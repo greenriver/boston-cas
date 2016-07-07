@@ -1,0 +1,26 @@
+#vsm-container {
+  display: none !important;
+}
+a[href]:after {
+  content: none;
+}
+header {
+  background: transparent;
+  box-shadow: none;
+}
+.site-name {
+  width: initial;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  position: relative;
+}
+.tagline {
+  color: #444;
+  margin-left: 0;
+  clear: both;
+  padding: 0;
+}
+footer {
+  min-height: initial;
+}

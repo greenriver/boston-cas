@@ -1,0 +1,31 @@
+
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %tr
+            %th ID
+            %th Available
+            %th= "#{Building.model_name.human} & Unit"
+            %th= "Voucher (#{Building.model_name.human} & Unit)"
+            %th Edit
+            %th Delete
+        %tbody
+          %tr
+            %td= @opportunity.id
+            %td 
+              = checkmark @opportunity.available
+            %td
+              - unless @opportunity.unit.nil?
+                = "#{@opportunity.try(:unit).try(:building).try(:name)}: #{@opportunity.try(:unit).try(:name)}"
+            %td
+              - unless @opportunity.voucher.nil?
+                = "#{@opportunity.voucher.sub_program.program.name}"
+                - unless @opportunity.voucher.unit.nil?
+                  = "(#{@opportunity.voucher.unit.try(:building).try(:name)}: #{@opportunity.voucher.unit.try(:name)})"
+            %th= link_to "Edit", edit_opportunity_path(@opportunity)
+            %td= link_to "Delete", opportunity_path(@opportunity), method: :delete
+  .row
+    %p= link_to 'Manage Contacts', opportunity_contacts_path(@opportunity)
+    %p= link_to('All Opportunities', opportunities_path, class: 'back')

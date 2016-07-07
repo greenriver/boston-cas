@@ -1,0 +1,29 @@
+
+.row
+  .col-sm-12
+    %h1 CAS Rules List
+    %p
+      = "These rules are available to apply (\"must\" or \"can't\") when editing a funding source, sub-grantee, subcontractor, #{Building.model_name.human.downcase}, service, or program."
+      %br
+      For now, if DND needs to change wording or add a rule, please email Green
+      River.
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed.table-hover
+        %tbody
+          - @rules.each do |rule|
+            %tr
+              - attributes = {:class => rule.deleted_at.present? ? 'deleted' : nil}
+              %td{attributes}= rule.verb.try :titleize
+              %td{attributes}= rule.name
+              %td{attributes}
+                - if rule.always_apply?
+                  Always Apply
+              -# %td
+              -#   - if !rule.deleted_at
+              -#     = link_to rule_path(rule), method: :delete, data: {confirm: "Would you really like to delete the rule: #{rule.name}?"} do
+              -#       %span.icon-cross
+              -#       Delete
+              -#   - else
+              -#     = link_to 'Restore', restore_rule_path(rule.id), method: :post
+    %p= paginate @rules

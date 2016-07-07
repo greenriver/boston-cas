@@ -1,0 +1,43 @@
+= render 'breadcrumbs'
+  
+%h1= "Contacts for #{@contact_owner.name}"
+-# @prompt = t '.search_prompt'
+=# render 'search_form'
+
+%p= page_entries_info @contact_join_models
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th Name
+      %th Email
+      %th Phone
+      %th Role
+      %th HMIS Managed
+      %th
+  %tbody
+    - @contact_join_models.each do |contact_join_model|
+      %tr
+        %td{'data-deleted' => contact_join_model.deleted?}
+          - if contact_join_model.deleted?
+            = contact_join_model.contact_full_name
+          - else
+            = link_to contact_join_model.contact_full_name, {action: :edit, id: contact_join_model}
+        %td{'data-deleted' => contact_join_model.deleted?}= contact_join_model.contact_email
+        %td{'data-deleted' => contact_join_model.deleted?}= contact_join_model.contact_phone
+        %td{'data-deleted' => contact_join_model.deleted?}= contact_join_model.contact_role
+        %td
+          = checkmark contact_join_model.contact.hmis_managed?
+          - unless contact_join_model.contact.hmis_managed? || contact_join_model.deleted?
+            = link_to 'Edit', {action: :edit, id: contact_join_model}
+        %td
+          - if contact_join_model.deleted?
+            = link_to 'Restore', {action: :restore, id: contact_join_model}, method: :post
+          - else
+            -# TODO: This should stop you from removing hmis_managed relationships, not hmis managed contacts
+            -# removing restriction for now.
+            -# unless contact_join_model.contact.hmis_managed?
+            = link_to "Remove", {action: :destroy, id: contact_join_model}, data: {confirm: "Are you sure you want to remove this contact from this #{@contact_owner.class.name.demodulize.humanize}?", method: :delete}
+
+%p= paginate @contact_join_models
+= link_to 'Add Contact', {action: :new}, class: 'btn btn-default'

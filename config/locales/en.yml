@@ -1,0 +1,85 @@
+en:
+  associated_contacts:
+    new:
+     search_prompt: 'Search contacts...'
+    index:
+     search_prompt: 'Search contacts...'
+  buildings:
+    index:
+      title: 'Manage Sites'
+      search_prompt: 'Search sites...'
+  date:
+    formats:
+      default: "%m/%d/%Y"
+  datepicker:
+    dformat: '%b %e, %Y'
+  contacts:
+    index:
+      title: 'Manage Contacts'
+      search_prompt: 'Search contacts...'
+  clients:
+    index:
+      title: 'Manage Clients'
+      search_prompt: 'Search clients...'
+  matches:
+    index:
+      title: 'Matches in Progress'
+      search_prompt: 'Search matches for a client name...'
+  opportunities:
+    index:
+      title: 'Manage Vacancies'
+      search_prompt: 'Search vacancies...'
+  funding_sources:
+    index:
+      title: 'Manage Funding Sources'
+      search_prompt: 'Search funding sources...'
+  programs:
+    index:
+      title: 'Manage Programs'
+      search_prompt: 'Search programs...'
+  rules:
+    index:
+      title: 'Rules List'
+      search_prompt: 'Search rules...'
+  rulesets:
+    index:
+      title: 'Manage Rule Sets'
+      search_prompt: 'Search rule sets...'
+  subgrantees:
+    index:
+      title: 'Manage Sub-Grantees'
+      search_prompt: 'Search sub-grantees...'
+  units:
+    index:
+      title: 'Manage Units'
+      search_prompt: 'Search units...'
+  admin:
+    users:
+      index:
+        title: 'Manage User Accounts'
+        search_prompt: 'Search user accounts...'
+  vouchers:
+    index:
+      title: 'Vouchers'
+      search_prompt: 'Search vouchers...'
+  services:
+    index:
+      title: 'Services'
+      search_prompt: 'Search services...'
+  reissue_notifications:
+      index:
+        title: 'Oustanding Requests for Notifications'
+  activerecord:
+    models:
+      building: 'Site'
+      opportunity: 
+        one: 'Vacancy'
+        other: 'Vacancies'
+    attributes:
+      hmis/client:
+        id: 'ID'
+        ssn: 'SSN'
+        date_of_birth: 'DOB'
+        hiv_aids: 'HIV aids'
+    
+

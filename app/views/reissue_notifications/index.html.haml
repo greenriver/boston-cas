@@ -1,0 +1,28 @@
+.row
+  .col-sm-12
+    %h1= t '.title'
+- if @reissue_notifications.length > 0
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th Notification
+        %th Sent To
+        %th Originally Sent
+        %th Re-issue Requested
+        %th Re-issue
+        %th Delete request
+    %tbody
+      - @reissue_notifications.preload(:notification).each do |reissue_notification|
+        %tr
+          %td
+            = reissue_notification.notification.event_label
+          %td
+            = "#{reissue_notification.notification.recipient.name} (#{reissue_notification.notification.recipient.email})"
+          %td
+            = date_format(reissue_notification.notification.created_at.to_date)
+          %td
+            = date_format(reissue_notification.created_at.to_date)
+          %td= link_to 'Re-issue Notification', reissue_notification_path(reissue_notification), :method => :patch, class: 'btn btn-primary pull-right'
+          %td= link_to 'Delete Request', reissue_notification, :method => :delete, :data => { :confirm => 'Are you sure you want to delete this request?' }, class: 'btn btn-secondary pull-right'
+- else
+  %p There are no outstanding notification re-issue requests at this time.

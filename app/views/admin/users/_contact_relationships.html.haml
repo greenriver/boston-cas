@@ -1,0 +1,29 @@
+%h3.relationships Relationships
+%h4.clients Clients
+%ul.clients-list
+  - @client_contacts.each do |client|
+    %li
+      = link_to client.full_name, client_path(client.id) 
+- if @client_contacts.empty?
+  None
+%h4.owners Owners
+%ul.owners-list
+  - @subgrantee_contacts.each do |subgrantee|
+    %li
+      = link_to subgrantee.name, subgrantee_path(subgrantee.id)
+- if @subgrantee_contacts.empty?
+  None
+%h4.buildings= Building.model_name.human.pluralize
+%ul.buildings-list
+  - @building_contacts.each do |building|
+    %li
+      = link_to building.name, building_path(building.id)
+- if @building_contacts.empty?
+  None
+%h4.opportunities Opportunities
+%ul.opportunities-list
+  - @opportunity_contacts.each do |opportunity|
+    %li
+      = link_to opportunity.name, building_path(opportunity.id)
+- if @opportunity_contacts.empty?
+  None

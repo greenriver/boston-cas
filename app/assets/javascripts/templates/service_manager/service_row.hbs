@@ -1,0 +1,18 @@
+<div class="row" data-service-row data-service-id="{{service.id}}">
+  <div class="col-sm-12">
+    <div class="add-things-boxes--added-row">
+      <div class="row">
+        <input type="hidden" name="{{input_name}}" value="{{service.id}}">
+        <div class="col-sm-5">{{service.name}}</div>
+        <div class="col-sm-5"> 
+          {{service.requirements_description}}
+        </div>
+        <div class="col-sm-2 text-right">
+          <a href="#" class="add-things-boxes--remove-link" data-remove-service-link="{{service.id}}">
+            <span class="icon-cross"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

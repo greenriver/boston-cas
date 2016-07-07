@@ -1,0 +1,23 @@
+.row
+  .col-xs-12
+    .match-decision
+      %p
+        Once known, please indicate the date the client is expected to be housed (or was housed).
+      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+        = form.hidden_field :status, value: 'completed'
+        .form-group
+          .row
+            .col-xs-5
+              = form.input :client_move_in_date, label: 'Date client will move in', as: :date_picker, disabled: !@decision.editable?
+              
+        .row
+          .col-sm-8
+            .row.form-inputs
+              .col-xs-12
+                = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+
+        .form-actions.clearfix
+          = form.submit 'Submit', class: 'btn btn-primary', disabled: !@decision.editable?
+
+        %p DND will receive notification of the housing date.
+

@@ -1,0 +1,8 @@
+%div{style: 'border: solid 1px gray;'}
+  %p This rule can not be removed because it is already in use on:
+  %ul
+    - @rule.requirements.each do |requirement|
+      %li
+        #{requirement.requirer.class.to_s.humanize}:
+        #{requirement.requirer.name}
+  = link_to "Cancel", rules_path, class: 'btn'

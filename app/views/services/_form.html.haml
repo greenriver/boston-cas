@@ -1,0 +1,10 @@
+= simple_form_for(@service) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name, label: 'Name of Service'
+  
+  = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Service'
+  
+  .form-actions
+    = f.button :submit

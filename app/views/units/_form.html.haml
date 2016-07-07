@@ -1,0 +1,16 @@
+= simple_form_for [@unit] do |f|
+  = f.error_notification
+  - disabled = false
+  - hint = ''
+  .form-inputs.margin-top-02
+    %label.margin-bottom-00 Is Unit Available?
+    = f.input :available
+    - if @unit.hmis_managed?
+      - disabled = true
+      - hint = 'Details of this unit are not editable here as they are managed in the HMIS'
+    = f.association :building, label_method: :name, disabled: disabled, hint: hint, label: "#{Building.model_name.human}"
+    = f.input :name, disabled: disabled
+        
+  .form-actions
+    = f.button :submit
+

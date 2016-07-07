@@ -1,0 +1,38 @@
+= render 'breadcrumbs'
+%h1
+  New Contact for
+  = @contact_owner.name
+
+
+%h2 Add an existing Contact
+- @prompt = t '.search_prompt'
+= render 'search_form'
+%p= page_entries_info @available_contacts, entry_name: 'available contact'
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th Name
+      %th Email
+      %th Phone
+      %th Organization
+      %th
+  %tbody
+    - @available_contacts.each do |contact|
+      %tr
+        %td= contact.full_name
+        %td= contact.email
+        %td= contact.phone
+        %td= contact.role
+        %td
+          = simple_form_for [@contact_owner, @contact_join_model] do |form|
+            = form.hidden_field :contact_id, value: contact.id
+            = form.submit 'Add'
+%p= paginate @available_contacts#, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+.row
+%h2 OR Create a new Contact
+= render 'form'
+
+
+.row
+= link_to 'Back', action: :index

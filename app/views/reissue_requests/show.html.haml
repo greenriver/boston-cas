@@ -1,0 +1,25 @@
+.row
+  .col-sm-12
+    %h1 Page Access Expired
+- if @notification.decision.editable?
+  %p This link has expired. DND has been prompted to reissue an email notification to you with a new expiring link.  
+- else
+  - if @match.current_decision.present?
+    .row
+      .col-sm-12
+        .current-step
+          %h4.current-step--heading 
+            Current Step:
+            %span.current-step--name
+              = @match.current_decision.step_name
+          %h5.current-step--assignemnt--label
+            Assigned To:
+            %span.current-step--assignment--value= @match.current_decision.actor_type
+  - else
+    .row
+      .col-sm-12
+        %p This match is not active
+  %p 
+    Action has already been taken on this step on 
+    = "#{date_format(@notification.decision.updated_at.to_date)}, " 
+    a new email notification will be issued if you are involved in future steps.

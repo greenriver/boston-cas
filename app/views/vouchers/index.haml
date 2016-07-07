@@ -1,0 +1,23 @@
+= render 'sub_programs/breadcrumbs'
+.row
+  .col-sm-6
+    %h1 
+      Program: 
+      = @subprogram.program.name
+    %h2
+      Sub-Program:
+      = @subprogram.name
+  .col-sm-6
+    = render 'sub_programs/status_blocks'
+.row.margin-top-02
+  .col-sm-8
+    = render 'sub_programs/tab_navigation', active: 'vouchers'
+  .col-sm-4
+    = render 'bulk_add_form'
+.row
+  .col-sm-12
+    - if @subprogram.vouchers.count > 0
+      = render 'form'
+    - else
+      %p.alert.alert-info.margin-top-03
+        This program has no vouchers defined yet. Use the Add Vouchers box above to add some.

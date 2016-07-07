@@ -1,0 +1,19 @@
+.row
+  .col-sm-12
+    %h2 Activate Account
+
+    %p Hello #{@user.name},
+
+    %p Please choose a password to begin using the Coordinated Access System.
+
+.row
+  .col-sm-4
+    = simple_form_for @user, :url => invitation_path(resource_name), :html => { :method => :put } do |f|
+      = devise_error_messages!
+      = f.hidden_field :invitation_token
+
+      %p
+        = f.input :password
+      %p
+        = f.input :password_confirmation
+      %p= f.submit "Set Password and Sign In"

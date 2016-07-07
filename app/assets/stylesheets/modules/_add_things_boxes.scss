@@ -1,0 +1,20 @@
+.add-things-boxes {
+  border: 3px solid $gray-030;
+  background-color: #fff;
+  border-radius: 0;
+}
+.add-things-boxes--h3 {
+  margin-top: 0;
+}
+.add-things-boxes--added-row {
+  @include margin(null null 18px null);
+  @include padding(12px null);
+  border-bottom: 1px solid $gray-030;
+}
+.add-things-boxes--remove-link,
+.add-things-boxes--remove-link {
+  color: $gray-065;
+}
+.add-things-boxes--right-side {
+  padding-top: 8px;
+}

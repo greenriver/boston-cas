@@ -1,0 +1,5 @@
+%div{style: 'border: solid 1px gray;'}
+  %p Are you sure you would like to remove this rule?
+  = simple_form_for @rule, method: :delete do |form|
+    = link_to "Cancel", rules_path, class: 'btn'
+    = form.submit 'Remove Rule'

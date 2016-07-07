@@ -1,0 +1,6 @@
+class AddRoleFlagsToClientContact < ActiveRecord::Migration
+  def change
+    add_column :client_contacts, :shelter_agency, :boolean, default: false, null: false
+    add_column :client_contacts, :regular, :boolean, default: false, null: false
+  end
+end

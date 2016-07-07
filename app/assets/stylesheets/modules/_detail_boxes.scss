@@ -1,0 +1,24 @@
+.detail-box {
+  background-color: $cas-red-green;
+  padding: 18px 12px 24px;
+  margin-bottom: 24px;
+  border: 3px solid darken($cas-red-green, 20);
+}
+.detail-box--label {
+  @include open-sans-condensed-bold;
+  text-transform: uppercase;
+}
+.detail-box--value {
+  margin-bottom: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.detail-box--header {
+  @include margin(18px null 0);
+  text-transform: uppercase;
+  font-size: rem(14);
+  color: darken($cas-red-green, 30);
+}
+.detail-box--requirement-source {
+  font-size: rem(12);
+}

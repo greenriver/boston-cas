@@ -1,0 +1,51 @@
+
+.row
+  .col-sm-8
+    %h1= t '.title'
+  .col-sm-4
+    = link_to new_unit_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+      %span.icon-plus
+      Add a Unit
+- @prompt = t '.search_prompt'
+= render 'search_form'
+.row.table-utilities
+  .col-sm-8
+    %p= page_entries_info @units
+    :ruby
+      columns = ['id', 'name', 'available', 'address', 'building_id']
+      directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+      titles = {}
+      directions.each {| k,v | titles[k] = @units.human_attribute_name(k)}
+      titles['address'] = 'Location'
+      titles['id'].upcase!
+  
+.row
+  .col-sm-12  
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %tr
+            - titles.each do | k, title |
+              %th
+                = sort_link(titles[k], k, directions)
+                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th Edit
+        %tbody
+          - @units.each do |unit|
+            - if unit.deleted_at
+              - deleted = "deleted"
+            %tr
+              %td{:class => deleted}= unit.id
+              %td{:class => deleted}= unit.name
+              %td{:class => deleted}= checkmark unit.available
+              %td{:class => deleted} #{unit.address} #{unit.city}, #{unit.state} #{unit.zip_code}
+              %td= link_to unit.building.name, building_path(unit.building)
+              %td
+                - if ! unit.deleted_at
+                  = link_to 'Edit', edit_unit_path(unit)
+                - else
+                  = link_to 'Restore', restore_unit_path(unit.id), method: :post
+                          
+    %p= paginate @units
+    
+  

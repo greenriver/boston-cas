@@ -1,0 +1,18 @@
+= simple_form_for form_for_arg do |f|
+  = f.error_notification
+  - disabled = false
+  - hint = ''
+  .form-inputs
+    - if form_for_arg.hmis_managed?
+      - disabled = true
+      - hint = 'Details of this contact are not editable here as they are managed in the HMIS'
+    = f.input :first_name, required: true, disabled: disabled, hint: hint
+    = f.input :last_name, required: true, disabled: disabled
+    = f.input :role, disabled: disabled
+    = f.input :email, as: :email, required: true, disabled: disabled
+    = f.input :phone, required: true, disabled: disabled
+    = f.input :cell_phone, required: false, disabled: disabled
+
+  .form-actions
+    = f.button :submit
+

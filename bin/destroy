@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+spring stop
+touch tmp/restart.txt
+bin/rake db:drop

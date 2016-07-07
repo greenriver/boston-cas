@@ -1,0 +1,26 @@
+= simple_form_for [:admin, @user] do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.simple_fields_for :contact do |contact_fields|
+      = contact_fields.input :first_name, required: true
+      = contact_fields.input :last_name, required: true
+      -# = contact_fields.input :role
+      -# Taking role out for now because it's not being used anywhere in association with user accounts. DND can recognize whether they have the correct person by their email address. We'll add the ability to associate accounts with contacts which have more role/organization detail.
+      = contact_fields.input :phone, as: :tel
+      = contact_fields.input :email, as: :email, required: true
+    .form--checkbox-groups
+      %h3 CAS Roles for Access Permissions
+      = f.input :admin
+      = f.input :dnd_staff, label: 'DND Staff'
+      = f.input :housing_subsidy_admin, label: 'Housing Subsidy Administrator (HSA)'
+    .form--checkbox-groups
+      %h3 Additional Options
+      = f.input :receive_initial_notification
+
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'
+
+-# When we've connected contacts to user accounts, this would be a good roll-up place to show the contact relationships
+-# - unless @user.new_record?
+-#   = render 'contact_relationships'

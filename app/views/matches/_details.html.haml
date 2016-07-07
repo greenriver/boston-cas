@@ -1,0 +1,89 @@
+.row
+  .col-sm-8
+    %h1 Housing Opportunity: Match Progress
+  .col-sm-4
+    .summary-readout.pull-right
+      .summary-readout--tile.summary-readout--tile__green
+        .summary-readout--tile-label.summary-readout--tile-label__outside
+          Status
+        .summary-readout--tile-color-block
+          = match.overall_status
+
+%h3.detail-box--header Match Recommendation Details
+.detail-box
+  -# These label/value pairs can all be displayed conditionally if present
+  .row
+    .col-sm-9
+      .row
+        .col-sm-3
+          .detail-box--label Program
+          .detail-box--value= match.opportunity_details.program_name
+          .detail-box--label Service Provider
+          .detail-box--value= match.opportunity_details.subgrantee_name
+          -#.detail-box--label Sub-Contractor
+          .detail-box--value
+        .col-sm-3
+          .detail-box--label= "#{Building.model_name.human}"
+          .detail-box--value
+            - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
+              = match.opportunity_details.building_name 
+              %br
+            - match.opportunity_details.building_address.each do |line|
+              - if match.opportunity_details.building_map_link
+                = link_to line, match.opportunity_details.building_map_link, target: '_blank'
+              - else
+                = line
+              %br
+        .col-sm-2
+          .detail-box--label Unit
+          .detail-box--value= match.opportunity_details.unit_name
+        .col-sm-4
+          .detail-box--label Client
+          .detail-box--value
+            - if match.show_client_info_to? current_contact
+              = link_to access_context.match_client_details_path(match), data: {loads_in_pjax_modal: true} do
+                = match.client_name_for_contact current_contact
+            - else
+              = match.client_name_for_contact current_contact
+      .row
+        .col-sm-5
+          .detail-box--label Services
+          .detail-box--value
+            - services = match.services_with_inherited
+            - if services.count > 0
+              = services.map(&:name).join('<br />').html_safe
+            - else
+              None
+        .col-sm-7
+          .detail-box--label Rules
+          .detail-box--value
+            - requirements = match.requirements_with_inherited
+            - if requirements.count > 0
+              = requirements.map{ |r| "#{r.name} <em class='detail-box--requirement-source'>(#{r.requirer.name})</em>".html_safe }.join('<br />').html_safe
+            - else
+              None
+    .col-sm-3
+      - match.shelter_agency_contacts.each do |contact|
+        .detail-box--label Shelter Agency Contact
+        .detail-box--value
+          = contact.name
+          -# TODO record organization as part of the shelter_agency_contact and display it here
+          %br
+          = mail_to contact.email, nil, target: '_blank'
+          - if contact.phone.present?
+            %br
+            = contact.phone
+      - match.housing_subsidy_admin_contacts.each do |contact|
+        .detail-box--label Housing Subsidy Administrator
+        .detail-box--value
+          = contact.name
+          %br
+          = mail_to contact.email, nil, target: '_blank'
+          - if contact.phone.present?
+            %br
+            = contact.phone
+      - if contacts_editable?
+        .detail-box--link
+          = link_to access_context.edit_match_contacts_path(match), data: {loads_in_pjax_modal: true} do
+            %span.icon-pencil
+            Edit Contacts

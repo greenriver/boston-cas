@@ -1,0 +1,31 @@
+%ul.nav.nav-tabs
+  - if active == 'program_details'
+    %li.active{role: 'presentation'}
+      %a{href: '#'} 
+        Edit Program Details
+  - else
+    %li= link_to 'Edit Program Details', [:edit, @program, @subprogram, :program_details]
+
+  - if active == 'edit'
+    %li.active{role: 'presentation'}
+      %a{href: '#'} 
+        Edit Sub-Program
+  - else
+    %li  
+      %a{href: edit_program_sub_program_path(id: @subprogram.id)} Edit Sub-Program
+
+  
+
+  - vouchers_active = (active == 'vouchers')
+  %li{class: (vouchers_active && 'active'), role: 'presentation'}
+    %a{href: program_sub_program_vouchers_path(sub_program_id: @subprogram.id)} 
+      Vouchers/Units
+
+  -# if active == 'matches'
+    %li.active{role: 'presentation'}
+      %a{href: '#'} 
+        Potential Matches
+  -# else 
+    %li
+      %a{href: '#'} 
+        Potential Matches

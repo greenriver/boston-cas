@@ -1,0 +1,24 @@
+= render 'admin/users/breadcrumbs'
+
+.row
+  .col-sm-12
+    %h1 Add a User Account
+
+  .col-sm-8
+    = simple_form_for @user, url: user_invitation_path do |f|
+      = f.error_notification message: "Please correct the following errors: #{@user.errors.full_messages.join('. ')}"
+
+      .form-inputs
+        = f.simple_fields_for :contact do |contact_fields|
+          = contact_fields.input :first_name, required: true
+          = contact_fields.input :last_name, required: true
+          = contact_fields.input :phone, as: :tel
+          = contact_fields.input :email, as: :email, required: true
+        .form--checkbox-groups
+          %h3 CAS Roles for Access Permissions
+          = f.input :admin
+          = f.input :dnd_staff, label: 'DND Staff'
+          = f.input :housing_subsidy_admin, label: 'Housing Subsidy Administrator (HSA)'
+
+      .form-actions
+        = f.button :submit, class: 'btn btn-primary'

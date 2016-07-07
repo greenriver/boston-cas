@@ -1,0 +1,5 @@
+#{Building.model_name.human}: #{@match.opportunity_details.building_name}
+Unit: #{@match.opportunity_details.unit_name}
+Address: #{'Not Available' if @match.opportunity_details.building_address.blank?}
+- @match.opportunity_details.building_address.each do |address_line|
+  = address_line

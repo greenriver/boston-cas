@@ -1,0 +1,51 @@
+.row
+  .col-sm-8
+    %h1= t '.title'
+  .col-sm-4
+    = link_to new_user_invitation_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+      %span.icon-plus
+      Add a User Account
+- @prompt = t '.search_prompt'
+= render 'search_form'
+.row.table-utilities
+  .col-sm-8
+    %p= page_entries_info @users, entry_name: 'user account'
+    :ruby
+      columns = ['name', 'email']
+      directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+      titles = {}
+      directions.each {| k,v | titles[k] = @users.human_attribute_name(k)}
+
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %tr
+            - titles.each do | k, title |
+              %th
+                = sort_link(titles[k], k, directions)
+                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th Roles
+            %th Status
+            %th
+            %th
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td= user.name
+              %td
+                = user.email
+              %td= user.roles_string
+              %td= render 'user_invitation_status', user: user
+              %td
+                = link_to action: :edit, id: user do
+                  %span.icon-pencil
+                  Edit
+              %td
+                = link_to admin_user_path(user),  method: :delete, data: {confirm: "Would you really like to delete the account for: #{user.name}?"} do
+                  %span.icon-cross
+                  Delete
+ 
+    %p= paginate @users, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+    

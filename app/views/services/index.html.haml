@@ -1,0 +1,31 @@
+.row
+  .col-sm-8
+    %h1= t '.title'
+    - @prompt = t '.search_prompt'
+  .col-sm-4.text-right
+    - if admin? || dnd_staff?
+      = link_to new_service_path, class: 'btn btn-primary' do
+        %span.icon-plus
+        Add a service
+
+.table-responsive
+  %table.table.table-condensed.table-hover.table__full-width
+    %thead
+      %tr
+        %th Service Name
+        %th Edit
+        %th Delete
+
+    %tbody
+      - @services.each do |service|
+        %tr
+          %td= service.name
+          %td
+            = link_to edit_service_path(service) do
+              %span.icon-pencil
+              Edit
+          %td
+            = link_to service, :method => :delete, data: {confirm: "Are you sure you'd like to delete this service: #{service.name}?" } do
+              %span.icon-cross
+              Delete
+

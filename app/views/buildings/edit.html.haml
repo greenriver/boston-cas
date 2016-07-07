@@ -1,0 +1,12 @@
+= content_for :crumbs do
+  = link_to action: :index do
+    = "&laquo; Manage #{Building.model_name.human.pluralize}".html_safe
+  = link_to building_path do
+    = "&laquo; View #{Building.model_name.human}:".html_safe
+    =@building.name
+.container
+  %h1 
+    = "Edit #{Building.model_name.human}:"
+    = @building.name
+
+  = render 'form'

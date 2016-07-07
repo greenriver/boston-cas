@@ -1,0 +1,12 @@
+= render 'breadcrumbs'
+.row
+  .col-sm-12
+    %h1
+      Edit Contact for
+      = @contact.full_name
+
+.row
+  .col-sm-8
+    = render 'form'
+    %p.delete
+      = link_to "Delete #{@contact.full_name}", {action: :destroy, id: @contact}, method: :delete, data: {confirm: "Really delete this contact?"}

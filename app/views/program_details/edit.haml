@@ -1,0 +1,49 @@
+= render 'sub_programs/breadcrumbs'
+.row
+  .col-sm-6
+    %h1 Edit Program Details
+  .col-sm-6
+    = render 'sub_programs/status_blocks'
+    
+.row.margin-top-02
+  .col-sm-8
+    = render 'sub_programs/tab_navigation', active: 'program_details'
+  .col-sm-4
+    - if admin? || dnd_staff?
+      = link_to new_program_sub_program_path(@program), class: 'btn btn-primary pull-right' do
+        %span.icon-plus
+        Add a Sub-Program
+
+.row.margin-top-02
+  .col-sm-8
+    = simple_form_for @program, url: form_url do |f|
+
+      - if @program.sub_programs.count > 1
+        %p
+          This program has
+          = pluralize (@program.sub_programs.count - 1), 'other sub-program'
+
+      .form-inputs
+        = f.input :name, label: 'Program Name'
+        = f.association :funding_source, label_method: :name, required: true, label: 'Funding Source', input_html: {data: {select2: true}}
+        %div.form-group.string.optional
+          .row
+            .col-sm-5
+              = f.label :contract_start_date do
+                Contract Start Date
+              .input-group.date{'data-provide' => 'datepicker'}
+                = f.input_field :contract_start_date,  class: 'form-control'
+                %span.input-group-addon.icon-calendar
+
+        = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Program'
+
+        = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Program', help_text: "In programs with more than one #{Building.model_name.human.downcase}, when a match is made, only #{Building.model_name.human.downcase} rules for the applicable #{Building.model_name.human.downcase} will be applied.  If you need to ensure a rule will be applied across all #{Building.model_name.human.downcase} in the program, add it on this program screen as well."
+
+      .form-actions
+        = f.submit 'Save', class: 'btn btn-primary'
+
+= content_for :page_js do
+  :javascript
+    $('select[data-select2]').select2();
+    
+
