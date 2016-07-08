@@ -21,7 +21,7 @@ A copy of the the license is available in [LICENCE.md](https://github.com/greenr
 
 The application designed around the [HUD Data Standards](https://www.hudexchange.info/programs/hmis/hmis-data-and-technical-standards/). You can find copies of some relavent documenation in the `docs` folder.
 
-The application is written primarily in [Ruby on Rails](http://rubyonrails.org) and we use [RVM](https://rvm.io/) to select the current supported ruby version. Other ruby version managers should work fine as would manually installing the ruby version mentioned in the `.ruby-version`
+The application is written primarily in [Ruby on Rails](http://rubyonrails.org) and we use [RVM](https://rvm.io/) to select a ruby version. Other ruby version managers should work fine, as would manually installing the ruby version mentioned in the `.ruby-version`
 
 The application uses [postgres](https://www.postgresql.org/) as a default primary data storage. Data connectors to other HMIS systems is not included in this release but simple example method using CSV files is available. In Boston's deployment we have connections using various combinations of Microsoft SQL Server, SFTP of CSV and XML, and live API connections.
 
