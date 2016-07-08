@@ -17,12 +17,6 @@ GNU General Public License for more details.
 
 A copy of the the license is available in [LICENCE.md](https://github.com/greenriver/boston-cas/blob/master/LICENSE.md)
 
-### Screen Shots
-##### A Match in Progress
-![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/match-detail.png)
-##### Editing Program roles
-![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/rules-editing.png)
-
 ## Application Design
 
 The application designed around the [HUD Data Standards](https://www.hudexchange.info/programs/hmis/hmis-data-and-technical-standards/). You can find copies of some relavent documenation in the `docs` folder.
@@ -32,6 +26,12 @@ The application is written primarily in [Ruby on Rails](http://rubyonrails.org) 
 The application uses [postgres](https://www.postgresql.org/) as a default primary data storage. Data connectors to other HMIS systems is not included in this release but simple example method using CSV files is available. In Boston's deployment we have connections using various combinations of Microsoft SQL Server, SFTP of CSV and XML, and live API connections.
 
 We've develop locally on OSX using [homebrew](http://brew.sh/) and deploy to Ubuntu 16.04 using `apt` for dependancies.
+
+## Screen Shots
+##### A Match in Progress
+![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/match-detail.png)
+##### Editing Program roles
+![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/rules-editing.png)
 
 ### Developer Prequisites
 
