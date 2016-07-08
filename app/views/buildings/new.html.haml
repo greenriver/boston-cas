@@ -1,0 +1,6 @@
+= render partial: 'breadcrumbs'
+%h1= "Add #{Building.model_name.human}"
+
+= render 'form'
+
+= link_to 'Back', action: :index

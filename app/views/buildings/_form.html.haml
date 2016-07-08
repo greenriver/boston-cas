@@ -1,0 +1,29 @@
+.row
+  .col-sm-8
+    = simple_form_for [@building] do |f|
+      = f.error_notification
+      - disabled = false
+      - hint = ''
+      .form-inputs
+        - if @building.hmis_managed?
+          - disabled = true
+          - hint = 'Details of this building are not editable here as they are managed in the HMIS. You can edit the rules and services for this building.'
+        = f.input :name, disabled: disabled, hint: hint
+        = f.input :building_type, disabled: disabled
+        = f.input :address, disabled: disabled
+        = f.input :city, disabled: disabled
+        = f.input :state, disabled: disabled
+        = f.input :zip_code, disabled: disabled
+        = f.association :subgrantee, label_method: :name, disabled: disabled
+
+        = render 'service_manager/form_fields', form: f, heading: "Services Attached to this #{Building.model_name.human}"
+
+        = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Building.model_name.human}"
+                
+
+      .form-actions
+        = f.button :submit
+
+    = content_for :page_js do
+      :javascript
+        $('.services select, .building_subgrantee select').select2();

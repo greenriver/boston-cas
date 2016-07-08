@@ -1,0 +1,75 @@
+= simple_form_for @subprogram, url: bulk_update_program_sub_program_vouchers_path, html: {class: 'bulk-vouchers'}  do |f|
+  = f.error_notification
+  .table-responsive.margin-top-03
+    %table.table.table-condensed
+      %thead
+        %tr
+          %th.vouchers--available
+            Available
+          - if @subprogram.has_buildings
+            %th.vouchers--building
+              = "#{Building.model_name.human}"
+            %th.vouchers--unit
+              Unit
+          %th.vouchers--date_available
+            Date Available
+          %th
+            Status
+          %th
+            Client
+      %tbody
+        = f.simple_fields_for :vouchers, @vouchers do |v|
+
+          - disabled = false
+          - # disable the form fields if we have a successful or active match
+          - if v.object.status_match.present?
+            - disabled = true
+          %tr
+            %td.text-center
+              = v.input_field :available, disabled: disabled, as: :boolean
+            - if @subprogram.has_buildings
+              %td
+                = v.input_field :building_id, collection: Building.all, selected: v.object.building.try(:id), disabled: disabled, class: 'has-dependent'
+              %td
+                = v.association :unit, collection: v.object.units, disabled: disabled, input_html: {data: {dependent: true, url: '/buildings/:id/available_units.json', 'value-method' => :id, 'label-method' => :name}, class: "sub_program_vouchers_attributes_#{v.index}_building_id", style: "width: 100%;"}, label: false
+            %td
+              .input-group.date
+                = v.input_field :date_available, disabled: disabled, as: :date_picker, value: v.object.date_available
+            %td
+              - if v.object.status_match.present?
+                = link_to v.object.status_match.overall_status, match_path(v.object.status_match)
+            %td
+              - if v.object.status_match.present?
+                = link_to client_path(v.object.status_match.client) do
+                  = v.object.status_match.client.full_name
+          - if v.object.errors.any?
+            %tr
+              %td(style="border: none; color:red; position: relative; top: -30px;")
+              %td(colspan="5" style="border: none; color:red; position: relative; top: -30px;")
+                = v.object.errors.full_messages_for(:base).join ', '   
+
+    = f.button :submit, value: 'Update Vouchers'
+= content_for :page_js do
+  :javascript
+    $('select').select2();
+    $('.bulk-vouchers').on('change', '.has-dependent', function() {
+      var parent = this.id
+      var id = this.value
+      var $child = $('.' + parent);
+      var value_method = $child.data('value-method');
+      var label_method = $child.data('label-method');
+      if($child.val()) {
+        $('body').data('original_value', $child.val());
+      }
+      var url = $child.data('url').replace(':id', id)
+      $.get(url, function(data) {
+        // remove previous options
+        $child.children('option:gt(0)').remove();
+        $.each(data, function(k,v){
+          $child.append($('<option />').attr('value', v[value_method]).text(v[label_method]));
+        });
+        // restore the original value if still available
+        $child.val($('body').data('original_value'));
+      }, 'json');
+      
+    });

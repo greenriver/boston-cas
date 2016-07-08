@@ -1,0 +1,37 @@
+.current-step--heading {
+  text-transform: uppercase;
+  font-size: $font-size-h3;
+  float: left;
+  @include margin(0 36px null null);
+  @media(max-width: $screen-xs-max) {
+    @include margin(24px 0 null null);
+    float: none;
+  }
+}
+.current-step--name {
+  text-transform: initial;
+  font-size: rem(19);
+  margin-left: 8px;
+}
+.current-step--assignemnt--label {
+  text-transform: uppercase;
+  color: $cas-blue;
+  font-size: rem(16);
+  line-height: 1.7;
+  @media(max-width: $screen-xs-max) {
+    clear: both;
+  }
+}
+.current-step--assignment--value {
+  text-transform: initial;
+  color: $text-color;
+}
+.current-step--introduction {
+  clear: both;
+  margin-bottom: 20px;
+}
+.match-decision {
+  padding: 18px 24px;
+  background-color: $gray-015;
+  border: 3px solid $cas-green;
+}

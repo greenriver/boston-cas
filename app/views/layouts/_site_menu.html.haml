@@ -1,0 +1,72 @@
+#vsm-container.outboard
+  .vsm-group.vsm-group-toggle
+    .vsm-item-link{class: 'jToggleVsm'}
+      .vsm-item-link--description.vsm-item-link--description__collapse.show-open
+        Collapse Menu
+      .menu-icon.menu-link
+        .show-closed
+          %span.menu-link--word Menu
+          %span.icon-menu
+        .show-open
+          %span.icon-arrow-right2
+
+  .vsm-group.vsm-group__group-a
+    = link_to active_matches_path, :class => 'vsm-item-link' do
+      .vsm-item-link--description
+        Matches in Progress
+    - if admin? || dnd_staff?
+      = link_to clients_path, :class => 'vsm-item-link' do
+        .vsm-item-link--description
+          All Clients
+
+  - if admin? || dnd_staff?
+    .vsm-group.vsm-group__group-b
+      - if admin? || dnd_staff?
+        = link_to contacts_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Contacts
+      - if admin? || dnd_staff?
+        = link_to opportunities_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Vacancies
+      - if admin? || dnd_staff?
+        = link_to programs_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Programs
+      - if admin?
+        = link_to funding_sources_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Funding Sources
+      - if admin?
+        = link_to subgrantees_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Sub-Grantees
+      - if admin?
+        = link_to buildings_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            = "#{Building.model_name.human.pluralize}"
+      - if admin?
+        = link_to rules_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Rules List
+      - if admin?
+        = link_to services_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            Services List
+      - if admin?
+        = link_to admin_users_path, :class => 'vsm-item-link' do
+          .vsm-item-link--description
+            User Accounts
+
+  .vsm-group.vsm-group__account
+    = link_to edit_account_path, :class => 'vsm-item-link' do
+      .vsm-item-link--description
+        Edit Account
+    -# = current_user.name
+    = link_to destroy_user_session_path, :method => :delete, :class => 'vsm-item-link' do
+      .vsm-item-link--description
+        Sign Out
+      .menu-icon
+        %i{class: "icon-exit"}
+
+

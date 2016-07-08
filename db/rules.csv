@@ -1,0 +1,25 @@
+Class Name,Rule Name,Verb
+AgeGreaterThanSixteen,Age greater than 16,be
+AgeGreaterThanTwentyFive,Age greater than 25,be
+AgeGreaterThanFifty,Age greater than 50,be
+AgeGreaterThanFiftyFive,Age greater than 55,be
+AgeGreaterThanSixty,Age greater than 60,be
+AgeGreaterThanSixtyTwo,Age greater than 62,be
+ChronicallyHomeless,Chronically Homeless as defined by HUD,be
+MiAndSaCoMorbid,Co-morbid (MI & SA),be
+PhysicalDisablingCondition,Disabling condition: physical,have
+DomesticViolenceSurvivor,Domestic Violence survivor,be
+Female,Female,be
+AidsOrRelatedDiseases,HIV or AIDS,have
+IncomeLessThanThirtyPercentAmi,Income - Less than 30% Area Median Income (Extremely Low Income),have
+IncomeLessThanFiftyPercentAmi,Income - Less than 50% Area Median Income or less (Very Low Income),have
+IncomeLessThanSixtyPercentAmi,Income - Less than 60% Area Median Income,have
+IncomeLessThanEightyPercentAmi,Income - Less than 80% Area Median Income (Low Income),have
+Homeless,Literally homeless as defined by HUD,be
+Male,Male,be
+MentalHealthEligible,Mental Health Disability,have
+MiSaOrCoMorbid,"MI, SA, or co-morbid",have
+ChronicSubstanceUse,Substance use disorder,have
+Transgender,Transgender,be
+Veteran,Veteran,be
+DmhEligible,DMH Eligible,be

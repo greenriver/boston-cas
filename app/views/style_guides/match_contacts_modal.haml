@@ -1,0 +1,57 @@
+= content_for :modal_title do
+  Review Contacts for Match
+%form.simple_form.current-step-form
+  .form-group.select.optional.notification_response_action
+    %label.select.optional.control-label{for: 'notification_response_action'}
+      Please select one
+    %select.optional.form-control
+      %option{value: ''}
+      %option{value: 'accepted'}Accept
+      %option{value: 'declined'}Decline
+
+  .form-group.margin-bottom-03
+    %label.control-label{for: 'shelter-agency-contact'}
+      Shelter Agency Contact
+    %input{type: 'text', class: 'form-control', id: 'shelter-agency-contact', placeholder: 'Start typing name or select from list'}
+  .row
+    .col-xs-12
+      .contact-on-match
+        %span.contact-on-match--item
+          =link_to '#', {class: 'contact-on-match--icon-link'} do
+            %i.icon-cross
+        %span.contact-on-match--item
+          Leroy Bass
+        %span.contact-on-match--item
+          leroybass@pinestreetinn.org
+        %span.contact-on-match--item
+          617.555.1212
+  .row
+    .col-xs-12
+      .add-another
+        =link_to 'Add another Shelter Agency contact', '#', {class: 'add-another--link'}
+  .form-group.has-error
+    %label.control-label{for: 'note'}
+      Note
+    %p.error-block Please add a note explaining the decision
+    %textarea{class: 'form-control', rows: 4, name: 'note'}
+  .form-group
+    %label.control-label Project, Tenant, or Sponsor-Based?
+    .radio
+      %label
+        %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio1', value: 'option1', checked: 'checked'}
+        Project-Based
+    .row
+      .col-xs-6.col-xs-offset-1
+        .form-group
+          %label.control-label{for: 'building-name'}= "#{Building.model_name.human}"
+          %input{type: 'text', class: 'form-control', name: 'building-name', id: 'building-name'}
+    .radio
+      %label
+        %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio2', value: 'option2'}
+        Tenant-Based
+    .radio
+      %label
+        %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio3', value: 'option3'}
+        Sponsor-Based
+  .form-actions.clearfix
+    %input{type: 'submit', name: 'commit', value: 'Save', class: 'btn btn-primary pull-right btn-min-width-medium'}

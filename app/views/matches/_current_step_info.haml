@@ -1,0 +1,28 @@
+.row
+  .col-sm-9
+    - if @match.current_decision.present?
+      .summary-readout
+        .summary-readout--tile.summary-readout--tile__green
+          .summary-readout--tile-label.summary-readout--tile-label__outside 
+            Current Step
+          .summary-readout--tile-color-block 
+            -if !@match.overall_status == "In Progress"
+              = match.overall_status
+            -else
+              = @match.current_decision.step_name
+        .summary-readout--tile.summary-readout--tile__blue.margin-left-01
+          .summary-readout--tile-label.summary-readout--tile-label__outside 
+            Assigned To
+          .summary-readout--tile-color-block 
+            = @match.current_decision.try(:actor_type) || 'N/A'
+        
+    - else
+      %p This match is not active
+  .col-sm-3
+    - if @match.can_create_overall_note? current_contact
+      .pull-right
+        .btn-label.btn-label__primary
+          DND
+        = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
+          %span.icon-plus
+          Add Note

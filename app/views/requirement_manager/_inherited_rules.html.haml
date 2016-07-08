@@ -1,0 +1,14 @@
+%h4 Inherited Rules
+- if inheritee.inherited_requirements_by_source.values.none?(&:present?)
+  %p (none)
+- else
+  .table-responsive
+    %table.table
+      %tr
+        %th Source
+        %th Rule
+      - inheritee.inherited_requirements_by_source.each do |requirement_source, requirements|
+        - requirements.each do |requirement|
+          %tr
+            %td= requirement_source.name
+            %td= requirement.name

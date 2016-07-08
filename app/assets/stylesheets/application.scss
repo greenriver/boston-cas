@@ -1,0 +1,81 @@
+/*
+*= require select2
+*= require select2-bootstrap
+*= require bootstrap-datepicker3
+*/
+
+@import 'bootstrap-custom';
+@import "font-awesome-sprockets";
+@import "font-awesome";
+@import "helpers/mixins";
+// @import "base/grid_framework";
+@import "base/typography";
+@import "base/buttons";
+@import "base/forms";
+@import "base/modals";
+@import "base/navs";
+@import "modules/header";
+@import "modules/footer";
+@import "modules/summary_readouts";
+@import "modules/detail_boxes";
+@import "modules/current_step";
+@import "modules/history";
+@import "modules/tables";
+@import "modules/site_menu";
+@import "modules/vouchers";
+@import "modules/add_things_boxes";
+@import "vendor/icomoon";
+@import "helpers/helper_classes";
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+main {
+  flex: 1 0 auto;
+}
+.utility {
+  min-height: 60px;
+  padding: 8px 0;
+  @media (max-width: $screen-sm-min) {
+    margin-top: 40px;
+  }
+}
+.crumbs a {
+  margin-right: 12px;
+}
+.alert {
+  z-index: $zIndex-3--notice;
+  @include open-sans-medium;
+}
+.alert a {
+  color: #fff;
+}
+.alert a:hover,
+.alert a:focus {
+  text-decoration: none;
+}
+.action-row {
+  padding-bottom: 12px;
+}
+.add-another {
+  margin-top: 24px;
+  margin-bottom: 36px;
+  text-align: right;
+}
+.how-to-popover:focus {
+  outline: none;
+}
+.popover ol {
+  padding-left: 0 !important;
+  -webkit-padding-start: 10px !important;
+}
+.home-intro {
+  @include lora-normal;
+  font-size: 1.2em;
+  margin-bottom: 40px;
+  @media (min-width: $screen-sm-min) {
+    margin: 30px auto 0;
+  }
+}

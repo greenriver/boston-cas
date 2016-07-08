@@ -1,0 +1,69 @@
+= content_for :modal_title do
+  Client Details
+- unless @match.show_client_info_to? current_contact
+  %p Sorry, you are not able to see that information at this time
+- else
+  %p
+    = @client.full_name
+    - if @client.date_of_birth.present?
+      %span.age
+        = "(age: #{@client.age})"
+    - else
+      %span.age (age unknown)
+    %br
+    Home Phone:
+    = @client.homephone
+    %br
+    Cell Phone:
+    = @client.cellphone
+    - if @client.workphone.present?
+      %br
+      Work Phone
+      = @client.workphone
+    - if @client.pager.present?
+      %br
+      Pager:
+      = @client.pager
+    %br
+    Email:
+    = @client.email
+
+  %h3 Date of First Homelessness
+  - if @client.calculated_first_homeless_night.present?
+    %p
+      = date_format(@client.calculated_first_homeless_night)
+
+  -#%h3 Special Needs
+  -#%ul
+    -#%li TODO: List of Special Needs
+
+  -#%h3 Language(s) Spoken
+  -#%ul
+    -#%li TODO: Languages Spoken
+
+  %h3 Last Bed Stay or Outreach Contact
+  %table.table.table-condensed
+    %tbody
+      %tr
+        %td
+          ="#{@client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))}"
+        %td
+          = "#{@client.project_client.try(:building).try(:name)}"
+
+  %h3 CAS Housing History
+  %p (This information is only known for opportunities created through CAS.)
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th Date
+        %th= "#{Building.model_name.human}/Unit"
+        %th Notes
+    -# TODO: display info about housing history. N/A's are placeholders
+    %tbody
+      %tr
+        %td
+          n/a
+        %td
+          n/a
+        %td
+          n/a

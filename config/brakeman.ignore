@@ -1,0 +1,120 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "fc8770f086f4470d86aa2f3813ef864b8d36dc6b7de7572273edb7fbc4a08732",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/hmis/opportunities_controller.rb",
+      "line": 26,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Opportunity.with_deleted.page(params[:page]).per(15).includes(:project).references(:project).where(Opportunity.arel_table[:name].matches(query_string).or(Opportunity.arel_table[:address].matches(query_string)).or(Project.arel_table[:name].matches(query_string))).where(Opportunity.arel_table[:deleted_at].gt(60.minutes.ago).or(Opportunity.arel_table[:deleted_at].eq(nil))).order(\"#{(\"opportunities.#{sort_column}\" or \"projects.name\")} #{sort_direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Hmis::OpportunitiesController",
+        "method": "index"
+      },
+      "user_input": "sort_column",
+      "confidence": "Medium",
+      "note": "sort is limited to column names, see sort_column method"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "73d468ff36aeb957c1638efaf5ecb3ab322195ef92a29f0b92b7a7d20ab76659",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/hmis/opportunities_controller.rb",
+      "line": 33,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Opportunity.with_deleted.page(params[:page]).per(15).includes(:project).where(Opportunity.arel_table[:deleted_at].gt(60.minutes.ago).or(Opportunity.arel_table[:deleted_at].eq(nil))).order(\"#{(\"opportunities.#{sort_column}\" or \"projects.name\")} #{sort_direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Hmis::OpportunitiesController",
+        "method": "index"
+      },
+      "user_input": "sort_column",
+      "confidence": "Medium",
+      "note": "sort is limited to column names, see sort_column method"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "118b1f501574867eefe21b71d01c0683f3c5b29b6696dcc5073d2a0d971cae22",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/hmis/projects_controller.rb",
+      "line": 22,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Project.page(params[:page]).per(15).includes(:project_owner).references(:project_owner).where(Project.arel_table[:name].matches(query_string).or(ProjectOwner.arel_table[:name].matches(query_string))).order(\"#{(\"projects.#{sort_column}\" or \"project_owners.name\")} #{sort_direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Hmis::ProjectsController",
+        "method": "index"
+      },
+      "user_input": "sort_column",
+      "confidence": "Medium",
+      "note": "sort is limited to column names, see sort_column method"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "62f393b69e222da4f079b42b978e2f9f94ce8477a21a230be93020b0320716e9",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/hmis/projects_controller.rb",
+      "line": 24,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Project.page(params[:page]).per(15).includes(:project_owner).order(\"#{(\"projects.#{sort_column}\" or \"project_owners.name\")} #{sort_direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Hmis::ProjectsController",
+        "method": "index"
+      },
+      "user_input": "sort_column",
+      "confidence": "Medium",
+      "note": "sort is limited to column names, see sort_column method"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "3d6c2d6a6c40a566e1c345f2420d78d6ce04268b4c655641fe7760d1422ab4ff",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/hmis/rulesets_controller.rb",
+      "line": 23,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Ruleset.with_deleted.page(params[:page]).per(15).includes(:user).references(:user).where(Ruleset.arel_table[:name].matches(query_string).or(User.arel_table[:name].matches(query_string))).where(Ruleset.arel_table[:deleted_at].gt(60.minutes.ago).or(Ruleset.arel_table[:deleted_at].eq(nil))).order(\"#{(\"rulesets.#{sort_column}\" or \"users.name\")} #{sort_direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Hmis::RulesetsController",
+        "method": "index"
+      },
+      "user_input": "sort_column",
+      "confidence": "Medium",
+      "note": "sort is limited to column names, see sort_column method"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "9ef22a09144c457d29518c8b9386c8955c9fc543890dcf1e95870621bfca884a",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/hmis/rulesets_controller.rb",
+      "line": 29,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Ruleset.with_deleted.page(params[:page]).per(15).includes(:user).where(Ruleset.arel_table[:deleted_at].gt(60.minutes.ago).or(Ruleset.arel_table[:deleted_at].eq(nil))).order(\"#{(\"rulesets.#{sort_column}\" or \"users.name\")} #{sort_direction}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Hmis::RulesetsController",
+        "method": "index"
+      },
+      "user_input": "sort_column",
+      "confidence": "Medium",
+      "note": "sort is limited to column names, see sort_column method"
+    }
+  ],
+  "updated": "2016-03-08 10:02:21 -0500",
+  "brakeman_version": "3.1.5"
+}

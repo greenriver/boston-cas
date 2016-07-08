@@ -1,0 +1,5 @@
+-# ONLY FOR TESTING PURPOSES
+= simple_form_for @candidate_generation do |form|
+  = multi(form, :clients, Client.all)
+  = multi(form, :opportunities, @candidate_generation.candidate_opportunities)
+  = form.submit

@@ -1,0 +1,61 @@
+= simple_form_for @program do |f|
+  .form-inputs
+    = f.input :name, label: 'Program Name'
+    = f.association :funding_source, label_method: :name, required: true, label: 'Funding Source'   
+    %div.form-group.string.optional
+      .row
+        .col-sm-5
+          = f.label :contract_start_date do
+            Contract Start Date
+          .input-group.date{'data-provide' => 'datepicker'}
+            = f.input_field :contract_start_date,  class: 'form-control'
+            %span.input-group-addon.icon-calendar
+    = f.simple_fields_for :sub_programs do |sp|
+      %p 
+        %strong 
+          Sub-Program Fields:
+        The fields below will used to create a first 'sub-program'. Sub-programs facilitate identifying multiple sub-contractors on a program. You'll have the option to add additional sub-programs.
+      .form-group.form-group__indented-02
+        = sp.input :name
+      .form-group.form-group__indented-02
+        = sp.association :housing_subsidy_administrator, label: 'Housing Subsidy Administrator'
+      .form-group.form-group__indented-02
+        = sp.association :service_provider, label: 'Service Provider', required: true
+      .form-group.form-group__indented-02
+        = sp.association :sub_contractor, label: 'Sub-Contractor'
+      .form-group.form-group__indented-02.radio_buttons.program-type
+        = sp.label :program_type, required: true do
+          %abbr{'data-original-title' => 'required'}*
+          Project, Tenant, or Sponsor-Based?
+        - SubProgram.types.each do |t|
+          .radio
+            = sp.label :program_type, for: "program_sub_programs_attributes_#{sp.index}_program_type_#{t[:value].downcase}" do
+              = sp.radio_button :program_type, t[:value]
+              = t[:label]
+            - if t[:building]
+              = building = sp.association :building, label: 'Building Name', wrapper_html: {class: 'building form-group__indented-01'}
+    
+      = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Program'
+    
+      = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Program', help_text: "In programs with more than one #{Building.model_name.human.downcase}, when a match is made, only #{Building.model_name.human.downcase} rules for the applicable #{Building.model_name.human.downcase} will be applied.  If you need to ensure a rule will be applied across all #{Building.model_name.human.downcase} in the program, add it on this program screen as well."
+
+  .form-actions
+    - if @program.id
+      = f.button :submit, value: 'Add Sub-Program', class: 'btn btn-primary'
+    - else
+      = f.button :submit, class: 'btn btn-primary'
+
+= content_for :page_js do
+  :javascript
+    $('select').select2();
+    
+    $('.program-type').on('change', 'input', function() {
+      var have_buildings = #{SubProgram.have_buildings};
+      $('div.building').hide();
+      if($.inArray(this.value, have_buildings) != -1) {
+        $(this).parent().siblings('.building').show();
+      }
+    });
+    $('.program-type input:checked').trigger('change');
+    
+

@@ -1,0 +1,13 @@
+= simple_form_for @user, url: notification_registrations_path(@notification) do |form|
+  = form.error_notification
+  %p spacer
+  .form-inputs
+    = form.simple_fields_for :contact do |contact_fields|
+      %p 
+        Create a user account for
+        %strong
+          = "#{contact_fields.object.first_name} #{contact_fields.object.last_name}."
+      %p You will receive an email at the address we have on file with instructions on how to set your password.
+    
+  .form-actions
+    = form.button :submit, class: 'btn btn-primary'

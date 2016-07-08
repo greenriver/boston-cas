@@ -1,0 +1,50 @@
+
+.row
+  .col-sm-8
+    %h1= t '.title'
+  .col-sm-4
+    - if admin? || dnd_staff?
+      = link_to new_subgrantee_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+        %span.icon-plus
+        Add a Sub-Grantee
+    
+  
+- @prompt = t '.search_prompt'
+= render 'search_form'
+.row.table-utilities
+  .col-sm-8
+    %p= page_entries_info @subgrantees
+    :ruby
+      columns = ['id', 'name']
+      directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+      titles = {}
+      directions.each {| k,v | titles[k] = @subgrantees.human_attribute_name(k)}
+      titles['id'].upcase!
+  
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            - titles.each do | k, title |
+              %th
+                = sort_link(titles[k], k, directions)
+                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th
+              HMIS Managed
+        %tbody
+          - @subgrantees.each do |s|
+            %tr
+              %td
+                = link_to subgrantee_path(s) do
+                  = s.id
+              %td
+                = link_to subgrantee_path(s) do
+                  = s.name
+              %td
+                = checkmark s.hmis_managed?
+                - unless s.hmis_managed?
+                  = link_to 'Edit', edit_subgrantee_path(s)
+
+    %p= paginate @subgrantees, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}

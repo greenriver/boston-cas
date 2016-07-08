@@ -1,0 +1,10 @@
+= render 'breadcrumbs'
+%h1
+  Edit Unit:
+  = @unit.name
+
+.row
+  .col-sm-8
+    = render 'form'
+    %p.delete
+      = link_to "Delete this unit in #{@unit.name}", unit_path(@unit), method: :delete, data: {confirm: "Please confirm that you'd like to delete this unit."}

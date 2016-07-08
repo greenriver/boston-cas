@@ -1,0 +1,12 @@
+.container
+  %h1
+    Edit Opportunity:
+    = @opportunity.id
+
+  = render 'form'
+  %p.delete
+    = link_to "Delete #{@opportunity.id}", opportunity_path(@opportunity), method: :delete, data: {confirm: "Really delete this opportunity?"}
+  %ul.local-navigation
+    %li= link_to 'View', opportunity_path
+    %li= link_to 'Manage Contacts', opportunity_contacts_path(@opportunity)
+    %li= link_to 'All Opportunities', opportunities_path

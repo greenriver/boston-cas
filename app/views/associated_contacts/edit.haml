@@ -1,0 +1,8 @@
+.container
+  %h1
+    Edit Contact:
+    = @contact_join_model.contact_full_name
+
+  = render 'form'
+  %p
+    = link_to "View all Contacts for #{@contact_owner.name}", action: :index

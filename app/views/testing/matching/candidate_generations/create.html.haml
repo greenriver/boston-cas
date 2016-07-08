@@ -1,0 +1,7 @@
+= render 'form'
+- if @candidate_generation.candidate_opportunities.any?
+  %li
+    - @candidate_generation.candidate_opportunities.each do |opportunity|
+      %ul #{opportunity.name}
+- else
+  No opportunities to match up.

@@ -1,0 +1,8 @@
+.container
+  %h1 New User
+  = simple_form_for(@user, url: url_for(controller: :admins, action: :create)) do |f|
+    = f.input :name
+    = f.input :email
+    = f.input :password
+    = f.input :password_confirmation
+    = f.submit class: 'btn btn-primary'

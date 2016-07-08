@@ -1,0 +1,55 @@
+
+.row
+  .col-sm-8
+    %h1= t '.title'
+  .col-sm-4
+    - if admin? || dnd_staff?
+      = link_to new_contact_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+        %span.icon-plus
+        Add a Contact
+    
+- @prompt = t '.search_prompt'
+= render 'search_form'
+:ruby
+  columns = ['last_name', 'first_name', 'email', 'phone', 'role']
+  directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+  titles = {}
+  directions.each {| k,v | titles[k] = @contacts.human_attribute_name(k)}
+.row.table-utilities
+  .col-sm-8
+    %p= page_entries_info @contacts
+  
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            - titles.each do | k, title |
+              %th
+                = sort_link(titles[k], k, directions)
+                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th
+              HMIS Managed
+        %tbody
+          - @contacts.each do |c|
+            %tr
+              %td
+                = link_to edit_contact_path(c) do
+                  = c.last_name
+              %td
+                = link_to edit_contact_path(c) do
+                  = c.first_name
+              %td
+                = mail_to c.email, nil, target: '_blank'
+              %td
+                = c.phone
+              %td 
+                = c.role
+              %td
+                = checkmark c.hmis_managed?
+                - unless c.hmis_managed?
+                  = link_to 'Edit', edit_contact_path(c)
+ 
+    %p= paginate @contacts
+    

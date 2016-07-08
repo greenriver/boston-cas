@@ -1,0 +1,13 @@
+= simple_form_for [@opportunity] do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :program, required: true, label: "Choose a Project-Based #{Program.model_name.human}", as: :select, collection: @programs.map { |program| ["#{program.program.name} - #{program.name} (#{program.program_type})", program.id] }
+    = f.input :building, required: true, label: "Choose a #{Building.model_name.human}", as: :select, collection: @buildings.map { |b| ["#{b.name} - #{b.address}", b.id] }
+    = f.input :units, required: true, label: "How many vacancies would you like to create?", as: :integer, input_html: {maxlength: 3, size: 4}
+    
+  .form-actions
+    = f.button :submit
+
+= content_for :page_js do
+  :javascript
+    $('select').select2();

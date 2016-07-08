@@ -1,0 +1,61 @@
+= render partial: 'breadcrumbs'
+.building
+  .row
+    .col-sm-6
+      %h1 
+        = "#{Building.model_name.human}: #{@building.name}"
+      
+    .col-sm-6.text-right.margin-top-03.buttons-row
+      - if admin? || dnd_staff?
+        = link_to edit_building_path(@building), class: 'btn btn-primary' do
+          %span.icon-pencil
+          = "Edit #{Building.model_name.human} Details"
+        = link_to [@building, :contacts], class: 'btn btn-primary' do
+          %span.icon-users
+          = "Edit #{Building.model_name.human} Contacts"
+        = link_to new_building_unit_path(@building), class: 'btn btn-primary' do
+          %span.icon-plus
+          Add Unit
+        
+  %dl
+    %dt
+      Address
+    %dd  
+      - @building.building_address.each do |line|
+        - if @building.map_link
+          = link_to line, @building.map_link, target: '_blank'
+        - else
+          = line
+        %br
+    %dt
+      Project Name
+    %dd
+      = @building.building_type
+    %dt.label--value
+      Subgrantee
+    %dd
+      - if @building.subgrantee_id
+        = @building.subgrantee.name
+  :ruby
+    columns = ['id', 'name', 'available']
+    directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+    titles = {}
+    directions.each {| k,v | titles[k] = @building.units.human_attribute_name(k)}
+    titles['id'].upcase!
+  %h2= "#{Building.model_name.human} Units"
+  .table-responsive
+    %table.table.table-condensed
+      %thead
+        %tr
+          - titles.each do | k, title |
+            %th
+              = sort_link(titles[k], k, directions)
+              %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+          %th HMIS Managed
+      %tbody
+        - @building.units.each do |u|
+          %tr
+            %td=u.id
+            %td= link_to u.name, edit_unit_path(u)
+            %td=checkmark u.available
+            %td=checkmark u.hmis_managed?

@@ -1,0 +1,44 @@
+= render 'breadcrumbs'
+.subgrantee
+  .row
+    .col-sm-7
+      %h1
+        = @subgrantee.name
+        - if @subgrantee.abbreviation
+          (
+          = @subgrantee.abbreviation
+          )
+    .col-sm-5.text-right.buttons-row.margin-top-03
+      - if admin? || dnd_staff?
+        = link_to edit_subgrantee_path(@subgrantee), class: 'btn btn-primary' do
+          %span.icon-pencil
+          Edit Subgrantee
+        = link_to subgrantee_contacts_path(@subgrantee), class: 'btn btn-primary' do
+          %span.icon-users
+          Manage Subgrantee Contacts
+  .row
+    .col-sm-12
+      %h2
+        = "Associated #{Building.model_name.human.pluralize}"
+      .table-responsive
+        %table.table.table-condensed
+          %thead
+            %tr
+              %th= @buildings.human_attribute_name(:id).upcase
+              %th= @buildings.human_attribute_name :name
+              %th= "#{Building.model_name.human} Type"
+              %th= @buildings.human_attribute_name :subgrantee
+          %tbody
+            - @buildings.each do |building|
+              %tr
+                %td
+                  = link_to building_path(building) do
+                    = building.id
+                %td
+                  = link_to building_path(building) do
+                    = building.name
+                %td
+                  = building.building_type
+                %td
+                  = building.subgrantee.name
+      %p= paginate @buildings

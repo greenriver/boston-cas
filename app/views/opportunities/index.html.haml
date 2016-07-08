@@ -1,0 +1,74 @@
+.row
+  .col-sm-8
+    %h1= t '.title'
+  .col-sm-4.margin-top-03.text-right
+    = link_to new_opportunity_path, class: 'btn btn-primary margin-bottom-02' do
+      %span.icon-plus
+      Submit a Vacancy
+    %br
+    %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
+      %span.icon-info
+      How to Add a Vacancy
+  
+- @prompt = t '.search_prompt'
+= render 'search_form'
+.row.table-utilities
+  .col-sm-8
+    %p= page_entries_info @opportunities, entry_name: 'vacancy'
+    :ruby
+      columns = ['id']
+      directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+      titles = {}
+      directions.each {| k,v | titles[k] = @opportunities.human_attribute_name(k)}
+      titles['id'].upcase!
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %tr
+            %th Matches
+            - titles.each do | k, title |
+              %th
+                = sort_link(titles[k], k, directions)
+                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th
+              Status
+            %th
+              Voucher
+              %em (Type)
+            %th= "#{Building.model_name.human} & Unit"
+        %tbody
+          - @opportunities.each do |opportunity|
+            - if opportunity.deleted_at
+              - deleted = "deleted"
+            %tr
+              %td.text-center
+                = link_to opportunity_matches_path(opportunity) do
+                  .badge.badge-success= @matches[opportunity.id]
+              %td{:class => deleted}= opportunity.id
+              %td{:class => deleted}
+                - if opportunity.active_match
+                  Match in Progress
+                - elsif opportunity.available || opportunity.voucher.available 
+                  Available
+                - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
+                  Available: 
+                  = date_format(opportunity.voucher.date_available)
+              %td
+                - unless opportunity.voucher.nil?
+                  = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = opportunity.voucher.sub_program.program.name
+                  %em
+                    = "(#{opportunity.voucher.sub_program.program_type})"
+              %td
+                - unless opportunity.unit.nil?
+                  = link_to edit_unit_path(opportunity.unit) do
+                    = "#{opportunity.try(:unit).try(:building).try(:name)}: #{opportunity.try(:unit).try(:name)}"
+                - unless opportunity.voucher.nil?
+                  - unless opportunity.voucher.unit.nil?
+                    = "#{opportunity.voucher.unit.try(:building).try(:name)}: #{opportunity.voucher.unit.try(:name)}"
+               
+    %p= paginate @opportunities, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+    
+  

@@ -1,0 +1,41 @@
+= content_for :modal_title do
+  Edit Contacts for Match
+
+- if @match_contacts.errors.any?
+  .errors
+    = @match_contacts.errors.full_messages.join ","
+
+= simple_form_for @match_contacts, url: access_context.match_contacts_path(@match), html: form_html_options.merge(class: 'current-step-form') do |form|
+  = render 'contact_manager',
+    contacts_type: 'shelter_agency',
+    heading: 'Shelter Agency (required) and/or Housing Search Worker Contacts',
+    available_contacts_method: :available_shelter_agency_contacts,
+    selected_contacts_method: :shelter_agency_contacts
+
+  = render 'contact_manager',
+    contacts_type: 'client',
+    heading: 'Client Contacts',
+    available_contacts_method: :available_client_contacts,
+    selected_contacts_method: :client_contacts
+
+  = render 'contact_manager',
+    contacts_type: 'dnd_staff',
+    heading: 'DND Staff Contacts',
+    available_contacts_method: :available_dnd_staff_contacts,
+    selected_contacts_method: :dnd_staff_contacts
+
+  = render 'contact_manager',
+    contacts_type: 'housing_subsidy_admin',
+    heading: 'Housing Subsidy Administrator Contacts',
+    available_contacts_method: :available_housing_subsidy_admin_contacts,
+    selected_contacts_method: :housing_subsidy_admin_contacts
+
+  .form-actions.clearfix
+    = form.submit "Save", class: 'btn btn-primary'
+  
+
+= content_for :page_js do
+  :javascript
+    $('[data-contact-manager]').each(function(_i, element) {
+      new App.ContactManager.Controller(element);
+    });

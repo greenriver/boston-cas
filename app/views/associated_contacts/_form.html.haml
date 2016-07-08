@@ -1,0 +1,18 @@
+= simple_form_for [@contact_owner, @contact_join_model] do |form|
+  = form.error_notification
+  - disabled = false
+  - hint = ''
+  .form-inputs
+    = form.simple_fields_for :contact do |contact_fields|
+      - if @contact_join_model.contact.hmis_managed?
+        - disabled = true
+        - hint = 'Details of this contact are not editable here as they are managed in the HMIS'
+      = contact_fields.input :first_name, disabled: disabled, hint: hint
+      = contact_fields.input :last_name, disabled: disabled
+      = contact_fields.input :role, disabled: disabled
+      = contact_fields.input :email, as: :email, disabled: disabled
+      = contact_fields.input :phone, disabled: disabled
+      = contact_fields.input :cell_phone, disabled: disabled
+
+  .form-actions
+    = form.submit 'Save', class: 'btn btn-primary'

@@ -1,0 +1,14 @@
+.row
+  .col-xs-12
+    .match-decision
+      %p Once you have enough information about this match (e.g. criminal background hearing has been held, if applicable), please accept or decline the match accordingly.
+      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+        = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+
+        = render 'match_decisions/decline_reason', form: form
+
+        .form-actions.clearfix
+          = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+          = form.submit 'Accept Match Recommendation', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
+
+        %p If the match is declined, the DND will be informed of the decision. If accepted, all involved parties will be notified.

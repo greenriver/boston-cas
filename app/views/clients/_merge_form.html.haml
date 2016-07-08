@@ -1,0 +1,6 @@
+= simple_form_for @client, url: merge_client_url do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :source, as: :hidden, input_html: {value: c.id}
+  .form-actions
+    = f.button :submit, "Merge into #{@client.first_name} #{@client.last_name}"

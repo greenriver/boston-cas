@@ -1,0 +1,9 @@
+.row
+  .col-xs-12
+    .match-decision
+      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+        = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+
+        .form-actions.clearfix
+          = form.submit 'Override Decline', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)
+          = form.submit 'Accept Decline', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_confirmed'}, disabled: (!@decision.editable?)
