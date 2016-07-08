@@ -1,7 +1,7 @@
 # Boston Coordinated Access
 
 ## Introduction
-The Boston Coordinated Access system was started by the City of Boston, Dept. of Neighborhood Development to help in matching homeless individuals to housing vacancies based on need. The Coordinated Access system centralizes vacancies to permanent supportive housing units using a customisable rule-based system. Once a match is proposed by the sytem using these rules it supports web/email based workflow to work with the client, Dept. of Neighborhood Development staff, Sheleter Agencies and Housing providers to verify eligability and coordiante the housing oppertunity. See [`docs/Flow May Vouchers.pdf`](../blob/master/docs/Flow May Vouchers.pdf) for an example.
+The Boston Coordinated Access system was started by the City of Boston, Dept. of Neighborhood Development to help in matching homeless individuals to housing vacancies based on need. The Coordinated Access system centralizes vacancies to permanent supportive housing units using a customisable rule-based system. Once a match is proposed by the sytem using these rules it supports web/email based workflow to work with the client, Dept. of Neighborhood Development staff, Sheleter Agencies and Housing providers to verify eligability and coordiante the housing oppertunity. See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/master/docs/Flow%20Map%20Vouchers.pdf) for an example.
 
 ```
 This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ```
 
-A copy of the the license is available in [LICENCE.md](../blob/master/LICENSE.md)
+A copy of the the license is available in [LICENCE.md](https://github.com/greenriver/boston-cas/blob/master/LICENSE.md)
 
 ## Application Design
 
