@@ -1,7 +1,11 @@
-# Boston Coordinated Access
+# Boston Coordinated Access System
 
 ## Introduction
-The Boston Coordinated Access system was started by the City of Boston, Dept. of Neighborhood Development to help in matching homeless individuals to housing vacancies based on need. The Coordinated Access system centralizes vacancies to permanent supportive housing units using a customisable rule-based system. Once a match is proposed by the sytem using these rules it supports web/email based workflow to work with the client, Dept. of Neighborhood Development staff, Sheleter Agencies and Housing providers to verify eligability and coordiante the housing oppertunity. See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/master/docs/Flow%20Map%20Vouchers.pdf) for an example.
+The Boston Coordinated Access System (CAS) project was initiated by the City of Boston's Department of Neighborhood Development office to match homeless individuals to housing vacancies based on need. 
+
+The CAS matches vacancies to permanent supportive housing units to clients using a customizable rule-based system. Once a match is proposed by the system using these rules, the system verifies eligibility and coordinates communication around the housing opportunity between the client, Department of Neighborhood Development staff, Shelter Agencies and Housing providers. 
+
+See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/master/docs/Flow%20Map%20Vouchers.pdf) for a flow map that describes voucher availability to person housed.
 
 ```
 This program is free software: you can redistribute it and/or modify
@@ -15,22 +19,22 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ```
 
-A copy of the the license is available in [LICENCE.md](https://github.com/greenriver/boston-cas/blob/master/LICENSE.md)
+A copy of the license is available in [LICENSE.md](https://github.com/greenriver/boston-cas/blob/master/LICENSE.md)
 
 ## Application Design
 
-The application designed around the [HUD Data Standards](https://www.hudexchange.info/programs/hmis/hmis-data-and-technical-standards/). You can find copies of some relavent documenation in the `docs` folder.
+The application is designed around the [HUD Data Standards](https://www.hudexchange.info/programs/hmis/hmis-data-and-technical-standards/). You can find copies of some relevant documentation in the `docs` folder.
 
 The application is written primarily in [Ruby on Rails](http://rubyonrails.org) and we use [RVM](https://rvm.io/) to select a ruby version. Other ruby version managers should work fine, as would manually installing the ruby version mentioned in the `.ruby-version`
 
-The application uses [postgres](https://www.postgresql.org/) as a default primary data storage. Data connectors to other HMIS systems is not included in this release but simple example method using CSV files is available. In Boston's deployment we have connections using various combinations of Microsoft SQL Server, SFTP of CSV and XML, and live API connections.
+The application uses [postgres](https://www.postgresql.org/) as a default primary data storage. Data connectors to other HMIS systems are not included in this release but a simple example method using CSV files is available. In Boston's deployment we have connections using various combinations of Microsoft SQL Server, SFTP of CSV and XML, and live API connections.
 
-We've develop locally on OSX using [homebrew](http://brew.sh/) and deploy to Ubuntu 16.04 using `apt` for dependancies.
+We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to Ubuntu 16.04 using `apt` for dependancies.
 
 ## Screen Shots
 ##### A Match in Progress
 ![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/match-detail.png)
-##### Editing Program roles
+##### Editing Program Roles
 ![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/rules-editing.png)
 
 ### Developer Prequisites
@@ -42,20 +46,20 @@ There is a simple script to setup a development environment in `bin/setup`. To m
 * A running Ruby 2.3+ environment with bundler 1.11+ installed.
 * A local install of postgresql 9.4+ allowing your user to create new databases.
 
-Once these are in-place `bin/setup` should:
+Once these are in place, `bin/setup` should:
 
 * Install all ruby dependancies.
 * Create initial copies of configuration files.
 * Create an initial database and seed it with reference data and a randomly generated admin user.
 * Add some example data that in production would come from your HMIS integration.
 
-If all goes well you should then be able to run `bin/rails server` and open the CAS in your system at http://localhost:3000 using the email/password created during `bin/setup`. If not, read `bin/setup` to figure out what when wrong and fix it.
+If all goes well you should then be able to run `bin/rails server` and open the CAS in your system at http://localhost:3000 using the email/password created during `bin/setup`. If not, read `bin/setup` to figure out what went wrong and fix it.
 
 Hack on your version as you see fit and if you have questions or want to contibute open an issue on github.
 
-# Developer notes
+# Developer Notes
 
-We use the following common rails gem's and conventions:
+We use the following common rails gems and conventions:
 
 * `haml` for view templating
 * `bootstrap` for base styles and layout
@@ -65,5 +69,5 @@ We use the following common rails gem's and conventions:
 * `brakeman` for basic security scanning.
 * `rack-mini-profiler` to make sure pages are fast. Ideally <200ms
 * helpers need to be explictly loaded in controllers. i.e. we have `config.action_controller.include_all_helpers = false` set
-* `bin/rake generate controller ... ` doesn't make fixures and they are disabled in test_helper. We dont use them and instead seed data in test or let test create their own data however they need to.
+* `bin/rake generate controller ... ` doesn't make fixures and they are disabled in test_helper. We don't use them and instead seed data in test or let test create their own data however they need to.
 * it also doesn't make helper or asset stubs, make them by hand if you need one. See `config/application.rb` for details.
