@@ -1,13 +1,15 @@
 # Boston Coordinated Access System
 
 ## Introduction
-The Boston Coordinated Access System (CAS) project was initiated by the City of Boston's Department of Neighborhood Development office to match homeless individuals to housing vacancies based on need. 
+The Boston Coordinated Access System (CAS) project was initiated by the City of Boston's Department of Neighborhood Development office to match homeless individuals to housing vacancies based on need.
 
-The CAS matches vacancies to permanent supportive housing units to clients using a customizable rule-based system. Once a match is proposed by the system using these rules, the system verifies eligibility and coordinates communication around the housing opportunity between the client, Department of Neighborhood Development staff, Shelter Agencies and Housing providers. 
+The CAS matches vacancies to permanent supportive housing units to clients using a customizable rule-based system. Once a match is proposed by the system using these rules, the system verifies eligibility and coordinates communication around the housing opportunity between the client, Department of Neighborhood Development staff, Shelter Agencies and Housing providers.
 
 See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/master/docs/Flow%20Map%20Vouchers.pdf) for a flow map that describes voucher availability to person housed.
 
 ```
+Copyright © 2016 Green River Data Analysis, LLC
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
