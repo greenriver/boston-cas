@@ -29,7 +29,7 @@ The application is written primarily in [Ruby on Rails](http://rubyonrails.org) 
 
 The application uses [postgres](https://www.postgresql.org/) as a default primary data storage. Data connectors to other HMIS systems are not included in this release but a simple example method using CSV files is available. In Boston's deployment we have connections using various combinations of Microsoft SQL Server, SFTP of CSV and XML, and live API connections.
 
-We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to Ubuntu 16.04 using `apt` for dependancies.
+We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to Ubuntu 16.04 using `apt` for dependencies.
 
 ## Screen Shots
 ##### A Match in Progress
@@ -48,7 +48,7 @@ There is a simple script to setup a development environment in `bin/setup`. To m
 
 Once these are in place, `bin/setup` should:
 
-* Install all ruby dependancies.
+* Install all ruby dependencies.
 * Create initial copies of configuration files.
 * Create an initial database and seed it with reference data and a randomly generated admin user.
 * Add some example data that in production would come from your HMIS integration.
