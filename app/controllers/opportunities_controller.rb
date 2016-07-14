@@ -2,7 +2,7 @@ class OpportunitiesController < ApplicationController
   require 'securerandom'
 
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_add_vacancies!
   before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
 
