@@ -1,7 +1,7 @@
 class ProgramDetailsController < ApplicationController
   
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_add_vacancies!
   before_action :set_program
   before_action :set_subprogram
 

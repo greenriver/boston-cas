@@ -72,6 +72,18 @@ module ApplicationHelper
   def dnd_staff?
     current_user.try(:dnd_staff)
   end
+
+  def housing_subsidy_admin?
+    current_user.try(:housing_subsidy_admin)
+  end
+
+  def can_change_rules?
+    true if admin? || dnd_staff?
+  end
+
+  def can_change_services?
+    true if admin? || dnd_staff?
+  end
   
   def enable_responsive?
     @enable_responsive  = true
