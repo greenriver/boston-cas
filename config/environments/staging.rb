@@ -17,5 +17,4 @@ Rails.application.configure do
   config.sandbox_email_mode = true
   config.action_mailer.delivery_method = :sendmail
   config.action_mailer.default_url_options = { host: 'cas-staging.boston.gov', protocol: 'https'}
-  config.action_mailer.smtp_settings = YAML.load_file('config/mail_account.yml')
 end
