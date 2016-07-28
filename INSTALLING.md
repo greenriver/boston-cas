@@ -1,6 +1,7 @@
 # Manual Deploy on Ubuntu 14.04
 
-0. Make a directory for the application to live in.
+Make a directory for the application to live in (or set it up with its own user)
+
  ```
 $ sudo mkdir -p /u/apps/boston-cas
 $ sudo chown -R `whoami`:`whoami` /u/apps/boston-cas
