@@ -23,6 +23,14 @@ GNU General Public License for more details.
 
 A copy of the license is available in [LICENSE.md](https://github.com/greenriver/boston-cas/blob/master/LICENSE.md)
 
+## Vision
+
+The City of Boston made a conscientious choice to release this project into the open source under a GPL. Our goal is to promote this opportunity, allowing Boston's investment to assist other municipalities and organizations, and realize the vision of a tool under continuous, collaborative improvement helping communities nationwide.
+
+Looking ahead, we see the CAS codebase serving as a foundation for many housing match applications. By providing the functionality to connect housing seekers to eligible opportunities, and supporting communication workflows around the process, the system can be adapted to support a wide range of needs.  It could support expansive affordable housing programs at a regional or state level; it could support efforts targeting a larger homeless population; or it could support a local housing project manage its vacancies.
+
+The CAS can sit logically between other existing systems: it's designed now to pull housing inventory and person records from external data sources, and potentially write back updates. It could also work as a standalone system, serving as a canonical database of housing opportunities and housing seeker information. In either case, the CAS provides the fundamental logic and workflow support for identifying optimal housing options, and seeing a selection through to move-in day.
+
 ## Application Design
 
 The application is designed around the [HUD Data Standards](https://www.hudexchange.info/programs/hmis/hmis-data-and-technical-standards/). You can find copies of some relevant documentation in the `docs` folder.
