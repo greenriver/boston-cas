@@ -47,6 +47,7 @@ class SubProgramsController < ApplicationController
       permit(
         :id,
         :name,
+        :voucher_count,
         :subgrantee_id, # Service provider
         :sub_contractor_id,
         :program_type,

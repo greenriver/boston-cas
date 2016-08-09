@@ -21,7 +21,7 @@
     = f.association :housing_subsidy_administrator, label: 'Housing Subsidy Administrator'
     = f.association :service_provider, label: 'Service Provider', required: true 
     = f.association :sub_contractor, label: 'Sub-Contractor'
-    %div.form-group.radio_buttons.program-type
+    .form-group.radio_buttons.program-type
       = f.label :program_type, required: true do
         %abbr{'data-original-title' => 'required'}*
         Project, Tenant, or Sponsor-Based?
@@ -32,7 +32,7 @@
             = t[:label]
           - if t[:building]
             = building = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01'}
-    
+    = f.input :voucher_count, label: 'Total Vouchers', input_html: {style: 'width: 8em;'}
   .well.add-things-boxes.add-things-boxes--rules
     %h3.add-things-boxes--h3 Rules
     = render = render 'requirement_manager/inherited_rules', inheritee: @subprogram
