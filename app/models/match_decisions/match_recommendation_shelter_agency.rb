@@ -4,8 +4,10 @@ module MatchDecisions
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
+    attr_accessor :release_of_information
     # validate :note_present_if_status_declined
     validate :validate_client_last_seen_date_present_if_not_working_with_client
+    validate :release_of_information_present_if_match_accepted
 
     def label
       label_for_status status
@@ -74,6 +76,10 @@ module MatchDecisions
       end
 
       def accepted
+        # Only update the client's release_of_information attribute if we just set it
+        if @decision.release_of_information == '1'
+          match.client.update_attribute(:release_of_information, Time.now)
+        end
         match.schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
       end
       
@@ -89,16 +95,23 @@ module MatchDecisions
       end
     end
 
+    private def release_of_information_present_if_match_accepted
+      # if the Shelter Agency has just indicated a release has been signed:
+      # release_of_information = '1'
+      # if the client previously signed the release 
+      # release_of_information = Time
+      if status == 'accepted' && release_of_information == '0'
+        errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
+      end
+    end
+
     private def decline_reason_blank?
       decline_reason.blank? && not_working_with_client_reason.blank?
     end
 
     def whitelist_params_for_update params
-      super.merge params.require(:decision).permit(:client_last_seen_date)
+      super.merge params.require(:decision).permit(:client_last_seen_date, :release_of_information)
     end
-    
-    
-
   end
 end
 

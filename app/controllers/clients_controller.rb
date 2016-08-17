@@ -56,7 +56,7 @@ class ClientsController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def client_params
     params.require(:client).
-      permit(:source)
+      permit(:source, :release_of_information)
   end
 
   # propose duplicate ids for a given client

@@ -357,7 +357,8 @@ CREATE TABLE clients (
     mental_health_problem boolean DEFAULT false,
     substance_abuse_problem boolean DEFAULT false,
     physical_disability boolean DEFAULT false,
-    disabling_condition boolean DEFAULT false
+    disabling_condition boolean DEFAULT false,
+    release_of_information timestamp without time zone
 );
 
 
@@ -3868,4 +3869,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160622175241');
 INSERT INTO schema_migrations (version) VALUES ('20160622193037');
 
 INSERT INTO schema_migrations (version) VALUES ('20160809193948');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817172520');
 

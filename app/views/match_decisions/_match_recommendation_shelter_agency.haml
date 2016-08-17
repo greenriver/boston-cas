@@ -21,6 +21,14 @@
               = form.association :not_working_with_client_reason, collection: @decision.not_working_with_client_reasons, label: 'If you are no longer working with client, please indicate reason:', as: :check_boxes
               = form.input :not_working_with_client_reason_other_explanation, as: :text, label: false, placeholder: 'Other reason'
               = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
+              - if @match.client.release_of_information.blank?
+                = form.input :release_of_information, as: :boolean, inline_label: 'Client has signed release of information to share their data with network partners'
+              - else
+                %p
+                  Client signed release of information to share their data with network partners on 
+                  %strong
+                    = @match.client.release_of_information.to_date
+                = form.input :release_of_information, as: :hidden, input_html: { value: @match.client.release_of_information}
    
 
           .form-actions.clearfix

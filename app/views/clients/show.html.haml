@@ -41,6 +41,9 @@
       %tr
         %th Veteran
         %td= @client.veteran_status.try(:text)
+      %tr
+        %th Release of information signed on
+        %td= @client.release_of_information.try(:to_date)
 
   %h3 Contact Information
   %table.table.table-condensed
