@@ -4,12 +4,20 @@
   %p Sorry, you are not able to see that information at this time
 - else
   %p
-    = @client.full_name
+    %strong
+      = @client.full_name
+    %br
     - if @client.date_of_birth.present?
       %span.age
-        = "(age: #{@client.age})"
+        = "Date of Birth: #{@client.date_of_birth}"
     - else
       %span.age (age unknown)
+    %br
+    SSN:
+    - if @client.ssn.present?
+      = ssn(@client.ssn)
+    - else
+      none on file
     %br
     Home Phone:
     = @client.homephone
@@ -27,28 +35,18 @@
     %br
     Email:
     = @client.email
-
-  %h3 Date of First Homelessness
-  - if @client.calculated_first_homeless_night.present?
-    %p
-      = date_format(@client.calculated_first_homeless_night)
-
-  -#%h3 Special Needs
-  -#%ul
-    -#%li TODO: List of Special Needs
-
-  -#%h3 Language(s) Spoken
-  -#%ul
-    -#%li TODO: Languages Spoken
-
-  %h3 Last Bed Stay or Outreach Contact
-  %table.table.table-condensed
-    %tbody
-      %tr
-        %td
-          ="#{@client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))}"
-        %td
-          = "#{@client.project_client.try(:building).try(:name)}"
+  .row
+    .col-sm-6
+      %h4 Date of First Homelessness
+      %p
+        - if @client.calculated_first_homeless_night.present?
+          = @client.calculated_first_homeless_night
+        - else
+          Unknown
+    .col-sm-6
+      %h4 Last Bed Stay or Outreach Contact
+      = @client.project_client[:calculated_last_homeless_night]
+      = @client.project_client.try(:building).try(:name)
 
   %h3 CAS Housing History
   %p (This information is only known for opportunities created through CAS.)
