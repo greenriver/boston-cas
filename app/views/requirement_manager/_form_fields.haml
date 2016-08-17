@@ -20,8 +20,8 @@
       .col-md-7
         .form-group
           = select_tag :available_rules, nil, class: 'form-control', data: {rule_searcher: true}
-          - form.object.available_rules.each do |rule|
-            %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb}}
+          - form.object.available_rules.each_with_index do |rule, i|
+            %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, sort_order: i}}
       .col-md-2
         .btn-group
           %a{href: '#', class: 'btn btn-primary', data: {add_button: true}} Add Rule
