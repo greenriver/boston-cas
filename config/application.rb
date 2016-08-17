@@ -42,6 +42,7 @@ module BostonCa
     config.lograge.custom_options = ->(event) do
       {
         server_protocol: event.payload[:server_protocol],
+        forwarded_for: event.payload[:forwarded_for],
         remote_ip: event.payload[:remote_ip],
         session_id: event.payload[:session_id],
         user_id: event.payload[:user_id],
