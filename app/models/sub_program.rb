@@ -28,7 +28,8 @@ class SubProgram < ActiveRecord::Base
     [
       {value: 'Project-Based', label: 'Project-Based', building: true},
       {value: 'Tenant-Based', label: 'Tenant-Based', building: false},
-      {value: 'Sponsor-Based', label: 'Sponsor-Based', building: false},
+      {value: 'Sponsor-Based', label: 'Sponsor-Based (mobile)', building: false},
+      {value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true},
     ]
   end
 
