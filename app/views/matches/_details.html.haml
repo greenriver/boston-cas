@@ -44,7 +44,8 @@
               = link_to access_context.match_client_details_path(match), data: {loads_in_pjax_modal: true} do
                 = match.client_name_for_contact current_contact
             - else
-              = match.client_name_for_contact current_contact
+              = link_to new_user_session_path do
+                = match.client_name_for_contact current_contact
       .row
         .col-sm-5
           .detail-box--label Services

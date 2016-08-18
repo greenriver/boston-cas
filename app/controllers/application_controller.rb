@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   #before_filter :_basic_auth, if: -> { Rails.env.staging? }
   before_filter :set_paper_trail_whodunnit
+  # Allow devise login links to pass along a destination
+  after_filter :store_action
 
   if Rails.configuration.force_ssl
     force_ssl
@@ -48,6 +50,19 @@ class ApplicationController < ActionController::Base
     @current_contact || current_user.try(:contact)
   end
 
+  def store_action
+    return unless request.get? 
+    if (request.path != "/users/sign_in" &&
+        request.path != "/users/sign_up" &&
+        request.path != "/users/password/new" &&
+        request.path != "/users/password/edit" &&
+        request.path != "/users/confirmation" &&
+        request.path != "/users/sign_out" &&
+        !request.xhr?) # don't store ajax calls
+      store_location_for(:user, request.fullpath)
+    end
+  end
+  
   protected
 
   def configure_permitted_parameters
