@@ -9,7 +9,7 @@ module MatchAccessContexts
     end
     
     def current_contact
-      notification.recipient
+      @notification.recipient
     end
     
     def contacts_editable?

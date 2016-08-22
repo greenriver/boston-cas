@@ -4,6 +4,7 @@ module MatchDecisions
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
+    # proxy for client.release_of_information
     attr_accessor :release_of_information
     # validate :note_present_if_status_declined
     validate :validate_client_last_seen_date_present_if_not_working_with_client

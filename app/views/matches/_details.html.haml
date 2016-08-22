@@ -40,14 +40,24 @@
         .col-sm-4
           .detail-box--label Client
           .detail-box--value
-            - if match.show_client_info_to? current_contact
-              = link_to access_context.match_client_details_path(match), data: {loads_in_pjax_modal: true} do
-                = match.client_name_for_contact current_contact
+            - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end
+            - name = match.client_name_for_contact access_context.current_contact
+            - if match.show_client_info_to?(access_context.current_contact)
+              -# If we have permission to see the client details, present a modal
+              = link_to link, data: {loads_in_pjax_modal: true} do
+                = name
+                - unless user_signed_in?
+                  -# If we would have permission to see the client details if we logged in, show age
+                  %br
+                  Age: 
+                  = match.client.age || 'unknown'
             - elsif ! user_signed_in?
-              = link_to new_user_session_path do
-                = match.client_name_for_contact current_contact
+              -# Provide the option to login to see more
+              = link_to link do
+                = name
             - else
-              = match.client_name_for_contact current_contact
+              -# Even though we are logged in, we don't have permission
+              = name
       .row
         .col-sm-5
           .detail-box--label Services
