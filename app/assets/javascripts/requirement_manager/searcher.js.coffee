@@ -33,4 +33,12 @@ class App.RequirementManager.Searcher
     
   _select2_data: ->
     result = [{id: "", text: ""}]
-    result = result.concat @available_rules.map (rule) => {text: rule.name, id: rule.id}
+    result = result.concat @available_rules.map (rule) => {text: rule.name, id: rule.id}  
+    result.sort(@_compare_rules)    
+    
+  _compare_rules: (a, b) ->   
+    if a.text < b.text    
+      return -1   
+    if a.text > b.text    
+      return 1    
+    return 0 
