@@ -90,6 +90,11 @@ module Cas
       if pc_attr["veteran_status"] == '1'
         pc_attr["veteran"] = 1
       end
+      if pc_attr["developmental_disability"] == '1'
+        pc_attr["developmental_disability"] = 1
+      else
+        pc_attr["developmental_disability"] = nil
+      end
       pc_attr["substance_abuse_problem"] = pc.substance_abuse?
 
       # convert ProjectClient into Client format
