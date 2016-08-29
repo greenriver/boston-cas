@@ -82,7 +82,8 @@ module Cas
         :gender,
         :income_total_monthly_last_collected,
         :income_total_monthly,
-        :substance_abuse_problem
+        :substance_abuse_problem,
+        :developmental_disability
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?
