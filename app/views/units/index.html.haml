@@ -12,11 +12,10 @@
   .col-sm-8
     %p= page_entries_info @units
     :ruby
-      columns = ['id', 'name', 'available', 'address', 'building_id']
+      columns = ['id', 'name', 'available', 'building_id']
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
       titles = {}
       directions.each {| k,v | titles[k] = @units.human_attribute_name(k)}
-      titles['address'] = 'Location'
       titles['id'].upcase!
   
 .row
@@ -38,7 +37,6 @@
               %td{:class => deleted}= unit.id
               %td{:class => deleted}= unit.name
               %td{:class => deleted}= checkmark unit.available
-              %td{:class => deleted} #{unit.address} #{unit.city}, #{unit.state} #{unit.zip_code}
               %td= link_to unit.building.name, building_path(unit.building)
               %td
                 - if ! unit.deleted_at

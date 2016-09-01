@@ -105,4 +105,8 @@ module ApplicationHelper
   def current_contact
     @current_contact || current_user.try(:contact)
   end
+
+  def pjax_request?
+    request.env['HTTP_X_PJAX'].present?
+  end
 end

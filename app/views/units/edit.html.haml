@@ -1,10 +1,14 @@
 = render 'breadcrumbs'
-%h1
+= content_for :modal_title do
   Edit Unit:
   = @unit.name
-
-.row
-  .col-sm-8
-    = render 'form'
-    %p.delete
-      = link_to "Delete this unit in #{@unit.name}", unit_path(@unit), method: :delete, data: {confirm: "Please confirm that you'd like to delete this unit."}
+- if pjax_request?
+  .row
+    .col-sm-12
+      = render 'form'
+- else
+  .row
+    .col-sm-8
+      = render 'form'
+      %p.delete
+        = link_to "Delete this unit: #{@unit.name}", unit_path(@unit), method: :delete, data: {confirm: "Please confirm that you'd like to delete this unit."}

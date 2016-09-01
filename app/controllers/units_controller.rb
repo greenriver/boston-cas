@@ -3,6 +3,7 @@ class UnitsController < ApplicationController
   before_action :require_admin_or_dnd_staff!
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
+  include PjaxModalController
 
   # GET /hmis/units
   def index
@@ -70,8 +71,9 @@ class UnitsController < ApplicationController
 
   # DELETE /hmis/units/1
   def destroy
+    building = @unit.building
     if @unit.destroy
-      redirect_to units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
+      redirect_to building_path(building), notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
     else
       render :edit, {:flash => { :error => 'Unable to delete unit <strong>#{@unit[:name]}</strong>.'}}
     end
