@@ -15,6 +15,10 @@ module Matching::HasOrInheritsRequirements
       me.direct_requirements + me.inherited_requirements(ancestors)
     end
   
+    def requirements_for_archive
+      requirements_with_inherited.map{|r| r.attributes.reject{|k,v| ['deleted_at', 'created_at', 'updated_at'].include? k}}
+    end
+
     def direct_requirements
       self.class.associations_for_direct_requirements.map {|_| send(_)}.flatten
     end

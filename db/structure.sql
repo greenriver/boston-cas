@@ -231,7 +231,8 @@ CREATE TABLE client_opportunity_matches (
     selected boolean,
     active boolean DEFAULT false NOT NULL,
     closed boolean DEFAULT false NOT NULL,
-    closed_reason character varying
+    closed_reason character varying,
+    universe_state json
 );
 
 
@@ -3871,4 +3872,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160622193037');
 INSERT INTO schema_migrations (version) VALUES ('20160809193948');
 
 INSERT INTO schema_migrations (version) VALUES ('20160817172520');
+
+INSERT INTO schema_migrations (version) VALUES ('20160901201841');
 

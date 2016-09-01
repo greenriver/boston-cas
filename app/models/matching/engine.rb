@@ -62,8 +62,11 @@ class Matching::Engine
 
     client_priority = 1
     clients_for_matches(opportunity).each do |client|
+      universe_state = {
+        requirements: opportunity.requirements_for_archive,
+      }
       match =
-        client.candidate_matches.create(opportunity: opportunity, client: client)
+        client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
       match.activate! if client_priority == 1
       client_priority += 1
     end
