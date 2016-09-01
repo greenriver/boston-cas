@@ -76,6 +76,7 @@ Rails.application.routes.draw do
         patch 'bulk_update', on: :collection
       end
       resource :program_details, only: [:edit, :update]
+      resources :unit_for_building, only: [:new, :create]
     end
   end
   resources :services

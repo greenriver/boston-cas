@@ -1,0 +1,15 @@
+= simple_form_for :unit_for_building, url: program_sub_program_unit_for_building_index_path, class: :unit_for_building do |f|
+  = f.error_notification
+  .form-inputs.margin-top-02
+    = f.input :building_id, collection: @buildings, label: "Where is this unit located?", selected: params[:building_id], class: 'has-dependent'
+    = f.input :available, as: :hidden, input_html: {value: true}
+    =# debug @buildings
+    
+    = f.input :name, label: "#{Unit.model_name.human} name"
+        
+  .form-actions
+    = f.button :submit, value: "Add #{Unit.model_name.human}"
+
+= content_for :page_js do
+  :javascript
+    $('select').select2({ width: '100%' });
