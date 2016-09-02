@@ -4,13 +4,20 @@ module MatchArchive
   
   extend ActiveSupport::Concern
 
-  def prepare_for_archive   
+  def prepare_for_archive
     attributes = if self.is_a?(OpportunityDetails::Base)
       opportunity.attributes
     else
       self.attributes
     end
     return unless attributes.present?
+    if respond_to?(:services) && services.any?
+      attributes[:services] = services.map(&:prepare_for_archive)
+    end
+    if respond_to?(:requirements) && requirements.any?
+      attributes[:requirements] = requirements.map(&:prepare_for_archive)
+      attributes[:rules] = requirements.map{|m| {type: m.rule.type, id: m.id}}
+    end
     attributes.reject{|k,v| ['deleted_at', 'created_at', 'updated_at'].include? k}
   end
 end

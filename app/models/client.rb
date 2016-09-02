@@ -1,6 +1,7 @@
 class Client < ActiveRecord::Base
 
   include SubjectForMatches
+  include MatchArchive
 
   has_paper_trail
   acts_as_paranoid

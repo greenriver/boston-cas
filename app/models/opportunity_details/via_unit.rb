@@ -38,14 +38,14 @@ module OpportunityDetails
     def opportunity_for_archive
       {
         opportunity: prepare_for_archive,
-        voucher: voucher.prepare_for_archive,
-        sub_program: voucher.sub_program.prepare_for_archive,
-        program: voucher.sub_program.program.prepare_for_archive,
-        subgrantee: voucher.sub_program.sub_contractor.prepare_for_archive,
-        sub_contractor: voucher.sub_program.service_provider.prepare_for_archive,
-        funding_source: voucher.sub_program.program.funding_source.prepare_for_archive,
-        unit: unit.prepare_for_arvive,
-        building: unit.building.prepare_for_arvive,
+        voucher: voucher.try(:prepare_for_archive),
+        sub_program: voucher.sub_program.try(:prepare_for_archive),
+        program: voucher.sub_program.program.try(:prepare_for_archive),
+        subgrantee: voucher.sub_program.sub_contractor.try(:prepare_for_archive),
+        sub_contractor: voucher.sub_program.service_provider.try(:prepare_for_archive),
+        funding_source: voucher.sub_program.program.funding_source.try(:prepare_for_archive),
+        unit: unit.try(:prepare_for_archive),
+        building: unit.building.try(:prepare_for_archive),
       }
     end
 

@@ -66,6 +66,7 @@ class Matching::Engine
         requirements: opportunity.requirements_for_archive,
         services: opportunity.services_for_archive,
         opportunity: opportunity.opportunity_details.opportunity_for_archive,
+        client: client.prepare_for_archive,
       }
       match =
         client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)

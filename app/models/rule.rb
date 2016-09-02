@@ -1,5 +1,6 @@
 class Rule < ActiveRecord::Base
   self.table_name = 'rules'
+  include MatchArchive
 
   has_many :requirements
   has_many :services, through: :building_services
