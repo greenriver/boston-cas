@@ -78,7 +78,7 @@
                 Requirements have changes since match creation; client may no longer be eligible.
             - if requirements.count > 0
               - requirements.each do |r| 
-                - if initial_ids.exclude? r.id
+                - if initial_ids.present? && initial_ids.exclude?(r.id)
                   %span.detail-box--new-requirement
                     *
                     = r.name
