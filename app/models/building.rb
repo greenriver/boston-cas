@@ -4,6 +4,7 @@ class Building < ActiveRecord::Base
   include ManagesServices
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
+  include MatchArchive
 
   has_paper_trail
 

@@ -16,7 +16,7 @@ module Matching::HasOrInheritsRequirements
     end
   
     def requirements_for_archive
-      requirements_with_inherited.map{|r| r.attributes.reject{|k,v| ['deleted_at', 'created_at', 'updated_at'].include? k}}
+      requirements_with_inherited.map{|r| r.prepare_for_archive}
     end
 
     def direct_requirements

@@ -4,6 +4,7 @@ class Subgrantee < ActiveRecord::Base
   include ManagesServices
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
+  include MatchArchive
 
   has_many :buildings
   has_many :data_sources

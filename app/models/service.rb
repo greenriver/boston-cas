@@ -1,6 +1,7 @@
 class Service < ActiveRecord::Base
   include Matching::HasOrInheritsRequirements
   include HasRequirements
+  include MatchArchive
 
   has_many :building_services, dependent: :destroy, inverse_of: :service
   has_many :buildings, through: :building_services

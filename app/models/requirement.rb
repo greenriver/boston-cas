@@ -1,4 +1,5 @@
 class Requirement < ActiveRecord::Base
+  include MatchArchive
   belongs_to :rule
   belongs_to :requirer, polymorphic: true
 

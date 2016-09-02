@@ -2,6 +2,7 @@ class SubProgram < ActiveRecord::Base
 
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
+  include MatchArchive
 
   belongs_to :program, inverse_of: :sub_programs
   belongs_to :building

@@ -27,6 +27,10 @@ module OpportunityDetails
       ''
     end
 
+    def opportunity_for_archive
+      {}
+    end
+
     def services
       []
     end

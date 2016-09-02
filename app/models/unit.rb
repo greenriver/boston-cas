@@ -4,6 +4,7 @@ class Unit < ActiveRecord::Base
 
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
+  include MatchArchive
 
   belongs_to :building, inverse_of: :units
   has_many :opportunities, inverse_of: :unit

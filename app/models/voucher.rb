@@ -2,7 +2,8 @@ class Voucher < ActiveRecord::Base
 
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
-
+  include MatchArchive
+  
   belongs_to :sub_program
   belongs_to :unit
 

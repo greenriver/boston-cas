@@ -5,6 +5,7 @@ class Program < ActiveRecord::Base
   include HasRequirements
   include InheritsRequirementsFromServices
   include ManagesServices
+  include MatchArchive
 
   belongs_to :funding_source
   delegate :name, to: :funding_source, allow_nil: true, prefix: true

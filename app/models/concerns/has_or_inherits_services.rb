@@ -30,6 +30,10 @@ module HasOrInheritsServices
       end.flatten
     end
     
+    def services_for_archive
+      services_with_inherited.map{|r| r.prepare_for_archive}
+    end
+
     def self.eager_load_services_with_inherited
       eager_load(*associations_for_services_with_inherited)
     end

@@ -64,6 +64,8 @@ class Matching::Engine
     clients_for_matches(opportunity).each do |client|
       universe_state = {
         requirements: opportunity.requirements_for_archive,
+        services: opportunity.services_for_archive,
+        opportunity: opportunity.opportunity_details.opportunity_for_archive,
       }
       match =
         client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)

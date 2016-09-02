@@ -4,6 +4,7 @@ class FundingSource < ActiveRecord::Base
   include InheritsRequirementsFromServicesOnly
   include HasRequirements
   include ManagesServices
+  include MatchArchive
 
   has_many :funding_source_services, inverse_of: :funding_source
   has_many :services, through: :funding_source_services

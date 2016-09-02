@@ -6,6 +6,7 @@ class Opportunity < ActiveRecord::Base
   include HasRequirements
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
+  include MatchArchive
 
   belongs_to :unit, inverse_of: :opportunities
   belongs_to :voucher, inverse_of: :opportunity
