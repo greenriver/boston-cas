@@ -22,3 +22,6 @@
 .detail-box--requirement-source {
   font-size: rem(12);
 }
+.detail-box--new-requirement {
+  color: darken($brand-danger, 30);
+}
