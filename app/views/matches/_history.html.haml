@@ -7,7 +7,7 @@
       - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
         %tr
           %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
-          %td.history--event-name
+          %td.history--event-name      
             = event.name
             - if event.note.present?
               .history--event-note
@@ -22,3 +22,7 @@
                       %span.icon-cross
                       Delete Note
           %td.history--contact-name= event.contact_name
+          - if admin? || dnd_staff?
+            %td.history--resend-notification
+              - if event.notification.present? && event.notification.decision == @match.current_decision
+                = link_to 'Re-send notification', resend_notification_path(event.notification.code)

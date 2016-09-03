@@ -89,6 +89,7 @@ Rails.application.routes.draw do
   end
   resource :account, only: [:edit, :update]
   resources :reissue_notifications, only: [:index, :update, :destroy]
+  resources :resend_notification, only: [:show]
 
   unless Rails.env.production?
     resource 'style_guide', only: :none do
