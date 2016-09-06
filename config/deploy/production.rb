@@ -2,7 +2,7 @@ set :deploy_to, '/u/apps/boston-cas'
 namespace :deploy do
   before :finishing, :nginx_restart do
     on roles(:web) do
-      execute :sudo, 'restart boston-ca-staging'
+      execute :sudo, 'restart boston-ca'
     end
   end
 end
