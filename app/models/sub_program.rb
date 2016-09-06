@@ -1,5 +1,6 @@
 class SubProgram < ActiveRecord::Base
-
+  acts_as_paranoid
+  has_paper_trail
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include MatchArchive
@@ -16,14 +17,13 @@ class SubProgram < ActiveRecord::Base
   belongs_to :housing_subsidy_administrator, class_name: 'Subgrantee', foreign_key: :hsa_id
 
   has_many :vouchers
-  
-  acts_as_paranoid
-  has_paper_trail
 
   accepts_nested_attributes_for :program, :vouchers
   attr_accessor :add_vouchers
 
-  validates_presence_of :building, if: :has_buildings
+  validates_presence_of :building, if: :has_buildings?
+
+  scope :has_buildings, -> {where(program_type: SubProgram.have_buildings)}
 
   def self.types
     [
@@ -32,6 +32,10 @@ class SubProgram < ActiveRecord::Base
       {value: 'Sponsor-Based', label: 'Sponsor-Based (mobile)', building: false},
       {value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true},
     ]
+  end
+
+  def program_type_label
+    SubProgram.types.select{|m| m[:value] == program_type}.first[:label]
   end
 
   def update_summary!
@@ -49,7 +53,7 @@ class SubProgram < ActiveRecord::Base
     b
   end
 
-  def has_buildings
+  def has_buildings?
     SubProgram.have_buildings.include? program_type
   end
 

@@ -6,7 +6,7 @@
         %tr
           %th.vouchers--available
             Available
-          - if @subprogram.has_buildings
+          - if @subprogram.has_buildings?
             %th.vouchers--building
               = "#{Building.model_name.human}"
             %th.vouchers--unit
@@ -27,7 +27,7 @@
           %tr
             %td.text-center
               = v.input_field :available, disabled: disabled, as: :boolean
-            - if @subprogram.has_buildings
+            - if @subprogram.has_buildings?
               %td
                 = v.input_field :building_id, collection: Building.all, selected: v.object.building.try(:id), disabled: disabled, class: 'has-dependent'
               %td

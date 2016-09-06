@@ -74,7 +74,7 @@ class SubProgramsController < ApplicationController
   end
   def prevent_incorrect_building
     # make sure we unset the building if we shouldn't have one.
-    unless @subprogram.has_buildings
+    unless @subprogram.has_buildings?
       @subprogram.building_id = nil
     end
   end

@@ -35,7 +35,7 @@ class OpportunitiesController < ApplicationController
   # Using this to bulk create units and associated vouchers
   def new
     @opportunity = Opportunity.new
-    @programs = sub_program_scope.where(program_type: SubProgram.have_buildings)
+    @programs = sub_program_scope
     @buildings = building_scope
   end
 
@@ -45,42 +45,50 @@ class OpportunitiesController < ApplicationController
 
   # Bulk create available units with associated available vouchers
   def create
-    @opportunity = Opportunity.new
-    @programs = sub_program_scope.where(program_type: 'Project-Based')
-    @buildings = building_scope
+    @opportunity = Opportunity.new(opportunity_params)
     
-    if params[:opportunity][:program].nil? || params[:opportunity][:program].empty? 
+    if params[:opportunity][:program].blank? 
       @opportunity.errors[:program] = 'Required'
+    else
+      sub_program = SubProgram.find(opportunity_params[:program].to_i)
     end
-    if params[:opportunity][:building].nil? || params[:opportunity][:building].empty?
-      @opportunity.errors[:building] = 'Required'
+    
+    if sub_program.present? && sub_program.has_buildings?
+      if params[:opportunity][:building].blank?
+        @opportunity.errors[:building] = 'Required'
+      else
+         building = Building.find(opportunity_params[:building].to_i)
+      end
     end
-    if params[:opportunity][:units].nil? || params[:opportunity][:units].empty? || ! params[:opportunity][:units] =~ /\A\d+\z/
+    if params[:opportunity][:units].blank? || ! params[:opportunity][:units] =~ /\A\d+\z/
       @opportunity.errors[:units] = 'Required, and must be a number'
     end
 
     if @opportunity.errors.present?
+      @programs = sub_program_scope
+      @buildings = building_scope
       render :new
     else
-      building = Building.find(opportunity_params[:building].to_i)
-      sub_program = SubProgram.find(opportunity_params[:program].to_i)
       units = []
       vouchers = []
       opportunity_params[:units].to_i.times do |x|
-        unit = Unit.create(building: building, name: SecureRandom.hex, available: true)
-        voucher = Voucher.create(sub_program: sub_program, unit: unit, available: true)
+        if sub_program.has_buildings?
+          unit = Unit.create(building: building, name: SecureRandom.hex, available: true)
+        end
+        voucher = Voucher.new(sub_program: sub_program, available: true)
+        voucher.unit = unit
+        voucher.save
         voucher.opportunity || voucher.create_opportunity(available: true, available_candidate: true)
         
-        units << unit
         vouchers << voucher
       end
-      if units.count > 0 && vouchers.count > 0
-        flash[:notice] = "Created #{vouchers.count} new #{Opportunity.model_name.human(count: units.count)}"
+      if vouchers.count > 0
+        flash[:notice] = "Created #{vouchers.count} new #{Opportunity.model_name.human(count: vouchers.count)}"
         Matching::RunEngineJob.perform_later
       else
         flash[:alert] = "There was an error creating new #{Opportunity.model_name.human}"
       end
-        redirect_to action: :index
+      redirect_to action: :index
     end
   end
 
