@@ -16,6 +16,21 @@ class UnitForBuildingController < ApplicationController
     end
   end
 
+  def edit
+    @unit = unit_source.find(params[:id].to_i)
+    @building = @unit.building
+    @units = []
+  end
+  def update
+    @unit = unit_source.find(params[:id].to_i)
+    if @unit.update(unit_params)
+      flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> in <a href=\"#{building_path(@unit.building)}\">#{@unit.building.name}</a> was successfully updated."
+      redirect_to program_sub_program_vouchers_path(program_id: params[:program_id].to_i, sub_program_id: params[:sub_program_id].to_i)
+    else
+      flash[:error] = "Unable to update unit"
+    end
+  end
+
   private
     def unit_scope
       unit_source.all

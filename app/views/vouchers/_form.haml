@@ -34,7 +34,7 @@
                 .row
                   .col-sm-2
                     = link_to 'Add', new_program_sub_program_unit_for_building_path(@program, @subprogram, building_id: v.object.building.try(:id)), data: {loads_in_pjax_modal: true}, class: 'jAddUnit'
-                    = link_to 'Edit', edit_unit_path(1), data: {loads_in_pjax_modal: true}, class: 'jEditUnit'
+                    = link_to 'Edit', edit_program_sub_program_unit_for_building_path(program_id: @program.id, sub_program_id: @subprogram.id, id: 1), data: {loads_in_pjax_modal: true}, class: 'jEditUnit'
                   .col-sm-10
                     = v.association :unit, collection: v.object.units, disabled: disabled, input_html: {data: {dependent: true, url: '/buildings/:id/available_units.json', 'value-method' => :id, 'label-method' => :name}, class: "sub_program_vouchers_attributes_#{v.index}_building_id jUnit", style: "width: 100%;"}, label: false
             %td
@@ -85,7 +85,8 @@
       else {
         $(this).closest('.row').find('.jAddUnit').hide();
         var jUnit = $(this).closest('.row').find('.jEditUnit');
-        jUnit.attr('href', '/units/' + $(this).val() + '/edit')
+        var href = jUnit.attr('href').replace(/\/unit_for_building\/\d+\/edit/, '/unit_for_building/' + $(this).val() + '/edit');
+        jUnit.attr('href', href)
         jUnit.show();
       }
     });

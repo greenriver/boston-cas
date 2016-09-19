@@ -62,7 +62,9 @@ class UnitsController < ApplicationController
         # might also include this unit
         #op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
-      redirect_to building_path(@unit.building)
+      if ! pjax_request?
+        redirect_to building_path(@unit.building)
+      end
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> was successfully updated."
     else
       render :edit, {:flash => { :error => 'Unable to update unit <strong>#{@unit[:name]}</strong>.'}}

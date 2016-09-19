@@ -1,0 +1,12 @@
+= simple_form_for @unit, as: :unit_for_building, url: program_sub_program_unit_for_building_path, class: :unit_for_building do |f|
+  = f.error_notification
+  .form-inputs.margin-top-02
+    = f.input :available, as: :boolean
+    = f.input :name, label: "#{Unit.model_name.human} name"
+        
+  .form-actions
+    = f.button :submit, value: "Update #{Unit.model_name.human}"
+
+= content_for :page_js do
+  :javascript
+    $('select').select2({ width: '100%' });
