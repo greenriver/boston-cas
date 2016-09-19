@@ -75,7 +75,7 @@
             - if requirements.map(&:prepare_for_archive) != initial_requirements
               - initial_ids = initial_requirements.map{|m| m['id']}
               .alert.alert-danger
-                Requirements have changes since match creation; client may no longer be eligible.
+                Requirements have changed since match creation; client may no longer be eligible.
             - if requirements.count > 0
               - requirements.each do |r| 
                 - if initial_ids.present? && initial_ids.exclude?(r.id)
