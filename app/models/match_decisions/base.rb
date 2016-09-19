@@ -117,6 +117,8 @@ module MatchDecisions
       {}
     end
     
+    # Overridden for decisions that can be overridden by DND and indicate
+    # the status visually
     def status_label
       statuses[status && status.to_sym]
     end

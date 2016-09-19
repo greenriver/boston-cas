@@ -17,6 +17,15 @@ module MatchDecisions
       end
     end
 
+    # if we've overridden this decision, indicate that (this is sent to the client)
+    def status_label
+      if match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.status == 'decline_overridden'
+        'Approved'
+      else
+        statuses[status && status.to_sym]
+      end
+    end
+
     def step_name
       'Housing Subsidy Administrator Reviews Match'
     end
