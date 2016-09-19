@@ -177,8 +177,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def overall_status
     if active?
       if match_recommendation_dnd_staff_decision.status == 'decline' ||
-        match_recommendation_shelter_agency_decision.status == 'declined' ||
-        approve_match_housing_subsidy_admin_decision.status == 'declined'
+        (match_recommendation_shelter_agency_decision.status == 'declined' && ! confirm_shelter_agency_decline_dnd_staff_decision.status == 'decline_overridden') ||
+        (approve_match_housing_subsidy_admin_decision.status == 'declined' && ! confirm_housing_subsidy_admin_decline_dnd_staff_decision.status == 'decline_overridden')
         "Declined"
       else
         "In Progress"

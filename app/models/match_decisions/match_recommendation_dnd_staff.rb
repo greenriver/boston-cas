@@ -52,7 +52,11 @@ module MatchDecisions
       MatchDecisionReasons::DndStaffDecline.all
     end
     
-
+    def notifications_for_this_step
+      @notifications_for_this_step ||= [].tap do |m|
+        m << Notifications::MatchRecommendationDndStaff
+      end
+    end
 
 
     class StatusCallbacks < StatusCallbacks

@@ -36,6 +36,16 @@ module MatchDecisions
     def initialize_decision!
       update status: 'pending'
     end
+
+    def notifications_for_this_step
+      @notifications_for_this_step ||= [].tap do |m|
+        if match.schedule_criminal_hearing_housing_subsidy_admin_decision.status == 'scheduled'
+          m << Notifications::CriminalHearingScheduledClient
+          m << Notifications::CriminalHearingScheduledDndStaff
+          m << Notifications::CriminalHearingScheduledShelterAgency
+        end
+      end
+    end
     
     def accessible_by? contact
       contact.user_admin? ||

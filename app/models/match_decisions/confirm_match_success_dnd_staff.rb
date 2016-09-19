@@ -36,6 +36,12 @@ module MatchDecisions
       Notifications::ConfirmMatchSuccessDndStaff.create_for_match! match
     end
 
+    def notifications_for_this_step
+      @notifications_for_this_step ||= [].tap do |m|
+        m << Notifications::ConfirmMatchSuccessDndStaff
+      end
+    end
+
     def accessible_by? contact
       contact.user_admin? ||
       contact.user_dnd_staff?

@@ -52,6 +52,14 @@ module MatchDecisions
       Notifications::MatchRecommendationShelterAgency.create_for_match! match
     end
 
+    def notifications_for_this_step
+      @notifications_for_this_step ||= [].tap do |m|
+        m << Notifications::MatchRecommendationHousingSubsidyAdmin
+        m << Notifications::MatchRecommendationClient
+        m << Notifications::MatchRecommendationShelterAgency
+      end
+    end
+
     def accessible_by? contact
       contact.user_admin? ||
       contact.user_dnd_staff? ||

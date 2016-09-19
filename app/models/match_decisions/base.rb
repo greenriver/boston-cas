@@ -95,6 +95,19 @@ module MatchDecisions
       !match.closed?
     end
     
+    # Sometimes the contacts change during a match and notifications should be re-issued
+    # to everyone including the new contact (This runs the notification part of StatusCallbacks#accepted on 
+    # on the prior step)
+    def recreate_notifications_for_this_step
+      notifications_for_this_step.each do |n|
+        n.create_for_match! match
+      end
+    end
+
+    def notifications_for_this_step
+      # override in subclass, return an array of notifications appropriate to resend for the current step
+    end
+
     ######################
     # Status Handling
     ######################

@@ -33,6 +33,16 @@ class MatchDecisionsController < ApplicationController
     end
   end
 
+  def recreate_notifications
+    if @decision.editable?
+      flash[:notice] = "Recreated notifications for this step"
+      @decision.recreate_notifications_for_this_step
+      redirect_to access_context.match_decision_path(@match, @decision)
+    else
+      flash[:alert] = "Unable to recreate notifications for this step, it is now locked."
+    end
+  end
+
   private
 
     def find_match!

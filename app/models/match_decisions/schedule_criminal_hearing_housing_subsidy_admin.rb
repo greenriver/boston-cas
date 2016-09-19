@@ -36,6 +36,12 @@ module MatchDecisions
       update status: 'pending'
       Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
     end
+
+    def notifications_for_this_step
+      @notifications_for_this_step ||= [].tap do |m|
+        m << Notifications::ScheduleCriminalHearingHousingSubsidyAdmin
+      end
+    end
     
     def permitted_params
       super + [:criminal_hearing_date]

@@ -2,7 +2,7 @@ module Notifications
   class CriminalHearingScheduledClient < Base
     
     def self.create_for_match! match
-      match.shelter_agency_contacts.each do |contact|
+      match.client_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
