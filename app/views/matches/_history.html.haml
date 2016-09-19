@@ -2,12 +2,12 @@
   .col-xs-12
     %h3.history History
     .row
-      .col-sm-8
+      .col-sm-7
         %p.history--note ** All notes recorded in these match process pages will be visible in the history list below.**
-      .col-sm-4
+      .col-sm-5.text-right
         - if admin? || dnd_staff?
           - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
-            = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-secondary'
+            = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-secondary margin-bottom-02'
     %table.table.table-condensed.table-striped
       %tbody
       - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
