@@ -25,6 +25,9 @@ class MatchDecisionsController < ApplicationController
     elsif @decision.update(decision_params)
       @decision.record_action_event! contact: current_contact
       @decision.run_status_callback!
+      unless current_contact.in?(@match.shelter_agency_contacts)
+        @decision.notify_contact_of_action_taken_on_behalf_of contact: current_contact
+      end
       flash[:notice] = "Thank you, your response has been entered." unless request.xhr?
       redirect_to access_context.match_path(@match)
     else

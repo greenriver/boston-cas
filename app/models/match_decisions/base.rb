@@ -143,6 +143,11 @@ module MatchDecisions
       decision_action_events.create! match: match, contact: contact, action: status, note: note
     end
 
+    # override in subclass
+    def notify_contact_of_action_taken_on_behalf_of contact:
+
+    end
+
     def self.model_name
       @_model_name ||= ActiveModel::Name.new(self, nil, "decision")
     end

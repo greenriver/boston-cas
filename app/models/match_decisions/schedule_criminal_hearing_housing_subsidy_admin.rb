@@ -42,6 +42,10 @@ module MatchDecisions
         m << Notifications::ScheduleCriminalHearingHousingSubsidyAdmin
       end
     end
+
+    def notify_contact_of_action_taken_on_behalf_of contact:
+      Notifications::OnBehalfOf.create_for_match! match, :housing_subsidy_admin_contacts
+    end
     
     def permitted_params
       super + [:criminal_hearing_date]

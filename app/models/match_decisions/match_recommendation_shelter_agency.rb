@@ -60,6 +60,10 @@ module MatchDecisions
       end
     end
 
+    def notify_contact_of_action_taken_on_behalf_of contact:
+      Notifications::OnBehalfOf.create_for_match! match, :shelter_agency_contacts
+    end
+
     def accessible_by? contact
       contact.user_admin? ||
       contact.user_dnd_staff? ||
@@ -90,6 +94,7 @@ module MatchDecisions
           match.client.update_attribute(:release_of_information, Time.now)
         end
         match.schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
+
       end
       
       def declined
