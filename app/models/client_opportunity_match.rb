@@ -93,18 +93,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
     # admins & DND see everything
     if user.admin? || user.dnd_staff?
       all
-    # HSAs see their own
-    elsif user.housing_subsidy_admin?
-      contact = user.contact
-      subquery = ClientOpportunityMatchContact
-        .where(housing_subsidy_admin: true, contact_id: contact.id)
-        .select(:match_id)
-      where(id: subquery)
-    # Shelter agency users can see their list
+    # Allow logged-in users to see any match they are a contact on
     elsif user.present?
       contact = user.contact
       subquery = ClientOpportunityMatchContact
-        .where(shelter_agency: true, contact_id: contact.id)
+        .where(contact_id: contact.id)
         .select(:match_id)
       where(id: subquery)
     else

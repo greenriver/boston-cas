@@ -1,2 +1,2 @@
-Program Name: #{@match.opportunity_details.program_name.html_safe}
-Service Provider: #{@match.opportunity_details.subgrantee_name.html_safe}
+Program Name: #{@match.opportunity_details.program_name.try(:html_safe)}
+Service Provider: #{@match.opportunity_details.subgrantee_name.try(:html_safe)}
