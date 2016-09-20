@@ -65,6 +65,10 @@ module MatchDecisions
     def actor_type
       raise 'Abstract method'
     end
+
+    def contact_actor_type
+      raise 'Abstract method'
+    end
     
     def step_name
       raise 'Not implemented'

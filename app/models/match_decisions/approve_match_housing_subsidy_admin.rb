@@ -33,6 +33,10 @@ module MatchDecisions
     def actor_type
       'HSA'
     end
+
+    def contact_actor_type
+      :housing_subsidy_admin_contacts
+    end
     
     def statuses
       {pending: 'Pending', accepted: 'Accepted', declined: 'Declined'}
@@ -55,13 +59,9 @@ module MatchDecisions
         end
       end
     end
-    
-    def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::OnBehalfOf.create_for_match! match, :shelter_agency_contacts
-    end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::OnBehalfOf.create_for_match! match, :housing_subsidy_admin_contacts
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
     def accessible_by? contact

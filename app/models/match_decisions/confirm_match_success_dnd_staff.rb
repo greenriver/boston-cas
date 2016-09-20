@@ -26,6 +26,10 @@ module MatchDecisions
     def actor_type
       'DND'
     end
+
+    def contact_actor_type
+      nil
+    end
     
     def editable?
       super && status !~ /confirmed|rejected/
