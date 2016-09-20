@@ -1,117 +1,119 @@
 = render 'breadcrumbs'
-.row
-  %h1.name
-    = @client.full_name
-    - if @client.merged_into
-      %a
-        = link_to client_path(@client.merged_into) do
-          %span.icon-shrink2{data: {toggle: 'tooltip', placement: 'top'}, title: "Merged into #{@client.merged_with_name}"}
-      Now:
+%h1.name
+  = @client.full_name
+  - if @client.merged_into
+    %a
       = link_to client_path(@client.merged_into) do
-        = @client.merged_with_name
-  - if @client.calculated_first_homeless_night.present?
-    %h3 
-      Homeless Since:  
-      = date_format(@client.calculated_first_homeless_night)
-  %table.table.table-condensed
-    %tbody
-      %tr
-        %th Age
-        %td= @client.age
-      %tr
-        %th Chronically Homeless
-        %td= checkmark @client.send('chronic_homeless')
-      %tr
-        %th Date of First Homelessness
-        %td 
-          - if @client.calculated_first_homeless_night.present?
-            = date_format(@client.calculated_first_homeless_night)
-      %tr
-        %th SSN
-        %td= masked_ssn @client.ssn
-      %tr
-        %th Gender
-        %td= @client.gender.try(:text)
-      %tr
-        %th Race
-        %td= @client.race.try(:text)
-      %tr
-        %th Ethnicity
-        %td= @client.ethnicity.try(:text)
-      %tr
-        %th Veteran
-        %td= @client.veteran_status.try(:text)
-      %tr
-        %th Release of information signed on
-        %td= @client.release_of_information.try(:to_date)
-
-  %h3 Contact Information
-  %table.table.table-condensed
-    %tbody
-      %tr
-        %th Email
-        %td= @client.email
-      %tr
-        %th Home Phone
-        %td= @client.homephone
-      %tr
-        %th Cell Phone
-        %td= @client.cellphone
-      - if @client.workphone.present?
+        %span.icon-shrink2{data: {toggle: 'tooltip', placement: 'top'}, title: "Merged into #{@client.merged_with_name}"}
+    Now:
+    = link_to client_path(@client.merged_into) do
+      = @client.merged_with_name
+.row
+  .col-sm-12
+    = render 'tab_navigation', active: 'show', client_id: @client.id
+.row
+  .col-sm-6
+    - if @client.calculated_first_homeless_night.present?
+      %h3 
+        Homeless Since:  
+        = date_format(@client.calculated_first_homeless_night)
+    %table.table.table-condensed
+      %tbody
         %tr
-          %th Work Phone
-          %td= @client.workphone
-      - if @client.pager.present?
+          %th Age
+          %td= @client.age
         %tr
-          %th Pager
-          %td= @client.pager
-  
-  %h3 Health Information
-  %table.table.table-condensed
-    %tbody
-      %tr
-        %th Developmental Disability
-        %td= checkmark @client.send('developmental_disability')
-      %tr
-        %th Domestic Violence Survivor
-        %td= checkmark @client.send('domestic_violence')
-      %tr
-        %th HIV/AIDS
-        %td= checkmark @client.send('hiv_aids')
-      %tr
-        %th Chronic Health Disability
-        %td= checkmark @client.send('chronic_health_problem')
-      %tr
-        %th Mental Health Disability
-        %td= checkmark @client.send('mental_health_problem')
-      %tr
-        %th Substance Abuse Problem
-        %td= checkmark @client.send('substance_abuse_problem')
-      %tr
-        %th Physical Disability
-        %td= checkmark @client.send('physical_disability')
-      %tr
-        %th Disabling Condition
-        %td= checkmark @client.send('disabling_condition')
-
-  %h3 Last Bed Stay or Outreach Contact
-  %table.table.table-condensed
-    %tbody
-      %tr
-        %td
-          ="#{@client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))}"
-        %td
-          = "#{@client.project_client.try(:building).try(:name)}"
-
+          %th Chronically Homeless
+          %td= checkmark @client.send('chronic_homeless')
+        %tr
+          %th Date of First Homelessness
+          %td 
+            - if @client.calculated_first_homeless_night.present?
+              = date_format(@client.calculated_first_homeless_night)
+        %tr
+          %th SSN
+          %td= masked_ssn @client.ssn
+        %tr
+          %th Gender
+          %td= @client.gender.try(:text)
+        %tr
+          %th Race
+          %td= @client.race.try(:text)
+        %tr
+          %th Ethnicity
+          %td= @client.ethnicity.try(:text)
+        %tr
+          %th Veteran
+          %td= @client.veteran_status.try(:text)
+        %tr
+          %th Release of information signed on
+          %td= @client.release_of_information.try(:to_date)
+  .col-sm-6
+    %h3 Last Bed Stay or Outreach Contact
+    %table.table.table-condensed
+      %tbody
+        %tr
+          %td
+            ="#{@client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))}"
+          %td
+            = "#{@client.project_client.try(:building).try(:name)}"
+    %h3 Contact Information
+    %table.table.table-condensed
+      %tbody
+        %tr
+          %th Email
+          %td= @client.email
+        %tr
+          %th Home Phone
+          %td= @client.homephone
+        %tr
+          %th Cell Phone
+          %td= @client.cellphone
+        - if @client.workphone.present?
+          %tr
+            %th Work Phone
+            %td= @client.workphone
+        - if @client.pager.present?
+          %tr
+            %th Pager
+            %td= @client.pager
 .row
-  %p= link_to 'Manage Contacts', client_contacts_path(@client)
-.row
-  = render 'potential_duplicates'
-.row
-  - if @client.previously_merged?
-    = render 'previously_merged'
- 
-    
+  .col-sm-6 
+    %h3 Health Information
+    %table.table.table-condensed
+      %tbody
+        %tr
+          %th Developmental Disability
+          %td= checkmark @client.send('developmental_disability')
+        %tr
+          %th Domestic Violence Survivor
+          %td= checkmark @client.send('domestic_violence')
+        %tr
+          %th HIV/AIDS
+          %td= checkmark @client.send('hiv_aids')
+        %tr
+          %th Chronic Health Disability
+          %td= checkmark @client.send('chronic_health_problem')
+        %tr
+          %th Mental Health Disability
+          %td= checkmark @client.send('mental_health_problem')
+        %tr
+          %th Substance Abuse Problem
+          %td= checkmark @client.send('substance_abuse_problem')
+        %tr
+          %th Physical Disability
+          %td= checkmark @client.send('physical_disability')
+        %tr
+          %th Disabling Condition
+          %td= checkmark @client.send('disabling_condition')
+  .col-sm-6
+    .row
+      .col-sm-12
+        = render 'potential_duplicates'
+    .row
+      .col-sm-12
+        - if @client.previously_merged?
+          = render 'previously_merged'    
   /.row.debug
   /  %h2 Debug
   /  = debug @potential_dupes

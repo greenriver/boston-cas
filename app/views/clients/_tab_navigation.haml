@@ -1,0 +1,23 @@
+%ul.nav.nav-tabs
+  - if active == 'show'
+    %li.active{role: 'presentation'}
+      %a{href: '#'} 
+        Client Details
+  - else
+    %li= link_to 'Client Details', client_path(id: client_id)
+
+  - if active == 'matches'
+    %li.active{role: 'presentation'}
+      %a{href: '#'} 
+        CAS Housing History
+  - else
+    %li  
+      = link_to 'CAS Housing History', client_matches_path(client_id: client_id)
+
+  - if active == 'contacts'
+    %li.active{role: 'presentation'}
+      %a{href: '#'} 
+        Contacts
+  - else
+    %li  
+      = link_to 'Contacts', client_contacts_path(client_id: client_id)

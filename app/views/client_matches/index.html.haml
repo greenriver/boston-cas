@@ -1,0 +1,36 @@
+= render '/clients/breadcrumbs'
+.row
+  .col-sm-12
+    %h1= @heading
+.row
+  .col-sm-12
+    = render '/clients/tab_navigation', active: 'matches', client_id: params[:client_id]
+
+.row
+  .col-sm-12
+    = render 'help_text'
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %tr
+            %th Current Step
+            %th Initial Match Date
+            %th
+              Funding Source &amp; Service Provider
+            %th
+              Details
+        %tbody
+          - @matches.each do |match|
+            %tr
+              %td= match.current_step_name || match.overall_status
+              %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+
+              %td
+                = match.opportunity_details.organizations
+              - if show_links_to_matches?
+                %td
+                  = link_to 'View / Update Match', match_path(match)
+
+    %p= paginate @matches

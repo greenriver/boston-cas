@@ -8,6 +8,7 @@ class MatchClientDetailsController < ApplicationController
   before_action :set_client
 
   def show
+    @matches = match_history_scope
   end
 
   private
@@ -18,6 +19,12 @@ class MatchClientDetailsController < ApplicationController
 
     def set_client
       @client = @match.client
+    end
+
+    def match_history_scope
+      ClientOpportunityMatch
+        .closed
+        .where(client_id: @client.id)
     end
 
 end

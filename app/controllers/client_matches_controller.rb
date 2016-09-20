@@ -12,7 +12,7 @@ class ClientMatchesController < MatchListBaseController
     end
     
     def find_client!
-      @client = Client.find params[:client_id]
+      @client = Client.find(params[:client_id].to_i)
     end
     
     def set_heading

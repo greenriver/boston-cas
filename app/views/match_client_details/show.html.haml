@@ -56,12 +56,12 @@
         %th Date
         %th= "#{Building.model_name.human}/Unit"
         %th Notes
-    -# TODO: display info about housing history. N/A's are placeholders
     %tbody
-      %tr
-        %td
-          n/a
-        %td
-          n/a
-        %td
-          n/a
+      - @matches.each do |match|
+        %tr
+          %td
+            = match.updated_at.to_date
+          %td
+            = "#{match.opportunity_details.building_name} / #{match.opportunity_details.unit_name}"
+          %td
+            = match.overall_status
