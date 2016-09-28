@@ -71,3 +71,6 @@
             = "#{match.opportunity_details.building_name} / #{match.opportunity_details.unit_name}"
           %td
             = match.overall_status
+= content_for :modal_only_footer do
+  = link_to access_context.match_client_details_path(@match) do
+    Printable

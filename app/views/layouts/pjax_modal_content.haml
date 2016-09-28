@@ -8,8 +8,8 @@
     = yield
   %div(data-pjax-modal-loading style="display: none;")
     Loading&hellip;
-- if content_for?(:modal_footer)
+- if content_for?(:modal_footer) || content_for?(:modal_only_footer)
   .modal-footer(data-pjax-modal-footer)
     = yield :modal_footer
-
+    = yield :modal_only_footer
 = yield :page_js
