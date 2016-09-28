@@ -18,6 +18,12 @@
       = ssn(@client.ssn)
     - else
       none on file
+    %br 
+    Race: 
+    = @client.race.try(:text) || 'not on file'
+    %br
+    Ethnicity:
+    = @client.ethnicity.try(:text) || 'not on file'
     %br
     Home Phone:
     = @client.homephone
