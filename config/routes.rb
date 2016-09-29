@@ -96,6 +96,7 @@ Rails.application.routes.draw do
     resource 'style_guide', only: :none do
       get 'dnd_match_review'
       get 'match_contacts_modal'
+      get 'icon_font'
     end
   end
 
