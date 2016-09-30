@@ -73,4 +73,4 @@
             = match.overall_status
 = content_for :modal_only_footer do
   = link_to access_context.match_client_details_path(@match) do
-    Printable
+    %span.icon-printer{title: "Printable", data: {toggle: "tooltip", placement: "top"}, aria: {label: 'Printable'}}
