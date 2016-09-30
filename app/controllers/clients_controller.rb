@@ -2,7 +2,7 @@ class ClientsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_admin_or_dnd_staff!
 
-  before_action :set_client, only: [:show, :edit, :update, :destroy, :merge, :split]
+  before_action :set_client, only: [:show, :edit, :update, :destroy, :merge, :split, :unavailable]
 
   helper_method :sort_column, :sort_direction
 
@@ -41,6 +41,31 @@ class ClientsController < ApplicationController
     else
       render :edit, {flash: {error: 'Unable to split <strong>#{c.full_name}</strong> from client <strong>#{@client.full_name}</strong>.'}}
     end
+  end
+
+  # PATCH /clients/:id/unavailable
+  # Find any matches where the client is the active client
+  # Remove the client from the match
+  # Activate the next client
+  # Remove the client from any other matches
+  # Mark the Client as available = false
+  def unavailable
+    active_match = @client.client_opportunity_matches.active.first
+    Client.transaction do 
+      if active_match.present?
+        opportunity = active_match.opportunity
+        active_match.delete
+        opportunity.update(available_candidate: true)
+        Matching::RunEngineJob.perform_later
+      end
+      if @client.client_opportunity_matches.any?
+        @client.client_opportunity_matches.each do |opp|
+          opp.delete
+        end
+      end
+      @client.update(available: false)
+    end
+    redirect_to action: :show
   end
 
   private
