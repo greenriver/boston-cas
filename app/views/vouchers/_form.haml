@@ -43,6 +43,11 @@
             %td
               - if v.object.status_match.present?
                 = link_to v.object.status_match.overall_status, match_path(v.object.status_match)
+                - if v.object.status_match.active?
+                  %br
+                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, v.object), class: 'btn btn-secondary', method: :delete, data: {confirm: "Stoping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
+                    Stop Match
+
             %td
               - if v.object.status_match.present?
                 = link_to client_path(v.object.status_match.client) do

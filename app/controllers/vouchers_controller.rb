@@ -1,9 +1,9 @@
 class VouchersController < ApplicationController
   before_action :authenticate_user!
   before_action :require_add_vacancies!
-  before_action :set_voucher, only: [:update, :destroy]
-  before_action :set_sub_program, only: [:create, :index, :bulk_update]
-  before_action :set_program, only: [:index, :bulk_update]
+  before_action :set_voucher, only: [:update, :destroy, :unavailable]
+  before_action :set_sub_program, only: [:create, :index, :bulk_update, :unavailable]
+  before_action :set_program, only: [:index, :bulk_update, :unavailable]
 
   def index
     @vouchers = @subprogram.vouchers.preload(:status_match).order(:id)
@@ -24,6 +24,31 @@ class VouchersController < ApplicationController
   end
 
   def update
+  end
+
+  # Find the opportunity with this voucher
+  # Mark any involved clients as available_candidate (potentially they've been matched up to the limit, 
+  # deleting this match this frees one up)
+  # Delete any associated client opportunity matches
+  # Delete the opportunity
+  # Set the Voucher as available = false
+  def unavailable
+    opportunity = @voucher.opportunity
+    active_match = opportunity.active_match
+    if active_match.present?
+      matches = @voucher.opportunity.client_opportunity_matches
+      Client.transaction do
+        matches.each do |m|
+          m.client.update(available_candidate: true)
+          m.delete
+        end
+        opportunity.delete
+        @voucher.update(available: false)
+      end
+    else
+      flash[:error] = "The selected voucher does not have an active match, and cannot be stopped."
+    end
+    redirect_to action: :index
   end
 
   def bulk_update
@@ -66,13 +91,13 @@ class VouchersController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_voucher
-    @voucher = Voucher.find(params[:id])
+    @voucher = Voucher.find(params[:id].to_i)
   end
   def set_sub_program
-    @subprogram = SubProgram.find(params[:sub_program_id])
+    @subprogram = SubProgram.find(params[:sub_program_id].to_i)
   end
   def set_program
-    @program = Program.find(params[:program_id])
+    @program = Program.find(params[:program_id].to_i)
   end
   # Only allow a trusted parameter "white list" through.
   def voucher_params

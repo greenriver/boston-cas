@@ -75,6 +75,7 @@ Rails.application.routes.draw do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
       resources :vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection
+        delete :unavailable, on: :member
       end
       resource :program_details, only: [:edit, :update]
       resources :unit_for_building, only: [:new, :edit, :create, :update]
