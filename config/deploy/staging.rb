@@ -2,6 +2,13 @@ set :deploy_to, '/u/apps/boston-cas-staging'
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 namespace :deploy do
+  before :finishing, :seed_rules do
+    on roles(:db)  do
+      within current_path do
+        execute :rake, 'cas_seeds:create_rules RAILS_ENV=staging'
+      end
+    end
+  end
   before :finishing, :nginx_restart do
     on roles(:web) do
       execute :sudo, 'restart boston-ca-staging'
