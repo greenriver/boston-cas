@@ -1,6 +1,6 @@
 #= require namespace
 App.acknowledge_notification = (href) ->
-  console.log 'acknowledging!'
+  # console.log 'acknowledging!'
   $.ajax href,
     method: 'post'
     success: ( -> window.location.reload(true) )

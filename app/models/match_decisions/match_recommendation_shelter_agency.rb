@@ -6,6 +6,8 @@ module MatchDecisions
 
     # proxy for client.release_of_information
     attr_accessor :release_of_information
+    # javascript toggle
+    attr_accessor :working_with_client
     # validate :note_present_if_status_declined
     validate :validate_client_last_seen_date_present_if_not_working_with_client
     validate :release_of_information_present_if_match_accepted
@@ -19,7 +21,8 @@ module MatchDecisions
       when :pending then 'New Match Awaiting Shelter Agency Review'
       when :acknowledged then 'Match acknowledged by shelter agency.  In review'
       when :accepted then 'Match accepted by shelter agency'
-      when :declined then decline_status_label 
+      when :not_working_with_client then 'Shelter agency no longer working with client'
+      when :declined then decline_status_label
       end
     end
 
@@ -44,7 +47,7 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', acknowledged: 'Acknowledged', accepted: 'Accepted', declined: 'Declined'}
+      {pending: 'Pending', acknowledged: 'Acknowledged', accepted: 'Accepted', declined: 'Declined', not_working_with_client: 'Pending'}
     end
     
     def editable?
@@ -104,8 +107,21 @@ module MatchDecisions
       def declined
         match.confirm_shelter_agency_decline_dnd_staff_decision.initialize_decision!
       end
+
+      def not_working_with_client
+        
+      end
     end
     private_constant :StatusCallbacks
+
+    # Override default behavior to send additional notification to DND contacts
+    # if status = 'not_working_with_client'
+    def record_action_event! contact:
+      decision_action_events.create! match: match, contact: contact, action: status, note: note
+      if status == 'not_working_with_client'
+        Notifications::NoLongerWorkingWithClient.create_for_match! match
+      end
+    end
     
     private def validate_client_last_seen_date_present_if_not_working_with_client
       if not_working_with_client_reason.present? && client_last_seen_date.blank?
@@ -128,7 +144,7 @@ module MatchDecisions
     end
 
     def whitelist_params_for_update params
-      super.merge params.require(:decision).permit(:client_last_seen_date, :release_of_information)
+      super.merge params.require(:decision).permit(:client_last_seen_date, :release_of_information, :working_with_client)
     end
   end
 end

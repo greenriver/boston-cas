@@ -109,7 +109,14 @@ class NotificationsMailer < ApplicationMailer
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Match Declined by HSA - Requires Your Action')
+    mail(to: @contact.email, subject: '[CAS] Action taken on your behalf')
+  end
+
+  def no_longer_working_with_client notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Contact no longer working with Client')
   end
 
   

@@ -71,6 +71,10 @@ main {
   padding-left: 0 !important;
   -webkit-padding-start: 10px !important;
 }
+hr.dark
+{
+  border-top-color: $gray-065;
+}
 .home-intro {
   @include lora-normal;
   font-size: 1.2em;

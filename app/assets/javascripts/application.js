@@ -34,5 +34,6 @@
 //= require enhanced_submit_param
 //= require site_menu
 //= require single_option_checkboxes
+//= require section_toggle
 
 //= require init
