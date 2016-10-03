@@ -20,7 +20,6 @@
 
             .row
               .col-sm-5
-                = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
                 - if @match.client.release_of_information.blank?
                   = form.input :release_of_information, as: :boolean, required: true, inline_label: 'Client has signed release of information to share their data with network partners'
                 - else
