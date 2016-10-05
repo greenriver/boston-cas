@@ -68,7 +68,9 @@
           %td
             = match.updated_at.to_date
           %td
-            = "#{match.opportunity_details.program_name} - #{match.opportunity_details.sub_program_name}"
+            = match.opportunity_details.program_name
+            - if sub_program_name = match.opportunity_details.sub_program_name
+              = "(#{sub_program_name})"
           %td
             = match.overall_status
 = content_for :modal_only_footer do
