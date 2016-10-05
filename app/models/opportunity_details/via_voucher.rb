@@ -2,6 +2,7 @@ module OpportunityDetails
   class ViaVoucher < Base
 
     delegate :voucher, to: :opportunity
+    delegate :sub_program, to: :voucher
 
     def unit_name
       voucher.unit.try :name
@@ -25,6 +26,10 @@ module OpportunityDetails
       voucher.sub_program&.program&.name
     end
     
+    def sub_program_name
+      voucher.sub_program&.name
+    end
+
     def subgrantee_name
       voucher.building&.subgrantee&.name
     end

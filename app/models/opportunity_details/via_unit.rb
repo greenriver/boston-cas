@@ -2,6 +2,7 @@ module OpportunityDetails
   class ViaUnit < Base
 
     delegate :unit, to: :opportunity
+    delegate :sub_program, to: :voucher
 
     def unit_name
       unit.name
@@ -22,8 +23,11 @@ module OpportunityDetails
     end
 
     def program_name
-      # unit-based opportunities don't have programs
-      'N/A'
+      sub_program&.program&.name
+    end
+
+    def sub_program_name
+      sub_program&.name
     end
     
     def subgrantee_name
@@ -31,7 +35,7 @@ module OpportunityDetails
     end
 
     def funding_source_name
-      ''
+      sub_program&.program&.funding_source&.name
     end
 
     # build a hash of associated bits to store at match creation
@@ -50,8 +54,8 @@ module OpportunityDetails
     end
 
     def organizations
-      # unit-based opportunities don't have funding sources or subgrantees
-      'N/A'
+      organization_names = [funding_source_name] + voucher.sub_program&.organizations
+      organization_names.compact.join(', ')
     end
 
     def services

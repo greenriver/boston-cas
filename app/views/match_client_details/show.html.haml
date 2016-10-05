@@ -60,7 +60,7 @@
     %thead
       %tr
         %th Date
-        %th= "#{Building.model_name.human}/Unit"
+        %th Program
         %th Notes
     %tbody
       - @matches.each do |match|
@@ -68,7 +68,7 @@
           %td
             = match.updated_at.to_date
           %td
-            = "#{match.opportunity_details.building_name} / #{match.opportunity_details.unit_name}"
+            = "#{match.opportunity_details.program_name} - #{match.opportunity_details.sub_program_name}"
           %td
             = match.overall_status
 = content_for :modal_only_footer do
