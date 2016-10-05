@@ -14,6 +14,10 @@ module OpportunityDetails
     def program_name
       ''
     end
+
+    def sub_program_name
+      ''
+    end
     
     def subgrantee_name
       ''

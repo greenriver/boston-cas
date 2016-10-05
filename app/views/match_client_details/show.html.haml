@@ -70,7 +70,7 @@
           %td
             = match.opportunity_details.program_name
             - if ! match.opportunity_details.sub_program_name.blank?
-              = "(#{sub_program_name})"
+              = "(#{match.opportunity_details.sub_program_name})"
           %td
             = match.overall_status
 = content_for :modal_only_footer do
