@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     # resolves route clash w/ devise
     resources :users, except: [:show, :new, :create] do
       resource :resend_invitation, only: :create
+      resource :recreate_invitation, only: :create
     end
   end
   resource :account, only: [:edit, :update]
