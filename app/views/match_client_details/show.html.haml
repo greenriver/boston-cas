@@ -19,6 +19,9 @@
     - else
       none on file
     %br 
+    Gender: 
+    = @client.gender.try(:text) || 'not on file'
+    %br 
     Race: 
     = @client.race.try(:text) || 'not on file'
     %br
