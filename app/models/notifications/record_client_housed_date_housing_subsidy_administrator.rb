@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'Housing Subsidy Administrator notified of approved match and asked to record date client housed'
+      'Housing Subsidy Administrator notified of approved match and asked to record lease start date'
     end
 
     def should_expire?

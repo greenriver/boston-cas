@@ -11,7 +11,7 @@ module Notifications
     end
 
     def event_label
-      'Shelter Agency and Housing Subsidy Administrator contacts notified, move-in date set.'
+      'Shelter Agency and Housing Subsidy Administrator contacts notified, lease start date set.'
     end
 
     def should_expire?

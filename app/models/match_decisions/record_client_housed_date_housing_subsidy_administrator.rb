@@ -10,7 +10,7 @@ module MatchDecisions
     def label_for_status status
       case status.to_sym
       when :pending then 'Housing Subsidy Administrator to note when client will move in.'
-      when :completed then "Housing Subsidy Administrator notes client will move in #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "Housing Subsidy Administrator notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       end
     end
 
