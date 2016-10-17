@@ -54,7 +54,7 @@ module MatchDecisions
       end
 
       def decline_overridden
-        match.record_client_housed_date_shelter_agency_decision.initialize_decision!
+        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
         # TODO maybe make these special decline reversed notifications?
         Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
         # TODO notify HSA of decline override
