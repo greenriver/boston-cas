@@ -40,14 +40,12 @@ module MatchDecisions
 
     def initialize_decision!
       update status: 'pending'
-      Notifications::RecordClientHousedDateHousingSubsidyAdministrator.create_for_match! match
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HousingSubsidyAdminDecisionClient
         m << Notifications::HousingSubsidyAdminAcceptedMatchDndStaff
-        m << Notifications::RecordClientHousedDateHousingSubsidyAdministrator
       end
     end
 
@@ -67,6 +65,8 @@ module MatchDecisions
 
       def completed
         match.confirm_match_success_dnd_staff_decision.initialize_decision!
+        Notifications::MoveInDateSet.create_for_match! match
+        # Notifications::RecordClientHousedDateHousingSubsidyAdministrator.create_for_match! match
       end
     end
     private_constant :StatusCallbacks

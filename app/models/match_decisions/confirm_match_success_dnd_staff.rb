@@ -42,6 +42,8 @@ module MatchDecisions
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
+        # m << Notifications::RecordClientHousedDateHousingSubsidyAdministrator
+        m << Notifications::MoveInDateSet # Sent to both HSA and Shelter Agency
         m << Notifications::ConfirmMatchSuccessDndStaff
       end
     end

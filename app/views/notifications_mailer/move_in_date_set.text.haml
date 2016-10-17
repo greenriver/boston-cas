@@ -2,8 +2,10 @@ Hello #{@contact.full_name},
 \
 A Housing Subsidy Administrator has set the client move-in date.
 \
-View details and indicate when the client will move in:
-#{notification_match_decision_url @notification, @match, :record_client_housed_date_housing_subsidy_administrator}
+Details:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
 \
 = render 'location_details'
 \

@@ -41,6 +41,20 @@ class NotificationsMailer < ApplicationMailer
     @contact = notification.recipient
     mail(to: @contact.email, subject: '[CAS] Housing Recommendation Approved - Requires Your Action')
   end
+
+  def record_client_housed_date_housing_subsidy_administrator notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Housing Recommendation Approved - Requires Your Action')
+  end
+
+  def move_in_date_set notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Housing Recommendation Move-in Date Set')
+  end
   
   def confirm_match_success_dnd_staff notification
     @notification = notification
