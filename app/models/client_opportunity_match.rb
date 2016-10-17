@@ -23,7 +23,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :schedule_criminal_hearing_housing_subsidy_admin
   has_decision :approve_match_housing_subsidy_admin
   has_decision :confirm_housing_subsidy_admin_decline_dnd_staff
-  has_decision :record_client_housed_date_shelter_agency # Legacy decisio type as of 10/16/2016
+  has_decision :record_client_housed_date_shelter_agency # Legacy decision type as of 10/16/2016
   has_decision :record_client_housed_date_housing_subsidy_administrator
   has_decision :confirm_match_success_dnd_staff
 

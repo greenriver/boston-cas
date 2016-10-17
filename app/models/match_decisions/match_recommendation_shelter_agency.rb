@@ -11,6 +11,7 @@ module MatchDecisions
     # validate :note_present_if_status_declined
     validate :validate_client_last_seen_date_present_if_not_working_with_client
     validate :release_of_information_present_if_match_accepted
+    validate :spoken_with_services_agency_and_cori_release_submitted_if_accepted
 
     def label
       label_for_status status
@@ -20,7 +21,7 @@ module MatchDecisions
       case status.to_sym
       when :pending then 'New Match Awaiting Shelter Agency Review'
       when :acknowledged then 'Match acknowledged by shelter agency.  In review'
-      when :accepted then 'Match accepted by shelter agency'
+      when :accepted then 'Match accepted by shelter agency. Client has signed release of information, spoken with services agency and submitted a CORI release form'
       when :not_working_with_client then 'Shelter agency no longer working with client'
       when :declined then decline_status_label
       end
@@ -139,12 +140,23 @@ module MatchDecisions
       end
     end
 
+    private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
+      if status == 'accepted' 
+        if ! client_spoken_with_services_agency
+          errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
+        end
+        if ! cori_release_form_submitted
+          errors.add :cori_release_form_submitted, 'A CORI release form is required.'
+        end
+      end
+    end
+
     private def decline_reason_blank?
       decline_reason.blank? && not_working_with_client_reason.blank?
     end
 
     def whitelist_params_for_update params
-      super.merge params.require(:decision).permit(:client_last_seen_date, :release_of_information, :working_with_client)
+      super.merge params.require(:decision).permit(:client_last_seen_date, :release_of_information, :working_with_client, :client_spoken_with_services_agency, :cori_release_form_submitted)
     end
   end
 end

@@ -28,8 +28,9 @@
                     %strong
                       = @match.client.release_of_information.to_date
                   = form.input :release_of_information, as: :hidden, input_html: { value: @match.client.release_of_information}
+                = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: 'Client has spoken with Services Agency'
+                = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
      
-
             .form-actions.clearfix
               = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
               = form.submit 'Indicate Interest in Match', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: !(@decision.editable?)

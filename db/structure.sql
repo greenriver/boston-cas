@@ -903,7 +903,9 @@ CREATE TABLE match_decisions (
     decline_reason_id integer,
     decline_reason_other_explanation text,
     not_working_with_client_reason_id integer,
-    not_working_with_client_reason_other_explanation text
+    not_working_with_client_reason_other_explanation text,
+    client_spoken_with_services_agency boolean DEFAULT false,
+    cori_release_form_submitted boolean DEFAULT false
 );
 
 
@@ -3876,4 +3878,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160817172520');
 INSERT INTO schema_migrations (version) VALUES ('20160901201841');
 
 INSERT INTO schema_migrations (version) VALUES ('20160902143546');
+
+INSERT INTO schema_migrations (version) VALUES ('20161017132353');
+
+INSERT INTO schema_migrations (version) VALUES ('20161017144713');
 
