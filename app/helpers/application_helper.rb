@@ -84,6 +84,10 @@ module ApplicationHelper
   def can_change_services?
     true if admin? || dnd_staff?
   end
+
+  def can_see_alternate_matches?
+    true if admin? || dnd_staff?
+  end
   
   def enable_responsive?
     @enable_responsive  = true
