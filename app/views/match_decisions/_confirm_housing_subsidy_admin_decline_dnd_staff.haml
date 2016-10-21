@@ -5,5 +5,6 @@
         = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
 
         .form-actions.clearfix
-          = form.submit 'Override Decline', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)
+          = form.submit 'Override Decline and Repeat Last Step', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden_returned'}, disabled: (!@decision.editable?)
+          = form.submit 'Override Decline and Move Forward', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)
           = form.submit 'Accept Decline', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_confirmed'}, disabled: (!@decision.editable?)
