@@ -18,7 +18,7 @@ class ClientsController < ApplicationController
     # sort / paginate
     @clients = @clients
       .order(sort_column => sort_direction)
-      .page(params[:page]).per(25)
+      .page(params[:page].to_i).per(25)
 
     @matches = ClientOpportunityMatch
               .group(:client_id)

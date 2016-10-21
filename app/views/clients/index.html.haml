@@ -4,6 +4,11 @@
     %h1= t '.title'
 - @prompt = t '.search_prompt'
 = render 'search_form'
+- if Client.parked.any?
+  .alert.alert-warning
+    %p.icon-warning
+      = "Some clients are parked. "
+      = link_to 'See all parked clients.', reports_parked_clients_path
 .row.table-utilities
   .col-sm-12
     %p= page_entries_info @clients

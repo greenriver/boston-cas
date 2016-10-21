@@ -19,4 +19,8 @@ module ControllerAuthorization
     not_authorized! unless admin? || dnd_staff? || housing_subsidy_admin?
   end
 
+  def require_can_see_reports!
+    not_authorized! unless admin? || dnd_staff?
+  end
+
 end

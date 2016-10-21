@@ -95,6 +95,10 @@ Rails.application.routes.draw do
   resources :reissue_notifications, only: [:index, :update, :destroy]
   resources :resend_notification, only: [:show]
 
+  namespace :reports do
+    resources :parked_clients, only: [:index]
+  end
+  
   unless Rails.env.production?
     resource 'style_guide', only: :none do
       get 'dnd_match_review'

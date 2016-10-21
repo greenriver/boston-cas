@@ -32,6 +32,11 @@ class Client < ActiveRecord::Base
 
   validates :ssn, length: {maximum: 9}
 
+  scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
+  scope :available_for_matching, -> { 
+    where(available_candidate: true)
+    .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
+  }
 
 
   def full_name

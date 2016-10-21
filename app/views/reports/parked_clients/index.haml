@@ -1,0 +1,22 @@
+.row
+  .col-sm-12
+    %h1 Currently Parked Clients
+- if @clients.any?
+  %p= "The following #{@clients.size} clients have been removed from matching temporarily"
+  .row
+    .col-sm-12
+      .table-responsive
+        %table.table.table-condensed.table-hover
+          %thead
+            %tr
+              %th Last Name
+              %th First Name
+              %th Parked Until
+          %tbody
+            - @clients.each do |client|
+              %tr
+                %td= link_to client.last_name, client_path(client)
+                %td= link_to client.first_name, client_path(client)
+                %td= client.prevent_matching_until
+- else
+  %p No parked clients at this time.

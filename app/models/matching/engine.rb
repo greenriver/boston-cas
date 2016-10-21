@@ -14,7 +14,7 @@ class Matching::Engine
 
     def available_clients
       # returns AR scope
-      Client.where(available_candidate: true).where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
+      Client.available_for_matching
     end
 
     def available_opportunities
