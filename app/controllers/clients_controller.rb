@@ -32,6 +32,34 @@ class ClientsController < ApplicationController
     @splits = find_potential_splits
   end
 
+  def update
+    if @client.update(client_params)
+      # If we have a future prevent_matching_until date, remove the client from 
+      # any current matches
+      if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
+        active_match = @client.client_opportunity_matches.active.first
+        Client.transaction do 
+          if active_match.present?
+            opportunity = active_match.opportunity
+            active_match.delete
+            opportunity.update(available_candidate: true)
+            Matching::RunEngineJob.perform_later
+          end
+          if @client.client_opportunity_matches.any?
+            @client.client_opportunity_matches.each do |opp|
+              opp.delete
+            end
+          end
+          # This will re-queue the client once the date is passed
+          @client.update(available_candidate: true)
+        end
+      end
+      redirect_to client_path(@client), notice: "Client updated"
+    else
+      render :show, {flash: {error: 'Unable update client.'}}
+    end
+  end
+
   # PATCH /clients/:id/split
   # Sets the merged_into field on the specified client equal to null (un-merging a previous merge)
   def split
@@ -81,7 +109,7 @@ class ClientsController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def client_params
     params.require(:client).
-      permit(:source, :release_of_information)
+      permit(:source, :release_of_information, :prevent_matching_until)
   end
 
   # propose duplicate ids for a given client

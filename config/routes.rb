@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     member { post 'restore' }
   end
 
-  resources :clients, only: [:index, :show] do
+  resources :clients, only: [:index, :show, :update] do
     resources :contacts, except: :show, controller: :client_contacts, concerns: [:restorable]
     patch 'split', on: :member
     patch :unavailable, on: :member
