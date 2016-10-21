@@ -8,6 +8,11 @@
     Now:
     = link_to client_path(@client.merged_into) do
       = @client.merged_with_name
+- if @client.prevent_matching_until > Date.today
+  .alert.alert-warning
+    %p.icon-warning
+      Client is currently parked and won't be considered for new matches until 
+      = @client.prevent_matching_until
 .row
   .col-sm-12
     = render 'tab_navigation', active: 'show', client_id: @client.id
