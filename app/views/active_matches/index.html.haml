@@ -19,12 +19,15 @@
     %p= page_entries_info @matches
     = render 'help_text'
 :ruby
-  columns = ['client_id', 'calculated_first_homeless_night']
+  columns = ['client_id', 'calculated_first_homeless_night', 'last_decision', 'current_step', 'created_at']
   directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
   titles = {}
   directions.each {| k,v | titles[k] = @matches.human_attribute_name(k)}
   titles['client_id'] = 'Client'
   titles['calculated_first_homeless_night'] = "First Homeless Night"
+  titles['last_decision'] = "Last Changed"
+  titles['current_step'] = "Current Step"
+  titles['created_at'] = "Initial Match Date"
 .row
   .col-sm-12
     .table-responsive
@@ -35,8 +38,6 @@
               %th
                 = sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th Current Step
-            %th Initial Match Date
             %th
               Funding Source &amp; Service Provider
             - if show_links_to_matches?
@@ -54,6 +55,7 @@
                   = match.client_name_for_contact current_contact
               %td
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+              %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td= match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
 
@@ -66,6 +68,5 @@
                 %td.text-center
                   = link_to opportunity_matches_path(match.opportunity) do
                     .badge.badge-success= match.opportunity_related_matches.count
-                    - # .badge.badge-success= @matches[opportunity.id]
 
     %p= paginate @matches, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}

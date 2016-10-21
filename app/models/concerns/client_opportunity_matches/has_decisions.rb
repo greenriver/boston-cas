@@ -51,7 +51,7 @@ module ClientOpportunityMatches
     end
     
     def initialized_decisions
-      decisions.select(&:initialized?)
+      decisions.where.not(status: nil)
     end
 
     private
@@ -63,9 +63,8 @@ module ClientOpportunityMatches
       end
       
       def decisions_for_events
-        decisions
-          .preload(:contact)
-          .select(&:initialized?)
+        initialized_decisions
+          .preload(:contact).to_a
       end
     
   end

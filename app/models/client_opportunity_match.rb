@@ -157,7 +157,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   # returns the most recent decision
   def current_decision
     unless closed?
-      initialized_decisions.sort_by(&:created_at).last
+      initialized_decisions.order(created_at: :desc).first
     end
   end
 
