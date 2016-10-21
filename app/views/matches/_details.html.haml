@@ -17,7 +17,10 @@
       .row
         .col-sm-3
           .detail-box--label Program
-          .detail-box--value= match.opportunity_details.program_name
+          .detail-box--value
+            = match.opportunity_details.program_name
+            %em
+              = match.opportunity_details.sub_program_name
           .detail-box--label Service Provider
           .detail-box--value= match.opportunity_details.subgrantee_name
           -#.detail-box--label Sub-Contractor
