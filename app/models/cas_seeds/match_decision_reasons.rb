@@ -4,7 +4,8 @@ module CasSeeds
     DND_REASONS = [
       "Client won't be eligible for services",
       "Client won't be eligible for housing type",
-      "Client won't be eligible based on funding source"
+      "Client won't be eligible based on funding source",
+      "Client has another housing option",
     ]
 
     HSA_REASONS = [
