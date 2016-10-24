@@ -8,7 +8,7 @@
     Now:
     = link_to client_path(@client.merged_into) do
       = @client.merged_with_name
-- if @client.prevent_matching_until > Date.today
+- if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
   .alert.alert-warning
     %p.icon-warning
       = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
