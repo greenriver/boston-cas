@@ -81,6 +81,7 @@ module MatchDecisions
       def accepted
         match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
         Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionShelterAgency.create_for_match! match
         Notifications::HousingSubsidyAdminAcceptedMatchDndStaff.create_for_match! match
       end
 

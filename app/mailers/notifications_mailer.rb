@@ -90,6 +90,13 @@ class NotificationsMailer < ApplicationMailer
     @contact = notification.recipient
     mail(to: @contact.email, subject: 'Decision from Housing Subsidy Administrator')
   end
+
+  def housing_subsidy_admin_decision_shelter_agency notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: 'Decision from Housing Subsidy Administrator')
+  end
   
   def housing_subsidy_admin_accepted_match_dnd_staff notification
     @notification = notification
