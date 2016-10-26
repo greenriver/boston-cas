@@ -2,6 +2,9 @@ Hello #{@contact.full_name},
 \
 A Criminal Background Hearing has been scheduled for a housing opportunity match in which you are involved.
 \
+The hearing is scheduled for:
+= @match.schedule_criminal_hearing_housing_subsidy_admin_decision.criminal_hearing_date.try(&:to_date) || 'Not set'
+\
 More details:
 #{notification_match_url @notification, @match}
 \
