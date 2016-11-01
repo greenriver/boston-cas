@@ -3,9 +3,11 @@ Hello #{@contact.full_name},
 A Criminal Background Hearing has been scheduled for a housing opportunity in which you are involved.
 \
 The hearing is scheduled for:
-= @match.schedule_criminal_hearing_housing_subsidy_admin_decision.criminal_hearing_date.try{ |t| t.to_time.strftime("%b %e, %Y %l:%M %P") } || 'Not set'
+= @match.schedule_criminal_hearing_housing_subsidy_admin_decision.criminal_hearing_date.try{ |t| t.strftime("%b %e, %Y %l:%M %P") } || 'Not set'
 \
 Please contact your case worker for more information.
+\
+= render 'shelter_agency_contacts'
 \
 = render 'location_details'
 \
