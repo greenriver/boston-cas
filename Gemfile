@@ -40,6 +40,8 @@ gem 'handlebars_assets'
 gem 'select2-rails'
 gem 'fuzzy_match'
 gem 'attribute_normalizer'
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 
 gem 'delayed_job_active_record'
 gem 'uglifier'

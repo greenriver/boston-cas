@@ -3,7 +3,7 @@
 *= require select2-bootstrap
 *= require bootstrap-datepicker3
 */
-
+@import "bootstrap-sprockets";
 @import 'bootstrap-custom';
 @import "font-awesome-sprockets";
 @import "font-awesome";
@@ -26,6 +26,7 @@
 @import "modules/add_things_boxes";
 @import "vendor/icomoon";
 @import "helpers/helper_classes";
+@import 'bootstrap-datetimepicker';
 
 body {
   display: flex;

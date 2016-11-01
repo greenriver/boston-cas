@@ -11,6 +11,9 @@ en:
   date:
     formats:
       default: "%m/%d/%Y"
+  time:
+    formats:
+      default: "%b %e, %Y %l:%M %P"
   datepicker:
     dformat: '%b %e, %Y'
   contacts:

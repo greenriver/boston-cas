@@ -8,10 +8,10 @@
             Yes, there will be a criminal background hearing
         .row
           .form-group.form-group__indented-01
-            %label(for="decision_criminal_hearing_date") Date of Criminal Background Hearing
-          .col-md-3.col-sm-6
+            %label(for="decision_criminal_hearing_date") Date and time of Criminal Background Hearing
+          .col-md-6.col-sm-6
             .form-group.form-group__indented-01
-              = form.input :criminal_hearing_date, label: false, as: :date_picker, disabled: !@decision.editable?
+              = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
 
         .form-group
           .radio
@@ -29,4 +29,11 @@
 
         %p
           Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
-
+= content_for :page_js do
+  :javascript
+    $('.date_time_picker').datetimepicker({
+      sideBySide: true,
+      stepping: 15,
+      minDate: new Date(),
+      format: "MMM D, YYYY h:mm a"
+    });

@@ -16,10 +16,12 @@
 ////////////////////
 //= require jquery
 //= require bootstrap
+//= require moment
 //= require jquery_ujs
 //= require handlebars.runtime
 //= require select2-full
 //= require bootstrap-datepicker
+//= require bootstrap-datetimepicker
 
 //////////////////////////
 // App specific code
