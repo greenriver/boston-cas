@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
   scope :housing_subsidy_admin, -> {where housing_subsidy_admin: true}
   
   has_one :contact, inverse_of: :user
+  
+  has_many :user_roles, dependent: :destroy, inverse_of: :user
+  has_many :roles, through: :user_roles
+
   after_create :set_up_contact!
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
