@@ -1,17 +1,11 @@
-- if @decision.status.to_s == 'pending' && access_context.acknowledge_shelter_agency_notification?
-  %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
-  %p Acknowledging Notification...
-  = content_for :page_js do
-    :javascript
-      $(function (){
-        var href = $('[data-acknowledge-href]').data('acknowledge-href');
-        App.acknowledge_notification(href);
-      });
-- else
-  .row
-    .col-xs-12
-      .match-decision
-        = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+.row
+  .col-xs-12
+    .match-decision
+      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+        - if @decision.status.to_s == 'pending' && access_context.acknowledge_shelter_agency_notification?
+          %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
+          = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) 
+        - else
           = form.input :working_with_client, as: :radio_buttons, collection: {'Still working with client': 'jStillWorking', 'No longer working with client': 'jNoLongerWorking'}, label: 'Are you still working with the client above?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
           .jStillWorking.jWorkingWithClient
             = form.input :note, as: :text, input_html: {rows: 4, disabled: !(@decision.editable?)}
