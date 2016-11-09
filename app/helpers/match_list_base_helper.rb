@@ -6,7 +6,7 @@ module MatchListBaseHelper
   end
   
   def show_match_status_facet_nav?
-    current_user.admin? || current_user.dnd_staff?
+    current_user.can_view_all_matches?
   end
 
   def show_links_to_matches?

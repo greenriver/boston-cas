@@ -5,7 +5,7 @@
     %p.margin-bottom-02= help_text
   
   = render 'requirement_manager/inherited_rules', inheritee: form.object
-  - if can_change_rules?    
+  - if can_assign_requirements?    
     %h4= selected_requirements_heading
     %div{ data: {selected_requirements: true} }
     - form.object.requirements.preload(:rule).order(:created_at).each do |requirement|

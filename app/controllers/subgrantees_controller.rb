@@ -1,6 +1,7 @@
 class SubgranteesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_view_subgrantees!
+  before_action :require_can_edit_subgrantees!, only: [:update, :destroy, :create]
   before_action :set_subgrantee, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
   

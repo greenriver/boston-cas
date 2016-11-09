@@ -3,7 +3,7 @@
   .col-sm-8
     %h1= t '.title'
   .col-sm-4
-    - if admin? || dnd_staff?
+    - if can_edit_subgrantees?
       = link_to new_subgrantee_path, class: 'btn btn-primary pull-right margin-bottom-02' do
         %span.icon-plus
         Add a Sub-Grantee

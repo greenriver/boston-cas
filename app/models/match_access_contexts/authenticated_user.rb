@@ -17,7 +17,7 @@ module MatchAccessContexts
     end
     
     def contacts_editable?
-      user.dnd_staff? || user.admin?
+      user.can_edit_match_contacts?
     end
     
     def match_scope

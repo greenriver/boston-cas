@@ -1,6 +1,6 @@
 class ReissueNotificationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_reissue_notifications!
   before_action :set_reissue_notification, only: [:update, :destroy]
 
   # GET /reissue_notifications

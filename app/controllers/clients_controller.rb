@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
-
+  before_action :require_can_view_all_clients!
+  before_action :require_can_edit_all_clients!, only: [:update, :destroy, :merge, :split]
   before_action :set_client, only: [:show, :edit, :update, :destroy, :merge, :split, :unavailable]
 
   helper_method :sort_column, :sort_direction

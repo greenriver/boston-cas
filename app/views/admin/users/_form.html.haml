@@ -11,9 +11,7 @@
       = contact_fields.input :email, as: :email, required: true
     .form--checkbox-groups
       %h3 CAS Roles for Access Permissions
-      = f.input :admin
-      = f.input :dnd_staff, label: 'DND Staff'
-      = f.input :housing_subsidy_admin, label: 'Housing Subsidy Administrator (HSA)'
+      = f.association :roles, as: :check_boxes, label_method: :role_name
     .form--checkbox-groups
       %h3 Additional Options
       = f.input :receive_initial_notification

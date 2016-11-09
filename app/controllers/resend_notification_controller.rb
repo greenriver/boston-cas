@@ -1,6 +1,6 @@
 class ResendNotificationController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_reissue_notifications!
 
   def show
     @notification = Notifications::Base.find_by code: params[:id]

@@ -2,7 +2,9 @@ class OpportunitiesController < ApplicationController
   require 'securerandom'
 
   before_action :authenticate_user!
-  before_action :require_add_vacancies!
+  before_action :require_can_view_opportunities!, except: [:new, :create]
+  before_action :require_can_edit_opportunities!, only: [:update, :destroy]
+  before_action :require_can_view_opportunities_or_can_add_vacancies!, only: [:new, :create]
   before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
 
@@ -168,5 +170,7 @@ class OpportunitiesController < ApplicationController
     def query_string
       "%#{@query}%"
     end
-
+    private def require_can_view_opportunities_or_can_add_vacancies!
+      can_view_opportunities? || can_add_vacancies?
+    end
 end

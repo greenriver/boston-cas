@@ -1,5 +1,13 @@
 module ApplicationHelper
-
+  # permissions
+  # See Role.rb for specifics of what permissions are available
+  Role.permissions.each do |permission|
+    define_method("#{permission}?") do
+      current_user.try(permission)
+    end
+  end
+  # END Permissions
+  # 
   def yn(boolean)
     boolean ? 'Y': 'N'
   end
@@ -63,30 +71,6 @@ module ApplicationHelper
       ['NECHV','New England Center for the Homeless Veterns']
     ].sample
     "<abbr title=\"#{long}\">#{short}</abbr>".html_safe
-  end
-
-  def admin?
-    current_user.try(:admin)
-  end
-
-  def dnd_staff?
-    current_user.try(:dnd_staff)
-  end
-
-  def housing_subsidy_admin?
-    current_user.try(:housing_subsidy_admin)
-  end
-
-  def can_change_rules?
-    true if admin? || dnd_staff?
-  end
-
-  def can_change_services?
-    true if admin? || dnd_staff?
-  end
-
-  def can_see_alternate_matches?
-    true if admin? || dnd_staff?
   end
   
   def enable_responsive?

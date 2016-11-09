@@ -4,19 +4,25 @@ class Role < ActiveRecord::Base
   validates :name, presence: true
   
   def role_name
-    name.to_s.humanize.gsub 'Dnd', 'DND'
+    name.to_s.humanize.gsub('Dnd', 'DND').gsub('Hsa', 'HSA')
   end
 
   def self.permissions
     [
       :can_view_all_clients, 
-      :can_edit_all_clients, 
+      :can_edit_all_clients,
+      :can_participate_in_matches,
+      :can_view_all_matches,
+      :can_see_alternate_matches,
+      :can_edit_match_contacts,
+      :can_approve_matches,
+      :can_reject_matches,
+      :can_act_on_behalf_of_match_contacts,
       :can_view_reports, 
       :can_edit_roles, 
       :can_edit_users, 
       :can_view_full_ssn, 
-      :can_view_full_dob, 
-      :can_participate_in_matches, 
+      :can_view_full_dob,  
       :can_view_buildings, 
       :can_edit_buildings, 
       :can_view_funding_sources, 
@@ -30,10 +36,17 @@ class Role < ActiveRecord::Base
       :can_view_opportunities, 
       :can_edit_opportunities, 
       :can_reissue_notifications, 
-      :can_edit_opportunities, 
       :can_view_units, 
       :can_edit_units, 
-      :can_edit_match_contacts, 
+      :can_add_vacancies,
+      :can_view_contacts,
+      :can_edit_contacts,
+      :can_view_rule_list,
+      :can_edit_rule_list,
+      :can_view_available_services,
+      :can_edit_available_services,
+      :can_assign_services,
+      :can_assign_requirements,
     ]
   end
 end

@@ -1,6 +1,8 @@
 class VouchersController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_add_vacancies!
+  before_action :require_can_view_vouchers!
+  before_action :require_can_edit_vouchers!, only: [:update, :destroy, :create, :bulk_update]
+  before_action :require_can_reject_matches!, only: [:unavailable]
   before_action :set_voucher, only: [:update, :destroy, :unavailable]
   before_action :set_sub_program, only: [:create, :index, :bulk_update, :unavailable]
   before_action :set_program, only: [:index, :bulk_update, :unavailable]

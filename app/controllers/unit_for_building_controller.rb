@@ -1,6 +1,6 @@
 class UnitForBuildingController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_add_vacancies!
   include PjaxModalController
   
   def new

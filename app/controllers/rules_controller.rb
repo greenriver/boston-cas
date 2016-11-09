@@ -1,6 +1,7 @@
 class RulesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin!
+  before_action :require_can_view_rule_list!
+  before_action :require_can_edit_rule_list!, only: [:update, :destroy, :create]
   before_action :set_rule, only: [:confirm_destroy, :destroy]
 
   helper_method :sort_column, :sort_direction

@@ -1,7 +1,7 @@
 class ClientOpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_match, only: [:show]
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_view_all_matches!
   
   helper_method :sort_column, :sort_direction
 

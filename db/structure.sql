@@ -1498,62 +1498,6 @@ ALTER SEQUENCE requirements_id_seq OWNED BY requirements.id;
 
 
 --
--- Name: roles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE roles (
-    id integer NOT NULL,
-    name character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    can_view_all_clients boolean DEFAULT false,
-    can_edit_all_clients boolean DEFAULT false,
-    can_view_reports boolean DEFAULT false,
-    can_edit_roles boolean DEFAULT false,
-    can_edit_users boolean DEFAULT false,
-    can_view_full_ssn boolean DEFAULT false,
-    can_view_full_dob boolean DEFAULT false,
-    can_participate_in_matches boolean DEFAULT false,
-    can_view_buildings boolean DEFAULT false,
-    can_edit_buildings boolean DEFAULT false,
-    can_view_funding_sources boolean DEFAULT false,
-    can_edit_funding_sources boolean DEFAULT false,
-    can_view_subgrantees boolean DEFAULT false,
-    can_edit_subgrantees boolean DEFAULT false,
-    can_view_vouchers boolean DEFAULT false,
-    can_edit_vouchers boolean DEFAULT false,
-    can_view_programs boolean DEFAULT false,
-    can_edit_programs boolean DEFAULT false,
-    can_view_opportunities boolean DEFAULT false,
-    can_edit_opportunities boolean DEFAULT false,
-    can_reissue_notifications boolean DEFAULT false,
-    can_view_units boolean DEFAULT false,
-    can_edit_units boolean DEFAULT false,
-    can_edit_match_contacts boolean DEFAULT false,
-    can_add_vacancies boolean DEFAULT false
-);
-
-
---
--- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE roles_id_seq OWNED BY roles.id;
-
-
---
 -- Name: rules; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1948,38 +1892,6 @@ ALTER SEQUENCE units_id_seq OWNED BY units.id;
 
 
 --
--- Name: user_roles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE user_roles (
-    id integer NOT NULL,
-    role_id integer,
-    user_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: user_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE user_roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: user_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE user_roles_id_seq OWNED BY user_roles.id;
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2013,7 +1925,10 @@ CREATE TABLE users (
     invited_by_id integer,
     invited_by_type character varying,
     invitations_count integer DEFAULT 0,
-    receive_initial_notification boolean DEFAULT false
+    receive_initial_notification boolean DEFAULT false,
+    admin boolean DEFAULT false,
+    dnd_staff boolean DEFAULT false,
+    housing_subsidy_admin boolean DEFAULT false
 );
 
 
@@ -2411,13 +2326,6 @@ ALTER TABLE ONLY requirements ALTER COLUMN id SET DEFAULT nextval('requirements_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY rules ALTER COLUMN id SET DEFAULT nextval('rules_id_seq'::regclass);
 
 
@@ -2489,13 +2397,6 @@ ALTER TABLE ONLY subgrantees ALTER COLUMN id SET DEFAULT nextval('subgrantees_id
 --
 
 ALTER TABLE ONLY units ALTER COLUMN id SET DEFAULT nextval('units_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY user_roles ALTER COLUMN id SET DEFAULT nextval('user_roles_id_seq'::regclass);
 
 
 --
@@ -2831,14 +2732,6 @@ ALTER TABLE ONLY requirements
 
 
 --
--- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY roles
-    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
-
-
---
 -- Name: rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2924,14 +2817,6 @@ ALTER TABLE ONLY subgrantees
 
 ALTER TABLE ONLY units
     ADD CONSTRAINT units_pkey PRIMARY KEY (id);
-
-
---
--- Name: user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY user_roles
-    ADD CONSTRAINT user_roles_pkey PRIMARY KEY (id);
 
 
 --
@@ -3394,13 +3279,6 @@ CREATE INDEX index_requirements_on_rule_id ON requirements USING btree (rule_id)
 
 
 --
--- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_roles_on_name ON roles USING btree (name);
-
-
---
 -- Name: index_rules_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3534,20 +3412,6 @@ CREATE INDEX index_units_on_id_in_data_source ON units USING btree (id_in_data_s
 
 
 --
--- Name: index_user_roles_on_role_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_user_roles_on_role_id ON user_roles USING btree (role_id);
-
-
---
--- Name: index_user_roles_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_user_roles_on_user_id ON user_roles USING btree (user_id);
-
-
---
 -- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3645,22 +3509,6 @@ ALTER TABLE ONLY sub_programs
 
 ALTER TABLE ONLY sub_programs
     ADD CONSTRAINT fk_rails_1c9726a2f9 FOREIGN KEY (hsa_id) REFERENCES subgrantees(id);
-
-
---
--- Name: fk_rails_318345354e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY user_roles
-    ADD CONSTRAINT fk_rails_318345354e FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-
-
---
--- Name: fk_rails_3369e0d5fc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY user_roles
-    ADD CONSTRAINT fk_rails_3369e0d5fc FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE;
 
 
 --
@@ -4030,6 +3878,4 @@ INSERT INTO schema_migrations (version) VALUES ('20161017132353');
 INSERT INTO schema_migrations (version) VALUES ('20161017144713');
 
 INSERT INTO schema_migrations (version) VALUES ('20161021171808');
-
-INSERT INTO schema_migrations (version) VALUES ('20161108203825');
 

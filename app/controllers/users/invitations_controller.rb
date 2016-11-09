@@ -1,6 +1,6 @@
 class Users::InvitationsController < Devise::InvitationsController
 
-  prepend_before_action :require_admin!, only: [:new, :create]
+  prepend_before_action :require_can_edit_users!, only: [:new, :create]
 
   # GET /resource/invitation/new
   def new
@@ -43,9 +43,7 @@ class Users::InvitationsController < Devise::InvitationsController
     params.require(:user).permit(
       :name,
       :email,
-      :admin,
-      :dnd_staff,
-      :housing_subsidy_admin,
+      role_ids: [],
       contact_attributes: [:first_name, :last_name, :phone, :email]
       )
   end

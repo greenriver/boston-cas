@@ -1,7 +1,7 @@
 module Reports
   class ParkedClientsController < ApplicationController
     before_action :authenticate_user!
-    before_action :require_can_see_reports!
+    before_action :require_can_view_reports!
   	
     def index
       @clients = Client.parked

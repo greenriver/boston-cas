@@ -2,13 +2,14 @@
   .col-sm-8
     %h1= t '.title'
   .col-sm-4.margin-top-03.text-right
-    = link_to new_opportunity_path, class: 'btn btn-primary margin-bottom-02' do
-      %span.icon-plus
-      Submit a Vacancy
-    %br
-    %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
-      %span.icon-info
-      How to Add a Vacancy
+    - if can_add_vacancies?
+      = link_to new_opportunity_path, class: 'btn btn-primary margin-bottom-02' do
+        %span.icon-plus
+        Submit a Vacancy
+      %br
+      %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
+        %span.icon-info
+        How to Add a Vacancy
   
 - @prompt = t '.search_prompt'
 = render 'search_form'

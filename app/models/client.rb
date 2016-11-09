@@ -81,7 +81,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.accessible_by_user(user)
-    if user.admin? || user.dnd_staff?
+    if user.can_view_all_clients?
       all
     else
       none
@@ -89,7 +89,7 @@ class Client < ActiveRecord::Base
   end
 
   def accessible_by_user?(user)
-    if user.admin? || user.dnd_staff?
+    if user.can_view_all_clients?
       true
     else
       false

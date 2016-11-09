@@ -9,7 +9,7 @@
   .col-sm-8
     = render 'sub_programs/tab_navigation', active: 'program_details'
   .col-sm-4
-    - if admin? || dnd_staff?
+    - if can_edit_programs?
       = link_to new_program_sub_program_path(@program), class: 'btn btn-primary pull-right' do
         %span.icon-plus
         Add a Sub-Program

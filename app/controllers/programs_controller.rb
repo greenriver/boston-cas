@@ -1,6 +1,7 @@
 class ProgramsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_add_vacancies!
+  before_action :require_can_view_programs!
+  before_action :require_can_edit_programs!, only: [:update, :destroy, :create]
   before_action :set_program, only: [:edit, :update, :destroy]
   
   helper_method :sort_column, :sort_direction

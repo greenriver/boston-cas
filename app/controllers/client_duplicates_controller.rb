@@ -1,7 +1,7 @@
 class ClientDuplicatesController < ApplicationController
   include PjaxModalController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_edit_all_clients!
   before_action :set_clients, only: [:show, :update]
 
   def show

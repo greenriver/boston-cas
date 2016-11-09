@@ -3,7 +3,7 @@ class MatchContactsController < ApplicationController
   include HasMatchAccessContext
 
   before_action :require_match_access_context!
-  before_action :require_current_contact_admin_or_dnd_staff!
+  before_action :require_current_contact_can_edit_match_contacts!
   before_action :set_match
   before_action :set_match_contacts
 
@@ -50,8 +50,8 @@ class MatchContactsController < ApplicationController
       end
     end
     
-    def require_current_contact_admin_or_dnd_staff!
-      not_authorized! unless current_contact.user_admin? || current_contact.user_dnd_staff?
+    def require_current_contact_can_edit_match_contacts!
+      not_authorized! unless current_contact.user_can_edit_match_contacts?
     end
     
     

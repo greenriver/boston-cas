@@ -4,7 +4,7 @@ module Admin
     # route collision with Devise
 
     before_action :authenticate_user!
-    before_action :require_admin_or_dnd_staff!
+    before_action :require_can_edit_users!
 
     helper_method :sort_column, :sort_direction
 
@@ -57,10 +57,8 @@ module Admin
         params.require(:user).permit(
           :name,
           :email,
-          :admin,
-          :dnd_staff,
-          :housing_subsidy_admin,
           :receive_initial_notification,
+          role_ids: [],
           contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role]
         )
       end

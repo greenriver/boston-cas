@@ -1,6 +1,7 @@
 class ServicesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_view_available_services!
+  before_action :require_can_edit_available_services!, only: [:update, :destroy, :create]
   before_action :set_service, only: [:show, :edit, :update, :destroy]
 
   # GET /services

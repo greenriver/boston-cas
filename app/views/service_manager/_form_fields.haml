@@ -3,7 +3,7 @@
     = heading
     -# text instead of spinner because the spinner freezes during the slow DOM rebuilds
     %small.add-things-boxes--spinner(data-loading-spinner) working&hellip;
-  - if can_change_services?
+  - if can_assign_services?
     %div{ data: {selected_services: true} }
       %input{type: 'hidden', name: "#{form.object_name}[service_ids][]", value: ""}
       - form.object.services.preload(requirements: :rule).each do |service|

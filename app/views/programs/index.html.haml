@@ -4,7 +4,7 @@
     %h1= t '.title'
     - @prompt = t '.search_prompt'
   .col-sm-4.text-right.margin-top-03.buttons-row
-    - if admin? || dnd_staff?
+    - if can_edit_programs?
       = link_to new_program_path, class: 'btn btn-primary margin-bottom-02' do
         %span.icon-plus
         Add a Program

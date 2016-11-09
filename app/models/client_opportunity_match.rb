@@ -92,7 +92,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def self.accessible_by_user user
     # admins & DND see everything
-    if user.admin? || user.dnd_staff?
+    if user.can_view_all_matches?
       all
     # Allow logged-in users to see any match they are a contact on
     elsif user.present?
@@ -108,7 +108,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def show_client_info_to? contact
     return false unless contact
-    if contact.user_admin? || contact.user_dnd_staff?
+    if contact.user_can_view_all_clients?
       true
     elsif contact.in?(shelter_agency_contacts)
       true
@@ -201,7 +201,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def can_create_overall_note? contact
-    contact && (contact.user && contact.user.dnd_staff? || contact.user.admin?)
+    contact && (contact.user && contact.user.can_approve_matches? || contact.user.can_reject_matches?)
   end
 
   def match_contacts

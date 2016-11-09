@@ -4,7 +4,8 @@ class ContactsController < ApplicationController
   # etc.
   
   before_action :authenticate_user!
-  before_action :require_admin!
+  before_action :require_can_view_contacts!
+  before_action :require_can_edit_contacts!, only: [:update, :destroy, :create]
   before_action :set_contact, only: [:edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
   

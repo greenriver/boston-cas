@@ -1,7 +1,7 @@
 module Testing::Matching
   class CandidateGenerationsController < ApplicationController
     before_action :authenticate_user!
-    before_action :require_admin!
+    before_action :require_can_edit_all_clients!
 
     # actions
 

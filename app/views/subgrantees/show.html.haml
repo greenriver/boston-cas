@@ -9,7 +9,7 @@
           = @subgrantee.abbreviation
           )
     .col-sm-5.text-right.buttons-row.margin-top-03
-      - if admin? || dnd_staff?
+      - if can_edit_subgrantees?
         = link_to edit_subgrantee_path(@subgrantee), class: 'btn btn-primary' do
           %span.icon-pencil
           Edit Subgrantee

@@ -1,6 +1,7 @@
 class SubProgramsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_add_vacancies!
+  before_action :require_can_view_programs!
+  before_action :require_can_edit_programs!, only: [:update, :destroy, :create]
   before_action :set_program
   before_action :set_sub_program, only: [:edit, :update, :destroy]
 

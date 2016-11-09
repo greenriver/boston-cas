@@ -1,7 +1,7 @@
 class Contact < ActiveRecord::Base
 
   belongs_to :user, required: false
-  delegate :admin?, :dnd_staff?, to: :user, allow_nil: true, prefix: true
+  delegate :can_view_all_clients?, :can_edit_match_contacts?, :can_view_all_matches?, :can_reject_matches?, :can_approve_matches?, :can_reject_matches?, :can_act_on_behalf_of_match_contacts?, to: :user, allow_nil: true, prefix: true
 
   has_many :client_opportunity_matches
   has_many :services

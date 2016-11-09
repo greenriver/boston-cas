@@ -42,8 +42,7 @@ module MatchDecisions
     end
 
     def accessible_by? contact
-      contact.user_admin? ||
-      contact.user_dnd_staff?
+      contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
     private def note_present_if_status_declined

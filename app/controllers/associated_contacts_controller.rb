@@ -5,7 +5,8 @@ class AssociatedContactsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_contact_owner!
   before_action :set_contact_join_model!, only: [:edit, :update, :destroy]
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_view_contacts!
+  before_action :require_can_edit_contacts!, only: [:update, :create, :destroy]
 
   def index
 

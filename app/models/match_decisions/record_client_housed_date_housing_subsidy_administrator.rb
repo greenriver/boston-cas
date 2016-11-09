@@ -54,8 +54,7 @@ module MatchDecisions
     end
 
     def accessible_by? contact
-      contact.user_admin? ||
-      contact.user_dnd_staff? ||
+      contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
     end
     

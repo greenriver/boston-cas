@@ -1,6 +1,6 @@
 class OpportunityAlternateMatchesController < MatchListBaseController
   
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_see_alternate_matches!
   prepend_before_action :find_opportunity!
  
   private

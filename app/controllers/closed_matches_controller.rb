@@ -1,6 +1,6 @@
 class ClosedMatchesController < MatchListBaseController
   
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_view_all_matches!
   
   private
 

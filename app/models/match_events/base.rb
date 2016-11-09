@@ -38,8 +38,7 @@ module MatchEvents
     
     def note_editable_by? editing_contact
       editing_contact &&
-      contact == editing_contact # ||
-      # editing_contact.user.try(:admin?)
+      contact == editing_contact 
     end
     
     def remove_note!

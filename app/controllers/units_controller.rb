@@ -1,6 +1,7 @@
 class UnitsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin_or_dnd_staff!
+  before_action :require_can_view_units!
+  before_action :require_can_edit_units!, only: [:update, :destroy, :create]
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
   include PjaxModalController

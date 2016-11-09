@@ -1,6 +1,6 @@
 module Admin
   class ResendInvitationsController < ::ApplicationController
-    before_action :require_admin!
+    before_action :require_can_edit_users!
 
     def create
       @user = User.find params[:user_id]

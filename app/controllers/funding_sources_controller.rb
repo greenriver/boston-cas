@@ -1,7 +1,8 @@
 class FundingSourcesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :require_admin!
+  before_action :require_can_view_funding_sources!
+  before_action :require_can_edit_funding_sources!, only: [:update, :destroy, :create]
   before_action :find_funding_source, only: [:edit, :update]
   
   def index
