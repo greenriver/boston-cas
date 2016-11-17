@@ -30,6 +30,12 @@
     available_contacts_method: :available_housing_subsidy_admin_contacts,
     selected_contacts_method: :housing_subsidy_admin_contacts
 
+  = render 'contact_manager',
+    contacts_type: 'ssp',
+    heading: 'Stabilization Service Provider (optional)',
+    available_contacts_method: :available_ssp_contacts,
+    selected_contacts_method: :ssp_contacts
+
   .form-actions.clearfix
     = form.submit "Save", class: 'btn btn-primary'
   

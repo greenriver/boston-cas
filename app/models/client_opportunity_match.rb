@@ -76,6 +76,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     through: :client_opportunity_match_contacts,
     source: :contact
 
+  has_many :ssp_contacts,
+    -> { where client_opportunity_match_contacts: {ssp: true} },
+    class_name: 'Contact',
+    through: :client_opportunity_match_contacts,
+    source: :contact
+
   has_many :events,
     class_name: 'MatchEvents::Base',
     foreign_key: :match_id,
@@ -112,7 +118,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
-    elsif contact.in?(housing_subsidy_admin_contacts) && shelter_agency_approval_or_dnd_override?
+    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && shelter_agency_approval_or_dnd_override?
       true
     else
       false
@@ -166,6 +172,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     add_default_housing_subsidy_admin_contacts!
     add_default_client_contacts!
     add_default_shelter_agency_contacts!
+    add_default_ssp_contacts!
   end
 
   def overall_status
@@ -290,6 +297,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
       client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
+    end
+
+    def add_default_ssp_contacts!
+      
     end
 
 end

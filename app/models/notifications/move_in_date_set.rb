@@ -8,10 +8,14 @@ module Notifications
       match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
       end
+
+      match.ssp_contacts.each do |contact|
+        create! match: match, recipient: contact
+      end
     end
 
     def event_label
-      'Shelter Agency and Housing Subsidy Administrator contacts notified, lease start date set.'
+      'Shelter Agency, Housing Subsidy Administrator and Stabilization Service Provider contacts notified, lease start date set.'
     end
 
     def should_expire?

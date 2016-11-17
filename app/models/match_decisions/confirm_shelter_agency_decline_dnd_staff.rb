@@ -69,6 +69,7 @@ module MatchDecisions
         # Send the notifications again
         Notifications::MatchRecommendationHousingSubsidyAdmin.create_for_match! match
         Notifications::MatchRecommendationClient.create_for_match! match
+        Notifications::MatchRecommendationSsp.create_for_match! match
       end
       
       def decline_confirmed

@@ -40,11 +40,13 @@ module MatchDecisions
     def initialize_decision!
       update status: 'pending'
       Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
+      Notifications::ScheduleCriminalHearingSsp.create_for_match! match
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ScheduleCriminalHearingHousingSubsidyAdmin
+        m << Notifications::ScheduleCriminalHearingSsp
       end
     end
 
@@ -70,6 +72,7 @@ module MatchDecisions
         Notifications::CriminalHearingScheduledClient.create_for_match! match
         Notifications::CriminalHearingScheduledDndStaff.create_for_match! match
         Notifications::CriminalHearingScheduledShelterAgency.create_for_match! match
+        Notifications::CriminalHearingScheduledSsp.create_for_match! match
       end
 
       def no_hearing

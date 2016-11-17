@@ -54,6 +54,7 @@ module MatchDecisions
       @notifications_for_this_step ||= [].tap do |m|
         if match.schedule_criminal_hearing_housing_subsidy_admin_decision.status == 'scheduled'
           m << Notifications::CriminalHearingScheduledClient
+          m << Notifications::CriminalHearingScheduledSsp
           m << Notifications::CriminalHearingScheduledDndStaff
           m << Notifications::CriminalHearingScheduledShelterAgency
         end
@@ -81,11 +82,13 @@ module MatchDecisions
         match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
         Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
         Notifications::HousingSubsidyAdminDecisionShelterAgency.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
         Notifications::HousingSubsidyAdminAcceptedMatchDndStaff.create_for_match! match
       end
 
       def declined
         Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
         Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency.create_for_match! match
         match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
       end
