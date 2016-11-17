@@ -1545,7 +1545,8 @@ CREATE TABLE roles (
     can_view_available_services boolean DEFAULT false,
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
-    can_assign_requirements boolean DEFAULT false
+    can_assign_requirements boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false
 );
 
 
@@ -4049,4 +4050,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161021171808');
 INSERT INTO schema_migrations (version) VALUES ('20161108203825');
 
 INSERT INTO schema_migrations (version) VALUES ('20161117152709');
+
+INSERT INTO schema_migrations (version) VALUES ('20161117155843');
 

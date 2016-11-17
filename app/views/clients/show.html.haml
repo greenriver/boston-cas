@@ -124,12 +124,13 @@
           %tr
             %th Disabling Condition
             %td= checkmark @client.send('disabling_condition')
-          %tr
-            %th DMH Eligible
-            %td= f.input_field :dmh_eligible
-          %tr
-            %td.text-right{colspan: 2}
-              = f.button :submit, class: 'btn btn-primary', value: 'Update'
+          - if can_view_dmh_eligibility?
+            %tr
+              %th DMH Eligible
+              %td= f.input_field :dmh_eligible
+            %tr
+              %td.text-right{colspan: 2}
+                = f.button :submit, class: 'btn btn-primary', value: 'Update'
 
   .col-sm-6
     .row
