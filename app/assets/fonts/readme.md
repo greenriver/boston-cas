@@ -2,8 +2,8 @@ The icon font is generated at icomoon, using their free service.
 To add fonts to the package, you can either re-create the font collection and add to it, or create an additional icon set with only the new icons and include that in the site as well.
 
 To recreate the icon font and add to it (recommended method):
-
-1. Select the characters/images already used in this site
+0. At https://icomoon.io/app/#/select choose (hamburger -> Deselect) to reset the selection
+1. Select the characters/images already used in this site (see: /style_guide/icon_font)
 2. Add new characters/images
 3. Click 'generate font' button
 4. Click 'Download' button (zip file)
@@ -12,6 +12,7 @@ To recreate the icon font and add to it (recommended method):
 7. In the stylesheet (/app/assets/stylesheets/vendor/icomoon.scss) font-face declaration, paste in the new url variable in each font file path
 8. From the zip file's style.css, copy all of the css declarations
 9. In the stylesheet (/app/assets/stylesheets/vendor/icomoon.scss), paste over all of the css declarations. The icons are listed in the scss file in the order they appear in icomoon, so it's helpful for future generation to keep them in the same order.
+10. Make sure you update app/views/style_guide/icon_font.haml with any icons you add
 
 To view all of the icons currently in use in the app, in development or on staging, view /style_guide/icon_font
 

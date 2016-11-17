@@ -11,6 +11,7 @@ module MatchDecisions
       case status.to_sym
       when :pending then 'Housing Subsidy Administrator to note when client will move in.'
       when :completed then "Housing Subsidy Administrator notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :canceled then 'Match canceled administratively.'
       end
     end
 
@@ -27,7 +28,7 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', completed: 'Complete'}
+      {pending: 'Pending', completed: 'Complete', canceled: 'Canceled'}
     end
     
     def editable?
@@ -50,7 +51,7 @@ module MatchDecisions
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
     def accessible_by? contact
@@ -67,16 +68,19 @@ module MatchDecisions
         Notifications::MoveInDateSet.create_for_match! match
         # Notifications::RecordClientHousedDateHousingSubsidyAdministrator.create_for_match! match
       end
+
+      def canceled
+        match.rejected!
+      end
     end
     private_constant :StatusCallbacks
     
-    private
     
-      def client_move_in_date_present_if_status_complete
-        if status == 'complete' && client_move_in_date.blank?
-          errors.add :client_move_in_date, 'must be filled in'
-        end
+    private def client_move_in_date_present_if_status_complete
+      if status == 'completed' && client_move_in_date.blank?
+        errors.add :client_move_in_date, 'must be filled in'
       end
+    end
     
   end
   

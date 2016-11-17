@@ -13,6 +13,7 @@ module MatchDecisions
       when :pending then 'Housing Subsidy Administrator researching criminal background and deciding whether to schedule a hearing'
       when :scheduled then "Housing Subsidy Administrator has scheduled criminal background hearing for <strong>#{criminal_hearing_date}</strong>".html_safe
       when :no_hearing then 'Housing Subsidy Administrator indicates there will not be a criminal background hearing'
+        when :canceled then 'Match canceled administratively.'
       end
     end
 
@@ -29,7 +30,7 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', scheduled: 'Criminal Background Hearing Scheduled', no_hearing: 'There will not be a criminal background hearing'}
+      {pending: 'Pending', scheduled: 'Criminal Background Hearing Scheduled', no_hearing: 'There will not be a criminal background hearing', canceled: 'Canceled'}
     end
     
     def editable?
@@ -48,7 +49,7 @@ module MatchDecisions
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
     
     def permitted_params
@@ -73,6 +74,10 @@ module MatchDecisions
 
       def no_hearing
         match.approve_match_housing_subsidy_admin_decision.initialize_decision!
+      end
+
+      def canceled
+        match.rejected!
       end
     end
     private_constant :StatusCallbacks

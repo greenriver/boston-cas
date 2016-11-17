@@ -22,7 +22,5 @@
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message
 
-
-
           = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
           = form.submit 'Accept Match Recommendation', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)

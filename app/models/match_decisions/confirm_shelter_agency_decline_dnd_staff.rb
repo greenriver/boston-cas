@@ -73,7 +73,6 @@ module MatchDecisions
       
       def decline_confirmed
         match.rejected!
-        # TODO maybe rerun the matching engine for that vancancy and client
       end
     end
     private_constant :StatusCallbacks
