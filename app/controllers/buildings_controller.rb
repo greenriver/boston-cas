@@ -65,7 +65,7 @@ class BuildingsController < ApplicationController
   def available_units
     @available_units = @building.available_units_for_vouchers
     respond_to do |format|
-      format.json { render json: @available_units.as_json, only: [:id, :name, :building_id] }
+      format.json { render json: @available_units, only: [:id, :name, :building_id] }
     end
   end
 

@@ -360,7 +360,8 @@ CREATE TABLE clients (
     physical_disability boolean DEFAULT false,
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
-    prevent_matching_until date
+    prevent_matching_until date,
+    dmh_eligible boolean DEFAULT false
 );
 
 
@@ -1339,7 +1340,8 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    old_warehouse_id character varying
+    old_warehouse_id character varying,
+    dmh_eligible boolean DEFAULT false
 );
 
 
@@ -4045,4 +4047,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161017144713');
 INSERT INTO schema_migrations (version) VALUES ('20161021171808');
 
 INSERT INTO schema_migrations (version) VALUES ('20161108203825');
+
+INSERT INTO schema_migrations (version) VALUES ('20161117152709');
 

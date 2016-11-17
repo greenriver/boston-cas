@@ -96,32 +96,41 @@
 .row
   .col-sm-6 
     %h3 Health Information
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %th Developmental Disability
-          %td= checkmark @client.send('developmental_disability')
-        %tr
-          %th Domestic Violence Survivor
-          %td= checkmark @client.send('domestic_violence')
-        %tr
-          %th HIV/AIDS
-          %td= checkmark @client.send('hiv_aids')
-        %tr
-          %th Chronic Health Disability
-          %td= checkmark @client.send('chronic_health_problem')
-        %tr
-          %th Mental Health Disability
-          %td= checkmark @client.send('mental_health_problem')
-        %tr
-          %th Substance Abuse Problem
-          %td= checkmark @client.send('substance_abuse_problem')
-        %tr
-          %th Physical Disability
-          %td= checkmark @client.send('physical_disability')
-        %tr
-          %th Disabling Condition
-          %td= checkmark @client.send('disabling_condition')
+    = simple_form_for(@client) do |f|
+      = f.error_notification
+      %table.table.table-condensed
+        %tbody
+          %tr
+            %th Developmental Disability
+            %td= checkmark @client.send('developmental_disability')
+          %tr
+            %th Domestic Violence Survivor
+            %td= checkmark @client.send('domestic_violence')
+          %tr
+            %th HIV/AIDS
+            %td= checkmark @client.send('hiv_aids')
+          %tr
+            %th Chronic Health Disability
+            %td= checkmark @client.send('chronic_health_problem')
+          %tr
+            %th Mental Health Disability
+            %td= checkmark @client.send('mental_health_problem')
+          %tr
+            %th Substance Abuse Problem
+            %td= checkmark @client.send('substance_abuse_problem')
+          %tr
+            %th Physical Disability
+            %td= checkmark @client.send('physical_disability')
+          %tr
+            %th Disabling Condition
+            %td= checkmark @client.send('disabling_condition')
+          %tr
+            %th DMH Eligible
+            %td= f.input_field :dmh_eligible
+          %tr
+            %td.text-right{colspan: 2}
+              = f.button :submit, class: 'btn btn-primary', value: 'Update'
+
   .col-sm-6
     .row
       .col-sm-12

@@ -1,9 +1,9 @@
 class Rules::DmhEligible < Rule
   def clients_that_fit(scope, requirement)
-    if mental_health_problem = Client.arel_table[:mental_health_problem]
-      scope.where(mental_health_problem: requirement.positive)
+    if dmh_eligible = Client.arel_table[:dmh_eligible]
+      scope.where(dmh_eligible: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.mental_health_problem missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing.new("clients.dmh_eligible missing. Cannot check clients against #{self.class}.")
     end
   end
 end
