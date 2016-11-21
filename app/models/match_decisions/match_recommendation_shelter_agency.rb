@@ -24,6 +24,7 @@ module MatchDecisions
       when :accepted then 'Match accepted by shelter agency. Client has signed release of information, spoken with services agency and submitted a CORI release form'
       when :not_working_with_client then 'Shelter agency no longer working with client'
       when :declined then decline_status_label
+      when :canceled then 'Match canceled administratively.'
       end
     end
 
@@ -48,7 +49,7 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', acknowledged: 'Acknowledged', accepted: 'Accepted', declined: 'Declined', not_working_with_client: 'Pending'}
+      {pending: 'Pending', acknowledged: 'Acknowledged', accepted: 'Accepted', declined: 'Declined', not_working_with_client: 'Pending', canceled: 'Canceled'}
     end
     
     def editable?
@@ -70,7 +71,7 @@ module MatchDecisions
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
     def accessible_by? contact
@@ -111,6 +112,10 @@ module MatchDecisions
 
       def not_working_with_client
         
+      end
+
+      def canceled
+        match.rejected!
       end
     end
     private_constant :StatusCallbacks

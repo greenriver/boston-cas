@@ -26,6 +26,8 @@
                 = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
      
             .form-actions.clearfix
+              - if can_reject_matches?
+                = form.submit 'Cancel Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable?
               = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
               = form.submit 'Indicate Interest in Match', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: !(@decision.editable?)
             
@@ -39,7 +41,10 @@
                 = form.association :not_working_with_client_reason, collection: @decision.not_working_with_client_reasons, label: 'If you are no longer working with client, please indicate reason:', as: :check_boxes
                 = form.input :not_working_with_client_reason_other_explanation, as: :text, label: false, placeholder: 'Other reason'
                 = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
-                = form.submit 'Not Working with Client', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)
+            .form-actions.clearfix
+              - if can_reject_matches?
+                = form.submit 'Cancel Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable?
+              = form.submit 'Not Working with Client', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)
 
 
 
