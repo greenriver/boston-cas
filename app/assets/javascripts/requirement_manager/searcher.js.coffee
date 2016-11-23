@@ -20,6 +20,7 @@ class App.RequirementManager.Searcher
       theme: 'bootstrap'
       data: @_select2_data()
       placeholder: @placeholder
+      width: '100%'
   
   reset: ->
     # resetting select2 this way currently throws

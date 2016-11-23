@@ -37,7 +37,7 @@ class OpportunitiesController < ApplicationController
   # Using this to bulk create units and associated vouchers
   def new
     @opportunity = Opportunity.new
-    @programs = sub_program_scope
+    @programs = sub_program_scope.sort_by{|m| [m.program.name, m.name]}
     @buildings = building_scope
   end
 

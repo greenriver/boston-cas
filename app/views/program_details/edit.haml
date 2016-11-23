@@ -16,11 +16,14 @@
 .row.margin-top-02
   .col-sm-8
     = simple_form_for @program, url: form_url do |f|
-
-      - if @program.sub_programs.count > 1
-        %p
+      - other_sub_programs = @program.sub_programs.count - 1
+      - if other_sub_programs > 0
+        %p.alert.alert-warning
+          %span.icon-warning
           This program has
-          = pluralize (@program.sub_programs.count - 1), 'other sub-program'
+          = "#{pluralize other_sub_programs, 'other sub-program'}."
+          %br 
+          = "Any changes you make on this page, including changing rules or services will also affect the #{pluralize other_sub_programs, 'other sub-program'}.  It may make more sense to change the rules on the #{Building.model_name.human.downcase}, sub-grantee or service provider for the sub-program instead."
 
       .form-inputs
         = f.input :name, label: 'Program Name'

@@ -50,7 +50,10 @@
                 - else
                   = link_to "Restore #{program.name}", program_restore_path(sp.program.id), method: :post
               %td{:class => deleted}
-                = sp.name              
+                - if ! sp.deleted_at
+                  = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
+                - else
+                  = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post         
               %td{:class => deleted}
                 = sp.site
               %td{:class => deleted}
