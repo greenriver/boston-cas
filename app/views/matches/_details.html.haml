@@ -112,6 +112,15 @@
           - if contact.phone.present?
             %br
             = contact.phone
+      - match.ssp_contacts.each do |contact|
+        .detail-box--label Stabilization Service Provider
+        .detail-box--value
+          = contact.name
+          %br
+          = mail_to contact.email, nil, target: '_blank'
+          - if contact.phone.present?
+            %br
+            = contact.phone
       - if contacts_editable?
         .detail-box--link
           = link_to access_context.edit_match_contacts_path(match), data: {loads_in_pjax_modal: true} do

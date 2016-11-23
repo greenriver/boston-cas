@@ -102,6 +102,7 @@ class SubProgram < ActiveRecord::Base
       .merge! inherited_program_requirements_by_source
       .merge! inherited_service_provider_requirements_by_source
       .merge! inherited_sub_contractor_requirements_by_source
+      .merge! inherited_building_requirements_by_source
   end
   
   def self.preload_inherited_requirements
@@ -155,6 +156,18 @@ class SubProgram < ActiveRecord::Base
           result[sub_contractor] = []
           sub_contractor.requirements.each do |requirement|
             result[sub_contractor] << requirement
+          end
+        end
+      end
+    end
+
+    def inherited_building_requirements_by_source
+      {}.tap do |result|
+        if building.present?
+            result.merge! building.inherited_requirements_by_source
+          result[building] = []
+          building.requirements.each do |requirement|
+            result[building] << requirement
           end
         end
       end

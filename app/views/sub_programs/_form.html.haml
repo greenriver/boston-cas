@@ -35,6 +35,9 @@
     = f.input :voucher_count, label: 'Total Vouchers', input_html: {style: 'width: 8em;'}
   .well.add-things-boxes.add-things-boxes--rules
     %h3.add-things-boxes--h3 Rules
+    %p.alert.alert-info.hidden.jRuleWarning
+      %span.icon-info
+      Rules inherited from a site listed above are only visible after save.
     = render = render 'requirement_manager/inherited_rules', inheritee: @subprogram
 
   .form-actions
@@ -52,5 +55,8 @@
       }
     });
     $('.program-type input:checked').trigger('change');
+    $('#sub_program_building_id').on('change', function(){
+      $('.jRuleWarning').removeClass('hidden');
+    });
     
 

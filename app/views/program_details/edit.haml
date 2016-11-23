@@ -1,19 +1,18 @@
 = render 'sub_programs/breadcrumbs'
 .row
-  .col-sm-6
+  .col-xs-6
     %h1 Edit Program Details
-  .col-sm-6
+  .col-xs-6
     = render 'sub_programs/status_blocks'
+- if can_edit_programs?
+  .add-program
+    = link_to new_program_sub_program_path(@program), class: 'btn btn-primary pull-right' do
+      %span.icon-plus
+      Add a Sub-Program
     
 .row.margin-top-02
-  .col-sm-8
+  .col-sm-12
     = render 'sub_programs/tab_navigation', active: 'program_details'
-  .col-sm-4
-    - if can_edit_programs?
-      = link_to new_program_sub_program_path(@program), class: 'btn btn-primary pull-right' do
-        %span.icon-plus
-        Add a Sub-Program
-
 .row.margin-top-02
   .col-sm-8
     = simple_form_for @program, url: form_url do |f|

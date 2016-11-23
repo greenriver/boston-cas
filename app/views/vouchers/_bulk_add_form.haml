@@ -1,7 +1,9 @@
-= simple_form_for @subprogram, url: program_sub_program_vouchers_path, html: {method: :post, class: 'add-vouchers'}  do |f|
-  = f.error_notification
-  .input-group.pull-right
-    %span.btn.btn-primary__reverse.btn-no-border-radius.btn__number
-      \#
-    = f.input_field :add_vouchers, as: :integer, class: 'input__button-size input__width-80'
-    = f.submit 'Add vouchers', class: 'btn btn-primary btn-no-border-radius'
+.row
+  .col-xs-12
+    = simple_form_for @subprogram, url: program_sub_program_vouchers_path, html: {method: :post, class: 'add-vouchers'}  do |f|
+      = f.error_notification
+      .input-group.pull-right
+        %span.btn.btn-primary__reverse.btn-no-border-radius.btn__number
+          \#
+        = f.input_field :add_vouchers, as: :integer, class: 'input__button-size input__width-80'
+        = f.submit 'Add vouchers', class: 'btn btn-primary btn-no-border-radius'

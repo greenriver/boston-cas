@@ -1,22 +1,23 @@
 = render 'sub_programs/breadcrumbs'
 .row
-  .col-sm-6
+  .col-xs-6
     %h1 
       Program: 
       = @subprogram.program.name
+  .col-xs-6
+    = render 'sub_programs/status_blocks'
+.row
+  .col-xs-8
     %h2
       Sub-Program:
       = @subprogram.name
-  .col-sm-6
-    = render 'sub_programs/status_blocks'
-.row.margin-top-02
-  .col-sm-8
-    = render 'sub_programs/tab_navigation', active: 'vouchers'
   .col-sm-4
     = render 'bulk_add_form'
-    .row
-      .col-sm-12.text-right
-        = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
+    .text-right
+      = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
+.row.margin-top-02
+  .col-sm-12
+    = render 'sub_programs/tab_navigation', active: 'vouchers'
 .row
   .col-sm-12
     - if @subprogram.vouchers.count > 0
