@@ -72,7 +72,7 @@ class Voucher < ActiveRecord::Base
     if status_match.present?
       condition = status_match.successful? ? 'successful match' : 'match in progress'
       if available_changed? || unit_id_changed? || date_available_changed?
-        errors.add :base, "Voucher is locked while there is a #{condition}"
+        errors.add :base, "Voucher #{id} is locked while there is a #{condition}"
       end
     end
   end
