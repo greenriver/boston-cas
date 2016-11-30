@@ -22,7 +22,7 @@ module MatchDecisions
       when :pending then 'New Match Awaiting Shelter Agency Review'
       when :acknowledged then 'Match acknowledged by shelter agency.  In review'
       when :accepted then 'Match accepted by shelter agency. Client has signed release of information, spoken with services agency and submitted a CORI release form'
-      when :not_working_with_client then 'Shelter agency no longer working with client'
+      when :not_working_with_client then "Shelter agency no longer working with client.  Last seen: #{client_last_seen_date.to_date}"
       when :declined then decline_status_label
       when :canceled then 'Match canceled administratively.'
       end

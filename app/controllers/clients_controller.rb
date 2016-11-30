@@ -45,8 +45,8 @@ class ClientsController < ApplicationController
             opportunity.update(available_candidate: true)
             Matching::RunEngineJob.perform_later
           end
-          if @client.client_opportunity_matches.any?
-            @client.client_opportunity_matches.each do |opp|
+          if @client.client_opportunity_matches.proposed.any?
+            @client.client_opportunity_matches.proposed.each do |opp|
               opp.delete
             end
           end
@@ -75,7 +75,7 @@ class ClientsController < ApplicationController
   # Find any matches where the client is the active client
   # Remove the client from the match
   # Activate the next client
-  # Remove the client from any other matches
+  # Remove the client from any other proposed matches
   # Mark the Client as available = false
   def unavailable
     active_match = @client.client_opportunity_matches.active.first
@@ -86,8 +86,8 @@ class ClientsController < ApplicationController
         opportunity.update(available_candidate: true)
         Matching::RunEngineJob.perform_later
       end
-      if @client.client_opportunity_matches.any?
-        @client.client_opportunity_matches.each do |opp|
+      if @client.client_opportunity_matches.proposed.any?
+        @client.client_opportunity_matches.proposed.each do |opp|
           opp.delete
         end
       end
