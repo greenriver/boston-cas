@@ -34,8 +34,10 @@ class Client < ActiveRecord::Base
 
   scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
   scope :available_for_matching, -> { 
+    # anyone who hasn't been matched fully, isn't parked and isn't active in another match
     where(available_candidate: true)
     .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
+    .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
 
 
@@ -121,5 +123,9 @@ class Client < ActiveRecord::Base
 
   def housing_history
     #client_opportunity_matches.inspect
+  end
+
+  def active_in_match
+    client_opportunity_matches.active.first.try(:id)
   end
 end

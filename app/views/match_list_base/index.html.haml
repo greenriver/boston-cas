@@ -44,7 +44,10 @@
               %th
         %tbody
           - @matches.each do |match|
-            %tr
+            - active_in_other_match_class = ''
+            - if match.client.active_in_match.present? && match.client.active_in_match != match.id
+              - active_in_other_match_class = 'client__active-match-elsewhere'
+            %tr{class: active_in_other_match_class}
               %td
                 - if match.client.accessible_by_user? current_user
                   = link_to client_path(match.client) do

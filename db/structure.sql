@@ -362,7 +362,9 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false
+    dmh_eligible boolean DEFAULT false,
+    va_eligible boolean DEFAULT false NOT NULL,
+    hues_eligible boolean DEFAULT false NOT NULL
 );
 
 
@@ -1342,7 +1344,9 @@ CREATE TABLE project_clients (
     pager character varying,
     email character varying,
     old_warehouse_id character varying,
-    dmh_eligible boolean DEFAULT false
+    dmh_eligible boolean DEFAULT false,
+    va_eligible boolean DEFAULT false NOT NULL,
+    hues_eligible boolean DEFAULT false NOT NULL
 );
 
 
@@ -1547,7 +1551,9 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL
 );
 
 
@@ -4055,4 +4061,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161117152709');
 INSERT INTO schema_migrations (version) VALUES ('20161117155843');
 
 INSERT INTO schema_migrations (version) VALUES ('20161117162449');
+
+INSERT INTO schema_migrations (version) VALUES ('20161130173742');
 

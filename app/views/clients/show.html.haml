@@ -128,6 +128,15 @@
             %tr
               %th DMH Eligible
               %td= f.input_field :dmh_eligible
+          - if can_view_va_eligibility?
+            %tr
+              %th VA Eligible
+              %td= f.input_field :va_eligible
+          - if can_view_hues_eligibility?
+            %tr
+              %th HUES Eligible
+              %td= f.input_field :hues_eligible
+          - if can_view_dmh_eligibility? || can_view_va_eligibility? || can_view_hues_eligibility?
             %tr
               %td.text-right{colspan: 2}
                 = f.button :submit, class: 'btn btn-primary', value: 'Update'
