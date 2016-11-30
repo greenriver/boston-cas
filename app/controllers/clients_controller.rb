@@ -37,22 +37,7 @@ class ClientsController < ApplicationController
       # If we have a future prevent_matching_until date, remove the client from 
       # any current matches
       if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
-        active_match = @client.client_opportunity_matches.active.first
-        Client.transaction do 
-          if active_match.present?
-            opportunity = active_match.opportunity
-            active_match.delete
-            opportunity.update(available_candidate: true)
-            Matching::RunEngineJob.perform_later
-          end
-          if @client.client_opportunity_matches.proposed.any?
-            @client.client_opportunity_matches.proposed.each do |opp|
-              opp.delete
-            end
-          end
-          # This will re-queue the client once the date is passed
-          @client.update(available_candidate: true)
-        end
+        @client.unavailable(permanent: false)
       end
       redirect_to client_path(@client), notice: "Client updated"
     else
@@ -78,21 +63,7 @@ class ClientsController < ApplicationController
   # Remove the client from any other proposed matches
   # Mark the Client as available = false
   def unavailable
-    active_match = @client.client_opportunity_matches.active.first
-    Client.transaction do 
-      if active_match.present?
-        opportunity = active_match.opportunity
-        active_match.delete
-        opportunity.update(available_candidate: true)
-        Matching::RunEngineJob.perform_later
-      end
-      if @client.client_opportunity_matches.proposed.any?
-        @client.client_opportunity_matches.proposed.each do |opp|
-          opp.delete
-        end
-      end
-      @client.update(available: false)
-    end
+    @client.unavailable(permanent: true)
     redirect_to action: :show
   end
 

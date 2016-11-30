@@ -128,4 +128,27 @@ class Client < ActiveRecord::Base
   def active_in_match
     client_opportunity_matches.active.first.try(:id)
   end
+
+  def unavailable(permanent:false)
+    active_match = client_opportunity_matches.active.first
+    Client.transaction do 
+      if active_match.present?
+        opportunity = active_match.opportunity
+        active_match.delete
+        opportunity.update(available_candidate: true)
+        Matching::RunEngineJob.perform_later
+      end
+      if client_opportunity_matches.proposed.any?
+        client_opportunity_matches.proposed.each do |opp|
+          opp.delete
+        end
+      end
+      if permanent
+        update(available: false)
+      else
+        # This will re-queue the client once the date is passed
+        update(available_candidate: true)
+      end
+    end
+  end
 end
