@@ -36,6 +36,10 @@ module MatchDecisions
       super && saved_status !~ /accepted|declined/
     end
 
+    def permitted_params
+      super + [:prevent_matching_until]
+    end
+
     def initialize_decision!
       update status: 'pending'
       Notifications::MatchRecommendationDndStaff.create_for_match! match
@@ -118,6 +122,6 @@ module MatchDecisions
     end
  
   end
-  
+
 end
 

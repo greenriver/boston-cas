@@ -31,6 +31,14 @@ class MatchDecisionsController < ApplicationController
         end
       end
       flash[:notice] = "Thank you, your response has been entered." unless request.xhr?
+      # If we've been asked to park the client
+      if can_reject_matches? && decision_params[:prevent_matching_until].present?
+        if decision_params[:prevent_matching_until].to_date > Date.today
+          client = @match.client
+          client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
+          client.unavailable(permanent: false)
+        end
+      end
       redirect_to access_context.match_path(@match)
     else
       flash[:error] = "Please review the form problems below."

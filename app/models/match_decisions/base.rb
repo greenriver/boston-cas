@@ -26,6 +26,8 @@ module MatchDecisions
 
     # we collect notes on our forms, and pass them on to events where they are stored
     attr_accessor :note
+    # We provide an option to park clients on the DND initial review
+    attr_accessor :prevent_matching_until
     
     has_many :decision_action_events,
       class_name: 'MatchEvents::DecisionAction',

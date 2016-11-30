@@ -17,7 +17,14 @@
         = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
 
         = render 'match_decisions/decline_reason', form: form
-
+        - if can_reject_matches?
+          %label
+            Optionally prevent matching #{@match.client.name} until:
+          .row
+            .col-xs-4
+              = form.input :prevent_matching_until, as: :date_picker, label: false
+            .col-xs-8
+              Parking a client will remove them from this match and any proposed matches.  The client will not be re-matched until the date specified has passed. 
         .form-actions.clearfix
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message
