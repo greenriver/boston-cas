@@ -6,6 +6,26 @@ button.close {
   text-transform: uppercase;
   @include open-sans-bold;
 }
+.btn-default {
+  color: $gray-060;
+}
+.btn-default:hover
+{
+  color: $gray-070;
+}
+.btn-default:active,
+.btn-default:focus,
+.btn-default:active:hover,
+.open > .btn-default.dropdown-toggle:focus
+{
+  background-color: $gray-050;
+  color: #FFF;
+}
+.open > .btn-default.dropdown-toggle
+{
+  background-color: $gray-050;
+  color: #FFF;
+}
 .btn-secondary {
   background-color: $gray-030;
   color: $text-color;

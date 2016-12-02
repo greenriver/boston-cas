@@ -1,5 +1,5 @@
 class ActiveMatchesController < MatchListBaseController
-
+  helper_method :sort_column, :sort_direction
   def index
     # search
     @matches = if params[:q].present?
@@ -17,8 +17,10 @@ class ActiveMatchesController < MatchListBaseController
     column = "client_opportunity_matches.#{sort_column}"
     if sort_column == 'calculated_first_homeless_night'
       column = 'clients.calculated_first_homeless_night'
-    elsif sort_column == 'client_id'
+    elsif sort_column == 'last_name'
       column = 'clients.last_name'
+    elsif sort_column == 'first_name'
+      column = 'clients.first_name'
     elsif sort_column == 'last_decision'
       column = "last_decision.updated_at"
     elsif sort_column == 'current_step'
@@ -32,18 +34,31 @@ class ActiveMatchesController < MatchListBaseController
       .order(sort)
       .preload(:client, :opportunity, :decisions)
       .page(params[:page]).per(25)
+
+    @column = sort_column
+    @direction = sort_direction
+    @active_filter = @data_source_id.present? || @start_date.present?
   end
   
-  private
   
-    def match_scope
-      ClientOpportunityMatch
-        .accessible_by_user(current_user)
-        .active
-    end
+  
+  private def match_scope
+    ClientOpportunityMatch
+      .accessible_by_user(current_user)
+      .active
+  end
     
-    def set_heading
-      @heading = 'Matches in Progress'
-    end
+  private def set_heading
+    @heading = 'Matches in Progress'
+  end
+
+  private def sort_column
+    available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
+    available_sort.include?(params[:sort]) ? params[:sort] : 'created_at'
+  end
+
+  private def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end
 
 end

@@ -59,6 +59,14 @@ module ApplicationHelper
     end
   end
 
+  #returns a link appropriate for sorting a table as described
+  def sort_as_link(link_text, column, direction='asc')
+    sort_direction = (direction.nil? || direction == 'asc') ? 'asc' : 'desc'
+    sort = {'sort' => column, 'direction' => sort_direction}
+    params.merge!(sort)
+    link_to(link_text, params)
+  end
+
   def fake_partner
     short, long = * [
       ['DND','Department of Neighborhood Development'],

@@ -303,4 +303,18 @@ class ClientOpportunityMatch < ActiveRecord::Base
       
     end
 
+    def self.sort_options
+      [
+        {title: 'Oldest match', column: 'created_at', direction: 'asc'},
+        {title: 'Most recent match', column: 'created_at', direction: 'desc'},
+        {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
+        {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
+        {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
+        {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
+        {title: 'Recently changed', column: 'last_decision', direction: 'desc'},
+        {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
+        {title: 'Current step', column: 'current_step', direction: 'desc'},
+      ]
+    end
+
 end

@@ -3,7 +3,9 @@
   .col-sm-12
     %h1= t '.title'
 - @prompt = t '.search_prompt'
-= render 'search_form'
+.row
+  .col-sm-6
+    = render 'search_form'
 - if Client.parked.any?
   .alert.alert-warning
     %p.icon-warning

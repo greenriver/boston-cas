@@ -72,6 +72,10 @@ en:
   reissue_notifications:
       index:
         title: 'Oustanding Requests for Notifications'
+  active_matches:
+      index:
+        title: 'Active Matches'
+        search_prompt: 'Search active matches...'
   activerecord:
     models:
       building: 'Site'

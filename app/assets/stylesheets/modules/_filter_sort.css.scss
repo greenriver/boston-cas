@@ -1,0 +1,20 @@
+.filter-sort__filter .dropdown-menu.options,
+.filter-sort__filter-active .dropdown-menu.options
+{
+  width: 38em;
+  padding: 1em;
+}
+.filter-sort__sort .dropdown-menu.options
+{
+  width: 15em;
+  padding: 1em;
+}
+.filter-sort__sort ul
+{
+  list-style-type: none;
+  padding-left: 0.25em;
+}
+.filter-sort__filter-active .btn-default {
+  background-color: $brand-info;
+  color: white;
+}

@@ -1,3 +1,4 @@
+- sort_options = ClientOpportunityMatch.sort_options
 .row
   .col-sm-4.col-sm-offset-8
     - if can_add_vacancies?
@@ -17,28 +18,32 @@
 .row
   .col-sm-12
     %h1= @heading
-    %p= page_entries_info @matches
     = render 'help_text'
-:ruby
-  columns = ['client_id', 'calculated_first_homeless_night', 'last_decision', 'current_step', 'created_at']
-  directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
-  titles = {}
-  directions.each {| k,v | titles[k] = @matches.human_attribute_name(k)}
-  titles['client_id'] = 'Client'
-  titles['calculated_first_homeless_night'] = "First Homeless Night"
-  titles['last_decision'] = "Last Changed"
-  titles['current_step'] = "Current Step"
-  titles['created_at'] = "Initial Match Date"
+  - @prompt = t '.search_prompt'
+.row
+  .col-sm-6
+    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
+  .col-sm-3.sort-filter      
+    -# render 'filter'
+    = render 'sort', sort_options: sort_options
+.row
+  .col-sm-4
+    %p= page_entries_info @matches
+  .col-sm-4
+    %p.client__current-sort-filter
+      Currently sorted by:
+      %strong= sort_options.select{|m| m[:column] == @column && m[:direction] == @direction}.first[:title]
 .row
   .col-sm-12
     .table-responsive
       %table.table.table-condensed
         %thead
           %tr
-            - titles.each do | k, title |
-              %th
-                = sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th Client
+            %th First Homeless Night
+            %th Last Changed
+            %th Current Step
+            %th Initial Match Date
             %th
               Funding Source &amp; Service Provider
             - if show_links_to_matches?
@@ -70,4 +75,4 @@
                   = link_to opportunity_matches_path(match.opportunity) do
                     .badge.badge-success= match.opportunity_related_matches.count
 
-    %p= paginate @matches, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+    %p= paginate @matches, params: {sort: @column, direction: @direction}

@@ -6,7 +6,9 @@
 
 %h2 Add an existing Contact
 - @prompt = t '.search_prompt'
-= render 'search_form'
+.row
+  .col-sm-6
+    = render 'search_form'
 %p= page_entries_info @available_contacts, entry_name: 'available contact'
 
 %table.table.table-condensed

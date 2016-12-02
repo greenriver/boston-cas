@@ -9,7 +9,9 @@
 .row
   .col-sm-12
     - @prompt = t '.search_prompt'
-    = render 'search_form'
+    .row
+      .col-sm-6
+        = render 'search_form'
     
     .table-responsive
       %table.table.table-condensed.table-hover
