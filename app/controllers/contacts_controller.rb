@@ -19,6 +19,7 @@ class ContactsController < ApplicationController
 
     # sort / paginate
     @contacts = @contacts
+      .preload(:client_opportunity_match_contacts)
       .order(sort_column => sort_direction)
       .page(params[:page]).per(25)
   end

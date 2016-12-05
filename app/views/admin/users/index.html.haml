@@ -35,6 +35,7 @@
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
             %th Roles
             %th Status
+            %th Matches
             %th
             %th
         %tbody
@@ -45,6 +46,9 @@
                 = user.email
               %td= user.roles_string
               %td= render 'user_invitation_status', user: user
+              %td.text-center
+                - matches = user.contact.try(:client_opportunity_match_contacts) || []
+                = matches.size
               %td
                 = link_to action: :edit, id: user do
                   %span.icon-pencil

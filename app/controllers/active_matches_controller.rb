@@ -8,7 +8,7 @@ class ActiveMatchesController < MatchListBaseController
       match_scope
     end
     # decision subquery
-
+    flash[:alert] = match_scope.to_sql
     md = MatchDecisions::Base.where(
       'match_id = client_opportunity_matches.id'
     ).where.not(status: nil).order(created_at: :desc).limit(1)
