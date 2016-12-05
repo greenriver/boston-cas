@@ -2008,7 +2008,6 @@ ALTER SEQUENCE user_roles_id_seq OWNED BY user_roles.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    name character varying NOT NULL,
     email character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -2036,7 +2035,9 @@ CREATE TABLE users (
     invited_by_id integer,
     invited_by_type character varying,
     invitations_count integer DEFAULT 0,
-    receive_initial_notification boolean DEFAULT false
+    receive_initial_notification boolean DEFAULT false,
+    first_name character varying,
+    last_name character varying
 );
 
 
@@ -4063,4 +4064,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161117155843');
 INSERT INTO schema_migrations (version) VALUES ('20161117162449');
 
 INSERT INTO schema_migrations (version) VALUES ('20161130173742');
+
+INSERT INTO schema_migrations (version) VALUES ('20161205190843');
 

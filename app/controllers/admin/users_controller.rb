@@ -55,7 +55,8 @@ module Admin
 
       def user_params
         params.require(:user).permit(
-          :name,
+          :first_name,
+          :last_name,
           :email,
           :receive_initial_notification,
           role_ids: [],
@@ -63,7 +64,7 @@ module Admin
         )
       end
       def sort_column
-        user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'name'
+        user_scope.column_names.include?(params[:sort]) ? params[:sort] : :last_name
       end
 
       def sort_direction

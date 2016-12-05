@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
   #has_secure_password # not needed with devise
 
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
-  validates :name, presence: true, length: {maximum: 40}
+  validates :first_name, presence: true, length: {maximum: 40}
+  validates :last_name, presence: true, length: {maximum: 40}
 
   scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
   scope :dnd_staff, -> {joins(:roles).where(roles: {name: 'dnd_staff'})}
@@ -26,8 +27,13 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
     super
-    self.name = contact.full_name
+    self.first_name = contact.first_name
+    self.last_name = contact.last_name
     self.email = contact.email
+  end
+
+  def name
+    "#{first_name} #{last_name}"
   end
 
   # load a hash of permission names (e.g. 'can_view_reports')
@@ -77,18 +83,16 @@ class User < ActiveRecord::Base
 
     query = "%#{text}%"
     where(
-      arel_table[:name].matches(query)
+      arel_table[:first_name].matches(query)
+      .or(arel_table[:last_name].matches(query))
       .or(arel_table[:email].matches(query))
     )
   end
   
-  private
-    def set_up_contact!
-      contact ||= build_contact
-      contact.first_name = name.split(' ').first
-      contact.last_name = name.split(' ').last
-      contact.email = email
-      contact.save!
-    end
-
+  
+  private def set_up_contact!
+    contact Contact.where(email: email).first_or_create
+    contact.update(first_name: first_name, last_name: last_name)
+    update(contact: contact)
+  end
 end
