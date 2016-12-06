@@ -64,7 +64,7 @@ module Admin
         )
       end
       def sort_column
-        user_scope.column_names.include?(params[:sort]) ? params[:sort] : :last_name
+        user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
       end
 
       def sort_direction

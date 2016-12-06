@@ -18,11 +18,11 @@
   .col-sm-8
     %p= page_entries_info @users, entry_name: 'user account'
     :ruby
-      columns = ['name', 'email']
+      columns = ['last_name', 'email']
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
       titles = {}
       directions.each {| k,v | titles[k] = @users.human_attribute_name(k)}
-
+      titles['last_name'] = 'Name'
 .row
   .col-sm-12
     .table-responsive
