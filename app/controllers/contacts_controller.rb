@@ -43,7 +43,9 @@ class ContactsController < ApplicationController
   
   def update
     if @contact.update contact_params
-      redirect_to action: :index, notice: 'Contact updated'
+      @contact.user.update(first_name: @contact.first_name, last_name: @contact.last_name) if @contact.user.present?
+      flash[:notice] = 'Contact updated'
+      redirect_to action: :index
     else
       flash[:error] = 'Please review the form problems below.'
       render :new
@@ -52,7 +54,8 @@ class ContactsController < ApplicationController
   
   def destroy
     @contact.destroy
-    redirect_to({action: :index}, notice: 'Contact deleted')
+    flash[:notice] = 'Contact deleted'
+    redirect_to({action: :index})
   end
   
   private

@@ -3,8 +3,8 @@ class SplitNameOnUser < ActiveRecord::Migration
     add_column :users, :first_name, :string
     add_column :users, :last_name, :string
     User.all.each do |u|
-      n = u.name.split(' ')
-      u.update(first_name: n.first, last_name: n.last)
+      first_name, last_name = u[:name].split(' ', 2)
+      u.update(first_name: first_name, last_name: last_name)
     end
     remove_column :users, :name
   end
