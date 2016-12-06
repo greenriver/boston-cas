@@ -23,7 +23,6 @@ class User < ActiveRecord::Base
   has_many :user_roles, dependent: :destroy, inverse_of: :user
   has_many :roles, through: :user_roles
 
-  after_create :set_up_contact!
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
     super
@@ -87,12 +86,5 @@ class User < ActiveRecord::Base
       .or(arel_table[:last_name].matches(query))
       .or(arel_table[:email].matches(query))
     )
-  end
-  
-  
-  private def set_up_contact!
-    contact Contact.where(email: email).first_or_create
-    contact.update(first_name: first_name, last_name: last_name)
-    update(contact: contact)
   end
 end

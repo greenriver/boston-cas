@@ -10,11 +10,17 @@ class Users::InvitationsController < Devise::InvitationsController
 
   # POST /resource/invitation
   def create
-    @user = User.invite!(invite_params, current_user)
+    user_attrs = invite_params['contact_attributes'].except('phone')
+    user_attrs[:role_ids] = invite_params['role_ids']
+
+    @user = User.invite!(user_attrs, current_user)
+    contact = Contact.where(email: user_attrs['email']).first_or_create
+    contact.update(first_name: @user.first_name, last_name: @user.last_name)
+    @user.update(contact: contact)
     if resource.errors.empty?
       if is_flashing_format? && self.resource.invitation_sent_at
 
-        set_flash_message :notice, :send_instructions, :email => self.resource.unconfirmed_email.inspect
+        set_flash_message :notice, :send_instructions, :email => user_attrs['email']
       end
       redirect_to admin_users_path
     else
