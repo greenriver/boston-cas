@@ -182,7 +182,8 @@ module MatchDecisions
         'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
         'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin', 
         'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
-        # 'MatchDecisions::RecordClientHousedDateShelterAgency',   
+        # 'MatchDecisions::RecordClientHousedDateShelterAgency',
+        'MatchDecisions::ConfirmMatchSuccessDndStaff',   
       ]
     end
 
