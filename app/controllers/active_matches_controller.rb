@@ -27,6 +27,11 @@ class ActiveMatchesController < MatchListBaseController
       column = 'last_decision.type'
     end
     sort = "#{column} #{sort_direction}"
+
+    if params[:current_step].present? && MatchDecisions::Base.available_sub_types_for_search.include?(params[:current_step])
+      @matches = @matches.where(last_decision: {type: params[:current_step]})
+    end
+
     @matches = @matches
       .references(:client)
       .includes(:client)

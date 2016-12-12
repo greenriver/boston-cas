@@ -175,6 +175,17 @@ module MatchDecisions
       false
     end
     
+    def self.available_sub_types_for_search
+      [
+        'MatchDecisions::MatchRecommendationDndStaff',
+        'MatchDecisions::MatchRecommendationShelterAgency',
+        'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+        'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin', 
+        'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+        # 'MatchDecisions::RecordClientHousedDateShelterAgency',   
+      ]
+    end
+
     private
     
       def decision_type
