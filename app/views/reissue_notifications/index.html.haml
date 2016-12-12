@@ -15,7 +15,7 @@
       - @reissue_notifications.preload(:notification).each do |reissue_notification|
         %tr
           %td
-            = reissue_notification.notification.event_label
+            = link_to reissue_notification.notification.event_label, match_path(reissue_notification.notification.match)
           %td
             = "#{reissue_notification.notification.recipient.name} (#{reissue_notification.notification.recipient.email})"
           %td
