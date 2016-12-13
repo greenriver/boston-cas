@@ -17,4 +17,13 @@ Rails.application.configure do
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = :sendmail
   config.action_mailer.default_url_options = { host: 'cas.boston.gov', protocol: 'https'}
+  config.middleware.use ExceptionNotification::Rack,
+    :slack => {
+      :webhook_url => Rails.application.config_for(:exception_notifier)['slack']['webhook_url'],
+      :channel => Rails.application.config_for(:exception_notifier)['slack']['channel'],
+      :additional_parameters => {
+        :mrkdwn => true,
+        :icon_url => Rails.application.config_for(:exception_notifier)['slack']['icon_url']
+      }
+    }
 end

@@ -49,6 +49,9 @@ gem 'uglifier'
 gem 'whenever', :require => false
 gem 'faker'
 
+gem 'slack-notifier'
+gem 'exception_notification'
+
 group :development do
   gem 'brakeman', require: false
   gem 'capistrano'
