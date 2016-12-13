@@ -120,6 +120,9 @@ GEM
       devise (>= 3.2.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
+    exception_notification (4.2.1)
+      actionmailer (>= 4.0, < 6)
+      activesupport (>= 4.0, < 6)
     execjs (2.7.0)
     faker (1.6.5)
       i18n (~> 0.5)
@@ -267,6 +270,7 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    slack-notifier (1.5.1)
     slop (3.6.0)
     spring (1.7.2)
     sprockets (3.6.3)
@@ -336,6 +340,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise (~> 3.5)
   devise_invitable
+  exception_notification
   execjs
   faker
   font-awesome-sass
@@ -363,6 +368,7 @@ DEPENDENCIES
   sass-rails
   select2-rails
   simple_form
+  slack-notifier
   spring
   sprockets-es6
   test-unit (~> 3.0)
