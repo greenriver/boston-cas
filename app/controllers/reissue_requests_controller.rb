@@ -16,7 +16,7 @@ class ReissueRequestsController < ApplicationController
       # Alert the DND Contact that the expired link was attempted
       @match.dnd_staff_contacts.each do |contact|
         message = {
-          body: "A CAS contact has just attepmted to access an expired notification.\n\nDetails can be found here: #{reissue_notifications_url}",
+          body: "A CAS contact (#{@notification.recipient.full_name}) has just attepmted to access an expired notification for the following match:\n\n#{match_url(@match)}\n\nDetails can be found here: #{reissue_notifications_url}",
           subject: '[CAS] Notification Expired - Requires Your Action',
           recipient: contact,
         }
