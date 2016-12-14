@@ -21,3 +21,7 @@
 every 1.day, at: '1:00 am' do
   rake "cas:update_voucher_availability"
 end
+
+every 1.day at: '2:00 am' do
+  command "backup perform -t cas --config-file /u/apps/boston-cas/current/backup/models/cas.rb"
+end
