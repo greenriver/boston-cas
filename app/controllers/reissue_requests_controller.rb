@@ -3,6 +3,7 @@ class ReissueRequestsController < ApplicationController
 
   def show
     @match = @notification.match
+    return unless @match.present?
     # might get here because:
     # 1. Expired token and step not yet complete (@notification.decision.editable? == true)
     #   This link has expired, 

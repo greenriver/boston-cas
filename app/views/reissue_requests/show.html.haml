@@ -1,7 +1,13 @@
 .row
   .col-sm-12
     %h1 Page Access Expired
-- if @notification.decision.editable?
+- if @match.blank?
+  .row
+    .col-sm-12
+      %p.alert.alert-info
+        %span.icon-info
+        This match is no longer active.
+- elsif @notification.decision.editable?
   %p This link has expired. DND has been prompted to reissue an email notification to you with a new expiring link.  
 - else
   - if @match.current_decision.present?
@@ -18,7 +24,9 @@
   - else
     .row
       .col-sm-12
-        %p This match is not active
+        %p.alert.alert-info
+          %span.icon-info
+          This match is no longer active.
   %p 
     Action has already been taken on this step on 
     = "#{date_format(@notification.decision.updated_at.to_date)}, " 
