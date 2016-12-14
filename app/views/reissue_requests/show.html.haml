@@ -7,6 +7,8 @@
       %p.alert.alert-info
         %span.icon-info
         This match is no longer active.
+- elsif @notification.decision.blank?
+  %p This step is no longer part of the match.
 - elsif @notification.decision.editable?
   %p This link has expired. DND has been prompted to reissue an email notification to you with a new expiring link.  
 - else
