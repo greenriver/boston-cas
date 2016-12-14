@@ -18,7 +18,7 @@ module MatchDecisions
     end
 
     def step_name
-      'Housing Subsidy Administrator Reviews Match'
+      'Housing Subsidy Administrator Schedules Hearing'
     end
 
     def actor_type
