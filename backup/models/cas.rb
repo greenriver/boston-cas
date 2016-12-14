@@ -12,11 +12,11 @@ notifier_config = YAML.load_file('config/exception_notifier.yml')['production']
 Backup::Model.new(:cas, 'Description for cas') do
   database PostgreSQL do |db|
     db.name           = db_config['database']
-    db.host           = "localhost"
   end
 
   store_with Local do |local|
     local.path = '/logs/postgres/'
+    local.keep = 30
   end
 
   compress_with Gzip

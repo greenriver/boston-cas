@@ -9,5 +9,9 @@
 #
 # Config file with usage details is in backup/cas.rb
 #
+# You'll need to run:
+#   gem install backup
+# before you can use the backup, it should *not* be part of your Gemfile
+#
 # You can run it with:
-# backup perform -t cas --config-file backup/models/cas.rb
+#   backup perform -t cas --config-file backup/models/cas.rb
