@@ -19,7 +19,8 @@ module CasSeeds
       "Unwilling to live in that neighborhood",
       "Unwilling to live in SRO",
       "Does not want housing at this time",
-      "Unsafe environment for this person"
+      "Unsafe environment for this person",
+      "Client has another housing option",
     ]
 
     SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS = [
