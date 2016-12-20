@@ -71,6 +71,7 @@ module MatchDecisions
       end
 
       def canceled
+        Notifications::MatchCanceled.create_for_match! match
         match.rejected!
       end
     end

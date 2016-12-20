@@ -175,5 +175,12 @@ class NotificationsMailer < ApplicationMailer
     mail(to: @contact.email, subject: '[CAS] Contact no longer working with Client')
   end
 
+  def match_canceled notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Match Administratively Canceled')
+  end
+
   
 end
