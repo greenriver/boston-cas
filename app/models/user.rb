@@ -87,4 +87,11 @@ class User < ActiveRecord::Base
       .or(arel_table[:email].matches(query))
     )
   end
+
+  # allow admins to remain logged in for longer than the default
+  # https://github.com/plataformatec/devise/wiki/How-To:-Add-timeout_in-value-dynamically
+  def timeout_in
+    return 2.hours if can_act_on_behalf_of_match_contacts?
+    30.minutes
+  end
 end
