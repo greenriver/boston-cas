@@ -12,7 +12,7 @@ class Opportunity < ActiveRecord::Base
   belongs_to :voucher, inverse_of: :opportunity
 
   has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
-  has_one :successful_match, -> {where closed: true, closed_reason: 'success'}
+  has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
   # active or successful
   has_one :status_match, -> {where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success')))}, class_name: 'ClientOpportunityMatch'
 
@@ -70,5 +70,14 @@ class Opportunity < ActiveRecord::Base
 
   def prioritized_matches
     client_opportunity_matches.joins(:client).order('clients.calculated_first_homeless_night desc')
+  end
+
+  def self.available_stati
+    [
+      'Match in Progress',
+      'Available',
+      'Available in the future',
+      'Successful',
+    ]
   end
 end

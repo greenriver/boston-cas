@@ -15,6 +15,8 @@
 .row
   .col-sm-6
     = render 'search_form'
+  .col-sm-3.sort-filter      
+    = render 'filter'
 .row.table-utilities
   .col-sm-8
     %p= page_entries_info @opportunities, entry_name: 'vacancy'
@@ -53,11 +55,13 @@
               %td{:class => deleted}
                 - if opportunity.active_match
                   Match in Progress
-                - elsif opportunity.available || opportunity.voucher.available 
-                  Available
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
                   Available: 
                   = date_format(opportunity.voucher.date_available)
+                - elsif opportunity.available || opportunity.voucher.available 
+                  Available
+                -else
+                  Successful
               %td
                 - unless opportunity.voucher.nil?
                   = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do

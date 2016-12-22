@@ -16,6 +16,26 @@ class OpportunitiesController < ApplicationController
     else
       opportunity_scope
     end
+    # filter with whitelist
+    @match_status = params[:status] if Opportunity.available_stati.include?(params[:status]) || nil
+
+    if @match_status.present?
+      case @match_status
+      when 'Match in Progress'
+        @opportunities = matches_in_progress
+      when 'Available in the future'
+        @opportunities = available_in_the_future
+      when 'Successful'
+        @opportunities = successful_matches
+      when 'Available'
+        # This is pretty nasty, but available is the negation of various situations
+        vt = Voucher.arel_table
+        @opportunities = @opportunities.
+          where.not(id: matches_in_progress).
+          where.not(id: available_in_the_future).
+          where.not(id: successful_matches)
+      end
+    end
 
     # sort / paginate
     @opportunities = @opportunities
@@ -24,9 +44,8 @@ class OpportunitiesController < ApplicationController
       .page(params[:page]).per(25)
 
     @matches = ClientOpportunityMatch.group(:opportunity_id)
-                .where(opportunity_id: @opportunities.map(&:id))
-                .count
-    
+      .where(opportunity_id: @opportunities.map(&:id))
+      .count
   end
 
   # GET /hmis/opportunities/1
@@ -126,51 +145,64 @@ class OpportunitiesController < ApplicationController
     @opportunity = Opportunity.find(params[:id])
   end
 
-  private
-    def opportunity_scope
-      Opportunity.where(success: false)
-    end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_opportunity
-      @opportunity = Opportunity.find(params[:id])
-    end
+  
+  private def opportunity_scope
+    Opportunity.where(success: false)
+  end
+  # Use callbacks to share common setup or constraints between actions.
+  private def set_opportunity
+    @opportunity = Opportunity.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def opportunity_params
-      params.require(:opportunity)
-        .permit(
-          :available, 
-          :unit, 
-          :voucher, 
-          :client,
-          :program,
-          :building,
-          :units,
-        )
-    end
+  # Only allow a trusted parameter "white list" through.
+  private def opportunity_params
+    params.require(:opportunity)
+      .permit(
+        :available, 
+        :unit, 
+        :voucher, 
+        :client,
+        :program,
+        :building,
+        :units,
+      )
+  end
 
-    # TODO: limit to programs you are associated with
-    def sub_program_scope
-      SubProgram.all
-    end
+  # TODO: limit to programs you are associated with
+  private def sub_program_scope
+    SubProgram.all
+  end
 
-    # TODO: limit to buildings you are associated with
-    def building_scope
-      Building.all
-    end
+  # TODO: limit to buildings you are associated with
+  private def building_scope
+    Building.all
+  end
 
-    def sort_column
-      Opportunity.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  private def sort_column
+    Opportunity.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-    end
+  private def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
-    private def require_can_view_opportunities_or_can_add_vacancies!
-      can_view_opportunities? || can_add_vacancies?
-    end
+  private def query_string
+    "%#{@query}%"
+  end
+  private def require_can_view_opportunities_or_can_add_vacancies!
+    can_view_opportunities? || can_add_vacancies?
+  end
+
+  private def successful_matches
+    @opportunities.joins(:successful_match).distinct
+  end
+
+  private def matches_in_progress
+    @opportunities.joins(:active_match).distinct
+  end
+
+  private def available_in_the_future
+    vt = Voucher.arel_table
+    @opportunities.joins(:voucher).where(vt[:date_available].gt(Date.today)).distinct
+  end
 end
