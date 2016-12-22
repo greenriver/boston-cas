@@ -53,15 +53,16 @@
                   .badge.badge-success= @matches[opportunity.id]
               %td{:class => deleted}= opportunity.id
               %td{:class => deleted}
-                - if opportunity.active_match
+                - if opportunity.active_match.present?
                   Match in Progress
+                - elsif opportunity.successful_match.present?
+                  Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
                   Available: 
                   = date_format(opportunity.voucher.date_available)
                 - elsif opportunity.available || opportunity.voucher.available 
                   Available
-                -else
-                  Successful
+                  
               %td
                 - unless opportunity.voucher.nil?
                   = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
