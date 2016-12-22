@@ -25,7 +25,7 @@
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
       titles = {}
       directions.each {| k,v | titles[k] = @opportunities.human_attribute_name(k)}
-      titles['id'].upcase!
+      titles['id'] = 'Created on'
 .row
   .col-sm-12
     .table-responsive
@@ -34,7 +34,7 @@
           %tr
             %th Matches
             - titles.each do | k, title |
-              %th
+              %th{style: 'width: 8em;'}
                 = sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
             %th
@@ -51,7 +51,7 @@
               %td.text-center
                 = link_to opportunity_matches_path(opportunity) do
                   .badge.badge-success= @matches[opportunity.id]
-              %td{:class => deleted}= opportunity.id
+              %td{:class => deleted}= opportunity.created_at.to_date
               %td{:class => deleted}
                 - if opportunity.active_match.present?
                   Match in Progress
