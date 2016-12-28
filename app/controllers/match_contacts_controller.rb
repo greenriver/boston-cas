@@ -2,6 +2,7 @@ class MatchContactsController < ApplicationController
   include PjaxModalController
   include HasMatchAccessContext
 
+  skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :require_current_contact_can_edit_match_contacts!
   before_action :set_match

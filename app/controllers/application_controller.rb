@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   #before_filter :_basic_auth, if: -> { Rails.env.staging? }
   before_filter :set_paper_trail_whodunnit
+  before_action :authenticate_user!
   # Allow devise login links to pass along a destination
   after_filter :store_current_location, :unless => :devise_controller?
 
