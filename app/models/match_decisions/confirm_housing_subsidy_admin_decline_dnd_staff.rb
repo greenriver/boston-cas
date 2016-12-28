@@ -34,6 +34,10 @@ module MatchDecisions
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
 
+    def permitted_params
+      super + [:prevent_matching_until]
+    end
+
     def initialize_decision!
       update status: 'pending'
       Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff.create_for_match! match
