@@ -179,8 +179,10 @@ module MatchDecisions
       [
         'MatchDecisions::MatchRecommendationDndStaff',
         'MatchDecisions::MatchRecommendationShelterAgency',
+        'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
         'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
         'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+        'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff',
         'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
         # 'MatchDecisions::RecordClientHousedDateShelterAgency',
         'MatchDecisions::ConfirmMatchSuccessDndStaff',   

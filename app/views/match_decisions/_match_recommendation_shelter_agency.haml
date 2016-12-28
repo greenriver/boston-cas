@@ -1,3 +1,4 @@
+- confirmation_text = "By clicking OK, you certify that you have obtained a signed Client Release of Information, the client has spoken to a shelter case manager and you have obtained a CORI release form from the client.  In addition, you have shared a signed Client Release of Information to all relevant parties in accordance with the BostonHMIS Policies and Procedures found in the BostonHMIS Handbook and in agreement with YOUR signed HMIS User Agreement on file at your Agency. &#x000A;&#x000A;Any violations may lead to user access termination and/or eventual employment termination. &#x000A;&#x000A;If this is not the case, click cancel.".html_safe
 .row
   .col-xs-12
     .match-decision
@@ -29,7 +30,7 @@
               - if can_reject_matches?
                 = form.submit 'Cancel Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable?
               = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
-              = form.submit 'Indicate Interest in Match', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: !(@decision.editable?)
+              = form.submit 'Indicate Interest in Match', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', confirm: confirmation_text}, disabled: !(@decision.editable?)
             
             %p
               The client does not need to be document-ready in order to indicate interest.

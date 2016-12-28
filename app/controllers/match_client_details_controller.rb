@@ -1,7 +1,8 @@
 class MatchClientDetailsController < ApplicationController
   include HasMatchAccessContext
   include PjaxModalController
-
+  
+  skip_before_action :authenticate_user!
   before_action :require_match_access_context!
 
   before_action :set_match

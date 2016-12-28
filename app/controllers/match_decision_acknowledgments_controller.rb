@@ -1,6 +1,7 @@
 class MatchDecisionAcknowledgmentsController < ApplicationController
   include HasMatchAccessContext
   
+  skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :find_match!
   before_action :find_decision!

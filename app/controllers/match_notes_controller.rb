@@ -2,6 +2,7 @@ class MatchNotesController < ApplicationController
   # controller to manage match notes
   include HasMatchAccessContext
 
+  skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :set_match!
   before_action :authorize_add_note!, :build_match_note, only: [:new, :create]
