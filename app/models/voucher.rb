@@ -3,6 +3,7 @@ class Voucher < ActiveRecord::Base
   include HasOrInheritsServices
   include MatchArchive
   
+  scope :available, -> {where available: true} 
   belongs_to :sub_program
   belongs_to :unit
 
@@ -17,25 +18,21 @@ class Voucher < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
+  delegate :active_match, to: :opportunity
+
   attr_accessor :building_id, :skip_match_locking_validation
 
   # Default to the building on the sub-program, if there is one.  
   # If a unit has been assigned, make sure the building matches the unit. 
   def building
-    if unit.nil?
-      sub_program.building
-    else 
-      unit.building
-    end
+    return sub_program.building unless unit.present?
+    unit.building
   end
   # Default the units available to the voucher to the sub-program building.
   # If a unit has already been assigned, scope it to the associated building
   def units
-    if unit.nil?
-      sub_program.building.units
-    else
-      unit.building.units
-    end
+    return sub_program.building.available_units_for_vouchers unless unit.present?
+    [unit] + unit.building.available_units_for_vouchers.to_a
   end
 
   def self.text_search(text)

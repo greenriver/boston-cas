@@ -52,6 +52,7 @@
               = sort_link(titles[k], k, directions)
               %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
           %th HMIS Managed
+          %th Match
       %tbody
         - @building.units.each do |u|
           %tr
@@ -59,3 +60,7 @@
             %td= link_to u.name, edit_unit_path(u)
             %td=checkmark u.available
             %td=checkmark u.hmis_managed?
+            %td
+              - if u.active_voucher.present? && u.active_match.present?
+                - match = u.active_match
+                = link_to match.client.name, match_path(match)

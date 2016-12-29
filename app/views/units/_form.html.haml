@@ -3,13 +3,16 @@
   - disabled = false
   - hint = ''
   .form-inputs.margin-top-02
-    %label.margin-bottom-00 Is Unit Available?
-    = f.input :available
-    - if @unit.hmis_managed?
+    - if @unit.in_use? && @unit.active_voucher.present?
       - disabled = true
-      - hint = 'Details of this unit are not editable here as they are managed in the HMIS'
-    = f.association :building, label_method: :name, disabled: disabled, hint: hint, label: "#{Building.model_name.human}"
-    = f.input :name, disabled: disabled
+      %p 
+      This unit is involved in a 
+      = link_to 'match', match_path(@unit.active_match)
+      , it's availability cannot be adjusted, nor can it be moved to another site.
+    %label.margin-bottom-00 Is Unit Available?
+    = f.input :available, disabled: disabled
+    = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
+    = f.input :name
         
   .form-actions
     = f.button :submit
