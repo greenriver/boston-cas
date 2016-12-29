@@ -6,10 +6,9 @@
     - if @unit.in_use? && @unit.active_voucher.present?
       - disabled = true
       %p 
-      This unit is involved in a 
-      = link_to 'match', match_path(@unit.active_match)
-      , it's availability cannot be adjusted, nor can it be moved to another site.
-    %label.margin-bottom-00 Is Unit Available?
+        This unit is involved in a 
+        = "#{link_to 'match', match_path(@unit.active_match)}, it's availability cannot be adjusted, nor can it be moved to another site."
+    %label.margin-bottom-00 Is the Unit Available?
     = f.input :available, disabled: disabled
     = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
