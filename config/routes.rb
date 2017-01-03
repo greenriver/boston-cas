@@ -92,6 +92,7 @@ Rails.application.routes.draw do
       resource :recreate_invitation, only: :create
     end
     resources :roles
+    resources :versions, only: [:index]
   end
   resource :account, only: [:edit, :update]
   resources :reissue_notifications, only: [:index, :update, :destroy]

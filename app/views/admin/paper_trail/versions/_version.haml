@@ -1,0 +1,10 @@
+- user = User.find_by_id version.whodunnit
+%tr.version
+  %td
+    - if user.present?
+      = user.name
+    - else
+      System
+  %td= "#{version.event}d"
+  %td= version.item_type
+  %td= "#{time_ago_in_words(version.created_at)} ago"

@@ -1,0 +1,15 @@
+.row
+  .col-sm-8
+    %h1= t '.title'
+
+%table.table
+  %thead
+    %tr
+      %th User
+      %th Action
+      %th Item
+      %th When
+  %tbody
+    = render @versions
+
+%p= paginate @versions

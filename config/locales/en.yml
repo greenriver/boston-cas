@@ -69,6 +69,9 @@ en:
     index:
       title: 'Services'
       search_prompt: 'Search services...'
+  versions:
+    index: 
+      title: 'Object History'
   reissue_notifications:
       index:
         title: 'Oustanding Requests for Notifications'
