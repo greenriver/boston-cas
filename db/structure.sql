@@ -910,7 +910,8 @@ CREATE TABLE match_decisions (
     not_working_with_client_reason_id integer,
     not_working_with_client_reason_other_explanation text,
     client_spoken_with_services_agency boolean DEFAULT false,
-    cori_release_form_submitted boolean DEFAULT false
+    cori_release_form_submitted boolean DEFAULT false,
+    deleted_at timestamp without time zone
 );
 
 
@@ -947,7 +948,8 @@ CREATE TABLE match_events (
     action character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    note text
+    note text,
+    deleted_at timestamp without time zone
 );
 
 
@@ -4066,4 +4068,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161117162449');
 INSERT INTO schema_migrations (version) VALUES ('20161130173742');
 
 INSERT INTO schema_migrations (version) VALUES ('20161205190843');
+
+INSERT INTO schema_migrations (version) VALUES ('20170103172116');
 

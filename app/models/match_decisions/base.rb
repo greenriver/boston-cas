@@ -13,6 +13,7 @@ module MatchDecisions
     self.table_name = 'match_decisions'
 
     has_paper_trail
+    acts_as_paranoid
     
     belongs_to :match, class_name: 'ClientOpportunityMatch', inverse_of: :decisions
     belongs_to :contact
