@@ -182,5 +182,12 @@ class NotificationsMailer < ApplicationMailer
     mail(to: @contact.email, subject: '[CAS] Match Administratively Canceled')
   end
 
+  def shelter_agency_accepted notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Shelter Agency Accepted Match')
+  end
+
   
 end
