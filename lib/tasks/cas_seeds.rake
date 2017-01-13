@@ -52,8 +52,8 @@ namespace :cas_seeds do
 
     users.find_each do |user|
       user.build_contact
-      user.contact.first_name = user.name.split(' ').first
-      user.contact.last_name = user.name.split(' ').last
+      user.contact.first_name = user.first_name
+      user.contact.last_name = user.last_name
       user.contact.email = user.email
       user.contact.save
     end
