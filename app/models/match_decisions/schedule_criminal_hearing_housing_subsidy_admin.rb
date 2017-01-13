@@ -41,12 +41,14 @@ module MatchDecisions
       update status: 'pending'
       Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
       Notifications::ScheduleCriminalHearingSsp.create_for_match! match
+      Notifications::ShelterAgencyAccepted.create_for_match! match
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ScheduleCriminalHearingHousingSubsidyAdmin
         m << Notifications::ScheduleCriminalHearingSsp
+        m << Notifications::ShelterAgencyAccepted
       end
     end
 
