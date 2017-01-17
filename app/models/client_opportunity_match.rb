@@ -149,7 +149,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
       Opportunity.arel_table[:id].eq arel_table[:opportunity_id]
     ).text_search(text).exists
 
-    where client_matches.or(opp_matches)
+    contact_matches = Contact.joins(:client_opportunity_match_contacts).where(
+      Contact.arel_table[:id].eq(ClientOpportunityMatchContact.arel_table[:contact_id])
+    ).text_search(text).exists
+    
+    where client_matches.or(opp_matches).or(contact_matches)
   end
 
   def self.associations_adding_requirements
