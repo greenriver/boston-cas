@@ -11,7 +11,7 @@ module Notifications
     end
     
     def decision
-      match.match_recommendation_shleter_agency_decision
+      match.match_recommendation_shelter_agency_decision
     end
 
     def event_label
