@@ -37,7 +37,7 @@
               - deleted = "deleted"
             %tr
               %td{:class => deleted}= unit.id
-              %td{:class => deleted}= unit.name
+              %td{:class => deleted}= unit.name || '(no name)'
               %td{:class => deleted}= checkmark unit.available
               %td= link_to unit.building.name, building_path(unit.building)
               %td

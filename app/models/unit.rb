@@ -15,6 +15,8 @@ class Unit < ActiveRecord::Base
 
   delegate :active_match, to: :active_voucher
 
+  validates :name, presence: true
+
   def hmis_managed?
     return true if id_in_data_source
     return false

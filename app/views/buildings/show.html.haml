@@ -56,8 +56,8 @@
       %tbody
         - @building.units.each do |u|
           %tr
-            %td=u.id
-            %td= link_to u.name, edit_unit_path(u)
+            %td= link_to u.id, edit_unit_path(u)
+            %td= link_to u.name || '(no name)', edit_unit_path(u)
             %td=checkmark u.available
             %td=checkmark u.hmis_managed?
             %td
