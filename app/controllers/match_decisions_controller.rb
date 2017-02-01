@@ -24,6 +24,10 @@ class MatchDecisionsController < ApplicationController
       flash[:alert] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
     elsif @decision.update(decision_params)
+      # If we have a custom notification length
+      if decision_params[:custom_expiration_length].present?
+        @match.update(custom_expiration_length: decision_params[:custom_expiration_length])
+      end  
       @decision.record_action_event! contact: current_contact
       @decision.run_status_callback!
       if @decision.contact_actor_type.present?

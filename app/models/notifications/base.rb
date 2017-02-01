@@ -29,8 +29,9 @@ module Notifications
 
     def setup_code
       self.code ||= SecureRandom.urlsafe_base64
-      if self.should_expire?
-        self.expires_at ||= DateTime.now + EXPIRATION_INTERVAL
+      if self.should_expire?   
+        expiration_interval = match.custom_expiration_length.presence || EXPIRATION_INTERVAL
+        self.expires_at ||= DateTime.now + expiration_interval
       end
     end
     
