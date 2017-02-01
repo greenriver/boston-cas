@@ -31,7 +31,7 @@
             = f.radio_button :program_type, t[:value]
             = t[:label]
           - if t[:building]
-            = building = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01'}
+            = building = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01'}, input_html: {class: 'jBuilding'}
     = f.input :voucher_count, label: 'Total Vouchers', input_html: {style: 'width: 8em;'}
   .well.add-things-boxes.add-things-boxes--rules
     %h3.add-things-boxes--h3 Rules
@@ -57,6 +57,14 @@
     $('.program-type input:checked').trigger('change');
     $('#sub_program_building_id').on('change', function(){
       $('.jRuleWarning').removeClass('hidden');
+    });
+    // Keep all buildings in sync
+    $('.jBuilding').on('change', function(e){
+      var v = this.value;
+      $('.jBuilding').not(this).each(function(d) {
+        this.value = v;
+        $(this).trigger('change.select2');
+      });
     });
     
 

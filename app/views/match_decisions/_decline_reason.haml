@@ -1,7 +1,9 @@
 .row
   .col-sm-5
-    = form.association :decline_reason, collection: @decision.decline_reasons, label: 'If you are declining this match, please indicate reason(s)', as: :check_boxes
-    = form.input :decline_reason_other_explanation, as: :text, label: false, placeholder: 'Other reason'
+    = form.association :decline_reason, collection: @decision.decline_reasons, label: 'If you are declining this match, please indicate reason(s)', as: :check_boxes, wrapper_html: {class: 'jDeclineReasons'}
+  .col-sm-7
+    = form.input :decline_reason_other_explanation, as: :text, label: 'List any details related to the decline below', hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherDeclineReason'}
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[decline_reason_id][]')
+    new window.App.Matches.Decline($('.jDeclineReasons input[type=checkbox]'),$('.jOtherDeclineReason'))

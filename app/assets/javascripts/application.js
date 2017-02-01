@@ -33,6 +33,7 @@
 //= require_tree ./contact_manager
 //= require_tree ./requirement_manager
 //= require_tree ./service_manager
+//= require_tree ./matches
 //= require enhanced_submit_param
 //= require site_menu
 //= require single_option_checkboxes

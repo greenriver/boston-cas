@@ -33,7 +33,7 @@
               = sp.radio_button :program_type, t[:value]
               = t[:label]
             - if t[:building]
-              = building = sp.association :building, label: 'Building Name', wrapper_html: {class: 'building form-group__indented-01'}
+              = building = sp.association :building, label: 'Building Name', wrapper_html: {class: 'building form-group__indented-01'}, input_html: {class: 'jBuilding'}
     
       = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Program'
     
@@ -55,6 +55,14 @@
       if($.inArray(this.value, have_buildings) != -1) {
         $(this).parent().siblings('.building').show();
       }
+    });
+    // Keep all buildings in sync
+    $('.jBuilding').on('change', function(e){
+      var v = this.value;
+      $('.jBuilding').not(this).each(function(d) {
+        this.value = v;
+        $(this).trigger('change.select2');
+      });
     });
     $('.program-type input:checked').trigger('change');
     

@@ -7,9 +7,9 @@
           %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
           = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) 
         - else
-          = form.input :working_with_client, as: :radio_buttons, collection: {'Still working with client': 'jStillWorking', 'No longer working with client': 'jNoLongerWorking'}, label: 'Are you still working with the client above?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
+          = form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
           .jStillWorking.jWorkingWithClient
-            = form.input :note, as: :text, input_html: {rows: 4, disabled: !(@decision.editable?)}
+            = form.input :note, as: :text, hint: 'Please include any notes that would be useful for this match.  e.g. "Client needs an accessible unit."',input_html: {rows: 4, disabled: !(@decision.editable?)}
               
             = render 'match_decisions/decline_reason', form: form
 

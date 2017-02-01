@@ -50,7 +50,11 @@ module MatchDecisions
       elsif decline_reason.other?
         "Other (#{decline_reason_other_explanation})"
       else
-        "#{decline_reason.name}"
+        reason = "#{decline_reason.name}"
+        if decline_reason_other_explanation.present?
+          reason += ". Note: #{decline_reason_other_explanation}"
+        end
+        reason
       end
     end
     
