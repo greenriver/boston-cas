@@ -79,6 +79,10 @@ en:
       index:
         title: 'Active Matches'
         search_prompt: 'Search active matches...'
+  closed_matches:
+      index:
+        title: 'Closed Matches'
+        search_prompt: 'Search closed matches...'
   activerecord:
     models:
       building: 'Site'
