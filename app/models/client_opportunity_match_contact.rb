@@ -10,4 +10,14 @@ class ClientOpportunityMatchContact < ActiveRecord::Base
 
   acts_as_paranoid
 
+  def self.text_search(text)
+    return none unless text.present?
+
+    contact_matches = Contact.where(
+      Contact.arel_table[:id].eq(arel_table[:contact_id])
+    ).text_search(text).exists
+
+    where(contact_matches)
+  end
+
 end
