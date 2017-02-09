@@ -22,7 +22,7 @@ module Notifications
 
     validates :code, uniqueness: true
 
-    EXPIRATION_INTERVAL = 7.days
+    EXPIRATION_INTERVAL = 8.days
 
     before_validation :setup_code
     after_create :deliver
