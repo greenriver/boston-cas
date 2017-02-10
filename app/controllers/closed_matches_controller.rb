@@ -4,12 +4,14 @@ class ClosedMatchesController < MatchListBaseController
   
   def index
     # search
-    @matches = if params[:q].present?
-      match_scope.
-        text_search(params[:q]).
-        where(id: visible_match_ids())
+    if params[:q].present?
+      search_scope = match_scope.text_search(params[:q])
+      unless current_user.contact.user_can_view_all_clients?
+        search_scope = search_scope.where(id: visible_match_ids())
+      end
+      @matches = search_scope
     else
-      match_scope
+      @matches = match_scope
     end
     # decision subquery
 
