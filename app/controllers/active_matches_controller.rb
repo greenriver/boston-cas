@@ -3,7 +3,9 @@ class ActiveMatchesController < MatchListBaseController
   def index
     # search
     @matches = if params[:q].present?
-      match_scope.text_search(params[:q])
+      match_scope.
+        text_search(params[:q]).
+        where(id: visible_match_ids())
     else
       match_scope
     end

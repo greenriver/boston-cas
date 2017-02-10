@@ -29,7 +29,15 @@ class MatchListBaseController < ApplicationController
   end
   
   private
-  
+    # This is painful, but we need to prevent leaking of client names
+    # via targeted search
+    def visible_match_ids
+      contact = current_user.contact
+      contact.client_opportunity_match_contacts.map(&:match).map do |m| 
+        m.id if m.try(:show_client_info_to?, contact) || false
+      end.compact
+    end
+
     def match_scope
       raise 'abstract method'
     end
