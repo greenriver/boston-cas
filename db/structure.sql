@@ -951,7 +951,9 @@ CREATE TABLE match_events (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     note text,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    not_working_with_client_reason_id integer,
+    client_last_seen_date date
 );
 
 
@@ -3240,6 +3242,13 @@ CREATE INDEX index_match_events_on_match_id ON match_events USING btree (match_i
 
 
 --
+-- Name: index_match_events_on_not_working_with_client_reason_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_events_on_not_working_with_client_reason_id ON match_events USING btree (not_working_with_client_reason_id);
+
+
+--
 -- Name: index_match_events_on_notification_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4083,4 +4092,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170103172116');
 INSERT INTO schema_migrations (version) VALUES ('20170201135646');
 
 INSERT INTO schema_migrations (version) VALUES ('20170213180945');
+
+INSERT INTO schema_migrations (version) VALUES ('20170213195031');
 

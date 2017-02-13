@@ -24,6 +24,8 @@ module MatchEvents
     belongs_to :contact,
       inverse_of: :events
     delegate :name, to: :contact, allow_nil: :true, prefix: true
+
+    belongs_to :not_working_with_client_reason, class_name: 'MatchDecisionReasons::Base'
     
     def name
       raise 'Abstract method'

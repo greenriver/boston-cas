@@ -22,7 +22,7 @@ module MatchDecisions
       when :pending then 'New Match Awaiting Shelter Agency Review'
       when :acknowledged then 'Match acknowledged by shelter agency.  In review'
       when :accepted then 'Match accepted by shelter agency. Client has signed release of information, spoken with services agency and submitted a CORI release form'
-      when :not_working_with_client then "Shelter agency no longer working with client.  Last seen: #{client_last_seen_date.to_date}"
+      when :not_working_with_client then 'Shelter agency no longer working with client'
       when :declined then decline_status_label
       when :canceled then canceled_status_label
       end
@@ -124,9 +124,11 @@ module MatchDecisions
     # Override default behavior to send additional notification to DND contacts
     # if status = 'not_working_with_client'
     def record_action_event! contact:
-      decision_action_events.create! match: match, contact: contact, action: status, note: note
       if status == 'not_working_with_client'
         Notifications::NoLongerWorkingWithClient.create_for_match! match
+        decision_action_events.create! match: match, contact: contact, action: status, note: note, not_working_with_client_reason_id: not_working_with_client_reason_id, client_last_seen_date: client_last_seen_date
+      else
+        decision_action_events.create! match: match, contact: contact, action: status, note: note
       end
     end
     
