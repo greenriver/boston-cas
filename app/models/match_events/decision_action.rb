@@ -9,6 +9,7 @@ module MatchEvents
       if client_last_seen_date.present? 
         decision_name << "; last seen: #{client_last_seen_date}"
       end
+      decision_name
     end
 
   end
