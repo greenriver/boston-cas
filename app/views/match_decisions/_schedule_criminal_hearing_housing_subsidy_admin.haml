@@ -26,7 +26,7 @@
 
         .form-actions.clearfix
           - if can_reject_matches?
-            = form.submit 'Cancel Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable?
+            = render 'match_decisions/cancel_match_form_fields', form: form
           = form.submit 'Submit', class: 'btn btn-primary', disabled: !@decision.editable?
 
         %p
