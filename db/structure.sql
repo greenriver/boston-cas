@@ -912,7 +912,8 @@ CREATE TABLE match_decisions (
     not_working_with_client_reason_other_explanation text,
     client_spoken_with_services_agency boolean DEFAULT false,
     cori_release_form_submitted boolean DEFAULT false,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    administrative_cancel_reason_id integer
 );
 
 
@@ -3197,6 +3198,13 @@ CREATE INDEX index_match_decision_reasons_on_type ON match_decision_reasons USIN
 
 
 --
+-- Name: index_match_decisions_on_administrative_cancel_reason_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_decisions_on_administrative_cancel_reason_id ON match_decisions USING btree (administrative_cancel_reason_id);
+
+
+--
 -- Name: index_match_decisions_on_decline_reason_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4073,4 +4081,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161205190843');
 INSERT INTO schema_migrations (version) VALUES ('20170103172116');
 
 INSERT INTO schema_migrations (version) VALUES ('20170201135646');
+
+INSERT INTO schema_migrations (version) VALUES ('20170213180945');
 

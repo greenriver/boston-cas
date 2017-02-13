@@ -1,0 +1,5 @@
+= form.association :administrative_cancel_reason, collection: MatchDecisionReasons::AdministrativeCancel.all, label: 'If canceling, please indicate reason:', as: :check_boxes
+= form.submit 'Cancel Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable?
+= content_for :page_js do
+  :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')

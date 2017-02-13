@@ -13,7 +13,7 @@ module MatchDecisions
       when :pending then 'Housing Subsidy Administrator researching criminal background and deciding whether to schedule a hearing'
       when :scheduled then "Housing Subsidy Administrator has scheduled criminal background hearing for <strong>#{criminal_hearing_date}</strong>".html_safe
       when :no_hearing then 'Housing Subsidy Administrator indicates there will not be a criminal background hearing'
-        when :canceled then 'Match canceled administratively.'
+        when :canceled then canceled_status_label
       end
     end
 

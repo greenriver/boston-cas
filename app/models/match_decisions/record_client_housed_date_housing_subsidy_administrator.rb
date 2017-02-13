@@ -11,7 +11,7 @@ module MatchDecisions
       case status.to_sym
       when :pending then 'Housing Subsidy Administrator to note when client will move in.'
       when :completed then "Housing Subsidy Administrator notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
-      when :canceled then 'Match canceled administratively.'
+      when :canceled then canceled_status_label
       end
     end
 

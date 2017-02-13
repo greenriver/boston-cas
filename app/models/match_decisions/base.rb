@@ -23,7 +23,7 @@ module MatchDecisions
     # and/or MatchDecisions::AcceptsNotWorkingWithClientReason if they intend to use these
     belongs_to :decline_reason, class_name: 'MatchDecisionReasons::Base'
     belongs_to :not_working_with_client_reason, class_name: 'MatchDecisionReasons::Base'
-
+    belongs_to :administrative_cancel_reason, class_name: 'MatchDecisionReasons::Base'
 
     # we collect notes on our forms, and pass them on to events where they are stored
     attr_accessor :note
@@ -168,7 +168,12 @@ module MatchDecisions
     end
 
     def whitelist_params_for_update params
-      params.require(:decision).permit(permitted_params)
+      result = params.require(:decision).permit(permitted_params)
+      # also allow one cancel reason
+      reason_id_array = Array.wrap params.require(:decision)[:administrative_cancel_reason_id]
+      cancel_reason_id = reason_id_array.select(&:present?).first
+      result.merge! administrative_cancel_reason_id: cancel_reason_id
+      result
     end
     
     # override in subclass
@@ -188,6 +193,14 @@ module MatchDecisions
         # 'MatchDecisions::RecordClientHousedDateShelterAgency',
         'MatchDecisions::ConfirmMatchSuccessDndStaff',   
       ]
+    end
+
+    def canceled_status_label
+      if administrative_cancel_reason.present?
+        "Match canceled administratively: #{administrative_cancel_reason.name}"
+      else
+        'Match canceled administratively'
+      end
     end
 
     private

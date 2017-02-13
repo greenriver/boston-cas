@@ -27,7 +27,19 @@ module CasSeeds
       "Barred from working with agency",
       "Hospitalized",
       "Don’t know / disappeared",
-      "Incarcerated"
+      "Incarcerated",
+    ]
+
+    ADMINISTRATIVE_CANCEL_REASONS = [
+      '7 days expired',
+      '14 days expired',
+      'Client has declined match',
+      'Client has disengaged',
+      'Client has disappeared',
+      'SSP CORI',
+      'Vacancy should not have been entered',
+      'Client received another housing opportunity',
+      'Client no longer eligible for match',
     ]
 
     def run!
@@ -37,6 +49,7 @@ module CasSeeds
       create_shelter_agency_reasons!
       create_shelter_agency_not_working_with_client_reasons!
       create_shelter_agency_not_working_with_client_other_reason!
+      create_admin_cancel_reasons!
     end
 
     private def create_other_reason!
@@ -70,6 +83,12 @@ module CasSeeds
 
     private def create_shelter_agency_not_working_with_client_other_reason!
       ::MatchDecisionReasons::ShelterAgencyNotWorkingWithClientOther.all.first_or_create! name: 'Other'
+    end
+
+    private def create_admin_cancel_reasons!
+      ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name|
+        ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name).first_or_create!
+      end    
     end
 
   end
