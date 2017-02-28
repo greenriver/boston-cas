@@ -77,6 +77,7 @@ module MatchDecisions
       end
       
       def decline_confirmed
+        Notifications::ShelterAgencyDeclineAccepted.create_for_match! match
         match.rejected!
       end
     end
