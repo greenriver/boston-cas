@@ -2,7 +2,13 @@ module MatchDecisions
   class ConfirmShelterAgencyDeclineDndStaff < Base
     
     def statuses
-      {pending: 'Pending', decline_overridden: 'Decline Overridden', decline_overridden_returned: 'Decline Overridden, Returned', decline_confirmed: 'Decline Confirmed'}
+      {
+        pending: 'Pending', 
+        decline_overridden: 'Decline Overridden', 
+        decline_overridden_returned: 'Decline Overridden, Returned',
+        decline_confirmed: 'Decline Confirmed',
+        canceled: 'Canceled',
+      }
     end
     
     def label
@@ -15,6 +21,7 @@ module MatchDecisions
       when :decline_overridden then 'Shelter Agency Decline overridden by DND.  Match proceeding to Housing Subsidy Administrator'
       when :decline_overridden_returned then 'Shelter Agency Decline overridden by DND.  Match returned to the Shelter Agency'
       when :decline_confirmed then 'Match rejected by DND'
+      when :canceled then canceled_status_label
       end
     end
 
@@ -78,6 +85,11 @@ module MatchDecisions
       
       def decline_confirmed
         Notifications::ShelterAgencyDeclineAccepted.create_for_match! match
+        match.rejected!
+      end
+
+      def canceled
+        Notifications::MatchCanceled.create_for_match! match
         match.rejected!
       end
     end

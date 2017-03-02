@@ -11,6 +11,7 @@ module MatchDecisions
       case status.to_sym
       when :pending then 'Shelter Agency to note when client will move in.'
       when :completed then "Shelter Agency notes client will move in #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :canceled then canceled_status_label
       end
     end
 
@@ -27,7 +28,11 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', completed: 'Complete'}
+      {
+        pending: 'Pending',
+        completed: 'Complete',
+        canceled: 'Canceled',
+      }
     end
     
     def editable?
@@ -66,6 +71,11 @@ module MatchDecisions
 
       def completed
         match.confirm_match_success_dnd_staff_decision.initialize_decision!
+      end
+
+      def canceled
+        Notifications::MatchCanceled.create_for_match! match
+        match.rejected!
       end
     end
     private_constant :StatusCallbacks

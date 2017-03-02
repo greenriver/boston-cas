@@ -2,7 +2,13 @@ module MatchDecisions
   class ConfirmHousingSubsidyAdminDeclineDndStaff < Base
     
     def statuses
-      {pending: 'Pending', decline_overridden: 'Decline Overridden', decline_overridden_returned: 'Decline Overridden, Returned', decline_confirmed: 'Decline Confirmed'}
+      {
+        pending: 'Pending', 
+        decline_overridden: 'Decline Overridden', 
+        decline_overridden_returned: 'Decline Overridden, Returned',
+        decline_confirmed: 'Decline Confirmed',
+        canceled: 'Canceled',
+       }
     end
     
     def label
@@ -15,6 +21,7 @@ module MatchDecisions
       when :decline_overridden then 'Housing Subsidy Administrator Decline overridden by DND.  Match proceeding to Housing Subsidy Administrator'
       when :decline_overridden_returned then 'Housing Subsidy Administrator Decline overridden by DND.  Match returned to Housing Subsidy Administrator'
       when :decline_confirmed then 'Match rejected by DND'
+      when :canceled then canceled_status_label
       end
     end
 
@@ -35,7 +42,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      super + [:prevent_matching_until]
+      super
     end
 
     def initialize_decision!
@@ -82,6 +89,11 @@ module MatchDecisions
       def decline_confirmed
         match.rejected!
         # TODO maybe rerun the matching engine for that vancancy and client
+      end
+
+      def canceled
+        Notifications::MatchCanceled.create_for_match! match
+        match.rejected!
       end
     end
     private_constant :StatusCallbacks

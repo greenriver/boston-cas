@@ -4,7 +4,11 @@ module MatchDecisions
     # validate :note_present_if_status_rejected
 
     def statuses
-      {pending: 'Pending', confirmed: 'Confirmed', rejected: 'Rejected'}
+      {
+        pending: 'Pending', 
+        confirmed: 'Confirmed', 
+        rejected: 'Rejected',
+      }
     end
     
     def label

@@ -49,7 +49,14 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', acknowledged: 'Acknowledged', accepted: 'Accepted', declined: 'Declined', not_working_with_client: 'Pending', canceled: 'Canceled'}
+      {
+        pending: 'Pending', 
+        acknowledged: 'Acknowledged', 
+        accepted: 'Accepted', 
+        declined: 'Declined', 
+        not_working_with_client: 'Pending', 
+        canceled: 'Canceled',
+      }
     end
     
     def editable?
