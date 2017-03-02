@@ -56,6 +56,7 @@ module MatchDecisions
         declined: 'Declined', 
         not_working_with_client: 'Pending', 
         canceled: 'Canceled',
+        expiration_update: 'Pending', 
       }
     end
     
@@ -121,6 +122,10 @@ module MatchDecisions
         
       end
 
+      def expiration_update
+        
+      end
+
       def canceled
         Notifications::MatchCanceled.create_for_match! match
         match.rejected!
@@ -134,6 +139,8 @@ module MatchDecisions
       if status == 'not_working_with_client'
         Notifications::NoLongerWorkingWithClient.create_for_match! match
         decision_action_events.create! match: match, contact: contact, action: status, note: note, not_working_with_client_reason_id: not_working_with_client_reason_id, client_last_seen_date: client_last_seen_date
+      elsif status == 'expiration_update'
+        # Do nothing
       else
         decision_action_events.create! match: match, contact: contact, action: status, note: note
       end
@@ -171,7 +178,14 @@ module MatchDecisions
     end
 
     def whitelist_params_for_update params
-      super.merge params.require(:decision).permit(:client_last_seen_date, :release_of_information, :working_with_client, :client_spoken_with_services_agency, :cori_release_form_submitted)
+      super.merge params.require(:decision).permit(
+        :client_last_seen_date, 
+        :release_of_information, 
+        :working_with_client, 
+        :client_spoken_with_services_agency, 
+        :cori_release_form_submitted,
+        :shelter_expiration
+      )
     end
   end
 end

@@ -28,6 +28,10 @@ class MatchDecisionsController < ApplicationController
       if decision_params[:custom_expiration_length].present?
         @match.update(custom_expiration_length: decision_params[:custom_expiration_length])
       end  
+      # If we are expiring the match for shelter agencies
+      if decision_params[:shelter_expiration].present?
+        @match.update(shelter_expiration: decision_params[:shelter_expiration])
+      end
       @decision.record_action_event! contact: current_contact
       @decision.run_status_callback!
       if @decision.contact_actor_type.present?

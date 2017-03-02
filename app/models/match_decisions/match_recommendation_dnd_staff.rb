@@ -45,7 +45,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      super + [:prevent_matching_until, :custom_expiration_length]
+      super + [:prevent_matching_until, :custom_expiration_length, :shelter_expiration]
     end
 
     def initialize_decision!

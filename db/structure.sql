@@ -234,7 +234,8 @@ CREATE TABLE client_opportunity_matches (
     closed boolean DEFAULT false NOT NULL,
     closed_reason character varying,
     universe_state json,
-    custom_expiration_length integer
+    custom_expiration_length integer,
+    shelter_expiration date
 );
 
 
@@ -4094,4 +4095,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170201135646');
 INSERT INTO schema_migrations (version) VALUES ('20170213180945');
 
 INSERT INTO schema_migrations (version) VALUES ('20170213195031');
+
+INSERT INTO schema_migrations (version) VALUES ('20170302202943');
 
