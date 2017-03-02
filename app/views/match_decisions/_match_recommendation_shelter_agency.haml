@@ -9,11 +9,7 @@
         - else
           - if @match.shelter_expiration?
             - if can_reject_matches?
-              .row
-                .col-sm-4.well
-                  %label Expiration Date
-                  = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
-                  = form.submit 'Update Expiration Date', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
+              = render 'match_decisions/shelter_agency_expiration', form: form
             - if @match.shelter_expiration > Date.today
               %p
                 This match will expire if the client has not expressed interest in the match before
@@ -23,6 +19,9 @@
               %p 
                 This match expired on
                 %strong= "#{@match.shelter_expiration}."
+          - else
+            = render 'match_decisions/shelter_agency_expiration', form: form
+            = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form, confirmation_text: confirmation_text
           
 
 
