@@ -4,8 +4,9 @@ module Reports
     before_action :require_can_view_reports!
   	
     def index
-      @clients = Client.parked
-        .page(params[:page].to_i).per(25)
+      @clients = Client.parked.
+        order(prevent_matching_until: :asc).
+        page(params[:page].to_i).per(25)
     end
   end
 end
