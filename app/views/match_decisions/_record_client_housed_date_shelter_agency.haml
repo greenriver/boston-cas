@@ -17,8 +17,9 @@
 
         .form-actions.clearfix
           - if can_reject_matches?
-            = render 'match_decisions/park_client', form: form
-            = render 'match_decisions/cancel_match_form_fields', form: form
+            .well
+              = render 'match_decisions/park_client', form: form
+              = render 'match_decisions/cancel_match_form_fields', form: form
           = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
 
         %p DND will receive notification of the housing date.

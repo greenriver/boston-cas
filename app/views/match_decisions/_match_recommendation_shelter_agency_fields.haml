@@ -33,6 +33,7 @@
       = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
   .form-actions.clearfix
     - if can_reject_matches?
-      = render 'match_decisions/park_client', form: form
-      = render 'match_decisions/cancel_match_form_fields', form: form
+      .well
+        = render 'match_decisions/park_client', form: form
+        = render 'match_decisions/cancel_match_form_fields', form: form
     = form.submit 'Not Working with Client', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)

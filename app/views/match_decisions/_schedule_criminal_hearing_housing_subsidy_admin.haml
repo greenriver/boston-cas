@@ -26,8 +26,9 @@
 
         .form-actions.clearfix
           - if can_reject_matches?
-            = render 'match_decisions/park_client', form: form
-            = render 'match_decisions/cancel_match_form_fields', form: form
+            .well
+              = render 'match_decisions/park_client', form: form
+              = render 'match_decisions/cancel_match_form_fields', form: form
           = form.submit 'Submit', class: 'btn btn-primary', disabled: !@decision.editable?
 
         %p

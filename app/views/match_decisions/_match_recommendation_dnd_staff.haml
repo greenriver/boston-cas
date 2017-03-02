@@ -21,7 +21,8 @@
             = form.input :shelter_expiration, as: :date_picker, label: false
         = render 'match_decisions/decline_reason', form: form
         - if can_reject_matches?
-          = render 'match_decisions/park_client', form: form
+          .well
+            = render 'match_decisions/park_client', form: form
         .row
           .col-sm-5
             - default_expiration_interval = Notifications::Base::EXPIRATION_INTERVAL
