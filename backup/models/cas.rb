@@ -16,7 +16,7 @@ Backup::Model.new(:cas, 'Description for cas') do
 
   store_with Local do |local|
     local.path = '/logs/postgres/'
-    local.keep = 30
+    local.keep = 15
   end
 
   compress_with Gzip
