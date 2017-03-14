@@ -19,10 +19,7 @@
         = render 'match_decisions/decline_reason', form: form
         - if can_reject_matches?
           = render 'match_decisions/park_client', form: form
-        .row
-          .col-sm-5
-            - default_expiration_interval = Notifications::Base::EXPIRATION_INTERVAL
-            = form.input :custom_expiration_length, label: 'Custom notification expiration length', collection: {"#{distance_of_time_in_words(default_expiration_interval)} (Default)": '', "#{distance_of_time_in_words(15.days)}": 14, "#{distance_of_time_in_words(22.days)}": 21}, selected: ''
+        
         .form-actions.clearfix
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message

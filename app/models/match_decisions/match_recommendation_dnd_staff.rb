@@ -8,8 +8,6 @@ module MatchDecisions
     # validate :note_present_if_status_declined
     validate :ensure_required_contacts_present_on_accept
 
-    attr_accessor :custom_expiration_length
-
     def label_for_status status
       case status.to_sym
       when :pending then 'New Match Awaiting DND Review'
@@ -39,7 +37,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      super + [:prevent_matching_until, :custom_expiration_length]
+      super + [:prevent_matching_until]
     end
 
     def initialize_decision!
