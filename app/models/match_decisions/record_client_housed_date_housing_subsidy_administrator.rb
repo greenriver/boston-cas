@@ -28,7 +28,11 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', completed: 'Complete', canceled: 'Canceled'}
+      {
+        pending: 'Pending', 
+        completed: 'Complete', 
+        canceled: 'Canceled',
+      }
     end
     
     def editable?

@@ -15,11 +15,15 @@
         = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_alternate_matches_path(@match.opportunity), target: '_blank'
       = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
         = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
-
+        %label Optionally provide a date after which the match will be expired if it hasn't been accepted by a shelter agency contact
+        .row
+          .col-xs-4
+            = form.input :shelter_expiration, as: :date_picker, label: false
         = render 'match_decisions/decline_reason', form: form
         - if can_reject_matches?
-          = render 'match_decisions/park_client', form: form
-        
+          .well
+            = render 'match_decisions/park_client', form: form
+
         .form-actions.clearfix
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message

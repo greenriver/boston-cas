@@ -25,10 +25,13 @@ module MatchDecisions
     belongs_to :not_working_with_client_reason, class_name: 'MatchDecisionReasons::Base'
     belongs_to :administrative_cancel_reason, class_name: 'MatchDecisionReasons::Base'
 
-    # we collect notes on our forms, and pass them on to events where they are stored
+    # We collect notes on our forms, and pass them on to events where they are stored
     attr_accessor :note
     # We provide an option to park clients on the DND initial review
     attr_accessor :prevent_matching_until
+    # We provide an option to expire the shelter agency initial review
+    attr_accessor :shelter_expiration
+
     
     has_many :decision_action_events,
       class_name: 'MatchEvents::DecisionAction',
@@ -164,7 +167,7 @@ module MatchDecisions
     end
     
     def permitted_params
-      [:status, :note]
+      [:status, :note, :prevent_matching_until]
     end
 
     def whitelist_params_for_update params

@@ -13,6 +13,7 @@ module MatchDecisions
       when :pending then 'New Match Awaiting DND Review'
       when :accepted then 'New Match Accepted by DND'
       when :declined then "New Match Declined by DND.  Reason: #{decline_reason_name}"
+      when :canceled then canceled_status_label
       end
     end
     
@@ -29,7 +30,12 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', accepted: 'Accept', declined: 'Decline'}
+      {
+        pending: 'Pending', 
+        accepted: 'Accept', 
+        declined: 'Decline',
+        canceled: 'Canceled',
+      }
     end
     
     def editable?
@@ -37,7 +43,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      super + [:prevent_matching_until]
+      super + [:prevent_matching_until, :shelter_expiration]
     end
 
     def initialize_decision!
@@ -80,6 +86,11 @@ module MatchDecisions
       end
       
       def declined
+        match.rejected!
+      end
+
+      def canceled
+        Notifications::MatchCanceled.create_for_match! match
         match.rejected!
       end
     end

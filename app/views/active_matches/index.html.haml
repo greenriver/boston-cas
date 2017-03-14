@@ -44,6 +44,7 @@
             %th Last Changed
             %th Current Step
             %th Initial Match Date
+            %th Initial Acceptance Expiration Date
             %th
               Funding Source &amp; Service Provider
             - if show_links_to_matches?
@@ -64,7 +65,9 @@
               %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td= match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-
+              %td
+                - if match.current_decision.type == 'MatchDecisions::MatchRecommendationShelterAgency'
+                  = match.shelter_expiration.try(:strftime, I18n.t('date.formats.default'))
               %td
                 = match.opportunity_details.organizations
               - if show_links_to_matches?

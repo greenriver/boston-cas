@@ -14,6 +14,7 @@ module MatchDecisions
       when :pending then 'Housing Subsidy Administrator reviewing match'
       when :accepted then 'Match accepted by Housing Subsidy Administrator'
       when :declined then "Match declined by Housing Subsidy Administrator.  Reason: #{decline_reason_name}"
+      when :canceled then canceled_status_label
       end
     end
 
@@ -39,7 +40,12 @@ module MatchDecisions
     end
     
     def statuses
-      {pending: 'Pending', accepted: 'Accepted', declined: 'Declined'}
+      {
+        pending: 'Pending',
+        accepted: 'Accepted', 
+        declined: 'Declined',
+        canceled: 'Canceled',
+      }
     end
     
     def editable?
@@ -91,6 +97,11 @@ module MatchDecisions
         Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
         Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency.create_for_match! match
         match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
+      end
+
+      def canceled
+        Notifications::MatchCanceled.create_for_match! match
+        match.rejected!
       end
     end
     private_constant :StatusCallbacks

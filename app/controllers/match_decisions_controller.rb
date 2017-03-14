@@ -24,6 +24,10 @@ class MatchDecisionsController < ApplicationController
       flash[:alert] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
     elsif @decision.update(decision_params)
+      # If we are expiring the match for shelter agencies
+      if decision_params[:shelter_expiration].present?
+        @match.update(shelter_expiration: decision_params[:shelter_expiration])
+      end
       @decision.record_action_event! contact: current_contact
       @decision.run_status_callback!
       if @decision.contact_actor_type.present?

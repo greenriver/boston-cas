@@ -323,6 +323,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
         {title: 'Recently changed', column: 'last_decision', direction: 'desc'},
         {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
         {title: 'Current step', column: 'current_step', direction: 'desc'},
+        {title: 'Initial Acceptance Expiration Date', column: 'shelter_expiration', direction: 'asc'},
       ]
     end
 

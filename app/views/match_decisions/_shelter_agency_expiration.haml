@@ -1,0 +1,5 @@
+.row
+  .col-sm-4.well
+    %label Expiration Date
+    = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
+    = form.submit 'Update Expiration Date', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
