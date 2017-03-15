@@ -366,7 +366,10 @@ CREATE TABLE clients (
     prevent_matching_until date,
     dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
-    hues_eligible boolean DEFAULT false NOT NULL
+    hues_eligible boolean DEFAULT false NOT NULL,
+    disability_verified_on timestamp without time zone,
+    housing_assistance_network_released_on timestamp without time zone,
+    sync_with_cas boolean DEFAULT false NOT NULL
 );
 
 
@@ -1353,7 +1356,10 @@ CREATE TABLE project_clients (
     old_warehouse_id character varying,
     dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
-    hues_eligible boolean DEFAULT false NOT NULL
+    hues_eligible boolean DEFAULT false NOT NULL,
+    disability_verified_on timestamp without time zone,
+    housing_assistance_network_released_on timestamp without time zone,
+    sync_with_cas boolean DEFAULT false NOT NULL
 );
 
 
@@ -4097,4 +4103,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170213180945');
 INSERT INTO schema_migrations (version) VALUES ('20170213195031');
 
 INSERT INTO schema_migrations (version) VALUES ('20170302202943');
+
+INSERT INTO schema_migrations (version) VALUES ('20170314162953');
+
+INSERT INTO schema_migrations (version) VALUES ('20170315124419');
 
