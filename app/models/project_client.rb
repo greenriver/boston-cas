@@ -7,7 +7,7 @@ class ProjectClient < ActiveRecord::Base
   # Availability is now determined solely based on the manually set sync_with_cas 
   # column.  This generally maps to the chronically homeless list
   def available?
-    sync_with_cas
+    self.sync_with_cas
   end
 
   def substance_abuse?

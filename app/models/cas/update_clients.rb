@@ -12,10 +12,12 @@ module Cas
       clients = Client.all.pluck(:id)
       if clients.size == 0
         to_add = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:id)
+        to_add += ProjectClient.where(sync_with_cas: true).pluck(:id)
       else
         project_clients = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:client_id)
         missing_clients = ProjectClient.where(client_id: project_clients - clients).pluck(:id)
         no_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where(client_id: nil).pluck(:id)
+        no_clients += ProjectClient.where(sync_with_cas: true).where(client_id: nil).pluck(:id)
         probably_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
 
         to_add = no_clients + missing_clients
@@ -75,15 +77,14 @@ module Cas
         :disabling_condition,
         :calculated_first_homeless_night,
         :calculated_last_homeless_night,
-        :project_exit_destination,
-        :project_exit_destination_generic,
         :primary_race,
         :ethnicity,
         :gender,
-        :income_total_monthly_last_collected,
-        :income_total_monthly,
         :substance_abuse_problem,
-        :developmental_disability
+        :developmental_disability,
+        :sync_with_cas,
+        :disability_verified_on,
+        :housing_assistance_network_released_on,
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?
@@ -106,14 +107,11 @@ module Cas
         "ethnicity_id": "ethnicity",
         "veteran_status_id": "veteran_status",
         "gender_id": "gender",
-        "income_information_date": "income_total_monthly_last_collected"
       }.each do |destination, source|
         pc_attr[destination] = pc_attr[source]
         pc_attr.delete(source)
       end
       pc_attr.delete("calculated_last_homeless_night")
-      pc_attr.delete("project_exit_destination")
-      pc_attr.delete("project_exit_destination_generic")
       pc_attr.delete('id')
 
       return pc_attr
