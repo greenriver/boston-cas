@@ -94,7 +94,7 @@ class Prototype < ActiveRecord::Migration
       t.boolean :cronic_homeless
 
       # HMIS 4.2 Income and Sources
-      # TODO: into new table -> client_income_assessments belongs to a clinet
+      # TODO: into new table -> client_income_assessments belongs to a client
       t.date :income_information_date
       t.string :income_from_any_source, limit: 20
       t.integer :income_total_montly

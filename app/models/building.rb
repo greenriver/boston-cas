@@ -20,7 +20,6 @@ class Building < ActiveRecord::Base
 
   has_many :units, inverse_of: :building
   has_many :opportunities, inverse_of: :building
-  has_many :project_clients, primary_key: :data_source_id, foreign_key: :last_homeless_night_programid
 
   validates_presence_of :name
 
