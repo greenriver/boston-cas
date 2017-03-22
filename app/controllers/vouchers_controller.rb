@@ -47,6 +47,7 @@ class VouchersController < ApplicationController
         opportunity.delete
         @voucher.update(available: false)
       end
+      @subprogram.update_summary!
     else
       flash[:error] = "The selected voucher does not have an active match, and cannot be stopped."
     end

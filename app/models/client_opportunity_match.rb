@@ -231,6 +231,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       opportunity.update available_candidate: false
       add_default_contacts!
       match_recommendation_dnd_staff_decision.initialize_decision!
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     end
   end
 
@@ -241,6 +242,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       opportunity.update! available_candidate: true
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     end
   end
 

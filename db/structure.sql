@@ -308,7 +308,9 @@ CREATE TABLE clients (
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
     housing_assistance_network_released_on timestamp without time zone,
-    sync_with_cas boolean DEFAULT false NOT NULL
+    sync_with_cas boolean DEFAULT false NOT NULL,
+    income_total_monthly double precision,
+    income_total_monthly_last_collected timestamp without time zone
 );
 
 
@@ -1277,7 +1279,9 @@ CREATE TABLE project_clients (
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
     housing_assistance_network_released_on timestamp without time zone,
-    sync_with_cas boolean DEFAULT false NOT NULL
+    sync_with_cas boolean DEFAULT false NOT NULL,
+    income_total_monthly double precision,
+    income_total_monthly_last_collected timestamp without time zone
 );
 
 
@@ -4027,4 +4031,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170314162953');
 INSERT INTO schema_migrations (version) VALUES ('20170315124419');
 
 INSERT INTO schema_migrations (version) VALUES ('20170315125413');
+
+INSERT INTO schema_migrations (version) VALUES ('20170322155734');
 

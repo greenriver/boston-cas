@@ -106,6 +106,7 @@ class OpportunitiesController < ApplicationController
       if vouchers.count > 0
         flash[:notice] = "Created #{vouchers.count} new #{Opportunity.model_name.human(count: vouchers.count)}"
         Matching::RunEngineJob.perform_later
+        sub_program.update_summary!
       else
         flash[:alert] = "There was an error creating new #{Opportunity.model_name.human}"
       end
