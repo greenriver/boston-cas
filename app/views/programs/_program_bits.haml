@@ -1,0 +1,11 @@
+= f.input :name, label: 'Program Name'
+= f.association :funding_source, label_method: :name, required: true, label: 'Funding Source'
+= f.input :confidential, label: 'Is this a confidential program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
+%div.form-group.string.optional
+  .row
+    .col-sm-5
+      = f.label :contract_start_date do
+        Contract Start Date
+      .input-group.date{'data-provide' => 'datepicker'}
+        = f.input_field :contract_start_date,  class: 'form-control'
+        %span.input-group-addon.icon-calendar

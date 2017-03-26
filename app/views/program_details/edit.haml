@@ -26,17 +26,7 @@
           = "Any changes you make on this page, including changing rules or services will also affect the #{pluralize other_sub_programs, 'other sub-program'}.  It may make more sense to change the rules on the #{Building.model_name.human.downcase}, sub-grantee or service provider for the sub-program instead."
 
       .form-inputs
-        = f.input :name, label: 'Program Name'
-        = f.association :funding_source, label_method: :name, required: true, label: 'Funding Source', input_html: {data: {select2: true}}
-        %div.form-group.string.optional
-          .row
-            .col-sm-5
-              = f.label :contract_start_date do
-                Contract Start Date
-              .input-group.date{'data-provide' => 'datepicker'}
-                = f.input_field :contract_start_date,  class: 'form-control'
-                %span.input-group-addon.icon-calendar
-
+        = render 'programs/program_bits', f: f
         = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Program'
 
         = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Program', help_text: "In programs with more than one #{Building.model_name.human.downcase}, when a match is made, only #{Building.model_name.human.downcase} rules for the applicable #{Building.model_name.human.downcase} will be applied.  If you need to ensure a rule will be applied across all #{Building.model_name.human.downcase} in the program, add it on this program screen as well."
@@ -46,6 +36,6 @@
 
 = content_for :page_js do
   :javascript
-    $('select[data-select2]').select2();
+    $('select').select2();
     
 

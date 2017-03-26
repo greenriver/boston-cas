@@ -36,7 +36,8 @@ class ProgramDetailsController < ApplicationController
         permit(
           :name, 
           :contract_start_date, 
-          :funding_source_id, 
+          :funding_source_id,
+          :confidential,
           service_ids: [],
           requirements_attributes: [:id, :rule_id, :positive, :_destroy]
         )

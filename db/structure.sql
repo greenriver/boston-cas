@@ -1201,7 +1201,8 @@ CREATE TABLE programs (
     contact_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    confidential boolean DEFAULT false NOT NULL
 );
 
 
@@ -4033,4 +4034,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170315124419');
 INSERT INTO schema_migrations (version) VALUES ('20170315125413');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322155734');
+
+INSERT INTO schema_migrations (version) VALUES ('20170326234009');
 

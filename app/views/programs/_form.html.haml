@@ -1,15 +1,6 @@
 = simple_form_for @program do |f|
   .form-inputs
-    = f.input :name, label: 'Program Name'
-    = f.association :funding_source, label_method: :name, required: true, label: 'Funding Source'   
-    %div.form-group.string.optional
-      .row
-        .col-sm-5
-          = f.label :contract_start_date do
-            Contract Start Date
-          .input-group.date{'data-provide' => 'datepicker'}
-            = f.input_field :contract_start_date,  class: 'form-control'
-            %span.input-group-addon.icon-calendar
+    = render 'programs/program_bits', f: f
     = f.simple_fields_for :sub_programs do |sp|
       %p 
         %strong 
