@@ -13,6 +13,7 @@ class Unit < ActiveRecord::Base
   has_one :opportunity, through: :active_voucher 
 
   delegate :active_match, to: :active_voucher
+  delegate :program, to: :active_voucher
 
   validates :name, presence: true
 

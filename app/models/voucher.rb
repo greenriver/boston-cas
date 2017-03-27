@@ -7,6 +7,8 @@ class Voucher < ActiveRecord::Base
   belongs_to :sub_program
   belongs_to :unit
 
+  delegate :program, to: :sub_program
+
   has_one :opportunity, inverse_of: :voucher
   has_one :status_match, through: :opportunity
   has_one :successful_match, through: :opportunity

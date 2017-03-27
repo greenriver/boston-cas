@@ -15,6 +15,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   belongs_to :client
   belongs_to :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
+  delegate :program, to: :sub_program
+  delegate :sub_program, to: :opportunity
+  delegate :confidential?, to: :program
+
   has_many :notifications, class_name: 'Notifications::Base'
 
   has_decision :match_recommendation_dnd_staff
@@ -125,8 +129,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  def client_name_for_contact contact
-    if show_client_info_to? contact
+  def client_name_for_contact contact, hidden:
+    if hidden
+      '(name hidden)'
+    elsif show_client_info_to?(contact)
       client.full_name
     else
       '(name withheld)'

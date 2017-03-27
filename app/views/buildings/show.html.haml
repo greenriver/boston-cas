@@ -1,3 +1,4 @@
+- hide_client_names = false
 = render partial: 'breadcrumbs'
 .building
   .row
@@ -16,6 +17,9 @@
         = link_to new_building_unit_path(@building), class: 'btn btn-primary' do
           %span.icon-plus
           Add Unit
+  .row
+    .col-sm-12.text-right
+      = render 'match_list_base/show_confidential_names'
         
   %dl
     %dt
@@ -63,4 +67,4 @@
             %td
               - if u.active_voucher.present? && u.active_match.present?
                 - match = u.active_match
-                = link_to match.client.name, match_path(match)
+                = link_to match.client_name_for_contact(current_contact, hidden: u.program.confidential? && ! params[:confidential_override].present?), match_path(match)

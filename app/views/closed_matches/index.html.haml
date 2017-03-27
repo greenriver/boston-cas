@@ -23,9 +23,10 @@
 .row
   .col-sm-6
     = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
-  .col-sm-3.sort-filter
-    = render 'filter'
+  .col-sm-6.sort-filter
+    = render 'filter', available_steps: ClientOpportunityMatch::CLOSED_REASONS, return_path: closed_matches_path, label_method: :closed
     = render 'sort', sort_options: sort_options
+    = render 'show_confidential_names'
 .row
   .col-sm-4
     %p= page_entries_info @matches
@@ -44,29 +45,30 @@
             %th Last Changed
             %th Current Step
             %th Initial Match Date
-            %th
-              Funding Source &amp; Service Provider
+            %th Program
+            %th Sub-Program
+            %th Funding Source &amp; Service Provider
             - if show_links_to_matches?
               %th
             - if can_see_alternate_matches?
               %th Alternate Matches
         %tbody
           - @matches.each do |match|
+            - hide_client_name = match.confidential? && ! params[:confidential_override]
             %tr
               %td
                 - if match.client.accessible_by_user? current_user
                   = link_to client_path(match.client) do
-                    = match.client_name_for_contact current_contact
+                    = match.client_name_for_contact current_contact, hidden: hide_client_name
                 - else
-                  = match.client_name_for_contact current_contact
-              %td
-                = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+                  = match.client_name_for_contact current_contact, hidden: hide_client_name
+              %td= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td= match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-
-              %td
-                = match.opportunity_details.organizations
+              %td= match.opportunity_details.program_name
+              %td= match.opportunity_details.sub_program_name
+              %td= match.opportunity_details.organizations
               - if show_links_to_matches?
                 %td
                   = link_to 'View / Update Match', match_path(match)

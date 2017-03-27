@@ -36,12 +36,8 @@ class Program < ActiveRecord::Base
   def organizations
     s = []
     sub_programs.each do |sp|
-      unless sp.service_provider.nil?
-        s << sp.service_provider.name
-      end
-      unless sp.sub_contractor.nil?
-        s << sp.sub_contractor.name
-      end
+      s << sp.service_provider.name if sp.service_provider.present?
+      s << sp.sub_contractor.name if sp.sub_contractor.present?
     end
     s
   end
