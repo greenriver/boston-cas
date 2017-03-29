@@ -32,6 +32,11 @@ class User < ActiveRecord::Base
     self.email = contact.email
   end
 
+  def self.non_admin
+    User.where.not(id: User.admin.select(:id)).
+      where.not(id: User.developer.select(:id))
+  end
+
   def name
     "#{first_name} #{last_name}"
   end

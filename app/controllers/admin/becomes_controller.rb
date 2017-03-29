@@ -13,8 +13,7 @@ class Admin::BecomesController < ::ApplicationController
   end
 
   def prevent_becoming_admin_or_developer
-    User.where.not(id: User.admin.select(:id)).
-      where.not(id: User.developer.select(:id)).
+    User.non_admin.
       where(id: params[:user_id].to_i).first
   end
 end

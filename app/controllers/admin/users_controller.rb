@@ -20,6 +20,9 @@ module Admin
       @users = @users
         .order(sort_column => sort_direction)
         .page(params[:page]).per(25)
+      if current_user.can_become_other_users?
+        @available_for_becoming = User.non_admin.pluck(:id)
+      end
     end
 
     def edit

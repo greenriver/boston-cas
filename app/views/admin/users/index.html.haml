@@ -36,6 +36,8 @@
             %th Roles
             %th Status
             %th Matches
+            - if can_become_other_users?
+              %th
             %th
             %th
         %tbody
@@ -49,6 +51,12 @@
               %td.text-center
                 - matches = user.contact.try(:client_opportunity_match_contacts) || []
                 = matches.size
+              - if can_become_other_users?
+                %td
+                  - if @available_for_becoming.include?(user.id)
+                    = link_to admin_user_become_path(user_id: user.id) do
+                      %span.icon-enter
+                      Become
               %td
                 = link_to action: :edit, id: user do
                   %span.icon-pencil
