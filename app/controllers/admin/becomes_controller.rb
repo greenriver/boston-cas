@@ -5,7 +5,7 @@ class Admin::BecomesController < ::ApplicationController
     user = prevent_becoming_admin_or_developer()
     if user.present?
       sign_in(:user, user, { bypass: true })
-      flash[:success] = "You are now logged in as #{user.name}"
+      flash[:success] = "You are now logged in as #{user.name}.  Remember to logout after you complete your troubleshooting."
     else
       flash[:error] = 'Becoming Admins and Developers is not allowed'
     end
