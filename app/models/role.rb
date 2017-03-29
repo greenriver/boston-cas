@@ -3,6 +3,8 @@ class Role < ActiveRecord::Base
   has_many :users, through: :user_roles
   validates :name, presence: true
   
+  scope :all_except_developer, -> {where.not(name: 'developer')}
+
   def role_name
     name.to_s.humanize.gsub('Dnd', 'DND').gsub('Hsa', 'HSA')
   end
@@ -52,5 +54,9 @@ class Role < ActiveRecord::Base
       :can_assign_requirements,
       :can_become_other_users, # This is an admin/developer only role for troubleshooting
     ]
+  end
+
+  def self.available_roles
+    Role.all_except_developer
   end
 end

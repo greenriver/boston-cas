@@ -16,7 +16,7 @@
           = contact_fields.input :email, as: :email, required: true
         .form--checkbox-groups
           %h3 CAS Roles for Access Permissions
-          = f.association :roles, as: :check_boxes, label_method: :role_name
+          = f.association :roles, as: :check_boxes, label_method: :role_name, collection: Role.available_roles
 
       .form-actions
         = f.button :submit, class: 'btn btn-primary'
