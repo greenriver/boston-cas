@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     resources :users, except: [:show, :new, :create] do
       resource :resend_invitation, only: :create
       resource :recreate_invitation, only: :create
+      resource :become, only: [:show]
     end
     resources :roles
     resources :versions, only: [:index]

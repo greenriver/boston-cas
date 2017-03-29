@@ -56,7 +56,7 @@ module Admin
         params.require(:role).
           permit(
             :name,
-            Role.permissions
+            Role.permissions - [:can_become_other_users] # This is restricted
           )
       end
       def sort_column

@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
 
   scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
   scope :dnd_staff, -> {joins(:roles).where(roles: {name: 'dnd_staff'})}
+  scope :developer, -> {joins(:roles).where(roles: {name: 'developer'})}
   scope :dnd_initial_contact, -> {dnd_staff.where receive_initial_notification: true}
   scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {name: 'hsa'})}
   

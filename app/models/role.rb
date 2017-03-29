@@ -50,6 +50,7 @@ class Role < ActiveRecord::Base
       :can_edit_available_services,
       :can_assign_services,
       :can_assign_requirements,
+      :can_become_other_users, # This is an admin/developer only role for troubleshooting
     ]
   end
 end

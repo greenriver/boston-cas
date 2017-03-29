@@ -1489,7 +1489,8 @@ CREATE TABLE roles (
     can_assign_requirements boolean DEFAULT false,
     can_view_dmh_eligibility boolean DEFAULT false,
     can_view_va_eligibility boolean DEFAULT false NOT NULL,
-    can_view_hues_eligibility boolean DEFAULT false NOT NULL
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
+    can_become_other_users boolean DEFAULT false
 );
 
 
@@ -4036,4 +4037,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170315125413');
 INSERT INTO schema_migrations (version) VALUES ('20170322155734');
 
 INSERT INTO schema_migrations (version) VALUES ('20170326234009');
+
+INSERT INTO schema_migrations (version) VALUES ('20170329122422');
 
