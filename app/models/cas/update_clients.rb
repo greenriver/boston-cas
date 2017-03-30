@@ -15,14 +15,15 @@ module Cas
         to_add += ProjectClient.where(sync_with_cas: true).pluck(:id)
       else
         project_clients = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:client_id)
+        project_clients += ProjectClient.where(sync_with_cas: true).pluck(:client_id)
         missing_clients = ProjectClient.where(client_id: project_clients - clients).pluck(:id)
         no_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where(client_id: nil).pluck(:id)
         no_clients += ProjectClient.where(sync_with_cas: true).where(client_id: nil).pluck(:id)
         probably_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
 
-        to_add = no_clients + missing_clients
-        to_delete = clients - project_clients
-        to_update = probably_clients - (project_clients - clients)
+        to_add = (no_clients.uniq + missing_clients.uniq).uniq
+        to_delete = (clients - project_clients.uniq).uniq
+        to_update = (probably_clients - (project_clients.uniq - clients)).uniq
       end
       if to_delete.any?
         Rails.logger.info "Removing #{to_delete.length} clients"
