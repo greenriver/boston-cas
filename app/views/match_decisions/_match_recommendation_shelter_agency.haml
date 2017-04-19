@@ -24,7 +24,8 @@
                   = render 'match_decisions/park_client', form: form
                   = render 'match_decisions/cancel_match_form_fields', form: form
           - else
-            = render 'match_decisions/shelter_agency_expiration', form: form
+            - if can_reject_matches?
+              = render 'match_decisions/shelter_agency_expiration', form: form
             = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form, confirmation_text: confirmation_text
           
 
