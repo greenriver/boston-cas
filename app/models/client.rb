@@ -126,7 +126,7 @@ class Client < ActiveRecord::Base
   end
 
   def active_in_match
-    client_opportunity_matches.active.first.try(:id)
+    client_opportunity_matches.active.first
   end
 
   def unavailable(permanent:false)

@@ -306,7 +306,8 @@ CREATE TABLE clients (
     housing_assistance_network_released_on timestamp without time zone,
     sync_with_cas boolean DEFAULT false NOT NULL,
     income_total_monthly double precision,
-    income_total_monthly_last_collected timestamp without time zone
+    income_total_monthly_last_collected timestamp without time zone,
+    confidential boolean DEFAULT false NOT NULL
 );
 
 
@@ -1486,7 +1487,8 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
-    can_become_other_users boolean DEFAULT false
+    can_become_other_users boolean DEFAULT false,
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL
 );
 
 
@@ -4035,4 +4037,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170322155734');
 INSERT INTO schema_migrations (version) VALUES ('20170326234009');
 
 INSERT INTO schema_migrations (version) VALUES ('20170329122422');
+
+INSERT INTO schema_migrations (version) VALUES ('20170421142554');
 

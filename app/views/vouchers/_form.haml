@@ -58,9 +58,9 @@
               - if v.object.status_match.present? 
                 - if can_view_all_matches?
                   = link_to client_path(v.object.status_match.client) do
-                    = v.object.status_match.client_name_for_contact current_contact, hidden: hide_client_names && ! params[:confidential_override].present?
+                    = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
                 - else
-                  = v.object.status_match.client_name_for_contact current_contact, hidden: hide_client_names && ! params[:confidential_override].present?
+                  = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
               
           - if v.object.errors.any?
             %tr
