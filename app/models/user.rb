@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   
   has_many :user_roles, dependent: :destroy, inverse_of: :user
   has_many :roles, through: :user_roles
+  has_many :vouchers
 
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
