@@ -1,4 +1,3 @@
-- hide_client_names = false
 = render 'sub_programs/breadcrumbs'
 .row
   .col-xs-6
@@ -16,17 +15,15 @@
     = render 'bulk_add_form'
     .text-right
       = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
-    - if @subprogram.program.confidential?
-      - hide_client_names = true
-      .text-right
-        = render 'match_list_base/show_confidential_names'
+    .text-right
+      = render 'match_list_base/show_confidential_names'
 .row.margin-top-02
   .col-sm-12
     = render 'sub_programs/tab_navigation', active: 'vouchers'
 .row
   .col-sm-12
     - if @subprogram.vouchers.count > 0
-      = render 'form', hide_client_names: hide_client_names
+      = render 'form'
     - else
       %p.alert.alert-info.margin-top-03
         This program has no vouchers defined yet. Use the Add Vouchers box above to add some.

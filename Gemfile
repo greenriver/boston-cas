@@ -59,6 +59,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
+  gem 'puma'
 
   # gem 'rack-mini-profiler'
   gem 'test-unit', '~> 3.0', require: false

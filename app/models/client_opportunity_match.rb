@@ -17,7 +17,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   delegate :program, to: :sub_program
   delegate :sub_program, to: :opportunity
-  delegate :confidential?, to: :program
 
   has_many :notifications, class_name: 'Notifications::Base'
 
@@ -99,6 +98,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_many :note_events,
     class_name: 'MatchEvents::Note',
     foreign_key: :match_id
+
+  def confidential?
+    program.confidential? or client.confidential?
+  end
 
   def self.accessible_by_user user
     # admins & DND see everything

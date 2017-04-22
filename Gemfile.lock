@@ -209,6 +209,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    puma (3.8.2)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -361,6 +362,7 @@ DEPENDENCIES
   paranoia (~> 2.0)
   pg
   pry-rails
+  puma
   quiet_assets
   rails
   rails-erd
@@ -382,4 +384,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.13.6
+   1.14.6

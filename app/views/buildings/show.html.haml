@@ -1,4 +1,3 @@
-- hide_client_names = false
 = render partial: 'breadcrumbs'
 .building
   .row
@@ -67,4 +66,4 @@
             %td
               - if u.active_voucher.present? && u.active_match.present?
                 - match = u.active_match
-                = link_to match.client_name_for_contact(current_contact, hidden: u.program.confidential? && ! params[:confidential_override].present?), match_path(match)
+                = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! params[:confidential_override].present?), match_path(match)

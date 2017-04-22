@@ -47,9 +47,9 @@
               %th
         %tbody
           - @matches.each do |match|
-            - hide_client_name = match.confidential? && ! params[:confidential_override]
+            - hide_client_name = (match.confidential? || match.client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
             - active_in_other_match_class = ''
-            - if match.client.active_in_match.present? && match.client.active_in_match != match.id
+            - if match.client.active_in_match.present? && match.client.active_in_match != match
               - active_in_other_match_class = 'client__active-match-elsewhere'
             %tr{class: active_in_other_match_class}
               %td
