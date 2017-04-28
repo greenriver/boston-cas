@@ -148,7 +148,9 @@ class OpportunitiesController < ApplicationController
 
   
   private def opportunity_scope
-    Opportunity.where(success: false, available: true)
+    Opportunity.where(success: false, available: true).
+      joins(:voucher).
+      where(vouchers: {available: true})
   end
   # Use callbacks to share common setup or constraints between actions.
   private def set_opportunity
