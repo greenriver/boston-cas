@@ -31,8 +31,7 @@ module CasSeeds
     ]
 
     ADMINISTRATIVE_CANCEL_REASONS = [
-      '7 days expired',
-      '14 days expired',
+      'Match expired',
       'Client has declined match',
       'Client has disengaged',
       'Client has disappeared',

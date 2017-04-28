@@ -11,6 +11,8 @@ module MatchDecisionReasons
 
     self.table_name = 'match_decision_reasons'
 
+    scope :active, -> { where(active: true) }
+
     validates :name, presence: true
 
     def other?
