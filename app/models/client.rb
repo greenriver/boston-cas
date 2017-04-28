@@ -151,4 +151,8 @@ class Client < ActiveRecord::Base
       end
     end
   end
+
+  def remote_id
+    project_client.id_in_data_source.presence
+  end
 end

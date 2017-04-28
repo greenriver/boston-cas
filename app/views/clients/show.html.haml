@@ -11,7 +11,7 @@
         = link_to client_path(@client.merged_into) do
           = @client.merged_with_name
   .col-sm-4
-    - if warehouse_id = @client.project_client.id_in_data_source.presence
+    - if warehouse_id = @client.remote_id
       = link_to "https://hmis.boston.gov/clients/#{warehouse_id}", target: '_blank' do
         Warehouse ID:
         = warehouse_id
