@@ -17,6 +17,8 @@
             Status
           %th
             Client
+          %th
+            Origin
       %tbody
         = f.simple_fields_for :vouchers, @vouchers do |v|
           - disabled = false
@@ -61,6 +63,12 @@
                     = v.object.status_match.client_name_for_contact current_contact, hidden: hide_client_names && ! params[:confidential_override].present?
                 - else
                   = v.object.status_match.client_name_for_contact current_contact, hidden: hide_client_names && ! params[:confidential_override].present?
+            %td.text-center
+              - if v.object.creator
+                - creation_info = v.object.creator.name + ' - ' + v.object.created_at.to_s.humanize
+              - else
+                - creation_info = v.object.created_at.to_s.humanize
+              %span.icon-info{'data-toggle': "tooltip", 'data-placement': "top", 'title': creation_info}
               
           - if v.object.errors.any?
             %tr
