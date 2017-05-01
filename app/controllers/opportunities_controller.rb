@@ -96,7 +96,7 @@ class OpportunitiesController < ApplicationController
         if sub_program.has_buildings?
           unit = Unit.create(building: building, name: SecureRandom.hex, available: true)
         end
-        voucher = Voucher.new(sub_program: sub_program, available: true)
+        voucher = Voucher.new(sub_program: sub_program, available: true, creator: @current_user)
         voucher.unit = unit
         voucher.save
         voucher.opportunity || voucher.create_opportunity(available: true, available_candidate: true)

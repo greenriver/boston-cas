@@ -14,7 +14,7 @@ class VouchersController < ApplicationController
   def create
     new_vouchers = []
     vouchers_to_create = voucher_params[:add_vouchers].to_i.times do 
-      new_vouchers << Voucher.create(sub_program: @subprogram)
+      new_vouchers << Voucher.create(sub_program: @subprogram, creator: @current_user)
     end
     if vouchers_to_create == new_vouchers.length
       flash[:notice] = "#{vouchers_to_create} vouchers added"

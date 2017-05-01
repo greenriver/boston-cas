@@ -2,12 +2,16 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
@@ -30,7 +34,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: building_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: building_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE building_contacts (
@@ -63,7 +67,7 @@ ALTER SEQUENCE building_contacts_id_seq OWNED BY building_contacts.id;
 
 
 --
--- Name: building_services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: building_services; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE building_services (
@@ -96,7 +100,7 @@ ALTER SEQUENCE building_services_id_seq OWNED BY building_services.id;
 
 
 --
--- Name: buildings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: buildings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE buildings (
@@ -138,7 +142,7 @@ ALTER SEQUENCE buildings_id_seq OWNED BY buildings.id;
 
 
 --
--- Name: client_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: client_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE client_contacts (
@@ -173,7 +177,7 @@ ALTER SEQUENCE client_contacts_id_seq OWNED BY client_contacts.id;
 
 
 --
--- Name: client_opportunity_match_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: client_opportunity_match_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE client_opportunity_match_contacts (
@@ -212,7 +216,7 @@ ALTER SEQUENCE client_opportunity_match_contacts_id_seq OWNED BY client_opportun
 
 
 --
--- Name: client_opportunity_matches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: client_opportunity_matches; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE client_opportunity_matches (
@@ -255,7 +259,7 @@ ALTER SEQUENCE client_opportunity_matches_id_seq OWNED BY client_opportunity_mat
 
 
 --
--- Name: clients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: clients; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE clients (
@@ -299,7 +303,7 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -331,7 +335,7 @@ ALTER SEQUENCE clients_id_seq OWNED BY clients.id;
 
 
 --
--- Name: contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contacts (
@@ -374,7 +378,7 @@ ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
 
 
 --
--- Name: data_sources; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: data_sources; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE data_sources (
@@ -406,7 +410,7 @@ ALTER SEQUENCE data_sources_id_seq OWNED BY data_sources.id;
 
 
 --
--- Name: date_of_birth_quality_codes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: date_of_birth_quality_codes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE date_of_birth_quality_codes (
@@ -438,7 +442,7 @@ ALTER SEQUENCE date_of_birth_quality_codes_id_seq OWNED BY date_of_birth_quality
 
 
 --
--- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE delayed_jobs (
@@ -477,7 +481,7 @@ ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 
 --
--- Name: disabling_conditions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: disabling_conditions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE disabling_conditions (
@@ -509,7 +513,7 @@ ALTER SEQUENCE disabling_conditions_id_seq OWNED BY disabling_conditions.id;
 
 
 --
--- Name: discharge_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: discharge_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE discharge_statuses (
@@ -541,7 +545,7 @@ ALTER SEQUENCE discharge_statuses_id_seq OWNED BY discharge_statuses.id;
 
 
 --
--- Name: domestic_violence_survivors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: domestic_violence_survivors; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE domestic_violence_survivors (
@@ -573,7 +577,7 @@ ALTER SEQUENCE domestic_violence_survivors_id_seq OWNED BY domestic_violence_sur
 
 
 --
--- Name: ethnicities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ethnicities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE ethnicities (
@@ -605,7 +609,7 @@ ALTER SEQUENCE ethnicities_id_seq OWNED BY ethnicities.id;
 
 
 --
--- Name: funding_source_services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: funding_source_services; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE funding_source_services (
@@ -638,7 +642,7 @@ ALTER SEQUENCE funding_source_services_id_seq OWNED BY funding_source_services.i
 
 
 --
--- Name: funding_sources; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: funding_sources; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE funding_sources (
@@ -674,7 +678,7 @@ ALTER SEQUENCE funding_sources_id_seq OWNED BY funding_sources.id;
 
 
 --
--- Name: genders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: genders; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE genders (
@@ -706,7 +710,7 @@ ALTER SEQUENCE genders_id_seq OWNED BY genders.id;
 
 
 --
--- Name: has_developmental_disabilities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: has_developmental_disabilities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE has_developmental_disabilities (
@@ -738,7 +742,7 @@ ALTER SEQUENCE has_developmental_disabilities_id_seq OWNED BY has_developmental_
 
 
 --
--- Name: has_hivaids; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: has_hivaids; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE has_hivaids (
@@ -770,7 +774,7 @@ ALTER SEQUENCE has_hivaids_id_seq OWNED BY has_hivaids.id;
 
 
 --
--- Name: has_mental_health_problems; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: has_mental_health_problems; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE has_mental_health_problems (
@@ -802,7 +806,7 @@ ALTER SEQUENCE has_mental_health_problems_id_seq OWNED BY has_mental_health_prob
 
 
 --
--- Name: match_decision_reasons; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: match_decision_reasons; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE match_decision_reasons (
@@ -810,7 +814,8 @@ CREATE TABLE match_decision_reasons (
     name character varying NOT NULL,
     type character varying NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    active boolean DEFAULT true NOT NULL
 );
 
 
@@ -834,7 +839,7 @@ ALTER SEQUENCE match_decision_reasons_id_seq OWNED BY match_decision_reasons.id;
 
 
 --
--- Name: match_decisions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: match_decisions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE match_decisions (
@@ -879,7 +884,7 @@ ALTER SEQUENCE match_decisions_id_seq OWNED BY match_decisions.id;
 
 
 --
--- Name: match_events; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: match_events; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE match_events (
@@ -919,7 +924,7 @@ ALTER SEQUENCE match_events_id_seq OWNED BY match_events.id;
 
 
 --
--- Name: name_quality_codes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: name_quality_codes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE name_quality_codes (
@@ -951,7 +956,7 @@ ALTER SEQUENCE name_quality_codes_id_seq OWNED BY name_quality_codes.id;
 
 
 --
--- Name: notifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE notifications (
@@ -986,7 +991,7 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 
 --
--- Name: opportunities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: opportunities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE opportunities (
@@ -1024,7 +1029,7 @@ ALTER SEQUENCE opportunities_id_seq OWNED BY opportunities.id;
 
 
 --
--- Name: opportunity_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: opportunity_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE opportunity_contacts (
@@ -1058,7 +1063,7 @@ ALTER SEQUENCE opportunity_contacts_id_seq OWNED BY opportunity_contacts.id;
 
 
 --
--- Name: opportunity_properties; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: opportunity_properties; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE opportunity_properties (
@@ -1089,7 +1094,7 @@ ALTER SEQUENCE opportunity_properties_id_seq OWNED BY opportunity_properties.id;
 
 
 --
--- Name: physical_disabilities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: physical_disabilities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE physical_disabilities (
@@ -1121,7 +1126,7 @@ ALTER SEQUENCE physical_disabilities_id_seq OWNED BY physical_disabilities.id;
 
 
 --
--- Name: primary_races; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: primary_races; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE primary_races (
@@ -1153,7 +1158,7 @@ ALTER SEQUENCE primary_races_id_seq OWNED BY primary_races.id;
 
 
 --
--- Name: program_services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: program_services; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE program_services (
@@ -1186,7 +1191,7 @@ ALTER SEQUENCE program_services_id_seq OWNED BY program_services.id;
 
 
 --
--- Name: programs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: programs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE programs (
@@ -1223,7 +1228,7 @@ ALTER SEQUENCE programs_id_seq OWNED BY programs.id;
 
 
 --
--- Name: project_clients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: project_clients; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE project_clients (
@@ -1272,7 +1277,7 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1303,7 +1308,7 @@ ALTER SEQUENCE project_clients_id_seq OWNED BY project_clients.id;
 
 
 --
--- Name: project_programs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: project_programs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE project_programs (
@@ -1337,7 +1342,7 @@ ALTER SEQUENCE project_programs_id_seq OWNED BY project_programs.id;
 
 
 --
--- Name: reissue_requests; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: reissue_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE reissue_requests (
@@ -1371,7 +1376,7 @@ ALTER SEQUENCE reissue_requests_id_seq OWNED BY reissue_requests.id;
 
 
 --
--- Name: rejected_matches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: rejected_matches; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE rejected_matches (
@@ -1403,7 +1408,7 @@ ALTER SEQUENCE rejected_matches_id_seq OWNED BY rejected_matches.id;
 
 
 --
--- Name: requirements; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: requirements; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE requirements (
@@ -1438,7 +1443,7 @@ ALTER SEQUENCE requirements_id_seq OWNED BY requirements.id;
 
 
 --
--- Name: roles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE roles (
@@ -1460,9 +1465,6 @@ CREATE TABLE roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false,
-    can_view_hues_eligibility boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -1487,6 +1489,9 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
     can_view_client_confidentiality boolean DEFAULT false NOT NULL
 );
@@ -1512,7 +1517,7 @@ ALTER SEQUENCE roles_id_seq OWNED BY roles.id;
 
 
 --
--- Name: rules; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: rules; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE rules (
@@ -1546,7 +1551,7 @@ ALTER SEQUENCE rules_id_seq OWNED BY rules.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
@@ -1555,7 +1560,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: secondary_races; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: secondary_races; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE secondary_races (
@@ -1587,7 +1592,7 @@ ALTER SEQUENCE secondary_races_id_seq OWNED BY secondary_races.id;
 
 
 --
--- Name: service_rules; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: service_rules; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE service_rules (
@@ -1620,7 +1625,7 @@ ALTER SEQUENCE service_rules_id_seq OWNED BY service_rules.id;
 
 
 --
--- Name: services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: services; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE services (
@@ -1652,7 +1657,7 @@ ALTER SEQUENCE services_id_seq OWNED BY services.id;
 
 
 --
--- Name: sessions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE sessions (
@@ -1684,7 +1689,7 @@ ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
 
 
 --
--- Name: social_security_number_quality_codes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: social_security_number_quality_codes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE social_security_number_quality_codes (
@@ -1716,7 +1721,7 @@ ALTER SEQUENCE social_security_number_quality_codes_id_seq OWNED BY social_secur
 
 
 --
--- Name: sub_programs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sub_programs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE sub_programs (
@@ -1758,7 +1763,7 @@ ALTER SEQUENCE sub_programs_id_seq OWNED BY sub_programs.id;
 
 
 --
--- Name: subgrantee_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: subgrantee_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE subgrantee_contacts (
@@ -1791,7 +1796,7 @@ ALTER SEQUENCE subgrantee_contacts_id_seq OWNED BY subgrantee_contacts.id;
 
 
 --
--- Name: subgrantee_services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: subgrantee_services; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE subgrantee_services (
@@ -1824,7 +1829,7 @@ ALTER SEQUENCE subgrantee_services_id_seq OWNED BY subgrantee_services.id;
 
 
 --
--- Name: subgrantees; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: subgrantees; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE subgrantees (
@@ -1861,7 +1866,7 @@ ALTER SEQUENCE subgrantees_id_seq OWNED BY subgrantees.id;
 
 
 --
--- Name: units; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: units; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE units (
@@ -1906,7 +1911,7 @@ ALTER SEQUENCE units_id_seq OWNED BY units.id;
 
 
 --
--- Name: user_roles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: user_roles; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE user_roles (
@@ -1938,7 +1943,7 @@ ALTER SEQUENCE user_roles_id_seq OWNED BY user_roles.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE users (
@@ -1996,7 +2001,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- Name: versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: versions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE versions (
@@ -2034,7 +2039,7 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 
 
 --
--- Name: veteran_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: veteran_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE veteran_statuses (
@@ -2066,7 +2071,7 @@ ALTER SEQUENCE veteran_statuses_id_seq OWNED BY veteran_statuses.id;
 
 
 --
--- Name: vouchers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vouchers; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vouchers (
@@ -2077,7 +2082,8 @@ CREATE TABLE vouchers (
     unit_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    user_id integer
 );
 
 
@@ -2486,7 +2492,7 @@ ALTER TABLE ONLY vouchers ALTER COLUMN id SET DEFAULT nextval('vouchers_id_seq':
 
 
 --
--- Name: building_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: building_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY building_contacts
@@ -2494,7 +2500,7 @@ ALTER TABLE ONLY building_contacts
 
 
 --
--- Name: building_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: building_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY building_services
@@ -2502,7 +2508,7 @@ ALTER TABLE ONLY building_services
 
 
 --
--- Name: buildings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: buildings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY buildings
@@ -2510,7 +2516,7 @@ ALTER TABLE ONLY buildings
 
 
 --
--- Name: client_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: client_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_contacts
@@ -2518,7 +2524,7 @@ ALTER TABLE ONLY client_contacts
 
 
 --
--- Name: client_opportunity_match_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: client_opportunity_match_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_opportunity_match_contacts
@@ -2526,7 +2532,7 @@ ALTER TABLE ONLY client_opportunity_match_contacts
 
 
 --
--- Name: client_opportunity_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: client_opportunity_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_opportunity_matches
@@ -2534,7 +2540,7 @@ ALTER TABLE ONLY client_opportunity_matches
 
 
 --
--- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY clients
@@ -2542,7 +2548,7 @@ ALTER TABLE ONLY clients
 
 
 --
--- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts
@@ -2550,7 +2556,7 @@ ALTER TABLE ONLY contacts
 
 
 --
--- Name: data_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: data_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY data_sources
@@ -2558,7 +2564,7 @@ ALTER TABLE ONLY data_sources
 
 
 --
--- Name: date_of_birth_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: date_of_birth_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY date_of_birth_quality_codes
@@ -2566,7 +2572,7 @@ ALTER TABLE ONLY date_of_birth_quality_codes
 
 
 --
--- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY delayed_jobs
@@ -2574,7 +2580,7 @@ ALTER TABLE ONLY delayed_jobs
 
 
 --
--- Name: disabling_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: disabling_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY disabling_conditions
@@ -2582,7 +2588,7 @@ ALTER TABLE ONLY disabling_conditions
 
 
 --
--- Name: discharge_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: discharge_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY discharge_statuses
@@ -2590,7 +2596,7 @@ ALTER TABLE ONLY discharge_statuses
 
 
 --
--- Name: domestic_violence_survivors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: domestic_violence_survivors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY domestic_violence_survivors
@@ -2598,7 +2604,7 @@ ALTER TABLE ONLY domestic_violence_survivors
 
 
 --
--- Name: ethnicities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ethnicities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ethnicities
@@ -2606,7 +2612,7 @@ ALTER TABLE ONLY ethnicities
 
 
 --
--- Name: funding_source_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: funding_source_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY funding_source_services
@@ -2614,7 +2620,7 @@ ALTER TABLE ONLY funding_source_services
 
 
 --
--- Name: funding_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: funding_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY funding_sources
@@ -2622,7 +2628,7 @@ ALTER TABLE ONLY funding_sources
 
 
 --
--- Name: genders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: genders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY genders
@@ -2630,7 +2636,7 @@ ALTER TABLE ONLY genders
 
 
 --
--- Name: has_developmental_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: has_developmental_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_developmental_disabilities
@@ -2638,7 +2644,7 @@ ALTER TABLE ONLY has_developmental_disabilities
 
 
 --
--- Name: has_hivaids_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: has_hivaids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_hivaids
@@ -2646,7 +2652,7 @@ ALTER TABLE ONLY has_hivaids
 
 
 --
--- Name: has_mental_health_problems_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: has_mental_health_problems_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_mental_health_problems
@@ -2654,7 +2660,7 @@ ALTER TABLE ONLY has_mental_health_problems
 
 
 --
--- Name: match_decision_reasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: match_decision_reasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_decision_reasons
@@ -2662,7 +2668,7 @@ ALTER TABLE ONLY match_decision_reasons
 
 
 --
--- Name: match_decisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: match_decisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_decisions
@@ -2670,7 +2676,7 @@ ALTER TABLE ONLY match_decisions
 
 
 --
--- Name: match_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: match_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_events
@@ -2678,7 +2684,7 @@ ALTER TABLE ONLY match_events
 
 
 --
--- Name: name_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: name_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY name_quality_codes
@@ -2686,7 +2692,7 @@ ALTER TABLE ONLY name_quality_codes
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2694,7 +2700,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: opportunities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: opportunities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunities
@@ -2702,7 +2708,7 @@ ALTER TABLE ONLY opportunities
 
 
 --
--- Name: opportunity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: opportunity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunity_contacts
@@ -2710,7 +2716,7 @@ ALTER TABLE ONLY opportunity_contacts
 
 
 --
--- Name: opportunity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: opportunity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunity_properties
@@ -2718,7 +2724,7 @@ ALTER TABLE ONLY opportunity_properties
 
 
 --
--- Name: physical_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: physical_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY physical_disabilities
@@ -2726,7 +2732,7 @@ ALTER TABLE ONLY physical_disabilities
 
 
 --
--- Name: primary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: primary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY primary_races
@@ -2734,7 +2740,7 @@ ALTER TABLE ONLY primary_races
 
 
 --
--- Name: program_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: program_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY program_services
@@ -2742,7 +2748,7 @@ ALTER TABLE ONLY program_services
 
 
 --
--- Name: programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY programs
@@ -2750,7 +2756,7 @@ ALTER TABLE ONLY programs
 
 
 --
--- Name: project_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: project_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY project_clients
@@ -2758,7 +2764,7 @@ ALTER TABLE ONLY project_clients
 
 
 --
--- Name: project_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: project_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY project_programs
@@ -2766,7 +2772,7 @@ ALTER TABLE ONLY project_programs
 
 
 --
--- Name: reissue_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: reissue_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reissue_requests
@@ -2774,7 +2780,7 @@ ALTER TABLE ONLY reissue_requests
 
 
 --
--- Name: rejected_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: rejected_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rejected_matches
@@ -2782,7 +2788,7 @@ ALTER TABLE ONLY rejected_matches
 
 
 --
--- Name: requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY requirements
@@ -2790,7 +2796,7 @@ ALTER TABLE ONLY requirements
 
 
 --
--- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY roles
@@ -2798,7 +2804,7 @@ ALTER TABLE ONLY roles
 
 
 --
--- Name: rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rules
@@ -2806,7 +2812,7 @@ ALTER TABLE ONLY rules
 
 
 --
--- Name: secondary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: secondary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY secondary_races
@@ -2814,7 +2820,7 @@ ALTER TABLE ONLY secondary_races
 
 
 --
--- Name: service_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: service_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY service_rules
@@ -2822,7 +2828,7 @@ ALTER TABLE ONLY service_rules
 
 
 --
--- Name: services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY services
@@ -2830,7 +2836,7 @@ ALTER TABLE ONLY services
 
 
 --
--- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sessions
@@ -2838,7 +2844,7 @@ ALTER TABLE ONLY sessions
 
 
 --
--- Name: social_security_number_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: social_security_number_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY social_security_number_quality_codes
@@ -2846,7 +2852,7 @@ ALTER TABLE ONLY social_security_number_quality_codes
 
 
 --
--- Name: sub_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: sub_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -2854,7 +2860,7 @@ ALTER TABLE ONLY sub_programs
 
 
 --
--- Name: subgrantee_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: subgrantee_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantee_contacts
@@ -2862,7 +2868,7 @@ ALTER TABLE ONLY subgrantee_contacts
 
 
 --
--- Name: subgrantee_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: subgrantee_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantee_services
@@ -2870,7 +2876,7 @@ ALTER TABLE ONLY subgrantee_services
 
 
 --
--- Name: subgrantees_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: subgrantees_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantees
@@ -2878,7 +2884,7 @@ ALTER TABLE ONLY subgrantees
 
 
 --
--- Name: units_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY units
@@ -2886,7 +2892,7 @@ ALTER TABLE ONLY units
 
 
 --
--- Name: user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_roles
@@ -2894,7 +2900,7 @@ ALTER TABLE ONLY user_roles
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -2902,7 +2908,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions
@@ -2910,7 +2916,7 @@ ALTER TABLE ONLY versions
 
 
 --
--- Name: veteran_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: veteran_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY veteran_statuses
@@ -2918,7 +2924,7 @@ ALTER TABLE ONLY veteran_statuses
 
 
 --
--- Name: vouchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vouchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vouchers
@@ -2926,679 +2932,679 @@ ALTER TABLE ONLY vouchers
 
 
 --
--- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
 
 
 --
--- Name: index_building_contacts_on_building_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_building_contacts_on_building_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_building_contacts_on_building_id ON building_contacts USING btree (building_id);
 
 
 --
--- Name: index_building_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_building_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_building_contacts_on_contact_id ON building_contacts USING btree (contact_id);
 
 
 --
--- Name: index_building_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_building_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_building_contacts_on_deleted_at ON building_contacts USING btree (deleted_at);
 
 
 --
--- Name: index_building_services_on_building_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_building_services_on_building_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_building_services_on_building_id ON building_services USING btree (building_id);
 
 
 --
--- Name: index_building_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_building_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_building_services_on_deleted_at ON building_services USING btree (deleted_at);
 
 
 --
--- Name: index_building_services_on_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_building_services_on_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_building_services_on_service_id ON building_services USING btree (service_id);
 
 
 --
--- Name: index_buildings_on_id_in_data_source; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_buildings_on_id_in_data_source; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_buildings_on_id_in_data_source ON buildings USING btree (id_in_data_source);
 
 
 --
--- Name: index_buildings_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_buildings_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_buildings_on_subgrantee_id ON buildings USING btree (subgrantee_id);
 
 
 --
--- Name: index_client_contacts_on_client_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_contacts_on_client_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_contacts_on_client_id ON client_contacts USING btree (client_id);
 
 
 --
--- Name: index_client_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_contacts_on_contact_id ON client_contacts USING btree (contact_id);
 
 
 --
--- Name: index_client_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_contacts_on_deleted_at ON client_contacts USING btree (deleted_at);
 
 
 --
--- Name: index_client_opportunity_match_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_match_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_match_contacts_on_contact_id ON client_opportunity_match_contacts USING btree (contact_id);
 
 
 --
--- Name: index_client_opportunity_match_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_match_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_match_contacts_on_deleted_at ON client_opportunity_match_contacts USING btree (deleted_at);
 
 
 --
--- Name: index_client_opportunity_match_contacts_on_match_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_match_contacts_on_match_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_match_contacts_on_match_id ON client_opportunity_match_contacts USING btree (match_id);
 
 
 --
--- Name: index_client_opportunity_matches_on_active; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_active; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_active ON client_opportunity_matches USING btree (active);
 
 
 --
--- Name: index_client_opportunity_matches_on_client_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_client_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_client_id ON client_opportunity_matches USING btree (client_id);
 
 
 --
--- Name: index_client_opportunity_matches_on_closed; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_closed; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_closed ON client_opportunity_matches USING btree (closed);
 
 
 --
--- Name: index_client_opportunity_matches_on_closed_reason; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_closed_reason; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_closed_reason ON client_opportunity_matches USING btree (closed_reason);
 
 
 --
--- Name: index_client_opportunity_matches_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_contact_id ON client_opportunity_matches USING btree (contact_id);
 
 
 --
--- Name: index_client_opportunity_matches_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_deleted_at ON client_opportunity_matches USING btree (deleted_at) WHERE (deleted_at IS NULL);
 
 
 --
--- Name: index_client_opportunity_matches_on_opportunity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_client_opportunity_matches_on_opportunity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_client_opportunity_matches_on_opportunity_id ON client_opportunity_matches USING btree (opportunity_id);
 
 
 --
--- Name: index_clients_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_clients_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_clients_on_deleted_at ON clients USING btree (deleted_at);
 
 
 --
--- Name: index_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_deleted_at ON contacts USING btree (deleted_at);
 
 
 --
--- Name: index_contacts_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_user_id ON contacts USING btree (user_id);
 
 
 --
--- Name: index_funding_source_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_funding_source_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_funding_source_services_on_deleted_at ON funding_source_services USING btree (deleted_at);
 
 
 --
--- Name: index_funding_source_services_on_funding_source_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_funding_source_services_on_funding_source_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_funding_source_services_on_funding_source_id ON funding_source_services USING btree (funding_source_id);
 
 
 --
--- Name: index_funding_source_services_on_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_funding_source_services_on_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_funding_source_services_on_service_id ON funding_source_services USING btree (service_id);
 
 
 --
--- Name: index_match_decision_reasons_on_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_decision_reasons_on_type; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_decision_reasons_on_type ON match_decision_reasons USING btree (type);
 
 
 --
--- Name: index_match_decisions_on_administrative_cancel_reason_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_decisions_on_administrative_cancel_reason_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_decisions_on_administrative_cancel_reason_id ON match_decisions USING btree (administrative_cancel_reason_id);
 
 
 --
--- Name: index_match_decisions_on_decline_reason_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_decisions_on_decline_reason_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_decisions_on_decline_reason_id ON match_decisions USING btree (decline_reason_id);
 
 
 --
--- Name: index_match_decisions_on_match_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_decisions_on_match_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_decisions_on_match_id ON match_decisions USING btree (match_id);
 
 
 --
--- Name: index_match_decisions_on_not_working_with_client_reason_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_decisions_on_not_working_with_client_reason_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_decisions_on_not_working_with_client_reason_id ON match_decisions USING btree (not_working_with_client_reason_id);
 
 
 --
--- Name: index_match_events_on_decision_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_events_on_decision_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_events_on_decision_id ON match_events USING btree (decision_id);
 
 
 --
--- Name: index_match_events_on_match_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_events_on_match_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_events_on_match_id ON match_events USING btree (match_id);
 
 
 --
--- Name: index_match_events_on_not_working_with_client_reason_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_events_on_not_working_with_client_reason_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_events_on_not_working_with_client_reason_id ON match_events USING btree (not_working_with_client_reason_id);
 
 
 --
--- Name: index_match_events_on_notification_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_match_events_on_notification_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_match_events_on_notification_id ON match_events USING btree (notification_id);
 
 
 --
--- Name: index_opportunities_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunities_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunities_on_deleted_at ON opportunities USING btree (deleted_at) WHERE (deleted_at IS NULL);
 
 
 --
--- Name: index_opportunities_on_unit_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunities_on_unit_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunities_on_unit_id ON opportunities USING btree (unit_id);
 
 
 --
--- Name: index_opportunities_on_voucher_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunities_on_voucher_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunities_on_voucher_id ON opportunities USING btree (voucher_id);
 
 
 --
--- Name: index_opportunity_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunity_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunity_contacts_on_contact_id ON opportunity_contacts USING btree (contact_id);
 
 
 --
--- Name: index_opportunity_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunity_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunity_contacts_on_deleted_at ON opportunity_contacts USING btree (deleted_at);
 
 
 --
--- Name: index_opportunity_contacts_on_opportunity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunity_contacts_on_opportunity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunity_contacts_on_opportunity_id ON opportunity_contacts USING btree (opportunity_id);
 
 
 --
--- Name: index_opportunity_properties_on_opportunity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_opportunity_properties_on_opportunity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_opportunity_properties_on_opportunity_id ON opportunity_properties USING btree (opportunity_id);
 
 
 --
--- Name: index_program_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_program_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_program_services_on_deleted_at ON program_services USING btree (deleted_at);
 
 
 --
--- Name: index_program_services_on_program_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_program_services_on_program_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_program_services_on_program_id ON program_services USING btree (program_id);
 
 
 --
--- Name: index_program_services_on_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_program_services_on_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_program_services_on_service_id ON program_services USING btree (service_id);
 
 
 --
--- Name: index_programs_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_programs_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_programs_on_contact_id ON programs USING btree (contact_id);
 
 
 --
--- Name: index_programs_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_programs_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_programs_on_deleted_at ON programs USING btree (deleted_at);
 
 
 --
--- Name: index_programs_on_funding_source_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_programs_on_funding_source_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_programs_on_funding_source_id ON programs USING btree (funding_source_id);
 
 
 --
--- Name: index_programs_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_programs_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_programs_on_subgrantee_id ON programs USING btree (subgrantee_id);
 
 
 --
--- Name: index_project_clients_on_calculated_chronic_homelessness; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_project_clients_on_calculated_chronic_homelessness; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_project_clients_on_calculated_chronic_homelessness ON project_clients USING btree (calculated_chronic_homelessness);
 
 
 --
--- Name: index_project_clients_on_client_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_project_clients_on_client_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_project_clients_on_client_id ON project_clients USING btree (client_id);
 
 
 --
--- Name: index_project_clients_on_date_of_birth; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_project_clients_on_date_of_birth; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_project_clients_on_date_of_birth ON project_clients USING btree (date_of_birth);
 
 
 --
--- Name: index_project_clients_on_source_last_changed; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_project_clients_on_source_last_changed; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_project_clients_on_source_last_changed ON project_clients USING btree (source_last_changed);
 
 
 --
--- Name: index_reissue_requests_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_reissue_requests_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_reissue_requests_on_deleted_at ON reissue_requests USING btree (deleted_at);
 
 
 --
--- Name: index_reissue_requests_on_notification_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_reissue_requests_on_notification_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_reissue_requests_on_notification_id ON reissue_requests USING btree (notification_id);
 
 
 --
--- Name: index_reissue_requests_on_reissued_by; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_reissue_requests_on_reissued_by; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_reissue_requests_on_reissued_by ON reissue_requests USING btree (reissued_by);
 
 
 --
--- Name: index_rejected_matches_on_client_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_rejected_matches_on_client_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_rejected_matches_on_client_id ON rejected_matches USING btree (client_id);
 
 
 --
--- Name: index_rejected_matches_on_opportunity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_rejected_matches_on_opportunity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_rejected_matches_on_opportunity_id ON rejected_matches USING btree (opportunity_id);
 
 
 --
--- Name: index_requirements_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_requirements_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_requirements_on_deleted_at ON requirements USING btree (deleted_at);
 
 
 --
--- Name: index_requirements_on_requirer_type_and_requirer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_requirements_on_requirer_type_and_requirer_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_requirements_on_requirer_type_and_requirer_id ON requirements USING btree (requirer_type, requirer_id);
 
 
 --
--- Name: index_requirements_on_rule_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_requirements_on_rule_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_requirements_on_rule_id ON requirements USING btree (rule_id);
 
 
 --
--- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_roles_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_roles_on_name ON roles USING btree (name);
 
 
 --
--- Name: index_rules_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_rules_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_rules_on_deleted_at ON rules USING btree (deleted_at);
 
 
 --
--- Name: index_service_rules_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_service_rules_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_service_rules_on_deleted_at ON service_rules USING btree (deleted_at);
 
 
 --
--- Name: index_service_rules_on_rule_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_service_rules_on_rule_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_service_rules_on_rule_id ON service_rules USING btree (rule_id);
 
 
 --
--- Name: index_service_rules_on_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_service_rules_on_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_service_rules_on_service_id ON service_rules USING btree (service_id);
 
 
 --
--- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_sessions_on_session_id ON sessions USING btree (session_id);
 
 
 --
--- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_sessions_on_updated_at ON sessions USING btree (updated_at);
 
 
 --
--- Name: index_sub_programs_on_building_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sub_programs_on_building_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_sub_programs_on_building_id ON sub_programs USING btree (building_id);
 
 
 --
--- Name: index_sub_programs_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sub_programs_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_sub_programs_on_deleted_at ON sub_programs USING btree (deleted_at);
 
 
 --
--- Name: index_sub_programs_on_program_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sub_programs_on_program_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_sub_programs_on_program_id ON sub_programs USING btree (program_id);
 
 
 --
--- Name: index_sub_programs_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sub_programs_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_sub_programs_on_subgrantee_id ON sub_programs USING btree (subgrantee_id);
 
 
 --
--- Name: index_subgrantee_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subgrantee_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subgrantee_contacts_on_contact_id ON subgrantee_contacts USING btree (contact_id);
 
 
 --
--- Name: index_subgrantee_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subgrantee_contacts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subgrantee_contacts_on_deleted_at ON subgrantee_contacts USING btree (deleted_at);
 
 
 --
--- Name: index_subgrantee_contacts_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subgrantee_contacts_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subgrantee_contacts_on_subgrantee_id ON subgrantee_contacts USING btree (subgrantee_id);
 
 
 --
--- Name: index_subgrantee_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subgrantee_services_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subgrantee_services_on_deleted_at ON subgrantee_services USING btree (deleted_at);
 
 
 --
--- Name: index_subgrantee_services_on_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subgrantee_services_on_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subgrantee_services_on_service_id ON subgrantee_services USING btree (service_id);
 
 
 --
--- Name: index_subgrantee_services_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subgrantee_services_on_subgrantee_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subgrantee_services_on_subgrantee_id ON subgrantee_services USING btree (subgrantee_id);
 
 
 --
--- Name: index_units_on_building_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_units_on_building_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_units_on_building_id ON units USING btree (building_id);
 
 
 --
--- Name: index_units_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_units_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_units_on_deleted_at ON units USING btree (deleted_at) WHERE (deleted_at IS NULL);
 
 
 --
--- Name: index_units_on_id_in_data_source; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_units_on_id_in_data_source; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_units_on_id_in_data_source ON units USING btree (id_in_data_source);
 
 
 --
--- Name: index_user_roles_on_role_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_user_roles_on_role_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_user_roles_on_role_id ON user_roles USING btree (role_id);
 
 
 --
--- Name: index_user_roles_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_user_roles_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_user_roles_on_user_id ON user_roles USING btree (user_id);
 
 
 --
--- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_users_on_invitation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_invitation_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_invitation_token ON users USING btree (invitation_token);
 
 
 --
--- Name: index_users_on_invitations_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_invitations_count; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_invitations_count ON users USING btree (invitations_count);
 
 
 --
--- Name: index_users_on_invited_by_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_invited_by_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_invited_by_id ON users USING btree (invited_by_id);
 
 
 --
--- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
--- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
--- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
 
 
 --
--- Name: index_vouchers_on_deleted_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vouchers_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vouchers_on_deleted_at ON vouchers USING btree (deleted_at);
 
 
 --
--- Name: index_vouchers_on_sub_program_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vouchers_on_sub_program_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vouchers_on_sub_program_id ON vouchers USING btree (sub_program_id);
 
 
 --
--- Name: index_vouchers_on_unit_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vouchers_on_unit_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vouchers_on_unit_id ON vouchers USING btree (unit_id);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
@@ -3642,6 +3648,14 @@ ALTER TABLE ONLY user_roles
 
 ALTER TABLE ONLY vouchers
     ADD CONSTRAINT fk_rails_3938619bb0 FOREIGN KEY (sub_program_id) REFERENCES sub_programs(id);
+
+
+--
+-- Name: fk_rails_3e6ca7b204; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vouchers
+    ADD CONSTRAINT fk_rails_3e6ca7b204 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3728,7 +3742,7 @@ ALTER TABLE ONLY sub_programs
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+SET search_path TO "$user", public;
 
 INSERT INTO schema_migrations (version) VALUES ('20160212185654');
 
@@ -4039,4 +4053,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170326234009');
 INSERT INTO schema_migrations (version) VALUES ('20170329122422');
 
 INSERT INTO schema_migrations (version) VALUES ('20170421142554');
+
+INSERT INTO schema_migrations (version) VALUES ('20170421163530');
+
+INSERT INTO schema_migrations (version) VALUES ('20170428201839');
 
