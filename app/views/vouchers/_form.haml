@@ -65,16 +65,16 @@
                   = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
             %td.text-center
               - if v.object.creator
-                - creation_info = v.object.creator.name + ' - ' + v.object.created_at.to_s.humanize
+                - creation_info = v.object.creator.name + '<br />' + v.object.created_at.to_s.humanize
               - else
                 - creation_info = v.object.created_at.to_s.humanize
-              %span.icon-info{'data-toggle': "tooltip", 'data-placement': "top", 'title': creation_info}
+              %span.icon-info{data:{ toggle: :tooltip, placement: :top, title: creation_info.html_safe, html: :true}}
               
           - if v.object.errors.any?
             %tr
               %td(style="border: none; color:red; position: relative; top: -30px;")
               %td(colspan="5" style="border: none; color:red; position: relative; top: -30px;")
-                = v.object.errors.full_messages_for(:base).join ', '   
+                = v.object.errors.full_messages_for(:base).join(', ')   
 
     = f.button :submit, value: 'Update Vouchers'
 = content_for :page_js do
