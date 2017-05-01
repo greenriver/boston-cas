@@ -70,6 +70,7 @@ group :development do
   gem 'quiet_assets'
   gem 'ruby-prof'
   gem 'rb-readline'
+  gem 'puma'
 end
 
 group :development, :test do

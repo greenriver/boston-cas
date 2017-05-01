@@ -2082,7 +2082,8 @@ CREATE TABLE vouchers (
     unit_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    user_id integer
 );
 
 
@@ -3650,6 +3651,14 @@ ALTER TABLE ONLY vouchers
 
 
 --
+-- Name: fk_rails_3e6ca7b204; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vouchers
+    ADD CONSTRAINT fk_rails_3e6ca7b204 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_5502b5ba7e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4045,5 +4054,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170329122422');
 
 INSERT INTO schema_migrations (version) VALUES ('20170421142554');
 
+<<<<<<< HEAD
+=======
+INSERT INTO schema_migrations (version) VALUES ('20170421163530');
+
+>>>>>>> master
 INSERT INTO schema_migrations (version) VALUES ('20170428201839');
 

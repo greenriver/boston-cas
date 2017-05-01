@@ -6,6 +6,7 @@ class Voucher < ActiveRecord::Base
   scope :available, -> {where available: true} 
   belongs_to :sub_program
   belongs_to :unit
+  belongs_to :creator, class_name: 'User', required: false, inverse_of: :vouchers, foreign_key: :user_id
 
   delegate :program, to: :sub_program
 
