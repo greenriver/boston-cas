@@ -60,9 +60,9 @@
               - if v.object.status_match.present? 
                 - if can_view_all_matches?
                   = link_to client_path(v.object.status_match.client) do
-                    = v.object.status_match.client_name_for_contact current_contact, hidden: hide_client_names && ! params[:confidential_override].present?
+                    = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
                 - else
-                  = v.object.status_match.client_name_for_contact current_contact, hidden: hide_client_names && ! params[:confidential_override].present?
+                  = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
             %td.text-center
               - if v.object.creator
                 - creation_info = v.object.creator.name + ' - ' + v.object.created_at.to_s.humanize
