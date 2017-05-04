@@ -1,4 +1,4 @@
-set :deploy_to, '/u/apps/boston-cas-staging'
+set :deploy_to, '/u/apps/staging/boston-cas-staging'
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 namespace :deploy do
