@@ -86,13 +86,18 @@
     %table.table.table-condensed
       %tbody
         %tr
-          %th Disability Verified
-          %td= @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
+          %th Disability
+          %td
+            - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
+              = "Verified on #{disability_verified_on}"
+            - else
+              Not Verified
         %tr
-          %th HAN Release Signed
-          %td= @client.housing_assistance_network_released_on.try(:strftime, I18n.t('date.formats.default'))
+          %th Housing Release
+          %td
+            = @client.housing_release_status.presence || 'Not Signed'
         %tr
-          %th Available for matching
+          %th Available for matching?
           %td
             = checkmark @client.available
             - if @client.available

@@ -90,7 +90,7 @@ module Cas
         :va_eligible,
         :hues_eligible,
         :hiv_positive,
-        :housing_release_type,
+        :housing_release_status,
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?
