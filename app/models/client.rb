@@ -111,11 +111,19 @@ class Client < ActiveRecord::Base
     return false
   end
 
-  def age
-    if date_of_birth.present?
-      Date.today.year - date_of_birth.to_date.year
+  def self.age date:, dob:
+      age = date.year - dob.year
+      age -= 1 if dob > date.years_ago(age)
+      return age
     end
+
+  def age date=Date.today
+    return unless date_of_birth.present?
+    date = date.to_date
+    dob = date_of_birth.to_date
+    self.class.age(date: date, dob: dob)
   end
+  alias_method :age_on, :age
 
   def prioritized_matches
     client_opportunity_matches.joins(:opportunity).order('opportunities.matchability asc')

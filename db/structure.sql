@@ -1288,7 +1288,8 @@ CREATE TABLE project_clients (
     income_total_monthly double precision,
     income_total_monthly_last_collected timestamp without time zone,
     hiv_positive boolean DEFAULT false NOT NULL,
-    housing_release_status character varying
+    housing_release_status character varying,
+    needs_update boolean DEFAULT false NOT NULL
 );
 
 
@@ -4064,4 +4065,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170421163530');
 INSERT INTO schema_migrations (version) VALUES ('20170428201839');
 
 INSERT INTO schema_migrations (version) VALUES ('20170505125855');
+
+INSERT INTO schema_migrations (version) VALUES ('20170505170358');
 
