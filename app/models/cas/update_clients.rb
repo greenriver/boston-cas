@@ -86,6 +86,11 @@ module Cas
         :sync_with_cas,
         :disability_verified_on,
         :housing_assistance_network_released_on,
+        :dmh_eligible,
+        :va_eligible,
+        :hues_eligible,
+        :hiv_positive,
+        :housing_release_type,
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?

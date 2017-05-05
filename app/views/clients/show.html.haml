@@ -124,51 +124,50 @@
 .row
   .col-sm-6 
     %h3 Health Information
-    = simple_form_for(@client) do |f|
-      = f.error_notification
-      %table.table.table-condensed
-        %tbody
+    %table.table.table-condensed
+      %tbody
+        %tr
+          %th Developmental Disability
+          %td= checkmark @client.developmental_disability
+        %tr
+          %th Domestic Violence Survivor
+          %td= checkmark @client.domestic_violence
+        %tr
+          %th HIV/AIDS (HUD)
+          %td= checkmark @client.hiv_aids
+        %tr
+          %th Chronic Health Disability
+          %td= checkmark @client.chronic_health_problem
+        %tr
+          %th Mental Health Disability
+          %td= checkmark @client.mental_health_problem
+        %tr
+          %th Substance Abuse Problem
+          %td= checkmark @client.substance_abuse_problem
+        %tr
+          %th Physical Disability
+          %td= checkmark @client.physical_disability
+        %tr
+          %th Disabling Condition
+          %td= checkmark @client.disabling_condition
+        - if can_view_dmh_eligibility?
           %tr
-            %th Developmental Disability
-            %td= checkmark @client.send('developmental_disability')
+            %th DMH Eligible
+            %td= checkmark @client.dmh_eligible
+            
+        - if can_view_va_eligibility?
           %tr
-            %th Domestic Violence Survivor
-            %td= checkmark @client.send('domestic_violence')
+            %th VA Eligible
+            %td= checkmark @client.va_eligible
+        - if can_view_hues_eligibility?
           %tr
-            %th HIV/AIDS
-            %td= checkmark @client.send('hiv_aids')
+            %th HUES Eligible
+            %td= checkmark @client.hues_eligible
+        - if can_view_hiv_positive_eligibility?
           %tr
-            %th Chronic Health Disability
-            %td= checkmark @client.send('chronic_health_problem')
-          %tr
-            %th Mental Health Disability
-            %td= checkmark @client.send('mental_health_problem')
-          %tr
-            %th Substance Abuse Problem
-            %td= checkmark @client.send('substance_abuse_problem')
-          %tr
-            %th Physical Disability
-            %td= checkmark @client.send('physical_disability')
-          %tr
-            %th Disabling Condition
-            %td= checkmark @client.send('disabling_condition')
-          - if can_view_dmh_eligibility?
-            %tr
-              %th DMH Eligible
-              %td= f.input_field :dmh_eligible
-          - if can_view_va_eligibility?
-            %tr
-              %th VA Eligible
-              %td= f.input_field :va_eligible
-          - if can_view_hues_eligibility?
-            %tr
-              %th HUES Eligible
-              %td= f.input_field :hues_eligible
-          - if can_view_dmh_eligibility? || can_view_va_eligibility? || can_view_hues_eligibility?
-            %tr
-              %td.text-right{colspan: 2}
-                = f.button :submit, class: 'btn btn-primary', value: 'Update'
-
+            %th HIV+
+            %td= checkmark @client.hiv_positive
+          
   .col-sm-6
     .row
       .col-sm-12
@@ -177,8 +176,3 @@
       .col-sm-12
         - if @client.previously_merged?
           = render 'previously_merged'    
-  /.row.debug
-  /  %h2 Debug
-  /  = debug @potential_dupes
-  /  = debug @strings_to_compare
-  /  = debug @scores

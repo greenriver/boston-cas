@@ -28,6 +28,7 @@ class Role < ActiveRecord::Base
       :can_view_dmh_eligibility,
       :can_view_va_eligibility,
       :can_view_hues_eligibility,
+      :can_view_hiv_positive_eligibility,
       :can_view_client_confidentiality,
       :can_view_buildings, 
       :can_edit_buildings, 
@@ -59,5 +60,13 @@ class Role < ActiveRecord::Base
 
   def self.available_roles
     Role.all_except_developer
+  end
+
+  def self.ensure_permissions_exist
+    Role.permissions.each do |permission|
+      unless ActiveRecord::Base.connection.column_exists?(:roles, permission)
+        ActiveRecord::Migration.add_column :roles, permission, :boolean, default: false
+      end
+    end
   end
 end

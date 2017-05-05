@@ -311,7 +311,9 @@ CREATE TABLE clients (
     sync_with_cas boolean DEFAULT false NOT NULL,
     income_total_monthly double precision,
     income_total_monthly_last_collected timestamp without time zone,
-    confidential boolean DEFAULT false NOT NULL
+    confidential boolean DEFAULT false NOT NULL,
+    hiv_positive boolean DEFAULT false NOT NULL,
+    housing_release_status character varying
 );
 
 
@@ -1284,7 +1286,9 @@ CREATE TABLE project_clients (
     housing_assistance_network_released_on timestamp without time zone,
     sync_with_cas boolean DEFAULT false NOT NULL,
     income_total_monthly double precision,
-    income_total_monthly_last_collected timestamp without time zone
+    income_total_monthly_last_collected timestamp without time zone,
+    hiv_positive boolean DEFAULT false NOT NULL,
+    housing_release_status character varying
 );
 
 
@@ -1493,7 +1497,8 @@ CREATE TABLE roles (
     can_view_va_eligibility boolean DEFAULT false NOT NULL,
     can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false NOT NULL
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
+    can_view_hiv_positive_eligibility boolean DEFAULT false
 );
 
 
@@ -4054,10 +4059,9 @@ INSERT INTO schema_migrations (version) VALUES ('20170329122422');
 
 INSERT INTO schema_migrations (version) VALUES ('20170421142554');
 
-<<<<<<< HEAD
-=======
 INSERT INTO schema_migrations (version) VALUES ('20170421163530');
 
->>>>>>> master
 INSERT INTO schema_migrations (version) VALUES ('20170428201839');
+
+INSERT INTO schema_migrations (version) VALUES ('20170505125855');
 
