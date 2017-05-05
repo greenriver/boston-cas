@@ -27,6 +27,10 @@
         .form-actions.clearfix
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message
+          - if ! @match.client.has_full_housing_release?
+            .alert.alert-danger
+              = link_to @match.client.full_name, client_path(@match.client)
+              Does not have a full housing release on file.
 
           = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
           = form.submit 'Accept Match Recommendation', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)

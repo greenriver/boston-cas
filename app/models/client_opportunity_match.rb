@@ -100,7 +100,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     foreign_key: :match_id
 
   def confidential?
-    program.confidential? or client.confidential?
+    program.confidential? || client.confidential?
   end
 
   def self.accessible_by_user user

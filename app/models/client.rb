@@ -155,4 +155,8 @@ class Client < ActiveRecord::Base
   def remote_id
     project_client.id_in_data_source.presence
   end
+
+  def has_full_housing_release?
+    housing_release_status == 'Full HAN Release'
+  end
 end
