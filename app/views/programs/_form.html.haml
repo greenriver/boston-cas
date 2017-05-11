@@ -9,6 +9,8 @@
       .form-group.form-group__indented-02
         = sp.input :name
       .form-group.form-group__indented-02
+        = sp.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
+      .form-group.form-group__indented-02
         = sp.association :housing_subsidy_administrator, label: 'Housing Subsidy Administrator'
       .form-group.form-group__indented-02
         = sp.association :service_provider, label: 'Service Provider', required: true

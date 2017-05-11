@@ -18,6 +18,10 @@
   %h3 Sub-Program Details
   .form-inputs
     = f.input :name
+    - if @program.confidential?
+      %p This sub-program belongs to a confidential program.  Client names will be hidden when shown in lists of matches by default.
+    - else 
+      = f.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
     = f.association :housing_subsidy_administrator, label: 'Housing Subsidy Administrator'
     = f.association :service_provider, label: 'Service Provider', required: true 
     = f.association :sub_contractor, label: 'Sub-Contractor'

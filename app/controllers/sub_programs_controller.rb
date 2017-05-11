@@ -53,7 +53,8 @@ class SubProgramsController < ApplicationController
         :sub_contractor_id,
         :program_type,
         :building_id,
-        :hsa_id
+        :hsa_id,
+        :confidential
       )
   end
 

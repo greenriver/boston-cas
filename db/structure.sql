@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.1
--- Dumped by pg_dump version 9.5.1
+-- Dumped from database version 9.5.6
+-- Dumped by pg_dump version 9.5.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1745,7 +1745,8 @@ CREATE TABLE sub_programs (
     name character varying,
     sub_contractor_id integer,
     hsa_id integer,
-    voucher_count integer DEFAULT 0
+    voucher_count integer DEFAULT 0,
+    confidential boolean DEFAULT false NOT NULL
 );
 
 
@@ -4067,4 +4068,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170428201839');
 INSERT INTO schema_migrations (version) VALUES ('20170505125855');
 
 INSERT INTO schema_migrations (version) VALUES ('20170505170358');
+
+INSERT INTO schema_migrations (version) VALUES ('20170511192828');
 
