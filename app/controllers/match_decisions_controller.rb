@@ -26,7 +26,17 @@ class MatchDecisionsController < ApplicationController
     elsif @decision.update(decision_params)
       # If we are expiring the match for shelter agencies
       if can_reject_matches? && decision_params[:shelter_expiration].present?
-        @match.update(shelter_expiration: decision_params[:shelter_expiration])
+        old_expiration = @match.shelter_expiration
+        new_expiration = decision_params[:shelter_expiration]
+        @match.update(shelter_expiration: new_expiration)
+        if old_expiration.blank? || old_expiration.to_date != new_expiration.to_date
+          note = "Shelter review expiration date set to #{new_expiration}."
+          MatchEvents::ExpirationChange.create!(
+            match_id: @match.id,
+            contact_id: current_contact.id, 
+            note: note
+          )
+        end
       end
       @decision.record_action_event! contact: current_contact
       @decision.run_status_callback!

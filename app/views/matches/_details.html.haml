@@ -1,3 +1,4 @@
+- sub_program = match.opportunity_details.sub_program
 .row
   .col-sm-8
     %h1 Housing Opportunity: Match Progress
@@ -62,7 +63,7 @@
               -# Even though we are logged in, we don't have permission
               = name
       .row
-        .col-sm-5
+        .col-sm-4
           .detail-box--label Services
           .detail-box--value
             - services = match.services_with_inherited
@@ -70,7 +71,7 @@
               = services.map(&:name).join('<br />').html_safe
             - else
               None
-        .col-sm-7
+        .col-sm-8
           .detail-box--label Rules
           .detail-box--value
             - requirements = match.requirements_with_inherited
@@ -92,6 +93,11 @@
                 %br
             - else
               None
+          - if sub_program.eligibility_requirement_notes?
+            .detail-box--label
+              Additional Eligibility Requirements
+            .detail-box--value
+              = sub_program.eligibility_requirement_notes
     .col-sm-3
       - match.shelter_agency_contacts.each do |contact|
         .detail-box--label Shelter Agency Contact

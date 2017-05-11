@@ -83,6 +83,7 @@ class ProgramsController < ApplicationController
           :building_id, 
           :hsa_id,
           :confidential,
+          :eligibility_requirement_notes,
         ],
         service_ids: [],
         requirements_attributes: [:id, :rule_id, :positive, :_destroy]

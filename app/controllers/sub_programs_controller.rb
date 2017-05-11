@@ -54,7 +54,8 @@ class SubProgramsController < ApplicationController
         :program_type,
         :building_id,
         :hsa_id,
-        :confidential
+        :confidential,
+        :eligibility_requirement_notes
       )
   end
 

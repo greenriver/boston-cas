@@ -140,7 +140,7 @@ module MatchDecisions
         Notifications::NoLongerWorkingWithClient.create_for_match! match
         decision_action_events.create! match: match, contact: contact, action: status, note: note, not_working_with_client_reason_id: not_working_with_client_reason_id, client_last_seen_date: client_last_seen_date
       elsif status == 'expiration_update'
-        # Do nothing
+        # Make note of the new expiration
       else
         decision_action_events.create! match: match, contact: contact, action: status, note: note
       end

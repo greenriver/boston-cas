@@ -43,7 +43,8 @@
       %span.icon-info
       Rules inherited from a site listed above are only visible after save.
     = render = render 'requirement_manager/inherited_rules', inheritee: @subprogram
-
+  .form-group.eligibility-requirement-notes
+    = f.input :eligibility_requirement_notes, hint: 'If there are eligibility requirements that don\'t fit within the defined rules, provide a brief explanation here.  They will be displayed on any match involving this opportunity.', label: 'Eligibility Requirement Notes'
   .form-actions
     = f.button :submit, value: 'Save', class: 'btn btn-primary'
 

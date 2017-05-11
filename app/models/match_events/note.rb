@@ -10,6 +10,10 @@ module MatchEvents
     def remove_note!
       destroy
     end
+
+    def is_editable?
+      true
+    end
     
   end
 end

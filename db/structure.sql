@@ -1746,7 +1746,8 @@ CREATE TABLE sub_programs (
     sub_contractor_id integer,
     hsa_id integer,
     voucher_count integer DEFAULT 0,
-    confidential boolean DEFAULT false NOT NULL
+    confidential boolean DEFAULT false NOT NULL,
+    eligibility_requirement_notes text
 );
 
 
@@ -4070,4 +4071,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170505125855');
 INSERT INTO schema_migrations (version) VALUES ('20170505170358');
 
 INSERT INTO schema_migrations (version) VALUES ('20170511192828');
+
+INSERT INTO schema_migrations (version) VALUES ('20170511194721');
 

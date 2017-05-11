@@ -49,5 +49,9 @@ module MatchEvents
       save
     end
 
+    def is_editable?
+      false
+    end
+
   end
 end
