@@ -30,6 +30,10 @@ module OpportunityDetails
       sub_program&.name
     end
     
+    def service_provider_name
+      sub_program&.service_provider&.name
+    end
+
     def subgrantee_name
       unit.building&.subgrantee&.name
     end

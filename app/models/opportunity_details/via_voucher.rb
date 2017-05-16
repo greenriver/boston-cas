@@ -30,6 +30,10 @@ module OpportunityDetails
       voucher.sub_program&.name
     end
 
+    def service_provider_name
+      voucher.sub_program&.service_provider&.name
+    end
+
     def subgrantee_name
       voucher.building&.subgrantee&.name
     end
