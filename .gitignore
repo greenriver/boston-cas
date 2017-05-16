@@ -58,3 +58,5 @@ config/database.yml
 
 *.sublime-project
 *.sublime-workspace
+
+.env.local
