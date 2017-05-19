@@ -52,7 +52,7 @@ gem 'faker'
 gem 'slack-notifier'
 gem 'exception_notification'
 
-gem 'dotenv-rails'
+# gem 'dotenv-rails'
 
 group :development do
   gem 'brakeman', require: false
