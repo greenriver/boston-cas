@@ -52,6 +52,8 @@ gem 'faker'
 gem 'slack-notifier'
 gem 'exception_notification'
 
+gem 'dotenv-rails'
+
 group :development do
   gem 'brakeman', require: false
   gem 'capistrano'
@@ -70,7 +72,6 @@ group :development do
   gem 'quiet_assets'
   gem 'ruby-prof'
   gem 'rb-readline'
-  gem 'puma'
 end
 
 group :development, :test do
