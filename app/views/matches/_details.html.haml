@@ -62,7 +62,7 @@
             - else
               -# Even though we are logged in, we don't have permission
               = name
-            - if can_view_all_clients? && warehouse_id = @client.remote_id
+            - if can_view_all_clients? && warehouse_id = match.client.remote_id
               %br
               = link_to "https://hmis.boston.gov/clients/#{warehouse_id}", target: '_blank' do
                 Warehouse ID:
