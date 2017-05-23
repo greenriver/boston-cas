@@ -1,6 +1,10 @@
 set :deploy_to, '/u/apps/staging/boston-cas-staging'
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
+server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
+
+append :linked_files, 'app/mail_interceptors/sandbox_email_interceptor.rb'
+
 namespace :deploy do
   before :finishing, :seed_rules do
     on roles(:db)  do

@@ -4,7 +4,6 @@ lock '3.5.0'
 set :application, 'boston-cas'
 set :repo_url, 'git@github.com:greenriver/boston-cas.git'
 
-server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -25,7 +24,7 @@ server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml', 'app/mail_interceptors/sandbox_email_interceptor.rb', 'config/exception_notifier.yml')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml', 'config/exception_notifier.yml')
 
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'var')
