@@ -5,10 +5,13 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 server ENV['STAGING_HOST'], user: 'ubuntu', roles: %w{app db web}
 
+<<<<<<< HEAD
 set :linked_dirs, fetch(:linked_dirs, []).push('certificates', 'key', '.well_known', 'challenge')
 
 set :linked_files, fetch(:linked_files, []).push('config/letsencrypt_plugin.yml')
 
+=======
+>>>>>>> aws-capistrano
 namespace :deploy do
   before :finishing, :seed_rules do
     on roles(:db)  do
@@ -18,5 +21,14 @@ namespace :deploy do
       end
     end
   end
+<<<<<<< HEAD
 end
 
+=======
+  before :finishing, :nginx_restart do
+    on roles(:web) do
+      execute :sudo, '/etc/init.d/nginx restart'
+    end
+  end
+end
+>>>>>>> aws-capistrano
