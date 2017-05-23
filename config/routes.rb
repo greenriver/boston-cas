@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount LetsencryptPlugin::Engine, at: '/'
+
   devise_for :users, controllers: { invitations: 'users/invitations'}
 
   concern :restorable do
