@@ -5,6 +5,8 @@ server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
 
 append :linked_files, 'app/mail_interceptors/sandbox_email_interceptor.rb'
 
+set :linked_files, fetch(:linked_files, []).push('config/letsencrypt_plugin.yml')
+
 namespace :deploy do
   before :finishing, :seed_rules do
     on roles(:db)  do

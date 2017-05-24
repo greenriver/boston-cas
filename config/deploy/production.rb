@@ -1,5 +1,8 @@
 set :deploy_to, '/u/apps/boston-cas'
 server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
+
+set :linked_files, fetch(:linked_files, []).push('config/letsencrypt_plugin.yml')
+
 namespace :deploy do
   before :finishing, :seed_rules do
     on roles(:db)  do
