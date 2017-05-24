@@ -42,7 +42,10 @@
           .detail-box--label Unit
           .detail-box--value= match.opportunity_details.unit_name
         .col-sm-4
-          .detail-box--label Client
+          .detail-box--label 
+            Client
+            - unless match.client.has_full_housing_release?
+              %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: match.client.housing_release_status}}
           .detail-box--value
             - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end
             - name = match.client_name_for_contact access_context.current_contact, hidden: false

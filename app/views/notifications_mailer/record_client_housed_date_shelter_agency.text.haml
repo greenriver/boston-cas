@@ -1,6 +1,8 @@
 Hello #{@contact.full_name},
 \
-A housing match has been approved for #{@match.client.name.presence || '(Name not available)'}.
+A housing match has been approved for:
+\
+= render 'client_details'
 \
 View details and indicate when the client will move in:
 #{notification_match_decision_url @notification, @match, :record_client_housed_date_shelter_agency}

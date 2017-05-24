@@ -20,7 +20,7 @@ module MatchDecisions
     end
 
     def actor_type
-      'Housing Subsidy Administrator'
+      'HSA'
     end
 
     def contact_actor_type

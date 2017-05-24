@@ -125,7 +125,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
-    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && shelter_agency_approval_or_dnd_override?
+    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && (shelter_agency_approval_or_dnd_override? && client.has_full_housing_release?)
       true
     else
       false
@@ -138,7 +138,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     elsif show_client_info_to?(contact)
       client.full_name
     else
-      '(name withheld)'
+      "(name withheld — #{id})"
     end
   end
 

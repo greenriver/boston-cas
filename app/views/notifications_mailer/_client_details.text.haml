@@ -1,1 +1,1 @@
-Client Name: #{@match.client.name.presence || '(Name not available)'}
+Client Name: #{@match.client_name_for_contact(@contact, hidden: false)}
