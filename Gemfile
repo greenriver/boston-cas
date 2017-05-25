@@ -55,6 +55,7 @@ gem 'slack-notifier'
 gem 'exception_notification'
 
 gem 'dotenv-rails'
+gem 'daemons'
 
 group :development do
   gem 'brakeman', require: false
@@ -63,6 +64,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
+  gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'puma'
 
   # gem 'rack-mini-profiler'

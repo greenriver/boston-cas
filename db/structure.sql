@@ -303,7 +303,7 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -808,6 +808,68 @@ ALTER SEQUENCE has_mental_health_problems_id_seq OWNED BY has_mental_health_prob
 
 
 --
+-- Name: letsencrypt_plugin_challenges; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE letsencrypt_plugin_challenges (
+    id integer NOT NULL,
+    response text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: letsencrypt_plugin_challenges_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE letsencrypt_plugin_challenges_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: letsencrypt_plugin_challenges_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE letsencrypt_plugin_challenges_id_seq OWNED BY letsencrypt_plugin_challenges.id;
+
+
+--
+-- Name: letsencrypt_plugin_settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE letsencrypt_plugin_settings (
+    id integer NOT NULL,
+    private_key text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: letsencrypt_plugin_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE letsencrypt_plugin_settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: letsencrypt_plugin_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE letsencrypt_plugin_settings_id_seq OWNED BY letsencrypt_plugin_settings.id;
+
+
+--
 -- Name: match_decision_reasons; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1279,7 +1341,7 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1470,11 +1532,6 @@ CREATE TABLE roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false,
-    can_view_hues_eligibility boolean DEFAULT false,
-    can_view_hiv_positive_eligibility boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -1499,7 +1556,12 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
-    can_become_other_users boolean DEFAULT false
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
+    can_become_other_users boolean DEFAULT false,
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
+    can_view_hiv_positive_eligibility boolean DEFAULT false
 );
 
 
@@ -2265,6 +2327,20 @@ ALTER TABLE ONLY has_mental_health_problems ALTER COLUMN id SET DEFAULT nextval(
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY letsencrypt_plugin_challenges ALTER COLUMN id SET DEFAULT nextval('letsencrypt_plugin_challenges_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY letsencrypt_plugin_settings ALTER COLUMN id SET DEFAULT nextval('letsencrypt_plugin_settings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY match_decision_reasons ALTER COLUMN id SET DEFAULT nextval('match_decision_reasons_id_seq'::regclass);
 
 
@@ -2665,6 +2741,22 @@ ALTER TABLE ONLY has_hivaids
 
 ALTER TABLE ONLY has_mental_health_problems
     ADD CONSTRAINT has_mental_health_problems_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: letsencrypt_plugin_challenges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY letsencrypt_plugin_challenges
+    ADD CONSTRAINT letsencrypt_plugin_challenges_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: letsencrypt_plugin_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY letsencrypt_plugin_settings
+    ADD CONSTRAINT letsencrypt_plugin_settings_pkey PRIMARY KEY (id);
 
 
 --
@@ -4073,4 +4165,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170505170358');
 INSERT INTO schema_migrations (version) VALUES ('20170511192828');
 
 INSERT INTO schema_migrations (version) VALUES ('20170511194721');
+
+INSERT INTO schema_migrations (version) VALUES ('20170524180811');
+
+INSERT INTO schema_migrations (version) VALUES ('20170524180812');
 
