@@ -5,6 +5,7 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Delayed Job
 set :delayed_job_workers, 2
+set :delayed_job_prefix, 'cas'
 set :delayed_job_roles, [:job]
 
 server ENV['STAGING_HOST'], user: 'ubuntu', roles: %w{app db web job}
