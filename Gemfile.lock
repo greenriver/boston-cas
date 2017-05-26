@@ -70,6 +70,7 @@ GEM
       momentjs-rails (>= 2.8.1)
     brakeman (3.3.2)
     builder (3.2.2)
+    byebug (9.0.6)
     capistrano (3.8.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -229,6 +230,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.2)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (3.8.2)
@@ -389,6 +393,7 @@ DEPENDENCIES
   paper_trail
   paranoia (~> 2.0)
   pg
+  pry-byebug
   pry-rails
   puma
   quiet_assets
@@ -412,4 +417,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.14.6
+   1.15.0
