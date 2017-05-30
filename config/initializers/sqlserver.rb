@@ -1,1 +1,1 @@
-ActiveRecord::ConnectionAdapters::SQLServerAdapter.lowercase_schema_reflection = true
+# ActiveRecord::ConnectionAdapters::SQLServerAdapter.lowercase_schema_reflection = true
