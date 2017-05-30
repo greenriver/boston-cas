@@ -1,8 +1,6 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem 'tiny_tds'
-gem 'activerecord-sqlserver-adapter'
 gem "pg"
 gem 'activerecord-import'
 gem "rails"
