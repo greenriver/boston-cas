@@ -15,6 +15,7 @@ class Role < ActiveRecord::Base
       :can_edit_all_clients,
       :can_participate_in_matches,
       :can_view_all_matches,
+      :can_view_own_closed_matches,
       :can_see_alternate_matches,
       :can_edit_match_contacts,
       :can_approve_matches,

@@ -1,6 +1,6 @@
 class ClosedMatchesController < MatchListBaseController
   
-  before_action :require_can_view_all_matches!
+  before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
   
   def index
     # search
@@ -34,7 +34,7 @@ class ClosedMatchesController < MatchListBaseController
     end
     sort = "#{column} #{sort_direction}"
 
-
+    
     if params[:current_step].present? && ClientOpportunityMatch::CLOSED_REASONS.include?(params[:current_step])
       @matches = @matches.where(closed_reason: params[:current_step])
     end
@@ -52,12 +52,21 @@ class ClosedMatchesController < MatchListBaseController
     @active_filter = @data_source_id.present? || @start_date.present?
   end
 
+  def require_can_view_all_matches_or_can_view_own_closed_matches!
+    can_view_all_matches? || can_view_own_closed_matches?
+  end
   
-
   private def match_scope
-    ClientOpportunityMatch
-      .accessible_by_user(current_user)
-      .closed
+    if can_view_all_matches?
+      ClientOpportunityMatch
+        .accessible_by_user(current_user)
+        .closed
+    else
+      ClientOpportunityMatch
+        .joins(:decisions)
+        .where(match_decisions: {status: 'accepted', type: 'MatchDecisions::MatchRecommendationShelterAgency'})
+        .accessible_by_user(current_user)
+    end
   end
   
   private def set_heading
