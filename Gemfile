@@ -5,7 +5,7 @@ gem "pg"
 gem 'activerecord-import'
 gem "rails"
 gem 'bcrypt'
-gem 'spring'
+
 gem "haml-rails"
 gem "sass-rails"
 gem 'autoprefixer-rails'
@@ -56,6 +56,7 @@ gem 'dotenv-rails'
 gem 'daemons'
 
 group :development do
+  gem 'spring'
   gem 'brakeman', require: false
   gem 'capistrano'
   gem 'capistrano-bundler'
