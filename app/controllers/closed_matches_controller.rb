@@ -65,7 +65,8 @@ class ClosedMatchesController < MatchListBaseController
       ClientOpportunityMatch
         .joins(:decisions)
         .where(match_decisions: {status: 'accepted', type: 'MatchDecisions::MatchRecommendationShelterAgency'})
-        .accessible_by_user(current_user)
+        .accessible_by_user(current_user).
+        closed
     end
   end
   
