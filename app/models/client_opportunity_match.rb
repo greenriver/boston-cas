@@ -185,13 +185,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
   
-  # returns the most recent decision on a closed match
-  def last_decision_before_close
-    if closed?
-      initialized_decisions.order(created_at: :desc).first
-    end
-  end
-
   def add_default_contacts!
     add_default_dnd_staff_contacts!
     add_default_housing_subsidy_admin_contacts!
