@@ -1561,7 +1561,8 @@ CREATE TABLE roles (
     can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
     can_view_client_confidentiality boolean DEFAULT false NOT NULL,
-    can_view_hiv_positive_eligibility boolean DEFAULT false
+    can_view_hiv_positive_eligibility boolean DEFAULT false,
+    can_view_own_closed_matches boolean DEFAULT false
 );
 
 
@@ -4169,4 +4170,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170511194721');
 INSERT INTO schema_migrations (version) VALUES ('20170524180811');
 
 INSERT INTO schema_migrations (version) VALUES ('20170524180812');
+
+INSERT INTO schema_migrations (version) VALUES ('20170605162924');
 

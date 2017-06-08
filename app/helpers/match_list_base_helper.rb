@@ -6,7 +6,7 @@ module MatchListBaseHelper
   end
   
   def show_match_status_facet_nav?
-    current_user.can_view_all_matches?
+    current_user.can_view_all_matches? || current_user.can_view_own_closed_matches?
   end
 
   def show_links_to_matches?

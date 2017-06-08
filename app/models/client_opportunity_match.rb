@@ -184,7 +184,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       initialized_decisions.order(created_at: :desc).first
     end
   end
-
+  
   def add_default_contacts!
     add_default_dnd_staff_contacts!
     add_default_housing_subsidy_admin_contacts!
