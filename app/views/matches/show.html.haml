@@ -25,16 +25,19 @@
 = content_for :page_js do
   :javascript
     (function($) {
-      //Route to match history may explode on matches with a notification
-      //If notifications, don't do this
+      var refresh_count = 0;
       setInterval(function() {
-        $.get('/matches/#{@match.id}/history', function(data){
+        $.get(window.location.pathname + '/history', function(data){
           new_event_count = $(data).attr('data-history-events')
           old_event_count = $('.jDynamicHistory').find('.jHistoryCount').attr('data-history-events');
           if (new_event_count != old_event_count) {
             $('.jDynamicHistory').html(data);
           }
+          refresh_count++;
+          if (refresh_count >= 10){
+            clearInterval();
+          }
         });
-      }, 3000);
+      }, 10000);
     })(jQuery);
     
