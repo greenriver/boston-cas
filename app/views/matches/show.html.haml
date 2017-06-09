@@ -29,13 +29,11 @@
       //If notifications, don't do this
       setInterval(function() {
         $.get('/matches/#{@match.id}/history', function(data){
-          new_event_count = $(data).find('.jHistoryCount').data('history_events');
-          old_event_count = $('.jDynamicHistory').find('.jHistoryCount').data('history_events');
+          new_event_count = $(data).attr('data-history-events')
+          old_event_count = $('.jDynamicHistory').find('.jHistoryCount').attr('data-history-events');
           if (new_event_count != old_event_count) {
             $('.jDynamicHistory').html(data);
           }
-          console.log(new_event_count)
-          console.log(old_event_count)
         });
       }, 3000);
     })(jQuery);

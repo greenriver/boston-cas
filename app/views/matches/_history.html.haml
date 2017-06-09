@@ -1,5 +1,4 @@
-.row.jHistoryCount{data: {history_events: @match.timeline_events.count}}
-  =@match
+.row.jHistoryCount{:data => {:history_events => @match.timeline_events.count}}
   .col-xs-12
     %h3.history History
     .row
