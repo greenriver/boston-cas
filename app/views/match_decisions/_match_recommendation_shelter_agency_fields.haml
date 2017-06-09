@@ -6,14 +6,19 @@
 
   .row
     .col-sm-5
-      - if @match.client.release_of_information.blank?
+      - if @match.client.release_of_information.blank? && @match.client.housing_release_status.blank?
         = form.input :release_of_information, as: :boolean, required: true, inline_label: 'Client has signed release of information to share their data with network partners'
-      - else
+      - elsif @match.client.release_of_information.present?
         %p
           Client signed release of information to share their data with network partners on 
           %strong
             = @match.client.release_of_information.to_date
         = form.input :release_of_information, as: :hidden, input_html: { value: @match.client.release_of_information}
+      - else
+        %p
+          %strong
+            Client provided a 
+            = @match.client.housing_release_status
       = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: 'Client has spoken to shelter case manager and understands the services attached and the program requirements'
       = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
 
