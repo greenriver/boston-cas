@@ -16,7 +16,12 @@ class MatchesController < ApplicationController
       @notification = @access_context.notification
     end
   end
-
+  
+  def history
+    @match = match_scope.find(params[:match_id])
+    render layout: false
+  end
+  
   private
 
     def find_match!
