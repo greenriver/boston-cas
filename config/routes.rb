@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   # or via a notification code
   def manage_matches
     resources :matches, only: [:show, :update] do
+      get :history
       resources :decisions, only: [:show, :update], controller: 'match_decisions' do
         resource :acknowledgment, only: [:create], controller: 'match_decision_acknowledgments'
         get :recreate_notifications, on: :member

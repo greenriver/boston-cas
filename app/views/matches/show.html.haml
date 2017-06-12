@@ -19,4 +19,25 @@
 
 = render @decision if @decision
 
-= render 'matches/history', match: @match
+.jDynamicHistory 
+  = render 'matches/history', match: @match
+
+= content_for :page_js do
+  :javascript
+    (function($) {
+      var refresh_count = 0;
+      setInterval(function() {
+        $.get(window.location.pathname + '/history', function(data){
+          new_event_count = $(data).attr('data-history-events')
+          old_event_count = $('.jDynamicHistory').find('.jHistoryCount').attr('data-history-events');
+          if (new_event_count != old_event_count) {
+            $('.jDynamicHistory').html(data);
+          }
+          refresh_count++;
+          if (refresh_count >= 10){
+            clearInterval();
+          }
+        });
+      }, 10000);
+    })(jQuery);
+    

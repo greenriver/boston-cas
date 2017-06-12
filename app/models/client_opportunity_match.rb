@@ -100,7 +100,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     foreign_key: :match_id
 
   def confidential?
-    program.confidential? || client.confidential? || sub_program.confidential?
+    program.confidential? || client.confidential? || sub_program.confidential? || ! client.has_full_housing_release?
   end
 
   def self.accessible_by_user user
@@ -184,7 +184,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       initialized_decisions.order(created_at: :desc).first
     end
   end
-
+  
   def add_default_contacts!
     add_default_dnd_staff_contacts!
     add_default_housing_subsidy_admin_contacts!
