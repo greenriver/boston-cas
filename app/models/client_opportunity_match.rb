@@ -165,9 +165,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  private def shelter_agency_approval_or_dnd_override?
-    match_recommendation_shelter_agency_decision.status == 'accepted' ||
-      confirm_shelter_agency_decline_dnd_staff_decision.status == 'decline_overridden'
+  def shelter_agency_approval_or_dnd_override?
+    hsa_involved?
+  end
+
+  def hsa_involved?
+    self.class.hsa_involved.where(id: id).exists?
   end
 
   def self.text_search(text)
