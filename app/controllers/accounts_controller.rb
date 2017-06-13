@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
 
   def update
     changed_notes = []
-    if @user.name != account_params[:name]
+    if @user.first_name != account_params[:first_name] && @user.last_name != account_params[:last_name] 
       changed_notes << "Account name was updated."
     end
     if @user.email != account_params[:email]
@@ -31,7 +31,8 @@ class AccountsController < ApplicationController
     def account_params
       params.require(:user).
         permit(
-          :name,
+          :first_name,
+          :last_name,
           :email,
           :current_password,
           :password,
