@@ -44,6 +44,16 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :successful, -> { where closed: true, closed_reason: 'success' }
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'preempted' }
+  scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
+    md_t = MatchDecisions::Base.arel_table
+    joins(:decisions).
+    where(
+      md_t[:status].eq('accepted').and(md_t[:type].eq('MatchDecisions::MatchRecommendationShelterAgency')).
+      or(
+        md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff'))
+      )
+    )
+  end
 
 
   ######################
@@ -126,6 +136,19 @@ class ClientOpportunityMatch < ActiveRecord::Base
     elsif contact.in?(shelter_agency_contacts)
       true
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && (shelter_agency_approval_or_dnd_override? && client.has_full_housing_release?)
+      true
+    else
+      false
+    end
+  end
+
+  def can_see_match_yet? contact
+    return false unless contact
+    if contact.user_can_view_all_clients?
+      true
+    elsif contact.in?(shelter_agency_contacts)
+      true
+    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && (shelter_agency_approval_or_dnd_override?)
       true
     else
       false

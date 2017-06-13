@@ -56,21 +56,20 @@ class ClosedMatchesController < MatchListBaseController
     can_view_all_matches? || can_view_own_closed_matches?
   end
   
-  private def match_scope
+  def match_scope
     if can_view_all_matches?
       ClientOpportunityMatch
         .accessible_by_user(current_user)
         .closed
     else
-      ClientOpportunityMatch
-        .joins(:decisions)
-        .where(match_decisions: {status: 'accepted', type: 'MatchDecisions::MatchRecommendationShelterAgency'})
-        .accessible_by_user(current_user).
+      ClientOpportunityMatch.
+        hsa_involved.
+        accessible_by_user(current_user).
         closed
     end
   end
   
-  private def set_heading
+  def set_heading
     @heading = 'Closed Matches'
   end
 
