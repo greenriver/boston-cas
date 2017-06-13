@@ -19,7 +19,8 @@ class AccountsController < ApplicationController
     end
     if @user.update_with_password(account_params)
       flash[:notice] = changed_notes.join(' ')
-
+      # Update any associated contact
+      @user.contact.update(contact_params)
       sign_in(@user, :bypass => true)
       redirect_to edit_account_path
     else
@@ -37,6 +38,15 @@ class AccountsController < ApplicationController
           :current_password,
           :password,
           :password_confirmation,
+        )
+    end
+
+    def contact_params
+      params.require(:user).
+        permit(
+          :first_name,
+          :last_name,
+          :email,
         )
     end
 
