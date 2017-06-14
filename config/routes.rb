@@ -105,6 +105,10 @@ Rails.application.routes.draw do
   namespace :reports do
     resources :parked_clients, only: [:index]
   end
+
+  namespace :system_status do
+    get :operational
+  end
   
   unless Rails.env.production?
     resource 'style_guide', only: :none do

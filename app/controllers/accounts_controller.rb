@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
 
   def update
     changed_notes = []
-    if @user.name != account_params[:name]
+    if @user.first_name != account_params[:first_name] && @user.last_name != account_params[:last_name] 
       changed_notes << "Account name was updated."
     end
     if @user.email != account_params[:email]
@@ -19,7 +19,8 @@ class AccountsController < ApplicationController
     end
     if @user.update_with_password(account_params)
       flash[:notice] = changed_notes.join(' ')
-
+      # Update any associated contact
+      @user.contact.update(contact_params)
       sign_in(@user, :bypass => true)
       redirect_to edit_account_path
     else
@@ -31,11 +32,21 @@ class AccountsController < ApplicationController
     def account_params
       params.require(:user).
         permit(
-          :name,
+          :first_name,
+          :last_name,
           :email,
           :current_password,
           :password,
           :password_confirmation,
+        )
+    end
+
+    def contact_params
+      params.require(:user).
+        permit(
+          :first_name,
+          :last_name,
+          :email,
         )
     end
 
