@@ -2,7 +2,7 @@ module Warehouse
   class BuildReport
     def run!
       # we just flush the whole damned thing every time
-      Hmis::Report.delete_all
+      Warehouse::CasReport.delete_all
       at = MatchDecisions::Base.arel_table
       ::Client.joins( :project_client, client_opportunity_matches: :decisions ).preload(
         :project_client,
@@ -20,14 +20,13 @@ module Warehouse
         client.client_opportunity_matches.each do |match|
           # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
           decisions = match.decisions.select(&:status).sort_by(&:created_at)
-          next if decisions.empty?
           current_decision = decisions.last
           previous_updated_at = nil
           decisions.each_with_index do |decision, idx|
             if previous_updated_at
               elapsed_days = ( decision.updated_at.to_date - previous_updated_at.to_date ).to_i
             end
-            Hmis::Report.create!(
+            Warehouse::CasReport.create!(
               client_id: client_id,
               match_id: match.id,
               decision_id: decision.id,
