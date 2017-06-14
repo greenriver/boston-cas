@@ -1,4 +1,4 @@
-module Hmis
+module Warehouse
   class BuildReport
     def run!
       # we just flush the whole damned thing every time
@@ -33,7 +33,7 @@ module Hmis
               decision_id: decision.id,
               decision_order: idx,
               match_step: decision.step_name,
-              decision_status: current_decision.label,
+              decision_status: decision.label,
               current_step: decision == current_decision,
               decline_reason: explain( decision, :decline_reason ),
               not_working_with_client_reason: explain( decision, :not_working_with_client_reason ),
