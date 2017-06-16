@@ -22,7 +22,7 @@ every 1.day, at: '1:00 am' do
   rake "cas:update_voucher_availability"
 end
 
-every 1.day, at: '7:50 am' do
+every 5.minutes do
   rake "cas:update_clients"
 end
 
