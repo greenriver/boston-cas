@@ -16,5 +16,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.sandbox_email_mode = true
   config.action_mailer.delivery_method = :sendmail
-  config.action_mailer.default_url_options = { host: 'cas-staging.boston.gov', protocol: 'https'}
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT']}
 end
