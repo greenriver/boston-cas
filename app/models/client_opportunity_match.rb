@@ -30,6 +30,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :record_client_housed_date_housing_subsidy_administrator
   has_decision :confirm_match_success_dnd_staff
 
+  has_one :current_decision
+
   CLOSED_REASONS = ['success', 'rejected', 'preempted']
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
 
@@ -44,6 +46,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :successful, -> { where closed: true, closed_reason: 'success' }
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'preempted' }
+  scope :stalled, -> do
+    md_t = MatchDecisions::Base.arel_table
+    active.joins(:decisions).
+      where(match_decisions: {status: :pending}).
+      where(md_t[:updated_at].lteq(1.month.ago))
+  end
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
     joins(:decisions).

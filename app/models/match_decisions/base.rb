@@ -32,6 +32,7 @@ module MatchDecisions
     # We provide an option to expire the shelter agency initial review
     attr_accessor :shelter_expiration
 
+    scope :pending, -> { where(status: :pending) }
     
     has_many :decision_action_events,
       class_name: 'MatchEvents::DecisionAction',

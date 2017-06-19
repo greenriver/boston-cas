@@ -988,6 +988,49 @@ ALTER SEQUENCE match_events_id_seq OWNED BY match_events.id;
 
 
 --
+-- Name: match_progress_updates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE match_progress_updates (
+    id integer NOT NULL,
+    type character varying NOT NULL,
+    match_id integer NOT NULL,
+    notification_id integer NOT NULL,
+    contact_id integer NOT NULL,
+    notification_number integer,
+    requested_at timestamp without time zone,
+    due_at timestamp without time zone,
+    submitted_at timestamp without time zone,
+    notify_dnd_at timestamp without time zone,
+    dnd_notified_at timestamp without time zone,
+    response character varying,
+    note text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    deleted_at timestamp without time zone
+);
+
+
+--
+-- Name: match_progress_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE match_progress_updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: match_progress_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE match_progress_updates_id_seq OWNED BY match_progress_updates.id;
+
+
+--
 -- Name: name_quality_codes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2363,6 +2406,13 @@ ALTER TABLE ONLY match_events ALTER COLUMN id SET DEFAULT nextval('match_events_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY match_progress_updates ALTER COLUMN id SET DEFAULT nextval('match_progress_updates_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY name_quality_codes ALTER COLUMN id SET DEFAULT nextval('name_quality_codes_id_seq'::regclass);
 
 
@@ -2782,6 +2832,14 @@ ALTER TABLE ONLY match_decisions
 
 ALTER TABLE ONLY match_events
     ADD CONSTRAINT match_events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: match_progress_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY match_progress_updates
+    ADD CONSTRAINT match_progress_updates_pkey PRIMARY KEY (id);
 
 
 --
@@ -3289,6 +3347,34 @@ CREATE INDEX index_match_events_on_not_working_with_client_reason_id ON match_ev
 --
 
 CREATE INDEX index_match_events_on_notification_id ON match_events USING btree (notification_id);
+
+
+--
+-- Name: index_match_progress_updates_on_contact_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_progress_updates_on_contact_id ON match_progress_updates USING btree (contact_id);
+
+
+--
+-- Name: index_match_progress_updates_on_match_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_progress_updates_on_match_id ON match_progress_updates USING btree (match_id);
+
+
+--
+-- Name: index_match_progress_updates_on_notification_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_progress_updates_on_notification_id ON match_progress_updates USING btree (notification_id);
+
+
+--
+-- Name: index_match_progress_updates_on_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_progress_updates_on_type ON match_progress_updates USING btree (type);
 
 
 --
@@ -4172,4 +4258,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170524180811');
 INSERT INTO schema_migrations (version) VALUES ('20170524180812');
 
 INSERT INTO schema_migrations (version) VALUES ('20170605162924');
+
+INSERT INTO schema_migrations (version) VALUES ('20170619000309');
 
