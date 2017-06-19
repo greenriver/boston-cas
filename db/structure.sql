@@ -995,8 +995,9 @@ CREATE TABLE match_progress_updates (
     id integer NOT NULL,
     type character varying NOT NULL,
     match_id integer NOT NULL,
-    notification_id integer NOT NULL,
+    notification_id integer,
     contact_id integer NOT NULL,
+    decision_id integer,
     notification_number integer,
     requested_at timestamp without time zone,
     due_at timestamp without time zone,
@@ -3354,6 +3355,13 @@ CREATE INDEX index_match_events_on_notification_id ON match_events USING btree (
 --
 
 CREATE INDEX index_match_progress_updates_on_contact_id ON match_progress_updates USING btree (contact_id);
+
+
+--
+-- Name: index_match_progress_updates_on_decision_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_progress_updates_on_decision_id ON match_progress_updates USING btree (decision_id);
 
 
 --

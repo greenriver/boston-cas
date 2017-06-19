@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resource :contacts, only: [:edit, :update], controller: 'match_contacts'
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
+      resources :match_progress_updates, only: [:update], shallow: true
     end
   end
   manage_matches

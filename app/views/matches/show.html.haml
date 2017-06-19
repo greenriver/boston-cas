@@ -16,7 +16,8 @@
             = @decision.step_name
             = link_to "[show current step]", access_context.match_path(@match) 
     
-
+- if @match.status_updates.incomplete_for_contact(contact: access_context.current_contact).exists?
+  = render 'status_update'
 = render @decision if @decision
 
 .jDynamicHistory 

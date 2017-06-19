@@ -1,8 +1,8 @@
 module MatchProgressUpdates
-  class Ssp < Base
+  class ShelterAgency < Base
     
     def name
-      'Stabilization Service Provider status update'
+      'ShelterAgency status update'
     end
 
     def responses
@@ -13,7 +13,8 @@ module MatchProgressUpdates
     end
 
     def self.match_contact_scope
-      :ssp_contacts
+      :shelter_agency_contacts
     end
+
   end
 end

@@ -196,5 +196,18 @@ class NotificationsMailer < ApplicationMailer
     mail(to: @contact.email, subject: '[CAS] Match Decline Accepted')
   end
 
+  def progress_update_requested notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Match Progress Update Requested - Requires Your Action')
+  end
+
+  def dnd_progress_update_late notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Match Progress Late')
+  end
   
 end

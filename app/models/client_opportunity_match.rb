@@ -110,11 +110,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
     dependent: :destroy
 
   has_one :match_created_event,
-    class_name: 'MatchEvents::Created',
+    class_name: MatchEvents::Created.name,
     foreign_key: :match_id
 
   has_many :note_events,
-    class_name: 'MatchEvents::Note',
+    class_name: MatchEvents::Note.name,
+    foreign_key: :match_id
+
+  has_many :status_updates,
+    class_name: MatchProgressUpdates::Base.name,
     foreign_key: :match_id
 
   def confidential?

@@ -15,7 +15,8 @@ class Contact < ActiveRecord::Base
   has_many :buildings, through: :building_contacts
   has_many :subgrantees, through: :subgrantee_contacts
 
-  has_many :events, class_name: 'MatchEvents::Base', inverse_of: :contact
+  has_many :events, class_name: MatchEvents::Base.name, inverse_of: :contact
+  has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
 
   acts_as_paranoid
   has_paper_trail

@@ -77,12 +77,11 @@ module MatchDecisions
       end
 
       def accepted
-        Notifications::MatchRecommendationClient.create_for_match! match
+        Notifications::MatchRecommendationClient.create_for_match!(match)
         match.match_recommendation_shelter_agency_decision.initialize_decision!
-        # Removed per DND request
-        # Notifications::MatchRecommendationSsp.create_for_match! match
-        # Notifications::MatchRecommendationHousingSubsidyAdmin.create_for_match! match
-        
+        # Setup recurring status notifications for SSP & Shelter Agency
+        MatchProgressUpdates::Ssp.create_for_match!(match)
+        MatchProgressUpdates::ShelterAgency.create_for_match!(match)
       end
       
       def declined

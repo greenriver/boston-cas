@@ -35,7 +35,11 @@ module MatchDecisions
     scope :pending, -> { where(status: :pending) }
     
     has_many :decision_action_events,
-      class_name: 'MatchEvents::DecisionAction',
+      class_name: MatchEvents::DecisionAction.name,
+      foreign_key: :decision_id
+
+    has_many :status_updates,
+      class_name: MatchProgressUpdates::Base.name,
       foreign_key: :decision_id
 
     validate :ensure_status_allowed, if: :status
