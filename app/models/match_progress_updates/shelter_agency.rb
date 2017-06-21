@@ -2,14 +2,7 @@ module MatchProgressUpdates
   class ShelterAgency < Base
     
     def name
-      'ShelterAgency status update'
-    end
-
-    def responses
-      [
-        'Response 1',
-        'Response 2',
-      ]
+      'Shelter Agency status update'
     end
 
     def self.match_contact_scope

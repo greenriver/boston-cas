@@ -1008,7 +1008,8 @@ CREATE TABLE match_progress_updates (
     note text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    client_last_seen date
 );
 
 
@@ -4268,4 +4269,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170524180812');
 INSERT INTO schema_migrations (version) VALUES ('20170605162924');
 
 INSERT INTO schema_migrations (version) VALUES ('20170619000309');
+
+INSERT INTO schema_migrations (version) VALUES ('20170621184202');
 

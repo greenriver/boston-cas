@@ -3,6 +3,11 @@ module MatchProgressUpdates
     self.table_name = 'match_progress_updates'
     has_paper_trail
     acts_as_paranoid
+    attr_accessor :working_with_client
+
+    def to_partial_path
+      'match_progress_updates/progress_update'
+    end
 
     belongs_to :match,
       class_name: 'ClientOpportunityMatch',
@@ -23,13 +28,17 @@ module MatchProgressUpdates
       mpu_t = arel_table
       joins(:match).
       merge(ClientOpportunityMatch.active).
-      where(response: nil).
+      where(submitted_at: nil).
       where(mpu_t[:due_at].lteq(Time.new))
     end
 
     scope :incomplete_for_contact, -> (contact:) do
       incomplete.
       where(contact_id: contact.id)
+    end
+
+    scope :complete, -> do
+      where.not(submitted_at: nil)
     end
 
     scope :should_notify_contact, -> do
@@ -45,12 +54,30 @@ module MatchProgressUpdates
       where(mpu_t[:notify_dnd_at].lteq(Time.new))
     end
 
+    alias_attribute :timestamp, :submitted_at
+
     def name
       raise 'Abstract method'
     end
 
-    def responses
-      raise 'Abstract method'
+    def still_active_responses
+      [
+        'Client searching for unit',
+        'Client has submitted request for tenancy',
+        'Client is waiting for project/sponsor based unit to become available',
+        'SSP/HSA waiting on documentation',
+        'SSP/HSA  CORI mitigation',
+      ]
+    end
+
+    def no_longer_active_responses
+      [
+        'Client disappeared',
+        'Client incarcerated',
+        'Client in medical institution',
+        'Client declining services',
+        'SSP/HSA unable to contact client',
+      ]
     end
 
     def note_editable_by? editing_contact

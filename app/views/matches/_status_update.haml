@@ -4,7 +4,16 @@
     .match-status-update
       %p 
         = "This match has been stalled since #{@match.current_decision.updated_at.to_date}.  Please provide an update to the status of the match."
-      = simple_form_for status_update, url: match_progress_update_path do |f|
-        = f.input :response, collection: status_update.responses, label: 'Status Update'
-        = f.input :note, label: 'Additional notes', input_html: {rows: 8}
+      = simple_form_for status_update, as: :match_progress_updates, url: match_progress_update_path(notification_id: params[:notification_id]) do |f|
+        = f.input :working_with_client, as: :radio_buttons, collection: {'Client is engaging with services': 'jStillWorking', 'Client is not engaging with services': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
+        .jStillWorking.jNoLongerWorking.jWorkingWithClient
+          .row
+            .col-sm-4
+              = f.input :client_last_seen, as: :date_picker
+        .jStillWorking.jWorkingWithClient
+          = f.input :response, collection: status_update.still_active_responses, label: 'Status Update', as: :check_boxes
+        .jNoLongerWorking.jWorkingWithClient
+          = f.input :response, collection: status_update.no_longer_active_responses, label: 'Status Update', as: :check_boxes
+        .jStillWorking.jNoLongerWorking.jWorkingWithClient
+          = f.input :note, label: 'Additional notes', input_html: {rows: 8}
         = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'

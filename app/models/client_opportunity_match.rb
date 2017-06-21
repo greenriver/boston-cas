@@ -260,7 +260,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def timeline_events
-    events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all
+    event_history = events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all.to_a 
+    status_history = status_updates.complete.preload(:notification, :contact).to_a
+    event_history + status_history
   end
 
   def can_create_overall_note? contact

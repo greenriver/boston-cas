@@ -1,0 +1,17 @@
+%tr
+  %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
+  %td.history--event-name      
+    = event.name
+    - if event.client_last_seen.present?
+      .history--event-client-last-seen
+        %strong Client last seen:
+        = event.client_last_seen
+    - if event.response.present?
+      .history--event-response
+        = event.response
+    - if event.note.present?
+      .history--event-note
+        %strong Note:
+        = event.note
+          
+  %td.history--contact-name= event.contact_name

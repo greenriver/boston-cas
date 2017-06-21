@@ -10,7 +10,10 @@ module MatchEvents
 
     has_paper_trail
     acts_as_paranoid
-    
+    def to_partial_path
+      'match_events/match_event'
+    end
+
     belongs_to :match,
       class_name: 'ClientOpportunityMatch',
       inverse_of: :events
