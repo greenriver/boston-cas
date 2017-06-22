@@ -22,6 +22,12 @@ module Warehouse
           decisions = match.decisions.select(&:status).sort_by(&:created_at)
           current_decision = decisions.last
           previous_updated_at = nil
+          match_started_decision = match.match_recommendation_dnd_staff_decision
+          match_started_at = if match_started_decision.status == 'accepted'
+            match_started_decision.updated_at
+          else
+            nil
+          end
           decisions.each_with_index do |decision, idx|
             if previous_updated_at
               elapsed_days = ( decision.updated_at.to_date - previous_updated_at.to_date ).to_i
@@ -44,7 +50,8 @@ module Warehouse
               client_last_seen_date: decision.client_last_seen_date,
               criminal_hearing_date: decision.criminal_hearing_date,
               client_spoken_with_services_agency: decision.client_spoken_with_services_agency,
-              cori_release_form_submitted: decision.cori_release_form_submitted
+              cori_release_form_submitted: decision.cori_release_form_submitted,
+              match_started_at: match_started_at
             )
             previous_updated_at = decision.updated_at
           end
