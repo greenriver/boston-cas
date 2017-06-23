@@ -16,7 +16,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = :sendmail
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT']}
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
   config.middleware.use ExceptionNotification::Rack,
     :slack => {
       :webhook_url => Rails.application.config_for(:exception_notifier)['slack']['webhook_url'],

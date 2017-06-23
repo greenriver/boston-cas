@@ -16,5 +16,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.sandbox_email_mode = true
   config.action_mailer.delivery_method = :sendmail
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT']}
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'], protocol: :https}
 end
