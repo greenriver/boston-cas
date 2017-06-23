@@ -29,3 +29,7 @@ end
 every 1.day, at: '6:00am' do
   rake "warehouse:report"  
 end
+
+every 1.day, at: '7:30am' do
+  rake 'cas:request_status_updates'  
+end

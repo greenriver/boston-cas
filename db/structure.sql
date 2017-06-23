@@ -1000,9 +1000,7 @@ CREATE TABLE match_progress_updates (
     decision_id integer,
     notification_number integer,
     requested_at timestamp without time zone,
-    due_at timestamp without time zone,
     submitted_at timestamp without time zone,
-    notify_dnd_at timestamp without time zone,
     dnd_notified_at timestamp without time zone,
     response character varying,
     note text,
@@ -4271,4 +4269,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170605162924');
 INSERT INTO schema_migrations (version) VALUES ('20170619000309');
 
 INSERT INTO schema_migrations (version) VALUES ('20170621184202');
+
+INSERT INTO schema_migrations (version) VALUES ('20170623171917');
 

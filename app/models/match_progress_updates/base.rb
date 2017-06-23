@@ -5,16 +5,22 @@ module MatchProgressUpdates
     acts_as_paranoid
     attr_accessor :working_with_client
 
+    DND_INTERVAL = if Rails.env.production?
+      1.weeks
+    else
+      1.days
+    end
+
     def to_partial_path
       'match_progress_updates/progress_update'
     end
 
     belongs_to :match,
-      class_name: 'ClientOpportunityMatch',
+      class_name: ClientOpportunityMatch.name,
       inverse_of: :status_updates
 
     belongs_to :notification,
-      class_name: 'Notifications::Base'
+      class_name: Notifications::Base.name
       
     belongs_to :contact,
       inverse_of: :status_updates
@@ -27,31 +33,35 @@ module MatchProgressUpdates
     scope :incomplete, -> do
       mpu_t = arel_table
       joins(:match).
-      merge(ClientOpportunityMatch.active).
-      where(submitted_at: nil).
-      where(mpu_t[:due_at].lteq(Time.new))
+      merge(ClientOpportunityMatch.stalled).
+      where(submitted_at: nil)
+      # where(mpu_t[:due_at].lteq(Time.new))
     end
 
-    scope :incomplete_for_contact, -> (contact:) do
+    scope :incomplete_for_contact, -> (contact_id:) do
       incomplete.
-      where(contact_id: contact.id)
+      where(contact_id: contact_id)
     end
 
     scope :complete, -> do
       where.not(submitted_at: nil)
     end
 
+    # any status updates where the match has been on the same decision
+    # for a specified length of time (currently 1 month)
+    # and we haven't already requested the update
     scope :should_notify_contact, -> do
       incomplete.
       where(requested_at: nil)
     end
 
+    # any status updates that have been requested over DND interval ago (currently 1 week)
     scope :should_notify_dnd, -> do
       mpu_t = arel_table
       incomplete.
       where.not(requested_at: nil).
-      where(dnd_notified_at: nil).
-      where(mpu_t[:notify_dnd_at].lteq(Time.new))
+      where(mpu_t[:requested_at].lteq(DND_INTERVAL.ago)).
+      where(dnd_notified_at: nil)
     end
 
     alias_attribute :timestamp, :submitted_at
@@ -86,19 +96,16 @@ module MatchProgressUpdates
     end
 
     def is_editable?
-      response.blank? && Time.now >= due_at
+      response.blank? && match.stalled?
     end
 
     def should_notify_dnd_of_lateness?
-      is_editable? && dnd_notified_at.blank? && Time.now >= notify_dnd_at
+      is_editable? && dnd_notified_at.blank? && requested_at <= DND_INTERVAL.ago
     end
 
-    def self.due_after
-      1.month
-    end
-
-    def self.notify_dnd_if_no_response_by
-      self.due_after + 1.week
+    def self.incomplete_for_contact?(contact_id:, match_id:)
+      incomplete_for_contact(contact_id: contact_id).
+        where(match_id: match_id).exists?
     end
 
     def self.create_for_match! match
@@ -106,8 +113,6 @@ module MatchProgressUpdates
         create!(
           match: match, 
           contact: contact,
-          due_at: Time.now + self.due_after,
-          notify_dnd_at: Time.now + self.notify_dnd_if_no_response_by
         )
       end
     end

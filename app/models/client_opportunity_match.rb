@@ -12,6 +12,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   after_create :create_match_created_event!
 
+  STALLED_INTERVAL = if Rails.env.production?
+    1.months
+  else
+    2.days
+  end
+
   belongs_to :client
   belongs_to :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
@@ -49,8 +55,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :stalled, -> do
     md_t = MatchDecisions::Base.arel_table
     active.joins(:decisions).
-      where(match_decisions: {status: :pending}).
-      where(md_t[:updated_at].lteq(1.month.ago))
+      where(match_decisions: {status: [:pending, :acknowledged]}).
+      where(md_t[:updated_at].lteq(STALLED_INTERVAL.ago))
   end
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
@@ -231,6 +237,18 @@ class ClientOpportunityMatch < ActiveRecord::Base
     add_default_ssp_contacts!
   end
 
+  def self.contact_titles
+    {
+      shelter_agency_contacts: 'Shelter Agency Contacts',
+      housing_subsidy_admin_contacts: 'Housing Subsidy Administrators',
+      ssp_contacts: 'Stabilization Service Providers'
+    }
+  end
+
+  def contact_titles
+    self.class.contact_titles
+  end
+
   def overall_status
     if active?
       if match_recommendation_dnd_staff_decision.status == 'decline' ||
@@ -249,6 +267,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     else
       'New'
     end
+  end
+
+  def stalled?
+    self.class.stalled.where(id: id).exists?
   end
 
   def successful?

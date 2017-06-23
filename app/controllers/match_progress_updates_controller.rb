@@ -12,6 +12,7 @@ class MatchProgressUpdatesController < ApplicationController
     begin
       @update.assign_attributes(update_params)
       @update.save!
+      Notifications::ProgressUpdateSubmitted.create_for_match!(@match)
     rescue Exception => e
       flash[:error] = "Unable to save your response: #{e.message}"
     end
@@ -32,7 +33,17 @@ class MatchProgressUpdatesController < ApplicationController
   end
 
   def set_update
+    # we may have arrived here from a previous notification
+    # if we can't find an update based on the current notification, 
+    # attempt to find one via our contact id and the match
     @update = MatchProgressUpdates::Base.joins(:notification).
       where(notifications: {code: params[:notification_id], client_opportunity_match_id: @match.id}).first
+    if @update.blank?
+      @update = MatchProgressUpdates::Base.where(
+        contact_id: current_contact.id, 
+        match_id: @match.id,
+        submitted_at: nil
+      ).joins(:notification).first
+    end
   end
 end
