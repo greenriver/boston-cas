@@ -199,8 +199,12 @@ module MatchDecisions
         'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff',
         'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
         # 'MatchDecisions::RecordClientHousedDateShelterAgency',
-        'MatchDecisions::ConfirmMatchSuccessDndStaff',   
+        'MatchDecisions::ConfirmMatchSuccessDndStaff',
       ]
+    end
+
+    def self.filter_options
+      self.available_sub_types_for_search + ['Stalled Matches']
     end
 
     def canceled_status_label

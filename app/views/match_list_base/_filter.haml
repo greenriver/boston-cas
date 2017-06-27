@@ -25,7 +25,10 @@
                 - selected = @current_step == t
                 %option{value: t, selected: selected}
                   - if label_method == :active
-                    = t.constantize.new.step_name
+                    - if MatchDecisions::Base.available_sub_types_for_search.include?(t)
+                      = t.constantize.new.step_name
+                    - else
+                      = t.capitalize
                   - elsif label_method == :closed
                     = t.capitalize
       .row
