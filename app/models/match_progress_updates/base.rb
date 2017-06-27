@@ -4,6 +4,7 @@ module MatchProgressUpdates
     has_paper_trail
     acts_as_paranoid
     attr_accessor :working_with_client
+    validates_presence_of :response, :client_last_seen, if: :submitting?
 
     DND_INTERVAL = if Rails.env.production?
       1.weeks
@@ -88,6 +89,17 @@ module MatchProgressUpdates
         'Client declining services',
         'SSP/HSA unable to contact client',
       ]
+    end
+
+    def submit!
+      @submitting = true
+      save!
+    ensure
+      @submitting = false
+    end
+
+    def submitting?
+      @submitting
     end
 
     def note_editable_by? editing_contact

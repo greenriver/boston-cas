@@ -11,7 +11,7 @@ class MatchProgressUpdatesController < ApplicationController
     update_params[:submitted_at] = Time.now
     begin
       @update.assign_attributes(update_params)
-      @update.save!
+      @update.submit!
       Notifications::ProgressUpdateSubmitted.create_for_match!(@match)
     rescue Exception => e
       flash[:error] = "Unable to save your response: #{e.message}"
