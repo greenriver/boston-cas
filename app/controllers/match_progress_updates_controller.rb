@@ -7,7 +7,7 @@ class MatchProgressUpdatesController < ApplicationController
 
   def update
     update_params = progress_params
-    update_params[:response] = update_params[:response].reject(&:blank?).join('; ')
+    update_params[:response] = update_params[:response].reject(&:blank?).uniq.join('; ')
     update_params[:submitted_at] = Time.now
     begin
       @update.assign_attributes(update_params)
@@ -15,6 +15,9 @@ class MatchProgressUpdatesController < ApplicationController
       Notifications::ProgressUpdateSubmitted.create_for_match!(@match)
     rescue Exception => e
       flash[:error] = "Unable to save your response: #{e.message}"
+      session[:match_status_update] = {
+        params[:notification_id] => @update
+      }
     end
     redirect_to notification_match_path(match_id: @match_id, notification_id: @update.notification.code)
   end

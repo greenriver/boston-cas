@@ -33,8 +33,10 @@ class ActiveMatchesController < MatchListBaseController
     sort = "#{column} #{sort_direction}"
     @filter_step = params[:current_step]
     if @filter_step.present? && MatchDecisions::Base.filter_options.include?(@filter_step)
-      if @filter_step == 'Stalled Matches'
-        @matches = @matches.stalled
+      if @filter_step == 'Stalled Matches - no response'
+        @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.incomplete.select(:match_id))
+      elsif @filter_step == 'Stalled Matches - with response'
+        @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.complete.select(:match_id))
       else
         @matches = @matches.where(last_decision: {type: @filter_step})
       end

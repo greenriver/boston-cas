@@ -204,7 +204,7 @@ module MatchDecisions
     end
 
     def self.filter_options
-      self.available_sub_types_for_search + ['Stalled Matches']
+      self.available_sub_types_for_search + ['Stalled Matches - with response', 'Stalled Matches - no response']
     end
 
     def canceled_status_label

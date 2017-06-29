@@ -14,6 +14,9 @@ class MatchesController < ApplicationController
     end
     if params[:notification_id].present?
       @notification = @access_context.notification
+      # load previously failed status sumission if available
+      @update = session[:match_status_update][params[:notification_id]].presence rescue nil
+      session[:match_status_update] = nil
     end
   end
   

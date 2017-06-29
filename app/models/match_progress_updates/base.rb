@@ -5,6 +5,7 @@ module MatchProgressUpdates
     acts_as_paranoid
     attr_accessor :working_with_client
     validates_presence_of :response, :client_last_seen, if: :submitting?
+    validate :note_required_if_other!
 
     DND_INTERVAL = if Rails.env.production?
       1.weeks
@@ -71,6 +72,10 @@ module MatchProgressUpdates
       raise 'Abstract method'
     end
 
+    def other_response
+      'Other (note required)'
+    end
+
     def still_active_responses
       [
         'Client searching for unit',
@@ -78,6 +83,7 @@ module MatchProgressUpdates
         'Client is waiting for project/sponsor based unit to become available',
         'SSP/HSA waiting on documentation',
         'SSP/HSA  CORI mitigation',
+        other_response,
       ]
     end
 
@@ -88,6 +94,7 @@ module MatchProgressUpdates
         'Client in medical institution',
         'Client declining services',
         'SSP/HSA unable to contact client',
+        other_response,
       ]
     end
 
@@ -164,6 +171,12 @@ module MatchProgressUpdates
 
     def self.match_contact_scope
       raise 'Abstract method'
+    end
+
+    def note_required_if_other!
+      if response.include?(other_response) && note.strip.blank?
+        errors.add :note, "must be filled in if choosing 'Other'"
+      end
     end
 
   end
