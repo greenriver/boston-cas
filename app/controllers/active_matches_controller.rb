@@ -34,7 +34,10 @@ class ActiveMatchesController < MatchListBaseController
     @filter_step = params[:current_step]
     if @filter_step.present? && MatchDecisions::Base.filter_options.include?(@filter_step)
       if @filter_step == 'Stalled Matches - no response'
-        @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.incomplete.select(:match_id))
+        # We only want matches where no-one has responded
+        # This will still show matches where no request has been made, if the match has stalled.
+        @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.incomplete.select(:match_id)).
+          where.not(id: MatchProgressUpdates::Base.complete.select(:match_id)) 
       elsif @filter_step == 'Stalled Matches - with response'
         @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.complete.select(:match_id))
       else
