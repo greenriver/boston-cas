@@ -6,7 +6,7 @@
   %button.btn.btn-default.dropdown-toggle{data: {toggle: 'dropdown'}}
     Filter
     %span.caret
-  .dropdown-menu.dropdown-menu-right.options
+  .dropdown-menu.dropdown-menu.options
     = form_tag(nil, method: "get") do
       -# preserve sort and search for filtering
       -# preserve sort and search for filtering
@@ -17,7 +17,7 @@
       - if params[:q] 
         = hidden_field_tag :q, params[:q]
       .row
-        .col-xs-10
+        .col-sm-10
           %p
             %select{name: :current_step, style: 'width: 100%;'}
               %option{value: ''} Filter by Current Step
