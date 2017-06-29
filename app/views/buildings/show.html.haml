@@ -64,6 +64,6 @@
             %td=checkmark u.available
             %td=checkmark u.hmis_managed?
             %td
-              - if u.active_voucher.present? && u.active_match.present?
+              - if false # u&.active_voucher&.present? && u&.active_match&.present?
                 - match = u.active_match
                 = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! params[:confidential_override].present?), match_path(match)

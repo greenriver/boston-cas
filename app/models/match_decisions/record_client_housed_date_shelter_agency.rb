@@ -75,7 +75,7 @@ module MatchDecisions
 
       def canceled
         Notifications::MatchCanceled.create_for_match! match
-        match.rejected!
+        match.canceled!
       end
     end
     private_constant :StatusCallbacks

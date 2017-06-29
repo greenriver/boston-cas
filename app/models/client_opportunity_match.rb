@@ -38,7 +38,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   has_one :current_decision
 
-  CLOSED_REASONS = ['success', 'rejected', 'preempted']
+  CLOSED_REASONS = ['success', 'rejected', 'canceled']
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
 
   ###################
@@ -50,8 +50,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :active, -> { where active: true  }
   scope :closed, -> { where closed: true }
   scope :successful, -> { where closed: true, closed_reason: 'success' }
+  scope :success, -> {successful} # alias
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
-  scope :preempted, -> { where closed: true, closed_reason: 'preempted' }
+  scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
+  scope :canceled, -> { preempted } # alias
   scope :stalled, -> do
     md_t = MatchDecisions::Base.arel_table
     active.joins(:decisions).
@@ -210,7 +212,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
     where(
       client_matches.
       or(opp_matches).
-      or(contact_matches)
+      or(contact_matches).
+      or(arel_table[:id].eq(text))
     )
   end
 
@@ -262,7 +265,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       case closed_reason
       when 'success' then 'Success'
       when 'rejected' then 'Rejected'
-      when 'preempted' then 'Pre-empted'
+      when 'canceled' then 'Pre-empted'
       end
     else
       'New'
@@ -309,6 +312,17 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def rejected!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
+      client.update! available_candidate: true
+      opportunity.update! available_candidate: true
+      RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
+      Matching::RunEngineJob.perform_later
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+    end
+  end
+
+  def canceled!
+    self.class.transaction do
+      update! active: false, closed: true, closed_reason: 'canceled'
       client.update! available_candidate: true
       opportunity.update! available_candidate: true
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
