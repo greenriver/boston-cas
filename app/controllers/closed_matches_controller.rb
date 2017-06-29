@@ -36,7 +36,7 @@ class ClosedMatchesController < MatchListBaseController
 
     
     if params[:current_step].present? && ClientOpportunityMatch::CLOSED_REASONS.include?(params[:current_step])
-      @matches = @matches.where(closed_reason: params[:current_step])
+      @matches = @matches.public_send(params[:current_step])
     end
 
     @matches = @matches
