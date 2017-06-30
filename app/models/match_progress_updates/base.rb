@@ -174,7 +174,7 @@ module MatchProgressUpdates
     end
 
     def note_required_if_other!
-      if response.include?(other_response) && note.strip.blank?
+      if response.present? && response.include?(other_response) && note.strip.blank?
         errors.add :note, "must be filled in if choosing 'Other'"
       end
     end
