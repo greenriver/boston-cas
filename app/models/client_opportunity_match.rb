@@ -439,9 +439,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
         end.group_by do |row|
           row[:match_id]
         end
-      
+
       updates.map do |match_id, update_requests|
-        submitted_all = Set.new
+        submitted_all = false
         requests_by_contact = update_requests.group_by do |row|
           row[:contact_id]
         end
