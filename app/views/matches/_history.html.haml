@@ -11,5 +11,5 @@
     %table.table.table-condensed.table-striped
       %tbody
       - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
-        = render event, event: event
+        = render event, event: event, match: match
         
