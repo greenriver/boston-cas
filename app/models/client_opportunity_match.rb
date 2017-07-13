@@ -434,6 +434,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       columns = [:contact_id, :match_id, :requested_at, :submitted_at]
       updates = MatchProgressUpdates::Base.joins(:contact).
         where(match_id: self.stalled.select(:id)).
+        order(requested_at: :asc).
         pluck(*columns).map do |row|
           Hash[columns.zip(row)]
         end.group_by do |row|
@@ -441,19 +442,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
         end
 
       updates.map do |match_id, update_requests|
-        submitted_all = false
+        submitted_most_recent = false
         requests_by_contact = update_requests.group_by do |row|
           row[:contact_id]
-        end
-        requests_by_contact.each do |contact_id, contact_requests|
-          response_count = contact_requests.select do |row|
-            row[:submitted_at].present?
-          end.size
-          if response_count == contact_requests.size
-            submitted_all = true
+        end.each do |contact_id, contact_requests|
+          if contact_requests.last[:submitted_at].present?
+            submitted_most_recent = true
           end
         end
-        if submitted_all
+        if submitted_most_recent
           match_id
         else
           nil
