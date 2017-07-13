@@ -964,7 +964,8 @@ CREATE TABLE match_events (
     note text,
     deleted_at timestamp without time zone,
     not_working_with_client_reason_id integer,
-    client_last_seen_date date
+    client_last_seen_date date,
+    admin_note boolean DEFAULT false NOT NULL
 );
 
 
@@ -4273,4 +4274,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170621184202');
 INSERT INTO schema_migrations (version) VALUES ('20170623171917');
 
 INSERT INTO schema_migrations (version) VALUES ('20170629144505');
+
+INSERT INTO schema_migrations (version) VALUES ('20170713125233');
 

@@ -2,7 +2,7 @@
   %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
   %td.history--event-name      
     = event.name
-    - if event.note.present?
+    - if event.show_note?(current_contact)
       .history--event-note
         - if event.is_editable?
           %strong Note:

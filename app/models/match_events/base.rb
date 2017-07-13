@@ -56,5 +56,9 @@ module MatchEvents
       false
     end
 
+    def show_note?(current_contact)
+      false
+    end
+
   end
 end

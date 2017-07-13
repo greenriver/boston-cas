@@ -83,7 +83,11 @@ class MatchNotesController < ApplicationController
     end
     
     def match_note_params
-      params.require(:match_note).permit(:note)
+      params.require(:match_note).
+        permit(
+          :note, 
+          :admin_note
+        )
     end
     
 end
