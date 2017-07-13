@@ -33,13 +33,43 @@ class ActiveMatchesController < MatchListBaseController
     sort = "#{column} #{sort_direction}"
     @filter_step = params[:current_step]
     if @filter_step.present? && MatchDecisions::Base.filter_options.include?(@filter_step)
-      if @filter_step == 'Stalled Matches - no response'
-        # We only want matches where no-one has responded
-        # This will still show matches where no request has been made, if the match has stalled.
-        @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.incomplete.select(:match_id)).
-          where.not(id: MatchProgressUpdates::Base.complete.select(:match_id)) 
-      elsif @filter_step == 'Stalled Matches - with response'
-        @matches = @matches.stalled.where(id: MatchProgressUpdates::Base.complete.select(:match_id))
+      if MatchDecisions::Base.stalled_match_filter_options.include?(@filter_step)
+        # determine delinquent progress updates
+        stalled_ids = @matches.stalled.pluck(:id)
+        columns = [:contact_id, :match_id, :requested_at, :submitted_at]
+        updates = MatchProgressUpdates::Base.
+          where(match_id: stalled_ids).
+          pluck(*columns).map do |row|
+            Hash[columns.zip(row)]
+          end.group_by do |row|
+            row[:match_id]
+          end
+        delinquent_match_ids = updates.map do |match_id, update_requests|
+          delinquent = Set.new
+          requests_by_contact = update_requests.group_by do |row|
+            row[:contact_id]
+          end
+          requests_by_contact.each do |contact_id, contact_requests|
+            contact_requests.each do |row|
+              if row[:submitted_at].blank? && row[:requested_at] < MatchProgressUpdates::Base::STALLED_INTERVAL.ago
+                delinquent << contact_id
+              end
+            end
+          end
+          # if every contact is delinquent, show the match
+          if delinquent.size == requests_by_contact.size
+            match_id
+          else
+            nil
+          end
+        end.compact
+        if @filter_step == 'Stalled Matches - awaiting response'
+          # We only want matches where no-one has responded to the most recent request
+          # This will still show matches where no request has been made, if the match has stalled.
+          @matches = @matches.stalled.where(id: delinquent_match_ids) 
+        elsif @filter_step == 'Stalled Matches - with response'
+          @matches = @matches.stalled.where.not(id: delinquent_match_ids)
+        end
       else
         @matches = @matches.where(last_decision: {type: @filter_step})
       end

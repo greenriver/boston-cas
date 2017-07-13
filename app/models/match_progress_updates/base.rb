@@ -13,6 +13,12 @@ module MatchProgressUpdates
       1.days
     end
 
+    STALLED_INTERVAL = if Rails.env.production?
+      1.months
+    else
+      2.days
+    end
+
     def to_partial_path
       'match_progress_updates/progress_update'
     end
@@ -47,14 +53,6 @@ module MatchProgressUpdates
 
     scope :complete, -> do
       where.not(submitted_at: nil)
-    end
-
-    # any status updates where the match has been on the same decision
-    # for a specified length of time (currently 1 month)
-    # and we haven't already requested the update
-    scope :should_notify_contact, -> do
-      incomplete.
-      where(requested_at: nil)
     end
 
     # any status updates that have been requested over DND interval ago (currently 1 week)
@@ -137,26 +135,61 @@ module MatchProgressUpdates
       end
     end
 
+    # Re-send the same request if we requested it before, but haven't had a response
+    # in a reasonable amount of time
+    def resend_update_request?
+      requested_at.present? && submitted_at.blank? && requested_at < STALLED_INTERVAL.ago
+    end
+
+    # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
+    def create_new_update_request?
+      submitted_at.present? && submitted_at < STALLED_INTERVAL.ago && requested_at < STALLED_INTERVAL.ago
+    end
+
     def self.send_notifications
-      should_notify_contact.each do |progress_update|
+      # Get SSP & Shelter agency contacts for stalled matches
+      # if we have un-submitted but requested status update where the requested date is less than INTERVAL.ago - queue to send same request again, and update the requested date
+      # if we have a submitted progress update with a response less than INTERVAL.ago - create a new update request
+      matches = self.joins(:match).merge(ClientOpportunityMatch.stalled).
+        distinct.pluck(:contact_id, :match_id)
+      matches.each do |contact_id, match_id|
         # Determine next notification number
         notification_number = self.where(
-          contact_id: progress_update.contact_id,
-          match_id: progress_update.match_id,
-          requested_at: nil
+          contact_id: contact_id,
+          match_id: match_id,
         ).count
-        decision_id = progress_update.match.current_decision.id
+        progress_update = self.where(
+          contact_id: contact_id,
+          match_id: match_id,
+        ).order(id: :desc).first
         requested_at = Time.now
-        notification = Notifications::ProgressUpdateRequested.create_for_match!(
-          progress_update.match, 
-          contact: progress_update.contact
-        )
-        progress_update.update(
-          notification_id: notification.id,
-          notification_number: notification_number,
-          decision_id: decision_id,
-          requested_at: requested_at,
-        )
+        decision_id = progress_update.match.current_decision.id
+        if progress_update.resend_update_request?
+          # Re-send same request
+          # Bump requested_at
+          notification = Notifications::Base.find(progress_update.notification_id)
+          notification.deliver
+          progress_update.update(
+            decision_id: decision_id,
+            requested_at: requested_at,
+            dnd_notified_at: nil,
+          )
+        elsif progress_update.create_new_update_request?
+          # Create a new request
+          notification = Notifications::ProgressUpdateRequested.create_for_match!(
+            progress_update.match, 
+            contact: progress_update.contact
+          )
+          new_request = create(
+            type: progress_update.type,
+            match_id: progress_update.match_id,
+            contact_id: progress_update.contact_id,
+            notification_id: notification.id,
+            notification_number: notification_number,
+            decision_id: decision_id,
+            requested_at: requested_at,
+          )
+        end
       end
       should_notify_dnd.each do |dnd_notification|
         # Determine next notification number
