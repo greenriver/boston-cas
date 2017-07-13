@@ -401,7 +401,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
     def self.delinquent_match_ids
       columns = [:contact_id, :match_id, :requested_at, :submitted_at]
-      updates = MatchProgressUpdates::Base.
+      updates = MatchProgressUpdates::Base.joins(:contact).
         where(match_id: self.stalled.select(:id)).
         pluck(*columns).map do |row|
           Hash[columns.zip(row)]
@@ -423,6 +423,37 @@ class ClientOpportunityMatch < ActiveRecord::Base
         end
         # if every contact is delinquent, show the match
         if delinquent.size == requests_by_contact.size
+          match_id
+        else
+          nil
+        end
+      end.compact
+    end
+
+    def self.at_least_one_response_in_current_iteration_ids
+      columns = [:contact_id, :match_id, :requested_at, :submitted_at]
+      updates = MatchProgressUpdates::Base.joins(:contact).
+        where(match_id: self.stalled.select(:id)).
+        pluck(*columns).map do |row|
+          Hash[columns.zip(row)]
+        end.group_by do |row|
+          row[:match_id]
+        end
+      
+      updates.map do |match_id, update_requests|
+        submitted_all = Set.new
+        requests_by_contact = update_requests.group_by do |row|
+          row[:contact_id]
+        end
+        requests_by_contact.each do |contact_id, contact_requests|
+          response_count = contact_requests.select do |row|
+            row[:submitted_at].present?
+          end.size
+          if response_count == contact_requests.size
+            submitted_all = true
+          end
+        end
+        if submitted_all
           match_id
         else
           nil
