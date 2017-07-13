@@ -83,6 +83,7 @@ module MatchProgressUpdates
         'Client is waiting for project/sponsor based unit to become available',
         'SSP/HSA waiting on documentation',
         'SSP/HSA  CORI mitigation',
+        'Client has submitted Reasonable Accomodation',
         other_response,
       ]
     end
