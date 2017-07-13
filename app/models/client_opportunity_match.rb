@@ -399,6 +399,37 @@ class ClientOpportunityMatch < ActiveRecord::Base
       
     end
 
+    def self.delinquent_match_ids
+      columns = [:contact_id, :match_id, :requested_at, :submitted_at]
+      updates = MatchProgressUpdates::Base.
+        where(match_id: self.stalled.select(:id)).
+        pluck(*columns).map do |row|
+          Hash[columns.zip(row)]
+        end.group_by do |row|
+          row[:match_id]
+        end
+      
+      updates.map do |match_id, update_requests|
+        delinquent = Set.new
+        requests_by_contact = update_requests.group_by do |row|
+          row[:contact_id]
+        end
+        requests_by_contact.each do |contact_id, contact_requests|
+          contact_requests.each do |row|
+            if row[:submitted_at].blank? && row[:requested_at] <= Date.today
+              delinquent << contact_id
+            end
+          end
+        end
+        # if every contact is delinquent, show the match
+        if delinquent.size == requests_by_contact.size
+          match_id
+        else
+          nil
+        end
+      end.compact
+    end
+
     def self.sort_options
       [
         {title: 'Oldest match', column: 'created_at', direction: 'asc'},
