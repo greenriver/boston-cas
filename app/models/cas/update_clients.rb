@@ -2,65 +2,81 @@ module Cas
   class UpdateClients
 
     def run!
-      return unless needs_update?
-      to_add = []
-      to_delete = []
-      to_update = []
+      if needs_update?
+        to_add = []
+        to_delete = []
+        to_update = []
 
-      # add clients for:
-      # 1. Any project client with an empty client_id
-      # 2. Any project client with a client_id that doesn't have a corresponding client
-      ProjectClient.transaction do
-        clients = Client.all.pluck(:id)
-        if clients.size == 0
-          to_add = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:id)
-          to_add += ProjectClient.where(sync_with_cas: true).pluck(:id)
-        else
-          project_clients = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:client_id)
-          project_clients += ProjectClient.where(sync_with_cas: true).pluck(:client_id)
-          missing_clients = ProjectClient.where(client_id: project_clients - clients).pluck(:id)
-          no_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where(client_id: nil).pluck(:id)
-          no_clients += ProjectClient.where(sync_with_cas: true).where(client_id: nil).pluck(:id)
-          probably_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
+        # add clients for:
+        # 1. Any project client with an empty client_id
+        # 2. Any project client with a client_id that doesn't have a corresponding client
+        ProjectClient.transaction do
+          clients = Client.all.pluck(:id)
+          if clients.size == 0
+            to_add = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:id)
+            to_add += ProjectClient.where(sync_with_cas: true).pluck(:id)
+          else
+            project_clients = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:client_id)
+            project_clients += ProjectClient.where(sync_with_cas: true).pluck(:client_id)
+            missing_clients = ProjectClient.where(client_id: project_clients - clients).pluck(:id)
+            no_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where(client_id: nil).pluck(:id)
+            no_clients += ProjectClient.where(sync_with_cas: true).where(client_id: nil).pluck(:id)
+            probably_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
 
-          to_add = (no_clients.uniq + missing_clients.uniq).uniq
-          to_delete = (clients - project_clients.uniq).uniq
-          to_update = (probably_clients - (project_clients.uniq - clients)).uniq
-        end
-        if to_delete.any?
-          Rails.logger.info "Removing #{to_delete.length} clients"
-          to_delete.uniq.each do |d|
-            Client.where(id: d).each do |c|
-              c.destroy
+            to_add = (no_clients.uniq + missing_clients.uniq).uniq
+            to_delete = (clients - project_clients.uniq).uniq
+            to_update = (probably_clients - (project_clients.uniq - clients)).uniq
+          end
+          if to_delete.any?
+            Rails.logger.info "Removing #{to_delete.length} clients"
+            to_delete.uniq.each do |d|
+              Client.where(id: d).each do |c|
+                c.destroy
+              end
             end
           end
-        end
-        Rails.logger.info "Adding #{to_add.length} clients"
-        to_add.each do |a|
-          pc_attr = fetch_project_client(:id, a)
-          c = Client.create(pc_attr)
-          # make note of our new connection in project_clients
-          pc = ProjectClient.find(a)
-          pc.update_attributes(client_id: c.id)
-        end
-        if to_update.any?
-          Rails.logger.info "Updating #{to_update.length} clients"
-          to_update.each do |u|
-            pc_attr = fetch_project_client(:client_id, u)
-            pc_attr.delete('id')
-            c = Client.find_by(id: u)
-            # ignore available flag if this client has previously been merged
-            if c[:merged_into].present?
-              pc_attr.delete('available')
-            end
-
-            c.update_attributes(pc_attr)
+          Rails.logger.info "Adding #{to_add.length} clients"
+          to_add.each do |a|
+            pc_attr = fetch_project_client(:id, a)
+            c = Client.create(pc_attr)
+            # make note of our new connection in project_clients
+            pc = ProjectClient.find(a)
+            pc.update_attributes(client_id: c.id)
           end
+          if to_update.any?
+            Rails.logger.info "Updating #{to_update.length} clients"
+            to_update.each do |u|
+              pc_attr = fetch_project_client(:client_id, u)
+              pc_attr.delete('id')
+              c = Client.find_by(id: u)
+              # ignore available flag if this client has previously been merged
+              if c[:merged_into].present?
+                pc_attr.delete('available')
+              end
+
+              c.update_attributes(pc_attr)
+            end
+          end
+          ProjectClient.update_all(needs_update: false)
         end
-        ProjectClient.update_all(needs_update: false)
+        fix_incorrect_available_candidate_clients()
+        # Data has changed, see if we have any new matches
+        Matching::RunEngineJob.perform_later
+      else
+        fix_incorrect_available_candidate_clients()
       end
-      # Data has changed, see if we have any new matches
-      Matching::RunEngineJob.perform_later
+    end
+
+    # Find anyone who should be marked as available_candidate, but for whatever reason isn't marked as such
+    def fix_incorrect_available_candidate_clients
+      clients = Client.where(available_candidate: false, available: true, prevent_matching_until: nil)
+      clients.each do |c| 
+        if c.client_opportunity_matches.active.none? && c.client_opportunity_matches.success.none?
+          if c.client_opportunity_matches.count < Client.max_candidate_matches
+            c.update(available_candidate: true)
+          end
+        end
+      end
     end
 
     private
