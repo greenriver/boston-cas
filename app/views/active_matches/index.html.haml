@@ -69,30 +69,42 @@
               %td    
                 .match-progress-bar
                   %ol.progress{"data-steps" => "6"}
-                    %li.done
-                      %span.name 
-                      %span.step
-                        %span 1
-                    %li.done
-                      %span.name 
-                      %span.step
-                        %span 2
-                    %li.active
-                      %span.name 
-                      %span.step
-                        %span 3
                     %li
-                      %span.name 
-                      %span.step
-                        %span 4
+                      .done{data: {toggle: :tooltip, title: 'Name 1'}}
+                        .name 
+                          Name 1
+                        .step
+                          .number 1
                     %li
-                      %span.name 
-                      %span.step
-                        %span 5
+                      .done{data: {toggle: :tooltip, title: 'Name 2'}}
+                        .name 
+                          Name 2
+                        .step
+                          .number 2
                     %li
-                      %span.name 
-                      %span.step
-                        %span 6
+                      .active
+                        .name 
+                          Name 3
+                        .step
+                          .number 3
+                    %li
+                      .incomplete{data: {toggle: :tooltip, title: 'Name 4'}}
+                        .name 
+                          Name 4
+                        .step
+                          .number 4
+                    %li
+                      .incomplete{data: {toggle: :tooltip, title: 'Name 5'}}
+                        .name 
+                          Name 5
+                        .step
+                          .number 5
+                    %li
+                      .incomplete{data: {toggle: :tooltip, title: 'Name 6'}}
+                        .name 
+                          Name 6
+                        .step
+                          .number 6
                 = match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td

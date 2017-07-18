@@ -13,87 +13,112 @@
     list-style: none;
     list-style-image: none;
     margin: 20px 0 20px 0;
-    padding: 0;
+    height: 1.2em;
+    padding: 0; 
+    border-radius: 0.6em;
+    border: 1px solid $cob-sg-blue-005;
   }
 
-  .progress li {
-      float: left;
-      text-align: center;
-      position: relative;
+  li {
+    float: left;
+    text-align: center;
+    position: relative;
+    height: 1em;
   }
 
-  .progress .name {
-      display: block;
-      vertical-align: bottom;
-      text-align: center;
-      margin-bottom: 1em;
-      color: black;
-      opacity: 0.3;
+  .name {
+    display: block;
+    vertical-align: center;
+    text-align: center;
+    margin-bottom: 1em;
+    display: none;
   }
 
-  .progress .step {
-      color: black;
-      border: 3px solid silver;
-      background-color: silver;
-      border-radius: 50%;
-      line-height: 1.2;
-      width: 1.2em;
-      height: 1.2em;
-      display: inline-block;
-      z-index: 0;
+  .step {
+    color: black;
+    border: 1px solid $cob-sg-blue-005;
+    border-radius: 50%;
+    line-height: 1;
+    width: 1.1em;
+    height: 1.1em;
+    display: inline-block;
+    z-index: 0;
   }
 
-  .progress .step span {
-      opacity: 0.3;
+  .step .number {
+    display: none;
+  }
+  
+  .active
+  {
+    margin-top: -0.3em;
+  }
+  .active .step
+  {
+    height: 1.6em;
+    width: 1.6em;
+    background-color: white;
+  }
+  .active .step .number {
+    display: initial;
+    line-height: 1.6;
   }
 
-  .progress .active .name,
-  .progress .active .step span {
-      opacity: 1;
+  .active .name,
+  .active .step {
+    opacity: 1;
+  }
+  
+  .done
+  {
+    background-color: $cob-sg-blue-005;
+    height: 1.1em;
+  }
+  
+  li:first-of-type, li:last-of-type {
+    border-radius: 0.6em;
+  }
+  
+  .done .step
+  {
+    border-width: 0;
+  }
+  // .progress .step:before,
+  // .progress .step:after {
+  //   content: "";
+  //   display: block;
+  //   // background-color: silver;
+  // 
+  //   height: 1.2em;
+  //   width: 50%;
+  //   position: absolute;
+  //   bottom: 0;
+  //   right: 0;
+  //   z-index: -1;
+  // }
+  
+  .step:before {
+    left: 0;
+  }
+  
+  .step:after {
+    right: 0;
   }
 
-  .progress .step:before {
-      content: "";
-      display: block;
-      background-color: silver;
-      height: 1.0em;
-      width: 50%;
-      position: absolute;
-      bottom: 0.6em;
-      left: 0;
-      z-index: -1;
+  .done .step:before,
+  .done .step:after{
+    background-color: $cob-sg-blue-005;
   }
-
-  .progress .step:after {
-      content: "";
-      display: block;
-      background-color: silver;
-      height: 1.0em;
-      width: 50%;
-      position: absolute;
-      bottom: 0.6em;
-      right: 0;
-      z-index: -1;
+  
+  .active .step:before {
+    background-color: $cob-sg-blue-005;
   }
-
-  .progress li:first-of-type .step:before {
-      display: none;
+  
+  .done .step {
+    background-color: $cob-sg-blue-004;
   }
-
-  .progress li:last-of-type .step:after {
-      display: none;
-  }
-
-  .progress .done .step,
-  .progress .done .step:before,
-  .progress .done .step:after,
-  .progress .active .step,
-  .progress .active .step:before {
-      background-color: $cob-sg-blue-005;
-  }
-
-  .progress .done .step,
-  .progress .active .step {
-      border: 3px solid $cob-sg-blue-002;
+  
+  .active .step {
+    border: 1px solid $cob-sg-blue-005;
   }
 }
