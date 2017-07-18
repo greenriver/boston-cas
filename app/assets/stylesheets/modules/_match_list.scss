@@ -7,6 +7,8 @@
   ol.progress[data-steps="7"] li { width: 14%; }
   ol.progress[data-steps="8"] li { width: 12%; }
   ol.progress[data-steps="9"] li { width: 11%; }
+  
+  // ol.progress[data-steps="6"] li { padding-left: 8%; }
 
   .progress {
     width: 100%;
@@ -25,7 +27,7 @@
     position: relative;
     height: 1em;
   }
-
+  
   .name {
     display: block;
     vertical-align: center;
@@ -44,6 +46,21 @@
     display: inline-block;
     z-index: 0;
   }
+  
+  li:last-of-type {
+    margin-top: -0.2em;
+  }
+  
+  li:last-of-type .step{
+    height: 1.6em;
+    width: 1.6em;
+    background-color: white;
+  }
+  
+  li:last-of-type .step .number {
+    display: initial;
+    line-height: 1.6;
+  }
 
   .step .number {
     display: none;
@@ -51,7 +68,7 @@
   
   .active
   {
-    margin-top: -0.3em;
+    margin-top: -0.2em;
   }
   .active .step
   {
@@ -75,28 +92,20 @@
     height: 1.1em;
   }
   
-  li:first-of-type, li:last-of-type {
-    border-radius: 0.6em;
+  li:first-of-type .done {
+    border-radius: 0.6em 0 0 0.6em;
   }
+  li:last-of-type .done{
+    border-radius: 0 0.6em 0.6em 0;
+  }
+  
+  
   
   .done .step
   {
     border-width: 0;
   }
-  // .progress .step:before,
-  // .progress .step:after {
-  //   content: "";
-  //   display: block;
-  //   // background-color: silver;
-  // 
-  //   height: 1.2em;
-  //   width: 50%;
-  //   position: absolute;
-  //   bottom: 0;
-  //   right: 0;
-  //   z-index: -1;
-  // }
-  
+
   .step:before {
     left: 0;
   }
