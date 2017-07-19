@@ -3,6 +3,15 @@ lock '3.8.1'
 
 set :application, 'boston-cas'
 set :repo_url, 'git@github.com:greenriver/boston-cas.git'
+set :client, ENV.fetch('CLIENT')
+
+server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
+
+if !ENV['FORCE_SSH_KEY'].nil?
+  set :ssh_options, {
+    keys: [ENV['FORCE_SSH_KEY']]
+  }
+end
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
