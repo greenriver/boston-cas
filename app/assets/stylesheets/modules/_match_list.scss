@@ -1,25 +1,32 @@
-$data-steps: 6; //TODO Get steps from html param
+//FIXME When active is last, marker is raised too high
+//TODO Place last marker correctly for any number of markers
+
+$data-steps: 6; 
 $match-progress-bar-step-width: floor(percentage(1 / $data-steps));
-$match-progress-bar-step-left: $match-progress-bar-step-width / 2;
+$match-progress-bar-step-left: $match-progress-bar-step-width;
+
+$match-progress-bar-height: 1.2em;
+$match-progress-bar-step-marker-height: 1.1em;
+$match-progress-bar-step-marker-width: $match-progress-bar-step-marker-height;
 
 .match-progress-bar {
   width: 100%;
   list-style: none;
   list-style-image: none;
   margin: 20px 0 20px 0;
-  height: 1.2em;
+  height: $match-progress-bar-height;
   padding: 0; 
-  border-radius: 0.6em;
+  border-top-left-radius: 0.6em;
+  border-bottom-left-radius: 0.6em;
   border: 1px solid $cob-sg-blue-005;
 }
 
 .match-progress-bar__step {
   width: $match-progress-bar-step-width; 
-  left: $match-progress-bar-step-left; 
+  left: $match-progress-bar-step-left;
   float: left;
   text-align: left;
   position: relative;
-  height: 1em;
 }
 
 .match-progress-bar__step__name {
@@ -31,8 +38,8 @@ $match-progress-bar-step-left: $match-progress-bar-step-width / 2;
   border: 1px solid $cob-sg-blue-005;
   border-radius: 50%;
   line-height: 1;
-  width: 1.1em;
-  height: 1.1em;
+  width: $match-progress-bar-step-marker-width;
+  height: $match-progress-bar-step-marker-height;
   display: inline-block;
   text-align: center;
 }
@@ -45,7 +52,7 @@ $match-progress-bar-step-left: $match-progress-bar-step-width / 2;
 //Done steps
 .match-progress-bar__step--done {
   background-color: $cob-sg-blue-005;
-  height: 1.1em;
+  height: $match-progress-bar-step-marker-height;
 }
 
 .match-progress-bar__step--done .match-progress-bar__step__marker
@@ -62,42 +69,35 @@ $match-progress-bar-step-left: $match-progress-bar-step-width / 2;
   background-color: $cob-sg-blue-004;
 }
 
-.match-progress-bar__step .match-progress-bar__step--done:last-of-type {
-  background-color: purple;
-  margin-right: -0.5em;
+.match-progress-bar__step--done:last-of-type {
   padding-right: 3em;
+  margin-right: -0.5em;
 }
 
 .match-progress-bar__step:first-of-type .match-progress-bar__step--done {
-  // < 480
-  padding-left: 0;
-  margin-left: 0;
-  background-color: yellow;
+  // < 480px
+  padding-left: 4.2em;
+  margin-left: -4.2em;
   @media (min-width: $screen-xs-min) {
-    // 480-768
-    padding-left: 5.2em;
-    margin-left: -5.2em;
-    background-color: green;
+    // 480-768px
+    padding-left: 4.2em;
+    margin-left: -4.2em;
   }
   @media (min-width: $screen-sm-min) {
-    // 768 - 992
-    padding-left: 1.2em;
-    margin-left: -1.2em;
-    background-color: red;
+    // 768 - 992px
+    padding-left: 1.3em;
+    margin-left: -1.3em;
   }
   @media (min-width: $screen-md-min) {
-    // 992-1200
-    padding-left: 2.2em;
-    margin-left: -3.2em;
-    background-color: gold;
+    // 992-1200px
+    padding-left: 1.6em;
+    margin-left: -1.6em;  
   }
   @media (min-width: $screen-lg-min) {
-    // 1200+
-    padding-left: 2.2em;
-    margin-left: -3.2em;
-    background-color: black;
+    // 1200+px
+    padding-left: 2.4em;
+    margin-left: -2.4em;  
   }
-  
   border-radius: 0.6em 0 0 0.6em;
 }
 
@@ -105,7 +105,6 @@ $match-progress-bar-step-left: $match-progress-bar-step-width / 2;
 .match-progress-bar__step--active
 {
   margin-top: -0.2em;
-  // background-color: $cob-sg-blue-005;
 }
 .match-progress-bar__step--active .match-progress-bar__step__marker
 {
