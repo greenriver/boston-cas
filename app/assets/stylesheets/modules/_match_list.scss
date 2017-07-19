@@ -1,14 +1,15 @@
-.match-progress-bar {
-  ol.progress[data-steps="2"] li { width: 49%; }
-  ol.progress[data-steps="3"] li { width: 33%; }
-  ol.progress[data-steps="4"] li { width: 24%; }
-  ol.progress[data-steps="5"] li { width: 19%; }
-  ol.progress[data-steps="6"] li { width: 16%; }
-  ol.progress[data-steps="7"] li { width: 14%; }
-  ol.progress[data-steps="8"] li { width: 12%; }
-  ol.progress[data-steps="9"] li { width: 11%; }
+.match-progress-bar{
+  .progress[data-steps="2"] li { width: 49%; }
+  .progress[data-steps="3"] li { width: 33%; }
+  .progress[data-steps="4"] li { width: 24%; }
+  .progress[data-steps="5"] li { width: 19%; }
+  .progress[data-steps="6"] li { width: 16%; }
+  .progress[data-steps="7"] li { width: 14%; }
+  .progress[data-steps="8"] li { width: 12%; }
+  .progress[data-steps="9"] li { width: 11%; }
   
-  // ol.progress[data-steps="6"] li { padding-left: 8%; }
+  ol.progress[data-steps="6"] li { left: 8%; } // 1/2 of li width
+  //Values for each data-steps number
 
   .progress {
     width: 100%;
@@ -23,16 +24,12 @@
 
   li {
     float: left;
-    text-align: center;
+    text-align: left;
     position: relative;
     height: 1em;
   }
   
   .name {
-    display: block;
-    vertical-align: center;
-    text-align: center;
-    margin-bottom: 1em;
     display: none;
   }
 
@@ -44,7 +41,7 @@
     width: 1.1em;
     height: 1.1em;
     display: inline-block;
-    z-index: 0;
+    text-align: center;
   }
   
   li:last-of-type {
@@ -57,6 +54,12 @@
     background-color: white;
   }
   
+  li .done:last-of-type {
+    background-color: purple;
+    margin-right: -0.5em;
+    padding-right: 3em;
+  }
+  
   li:last-of-type .step .number {
     display: initial;
     line-height: 1.6;
@@ -64,6 +67,8 @@
 
   .step .number {
     display: none;
+    
+    text-align: center;
   }
   
   .active
@@ -92,39 +97,64 @@
     height: 1.1em;
   }
   
+  li:first-of-type {
+    
+  }
   li:first-of-type .done {
+    // < 480
+    padding-left: 0;
+    margin-left: 0;
+    background-color: yellow;
+    @media (min-width: $screen-xs-min) {
+      // 480-768
+      padding-left: 5.2em;
+      margin-left: -5.2em;
+      background-color: green;
+    }
+    @media (min-width: $screen-sm-min) {
+      // 768 - 992
+      padding-left: 1.2em;
+      margin-left: -1.2em;
+      background-color: red;
+    }
+    @media (min-width: $screen-md-min) {
+      // 992-1200
+      padding-left: 2.2em;
+      margin-left: -3.2em;
+      background-color: gold;
+    }
+    @media (min-width: $screen-lg-min) {
+      // 1200+
+      padding-left: 2.2em;
+      margin-left: -3.2em;
+      background-color: black;
+    }
+     
+    // width: 32px;
+    // border-left: 16px solid $cob-sg-blue-005;
     border-radius: 0.6em 0 0 0.6em;
   }
-  li:last-of-type .done{
-    border-radius: 0 0.6em 0.6em 0;
-  }
   
-  
+  // li:last-of-type .done{
+  //   border-radius: 0 0.6em 0.6em 0;
+  // }
   
   .done .step
   {
     border-width: 0;
   }
 
-  .step:before {
-    left: 0;
-  }
-  
-  .step:after {
-    right: 0;
-  }
-
   .done .step:before,
   .done .step:after{
-    background-color: $cob-sg-blue-005;
+    // background-color: $cob-sg-blue-005;
   }
-  
-  .active .step:before {
-    background-color: $cob-sg-blue-005;
-  }
-  
+
   .done .step {
     background-color: $cob-sg-blue-004;
+  }
+  
+  .active  {
+    // background-color: $cob-sg-blue-005;
   }
   
   .active .step {
