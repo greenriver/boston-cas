@@ -1,163 +1,139 @@
-.match-progress-bar{
-  .progress[data-steps="2"] li { width: 49%; }
-  .progress[data-steps="3"] li { width: 33%; }
-  .progress[data-steps="4"] li { width: 24%; }
-  .progress[data-steps="5"] li { width: 19%; }
-  .progress[data-steps="6"] li { width: 16%; }
-  .progress[data-steps="7"] li { width: 14%; }
-  .progress[data-steps="8"] li { width: 12%; }
-  .progress[data-steps="9"] li { width: 11%; }
-  
-  ol.progress[data-steps="6"] li { left: 8%; } // 1/2 of li width
-  //Values for each data-steps number
+$data-steps: 6; //TODO Get steps from html param
+$match-progress-bar-step-width: floor(percentage(1 / $data-steps));
+$match-progress-bar-step-left: $match-progress-bar-step-width / 2;
 
-  .progress {
-    width: 100%;
-    list-style: none;
-    list-style-image: none;
-    margin: 20px 0 20px 0;
-    height: 1.2em;
-    padding: 0; 
-    border-radius: 0.6em;
-    border: 1px solid $cob-sg-blue-005;
-  }
+.match-progress-bar {
+  width: 100%;
+  list-style: none;
+  list-style-image: none;
+  margin: 20px 0 20px 0;
+  height: 1.2em;
+  padding: 0; 
+  border-radius: 0.6em;
+  border: 1px solid $cob-sg-blue-005;
+}
 
-  li {
-    float: left;
-    text-align: left;
-    position: relative;
-    height: 1em;
-  }
-  
-  .name {
-    display: none;
-  }
+.match-progress-bar__step {
+  width: $match-progress-bar-step-width; 
+  left: $match-progress-bar-step-left; 
+  float: left;
+  text-align: left;
+  position: relative;
+  height: 1em;
+}
 
-  .step {
-    color: black;
-    border: 1px solid $cob-sg-blue-005;
-    border-radius: 50%;
-    line-height: 1;
-    width: 1.1em;
-    height: 1.1em;
-    display: inline-block;
-    text-align: center;
-  }
-  
-  li:last-of-type {
-    margin-top: -0.2em;
-  }
-  
-  li:last-of-type .step{
-    height: 1.6em;
-    width: 1.6em;
-    background-color: white;
-  }
-  
-  li .done:last-of-type {
-    background-color: purple;
-    margin-right: -0.5em;
-    padding-right: 3em;
-  }
-  
-  li:last-of-type .step .number {
-    display: initial;
-    line-height: 1.6;
-  }
+.match-progress-bar__step__name {
+  display: none;
+}
 
-  .step .number {
-    display: none;
-    
-    text-align: center;
-  }
-  
-  .active
-  {
-    margin-top: -0.2em;
-  }
-  .active .step
-  {
-    height: 1.6em;
-    width: 1.6em;
-    background-color: white;
-  }
-  .active .step .number {
-    display: initial;
-    line-height: 1.6;
-  }
+.match-progress-bar__step__marker {
+  color: black;
+  border: 1px solid $cob-sg-blue-005;
+  border-radius: 50%;
+  line-height: 1;
+  width: 1.1em;
+  height: 1.1em;
+  display: inline-block;
+  text-align: center;
+}
 
-  .active .name,
-  .active .step {
-    opacity: 1;
-  }
-  
-  .done
-  {
-    background-color: $cob-sg-blue-005;
-    height: 1.1em;
-  }
-  
-  li:first-of-type {
-    
-  }
-  li:first-of-type .done {
-    // < 480
-    padding-left: 0;
-    margin-left: 0;
-    background-color: yellow;
-    @media (min-width: $screen-xs-min) {
-      // 480-768
-      padding-left: 5.2em;
-      margin-left: -5.2em;
-      background-color: green;
-    }
-    @media (min-width: $screen-sm-min) {
-      // 768 - 992
-      padding-left: 1.2em;
-      margin-left: -1.2em;
-      background-color: red;
-    }
-    @media (min-width: $screen-md-min) {
-      // 992-1200
-      padding-left: 2.2em;
-      margin-left: -3.2em;
-      background-color: gold;
-    }
-    @media (min-width: $screen-lg-min) {
-      // 1200+
-      padding-left: 2.2em;
-      margin-left: -3.2em;
-      background-color: black;
-    }
-     
-    // width: 32px;
-    // border-left: 16px solid $cob-sg-blue-005;
-    border-radius: 0.6em 0 0 0.6em;
-  }
-  
-  // li:last-of-type .done{
-  //   border-radius: 0 0.6em 0.6em 0;
-  // }
-  
-  .done .step
-  {
-    border-width: 0;
-  }
+.match-progress-bar__step__marker .number {
+  display: none;
+  text-align: center;
+}
 
-  .done .step:before,
-  .done .step:after{
-    // background-color: $cob-sg-blue-005;
-  }
+//Done steps
+.match-progress-bar__step--done {
+  background-color: $cob-sg-blue-005;
+  height: 1.1em;
+}
 
-  .done .step {
-    background-color: $cob-sg-blue-004;
+.match-progress-bar__step--done .match-progress-bar__step__marker
+{
+  border-width: 0;
+}
+
+.match-progress-bar__step--done .match-progress-bar__step__marker:before,
+.match-progress-bar__step--done .match-progress-bar__step__marker:after{
+  // background-color: $cob-sg-blue-005;
+}
+
+.match-progress-bar__step--done .match-progress-bar__step__marker {
+  background-color: $cob-sg-blue-004;
+}
+
+.match-progress-bar__step .match-progress-bar__step--done:last-of-type {
+  background-color: purple;
+  margin-right: -0.5em;
+  padding-right: 3em;
+}
+
+.match-progress-bar__step:first-of-type .match-progress-bar__step--done {
+  // < 480
+  padding-left: 0;
+  margin-left: 0;
+  background-color: yellow;
+  @media (min-width: $screen-xs-min) {
+    // 480-768
+    padding-left: 5.2em;
+    margin-left: -5.2em;
+    background-color: green;
+  }
+  @media (min-width: $screen-sm-min) {
+    // 768 - 992
+    padding-left: 1.2em;
+    margin-left: -1.2em;
+    background-color: red;
+  }
+  @media (min-width: $screen-md-min) {
+    // 992-1200
+    padding-left: 2.2em;
+    margin-left: -3.2em;
+    background-color: gold;
+  }
+  @media (min-width: $screen-lg-min) {
+    // 1200+
+    padding-left: 2.2em;
+    margin-left: -3.2em;
+    background-color: black;
   }
   
-  .active  {
-    // background-color: $cob-sg-blue-005;
-  }
-  
-  .active .step {
-    border: 1px solid $cob-sg-blue-005;
-  }
+  border-radius: 0.6em 0 0 0.6em;
+}
+
+//Active step
+.match-progress-bar__step--active
+{
+  margin-top: -0.2em;
+  // background-color: $cob-sg-blue-005;
+}
+.match-progress-bar__step--active .match-progress-bar__step__marker
+{
+  height: 1.6em;
+  width: 1.6em;
+  background-color: white;
+}
+.match-progress-bar__step--active .match-progress-bar__step__marker .number {
+  display: initial;
+  line-height: 1.6;
+}
+
+.match-progress-bar__step--active .match-progress-bar__step__marker {
+  border: 1px solid $cob-sg-blue-005;
+}
+
+// Last step 
+.match-progress-bar__step:last-of-type {
+  margin-top: -0.2em;
+}
+
+.match-progress-bar__step:last-of-type .match-progress-bar__step__marker{
+  height: 1.6em;
+  width: 1.6em;
+  background-color: white;
+}
+
+.match-progress-bar__step:last-of-type .match-progress-bar__step__marker .number {
+  display: initial;
+  line-height: 1.6;
 }

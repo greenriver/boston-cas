@@ -67,44 +67,43 @@
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td    
-                .match-progress-bar
-                  %ol.progress{"data-steps" => "6"}
-                    %li
-                      .done{data: {toggle: :tooltip, title: 'Name 1'}}
-                        .name 
-                          Name 1
-                        .step
-                          .number 1
-                    %li
-                      .done{data: {toggle: :tooltip, title: 'Name 2'}}
-                        .name 
-                          Name 2
-                        .step
-                          .number 2
-                    %li
-                      .done{data: {toggle: :tooltip, title: 'Name 3'}}
-                        .name 
-                          Name 3
-                        .step
-                          .number 3
-                    %li
-                      .active{data: {toggle: :tooltip, title: 'Name 4'}}
-                        .name 
-                          Name 4
-                        .step
-                          .number 4
-                    %li
-                      .incomplete{data: {toggle: :tooltip, title: 'Name 5'}}
-                        .name 
-                          Name 5
-                        .step
-                          .number 5
-                    %li
-                      .incomplete{data: {toggle: :tooltip, title: 'Name 6'}}
-                        .name 
-                          Name 6
-                        .step
-                          .number 6
+                %ol.match-progress-bar{"data-steps" => "6"}
+                  %li.match-progress-bar__step
+                    .match-progress-bar__step--done{data: {toggle: :tooltip, title: 'Name 1'}}
+                      .match-progress-bar__step__name 
+                        Name 1
+                      .match-progress-bar__step__marker
+                        .number 1
+                  %li.match-progress-bar__step
+                    .match-progress-bar__step--done{data: {toggle: :tooltip, title: 'Name 2'}}
+                      .match-progress-bar__step__name 
+                        Name 2
+                      .match-progress-bar__step__marker
+                        .number 2
+                  %li.match-progress-bar__step
+                    .match-progress-bar__step--done{data: {toggle: :tooltip, title: 'Name 3'}}
+                      .match-progress-bar__step__name 
+                        Name 3
+                      .match-progress-bar__step__marker
+                        .number 3
+                  %li.match-progress-bar__step
+                    .match-progress-bar__step--active{data: {toggle: :tooltip, title: 'Name 4'}}
+                      .match-progress-bar__step__name 
+                        Name 4
+                      .match-progress-bar__step__marker
+                        .number 4
+                  %li.match-progress-bar__step
+                    .match-progress-bar__step--incomplete{data: {toggle: :tooltip, title: 'Name 5'}}
+                      .match-progress-bar__step__name 
+                        Name 5
+                      .match-progress-bar__step__marker
+                        .number 5
+                  %li.match-progress-bar__step
+                    .match-progress-bar__step--incomplete{data: {toggle: :tooltip, title: 'Name 6'}}
+                      .match-progress-bar__step__name 
+                        Name 6
+                      .match-progress-bar__step__marker
+                        .number 6
                 = match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td
