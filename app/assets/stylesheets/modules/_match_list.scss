@@ -50,6 +50,8 @@ $match-progress-bar-step-marker-width: $match-progress-bar-step-marker-height;
 .match-progress-bar__step--done {
   background-color: $cob-sg-blue-005;
   height: $match-progress-bar-step-marker-height;
+  padding-right: 3em;
+  margin-right: -0.5em;
 }
 
 .match-progress-bar__step--done .match-progress-bar__step__marker
@@ -61,12 +63,9 @@ $match-progress-bar-step-marker-width: $match-progress-bar-step-marker-height;
   background-color: $cob-sg-blue-004;
 }
 
-.match-progress-bar__step--done:last-of-type {
-  padding-right: 3em;
-  margin-right: -0.5em;
-}
-
-.match-progress-bar__step:first-of-type .match-progress-bar__step--done {
+.match-progress-bar__step:first-of-type .match-progress-bar__step--done,
+.match-progress-bar__step:first-of-type .match-progress-bar__step--active
+ {
   // < 480px
   padding-left: 4.2em;
   margin-left: -4.2em;
@@ -96,7 +95,7 @@ $match-progress-bar-step-marker-width: $match-progress-bar-step-marker-height;
 //Active step
 .match-progress-bar__step--active
 {
-  margin-top: -0.2em;
+  margin-top: -0.3em;
 }
 .match-progress-bar__step--active .match-progress-bar__step__marker
 {
@@ -108,23 +107,50 @@ $match-progress-bar-step-marker-width: $match-progress-bar-step-marker-height;
   display: initial;
   line-height: 1.6;
 }
-
 .match-progress-bar__step--active .match-progress-bar__step__marker {
   border: 1px solid $cob-sg-blue-005;
 }
 
-// Last step 
-.match-progress-bar__step:last-of-type .match-progress-bar__step--incomplete{
-  margin-top: -0.2em;
+.match-progress-bar__step:first-of-type .match-progress-bar__step--active {
+  background-color: $cob-sg-blue-005;
+  height: $match-progress-bar-step-marker-height;
+  padding-right: 0em;
+  margin-right: 1.5em;
+  margin-top: 0;
 }
 
-.match-progress-bar__step:last-of-type .match-progress-bar__step__marker{
+.match-progress-bar__step:first-of-type .match-progress-bar__step--active .match-progress-bar__step__marker{
+  margin-top: -4em;
+}
+
+
+
+// Last step 
+.match-progress-bar__step:last-of-type .match-progress-bar__step--incomplete,
+.match-progress-bar__step:last-of-type .match-progress-bar__step--active,
+.match-progress-bar__step:last-of-type .match-progress-bar__step--done
+{
+  margin-top: -0.3em;
+}
+.match-progress-bar__step:last-of-type .match-progress-bar__step--done
+{
+  height: 1.6em;
+  background-color: transparent;
+}
+
+.match-progress-bar__step:last-of-type .match-progress-bar__step__marker
+{
   height: 1.6em;
   width: 1.6em;
+  line-height: 1.6;
+  padding-top: 0.2em;
   background-color: white;
 }
 
-.match-progress-bar__step:last-of-type .match-progress-bar__step__marker .number {
-  display: initial;
-  line-height: 1.6;
+.match-progress-bar__step:last-of-type .match-progress-bar__step--done .match-progress-bar__step__marker
+{
+
+  background-color: $cob-sg-blue-004;
+  color: white;
+  border: 1px solid $cob-sg-blue-004;
 }

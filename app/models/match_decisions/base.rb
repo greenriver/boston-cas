@@ -218,6 +218,12 @@ module MatchDecisions
         'Match canceled administratively'
       end
     end
+    
+    def incomplete_active_done?
+      return :active if editable?
+      return :incomplete if status == :pending || status.blank?
+      :done
+    end
 
     private
     
@@ -246,4 +252,3 @@ module MatchDecisions
   end
   
 end
-

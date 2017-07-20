@@ -60,6 +60,14 @@ class ActiveMatchesController < MatchListBaseController
     @column = sort_column
     @direction = sort_direction
     @active_filter = @data_source_id.present? || @start_date.present?
+    @types = {
+     'MatchDecisions::MatchRecommendationDndStaff' => 1,
+     'MatchDecisions::MatchRecommendationShelterAgency' => 2,
+     'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
+     'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
+     'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
+     'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
+     }
   end
   
   
