@@ -43,7 +43,7 @@
             %th Client
             %th First Homeless Night
             %th Last Changed
-            %th Current Step
+            %th.match-progress-bar-fixed-width Current Step
             %th Initial Match Date
             %th Program
             %th Sub-Program
@@ -64,7 +64,7 @@
                   = match.client_name_for_contact current_contact, hidden: hide_client_name
               %td= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
-              %td= match.current_step_name || match.overall_status
+              %td= render 'current_step', match: match 
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td= match.opportunity_details.program_name
               %td= match.opportunity_details.sub_program_name

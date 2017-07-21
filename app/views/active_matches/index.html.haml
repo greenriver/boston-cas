@@ -43,7 +43,7 @@
             %th Client
             %th First Homeless Night
             %th Last Changed
-            %th Current Step
+            %th.match-progress-bar-fixed-width Current Step
             %th Initial Match Date
             %th Initial Acceptance Expiration Date
             %th Program
@@ -66,7 +66,7 @@
               %td
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
-              %td= match.current_step_name || match.overall_status
+              %td= render 'current_step', match: match 
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td
                 - if match.current_decision.type == 'MatchDecisions::MatchRecommendationShelterAgency'

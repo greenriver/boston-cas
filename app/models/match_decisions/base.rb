@@ -202,6 +202,25 @@ module MatchDecisions
         'MatchDecisions::ConfirmMatchSuccessDndStaff',
       ]
     end
+    
+    def self.match_steps
+      {
+       'MatchDecisions::MatchRecommendationDndStaff' => 1,
+       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
+       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
+       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
+       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
+       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
+       }
+    end
+    
+    def self.closed_match_statuses
+      [
+        :declined,
+        :canceled,
+        :rejected,
+      ]
+    end
 
     def self.filter_options
       self.available_sub_types_for_search + self.stalled_match_filter_options
@@ -217,6 +236,13 @@ module MatchDecisions
       else
         'Match canceled administratively'
       end
+    end
+    
+    def incomplete_active_done?
+      return :canceled if self.class.closed_match_statuses.include?(status.try(:to_sym))
+      return :active if editable?
+      return :incomplete if status == :pending || status.blank?
+      :done
     end
 
     private
@@ -246,4 +272,3 @@ module MatchDecisions
   end
   
 end
-
