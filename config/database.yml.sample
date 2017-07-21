@@ -1,15 +1,33 @@
 default: &default
-  adapter: postgresql
+  adapter: <%= ENV['DATABASE_ADAPTER'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
   pool: 5
   timeout: 5000
+  <% if ENV['DATABASE_PORT'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  <% end %>
+  <% if ENV['DATABASE_USER'] %>
+  username: <%= ENV['DATABASE_USER'] %>
+  <% end %>
+  <% if ENV['DATABASE_PASS'] %>
+  password: <%= ENV['DATABASE_PASS'] %>
+  <% end %>
+  <% if ENV['DATABASE_HOST'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  <% end %>
 
-development:
+<%= ENV['RAILS_ENV'] %>:
   <<: *default
-  database: boston_cas_dev
+  database: <%= ENV['DATABASE_APP_DB'] %>
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+<%= "#{ENV['RAILS_ENV']}_warehouse" %>:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+
 test:
   <<: *default
-  database: boston_cas_test
+  database: <%= ENV['DATABASE_DB_TEST'] %>
+
+test_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB_TEST'] %>
