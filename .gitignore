@@ -21,7 +21,6 @@ pickle-email-*.html
 config/initializers/secret_token.rb
 config/secrets.yml
 config/mail_account.yml
-config/exception_notifier.yml
 config/letsencrypt_plugin.yml
 app/mail_interceptors/sandbox_email_interceptor.rb
 
@@ -44,7 +43,6 @@ bower.json
 .powenv
 
 .DS_Store
-config/database.yml
 
 # personal tool stuff
 /.tags
