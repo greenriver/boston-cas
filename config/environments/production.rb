@@ -20,7 +20,7 @@ Rails.application.configure do
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = deliver_method
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
-  f deliver_method == :smtp
+  if deliver_method == :smtp
     config.action_mailer.smtp_settings = {
       address: ENV['SMTP_SERVER'],
       port: 587,
