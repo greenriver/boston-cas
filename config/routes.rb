@@ -98,6 +98,9 @@ Rails.application.routes.draw do
     end
     resources :roles
     resources :versions, only: [:index]
+    
+    resources :translation_keys, only: [:index, :update]
+    resources :translation_text, only: [:update]
   end
   resource :account, only: [:edit, :update]
   resources :reissue_notifications, only: [:index, :update, :destroy]
