@@ -1,0 +1,33 @@
+default: &default
+  adapter: <%= ENV['DATABASE_ADAPTER'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  pool: 5
+  timeout: 5000
+  <% if ENV['DATABASE_PORT'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  <% end %>
+  <% if ENV['DATABASE_USER'] %>
+  username: <%= ENV['DATABASE_USER'] %>
+  <% end %>
+  <% if ENV['DATABASE_PASS'] %>
+  password: <%= ENV['DATABASE_PASS'] %>
+  <% end %>
+  <% if ENV['DATABASE_HOST'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  <% end %>
+
+<%= ENV['RAILS_ENV'] %>:
+  <<: *default
+  database: <%= ENV['DATABASE_APP_DB'] %>
+
+<%= "#{ENV['RAILS_ENV']}_warehouse" %>:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+
+test:
+  <<: *default
+  database: <%= ENV['DATABASE_DB_TEST'] %>
+
+test_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB_TEST'] %>
