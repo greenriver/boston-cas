@@ -1,4 +1,4 @@
-$match-progress-bar-step-width: 48px;
+$match-progress-bar-step-width: 45.8333333333333px;
 $match-progress-bar-step-left: $match-progress-bar-step-width;
 
 $match-progress-bar-height: 19px;
@@ -16,7 +16,7 @@ $match-progress-bar-step-marker-large-width: $match-progress-bar-step-marker-lar
 
 .match-progress-bar 
 {
-  width: 300px;
+  width: 275px;
   height: 207px;
   list-style: none;
   list-style-image: none;
@@ -57,6 +57,8 @@ $match-progress-bar-step-marker-large-width: $match-progress-bar-step-marker-lar
 {
   display: none;
   text-align: center;
+  color: $cob-sg-blue-004;
+  font-weight: bold;
 }
 
 //Done steps
@@ -79,37 +81,51 @@ $match-progress-bar-step-marker-large-width: $match-progress-bar-step-marker-lar
 }
 
 .match-progress-bar__step:first-of-type .match-progress-bar__step--done,
-.match-progress-bar__step:first-of-type .match-progress-bar__step--active 
+.match-progress-bar__step:first-of-type .match-progress-bar__step--active,
+.match-progress-bar__step:first-of-type .match-progress-bar__step--canceled
 {
-  padding-left: 48px;
-  margin-left: -48px;  
+  padding-left: 46px;
+  margin-left: -46px;  
   border-radius: 9px 0 0 9px;
 }
 
 //Active step
-.match-progress-bar__step--active
+.match-progress-bar__step--active,
+.match-progress-bar__step--canceled
 {
   margin-top: -5px;
 }
 
-.match-progress-bar__step--active .match-progress-bar__step__marker
+.match-progress-bar__step--active .match-progress-bar__step__marker,
+.match-progress-bar__step--canceled .match-progress-bar__step__marker
 {
   height: $match-progress-bar-step-marker-large-height;
   width: $match-progress-bar-step-marker-large-width;
   background-color: white;
+  border: 1px solid $cob-sg-blue-004;
+  padding-top: 0.1em;
 }
 
-.match-progress-bar__step--active .match-progress-bar__step__marker .number {
+.match-progress-bar__step--canceled .match-progress-bar__step__marker
+{
+  background-color: darken($brand-danger, 15);
+  border: 1px solid darken($brand-danger, 15);
+}
+
+.match-progress-bar__step--active .match-progress-bar__step__marker .number,
+.match-progress-bar__step--canceled .match-progress-bar__step__marker .number
+ {
   display: initial;
   line-height: 1.6;
 }
-
-.match-progress-bar__step--active .match-progress-bar__step__marker {
-  border: 1px solid $cob-sg-blue-004;
+.match-progress-bar__step--canceled .match-progress-bar__step__marker .number
+{
+  color: white;
 }
 
 //When active step is first
-.match-progress-bar__step:first-of-type .match-progress-bar__step--active 
+.match-progress-bar__step:first-of-type .match-progress-bar__step--active,
+.match-progress-bar__step:first-of-type .match-progress-bar__step--canceled 
 {
   background-color: $cob-sg-blue-005;
   height: $match-progress-bar-step-marker-height;
@@ -118,13 +134,19 @@ $match-progress-bar-step-marker-large-width: $match-progress-bar-step-marker-lar
   margin-top: 0;
 }
 
-.match-progress-bar__step:first-of-type .match-progress-bar__step--active .match-progress-bar__step__marker
+.match-progress-bar__step:first-of-type .match-progress-bar__step--active .match-progress-bar__step__marker,
+.match-progress-bar__step:first-of-type .match-progress-bar__step--canceled .match-progress-bar__step__marker
 {
   margin-top: -7px;
   padding-top: 2px;
 }
 
 // Last step 
+.match-progress-bar__step:last-of-type
+{
+  width: 40px;
+  margin-left: -10px;
+}
 .match-progress-bar__step:last-of-type .match-progress-bar__step--incomplete,
 .match-progress-bar__step:last-of-type .match-progress-bar__step--done
 {
@@ -143,6 +165,7 @@ $match-progress-bar-step-marker-large-width: $match-progress-bar-step-marker-lar
   width: $match-progress-bar-step-marker-large-width;
   padding-top: 4px;
   background-color: white;
+  color: $cob-sg-blue-004;
 }
 
 //When last step is done

@@ -50,6 +50,7 @@ class ClosedMatchesController < MatchListBaseController
     @column = sort_column
     @direction = sort_direction
     @active_filter = @data_source_id.present? || @start_date.present?
+    @types = MatchDecisions::Base.match_steps
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!
