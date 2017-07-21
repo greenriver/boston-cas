@@ -1,5 +1,8 @@
 require 'yaml'
 Rails.application.configure do
+  deliver_method = ENV['MAIL_DELIVERY_METHOD'].to_sym
+  slack_config = Rails.application.config_for(:exception_notifier)['slack']
+
   config.cache_classes = true
   config.eager_load = true
   config.consider_all_requests_local       = false
@@ -15,15 +18,28 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.active_record.dump_schema_after_migration = false
   config.sandbox_email_mode = false
-  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.delivery_method = deliver_method
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
-  config.middleware.use ExceptionNotification::Rack,
-    :slack => {
-      :webhook_url => Rails.application.config_for(:exception_notifier)['slack']['webhook_url'],
-      :channel => Rails.application.config_for(:exception_notifier)['slack']['channel'],
-      :additional_parameters => {
-        :mrkdwn => true,
-        :icon_url => Rails.application.config_for(:exception_notifier)['slack']['icon_url']
-      }
+  f deliver_method == :smtp
+    config.action_mailer.smtp_settings = {
+      address: ENV['SMTP_SERVER'],
+      port: 587,
+      user_name: ENV['SMTP_USERNAME'],
+      password: ENV['SMTP_PASSWORD'],
+      authentication: :login,
+      enable_starttls_auto: true,
     }
+  end
+  if slack_config.present?
+    config.middleware.use(ExceptionNotification::Rack,
+      :slack => {
+        :webhook_url => slack_config['webhook_url'],
+        :channel => slack_config['channel'],
+        :additional_parameters => {
+          :mrkdwn => true,
+          :icon_url => slack_config['icon_url']
+        }
+      }
+    )
+  end
 end
