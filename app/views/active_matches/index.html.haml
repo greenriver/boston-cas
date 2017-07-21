@@ -67,7 +67,7 @@
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td
-                -# %ol.match-progress-bar{"data-steps" => "#{@types.length}"}
+                -# %ol.match-progress-bar
                 -#   - match.decisions.order(id: :asc).where(type: @types.keys).each do |decision|
                 -#     - decision_status = decision.incomplete_active_done?
                 -#     %li.match-progress-bar__step
