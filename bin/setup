@@ -22,7 +22,8 @@ Dir.chdir APP_ROOT do
   end
 
   puts "\n== Preparing CAS database =="
-  system "bin/rake db:setup"
+  system "bin/rake db:create"
+  system "bin/rake db:migrate"
 
   puts "\n== Generating Seed Data for CAS Database =="
   puts "\n== Adding Available Rules =="
