@@ -1,5 +1,9 @@
 - locales = TranslationKey.available_locales
-      
+
+-if can_edit_users? 
+  = render 'menus/admin_tabs'
+  
+%h1 Manage Translations    
 .row.table-utilities
   .col-sm-4
     %p= page_entries_info @translation_keys, entry_name: _('translation')

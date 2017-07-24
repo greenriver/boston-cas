@@ -1607,7 +1607,8 @@ CREATE TABLE roles (
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
     can_become_other_users boolean DEFAULT false,
-    can_view_own_closed_matches boolean DEFAULT false
+    can_view_own_closed_matches boolean DEFAULT false,
+    can_edit_translations boolean DEFAULT false
 );
 
 
@@ -1979,6 +1980,70 @@ CREATE SEQUENCE subgrantees_id_seq
 --
 
 ALTER SEQUENCE subgrantees_id_seq OWNED BY subgrantees.id;
+
+
+--
+-- Name: translation_keys; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE translation_keys (
+    id integer NOT NULL,
+    key character varying DEFAULT ''::character varying NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: translation_keys_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE translation_keys_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: translation_keys_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE translation_keys_id_seq OWNED BY translation_keys.id;
+
+
+--
+-- Name: translation_texts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE translation_texts (
+    id integer NOT NULL,
+    text text,
+    locale character varying,
+    translation_key_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: translation_texts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE translation_texts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: translation_texts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE translation_texts_id_seq OWNED BY translation_texts.id;
 
 
 --
@@ -2587,6 +2652,20 @@ ALTER TABLE ONLY subgrantees ALTER COLUMN id SET DEFAULT nextval('subgrantees_id
 
 
 --
+-- Name: translation_keys id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY translation_keys ALTER COLUMN id SET DEFAULT nextval('translation_keys_id_seq'::regclass);
+
+
+--
+-- Name: translation_texts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY translation_texts ALTER COLUMN id SET DEFAULT nextval('translation_texts_id_seq'::regclass);
+
+
+--
 -- Name: units id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3042,6 +3121,22 @@ ALTER TABLE ONLY subgrantee_services
 
 ALTER TABLE ONLY subgrantees
     ADD CONSTRAINT subgrantees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: translation_keys translation_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY translation_keys
+    ADD CONSTRAINT translation_keys_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: translation_texts translation_texts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY translation_texts
+    ADD CONSTRAINT translation_texts_pkey PRIMARY KEY (id);
 
 
 --
@@ -3688,6 +3783,20 @@ CREATE INDEX index_subgrantee_services_on_subgrantee_id ON subgrantee_services U
 
 
 --
+-- Name: index_translation_keys_on_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_translation_keys_on_key ON translation_keys USING btree (key);
+
+
+--
+-- Name: index_translation_texts_on_translation_key_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_translation_texts_on_translation_key_id ON translation_texts USING btree (translation_key_id);
+
+
+--
 -- Name: index_units_on_building_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4277,4 +4386,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170623171917');
 INSERT INTO schema_migrations (version) VALUES ('20170629144505');
 
 INSERT INTO schema_migrations (version) VALUES ('20170713125233');
+
+INSERT INTO schema_migrations (version) VALUES ('20170721152121');
+
+INSERT INTO schema_migrations (version) VALUES ('20170724182052');
 

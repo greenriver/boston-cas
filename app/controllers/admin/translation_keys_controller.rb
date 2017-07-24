@@ -1,9 +1,9 @@
 module Admin
   class TranslationKeysController < ApplicationController
-    before_action :require_can_edit_translations!
+    # before_action :require_can_edit_translations!
     before_action :find_translation_key, only: [:show, :edit, :update, :destroy]
     before_action :add_default_locales_to_translation, only: [:show, :new]
-
+    
     def index
       tt_t = TranslationText.arel_table
       tk_t = translation_key_source.arel_table
@@ -88,8 +88,7 @@ module Admin
     
     class Search < ModelForm
       attribute :q, String, lazy: true, default: ''
-      attribute :missing_translations, Boolean, lazy: true, default: false
-      
+      attribute :missing_translations, Boolean, lazy: true, default: false      
     end
   end
 end
