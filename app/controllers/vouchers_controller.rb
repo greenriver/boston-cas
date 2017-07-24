@@ -30,9 +30,9 @@ class VouchersController < ApplicationController
 
   # Find the opportunity with this voucher
   # Mark any involved clients as available_candidate (potentially they've been matched up to the limit, 
-  # deleting this match this frees one up)
-  # Delete any associated client opportunity matches
-  # Delete the opportunity
+  # deleting this match this frees one up
+  # Delete any associated client opportunity matches that aren't complete
+  # Remove the opportunity from matching
   # Set the Voucher as available = false
   def unavailable
     opportunity = @voucher.opportunity
@@ -41,10 +41,12 @@ class VouchersController < ApplicationController
       matches = @voucher.opportunity.client_opportunity_matches
       Client.transaction do
         matches.each do |m|
-          m.client.update(available_candidate: true)
-          m.delete
+          unless m.closed?
+            m.client.update(available_candidate: true)
+            m.delete
+          end
         end
-        opportunity.delete
+        opportunity.update(available: false, available_candidate: false)
         @voucher.update(available: false)
       end
       @subprogram.update_summary!

@@ -1,4 +1,4 @@
-set :deploy_to, '/var/www/boston-cas-staging'
+set :deploy_to, "/var/www/#{fetch(:client)}-cas-staging"
 set :rails_env, "staging"
 
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
