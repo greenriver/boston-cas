@@ -39,7 +39,17 @@ set :linked_files, fetch(:linked_files, []).push(
 )
 
 # Default value for linked_dirs is []
-set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'var')
+set :linked_dirs, fetch(:linked_dirs, []).push(
+  'log', 
+  'tmp/pids', 
+  'tmp/cache', 
+  'tmp/sockets', 
+  'public/system', 
+  'var',
+  'app/assets/stylesheets/theme/styles',
+  'app/assets/images/theme/logo',
+  'app/assets/images/theme/icons',
+)
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -54,6 +64,10 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+      within shared_path do
+        # must exist for asset-precompile to succeed.
+        execute :touch, 'app/assets/stylesheets/theme/styles/_variables.scss'
+      end
     end
   end
 end
