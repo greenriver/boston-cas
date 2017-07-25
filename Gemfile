@@ -55,6 +55,8 @@ gem 'exception_notification'
 gem 'dotenv-rails'
 gem 'daemons'
 
+gem 'auto-session-timeout'
+
 group :development do
   gem 'spring'
   gem 'brakeman', require: false

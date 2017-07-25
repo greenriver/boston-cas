@@ -53,6 +53,7 @@ GEM
     ansi (1.5.0)
     arel (6.0.4)
     attribute_normalizer (1.2.0)
+    auto-session-timeout (0.9.5)
     autoprefixer-rails (6.5.4)
       execjs
     babel-source (5.8.35)
@@ -348,6 +349,7 @@ DEPENDENCIES
   activerecord-import
   activerecord-session_store
   attribute_normalizer
+  auto-session-timeout
   autoprefixer-rails
   bcrypt
   bootstrap-sass
@@ -409,4 +411,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.14.6
+   1.15.1
