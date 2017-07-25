@@ -38,5 +38,3 @@ namespace :cas do
   end
 
 end
-
-
