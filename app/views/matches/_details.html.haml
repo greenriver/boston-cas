@@ -89,9 +89,9 @@
           .detail-box--label Rules
           .detail-box--value
             - requirements = match.requirements_with_inherited
-            - initial_requirements = match.universe_state["requirements"]
+            - initial_requirements = match&.universe_state.try(:[], "requirements")
             - if requirements.map(&:prepare_for_archive) != initial_requirements
-              - initial_ids = initial_requirements.map{|m| m['id']}
+              - initial_ids = initial_requirements&.map{|m| m['id']}
               .alert.alert-danger
                 Requirements have changed since match creation; client may no longer be eligible.
             - if requirements.count > 0

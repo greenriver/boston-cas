@@ -59,3 +59,8 @@ bower.json
 *.sublime-workspace
 
 .env.local
+
+# Ignore themes
+app/assets/stylesheets/theme/styles
+app/assets/images/theme/logo
+app/assets/images/theme/icons
