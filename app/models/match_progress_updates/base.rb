@@ -191,6 +191,9 @@ module MatchProgressUpdates
           )
         end
       end
+    end
+    
+    def self.batch_should_notify_dnd
       should_notify_dnd.each do |dnd_notification|
         # Determine next notification number
         dnd_notified_at = Time.now

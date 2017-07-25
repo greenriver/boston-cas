@@ -13,6 +13,7 @@ namespace :cas do
   desc "Send status update requests for stalled matches"
   task request_status_updates: [:environment, "log:info_to_stdout"] do
     MatchProgressUpdates::Base.send_notifications
+    MatchProgressUpdates::Base.batch_should_notify_dnd
   end
 
   desc "Ensure all active matches have status update requests"
@@ -38,5 +39,3 @@ namespace :cas do
   end
 
 end
-
-
