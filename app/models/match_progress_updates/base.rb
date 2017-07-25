@@ -145,6 +145,10 @@ module MatchProgressUpdates
     def create_new_update_request?
       submitted_at.present? && submitted_at < STALLED_INTERVAL.ago && requested_at < STALLED_INTERVAL.ago
     end
+    
+    def never_sent?
+      requested_at.blank?
+    end
 
     def self.send_notifications
       # Get SSP & Shelter agency contacts for stalled matches
@@ -164,7 +168,19 @@ module MatchProgressUpdates
         ).order(id: :desc).first
         requested_at = Time.now
         decision_id = progress_update.match.current_decision.id
-        if progress_update.resend_update_request?
+        if progress_update.never_sent?
+          notification = Notifications::ProgressUpdateRequested.create_for_match!(
+            progress_update.match, 
+            contact: progress_update.contact
+          )
+          progress_update.update(
+            decision_id: decision_id,
+            requested_at: requested_at,
+            notification_id: notification.id,
+            notification_number: 1,
+            dnd_notified_at: nil,
+          )
+        elsif progress_update.resend_update_request?
           # Re-send same request
           # Bump requested_at
           notification = Notifications::Base.find(progress_update.notification_id)
@@ -194,12 +210,15 @@ module MatchProgressUpdates
     end
     
     def self.batch_should_notify_dnd
+      matches = ClientOpportunityMatch.where(id: should_notify_dnd.select(:match_id))
+      puts matches.count
+      binding.pry
+      Notifications::DndProgressUpdateLate.create_for_matches!(matches)
+      # Notify DnD for each match
       should_notify_dnd.each do |dnd_notification|
         # Determine next notification number
         dnd_notified_at = Time.now
-        Notifications::DndProgressUpdateLate.create_for_match!(
-          dnd_notification.match
-        )
+        
         dnd_notification.update(
           dnd_notified_at: dnd_notified_at,
         )
