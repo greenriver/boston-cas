@@ -54,7 +54,7 @@ class MatchDecisionsController < ApplicationController
           client.unavailable(permanent: false)
         end
       end
-      redirect_to access_context.match_path(@match)
+      redirect_to access_context.match_path(@match, :redirect => "true")
     else
       flash[:error] = "Please review the form problems below."
       render 'matches/show'
