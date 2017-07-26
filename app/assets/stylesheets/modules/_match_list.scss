@@ -152,14 +152,17 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
 }
 
 //When last step is done
-.match-progress-bar__step:last-of-type .match-progress-bar__step--done
-{
-  background-color: $cob-sg-blue-005;
-}
-
-.match-progress-bar__step:last-of-type .match-progress-bar__step--done .match-progress-bar__step__marker
+.match-progress-bar__step:last-of-type.match-progress-bar__step--done .match-progress-bar__step__marker
 {
   background-color: $cob-sg-blue-004;
   border: 1px solid $cob-sg-blue-004;
+  color: white;
+}
+
+//When last step is canceled
+.match-progress-bar__step:last-of-type.match-progress-bar__step--canceled .match-progress-bar__step__marker
+{
+  background-color: darken($brand-danger, 15);
+  border: 1px solid darken($brand-danger, 15);
   color: white;
 }
