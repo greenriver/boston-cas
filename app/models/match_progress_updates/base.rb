@@ -211,18 +211,10 @@ module MatchProgressUpdates
     
     def self.batch_should_notify_dnd
       matches = ClientOpportunityMatch.where(id: should_notify_dnd.select(:match_id))
-      puts matches.count
-      binding.pry
+      
       Notifications::DndProgressUpdateLate.create_for_matches!(matches)
       # Notify DnD for each match
-      should_notify_dnd.each do |dnd_notification|
-        # Determine next notification number
-        dnd_notified_at = Time.now
-        
-        dnd_notification.update(
-          dnd_notified_at: dnd_notified_at,
-        )
-      end
+      should_notify_dnd.update_all(dnd_notified_at: Time.now)
     end
 
     def self.match_contact_scope

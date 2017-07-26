@@ -210,10 +210,10 @@ class NotificationsMailer < ApplicationMailer
     mail(to: @contact.email, subject: '[CAS] Match Progress Update Submitted')
   end
 
-  def dnd_progress_update_late notification
+  def dnd_progress_update_late notification, contact, matches
     @notification = notification
-    @matches = notification.matches
-    @contact = notification.recipient
+    @matches = matches
+    @contact = contact
     mail(to: @contact.email, subject: '[CAS] Match Progress Late')
   end
   

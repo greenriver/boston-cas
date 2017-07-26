@@ -1,11 +1,11 @@
 Hello #{@contact.full_name},
 \
-The following match has stalled and at least one contact has failed to provide an update within the alloted time.
+The following matches have stalled and at least one contact has failed to provide an update within the alloted time.
 \
 Matches:
 - @matches.each do |match|
-  @match = match
-  #{notification_match_url @notification, match}
+  - @match = match
+  #{notification_match_url @notification, @match}
   \
   = render 'client_details'
   \
