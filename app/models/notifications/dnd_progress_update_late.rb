@@ -7,7 +7,6 @@ module Notifications
       matches.each do |match|
         contacts += match.dnd_staff_contacts.pluck(:id)
       end
-      
       contacts.each do |contact_id|
         matches_for_contact = matches.select do |m| 
           m.dnd_staff_contacts.pluck(:contact_id).include?(contact_id)

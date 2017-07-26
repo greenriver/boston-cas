@@ -197,7 +197,7 @@ module MatchProgressUpdates
             contact: progress_update.contact
           )
           new_request = create(
-            type: progress_update.type,
+            inheritance_column: progress_update.inheritance_column,
             match_id: progress_update.match_id,
             contact_id: progress_update.contact_id,
             notification_id: notification.id,
