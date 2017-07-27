@@ -30,13 +30,5 @@ module Notifications
         record_delivery_event!
       end
     end
-    # class DeliverJob < ActiveJob::Base
-    #   def perform(notification, matches)
-    #     NotificationsMailer.send(notification.notification_type, notification, matches).deliver
-    #     notification.record_delivery_event!
-    #   end
-    # end
-    # private_constant :DeliverJob
-    
   end
 end
