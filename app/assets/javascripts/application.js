@@ -22,6 +22,8 @@
 //= require select2-full
 //= require bootstrap-datepicker
 //= require bootstrap-datetimepicker
+//= require jquery.periodicalupdater
+//= require jquery.updater
 
 //////////////////////////
 // App specific code
