@@ -56,6 +56,8 @@ gem 'exception_notification'
 gem 'dotenv-rails'
 gem 'daemons'
 
+gem 'auto-session-timeout'
+
 #Translations
 gem 'gettext_i18n_rails'
 gem 'fast_gettext'
