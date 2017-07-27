@@ -27,11 +27,11 @@
             .site-name
               .site-title
                 = link_to root_path do
-                  = 'Boston Coordinated Access'
+                  = _('Boston Coordinated Access')
                   - unless Rails.env.production?
                     %span{style: 'font-size:12px;'}= "[#{Rails.env}]"
             .tagline
-              Ending Veteran & Chronic Homelessness in Boston
+              = _('Ending Veteran & Chronic Homelessness in Boston')
           .col-xs-2
             - if user_signed_in?
               = render 'layouts/site_menu'
@@ -59,9 +59,7 @@
       .container{class: container_classes}
         %p.text-center
           = render 'layouts/footer_seal'
-          The Boston Coordinated Access System is operated by the
-          %br
-          Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.
+          = _('The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.')
 
     = render 'pjax_modal_frame'
     = javascript_include_tag 'application'

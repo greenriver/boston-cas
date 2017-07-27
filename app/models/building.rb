@@ -38,7 +38,7 @@ class Building < ActiveRecord::Base
         opp.name = "#{name} ##{i+1}"
         opp.available = Faker::Boolean.boolean(0.085) ? true : false
         opp.address = Faker::Address.street_address
-        opp.city = 'Boston'
+        opp.city = _('Boston')
         opp.state = 'MA'
         opp.zip_code = Faker::Address.zip_code
       end 
