@@ -1,6 +1,6 @@
 module Admin
   class TranslationKeysController < ApplicationController
-    # before_action :require_can_edit_translations!
+    before_action :require_can_edit_translations!
     before_action :find_translation_key, only: [:show, :edit, :update, :destroy]
     before_action :add_default_locales_to_translation, only: [:show, :new]
     
