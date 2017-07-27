@@ -20,7 +20,7 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
 
 .match-progress-bar-fixed-width 
 {
-  width: 330px;
+  max-width: 330px;
   min-width: 180px;
 }
 
