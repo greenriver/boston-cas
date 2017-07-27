@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'pathname'
+require 'fileutils'
 
 # path to your application root.
 APP_ROOT = Pathname.new File.expand_path('../../',  __FILE__)
@@ -12,13 +13,16 @@ Dir.chdir APP_ROOT do
   system "gem install bundler --conservative"
   system "bundle check || bundle install"
 
-  unless File.exist?("config/database.yml")
-    puts "\n== Creating config/database.yml =="
-    system "cp config/database.yml.sample config/database.yml"
-  end
-  unless File.exist?("config/secrets.yml")
-    puts "\n== Creating config/secrets.yml =="
-    system "cp config/secrets.yml.sample config/secrets.yml"
+  ymls = [
+    "secrets.yml",
+    "letsencrypt_plugin.yml"
+  ]
+  ymls.each do |file|
+    file = File.join('config', file)
+    unless File.exist?(file)
+      puts "\n== Creating #{file} =="
+      FileUtils.cp "#{file}.sample", file
+    end
   end
 
   puts "\n== Preparing CAS database =="
@@ -45,6 +49,20 @@ Dir.chdir APP_ROOT do
   system "bin/rake cas_seeds:create_opportunities"
 
   puts "\n== Removing old logs and tempfiles =="
-  system "rm -f log/*"
-  system "rm -rf tmp/cache"
+  FileUtils.rm_f Dir.glob(File.join('log', '*'))
+  FileUtils.rm_rf Dir.glob(File.join('tmp', 'cache'))
+
+  puts "\n== Creating styles/_variables.scss =="
+  styles = File.join %w(app assets stylesheets theme styles)
+  unless File.directory?(styles)
+    FileUtils.mkdir(styles)
+  end
+  variables = File.join styles, "_variables.scss"
+  unless File.exist?(variables)
+    FileUtils.touch variables
+  end
+  
+  puts "\n== Restarting application server =="
+  restart = File.join %w(tmp restart.txt)
+  FileUtils.touch restart
 end
