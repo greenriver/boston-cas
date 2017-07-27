@@ -66,3 +66,5 @@
     = render 'pjax_modal_frame'
     = javascript_include_tag 'application'
     = yield :page_js
+    - if current_user
+      = auto_session_timeout_js(frequency: 60)
