@@ -21,6 +21,7 @@ gem 'letsencrypt_plugin'
 gem 'validates_email_format_of'
 
 gem "simple_form"
+gem 'virtus'
 gem 'font-awesome-sass'
 
 gem 'kaminari'
@@ -54,6 +55,13 @@ gem 'exception_notification'
 
 gem 'dotenv-rails'
 gem 'daemons'
+
+#Translations
+gem 'gettext_i18n_rails'
+gem 'fast_gettext'
+gem 'gettext', '>=3.0.2', require: false
+gem 'ruby_parser', require: false
+gem 'grosser-pomo'
 
 group :development do
   gem 'spring'
