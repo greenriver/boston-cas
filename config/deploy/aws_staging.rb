@@ -15,6 +15,13 @@ set :linked_dirs, fetch(:linked_dirs, []).push('certificates', 'key', '.well_kno
 set :linked_files, fetch(:linked_files, []).push('config/letsencrypt_plugin.yml', 'app/mail_interceptors/sandbox_email_interceptor.rb')
 
 namespace :deploy do
+  before :published, :translations do
+    on roles(:db)  do
+      within release_path do
+        execute :rake, 'gettext:sync_to_po_and_db RAILS_ENV=production'
+      end
+    end
+  end
   before :finishing, :seed_rules do
     on roles(:db)  do
       within current_path do
