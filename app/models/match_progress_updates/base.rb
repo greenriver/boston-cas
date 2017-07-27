@@ -10,13 +10,13 @@ module MatchProgressUpdates
     DND_INTERVAL = if Rails.env.production?
       1.weeks
     else
-      1.weeks
+      1.days
     end
 
     STALLED_INTERVAL = if Rails.env.production?
       1.months
     else
-      1.months
+      1.weeks
     end
 
     def to_partial_path
