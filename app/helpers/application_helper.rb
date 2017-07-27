@@ -105,4 +105,11 @@ module ApplicationHelper
   def pjax_request?
     request.env['HTTP_X_PJAX'].present?
   end
+  
+  def human_locale(locale)
+    translations = {
+      en: 'Text adjustments'
+    }
+    translations[locale.to_sym].presence || locale
+  end
 end

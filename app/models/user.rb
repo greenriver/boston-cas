@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-
+  include Rails.application.routes.url_helpers
   has_paper_trail
 
   # Include default devise modules. Others available are:
@@ -93,6 +93,11 @@ class User < ActiveRecord::Base
       .or(arel_table[:last_name].matches(query))
       .or(arel_table[:email].matches(query))
     )
+  end
+  
+  def admin_dashboard_landing_path
+    return admin_users_path if can_edit_users?
+    return admin_translation_keys_path if can_edit_translations?
   end
 
   # allow admins to remain logged in for longer than the default

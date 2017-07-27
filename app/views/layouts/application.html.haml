@@ -5,7 +5,7 @@
     - if enable_responsive?
       %meta{:name=>"viewport", :content=>"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"}
     %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
-    %title Boston Coordinated Access System
+    %title= _('Boston Coordinated Access System')
     %link{rel: :icon, type: 'image/png', href: 'data:;base64,iVBORw0KGgo='}
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,700|Open+Sans+Condensed:700|Montserrat:400,300,500,700|Lora:400,400i', rel: 'stylesheet', type: 'text/css'}
     = stylesheet_link_tag 'application', media: 'all'
