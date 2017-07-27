@@ -995,7 +995,7 @@ ALTER SEQUENCE match_events_id_seq OWNED BY match_events.id;
 
 CREATE TABLE match_progress_updates (
     id integer NOT NULL,
-    inheritance_column character varying NOT NULL,
+    type character varying NOT NULL,
     match_id integer NOT NULL,
     notification_id integer,
     contact_id integer NOT NULL,
@@ -3461,13 +3461,6 @@ CREATE INDEX index_match_progress_updates_on_decision_id ON match_progress_updat
 
 
 --
--- Name: index_match_progress_updates_on_inheritance_column; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_match_progress_updates_on_inheritance_column ON match_progress_updates USING btree (inheritance_column);
-
-
---
 -- Name: index_match_progress_updates_on_match_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3479,6 +3472,13 @@ CREATE INDEX index_match_progress_updates_on_match_id ON match_progress_updates 
 --
 
 CREATE INDEX index_match_progress_updates_on_notification_id ON match_progress_updates USING btree (notification_id);
+
+
+--
+-- Name: index_match_progress_updates_on_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_progress_updates_on_type ON match_progress_updates USING btree (type);
 
 
 --
@@ -4392,6 +4392,4 @@ INSERT INTO schema_migrations (version) VALUES ('20170721152121');
 INSERT INTO schema_migrations (version) VALUES ('20170724182052');
 
 INSERT INTO schema_migrations (version) VALUES ('20170725203814');
-
-INSERT INTO schema_migrations (version) VALUES ('20170726201719');
 
