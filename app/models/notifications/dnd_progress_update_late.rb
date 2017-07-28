@@ -8,13 +8,15 @@ module Notifications
         contacts += match.dnd_staff_contacts.pluck(:id)
       end
       contacts.each do |contact_id|
-        matches_for_contact = matches.select do |m| 
+        matches_for_contact = matches.select do |m|
+          puts "Staff count: #{m.dnd_staff_contacts.count}"
           m.dnd_staff_contacts.pluck(:contact_id).include?(contact_id)
         end
+        puts "Matches count: #{matches_for_contact.count}"
         contact = Contact.find(contact_id)
-        matches.each do |match|
-          should_send = (match == matches.last)
-          notification = create! match: match, recipient: contact, matches: matches, should_send: should_send
+        matches_for_contact.each do |match|
+          should_send = (match == matches_for_contact.last)
+          notification = create! match: match, recipient: contact, matches: matches_for_contact, should_send: should_send
           notification.record_delivery_event! unless should_send
         end
       end
