@@ -1,0 +1,8 @@
+.row
+  %ul.nav.nav-tabs
+    -if can_edit_users?
+      %li{role: "presentation", class: ('active' if current_page?(admin_users_path))}
+        = link_to 'User Accounts', admin_users_path
+    -if can_edit_translations?
+      %li{role: "presentation", class: ('active' if current_page?(admin_translation_keys_path))}
+        = link_to 'Manage Translations', admin_translation_keys_path

@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   mount LetsencryptPlugin::Engine, at: '/'
 
-  devise_for :users, controllers: { invitations: 'users/invitations'}
+  devise_for :users, controllers: { invitations: 'users/invitations', sessions: 'users/sessions'}
+  devise_scope :user do
+    match 'active' => 'users/sessions#active', via: :get
+    match 'timeout' => 'users/sessions#timeout', via: :get
+  end  
 
   concern :restorable do
     member { post 'restore' }
@@ -98,6 +102,9 @@ Rails.application.routes.draw do
     end
     resources :roles
     resources :versions, only: [:index]
+    
+    resources :translation_keys, only: [:index, :update]
+    resources :translation_text, only: [:update]
   end
   resource :account, only: [:edit, :update]
   resources :reissue_notifications, only: [:index, :update, :destroy]

@@ -5,7 +5,7 @@ set :application, 'boston-cas'
 set :repo_url, 'git@github.com:greenriver/boston-cas.git'
 set :client, ENV.fetch('CLIENT')
 
-server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
+# server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
 
 if !ENV['FORCE_SSH_KEY'].nil?
   set :ssh_options, {

@@ -4,7 +4,11 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  auto_session_timeout User.timeout_in
 
+  helper_method :locale
+  before_filter :set_gettext_locale
+  
   #before_filter :_basic_auth, if: -> { Rails.env.staging? }
   before_filter :set_paper_trail_whodunnit
   before_action :authenticate_user!
@@ -56,10 +60,20 @@ class ApplicationController < ActionController::Base
     return if request.xhr? # don't store ajax calls
     store_location_for(:user, request.url)
   end
+
+  def set_gettext_locale
+    session[:locale] = I18n.locale = FastGettext.set_locale(locale)
+    super
+  end
   
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :name) }
+  end
+  
+  def locale
+    default_locale = 'en'
+    params[:locale] || session[:locale] || default_locale
   end
 end
