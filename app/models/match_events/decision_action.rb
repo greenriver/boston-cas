@@ -12,5 +12,9 @@ module MatchEvents
       decision_name
     end
 
+    def show_note?(current_contact)
+      note.present?
+    end
+
   end
 end
