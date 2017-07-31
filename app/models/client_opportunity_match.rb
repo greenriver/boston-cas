@@ -416,7 +416,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
         end
         requests_by_contact.each do |contact_id, contact_requests|
           contact_requests.each do |row|
-            if row[:submitted_at].blank? && row[:requested_at] <= Date.today
+            if row[:submitted_at].blank? && row[:requested_at].present? && row[:requested_at] <= Date.today
               delinquent << contact_id
             end
           end
