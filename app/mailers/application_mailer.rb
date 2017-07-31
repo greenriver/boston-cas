@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: '"Boston Coordinated Access" <cas-help@boston.gov>'
+  default from: ENV['DEFAULT_FROM']
   layout 'mailer'
 
   if Rails.configuration.sandbox_email_mode
