@@ -54,7 +54,7 @@ class MatchDecisionsController < ApplicationController
           client.unavailable(permanent: false)
         end
       end
-      redirect_to access_context.match_path(@match, :redirect => "true")
+      redirect_to access_context.match_path(@match, redirect: "true")
     else
       flash[:error] = "Please review the form problems below."
       render 'matches/show'
@@ -65,7 +65,7 @@ class MatchDecisionsController < ApplicationController
     if @decision.editable?
       flash[:notice] = "Recreated notifications for this step"
       @decision.recreate_notifications_for_this_step
-      redirect_to access_context.match_decision_path(@match, @decision)
+      redirect_to access_context.match_decision_path(@match, @decision, redirect: "true")
     else
       flash[:alert] = "Unable to recreate notifications for this step, it is now locked."
     end

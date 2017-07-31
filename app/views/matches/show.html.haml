@@ -21,7 +21,11 @@
 - else
   = render @decision if @decision
 
-.jDynamicHistory 
+- history_path = match_history_path(@match)
+- if @notification.present?
+  - history_path = notification_match_history_path(@notification, @match)
+
+.jDynamicHistory{data: {history_path: history_path }}
   = render 'matches/history', match: @match
 
 - if(params[:redirect] == "true")
@@ -30,11 +34,13 @@
       (function($) {
         var refresh_count = 0;
         setInterval(function() {
-          $.get(window.location.pathname + '/history', function(data){
+          var $history = $('.jDynamicHistory');
+          var url = $history.data('history-path');
+          $.get(url, function(data){
             new_event_count = $(data).attr('data-history-events')
-            old_event_count = $('.jDynamicHistory').find('.jHistoryCount').attr('data-history-events');
+            old_event_count = $history.find('.jHistoryCount').attr('data-history-events');
             if (new_event_count != old_event_count) {
-              $('.jDynamicHistory').html(data);
+              $history.html(data);
             }
             refresh_count++;
             if (refresh_count >= 10){
