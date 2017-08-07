@@ -1,0 +1,34 @@
+default: &default
+  endpoint: 'https://acme-v01.api.letsencrypt.org/'
+  email: 'peter@greenriver.org'
+  domain: "boston-cas.dev"
+
+  # in Rails.root, path to private key
+  private_key: 'key/keyfile.pem'
+
+  # Private key stored in the database
+  # private_key_in_db: true
+
+  # in Rails.root, path where certificates will be stored
+  # NOTE: on Heroku, this variable is ignored
+  output_cert_dir: 'certificates'
+
+  # in Rails.root, path where challenge token will be stored
+  # in situations when database will not be used
+  # NOTE: on Heroku, comment out this line and use the database
+  challenge_dir_name: 'challenge'
+
+production:
+  # if 'cert_name' is set, the keys are saved with this name, if not the first string from key 'domain' will be used
+  cert_name: 'production'
+  <<: *default
+
+development:
+  # if 'cert_name' is set, the keys are saved with this name, if not the first string from key 'domain' will be used
+  cert_name: 'development'
+  <<: *default
+
+test:
+  # if 'cert_name' is set, the keys are saved with this name, if not the first string from key 'domain' will be used
+  cert_name: 'test'
+  <<: *default

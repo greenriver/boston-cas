@@ -24,6 +24,10 @@ Dir.chdir APP_ROOT do
       FileUtils.cp "#{file}.sample", file
     end
   end
+  unless File.exist?("config/letsencrypt_plugin.yml")
+    puts "\n== Creating config/letsencrypt_plugin.yml =="
+    system "cp config/letsencrypt_plugin.yml.sample config/letsencrypt_plugin.yml"
+  end
 
   puts "\n== Preparing CAS database =="
   system "bin/rake db:create"
@@ -38,7 +42,7 @@ Dir.chdir APP_ROOT do
   system "bin/rake cas_seeds:ensure_all_users_have_contacts"
   puts "\n== Adding Available Decision Reasons =="
   system "bin/rake cas_seeds:create_match_decision_reasons"
-  
+
   puts "\n== Adding Fake Clients =="
   system "bin/rake cas_seeds:import_chronically_homeless_from_csv"
   puts "\n== Adding Processing Clients =="
