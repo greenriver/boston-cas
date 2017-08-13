@@ -9,10 +9,8 @@ module Notifications
       end
       contacts.each do |contact_id|
         matches_for_contact = matches.select do |m|
-          puts "Staff count: #{m.dnd_staff_contacts.count}"
           m.dnd_staff_contacts.pluck(:contact_id).include?(contact_id)
         end
-        puts "Matches count: #{matches_for_contact.count}"
         contact = Contact.find(contact_id)
         matches_for_contact.each do |match|
           should_send = (match == matches_for_contact.last)
