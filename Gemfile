@@ -91,6 +91,9 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
   gem 'foreman'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'guard-rspec', require: false
 end
 
 group :test do

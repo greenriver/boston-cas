@@ -39,9 +39,9 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   config.force_ssl = false
-
-
-
+    
+  # time zone
+  config.time_zone = 'Eastern Time (US & Canada)'
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

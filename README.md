@@ -1,4 +1,4 @@
-# Boston Coordinated Access System
+# Boston Coordinated Access System [![Build Status](https://travis-ci.org/greenriver/boston-cas.svg?branch=master)](https://travis-ci.org/greenriver/boston-cas)
 
 ## Introduction
 The Boston Coordinated Access System (CAS) project was initiated by the City of Boston's Department of Neighborhood Development office to match homeless individuals to housing vacancies based on need.

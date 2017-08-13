@@ -33,7 +33,7 @@ module BostonCa
     config.generators do |generate|
       generate.helper false
       generate.assets false
-      generate.test_framework false
+      generate.test_framework :rspec
     end
 
     # By default, all emails will only go to DND staff
