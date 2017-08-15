@@ -2,13 +2,14 @@
 %ol.match-progress-bar{"step-count" => "#{match_decisions.count}"}
   - match_decisions.each do |decision|
     - decision_status = decision.incomplete_active_done?
+
     %li{class: "match-progress-bar__step match-progress-bar__step--#{decision_status}"}
       .match-progress-bar__step__name 
         = decision.step_name
-      .match-progress-bar__step__marker{data: {toggle: :tooltip, title: decision.step_name}}
-        - if @types[decision.type].to_i == @types.length.to_i
-          .icon-home3
-        - else
-          .number
-            = @types[decision.type]
+      - if decision_status == :active && show_links_to_matches?
+        = link_to match_path(match) do 
+          = render 'step_marker', decision: decision 
+      - else
+        = render 'step_marker', decision: decision 
+            
 = match.current_step_name || match.overall_status
