@@ -2,34 +2,39 @@
   .col-xs-12
     .match-decision
       = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-        .radio
-          %label
-            = form.radio_button :status, :scheduled, disabled: !@decision.editable?
-            Yes, there will be a criminal background hearing
         .row
-          .form-group.form-group__indented-01
-            %label(for="decision_criminal_hearing_date") Date and time of Criminal Background Hearing
-          .col-md-6.col-sm-6
-            .form-group.form-group__indented-01
-              = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
+          .col-sm-6
+            - if can_reject_matches?
+              %h3 Continue Match
+            .radio
+              %label
+                = form.radio_button :status, :scheduled, disabled: !@decision.editable?
+                Yes, there will be a criminal background hearing
+            .row
+              .form-group.form-group__indented-01
+                %label(for="decision_criminal_hearing_date") Date and time of Criminal Background Hearing
+              .col-md-6.col-sm-6
+                .form-group.form-group__indented-01
+                  = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
 
-        .form-group
-          .radio
-            %label
-              = form.radio_button :status, :no_hearing
-              No, there will not be a criminal background hearing
+            .form-group
+              .radio
+                %label
+                  = form.radio_button :status, :no_hearing
+                  No, there will not be a criminal background hearing
         
         
         
-        = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
-
-
-        .form-actions.clearfix
-          - if can_reject_matches?
-            .well
-              = render 'match_decisions/park_client', form: form
-              = render 'match_decisions/cancel_match_form_fields', form: form
-          = form.submit 'Submit', class: 'btn btn-primary', disabled: !@decision.editable?
+            = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+            .form-actions.clearfix
+              = form.submit 'Submit', class: 'btn btn-primary jSubmit', disabled: !@decision.editable?
+          .col-sm-6
+            - if can_reject_matches?
+              %h3 Cancel Match
+              .well
+                = render 'match_decisions/park_client', form: form
+                = render 'match_decisions/cancel_match_form_fields', form: form
+          
 
         %p
           Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
@@ -40,3 +45,17 @@
       stepping: 15,
       format: "MMM D, YYYY h:mm a"
     });
+    
+    function update_button_states() {
+        var prevent_matching_present = $('#decision_prevent_matching_until').val() != ''
+        if(prevent_matching_present) {
+          $('.jSubmit').attr('disabled', 'disabled');
+          $('.jCancel').removeAttr('disabled');
+        } else {
+         $('.jSubmit').removeAttr('disabled');
+         
+        }
+    }
+
+    $('#decision_prevent_matching_until').on("change", update_button_states);
+    $('#decision_prevent_matching_until').trigger('change');
