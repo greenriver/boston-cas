@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-27 14:27-0400\n"
-"PO-Revision-Date: 2017-07-27 14:27-0400\n"
+"POT-Creation-Date: 2017-08-17 15:34-0400\n"
+"PO-Revision-Date: 2017-08-17 15:34-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -33,7 +33,28 @@ msgstr ""
 msgid "By clicking OK, you certify that you have obtained a signed Client Release of Information, the client has spoken to a shelter case manager and you have obtained a CORI release form from the client.  In addition, you have shared a signed Client Release of Information to all relevant parties in accordance with the BostonHMIS Policies and Procedures found in the BostonHMIS Handbook and in agreement with YOUR signed HMIS User Agreement on file at your Agency. &#x000A;&#x000A;Any violations may lead to user access termination and/or eventual employment termination. &#x000A;&#x000A;If this is not the case, click cancel."
 msgstr ""
 
+msgid "DND"
+msgstr ""
+
 msgid "Ending Veteran & Chronic Homelessness in Boston"
+msgstr ""
+
+msgid "HAN"
+msgstr ""
+
+msgid "HSA"
+msgstr ""
+
+msgid "Housing Search Worker"
+msgstr ""
+
+msgid "Housing Subsidy Administrator"
+msgstr ""
+
+msgid "Shelter Agency"
+msgstr ""
+
+msgid "Stabilization Service Provider"
 msgstr ""
 
 msgid "The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care."
