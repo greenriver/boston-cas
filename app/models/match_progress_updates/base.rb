@@ -79,8 +79,8 @@ module MatchProgressUpdates
         'Client searching for unit',
         'Client has submitted request for tenancy',
         'Client is waiting for project/sponsor based unit to become available',
-        'SSP/HSA waiting on documentation',
-        'SSP/HSA  CORI mitigation',
+        "#{_('SSP')}/#{_('HSA')} waiting on documentation",
+        "#{_('SSP')}/#{_('HSA')}  CORI mitigation",
         'Client has submitted Reasonable Accomodation',
         other_response,
       ]
@@ -92,7 +92,7 @@ module MatchProgressUpdates
         'Client incarcerated',
         'Client in medical institution',
         'Client declining services',
-        'SSP/HSA unable to contact client',
+        "#{_('SSP')}/#{_('HSA')} unable to contact client",
         other_response,
       ]
     end

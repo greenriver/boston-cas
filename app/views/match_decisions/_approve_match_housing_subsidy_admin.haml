@@ -23,4 +23,4 @@
           = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
           = form.submit 'Accept Match Recommendation', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
 
-        %p If the match is declined, the DND will be informed of the decision. If accepted, all involved parties will be notified.
+        %p= "If the match is declined, the #{_('DND')} will be informed of the decision. If accepted, all involved parties will be notified."

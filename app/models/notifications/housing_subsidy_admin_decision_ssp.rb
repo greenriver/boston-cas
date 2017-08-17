@@ -9,7 +9,7 @@ module Notifications
     end
 
     def event_label
-      'Stabilization Services Provider sent notice of Housing Subsidy Administrator\'s decision.'
+      "#{_('Stabilization Services Provider')} sent notice of #{_('Housing Subsidy Administrator')}'s decision."
     end
 
     def should_expire?

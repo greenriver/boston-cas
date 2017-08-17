@@ -11,9 +11,9 @@ module MatchDecisions
     
     def label_for_status status
       case status.to_sym
-      when :pending then 'Housing Subsidy Administrator reviewing match'
-      when :accepted then 'Match accepted by Housing Subsidy Administrator'
-      when :declined then "Match declined by Housing Subsidy Administrator.  Reason: #{decline_reason_name}"
+      when :pending then "#{_('Housing Subsidy Administrator')} reviewing match"
+      when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
+      when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
@@ -28,11 +28,11 @@ module MatchDecisions
     end
 
     def step_name
-      'Housing Subsidy Administrator CORI Hearing'
+      "#{_('Housing Subsidy Administrator')} CORI Hearing"
     end
 
     def actor_type
-      'HSA'
+      "#{_('HSA')}"
     end
 
     def contact_actor_type

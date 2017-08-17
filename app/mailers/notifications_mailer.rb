@@ -109,56 +109,56 @@ class NotificationsMailer < ApplicationMailer
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: 'Decision from Housing Subsidy Administrator')
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: 'Decision from Housing Subsidy Administrator')
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: 'Decision from Housing Subsidy Administrator')
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
   
   def housing_subsidy_admin_accepted_match_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Match Accepted by HSA')
+    mail(to: @contact.email, subject: "[CAS] Match Accepted by #{_('HSA')}")
   end
   
   def housing_subsidy_admin_declined_match_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Match Declined by HSA')
+    mail(to: @contact.email, subject: "[CAS] Match Declined by #{_('HSA')}")
   end
 
   def housing_subsidy_admin_declined_match_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Match Declined by HSA')
+    mail(to: @contact.email, subject: "[CAS] Match Declined by #{_('HSA')}")
   end
 
   def confirm_shelter_agency_decline_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Match Declined by Shelter Agency - Requires Your Action')
+    mail(to: @contact.email, subject: "[CAS] Match Declined by #{_('Shelter Agency')} - Requires Your Action")
   end
 
   def confirm_housing_subsidy_admin_decline_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Match Declined by HSA - Requires Your Action')
+    mail(to: @contact.email, subject: "[CAS] Match Declined by #{_('HSA')} - Requires Your Action")
   end
 
   def on_behalf_of notification
@@ -186,7 +186,7 @@ class NotificationsMailer < ApplicationMailer
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: '[CAS] Shelter Agency Accepted Match')
+    mail(to: @contact.email, subject: "[CAS] #{_('Shelter Agency')} Accepted Match")
   end
 
   def shelter_agency_decline_accepted notification

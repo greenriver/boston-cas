@@ -11,7 +11,7 @@ module Notifications
     end
 
     def event_label
-      'Sent notice of Housing Subsidy Administrator\'s decision to DND'
+      "Sent notice of #{_('Housing Subsidy Administrator')}'s decision to #{_('DND')}"
     end
 
     def should_expire?

@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      "Progress update submitted, DND notified"
+      "Progress update submitted, #{_('DND')} notified"
     end
   end
 end
