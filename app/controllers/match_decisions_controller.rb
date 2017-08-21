@@ -16,7 +16,7 @@ class MatchDecisionsController < ApplicationController
     render 'matches/show'
   end
   
-  def update  
+  def update
     if !@decision.editable?
       flash[:alert] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
@@ -43,7 +43,7 @@ class MatchDecisionsController < ApplicationController
     
     # If decline reason is provided and match is canceled or accepted
     elsif decision_params[:decline_reason_id].present? && decision_params[:status] == "accepted" || 
-          decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled" ||
+          decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled" 
       flash[:alert] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
       render 'matches/show'
 
