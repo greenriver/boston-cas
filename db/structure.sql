@@ -2,12 +2,11 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.8
--- Dumped by pg_dump version 9.6.4
+-- Dumped from database version 9.5.6
+-- Dumped by pg_dump version 9.5.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -304,7 +303,7 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1387,7 +1386,7 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1569,7 +1568,6 @@ CREATE TABLE roles (
     can_edit_all_clients boolean DEFAULT false,
     can_participate_in_matches boolean DEFAULT false,
     can_view_all_matches boolean DEFAULT false,
-    can_view_own_closed_matches boolean DEFAULT false,
     can_see_alternate_matches boolean DEFAULT false,
     can_edit_match_contacts boolean DEFAULT false,
     can_approve_matches boolean DEFAULT false,
@@ -1580,11 +1578,6 @@ CREATE TABLE roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false,
-    can_view_hues_eligibility boolean DEFAULT false,
-    can_view_hiv_positive_eligibility boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -1609,8 +1602,15 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
-    can_edit_translations boolean DEFAULT false
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
+    can_view_hiv_positive_eligibility boolean DEFAULT false,
+    can_view_own_closed_matches boolean DEFAULT false,
+    can_edit_translations boolean DEFAULT false,
+    can_view_vspdats boolean DEFAULT false
 );
 
 
@@ -2290,427 +2290,427 @@ ALTER SEQUENCE vouchers_id_seq OWNED BY vouchers.id;
 
 
 --
--- Name: building_contacts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY building_contacts ALTER COLUMN id SET DEFAULT nextval('building_contacts_id_seq'::regclass);
 
 
 --
--- Name: building_services id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY building_services ALTER COLUMN id SET DEFAULT nextval('building_services_id_seq'::regclass);
 
 
 --
--- Name: buildings id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY buildings ALTER COLUMN id SET DEFAULT nextval('buildings_id_seq'::regclass);
 
 
 --
--- Name: client_contacts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_contacts ALTER COLUMN id SET DEFAULT nextval('client_contacts_id_seq'::regclass);
 
 
 --
--- Name: client_opportunity_match_contacts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_opportunity_match_contacts ALTER COLUMN id SET DEFAULT nextval('client_opportunity_match_contacts_id_seq'::regclass);
 
 
 --
--- Name: client_opportunity_matches id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_opportunity_matches ALTER COLUMN id SET DEFAULT nextval('client_opportunity_matches_id_seq'::regclass);
 
 
 --
--- Name: clients id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::regclass);
 
 
 --
--- Name: contacts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq'::regclass);
 
 
 --
--- Name: data_sources id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY data_sources ALTER COLUMN id SET DEFAULT nextval('data_sources_id_seq'::regclass);
 
 
 --
--- Name: date_of_birth_quality_codes id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY date_of_birth_quality_codes ALTER COLUMN id SET DEFAULT nextval('date_of_birth_quality_codes_id_seq'::regclass);
 
 
 --
--- Name: delayed_jobs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
 
 
 --
--- Name: disabling_conditions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY disabling_conditions ALTER COLUMN id SET DEFAULT nextval('disabling_conditions_id_seq'::regclass);
 
 
 --
--- Name: discharge_statuses id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY discharge_statuses ALTER COLUMN id SET DEFAULT nextval('discharge_statuses_id_seq'::regclass);
 
 
 --
--- Name: domestic_violence_survivors id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY domestic_violence_survivors ALTER COLUMN id SET DEFAULT nextval('domestic_violence_survivors_id_seq'::regclass);
 
 
 --
--- Name: ethnicities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ethnicities ALTER COLUMN id SET DEFAULT nextval('ethnicities_id_seq'::regclass);
 
 
 --
--- Name: funding_source_services id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY funding_source_services ALTER COLUMN id SET DEFAULT nextval('funding_source_services_id_seq'::regclass);
 
 
 --
--- Name: funding_sources id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY funding_sources ALTER COLUMN id SET DEFAULT nextval('funding_sources_id_seq'::regclass);
 
 
 --
--- Name: genders id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY genders ALTER COLUMN id SET DEFAULT nextval('genders_id_seq'::regclass);
 
 
 --
--- Name: has_developmental_disabilities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_developmental_disabilities ALTER COLUMN id SET DEFAULT nextval('has_developmental_disabilities_id_seq'::regclass);
 
 
 --
--- Name: has_hivaids id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_hivaids ALTER COLUMN id SET DEFAULT nextval('has_hivaids_id_seq'::regclass);
 
 
 --
--- Name: has_mental_health_problems id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_mental_health_problems ALTER COLUMN id SET DEFAULT nextval('has_mental_health_problems_id_seq'::regclass);
 
 
 --
--- Name: letsencrypt_plugin_challenges id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY letsencrypt_plugin_challenges ALTER COLUMN id SET DEFAULT nextval('letsencrypt_plugin_challenges_id_seq'::regclass);
 
 
 --
--- Name: letsencrypt_plugin_settings id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY letsencrypt_plugin_settings ALTER COLUMN id SET DEFAULT nextval('letsencrypt_plugin_settings_id_seq'::regclass);
 
 
 --
--- Name: match_decision_reasons id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_decision_reasons ALTER COLUMN id SET DEFAULT nextval('match_decision_reasons_id_seq'::regclass);
 
 
 --
--- Name: match_decisions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_decisions ALTER COLUMN id SET DEFAULT nextval('match_decisions_id_seq'::regclass);
 
 
 --
--- Name: match_events id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_events ALTER COLUMN id SET DEFAULT nextval('match_events_id_seq'::regclass);
 
 
 --
--- Name: match_progress_updates id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_progress_updates ALTER COLUMN id SET DEFAULT nextval('match_progress_updates_id_seq'::regclass);
 
 
 --
--- Name: name_quality_codes id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY name_quality_codes ALTER COLUMN id SET DEFAULT nextval('name_quality_codes_id_seq'::regclass);
 
 
 --
--- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
 --
--- Name: opportunities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunities ALTER COLUMN id SET DEFAULT nextval('opportunities_id_seq'::regclass);
 
 
 --
--- Name: opportunity_contacts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunity_contacts ALTER COLUMN id SET DEFAULT nextval('opportunity_contacts_id_seq'::regclass);
 
 
 --
--- Name: opportunity_properties id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunity_properties ALTER COLUMN id SET DEFAULT nextval('opportunity_properties_id_seq'::regclass);
 
 
 --
--- Name: physical_disabilities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY physical_disabilities ALTER COLUMN id SET DEFAULT nextval('physical_disabilities_id_seq'::regclass);
 
 
 --
--- Name: primary_races id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY primary_races ALTER COLUMN id SET DEFAULT nextval('primary_races_id_seq'::regclass);
 
 
 --
--- Name: program_services id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY program_services ALTER COLUMN id SET DEFAULT nextval('program_services_id_seq'::regclass);
 
 
 --
--- Name: programs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY programs ALTER COLUMN id SET DEFAULT nextval('programs_id_seq'::regclass);
 
 
 --
--- Name: project_clients id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY project_clients ALTER COLUMN id SET DEFAULT nextval('project_clients_id_seq'::regclass);
 
 
 --
--- Name: project_programs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY project_programs ALTER COLUMN id SET DEFAULT nextval('project_programs_id_seq'::regclass);
 
 
 --
--- Name: reissue_requests id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reissue_requests ALTER COLUMN id SET DEFAULT nextval('reissue_requests_id_seq'::regclass);
 
 
 --
--- Name: rejected_matches id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rejected_matches ALTER COLUMN id SET DEFAULT nextval('rejected_matches_id_seq'::regclass);
 
 
 --
--- Name: requirements id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY requirements ALTER COLUMN id SET DEFAULT nextval('requirements_id_seq'::regclass);
 
 
 --
--- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
 
 
 --
--- Name: rules id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rules ALTER COLUMN id SET DEFAULT nextval('rules_id_seq'::regclass);
 
 
 --
--- Name: secondary_races id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY secondary_races ALTER COLUMN id SET DEFAULT nextval('secondary_races_id_seq'::regclass);
 
 
 --
--- Name: service_rules id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY service_rules ALTER COLUMN id SET DEFAULT nextval('service_rules_id_seq'::regclass);
 
 
 --
--- Name: services id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY services ALTER COLUMN id SET DEFAULT nextval('services_id_seq'::regclass);
 
 
 --
--- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
 
 
 --
--- Name: social_security_number_quality_codes id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY social_security_number_quality_codes ALTER COLUMN id SET DEFAULT nextval('social_security_number_quality_codes_id_seq'::regclass);
 
 
 --
--- Name: sub_programs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs ALTER COLUMN id SET DEFAULT nextval('sub_programs_id_seq'::regclass);
 
 
 --
--- Name: subgrantee_contacts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantee_contacts ALTER COLUMN id SET DEFAULT nextval('subgrantee_contacts_id_seq'::regclass);
 
 
 --
--- Name: subgrantee_services id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantee_services ALTER COLUMN id SET DEFAULT nextval('subgrantee_services_id_seq'::regclass);
 
 
 --
--- Name: subgrantees id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantees ALTER COLUMN id SET DEFAULT nextval('subgrantees_id_seq'::regclass);
 
 
 --
--- Name: translation_keys id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY translation_keys ALTER COLUMN id SET DEFAULT nextval('translation_keys_id_seq'::regclass);
 
 
 --
--- Name: translation_texts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY translation_texts ALTER COLUMN id SET DEFAULT nextval('translation_texts_id_seq'::regclass);
 
 
 --
--- Name: units id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY units ALTER COLUMN id SET DEFAULT nextval('units_id_seq'::regclass);
 
 
 --
--- Name: user_roles id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_roles ALTER COLUMN id SET DEFAULT nextval('user_roles_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
 
 
 --
--- Name: veteran_statuses id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY veteran_statuses ALTER COLUMN id SET DEFAULT nextval('veteran_statuses_id_seq'::regclass);
 
 
 --
--- Name: vouchers id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vouchers ALTER COLUMN id SET DEFAULT nextval('vouchers_id_seq'::regclass);
 
 
 --
--- Name: building_contacts building_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: building_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY building_contacts
@@ -2718,7 +2718,7 @@ ALTER TABLE ONLY building_contacts
 
 
 --
--- Name: building_services building_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: building_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY building_services
@@ -2726,7 +2726,7 @@ ALTER TABLE ONLY building_services
 
 
 --
--- Name: buildings buildings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: buildings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY buildings
@@ -2734,7 +2734,7 @@ ALTER TABLE ONLY buildings
 
 
 --
--- Name: client_contacts client_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: client_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_contacts
@@ -2742,7 +2742,7 @@ ALTER TABLE ONLY client_contacts
 
 
 --
--- Name: client_opportunity_match_contacts client_opportunity_match_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: client_opportunity_match_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_opportunity_match_contacts
@@ -2750,7 +2750,7 @@ ALTER TABLE ONLY client_opportunity_match_contacts
 
 
 --
--- Name: client_opportunity_matches client_opportunity_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: client_opportunity_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY client_opportunity_matches
@@ -2758,7 +2758,7 @@ ALTER TABLE ONLY client_opportunity_matches
 
 
 --
--- Name: clients clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY clients
@@ -2766,7 +2766,7 @@ ALTER TABLE ONLY clients
 
 
 --
--- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts
@@ -2774,7 +2774,7 @@ ALTER TABLE ONLY contacts
 
 
 --
--- Name: data_sources data_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: data_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY data_sources
@@ -2782,7 +2782,7 @@ ALTER TABLE ONLY data_sources
 
 
 --
--- Name: date_of_birth_quality_codes date_of_birth_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: date_of_birth_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY date_of_birth_quality_codes
@@ -2790,7 +2790,7 @@ ALTER TABLE ONLY date_of_birth_quality_codes
 
 
 --
--- Name: delayed_jobs delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY delayed_jobs
@@ -2798,7 +2798,7 @@ ALTER TABLE ONLY delayed_jobs
 
 
 --
--- Name: disabling_conditions disabling_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: disabling_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY disabling_conditions
@@ -2806,7 +2806,7 @@ ALTER TABLE ONLY disabling_conditions
 
 
 --
--- Name: discharge_statuses discharge_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: discharge_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY discharge_statuses
@@ -2814,7 +2814,7 @@ ALTER TABLE ONLY discharge_statuses
 
 
 --
--- Name: domestic_violence_survivors domestic_violence_survivors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: domestic_violence_survivors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY domestic_violence_survivors
@@ -2822,7 +2822,7 @@ ALTER TABLE ONLY domestic_violence_survivors
 
 
 --
--- Name: ethnicities ethnicities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ethnicities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ethnicities
@@ -2830,7 +2830,7 @@ ALTER TABLE ONLY ethnicities
 
 
 --
--- Name: funding_source_services funding_source_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: funding_source_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY funding_source_services
@@ -2838,7 +2838,7 @@ ALTER TABLE ONLY funding_source_services
 
 
 --
--- Name: funding_sources funding_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: funding_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY funding_sources
@@ -2846,7 +2846,7 @@ ALTER TABLE ONLY funding_sources
 
 
 --
--- Name: genders genders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: genders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY genders
@@ -2854,7 +2854,7 @@ ALTER TABLE ONLY genders
 
 
 --
--- Name: has_developmental_disabilities has_developmental_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: has_developmental_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_developmental_disabilities
@@ -2862,7 +2862,7 @@ ALTER TABLE ONLY has_developmental_disabilities
 
 
 --
--- Name: has_hivaids has_hivaids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: has_hivaids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_hivaids
@@ -2870,7 +2870,7 @@ ALTER TABLE ONLY has_hivaids
 
 
 --
--- Name: has_mental_health_problems has_mental_health_problems_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: has_mental_health_problems_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY has_mental_health_problems
@@ -2878,7 +2878,7 @@ ALTER TABLE ONLY has_mental_health_problems
 
 
 --
--- Name: letsencrypt_plugin_challenges letsencrypt_plugin_challenges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: letsencrypt_plugin_challenges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY letsencrypt_plugin_challenges
@@ -2886,7 +2886,7 @@ ALTER TABLE ONLY letsencrypt_plugin_challenges
 
 
 --
--- Name: letsencrypt_plugin_settings letsencrypt_plugin_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: letsencrypt_plugin_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY letsencrypt_plugin_settings
@@ -2894,7 +2894,7 @@ ALTER TABLE ONLY letsencrypt_plugin_settings
 
 
 --
--- Name: match_decision_reasons match_decision_reasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: match_decision_reasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_decision_reasons
@@ -2902,7 +2902,7 @@ ALTER TABLE ONLY match_decision_reasons
 
 
 --
--- Name: match_decisions match_decisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: match_decisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_decisions
@@ -2910,7 +2910,7 @@ ALTER TABLE ONLY match_decisions
 
 
 --
--- Name: match_events match_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: match_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_events
@@ -2918,7 +2918,7 @@ ALTER TABLE ONLY match_events
 
 
 --
--- Name: match_progress_updates match_progress_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: match_progress_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY match_progress_updates
@@ -2926,7 +2926,7 @@ ALTER TABLE ONLY match_progress_updates
 
 
 --
--- Name: name_quality_codes name_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: name_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY name_quality_codes
@@ -2934,7 +2934,7 @@ ALTER TABLE ONLY name_quality_codes
 
 
 --
--- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2942,7 +2942,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: opportunities opportunities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: opportunities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunities
@@ -2950,7 +2950,7 @@ ALTER TABLE ONLY opportunities
 
 
 --
--- Name: opportunity_contacts opportunity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: opportunity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunity_contacts
@@ -2958,7 +2958,7 @@ ALTER TABLE ONLY opportunity_contacts
 
 
 --
--- Name: opportunity_properties opportunity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: opportunity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunity_properties
@@ -2966,7 +2966,7 @@ ALTER TABLE ONLY opportunity_properties
 
 
 --
--- Name: physical_disabilities physical_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: physical_disabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY physical_disabilities
@@ -2974,7 +2974,7 @@ ALTER TABLE ONLY physical_disabilities
 
 
 --
--- Name: primary_races primary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: primary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY primary_races
@@ -2982,7 +2982,7 @@ ALTER TABLE ONLY primary_races
 
 
 --
--- Name: program_services program_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: program_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY program_services
@@ -2990,7 +2990,7 @@ ALTER TABLE ONLY program_services
 
 
 --
--- Name: programs programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY programs
@@ -2998,7 +2998,7 @@ ALTER TABLE ONLY programs
 
 
 --
--- Name: project_clients project_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: project_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY project_clients
@@ -3006,7 +3006,7 @@ ALTER TABLE ONLY project_clients
 
 
 --
--- Name: project_programs project_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: project_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY project_programs
@@ -3014,7 +3014,7 @@ ALTER TABLE ONLY project_programs
 
 
 --
--- Name: reissue_requests reissue_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: reissue_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reissue_requests
@@ -3022,7 +3022,7 @@ ALTER TABLE ONLY reissue_requests
 
 
 --
--- Name: rejected_matches rejected_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: rejected_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rejected_matches
@@ -3030,7 +3030,7 @@ ALTER TABLE ONLY rejected_matches
 
 
 --
--- Name: requirements requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY requirements
@@ -3038,7 +3038,7 @@ ALTER TABLE ONLY requirements
 
 
 --
--- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY roles
@@ -3046,7 +3046,7 @@ ALTER TABLE ONLY roles
 
 
 --
--- Name: rules rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rules
@@ -3054,7 +3054,7 @@ ALTER TABLE ONLY rules
 
 
 --
--- Name: secondary_races secondary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: secondary_races_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY secondary_races
@@ -3062,7 +3062,7 @@ ALTER TABLE ONLY secondary_races
 
 
 --
--- Name: service_rules service_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: service_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY service_rules
@@ -3070,7 +3070,7 @@ ALTER TABLE ONLY service_rules
 
 
 --
--- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY services
@@ -3078,7 +3078,7 @@ ALTER TABLE ONLY services
 
 
 --
--- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sessions
@@ -3086,7 +3086,7 @@ ALTER TABLE ONLY sessions
 
 
 --
--- Name: social_security_number_quality_codes social_security_number_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: social_security_number_quality_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY social_security_number_quality_codes
@@ -3094,7 +3094,7 @@ ALTER TABLE ONLY social_security_number_quality_codes
 
 
 --
--- Name: sub_programs sub_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sub_programs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -3102,7 +3102,7 @@ ALTER TABLE ONLY sub_programs
 
 
 --
--- Name: subgrantee_contacts subgrantee_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: subgrantee_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantee_contacts
@@ -3110,7 +3110,7 @@ ALTER TABLE ONLY subgrantee_contacts
 
 
 --
--- Name: subgrantee_services subgrantee_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: subgrantee_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantee_services
@@ -3118,7 +3118,7 @@ ALTER TABLE ONLY subgrantee_services
 
 
 --
--- Name: subgrantees subgrantees_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: subgrantees_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subgrantees
@@ -3126,7 +3126,7 @@ ALTER TABLE ONLY subgrantees
 
 
 --
--- Name: translation_keys translation_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: translation_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY translation_keys
@@ -3134,7 +3134,7 @@ ALTER TABLE ONLY translation_keys
 
 
 --
--- Name: translation_texts translation_texts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: translation_texts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY translation_texts
@@ -3142,7 +3142,7 @@ ALTER TABLE ONLY translation_texts
 
 
 --
--- Name: units units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY units
@@ -3150,7 +3150,7 @@ ALTER TABLE ONLY units
 
 
 --
--- Name: user_roles user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_roles
@@ -3158,7 +3158,7 @@ ALTER TABLE ONLY user_roles
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3166,7 +3166,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions
@@ -3174,7 +3174,7 @@ ALTER TABLE ONLY versions
 
 
 --
--- Name: veteran_statuses veteran_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: veteran_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY veteran_statuses
@@ -3182,7 +3182,7 @@ ALTER TABLE ONLY veteran_statuses
 
 
 --
--- Name: vouchers vouchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vouchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vouchers
@@ -3918,7 +3918,7 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: sub_programs fk_rails_08099961f4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_08099961f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -3926,7 +3926,7 @@ ALTER TABLE ONLY sub_programs
 
 
 --
--- Name: sub_programs fk_rails_1c9726a2f9; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_1c9726a2f9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -3934,7 +3934,7 @@ ALTER TABLE ONLY sub_programs
 
 
 --
--- Name: user_roles fk_rails_318345354e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_318345354e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_roles
@@ -3942,7 +3942,7 @@ ALTER TABLE ONLY user_roles
 
 
 --
--- Name: user_roles fk_rails_3369e0d5fc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_3369e0d5fc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_roles
@@ -3950,7 +3950,7 @@ ALTER TABLE ONLY user_roles
 
 
 --
--- Name: vouchers fk_rails_3938619bb0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_3938619bb0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vouchers
@@ -3958,7 +3958,7 @@ ALTER TABLE ONLY vouchers
 
 
 --
--- Name: vouchers fk_rails_3e6ca7b204; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_3e6ca7b204; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vouchers
@@ -3966,7 +3966,7 @@ ALTER TABLE ONLY vouchers
 
 
 --
--- Name: reissue_requests fk_rails_5502b5ba7e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_5502b5ba7e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reissue_requests
@@ -3974,7 +3974,7 @@ ALTER TABLE ONLY reissue_requests
 
 
 --
--- Name: programs fk_rails_6a0a1e6411; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_6a0a1e6411; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY programs
@@ -3982,7 +3982,7 @@ ALTER TABLE ONLY programs
 
 
 --
--- Name: sub_programs fk_rails_7aa5978182; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_7aa5978182; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -3990,7 +3990,7 @@ ALTER TABLE ONLY sub_programs
 
 
 --
--- Name: reissue_requests fk_rails_7f153cde04; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_7f153cde04; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reissue_requests
@@ -3998,7 +3998,7 @@ ALTER TABLE ONLY reissue_requests
 
 
 --
--- Name: opportunities fk_rails_90139b441c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_90139b441c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY opportunities
@@ -4006,7 +4006,7 @@ ALTER TABLE ONLY opportunities
 
 
 --
--- Name: programs fk_rails_9d29596bf8; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_9d29596bf8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY programs
@@ -4014,7 +4014,7 @@ ALTER TABLE ONLY programs
 
 
 --
--- Name: vouchers fk_rails_b7b36b70ab; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_b7b36b70ab; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vouchers
@@ -4022,7 +4022,7 @@ ALTER TABLE ONLY vouchers
 
 
 --
--- Name: sub_programs fk_rails_b8163bf251; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_b8163bf251; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -4030,7 +4030,7 @@ ALTER TABLE ONLY sub_programs
 
 
 --
--- Name: programs fk_rails_c0d5ae3683; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_c0d5ae3683; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY programs
@@ -4038,7 +4038,7 @@ ALTER TABLE ONLY programs
 
 
 --
--- Name: sub_programs fk_rails_f92c6a12a3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_f92c6a12a3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sub_programs
@@ -4394,4 +4394,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170724182052');
 INSERT INTO schema_migrations (version) VALUES ('20170725203814');
 
 INSERT INTO schema_migrations (version) VALUES ('20170818202458');
+
+INSERT INTO schema_migrations (version) VALUES ('20170821132203');
 

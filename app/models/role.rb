@@ -57,6 +57,7 @@ class Role < ActiveRecord::Base
       :can_assign_requirements,
       :can_become_other_users, # This is an admin/developer only role for troubleshooting
       :can_edit_translations,
+      :can_view_vspdats,
     ]
   end
 

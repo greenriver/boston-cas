@@ -64,9 +64,10 @@
           %tr
             %th Release of information signed on
             %td= @client.release_of_information.try(:to_date)
-          %tr
-            %th VISPDAT Score
-            %td= @client.vispdat_score
+          - if can_view_vspdats?
+            %tr
+              %th VISPDAT Score
+              %td= @client.vispdat_score
           - if can_view_client_confidentiality?
             %tr
               %th
