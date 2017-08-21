@@ -25,3 +25,53 @@
 
         %p If the match is declined, the DND will be informed of the decision. If accepted, all involved parties will be notified.
         
+      = content_for :page_js do
+        :javascript
+          function update_button_states(e) {
+    
+            var prevent_matching_present = $('#decision_prevent_matching_until').val() != '';
+            if(prevent_matching_present) {
+              $('.jAccept').prop('disabled', true);
+              // $('.jDecline').prop('disabled', false);         
+            }
+            
+            var decline_reason_present = $(".decision_decline_reason input:checkbox:checked").length > 0;
+            if(decline_reason_present) {
+              //Disable cancel and accept 
+              $('.jAccept').prop('disabled', true);
+              $('.jCancel').prop('disabled', true);
+              
+              //Clear cancel reason
+              if ($(e.currentTarget).attr('class') != $('.decision_administrative_cancel_reason').attr('class')){
+                $(".decision_administrative_cancel_reason input:checkbox:checked").removeAttr('checked')
+              }    
+              
+              //Enable decline button
+              $('.jDecline').removeAttr('disabled');                 
+            }
+            
+            var cancel_reason_present = $(".decision_administrative_cancel_reason input:checkbox:checked").length > 0;
+            if(cancel_reason_present) {
+              //Disable decline and accept 
+              $('.jAccept').prop('disabled', true);
+              $('.jDecline').prop('disabled', true);
+              
+              //Clear decline reason
+              if ($(e.currentTarget).attr('class') != $('.decision_decline_reason').attr('class')){
+                $(".decision_decline_reason input:checkbox:checked").removeAttr('checked')
+              }   
+              
+              //Enable cancel button
+              $('.jCancel').removeAttr('disabled');       
+            }
+            
+            
+            if(! prevent_matching_present && ! decline_reason_present & ! cancel_reason_present) {
+              $('.jAccept').removeAttr('disabled');
+              $('.jDecline').removeAttr('disabled');
+              $('.jCancel').removeAttr('disabled');
+            }
+          }
+
+          $('.jButtonStateTriggers').on("change", update_button_states);
+          $('.jButtonStateTriggers').trigger('change');
