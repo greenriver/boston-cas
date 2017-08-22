@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'DND notified of new match'
+      "#{_('DND')} notified of new match"
     end
     
     def contacts_editable?

@@ -17,9 +17,9 @@ module MatchDecisions
     
     def label_for_status status
       case status.to_sym
-      when :pending then 'DND to confirm match success'
-      when :confirmed then 'DND confirms match success'
-      when :rejected then 'Match rejected by DND'
+      when :pending then "#{_('DND')} to confirm match success"
+      when :confirmed then "#{_('DND')} confirms match success"
+      when :rejected then "Match rejected by #{_('DND')}"
       end
     end
 
@@ -28,7 +28,7 @@ module MatchDecisions
     end
 
     def actor_type
-      'DND'
+      "#{_('DND')}"
     end
 
     def contact_actor_type

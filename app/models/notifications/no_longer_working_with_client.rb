@@ -8,7 +8,7 @@ module Notifications
     end
     
     def event_label
-      'DND notified, contact no longer working with client'
+      "#{_('DND')} notified, contact no longer working with client"
     end
 
     def should_expire?

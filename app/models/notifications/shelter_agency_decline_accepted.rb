@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'Shelter Agency notified of DND acceptance of Shelter Agency decline'
+      "#{_('Shelter Agency')} notified of #{_('DND')} acceptance of #{_('Shelter Agency')} decline"
     end
     
   end

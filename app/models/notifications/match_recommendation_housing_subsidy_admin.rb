@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      'Housing Subsidy Administrator notified of potential match (no client details sent)'
+      "#{_('Housing Subsidy Administrator')} notified of potential match (no client details sent)"
     end
     
     def show_client_info?

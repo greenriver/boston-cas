@@ -17,20 +17,20 @@ module MatchDecisions
     
     def label_for_status status
       case status.to_sym
-      when :pending then 'DND to confirm match success'
-      when :decline_overridden then 'Housing Subsidy Administrator Decline overridden by DND.  Match proceeding to Housing Subsidy Administrator'
-      when :decline_overridden_returned then 'Housing Subsidy Administrator Decline overridden by DND.  Match returned to Housing Subsidy Administrator'
-      when :decline_confirmed then 'Match rejected by DND'
+      when :pending then "#{_('DND')} to confirm match success"
+      when :decline_overridden then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Housing Subsidy Administrator')}"
+      when :decline_overridden_returned then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator')}"
+      when :decline_confirmed then "Match rejected by #{_('DND')}"
       when :canceled then canceled_status_label
       end
     end
 
     def step_name
-      'DND Reviews Match Declined by HSA'
+      "#{_('DND')} Reviews Match Declined by #{_('HSA')}"
     end
 
     def actor_type
-      'DND'
+      "#{_('DND')}"
     end
 
     def contact_actor_type

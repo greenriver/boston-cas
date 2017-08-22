@@ -50,7 +50,7 @@
             Client
             - unless match.client.has_full_housing_release?
               .limited-cas-release
-                %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "This client has not signed the HAN release and their name cannot be released to the SSP or the HSA. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the HAN release at any time during the match the change will be reflected in CAS and their information will become available."}}
+                %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "This client has not signed the HAN release and their name cannot be released to the SSP or the #{_('HSA')}. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the #{_('HAN')} release at any time during the match the change will be reflected in CAS and their information will become available."}}
                 = match.client.housing_release_status || 'No release on file'
           .detail-box--value
             - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end
