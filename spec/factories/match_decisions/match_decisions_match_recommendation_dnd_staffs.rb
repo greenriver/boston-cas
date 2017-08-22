@@ -1,0 +1,44 @@
+FactoryGirl.define do
+  factory :match_decisions_match_recommendation_dnd_staff, class: 'MatchDecisions::MatchRecommendationDndStaff' do
+    association :match, factory: :client_opportunity_match
+    
+    status :pending
+    
+    trait :accepted do 
+      status 'accepted'
+    end
+    
+    trait :declined do 
+      status 'declined'
+    end
+    
+    trait :pending do 
+      status 'pending'
+    end
+    
+    trait :canceled do 
+      status 'canceled'
+    end
+    
+    trait :parked do 
+      prevent_matching_until Date.tomorrow
+    end
+    
+    trait :shelter_expiration do
+      shelter_expiration Date.tomorrow
+    end
+    
+    
+    # type 'MatchDecisions::MatchRecommendationShelterAgency'
+    # contact_id 5
+    # client_last_seen_date
+    # client_move_in_date
+    # decline_reason_id
+    # decline_reason_other_explanation
+    # not_working_with_client_reason_id
+    # not_working_with_client_reason_other_explanation
+    # client_spoken_with_service_agency
+    # cori_release_form_submitted
+    # administrative_cancel_reason_id
+  end
+end

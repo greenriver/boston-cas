@@ -18,33 +18,33 @@ class MatchDecisionsController < ApplicationController
   
   def update
     if !@decision.editable?
-      flash[:alert] = 'Sorry, a response has already been recorded and this step is now locked.'
+      flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
       
     elsif @match.closed?
-      flash[:alert] = 'Sorry, that match has already been closed.'
+      flash[:error] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
       
     # If expiration date is provided and match is declined
     elsif decision_params[:shelter_expiration].present? && decision_params[:status] == "declined" 
-      flash[:alert] = 'Sorry, you cannot decline a match if you have provided an expiration date.'
+      flash[:error] = 'Sorry, you cannot decline a match if you have provided an expiration date.'
       render 'matches/show'
       
     # If we've been asked to park the client and match is accepted 
     elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == "accepted" 
-      flash[:alert] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
+      flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
       render 'matches/show'
     
     # If cancel reason is provided and match is declined or accepted
     elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "accepted" || 
           decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "declined" 
-      flash[:alert] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
+      flash[:error] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
       render 'matches/show'
     
     # If decline reason is provided and match is canceled or accepted
     elsif decision_params[:decline_reason_id].present? && decision_params[:status] == "accepted" || 
           decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled" 
-      flash[:alert] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
+      flash[:error] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
       render 'matches/show'
 
     elsif @decision.update(decision_params)
