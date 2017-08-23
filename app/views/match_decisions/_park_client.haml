@@ -1,7 +1,6 @@
-%label
-  Optionally prevent matching #{@match.client.name} until:
-.row
-  .col-xs-4
-    = form.input :prevent_matching_until, as: :date_picker, label: false
-  .col-xs-8
-    Parking a client will remove them from this match and any proposed matches.  The client will not be re-matched until the date specified has passed. 
+.park-client.margin-bottom-02
+  %label
+    Optionally prevent matching #{@match.client.name} until:
+
+  = form.input :prevent_matching_until, as: :date_picker, input_html: {class: 'jButtonStateTriggers'}, label: false, hint: 'Parking a client will remove them from this match and any proposed matches.  The client will not be re-matched until the date specified has passed.'
+  
