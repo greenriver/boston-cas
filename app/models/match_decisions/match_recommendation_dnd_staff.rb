@@ -10,19 +10,19 @@ module MatchDecisions
 
     def label_for_status status
       case status.to_sym
-      when :pending then 'New Match Awaiting DND Review'
-      when :accepted then 'New Match Accepted by DND'
-      when :declined then "New Match Declined by DND.  Reason: #{decline_reason_name}"
+      when :pending then "New Match Awaiting #{_('DND')} Review"
+      when :accepted then "New Match Accepted by #{_('DND')}"
+      when :declined then "New Match Declined by #{_('DND')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
     
     def step_name
-      'DND Initial Review'
+      "#{_('DND')} Initial Review"
     end
 
     def actor_type
-      'DND'
+      "#{_('DND')}"
     end
 
     def contact_actor_type
@@ -117,15 +117,15 @@ module MatchDecisions
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       if save_will_accept? && match.shelter_agency_contacts.none?
-        missing_contacts << 'a Shelter Agency Contact'
+        missing_contacts << "a #{_('Shelter Agency')} Contact"
       end
 
       if save_will_accept? && match.dnd_staff_contacts.none?
-        missing_contacts << 'a DND Staff Contact'
+        missing_contacts << "a #{_('DND')} Staff Contact"
       end
 
       if save_will_accept? && match.housing_subsidy_admin_contacts.none?
-        missing_contacts << 'a Housing Subsidy Administrator Contact'
+        missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact"
       end
 
       if missing_contacts.any?

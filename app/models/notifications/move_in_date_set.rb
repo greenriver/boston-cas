@@ -15,7 +15,7 @@ module Notifications
     end
 
     def event_label
-      'Shelter Agency, Housing Subsidy Administrator and Stabilization Service Provider contacts notified, lease start date set.'
+      "#{_('Shelter Agency')}, #{_('Housing Subsidy Administrator')} and #{_('Stabilization Service Provider')} contacts notified, lease start date set."
     end
 
     def should_expire?

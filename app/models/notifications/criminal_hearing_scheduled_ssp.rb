@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      'Stabilization Services Provider sent notice of criminal background hearing date.'
+      "#{_('Stabilization Services Provider')} sent notice of criminal background hearing date."
     end
 
     def should_expire?

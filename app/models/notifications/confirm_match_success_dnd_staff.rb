@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'DND Staff notified of client housed date and asked to give final confirmation to match.'
+      "#{_('DND')} Staff notified of client housed date and asked to give final confirmation to match."
     end
 
     def should_expire?

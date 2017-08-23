@@ -28,7 +28,7 @@
   %p
     The client does not need to be document-ready in order to indicate interest.
     %br
-    When you indicate interest, notification will be sent to the Housing Subsidy Administrator. If the HSA has a release, they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing.
+    = "When you indicate interest, notification will be sent to the #{_('Housing Subsidy Administrator')}. If the #{_('HSA')} has a release, they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing."
 .jNoLongerWorking.jWorkingWithClient
   = form.association :not_working_with_client_reason, collection: @decision.not_working_with_client_reasons, label: 'If you are no longer working with client, please indicate reason:', as: :check_boxes
   = form.input :not_working_with_client_reason_other_explanation, as: :text, label: false, placeholder: 'Other reason'

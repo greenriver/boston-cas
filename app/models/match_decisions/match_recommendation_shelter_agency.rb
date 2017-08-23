@@ -19,11 +19,11 @@ module MatchDecisions
     
     def label_for_status status
       case status.to_sym
-      when :pending then 'New Match Awaiting Shelter Agency Review'
-      when :acknowledged then 'Match acknowledged by shelter agency.  In review'
-      when :accepted then 'Match accepted by shelter agency. Client has signed release of information, spoken with services agency and submitted a CORI release form'
-      when :not_working_with_client then 'Shelter agency no longer working with client'
-      when :expiration_update then 'New Match Awaiting Shelter Agency Review'
+      when :pending then "New Match Awaiting #{_('Shelter Agency')} Review"
+      when :acknowledged then "Match acknowledged by #{_('Shelter Agency')}.  In review"
+      when :accepted then "Match accepted by #{_('Shelter Agencyy')}. Client has signed release of information, spoken with services agency and submitted a CORI release form"
+      when :not_working_with_client then "#{_('Shelter Agency')} no longer working with client"
+      when :expiration_update then "New Match Awaiting #{_('Shelter Agency')} Review"
       when :declined then decline_status_label
       when :canceled then canceled_status_label
       end
@@ -31,18 +31,18 @@ module MatchDecisions
 
     private def decline_status_label
       [
-        "Match declined by shelter agency. Reason: #{decline_reason_name}",
+        "Match declined by #{_('Shelter Agency')}. Reason: #{decline_reason_name}",
         not_working_with_client_reason_status_label
       ].join ". "
     end
     
 
     def step_name
-      'Shelter Agency Initial Review of Match Recommendation'
+      "#{_('Shelter Agency')} Initial Review of Match Recommendation"
     end
 
     def actor_type
-      'Shelter Agency'
+      "#{_('Shelter Agency')}"
     end
 
     def contact_actor_type

@@ -8,7 +8,7 @@ set :branch, 'master'
 
 # Delayed Job
 set :delayed_job_workers, 2
-set :delayed_job_prefix, 'cas'
+set :delayed_job_prefix, "#{ENV['CLIENT']}-cas"
 set :delayed_job_roles, [:job]
 
 puts "Allowable hosts: #{ENV['HOSTS']}"

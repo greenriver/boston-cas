@@ -22,4 +22,4 @@
               = render 'match_decisions/cancel_match_form_fields', form: form
           = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
 
-        %p DND and the Shelter Agency contact will receive notification of the housing date.
+        %p= "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."

@@ -1,6 +1,6 @@
 Hello #{@contact.full_name},
 \
-A Housing Subsidy Administrator has set the lease start date.
+= "A #{_('Housing Subsidy Administrator')} has set the lease start date."
 \
 View details and indicate when the client will move in:
 #{notification_match_decision_url @notification, @match, :record_client_housed_date_housing_subsidy_administrator}

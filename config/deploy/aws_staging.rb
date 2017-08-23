@@ -5,7 +5,7 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Delayed Job
 set :delayed_job_workers, 2
-set :delayed_job_prefix, 'cas'
+set :delayed_job_prefix, "#{ENV['CLIENT']}-cas"
 set :delayed_job_roles, [:job]
 
 server ENV['STAGING_HOST'], user: 'ubuntu', roles: %w{app db web job}
@@ -18,7 +18,7 @@ namespace :deploy do
   before :published, :translations do
     on roles(:db)  do
       within release_path do
-        execute :rake, 'gettext:sync_to_po_and_db RAILS_ENV=production'
+        execute :rake, 'gettext:sync_to_po_and_db RAILS_ENV=staging'
       end
     end
   end

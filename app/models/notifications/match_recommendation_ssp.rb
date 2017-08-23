@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      'Stabilization Service Provider notified of potential match (no client details sent)'
+      "#{_('Stabilization Service Provider')} notified of potential match (no client details sent)"
     end
     
     def show_client_info?

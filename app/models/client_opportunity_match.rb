@@ -242,9 +242,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def self.contact_titles
     {
-      shelter_agency_contacts: 'Shelter Agency Contacts',
-      housing_subsidy_admin_contacts: 'Housing Subsidy Administrators',
-      ssp_contacts: 'Stabilization Service Providers'
+      shelter_agency_contacts: "#{_('Shelter Agency')} Contacts",
+      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrators')}",
+      ssp_contacts: "#{_('Stabilization Service Providers')}"
     }
   end
 

@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'DND notified of shelter agency decline.  Confirmation pending.'
+      "#{_('DND')} notified of #{_('Shelter Agency')} decline.  Confirmation pending."
     end
 
     def should_expire?

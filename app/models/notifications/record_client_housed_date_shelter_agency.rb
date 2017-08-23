@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'Shelter Agency notified of approved match and asked to record date client housed'
+      "#{_('Shelter Agency')} notified of approved match and asked to record date client housed"
     end
 
     def should_expire?

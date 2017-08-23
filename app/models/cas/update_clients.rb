@@ -70,7 +70,7 @@ module Cas
     # Find anyone who should be marked as available_candidate, but for whatever reason isn't marked as such
     def fix_incorrect_available_candidate_clients
       clients = Client.where(available_candidate: false, available: true, prevent_matching_until: nil)
-      clients.each do |c| 
+      clients.each do |c|
         if c.client_opportunity_matches.active.none? && c.client_opportunity_matches.success.none?
           if c.client_opportunity_matches.count < Client.max_candidate_matches
             c.update(available_candidate: true)
@@ -115,6 +115,7 @@ module Cas
         :hues_eligible,
         :hiv_positive,
         :housing_release_status,
+        :vispdat_score
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?

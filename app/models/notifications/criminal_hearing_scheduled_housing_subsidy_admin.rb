@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      'Housing Subsidy Administrator sent notice of criminal background hearing date.'
+      "#{_('Housing Subsidy Administrator')} sent notice of criminal background hearing date."
     end
 
     def should_expire?

@@ -12,7 +12,7 @@ module Notifications
     end
 
     def event_label
-      'DND notified of housing subsidy administrator decline.  Confirmation pending.'
+      "#{_('DND')} notified of housing subsidy administrator decline.  Confirmation pending."
     end
 
     def should_expire?

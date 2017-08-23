@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      'Contact notified, action taken by DND'
+      "Contact notified, action taken by #{_('DND')}"
     end
 
   end

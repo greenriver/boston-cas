@@ -313,7 +313,8 @@ CREATE TABLE clients (
     income_total_monthly_last_collected timestamp without time zone,
     confidential boolean DEFAULT false NOT NULL,
     hiv_positive boolean DEFAULT false NOT NULL,
-    housing_release_status character varying
+    housing_release_status character varying,
+    vispdat_score integer
 );
 
 
@@ -1395,7 +1396,8 @@ CREATE TABLE project_clients (
     income_total_monthly_last_collected timestamp without time zone,
     hiv_positive boolean DEFAULT false NOT NULL,
     housing_release_status character varying,
-    needs_update boolean DEFAULT false NOT NULL
+    needs_update boolean DEFAULT false NOT NULL,
+    vispdat_score integer
 );
 
 
@@ -1607,7 +1609,8 @@ CREATE TABLE roles (
     can_view_client_confidentiality boolean DEFAULT false NOT NULL,
     can_view_hiv_positive_eligibility boolean DEFAULT false,
     can_view_own_closed_matches boolean DEFAULT false,
-    can_edit_translations boolean DEFAULT false
+    can_edit_translations boolean DEFAULT false,
+    can_view_vspdats boolean DEFAULT false
 );
 
 
@@ -4389,4 +4392,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170713125233');
 INSERT INTO schema_migrations (version) VALUES ('20170724182052');
 
 INSERT INTO schema_migrations (version) VALUES ('20170725203814');
+
+INSERT INTO schema_migrations (version) VALUES ('20170818202458');
+
+INSERT INTO schema_migrations (version) VALUES ('20170821132203');
 

@@ -30,8 +30,8 @@
     = simple_form_for(@client) do |f|
       = f.error_notification
       - if @client.calculated_first_homeless_night.present?
-        %h3 
-          Homeless Since:  
+        %h3
+          Homeless Since:
           = date_format(@client.calculated_first_homeless_night)
       %table.table.table-condensed
         %tbody
@@ -43,7 +43,7 @@
             %td= checkmark @client.send('chronic_homeless')
           %tr
             %th Date of First Homelessness
-            %td 
+            %td
               - if @client.calculated_first_homeless_night.present?
                 = date_format(@client.calculated_first_homeless_night)
           %tr
@@ -64,9 +64,13 @@
           %tr
             %th Release of information signed on
             %td= @client.release_of_information.try(:to_date)
+          - if can_view_vspdats?
+            %tr
+              %th VISPDAT Score
+              %td= @client.vispdat_score
           - if can_view_client_confidentiality?
             %tr
-              %th 
+              %th
                 Confidential Client
                 %p.help-block
                   (name hidden on lists of matches by default)
@@ -74,7 +78,7 @@
             %tr
               %td.text-right{colspan: 2}
                 = f.button :submit, class: 'btn btn-primary', value: 'Update'
-          
+
   .col-sm-6
     %h3 Last Bed Stay or Outreach Contact
     %table.table.table-condensed
@@ -127,7 +131,7 @@
             %th Pager
             %td= @client.pager
 .row
-  .col-sm-6 
+  .col-sm-6
     %h3 Health Information
     %table.table.table-condensed
       %tbody
@@ -159,7 +163,7 @@
           %tr
             %th DMH Eligible
             %td= checkmark @client.dmh_eligible
-            
+
         - if can_view_va_eligibility?
           %tr
             %th VA Eligible
@@ -172,7 +176,7 @@
           %tr
             %th HIV+
             %td= checkmark @client.hiv_positive
-          
+
   .col-sm-6
     .row
       .col-sm-12
@@ -180,4 +184,4 @@
     .row
       .col-sm-12
         - if @client.previously_merged?
-          = render 'previously_merged'    
+          = render 'previously_merged'
