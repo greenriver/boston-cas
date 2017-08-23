@@ -12,12 +12,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   after_create :create_match_created_event!
 
-  STALLED_INTERVAL = if Rails.env.production?
-    1.months
-  else
-    2.days
-  end
-
   belongs_to :client
   belongs_to :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
@@ -58,7 +52,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     md_t = MatchDecisions::Base.arel_table
     active.joins(:decisions).
       where(match_decisions: {status: [:pending, :acknowledged]}).
-      where(md_t[:updated_at].lteq(STALLED_INTERVAL.ago))
+      where(md_t[:updated_at].lteq(self.stalled_interval.ago))
   end
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
@@ -129,6 +123,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     class_name: MatchProgressUpdates::Base.name,
     foreign_key: :match_id
 
+  def self.stalled_interval
+    Config.get(:stalled_interval).days
+  end
+    
   def confidential?
     program.confidential? || client.confidential? || sub_program.confidential? || ! client.has_full_housing_release?
   end

@@ -6,10 +6,6 @@ module MatchProgressUpdates
     attr_accessor :working_with_client
     validates_presence_of :response, :client_last_seen, if: :submitting?
     validate :note_required_if_other!
-
-    DND_INTERVAL = Config.get(:dnd_interval)
-
-    STALLED_INTERVAL = Config.get(:stalled_interval)
     
     def to_partial_path
       'match_progress_updates/progress_update'
@@ -52,12 +48,20 @@ module MatchProgressUpdates
       mpu_t = arel_table
       incomplete.
       where.not(requested_at: nil).
-      where(mpu_t[:requested_at].lteq(DND_INTERVAL.ago)).
+      where(mpu_t[:requested_at].lteq(dnd_interval.ago)).
       where(dnd_notified_at: nil)
     end
 
     alias_attribute :timestamp, :submitted_at
 
+    def self.stalled_interval
+      Config.get(:stalled_interval).days
+    end
+    
+    def self.dnd_interval
+      Config.get(:dnd_interval).days
+    end
+    
     def name
       raise 'Abstract method'
     end
@@ -130,12 +134,12 @@ module MatchProgressUpdates
     # Re-send the same request if we requested it before, but haven't had a response
     # in a reasonable amount of time
     def resend_update_request?
-      requested_at.present? && submitted_at.blank? && requested_at < STALLED_INTERVAL.ago
+      requested_at.present? && submitted_at.blank? && requested_at < self.stalled_interval.ago
     end
 
     # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
     def create_new_update_request?
-      submitted_at.present? && submitted_at < STALLED_INTERVAL.ago && requested_at < STALLED_INTERVAL.ago
+      submitted_at.present? && submitted_at < self.stalled_interval.ago && requested_at < self.stalled_interval.ago
     end
     
     def never_sent?
