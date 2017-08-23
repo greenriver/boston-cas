@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :match_decisions_match_recommendation_dnd_staff, class: 'MatchDecisions::MatchRecommendationDndStaff' do
     association :match, factory: :client_opportunity_match
-    
     status :pending
     
     trait :accepted do 
@@ -26,6 +25,18 @@ FactoryGirl.define do
     
     trait :shelter_expiration do
       shelter_expiration Date.tomorrow
+    end
+    
+    trait :cancel_reason do
+      administrative_cancel_reason_id 21
+    end
+    
+    trait :cancel_reason_absent do
+      administrative_cancel_reason_id nil
+    end
+    
+    trait :decline_reason do
+      decline_reason_id 12
     end
     
     

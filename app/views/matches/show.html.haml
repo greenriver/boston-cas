@@ -17,7 +17,7 @@
             = link_to "[show current step]", access_context.match_path(@match) 
     
 - if @match.status_updates.incomplete_for_contact(contact_id: access_context.current_contact.id).exists?
-  = render 'status_update'
+  = render 'matches/status_update'
 - else
   = render @decision if @decision
 

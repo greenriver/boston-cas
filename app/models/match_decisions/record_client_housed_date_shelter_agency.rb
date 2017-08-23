@@ -16,7 +16,7 @@ module MatchDecisions
     end
 
     def step_name
-      'Indicate date client has been (or will be) housed'
+      'Indicate date client was housed'
     end
 
     def actor_type
@@ -91,4 +91,3 @@ module MatchDecisions
   end
   
 end
-

@@ -7,26 +7,30 @@
           %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
           = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) 
         - else
-          - if @match.shelter_expiration?
-            - if can_reject_matches?
-              = render 'match_decisions/shelter_agency_expiration', form: form
-            - if @match.shelter_expiration >= Date.today
-              %p
-                This match will expire if the client has not expressed interest in the match before
-                %strong= "#{@match.shelter_expiration}."
-              = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form, confirmation_text: confirmation_text
-            - else
-              %p 
-                This match expired on
-                %strong= "#{@match.shelter_expiration}."
+          .row
+            .col-sm-6
+              - if @match.shelter_expiration?
+                - if can_reject_matches?
+                  = render 'match_decisions/shelter_agency_expiration', form: form
+                - if @match.shelter_expiration >= Date.today
+                  %p
+                    This match will expire if the client has not expressed interest in the match before
+                    %strong= "#{@match.shelter_expiration}."
+                  = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form, confirmation_text: confirmation_text
+                - else
+                  %p 
+                    This match expired on
+                    %strong= "#{@match.shelter_expiration}."    
+              - else
+                - if can_reject_matches?
+                  = render 'match_decisions/shelter_agency_expiration', form: form
+                = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form, confirmation_text: confirmation_text
+              
+            .col-sm-6
               - if can_reject_matches?
                 .well
                   = render 'match_decisions/park_client', form: form
                   = render 'match_decisions/cancel_match_form_fields', form: form
-          - else
-            - if can_reject_matches?
-              = render 'match_decisions/shelter_agency_expiration', form: form
-            = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form, confirmation_text: confirmation_text
           
 
 

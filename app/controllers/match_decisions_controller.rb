@@ -46,6 +46,11 @@ class MatchDecisionsController < ApplicationController
           decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled" 
       flash[:error] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
       render 'matches/show'
+      
+    # If cancel reason is NOT provided and match is canceled
+    elsif decision_params[:administrative_cancel_reason_id].blank? && decision_params[:status] == "canceled"
+      flash[:error] = 'Sorry, you must provide a cancel reason to cancel this match.'
+      render 'matches/show'
 
     elsif @decision.update(decision_params)
       # If we are expiring the match for shelter agencies
