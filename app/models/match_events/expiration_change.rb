@@ -3,7 +3,7 @@ module MatchEvents
     validates :note, presence: true
     
     def name
-      ''
+      note
     end
         
   end

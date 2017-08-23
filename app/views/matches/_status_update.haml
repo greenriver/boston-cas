@@ -4,7 +4,7 @@
     .match-status-update
       %p 
         = "This match has been stalled since #{@match.current_decision.updated_at.to_date}.  Please provide an update to the status of the match."
-      = simple_form_for status_update, as: :match_progress_updates, url: match_progress_update_path(notification_id: params[:notification_id]) do |f|
+      = simple_form_for status_update, as: :match_progress_updates, url: match_progress_update_path(match_id: @match.id, notification_id: params[:notification_id]) do |f|
         = f.input :working_with_client, as: :radio_buttons, collection: {'Client is engaging with housing services': 'jStillWorking', 'Client is not engaging with housing services': 'jNoLongerWorking'}, label: 'Is the client engaging with housing services?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
         .jStillWorking.jNoLongerWorking.jWorkingWithClient
           .row

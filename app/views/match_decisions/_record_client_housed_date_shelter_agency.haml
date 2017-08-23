@@ -2,7 +2,7 @@
   .col-xs-12
     .match-decision
       %p
-        Once known, please indicate the date the client is expected to be housed (or was housed).
+        Please record the date the client moved in.
       = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
         .form-group
           .row
@@ -23,4 +23,3 @@
           = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
 
         %p= "#{_('DND')} will receive notification of the housing date."
-

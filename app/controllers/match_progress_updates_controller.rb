@@ -19,7 +19,7 @@ class MatchProgressUpdatesController < ApplicationController
         params[:notification_id] => @update
       }
     end
-    redirect_to notification_match_path(match_id: @match_id, notification_id: @update.notification.code)
+    redirect_to notification_match_path(id: @match.id, notification_id: @update.notification.code)
   end
 
   def progress_params
@@ -32,7 +32,11 @@ class MatchProgressUpdatesController < ApplicationController
   end
 
   def find_match!
-    @match = match_scope.find(params[:id].to_i)
+    if params[:match_id].present?
+      @match = match_scope.find(params[:match_id].to_i)
+    else
+      @match = match_scope.find(params[:id].to_i)
+    end
   end
 
   def set_update
