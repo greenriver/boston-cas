@@ -7,18 +7,10 @@ module MatchProgressUpdates
     validates_presence_of :response, :client_last_seen, if: :submitting?
     validate :note_required_if_other!
 
-    DND_INTERVAL = if Rails.env.production?
-      1.weeks
-    else
-      1.days
-    end
+    DND_INTERVAL = Config.get(:dnd_interval)
 
-    STALLED_INTERVAL = if Rails.env.production?
-      1.months
-    else
-      1.weeks
-    end
-
+    STALLED_INTERVAL = Config.get(:stalled_interval)
+    
     def to_partial_path
       'match_progress_updates/progress_update'
     end
