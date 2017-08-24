@@ -48,6 +48,9 @@ gem 'delayed_job_active_record'
 gem 'uglifier'
 
 gem 'whenever', :require => false
+
+# Faker queries translations db in development to look for user overrides of fake data
+# There is no way to disable this
 gem 'faker'
 
 gem 'slack-notifier'
