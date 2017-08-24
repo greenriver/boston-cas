@@ -105,6 +105,9 @@ Rails.application.routes.draw do
     
     resources :translation_keys, only: [:index, :update]
     resources :translation_text, only: [:update]
+    resources :configs, only: [:index] do
+      patch :update, on: :collection
+    end
   end
   resource :account, only: [:edit, :update]
   resources :reissue_notifications, only: [:index, :update, :destroy]

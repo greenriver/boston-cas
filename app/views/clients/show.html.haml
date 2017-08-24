@@ -12,7 +12,7 @@
           = @client.merged_with_name
   .col-sm-4
     - if warehouse_id = @client.remote_id
-      = link_to "https://hmis.boston.gov/clients/#{warehouse_id}", target: '_blank' do
+      = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
         Warehouse ID:
         = warehouse_id
 

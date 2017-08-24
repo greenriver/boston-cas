@@ -338,6 +338,37 @@ ALTER SEQUENCE clients_id_seq OWNED BY clients.id;
 
 
 --
+-- Name: configs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE configs (
+    id integer NOT NULL,
+    stalled_interval integer NOT NULL,
+    dnd_interval integer NOT NULL,
+    warehouse_url character varying NOT NULL
+);
+
+
+--
+-- Name: configs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE configs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: configs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE configs_id_seq OWNED BY configs.id;
+
+
+--
 -- Name: contacts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1610,7 +1641,8 @@ CREATE TABLE roles (
     can_view_hiv_positive_eligibility boolean DEFAULT false,
     can_view_own_closed_matches boolean DEFAULT false,
     can_edit_translations boolean DEFAULT false,
-    can_view_vspdats boolean DEFAULT false
+    can_view_vspdats boolean DEFAULT false,
+    can_manage_config boolean DEFAULT false
 );
 
 
@@ -2342,6 +2374,13 @@ ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY configs ALTER COLUMN id SET DEFAULT nextval('configs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq'::regclass);
 
 
@@ -2763,6 +2802,14 @@ ALTER TABLE ONLY client_opportunity_matches
 
 ALTER TABLE ONLY clients
     ADD CONSTRAINT clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: configs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY configs
+    ADD CONSTRAINT configs_pkey PRIMARY KEY (id);
 
 
 --
@@ -4396,4 +4443,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170725203814');
 INSERT INTO schema_migrations (version) VALUES ('20170818202458');
 
 INSERT INTO schema_migrations (version) VALUES ('20170821132203');
+
+INSERT INTO schema_migrations (version) VALUES ('20170823175246');
+
+INSERT INTO schema_migrations (version) VALUES ('20170823182320');
 
