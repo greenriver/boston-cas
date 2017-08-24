@@ -134,12 +134,12 @@ module MatchProgressUpdates
     # Re-send the same request if we requested it before, but haven't had a response
     # in a reasonable amount of time
     def resend_update_request?
-      requested_at.present? && submitted_at.blank? && requested_at < self.stalled_interval.ago
+      requested_at.present? && submitted_at.blank? && requested_at < self.class.stalled_interval.ago
     end
 
     # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
     def create_new_update_request?
-      submitted_at.present? && submitted_at < self.stalled_interval.ago && requested_at < self.stalled_interval.ago
+      submitted_at.present? && submitted_at < self.class.stalled_interval.ago && requested_at < self.class.stalled_interval.ago
     end
     
     def never_sent?
