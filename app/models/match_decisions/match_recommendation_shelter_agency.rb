@@ -75,6 +75,7 @@ module MatchDecisions
         m << Notifications::MatchRecommendationHousingSubsidyAdmin
         m << Notifications::MatchRecommendationClient
         m << Notifications::MatchRecommendationSsp
+        m << Notifications::MatchRecommendationHsp
         m << Notifications::MatchRecommendationShelterAgency
       end
     end

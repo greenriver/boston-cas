@@ -36,6 +36,7 @@ module CasSeeds
       'Client has disengaged',
       'Client has disappeared',
       'SSP CORI',
+      'HSP CORI',
       'Vacancy should not have been entered',
       'Client received another housing opportunity',
       'Client no longer eligible for match',

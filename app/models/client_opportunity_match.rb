@@ -105,6 +105,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     through: :client_opportunity_match_contacts,
     source: :contact
 
+    has_many :hsp_contacts,
+    -> { where client_opportunity_match_contacts: {hsp: true} },
+    class_name: 'Contact',
+    through: :client_opportunity_match_contacts,
+    source: :contact
+
   has_many :events,
     class_name: 'MatchEvents::Base',
     foreign_key: :match_id,
@@ -153,7 +159,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
-    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && (shelter_agency_approval_or_dnd_override? && client.has_full_housing_release?)
+    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override? && client.has_full_housing_release?)
       true
     else
       false
@@ -166,7 +172,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
-    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) && (shelter_agency_approval_or_dnd_override?)
+    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts)) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
       true
     else
       false
@@ -236,13 +242,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
     add_default_client_contacts!
     add_default_shelter_agency_contacts!
     add_default_ssp_contacts!
+    add_default_hsp_contacts!
   end
 
   def self.contact_titles
     {
       shelter_agency_contacts: "#{_('Shelter Agency')} Contacts",
       housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrators')}",
-      ssp_contacts: "#{_('Stabilization Service Providers')}"
+      ssp_contacts: "#{_('Stabilization Service Providers')}",
+      hsp_contacts: "#{_('Housing Search Providers')}",
     }
   end
 
@@ -394,6 +402,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
 
     def add_default_ssp_contacts!
+      
+    end
+
+    def add_default_hsp_contacts!
       
     end
 

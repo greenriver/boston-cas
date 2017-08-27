@@ -13,6 +13,7 @@ class MatchContacts
     :dnd_staff_contact_ids,
     :housing_subsidy_admin_contact_ids,
     :ssp_contact_ids
+    :hsp_contact_ids
   
   delegate :to_param, to: :match
 
@@ -24,6 +25,7 @@ class MatchContacts
     self.dnd_staff_contacts = match.dnd_staff_contacts
     self.housing_subsidy_admin_contacts = match.housing_subsidy_admin_contacts
     self.ssp_contacts = match.ssp_contacts
+    self.hsp_contacts = match.hsp_contacts
   end
   
   def save
@@ -33,6 +35,7 @@ class MatchContacts
       match.dnd_staff_contact_ids = dnd_staff_contact_ids
       match.housing_subsidy_admin_contact_ids = housing_subsidy_admin_contact_ids
       match.ssp_contact_ids = ssp_contact_ids
+      match.hsp_contact_ids = hsp_contact_ids
     end
   end
   
@@ -58,6 +61,10 @@ class MatchContacts
 
   def available_ssp_contacts base_scope = Contact.all
     base_scope.where.not(id: ssp_contact_ids)
+  end
+
+  def available_hsp_contacts base_scope = Contact.all
+    base_scope.where.not(id: hsp_contact_ids)
   end
 
   def persisted?
@@ -99,9 +106,17 @@ class MatchContacts
   def ssp_contacts
     Contact.find ssp_contact_ids
   end
+
+  def hsp_contacts
+    Contact.find hsp_contact_ids
+  end
   
   def ssp_contacts= contacts
     self.ssp_contact_ids = contacts.map(&:id)
+  end
+
+  def hsp_contacts= contacts
+    self.hsp_contact_ids = contacts.map(&:id)
   end
 
 end

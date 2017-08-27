@@ -28,6 +28,13 @@ class NotificationsMailer < ApplicationMailer
     mail(to: @contact.email, subject: '[CAS] New Housing Recommendation')
   end
 
+  def match_recommendation_hsp notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] New Housing Recommendation')
+  end
+
   def match_recommendation_shelter_agency notification
     @notification = notification
     @match = notification.match
@@ -43,6 +50,13 @@ class NotificationsMailer < ApplicationMailer
   end
 
   def schedule_criminal_hearing_ssp notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Housing Recommendation')
+  end
+
+  def schedule_criminal_hearing_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
@@ -90,6 +104,13 @@ class NotificationsMailer < ApplicationMailer
     @contact = notification.recipient
     mail(to: @contact.email, subject: '[CAS] Hearing Scheduled')
   end
+
+  def criminal_hearing_scheduled_hsp notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] Hearing Scheduled')
+  end
   
   def criminal_hearing_scheduled_client notification
     @notification = notification
@@ -125,6 +146,13 @@ class NotificationsMailer < ApplicationMailer
     @contact = notification.recipient
     mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
+
+  def housing_subsidy_admin_decision_hsp notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+  end
   
   def housing_subsidy_admin_accepted_match_dnd_staff notification
     @notification = notification
@@ -141,6 +169,13 @@ class NotificationsMailer < ApplicationMailer
   end
 
   def housing_subsidy_admin_declined_match_ssp notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: "[CAS] Match Declined by #{_('HSA')}")
+  end
+
+  def housing_subsidy_admin_declined_match_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient

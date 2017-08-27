@@ -35,6 +35,14 @@ namespace :cas do
           update.notification_number = 0
         end
       end
+      match.hsp_contacts.each do |contact|
+        MatchProgressUpdates::Hsp.where(
+          contact_id: contact.id, 
+          match_id: match.id,
+        ).first_or_create do |update|
+          update.notification_number = 0
+        end
+      end
     end
   end
 

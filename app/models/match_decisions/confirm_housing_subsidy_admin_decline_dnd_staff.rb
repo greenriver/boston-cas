@@ -72,6 +72,7 @@ module MatchDecisions
         match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
         Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
         Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
       end
 
       def decline_overridden_returned
@@ -83,6 +84,7 @@ module MatchDecisions
         Notifications::CriminalHearingScheduledDndStaff.create_for_match! match
         Notifications::CriminalHearingScheduledShelterAgency.create_for_match! match
         Notifications::CriminalHearingScheduledSsp.create_for_match! match
+        Notifications::CriminalHearingScheduledHsp.create_for_match! match
         Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
       end
       

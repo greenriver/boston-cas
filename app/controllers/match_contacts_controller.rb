@@ -43,13 +43,15 @@ class MatchContactsController < ApplicationController
         housing_subsidy_admin_contact_ids: [],
         dnd_staff_contact_ids: [],
         client_contact_ids: [],
-        ssp_contact_ids: []
+        ssp_contact_ids: [],
+        hsp_contact_ids: []
       ).tap do |result|
         result[:shelter_agency_contact_ids] ||= []
         result[:client_contact_ids] ||= []
         result[:dnd_staff_contact_ids] ||= []
         result[:housing_subsidy_admin_contact_ids] ||= []
         result[:ssp_contact_ids] ||= []
+        result[:hsp_contact_ids] ||= []
       end
     end
     

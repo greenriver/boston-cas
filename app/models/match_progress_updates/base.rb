@@ -75,8 +75,8 @@ module MatchProgressUpdates
         'Client searching for unit',
         'Client has submitted request for tenancy',
         'Client is waiting for project/sponsor based unit to become available',
-        "#{_('SSP')}/#{_('HSA')} waiting on documentation",
-        "#{_('SSP')}/#{_('HSA')}  CORI mitigation",
+        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
+        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
         'Client has submitted Reasonable Accomodation',
         other_response,
       ]
@@ -88,7 +88,7 @@ module MatchProgressUpdates
         'Client incarcerated',
         'Client in medical institution',
         'Client declining services',
-        "#{_('SSP')}/#{_('HSA')} unable to contact client",
+        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} unable to contact client",
         other_response,
       ]
     end
@@ -147,7 +147,7 @@ module MatchProgressUpdates
     end
 
     def self.send_notifications
-      # Get SSP & Shelter agency contacts for stalled matches
+      # Get SSP, HSP, & Shelter agency contacts for stalled matches
       # if we have un-submitted but requested status update where the requested date is less than INTERVAL.ago - queue to send same request again, and update the requested date
       # if we have a submitted progress update with a response less than INTERVAL.ago - create a new update request
       matches = self.joins(:match).merge(ClientOpportunityMatch.stalled).

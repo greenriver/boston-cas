@@ -16,6 +16,8 @@
 
   = render 'contact_manager', contacts_type: 'ssp', heading: "#{_('Stabilization Service Provider')} (optional)", available_contacts_method: :available_ssp_contacts, selected_contacts_method: :ssp_contacts
 
+  = render 'contact_manager', contacts_type: 'hsp', heading: "#{_('Housing Search Provider')} (optional)", available_contacts_method: :available_hsp_contacts, selected_contacts_method: :hsp_contacts
+
   .form-actions.clearfix
     = form.submit "Save", class: 'btn btn-primary'
   

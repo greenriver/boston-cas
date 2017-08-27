@@ -51,6 +51,7 @@ module MatchDecisions
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HousingSubsidyAdminDecisionClient
         m << Notifications::HousingSubsidyAdminDecisionSsp
+        m << Notifications::HousingSubsidyAdminDecisionHsp
         m << Notifications::HousingSubsidyAdminAcceptedMatchDndStaff
       end
     end

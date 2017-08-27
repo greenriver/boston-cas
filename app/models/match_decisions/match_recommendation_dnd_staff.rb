@@ -79,8 +79,9 @@ module MatchDecisions
       def accepted
         Notifications::MatchRecommendationClient.create_for_match!(match)
         match.match_recommendation_shelter_agency_decision.initialize_decision!
-        # Setup recurring status notifications for SSP & Shelter Agency
+        # Setup recurring status notifications for SSP, HSP, & Shelter Agency
         MatchProgressUpdates::Ssp.create_for_match!(match)
+        MatchProgressUpdates::Hsp.create_for_match!(match)
         MatchProgressUpdates::ShelterAgency.create_for_match!(match)
       end
       

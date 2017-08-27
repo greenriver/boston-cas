@@ -12,10 +12,14 @@ module Notifications
       match.ssp_contacts.each do |contact|
         create! match: match, recipient: contact
       end
+
+      match.hsp_contacts.each do |contact|
+        create! match: match, recipient: contact
+      end
     end
 
     def event_label
-      "#{_('Shelter Agency')}, #{_('Housing Subsidy Administrator')} and #{_('Stabilization Service Provider')} contacts notified, lease start date set."
+      "#{_('Shelter Agency')}, #{_('Housing Subsidy Administrator')}, #{_('Stabilization Service Provider')}, and #{_('Housing Search Provider')} contacts notified, lease start date set."
     end
 
     def should_expire?

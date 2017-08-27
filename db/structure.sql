@@ -192,7 +192,8 @@ CREATE TABLE client_opportunity_match_contacts (
     client boolean DEFAULT false NOT NULL,
     housing_search_worker boolean DEFAULT false NOT NULL,
     shelter_agency boolean DEFAULT false NOT NULL,
-    ssp boolean DEFAULT false NOT NULL
+    ssp boolean DEFAULT false NOT NULL,
+    hsp boolean DEFAULT false NOT NULL
 );
 
 
@@ -4447,4 +4448,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170821132203');
 INSERT INTO schema_migrations (version) VALUES ('20170823175246');
 
 INSERT INTO schema_migrations (version) VALUES ('20170823182320');
+
+INSERT INTO schema_migrations (version) VALUES ('20170827114049');
 

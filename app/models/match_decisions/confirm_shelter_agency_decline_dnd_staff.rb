@@ -81,6 +81,7 @@ module MatchDecisions
         Notifications::MatchRecommendationHousingSubsidyAdmin.create_for_match! match
         Notifications::MatchRecommendationClient.create_for_match! match
         Notifications::MatchRecommendationSsp.create_for_match! match
+        Notifications::MatchRecommendationHsp.create_for_match! match
       end
       
       def decline_confirmed
