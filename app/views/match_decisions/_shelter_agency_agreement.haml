@@ -1,8 +1,38 @@
-%p
-  By clicking "OK" you are confirming that you have spoken to the client regarding this specific housing opportunity and that the client understands the opportunity and has stated their interest.  You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client.
-%p
-  For clients who only have a Limited CAS Release you are agreeing to refer to their match number and not their name when speaking with the Supportive Service Provider, Housing Subsidy Administrator, and/or Housing Search Provider. You may refer to them by name once a release has been signed.
-%p
-  By clicking "OK" you are verifying that you are acting in accordance with the Boston HMIS Policies and Procedures found in the HMIS Handbook and in agreement with your signed HMIS User Agreement on file at your agency. Any violations may lead to user access termination and/or eventual employment termination.
-%p
-  If any of the steps above still need to be completed, please click "cancel".
+= content_for :page_js do
+  :javascript
+    // Force agreement with terms
+    $('#shelter-agency-modal').modal('hide');
+    $('.jCancel').on('click', function(e){
+      $('#shelter-agency-modal').modal('hide');
+    });
+    $('.jNeedsToAgree').on('click', function(e) {
+      e.preventDefault();
+    });
+
+#shelter-agency-modal.modal.fade(tabindex="-1" role="dialog")
+  .modal-dialog(role="document")
+    .modal-content(data-pjax-modal-container)
+      .modal-header
+        %button.close.pull-right.jCancel(aria-label="Close" type="button")
+          %span.icon-cross(aria-hidden="true")
+        %h4.modal-title(data-pjax-modal-title)
+          Confirm and Agree
+      .modal-body.clearfix
+        %p
+          = "By clicking \"Accept\" you are confirming that you have spoken to the client regarding this specific housing opportunity and that the client understands the opportunity and has stated their interest.  #{_('You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client.')}"
+        %p
+          For clients who only have a Limited CAS Release you are agreeing to refer to their match number and not their name when speaking with the Supportive Service Provider, Housing Subsidy Administrator, and/or Housing Search Provider. You may refer to them by name once a release has been signed.
+        %p
+          = "By clicking \"Accept\" you are verifying that you are acting in accordance with the #{_('Boston HMIS Policies and Procedures found in the HMIS Handbook and in agreement with your signed HMIS User Agreement on file at your agency')}. Any violations may lead to user access termination and/or eventual employment termination."
+        %p
+          If any of the steps above still need to be completed, please click "Cancel".
+      .modal-footer(data-pjax-modal-footer)
+        .row
+          .col-sm-6.text-left
+            %button.btn.btn-primary.jAccept
+              Accept
+          .col-sm-6.text-right
+            %button.btn.btn-secondary.pull-right.jCancel(aria-label="Close" pjax-modal-close type="button")
+              Cancel
+        
+
