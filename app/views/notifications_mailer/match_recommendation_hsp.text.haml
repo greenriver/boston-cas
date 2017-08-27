@@ -1,0 +1,15 @@
+Hello #{@contact.full_name},
+\
+CAS has a new housing recommendation with intial details for your review. You will receive another notification once the case worker and client have had a chance to respond to the opportunity.
+\
+View details here:
+#{notification_match_url @notification, @match}
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

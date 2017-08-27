@@ -12,7 +12,7 @@ class MatchContacts
     :client_contact_ids,
     :dnd_staff_contact_ids,
     :housing_subsidy_admin_contact_ids,
-    :ssp_contact_ids
+    :ssp_contact_ids,
     :hsp_contact_ids
   
   delegate :to_param, to: :match
