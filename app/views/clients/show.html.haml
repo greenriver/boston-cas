@@ -102,11 +102,9 @@
             = @client.housing_release_status.presence || 'Not Signed'
         %tr
           %th Available for matching?
-          %td
+          %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
             = checkmark @client.available
-            - if @client.available
-              = link_to unavailable_client_path(@client), class: 'btn btn-secondary', method: :patch, data: {confirm: "Removing this client from matching will take the client out of any current match and prevent them from being matched in the future.  You'll need to up update the appropriate HMIS to indicate this client is no longer homeless or they will become available the next time the CAS is synchronized.  Are you sure you want to remove this client from matching?"} do
-                Remove from Matching
+            
         %tr
           %td{colspan: 2}
             = render 'form'
