@@ -8,6 +8,6 @@ class Rules::ChronicallyHomeless < Rule
   end
   
   def always_apply?
-    true
+    false
   end
 end
