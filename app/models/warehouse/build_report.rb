@@ -21,14 +21,14 @@ module Warehouse
           client_id = client.project_client.id_in_data_source
           client.client_opportunity_matches.each do |match|
             # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
-            decisions = match.decisions.select(&:status).sort_by(&:created_at)
+            decisions = match.decisions.select(&:status).sort_by(&:id)
             # Debugging 
             # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
             sub_program = match.sub_program
             current_decision = decisions.last
             previous_updated_at = nil
             match_started_decision = match.match_recommendation_dnd_staff_decision
-            match_started_at = if match_started_decision.status == 'accepted'
+            match_started_at = if match_started_decision&.status == 'accepted'
               match_started_decision.updated_at
             else
               nil
@@ -51,7 +51,7 @@ module Warehouse
                 client_id: client_id,
                 match_id: match.id,
                 decision_id: decision.id,
-                decision_order: idx,
+                decision_order: MatchDecisions::Base.match_steps[decision.type],
                 match_step: step_name,
                 decision_status: decision.label,
                 current_step: decision == current_decision,

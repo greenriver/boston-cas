@@ -207,10 +207,12 @@ module MatchDecisions
       {
        'MatchDecisions::MatchRecommendationDndStaff' => 1,
        'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
+       'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
+       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
+       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
+       'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff' => 6,
+       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 7,
+       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
        }
     end
     
