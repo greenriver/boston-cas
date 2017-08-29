@@ -8,14 +8,20 @@ module Warehouse
         ::Client.joins( :project_client, client_opportunity_matches: :decisions ).preload(
           :project_client,
           {
-            client_opportunity_matches: {
+            client_opportunity_matches: [
+              :dnd_staff_contacts,
+              :housing_subsidy_admin_contacts,
+              :client_contacts,
+              :shelter_agency_contacts,
+              :ssp_contacts,
+              :hsp_contacts,
               decisions: [
                 :decline_reason,
                 :not_working_with_client_reason,
                 :administrative_cancel_reason,
               ],
               opportunity: [voucher: :sub_program],
-            }
+            ]
           }
         ).where( at[:status].not_eq nil ).distinct.find_each do |client|
           client_id = client.project_client.id_in_data_source
@@ -67,12 +73,27 @@ module Warehouse
                 client_spoken_with_services_agency: decision.client_spoken_with_services_agency,
                 cori_release_form_submitted: decision.cori_release_form_submitted,
                 match_started_at: match_started_at,
-                program_type: sub_program.program_type
+                program_type: sub_program.program_type,
+                shelter_agency_contacts: contact_details(match.shelter_agency_contacts),
+                hsa_contacts: contact_details(match.housing_subsidy_admin_contacts),
+                ssp_contacts: contact_details(match.ssp_contacts),
+                admin_contacts: contact_details(match.dnd_staff_contacts),
+                clent_contacts: contact_details(match.client_contacts),
+                hsp_contacts: contact_details(match.hsp_contacts)
               )
               previous_updated_at = decision.updated_at
             end
           end
         end
+      end
+    end
+
+    def contact_details contacts
+      contacts.map do |contact| 
+        {
+          name: contact.name, 
+          email: contact.email,
+        }
       end
     end
 
