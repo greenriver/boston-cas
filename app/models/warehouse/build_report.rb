@@ -57,7 +57,7 @@ module Warehouse
                 client_id: client_id,
                 match_id: match.id,
                 decision_id: decision.id,
-                decision_order: MatchDecisions::Base.match_steps[decision.type],
+                decision_order: MatchDecisions::Base.match_steps_for_reporting[decision.type],
                 match_step: step_name,
                 decision_status: decision.label,
                 current_step: decision == current_decision,

@@ -207,6 +207,17 @@ module MatchDecisions
       {
        'MatchDecisions::MatchRecommendationDndStaff' => 1,
        'MatchDecisions::MatchRecommendationShelterAgency' => 2,
+       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
+       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
+       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
+       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
+      }
+    end
+
+    def self.match_steps_for_reporting
+      {
+       'MatchDecisions::MatchRecommendationDndStaff' => 1,
+       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
        'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
        'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
        'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
