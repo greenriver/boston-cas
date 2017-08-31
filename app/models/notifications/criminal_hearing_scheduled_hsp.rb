@@ -2,7 +2,7 @@ module Notifications
   class CriminalHearingScheduledHsp < Base
     
     def self.create_for_match! match
-      match.Hsp_contacts.each do |contact|
+      match.hsp_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
