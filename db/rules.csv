@@ -1,5 +1,6 @@
 Class Name,Rule Name,Verb
 AgeGreaterThanSixteen,Age greater than 16,be
+AgeGreaterThanSixteen,Age greater than 18,be
 AgeGreaterThanTwentyFive,Age greater than 25,be
 AgeGreaterThanFifty,Age greater than 50,be
 AgeGreaterThanFiftyFive,Age greater than 55,be
