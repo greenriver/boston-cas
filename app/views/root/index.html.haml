@@ -1,9 +1,12 @@
-.row 
-  .col-sm-6.col-sm-offset-1
-    %p.home-intro
-      Coordinated Access matches homeless individuals to housing vacancies based on need. The Coordinated Access system will centralize vacancies to permanent supportive housing units and will use data to drive outcomes.
-    
+- if lookup_context.exists?('homepage_content', ['root'], true)
+  = render 'root/homepage_content'
+- else 
+  .row
+    .col-sm-6.col-sm-offset-1
+      %p.home-intro
+        Coordinated Access matches homeless individuals to housing vacancies based on need. The Coordinated Access system will centralize vacancies to permanent supportive housing units and will use data to drive outcomes.
+      
 
-  .col-sm-3
-    = link_to 'https://www.boston.gov/housing/bostons-way-home', target: "_blank" do
-      = image_tag "bostons-way-home.png", alt: _("Boston's Way Home"), class: "img-responsive"
+    .col-sm-3
+      = link_to 'https://www.boston.gov/housing/bostons-way-home', target: "_blank" do
+        = image_tag "bostons-way-home.png", alt: _("Boston's Way Home"), class: "img-responsive"
