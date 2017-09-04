@@ -315,7 +315,15 @@ CREATE TABLE clients (
     confidential boolean DEFAULT false NOT NULL,
     hiv_positive boolean DEFAULT false NOT NULL,
     housing_release_status character varying,
-    vispdat_score integer
+    vispdat_score integer,
+    ineligible_immigrant boolean DEFAULT false NOT NULL,
+    family_member boolean DEFAULT false NOT NULL,
+    child_in_household boolean DEFAULT false NOT NULL,
+    us_citizen boolean DEFAULT false NOT NULL,
+    assylee boolean DEFAULT false NOT NULL,
+    lifetime_sex_offender boolean DEFAULT false NOT NULL,
+    meth_production_conviction boolean DEFAULT false NOT NULL,
+    days_homeless integer
 );
 
 
@@ -346,7 +354,8 @@ CREATE TABLE configs (
     id integer NOT NULL,
     stalled_interval integer NOT NULL,
     dnd_interval integer NOT NULL,
-    warehouse_url character varying NOT NULL
+    warehouse_url character varying NOT NULL,
+    engine_mode character varying DEFAULT 'first-date-homeless'::character varying NOT NULL
 );
 
 
@@ -1402,10 +1411,10 @@ CREATE TABLE project_clients (
     domestic_violence integer,
     discharge_type integer,
     developmental_disability integer,
-    us_citizen boolean,
-    assylee boolean,
-    lifetime_sex_offender boolean,
-    meth_production_conviction boolean,
+    us_citizen boolean DEFAULT false NOT NULL,
+    assylee boolean DEFAULT false NOT NULL,
+    lifetime_sex_offender boolean DEFAULT false NOT NULL,
+    meth_production_conviction boolean DEFAULT false NOT NULL,
     id_in_data_source integer,
     calculated_first_homeless_night date,
     calculated_last_homeless_night date,
@@ -1429,7 +1438,11 @@ CREATE TABLE project_clients (
     hiv_positive boolean DEFAULT false NOT NULL,
     housing_release_status character varying,
     needs_update boolean DEFAULT false NOT NULL,
-    vispdat_score integer
+    vispdat_score integer,
+    ineligible_immigrant boolean DEFAULT false NOT NULL,
+    family_member boolean DEFAULT false NOT NULL,
+    child_in_household boolean DEFAULT false NOT NULL,
+    days_homeless integer
 );
 
 
@@ -4450,4 +4463,12 @@ INSERT INTO schema_migrations (version) VALUES ('20170823175246');
 INSERT INTO schema_migrations (version) VALUES ('20170823182320');
 
 INSERT INTO schema_migrations (version) VALUES ('20170827114049');
+
+INSERT INTO schema_migrations (version) VALUES ('20170901180331');
+
+INSERT INTO schema_migrations (version) VALUES ('20170904161926');
+
+INSERT INTO schema_migrations (version) VALUES ('20170904173248');
+
+INSERT INTO schema_migrations (version) VALUES ('20170904175515');
 
