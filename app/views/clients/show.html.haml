@@ -29,10 +29,7 @@
   .col-sm-6
     = simple_form_for(@client) do |f|
       = f.error_notification
-      - if @client.calculated_first_homeless_night.present?
-        %h3
-          Homeless Since:
-          = date_format(@client.calculated_first_homeless_night)
+      %h3 Demographics
       %table.table.table-condensed
         %tbody
           %tr
@@ -61,13 +58,6 @@
           %tr
             %th Veteran
             %td= @client.veteran_status.try(:text)
-          %tr
-            %th Release of information signed on
-            %td= @client.release_of_information.try(:to_date)
-          - if can_view_vspdats?
-            %tr
-              %th VISPDAT Score
-              %td= @client.vispdat_score
           - if can_view_client_confidentiality?
             %tr
               %th
@@ -78,36 +68,6 @@
             %tr
               %td.text-right{colspan: 2}
                 = f.button :submit, class: 'btn btn-primary', value: 'Update'
-
-  .col-sm-6
-    %h3 Last Bed Stay or Outreach Contact
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %td
-            = @client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))
-    %h3 Availability
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %th Disability
-          %td
-            - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
-              = "Verified on #{disability_verified_on}"
-            - else
-              Not Verified
-        %tr
-          %th Housing Release
-          %td
-            = @client.housing_release_status.presence || 'Not Signed'
-        %tr
-          %th Available for matching?
-          %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
-            = checkmark @client.available
-            
-        %tr
-          %td{colspan: 2}
-            = render 'form'
     %h3 Contact Information
     %table.table.table-condensed
       %tbody
@@ -128,8 +88,71 @@
           %tr
             %th Pager
             %td= @client.pager
-.row
   .col-sm-6
+    %h3 Availability
+    %table.table.table-condensed
+      %tbody
+        %tr
+          %td{colspan: 2}
+            = render 'form'
+        %tr
+          %th Available for matching?
+          %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
+            = checkmark @client.available
+        %tr
+          %th Homeless Since
+          %td= date_format(@client.calculated_first_homeless_night)
+        %tr
+          %th Last Seen
+          %td= @client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))
+        %tr
+          %th Chronically Homeless
+          %td= checkmark @client.chronic_homeless
+        %tr
+          %th Disability
+          %td
+            - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
+              = "Verified on #{disability_verified_on}"
+            - else
+              Not Verified
+        %tr
+          %th Housing Release
+          %td
+            = @client.housing_release_status.presence || 'Not Signed'
+        - if @client.release_of_information.present?
+          %tr
+            %th Release of information signed on
+            %td= @client.release_of_information.try(:to_date)
+        - if can_view_va_eligibility?
+          %tr
+            %th VA Eligible
+            %td= checkmark @client.va_eligible
+        - if can_view_vspdats?
+          %tr
+            %th VISPDAT Score
+            %td= @client.vispdat_score
+        %tr
+          %th= _('U.S Citizen or Permanent Resident')
+          %td= checkmark (@client.us_citizen)
+        %tr
+          %th= _('Assylee, Refugee')
+          %td= checkmark (@client.assylee)
+        %tr
+          %th= _('Ineligible Immigrant (Including Undocumented)')
+          %td= checkmark (@client.ineligible_immigrant)
+        %tr
+          %th= _('Life-Time Sex Offender')
+          %td= checkmark (@client.lifetime_sex_offender)
+        %tr
+          %th= _('Meth Production Conviction')
+          %td= checkmark (@client.meth_production_conviction)
+        %tr
+          %th= _('Part of a family')
+          %td= checkmark (@client.family_member)
+        %tr
+          %th= _('Children under age 18 in household')
+          %td= checkmark (@client.child_in_household)
+          
     %h3 Health Information
     %table.table.table-condensed
       %tbody
@@ -161,11 +184,6 @@
           %tr
             %th DMH Eligible
             %td= checkmark @client.dmh_eligible
-
-        - if can_view_va_eligibility?
-          %tr
-            %th VA Eligible
-            %td= checkmark @client.va_eligible
         - if can_view_hues_eligibility?
           %tr
             %th HUES Eligible

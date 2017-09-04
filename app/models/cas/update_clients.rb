@@ -115,7 +115,14 @@ module Cas
         :hues_eligible,
         :hiv_positive,
         :housing_release_status,
-        :vispdat_score
+        :vispdat_score,
+        :us_citizen,
+        :assylee,
+        :ineligible_immigrant,
+        :lifetime_sex_offender,
+        :meth_production_conviction,
+        :family_member,
+        :child_in_household
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?
