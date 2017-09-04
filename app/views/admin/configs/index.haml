@@ -8,6 +8,7 @@
 = simple_form_for @config, url: admin_configs_path do |f|
   .row
     .col-sm-6
+      = f.input :engine_mode, label: 'What method should the matching engine use to determine priority', collection: Matching::Engine.engine_modes, include_blank: false
       = f.input :stalled_interval, label: 'Stalled Match Length in Days', input_html: {size: 4, style: 'width: 4em;'}
       = f.input :dnd_interval, label: "Stalled Match #{_('DND')} Notification Length in Days", input_html: {size: 4, style: 'width: 4em;'}
       = f.input :warehouse_url, label: 'Warehouse URL'

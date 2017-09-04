@@ -354,7 +354,8 @@ CREATE TABLE configs (
     id integer NOT NULL,
     stalled_interval integer NOT NULL,
     dnd_interval integer NOT NULL,
-    warehouse_url character varying NOT NULL
+    warehouse_url character varying NOT NULL,
+    engine_mode character varying DEFAULT 'first-date-homeless'::character varying NOT NULL
 );
 
 
@@ -4468,4 +4469,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170901180331');
 INSERT INTO schema_migrations (version) VALUES ('20170904161926');
 
 INSERT INTO schema_migrations (version) VALUES ('20170904173248');
+
+INSERT INTO schema_migrations (version) VALUES ('20170904175515');
 

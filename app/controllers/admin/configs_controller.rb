@@ -20,6 +20,7 @@ module Admin
         :stalled_interval,
         :dnd_interval,
         :warehouse_url,
+        :engine_mode
       )
     end
 

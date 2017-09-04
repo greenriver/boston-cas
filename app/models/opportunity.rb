@@ -71,7 +71,18 @@ class Opportunity < ActiveRecord::Base
   end
 
   def prioritized_matches
-    client_opportunity_matches.joins(:client).order('clients.calculated_first_homeless_night desc')
+    c_t = Client.arel_table
+    case Config.get(:engine_mode)
+    when 'first-date-homeless'
+      client_opportunity_matches.joins(:client).
+        order(c_t[:calculated_first_homeless_night].asc)
+    when 'vi-spdat'
+      client_opportunity_matches.joins(:client).
+        where.not(clients: {vispdat_score: nil}).
+        order(c_t[:vispdat_score].desc)
+    else
+      raise NotImplementedError
+    end
   end
 
   def self.available_stati

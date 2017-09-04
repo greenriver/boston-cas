@@ -21,6 +21,13 @@ class Matching::Engine
       # returns AR scope
       Opportunity.where(available_candidate: true)
     end
+
+    def engine_modes
+      {
+        'First date homeless' => 'first-date-homeless',
+        'VI-SPDAT Score' => 'vi-spdat',
+      }
+    end
   end
 
   attr_reader :clients, :opportunities
