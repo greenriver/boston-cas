@@ -126,6 +126,9 @@
           %tr
             %th Release of information signed on
             %td= @client.release_of_information.try(:to_date)
+        %tr
+          %th= _('Housing Authority Eligible')
+          %td= checkmark @client.ha_eligible
         - if can_view_va_eligibility?
           %tr
             %th VA Eligible

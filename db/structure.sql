@@ -323,7 +323,8 @@ CREATE TABLE clients (
     assylee boolean DEFAULT false NOT NULL,
     lifetime_sex_offender boolean DEFAULT false NOT NULL,
     meth_production_conviction boolean DEFAULT false NOT NULL,
-    days_homeless integer
+    days_homeless integer,
+    ha_eligible boolean DEFAULT false NOT NULL
 );
 
 
@@ -1442,7 +1443,8 @@ CREATE TABLE project_clients (
     ineligible_immigrant boolean DEFAULT false NOT NULL,
     family_member boolean DEFAULT false NOT NULL,
     child_in_household boolean DEFAULT false NOT NULL,
-    days_homeless integer
+    days_homeless integer,
+    ha_eligible boolean DEFAULT false NOT NULL
 );
 
 
@@ -4471,3 +4473,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170904161926');
 INSERT INTO schema_migrations (version) VALUES ('20170904173248');
 
 INSERT INTO schema_migrations (version) VALUES ('20170904175515');
+
+INSERT INTO schema_migrations (version) VALUES ('20170904203345');
+
