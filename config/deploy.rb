@@ -35,7 +35,8 @@ end
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push(
   'config/secrets.yml',
-  '.env'
+  '.env',
+  'app/views/root/_homepage_content.haml'
 )
 
 # Default value for linked_dirs is []
@@ -48,7 +49,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'var',
   'app/assets/stylesheets/theme/styles',
   'app/assets/images/theme/logo',
-  'app/assets/images/theme/icons',
+  'app/assets/images/theme/icons'
 )
 
 # Default value for default_env is {}

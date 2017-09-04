@@ -1,6 +1,6 @@
 class Config < ActiveRecord::Base
   after_save :invalidate_cache
-  after_initialize :set_defaults
+  before_create :set_defaults
 
   def invalidate_cache
     self.class.invalidate_cache
