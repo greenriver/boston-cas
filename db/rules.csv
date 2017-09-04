@@ -1,5 +1,6 @@
 Class Name,Rule Name,Verb
 AgeGreaterThanSixteen,Age greater than 16,be
+AgeGreaterThanEightteen,Age greater than 18,be
 AgeGreaterThanTwentyFive,Age greater than 25,be
 AgeGreaterThanFifty,Age greater than 50,be
 AgeGreaterThanFiftyFive,Age greater than 55,be
@@ -28,3 +29,11 @@ AgeGreaterThanFortyFive,Age greater than 45,be
 AgeGreaterThanSixtyFive,Age greater than 65,be
 VaEligible,VA Eligible,be
 HuesEligible,HUES Eligible,be
+UsCitizen,U.S Citizen or Permanent Resident,be
+Assylee,"Assylee, Refugee",be
+IneligibleImmigrant,"Ineligible Immigrant (Including Undocumented)",be
+LifetimeSexOffender,"Life-Time Sex Offender",be
+MethProductionConviction,Meth Production Conviction,have
+PartOfAFamily,Part of a family,be
+OneEightyDaysHomeless,180 homeless days in past three years,have
+OneYearHomeless,365 homeless days in past three years,have

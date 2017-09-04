@@ -9,7 +9,7 @@ class Rules::AgeGreaterThanFifty < Rule
       end
       scope.where(where, years_ago)
     else
-      raise RuleDatabaseStructureMissing.new("clients.hiv_aids missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing.new("clients.date_of_birth missing. Cannot check clients against #{self.class}.")
     end
   end
 end
