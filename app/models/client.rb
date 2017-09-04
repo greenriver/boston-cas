@@ -58,7 +58,14 @@ class Client < ActiveRecord::Base
   end
 
   def self.prioritized
-    order(:calculated_first_homeless_night)
+    case Config.get(:engine_mode)
+    when 'first-date-homeless'
+      order(calculated_first_homeless_night: :asc)
+    when 'vi-spdat' 
+      where.not(vispdat_score: nil).order(vispdat_score: :desc)
+    else
+      raise NotImplementedError
+    end
   end
 
   def self.max_candidate_matches
@@ -126,7 +133,8 @@ class Client < ActiveRecord::Base
   alias_method :age_on, :age
 
   def prioritized_matches
-    client_opportunity_matches.joins(:opportunity).order('opportunities.matchability asc')
+    o_t = Opportunity.arel_table
+    client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
   end
 
   def housing_history
