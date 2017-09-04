@@ -122,7 +122,8 @@ module Cas
         :lifetime_sex_offender,
         :meth_production_conviction,
         :family_member,
-        :child_in_household
+        :child_in_household,
+        :days_homeless
       ).first
       pc_attr = pc.attributes
       pc_attr["available"] = pc.available?

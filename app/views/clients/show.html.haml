@@ -103,6 +103,9 @@
           %th Homeless Since
           %td= date_format(@client.calculated_first_homeless_night)
         %tr
+          %th Days Homeless in Last Three Years
+          %td= number_with_delimiter(@client.days_homeless)
+        %tr
           %th Last Seen
           %td= @client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))
         %tr
