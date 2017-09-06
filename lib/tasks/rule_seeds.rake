@@ -6,7 +6,7 @@ namespace :rules do
       ChronicallyHomeless.create!(verb: 'is', name: 'Chronic Homeless')
       VeryLowIncome.create!(verb: 'has', name: 'Very Low Income (50% of Median or Less)')
       UsCitizenOrPermanentResident.create!(verb: 'is', name: 'U.S. Citizen or Permanent Resident')
-      AssyleeOrRefugee.create!(verb: 'is', name: 'Assylee, Refugee')
+      AsyleeOrRefugee.create!(verb: 'is', name: 'Asylee, Refugee')
       IneligibleImmigrant.create!(verb: 'is', name: 'Ineligible Immigrant (Including Undocumented)')
       PhysicalDisablingCondition.create!(verb: 'has', name: 'Disabling Condition: Physical')
       MentalHealthEligible.create!(verb: 'is', name: 'Mental Health Eligible')

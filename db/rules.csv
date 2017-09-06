@@ -30,7 +30,7 @@ AgeGreaterThanSixtyFive,Age greater than 65,be
 VaEligible,VA Eligible,be
 HuesEligible,HUES Eligible,be
 UsCitizen,U.S Citizen or Permanent Resident,be
-Assylee,"Assylee, Refugee",be
+Asylee,"Asylee, Refugee",be
 IneligibleImmigrant,"Ineligible Immigrant (Including Undocumented)",be
 LifetimeSexOffender,"Life-Time Sex Offender",be
 MethProductionConviction,Meth Production Conviction,have

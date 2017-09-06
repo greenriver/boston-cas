@@ -117,7 +117,7 @@ module Cas
         :housing_release_status,
         :vispdat_score,
         :us_citizen,
-        :assylee,
+        :asylee,
         :ineligible_immigrant,
         :lifetime_sex_offender,
         :meth_production_conviction,
