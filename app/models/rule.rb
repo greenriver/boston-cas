@@ -26,7 +26,7 @@ class Rule < ActiveRecord::Base
   end
 
   def name_with_verb
-    "#{verb} #{name}".downcase
+    "#{verb} #{_(name)}".downcase
   end
 
 end

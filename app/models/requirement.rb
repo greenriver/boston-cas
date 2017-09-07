@@ -21,7 +21,7 @@ class Requirement < ActiveRecord::Base
   delegate :name, :name_with_verb, to: :rule, allow_nil: true, prefix: true
   
   def name
-    "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{rule_name}"
+    "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{_(rule_name)}"
   end
   
 end
