@@ -14,7 +14,7 @@
             %tr
               - attributes = {:class => rule.deleted_at.present? ? 'deleted' : nil}
               %td{attributes}= rule.verb.try :titleize
-              %td{attributes}= rule.name
+              %td{attributes}= _(rule.name)
               %td{attributes}
                 - if rule.always_apply?
                   Always Apply
