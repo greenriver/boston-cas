@@ -16,7 +16,7 @@ class ClientsController < ApplicationController
     end
     sort_string = params[:q].try(:[], :s) || default_sort
     (@column, @direction) = sort_string.split(' ')
-    @sorted_by = Client.sort_options.select do |m| 
+    @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
     @q = client_scope.ransack(params[:q])

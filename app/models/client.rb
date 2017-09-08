@@ -224,17 +224,17 @@ class Client < ActiveRecord::Base
   end
 
 
-  def self.sort_options
+  def self.sort_options(show_vispdat: false)
     [
-      {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
-      {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
-      {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
-      {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
-      {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc'},
-      {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc'},
-      {title: 'Homeless days', column: 'days_homeless', direction: 'desc'},
-      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc'},
-      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc'},
+      {title: 'Last name A-Z', column: 'last_name', direction: 'asc', visible: true},
+      {title: 'Last name Z-A', column: 'last_name', direction: 'desc', visible: true},
+      {title: 'First name A-Z', column: 'first_name', direction: 'asc', visible: true},
+      {title: 'First name Z-A', column: 'first_name', direction: 'desc', visible: true},
+      {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc', visible: true},
+      {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', visible: true},
+      {title: 'Homeless days', column: 'days_homeless', direction: 'desc', visible: true},
+      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},
+      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
     ]
   end
 end

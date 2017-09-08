@@ -6,10 +6,11 @@
     %ul
       - sort_options.each do |opt|
         %li
-          = link_to sort_url(@q, opt[:column], default_order: opt[:direction]) do
-            - if @column == opt[:column] && @direction == opt[:direction]
-              %span.icon-checkbox-checked
-                = opt[:title]
-            - else
-              %span.icon-checkbox-unchecked
-                = opt[:title]
+          - if opt[:visible]
+            = link_to sort_url(@q, opt[:column], default_order: opt[:direction]) do
+              - if @column == opt[:column] && @direction == opt[:direction]
+                %span.icon-checkbox-checked
+                  = opt[:title]
+              - else
+                %span.icon-checkbox-unchecked
+                  = opt[:title]

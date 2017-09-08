@@ -4,7 +4,7 @@
   .col-sm-6
     = render 'search_form'
   .col-sm-2
-    = render 'sort', sort_options: Client.sort_options
+    = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
 - if Client.parked.any?
   .alert.alert-warning
     %p.icon-warning
