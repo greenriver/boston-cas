@@ -39,23 +39,52 @@ class Client < ActiveRecord::Base
     .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
     .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
+  scope :text_search, -> (text) do
+    return none unless text.present?
+    text.strip!
+    sa = arel_table
+    numeric = /[\d-]+/.match(text).try(:[], 0) == text
+    date = /\d\d\/\d\d\/\d\d\d\d/.match(text).try(:[], 0) == text
+    social = /\d\d\d-\d\d-\d\d\d\d/.match(text).try(:[], 0) == text
+    # Explicitly search for only last, first if there's a comma in the search
+    if text.include?(',')
+      last, first = text.split(',').map(&:strip)
+      if last.present?
+        where = sa[:last_name].lower.matches("#{last.downcase}%")
+      end
+      if last.present? && first.present?
+        where = where.and(sa[:first_name].lower.matches("#{first.downcase}%"))
+      elsif first.present?
+        where = sa[:first_name].lower.matches("#{first.downcase}%")
+      end
+    # Explicity search for "first last"
+    elsif text.include?(' ')
+      first, last = text.split(' ').map(&:strip)
+      where = sa[:first_name].lower.matches("#{first.downcase}%")
+        .and(sa[:last_name].lower.matches("#{last.downcase}%"))
+    # Explicitly search for a PersonalID
+    elsif social
+      where = sa[:ssn].eq(text.gsub('-',''))
+    elsif date
+      (month, day, year) = text.split('/')
+      where = sa[:date_of_birth].eq("#{year}-#{month}-#{day}")
+    else
+      query = "%#{text}%"
+      where = sa[:first_name].matches(query).
+        or(sa[:last_name].matches(query)).
+        or(sa[:ssn].matches(query))
+    end
+    where(where)
+  end
 
+  def self.ransackable_scopes(auth_object = nil)
+    [:text_search]
+  end
 
   def full_name
     [first_name, middle_name, last_name, name_suffix].select{|n| n.present?}.join(' ')
   end
   alias_method :name, :full_name
-
-  def self.text_search(text)
-    return none unless text.present?
-    query = "%#{text}%"
-    where(
-      arel_table[:first_name].matches(query)
-      .or(arel_table[:last_name].matches(query))
-      .or(arel_table[:middle_name].matches(query))
-      .or(arel_table[:ssn].matches(query))
-    )
-  end
 
   def self.prioritized
     case Config.get(:engine_mode)
@@ -145,6 +174,10 @@ class Client < ActiveRecord::Base
     client_opportunity_matches.active.first
   end
 
+  def active_in_match?
+    client_opportunity_matches.active.exists?
+  end
+
   def unavailable(permanent:false)
     active_match = client_opportunity_matches.active.first
     Client.transaction do 
@@ -174,5 +207,34 @@ class Client < ActiveRecord::Base
 
   def has_full_housing_release?
     housing_release_status == 'Full HAN Release'
+  end
+
+  def available_text
+    if available 
+      if available_candidate
+        'Available for matching'
+      elsif active_in_match?
+        'Active in a match'
+      else
+        'Fully matched'
+      end
+    else
+      'Not available'
+    end
+  end
+
+
+  def self.sort_options
+    [
+      {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
+      {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
+      {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
+      {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
+      {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc'},
+      {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc'},
+      {title: 'Homeless days', column: 'days_homeless', direction: 'desc'},
+      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc'},
+      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc'},
+    ]
   end
 end

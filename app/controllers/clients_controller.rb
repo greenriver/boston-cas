@@ -8,17 +8,22 @@ class ClientsController < ApplicationController
 
   # GET /hmis/clients
   def index
-    # search
-    @clients = if params[:q].present?
-      client_scope.text_search(params[:q])
+    @show_vispdat = can_view_vspdats? && Config.get(:engine_mode) == 'vi-spdat'
+    default_sort = if @show_vispdat
+      'vispdat_score desc'
     else
-      client_scope
+      'calculated_first_homeless_night asc'
     end
-
-    # sort / paginate
-    @clients = @clients
-      .order(sort_column => sort_direction)
-      .page(params[:page].to_i).per(25)
+    sort_string = params[:q].try(:[], :s) || default_sort
+    (@column, @direction) = sort_string.split(' ')
+    @sorted_by = Client.sort_options.select do |m| 
+      m[:column] == @column && m[:direction] == @direction
+    end.first[:title]
+    @q = client_scope.ransack(params[:q])
+    @clients = @q.result(distinct: true)
+    # paginate
+    @page = params[:page].presence || 1
+    @clients = @clients.page(@page.to_i).per(25)
 
     @matches = ClientOpportunityMatch
               .group(:client_id)

@@ -25,6 +25,7 @@ gem 'virtus'
 gem 'font-awesome-sass'
 
 gem 'kaminari'
+gem 'ransack'
 
 # No attachment to unicor here-- probably want to go with passenger or puma
 gem 'unicorn-rails'

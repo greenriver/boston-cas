@@ -98,7 +98,7 @@
         %tr
           %th Available for matching?
           %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
-            = checkmark @client.available
+            = @client.available_text
         %tr
           %th Homeless Since
           %td= date_format(@client.calculated_first_homeless_night)

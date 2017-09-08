@@ -52,7 +52,7 @@
         %tr
           - titles.each do | k, title |
             %th
-              = sort_link(titles[k], k, directions)
+              = manual_sort_link(titles[k], k, directions)
               %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
           %th HMIS Managed
           %th Match

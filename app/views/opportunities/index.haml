@@ -35,7 +35,7 @@
             %th Matches
             - titles.each do | k, title |
               %th{style: 'width: 8em;'}
-                = sort_link(titles[k], k, directions)
+                = manual_sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
             %th
               Status

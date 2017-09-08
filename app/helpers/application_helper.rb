@@ -40,7 +40,7 @@ module ApplicationHelper
   end
 
   #returns a link appropriate for re-sorting a table
-  def sort_link(link_text, column, directions)
+  def manual_sort_link(link_text, column, directions)
     direction = directions[column]
     sort_direction = (direction.nil? || direction == 'asc') ? 'desc' : 'asc'
     sort = {'sort' => column, 'direction' => sort_direction}
