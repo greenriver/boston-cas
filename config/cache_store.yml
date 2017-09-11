@@ -1,0 +1,4 @@
+<%= ENV['RAILS_ENV'] %>:
+  host: <%= ENV['CACHE_HOST'] %>
+  port: <%= ENV['CACHE_PORT'] %>
+  db: <%= ENV['CACHE_DB'] %>

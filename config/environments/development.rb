@@ -48,5 +48,6 @@ Rails.application.configure do
   config.sandbox_email_mode = false
 
   config.force_ssl = false
+  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours }
 
 end

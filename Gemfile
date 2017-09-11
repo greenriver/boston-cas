@@ -27,8 +27,9 @@ gem 'font-awesome-sass'
 gem 'kaminari'
 gem 'ransack'
 
-# No attachment to unicor here-- probably want to go with passenger or puma
+# No attachment to unicorn here-- probably want to go with passenger or puma
 gem 'unicorn-rails'
+gem 'redis-rails'
 
 gem "lograge"
 gem 'activerecord-session_store'

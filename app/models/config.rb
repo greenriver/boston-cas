@@ -27,7 +27,7 @@ class Config < ActiveRecord::Base
   end
 
   def self.get(config)
-    @settings ||= Rails.cache.fetch(self.name) do
+    @settings = Rails.cache.fetch(self.name) do
       self.first_or_create
     end
     @settings.public_send(config)
