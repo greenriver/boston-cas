@@ -7,6 +7,7 @@
       - disabled = true
       - hint = 'Details of this contact are not editable here as they are managed in the HMIS'
     = f.input :first_name, required: true, disabled: disabled, hint: hint
+    = f.input :middle_name, required: true, disabled: disabled
     = f.input :last_name, required: true, disabled: disabled
     = f.input :role, disabled: disabled
     = f.input :email, as: :email, required: true, disabled: disabled
