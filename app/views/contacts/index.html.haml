@@ -13,7 +13,7 @@
   .col-sm-6
     = render 'search_form'
 :ruby
-  columns = ['last_name', 'middle_name', 'first_name', 'email', 'phone', 'role']
+  columns = ['last_name', 'first_name', 'middle_name', 'email', 'phone', 'role']
   directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
   titles = {}
   directions.each {| k,v | titles[k] = @contacts.human_attribute_name(k)}
