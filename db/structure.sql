@@ -304,7 +304,7 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1429,7 +1429,7 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1513,7 +1513,8 @@ CREATE TABLE reissue_requests (
     reissued_at timestamp without time zone,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    request_sent_at timestamp without time zone
 );
 
 
@@ -1616,7 +1617,6 @@ CREATE TABLE roles (
     can_edit_all_clients boolean DEFAULT false,
     can_participate_in_matches boolean DEFAULT false,
     can_view_all_matches boolean DEFAULT false,
-    can_view_own_closed_matches boolean DEFAULT false,
     can_see_alternate_matches boolean DEFAULT false,
     can_edit_match_contacts boolean DEFAULT false,
     can_approve_matches boolean DEFAULT false,
@@ -1627,11 +1627,6 @@ CREATE TABLE roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false,
-    can_view_hues_eligibility boolean DEFAULT false,
-    can_view_hiv_positive_eligibility boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -1656,7 +1651,13 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
+    can_view_hiv_positive_eligibility boolean DEFAULT false,
+    can_view_own_closed_matches boolean DEFAULT false,
     can_edit_translations boolean DEFAULT false,
     can_view_vspdats boolean DEFAULT false,
     can_manage_config boolean DEFAULT false
@@ -4482,4 +4483,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170906162452');
 INSERT INTO schema_migrations (version) VALUES ('20170907122041');
 
 INSERT INTO schema_migrations (version) VALUES ('20170914195045');
+
+INSERT INTO schema_migrations (version) VALUES ('20170921150901');
 

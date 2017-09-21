@@ -16,13 +16,17 @@ class ReissueRequestsController < ApplicationController
     if @notification.decision.editable?
       @reissue_request = ::ReissueRequest.where(notification: @notification).first_or_create
       # Alert the DND Contact that the expired link was attempted
-      @match.dnd_staff_contacts.each do |contact|
-        message = {
-          body: "A CAS contact (#{@notification.recipient.full_name}) has just attempted to access an expired notification for the following match:\n\n#{match_url(@match)}\n\nDetails can be found here: #{reissue_notifications_url}",
-          subject: '[CAS] Notification Expired - Requires Your Action',
-          recipient: contact,
-        }
-        email = ApplicationMailer.notification_expired(message).deliver_later
+      # but only send one per day
+      if @reissue_request.request_sent_at.blank? || @reissue_request.request_sent_at < 1.day.ago
+        @match.dnd_staff_contacts.each do |contact|
+          message = {
+            body: "A CAS contact (#{@notification.recipient.full_name}) has just attempted to access an expired notification for the following match:\n\n#{match_url(@match)}\n\nDetails can be found here: #{reissue_notifications_url}",
+            subject: '[CAS] Notification Expired - Requires Your Action',
+            recipient: contact,
+          }
+          email = ApplicationMailer.notification_expired(message).deliver_later
+          @reissue_request.update(request_sent_at: Time.now)
+        end
       end
     end
   end
