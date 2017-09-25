@@ -35,7 +35,9 @@ IneligibleImmigrant,"Ineligible Immigrant (Including Undocumented)",be
 LifetimeSexOffender,"Life-Time Sex Offender",be
 MethProductionConviction,Meth Production Conviction,have
 PartOfAFamily,Part of a family,be
-OneEightyDaysHomeless,180 homeless days in past three years,have
-OneYearHomeless,365 homeless days in past three years,have
+OneEightyDaysHomeless,180 homeless days
+OneYearHomeless,365 homeless days
+OneEightyDaysHomelessLastThreeYears,180 homeless days in past three years,have
+OneYearHomelessLastThreeYears,365 homeless days in past three years,have
 ChildInHousehold,Children under age 18 in household,have
 HousingAuthorityEligible,Housing Authority Eligible,be
