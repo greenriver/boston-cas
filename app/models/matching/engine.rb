@@ -26,7 +26,8 @@ class Matching::Engine
       {
         'First date homeless' => 'first-date-homeless',
         'VI-SPDAT Score' => 'vi-spdat',
-        'Most days homeless' => 'cumulative-homeless-days',
+        'Cumulative days homeless' => 'cumulative-homeless-days',
+        'Days homeless in the last three years' => 'homeless-days-last-three-years',
       }
     end
   end

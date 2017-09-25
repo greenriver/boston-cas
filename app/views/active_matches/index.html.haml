@@ -42,6 +42,8 @@
           %tr
             %th Client
             %th First Homeless Night
+            %th Homeless days
+            %th Homeless days in last three years
             %th Last Changed
             %th.match-progress-bar-fixed-width Current Step
             %th Initial Match Date
@@ -65,6 +67,8 @@
                   = match.client_name_for_contact current_contact, hidden: hide_client_name
               %td
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+              %td= number_with_delimiter(match.client.days_homeless)
+              %td= number_with_delimiter(match.client.days_homeless_in_last_three_years)
               %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td= render 'current_step', match: match 
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))

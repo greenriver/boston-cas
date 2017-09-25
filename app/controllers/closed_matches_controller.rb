@@ -27,13 +27,19 @@ class ClosedMatchesController < MatchListBaseController
       column = 'clients.last_name'
     elsif sort_column == 'first_name'
       column = 'clients.first_name'
+    elsif sort_column == 'days_homeless'
+      column = 'clients.days_homeless'
+    elsif sort_column == 'days_homeless_in_last_three_years'
+      column = 'clients.days_homeless_in_last_three_years'
     elsif sort_column == 'last_decision'
       column = "last_decision.updated_at"
     elsif sort_column == 'current_step'
       column = 'last_decision.type'
     end
     sort = "#{column} #{sort_direction}"
-
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort = sort + ' NULLS LAST'
+    end
     
     if params[:current_step].present? && ClientOpportunityMatch::CLOSED_REASONS.include?(params[:current_step])
       @matches = @matches.public_send(params[:current_step])

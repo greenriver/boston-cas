@@ -78,7 +78,10 @@ class Opportunity < ActiveRecord::Base
         order(c_t[:calculated_first_homeless_night].asc)
     when 'cumulative-homeless-days'
       client_opportunity_matches.joins(:client).
-        order(c_t[:days_homeless].asc)
+        order(c_t[:days_homeless].desc)
+    when 'homeless-days-last-three-years'
+      client_opportunity_matches.joins(:client).
+      order(c_t[:days_homeless_in_last_three_years].desc)
     when 'vi-spdat'
       client_opportunity_matches.joins(:client).
         where.not(clients: {vispdat_score: nil}).

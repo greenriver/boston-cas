@@ -29,8 +29,16 @@ class ActiveMatchesController < MatchListBaseController
       column = "last_decision.updated_at"
     elsif sort_column == 'current_step'
       column = 'last_decision.type'
+    elsif sort_column == 'days_homeless'
+      column = 'clients.days_homeless'
+    elsif sort_column == 'days_homeless_in_last_three_years'
+      column = 'clients.days_homeless_in_last_three_years'
     end
     sort = "#{column} #{sort_direction}"
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort = sort + ' NULLS LAST'
+    end
+
     @filter_step = params[:current_step]
     if @filter_step.present? && MatchDecisions::Base.filter_options.include?(@filter_step)
       if MatchDecisions::Base.stalled_match_filter_options.include?(@filter_step)

@@ -24,6 +24,10 @@ class MatchListBaseController < ApplicationController
       column = 'clients.days_homeless_in_last_three_years'
     end
     sort = "#{column} #{sort_direction}"
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort = sort + ' NULLS LAST'
+    end
+    
     @matches = @matches
       .references(:client)
       .includes(:client)
