@@ -18,8 +18,16 @@ class MatchListBaseController < ApplicationController
       column = 'clients.calculated_first_homeless_night'
     elsif sort_column == 'client_id'
       column = 'clients.last_name'
+    elsif sort_column == 'days_homeless'
+      column = 'clients.days_homeless'
+    elsif sort_column == 'days_homeless_in_last_three_years'
+      column = 'clients.days_homeless_in_last_three_years'
     end
     sort = "#{column} #{sort_direction}"
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort = sort + ' NULLS LAST'
+    end
+    
     @matches = @matches
       .references(:client)
       .includes(:client)
@@ -47,7 +55,7 @@ class MatchListBaseController < ApplicationController
     end
   
     def sort_column
-      (match_scope.column_names + ['last_decision', 'current_step']).include?(params[:sort]) ? params[:sort] : 'calculated_first_homeless_night'
+      (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years']).include?(params[:sort]) ? params[:sort] : 'calculated_first_homeless_night'
     end
 
     def sort_direction

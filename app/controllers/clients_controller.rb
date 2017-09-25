@@ -8,14 +8,23 @@ class ClientsController < ApplicationController
 
   # GET /hmis/clients
   def index
-    @show_vispdat = can_view_vspdats? && Config.get(:engine_mode) == 'vi-spdat'
+    engine_mode = Config.get(:engine_mode)
+    @show_vispdat = can_view_vspdats? && engine_mode == 'vi-spdat'
     default_sort = if @show_vispdat
       'vispdat_score desc'
+    elsif engine_mode == 'cumulative-homeless-days'
+      'days_homeless desc'
+    elsif engine_mode == 'homeless-days-last-three-years'
+      'days_homeless_in_last_three_years desc'
     else
       'calculated_first_homeless_night asc'
     end
     sort_string = params[:q].try(:[], :s) || default_sort
     (@column, @direction) = sort_string.split(' ')
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort_string = sort_string + ' NULLS LAST'
+    end
+     
     @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
@@ -23,11 +32,14 @@ class ClientsController < ApplicationController
     @clients = @q.result(distinct: true)
     # paginate
     @page = params[:page].presence || 1
-    @clients = @clients.page(@page.to_i).per(25)
+    
+    @clients = @clients.reorder(sort_string).page(@page.to_i).per(25)
+    
+    client_ids = @clients.map(&:id)
 
     @matches = ClientOpportunityMatch
               .group(:client_id)
-              .where(client_id: @clients.map(&:id))
+              .where(client_id: client_ids)
               .count
   end
 

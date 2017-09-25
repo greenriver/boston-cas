@@ -90,6 +90,10 @@ class Client < ActiveRecord::Base
     case Config.get(:engine_mode)
     when 'first-date-homeless'
       order(calculated_first_homeless_night: :asc)
+    when 'cumulative-homeless-days'
+      order(days_homeless: :desc)
+    when 'homeless-days-last-three-years'
+      order(days_homeless_in_last_three_years: :desc)
     when 'vi-spdat' 
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     else
@@ -233,7 +237,8 @@ class Client < ActiveRecord::Base
       {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc', visible: true},
       {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', visible: true},
       {title: 'Homeless days', column: 'days_homeless', direction: 'desc', visible: true},
-      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},
+      {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc', visible: true},
+      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},      
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
     ]
   end
