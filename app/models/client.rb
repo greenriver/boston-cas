@@ -90,6 +90,8 @@ class Client < ActiveRecord::Base
     case Config.get(:engine_mode)
     when 'first-date-homeless'
       order(calculated_first_homeless_night: :asc)
+    when 'cumulative-homeless-days'
+      order(days_homeless: :asc)
     when 'vi-spdat' 
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     else
