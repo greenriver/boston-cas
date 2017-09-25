@@ -324,7 +324,8 @@ CREATE TABLE clients (
     lifetime_sex_offender boolean DEFAULT false NOT NULL,
     meth_production_conviction boolean DEFAULT false NOT NULL,
     days_homeless integer,
-    ha_eligible boolean DEFAULT false NOT NULL
+    ha_eligible boolean DEFAULT false NOT NULL,
+    days_homeless_in_last_three_years integer
 );
 
 
@@ -1445,7 +1446,8 @@ CREATE TABLE project_clients (
     family_member boolean DEFAULT false NOT NULL,
     child_in_household boolean DEFAULT false NOT NULL,
     days_homeless integer,
-    ha_eligible boolean DEFAULT false NOT NULL
+    ha_eligible boolean DEFAULT false NOT NULL,
+    days_homeless_in_last_three_years integer
 );
 
 
@@ -4485,4 +4487,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170907122041');
 INSERT INTO schema_migrations (version) VALUES ('20170914195045');
 
 INSERT INTO schema_migrations (version) VALUES ('20170921150901');
+
+INSERT INTO schema_migrations (version) VALUES ('20170925155224');
 
