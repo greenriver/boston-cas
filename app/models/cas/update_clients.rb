@@ -21,7 +21,7 @@ module Cas
             missing_clients = ProjectClient.where(client_id: project_clients - clients).pluck(:id)
             no_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where(client_id: nil).pluck(:id)
             no_clients += ProjectClient.where(sync_with_cas: true).where(client_id: nil).pluck(:id)
-            probably_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
+            probably_clients = ProjectClient.where(sync_with_cas: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
 
             to_add = (no_clients.uniq + missing_clients.uniq).uniq
             to_delete = (clients - project_clients.uniq).uniq
@@ -47,13 +47,12 @@ module Cas
             Rails.logger.info "Updating #{to_update.length} clients"
             to_update.each do |u|
               pc_attr = fetch_project_client(:client_id, u)
-              pc_attr.delete('id')
+              pc_attr.delete(:id)
               c = Client.find_by(id: u)
               # ignore available flag if this client has previously been merged
               if c[:merged_into].present?
-                pc_attr.delete('available')
+                pc_attr.delete(:available)
               end
-
               c.update_attributes(pc_attr)
             end
           end
@@ -127,33 +126,35 @@ module Cas
         :days_homeless_in_last_three_years,
         :ha_eligible
       ).first
-      pc_attr = pc.attributes
-      pc_attr["available"] = pc.available?
-      if pc_attr["veteran_status"] == '1'
-        pc_attr["veteran"] = 1
+      pc_attr = pc.attributes.map do |k,v|
+        [k.to_sym, v]
+      end.to_h
+      pc_attr[:available] = pc.available?
+      if pc_attr[:veteran_status] == '1'
+        pc_attr[:veteran] = 1
       end
-      if pc_attr["developmental_disability"] != 1
-        pc_attr["developmental_disability"] = nil
+      if pc_attr[:developmental_disability] != 1
+        pc_attr[:developmental_disability] = nil
       end
-      pc_attr["substance_abuse_problem"] = pc.substance_abuse?
+      pc_attr[:substance_abuse_problem] = pc.substance_abuse?
 
       # convert ProjectClient into Client format
       {
-        "chronic_homeless": "calculated_chronic_homelessness",
-        "ssn_quality": "ssn_quality_code",
-        "date_of_birth_quality": "dob_quality_code",
-        "hiv_aids": "hivaids_status",
-        "chronic_health_problem": "chronic_health_condition",
-        "race_id": "primary_race",
-        "ethnicity_id": "ethnicity",
-        "veteran_status_id": "veteran_status",
-        "gender_id": "gender",
+        chronic_homeless: :calculated_chronic_homelessness,
+        ssn_quality: :ssn_quality_code,
+        date_of_birth_quality: :dob_quality_code,
+        hiv_aids: :hivaids_status,
+        chronic_health_problem: :chronic_health_condition,
+        race_id: :primary_race,
+        ethnicity_id: :ethnicity,
+        veteran_status_id: :veteran_status,
+        gender_id: :gender,
       }.each do |destination, source|
         pc_attr[destination] = pc_attr[source]
         pc_attr.delete(source)
       end
-      pc_attr.delete("calculated_last_homeless_night")
-      pc_attr.delete('id')
+      pc_attr.delete(:calculated_last_homeless_night)
+      pc_attr.delete(:id)
 
       return pc_attr
     end
