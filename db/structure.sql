@@ -273,8 +273,8 @@ CREATE TABLE clients (
     ssn character varying(9),
     date_of_birth date,
     gender_other character varying(50),
-    veteran boolean,
-    chronic_homeless boolean,
+    veteran boolean DEFAULT false,
+    chronic_homeless boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
@@ -4491,4 +4491,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170921150901');
 INSERT INTO schema_migrations (version) VALUES ('20170925155224');
 
 INSERT INTO schema_migrations (version) VALUES ('20170925170636');
+
+INSERT INTO schema_migrations (version) VALUES ('20171002184557');
 
