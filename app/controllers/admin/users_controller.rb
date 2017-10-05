@@ -27,7 +27,15 @@ module Admin
 
     def edit
       @user = user_scope.find params[:id]
-      @user.build_contact unless @user.contact
+      # check for existing contact with the same email
+      contact = Contact.where(email: @user.email.downcase).first
+      if ! @user.contact
+        if contact.present?
+          @user.contact = contact
+        else
+          @user.build_contact
+        end
+      end
       @client_contacts = Client.where(id: ClientContact.where(contact_id: @user.contact).select(:client_id))
       @subgrantee_contacts = Subgrantee.where(id: SubgranteeContact.where(contact_id: @user.contact).select(:subgrantee_id))
       @building_contacts = Building.where(id: BuildingContact.where(contact_id: @user.contact).select(:building_id))
