@@ -23,6 +23,9 @@
     = render 'show_confidential_names'
 :ruby
   columns = ['client_id', 'calculated_first_homeless_night', 'days_homeless', 'days_homeless_in_last_three_years']
+  if @show_vispdat
+    columns << 'vispdat_score'
+  end
   directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
   titles = {}
   directions.each {| k,v | titles[k] = @matches.human_attribute_name(k)}
@@ -60,6 +63,9 @@
                   = match.client_name_for_contact current_contact, hidden: hide_client_name
               %td
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+              - if @show_vispdat
+                %td
+                  = match.client.vispdat_score
               %td
                 = number_with_delimiter(match.client.days_homeless)
               %td

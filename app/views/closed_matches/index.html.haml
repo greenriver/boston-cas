@@ -44,6 +44,8 @@
             %th First Homeless Night
             %th Days Homeless
             %th Days Homeless in the last three years
+            - if @show_vispdat
+              %th VI-SPDAT Score
             %th Last Changed
             %th.match-progress-bar-fixed-width Current Step
             %th Initial Match Date
@@ -67,6 +69,8 @@
               %td= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= number_with_delimiter(match.client.days_homeless)
               %td= number_with_delimiter(match.client.days_homeless_in_last_three_years)
+              - if @show_vispdat
+                %td= match.client.vispdat_score
               %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td= render 'current_step', match: match 
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))

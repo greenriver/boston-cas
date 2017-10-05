@@ -22,6 +22,8 @@ class MatchListBaseController < ApplicationController
       column = 'clients.days_homeless'
     elsif sort_column == 'days_homeless_in_last_three_years'
       column = 'clients.days_homeless_in_last_three_years'
+    elsif sort_column == 'vispdat_score'
+      column = 'clients.vispdat_score'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
@@ -34,9 +36,10 @@ class MatchListBaseController < ApplicationController
       .order(sort)
       .preload(:client, :opportunity, :decisions)
       .page(params[:page]).per(25)
+    @show_vispdat = show_vispdat?
   end
   
-  private
+  protected
     # This is painful, but we need to prevent leaking of client names
     # via targeted search
     def visible_match_ids
@@ -53,13 +56,41 @@ class MatchListBaseController < ApplicationController
     def set_heading
       raise 'abstract method'
     end
+
+    def show_vispdat?
+      can_view_vspdats? && engine_mode == 'vi-spdat'
+    end
+
+    def engine_mode
+      engine_mode = Config.get(:engine_mode)
+    end
+
+    def default_sort_direction
+      if show_vispdat? || engine_mode == 'cumulative-homeless-days' || engine_mode == 'homeless-days-last-three-years'
+        'desc'
+      else
+        'asc'
+      end
+    end
+
+    def default_sort_column
+      if show_vispdat?
+        'vispdat_score'
+      elsif engine_mode == 'cumulative-homeless-days'
+        'days_homeless'
+      elsif engine_mode == 'homeless-days-last-three-years'
+        'days_homeless_in_last_three_years'
+      else
+        'calculated_first_homeless_night'
+      end
+    end
   
     def sort_column
-      (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years']).include?(params[:sort]) ? params[:sort] : 'calculated_first_homeless_night'
+      (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
     end
 
     def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : default_sort_direction
     end
 
     def query_string

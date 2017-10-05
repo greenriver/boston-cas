@@ -134,7 +134,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
     
   def confidential?
-    program.confidential? || client.confidential? || sub_program.confidential? || ! client.has_full_housing_release?
+    program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
   end
 
   def self.accessible_by_user user
@@ -482,6 +482,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
         {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
         {title: 'Current step', column: 'current_step', direction: 'desc'},
         {title: 'Initial Acceptance Expiration Date', column: 'shelter_expiration', direction: 'asc'},
+        {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
       ]
     end
 

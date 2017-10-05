@@ -33,11 +33,14 @@ class ActiveMatchesController < MatchListBaseController
       column = 'clients.days_homeless'
     elsif sort_column == 'days_homeless_in_last_three_years'
       column = 'clients.days_homeless_in_last_three_years'
+    elsif sort_column == 'vispdat_score'
+      column = 'clients.vispdat_score'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort = sort + ' NULLS LAST'
     end
+    @show_vispdat = show_vispdat?
 
     @filter_step = params[:current_step]
     if @filter_step.present? && MatchDecisions::Base.filter_options.include?(@filter_step)

@@ -35,11 +35,14 @@ class ClosedMatchesController < MatchListBaseController
       column = "last_decision.updated_at"
     elsif sort_column == 'current_step'
       column = 'last_decision.type'
+    elsif sort_column == 'vispdat_score'
+      column = 'clients.vispdat_score'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort = sort + ' NULLS LAST'
     end
+    @show_vispdat = show_vispdat?
     
     if params[:current_step].present? && ClientOpportunityMatch::CLOSED_REASONS.include?(params[:current_step])
       @matches = @matches.public_send(params[:current_step])
