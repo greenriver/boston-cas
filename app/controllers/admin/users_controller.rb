@@ -28,7 +28,7 @@ module Admin
     def edit
       @user = user_scope.find params[:id]
       # check for existing contact with the same email
-      contact = Contact.where(email: @user.email.downcase).first
+      contact = Contact.find_by_email(@user.email.downcase)
       if ! @user.contact
         if contact.present?
           @user.contact = contact

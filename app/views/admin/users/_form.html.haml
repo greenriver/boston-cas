@@ -1,13 +1,18 @@
 = simple_form_for [:admin, @user] do |f|
   = f.error_notification
-
   .form-inputs
     = f.simple_fields_for :contact do |contact_fields|
       = contact_fields.input :first_name, required: true
       = contact_fields.input :last_name, required: true
-      -# = contact_fields.input :role
-      -# Taking role out for now because it's not being used anywhere in association with user accounts. DND can recognize whether they have the correct person by their email address. We'll add the ability to associate accounts with contacts which have more role/organization detail.
+      -# We override the phone and email fields, so we need to manually show errors
+      - if @user.errors.messages[:phone]
+        .alert.alert-danger
+          = @user.errors.messages[:phone].last.humanize
       = contact_fields.input :phone, as: :tel
+      -# We override the phone and email fields, so we need to manually show errors
+      - if @user.errors.messages[:email]
+        .alert.alert-danger
+          = @user.errors.messages[:email].last.humanize
       = contact_fields.input :email, as: :email, required: true
     .form--checkbox-groups
       %h3 CAS Roles for Access Permissions
