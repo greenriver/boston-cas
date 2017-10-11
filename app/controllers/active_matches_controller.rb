@@ -13,9 +13,9 @@ class ActiveMatchesController < MatchListBaseController
     end
     # decision subquery
 
-    md = MatchDecisions::Base.where(
-      'match_id = client_opportunity_matches.id'
-    ).where.not(status: nil).order(created_at: :desc).limit(1)
+    md = MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
+      where.not(status: nil).
+      order(created_at: :desc).limit(1)
 
     # sort / paginate
     column = "client_opportunity_matches.#{sort_column}"
@@ -60,13 +60,12 @@ class ActiveMatchesController < MatchListBaseController
       end
     end
 
-    @matches = @matches
-      .references(:client)
-      .includes(:client)
-      .joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision")
-      .order(sort)
-      .preload(:client, :opportunity, :decisions)
-      .page(params[:page]).per(25)
+    @matches = @matches.references(:client).
+      includes(:client).
+      joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
+      order(sort).
+      preload(:client, :opportunity, :decisions).
+      page(params[:page]).per(25)
 
     @column = sort_column
     @direction = sort_direction
