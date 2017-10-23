@@ -32,7 +32,7 @@
                 = manual_sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
             %th Matches
-            %th HMIS Managed
+            %th Edit
         %tbody
           - @contacts.each do |c|
             %tr
@@ -50,9 +50,7 @@
               %td= c.role
               %td.text-center= c.client_opportunity_match_contacts.count                 
               %td
-                = checkmark c.hmis_managed?
-                - unless c.hmis_managed?
-                  = link_to 'Edit', edit_contact_path(c)
+                = link_to 'Edit', edit_contact_path(c)
  
     %p= paginate @contacts
     

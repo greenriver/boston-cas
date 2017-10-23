@@ -54,7 +54,6 @@
             %th
               = manual_sort_link(titles[k], k, directions)
               %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-          %th HMIS Managed
           %th Match
       %tbody
         - @building.units.each do |u|
@@ -62,7 +61,6 @@
             %td= link_to u.id, edit_unit_path(u)
             %td= link_to u.name || '(no name)', edit_unit_path(u)
             %td=checkmark u.available
-            %td=checkmark u.hmis_managed?
             %td
               - if u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_match&.present?
                 - match = u.active_match

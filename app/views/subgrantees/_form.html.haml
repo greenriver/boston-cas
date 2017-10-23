@@ -3,9 +3,6 @@
   - disabled = false
   - hint = ''
   .form-inputs
-    - if @subgrantee.hmis_managed?
-      - disabled = true
-      - hint = 'Details of this sub-grantee are not editable here as they are managed in the HMIS'
     = f.input :name, disabled: disabled, hint: hint
   
   = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Subgrantee'
