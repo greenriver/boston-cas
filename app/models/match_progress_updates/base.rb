@@ -36,6 +36,7 @@ module MatchProgressUpdates
 
     scope :incomplete_for_contact, -> (contact_id:) do
       incomplete.
+      where.not(requested_at: nil).
       where(contact_id: contact_id)
     end
 
