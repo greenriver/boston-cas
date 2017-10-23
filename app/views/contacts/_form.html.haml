@@ -3,9 +3,6 @@
   - disabled = false
   - hint = ''
   .form-inputs
-    - if form_for_arg.hmis_managed?
-      - disabled = true
-      - hint = 'Details of this contact are not editable here as they are managed in the HMIS'
     = f.input :first_name, required: true, disabled: disabled, hint: hint
     = f.input :middle_name, required: true, disabled: disabled
     = f.input :last_name, required: true, disabled: disabled

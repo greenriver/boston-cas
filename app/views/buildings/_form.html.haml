@@ -5,9 +5,6 @@
       - disabled = false
       - hint = ''
       .form-inputs
-        - if @building.hmis_managed?
-          - disabled = true
-          - hint = 'Details of this building are not editable here as they are managed in the HMIS. You can edit the rules and services for this building.'
         = f.input :name, disabled: disabled, hint: hint
         = f.input :building_type, disabled: disabled
         = f.input :address, disabled: disabled

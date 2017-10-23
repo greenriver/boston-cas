@@ -34,13 +34,6 @@ class Contact < ActiveRecord::Base
     user.present?
   end
 
-  def hmis_managed?
-    if id_in_data_source
-      return true
-    end
-    return false
-  end
-
   def self.text_search(text)
     return none unless text.present?
 

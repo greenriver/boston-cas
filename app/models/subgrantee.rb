@@ -20,11 +20,6 @@ class Subgrantee < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
-  def hmis_managed?
-    return true if id_in_data_source
-    return false
-  end
-
   def self.text_search(text)
     return none unless text.present?
 

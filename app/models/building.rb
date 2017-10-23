@@ -44,11 +44,6 @@ class Building < ActiveRecord::Base
       end 
     end
   end
-  
-  def hmis_managed?
-    return true if id_in_data_source
-    return false
-  end
 
   def self.text_search(text)
     return none unless text.present?

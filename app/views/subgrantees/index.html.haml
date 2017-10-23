@@ -33,8 +33,7 @@
               %th
                 = manual_sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th
-              HMIS Managed
+            %th Edit
         %tbody
           - @subgrantees.each do |s|
             %tr
@@ -45,8 +44,6 @@
                 = link_to subgrantee_path(s) do
                   = s.name
               %td
-                = checkmark s.hmis_managed?
-                - unless s.hmis_managed?
-                  = link_to 'Edit', edit_subgrantee_path(s)
+                = link_to 'Edit', edit_subgrantee_path(s)
 
     %p= paginate @subgrantees, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
