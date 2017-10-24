@@ -1,4 +1,3 @@
-- sub_program = match.opportunity_details.sub_program
 .row
   .col-sm-8
     %h1 Housing Opportunity: Match Progress
@@ -18,99 +17,15 @@
 .detail-box
   -# These label/value pairs can all be displayed conditionally if present
   .row
-    .col-sm-9
-      .row
-        .col-sm-3
-          .detail-box--label Program
-          .detail-box--value
-            = match.opportunity_details.program_name
-            %em
-              = match.opportunity_details.sub_program_name
-          .detail-box--label Service Provider
-          .detail-box--value= match.opportunity_details.service_provider_name
-          -#.detail-box--label Sub-Contractor
-          .detail-box--value
-        .col-sm-3
-          .detail-box--label= "#{Building.model_name.human}"
-          .detail-box--value
-            - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
-              = match.opportunity_details.building_name 
-              %br
-            - match.opportunity_details.building_address.each do |line|
-              - if match.opportunity_details.building_map_link
-                = link_to line, match.opportunity_details.building_map_link, target: '_blank'
-              - else
-                = line
-              %br
-        .col-sm-2
-          .detail-box--label Unit
-          .detail-box--value= match.opportunity_details.unit_name
-        .col-sm-4
-          .detail-box--label 
-            Client
-            - unless match.client.has_full_housing_release?
-              .limited-cas-release
-                %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "This client has not signed the HAN release and their name cannot be released to the #{_('HSA')}, #{_('SSP')}, or the #{_('HSP')}. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the #{_('HAN')} release at any time during the match the change will be reflected in CAS and their information will become available."}}
-                = match.client.housing_release_status || 'No release on file'
-          .detail-box--value
-            - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end
-            - name = match.client_name_for_contact access_context.current_contact, hidden: false
-            - if match.show_client_info_to?(access_context.current_contact)
-              -# If we have permission to see the client details, present a modal
-              = link_to link, data: {loads_in_pjax_modal: true} do
-                = name
-                - unless user_signed_in?
-                  -# If we would have permission to see the client details if we logged in, show age
-                  %br
-                  Age: 
-                  = match.client.age || 'unknown'
-            - elsif ! user_signed_in?
-              -# Provide the option to login to see more
-              = link_to link do
-                = name
-            - else
-              -# Even though we are logged in, we don't have permission
-              = name
-            - if can_view_all_clients? && warehouse_id = match.client.remote_id
-              %br
-              = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
-                Warehouse ID:
-                = warehouse_id
-      .row
-        .col-sm-4
-          .detail-box--label Services
-          .detail-box--value
-            - services = match.services_with_inherited
-            - if services.count > 0
-              = services.map(&:name).join('<br />').html_safe
-            - else
-              None
-        .col-sm-8
-          .detail-box--label Rules
-          .detail-box--value
-            - requirements = match.requirements_with_inherited
-            - initial_requirements = match&.universe_state.try(:[], "requirements")
-            - if requirements.map(&:prepare_for_archive) != initial_requirements
-              - initial_ids = initial_requirements&.map{|m| m['id']}
-              .alert.alert-danger
-                Requirements have changed since match creation; client may no longer be eligible.
-            - if requirements.count > 0
-              - requirements.each do |r| 
-                - if initial_ids.present? && initial_ids.exclude?(r.id)
-                  %span.detail-box--new-requirement
-                    *
-                    = r.name
-                - else
-                  = r.name
-                %em.detail-box--requirement-source
-                  = "(#{r.requirer.name})"
-                %br
-            - else
-              None
-          - if sub_program.eligibility_requirement_notes?
-            .detail-box--label
-              Additional Eligibility Requirements
-            .detail-box--value
-              = sub_program.eligibility_requirement_notes
+    .col-sm-3
+      = render 'program_details', match: match
+      = render 'services', match: match
+    .col-sm-3
+      = render 'building_details', match: match
+      = render 'rules', match: match
+    .col-sm-3
+      = render 'client_details', match: match
+      - if @show_files
+        = render 'client_files', match: match
     .col-sm-3
       = render 'matches/contacts', match: match

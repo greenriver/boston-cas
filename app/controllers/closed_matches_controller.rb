@@ -6,7 +6,7 @@ class ClosedMatchesController < MatchListBaseController
     # search
     if params[:q].present?
       search_scope = match_scope.text_search(params[:q])
-      unless current_user.contact.user_can_view_all_clients?
+      unless current_user.can_view_all_clients?
         search_scope = search_scope.where(id: visible_match_ids())
       end
       @matches = search_scope

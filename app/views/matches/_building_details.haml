@@ -1,0 +1,13 @@
+.detail-box--label= "#{Building.model_name.human}"
+.detail-box--value
+  - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
+    = match.opportunity_details.building_name 
+    %br
+  - match.opportunity_details.building_address.each do |line|
+    - if match.opportunity_details.building_map_link
+      = link_to line, match.opportunity_details.building_map_link, target: '_blank'
+    - else
+      = line
+    %br
+.detail-box--label Unit
+.detail-box--value= match.opportunity_details.unit_name

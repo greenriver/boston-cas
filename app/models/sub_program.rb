@@ -17,8 +17,10 @@ class SubProgram < ActiveRecord::Base
   belongs_to :housing_subsidy_administrator, class_name: 'Subgrantee', foreign_key: :hsa_id
 
   has_many :vouchers
+  has_many :file_tags
 
   accepts_nested_attributes_for :program, :vouchers
+  accepts_nested_attributes_for :file_tags, allow_destroy: true
   attr_accessor :add_vouchers
 
   validates_presence_of :building, if: :has_buildings?

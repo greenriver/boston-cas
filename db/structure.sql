@@ -304,7 +304,7 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -653,6 +653,37 @@ CREATE SEQUENCE ethnicities_id_seq
 --
 
 ALTER SEQUENCE ethnicities_id_seq OWNED BY ethnicities.id;
+
+
+--
+-- Name: file_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE file_tags (
+    id integer NOT NULL,
+    sub_program_id integer NOT NULL,
+    name character varying,
+    tag_id integer
+);
+
+
+--
+-- Name: file_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE file_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: file_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE file_tags_id_seq OWNED BY file_tags.id;
 
 
 --
@@ -1430,7 +1461,7 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    dmh_eligible boolean DEFAULT false NOT NULL,
+    dmh_eligible boolean DEFAULT false,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1619,7 +1650,6 @@ CREATE TABLE roles (
     can_edit_all_clients boolean DEFAULT false,
     can_participate_in_matches boolean DEFAULT false,
     can_view_all_matches boolean DEFAULT false,
-    can_view_own_closed_matches boolean DEFAULT false,
     can_see_alternate_matches boolean DEFAULT false,
     can_edit_match_contacts boolean DEFAULT false,
     can_approve_matches boolean DEFAULT false,
@@ -1630,11 +1660,6 @@ CREATE TABLE roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false,
-    can_view_hues_eligibility boolean DEFAULT false,
-    can_view_hiv_positive_eligibility boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -1659,7 +1684,13 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
+    can_view_hiv_positive_eligibility boolean DEFAULT false,
+    can_view_own_closed_matches boolean DEFAULT false,
     can_edit_translations boolean DEFAULT false,
     can_view_vspdats boolean DEFAULT false,
     can_manage_config boolean DEFAULT false
@@ -2457,6 +2488,13 @@ ALTER TABLE ONLY ethnicities ALTER COLUMN id SET DEFAULT nextval('ethnicities_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY file_tags ALTER COLUMN id SET DEFAULT nextval('file_tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY funding_source_services ALTER COLUMN id SET DEFAULT nextval('funding_source_services_id_seq'::regclass);
 
 
@@ -2894,6 +2932,14 @@ ALTER TABLE ONLY domestic_violence_survivors
 
 ALTER TABLE ONLY ethnicities
     ADD CONSTRAINT ethnicities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: file_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY file_tags
+    ADD CONSTRAINT file_tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -4493,4 +4539,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170925155224');
 INSERT INTO schema_migrations (version) VALUES ('20170925170636');
 
 INSERT INTO schema_migrations (version) VALUES ('20171002184557');
+
+INSERT INTO schema_migrations (version) VALUES ('20171023185614');
 

@@ -11,6 +11,7 @@ class SubProgramsController < ApplicationController
 
   end
   def edit
+    @available_file_tags = FileTag.available_tags
   end
 
   def create
@@ -30,6 +31,12 @@ class SubProgramsController < ApplicationController
     @subprogram.assign_attributes(sub_program_params)
     prevent_incorrect_building()
     if @subprogram.save
+      @subprogram.file_tags.destroy_all
+      if file_tag_params.any?
+        tags = Warehouse::Tag.where(id:file_tag_params).map do |tag|
+          @subprogram.file_tags.create(tag_id: tag.id, name: tag.name)
+        end
+      end
       redirect_to action: :index, controller: :programs
       flash[:notice] = "Program \"<a href=\"#{edit_program_sub_program_path(@subprogram.program, @subprogram)}\">#{@subprogram.program.name}</a>\" updated."
     else
@@ -55,8 +62,13 @@ class SubProgramsController < ApplicationController
         :building_id,
         :hsa_id,
         :confidential,
-        :eligibility_requirement_notes
+        :eligibility_requirement_notes,
       )
+  end
+
+  def file_tag_params
+    params.require(:sub_program)[:file_tag_ids].
+      map(&:presence).compact.map(&:to_i) || []
   end
 
   def sub_program_source
