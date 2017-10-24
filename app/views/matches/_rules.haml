@@ -1,0 +1,26 @@
+.detail-box--label Rules
+.detail-box--value
+  - requirements = match.requirements_with_inherited
+  - initial_requirements = match&.universe_state.try(:[], "requirements")
+  - if requirements.map(&:prepare_for_archive) != initial_requirements
+    - initial_ids = initial_requirements&.map{|m| m['id']}
+    .alert.alert-danger
+      Requirements have changed since match creation; client may no longer be eligible.
+  - if requirements.count > 0
+    - requirements.each do |r| 
+      - if initial_ids.present? && initial_ids.exclude?(r.id)
+        %span.detail-box--new-requirement
+          *
+          = r.name
+      - else
+        = r.name
+      %em.detail-box--requirement-source
+        = "(#{r.requirer.name})"
+      %br
+  - else
+    None
+- if @sub_program.eligibility_requirement_notes?
+  .detail-box--label
+    Additional Eligibility Requirements
+  .detail-box--value
+    = @sub_program.eligibility_requirement_notes
