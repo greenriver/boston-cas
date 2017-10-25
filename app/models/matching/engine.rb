@@ -28,7 +28,7 @@ class Matching::Engine
         'VI-SPDAT Score' => 'vi-spdat',
         'Cumulative days homeless' => 'cumulative-homeless-days',
         'Days homeless in the last three years' => 'homeless-days-last-three-years',
-        'VI-SPDAT Priorty Score' => 'vispdat-priority-score'
+        'VI-SPDAT Priority Score' => 'vispdat-priority-score'
       }
     end
   end

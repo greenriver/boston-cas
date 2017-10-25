@@ -47,5 +47,6 @@ FactoryGirl.define do
     can_assign_requirements true
     can_become_other_users true 
     can_edit_translations true
+    can_view_vspdats true
   end
 end
