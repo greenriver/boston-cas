@@ -56,6 +56,26 @@ module Cas
               c.update_attributes(pc_attr)
             end
           end
+
+          # calculate the vispdat priority score
+          Client.connection.execute(
+            <<-SQL 
+              UPDATE clients
+              SET vispdat_priority_score = (
+                CASE 
+                WHEN days_homeless > 730 AND vispdat_score >=8
+                  THEN 730 + vispdat_score
+                WHEN days_homeless >= 365 AND vispdat_score >=8
+                  THEN 365 + vispdat_score
+                WHEN vispdat_score >= 0 
+                  THEN vispdat_score
+                ELSE 
+                  0
+                END 
+              )
+            SQL
+          )
+
           ProjectClient.update_all(needs_update: false)
         end
         fix_incorrect_available_candidate_clients()
