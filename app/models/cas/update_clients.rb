@@ -53,28 +53,10 @@ module Cas
               if c[:merged_into].present?
                 pc_attr.delete(:available)
               end
+              pc_attr = pc_attr.merge(vispdat_priority_score: calculate_vispdat_priority_score(c))
               c.update_attributes(pc_attr)
             end
           end
-
-          # calculate the vispdat priority score
-          Client.connection.execute(
-            <<-SQL 
-              UPDATE clients
-              SET vispdat_priority_score = (
-                CASE 
-                WHEN days_homeless > 730 AND vispdat_score >=8
-                  THEN 730 + vispdat_score
-                WHEN days_homeless >= 365 AND vispdat_score >=8
-                  THEN 365 + vispdat_score
-                WHEN vispdat_score >= 0 
-                  THEN vispdat_score
-                ELSE 
-                  0
-                END 
-              )
-            SQL
-          )
 
           ProjectClient.update_all(needs_update: false)
         end
@@ -99,6 +81,22 @@ module Cas
     end
 
     private
+
+    def calculate_vispdat_priority_score client
+      days  = client.days_homeless.to_i
+      score = client.vispdat_score.to_i
+
+      if days > 730 && score >= 8
+        730 + score
+      elsif days >= 365 && score >= 8
+        365 + score
+      elsif score >= 0 
+        score
+      else 
+        0
+      end 
+    end
+
     def needs_update?
       ProjectClient.where(needs_update: true).any?
     end
