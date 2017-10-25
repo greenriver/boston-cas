@@ -35,6 +35,8 @@ class ActiveMatchesController < MatchListBaseController
       column = 'clients.days_homeless_in_last_three_years'
     elsif sort_column == 'vispdat_score'
       column = 'clients.vispdat_score'
+    elsif sort_column == 'vispdat_priority_score'
+      column = 'clients.vispdat_priority_score'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'

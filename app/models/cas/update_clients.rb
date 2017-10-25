@@ -53,7 +53,10 @@ module Cas
               if c[:merged_into].present?
                 pc_attr.delete(:available)
               end
-              pc_attr = pc_attr.merge(vispdat_priority_score: calculate_vispdat_priority_score(c))
+              vispdat_length_homeless_in_days = pc_attr[:vispdat_length_homeless_in_days]
+              vispdat_score = pc_attr[:vispdat_score]
+              pc_attr = pc_attr.merge(vispdat_priority_score: calculate_vispdat_priority_score(vispdat_length_homeless_in_days, vispdat_score))
+              pc_attr.delete(:vispdat_length_homeless_in_days)
               c.update_attributes(pc_attr)
             end
           end
@@ -82,19 +85,16 @@ module Cas
 
     private
 
-    def calculate_vispdat_priority_score client
-      days  = client.days_homeless.to_i
-      score = client.vispdat_score.to_i
-
-      if days > 730 && score >= 8
-        730 + score
-      elsif days >= 365 && score >= 8
-        365 + score
-      elsif score >= 0 
-        score
+    def calculate_vispdat_priority_score vispdat_length_homeless_in_days, vispdat_score
+      if vispdat_length_homeless_in_days > 730 && vispdat_score >= 8
+        730 + vispdat_score
+      elsif vispdat_length_homeless_in_days >= 365 && vispdat_score >= 8
+        365 + vispdat_score
+      elsif vispdat_score >= 0 
+        vispdat_score
       else 
         0
-      end 
+      end
     end
 
     def needs_update?
@@ -133,6 +133,7 @@ module Cas
         :hiv_positive,
         :housing_release_status,
         :vispdat_score,
+        :vispdat_length_homeless_in_days,
         :us_citizen,
         :asylee,
         :ineligible_immigrant,

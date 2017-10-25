@@ -78,7 +78,7 @@ class MatchListBaseController < ApplicationController
     def default_sort_column
       if show_vispdat? && engine_mode=='vi-spdat'
         'vispdat_score'
-      elsif show_vipdat? && engine_mode=='vispdat-priority-score'
+      elsif show_vispdat? && engine_mode=='vispdat-priority-score'
         'vispdat_priority_score'
       elsif engine_mode == 'cumulative-homeless-days'
         'days_homeless'
