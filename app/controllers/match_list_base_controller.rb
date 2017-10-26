@@ -24,6 +24,8 @@ class MatchListBaseController < ApplicationController
       column = 'clients.days_homeless_in_last_three_years'
     elsif sort_column == 'vispdat_score'
       column = 'clients.vispdat_score'
+    elsif sort_column == 'vispdat_priority_score'
+      column = 'clients.vispdat_priority_score'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
@@ -58,7 +60,7 @@ class MatchListBaseController < ApplicationController
     end
 
     def show_vispdat?
-      can_view_vspdats? && engine_mode == 'vi-spdat'
+      can_view_vspdats? && %w(vi-spdat vispdat-priority-score).include?(engine_mode)
     end
 
     def engine_mode
@@ -74,8 +76,10 @@ class MatchListBaseController < ApplicationController
     end
 
     def default_sort_column
-      if show_vispdat?
+      if show_vispdat? && engine_mode=='vi-spdat'
         'vispdat_score'
+      elsif show_vispdat? && engine_mode=='vispdat-priority-score'
+        'vispdat_priority_score'
       elsif engine_mode == 'cumulative-homeless-days'
         'days_homeless'
       elsif engine_mode == 'homeless-days-last-three-years'

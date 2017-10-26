@@ -32,6 +32,7 @@
             %th Days Homeless in the last three years
             - if @show_vispdat
               %th VI-SPDAT
+              %th VI-SPDAT Priority Score
             %th Available
             %th Age
             %th Gender
@@ -59,6 +60,8 @@
               - if @show_vispdat
                 %td
                   = client.vispdat_score
+                %td
+                  = client.vispdat_priority_score
               %td
                 = client.available_text
               %td

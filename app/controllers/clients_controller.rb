@@ -9,13 +9,15 @@ class ClientsController < ApplicationController
   # GET /hmis/clients
   def index
     engine_mode = Config.get(:engine_mode)
-    @show_vispdat = can_view_vspdats? && engine_mode == 'vi-spdat'
-    default_sort = if @show_vispdat
+    @show_vispdat = can_view_vspdats? && %w(vi-spdat vispdat-priority-score).include?(engine_mode)
+    default_sort = if can_view_vspdats? && engine_mode=='vi-spdat'
       'vispdat_score desc'
     elsif engine_mode == 'cumulative-homeless-days'
       'days_homeless desc'
     elsif engine_mode == 'homeless-days-last-three-years'
       'days_homeless_in_last_three_years desc'
+    elsif can_view_vspdats? && engine_mode == 'vispdat-priority-score'
+      'vispdat_priority_score desc'
     else
       'calculated_first_homeless_night asc'
     end

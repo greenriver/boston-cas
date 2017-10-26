@@ -86,6 +86,10 @@ class Opportunity < ActiveRecord::Base
       client_opportunity_matches.joins(:client).
         where.not(clients: {vispdat_score: nil}).
         order(c_t[:vispdat_score].desc)
+    when 'vispdat-priority-score'
+      client_opportunity_matches.joins(:client)
+        .where.not(clients: { vispdat_priority_score: nil }) 
+        .order(c_t[:vispdat_priority_score].desc) 
     else
       raise NotImplementedError
     end

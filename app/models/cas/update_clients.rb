@@ -53,9 +53,14 @@ module Cas
               if c[:merged_into].present?
                 pc_attr.delete(:available)
               end
+              vispdat_length_homeless_in_days = pc_attr[:vispdat_length_homeless_in_days]
+              vispdat_score = pc_attr[:vispdat_score]
+              pc_attr = pc_attr.merge(vispdat_priority_score: calculate_vispdat_priority_score(vispdat_length_homeless_in_days, vispdat_score))
+              pc_attr.delete(:vispdat_length_homeless_in_days)
               c.update_attributes(pc_attr)
             end
           end
+
           ProjectClient.update_all(needs_update: false)
         end
         fix_incorrect_available_candidate_clients()
@@ -79,6 +84,19 @@ module Cas
     end
 
     private
+
+    def calculate_vispdat_priority_score vispdat_length_homeless_in_days, vispdat_score
+      if vispdat_length_homeless_in_days > 730 && vispdat_score >= 8
+        730 + vispdat_score
+      elsif vispdat_length_homeless_in_days >= 365 && vispdat_score >= 8
+        365 + vispdat_score
+      elsif vispdat_score >= 0 
+        vispdat_score
+      else 
+        0
+      end
+    end
+
     def needs_update?
       ProjectClient.where(needs_update: true).any?
     end
@@ -115,6 +133,7 @@ module Cas
         :hiv_positive,
         :housing_release_status,
         :vispdat_score,
+        :vispdat_length_homeless_in_days,
         :us_citizen,
         :asylee,
         :ineligible_immigrant,

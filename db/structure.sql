@@ -325,7 +325,8 @@ CREATE TABLE clients (
     meth_production_conviction boolean DEFAULT false NOT NULL,
     days_homeless integer,
     ha_eligible boolean DEFAULT false NOT NULL,
-    days_homeless_in_last_three_years integer
+    days_homeless_in_last_three_years integer,
+    vispdat_priority_score integer DEFAULT 0
 );
 
 
@@ -1478,7 +1479,8 @@ CREATE TABLE project_clients (
     child_in_household boolean DEFAULT false NOT NULL,
     days_homeless integer,
     ha_eligible boolean DEFAULT false NOT NULL,
-    days_homeless_in_last_three_years integer
+    days_homeless_in_last_three_years integer,
+    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL
 );
 
 
@@ -4541,4 +4543,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170925170636');
 INSERT INTO schema_migrations (version) VALUES ('20171002184557');
 
 INSERT INTO schema_migrations (version) VALUES ('20171023185614');
+
+INSERT INTO schema_migrations (version) VALUES ('20171025030616');
+
+INSERT INTO schema_migrations (version) VALUES ('20171025194209');
 

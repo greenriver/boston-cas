@@ -37,6 +37,8 @@ class ClosedMatchesController < MatchListBaseController
       column = 'last_decision.type'
     elsif sort_column == 'vispdat_score'
       column = 'clients.vispdat_score'
+    elsif sort_column == 'vispdat_priority_score'
+      column = 'clients.vispdat_priority_score'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'

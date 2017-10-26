@@ -25,6 +25,7 @@
   columns = ['client_id', 'calculated_first_homeless_night', 'days_homeless', 'days_homeless_in_last_three_years']
   if @show_vispdat
     columns << 'vispdat_score'
+    columns << 'vispdat_priority_score'
   end
   directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
   titles = {}
@@ -63,13 +64,13 @@
                   = match.client_name_for_contact current_contact, hidden: hide_client_name
               %td
                 = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-              - if @show_vispdat
-                %td
-                  = match.client.vispdat_score
               %td
                 = number_with_delimiter(match.client.days_homeless)
               %td
                 = number_with_delimiter(match.client.days_homeless_in_last_three_years)
+              - if @show_vispdat
+                %td= match.client.vispdat_score
+                %td= match.client.vispdat_priority_score
               %td= match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td= match.opportunity_details.program_name
