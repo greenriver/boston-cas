@@ -25,7 +25,7 @@ module Cas
 
             to_add = (no_clients.uniq + missing_clients.uniq).uniq
             to_delete = (clients - project_clients.uniq).uniq
-            to_update = (probably_clients - (project_clients.uniq - clients)).uniq
+            to_update = (probably_clients + (project_clients.uniq & clients)).uniq
           end
           if to_delete.any?
             Rails.logger.info "Removing #{to_delete.length} clients"
