@@ -18,14 +18,14 @@
   -# These label/value pairs can all be displayed conditionally if present
   .row
     .col-sm-3
-      = render 'program_details', match: match
-      = render 'services', match: match
+      = render 'matches/program_details', match: match
+      = render 'matches/services', match: match
     .col-sm-3
-      = render 'building_details', match: match
-      = render 'rules', match: match
+      = render 'matches/building_details', match: match
+      = render 'matches/rules', match: match
     .col-sm-3
-      = render 'client_details', match: match
+      = render 'matches/client_details', match: match
       - if @show_files
-        = render 'client_files', match: match
+        = render 'matches/client_files', match: match
     .col-sm-3
       = render 'matches/contacts', match: match
