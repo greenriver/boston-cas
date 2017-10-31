@@ -304,7 +304,7 @@ CREATE TABLE clients (
     disabling_condition boolean DEFAULT false,
     release_of_information timestamp without time zone,
     prevent_matching_until date,
-    dmh_eligible boolean DEFAULT false,
+    dmh_eligible boolean DEFAULT false NOT NULL,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -326,7 +326,8 @@ CREATE TABLE clients (
     days_homeless integer,
     ha_eligible boolean DEFAULT false NOT NULL,
     days_homeless_in_last_three_years integer,
-    vispdat_priority_score integer DEFAULT 0
+    vispdat_priority_score integer DEFAULT 0,
+    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1462,7 +1463,7 @@ CREATE TABLE project_clients (
     workphone character varying,
     pager character varying,
     email character varying,
-    dmh_eligible boolean DEFAULT false,
+    dmh_eligible boolean DEFAULT false NOT NULL,
     va_eligible boolean DEFAULT false NOT NULL,
     hues_eligible boolean DEFAULT false NOT NULL,
     disability_verified_on timestamp without time zone,
@@ -1652,6 +1653,7 @@ CREATE TABLE roles (
     can_edit_all_clients boolean DEFAULT false,
     can_participate_in_matches boolean DEFAULT false,
     can_view_all_matches boolean DEFAULT false,
+    can_view_own_closed_matches boolean DEFAULT false,
     can_see_alternate_matches boolean DEFAULT false,
     can_edit_match_contacts boolean DEFAULT false,
     can_approve_matches boolean DEFAULT false,
@@ -1662,6 +1664,11 @@ CREATE TABLE roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false,
+    can_view_hues_eligibility boolean DEFAULT false,
+    can_view_hiv_positive_eligibility boolean DEFAULT false,
+    can_view_client_confidentiality boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -1686,13 +1693,7 @@ CREATE TABLE roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false NOT NULL,
-    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
-    can_view_hiv_positive_eligibility boolean DEFAULT false,
-    can_view_own_closed_matches boolean DEFAULT false,
     can_edit_translations boolean DEFAULT false,
     can_view_vspdats boolean DEFAULT false,
     can_manage_config boolean DEFAULT false
@@ -4547,4 +4548,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171023185614');
 INSERT INTO schema_migrations (version) VALUES ('20171025030616');
 
 INSERT INTO schema_migrations (version) VALUES ('20171025194209');
+
+INSERT INTO schema_migrations (version) VALUES ('20171030152636');
 
