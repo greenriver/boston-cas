@@ -143,7 +143,8 @@ module Cas
         :child_in_household,
         :days_homeless,
         :days_homeless_in_last_three_years,
-        :ha_eligible
+        :ha_eligible,
+        :last_seen
       ).first
       pc_attr = pc.attributes.map do |k,v|
         [k.to_sym, v]
