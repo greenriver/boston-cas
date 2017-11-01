@@ -154,6 +154,9 @@ module MatchProgressUpdates
       matches = self.joins(:match).merge(ClientOpportunityMatch.stalled).
         distinct.pluck(:contact_id, :match_id)
       matches.each do |contact_id, match_id|
+        com = ClientOpportunityMatch.find(match_id)
+        next unless com&.match_contact_ids&.include?(contact_id)
+        
         # Determine next notification number
         notification_number = self.where(
           contact_id: contact_id,
