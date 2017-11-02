@@ -13,8 +13,7 @@ class MatchContactsController < ApplicationController
   
   def update
     if @match_contacts.update match_contacts_params
-      # remove contacts no longer on match
-      @match.status_updates.where(submitted_at: nil).where.not(contact_id: @match_contacts.contact_ids).delete_all
+      MatchProgressUpdates::Base.update_status_updates @match
       flash[:notice] = "Match Contacts updated"
       # TODO redirect back to specific decision if we came from there
       redirect_to access_context.match_path(@match)
