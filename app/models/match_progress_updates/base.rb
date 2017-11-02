@@ -132,9 +132,10 @@ module MatchProgressUpdates
       end
     end
 
-    def self.update_status_updates match
+    def self.update_status_updates match_contacts
       # remove contacts no longer on match
-      match.status_updates.where(submitted_at: nil).where.not(contact_id: match.match_contacts.progress_update_contact_ids).delete_all
+      match = match_contacts.match
+      match.status_updates.where(submitted_at: nil).where.not(contact_id: match_contacts.progress_update_contact_ids).delete_all
       # add any new contacts to the match progress updates
       MatchProgressUpdates::Ssp.create_for_match!(match)
       MatchProgressUpdates::Hsp.create_for_match!(match)
