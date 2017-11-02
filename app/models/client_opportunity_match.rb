@@ -305,7 +305,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def match_contact_ids
-    match_contacts&.contact_ids
+    match_contacts&.progress_update_contact_ids
   end
 
   def activate!
