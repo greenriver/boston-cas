@@ -124,11 +124,9 @@ module MatchProgressUpdates
     end
 
     def self.create_for_match! match
-      match.public_send(self.match_contact_scope).each do |contact|  
-        first_or_create!(
-          match: match, 
-          contact: contact,
-        )
+      match.public_send(self.match_contact_scope).each do |contact| 
+        
+        where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
     end
 
