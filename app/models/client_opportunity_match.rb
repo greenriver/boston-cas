@@ -304,6 +304,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     @match_contacts ||= MatchContacts.new match: self
   end
 
+  def match_contact_ids
+    match_contacts&.contact_ids
+  end
+
   def activate!
     self.class.transaction do
       update! active: true

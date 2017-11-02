@@ -119,4 +119,11 @@ class MatchContacts
     self.hsp_contact_ids = contacts.map(&:id)
   end
 
+  def progress_update_contact_ids
+    ([shelter_agency_contact_ids] +
+        [ssp_contact_ids] +
+        [hsp_contact_ids]).flatten.compact.uniq
+  end
+
+
 end
