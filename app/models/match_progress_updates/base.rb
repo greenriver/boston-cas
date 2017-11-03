@@ -124,12 +124,22 @@ module MatchProgressUpdates
     end
 
     def self.create_for_match! match
-      match.public_send(self.match_contact_scope).each do |contact|  
-        create!(
-          match: match, 
-          contact: contact,
-        )
+      match.public_send(self.match_contact_scope).each do |contact| 
+        
+        where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
+    end
+
+    def self.update_status_updates match_contacts
+      # remove contacts no longer on match
+      match = match_contacts.match
+      match.status_updates.where(submitted_at: nil).
+        where.not(contact_id: match_contacts.progress_update_contact_ids).
+        delete_all
+      # add any new contacts to the match progress updates
+      MatchProgressUpdates::Ssp.create_for_match!(match)
+      MatchProgressUpdates::Hsp.create_for_match!(match)
+      MatchProgressUpdates::ShelterAgency.create_for_match!(match)
     end
 
     # Re-send the same request if we requested it before, but haven't had a response
@@ -154,6 +164,10 @@ module MatchProgressUpdates
       matches = self.joins(:match).merge(ClientOpportunityMatch.stalled).
         distinct.pluck(:contact_id, :match_id)
       matches.each do |contact_id, match_id|
+        match = ClientOpportunityMatch.find(match_id)
+        # Short circuit if we are no longer a contact on the match
+        next unless match&.progress_update_contact_ids&.include?(contact_id)
+        
         # Determine next notification number
         notification_number = self.where(
           contact_id: contact_id,
