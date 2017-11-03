@@ -304,7 +304,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     @match_contacts ||= MatchContacts.new match: self
   end
 
-  def match_contact_ids
+  def progress_update_contact_ids
     match_contacts&.progress_update_contact_ids
   end
 

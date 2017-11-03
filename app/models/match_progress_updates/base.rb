@@ -133,7 +133,9 @@ module MatchProgressUpdates
     def self.update_status_updates match_contacts
       # remove contacts no longer on match
       match = match_contacts.match
-      match.status_updates.where(submitted_at: nil).where.not(contact_id: match_contacts.progress_update_contact_ids).delete_all
+      match.status_updates.where(submitted_at: nil).
+        where.not(contact_id: match_contacts.progress_update_contact_ids).
+        delete_all
       # add any new contacts to the match progress updates
       MatchProgressUpdates::Ssp.create_for_match!(match)
       MatchProgressUpdates::Hsp.create_for_match!(match)
@@ -162,8 +164,9 @@ module MatchProgressUpdates
       matches = self.joins(:match).merge(ClientOpportunityMatch.stalled).
         distinct.pluck(:contact_id, :match_id)
       matches.each do |contact_id, match_id|
-        com = ClientOpportunityMatch.find(match_id)
-        next unless com&.match_contact_ids&.include?(contact_id)
+        match = ClientOpportunityMatch.find(match_id)
+        # Short circuit if we are no longer a contact on the match
+        next unless match&.progress_update_contact_ids&.include?(contact_id)
         
         # Determine next notification number
         notification_number = self.where(
