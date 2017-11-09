@@ -327,7 +327,8 @@ CREATE TABLE clients (
     ha_eligible boolean DEFAULT false NOT NULL,
     days_homeless_in_last_three_years integer,
     vispdat_priority_score integer DEFAULT 0,
-    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL
+    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL,
+    part_of_a_family boolean DEFAULT false
 );
 
 
@@ -1481,7 +1482,8 @@ CREATE TABLE project_clients (
     days_homeless integer,
     ha_eligible boolean DEFAULT false NOT NULL,
     days_homeless_in_last_three_years integer,
-    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL
+    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL,
+    part_of_a_family boolean DEFAULT false
 );
 
 
@@ -4550,4 +4552,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171025030616');
 INSERT INTO schema_migrations (version) VALUES ('20171025194209');
 
 INSERT INTO schema_migrations (version) VALUES ('20171030152636');
+
+INSERT INTO schema_migrations (version) VALUES ('20171109210347');
 
