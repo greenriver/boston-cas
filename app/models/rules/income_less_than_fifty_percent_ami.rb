@@ -1,6 +1,6 @@
 class Rules::IncomeLessThanFiftyPercentAmi < Rule
   def clients_that_fit(scope, requirement)
-    if income_total_monthly = Client.arel_table[:income_total_monthly]
+    if Client.column_names.include?(:income_total_monthly.to_s)
       ami = 34350/12 #50% AMI
       if requirement.positive
         where = "income_total_monthly < ?"
