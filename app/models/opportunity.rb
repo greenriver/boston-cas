@@ -103,4 +103,27 @@ class Opportunity < ActiveRecord::Base
       'Successful',
     ]
   end
+
+  # NOTE: This cleans up the opportunity and all associated items
+  # making it as though this never happened.  Use with extreme caution
+  # remove contacts from all matches <- this happens automatically (dependent destroy)
+  # remove events from all matches <- this happens automatically (dependent destroy)
+  # remove match decisions from all matches <- this happens automatically (dependent destroy)
+  # remove all notifications for all matches
+  # update all matched clients available_candidate true
+  # remove all matches
+  # remove voucher
+  # remove self (opportunity)
+
+  def stop_matches_and_remove_entire_history_from_existance!
+    Opportunity.transaction do
+      client_opportunity_matches.each do |match|
+        match.client.update(available_candidate: true)
+        match.notifications.destroy_all
+        match.destroy
+      end
+      voucher.destroy
+      destroy
+    end
+  end
 end
