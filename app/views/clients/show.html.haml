@@ -36,14 +36,6 @@
             %th Age
             %td= "#{@client.age} (#{date_format(@client.date_of_birth)})"
           %tr
-            %th Chronically Homeless
-            %td= checkmark @client.send('chronic_homeless')
-          %tr
-            %th Date of First Homelessness
-            %td
-              - if @client.calculated_first_homeless_night.present?
-                = date_format(@client.calculated_first_homeless_night)
-          %tr
             %th SSN
             %td= masked_ssn @client.ssn
           %tr
