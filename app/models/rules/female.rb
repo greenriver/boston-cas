@@ -1,6 +1,6 @@
 class Rules::Female < Rule
   def clients_that_fit(scope, requirement)
-    if gender = Client.arel_table[:gender_id]
+    if Client.column_names.include?(:gender_id.to_s)
       female = Gender.where(text: 'Female').pluck(:numeric)
       if requirement.positive
         scope.where(gender_id: female)

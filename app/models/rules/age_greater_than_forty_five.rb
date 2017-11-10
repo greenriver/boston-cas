@@ -1,6 +1,6 @@
 class Rules::AgeGreaterThanFortyFive < Rule
   def clients_that_fit(scope, requirement)
-    if date_of_birth = Client.arel_table[:date_of_birth]
+    if Client.column_names.include?(:date_of_birth.to_s)
       years_ago = Date.today - 45.years
       if requirement.positive
         where = "date_of_birth < ?"
