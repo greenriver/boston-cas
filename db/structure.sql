@@ -318,7 +318,6 @@ CREATE TABLE clients (
     housing_release_status character varying,
     vispdat_score integer,
     ineligible_immigrant boolean DEFAULT false NOT NULL,
-    family_member boolean DEFAULT false NOT NULL,
     child_in_household boolean DEFAULT false NOT NULL,
     us_citizen boolean DEFAULT false NOT NULL,
     asylee boolean DEFAULT false NOT NULL,
@@ -328,7 +327,9 @@ CREATE TABLE clients (
     ha_eligible boolean DEFAULT false NOT NULL,
     days_homeless_in_last_three_years integer,
     vispdat_priority_score integer DEFAULT 0,
-    last_seen date
+    last_seen date,
+    vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL,
+    family_member boolean DEFAULT false
 );
 
 
@@ -4552,4 +4553,10 @@ INSERT INTO schema_migrations (version) VALUES ('20171025030616');
 INSERT INTO schema_migrations (version) VALUES ('20171025194209');
 
 INSERT INTO schema_migrations (version) VALUES ('20171031132741');
+
+INSERT INTO schema_migrations (version) VALUES ('20171030152636');
+
+INSERT INTO schema_migrations (version) VALUES ('20171109210347');
+
+INSERT INTO schema_migrations (version) VALUES ('20171110005511');
 

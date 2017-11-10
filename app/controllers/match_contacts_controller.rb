@@ -13,6 +13,7 @@ class MatchContactsController < ApplicationController
   
   def update
     if @match_contacts.update match_contacts_params
+      MatchProgressUpdates::Base.update_status_updates @match_contacts
       flash[:notice] = "Match Contacts updated"
       # TODO redirect back to specific decision if we came from there
       redirect_to access_context.match_path(@match)

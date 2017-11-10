@@ -14,10 +14,10 @@ class User < ActiveRecord::Base
   validates :last_name, presence: true, length: {maximum: 40}
 
   scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
-  scope :dnd_staff, -> {joins(:roles).where(roles: {name: 'dnd_staff'})}
+  scope :dnd_staff, -> {joins(:roles).where(roles: {can_edit_all_clients: true})}
   scope :developer, -> {joins(:roles).where(roles: {name: 'developer'})}
   scope :dnd_initial_contact, -> {dnd_staff.where receive_initial_notification: true}
-  scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {name: 'hsa'})}
+  scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {can_add_vacancies: true})}
   
   has_one :contact, inverse_of: :user
   

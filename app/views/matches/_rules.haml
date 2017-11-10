@@ -19,8 +19,8 @@
       %br
   - else
     None
-- if @sub_program.eligibility_requirement_notes?
+- if match.sub_program.eligibility_requirement_notes?
   .detail-box--label
     Additional Eligibility Requirements
   .detail-box--value
-    = @sub_program.eligibility_requirement_notes
+    = match.sub_program.eligibility_requirement_notes

@@ -25,7 +25,7 @@ module Cas
 
             to_add = (no_clients.uniq + missing_clients.uniq).uniq
             to_delete = (clients - project_clients.uniq).uniq
-            to_update = (probably_clients - (project_clients.uniq - clients)).uniq
+            to_update = (probably_clients + (project_clients.uniq & clients)).uniq
           end
           if to_delete.any?
             Rails.logger.info "Removing #{to_delete.length} clients"
@@ -86,6 +86,8 @@ module Cas
     private
 
     def calculate_vispdat_priority_score vispdat_length_homeless_in_days, vispdat_score
+      vispdat_length_homeless_in_days ||= 0
+      vispdat_score ||= 0
       if vispdat_length_homeless_in_days > 730 && vispdat_score >= 8
         730 + vispdat_score
       elsif vispdat_length_homeless_in_days >= 365 && vispdat_score >= 8
