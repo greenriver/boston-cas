@@ -18,6 +18,10 @@
     = link_to active_matches_path, :class => 'vsm-item-link' do
       .vsm-item-link--description
         Matches in Progress
+    - if Client.parked.any?
+      = link_to reports_parked_clients_path, :class => 'vsm-item-link' do
+        .vsm-item-link--description
+          Parked Clients
   -# Inventory and HMIS related items
   - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_buildings?
     .vsm-group.vsm-group__group-b

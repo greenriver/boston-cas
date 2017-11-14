@@ -39,6 +39,9 @@ class Client < ActiveRecord::Base
     .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
     .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
+  scope :confidential, -> { where(confidential: true) }
+  scope :non_confidential, -> { where(confidential: false) }
+
   scope :text_search, -> (text) do
     return none unless text.present?
     text.strip!
