@@ -118,12 +118,12 @@ unless Rails.env =~ /production|staging/
   end
 
 
-  inital_password = Faker::Internet.password
+  initial_password = Faker::Internet.password
   user = User.new
   user.email = 'noreply@example.com'
   user.first_name = "Sample"
   user.last_name = "Admin"
-  user.password = user.password_confirmation = inital_password
+  user.password = user.password_confirmation = initial_password
   user.confirmed_at = Time.now
   user.invitation_accepted_at = Time.now
   # user.admin = true
