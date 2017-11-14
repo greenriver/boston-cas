@@ -8,7 +8,7 @@ module Reports
           order(prevent_matching_until: :asc).
           page(params[:page].to_i).per(25)
       else
-        @clients = Client.non_confidential.parked.
+        @clients = Client.non_confidential.full_release.parked.
           order(prevent_matching_until: :asc).
           page(params[:page].to_i).per(25)
       end

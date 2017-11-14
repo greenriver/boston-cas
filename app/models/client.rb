@@ -41,6 +41,7 @@ class Client < ActiveRecord::Base
   }
   scope :confidential, -> { where(confidential: true) }
   scope :non_confidential, -> { where(confidential: false) }
+  scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
 
   scope :text_search, -> (text) do
     return none unless text.present?
