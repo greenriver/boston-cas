@@ -49,7 +49,7 @@
                   $('.jButtonStateTriggers').not('#' + current_target_id).val('');
                 }
                 
-                var prevent_matching_present = $('#decision_prevent_matching_until').val() != '';
+                var prevent_matching_present = $('#decision_prevent_matching_until').val() != '' && $('#decision_prevent_matching_until').val() != undefined;
                 if(prevent_matching_present) {
                   $('.jAccept').prop('disabled', true);
                   $('.jDecline').prop('disabled', false);
