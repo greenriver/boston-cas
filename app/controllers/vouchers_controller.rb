@@ -91,6 +91,13 @@ class VouchersController < ApplicationController
   end
 
   def destroy
+    if @voucher.can_be_destroyed?
+      @voucher.destroy
+      flash[:alert] = 'Voucher removed.'
+    else
+      flash[:alert] = 'Voucher in use and cannot be removed.'
+    end
+    redirect_to action: :index
   end
 
   private

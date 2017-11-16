@@ -14,7 +14,11 @@
   .col-sm-4
     = render 'bulk_add_form'
     .text-right
-      = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
+      %p
+        - if @subprogram.voucher_count.present? && @subprogram.voucher_count > 0
+          = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
+        - else
+          = "#{@subprogram.vouchers.count} vouchers created"
     .text-right
       = render 'match_list_base/show_confidential_names'
 .row.margin-top-02

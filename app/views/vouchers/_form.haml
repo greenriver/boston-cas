@@ -19,6 +19,7 @@
             Client
           %th
             Origin
+          %th
       %tbody
         = f.simple_fields_for :vouchers, @vouchers do |v|
           - disabled = false
@@ -69,11 +70,15 @@
               - else
                 - creation_info = v.object.created_at.to_s.humanize
               %span.icon-info{data:{ toggle: :tooltip, placement: :top, title: creation_info.html_safe, html: :true}}
-              
+            %td
+              - if v.object.can_be_destroyed?
+                = link_to program_sub_program_voucher_path(id: v.object.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-xs' do
+                  %span.icon-cross
+                  Delete
           - if v.object.errors.any?
             %tr
               %td(style="border: none; color:red; position: relative; top: -30px;")
-              %td(colspan="5" style="border: none; color:red; position: relative; top: -30px;")
+              %td(colspan="6" style="border: none; color:red; position: relative; top: -30px;")
                 = v.object.errors.full_messages_for(:base).join(', ')   
 
     = f.button :submit, value: 'Update Vouchers'
