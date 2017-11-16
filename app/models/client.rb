@@ -220,6 +220,12 @@ class Client < ActiveRecord::Base
     housing_release_status == 'Full HAN Release'
   end
 
+  # This is only here to allow the translation tool to find it for translating
+  def translated_text_of_release_types
+    _('Full HAN Release')
+    _('Limited CAS Release')
+  end
+
   def available_text
     if available 
       if available_candidate

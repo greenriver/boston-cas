@@ -28,11 +28,11 @@ module MatchDecisions
     end
 
     def step_name
-      "#{_('Housing Subsidy Administrator CORI Hearing')}"
+      _('Housing Subsidy Administrator CORI Hearing')
     end
 
     def actor_type
-      "#{_('HSA')}"
+      _('HSA')
     end
 
     def contact_actor_type

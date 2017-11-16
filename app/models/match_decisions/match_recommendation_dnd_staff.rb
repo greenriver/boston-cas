@@ -22,7 +22,7 @@ module MatchDecisions
     end
 
     def actor_type
-      "#{_('DND')}"
+      _('DND')
     end
 
     def contact_actor_type
