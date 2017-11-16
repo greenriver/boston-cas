@@ -18,3 +18,8 @@
 .add-things-boxes--right-side {
   padding-top: 8px;
 }
+
+// This colors Rules that aren't persisted a light yellow.
+.row[data-persisted-id=''] {
+  background-color: #fcf8e3;
+}
