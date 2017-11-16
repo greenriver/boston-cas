@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 20:17-0500\n"
-"PO-Revision-Date: 2017-11-15 20:17-0500\n"
+"POT-Creation-Date: 2017-11-16 11:07-0500\n"
+"PO-Revision-Date: 2017-11-16 11:07-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -34,6 +34,9 @@ msgid "Boston HMIS Policies and Procedures found in the HMIS Handbook and in agr
 msgstr ""
 
 msgid "Boston's Way Home"
+msgstr ""
+
+msgid "CSPECH Eligible"
 msgstr ""
 
 msgid "Case Workers"
@@ -133,6 +136,9 @@ msgid "You are also confirming that, except for special cases confirmed by the C
 msgstr ""
 
 msgid "case worker"
+msgstr ""
+
+msgid "full release"
 msgstr ""
 
 msgid "housing subsidy administator"
