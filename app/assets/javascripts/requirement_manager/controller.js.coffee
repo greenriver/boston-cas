@@ -84,7 +84,7 @@ class App.RequirementManager.Controller
     @next_index++
     $(@element).find('[data-selected-requirements]').append requirements_row.to_html()
     if $(".row[data-persisted-id='']").length > 0 && $('.rule-not-persisted-alert').length == 0
-      $('a[data-add-button]').closest('.row').after($('<div>', text: 'Rules marked in yellow have not been saved, press the save button to activate this rule', class: 'alert alert-warning rule-not-persisted-alert'))
+      $('a[data-add-button]').closest('.row').after($('<div>', text: 'Rules marked in yellow have not been saved. Submit this page to activate new rules.', class: 'alert alert-warning rule-not-persisted-alert'))
     @selected_requirements.add requirements
 
     
