@@ -32,8 +32,8 @@ module MatchDecisions
     def statuses
       {
         pending: 'Pending', 
-        scheduled: 'Criminal Background Hearing Scheduled', 
-        no_hearing: 'There will not be a criminal background hearing', 
+        scheduled: _('Criminal Background Hearing Scheduled'), 
+        no_hearing: _('There will not be a criminal background hearing'), 
         canceled: 'Canceled',
       }
     end

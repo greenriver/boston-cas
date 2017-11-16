@@ -21,7 +21,7 @@ module MatchDecisions
       case status.to_sym
       when :pending then "New Match Awaiting #{_('Shelter Agency')} Review"
       when :acknowledged then "Match acknowledged by #{_('Shelter Agency')}.  In review"
-      when :accepted then "Match accepted by #{_('Shelter Agencyy')}. Client has signed release of information, spoken with services agency and submitted a CORI release form"
+      when :accepted then "Match accepted by #{_('Shelter Agency')}. Client has signed release of information, spoken with services agency and submitted a CORI release form"
       when :not_working_with_client then "#{_('Shelter Agency')} no longer working with client"
       when :expiration_update then "New Match Awaiting #{_('Shelter Agency')} Review"
       when :declined then decline_status_label
