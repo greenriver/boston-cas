@@ -14,7 +14,7 @@
   .col-sm-12
     = render 'sub_programs/tab_navigation', active: 'program_details'
 .row.margin-top-02
-  .col-sm-12
+  .col-sm-8
     = simple_form_for @program, url: form_url do |f|
       - other_sub_programs = @program.sub_programs.count - 1
       - if other_sub_programs > 0
