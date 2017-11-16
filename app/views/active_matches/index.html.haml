@@ -81,8 +81,12 @@
               %td
                 - if match.current_decision.type == 'MatchDecisions::MatchRecommendationShelterAgency'
                   = match.shelter_expiration.try(:strftime, I18n.t('date.formats.default'))
-              %td= match.opportunity_details.program_name
-              %td= match.opportunity_details.sub_program_name
+              %td
+                = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
+                  = match.opportunity_details.program_name
+              %td
+                = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
+                  = match.opportunity_details.sub_program_name
               %td= match.opportunity_details.organizations
               - if show_links_to_matches?
                 %td

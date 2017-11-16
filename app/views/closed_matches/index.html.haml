@@ -76,8 +76,12 @@
               %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td= render 'current_step', match: match 
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-              %td= match.opportunity_details.program_name
-              %td= match.opportunity_details.sub_program_name
+              %td
+                = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
+                  = match.opportunity_details.program_name
+              %td
+                = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
+                  = match.opportunity_details.sub_program_name
               %td= match.opportunity_details.organizations
               - if show_links_to_matches?
                 %td
