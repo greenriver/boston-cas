@@ -37,7 +37,7 @@ class SubProgramsController < ApplicationController
           @subprogram.file_tags.create(tag_id: tag.id, name: tag.name)
         end
       end
-      redirect_to action: :index, controller: :programs
+      redirect_to action: :edit
       flash[:notice] = "Program \"<a href=\"#{edit_program_sub_program_path(@subprogram.program, @subprogram)}\">#{@subprogram.program.name}</a>\" updated."
     else
       flash[:error] = "Please review the form problems below."
