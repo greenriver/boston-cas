@@ -13,16 +13,16 @@
     
     %h4 Add Rule Condition
     .row
-      .col-xs-5.col-md-4.col-lg-3
+      .col-xs-6.col-sm-4.col-md-4.col-lg-3
         .btn-group
           %a{href: '#', class: 'btn btn-rule-condition', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
           %a{href: '#', class: 'btn btn-rule-condition', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
-      .col-xs-7.col-md-5.col-lg-7
+      .col-xs-6.col-sm-5.col-md-5.col-lg-7
         .form-group
           = select_tag :available_rules, nil, class: 'form-control', data: {rule_searcher: true}
           - form.object.available_rules.each do |rule|
             %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb}}
-      .col-xs-12.col-md-3.col-lg-2.text-right
+      .col-xs-12.col-sm-3.col-md-3.col-lg-2.text-right
         .btn-group
           %a{href: '#', class: 'btn btn-primary', data: {add_button: true}} Add Rule
           
