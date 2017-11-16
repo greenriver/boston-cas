@@ -166,6 +166,9 @@
         %tr
           %th= _('Children under age 18 in household')
           %td= checkmark (@client.child_in_household)
+        %tr
+          %th= _('CSPECH Eligible')
+          %td= checkmark (@client.cspech_eligible)
           
     %h3 Health Information
     %table.table.table-condensed

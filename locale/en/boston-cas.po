@@ -35,6 +35,9 @@ msgstr ""
 msgid "Boston's Way Home"
 msgstr ""
 
+msgid "CSPECH Eligible"
+msgstr ""
+
 msgid "Case Workers"
 msgstr ""
 
@@ -132,6 +135,9 @@ msgid "You are also confirming that, except for special cases confirmed by the C
 msgstr ""
 
 msgid "case worker"
+msgstr ""
+
+msgid "full release"
 msgstr ""
 
 msgid "housing subsidy administator"
