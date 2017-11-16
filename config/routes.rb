@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     resources :contacts, except: :show, controller: :building_contacts, concerns: [:restorable]
     get :available_units, on: :member
     get :available_units_for_vouchers, on: :member
+    get :units, on: :member
     resources :units, only: :new
   end
   resources :subgrantees do

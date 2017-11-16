@@ -40,6 +40,11 @@ class Voucher < ActiveRecord::Base
     [unit] + unit.building.available_units_for_vouchers.to_a
   end
 
+  def units_including_unavailable
+    return sub_program.building.units_for_vouchers unless unit.present?
+    [unit] + unit.building.units_for_vouchers.to_a
+  end
+
   def self.text_search(text)
     return none unless text.present?
 

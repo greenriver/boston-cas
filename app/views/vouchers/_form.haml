@@ -22,13 +22,16 @@
           %th
       %tbody
         = f.simple_fields_for :vouchers, @vouchers do |v|
+          - voucher = v.object
           - disabled = false
           - # disable the form fields if we have a successful or active match
-          - default_building_id = v.object.building.try(:id)
-          - default_unit_id = v.object.unit.try(:id)
-          - default_unit_name = v.object.unit.try(:name)
-          - if v.object.status_match.present?
+          - default_building_id = voucher.building.try(:id)
+          - default_unit_id = voucher.unit.try(:id)
+          - default_unit_name = voucher.unit.try(:name)
+          - if voucher.status_match.present?
             - disabled = true
+          - else
+            - disabled_units = voucher.building.unavailable_units_for_vouchers_ids
           %tr
             %td.text-center
               = v.input_field :available, disabled: disabled, as: :boolean
@@ -38,48 +41,48 @@
               %td
                 .row
                   .col-sm-2
-                    = link_to 'Add', new_program_sub_program_unit_for_building_path(@program, @subprogram, building_id: v.object.building.try(:id)), data: {loads_in_pjax_modal: true}, class: 'jAddUnit'
+                    = link_to 'Add', new_program_sub_program_unit_for_building_path(@program, @subprogram, building_id: voucher.building.try(:id)), data: {loads_in_pjax_modal: true}, class: 'jAddUnit'
                     = link_to 'Edit', edit_program_sub_program_unit_for_building_path(program_id: @program.id, sub_program_id: @subprogram.id, id: 1), data: {loads_in_pjax_modal: true}, class: 'jEditUnit'
                   .col-sm-10
-                    = v.association :unit, collection: v.object.units, disabled: disabled, input_html: {data: {dependent: true, url: '/buildings/:id/available_units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}, class: "sub_program_vouchers_attributes_#{v.index}_building_id jUnit", style: "width: 100%;"}, label: false
+                    = v.association :unit, collection: voucher.units_including_unavailable, disabled: (disabled || disabled_units), input_html: {data: {dependent: true, url: '/buildings/:id/units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}, class: "sub_program_vouchers_attributes_#{v.index}_building_id jUnit", style: "width: 100%;"}, label: false
             %td
               .input-group.date
-                = v.input_field :date_available, disabled: disabled, as: :date_picker, value: v.object.date_available
+                = v.input_field :date_available, disabled: disabled, as: :date_picker, value: voucher.date_available
             %td
-              - if v.object.status_match.present?
-                - can_see_details_of_this_match = ClientOpportunityMatch.accessible_by_user(current_user).where(id: v.object.status_match.id).present? rescue false
+              - if voucher.status_match.present?
+                - can_see_details_of_this_match = ClientOpportunityMatch.accessible_by_user(current_user).where(id: voucher.status_match.id).present? rescue false
                 - if can_see_details_of_this_match
-                  = link_to v.object.status_match.overall_status, match_path(v.object.status_match)
+                  = link_to voucher.status_match.overall_status, match_path(voucher.status_match)
                 - else
-                  = v.object.status_match.overall_status
-                - if v.object.status_match.active? && can_reject_matches?
+                  = voucher.status_match.overall_status
+                - if voucher.status_match.active? && can_reject_matches?
                   %br
-                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, v.object), class: 'btn btn-secondary btn-xs', method: :delete, data: {confirm: "Stoping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
+                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'btn btn-secondary btn-xs', method: :delete, data: {confirm: "Stoping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
                     Stop Match
 
             %td
-              - if v.object.status_match.present? 
+              - if voucher.status_match.present? 
                 - if can_view_all_matches?
-                  = link_to client_path(v.object.status_match.client) do
-                    = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
+                  = link_to client_path(voucher.status_match.client) do
+                    = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! params[:confidential_override].present?
                 - else
-                  = v.object.status_match.client_name_for_contact current_contact, hidden: v.object.status_match.confidential? && ! params[:confidential_override].present?
+                  = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! params[:confidential_override].present?
             %td.text-center
-              - if v.object.creator
-                - creation_info = v.object.creator.name + '<br />' + v.object.created_at.to_s.humanize
+              - if voucher.creator
+                - creation_info = voucher.creator.name + '<br />' + voucher.created_at.to_s.humanize
               - else
-                - creation_info = v.object.created_at.to_s.humanize
+                - creation_info = voucher.created_at.to_s.humanize
               %span.icon-info{data:{ toggle: :tooltip, placement: :top, title: creation_info.html_safe, html: :true}}
             %td
-              - if v.object.can_be_destroyed?
-                = link_to program_sub_program_voucher_path(id: v.object.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-xs' do
+              - if voucher.can_be_destroyed?
+                = link_to program_sub_program_voucher_path(id: voucher.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-xs' do
                   %span.icon-cross
                   Delete
-          - if v.object.errors.any?
+          - if voucher.errors.any?
             %tr
               %td(style="border: none; color:red; position: relative; top: -30px;")
               %td(colspan="6" style="border: none; color:red; position: relative; top: -30px;")
-                = v.object.errors.full_messages_for(:base).join(', ')   
+                = voucher.errors.full_messages_for(:base).join(', ')   
 
     = f.button :submit, value: 'Update Vouchers'
 = content_for :page_js do
