@@ -4,7 +4,7 @@
       .button-row
         %label.display-block * Add / Review Contacts for Match
         %div.hint.margin-bottom-01 This step is required
-        = link_to edit_match_contacts_path(@match), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
+        = link_to access_context.edit_match_contacts_path(@match), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
           %span.icon-plus
           Review Contacts for Match
         - if @decision.errors[:match_contacts].present?
@@ -49,7 +49,7 @@
                   $('.jButtonStateTriggers').not('#' + current_target_id).val('');
                 }
                 
-                var prevent_matching_present = $('#decision_prevent_matching_until').val() != '';
+                var prevent_matching_present = $('#decision_prevent_matching_until').val() != '' && $('#decision_prevent_matching_until').val() != undefined;
                 if(prevent_matching_present) {
                   $('.jAccept').prop('disabled', true);
                   $('.jDecline').prop('disabled', false);
