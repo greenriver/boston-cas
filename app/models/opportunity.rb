@@ -118,7 +118,7 @@ class Opportunity < ActiveRecord::Base
   def stop_matches_and_remove_entire_history_from_existance!
     Opportunity.transaction do
       client_opportunity_matches.each do |match|
-        match.client.update(available_candidate: true)
+        match.client.update(available_candidate: true, available: true)
         match.client_opportunity_match_contacts.destroy_all
         match.notifications.destroy_all
         match.destroy
@@ -126,5 +126,6 @@ class Opportunity < ActiveRecord::Base
       voucher&.destroy
       destroy
     end
+    SubProgram.all.each(&:update_summary!)
   end
 end
