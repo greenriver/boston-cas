@@ -2,7 +2,7 @@ Hello #{@contact.full_name},
 \
 The CAS has generated a new match recommendation.  
 \
-This match requires approval from DND staff.
+= "This match requires approval from #{_('DND')} staff."
 \
 Please review details and approve or decline the match:
 #{notification_match_decision_url @notification, @match, :match_recommendation_dnd_staff}

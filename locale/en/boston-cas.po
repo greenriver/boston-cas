@@ -35,10 +35,16 @@ msgstr ""
 msgid "Boston's Way Home"
 msgstr ""
 
+msgid "Case Workers"
+msgstr ""
+
 msgid "Children under age 18 in household"
 msgstr ""
 
 msgid "Confirm Match Success"
+msgstr ""
+
+msgid "Criminal Background Hearing"
 msgstr ""
 
 msgid "Criminal Background Hearing Scheduled"
@@ -123,6 +129,15 @@ msgid "U.S Citizen or Permanent Resident"
 msgstr ""
 
 msgid "You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client."
+msgstr ""
+
+msgid "case worker"
+msgstr ""
+
+msgid "housing subsidy administator"
+msgstr ""
+
+msgid "shelter case manager"
 msgstr ""
 
 msgid "translation"
