@@ -17,7 +17,7 @@
     %p
       %strong
         Client provided a 
-        = @match.client.housing_release_status
+        = _(@match.client.housing_release_status)
   = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: 'Client has spoken to shelter case manager and understands the services attached and the program requirements'
   = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
 

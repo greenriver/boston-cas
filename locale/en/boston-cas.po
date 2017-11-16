@@ -44,7 +44,10 @@ msgstr ""
 msgid "Ending Veteran & Chronic Homelessness in Boston"
 msgstr ""
 
-msgid "HAN"
+msgid "Full HAN Release"
+msgstr ""
+
+msgid "HAN release"
 msgstr ""
 
 msgid "HSA"
@@ -75,6 +78,9 @@ msgid "Ineligible Immigrant (Including Undocumented)"
 msgstr ""
 
 msgid "Life-Time Sex Offender"
+msgstr ""
+
+msgid "Limited CAS Release"
 msgstr ""
 
 msgid "Meth Production Conviction"

@@ -124,10 +124,10 @@
         %tr
           %th Housing Release
           %td
-            = @client.housing_release_status.presence || 'Not Signed'
+            = _(@client.housing_release_status.presence) || 'Not Signed'
         - if @client.release_of_information.present?
           %tr
-            %th Release of information signed on
+            %th= "_('Release of information') signed on"
             %td= @client.release_of_information.try(:to_date)
         %tr
           %th= _('Housing Authority Eligible')

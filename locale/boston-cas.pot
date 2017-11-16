@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-10 09:05-0500\n"
-"PO-Revision-Date: 2017-11-10 09:05-0500\n"
+"POT-Creation-Date: 2017-11-15 19:56-0500\n"
+"PO-Revision-Date: 2017-11-15 19:56-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -45,7 +45,10 @@ msgstr ""
 msgid "Ending Veteran & Chronic Homelessness in Boston"
 msgstr ""
 
-msgid "HAN"
+msgid "Full HAN Release"
+msgstr ""
+
+msgid "HAN release"
 msgstr ""
 
 msgid "HSA"
@@ -76,6 +79,9 @@ msgid "Ineligible Immigrant (Including Undocumented)"
 msgstr ""
 
 msgid "Life-Time Sex Offender"
+msgstr ""
+
+msgid "Limited CAS Release"
 msgstr ""
 
 msgid "Meth Production Conviction"
