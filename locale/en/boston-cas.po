@@ -38,6 +38,9 @@ msgstr ""
 msgid "Children under age 18 in household"
 msgstr ""
 
+msgid "Confirm Match Success"
+msgstr ""
+
 msgid "DND"
 msgstr ""
 
@@ -69,6 +72,9 @@ msgid "Housing Search Worker"
 msgstr ""
 
 msgid "Housing Subsidy Administrator"
+msgstr ""
+
+msgid "Housing Subsidy Administrator CORI Hearing"
 msgstr ""
 
 msgid "Housing Subsidy Administrators"

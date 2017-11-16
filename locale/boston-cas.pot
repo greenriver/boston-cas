@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 19:56-0500\n"
-"PO-Revision-Date: 2017-11-15 19:56-0500\n"
+"POT-Creation-Date: 2017-11-15 20:00-0500\n"
+"PO-Revision-Date: 2017-11-15 20:00-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -37,6 +37,9 @@ msgid "Boston's Way Home"
 msgstr ""
 
 msgid "Children under age 18 in household"
+msgstr ""
+
+msgid "Confirm Match Success"
 msgstr ""
 
 msgid "DND"
@@ -70,6 +73,9 @@ msgid "Housing Search Worker"
 msgstr ""
 
 msgid "Housing Subsidy Administrator"
+msgstr ""
+
+msgid "Housing Subsidy Administrator CORI Hearing"
 msgstr ""
 
 msgid "Housing Subsidy Administrators"

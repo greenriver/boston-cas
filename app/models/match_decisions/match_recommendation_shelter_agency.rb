@@ -42,7 +42,7 @@ module MatchDecisions
     end
 
     def actor_type
-      "#{_('Shelter Agency')}"
+      _('Shelter Agency')
     end
 
     def contact_actor_type

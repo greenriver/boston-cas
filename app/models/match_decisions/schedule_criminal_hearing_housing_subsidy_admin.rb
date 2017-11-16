@@ -22,7 +22,7 @@ module MatchDecisions
     end
 
     def actor_type
-      "#{_('HSA')}"
+      _('HSA')
     end
 
     def contact_actor_type
