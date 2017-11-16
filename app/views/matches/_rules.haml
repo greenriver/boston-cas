@@ -1,7 +1,7 @@
 .detail-box--label Rules
 .detail-box--value
   - requirements = match.requirements_with_inherited
-  - if match&.requirements_have_changed?
+  - if false #match&.requirements_have_changed?
     .alert.alert-danger
       Requirements have changed since match creation; client may no longer be eligible.
   - if requirements.count > 0
