@@ -14,6 +14,8 @@ class Voucher < ActiveRecord::Base
   has_one :status_match, through: :opportunity
   has_one :successful_match, through: :opportunity
 
+  has_many :client_opportunity_matches, through: :opportunity
+
   validate :cant_update_when_active_or_successful_match, unless: :skip_match_locking_validation
   validate :cant_have_unit_in_use
   validate :requires_unit_if_avaiable
@@ -66,6 +68,10 @@ class Voucher < ActiveRecord::Base
   
   def changing_to_available?
     available? && available_changed?
+  end
+
+  def can_be_destroyed?
+    ! client_opportunity_matches.exists?
   end
 
   private def cant_update_when_active_or_successful_match
