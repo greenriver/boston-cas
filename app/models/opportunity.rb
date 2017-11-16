@@ -119,10 +119,11 @@ class Opportunity < ActiveRecord::Base
     Opportunity.transaction do
       client_opportunity_matches.each do |match|
         match.client.update(available_candidate: true)
+        match.client_opportunity_match_contacts.destroy_all
         match.notifications.destroy_all
         match.destroy
       end
-      voucher.destroy
+      voucher&.destroy
       destroy
     end
   end
