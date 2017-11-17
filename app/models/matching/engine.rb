@@ -25,10 +25,10 @@ class Matching::Engine
     def engine_modes
       {
         'First date homeless' => 'first-date-homeless',
-        'VI-SPDAT Score' => 'vi-spdat',
+        'VSPDAT Score' => 'vi-spdat',
         'Cumulative days homeless' => 'cumulative-homeless-days',
         'Days homeless in the last three years' => 'homeless-days-last-three-years',
-        'VI-SPDAT Priority Score' => 'vispdat-priority-score'
+        'Priority Score' => 'vispdat-priority-score'
       }
     end
   end

@@ -22,8 +22,8 @@ RSpec.describe Matching::Engine, type: :model do
   let!(:simple_opportunity) { create :opportunity, voucher: simple_voucher }
   
   describe "engine_modes" do
-    it 'contains VI-SPDAT Priority Score' do
-      expect( Matching::Engine.engine_modes.keys ).to include "VI-SPDAT Priority Score"
+    it 'contains Priority Score' do
+      expect( Matching::Engine.engine_modes.keys ).to include "Priority Score"
     end
   end
 

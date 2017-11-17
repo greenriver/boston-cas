@@ -486,8 +486,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
         {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
         {title: 'Current step', column: 'current_step', direction: 'desc'},
         {title: 'Initial Acceptance Expiration Date', column: 'shelter_expiration', direction: 'asc'},
-        {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
-        {title: 'VI-SPDAT Priority Score', column: 'vispdat_priority_score', direction: 'desc'},
+        {title: 'VSPDAT Score', column: 'vispdat_score', direction: 'desc'},
+        {title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc'},
       ]
     end
 

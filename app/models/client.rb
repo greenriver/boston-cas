@@ -252,8 +252,8 @@ class Client < ActiveRecord::Base
       {title: 'Homeless days', column: 'days_homeless', direction: 'desc', visible: true},
       {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc', visible: true},
       {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},      
-      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
-      {title: 'VI-SPDAT priority score', column: 'vispdat_priority_score', direction: 'desc', visible: true}
+      {title: 'VSPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
+      {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', visible: true}
     ]
   end
 end
