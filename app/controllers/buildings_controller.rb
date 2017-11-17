@@ -69,6 +69,14 @@ class BuildingsController < ApplicationController
     end
   end
 
+  def units
+    @units = @building.units_for_vouchers
+    respond_to do |format|
+      format.json { render json: @units, only: [:id, :name, :building_id] }
+    end
+  end
+
+
 	private
     def building_scope
       Building.all
