@@ -15,7 +15,7 @@ class Users::InvitationsController < Devise::InvitationsController
     user_attrs[:email] = user_attrs[:email].downcase
     @user = User.invite!(user_attrs, current_user)
     c_t = Contact.arel_table
-    contact = Contact.where(c_t[:email].lower.matches(user_attrs[:email])).first_or_create
+    contact = Contact.where(email: user_attrs[:email].downcase).first_or_create
     contact.update(first_name: @user.first_name, last_name: @user.last_name)
     @user.update(contact: contact)
     if resource.errors.empty?
