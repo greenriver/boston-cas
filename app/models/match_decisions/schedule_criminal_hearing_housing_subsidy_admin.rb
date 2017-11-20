@@ -13,7 +13,8 @@ module MatchDecisions
       when :pending then "#{_('Housing Subsidy Administrator')} researching criminal background and deciding whether to schedule a hearing"
       when :scheduled then "#{_('Housing Subsidy Administrator')} has scheduled criminal background hearing for <strong>#{criminal_hearing_date}</strong>".html_safe
       when :no_hearing then "#{_('Housing Subsidy Administrator')} indicates there will not be a criminal background hearing"
-        when :canceled then canceled_status_label
+      when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -35,6 +36,7 @@ module MatchDecisions
         scheduled: _('Criminal Background Hearing Scheduled'), 
         no_hearing: _('There will not be a criminal background hearing'), 
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
     
@@ -42,12 +44,14 @@ module MatchDecisions
       super && saved_status !~ /scheduled|no_hearing/
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       update status: 'pending'
-      Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
-      Notifications::ScheduleCriminalHearingSsp.create_for_match! match
-      Notifications::ScheduleCriminalHearingHsp.create_for_match! match
-      Notifications::ShelterAgencyAccepted.create_for_match! match
+      if send_notifications
+        Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
+        Notifications::ScheduleCriminalHearingSsp.create_for_match! match
+        Notifications::ScheduleCriminalHearingHsp.create_for_match! match
+        Notifications::ShelterAgencyAccepted.create_for_match! match
+      end
     end
 
     def notifications_for_this_step
@@ -86,7 +90,12 @@ module MatchDecisions
       end
 
       def no_hearing
-        match.approve_match_housing_subsidy_admin_decision.initialize_decision!
+        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
+        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionShelterAgency.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
+        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
+        Notifications::HousingSubsidyAdminAcceptedMatchDndStaff.create_for_match! match
       end
 
       def canceled

@@ -12,6 +12,7 @@ module MatchDecisions
       when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
       when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -32,6 +33,7 @@ module MatchDecisions
         pending: 'Pending', 
         completed: 'Complete', 
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
     
@@ -50,6 +52,7 @@ module MatchDecisions
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HousingSubsidyAdminDecisionClient
+        m << Notifications::HousingSubsidyAdminDecisionShelterAgency
         m << Notifications::HousingSubsidyAdminDecisionSsp
         m << Notifications::HousingSubsidyAdminDecisionHsp
         m << Notifications::HousingSubsidyAdminAcceptedMatchDndStaff

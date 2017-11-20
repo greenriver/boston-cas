@@ -26,6 +26,7 @@ module MatchDecisions
       when :expiration_update then "New Match Awaiting #{_('Shelter Agency')} Review"
       when :declined then decline_status_label
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -57,7 +58,8 @@ module MatchDecisions
         declined: 'Declined', 
         not_working_with_client: 'Pending', 
         canceled: 'Canceled',
-        expiration_update: 'Pending', 
+        expiration_update: 'Pending',
+        back: 'Pending',
       }
     end
     
@@ -65,9 +67,9 @@ module MatchDecisions
       super && saved_status !~ /accepted|declined/
     end
 
-    def initialize_decision!
-      update status: 'pending'
-      Notifications::MatchRecommendationShelterAgency.create_for_match! match
+    def initialize_decision! send_notifications: true
+      update status: :pending
+      Notifications::MatchRecommendationShelterAgency.create_for_match!(match) if send_notifications
     end
 
     def notifications_for_this_step
@@ -131,7 +133,7 @@ module MatchDecisions
       def canceled
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
-      end
+      end 
     end
     private_constant :StatusCallbacks
 

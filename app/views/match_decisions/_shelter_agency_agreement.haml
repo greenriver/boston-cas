@@ -19,11 +19,7 @@
           Confirm and Agree
       .modal-body.clearfix
         %p
-          = "By clicking \"Accept\" you are confirming that you have spoken to the client regarding this specific housing opportunity and that the client understands the opportunity and has stated their interest.  #{_('You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client.')}"
-        %p
-          = "For clients who only have a #{_('Limited CAS Release')} you are agreeing to refer to their match number and not their name when speaking with the Supportive Service Provider, #{_('Housing Subsidy Administrator')}, and/or #{_('Housing Search Provider')}. You may refer to them by name once a release has been signed."
-        %p
-          = "By clicking \"Accept\" you are verifying that you are acting in accordance with the #{_('Boston HMIS Policies and Procedures found in the HMIS Handbook and in agreement with your signed HMIS User Agreement on file at your agency')}. Any violations may lead to user access termination and/or eventual employment termination."
+          = simple_format _('match shelter agency agreement modal')
         %p
           If any of the steps above still need to be completed, please click "Cancel".
       .modal-footer(data-pjax-modal-footer)

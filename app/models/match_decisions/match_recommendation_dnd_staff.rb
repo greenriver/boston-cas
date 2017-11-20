@@ -46,9 +46,9 @@ module MatchDecisions
       super + [:prevent_matching_until, :shelter_expiration]
     end
 
-    def initialize_decision!
-      update status: 'pending'
-      Notifications::MatchRecommendationDndStaff.create_for_match! match
+    def initialize_decision! send_notifications: true
+      update status: :pending
+      Notifications::MatchRecommendationDndStaff.create_for_match!(match) if send_notifications
     end
 
     def accessible_by? contact

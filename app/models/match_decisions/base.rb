@@ -92,8 +92,13 @@ module MatchDecisions
     # This method is meant to be called when a decision becomes active
     # do things like set the initial "pending" status and
     # send notifications
-    def initialize_decison!
+    def initialize_decison! send_notifications: true
       # no-op override in subclass
+    end
+
+    def un_start!
+      update(status: nil)
+      previous_step.initialize_decision!(send_notifications: false)
     end
     
     def initialized?
@@ -150,6 +155,10 @@ module MatchDecisions
         @dependencies = dependencies
       end
       delegate :match, to: :decision
+
+      def back
+        @decision.un_start!
+      end
     end
     private_constant :StatusCallbacks
     
@@ -187,6 +196,20 @@ module MatchDecisions
     # override in subclass
     def accessible_by? contact
       false
+    end
+
+    def step_number
+      self.class.match_steps[self.class.name]
+    end
+
+    def previous_step
+      previous_step_name = self.class.match_steps.invert[step_number - 1]
+      match.decisions.find_by(type: previous_step_name)
+    end
+
+    def next_step
+      next_step_name = self.class.match_steps.invert[step_number + 1]
+      match.decisions.find_by(type: next_step_name)
     end
     
     def self.available_sub_types_for_search
@@ -249,6 +272,10 @@ module MatchDecisions
       else
         'Match canceled administratively'
       end
+    end
+
+    def backup_status_label
+      "Match administratively moved back one step to: #{previous_step.step_name}"
     end
     
     def incomplete_active_done?

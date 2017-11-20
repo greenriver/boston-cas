@@ -15,6 +15,7 @@ module MatchDecisions
       when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
       when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -45,6 +46,7 @@ module MatchDecisions
         accepted: 'Accepted', 
         declined: 'Declined',
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
     
@@ -52,7 +54,7 @@ module MatchDecisions
       super && saved_status !~ /accepted|declined/
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       update status: 'pending'
     end
 
