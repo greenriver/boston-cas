@@ -46,12 +46,7 @@ module MatchDecisions
 
     def initialize_decision! send_notifications: true
       update status: 'pending'
-      if send_notifications
-        Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
-        Notifications::ScheduleCriminalHearingSsp.create_for_match! match
-        Notifications::ScheduleCriminalHearingHsp.create_for_match! match
-        Notifications::ShelterAgencyAccepted.create_for_match! match
-      end
+      send_notifications_for_step if send_notifications
     end
 
     def notifications_for_this_step
@@ -81,21 +76,13 @@ module MatchDecisions
       end
 
       def scheduled
-        match.approve_match_housing_subsidy_admin_decision.initialize_decision!
-        Notifications::CriminalHearingScheduledClient.create_for_match! match
-        Notifications::CriminalHearingScheduledDndStaff.create_for_match! match
-        Notifications::CriminalHearingScheduledShelterAgency.create_for_match! match
-        Notifications::CriminalHearingScheduledSsp.create_for_match! match
-        Notifications::CriminalHearingScheduledHsp.create_for_match! match
+        @decision.next_step.initialize_decision!
       end
 
       def no_hearing
-        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
-        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionShelterAgency.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
-        Notifications::HousingSubsidyAdminAcceptedMatchDndStaff.create_for_match! match
+        # Set the next step status to approved and skip the next step
+        @decision.next_step.update(status: :accepted)
+        @decision.next_step.next_step.initialize_decision!
       end
 
       def canceled

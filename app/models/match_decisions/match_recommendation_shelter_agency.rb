@@ -69,16 +69,16 @@ module MatchDecisions
 
     def initialize_decision! send_notifications: true
       update status: :pending
-      Notifications::MatchRecommendationShelterAgency.create_for_match!(match) if send_notifications
+      send_notifications_for_step if send_notifications
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::MatchRecommendationHousingSubsidyAdmin
         m << Notifications::MatchRecommendationClient
-        m << Notifications::MatchRecommendationSsp
-        m << Notifications::MatchRecommendationHsp
         m << Notifications::MatchRecommendationShelterAgency
+        # m << Notifications::MatchRecommendationSsp
+        # m << Notifications::MatchRecommendationHsp
+        # m << Notifications::MatchRecommendationHousingSubsidyAdmin
       end
     end
 
@@ -114,8 +114,7 @@ module MatchDecisions
         if @decision.release_of_information == '1'
           match.client.update_attribute(:release_of_information, Time.now)
         end
-        match.schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
-
+        @decision.next_step.initialize_decision!
       end
       
       def declined

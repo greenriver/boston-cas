@@ -48,7 +48,7 @@ module MatchDecisions
 
     def initialize_decision! send_notifications: true
       update status: :pending
-      Notifications::MatchRecommendationDndStaff.create_for_match!(match) if send_notifications
+      send_notifications_for_step if send_notifications
     end
 
     def accessible_by? contact
@@ -71,14 +71,12 @@ module MatchDecisions
       end
     end
 
-
     class StatusCallbacks < StatusCallbacks
       def pending
       end
 
       def accepted
-        Notifications::MatchRecommendationClient.create_for_match!(match)
-        match.match_recommendation_shelter_agency_decision.initialize_decision!
+        @decision.next_step.initialize_decision!
         # Setup recurring status notifications for SSP, HSP, & Shelter Agency
         MatchProgressUpdates::Ssp.create_for_match!(match)
         MatchProgressUpdates::Hsp.create_for_match!(match)

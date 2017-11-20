@@ -96,9 +96,11 @@ module MatchDecisions
       # no-op override in subclass
     end
 
-    def un_start!
+    def uninitialize_decision! send_notifications: false
       update(status: nil)
-      previous_step.initialize_decision!(send_notifications: false)
+      if previous_step
+        previous_step.initialize_decision!(send_notifications: send_notifications)
+      end
     end
     
     def initialized?
@@ -157,7 +159,7 @@ module MatchDecisions
       delegate :match, to: :decision
 
       def back
-        @decision.un_start!
+        @decision.uninitialize_decision!
       end
     end
     private_constant :StatusCallbacks
@@ -203,6 +205,7 @@ module MatchDecisions
     end
 
     def previous_step
+      return unless step_number.present?
       previous_step_name = self.class.match_steps.invert[step_number - 1]
       match.decisions.find_by(type: previous_step_name)
     end
@@ -210,6 +213,12 @@ module MatchDecisions
     def next_step
       next_step_name = self.class.match_steps.invert[step_number + 1]
       match.decisions.find_by(type: next_step_name)
+    end
+
+    def send_notifications_for_step
+      notifications_for_this_step.each do |notification|
+        notification.create_for_match! match
+      end
     end
     
     def self.available_sub_types_for_search

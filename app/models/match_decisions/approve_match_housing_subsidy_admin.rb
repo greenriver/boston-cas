@@ -56,6 +56,7 @@ module MatchDecisions
 
     def initialize_decision! send_notifications: true
       update status: 'pending'
+      send_notifications_for_step if send_notifications
     end
 
     def notifications_for_this_step
@@ -88,19 +89,10 @@ module MatchDecisions
       end
 
       def accepted
-        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
-        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionShelterAgency.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
-        Notifications::HousingSubsidyAdminAcceptedMatchDndStaff.create_for_match! match
+        @decision.next_step.initialize_decision!
       end
 
       def declined
-        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency.create_for_match! match
         match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
       end
 

@@ -69,7 +69,7 @@ class MatchDecisionsController < ApplicationController
       end
       @decision.record_action_event! contact: current_contact
       @decision.run_status_callback!
-      if @decision.contact_actor_type.present?
+      if @decision.contact_actor_type.present? && decision_params[:status] != "back"
         unless current_contact.in?(@match.send(@decision.contact_actor_type))
           @decision.notify_contact_of_action_taken_on_behalf_of contact: current_contact
         end

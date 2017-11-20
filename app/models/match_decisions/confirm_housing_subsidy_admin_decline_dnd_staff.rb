@@ -45,18 +45,18 @@ module MatchDecisions
       super
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       update status: 'pending'
-      Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff.create_for_match! match
-    end
-
-    def uninitialize_decision!
-      update status: nil
+      send_notifications_for_step if send_notifications
     end
     
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff
+        m << Notifications::HousingSubsidyAdminDecisionClient
+        m << Notifications::HousingSubsidyAdminDecisionSsp
+        m << Notifications::HousingSubsidyAdminDecisionHsp
+        m << Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency
       end
     end
 
@@ -70,22 +70,12 @@ module MatchDecisions
 
       def decline_overridden
         match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
-        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
         match.approve_match_housing_subsidy_admin_decision.initialize_decision!
-        match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.uninitialize_decision!
-        # Send the notifications again
-        Notifications::CriminalHearingScheduledClient.create_for_match! match
-        Notifications::CriminalHearingScheduledDndStaff.create_for_match! match
-        Notifications::CriminalHearingScheduledShelterAgency.create_for_match! match
-        Notifications::CriminalHearingScheduledSsp.create_for_match! match
-        Notifications::CriminalHearingScheduledHsp.create_for_match! match
-        Notifications::ScheduleCriminalHearingHousingSubsidyAdmin.create_for_match! match
+        @decision.uninitialize_decision!
       end
       
       def decline_confirmed
