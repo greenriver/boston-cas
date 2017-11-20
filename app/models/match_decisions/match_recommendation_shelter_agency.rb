@@ -76,9 +76,6 @@ module MatchDecisions
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::MatchRecommendationClient
         m << Notifications::MatchRecommendationShelterAgency
-        # m << Notifications::MatchRecommendationSsp
-        # m << Notifications::MatchRecommendationHsp
-        # m << Notifications::MatchRecommendationHousingSubsidyAdmin
       end
     end
 

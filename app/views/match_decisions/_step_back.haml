@@ -1,3 +1,4 @@
 .match__step-back
-  %p Return the step to the previous step.  This will be logged in the history, but no notifications will be sent.
+  %p 
+    = "Return the match to the previous step (#{@decision.previous_step.step_name}).  This will be logged in the history, but no notifications will be sent."
   = form.submit 'Backup Match', class: 'btn btn-secondary jBackup', data: {submit_param_name: 'decision[status]', submit_param_value: 'back'}, disabled: !@decision.editable?
