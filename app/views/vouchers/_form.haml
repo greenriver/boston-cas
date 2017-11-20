@@ -31,7 +31,7 @@
           - if voucher.status_match.present?
             - disabled = true
           - else
-            - disabled_units = voucher.building.unavailable_units_for_vouchers_ids
+            - disabled_units = voucher&.building&.unavailable_units_for_vouchers_ids
           %tr
             %td.text-center
               = v.input_field :available, disabled: disabled, as: :boolean
