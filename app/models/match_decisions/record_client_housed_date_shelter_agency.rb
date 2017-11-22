@@ -20,7 +20,7 @@ module MatchDecisions
     end
 
     def actor_type
-      "#{_('Shelter Agency')}"
+      _('Shelter Agency')
     end
 
     def contact_actor_type
@@ -43,9 +43,9 @@ module MatchDecisions
       super + [:client_move_in_date]
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       update status: 'pending'
-      Notifications::RecordClientHousedDateShelterAgency.create_for_match! match
+      Notifications::RecordClientHousedDateShelterAgency.create_for_match! match if send_notifications
     end
 
     def notifications_for_this_step

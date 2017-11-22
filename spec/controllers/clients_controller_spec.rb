@@ -23,8 +23,8 @@ RSpec.describe ClientsController, type: :controller do
         it 'sets direction to desc' do
           expect( assigns(:direction) ).to eq 'desc'
         end
-        it 'set sorted_by to VI-SPDAT priority score' do
-          expect( assigns(:sorted_by) ).to eq 'VI-SPDAT priority score'
+        it 'set sorted_by to Priority score' do
+          expect( assigns(:sorted_by) ).to eq 'Priority score'
         end
       end
     end

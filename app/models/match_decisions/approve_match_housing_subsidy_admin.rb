@@ -15,6 +15,7 @@ module MatchDecisions
       when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
       when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -28,11 +29,11 @@ module MatchDecisions
     end
 
     def step_name
-      "#{_('Housing Subsidy Administrator CORI Hearing')}"
+      _('Housing Subsidy Administrator CORI Hearing')
     end
 
     def actor_type
-      "#{_('HSA')}"
+      _('HSA')
     end
 
     def contact_actor_type
@@ -45,6 +46,7 @@ module MatchDecisions
         accepted: 'Accepted', 
         declined: 'Declined',
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
     
@@ -52,8 +54,9 @@ module MatchDecisions
       super && saved_status !~ /accepted|declined/
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       update status: 'pending'
+      send_notifications_for_step if send_notifications
     end
 
     def notifications_for_this_step
@@ -86,19 +89,10 @@ module MatchDecisions
       end
 
       def accepted
-        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
-        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionShelterAgency.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
-        Notifications::HousingSubsidyAdminAcceptedMatchDndStaff.create_for_match! match
+        @decision.next_step.initialize_decision!
       end
 
       def declined
-        Notifications::HousingSubsidyAdminDecisionClient.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionSsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDecisionHsp.create_for_match! match
-        Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency.create_for_match! match
         match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
       end
 

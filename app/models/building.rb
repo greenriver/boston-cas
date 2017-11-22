@@ -32,6 +32,14 @@ class Building < ActiveRecord::Base
     available_units.where.not(id: Voucher.where.not(unit_id: nil).select(:unit_id)).where.not(id: Opportunity.where.not(unit_id: nil).select(:unit_id))
   end
 
+  def units_for_vouchers
+    units.where.not(id: Voucher.where.not(unit_id: nil).select(:unit_id)).where.not(id: Opportunity.where.not(unit_id: nil).select(:unit_id))
+  end
+
+  def unavailable_units_for_vouchers_ids
+    units_for_vouchers.where(available: false).pluck(:id)
+  end
+
   def fake_opportunites(n)
     (0 .. n).map do |i|
       opportunities.build do |opp|

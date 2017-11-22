@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110005511) do
+ActiveRecord::Schema.define(version: 20171116160451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,6 +183,7 @@ ActiveRecord::Schema.define(version: 20171110005511) do
     t.integer  "days_homeless_in_last_three_years"
     t.integer  "vispdat_priority_score",                            default: 0
     t.integer  "vispdat_length_homeless_in_days",                   default: 0,     null: false
+    t.boolean  "cspech_eligible",                                   default: false
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -585,6 +586,7 @@ ActiveRecord::Schema.define(version: 20171110005511) do
     t.boolean  "ha_eligible",                            default: false, null: false
     t.integer  "days_homeless_in_last_three_years"
     t.integer  "vispdat_length_homeless_in_days",        default: 0,     null: false
+    t.boolean  "cspech_eligible",                        default: false
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree

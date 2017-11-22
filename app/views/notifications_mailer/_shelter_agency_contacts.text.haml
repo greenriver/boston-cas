@@ -1,2 +1,2 @@
-Case Workers for this match:
+#{_('Case Workers')} for this match:
 #{@match.shelter_agency_contacts.map{|c| "#{c.name.presence} #{c.phone.presence if c.phone != 'x'}"}.join("\n")}

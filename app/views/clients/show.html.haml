@@ -36,14 +36,6 @@
             %th Age
             %td= "#{@client.age} (#{date_format(@client.date_of_birth)})"
           %tr
-            %th Chronically Homeless
-            %td= checkmark @client.send('chronic_homeless')
-          %tr
-            %th Date of First Homelessness
-            %td
-              - if @client.calculated_first_homeless_night.present?
-                = date_format(@client.calculated_first_homeless_night)
-          %tr
             %th SSN
             %td= masked_ssn @client.ssn
           %tr
@@ -124,10 +116,10 @@
         %tr
           %th Housing Release
           %td
-            = @client.housing_release_status.presence || 'Not Signed'
+            = _(@client.housing_release_status.presence) || 'Not Signed'
         - if @client.release_of_information.present?
           %tr
-            %th Release of information signed on
+            %th= "#{_('Release of information')} signed on"
             %td= @client.release_of_information.try(:to_date)
         %tr
           %th= _('Housing Authority Eligible')
@@ -138,12 +130,12 @@
             %td= checkmark @client.va_eligible
         - if can_view_vspdats?
           %tr
-            %th VISPDAT Score
+            %th VSPDAT Score
             %td= @client.vispdat_score
           %tr
             %th 
-              VISPDAT Priority Score
-              %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus zero, one (365), or two (730) years of days homeless'}
+              Priority Score
+              %span.icon-info{data: {toggle: :tooltip}, title: 'VSPDAT score plus zero, one (365), or two (730) years of days homeless'}
             %td= @client.vispdat_priority_score
         %tr
           %th= _('U.S Citizen or Permanent Resident')
@@ -166,6 +158,9 @@
         %tr
           %th= _('Children under age 18 in household')
           %td= checkmark (@client.child_in_household)
+        %tr
+          %th= _('CSPECH Eligible')
+          %td= checkmark (@client.cspech_eligible)
           
     %h3 Health Information
     %table.table.table-condensed

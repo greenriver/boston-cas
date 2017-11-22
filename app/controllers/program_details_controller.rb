@@ -12,7 +12,7 @@ class ProgramDetailsController < ApplicationController
   def update
     if @program.update program_params
       flash[:notice] = 'Program Details saved.'
-      redirect_to edit_program_sub_program_path(@program, params[:sub_program_id])
+      redirect_to action: :edit
     else
       render :edit
     end

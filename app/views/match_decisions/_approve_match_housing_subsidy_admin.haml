@@ -28,5 +28,8 @@
           - if can_reject_matches?
             .col-sm-6
               %h3 Cancel Match
-              = render 'match_decisions/park_client', form: form
-              = render 'match_decisions/cancel_match_form_fields', form: form
+              .well
+                = render 'match_decisions/park_client', form: form
+                = render 'match_decisions/cancel_match_form_fields', form: form
+              .well
+                = render 'match_decisions/step_back', form: form

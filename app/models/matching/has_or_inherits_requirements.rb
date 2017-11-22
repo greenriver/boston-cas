@@ -33,6 +33,16 @@ module Matching::HasOrInheritsRequirements
         end.flatten
       end.flatten
     end
+
+    def requirements_have_changed?
+      current_requirments = requirements_with_inherited.map do |m|
+        m.prepare_for_archive.except('id')
+      end
+      initial_requirements = universe_state.try(:[], "requirements").map do |m|
+        m.except('id')
+      end
+      current_requirments != initial_requirements
+    end
     
     def self.eager_load_requirements_with_inherited
       eager_load(*associations_for_requirements_with_inherited)

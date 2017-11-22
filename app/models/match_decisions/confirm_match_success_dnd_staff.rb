@@ -24,11 +24,11 @@ module MatchDecisions
     end
 
     def step_name
-      'Confirm Match Success'
+      _('Confirm Match Success')
     end
 
     def actor_type
-      "#{_('DND')}"
+      _('DND')
     end
 
     def contact_actor_type

@@ -14,6 +14,8 @@ class Voucher < ActiveRecord::Base
   has_one :status_match, through: :opportunity
   has_one :successful_match, through: :opportunity
 
+  has_many :client_opportunity_matches, through: :opportunity
+
   validate :cant_update_when_active_or_successful_match, unless: :skip_match_locking_validation
   validate :cant_have_unit_in_use
   validate :requires_unit_if_avaiable
@@ -36,6 +38,11 @@ class Voucher < ActiveRecord::Base
   def units
     return sub_program.building.available_units_for_vouchers unless unit.present?
     [unit] + unit.building.available_units_for_vouchers.to_a
+  end
+
+  def units_including_unavailable
+    return sub_program.building.units_for_vouchers unless unit.present?
+    [unit] + unit.building.units_for_vouchers.to_a
   end
 
   def self.text_search(text)
@@ -66,6 +73,10 @@ class Voucher < ActiveRecord::Base
   
   def changing_to_available?
     available? && available_changed?
+  end
+
+  def can_be_destroyed?
+    ! client_opportunity_matches.exists?
   end
 
   private def cant_update_when_active_or_successful_match

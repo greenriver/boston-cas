@@ -24,3 +24,12 @@ th[class^="sort-"] {
 .table-responsive span[class*="icon-"] {
   font-size: rem(12);
 }
+.btn-sm span[class^="icon-"],
+.btn-sm span[class*="icon-"],
+.btn-xs span[class^="icon-"],
+.btn-xs span[class*="icon-"]
+{
+  font-size: 10px;
+  line-height: 1.5;
+  padding-right: 2px;
+}

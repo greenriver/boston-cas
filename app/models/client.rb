@@ -39,6 +39,10 @@ class Client < ActiveRecord::Base
     .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
     .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
+  scope :confidential, -> { where(confidential: true) }
+  scope :non_confidential, -> { where(confidential: false) }
+  scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
+
   scope :text_search, -> (text) do
     return none unless text.present?
     text.strip!
@@ -216,6 +220,12 @@ class Client < ActiveRecord::Base
     housing_release_status == 'Full HAN Release'
   end
 
+  # This is only here to allow the translation tool to find it for translating
+  def translated_text_of_release_types
+    _('Full HAN Release')
+    _('Limited CAS Release')
+  end
+
   def available_text
     if available 
       if available_candidate
@@ -242,8 +252,8 @@ class Client < ActiveRecord::Base
       {title: 'Homeless days', column: 'days_homeless', direction: 'desc', visible: true},
       {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc', visible: true},
       {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},      
-      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
-      {title: 'VI-SPDAT priority score', column: 'vispdat_priority_score', direction: 'desc', visible: true}
+      {title: 'VSPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
+      {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', visible: true}
     ]
   end
 end

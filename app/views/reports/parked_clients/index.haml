@@ -16,8 +16,9 @@
           %tbody
             - @clients.each do |client|
               %tr
-                %td= link_to client.last_name, client_path(client)
-                %td= link_to client.first_name, client_path(client)
+                %td
+                  = link_to_if can_view_all_clients?, client.last_name, client_path(client)
+                %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
                 %td= client.prevent_matching_until
   %p= paginate @clients
 - else

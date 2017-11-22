@@ -6,24 +6,21 @@
           .col-sm-6
             - if can_reject_matches?
               %h3 Continue Match
-            .radio
-              %label
-                = form.radio_button :status, :scheduled, disabled: !@decision.editable?
-                Yes, there will be a criminal background hearing
-            .row
-              .form-group.form-group__indented-01
-                %label(for="decision_criminal_hearing_date") Date and time of Criminal Background Hearing
-              .col-md-6.col-sm-6
-                .form-group.form-group__indented-01
-                  = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
-
             .form-group
               .radio
                 %label
                   = form.radio_button :status, :no_hearing
-                  No, there will not be a criminal background hearing
-        
-        
+                  = _('A criminal background hearing is not necessary')
+              .radio
+                %label
+                  = form.radio_button :status, :scheduled, disabled: ! @decision.editable?
+                  = _('There will be a criminal background hearing')
+              .row
+                .form-group.form-group__indented-01
+                  %label(for="decision_criminal_hearing_date")= _('Date and time of criminal background hearing')
+                .col-md-6.col-sm-6
+                  .form-group.form-group__indented-01
+                    = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
         
             = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
             .form-actions.clearfix
@@ -34,8 +31,9 @@
               .well
                 = render 'match_decisions/park_client', form: form
                 = render 'match_decisions/cancel_match_form_fields', form: form
-          
-
+              .well
+                = render 'match_decisions/step_back', form: form
+        
         %p
           Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
 = content_for :page_js do
