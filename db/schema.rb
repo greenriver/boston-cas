@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171116160451) do
+ActiveRecord::Schema.define(version: 20171122203909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -693,6 +693,7 @@ ActiveRecord::Schema.define(version: 20171116160451) do
     t.boolean  "can_edit_translations",               default: false
     t.boolean  "can_view_vspdats",                    default: false
     t.boolean  "can_manage_config",                   default: false
+    t.boolean  "can_create_overall_note",             default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

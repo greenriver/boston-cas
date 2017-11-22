@@ -14,7 +14,9 @@ class MatchNotesController < ApplicationController
   end
   
   def create
-    @match_note.assign_attributes match_note_params
+    mn_params = match_note_params
+    mn_params.delete(:admin_note) unless @match.can_create_administrative_note?(current_contact)
+    @match_note.assign_attributes mn_params
     @match_note.contact = current_contact
     if @match_note.save
       redirect_to success_path
@@ -27,7 +29,9 @@ class MatchNotesController < ApplicationController
   end
   
   def update
-    if @match_note.update match_note_params
+    mn_params = match_note_params
+    mn_params.delete(:admin_note) unless @match.can_create_administrative_note?(current_contact)
+    if @match_note.update mn_params
       redirect_to success_path
     else
       render :edit
@@ -35,6 +39,10 @@ class MatchNotesController < ApplicationController
   end
   
   def destroy
+    unless @match.can_create_administrative_note?(current_contact)
+      flash[:error] = 'You do not have permission to delete this note'
+      redirect_to success_path and return
+    end
     @match_note.note = nil
     @match_note.remove_note!
     redirect_to success_path
