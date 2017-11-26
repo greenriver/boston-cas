@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-16 11:07-0500\n"
-"PO-Revision-Date: 2017-11-16 11:07-0500\n"
+"POT-Creation-Date: 2017-11-20 09:35-0500\n"
+"PO-Revision-Date: 2017-11-20 09:35-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -28,9 +28,6 @@ msgid "Boston Coordinated Access"
 msgstr ""
 
 msgid "Boston Coordinated Access System"
-msgstr ""
-
-msgid "Boston HMIS Policies and Procedures found in the HMIS Handbook and in agreement with your signed HMIS User Agreement on file at your agency"
 msgstr ""
 
 msgid "Boston's Way Home"
@@ -108,6 +105,9 @@ msgstr ""
 msgid "Part of a family"
 msgstr ""
 
+msgid "Release of information"
+msgstr ""
+
 msgid "SSP"
 msgstr ""
 
@@ -132,9 +132,6 @@ msgstr ""
 msgid "U.S Citizen or Permanent Resident"
 msgstr ""
 
-msgid "You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client."
-msgstr ""
-
 msgid "case worker"
 msgstr ""
 
@@ -142,6 +139,9 @@ msgid "full release"
 msgstr ""
 
 msgid "housing subsidy administator"
+msgstr ""
+
+msgid "match shelter agency agreement modal"
 msgstr ""
 
 msgid "shelter case manager"

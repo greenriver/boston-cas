@@ -45,13 +45,9 @@ module MatchDecisions
       super + [:prevent_matching_until]
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       update status: 'pending'
-      Notifications::ConfirmShelterAgencyDeclineDndStaff.create_for_match! match
-    end
-
-    def uninitialize_decision!
-      update status: nil
+      send_notifications_for_step if send_notifications
     end
 
     def notifications_for_this_step
@@ -76,12 +72,7 @@ module MatchDecisions
       def decline_overridden_returned
         # Re-initialize the previous decision
         match.match_recommendation_shelter_agency_decision.initialize_decision!
-        match.confirm_shelter_agency_decline_dnd_staff_decision.uninitialize_decision!
-        # Send the notifications again
-        Notifications::MatchRecommendationHousingSubsidyAdmin.create_for_match! match
-        Notifications::MatchRecommendationClient.create_for_match! match
-        Notifications::MatchRecommendationSsp.create_for_match! match
-        Notifications::MatchRecommendationHsp.create_for_match! match
+        @decision.uninitialize_decision!
       end
       
       def decline_confirmed
