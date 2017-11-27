@@ -297,11 +297,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def can_create_overall_note? contact
-    can_create_administrative_note?(contact) || contact.user.can_create_overall_note?
+    can_create_administrative_note?(contact) || contact&.user&.can_create_overall_note?
   end
 
   def can_create_administrative_note? contact
-    contact && (contact.user && contact.user.can_approve_matches? || contact.user.can_reject_matches?)
+    contact && (contact.user && (contact.user.can_approve_matches? || contact.user.can_reject_matches?))
   end
 
   def match_contacts

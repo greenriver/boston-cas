@@ -20,7 +20,7 @@ module MatchEvents
     end
 
     def show_note?(current_contact)
-      note.present? && (! admin_note || match.can_create_overall_note?(current_contact))
+      note.present? && (! admin_note || match.can_create_administrative_note?(current_contact))
     end
     
   end

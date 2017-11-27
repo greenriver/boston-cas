@@ -19,10 +19,10 @@
     - else
       %p This match is not active
   .col-sm-3
-    - if @match.can_create_overall_note? current_contact
+    - if @match.can_create_overall_note?(access_context.current_contact)
       .pull-right
         .btn-label.btn-label__primary
-          = _('DND')
+          &nbsp;
         = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
           %span.icon-plus
           Add Note

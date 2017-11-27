@@ -39,7 +39,7 @@ class MatchNotesController < ApplicationController
   end
   
   def destroy
-    unless @match.can_create_administrative_note?(current_contact)
+    unless @match_note.note_editable_by?(current_contact)
       flash[:error] = 'You do not have permission to delete this note'
       redirect_to success_path and return
     end
