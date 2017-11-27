@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171116160451) do
+ActiveRecord::Schema.define(version: 20171127164318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 20171116160451) do
     t.integer "dnd_interval",                                     null: false
     t.string  "warehouse_url",                                    null: false
     t.string  "engine_mode",      default: "first-date-homeless", null: false
+    t.boolean "require_cori_release", default: true
   end
 
   create_table "contacts", force: :cascade do |t|
