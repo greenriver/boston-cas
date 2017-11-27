@@ -1,4 +1,5 @@
 = simple_form_for @match_note, url: submit_url, as: :match_note, html: {data: {submits_to_pjax_modal: true}} do |form|
   = form.input :note, as: :text, input_html: {rows: 4}, label: false
-  = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
+  - if @match.can_create_administrative_note?(access_context.current_contact)
+    = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
   = form.submit "Save", class: 'btn btn-primary'
