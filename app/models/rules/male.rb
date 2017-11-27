@@ -1,7 +1,7 @@
 class Rules::Male < Rule
   def clients_that_fit(scope, requirement)
     if Client.column_names.include?(:gender_id.to_s)
-      male = Gender.where(text: 'Male').pluck(:numeric)
+      male = Gender.where(numeric: [1,2,3]).pluck(:numeric)
       if requirement.positive
         scope.where(gender_id: male)
       else
