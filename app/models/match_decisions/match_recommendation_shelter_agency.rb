@@ -167,9 +167,6 @@ module MatchDecisions
         if ! client_spoken_with_services_agency
           errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
         end
-        if ! cori_release_form_submitted
-          errors.add :cori_release_form_submitted, 'A CORI release form is required.'
-        end
       end
     end
 

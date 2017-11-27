@@ -20,7 +20,6 @@
         Client provided a 
         = _(@match.client.housing_release_status)
   = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{_('shelter case manager')} and understands the services attached and the program requirements"
-  = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
 
   .form-actions.clearfix
     = form.submit 'Indicate Interest in Match', class: 'btn btn-primary jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)
