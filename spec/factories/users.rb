@@ -1,8 +1,35 @@
 FactoryGirl.define do
-  factory :user do
-    first_name 'Peter'
-    last_name 'Clark'
-    email 'peter@greenriver.com'
+  factory :user, class: 'User' do
+    first_name 'User'
+    last_name 'One'
+    email 'user_one@example.com'
+    password 'abcd1234'
+    password_confirmation 'abcd1234'
+    confirmed_at Date.yesterday
+    contact
+  end
+  factory :user_two, class: 'User' do
+    first_name 'User'
+    last_name 'Two'
+    email 'user_two@example.com'
+    password 'abcd1234'
+    password_confirmation 'abcd1234'
+    confirmed_at Date.yesterday
+    contact
+  end
+  factory :user_three, class: 'User' do
+    first_name 'User'
+    last_name 'Three'
+    email 'user_three@example.com'
+    password 'abcd1234'
+    password_confirmation 'abcd1234'
+    confirmed_at Date.yesterday
+    contact
+  end
+  factory :user_four, class: 'User' do
+    first_name 'User'
+    last_name 'Four'
+    email 'user_four@example.com'
     password 'abcd1234'
     password_confirmation 'abcd1234'
     confirmed_at Date.yesterday

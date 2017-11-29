@@ -59,6 +59,7 @@
               %th Alternate Matches
         %tbody
           - @matches.each do |match|
+            - next unless match.client.present?
             - hide_client_name = match.confidential? && ! params[:confidential_override]
             %tr
               %td

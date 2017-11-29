@@ -48,5 +48,12 @@ FactoryGirl.define do
     can_become_other_users true 
     can_edit_translations true
     can_view_vspdats true
+    can_create_overall_note true
+  end
+
+  factory :shelter_role, class: 'Role' do
+    name "shelter"
+    can_participate_in_matches true
+    can_create_overall_note true
   end
 end
