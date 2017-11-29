@@ -20,7 +20,8 @@ module Admin
         :stalled_interval,
         :dnd_interval,
         :warehouse_url,
-        :engine_mode
+        :engine_mode,
+        :require_cori_release
       )
     end
 

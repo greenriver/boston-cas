@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122203909) do
+ActiveRecord::Schema.define(version: 20171129144446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,10 +189,11 @@ ActiveRecord::Schema.define(version: 20171122203909) do
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
 
   create_table "configs", force: :cascade do |t|
-    t.integer "stalled_interval",                                 null: false
-    t.integer "dnd_interval",                                     null: false
-    t.string  "warehouse_url",                                    null: false
-    t.string  "engine_mode",      default: "first-date-homeless", null: false
+    t.integer "stalled_interval",                                     null: false
+    t.integer "dnd_interval",                                         null: false
+    t.string  "warehouse_url",                                        null: false
+    t.string  "engine_mode",          default: "first-date-homeless", null: false
+    t.boolean "require_cori_release", default: true
   end
 
   create_table "contacts", force: :cascade do |t|
