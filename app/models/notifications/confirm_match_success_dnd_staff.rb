@@ -14,10 +14,6 @@ module Notifications
     def event_label
       "#{_('DND')} Staff notified of client housed date and asked to give final confirmation to match."
     end
-
-    def should_expire?
-      false
-    end
     
   end
 end

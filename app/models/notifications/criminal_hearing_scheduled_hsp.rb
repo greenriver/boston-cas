@@ -11,9 +11,5 @@ module Notifications
       "#{_('Housing Search Provider')} sent notice of criminal background hearing date."
     end
 
-    def should_expire?
-      true
-    end
-    
   end
 end

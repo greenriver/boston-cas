@@ -22,9 +22,5 @@ module Notifications
       "#{_('Shelter Agency')}, #{_('Housing Subsidy Administrator')}, #{_('Stabilization Service Provider')}, and #{_('Housing Search Provider')} contacts notified, lease start date set."
     end
 
-    def should_expire?
-      true
-    end
-
   end
 end

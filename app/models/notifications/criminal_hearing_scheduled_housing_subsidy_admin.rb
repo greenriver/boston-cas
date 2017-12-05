@@ -11,9 +11,5 @@ module Notifications
       "#{_('Housing Subsidy Administrator')} sent notice of criminal background hearing date."
     end
 
-    def should_expire?
-      true
-    end
-    
   end
 end

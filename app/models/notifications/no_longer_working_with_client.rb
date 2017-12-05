@@ -11,9 +11,5 @@ module Notifications
       "#{_('DND')} notified, contact no longer working with client"
     end
 
-    def should_expire?
-      false
-    end
-
   end
 end

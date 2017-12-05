@@ -11,9 +11,5 @@ module Notifications
       "#{_('DND')} sent notice of criminal background hearing date."
     end
 
-    def should_expire?
-      false
-    end
-    
   end
 end

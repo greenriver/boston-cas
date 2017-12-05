@@ -11,9 +11,5 @@ module Notifications
       'Client notified of potential match'
     end
 
-    def should_expire?
-      false
-    end
-    
   end
 end

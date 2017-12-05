@@ -15,9 +15,5 @@ module Notifications
       "#{_('Shelter Agency')} notified of approved match and asked to record date client housed"
     end
 
-    def should_expire?
-      true
-    end
-    
   end
 end
