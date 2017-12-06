@@ -146,7 +146,8 @@ module Cas
         :days_homeless,
         :days_homeless_in_last_three_years,
         :ha_eligible,
-        :cspech_eligible
+        :cspech_eligible,
+        :income_total_monthly
       ).first
       pc_attr = pc.attributes.map do |k,v|
         [k.to_sym, v]

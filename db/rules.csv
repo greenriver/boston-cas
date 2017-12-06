@@ -16,6 +16,7 @@ IncomeLessThanThirtyPercentAmi,Income - Less than 30% Area Median Income (Extrem
 IncomeLessThanFiftyPercentAmi,Income - Less than 50% Area Median Income or less (Very Low Income),have
 IncomeLessThanSixtyPercentAmi,Income - Less than 60% Area Median Income,have
 IncomeLessThanEightyPercentAmi,Income - Less than 80% Area Median Income (Low Income),have
+Income,Income,have
 Homeless,Literally homeless as defined by HUD,be
 Male,Male,be
 MentalHealthEligible,Mental Health Disability,have
