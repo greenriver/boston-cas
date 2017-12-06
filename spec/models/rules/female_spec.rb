@@ -16,6 +16,8 @@ RSpec.describe Rules::Female, type: :model do
   let!(:negative) { create :requirement, rule: female_rule, positive: false }
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
   let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
+
+
   
   describe 'clients_that_fit' do
 

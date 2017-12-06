@@ -8,8 +8,7 @@ class Rules::IncomeLessThanSixtyPercentAmi < Rule
         where = c_t[:income_total_monthly].lt(ami_partial).
           or(c_t[:income_total_monthly].eq(nil))
       else
-        where = c_t[:income_total_monthly].gteq(ami_partial).
-          or(c_t[:income_total_monthly].eq(nil))
+        where = c_t[:income_total_monthly].gteq(ami_partial)
       end
       scope.where(where)
     else
