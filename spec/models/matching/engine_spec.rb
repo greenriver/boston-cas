@@ -20,6 +20,15 @@ RSpec.describe Matching::Engine, type: :model do
   let!(:simple_sub_program) { create :sub_program, program: simple_program }
   let!(:simple_voucher) { create :voucher, sub_program: simple_sub_program }
   let!(:simple_opportunity) { create :opportunity, voucher: simple_voucher }
+
+  let!(:income_program) {
+    requirement = create :requirement, rule: Rules::IncomeLessThanEightyPercentAmi.first, positive: true
+    create :program, requirements: [requirement]
+  }
+  let!(:income_sub_program) { create :sub_program, program: simple_program }
+  let!(:income_voucher) { create :voucher, sub_program: income_sub_program }
+  let!(:income_opportunity) { create :opportunity, voucher: income_voucher }
+
   
   describe "engine_modes" do
     it 'contains Priority Score' do

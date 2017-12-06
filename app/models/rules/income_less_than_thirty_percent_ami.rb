@@ -1,13 +1,17 @@
 class Rules::IncomeLessThanThirtyPercentAmi < Rule
   def clients_that_fit(scope, requirement)
     if Client.column_names.include?(:income_total_monthly.to_s)
-      ami = 20650/12 #30% AMI
+      c_t = Client.arel_table
+      ami = Config.get(:ami)
+      ami_partial = (ami * 0.3) / 12 #30% AMI
       if requirement.positive
-        where = "income_total_monthly < ?"
+        where = c_t[:income_total_monthly].lt(ami_partial).
+          or(c_t[:income_total_monthly].eq(nil))
       else
-        where = "income_total_monthly >= ?"
+        where = c_t[:income_total_monthly].gteq(ami_partial).
+          or(c_t[:income_total_monthly].eq(nil))
       end
-      scope.where(where, ami)
+      scope.where(where)
     else
       raise RuleDatabaseStructureMissing.new("clients.income_total_monthly missing. Cannot check clients against #{self.class}.")
     end
