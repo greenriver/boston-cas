@@ -59,6 +59,7 @@ class Role < ActiveRecord::Base
       :can_edit_translations,
       :can_view_vspdats,
       :can_manage_config,
+      :can_create_overall_note,
     ]
   end
 

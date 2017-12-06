@@ -10,5 +10,6 @@ FactoryGirl.define do
     vispdat_score Faker::Number.between(1, 20)
     vispdat_priority_score Faker::Number.between(1, 800)
     calculated_first_homeless_night Faker::Date.between(20.years.ago, 1.years.ago)
+    income_total_monthly 100
   end
 end
