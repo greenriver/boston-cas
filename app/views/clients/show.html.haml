@@ -161,6 +161,9 @@
         %tr
           %th= _('CSPECH Eligible')
           %td= checkmark (@client.cspech_eligible)
+        %tr
+          %th Total Monthly Income
+          %td= number_to_currency(@client.income_total_monthly)
           
     %h3 Health Information
     %table.table.table-condensed
