@@ -1,4 +1,12 @@
-- sort_options = ClientOpportunityMatch.sort_options
+:ruby
+  available_steps = MatchDecisions::Base.filter_options.map do |value|
+    if MatchDecisions::Base.available_sub_types_for_search.include?(value)
+      [value.constantize.new.step_name, value]
+    else
+      [value.capitalize, value]
+    end
+  end
+  sort_options = ClientOpportunityMatch.sort_options
 .row
   .col-sm-4.col-sm-offset-8
     - if can_add_vacancies?
@@ -23,8 +31,8 @@
 .row
   .col-sm-6
     = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
-  .col-sm-6.sort-filter      
-    = render 'filter', available_steps: MatchDecisions::Base.filter_options, return_path: active_matches_path, label_method: :active
+  .col-sm-6.sort-filter
+    = render 'filter', available_steps: available_steps, return_path: active_matches_path, label_method: :active
     = render 'sort', sort_options: sort_options
     = render 'show_confidential_names'
 .row

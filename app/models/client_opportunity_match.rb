@@ -132,6 +132,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def self.stalled_interval
     Config.get(:stalled_interval).days
   end
+
+  def self.closed_filter_options
+    {
+      'Success' => 'success', 
+      'Rejected/Declined' =>'rejected', 
+      'Canceled/Pre-Empted' => 'canceled'
+    }
+  end
     
   def confidential?
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?

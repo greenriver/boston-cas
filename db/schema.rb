@@ -193,8 +193,8 @@ ActiveRecord::Schema.define(version: 20171206140644) do
     t.integer "dnd_interval",                                         null: false
     t.string  "warehouse_url",                                        null: false
     t.string  "engine_mode",          default: "first-date-homeless", null: false
+    t.integer "ami",                  default: 666000,                null: false
     t.boolean "require_cori_release", default: true
-    t.integer "ami",                  default: 66600,                 null: false
   end
 
   create_table "contacts", force: :cascade do |t|
