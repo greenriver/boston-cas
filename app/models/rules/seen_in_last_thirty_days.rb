@@ -1,15 +1,15 @@
 class Rules::SeenInLastThirtyDays < Rule
   def clients_that_fit(scope, requirement)
-    c_t = Client.arel_table
-    if last_seen = c_t[:last_seen]
+    pc_t = ProjectClient.arel_table
+    if last_seen = pc_t[:calculated_last_homeless_night]
       if requirement.positive
-        where = c_t[:last_seen].gteq( 30.days.ago )
+        where = pc_t[:calculated_last_homeless_night].gteq( 30.days.ago )
       else
-        where = c_t[:last_seen].lt( 30.days.ago )
+        where = pc_t[:calculated_last_homeless_night].lt( 30.days.ago )
       end
-      scope.where(where)
+      scope.joins(:project_client).where(where)
     else
-      raise RuleDatabaseStructureMissing.new("clients.last_seen missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing.new("project_clients.calculated_last_homeless_night is missing. Cannot check clients against #{self.class}.")
     end
   end
 end

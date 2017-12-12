@@ -15,4 +15,8 @@ FactoryGirl.define do
     name 'Income'
     verb 'have'
   end
+  factory :last_seen, class: 'Rules::SeenInLastThirtyDays' do
+    name 'Seen in Last 30 Days'
+    verb 'be'
+  end
 end
