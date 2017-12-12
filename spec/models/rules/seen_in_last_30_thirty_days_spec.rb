@@ -5,14 +5,10 @@ RSpec.describe Rules::SeenInLastThirtyDays, type: :model do
   let!(:last_seen_rule) { create :last_seen }
 
   let!(:bob) { 
-    client = create :client, first_name: 'Bob'
-    client.project_client = create :project_client, calculated_last_homeless_night: 6.months.ago
-    client
+    client = create :client, first_name: 'Bob', calculated_last_homeless_night: 6.months.ago
   }
   let!(:roy) {
-    client = create :client, first_name: 'Roy'
-    client.project_client = create :project_client, calculated_last_homeless_night: 15.days.ago
-    client
+    client = create :client, first_name: 'Roy', calculated_last_homeless_night: 15.days.ago
   }
   let!(:positive) { create :requirement, rule: last_seen_rule, positive: true }
   let!(:negative) { create :requirement, rule: last_seen_rule, positive: false }

@@ -176,7 +176,6 @@ module Cas
         pc_attr[destination] = pc_attr[source]
         pc_attr.delete(source)
       end
-      pc_attr.delete(:calculated_last_homeless_night)
       pc_attr.delete(:id)
 
       return pc_attr

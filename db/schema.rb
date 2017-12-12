@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171206140644) do
+ActiveRecord::Schema.define(version: 20171212210614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 20171206140644) do
     t.integer  "vispdat_priority_score",                            default: 0
     t.integer  "vispdat_length_homeless_in_days",                   default: 0,     null: false
     t.boolean  "cspech_eligible",                                   default: false
+    t.date     "calculated_last_homeless_night"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
