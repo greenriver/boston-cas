@@ -132,6 +132,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def self.stalled_interval
     Config.get(:stalled_interval).days
   end
+
+  def self.closed_filter_options
+    {
+      'Success' => 'success', 
+      'Rejected/Declined' =>'rejected', 
+      'Canceled/Pre-Empted' => 'canceled'
+    }
+  end
     
   def confidential?
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
@@ -297,7 +305,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def can_create_overall_note? contact
-    contact && (contact.user && contact.user.can_approve_matches? || contact.user.can_reject_matches?)
+    can_create_administrative_note?(contact) || contact&.user&.can_create_overall_note?
+  end
+
+  def can_create_administrative_note? contact
+    contact.present? && (contact.user.present? && (contact.user.can_approve_matches? || contact.user.can_reject_matches?))
   end
 
   def match_contacts

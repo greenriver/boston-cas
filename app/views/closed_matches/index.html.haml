@@ -24,7 +24,7 @@
   .col-sm-6
     = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
   .col-sm-6.sort-filter
-    = render 'filter', available_steps: ClientOpportunityMatch::CLOSED_REASONS, return_path: closed_matches_path, label_method: :closed
+    = render 'filter', available_steps: ClientOpportunityMatch.closed_filter_options, return_path: closed_matches_path, label_method: :closed
     = render 'sort', sort_options: sort_options
     = render 'show_confidential_names'
 .row
@@ -59,6 +59,7 @@
               %th Alternate Matches
         %tbody
           - @matches.each do |match|
+            - next unless match.client.present?
             - hide_client_name = match.confidential? && ! params[:confidential_override]
             %tr
               %td

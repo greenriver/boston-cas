@@ -7,4 +7,12 @@ FactoryGirl.define do
     name 'Age greater than 18'
     verb 'be'
   end
+  factory :low_income, class: 'Rules::IncomeLessThanEightyPercentAmi' do
+    name 'Less than 80% Area Median Income (Low Income)'
+    verb 'have'
+  end
+  factory :income, class: 'Rules::Income' do
+    name 'Income'
+    verb 'have'
+  end
 end
