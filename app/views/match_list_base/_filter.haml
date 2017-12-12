@@ -21,16 +21,10 @@
           %p
             %select{name: :current_step, style: 'width: 100%;'}
               %option{value: ''} Filter by Current Step
-              - available_steps.each do |t|
-                - selected = @current_step == t
-                %option{value: t, selected: selected}
-                  - if label_method == :active
-                    - if MatchDecisions::Base.available_sub_types_for_search.include?(t)
-                      = t.constantize.new.step_name
-                    - else
-                      = t.capitalize
-                  - elsif label_method == :closed
-                    = t.capitalize
+              - available_steps.each do |label,value|
+                - selected = @current_step == value
+                %option{value: value, selected: selected}
+                  = label
       .row
         .col-xs-6
           %p

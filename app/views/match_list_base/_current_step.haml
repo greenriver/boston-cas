@@ -6,8 +6,8 @@
     %li{class: "match-progress-bar__step match-progress-bar__step--#{decision_status}"}
       .match-progress-bar__step__name 
         = decision.step_name
-      - if decision_status == :active && show_links_to_matches?
-        = link_to match_path(match) do 
+      - if show_links_to_matches?
+        = link_to match_path(match) do
           = render 'step_marker', decision: decision 
       - else
         = render 'step_marker', decision: decision 
