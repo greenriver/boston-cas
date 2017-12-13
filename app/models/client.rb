@@ -43,6 +43,16 @@ class Client < ActiveRecord::Base
   scope :non_confidential, -> { where(confidential: false) }
   scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
 
+  scope :match_alternate_name, -> (name) do
+    arel_table[:alternate_names].lower.matches("%#{name.downcase}%")
+  end
+  scope :match_first_name, -> (name) do
+    arel_table[:first_name].lower.matches("%#{name.downcase}%")
+  end
+  scope :match_last_name, -> (name) do
+    arel_table[:last_name].lower.matches("%#{name.downcase}%")
+  end
+
   scope :text_search, -> (text) do
     return none unless text.present?
     text.strip!
@@ -54,18 +64,20 @@ class Client < ActiveRecord::Base
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
       if last.present?
-        where = sa[:last_name].lower.matches("#{last.downcase}%")
+        where = match_last_name(last).or(match_alternate_name(last))
       end
       if last.present? && first.present?
-        where = where.and(sa[:first_name].lower.matches("#{first.downcase}%"))
+        where = where.and(match_first_name(first)).or(match_alternate_name(first))
       elsif first.present?
-        where = sa[:first_name].lower.matches("#{first.downcase}%")
+        where = match_first_name(first).or(match_alternate_name(first))
       end
     # Explicity search for "first last"
     elsif text.include?(' ')
       first, last = text.split(' ').map(&:strip)
-      where = sa[:first_name].lower.matches("#{first.downcase}%")
-        .and(sa[:last_name].lower.matches("#{last.downcase}%"))
+      where = match_first_name(first)
+        .and(match_last_name(last))
+        .or(match_alternate_name(first))
+        .or(match_alternate_name(last))
     # Explicitly search for a PersonalID
     elsif social
       where = sa[:ssn].eq(text.gsub('-',''))
@@ -74,9 +86,10 @@ class Client < ActiveRecord::Base
       where = sa[:date_of_birth].eq("#{year}-#{month}-#{day}")
     else
       query = "%#{text}%"
-      where = sa[:first_name].matches(query).
-        or(sa[:last_name].matches(query)).
-        or(sa[:ssn].matches(query))
+      where = match_first_name(text)
+        .or(match_last_name(text))
+        .or(sa[:ssn].matches(query))
+        .or(match_alternate_name(text))
     end
     where(where)
   end
