@@ -10,6 +10,12 @@
         Now:
         = link_to client_path(@client.merged_into) do
           = @client.merged_with_name
+    - if @client.alternate_names.present?
+      .alternate-names
+        %h4 Aliases
+        - @client.alternate_names.split(',').each do |name|
+          .client-alternate-name
+            = name
   .col-sm-4
     - if warehouse_id = @client.remote_id
       = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
