@@ -22,9 +22,9 @@ RSpec.describe Client, type: :model do
   let(:ray_clark) { create :client, first_name: 'Ray', last_name: 'Clark' }
   let(:ben_chris) { create :client, first_name: 'Ben', last_name: 'Chris', alternate_names: 'Bobby Ray,Lee Jones' }
   let(:clients) { [bob_smith, joe_smith, ray_jones, ray_clark, ben_chris] }
-  let(:match_bob) { Client.where(Client.match_first_name('Bob')) }
-
-  describe 'match_first_name' do
+  let(:match_bob) { Client.where(Client.search_first_name('Bob')) }
+  let(:match_ray) { Client.text_search('Ray') }
+  describe 'search_first_name' do
     before(:each) do
       clients
     end
@@ -41,9 +41,9 @@ RSpec.describe Client, type: :model do
     end
   end
 
-  let(:match_smith) { Client.where(Client.match_last_name('Smith')) }
+  let(:match_smith) { Client.where(Client.search_last_name('Smith')) }
 
-  describe 'match_last_name' do
+  describe 'search_last_name' do
     before(:each) do
       clients
     end
@@ -63,9 +63,9 @@ RSpec.describe Client, type: :model do
     end
   end
 
-  let(:match_alternate_jones) { Client.where(Client.match_alternate_name('Jones')) }
+  let(:match_alternate_jones) { Client.where(Client.search_alternate_name('Jones')) }
 
-  describe 'match_alternate_name' do
+  describe 'search_alternate_name' do
     before(:each) do
       clients
     end
@@ -82,15 +82,32 @@ RSpec.describe Client, type: :model do
     end
   end
 
+  describe 'search text search' do
+    before(:each) do
+      clients
+    end
+    context 'when searching Ray' do
+      it 'matches three (two in first name, one in alternate names' do
+        expect( match_ray.count ).to eq 3
+      end
+      it 'matches Ray' do
+        expect( match_ray ).to include ray_jones
+      end
+      it 'does not match Joe Smith' do
+        expect( match_ray ).to_not include joe_smith
+      end
+    end
+  end
+
   let(:ray_search) do 
     Client.where(
-      Client.match_first_name('Ray')
-      .or(Client.match_alternate_name('Ray')))
+      Client.search_first_name('Ray')
+      .or(Client.search_alternate_name('Ray')))
   end
   let(:bob_search) do
     Client.where(
-      Client.match_first_name('Bob')
-      .or(Client.match_alternate_name('Bob')))
+      Client.search_first_name('Bob')
+      .or(Client.search_alternate_name('Bob')))
   end
 
   describe 'combo match on first & alternate' do
