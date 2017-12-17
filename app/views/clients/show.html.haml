@@ -108,7 +108,7 @@
           %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
         %tr
           %th Last Seen
-          %td= @client.project_client[:calculated_last_homeless_night].try(:strftime, I18n.t('date.formats.default'))
+          %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
         %tr
           %th Chronically Homeless
           %td= checkmark @client.chronic_homeless
