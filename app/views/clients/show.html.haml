@@ -107,7 +107,7 @@
           %th Days Homeless in Last Three Years
           %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
         %tr
-          %th Last Seen
+          %th Last Homeless Contact
           %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
         %tr
           %th Chronically Homeless
