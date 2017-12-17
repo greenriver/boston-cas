@@ -18,21 +18,13 @@ module Notifications
       class_name: 'MatchEvents::NotificationDelivery',
       foreign_key: :notification_id
 
-    has_many :reissue_notifications
-
     validates :code, uniqueness: true
-
-    EXPIRATION_INTERVAL = 8.days
 
     before_validation :setup_code
     after_create :deliver
 
     def setup_code
       self.code ||= SecureRandom.urlsafe_base64
-      if self.should_expire?   
-        expiration_interval = EXPIRATION_INTERVAL
-        self.expires_at ||= DateTime.now + expiration_interval
-      end
     end
     
     def to_param
@@ -82,11 +74,7 @@ module Notifications
     end
 
     def expired?
-      should_expire? && expires_at.in_time_zone <= Time.now.in_time_zone
-    end
-
-    def should_expire?
-      false
+      expires_at.in_time_zone <= Time.now.in_time_zone
     end
 
     # override in base class

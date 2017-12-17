@@ -15,9 +15,5 @@ module Notifications
       "#{_('DND')} notified of #{_('Shelter Agency')} decline.  Confirmation pending."
     end
 
-    def should_expire?
-      true
-    end
-    
   end
 end

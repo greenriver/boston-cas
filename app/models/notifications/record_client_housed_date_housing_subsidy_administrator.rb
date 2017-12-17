@@ -15,9 +15,5 @@ module Notifications
       "#{_('Housing Subsidy Administrator')} notified of approved match and asked to record lease start date"
     end
 
-    def should_expire?
-      true
-    end
-    
   end
 end

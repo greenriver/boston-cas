@@ -320,6 +320,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
     match_contacts&.progress_update_contact_ids
   end
 
+
+  def expire_all_notifications(on: 1.week.from_now.to_date)
+    notifications.update_all(expires_at: on)
+  end
+
   def activate!
     self.class.transaction do
       update! active: true
@@ -339,6 +344,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      # Prevent access to this match by notification after 1 week
+      expire_all_notifications()
     end
   end
 
@@ -350,6 +357,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      # Prevent access to this match by notification after 1 week
+      expire_all_notifications()
     end
   end
 
@@ -367,6 +376,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
         opportunity.voucher.update available: false, skip_match_locking_validation: true
         opportunity.voucher.sub_program.update_summary!
       end
+      # Prevent access to this match by notification after 1 week
+      expire_all_notifications()
     end
   end
 

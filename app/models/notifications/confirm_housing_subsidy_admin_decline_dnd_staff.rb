@@ -15,9 +15,5 @@ module Notifications
       "#{_('DND')} notified of #{_('housing subsidy administrator')} decline.  Confirmation pending."
     end
 
-    def should_expire?
-      false
-    end
-
   end
 end

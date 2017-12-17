@@ -14,9 +14,5 @@ module Notifications
       "Sent notice of #{_('Housing Subsidy Administrator')}'s decision to #{_('Shelter Agency')}"
     end
 
-    def should_expire?
-      false
-    end
-    
   end
 end

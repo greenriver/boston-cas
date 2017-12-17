@@ -11,10 +11,6 @@
           %span.icon-arrow-right2
   -# Match related items
   .vsm-group.vsm-group__group-a
-    - if can_reissue_notifications? && ReissueRequest.all.any?
-      = link_to reissue_notifications_path, :class => 'vsm-item-link' do
-        .vsm-item-link--description
-          Expired Notifications
     = link_to active_matches_path, :class => 'vsm-item-link' do
       .vsm-item-link--description
         Matches in Progress

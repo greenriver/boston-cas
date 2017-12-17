@@ -15,9 +15,5 @@ module Notifications
       "#{_('Shelter Agency')} notified of new match"
     end
 
-    def should_expire?
-      true
-    end
-
   end
 end

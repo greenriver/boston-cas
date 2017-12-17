@@ -111,7 +111,6 @@ Rails.application.routes.draw do
     end
   end
   resource :account, only: [:edit, :update]
-  resources :reissue_notifications, only: [:index, :update, :destroy]
   resources :resend_notification, only: [:show]
 
   namespace :reports do

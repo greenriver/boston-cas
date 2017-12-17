@@ -19,9 +19,5 @@ module Notifications
       true
     end
 
-    def should_expire?
-      false
-    end
-    
   end
 end
