@@ -49,10 +49,14 @@ module Matching::HasOrInheritsRequirements
         r['rule_id']
       end
 
-      initial_requirements = universe_state.try(:[], "requirements").map do |r|
-        r.slice('rule_id', 'positive')
-      end.sort_by do |r|
-        r['rule_id']
+      initial_requirements = begin 
+        universe_state.try(:[], "requirements").map do |r|
+          r.slice('rule_id', 'positive')
+        end.sort_by do |r|
+          r['rule_id']
+        end
+      rescue Exception => e
+        []
       end
 
       current_requirements - initial_requirements
