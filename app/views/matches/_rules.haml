@@ -1,17 +1,22 @@
 .detail-box--label Rules
 .detail-box--value
   - requirements = match.requirements_with_inherited
-  - if false #match&.requirements_have_changed?
+
+  - if match&.requirements_have_changed?
     .alert.alert-danger
       Requirements have changed since match creation; client may no longer be eligible.
+
+  - changed_ids = match&.requirements_changes_ids
   - if requirements.count > 0
     - requirements.each do |r| 
+      = '*' if changed_ids.include? r.rule_id
       = r.name
       %em.detail-box--requirement-source
         = "(#{r.requirer.name})"
       %br
   - else
     None
+
 - if match.sub_program.eligibility_requirement_notes?
   .detail-box--label
     Additional Eligibility Requirements
