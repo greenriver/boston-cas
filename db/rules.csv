@@ -44,3 +44,5 @@ ChildInHousehold,Children under age 18 in household,have
 HousingAuthorityEligible,Housing Authority Eligible,be
 DisablingCondition,Disabling Condition,have
 CspechEligible,CSPECH Eligible,be
+SeenInLastThirtyDays,Homeless Service in the past 30 days,have
+SeenInLastNinetyDays,Homeless Service in the past 90 days,have
