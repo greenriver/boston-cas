@@ -184,8 +184,8 @@ ActiveRecord::Schema.define(version: 20171213135320) do
     t.integer  "vispdat_priority_score",                            default: 0
     t.integer  "vispdat_length_homeless_in_days",                   default: 0,     null: false
     t.boolean  "cspech_eligible",                                   default: false
-    t.date     "calculated_last_homeless_night"
     t.string   "alternate_names"
+    t.date     "calculated_last_homeless_night"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree

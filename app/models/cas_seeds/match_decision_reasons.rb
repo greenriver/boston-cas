@@ -40,6 +40,7 @@ module CasSeeds
       'Vacancy should not have been entered',
       'Client received another housing opportunity',
       'Client no longer eligible for match',
+      'Client deceased'
     ]
 
     def run!

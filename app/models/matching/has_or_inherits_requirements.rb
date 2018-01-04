@@ -35,13 +35,27 @@ module Matching::HasOrInheritsRequirements
     end
 
     def requirements_have_changed?
-      current_requirments = requirements_with_inherited.map do |m|
-        m.prepare_for_archive.except('id')
+      requirements_changes.any?
+    end
+
+    def requirements_changes_ids
+      requirements_changes.map { |r| r['rule_id'] }
+    end
+
+    def requirements_changes
+      current_requirements = requirements_with_inherited.map do |r|
+        r.slice('rule_id', 'positive')
+      end.sort_by do |r|
+        r['rule_id']
       end
-      initial_requirements = universe_state.try(:[], "requirements").map do |m|
-        m.except('id')
+
+      initial_requirements = universe_state.try(:[], "requirements").map do |r|
+        r.slice('rule_id', 'positive')
+      end.sort_by do |r|
+        r['rule_id']
       end
-      current_requirments != initial_requirements
+
+      current_requirements - initial_requirements
     end
     
     def self.eager_load_requirements_with_inherited
