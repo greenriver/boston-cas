@@ -46,3 +46,6 @@ DisablingCondition,Disabling Condition,have
 CspechEligible,CSPECH Eligible,be
 SeenInLastThirtyDays,Homeless Service in the past 30 days,have
 SeenInLastNinetyDays,Homeless Service in the past 90 days,have
+VispdatScoreThreeOrLess,VI-SPDAT score of 3 or less,have
+VispdatScoreFourToSeven,VI-SPDAT score of 4 to 7,have
+VispdatScoreEightOrMore,VI-SPDAT score of 8 or more,have
