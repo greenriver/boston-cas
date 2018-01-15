@@ -39,6 +39,19 @@ class Client < ActiveRecord::Base
     .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
     .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
+  scope :available_candidate, -> { where(available_candidate: true) }
+  scope :active_in_match, -> {
+    joins(:client_opportunity_matches).merge(ClientOpportunityMatch.active)
+  }
+  scope :unavailable, -> {
+    where(available: false)
+  }
+  scope :fully_matched, -> {
+    where(available_candidate: false).
+    where.not(id: active_in_match.select(:id))
+  }
+  scope :veteran, -> { where(veteran: true)}
+  scope :non_veteran, -> { where(veteran: false)}
   scope :confidential, -> { where(confidential: true) }
   scope :non_confidential, -> { where(confidential: false) }
   scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
@@ -237,6 +250,15 @@ class Client < ActiveRecord::Base
   def translated_text_of_release_types
     _('Full HAN Release')
     _('Limited CAS Release')
+  end
+
+  def self.possible_availability_states
+    {
+      active_in_match: 'Active in a match',
+      available_for_matching: 'Available for matching',
+      fully_matched: 'Fully matched',
+      unavailable: 'Not available',
+    }
   end
 
   def available_text

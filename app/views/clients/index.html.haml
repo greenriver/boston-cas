@@ -3,7 +3,8 @@
 .row
   .col-sm-6
     = render 'search_form'
-  .col-sm-2
+  .col-sm-4.filter-sort__filter
+    = render 'filter'
     = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
 - if Client.parked.any?
   .alert.alert-warning
