@@ -19,4 +19,16 @@ FactoryGirl.define do
     name 'Seen in Last 30 Days'
     verb 'be'
   end
+  factory :vispdat_less_than_3, class: 'Rules::VispdatScoreThreeOrLess' do
+    name 'VI-SPDAT score of 3 or less'
+    verb 'have'
+  end
+  factory :vispdat_between_4_and_7, class: 'Rules::VispdatScoreFourToSeven' do
+    name 'VI-SPDAT score of 4 to 7'
+    verb 'have'
+  end
+  factory :vispdat_more_than_8, class: 'Rules::VispdatScoreEightOrMore' do
+    name 'VI-SPDAT score of 8 or more'
+    verb 'have'
+  end
 end

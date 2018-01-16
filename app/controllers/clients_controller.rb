@@ -32,9 +32,21 @@ class ClientsController < ApplicationController
     end.first[:title]
     @q = client_scope.ransack(params[:q])
     @clients = @q.result(distinct: true)
+    # Filter
+    if params[:veteran].present?
+      if params[:veteran] == '1'
+        @clients = @clients.veteran
+      elsif params[:veteran] == '0'
+        @clients = @clients.non_veteran
+      end
+    end
+    if params[:availability].present?
+      available_scope = Client.possible_availability_states.keys.detect{ |m| m == params[:availability].to_sym}
+      available_scope ||= :all
+      @clients = @clients.public_send(available_scope)
+    end
     # paginate
     @page = params[:page].presence || 1
-    
     @clients = @clients.reorder(sort_string).page(@page.to_i).per(25)
     
     client_ids = @clients.map(&:id)
