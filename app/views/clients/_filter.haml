@@ -24,7 +24,7 @@
           %h4 Veteran
           = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2'
      
-      .row
+      .row.margin-top-02
         .col-xs-6
           %p
             %button.btn.btn-primary.icon-filter{type: :submit}
