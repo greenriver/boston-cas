@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 every 1.day, at: '1:00 am' do
-  rake "cas:update_voucher_availability"
+  rake "cas:daily"
 end
 
 every 5.minutes do
