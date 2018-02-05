@@ -5,6 +5,11 @@ namespace :warehouse do
     Warehouse::BuildReport.new.run!
   end
 
+  desc "Flag CAS housed clients in the warehouse"
+  task flag_housed: [:environment, "log:info_to_stdout"] do
+    Warehouse::FlagHoused.new.run!
+  end
+
 end
 
 
