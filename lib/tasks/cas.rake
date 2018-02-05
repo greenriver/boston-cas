@@ -1,5 +1,12 @@
 namespace :cas do
   
+  desc "Daily tasks"
+  task daily: [:environment, "log:info_to_stdout"] do
+    Warehouse::BuildReport.new.run!
+    Warehouse::FlagHoused.new.run!
+    Cas::UpdateVoucherAvailability.new.run!
+  end
+
   desc "Add/Update Clients with chronically homeless"
   task update_clients: [:environment, "log:info_to_stdout"] do
     Cas::UpdateClients.new.run!
