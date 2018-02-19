@@ -61,7 +61,7 @@
                     Stop Match
 
             %td
-              - if voucher.status_match.present? 
+              - if voucher.status_match.present? && voucher.status_match.client.present?
                 - if can_view_all_matches?
                   = link_to client_path(voucher.status_match.client) do
                     = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! params[:confidential_override].present?
