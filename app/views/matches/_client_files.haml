@@ -4,9 +4,10 @@
   - if @show_files
     -# Show the most recent version of any matching files
     - @sub_program.file_tags.each do |tag|
-      - if file = @available_files.detect{|file| file.tag_id == tag.tag_id}
-        .file= link_to tag.name, Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
-      - else
-        = tag.name
+      .file
+        - if file = @available_files.detect{|file| file.tag_id == tag.tag_id}
+          = link_to tag.name, Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
+        - else
+          = tag.name
   - else
     None
