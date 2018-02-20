@@ -1,8 +1,8 @@
 .detail-box--label Program
 .detail-box--value
-  = match.opportunity_details.program_name
+  = @program.name
   %em
-    = match.opportunity_details.sub_program_name
+    = link_to @sub_program.name, edit_program_sub_program_path(@program, @sub_program)
 .detail-box--label Service Provider
 .detail-box--value= match.opportunity_details.service_provider_name
 -#.detail-box--label Sub-Contractor

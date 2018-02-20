@@ -10,7 +10,8 @@ class MatchesController < ApplicationController
     @opportunity = @match.opportunity
     current_decision = @match.current_decision
     @show_client_info = @match.show_client_info_to?(access_context.current_contact)
-    @sub_program = @match.opportunity_details.sub_program
+    @sub_program = @match.sub_program
+    @program = @match.program
     sub_program_has_files = @sub_program.file_tags.exists?
     can_see_client_details = @client.has_full_housing_release? || can_view_all_clients?
 
