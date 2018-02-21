@@ -26,13 +26,21 @@ class MatchesController < ApplicationController
         updated_at: :updated_at, 
         tag_id: t_t[:tag_id].as('tag_id').to_sql
       }
-      @available_files = Warehouse::File.for_client(@client.remote_id).
+      available_files = Warehouse::File.for_client(@client.remote_id).
         joins(:taggings).
         where(taggings: {tag_id: @sub_program.file_tags.pluck(:tag_id)}).
         order(updated_at: :desc).
         pluck(*columns.values).map do |row|
           OpenStruct.new(Hash[columns.keys.zip(row)])
         end
+      @files = @sub_program.file_tags.map do |tag|
+        file = available_files.detect{|file| file.tag_id == tag.tag_id}
+        if file
+          [tag.name, file]
+        else
+          [tag.name, {}]
+        end
+      end.to_h
     end
     if current_decision.try :accessible_by?, current_contact
       @decision = current_decision

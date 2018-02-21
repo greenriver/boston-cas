@@ -1,13 +1,17 @@
 - client = match.client
-.detail-box--label= link_to 'Files', Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files", target: '_blank' 
+- file_ids = @files.values.map(&:presence).compact.map(&:id).join(',')
+- url = Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files"
+- if file_ids.present?
+  - url += "?file_ids=#{file_ids}"
+.detail-box--label= link_to 'Files', url, target: '_blank' 
 .detail-box--value
   - if @show_files
     -# Show the most recent version of any matching files
-    - @sub_program.file_tags.each do |tag|
+    - @files.each do |tag, file|
       .file
-        - if file = @available_files.detect{|file| file.tag_id == tag.tag_id}
-          = link_to tag.name, Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
+        - if file.present?
+          = link_to tag, Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
         - else
-          = tag.name
+          = tag
   - else
     None
