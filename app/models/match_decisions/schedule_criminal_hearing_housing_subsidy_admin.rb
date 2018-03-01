@@ -10,9 +10,9 @@ module MatchDecisions
     
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} researching criminal background and deciding whether to schedule a hearing"
-      when :scheduled then "#{_('Housing Subsidy Administrator')} has scheduled criminal background hearing for <strong>#{criminal_hearing_date}</strong>".html_safe
-      when :no_hearing then "#{_('Housing Subsidy Administrator')} indicates there will not be a criminal background hearing"
+      when :pending then "#{_('Housing Subsidy Administrator')} #{_('researching criminal background and deciding whether to schedule a hearing')}"
+      when :scheduled then "#{_('Housing Subsidy Administrator')} #{_('has scheduled criminal background hearing for')} <strong>#{criminal_hearing_date}</strong>".html_safe
+      when :no_hearing then "#{_('Housing Subsidy Administrator')} #{_('indicates there will not be a criminal background hearing')}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end

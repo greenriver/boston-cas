@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Stabilization Services Provider')} sent notice of criminal background hearing date."
+      "#{_('Stabilization Services Provider')} #{_('sent notice of criminal background hearing date.')}"
     end
 
   end

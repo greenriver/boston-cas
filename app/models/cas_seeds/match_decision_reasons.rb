@@ -11,7 +11,14 @@ module CasSeeds
     HSA_REASONS = [
       "CORI",
       "SORI",
-      "Immigration status"
+      "Immigration status",
+      'Household did not respond after initial acceptance of match',
+      'Ineligible for Housing Program',
+      'Client refused offer',
+      'Self-resolved',
+      'Falsification of documents',
+      'Additional screening criteria imposed by third parties',
+      'Health and Safety',
     ]
 
     SHELTER_AGENCY_REASONS = [

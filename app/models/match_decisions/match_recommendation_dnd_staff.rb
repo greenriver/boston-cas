@@ -81,6 +81,9 @@ module MatchDecisions
         MatchProgressUpdates::Ssp.create_for_match!(match)
         MatchProgressUpdates::Hsp.create_for_match!(match)
         MatchProgressUpdates::ShelterAgency.create_for_match!(match)
+        if match.client.remote_id.present?
+          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+        end
       end
       
       def declined

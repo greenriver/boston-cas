@@ -10,6 +10,8 @@ class MatchDecisionsController < ApplicationController
   def show
     @client = @match.client
     @opportunity = @match.opportunity
+    @program = @match.program
+    @sub_program = @match.sub_program
     if params[:notification_id].present?
       @notification = @access_context.notification
     end
