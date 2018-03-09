@@ -148,7 +148,9 @@ module Cas
         :ha_eligible,
         :cspech_eligible,
         :income_total_monthly,
-        :alternate_names
+        :alternate_names,
+        :congregate_housing,
+        :sober_housing
       ).first
       pc_attr = pc.attributes.map do |k,v|
         [k.to_sym, v]
