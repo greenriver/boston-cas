@@ -19,7 +19,8 @@ class Matching::Engine
 
     def available_opportunities
       # returns AR scope
-      Opportunity.where(available_candidate: true)
+      # Need to require a voucher or else we end up with very odd situations
+      Opportunity.with_voucher.available_candidate
     end
 
     def engine_modes

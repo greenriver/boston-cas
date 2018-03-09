@@ -29,6 +29,12 @@ class Opportunity < ActiveRecord::Base
 
   attr_accessor :program, :building, :units
 
+  scope :with_voucher, -> do
+    where.not(voucher_id: nil)
+  end
+  scope :available_candidate, -> do
+    where(available_candidate: true)
+  end
   # after_save :run_match_engine_if_newly_available
 
   def self.text_search(text)
