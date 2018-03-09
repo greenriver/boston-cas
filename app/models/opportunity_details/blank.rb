@@ -2,6 +2,9 @@ module OpportunityDetails
   class Blank
     # Null Object that returns empty string, for use when there isn't a way to
     # get the information for whatever reason
+    def initialize opportunity
+      @opportunity = opportunity
+    end
     
     def unit_name
       ''
