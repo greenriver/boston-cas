@@ -19,6 +19,8 @@ class MatchDecisionsController < ApplicationController
   end
   
   def update
+    @program = @match.program
+    @sub_program = @match.sub_program
     if !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
