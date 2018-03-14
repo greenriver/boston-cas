@@ -170,6 +170,12 @@
         %tr
           %th Total Monthly Income
           %td= number_to_currency(@client.income_total_monthly)
+        %tr
+          %th Willing to live in congregate housing
+          %td= checkmark @client.congregate_housing
+        %tr
+          %th Appropirate for sober supportive housing
+          %td= checkmark @client.sober_housing
           
     %h3 Health Information
     %table.table.table-condensed
