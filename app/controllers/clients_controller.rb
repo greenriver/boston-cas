@@ -55,6 +55,8 @@ class ClientsController < ApplicationController
               .group(:client_id)
               .where(client_id: client_ids)
               .count
+
+    @active_filter = params[:availability].present? || params[:veteran].present?
   end
 
   # GET /clients/1
