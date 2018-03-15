@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309204058) do
+ActiveRecord::Schema.define(version: 20180315161438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -378,6 +378,7 @@ ActiveRecord::Schema.define(version: 20180309204058) do
     t.boolean  "cori_release_form_submitted",                      default: false
     t.datetime "deleted_at"
     t.integer  "administrative_cancel_reason_id"
+    t.string   "administrative_cancel_reason_other_explanation"
   end
 
   add_index "match_decisions", ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id", using: :btree

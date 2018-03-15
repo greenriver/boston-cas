@@ -43,6 +43,7 @@ module MatchDecisions
       foreign_key: :decision_id
 
     validate :ensure_status_allowed, if: :status
+    validate :cancellations, if: :administrative_cancel_reason_id
     
     ####################
     # Attributes
@@ -183,7 +184,7 @@ module MatchDecisions
     end
     
     def permitted_params
-      [:status, :note, :prevent_matching_until]
+      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation]
     end
 
     def whitelist_params_for_update params
@@ -276,7 +277,9 @@ module MatchDecisions
     end
 
     def canceled_status_label
-      if administrative_cancel_reason.present?
+      if administrative_cancel_reason_other_explanation.present?
+        "Match canceled administratively: #{administrative_cancel_reason.name} (#{administrative_cancel_reason_other_explanation})"
+      elsif administrative_cancel_reason.present?
         "Match canceled administratively: #{administrative_cancel_reason.name}"
       else
         'Match canceled administratively'
@@ -307,6 +310,12 @@ module MatchDecisions
       def ensure_status_allowed
         if statuses.with_indifferent_access[status].blank?
           errors.add :status, 'is not allowed'
+        end
+      end
+
+      def cancellations
+        if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
+          errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'"
         end
       end
       
