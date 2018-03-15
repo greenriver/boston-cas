@@ -44,6 +44,7 @@ module CasSeeds
       'Client has disappeared',
       'SSP CORI',
       'HSP CORI',
+      'Incarcerated'
       'Vacancy should not have been entered',
       'Client received another housing opportunity',
       'Client no longer eligible for match',
