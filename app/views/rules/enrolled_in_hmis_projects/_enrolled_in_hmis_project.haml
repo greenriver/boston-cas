@@ -1,0 +1,2 @@
+- rule = enrolled_in_hmis_project
+= select_tag(:variable, options_from_collection_for_select(rule.available_projects, :first, :last), class: 'variable', id: "variable_#{rule.id}")

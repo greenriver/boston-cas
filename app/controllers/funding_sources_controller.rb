@@ -42,7 +42,7 @@ class FundingSourcesController < ApplicationController
     def funding_source_params
       params.require(:funding_source).permit(
         service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :_destroy]
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
     

@@ -64,7 +64,7 @@ class SubgranteesController < ApplicationController
       params_base.permit(
         :name,
         service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :_destroy]
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
     

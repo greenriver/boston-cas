@@ -56,7 +56,7 @@ class ServicesController < ApplicationController
     def service_params
       params.require(:service).permit(
         :name,
-        requirements_attributes: [:id, :rule_id, :positive, :_destroy]
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
 end

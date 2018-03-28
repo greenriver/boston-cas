@@ -43,14 +43,19 @@ class App.RequirementManager.Controller
     add_button_element = $(@element).find('[data-add-button]')[0]
     new App.RequirementManager.AddButton add_button_element, controller: @
   
-  add_requirement_from_rule_searcher: (attrs) ->
+  add_requirement_from_rule_searcher: (attrs) -> 
     chosen_rule_id = Number $(@searcher.element).val()
     chosen_rule = @available_rules.find chosen_rule_id
     if chosen_rule && (@new_requirement_positive_value == true || @new_requirement_positive_value == false)
+      variable = ''
+      if chosen_rule.variable
+        variable = $(".jVariableRequirment[data-rule-id=#{chosen_rule.id}]").find('.variable').val()
+
       requirement = new App.RequirementManager.Requirement
         rule_id: chosen_rule.id
         rule_name: chosen_rule.name
         positive: @new_requirement_positive_value
+        variable: variable
       @select_requirement requirement
       @available_rules.remove chosen_rule.id
       @searcher.reset()

@@ -29,6 +29,10 @@ class Rule < ActiveRecord::Base
     "#{verb} #{_(name)}".downcase
   end
 
+  def variable_requirement?
+    false
+  end
+
 end
 
 class RuleDatabaseStructureMissing < StandardError ; end
