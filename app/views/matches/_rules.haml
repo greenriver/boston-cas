@@ -11,6 +11,8 @@
     - requirements.each do |r| 
       = '*' if changed_ids.include? r.rule_id
       = r.name
+      - if r.variable.present?
+        = r.display_for_variable
       %em.detail-box--requirement-source
         = "(#{r.requirer.name})"
       %br

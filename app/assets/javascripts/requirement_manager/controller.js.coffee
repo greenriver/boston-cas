@@ -49,13 +49,18 @@ class App.RequirementManager.Controller
     if chosen_rule && (@new_requirement_positive_value == true || @new_requirement_positive_value == false)
       variable = ''
       if chosen_rule.variable
-        variable = $(".jVariableRequirment[data-rule-id=#{chosen_rule.id}]").find('.variable').val()
+        $input = $(".jVariableRequirment[data-rule-id=#{chosen_rule.id}]").find('.variable')
+        variable = $input.val()
+        display_for_variable = display_for_variable
+        if $input.data('options')?
+          display_for_variable = $input.data('options')[variable]
 
       requirement = new App.RequirementManager.Requirement
         rule_id: chosen_rule.id
         rule_name: chosen_rule.name
         positive: @new_requirement_positive_value
         variable: variable
+        display_for_variable: "(#{display_for_variable})"
       @select_requirement requirement
       @available_rules.remove chosen_rule.id
       @searcher.reset()

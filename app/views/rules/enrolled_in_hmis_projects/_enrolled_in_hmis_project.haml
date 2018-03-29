@@ -1,2 +1,3 @@
 - rule = enrolled_in_hmis_project
-= select_tag(:variable, options_from_collection_for_select(rule.available_projects, :first, :last), class: 'variable', id: "variable_#{rule.id}")
+%h4 Project
+= select_tag(:variable, options_from_collection_for_select(rule.available_projects, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_projects.to_h.to_json})

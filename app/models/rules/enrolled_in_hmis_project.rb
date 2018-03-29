@@ -7,6 +7,10 @@ class Rules::EnrolledInHmisProject < Rule
     Warehouse::Project.pluck(:id, :ProjectName)
   end
 
+  def display_for_variable value
+    available_projects.to_h.try(:[], value.to_i) || value
+  end
+
   def clients_that_fit(scope, requirement)
     if Client.column_names.include?(:enrolled_project_ids.to_s)
       if requirement.positive
@@ -14,7 +18,7 @@ class Rules::EnrolledInHmisProject < Rule
       else
         where = 'not(enrolled_project_ids @> ?) OR enrolled_project_ids is null'
       end
-      scope.where(where, requirement.variable.to_i)
+      scope.where(where, requirement.variable.to_s)
     else
       raise RuleDatabaseStructureMissing.new("clients.enrolled_project_ids missing. Cannot check clients against #{self.class}.")
     end

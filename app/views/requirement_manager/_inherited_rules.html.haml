@@ -11,4 +11,7 @@
         - requirements.each do |requirement|
           %tr
             %td= requirement_source.name
-            %td= requirement.name
+            %td
+              = requirement.name
+              - if requirement.variable.present?
+                = requirement.display_for_variable

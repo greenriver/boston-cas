@@ -26,11 +26,15 @@ class Rule < ActiveRecord::Base
   end
 
   def name_with_verb
-    "#{verb} #{_(name)}".downcase
+    "#{verb} #{_(name)}"
   end
 
   def variable_requirement?
     false
+  end
+
+  def display_for_variable value
+    nil
   end
 
 end

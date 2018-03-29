@@ -9,7 +9,7 @@
     %h4= selected_requirements_heading
     %div{ data: {selected_requirements: true} }
     - form.object.requirements.preload(:rule).order(:created_at).each do |requirement|
-      %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: requirement.rule_name_with_verb, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s }}
+      %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: requirement.rule_name_with_verb, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s, requirement_display_for_variable: requirement.display_for_variable }}
     
     %h4 Add Rule Condition
     .row
