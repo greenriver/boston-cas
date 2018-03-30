@@ -3,6 +3,7 @@ source "https://rubygems.org"
 
 gem "pg"
 gem 'activerecord-import'
+gem 'composite_primary_keys', '~> 8.0'
 gem "rails"
 gem 'bcrypt'
 
@@ -99,6 +100,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'guard-rspec', require: false
+  gem 'timecop'
 end
 
 group :test do

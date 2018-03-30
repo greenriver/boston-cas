@@ -4,7 +4,10 @@ class Rules::EnrolledInHmisProject < Rule
   end
 
   def available_projects
-    Warehouse::Project.pluck(:id, :ProjectName)
+    @available_projects ||= Warehouse::Project.joins(:organization).map do |project|
+      label = "#{project.ProjectName} << #{project.organization.OrganizationName}"
+      [project.id, label]
+    end
   end
 
   def display_for_variable value

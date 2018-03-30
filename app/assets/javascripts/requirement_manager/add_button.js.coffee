@@ -12,3 +12,4 @@ class App.RequirementManager.AddButton
     $(@element).on 'click', (evt) =>
       evt.preventDefault()
       @controller.add_requirement_from_rule_searcher()
+      $(".jVariableRequirment").hide()
