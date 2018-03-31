@@ -11,6 +11,7 @@
         <div class="col-lg-9 col-sm-7 col-md-8 col-xs-7">
           <div class="add-things-boxes--right-side">
             <span>{{requirement.rule_name}}</span>
+            <span>{{requirement.display_for_variable}}</span>
             <div class="pull-right">
               <a href="#" class="add-things-boxes--remove-link" data-destroy-requirement-link data-destroy-requirement-rule-id="{{requirement.rule_id}}"><i class="icon icon-cross"></i></a>
             </div>
@@ -24,6 +25,7 @@
   <input type="hidden" name="{{input_name_prefix}}[id]" value="{{requirement.id}}">
   <input type="hidden" name="{{input_name_prefix}}[rule_id]" value="{{requirement.rule_id}}">
   <input type="hidden" name="{{input_name_prefix}}[positive]" value="{{requirement.positive_string}}">
+  <input type="hidden" name="{{input_name_prefix}}[variable]" value="{{requirement.variable}}">
   <input type="hidden" name="{{input_name_prefix}}[_destroy]" value="0" data-destroy-requirement-input>
   
 </div>

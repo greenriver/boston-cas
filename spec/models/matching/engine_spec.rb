@@ -6,7 +6,11 @@ RSpec.describe Matching::Engine, type: :model do
     # make sure we have all of the rules
     CasSeeds::Rules.new.run!
     requirements = Rule.all.map do |rule|
-      create :requirement, rule: rule, positive: true
+      if rule.variable_requirement?
+        create :requirement, rule: rule, positive: true, variable: 1
+      else
+        create :requirement, rule: rule, positive: true
+      end
     end
     create :program, requirements: requirements
   }

@@ -112,6 +112,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
+    composite_primary_keys (8.1.6)
+      activerecord (~> 4.2.0)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
     daemons (1.2.4)
@@ -417,6 +419,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.7)
+    timecop (0.9.1)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
     uglifier (3.0.4)
@@ -467,6 +470,7 @@ DEPENDENCIES
   capistrano3-delayed-job (~> 1.0)
   capybara
   coffee-rails
+  composite_primary_keys (~> 8.0)
   daemons
   delayed_job_active_record
   devise (~> 3.5)
@@ -518,6 +522,7 @@ DEPENDENCIES
   spring
   sprockets-es6
   test-unit (~> 3.0)
+  timecop
   uglifier
   unicorn-rails
   validates_email_format_of

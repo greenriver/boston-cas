@@ -150,7 +150,9 @@ module Cas
         :income_total_monthly,
         :alternate_names,
         :congregate_housing,
-        :sober_housing
+        :sober_housing,
+        :enrolled_project_ids,
+        :active_cohort_ids
       ).first
       pc_attr = pc.attributes.map do |k,v|
         [k.to_sym, v]

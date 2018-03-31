@@ -19,9 +19,15 @@ class Requirement < ActiveRecord::Base
   end
   
   delegate :name, :name_with_verb, to: :rule, allow_nil: true, prefix: true
-  
+
   def name
     "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{_(rule_name)}"
   end
-  
+
+  def display_for_variable
+    if str = rule.display_for_variable(variable)
+      "(#{str})"
+    end
+  end
+
 end
