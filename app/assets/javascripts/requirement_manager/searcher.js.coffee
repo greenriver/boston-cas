@@ -13,7 +13,7 @@ class App.RequirementManager.Searcher
     @available_rules = @controller.available_rules
     @placeholder = $(@element).attr 'placeholder'
     @_init_select2()
-    # @_init_select_listener()
+    @_init_select_listener()
     
   _init_select2: ->
     $(@element).select2
@@ -21,7 +21,14 @@ class App.RequirementManager.Searcher
       data: @_select2_data()
       placeholder: @placeholder
       width: '100%'
-  
+
+  _init_select_listener: ->
+    $(".jVariableRequirment").hide()
+    $(@element).on 'select2:select', (e) =>
+      rule_id = $(@element).val()
+      $(".jVariableRequirment").hide()
+      $(".jVariableRequirment[data-rule-id=#{rule_id}]").show()
+
   reset: ->
     # resetting select2 this way currently throws
     # Uncaught TypeError: Cannot read property 'current' of null

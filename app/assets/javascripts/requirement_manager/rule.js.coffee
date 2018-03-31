@@ -5,12 +5,13 @@ class App.RequirementManager.Rule
   
   constructor: (attrs) ->
     # oooo, object destructuring assignment :-d
-    {@id, @name} = attrs
+    {@id, @name, @variable} = attrs
 
   @from_element: (element) =>
     attrs = 
       id: $(element).data('rule-id')
       name: $(element).data('rule-name')
+      variable: $(element).data('variable')
     new @(attrs)
     
   store_key: -> @id

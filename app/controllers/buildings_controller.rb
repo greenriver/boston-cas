@@ -90,7 +90,7 @@ class BuildingsController < ApplicationController
       params.require(:building).permit(
         :name, :building_type, :subgrantee_id, :address, :city, :state, :zip_code,
         service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :_destroy]
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
 

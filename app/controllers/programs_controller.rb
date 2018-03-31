@@ -86,7 +86,7 @@ class ProgramsController < ApplicationController
           :eligibility_requirement_notes,
         ],
         service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :_destroy]
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
   end
 

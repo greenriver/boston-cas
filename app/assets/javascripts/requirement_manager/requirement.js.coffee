@@ -5,7 +5,7 @@ class App.RequirementManager.Requirement
   
   constructor: (attrs) ->
     # oooo, object destructuring assignment :-d
-    {@id, @rule_id, @rule_name, @positive} = attrs
+    {@id, @rule_id, @rule_name, @positive, @variable, @display_for_variable} = attrs
     @must_active = 'active' if @positive
     @cant_active = 'active' unless @positive
     if @positive
@@ -15,11 +15,15 @@ class App.RequirementManager.Requirement
     
 
   @from_element: (element) =>
+    rule_id = $(element).attr('data-requirement-rule-id')
+
     attrs = 
       id: $(element).attr('data-requirement-id')
-      rule_id: $(element).attr('data-requirement-rule-id')
+      rule_id: rule_id
       rule_name: $(element).attr('data-requirement-rule-name')
       positive: $(element).attr('data-requirement-positive') == 'true'
+      variable: $(element).attr('data-requirement-variable')
+      display_for_variable: $(element).attr('data-requirement-display-for-variable')
     new @(attrs)
     
   # use rule_id as our index in stores since we might not have an
