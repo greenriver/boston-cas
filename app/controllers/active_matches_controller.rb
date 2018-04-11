@@ -78,9 +78,10 @@ class ActiveMatchesController < MatchListBaseController
   
   
   private def match_scope
-    ClientOpportunityMatch
-      .accessible_by_user(current_user)
-      .active
+    ClientOpportunityMatch.
+      accessible_by_user(current_user).
+      active.
+      joins(:client)
   end
     
   private def set_heading

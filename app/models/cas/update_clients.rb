@@ -31,7 +31,7 @@ module Cas
             Rails.logger.info "Removing #{to_delete.length} clients"
             to_delete.uniq.each do |d|
               Client.where(id: d).each do |c|
-                c.destroy
+                c.destroy unless c.active_in_match?
               end
             end
           end
