@@ -17,6 +17,8 @@ module MatchDecisions
     
     belongs_to :match, class_name: 'ClientOpportunityMatch', inverse_of: :decisions
     belongs_to :contact
+    has_one :program, through: :match
+    has_one :match_route, through: :program
     
     # these need to be present on the base class for preloading
     # subclasses should include MatchDecisions::AcceptsDeclineReason
@@ -50,6 +52,8 @@ module MatchDecisions
     ####################
     
     alias_attribute :timestamp, :updated_at
+
+    delegate :available_sub_types_for_search, :match_steps, :match_steps_for_reporting, to: :match_route
 
     def label
       # default behavior.  subclasses will probably want to override this
@@ -221,45 +225,7 @@ module MatchDecisions
         notification.create_for_match! match
       end
     end
-    
-    def self.available_sub_types_for_search
-      [
-        'MatchDecisions::MatchRecommendationDndStaff',
-        'MatchDecisions::MatchRecommendationShelterAgency',
-        'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
-        'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
-        'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
-        'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff',
-        'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
-        # 'MatchDecisions::RecordClientHousedDateShelterAgency',
-        'MatchDecisions::ConfirmMatchSuccessDndStaff',
-      ]
-    end
-    
-    def self.match_steps
-      {
-       'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
-      }
-    end
-
-    def self.match_steps_for_reporting
-      {
-       'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
-       'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff' => 6,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 7,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
-       }
-    end
-    
+        
     def self.closed_match_statuses
       [
         :declined,

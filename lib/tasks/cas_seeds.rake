@@ -60,6 +60,11 @@ namespace :cas_seeds do
     
   end
 
+  desc 'ensure all match routes exist'
+  task ensure_all_match_routes_exist: [:environment, "log:info_to_stdout"] do
+    MatchRoutes::Base.ensure_all
+  end
+
   # These have been disabled because they create fake data for development mode
   # we could potentially bring them back as part of a dev-mode only script
 

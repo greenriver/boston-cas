@@ -13,9 +13,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
   after_create :create_match_created_event!
 
   belongs_to :client
-  belongs_to :opportunity
+  has_one :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
-  delegate :program, to: :sub_program
+  has_one :program, through: :sub_program
   delegate :sub_program, to: :opportunity
 
   has_many :notifications, class_name: 'Notifications::Base'

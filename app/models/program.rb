@@ -16,6 +16,8 @@ class Program < ActiveRecord::Base
   has_many :program_services, inverse_of: :program
   has_many :services, through: :program_services
 
+  belongs_to :match_route, class_name: MatchRoutes::Base.name
+
   validates_presence_of :name
   accepts_nested_attributes_for :sub_programs
 

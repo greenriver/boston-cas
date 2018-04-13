@@ -11,13 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180331011801) do
+ActiveRecord::Schema.define(version: 20180413155737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "fuzzystrmatch"
-  enable_extension "pgcrypto"
 
   create_table "building_contacts", force: :cascade do |t|
     t.integer  "building_id", null: false
@@ -162,7 +159,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "disabling_condition",                               default: false
     t.datetime "release_of_information"
     t.date     "prevent_matching_until"
-    t.boolean  "dmh_eligible",                                      default: false, null: false
+    t.boolean  "dmh_eligible",                                      default: false
     t.boolean  "va_eligible",                                       default: false, null: false
     t.boolean  "hues_eligible",                                     default: false, null: false
     t.datetime "disability_verified_on"
@@ -187,8 +184,8 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.integer  "vispdat_priority_score",                            default: 0
     t.integer  "vispdat_length_homeless_in_days",                   default: 0,     null: false
     t.boolean  "cspech_eligible",                                   default: false
-    t.date     "calculated_last_homeless_night"
     t.string   "alternate_names"
+    t.date     "calculated_last_homeless_night"
     t.boolean  "congregate_housing",                                default: false
     t.boolean  "sober_housing",                                     default: false
     t.jsonb    "enrolled_project_ids"
@@ -436,6 +433,15 @@ ActiveRecord::Schema.define(version: 20180331011801) do
   add_index "match_progress_updates", ["notification_id"], name: "index_match_progress_updates_on_notification_id", using: :btree
   add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
 
+  create_table "match_routes", force: :cascade do |t|
+    t.string   "type",                                     null: false
+    t.boolean  "active",                   default: true,  null: false
+    t.integer  "weight",                   default: 10,    null: false
+    t.boolean  "contacts_editable_by_hsa", default: false, null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
   create_table "name_quality_codes", force: :cascade do |t|
     t.integer  "numeric"
     t.string   "text"
@@ -527,6 +533,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.datetime "updated_at",                          null: false
     t.datetime "deleted_at"
     t.boolean  "confidential",        default: false, null: false
+    t.integer  "match_route_id",      default: 1
   end
 
   add_index "programs", ["contact_id"], name: "index_programs_on_contact_id", using: :btree
@@ -579,7 +586,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.string   "workphone"
     t.string   "pager"
     t.string   "email"
-    t.boolean  "dmh_eligible",                           default: false, null: false
+    t.boolean  "dmh_eligible",                           default: false
     t.boolean  "va_eligible",                            default: false, null: false
     t.boolean  "hues_eligible",                          default: false, null: false
     t.datetime "disability_verified_on"
@@ -667,7 +674,6 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "can_edit_all_clients",                default: false
     t.boolean  "can_participate_in_matches",          default: false
     t.boolean  "can_view_all_matches",                default: false
-    t.boolean  "can_view_own_closed_matches",         default: false
     t.boolean  "can_see_alternate_matches",           default: false
     t.boolean  "can_edit_match_contacts",             default: false
     t.boolean  "can_approve_matches",                 default: false
@@ -678,11 +684,6 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "can_edit_users",                      default: false
     t.boolean  "can_view_full_ssn",                   default: false
     t.boolean  "can_view_full_dob",                   default: false
-    t.boolean  "can_view_dmh_eligibility",            default: false
-    t.boolean  "can_view_va_eligibility",             default: false
-    t.boolean  "can_view_hues_eligibility",           default: false
-    t.boolean  "can_view_hiv_positive_eligibility",   default: false
-    t.boolean  "can_view_client_confidentiality",     default: false
     t.boolean  "can_view_buildings",                  default: false
     t.boolean  "can_edit_buildings",                  default: false
     t.boolean  "can_view_funding_sources",            default: false
@@ -707,7 +708,13 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "can_edit_available_services",         default: false
     t.boolean  "can_assign_services",                 default: false
     t.boolean  "can_assign_requirements",             default: false
+    t.boolean  "can_view_dmh_eligibility",            default: false
+    t.boolean  "can_view_va_eligibility",             default: false, null: false
+    t.boolean  "can_view_hues_eligibility",           default: false, null: false
     t.boolean  "can_become_other_users",              default: false
+    t.boolean  "can_view_client_confidentiality",     default: false, null: false
+    t.boolean  "can_view_hiv_positive_eligibility",   default: false
+    t.boolean  "can_view_own_closed_matches",         default: false
     t.boolean  "can_edit_translations",               default: false
     t.boolean  "can_view_vspdats",                    default: false
     t.boolean  "can_manage_config",                   default: false
