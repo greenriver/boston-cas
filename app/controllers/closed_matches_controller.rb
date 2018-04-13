@@ -61,7 +61,7 @@ class ClosedMatchesController < MatchListBaseController
     @column = sort_column
     @direction = sort_direction
     @active_filter = @data_source_id.present? || @start_date.present?
-    @types = MatchDecisions::Base.match_steps
+    @types = MatchRoutes::Base.match_steps
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!
@@ -70,14 +70,16 @@ class ClosedMatchesController < MatchListBaseController
   
   def match_scope
     if can_view_all_matches?
-      ClientOpportunityMatch
-        .accessible_by_user(current_user)
-        .closed
+      ClientOpportunityMatch.
+        accessible_by_user(current_user).
+        closed.
+        joins(:client)
     else
       ClientOpportunityMatch.
         hsa_involved.
         accessible_by_user(current_user).
-        closed
+        closed.
+        joins(:client)
     end
   end
   

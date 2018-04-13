@@ -72,7 +72,7 @@ class ActiveMatchesController < MatchListBaseController
     @column = sort_column
     @direction = sort_direction
     @active_filter = @data_source_id.present? || @start_date.present?
-    @types = MatchDecisions::Base.match_steps
+    @types = MatchRoutes::Base.match_steps
   end
   
   

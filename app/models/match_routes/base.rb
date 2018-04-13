@@ -1,0 +1,53 @@
+module MatchRoutes
+  class Base < ActiveRecord::Base
+    self.table_name = :match_routes
+
+    scope :available, -> do
+      where(active: true).
+        order(weight: :asc)
+    end
+
+    def self.all_routes
+      [
+        MatchRoutes::Default,
+        MatchRoutes::ProviderOnly,
+      ]
+    end
+
+    def self.ensure_all
+      all_routes.each_with_index do |route, i|
+        route.first_or_create(weight: i)
+      end
+    end
+
+    # implement in sub-classes
+    def title
+      raise NotImplementedError
+    end
+
+    
+    def self.match_steps
+      all_routes.map do |route|
+        [route.name, route.match_steps]
+      end.to_h
+    end
+
+    # TODO: FIXME: this needs to be re-thought for app/models/warehouse/build_report.rb
+    def self.match_steps_for_reporting
+      all_routes.map(&:match_steps_for_reporting).flatten().uniq.to_h
+    end
+
+    def self.available_sub_types_for_search
+      all_routes.map(&:available_sub_types_for_search).flatten().uniq
+    end
+
+    def self.filter_options
+      self.available_sub_types_for_search + self.stalled_match_filter_options
+    end
+
+    def self.stalled_match_filter_options
+      ['Stalled Matches - with response', 'Stalled Matches - awaiting response']
+    end
+
+  end
+end

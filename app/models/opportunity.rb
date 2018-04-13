@@ -11,7 +11,7 @@ class Opportunity < ActiveRecord::Base
   belongs_to :unit, inverse_of: :opportunities
   belongs_to :voucher, inverse_of: :opportunity
 
-  delegate :sub_program, to: :voucher
+  has_one :sub_program, through: :voucher
 
   has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
   has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'

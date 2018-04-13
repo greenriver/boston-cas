@@ -53,8 +53,6 @@ module MatchDecisions
     
     alias_attribute :timestamp, :updated_at
 
-    delegate :available_sub_types_for_search, :match_steps, :match_steps_for_reporting, to: :match_route
-
     def label
       # default behavior.  subclasses will probably want to override this
       decision_type.humanize.titleize
@@ -206,17 +204,17 @@ module MatchDecisions
     end
 
     def step_number
-      self.class.match_steps[self.class.name]
+      match_route.match_steps[self.class.name]
     end
 
     def previous_step
       return unless step_number.present?
-      previous_step_name = self.class.match_steps.invert[step_number - 1]
+      previous_step_name = match_route.class.match_steps.invert[step_number - 1]
       match.decisions.find_by(type: previous_step_name)
     end
 
     def next_step
-      next_step_name = self.class.match_steps.invert[step_number + 1]
+      next_step_name = match_route.class.match_steps.invert[step_number + 1]
       match.decisions.find_by(type: next_step_name)
     end
 
@@ -234,12 +232,20 @@ module MatchDecisions
       ]
     end
 
+    def self.match_steps_for_reporting
+      MatchRoutes::Base.match_steps_for_reporting
+    end
+
+    def self.available_sub_types_for_search
+      MatchRoutes::Base.available_sub_types_for_search
+    end
+
     def self.filter_options
-      self.available_sub_types_for_search + self.stalled_match_filter_options
+      MatchRoutes::Base.filter_options
     end
 
     def self.stalled_match_filter_options
-      ['Stalled Matches - with response', 'Stalled Matches - awaiting response']
+      MatchRoutes::Base.stalled_match_filter_options
     end
 
     def canceled_status_label

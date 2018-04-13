@@ -13,10 +13,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
   after_create :create_match_created_event!
 
   belongs_to :client
-  has_one :opportunity
+  belongs_to :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   has_one :program, through: :sub_program
-  delegate :sub_program, to: :opportunity
+  has_one :sub_program, through: :opportunity
+  has_one :match_route, through: :program
 
   has_many :notifications, class_name: 'Notifications::Base'
 
