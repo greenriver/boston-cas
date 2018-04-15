@@ -1,6 +1,9 @@
 module MatchRoutes
   class Default < Base
 
+    def title
+      _('Default Match Route')
+    end
 
     def self.available_sub_types_for_search
       [

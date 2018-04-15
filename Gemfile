@@ -25,6 +25,7 @@ gem "simple_form"
 gem 'virtus'
 gem 'font-awesome-sass'
 
+gem 'responders'
 gem 'kaminari'
 gem 'ransack'
 

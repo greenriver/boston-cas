@@ -18,7 +18,7 @@ class Program < ActiveRecord::Base
 
   belongs_to :match_route, class_name: MatchRoutes::Base.name
 
-  validates_presence_of :name
+  validates_presence_of :name, :match_route_id
   accepts_nested_attributes_for :sub_programs
 
   acts_as_paranoid

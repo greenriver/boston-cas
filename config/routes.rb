@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     resources :configs, only: [:index] do
       patch :update, on: :collection
     end
+    resources :match_routes, only: [:index, :edit, :update]
   end
   resource :account, only: [:edit, :update]
   resources :resend_notification, only: [:show]

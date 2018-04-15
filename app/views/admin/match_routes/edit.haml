@@ -1,0 +1,7 @@
+- title = "Edit #{@route.title}"
+- content_for :title, title
+
+= simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
+  = f.input :active
+  = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
+  = f.button :submit, value: "Update #{@route.title}"

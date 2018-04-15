@@ -9,8 +9,9 @@ class CreateMatchRoutes < ActiveRecord::Migration
     end
 
     MatchRoutes::Base.ensure_all
+    default_route = MatchRoutes::Default.first.id || 1 
 
-    add_reference :programs, :match_route, default: MatchRoutes::Default.first.id
+    add_reference :programs, :match_route, default: default_route
 
   end
 end

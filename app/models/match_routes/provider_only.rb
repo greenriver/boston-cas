@@ -1,6 +1,10 @@
 module MatchRoutes
   class ProviderOnly < Base
 
+    def title
+      _('Provider Only Route')
+    end
+
     def self.available_sub_types_for_search
       [
         'MatchDecisions::ApproveMatchHousingSubsidyAdmin',

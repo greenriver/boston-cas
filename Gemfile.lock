@@ -511,6 +511,7 @@ DEPENDENCIES
   ransack
   rb-readline
   redis-rails
+  responders
   rspec-mocks
   rspec-rails
   ruby-prof
