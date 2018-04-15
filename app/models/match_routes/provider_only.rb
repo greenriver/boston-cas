@@ -13,15 +13,16 @@ module MatchRoutes
 
     def self.match_steps
       {
-       'MatchDecisions::HSAAcknowledgesReceipt' => 1,
-       'MatchDecisions::HSAAcceptsClient' => 2,
+       'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
+       'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
       }
     end
 
     def self.match_steps_for_reporting
       {
-       'MatchDecisions::HSAAcknowledgesReceipt' => 1,
-       'MatchDecisions::HSAAcceptsClient' => 2,
+       'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
+       'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
+       'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaffDecision' => 2,
        # 'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
        # 'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
        # 'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
@@ -29,6 +30,10 @@ module MatchRoutes
        # 'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 7,
        # 'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
        }
+    end
+
+    def initial_decision
+      :hsa_acknowledges_receipt_decision
     end
 
   end

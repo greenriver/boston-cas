@@ -21,6 +21,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   has_many :notifications, class_name: 'Notifications::Base'
 
+  # Default Match Route
   has_decision :match_recommendation_dnd_staff
   has_decision :match_recommendation_shelter_agency
   has_decision :confirm_shelter_agency_decline_dnd_staff
@@ -31,8 +32,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :record_client_housed_date_housing_subsidy_administrator
   has_decision :confirm_match_success_dnd_staff
 
+  # Provider Only Match Route
   has_decision :hsa_acknowledges_receipt
   has_decision :hsa_accepts_client
+  has_decision :confirm_hsa_accepts_client_decline_dnd_staff
 
   has_one :current_decision
 
@@ -40,7 +43,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
 
   ###################
-  ## Lifecycle Scopes
+  ## Life cycle Scopes
   ###################
 
   scope :proposed, -> { where active: false, closed: false }
@@ -272,9 +275,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def overall_status
     if active?
-      if match_recommendation_dnd_staff_decision.status == 'decline' ||
-        (match_recommendation_shelter_agency_decision.status == 'declined' && ! confirm_shelter_agency_decline_dnd_staff_decision.status == 'decline_overridden') ||
-        (approve_match_housing_subsidy_admin_decision.status == 'declined' && ! confirm_housing_subsidy_admin_decline_dnd_staff_decision.status == 'decline_overridden')
+      if status_declined?
         "Declined"
       else
         "In Progress"
@@ -288,6 +289,17 @@ class ClientOpportunityMatch < ActiveRecord::Base
     else
       'New'
     end
+  end
+
+  def status_declined?
+    dnd_status = match_recommendation_dnd_staff_decision&.status
+    shelter_status = match_recommendation_shelter_agency_decision&.status
+    shelter_override_status = confirm_shelter_agency_decline_dnd_staff_decision&.status
+    shelter_declined = (shelter_status == 'declined' && ! shelter_override_status == 'decline_overridden')
+    hsa_status = approve_match_housing_subsidy_admin_decision&.status
+    hsa_override_status = confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status
+    hsa_declined = (hsa_satus == 'declined' && ! hsa_override_status == 'decline_overridden')
+    dnd_status == 'decline' || shelter_declined || hsa_declined
   end
 
   def stalled?
@@ -335,9 +347,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       client.update available_candidate: false
       opportunity.update available_candidate: false
       add_default_contacts!
-      # TODO: This needs to be dependent on the match_route
-      raise 'TODO'
-      match_recommendation_dnd_staff_decision.initialize_decision!
+      self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     end
   end

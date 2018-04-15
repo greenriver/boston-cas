@@ -25,6 +25,9 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def initial_decision
+      raise NotImplementedError
+    end
     
     def self.match_steps
       all_routes.map do |route|

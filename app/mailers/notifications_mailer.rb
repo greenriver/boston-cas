@@ -251,5 +251,19 @@ class NotificationsMailer < ApplicationMailer
     @contact = contact
     mail(to: @contact.email, subject: '[CAS] Match Progress Late')
   end
+
+  def match_recommendation_dnd_staff notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] New Housing Recommendation - Requires Your Action')
+  end
+
+  def match_recommendation_dnd_staff notification
+    @notification = notification
+    @match = notification.match
+    @contact = notification.recipient
+    mail(to: @contact.email, subject: '[CAS] New Housing Recommendation - Requires Your Action')
+  end
   
 end

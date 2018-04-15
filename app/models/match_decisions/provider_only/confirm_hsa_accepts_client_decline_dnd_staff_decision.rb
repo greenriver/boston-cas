@@ -1,5 +1,5 @@
-module MatchDecisions
-  class ConfirmHousingSubsidyAdminDeclineDndStaff < Base
+module MatchDecisions::ProviderOnly
+  class ConfirmHsaAcceptsClientDeclineDndStaffDecision < Base
     
     def statuses
       {
@@ -18,7 +18,7 @@ module MatchDecisions
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('DND')} to confirm match success"
-      when :decline_overridden then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Housing Subsidy Administrator')}"
+      when :decline_overridden then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match successful"
       when :decline_overridden_returned then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
       when :canceled then canceled_status_label
@@ -69,12 +69,12 @@ module MatchDecisions
       end
 
       def decline_overridden
-        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
+        match.succeeded!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.approve_match_housing_subsidy_admin_decision.initialize_decision!
+        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
       

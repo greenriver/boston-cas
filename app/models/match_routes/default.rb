@@ -42,5 +42,9 @@ module MatchRoutes
        'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
        }
     end
+
+    def initial_decision
+      :match_recommendation_dnd_staff_decision
+    end
   end
 end
