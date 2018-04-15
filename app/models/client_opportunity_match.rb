@@ -31,6 +31,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :record_client_housed_date_housing_subsidy_administrator
   has_decision :confirm_match_success_dnd_staff
 
+  has_decision :hsa_acknowledges_receipt
+  has_decision :hsa_accepts_client
+
   has_one :current_decision
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
@@ -332,6 +335,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       client.update available_candidate: false
       opportunity.update available_candidate: false
       add_default_contacts!
+      # TODO: This needs to be dependent on the match_route
       match_recommendation_dnd_staff_decision.initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     end

@@ -13,19 +13,15 @@ module MatchRoutes
 
     def self.match_steps
       {
-       # 'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       # 'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       # 'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
-       # 'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
-       # 'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
-       # 'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
+       'MatchDecisions::HSAAcknowledgesReceipt' => 1,
+       'MatchDecisions::HSAAcceptsClient' => 2,
       }
     end
 
     def self.match_steps_for_reporting
       {
-       # 'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       # 'MatchDecisions::MatchRecommendationShelterAgency' => 2,
+       'MatchDecisions::HSAAcknowledgesReceipt' => 1,
+       'MatchDecisions::HSAAcceptsClient' => 2,
        # 'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
        # 'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
        # 'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
