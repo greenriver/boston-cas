@@ -51,8 +51,8 @@ module MatchDecisions::ProviderOnly
     
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::ProviderOnlyMatchInitiationForHSA
-        m << Notifications::ProviderOnlyMatchInitiationForShelterAgency
+        m << Notifications::ProviderOnly::MatchInitiationForHsa
+        m << Notifications::ProviderOnly::MatchInitiationForShelterAgency
       end
     end
 

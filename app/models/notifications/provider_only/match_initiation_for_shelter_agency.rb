@@ -1,5 +1,5 @@
-module Notifications
-  class ProviderOnlyMatchInitiationForShelterAgency < Base
+module Notifications::ProviderOnly
+  class MatchInitiationForShelterAgency < ::Notifications::Base
 
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
@@ -8,7 +8,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of match detail"
+      "#{_('Shelter Agency')} notified of match detail"
     end
     
     def show_client_info?
