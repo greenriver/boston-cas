@@ -336,6 +336,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       opportunity.update available_candidate: false
       add_default_contacts!
       # TODO: This needs to be dependent on the match_route
+      raise 'TODO'
       match_recommendation_dnd_staff_decision.initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     end
