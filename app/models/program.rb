@@ -44,6 +44,10 @@ class Program < ActiveRecord::Base
     s
   end
 
+  def match_route_fixed?
+    sub_programs.joins(:vouchers).exists?
+  end
+
   def self.text_search(text)
     return none unless text.present?
 
