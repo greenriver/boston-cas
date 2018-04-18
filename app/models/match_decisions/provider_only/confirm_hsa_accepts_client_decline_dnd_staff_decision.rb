@@ -1,5 +1,5 @@
 module MatchDecisions::ProviderOnly
-  class ConfirmHsaAcceptsClientDeclineDndStaffDecision < Base
+  class ConfirmHsaAcceptsClientDeclineDndStaffDecision < ::MatchDecisions::Base
     
     def statuses
       {

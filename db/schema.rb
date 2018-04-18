@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180413155737) do
+ActiveRecord::Schema.define(version: 20180418194751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -510,6 +510,24 @@ ActiveRecord::Schema.define(version: 20180413155737) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "program_contacts", force: :cascade do |t|
+    t.integer  "program_id",                            null: false
+    t.integer  "contact_id",                            null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.datetime "deleted_at"
+    t.boolean  "dnd_staff",             default: false, null: false
+    t.boolean  "housing_subsidy_admin", default: false, null: false
+    t.boolean  "client",                default: false, null: false
+    t.boolean  "housing_search_worker", default: false, null: false
+    t.boolean  "shelter_agency",        default: false, null: false
+    t.boolean  "ssp",                   default: false, null: false
+    t.boolean  "hsp",                   default: false, null: false
+  end
+
+  add_index "program_contacts", ["contact_id"], name: "index_program_contacts_on_contact_id", using: :btree
+  add_index "program_contacts", ["program_id"], name: "index_program_contacts_on_program_id", using: :btree
 
   create_table "program_services", force: :cascade do |t|
     t.integer  "program_id"

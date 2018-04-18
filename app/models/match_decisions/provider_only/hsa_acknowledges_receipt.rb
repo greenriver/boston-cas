@@ -1,5 +1,5 @@
 module MatchDecisions::ProviderOnly
-  class HsaAcknowledgesReceipt < Base
+  class HsaAcknowledgesReceipt < ::MatchDecisions::Base
     
     include MatchDecisions::AcceptsDeclineReason
 

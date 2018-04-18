@@ -33,9 +33,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :confirm_match_success_dnd_staff
 
   # Provider Only Match Route
-  has_decision :hsa_acknowledges_receipt
-  has_decision :hsa_accepts_client
-  has_decision :confirm_hsa_accepts_client_decline_dnd_staff
+  has_decision :hsa_acknowledges_receipt, decision_class_name: MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt.name, notification_class_name: Notifications::ProviderOnly::MatchInitiationForHsa.name
+  has_decision :hsa_accepts_client, decision_class_name: MatchDecisions::ProviderOnly::HsaAcceptsClient.name, notification_class_name: Notifications::ProviderOnly::HsaAcceptsClient.name
+  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaffDecision.name, notification_class_name: Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff.name
 
   has_one :current_decision
 
@@ -298,7 +298,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     shelter_declined = (shelter_status == 'declined' && ! shelter_override_status == 'decline_overridden')
     hsa_status = approve_match_housing_subsidy_admin_decision&.status
     hsa_override_status = confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status
-    hsa_declined = (hsa_satus == 'declined' && ! hsa_override_status == 'decline_overridden')
+    hsa_declined = (hsa_status == 'declined' && ! hsa_override_status == 'decline_overridden')
     dnd_status == 'decline' || shelter_declined || hsa_declined
   end
 
@@ -424,10 +424,16 @@ class ClientOpportunityMatch < ActiveRecord::Base
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
+      program.dnd_contacts.each do |contact|
+        assign_match_role_to_contact :dnd_staff, contact
+      end
     end
 
     def add_default_housing_subsidy_admin_contacts!
       opportunity.housing_subsidy_admin_contacts.each do |contact|
+        assign_match_role_to_contact :housing_subsidy_admin, contact
+      end
+      program.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
     end
@@ -436,20 +442,30 @@ class ClientOpportunityMatch < ActiveRecord::Base
       client.regular_contacts.each do |contact|
         assign_match_role_to_contact :client, contact
       end
+      program.client_contacts.each do |contact|
+        assign_match_role_to_contact :client, contact
+      end
     end
 
     def add_default_shelter_agency_contacts!
       client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
+      program.shelter_agency_contacts.each do |contact|
+        assign_match_role_to_contact :shelter_agency, contact
+      end
     end
 
     def add_default_ssp_contacts!
-      
+      program.ssp_contacts.each do |contact|
+        assign_match_role_to_contact :ssp, contact
+      end
     end
 
     def add_default_hsp_contacts!
-      
+      program.hsp_contacts.each do |contact|
+        assign_match_role_to_contact :hsp, contact
+      end
     end
 
     def self.delinquent_match_ids

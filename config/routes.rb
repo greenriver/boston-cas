@@ -83,6 +83,7 @@ Rails.application.routes.draw do
   resources :contacts, except: :show
   resources :units, except: :show, concerns: [:restorable]
   resources :programs do
+    resource :contacts, only: [:edit, :update], controller: :program_contacts
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
       resources :vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection

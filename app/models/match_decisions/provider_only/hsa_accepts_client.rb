@@ -1,5 +1,5 @@
 module MatchDecisions::ProviderOnly
-  class HsaAcceptsClient < Base
+  class HsaAcceptsClient < ::MatchDecisions::Base
     
     include MatchDecisions::AcceptsDeclineReason
 
