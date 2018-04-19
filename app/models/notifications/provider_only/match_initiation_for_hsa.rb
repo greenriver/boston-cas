@@ -22,6 +22,10 @@ module Notifications::ProviderOnly
     def registration_role
       :housing_subsidy_admin
     end
+
+    def contacts_editable?
+      true
+    end
     
   end
 end

@@ -204,7 +204,7 @@ module MatchDecisions
     end
 
     def step_number
-      match_route.match_steps[self.class.name]
+      match_route.class.match_steps[self.class.name]
     end
 
     def previous_step

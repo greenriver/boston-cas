@@ -4,11 +4,12 @@ class MatchContactsController < ApplicationController
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
-  before_action :require_current_contact_can_edit_match_contacts!
   before_action :set_match
+  before_action :require_current_contact_can_edit_match_contacts!
   before_action :set_match_contacts
 
   def edit
+    @current_contact = current_contact
   end
   
   def update
@@ -47,19 +48,40 @@ class MatchContactsController < ApplicationController
         ssp_contact_ids: [],
         hsp_contact_ids: []
       ).tap do |result|
-        result[:shelter_agency_contact_ids] ||= []
-        result[:client_contact_ids] ||= []
-        result[:dnd_staff_contact_ids] ||= []
-        result[:housing_subsidy_admin_contact_ids] ||= []
-        result[:ssp_contact_ids] ||= []
-        result[:hsp_contact_ids] ||= []
+        if current_contact.user_can_edit_match_contacts?
+          result[:shelter_agency_contact_ids] ||= []
+          result[:client_contact_ids] ||= []
+          result[:dnd_staff_contact_ids] ||= []
+          result[:housing_subsidy_admin_contact_ids] ||= []
+          result[:ssp_contact_ids] ||= []
+          result[:hsp_contact_ids] ||= []
+        elsif hsa_can_edit_contacts?
+          # only allow editing of the hsa contacts
+          result[:shelter_agency_contact_ids] ||= @match.shelter_agency_contact_ids
+          result[:client_contact_ids] ||= @match.client_contact_ids
+          result[:dnd_staff_contact_ids] ||= @match.dnd_staff_contact_ids
+          result[:housing_subsidy_admin_contact_ids] ||= []
+          result[:ssp_contact_ids] ||= @match.ssp_contact_ids
+          result[:hsp_contact_ids] ||= @match.hsp_contact_ids
+
+          # always add self
+          result[:housing_subsidy_admin_contact_ids] << current_contact.id
+        end
       end
     end
     
     def require_current_contact_can_edit_match_contacts!
-      not_authorized! unless current_contact.user_can_edit_match_contacts?
+      not_authorized! unless current_contact.user_can_edit_match_contacts? || hsa_can_edit_contacts?
     end
+
+    def hsa_can_edit_contacts?
+      @match.contacts_editable_by_hsa && current_contact.in?(@match.housing_subsidy_admin_contacts)
+    end
+    helper_method :hsa_can_edit_contacts?
     
-    
+    def cant_edit_self?
+      ! current_contact.user_can_edit_match_contacts? && hsa_can_edit_contacts?
+    end
+    helper_method :cant_edit_self?
   
 end

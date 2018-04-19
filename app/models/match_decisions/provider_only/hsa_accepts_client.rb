@@ -29,7 +29,7 @@ module MatchDecisions::ProviderOnly
     end
 
     def step_name
-      _('Housing Subsidy Administrator CORI Hearing')
+      _('Client Agrees to Match')
     end
 
     def actor_type
@@ -61,13 +61,7 @@ module MatchDecisions::ProviderOnly
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        if match.schedule_criminal_hearing_housing_subsidy_admin_decision.status == 'scheduled'
-          m << Notifications::CriminalHearingScheduledClient
-          m << Notifications::CriminalHearingScheduledSsp
-          m << Notifications::CriminalHearingScheduledHsp
-          m << Notifications::CriminalHearingScheduledDndStaff
-          m << Notifications::CriminalHearingScheduledShelterAgency
-        end
+        m << Notifications::ProviderOnly::HsaAcceptsClient
       end
     end
 

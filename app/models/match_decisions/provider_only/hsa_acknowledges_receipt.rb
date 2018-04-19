@@ -10,7 +10,7 @@ module MatchDecisions::ProviderOnly
     def label_for_status status
       case status.to_sym
       when :pending then "New Match Awaiting Acknowledgment by #{_('HSA')}"
-      when :accepted then "Acknowledgment by #{_('DND')}"
+      when :acknowledged then "Match acknowledged by #{_('HSA')}.  In review"
       when :canceled then canceled_status_label
       end
     end
@@ -30,7 +30,7 @@ module MatchDecisions::ProviderOnly
     def statuses
       {
         pending: 'Pending', 
-        accepted: 'Accept', 
+        acknowledged: 'Acknowledged', 
         canceled: 'Canceled',
       }
     end
@@ -60,7 +60,7 @@ module MatchDecisions::ProviderOnly
       def pending
       end
 
-      def accepted
+      def acknowledged
         @decision.next_step.initialize_decision!
         # Setup recurring status notifications for HSA
         MatchProgressUpdates::Hsa.create_for_match!(match)

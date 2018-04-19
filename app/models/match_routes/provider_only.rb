@@ -22,7 +22,7 @@ module MatchRoutes
       {
        'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
        'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
-       'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaffDecision' => 2,
+       'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
        # 'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
        # 'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
        # 'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,

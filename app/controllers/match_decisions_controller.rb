@@ -1,11 +1,13 @@
 class MatchDecisionsController < ApplicationController
   include HasMatchAccessContext
+  include Decisions
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :find_match!
   before_action :find_decision!
   before_action :authorize_decision!
+  before_action :authorize_notification_recreation!, only: [:recreate_notifications]
   
   def show
     @client = @match.client
@@ -121,7 +123,14 @@ class MatchDecisionsController < ApplicationController
         redirect_to access_context.match_path(@match)
       end
     end
-    
+
+    def authorize_notification_recreation!
+      unless can_recreate_this_decision?
+        flash[:alert] = 'Sorry, you are not authorized to access that.'
+        redirect_to access_context.match_path(@match)
+      end
+    end
+
     def decision_params
       @decision.whitelist_params_for_update params
     end

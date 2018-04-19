@@ -15,6 +15,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   belongs_to :client
   belongs_to :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
+  delegate :contacts_editable_by_hsa, to: :match_route
   has_one :program, through: :sub_program
   has_one :sub_program, through: :opportunity
   has_one :match_route, through: :program
@@ -35,7 +36,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   # Provider Only Match Route
   has_decision :hsa_acknowledges_receipt, decision_class_name: MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt.name, notification_class_name: Notifications::ProviderOnly::MatchInitiationForHsa.name
   has_decision :hsa_accepts_client, decision_class_name: MatchDecisions::ProviderOnly::HsaAcceptsClient.name, notification_class_name: Notifications::ProviderOnly::HsaAcceptsClient.name
-  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaffDecision.name, notification_class_name: Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff.name
+  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff.name, notification_class_name: Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff.name
 
   has_one :current_decision
 

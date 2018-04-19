@@ -8,7 +8,7 @@ module Notifications::ProviderOnly
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} reviews match"
+      "#{_('Housing Subsidy Administrator')} reviews match with client"
     end
     
     def show_client_info?
@@ -21,6 +21,10 @@ module Notifications::ProviderOnly
 
     def registration_role
       :housing_subsidy_admin
+    end
+
+    def contacts_editable?
+      true
     end
     
   end

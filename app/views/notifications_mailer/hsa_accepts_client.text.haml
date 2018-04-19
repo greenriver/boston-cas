@@ -1,0 +1,15 @@
+Hello #{@contact.full_name},
+\
+The following match is ready for your review:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

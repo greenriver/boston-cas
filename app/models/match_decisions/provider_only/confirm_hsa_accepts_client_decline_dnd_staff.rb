@@ -1,5 +1,5 @@
 module MatchDecisions::ProviderOnly
-  class ConfirmHsaAcceptsClientDeclineDndStaffDecision < ::MatchDecisions::Base
+  class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
     
     def statuses
       {
@@ -74,7 +74,7 @@ module MatchDecisions::ProviderOnly
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
+        match.hsa_accepts_client_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
       

@@ -183,6 +183,11 @@ class NotificationsMailer < ApplicationMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: '[CAS] New Housing Recommendation')
   end
+
+  def hsa_accepts_client notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: '[CAS] Match ready for review - Requires Your Action')
+  end
   # End Provider Only
 
   # Progress Updates

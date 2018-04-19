@@ -1,5 +1,6 @@
 class MatchesController < ApplicationController
   include HasMatchAccessContext
+  include Decisions
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
@@ -57,7 +58,7 @@ class MatchesController < ApplicationController
     @match = match_scope.find(params[:match_id])
     render layout: false
   end
-  
+ 
   private
 
     def find_match!
