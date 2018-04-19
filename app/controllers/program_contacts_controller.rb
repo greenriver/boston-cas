@@ -11,7 +11,7 @@ class ProgramContactsController < ApplicationController
   def update
     if @program_contacts.update program_contacts_params
       flash[:notice] = "Contacts updated"
-      redirect_to edit_program_contacts_path(@program)
+      redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
     else
       flash[:error] = "Please review the form problems below."
       render :edit
@@ -23,9 +23,14 @@ class ProgramContactsController < ApplicationController
     def program_scope
       Program.all
     end
+
+    def sub_program_scope
+      SubProgram.all
+    end
   
     def set_program
-      @program = program_scope.find params[:program_id]
+      @program = program_scope.find params[:program_id].to_i
+      @subprogram = sub_program_scope.find params[:sub_program_id].to_i
     end
   
     def set_program_contacts
