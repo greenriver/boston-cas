@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     patch :unavailable, on: :member
     resources :duplicates, controller: 'client_duplicates', only: [:show, :update]
     resources :matches, controller: 'client_matches', only: :index
+    resources :qualified_opportunities, only: [:index, :update]
   end
   resources :opportunities do
     post 'restore'

@@ -89,6 +89,7 @@ class Matching::Engine
   end
 
   def clients_for_matches(opportunity)
+    # TODO: Pass in match route to prioritized_candidate_clients
     opportunity.matching_co_candidates_for_max(prioritized_candidate_clients)
   end
 
@@ -97,6 +98,7 @@ class Matching::Engine
   end
 
   def prioritized_candidate_clients
+    # Needs match route and can't be ||= if we have more than one prioritization scheme
     @_prioritized_candidate_clients ||= candidates(clients).prioritized
   end
 

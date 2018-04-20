@@ -34,9 +34,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :confirm_match_success_dnd_staff
 
   # Provider Only Match Route
-  has_decision :hsa_acknowledges_receipt, decision_class_name: MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt.name, notification_class_name: Notifications::ProviderOnly::MatchInitiationForHsa.name
-  has_decision :hsa_accepts_client, decision_class_name: MatchDecisions::ProviderOnly::HsaAcceptsClient.name, notification_class_name: Notifications::ProviderOnly::HsaAcceptsClient.name
-  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff.name, notification_class_name: Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff.name
+  # NB: the following class names need to be strings, or it has trouble finding the nested StatusCallback classes
+  has_decision :hsa_acknowledges_receipt, decision_class_name: 'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt', notification_class_name: 'Notifications::ProviderOnly::MatchInitiationForHsa'
+  has_decision :hsa_accepts_client, decision_class_name: 'MatchDecisions::ProviderOnly::HsaAcceptsClient', notification_class_name: 'Notifications::ProviderOnly::HsaAcceptsClient'
+  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
   has_one :current_decision
 
@@ -379,6 +380,20 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
+  # Similar to a cancel, but allow the client to re-match the same opportunity
+  # if it comes up again.  Also, don't re-run the matching engine, we'll 
+  # put the opportunity 
+  def poached!
+    self.class.transaction do
+      update! active: false, closed: true, closed_reason: 'canceled'
+      client.update! available_candidate: true
+      opportunity.update! available_candidate: false
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      # Prevent access to this match by notification after 1 week
+      expire_all_notifications()
+    end
+  end
+
   def succeeded!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'success'
@@ -399,15 +414,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def client_related_matches
-    ClientOpportunityMatch
-      .where(client_id: client_id)
-      .where.not(id: id)
+    ClientOpportunityMatch.joins(:match_route).
+      where(client_id: client_id).
+      where.not(id: id)
   end
 
   def opportunity_related_matches
-    ClientOpportunityMatch
-      .where(opportunity_id: opportunity_id)
-      .where.not(id: id)
+    ClientOpportunityMatch.
+      where(opportunity_id: opportunity_id).
+      where.not(id: id)
   end
 
   private

@@ -35,6 +35,13 @@ class Opportunity < ActiveRecord::Base
   scope :available_candidate, -> do
     where(available_candidate: true)
   end
+
+  scope :available_for_poaching, -> do
+    available_candidate_ids = Opportunity.available_candidate.pluck(:id)
+    unstarted_ids = Opportunity.joins(active_match: :match_recommendation_dnd_staff_decision).
+      merge(MatchDecisions::Base.pending).pluck(:id)
+    Opportunity.where(id: available_candidate_ids + unstarted_ids)
+  end
   # after_save :run_match_engine_if_newly_available
 
   def self.text_search(text)
@@ -65,7 +72,7 @@ class Opportunity < ActiveRecord::Base
   def self.associations_adding_services
     [:unit, :voucher]
   end
-  
+
   def opportunity_details
     @_opportunity_detail ||= OpportunityDetails.build self
   end
@@ -99,6 +106,12 @@ class Opportunity < ActiveRecord::Base
     else
       raise NotImplementedError
     end
+  end
+
+  def matches_client?(client)
+    requirements_with_inherited.map do |requirment|
+      requirment.clients_that_fit(Client.where(id: client.id)).exists?
+    end.all?
   end
 
   def self.available_stati

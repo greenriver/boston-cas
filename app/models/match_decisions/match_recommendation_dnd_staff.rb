@@ -109,10 +109,8 @@ module MatchDecisions
     end
     
     def cant_accept_if_related_active_match
-      if save_will_accept? &&
-        (match.client_related_matches.active.any? ||
-          match.opportunity_related_matches.active.any?)
-        then errors.add :status, "There is already another active match for this client or opportunity"          
+      if save_will_accept? && match.opportunity_related_matches.active.any?
+        then errors.add :status, "There is already another active match for this opportunity"          
       end
     end
 

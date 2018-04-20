@@ -211,6 +211,10 @@ class Client < ActiveRecord::Base
     client_opportunity_matches.active.first
   end
 
+  def active_matches
+    client_opportunity_matches.active
+  end
+
   def active_in_match?
     client_opportunity_matches.active.exists?
   end
