@@ -15,9 +15,6 @@ ActiveRecord::Schema.define(version: 20180331011801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "fuzzystrmatch"
-  enable_extension "pgcrypto"
 
   create_table "building_contacts", force: :cascade do |t|
     t.integer  "building_id", null: false

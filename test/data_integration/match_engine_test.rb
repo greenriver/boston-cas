@@ -465,4 +465,3 @@ class MatchEngineTest < ActiveSupport::TestCase
       ]
     end
 end
-
