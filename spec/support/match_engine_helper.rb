@@ -116,7 +116,7 @@ module MatchEngineHelper
     @sub_programs << sub_program.id
     voucher = generate_available_voucher sub_program
     @vouchers << voucher.id
-    opportunity = generate_avaialable_voucher_based_opportunity voucher
+    opportunity = generate_available_voucher_based_opportunity voucher
     @opportunities << opportunity.id
     return opportunity
   end
@@ -128,20 +128,13 @@ module MatchEngineHelper
     mental_health = [Requirement.new(rule: Rule.where(type: Rules::MentalHealthEligible).first, positive: true)]
     services = [Service.new(name: '__test__', requirements: mental_health)]
 
-    funding_source = @m.generate_funding_source veteran
-    @funding_sources << funding_source.id
-    subgrantee = @m.generate_subgrantee no_substance_abuse
-    @subgrantees << subgrantee.id
-    program = @m.generate_program funding_source, chronic
-    @programs << program.id
-    service_provider = @m.generate_service_provider [], services
-    @service_providers << service_provider
-    sub_program = @m.generate_sub_program program, subgrantee, service_provider
-    @sub_programs << sub_program.id
-    voucher = @m.generate_available_voucher sub_program
-    @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
-    @opportunities << opportunity.id
+    funding_source = generate_funding_source veteran
+    subgrantee = generate_subgrantee no_substance_abuse
+    program = generate_program funding_source, chronic
+    service_provider = generate_service_provider [], services
+    sub_program = generate_sub_program program, subgrantee, service_provider
+    voucher = generate_available_voucher sub_program
+    opportunity = generate_available_voucher_based_opportunity voucher 
     return opportunity
   end
 # 1. doesn't match: no physical disability
@@ -162,7 +155,7 @@ module MatchEngineHelper
     @sub_programs << sub_program.id
     voucher = @m.generate_available_voucher sub_program
     @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
+    opportunity = @m.generate_available_voucher_based_opportunity voucher
     @opportunities << opportunity.id
     return opportunity
   end
@@ -184,7 +177,7 @@ module MatchEngineHelper
     @sub_programs << sub_program.id
     voucher = @m.generate_available_voucher sub_program
     @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
+    opportunity = @m.generate_available_voucher_based_opportunity voucher
     @opportunities << opportunity.id
     return opportunity
   end
@@ -208,7 +201,7 @@ module MatchEngineHelper
     @sub_programs << sub_program.id
     voucher = @m.generate_available_voucher sub_program
     @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
+    opportunity = @m.generate_available_voucher_based_opportunity voucher
     @opportunities << opportunity.id
     return opportunity
   end
@@ -234,7 +227,7 @@ module MatchEngineHelper
     @sub_programs << sub_program.id
     voucher = @m.generate_available_voucher sub_program
     @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
+    opportunity = @m.generate_available_voucher_based_opportunity voucher
     @opportunities << opportunity.id
     return opportunity
   end
