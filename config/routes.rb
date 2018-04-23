@@ -13,9 +13,7 @@ Rails.application.routes.draw do
 
   resources :clients, only: [:index, :show, :update] do
     resources :contacts, except: :show, controller: :client_contacts, concerns: [:restorable]
-    patch 'split', on: :member
     patch :unavailable, on: :member
-    resources :duplicates, controller: 'client_duplicates', only: [:show, :update]
     resources :matches, controller: 'client_matches', only: :index
     resources :qualified_opportunities, only: [:index, :update]
   end

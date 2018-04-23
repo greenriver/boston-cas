@@ -33,9 +33,9 @@ module SubjectForMatches
       where.not(id: RejectedMatch.select(:client_id).where(opportunity_id: co_candidate))
     end
 
-    def max_candidate_matches
-      1
-    end
+    # def max_candidate_matches
+    #   1
+    # end
   end
 
   included do

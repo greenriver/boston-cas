@@ -52,5 +52,12 @@ module MatchRoutes
       ['Stalled Matches - with response', 'Stalled Matches - awaiting response']
     end
 
+    def self.max_matches_per_client
+      6
+    end
+
+    def self.max_matches_per_opportunity
+      20
+    end
   end
 end
