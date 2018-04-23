@@ -30,18 +30,27 @@ class Client < ActiveRecord::Base
     through: :shelter_agency_client_contacts,
     source: :contact
 
+  has_many :unavailable_as_candidate_fors
+
   validates :ssn, length: {maximum: 9}
 
   scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
-  scope :available_for_matching, -> { 
+  scope :available_for_matching, -> (match_route )  { 
     # anyone who hasn't been matched fully, isn't parked and isn't active in another match
-    where(available_candidate: true, available: true)
-    .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
-    .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
+    available.available_as_candidate(match_route).
+    where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today]).
+    where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
-  scope :available_candidate, -> { where(available_candidate: true) }
+
+  scope :available_as_candidate, -> (match_route) do
+    where.not(id: UnavailableAsCandidateFor.for_route(match_route).select(:client_id))
+  end
+
   scope :active_in_match, -> {
     joins(:client_opportunity_matches).merge(ClientOpportunityMatch.active)
+  }
+  scope :available, -> {
+    where(available: true)
   }
   scope :unavailable, -> {
     where(available: false)
@@ -132,6 +141,10 @@ class Client < ActiveRecord::Base
     else
       raise NotImplementedError
     end
+  end
+
+  def self.ready_to_match match_route:
+    available_as_candidate(match_route: match_route).matchable
   end
 
   def self.max_candidate_matches

@@ -27,6 +27,8 @@ class Opportunity < ActiveRecord::Base
     through: :opportunity_contacts,
     source: :contact
 
+  has_one :match_route, through: :sub_program
+
   attr_accessor :program, :building, :units
 
   scope :with_voucher, -> do
@@ -44,6 +46,10 @@ class Opportunity < ActiveRecord::Base
   end
   # after_save :run_match_engine_if_newly_available
 
+  scope :on_route, -> (route) do
+    joins(sub_program: :program).merge(SubProgram.on_route(route))
+  end
+
   def self.text_search(text)
     return none unless text.present?
 
@@ -59,6 +65,14 @@ class Opportunity < ActiveRecord::Base
       unit_matches
       .or(voucher_matches)
     )
+  end
+
+  def self.available_as_candidate
+    where(available_candidate: true)
+  end
+
+  def self.ready_to_match
+    available_as_candidate.matchable
   end
 
   def self.max_candidate_matches

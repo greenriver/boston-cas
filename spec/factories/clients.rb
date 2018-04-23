@@ -4,7 +4,6 @@ FactoryGirl.define do
     first_name 'Client'
     last_name 'Last'
     available true
-    available_candidate true
     gender_id 0 # female
     date_of_birth '1990-01-01'
     vispdat_score Faker::Number.between(1, 20)

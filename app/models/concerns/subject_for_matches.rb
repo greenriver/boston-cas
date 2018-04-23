@@ -8,14 +8,6 @@ module SubjectForMatches
       end
     end
 
-    def ready_to_match
-      available_as_candidate.matchable
-    end
-
-    def available_as_candidate
-      where(available_candidate: true)
-    end
-
     def matchable
       if column_names.include? :matchability
         where(arel_table[:matchability].gt(0))
