@@ -33,80 +33,6 @@ class MatchEngineTest < ActiveSupport::TestCase
     destroy_opportunities_for_priority_test
   end
 
-  # Opportunity Tests
-  def test_opportunity_voucher_based_female_only_from_program
-    rule = Rule.where(type: Rules::Female).first
-    requirements = [Requirement.new(rule: rule, positive: true)]
-
-    funding_source = @m.generate_funding_source
-    @funding_sources << funding_source.id
-    subgrantee = @m.generate_subgrantee
-    @subgrantees << subgrantee.id
-    program = @m.generate_program funding_source, requirements
-    @programs << program.id
-    sub_program = @m.generate_sub_program program, subgrantee
-    @sub_programs << sub_program.id
-    voucher = @m.generate_available_voucher sub_program
-    @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
-    @opportunities << opportunity.id
-    matches = Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)
-    
-    assert_equal 4, matches.count
-  end
-
-  def test_opportunity_voucher_based_veteran_only_from_subgrantee
-    opportunity = opportunity_voucher_based_veteran_only_from_subgrantee
-    
-    matches = Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)
-
-    # 5 directly + 8 from test_opportunity_voucher_based_rules_on_program_service_provider_subgrantee_funding_source_service
-    assert_equal 13, matches.count
-  end
-
-  def test_opportunity_voucher_based_sub_50_percent_ami_from_service_on_program    
-    funding_source = @m.generate_funding_source
-    @funding_sources << funding_source.id
-    rule = Rule.where(type: Rules::IncomeLessThanFiftyPercentAmi).first
-    requirements = [Requirement.new(rule: rule, positive: true)]
-    services = [Service.new(name: '__test__', requirements: requirements)]
-
-    subgrantee = @m.generate_subgrantee
-    @subgrantees << subgrantee.id
-    program = @m.generate_program funding_source, [], services
-    @programs << program.id
-    sub_program = @m.generate_sub_program program, subgrantee
-    @sub_programs << sub_program.id
-    voucher = @m.generate_available_voucher sub_program
-    @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
-    @opportunities << opportunity.id
-    matches = Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)
-   
-    assert_equal 11, matches.count
-  end
-
-  def test_opportunity_voucher_based_between_16_and_25_years_old_from_funding_source
-    sixteen = Rule.where(type: Rules::AgeGreaterThanSixteen).first
-    twenty_five = Rule.where(type: Rules::AgeGreaterThanTwentyFive).first
-    requirements = [Requirement.new(rule: sixteen, positive: true), Requirement.new(rule: twenty_five, positive: false)]
-
-    funding_source = @m.generate_funding_source requirements
-    @funding_sources << funding_source.id
-    subgrantee = @m.generate_subgrantee
-    @subgrantees << subgrantee.id
-    program = @m.generate_program funding_source
-    @programs << program.id
-    sub_program = @m.generate_sub_program program, subgrantee
-    @sub_programs << sub_program.id
-    voucher = @m.generate_available_voucher sub_program
-    @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
-    @opportunities << opportunity.id
-    matches = Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)
-    
-    assert_equal 1, matches.count
-  end
 
   def test_opportunity_voucher_based_rules_on_program_service_provider_subgrantee_funding_source_service
     opportunity = opportunity_voucher_based_rules_on_program_service_provider_subgrantee_funding_source_service
@@ -116,35 +42,7 @@ class MatchEngineTest < ActiveSupport::TestCase
     assert_equal 8, matches.count
   end
 
-  def test_match_client_order
-    # create an opportunity with a known set of requirements:
-    # homeless, chronically homeless & MI & SA co-morbid
-    # see that the clients that match are returned first homeless night asc
-    homeless = Requirement.new(rule: Rule.where(type: Rules::Homeless).first, positive: true)
-    chronic = Requirement.new(rule: Rule.where(type: Rules::ChronicallyHomeless).first, positive: true)
-    co_morbid = Requirement.new(rule: Rule.where(type: Rules::MiAndSaCoMorbid).first, positive: true)
-    requirements = [homeless, chronic, co_morbid]
 
-    funding_source = @m.generate_funding_source
-    @funding_sources << funding_source.id
-    subgrantee = @m.generate_subgrantee
-    @subgrantees << subgrantee.id
-    program = @m.generate_program funding_source, requirements
-    @programs << program.id
-    service_provider = @m.generate_service_provider
-    @service_providers << service_provider
-    sub_program = @m.generate_sub_program program, subgrantee, service_provider
-    @sub_programs << sub_program.id
-    voucher = @m.generate_available_voucher sub_program
-    @vouchers << voucher.id
-    opportunity = @m.generate_avaialable_voucher_based_opportunity voucher
-    @opportunities << opportunity.id
-    matches = Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)
-    top_match = matches[0]
-    ten_years_ago = Date.today - 10.years
-
-    assert_equal ten_years_ago, top_match[:calculated_first_homeless_night]
-  end
 
   def test_matchability
     # create two opportunities, one obviously more restrictive than the other
@@ -206,13 +104,6 @@ class MatchEngineTest < ActiveSupport::TestCase
     assert_equal  @least_restrictive.reload.matchability, client.prioritized_matches.last.opportunity.matchability
   end
 
-  def test_highest_priority_client_on_match_is_active_after_match
-    skip 'client_first_homeless nights are nil which is messing up ordering'
-    opportunity = opportunity_voucher_based_veteran_only_from_subgrantee
-    
-    Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).create_candidate_matches(opportunity)
-    assert opportunity.prioritized_matches.first.active
-  end
 
   private
     def make_funding_sources

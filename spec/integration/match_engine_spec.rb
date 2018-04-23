@@ -6,8 +6,8 @@ RSpec.describe "Running the match engine...", type: :request do
   let!(:unknown_gender_clients) { create_list :client, 7, gender_id: nil }
   let!(:female_veteran_clients) { create_list :client, 5, gender_id: 0, veteran: 1 }
   let!(:male_veteran_clients) { create_list :client, 3, gender_id: 1, veteran: 1 }
-  let!(:ami_50_percent_clients) { create_list :client, 5, gender_id: 1, veteran: 0, income_total_monthly: 66600 / 2 }
-  let!(:ami_100_percent_clients) { create_list :client, 5, gender_id: 1, veteran: 0, income_total_monthly: 66600 }
+  let!(:ami_50_percent_clients) { create_list :client, 5, gender_id: 1, veteran: 0, income_total_monthly: Config.get(:ami)/ 2 }
+  let!(:ami_100_percent_clients) { create_list :client, 5, gender_id: 1, veteran: 0, income_total_monthly: Config.get(:ami) }
   let!(:age_10_clients) { create_list :client, 8, date_of_birth: Date.today - 10.years }
   let!(:age_16_clients) { create_list :client, 1, date_of_birth: Date.today - 16.years }
   let!(:age_18_clients) { create_list :client, 3, date_of_birth: Date.today - 18.years }
@@ -92,36 +92,29 @@ RSpec.describe "Running the match engine...", type: :request do
     end  
   end
   
-  # #NOT WORKING
-  # describe "with homeless, chronic_homeless, mental health, and substance abuse requirement" do  
-  #   #create_matches differs by not creating a service_provider and passing it to the sub_program. 
-  #   #I don't know if this matters
-  #   let!(:matches) { create_matches( 
-  #     {rule: create(:homeless), positive: true}, 
-  #     {rule: create(:chronically_homeless), positive: true},
-  #     {rule: create(:mi_and_sa_co_morbid), positive: true},
-  #     ) }
-  # 
-  #   # let!(homeless) { Requirement.new(rule: Rule.where(type: Rules::Homeless).first, positive: true) }
-  #   # let!(chronic) { Requirement.new(rule: Rule.where(type: Rules::ChronicallyHomeless).first, positive: true) }
-  #   # let!(co_morbid) { Requirement.new(rule: Rule.where(type: Rules::MiAndSaCoMorbid).first, positive: true) }
-  #   # let!(requirements) { [homeless, chronic, co_morbid] }
-  #   # 
-  #   # let!(funding_source) { generate_funding_source }
-  #   # let!(subgrantee) { generate_subgrantee }
-  #   # let!(program) { generate_program funding_source, requirements }
-  #   # let!(service_provider) { generate_service_provider }
-  #   # let!(sub_program) { generate_sub_program program, subgrantee, service_provider }
-  #   # let!(voucher) { generate_available_voucher sub_program }
-  #   # let!(opportunity) { generate_avaialable_voucher_based_opportunity voucher }
-  #   # let!(matches) { Matching::Engine.new(Client.where(id: @clients), Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity) }
-  # 
-  #   it "clients that match are returned first homeless night asc" do
-  #     top_match = matches[0]
-  #     ten_years_ago = Date.today - 10.years
-  #     expect(ten_years_ago).to eq top_match[:calculated_first_homeless_night]
-  #   end  
-  # end
+  describe "with homeless, chronic_homeless, mental health, and substance abuse requirement" do 
+    conf = Config.first_or_create
+    conf.engine_mode = 'first-date-homeless'
+    conf.save!
+    
+    let!(:matches) { create_matches( 
+      {rule: create(:homeless), positive: true}, 
+      {rule: create(:chronically_homeless), positive: true},
+      {rule: create(:mi_and_sa_co_morbid), positive: true},
+      ) }
+  
+    it "clients that match are returned first homeless night asc" do
+      first_night = Client.where(
+        available: true, 
+        chronic_homeless: true, 
+        substance_abuse_problem: true, 
+        mental_health_problem: true
+      ).minimum(:calculated_first_homeless_night)
+      top_match = matches[0]
+  
+      expect(first_night).to eq top_match[:calculated_first_homeless_night]
+    end  
+  end
   
   describe "without physical disability requirement" do 
     let!(:matches) { create_matches ( {rule: create(:physical_disability), positive: false} ) }
