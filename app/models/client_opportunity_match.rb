@@ -44,6 +44,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
 
+  scope :on_route, -> (route) do
+    joins(:program).merge(Program.on_route(route))
+  end
+
   ###################
   ## Life cycle Scopes
   ###################
@@ -346,7 +350,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def activate!
     self.class.transaction do
       update! active: true
-      client.update available_candidate: false
+      client.make_unavailable_in(match_route: opportunity.match_route)
       opportunity.update available_candidate: false
       add_default_contacts!
       self.send(match_route.initial_decision).initialize_decision!
@@ -357,7 +361,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def rejected!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
-      client.update! available_candidate: true
+      client.make_available_in(match_route: opportunity.match_route)
       opportunity.update! available_candidate: opportunity.active_match.blank?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
@@ -370,7 +374,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def canceled!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
-      client.update! available_candidate: true
+      client.make_available_in(match_route: opportunity.match_route)
       opportunity.update! available_candidate: opportunity.active_match.blank?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
@@ -386,7 +390,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def poached!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
-      client.update! available_candidate: true
+      client.make_available_in(match_route: opportunity.match_route)
       opportunity.update! available_candidate: false
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
@@ -399,7 +403,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       update! active: false, closed: true, closed_reason: 'success'
       client_related_matches.destroy_all
       opportunity_related_matches.destroy_all
-      client.update available: false, available_candidate: false
+      client.update available: false
+      client.make_unavailable_in_all_routes
       opportunity.update available: false, available_candidate: false
       if opportunity.unit != nil
         opportunity.unit.update available: false

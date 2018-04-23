@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423140316) do
+ActiveRecord::Schema.define(version: 20180423183534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,7 +145,6 @@ ActiveRecord::Schema.define(version: 20180423140316) do
     t.integer  "domestic_violence"
     t.date     "calculated_first_homeless_night"
     t.boolean  "available",                                         default: true,  null: false
-    t.boolean  "available_candidate",                               default: true
     t.string   "homephone"
     t.string   "cellphone"
     t.string   "workphone"

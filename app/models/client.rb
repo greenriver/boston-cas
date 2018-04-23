@@ -35,10 +35,13 @@ class Client < ActiveRecord::Base
   validates :ssn, length: {maximum: 9}
 
   scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
+  scope :not_parked, -> do
+    where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
+  end
   scope :available_for_matching, -> (match_route )  { 
     # anyone who hasn't been matched fully, isn't parked and isn't active in another match
     available.available_as_candidate(match_route).
-    where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today]).
+    not_parked.
     where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
 
@@ -55,10 +58,13 @@ class Client < ActiveRecord::Base
   scope :unavailable, -> {
     where(available: false)
   }
-  scope :fully_matched, -> {
-    where(available_candidate: false).
-    where.not(id: active_in_match.select(:id))
-  }
+  scope :unavailable_in, -> (route) do
+    joins(:unavailable_as_candidate_fors).merge(UnavailableAsCandidateFor.for_route(route))
+  end
+  # scope :fully_matched, -> {
+  #   where(available_candidate: false).
+  #   where.not(id: active_in_match.select(:id))
+  # }
   scope :veteran, -> { where(veteran: true)}
   scope :non_veteran, -> { where(veteran: false)}
   scope :confidential, -> { where(confidential: true) }
@@ -232,6 +238,28 @@ class Client < ActiveRecord::Base
     client_opportunity_matches.active.exists?
   end
 
+  def available_as_candidate_for_any_route?
+    ! UnavailableAsCandidateFor.where(client_id: id).exists?
+  end
+
+  def make_available_in match_route: 
+    UnavailableAsCandidateFor.where(client_id: id, match_route_type: match_route).destroy_all
+  end
+
+  def make_available_in_all_routes
+    UnavailableAsCandidateFor.where(client_id: id).destroy_all
+  end
+
+  def make_unavailable_in match_route:
+    unavailable_as_candidate_fors.create(match_route_type: match_route.class.name)
+  end
+
+  def make_unavailable_in_all_routes
+    MatchRoutes::Base.all_routes.each do |route|
+      make_unavailable_in match_route: route
+    end
+  end
+
   def unavailable(permanent:false)
     active_match = client_opportunity_matches.active.first
     Client.transaction do 
@@ -250,7 +278,9 @@ class Client < ActiveRecord::Base
         update(available: false)
       else
         # This will re-queue the client once the date is passed
-        update(available_candidate: true)
+        MatchRoutes::Base.all_routes.each do |route|
+          make_unavailable_in match_route: route
+        end
       end
     end
   end
@@ -280,7 +310,7 @@ class Client < ActiveRecord::Base
 
   def available_text
     if available 
-      if available_candidate
+      if available_as_candidate_for_any_route?
         'Available for matching'
       elsif active_in_match?
         'Active in a match'
