@@ -17,7 +17,6 @@ module Admin
 
     private def config_params
       p = params.require(:config).permit(
-        :stalled_interval,
         :dnd_interval,
         :warehouse_url,
         :engine_mode,

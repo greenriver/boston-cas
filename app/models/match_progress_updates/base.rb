@@ -26,6 +26,9 @@ module MatchProgressUpdates
       class_name: MatchDecisions::Base.name,
       inverse_of: :status_updates
 
+    has_one :match_route, through: :match
+    delegate :stalled_interval, to: :match_route
+
     scope :incomplete, -> do
       mpu_t = arel_table
       joins(:match).
@@ -55,10 +58,6 @@ module MatchProgressUpdates
 
     alias_attribute :timestamp, :submitted_at
 
-    def self.stalled_interval
-      Config.get(:stalled_interval).days
-    end
-    
     def self.dnd_interval
       Config.get(:dnd_interval).days
     end
@@ -145,12 +144,12 @@ module MatchProgressUpdates
     # Re-send the same request if we requested it before, but haven't had a response
     # in a reasonable amount of time
     def resend_update_request?
-      requested_at.present? && submitted_at.blank? && requested_at < self.class.stalled_interval.ago
+      requested_at.present? && submitted_at.blank? && requested_at < stalled_interval.days.ago
     end
 
     # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
     def create_new_update_request?
-      submitted_at.present? && submitted_at < self.class.stalled_interval.ago && requested_at < self.class.stalled_interval.ago
+      submitted_at.present? && submitted_at < self.class.stalled_interval.ago && requested_at < stalled_interval.days.ago
     end
     
     def never_sent?

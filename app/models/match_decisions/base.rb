@@ -35,6 +35,12 @@ module MatchDecisions
     attr_accessor :shelter_expiration
 
     scope :pending, -> { where(status: :pending) }
+    scope :awaiting_action -> do
+      where(status: [:pending, :acknowledged])
+    end
+    scope :last_updated_before, -> (date) do
+      where(arel_table[:updated_at].lteq(date))
+    end
     
     has_many :decision_action_events,
       class_name: MatchEvents::DecisionAction.name,

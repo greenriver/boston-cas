@@ -62,10 +62,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
   scope :stalled, -> do
-    md_t = MatchDecisions::Base.arel_table
-    active.joins(:decisions).
-      where(match_decisions: {status: [:pending, :acknowledged]}).
-      where(md_t[:updated_at].lteq(self.stalled_interval.ago))
+    ids = Set.new
+    MatchRoutes::Base.all_routes.each do |route|
+      stall_date = route.stalled_interval.days.ago
+      ids += active.on_route(route).joins(:decisions).merge(MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)).distict.pluck(:id)
+    end
+    where(id: ids.to_a)
   end
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
@@ -141,10 +143,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_many :status_updates,
     class_name: MatchProgressUpdates::Base.name,
     foreign_key: :match_id
-
-  def self.stalled_interval
-    Config.get(:stalled_interval).days
-  end
 
   def self.closed_filter_options
     {
