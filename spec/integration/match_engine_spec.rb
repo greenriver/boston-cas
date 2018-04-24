@@ -251,5 +251,23 @@ RSpec.describe "Running the match engine...", type: :request do
       
       expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities[-1])
     end
+    
+    it "the most restrictive opportunity that matches is activated" do
+      # Update matchability
+      Matching::Matchability.update Opportunity.where(id: restrictive_opportunities)
+      # generate matches
+      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
+      
+      expect(client.prioritized_matches.first.active).to be true
+    end
+    
+    skip "least restrictive opportunity is returned last (highest matchability)" do
+      # Update matchability
+      Matching::Matchability.update Opportunity.where(id: restrictive_opportunities)
+      # generate matches
+      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
+    
+      expect(client.prioritized_matches.last.opportunity.id).to eq(restrictive_opportunities[1])
+    end
   end
 end
