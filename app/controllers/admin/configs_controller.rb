@@ -19,7 +19,6 @@ module Admin
       p = params.require(:config).permit(
         :dnd_interval,
         :warehouse_url,
-        :engine_mode,
         :require_cori_release,
         :ami
       )

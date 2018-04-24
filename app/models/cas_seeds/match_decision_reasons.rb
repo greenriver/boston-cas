@@ -21,6 +21,15 @@ module CasSeeds
       'Health and Safety',
     ]
 
+    HSA_PRIORITY_ONLY_REASONS = [
+      'Household did not respond',
+      'Ineligible for Housing Program',
+      'Client refused offer',
+      'Self-resolved',
+      'Falsification of documents',
+      'Health and Safety',
+    ]
+
     SHELTER_AGENCY_REASONS = [
       "Does not agree to services",
       "Unwilling to live in that neighborhood",
@@ -55,6 +64,7 @@ module CasSeeds
       create_other_reason!
       create_dnd_reasons!
       create_hsa_reasons!
+      create_hsa_priority_reasons!
       create_shelter_agency_reasons!
       create_shelter_agency_not_working_with_client_reasons!
       create_shelter_agency_not_working_with_client_other_reason!
@@ -75,6 +85,12 @@ module CasSeeds
     private def create_hsa_reasons!
       HSA_REASONS.each do |reason_name|
         ::MatchDecisionReasons::HousingSubsidyAdminDecline.where(name: reason_name).first_or_create!
+      end
+    end
+
+    private def create_hsa_priority_reasons!
+      HSA_PRIORITY_ONLY_REASONS.each do |reason_name|
+        ::MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.where(name: reason_name).first_or_create!
       end
     end
 

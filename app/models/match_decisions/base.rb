@@ -35,7 +35,7 @@ module MatchDecisions
     attr_accessor :shelter_expiration
 
     scope :pending, -> { where(status: :pending) }
-    scope :awaiting_action -> do
+    scope :awaiting_action, -> do
       where(status: [:pending, :acknowledged])
     end
     scope :last_updated_before, -> (date) do

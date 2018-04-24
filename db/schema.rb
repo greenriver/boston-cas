@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424124203) do
+ActiveRecord::Schema.define(version: 20180424163313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -439,14 +439,15 @@ ActiveRecord::Schema.define(version: 20180424124203) do
   add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
 
   create_table "match_routes", force: :cascade do |t|
-    t.string   "type",                                     null: false
-    t.boolean  "active",                   default: true,  null: false
-    t.integer  "weight",                   default: 10,    null: false
-    t.boolean  "contacts_editable_by_hsa", default: false, null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.integer  "stalled_interval",         default: 7,     null: false
-    t.integer  "match_prioritization_id",  default: 5,     null: false
+    t.string   "type",                                        null: false
+    t.boolean  "active",                      default: true,  null: false
+    t.integer  "weight",                      default: 10,    null: false
+    t.boolean  "contacts_editable_by_hsa",    default: false, null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.integer  "stalled_interval",            default: 7,     null: false
+    t.integer  "match_prioritization_id",     default: 5,     null: false
+    t.boolean  "should_cancel_other_matches", default: true,  null: false
   end
 
   create_table "name_quality_codes", force: :cascade do |t|

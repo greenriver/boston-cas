@@ -56,6 +56,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :candidate, -> { proposed } #alias
   scope :active, -> { where active: true  }
   scope :closed, -> { where closed: true }
+  scope :open, -> { where closed: false }
   scope :successful, -> { where closed: true, closed_reason: 'success' }
   scope :success, -> {successful} # alias
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
@@ -64,8 +65,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :stalled, -> do
     ids = Set.new
     MatchRoutes::Base.all_routes.each do |route|
-      stall_date = route.stalled_interval.days.ago
-      ids += active.on_route(route).joins(:decisions).merge(MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)).distict.pluck(:id)
+      stall_date = route.first.stalled_interval.days.ago
+      ids += active.on_route(route).joins(:decisions).merge(MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)).distinct.pluck(:id)
     end
     where(id: ids.to_a)
   end
@@ -78,6 +79,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
         md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff'))
       )
     )
+  end
+  scope :should_alert_warehouse, -> do 
+    success.joins(:match_route).merge(MatchRoutes::Base.should_cancel_other_matches)
   end
 
 
@@ -398,11 +402,19 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def succeeded!
     self.class.transaction do
+      route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
-      client_related_matches.destroy_all
-      opportunity_related_matches.destroy_all
-      client.update available: false
-      client.make_unavailable_in_all_routes
+      if route.should_cancel_other_matches
+        client_related_matches.destroy_all
+        client.update available: false
+        # Prevent matching on any route
+        client.make_unavailable_in_all_routes
+      else
+        # Prevent matching on this route again
+        client.make_available_in match_route: route
+      end
+      
+      opportunity_related_matches.destroy_all       
       opportunity.update available: false, available_candidate: false
       if opportunity.unit != nil
         opportunity.unit.update available: false
@@ -417,7 +429,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def client_related_matches
-    ClientOpportunityMatch.joins(:match_route).
+    ClientOpportunityMatch.open.joins(:match_route).
       where(client_id: client_id).
       where.not(id: id)
   end

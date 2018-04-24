@@ -75,7 +75,7 @@ module MatchDecisions::ProviderOnly
     end
 
     private def decline_reason_scope
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
     
     class StatusCallbacks < StatusCallbacks

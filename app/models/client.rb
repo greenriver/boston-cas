@@ -131,8 +131,8 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def self.prioritized
-    case Config.get(:engine_mode)
+  def self.prioritized match_route:
+    case match_route.match_prioritization.slug
     when 'first-date-homeless'
       order(calculated_first_homeless_night: :asc)
     when 'cumulative-homeless-days'

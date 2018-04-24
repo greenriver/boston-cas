@@ -2,6 +2,11 @@ module MatchPrioritization
   class Base < ActiveRecord::Base
     self.table_name = :match_prioritizations
 
+    scope :available, -> do
+      where(active: true).
+        order(weight: :asc)
+    end
+
     def self.prioritization_schemes
       [
         MatchPrioritization::FirstDateHomeless,
