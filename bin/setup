@@ -38,6 +38,7 @@ Dir.chdir APP_ROOT do
   system "bin/rake db:migrate"
 
   puts "\n== Generating Seed Data for CAS Database =="
+  system "bin/rake db:seed"
   puts "\n== Adding Available Rules =="
   system "bin/rake cas_seeds:create_rules"
   puts "\n== Adding Available Services =="
