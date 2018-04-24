@@ -26,14 +26,20 @@ RSpec.describe "Running the match engine...", type: :request do
   let!(:funding_source) { create :funding_source}
   let!(:subgrantee) { create :subgrantee }
   
-  def create_matches(*rules)
+  
+  def create_opportunity(*rules)
     #Pass in any number of hashes that look like {rule: rule, positive: true}  
     requirements = rules.map { |rule| Requirement.new(rule: rule[:rule], positive: rule[:positive]) }
     
     program = create :program, funding_source: funding_source, requirements: requirements 
     sub_program = create :sub_program, program: program, service_provider: subgrantee
     voucher = create :voucher, sub_program: sub_program
-    opportunity = create :opportunity, voucher: voucher
+    opportunity = create :opportunity, voucher: voucher 
+  end
+  
+  def create_matches(*rules)
+    #Pass in any number of hashes that look like {rule: rule, positive: true}  
+    opportunity = create_opportunity(*rules)
     Matching::Engine.new(Client.all, Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)    
   end
 
@@ -162,5 +168,88 @@ RSpec.describe "Running the match engine...", type: :request do
       expected_ids = Client.where(physical_disability: true, available: true, chronic_homeless: true, gender_id: 1).map(&:id)
       expect(expected_ids).to include *matches.pluck(:id)
     end  
+  end
+  
+  describe "with veteran, no chronic substance abuse, chronically homeless, and mental health requirement" do 
+    let!(:matches) { create_matches( 
+      {rule: create(:veteran), positive: true},
+      {rule: create(:chronic_substance_use), positive: false},
+      {rule: create(:chronically_homeless), positive: true},
+      {rule: create(:mental_health_eligible), positive: true},
+      ) }
+        
+    it "matches only clients who are veterans, chronically homeless, have a mental health problem, and do not have a chronic substance abuse problem" do 
+      expected_ids = Client.where(veteran: true, substance_abuse_problem: false, chronic_homeless: true, mental_health_problem: true).map(&:id)
+      expect(expected_ids).to include *matches.pluck(:id)
+    end 
+  end
+  
+  describe "when we create two opportunities, one obviously more restrictive than the other" do
+    let!(:less_restrictive) { create_opportunity( 
+      {rule: create(:veteran), positive: true},
+      ) }
+      
+    let!(:more_restrictive) { create_opportunity( 
+      {rule: create(:veteran), positive: true},
+      {rule: create(:chronic_substance_use), positive: false},
+      {rule: create(:chronically_homeless), positive: true},
+      {rule: create(:mental_health_eligible), positive: true},
+      ) }
+    
+    it "the more restrictive opportunity should have a smaller matchability score" do
+      # Update matchability
+      Matching::Matchability.update Opportunity.where(id: [less_restrictive.id, more_restrictive.id])
+      less_restrictive.reload
+      more_restrictive.reload
+      
+      expect(less_restrictive.matchability).to be > (more_restrictive.matchability)
+    end
+  end
+  
+  describe "when we feed the engine one client with many opportunities" do 
+    # skip 'need to fixup test data to get varying matchabilities across different opportunities
+    
+    # client: - homeless + physical disability + male + chronic
+    let!(:client) { Client.where(available: true, chronic_homeless: true, physical_disability: true, gender_id: 1).first } 
+    
+    # opportunities:
+    # 1. doesn't match: no physical disability
+    # 2. matches, not very restrictive: homeless + physical disability
+    # 3. matches, more restrictive: homeless + physical disability + male
+    # 4. matches, very restrictive: homeless + physical disability + male + chronic
+    let!(:least_restrictive) { create_opportunity( 
+      {rule: create(:physical_disability), positive: false},
+    )}
+    let!(:less_restrictive) { create_opportunity( 
+      {rule: create(:homeless), positive: true},
+      {rule: create(:physical_disability), positive: true},
+    )}
+    let!(:more_restrictive) { create_opportunity( 
+      {rule: create(:homeless), positive: true},
+      {rule: create(:physical_disability), positive: true},
+      {rule: create(:male), positive: true},
+    )}
+    let!(:most_restrictive) { create_opportunity( 
+      {rule: create(:homeless), positive: true},
+      {rule: create(:physical_disability), positive: true},
+      {rule: create(:male), positive: true},
+      {rule: create(:chronically_homeless), positive: true},
+    )}
+    
+    let!(:restrictive_opportunities) { [
+      least_restrictive.id,
+      less_restrictive.id,
+      more_restrictive.id,  
+      most_restrictive.id  
+    ] }
+    
+    it "the most restrictive opportunity that matches is returned first (lowest matchability)" do
+      # Update matchability
+      Matching::Matchability.update Opportunity.where(id: restrictive_opportunities)
+      # generate matches
+      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
+      
+      expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities[-1])
+    end
   end
 end
