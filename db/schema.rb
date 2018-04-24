@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423184549) do
+ActiveRecord::Schema.define(version: 20180424124203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,11 +194,10 @@ ActiveRecord::Schema.define(version: 20180423184549) do
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
 
   create_table "configs", force: :cascade do |t|
-    t.integer "dnd_interval",                                         null: false
-    t.string  "warehouse_url",                                        null: false
-    t.string  "engine_mode",          default: "first-date-homeless", null: false
+    t.integer "dnd_interval",                         null: false
+    t.string  "warehouse_url",                        null: false
     t.boolean "require_cori_release", default: true
-    t.integer "ami",                  default: 66600,                 null: false
+    t.integer "ami",                  default: 66600, null: false
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -407,6 +406,14 @@ ActiveRecord::Schema.define(version: 20180423184549) do
   add_index "match_events", ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id", using: :btree
   add_index "match_events", ["notification_id"], name: "index_match_events_on_notification_id", using: :btree
 
+  create_table "match_prioritizations", force: :cascade do |t|
+    t.string   "type",                      null: false
+    t.boolean  "active",     default: true, null: false
+    t.integer  "weight",     default: 10,   null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "match_progress_updates", force: :cascade do |t|
     t.string   "type",                null: false
     t.integer  "match_id",            null: false
@@ -439,6 +446,7 @@ ActiveRecord::Schema.define(version: 20180423184549) do
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
     t.integer  "stalled_interval",         default: 7,     null: false
+    t.integer  "match_prioritization_id",  default: 5,     null: false
   end
 
   create_table "name_quality_codes", force: :cascade do |t|

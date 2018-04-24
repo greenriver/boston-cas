@@ -34,11 +34,11 @@ RSpec.describe Matching::Engine, type: :model do
   let!(:income_opportunity) { create :opportunity, voucher: income_voucher }
 
   
-  describe "engine_modes" do
-    it 'contains Priority Score' do
-      expect( Matching::Engine.engine_modes.keys ).to include "Priority Score"
-    end
-  end
+  # describe "engine_modes" do
+  #   it 'contains Priority Score' do
+  #     expect( Matching::Engine.engine_modes.keys ).to include "Priority Score"
+  #   end
+  # end
 
   describe "engine runs" do
     it 'and does not throw an error' do

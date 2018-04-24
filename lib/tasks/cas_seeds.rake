@@ -65,6 +65,11 @@ namespace :cas_seeds do
     MatchRoutes::Base.ensure_all
   end
 
+  desc 'ensure all match prioritization schemes exist'
+  task ensure_all_match_prioritization_schemes_exist: [:environment, "log:info_to_stdout"] do
+    MatchPrioritization::Base.ensure_all
+  end
+
   # These have been disabled because they create fake data for development mode
   # we could potentially bring them back as part of a dev-mode only script
 

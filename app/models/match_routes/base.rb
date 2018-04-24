@@ -2,6 +2,8 @@ module MatchRoutes
   class Base < ActiveRecord::Base
     self.table_name = :match_routes
 
+    belongs_to :prioritization_scheme, class_name: MatchPrioritization::Base.name
+
     scope :available, -> do
       where(active: true).
         order(weight: :asc)

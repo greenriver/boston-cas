@@ -23,15 +23,6 @@ class Matching::Engine
       Opportunity.with_voucher.available_candidate
     end
 
-    def engine_modes
-      {
-        'First date homeless' => 'first-date-homeless',
-        'VI-SPDAT Score' => 'vi-spdat',
-        'Cumulative days homeless' => 'cumulative-homeless-days',
-        'Days homeless in the last three years' => 'homeless-days-last-three-years',
-        'Priority Score' => 'vispdat-priority-score'
-      }
-    end
   end
 
   attr_reader :clients, :opportunities

@@ -99,7 +99,7 @@ class Opportunity < ActiveRecord::Base
 
   def prioritized_matches
     c_t = Client.arel_table
-    case Config.get(:engine_mode)
+    case match_route.prioritization_scheme.slug
     when 'first-date-homeless'
       client_opportunity_matches.joins(:client).
         order(c_t[:calculated_first_homeless_night].asc)
