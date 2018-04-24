@@ -80,7 +80,7 @@ class Matching::Engine
   end
 
   def clients_for_matches opportunity
-    opportunity.matching_co_candidates_for_max(prioritized_candidate_clients(match_route: opportunity.match_route.class.name))
+    opportunity.matching_co_candidates_for_max(prioritized_candidate_clients(match_route: opportunity.match_route))
   end
 
   def prioritized_candidate_opportunities

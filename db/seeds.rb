@@ -5,7 +5,7 @@
   8 => 'Client doesn’t know',
   9 => 'Client refused'
 }.each do |id, name|
-  NameQualityCode.create! do |r|
+  NameQualityCode.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -18,7 +18,7 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  SocialSecurityNumberQualityCode.create! do |r|
+  SocialSecurityNumberQualityCode.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -31,7 +31,7 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  DateOfBirthQualityCode.create! do |r|
+  DateOfBirthQualityCode.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -47,7 +47,7 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  Gender.create! do |r|
+  Gender.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -63,7 +63,7 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  Race.create! do |r|
+  Race.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -76,7 +76,7 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  Ethnicity.create! do |r|
+  Ethnicity.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -89,7 +89,7 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  VeteranStatus.create! do |r|
+  VeteranStatus.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
@@ -102,19 +102,19 @@ end
   9 => 'Client refused',
   99 => 'Data not collected'
 }.each do |id, name|
-  DisablingCondition.create! do |r|
+  DisablingCondition.where(numeric: id, text: name).first_or_create! do |r|
     r.numeric = id
     r.text = name
   end
 end
 
 # Add a user.  This should not be added in production
-unless Rails.env =~ /production|staging/
+unless Rails.env =~ /production|staging|test/
   [
     'HUD: CoC - Permanent Supportive Housing',
     'HUD: CoC - Rapid Re-Housing'
   ].each do |name|
-    FundingSource.create!(name: name)
+    FundingSource.where(name: name).first_or_create!(name: name)
   end
 
 

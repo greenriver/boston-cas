@@ -58,7 +58,7 @@ class Program < ActiveRecord::Base
   belongs_to :match_route, class_name: MatchRoutes::Base.name
 
   scope :on_route, -> (route) do
-    joins(:match_route).merge(MatchRoutes::Base.where(type: route))
+    joins(:match_route).merge(MatchRoutes::Base.where(type: route.class.name))
   end
 
   validates_presence_of :name, :match_route_id

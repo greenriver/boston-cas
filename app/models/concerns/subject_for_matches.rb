@@ -36,13 +36,11 @@ module SubjectForMatches
     has_many :rejected_matches
 
     def matching_co_candidates_for_max(co_candidates)
-      @_matching_co_candidates_for_max ||=
-        co_candidates.matching_co_candidate(self).limit(matches_left_to_max)
+      @_matching_co_candidates_for_max ||= co_candidates.matching_co_candidate(self).limit(matches_left_to_max)
     end
 
     def matching_co_candidates(co_candidates)
-      @_matching_co_candidates ||=
-        co_candidates.matching_co_candidate(self)
+      @_matching_co_candidates ||= co_candidates.matching_co_candidate(self)
     end
 
     def matches_left_to_max

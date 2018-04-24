@@ -25,13 +25,19 @@ RSpec.describe "Running the match engine...", type: :request do
   
   let!(:funding_source) { create :funding_source}
   let!(:subgrantee) { create :subgrantee }
+  let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
+  let(:route) { 
+    r = MatchRoutes::Default.first 
+    r.update(match_prioritization_id: priority.id)
+    r
+    }
   
   
   def create_opportunity(*rules)
     #Pass in any number of hashes that look like {rule: rule, positive: true}  
     requirements = rules.map { |rule| Requirement.new(rule: rule[:rule], positive: rule[:positive]) }
     
-    program = create :program, funding_source: funding_source, requirements: requirements 
+    program = create :program, funding_source: funding_source, requirements: requirements, match_route: route
     sub_program = create :sub_program, program: program, service_provider: subgrantee
     voucher = create :voucher, sub_program: sub_program
     opportunity = create :opportunity, voucher: voucher 
@@ -98,11 +104,7 @@ RSpec.describe "Running the match engine...", type: :request do
     end  
   end
   
-  describe "with homeless, chronic_homeless, mental health, and substance abuse requirement" do 
-    conf = Config.first_or_create
-    conf.engine_mode = 'first-date-homeless'
-    conf.save!
-    
+  describe "with homeless, chronic_homeless, mental health, and substance abuse requirement" do     
     let!(:matches) { create_matches( 
       {rule: create(:homeless), positive: true}, 
       {rule: create(:chronically_homeless), positive: true},
@@ -198,7 +200,7 @@ RSpec.describe "Running the match engine...", type: :request do
     
     it "the more restrictive opportunity should have a smaller matchability score" do
       # Update matchability
-      Matching::Matchability.update Opportunity.where(id: [less_restrictive.id, more_restrictive.id])
+      Matching::Matchability.update(Opportunity.where(id: [less_restrictive.id, more_restrictive.id]), match_route: route)
       less_restrictive.reload
       more_restrictive.reload
       
@@ -217,18 +219,22 @@ RSpec.describe "Running the match engine...", type: :request do
     # 2. matches, not very restrictive: homeless + physical disability
     # 3. matches, more restrictive: homeless + physical disability + male
     # 4. matches, very restrictive: homeless + physical disability + male + chronic
+    let!(:lots_of_clients) { create_list :client, 40, physical_disability: true }
     let!(:least_restrictive) { create_opportunity( 
       {rule: create(:physical_disability), positive: false},
     )}
+    let!(:many_clients) { create_list :client, 30, physical_disability: true, available: true }
     let!(:less_restrictive) { create_opportunity( 
       {rule: create(:homeless), positive: true},
       {rule: create(:physical_disability), positive: true},
     )}
+    let!(:some_clients) { create_list :client, 20, physical_disability: true, available: true, gender_id: 1 }
     let!(:more_restrictive) { create_opportunity( 
       {rule: create(:homeless), positive: true},
       {rule: create(:physical_disability), positive: true},
       {rule: create(:male), positive: true},
     )}
+    let!(:a_few_clients) { create_list :client, 10, physical_disability: true, available: true, gender_id: 1, chronic_homeless: true }
     let!(:most_restrictive) { create_opportunity( 
       {rule: create(:homeless), positive: true},
       {rule: create(:physical_disability), positive: true},
@@ -245,25 +251,25 @@ RSpec.describe "Running the match engine...", type: :request do
     
     it "the most restrictive opportunity that matches is returned first (lowest matchability)" do
       # Update matchability
-      Matching::Matchability.update Opportunity.where(id: restrictive_opportunities)
+      Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
       Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
-      
-      expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities[-1])
+
+      expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities.last)
     end
     
     it "the most restrictive opportunity that matches is activated" do
       # Update matchability
-      Matching::Matchability.update Opportunity.where(id: restrictive_opportunities)
+      Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
       Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
       
       expect(client.prioritized_matches.first.active).to be true
     end
     
-    skip "least restrictive opportunity is returned last (highest matchability)" do
+    it "least restrictive opportunity is returned last (highest matchability)" do
       # Update matchability
-      Matching::Matchability.update Opportunity.where(id: restrictive_opportunities)
+      Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
       Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
     
