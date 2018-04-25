@@ -156,12 +156,16 @@ module MatchProgressUpdates
       requested_at.blank?
     end
 
+    def self.outstanding_contacts_for_stalled_matches
+      self.joins(:match).merge(ClientOpportunityMatch.stalled).
+        distinct.pluck(:contact_id, :match_id)
+    end
+
     def self.send_notifications
       # Get SSP, HSP, & Shelter agency contacts for stalled matches
       # if we have un-submitted but requested status update where the requested date is less than INTERVAL.ago - queue to send same request again, and update the requested date
       # if we have a submitted progress update with a response less than INTERVAL.ago - create a new update request
-      matches = self.joins(:match).merge(ClientOpportunityMatch.stalled).
-        distinct.pluck(:contact_id, :match_id)
+      matches = outstanding_contacts_for_stalled_matches
       matches.each do |contact_id, match_id|
         match = ClientOpportunityMatch.find(match_id)
         # Short circuit if we are no longer a contact on the match

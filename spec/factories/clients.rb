@@ -12,5 +12,6 @@ FactoryGirl.define do
     income_total_monthly 100
     sequence(:days_homeless) {|n| Faker::Number.between(0, 2000) }
     sequence(:days_homeless_in_last_three_years)  {|n| Faker::Number.between(0, 1000) }
+   
   end
 end

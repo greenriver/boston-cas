@@ -65,8 +65,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :stalled, -> do
     ids = Set.new
     MatchRoutes::Base.all_routes.each do |route|
-      stall_date = route.first.stalled_interval.days.ago
-      ids += active.on_route(route).joins(:decisions).merge(MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)).distinct.pluck(:id)
+      # instantiate the route
+      route = route.first
+      stall_date = route.stalled_interval.days.ago
+      ids += active.on_route(route).joins(:decisions).merge(
+        MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)
+      ).distinct.pluck(:id)
     end
     where(id: ids.to_a)
   end
