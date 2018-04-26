@@ -11,13 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180331011801) do
+ActiveRecord::Schema.define(version: 20180426174448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "fuzzystrmatch"
-  enable_extension "pgcrypto"
 
   create_table "building_contacts", force: :cascade do |t|
     t.integer  "building_id", null: false
@@ -435,6 +432,18 @@ ActiveRecord::Schema.define(version: 20180331011801) do
   add_index "match_progress_updates", ["match_id"], name: "index_match_progress_updates_on_match_id", using: :btree
   add_index "match_progress_updates", ["notification_id"], name: "index_match_progress_updates_on_notification_id", using: :btree
   add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "from",                       null: false
+    t.string   "subject",                    null: false
+    t.text     "body",                       null: false
+    t.boolean  "html",       default: false, null: false
+    t.datetime "seen_at"
+    t.datetime "sent_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "name_quality_codes", force: :cascade do |t|
     t.integer  "numeric"
@@ -913,6 +922,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "receive_initial_notification", default: false
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "email_schedule"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
