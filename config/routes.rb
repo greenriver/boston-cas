@@ -121,6 +121,8 @@ Rails.application.routes.draw do
     get :operational
   end
   
+  resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy,]
+  
   unless Rails.env.production?
     resource 'style_guide', only: :none do
       get 'dnd_match_review'

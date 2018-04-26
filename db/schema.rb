@@ -11,13 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180331011801) do
+ActiveRecord::Schema.define(version: 20180425140747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "fuzzystrmatch"
-  enable_extension "pgcrypto"
 
   create_table "building_contacts", force: :cascade do |t|
     t.integer  "building_id", null: false
@@ -193,6 +190,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "sober_housing",                                     default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
+    t.string   "client_identifier"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -241,6 +239,20 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "deidentified_clients", force: :cascade do |t|
+    t.string   "client_identifier"
+    t.integer  "assessment_score"
+    t.string   "agency"
+    t.string   "first_name",        default: "Anonymous"
+    t.string   "last_name",         default: "Anonymous"
+    t.jsonb    "active_cohort_ids"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "deidentified_clients", ["deleted_at"], name: "index_deidentified_clients_on_deleted_at", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -604,6 +616,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "sober_housing",                          default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
+    t.string   "client_identifier"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -712,6 +725,8 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "can_view_vspdats",                    default: false
     t.boolean  "can_manage_config",                   default: false
     t.boolean  "can_create_overall_note",             default: false
+    t.boolean  "can_enter_deidentified_clients",      default: false
+    t.boolean  "can_manage_deidentified_clients",     default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

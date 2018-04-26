@@ -1,0 +1,13 @@
+%h1 Add a Deidentifed Client
+= simple_form_for @deidentified_client, url: deidentified_clients_path do |f|
+  = f.error_notification
+
+  .row
+    .col-sm-6
+      .form-inputs
+        = f.input :client_identifier, required: true
+        = f.input :assessment_score
+        = f.input :agency            
+
+      .form-actions
+        = f.button :submit, "Submit", class: 'btn btn-primary'
