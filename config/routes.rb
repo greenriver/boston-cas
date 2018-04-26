@@ -121,6 +121,13 @@ Rails.application.routes.draw do
     get :operational
   end
   
+  resources :messages, only: [:show, :index] do
+    collection do
+      get :poll
+      post :seen
+    end
+  end
+
   unless Rails.env.production?
     resource 'style_guide', only: :none do
       get 'dnd_match_review'
