@@ -5,6 +5,7 @@ FactoryGirl.define do
     email 'user_one@example.com'
     password 'abcd1234'
     password_confirmation 'abcd1234'
+    email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
   end
