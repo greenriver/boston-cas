@@ -239,7 +239,7 @@ class Client < ActiveRecord::Base
   end
 
   def remote_id
-    project_client.id_in_data_source.presence
+    project_client&.id_in_data_source.presence
   end
 
   def has_full_housing_release?

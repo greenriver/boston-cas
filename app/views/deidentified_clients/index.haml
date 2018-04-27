@@ -18,27 +18,24 @@
         %thead
           %th Last Name
           %th First Name
-          %th Client Identifier
           %th Assessment Score
           %th Agency
-          %th Cohorts
         %tbody
           - @deidentified_clients.each do |deidentified_client|
             %tr
               %td= deidentified_client.last_name
-              %td= deidentified_client.first_name
-              %td= deidentified_client.client_identifier
+              %td= deidentified_client.first_name    
               %td= deidentified_client.assessment_score
               %td= deidentified_client.agency
-              %td= deidentified_client.active_cohort_ids
               - if can_manage_deidentified_clients? 
                 %td
                   = link_to action: :edit, id: deidentified_client do
                     %span.icon-pencil
                     Edit
-                %td
-                  = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this deidentified_client?"} do
-                    %span.icon-cross
-                    Delete
+                - if !deidentified_client.involved_in_match?
+                  %td
+                    = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this deidentified_client?"} do
+                      %span.icon-cross
+                      Delete
                       
 %p= paginate @deidentified_clients
