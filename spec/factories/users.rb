@@ -15,6 +15,7 @@ FactoryGirl.define do
     email 'user_two@example.com'
     password 'abcd1234'
     password_confirmation 'abcd1234'
+    email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
   end
@@ -24,6 +25,7 @@ FactoryGirl.define do
     email 'user_three@example.com'
     password 'abcd1234'
     password_confirmation 'abcd1234'
+    email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
   end
@@ -33,6 +35,7 @@ FactoryGirl.define do
     email 'user_four@example.com'
     password 'abcd1234'
     password_confirmation 'abcd1234'
+    email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
   end
