@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe MessagesController, type: :controller do
-  let! :user  { create :user }
+  let! :contact {create :contact }
+  let! :user  { create :user, contact: contact }
   let! :event { create :message, user: user }
 
   before(:each) do
@@ -9,7 +10,7 @@ RSpec.describe MessagesController, type: :controller do
   end
 
   after(:each) do
-    user.messages.destroy_all
+    user.contact.messages.destroy_all
   end
 
   describe 'GET poll' do
