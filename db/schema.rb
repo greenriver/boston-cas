@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180427234333) do
+ActiveRecord::Schema.define(version: 20180428121025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -434,7 +434,6 @@ ActiveRecord::Schema.define(version: 20180427234333) do
   add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
 
   create_table "messages", force: :cascade do |t|
-    t.integer  "user_id"
     t.string   "from",                       null: false
     t.string   "subject",                    null: false
     t.text     "body",                       null: false
@@ -443,6 +442,7 @@ ActiveRecord::Schema.define(version: 20180427234333) do
     t.datetime "sent_at"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "contact_id",                 null: false
   end
 
   create_table "name_quality_codes", force: :cascade do |t|

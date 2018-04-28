@@ -3,26 +3,29 @@ module Mail
   class DatabaseDelivery
 
     def initialize(parameters)
+      binding.pry
       @parameters = parameters
     end
 
     def deliver!(mail)
+      binding.pry
       is_html, body = content_and_type mail
       subject       = ApplicationMailer.remove_prefix mail.subject
       from          = mail[:from].addresses.first
       if from.nil?
         Rails.logger.fatal "no DEFAULT_FROM specified in .env; mail cannot be sent"
       end
-      User.where( email: mail[:to].addresses ).each do |user|
+      Contact.where( email: mail[:to].addresses ).each do |contact|
         # store the "email" in the database
         message = ::Message.create(
-          user_id: user.id,
+          contact_id: contact.id,
           subject: subject,
           body:    body,
           from:    from,
           html:    is_html,
         )
-        if user.continuous_email_delivery?
+        user = contact.user
+        if user.blank? || user.continuous_email_delivery?
           # use the configured delivery method
           delivery_method = Rails.configuration.action_mailer.delivery_method
           options = case delivery_method
@@ -33,7 +36,7 @@ module Mail
           end
           delivery_method = ActionMailer::Base.delivery_methods[delivery_method]
           copy = mail.dup
-          copy.to = user.email
+          copy.to = contact.email
           copy.delivery_method delivery_method, options
           copy.perform_deliveries = true
           copy.deliver
