@@ -6,7 +6,8 @@ class Message < ActiveRecord::Base
     daily
   )
 
-  belongs_to :user
+  belongs_to :contact
+  has_one :user, through: :contact
   scope :sent, -> (time=DateTime.current) { where arel_table[:sent_at].lteq time }
   scope :unsent, -> { where sent_at: nil }
   scope :seen, -> (time=DateTime.current) { where arel_table[:seen_at].lteq time }  

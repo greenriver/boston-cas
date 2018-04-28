@@ -3,15 +3,14 @@ module Mail
   class DatabaseDelivery
 
     def initialize(parameters)
-      binding.pry
       @parameters = parameters
     end
 
     def deliver!(mail)
-      binding.pry
       is_html, body = content_and_type mail
       subject       = ApplicationMailer.remove_prefix mail.subject
-      from          = mail[:from].addresses.first
+      from          = mail[:from].addresses.first || ENV['DEFAULT_FROM']
+
       if from.nil?
         Rails.logger.fatal "no DEFAULT_FROM specified in .env; mail cannot be sent"
       end

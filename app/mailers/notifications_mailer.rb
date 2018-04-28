@@ -1,7 +1,6 @@
 class NotificationsMailer < DatabaseMailer
 
   def match_recommendation_dnd_staff notification
-    binding.pry
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
