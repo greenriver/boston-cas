@@ -18,6 +18,7 @@ class Contact < ActiveRecord::Base
 
   has_many :events, class_name: MatchEvents::Base.name, inverse_of: :contact
   has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
+  has_many :messages
 
   acts_as_paranoid
   has_paper_trail

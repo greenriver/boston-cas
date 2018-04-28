@@ -58,6 +58,50 @@ header {
     margin-right: 0;
   }
 }
+.email-messages {
+  float: right;
+  @media (min-width: $screen-xs-min) {
+    display: none; // too small
+  }
+  @media (min-width: $screen-sm-min) {
+    display: block;
+    margin-right: 25px;
+  }
+  @media (min-width: $screen-md-min) {
+    margin-right: 30px;
+  }
+  @media (min-width: $screen-lg-min) {
+    margin-right: -40px;
+  }
+  .btn [class^="icon-"] {
+    @extend .tagline;
+    padding-top: 22px;
+    width: 2rem;
+    .message-count {
+      position: relative;
+      background-color: $cob-sg-optimistic-blue;
+      top: -12px;
+      left: -18px;
+    }
+  }
+  .show-all {
+    margin: 5px auto;
+  }
+  .dropdown-menu {
+    top: 50px;
+    padding: 5px;
+    min-width: 200px;
+  }
+}
+.btn.email-messages-envelope:focus,
+.btn.email-messages-envelope.focus
+{
+  outline: 0;
+}
+.btn.email-messages-envelope [class^="icon-"]:hover
+{
+  color:  $cob-sg-optimistic-blue;
+}
 .utility {
   @media (min-width: $screen-sm-min) {
     @include margin(null null null 243px);
