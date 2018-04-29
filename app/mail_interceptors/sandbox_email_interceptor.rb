@@ -14,9 +14,9 @@ class SandboxEmailInterceptor
     mail.bcc = RECIPIENTS
     unless Rails.env.production? 
       # Add [TRAINING], but only once
-      mail.subject = "[TRAINING] #{mail.subject}" unless mail.subject.include? '[TRAINING]'
+      mail.subject = "[TRAINING] #{mail.subject.gsub('[TRAINING] ', '')}"
       # Add warning, but only once
-      mail.body = warning + String(mail.body) unless String(mail.body).include? warning
+      mail.body = warning + String(mail.body).gsub(warning, '')
     end
   end
 
