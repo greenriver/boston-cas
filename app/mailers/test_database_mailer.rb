@@ -1,6 +1,6 @@
-# bundle exec rails runner 'TestMailer.ping("somebody@greenriver.com").deliver_now'
+# bundle exec rails runner 'TestDatabaseMailer.ping("somebody@greenriver.com").deliver_now'
 
-class TestMailer < ActionMailer::Base
+class TestDatabaseMailer < DatabaseMailer
   default from: 'noreply@greenriver.com'
 
   def ping(email)
