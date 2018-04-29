@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ActiveJob::TestHelper
 
 RSpec.describe Matching::Engine, type: :model do
   CasSeeds::Rules.new.run!
@@ -51,6 +52,8 @@ RSpec.describe Matching::Engine, type: :model do
       Matching::RunEngineJob.perform_now
       expect(client.client_opportunity_matches.first).to eq(simple_opportunity.active_match)
     end
+
+    
   end
 
 end
