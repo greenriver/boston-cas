@@ -13,8 +13,10 @@ class SandboxEmailInterceptor
     # mail.cc = mail.cc.to_a.select{|a| WHITELIST.include? a.downcase}
     mail.bcc = RECIPIENTS
     if Rails.env.staging?
-      mail.subject = "[TRAINING] #{mail.subject}"
-      mail.body = warning + String(mail.body)
+      # Add [TRAINING], but only once
+      mail.subject = "[TRAINING] #{mail.subject.sub('[TRAINING]', '')}"
+      # Add warning, but only once
+      mail.body = warning + String(mail.body.sub(warning, ''))
     end
   end
 
