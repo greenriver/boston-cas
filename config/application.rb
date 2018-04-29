@@ -56,5 +56,8 @@ module BostonCa
     # force all requests over ssl by default
     config.force_ssl = true
 
+
+    # additional library paths
+    config.autoload_paths << Rails.root.join('lib', 'util')
   end
 end

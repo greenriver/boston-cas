@@ -11,13 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180331011801) do
+ActiveRecord::Schema.define(version: 20180428121025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "fuzzystrmatch"
-  enable_extension "pgcrypto"
 
   create_table "building_contacts", force: :cascade do |t|
     t.integer  "building_id", null: false
@@ -435,6 +432,18 @@ ActiveRecord::Schema.define(version: 20180331011801) do
   add_index "match_progress_updates", ["match_id"], name: "index_match_progress_updates_on_match_id", using: :btree
   add_index "match_progress_updates", ["notification_id"], name: "index_match_progress_updates_on_notification_id", using: :btree
   add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.string   "from",                       null: false
+    t.string   "subject",                    null: false
+    t.text     "body",                       null: false
+    t.boolean  "html",       default: false, null: false
+    t.datetime "seen_at"
+    t.datetime "sent_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "contact_id",                 null: false
+  end
 
   create_table "name_quality_codes", force: :cascade do |t|
     t.integer  "numeric"
@@ -883,14 +892,14 @@ ActiveRecord::Schema.define(version: 20180331011801) do
   add_index "user_roles", ["user_id"], name: "index_user_roles_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                        null: false
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.string   "encrypted_password",           default: "",    null: false
+    t.string   "email",                                              null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.string   "encrypted_password",           default: "",          null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                default: 0,     null: false
+    t.integer  "sign_in_count",                default: 0,           null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -899,7 +908,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",              default: 0,     null: false
+    t.integer  "failed_attempts",              default: 0,           null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "invitation_token"
@@ -913,6 +922,7 @@ ActiveRecord::Schema.define(version: 20180331011801) do
     t.boolean  "receive_initial_notification", default: false
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "email_schedule",               default: "immediate", null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
