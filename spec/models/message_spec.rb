@@ -65,7 +65,6 @@ RSpec.describe Message, type: :model do
         expect {
           TestDatabaseMailer.ping(contact.email).deliver_later
         }.to have_enqueued_job.on_queue('mailers')
-        # expect(Message.count).to eq(original_message_count + 1)
       end
 
       it 'creates a message' do 
