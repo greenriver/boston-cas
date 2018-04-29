@@ -47,6 +47,7 @@ module Cas
             Rails.logger.info "Updating #{to_update.length} clients"
             to_update.each do |u|
               pc_attr = fetch_project_client(:client_id, u)
+              next unless pc_attr
               pc_attr.delete(:id)
               c = Client.find_by(id: u)
               # ignore available flag if this client has previously been merged
@@ -154,6 +155,7 @@ module Cas
         :enrolled_project_ids,
         :active_cohort_ids
       ).first
+      return false unless pc.present?
       pc_attr = pc.attributes.map do |k,v|
         [k.to_sym, v]
       end.to_h
