@@ -130,28 +130,28 @@ class NotificationsMailer < DatabaseMailer
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
   end
   
   def housing_subsidy_admin_accepted_match_dnd_staff notification

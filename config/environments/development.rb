@@ -45,7 +45,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'], protocol: :http }
 
   # don't need email sandbox with letter opener
-  config.sandbox_email_mode = false
+  config.sandbox_email_mode = true
 
   config.force_ssl = false
   config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours }
