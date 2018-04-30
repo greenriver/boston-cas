@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   auto_session_timeout User.timeout_in
+  prepend_before_action :skip_timeout
 
   helper_method :locale
   before_filter :set_gettext_locale
@@ -75,5 +76,10 @@ class ApplicationController < ActionController::Base
   def locale
     default_locale = 'en'
     params[:locale] || session[:locale] || default_locale
+  end
+
+  # don't extend the user's session if its an ajax request.
+  def skip_timeout
+    request.env['devise.skip_trackable'] = true if request.xhr?
   end
 end

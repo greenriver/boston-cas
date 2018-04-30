@@ -47,10 +47,6 @@ Dir.chdir APP_ROOT do
   puts "\n== Adding Available Decision Reasons =="
   system "bin/rake cas_seeds:create_match_decision_reasons"
 
-  puts "\n== Adding Fake Clients =="
-  system "bin/rake cas_seeds:import_chronically_homeless_from_csv"
-  puts "\n== Adding Processing Clients =="
-  system "bin/rake cas:update_clients"
   puts "\n== Adding Fake Programs, Sub-Programs, Vouchers, Buildings, Units and associated organizations =="
   system "bin/rake cas_seeds:import_vouchers"
   puts "\n== Marking some fake opportunities as available for matching =="

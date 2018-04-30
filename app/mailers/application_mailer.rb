@@ -12,4 +12,20 @@ class ApplicationMailer < ActionMailer::Base
     @subject = message[:subject]
     mail(to: @contact.email, subject: @subject, body: @body)
   end
+
+  def self.prefix
+    '[CAS]'
+  end
+
+  def prefix
+    self.class.prefix
+  end
+
+  def self.remove_prefix(subject)
+    if subject.starts_with? prefix
+      subject[prefix.length..-1].strip
+    else
+      subject
+    end
+  end
 end

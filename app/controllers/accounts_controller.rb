@@ -38,6 +38,7 @@ class AccountsController < ApplicationController
           :current_password,
           :password,
           :password_confirmation,
+          :email_schedule,
         )
     end
 

@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
   validates :first_name, presence: true, length: {maximum: 40}
   validates :last_name, presence: true, length: {maximum: 40}
+  validates :email_schedule, inclusion: { in: Message::SCHEDULES }, allow_blank: false
 
   scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
   scope :dnd_staff, -> {joins(:roles).where(roles: {can_edit_all_clients: true})}
@@ -24,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :user_roles, dependent: :destroy, inverse_of: :user
   has_many :roles, through: :user_roles
   has_many :vouchers
+  has_many :messages, through: :contact
 
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
@@ -106,4 +108,16 @@ class User < ActiveRecord::Base
     return 2.hours if can_act_on_behalf_of_match_contacts?
     30.minutes
   end
+
+  # send email upon creation or only in a periodic digest
+  def continuous_email_delivery?
+    email_schedule.nil? || email_schedule == 'immediate'
+  end
+
+  # does this user want to see messages in the app itself (versus only in email)
+  # TODO make this depend on some attribute(s) configurable by the user and/or admins
+  def in_app_messages?
+    true
+  end
+
 end
