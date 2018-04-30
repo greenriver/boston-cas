@@ -12,13 +12,24 @@ class SandboxEmailInterceptor
     # mail.cc = mail.cc.to_a.select{|a| WHITELIST.include? a.downcase}
     mail.bcc = RECIPIENTS
     unless Rails.env.production? || mail.delivery_method.is_a?(ApplicationMailer.delivery_methods[:db])
-      mail.subject = "[TRAINING] #{mail.subject}"
-      mail.body = warning + String(mail.body)
+      mail.subject = "#{subject_warning} #{mail.subject.gsub(subject_warning, '')}"
+      if mail.multipart?
+        html_body = mail.html_part.body.to_s
+        text_body = mail.text_part.body.to_s
+        mail.html_part = html_body.sub('<body>', "<body><p>#{body_warning}</p>") unless html_body.include?(body_warning)
+        mail.text_part = body_warning + "\n\n" +  text_body unless text_body.include?(body_warning)
+      else
+        mail.body = "#{body_warning} #{String(mail.body).sub(body_warning, '')}"
+      end
     end
   end
 
-  def self.warning
-    "***This message is for training purposes only, the following information is fictitious and does not represent a real housing opportunity or homeless client.***\n\n"
+  def self.subject_warning
+    '[TRAINING]'
+  end
+
+  def self.body_warning
+    "***This message is for training purposes only, the following information is fictitious and does not represent a real housing opportunity or homeless client.***"
   end
 
 end
