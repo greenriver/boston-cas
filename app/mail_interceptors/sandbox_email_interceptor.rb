@@ -4,8 +4,8 @@ class SandboxEmailInterceptor
   
   # TODO: list whitelisted email addresses here -- any other emails will only be BCC'd to the above
   # when this intercepter is in place
-  WHITELIST = ENV['SANDBOX_WHITELIST']&.split(';') || []
-  WHITELIST = (WHITELIST + RECIPIENTS).compact.map!(&:downcase)
+  ENV_WHITELIST = ENV['SANDBOX_WHITELIST']&.split(';') || []
+  WHITELIST = (ENV_WHITELIST + RECIPIENTS).compact.map!(&:downcase)
 
   def self.delivering_email mail
     # mail.to = mail.to.to_a.select{|a| WHITELIST.include? a.downcase}
