@@ -1,17 +1,16 @@
 class SandboxEmailInterceptor
   # TODO: list recipients who will always be BCC'd when application is running in sandbox mode
-  RECIPIENTS = [
-  ]
+  recipients = ENV['SANDBOX_RECIPIENTS']&.split(';') || []
   
   # TODO: list whitelisted email addresses here -- any other emails will only be BCC'd to the above
   # when this intercepter is in place
-  WHITELIST = ([
-  ] + RECIPIENTS).map!(&:downcase)
+  env_whitelist = ENV['SANDBOX_WHITELIST']&.split(';') || []
+  whitelist = (env_whitelist + recipients).compact.map!(&:downcase)
 
   def self.delivering_email mail
     # mail.to = mail.to.to_a.select{|a| WHITELIST.include? a.downcase}
     # mail.cc = mail.cc.to_a.select{|a| WHITELIST.include? a.downcase}
-    mail.bcc = RECIPIENTS
+    mail.bcc = recipients
     unless Rails.env.production? || mail.delivery_method.is_a?(ApplicationMailer.delivery_methods[:db])
       # Add [TRAINING], but only once
       mail.subject = "[TRAINING] #{mail.subject}" unless mail.subject.to_s.include?('[TRAINING]')
