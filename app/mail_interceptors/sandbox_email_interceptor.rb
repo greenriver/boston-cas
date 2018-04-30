@@ -12,7 +12,7 @@ class SandboxEmailInterceptor
     # mail.to = mail.to.to_a.select{|a| WHITELIST.include? a.downcase}
     # mail.cc = mail.cc.to_a.select{|a| WHITELIST.include? a.downcase}
     mail.bcc = RECIPIENTS
-    unless Rails.env.production? || mail.delivery_method.is_a? ApplicationMailer.delivery_methods[:db]
+    unless Rails.env.production? || mail.delivery_method.is_a?(ApplicationMailer.delivery_methods[:db])
       # Add [TRAINING], but only once
       mail.subject = "[TRAINING] #{mail.subject}" unless mail.subject.to_s.include?('[TRAINING]')
       # Add warning, but only once

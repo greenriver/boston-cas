@@ -4,252 +4,252 @@ class NotificationsMailer < DatabaseMailer
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} New Housing Recommendation - Requires Your Action")
+    mail(to: @contact.email, subject: "New Housing Recommendation - Requires Your Action")
   end
 
   def match_recommendation_client notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} New Housing Opportunity")
+    mail(to: @contact.email, subject: "New Housing Opportunity")
   end
 
   def match_recommendation_housing_subsidy_admin notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} New Housing Recommendation")
+    mail(to: @contact.email, subject: "New Housing Recommendation")
   end
 
   def match_recommendation_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} New Housing Recommendation")
+    mail(to: @contact.email, subject: "New Housing Recommendation")
   end
 
   def match_recommendation_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} New Housing Recommendation")
+    mail(to: @contact.email, subject: "New Housing Recommendation")
   end
 
   def match_recommendation_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} New Housing Recommendation - Requires Your Action")
+    mail(to: @contact.email, subject: "New Housing Recommendation - Requires Your Action")
   end
 
   def schedule_criminal_hearing_housing_subsidy_admin notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation - Requires Your Action")
+    mail(to: @contact.email, subject: "Housing Recommendation - Requires Your Action")
   end
 
   def schedule_criminal_hearing_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation")
+    mail(to: @contact.email, subject: "Housing Recommendation")
   end
 
   def schedule_criminal_hearing_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation")
+    mail(to: @contact.email, subject: "Housing Recommendation")
   end
   
   def record_client_housed_date_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation Approved - Requires Your Action")
+    mail(to: @contact.email, subject: "Housing Recommendation Approved - Requires Your Action")
   end
 
   def record_client_housed_date_housing_subsidy_administrator notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation Approved - Requires Your Action")
+    mail(to: @contact.email, subject: "Housing Recommendation Approved - Requires Your Action")
   end
 
   def move_in_date_set notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation Move-in Date Set")
+    mail(to: @contact.email, subject: "Housing Recommendation Move-in Date Set")
   end
   
   def confirm_match_success_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Housing Recommendation - Requires Final Approval")
+    mail(to: @contact.email, subject: "Housing Recommendation - Requires Final Approval")
   end
   
   def criminal_hearing_scheduled_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Hearing Scheduled")
+    mail(to: @contact.email, subject: "Hearing Scheduled")
   end
 
   def criminal_hearing_scheduled_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Hearing Scheduled")
+    mail(to: @contact.email, subject: "Hearing Scheduled")
   end
 
   def criminal_hearing_scheduled_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Hearing Scheduled")
+    mail(to: @contact.email, subject: "Hearing Scheduled")
   end
   
   def criminal_hearing_scheduled_client notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Hearing Scheduled")
+    mail(to: @contact.email, subject: "Hearing Scheduled")
   end
   
   def criminal_hearing_scheduled_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Hearing Scheduled")
+    mail(to: @contact.email, subject: "Hearing Scheduled")
   end
   
   def housing_subsidy_admin_decision_client notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
   
   def housing_subsidy_admin_accepted_match_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Accepted by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Accepted by #{_('HSA')}")
   end
   
   def housing_subsidy_admin_declined_match_shelter_agency notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Declined by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
   end
 
   def housing_subsidy_admin_declined_match_ssp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Declined by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
   end
 
   def housing_subsidy_admin_declined_match_hsp notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Declined by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
   end
 
   def confirm_shelter_agency_decline_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Declined by #{_('Shelter Agency')} - Requires Your Action")
+    mail(to: @contact.email, subject: "Match Declined by #{_('Shelter Agency')} - Requires Your Action")
   end
 
   def confirm_housing_subsidy_admin_decline_dnd_staff notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Declined by #{_('HSA')} - Requires Your Action")
+    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
   end
 
   def on_behalf_of notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Action taken on your behalf")
+    mail(to: @contact.email, subject: "Action taken on your behalf")
   end
 
   def no_longer_working_with_client notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Contact no longer working with Client")
+    mail(to: @contact.email, subject: "Contact no longer working with Client")
   end
 
   def match_canceled notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Administratively Canceled")
+    mail(to: @contact.email, subject: "Match Administratively Canceled")
   end
 
   def shelter_agency_accepted notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} #{_('Shelter Agency')} Accepted Match")
+    mail(to: @contact.email, subject: "#{_('Shelter Agency')} Accepted Match")
   end
 
   def shelter_agency_decline_accepted notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Decline Accepted")
+    mail(to: @contact.email, subject: "Match Decline Accepted")
   end
 
   def progress_update_requested notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Progress Update Requested - Requires Your Action")
+    mail(to: @contact.email, subject: "Match Progress Update Requested - Requires Your Action")
   end
 
   def progress_update_submitted notification
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
-    mail(to: @contact.email, subject: "#{prefix} Match Progress Update Submitted")
+    mail(to: @contact.email, subject: "Match Progress Update Submitted")
   end
 
   def dnd_progress_update_late notification, contact, matches
     @notification = notification
     @matches = matches
     @contact = contact
-    mail(to: @contact.email, subject: "#{prefix} Match Progress Late")
+    mail(to: @contact.email, subject: "Match Progress Late")
   end
   
 end
