@@ -1,9 +1,9 @@
 # munged out of https://gist.github.com/d11wtq/1176236
 module Mail
   class DatabaseDelivery
-
+    
     def initialize(parameters)
-      @parameters = parameters
+      @parameters = {}.merge(parameters)
     end
 
     def deliver!(mail)
@@ -25,21 +25,8 @@ module Mail
         )
         user = contact.user
         if user.blank? || user.continuous_email_delivery?
-          # use the configured delivery method
-          delivery_method = Rails.configuration.action_mailer.delivery_method
-          options = case delivery_method
-          when :letter_opener
-            { location: Rails.root.join( 'tmp', 'letter_opener' ) } # for some reason it isn't getting the default
-          else
-            {}
-          end
-          delivery_method = ActionMailer::Base.delivery_methods[delivery_method]
-          copy = mail.dup
-          copy.to = contact.email
-          copy.delivery_method delivery_method, options
-          copy.perform_deliveries = true
-          copy.deliver
-          message.update_attributes sent_at: DateTime.current, seen_at: DateTime.current
+          ::ImmediateMailer.immediate(message, contact.email).deliver_now
+          message.update(sent_at: Time.now, seen_at: Time.now)
         end
       end
     end
