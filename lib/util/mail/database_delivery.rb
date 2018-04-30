@@ -1,8 +1,7 @@
 # munged out of https://gist.github.com/d11wtq/1176236
 module Mail
   class DatabaseDelivery
-    attr_accessor :settings
-
+    
     def initialize(parameters)
       @parameters = {}.merge(parameters)
     end
