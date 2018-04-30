@@ -4,7 +4,7 @@ module Mail
     attr_accessor :settings
 
     def initialize(parameters)
-      self.settings = {}.merge(parameters)
+      @parameters = {}.merge(parameters)
     end
 
     def deliver!(mail)
