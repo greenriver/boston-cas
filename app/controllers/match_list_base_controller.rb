@@ -68,7 +68,7 @@ class MatchListBaseController < ApplicationController
     end
 
     def default_sort_column
-      'homeless-days-last-three-years'
+      'days_homeless_in_last_three_years'
     end
   
     def sort_column
