@@ -8,9 +8,9 @@ class MatchDecisionsController < ApplicationController
   before_action :find_decision!
   before_action :authorize_decision!
   before_action :authorize_notification_recreation!, only: [:recreate_notifications]
+  before_action :set_client, only: [:show, :update]
   
   def show
-    @client = @match.client
     @opportunity = @match.opportunity
     @program = @match.program
     @sub_program = @match.sub_program
@@ -111,6 +111,10 @@ class MatchDecisionsController < ApplicationController
 
     def find_match!
       @match = match_scope.find params[:match_id]
+    end
+
+    def set_client
+      @client = @match.client
     end
 
     def find_decision!
