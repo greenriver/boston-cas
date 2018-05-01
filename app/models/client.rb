@@ -132,13 +132,14 @@ class Client < ActiveRecord::Base
   alias_method :name, :full_name
 
   def self.prioritized match_route:
+    c_t = Client.arel_table
     case match_route.match_prioritization.class.slug
     when 'first-date-homeless'
       order(calculated_first_homeless_night: :asc)
     when 'cumulative-homeless-days'
       order(days_homeless: :desc)
     when 'homeless-days-last-three-years'
-      order(days_homeless_in_last_three_years: :desc)
+      order(c_t[:days_homeless_in_last_three_years].desc)
     when 'vi-spdat' 
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     when 'vispdat-priority-score'

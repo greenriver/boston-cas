@@ -32,12 +32,12 @@ class MatchListBaseController < ApplicationController
       sort = sort + ' NULLS LAST'
     end
     
-    @matches = @matches
-      .references(:client)
-      .includes(:client)
-      .order(sort)
-      .preload(:client, :opportunity, :decisions)
-      .page(params[:page]).per(25)
+    @matches = @matches.
+      references(:client).
+      includes(:client).
+      order(sort).
+      preload(:client, :opportunity, :decisions).
+      page(params[:page]).per(25)
     @show_vispdat = show_vispdat?
   end
   
