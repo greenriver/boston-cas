@@ -108,27 +108,9 @@ end
   end
 end
 
-# Add a user.  This should not be added in production
-unless Rails.env =~ /production|staging|test/
-  [
-    'HUD: CoC - Permanent Supportive Housing',
-    'HUD: CoC - Rapid Re-Housing'
-  ].each do |name|
-    FundingSource.where(name: name).first_or_create!(name: name)
-  end
-
-
-  initial_password = Faker::Internet.password
-  user = User.new
-  user.email = 'noreply@example.com'
-  user.first_name = "Sample"
-  user.last_name = "Admin"
-  user.password = user.password_confirmation = initial_password
-  user.confirmed_at = Time.now
-  user.invitation_accepted_at = Time.now
-  # user.admin = true
-  # user.dnd_staff = true
-  user.receive_initial_notification = true
-  user.save!
-  puts "Created initial admin email:#{user.email}  password:#{user.password}"
+[
+  'HUD: CoC - Permanent Supportive Housing',
+  'HUD: CoC - Rapid Re-Housing'
+].each do |name|
+  FundingSource.where(name: name).first_or_create!(name: name)
 end
