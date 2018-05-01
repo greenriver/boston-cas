@@ -1,8 +1,7 @@
 .row
   .col-sm-8
-    %h3
-      Program Details
-    %table.table
+    %h3 Program Details
+    %table.table.table-condensed
       %tr
         %th Name
         %td= @program.name
@@ -15,9 +14,14 @@
       %tr
         %th Match Route
         %td= @program.match_route.title
+    %h3 Settings Inherited from the Match Route
+    %table.table.table-condensed
       %tr
         %th Contacts Editable by #{_('HSA')}?
         %td= checkmark @program.match_route.contacts_editable_by_hsa
       %tr
         %th Prioritized by
         %td= @program.match_route.match_prioritization.class.title
+      %tr
+        %th On Completion, will matches with this program cancel other matches for the client?
+        %td= checkmark @program.match_route.should_cancel_other_matches
