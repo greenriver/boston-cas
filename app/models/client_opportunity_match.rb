@@ -186,6 +186,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
+    elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
+      true 
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?)
       true
     else
@@ -471,6 +473,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
       program.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
+      # If for some reason we forgot to setup the default HSA contacts
+      # put the people who usually receive initial notifications in that role
+      if contacts_editable_by_hsa && housing_subsidy_admin_contacts.blank?
+        Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
+          assign_match_role_to_contact :housing_subsidy_admin, contact
+        end
+      end
+
     end
 
     def add_default_client_contacts!
