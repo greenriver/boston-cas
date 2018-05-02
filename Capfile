@@ -25,6 +25,7 @@ unless ENV['NO_PASSENGER']
   require 'capistrano/passenger'
 end
 require 'capistrano/delayed_job'
+require "whenever/capistrano"
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
