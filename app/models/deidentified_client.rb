@@ -16,14 +16,16 @@ class DeidentifiedClient < ActiveRecord::Base
   end
   
   def cohort_names
-    self.active_cohort_ids ? self.active_cohort_ids.map { |cohort_id| Warehouse::Cohort.active.find(cohort_id).name}.join("\n") : ""
+    Warehouse::Cohort.active.where(id: self.active_cohort_ids).pluck(:name).join("\n")
   end
   
-  def populated_project_client project_client
+  def populate_project_client project_client
     project_client.first_name = first_name
     project_client.last_name = last_name
     project_client.active_cohort_ids = active_cohort_ids
-    
+
+    project_client.sync_with_cas = true
+    project_client.needs_update = true
     project_client.save
   end
 
@@ -46,7 +48,7 @@ class DeidentifiedClient < ActiveRecord::Base
         data_source_id: data_source_id, 
         id_in_data_source: deidentified_client.id
       ).first_or_initialize
-      deidentified_client.populated_project_client(project_client)
+      deidentified_client.populate_project_client(project_client)
     end
 
     log "Updated #{DeidentifiedClient.count} ProjectClients from DeidentifiedClients"
