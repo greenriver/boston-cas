@@ -6,17 +6,7 @@ module MatchRoutes
     end
 
     def self.available_sub_types_for_search
-      [
-        'MatchDecisions::MatchRecommendationDndStaff',
-        'MatchDecisions::MatchRecommendationShelterAgency',
-        'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
-        'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
-        'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
-        'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff',
-        'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
-        # 'MatchDecisions::RecordClientHousedDateShelterAgency',
-        'MatchDecisions::ConfirmMatchSuccessDndStaff',
-      ]
+      match_steps_for_reporting.keys
     end
     
     def self.match_steps

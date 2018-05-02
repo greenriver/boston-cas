@@ -24,7 +24,7 @@
   .col-sm-6
     = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
   .col-sm-6.sort-filter
-    = render 'filter', available_steps: ClientOpportunityMatch.closed_filter_options, return_path: closed_matches_path, label_method: :closed
+    = render 'filter', available_steps: ClientOpportunityMatch.closed_filter_options, return_path: closed_matches_path, label_method: :closed, available_routes: @available_routes
     = render 'sort', sort_options: sort_options
     = render 'show_confidential_names'
 .row

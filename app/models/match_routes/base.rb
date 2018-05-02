@@ -16,6 +16,10 @@ module MatchRoutes
       ]
     end
 
+    def self.filterable_routes
+      available.pluck(:type)
+    end
+
     def self.ensure_all
       all_routes.each_with_index do |route, i|
         route.first_or_create(weight: i)

@@ -20,6 +20,9 @@ class ActiveMatchesController < MatchListBaseController
         [value.capitalize, value]
       end
     end
+    @available_routes = MatchRoutes::Base.filterable_routes.map do |value|
+      [value.capitalize, value]
+    end
     @sort_options = ClientOpportunityMatch.sort_options
 
     md = MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
@@ -71,6 +74,11 @@ class ActiveMatchesController < MatchListBaseController
       end
     end
 
+    @current_route = params[:current_route]
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.include?(@current_route)
+      @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
+    end
+
     @matches = @matches.references(:client).
       includes(:client).
       joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
@@ -80,7 +88,7 @@ class ActiveMatchesController < MatchListBaseController
 
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @current_step.present?
+    @active_filter = @current_step.present? || @current_route.present?
     @types = MatchRoutes::Base.match_steps
   end
   

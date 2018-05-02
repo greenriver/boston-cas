@@ -15,6 +15,10 @@ class ClosedMatchesController < MatchListBaseController
     end
     # decision subquery
 
+    @available_routes = MatchRoutes::Base.filterable_routes.map do |value|
+      [value.capitalize, value]
+    end
+    
     md = MatchDecisions::Base.where(
       'match_id = client_opportunity_matches.id'
     ).where.not(status: nil).order(created_at: :desc).limit(1)
