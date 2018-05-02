@@ -87,11 +87,11 @@ class ClosedMatchesController < MatchListBaseController
 
   private def sort_column
     available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
-    available_sort.include?(params[:sort]) ? params[:sort] : 'created_at'
+    available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 
 end

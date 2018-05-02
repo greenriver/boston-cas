@@ -33,6 +33,7 @@
             .tagline
               = _('Ending Veteran & Chronic Homelessness in Boston')
           .col-xs-2
+            = render 'layouts/messages'
             - if user_signed_in?
               = render 'layouts/site_menu'
             - else
