@@ -1,12 +1,9 @@
 .nav-tabs {
   background: $white;
-  margin-left: -30px;
-  margin-right: -30px;
-  padding-left: 30px;
-  padding-right: 30px;
   border-bottom: 1px solid $gray-015;
   margin-top: space(4);
   margin-bottom: space(4);
+  width: 100%;
 }
 
 .nav-tabs > li {

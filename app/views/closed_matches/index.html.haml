@@ -5,15 +5,15 @@
       = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
         %span.icon-plus
         Submit a Vacancy
-  
+
 - if show_match_status_facet_nav?
   .row
 
     %ul.nav.nav-tabs
-      %li{role: "presentation", class: ('active' if controller_path == 'active_matches')}
-        = link_to 'Matches in Progress', active_matches_path
-      %li{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
-        = link_to 'Closed Matches', closed_matches_path
+      %li.nav-item{role: "presentation", class: ('active' if controller_path == 'active_matches')}
+        = link_to 'Matches in Progress', active_matches_path, class: 'nav-link'
+      %li.nav-item{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
+        = link_to 'Closed Matches', closed_matches_path, class: 'nav-link'
 
 .row
   .col-sm-12
@@ -75,7 +75,7 @@
                 %td= match.client.vispdat_score
                 %td= match.client.vispdat_priority_score
               %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
-              %td= render 'current_step', match: match 
+              %td= render 'current_step', match: match
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td
                 = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do

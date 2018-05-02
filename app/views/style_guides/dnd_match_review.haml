@@ -8,14 +8,14 @@
   .col-sm-4
     .summary-readout.pull-right
       .summary-readout--tile.summary-readout--tile__green
-        .summary-readout--tile-label.summary-readout--tile-label__outside 
+        .summary-readout--tile-label.summary-readout--tile-label__outside
           Status:
-        .summary-readout--tile-color-block 
+        .summary-readout--tile-color-block
           Pending
       .summary-readout--tile.summary-readout--tile__blue
-        .summary-readout--tile-label.summary-readout--tile-label__outside 
+        .summary-readout--tile-label.summary-readout--tile-label__outside
           Current Step Assigned To:
-        .summary-readout--tile-color-block 
+        .summary-readout--tile-color-block
           Shelter Agency
 .detail-box
   -# These label/value pairs can all be displayed conditionally if present
@@ -34,7 +34,7 @@
           .detail-box--value
             Walnut Park
             %br
-            237 Walnut Ave, 
+            237 Walnut Ave,
             %br
             Boston, MA 02119
         .col-sm-2
@@ -42,7 +42,7 @@
           .detail-box--value 243-B
         .col-sm-4
           .detail-box--label Client
-          .detail-box--value 
+          .detail-box--value
             =link_to 'Ronnie Romero', '#'
       .row
         .col-sm-5
@@ -65,7 +65,7 @@
         =link_to 'leroybass@pinestreetinn.org', 'mailto:leroybass@pinestreetinn.org'
         %br
         617.555.1212
-      .detail-box--label 
+      .detail-box--label
         = "#{_('Housing Subsidy Administrator')}"
       .detail-box--value
         Bertha Carter
@@ -86,15 +86,15 @@
 .row
   .col-sm-12
     .current-step
-      %h3.current-step--heading 
+      %h3.current-step--heading
         Current Step:
         %span.current-step--name Shelter Agency Initial Review
-      %h5.current-step--assignemnt--label 
+      %h5.current-step--assignemnt--label
         Assigned To:
         %span.current-step--assignment--value Shelter Agency
       %p.current-step--introduction
         Placeholder for friendly text about this page and next steps.
-  
+
 
 
 -# if @decision.editable?
@@ -173,8 +173,8 @@
                   %label.control-label{for: 'date-last-saw-client'}When did you last see this client?
                   .input-group
                     %input{type: 'text', name: 'date-last-saw-client', id: 'date-last-saw-client', class: 'form-control'}
-                    %span.input-group-addon.icon-calendar
-            
+                    %span.input-group-append.icon-calendar
+
 
       .form-actions
         %p Forms that have two possible actions have a btn-primary (blue) and a btn-secondary (gray).
@@ -197,7 +197,7 @@
             %td.history--contact-name Bertha Carter
           %tr
             %td.history--date 3/25/2016
-            %td.history--event-name 
+            %td.history--event-name
               Shelter Agency accepted match recommendation
               .history--event-note
                 %strong Note:
@@ -209,13 +209,13 @@
             %td.history--contact-name Leroy Bass
           %tr
             %td.history--date 3/24/2016
-            %td.history--event-name 
+            %td.history--event-name
               Match Notification Sent to HSA
               %br
               Match Notification Sent to Shelter Agency
               %br
               Match Notification Sent to Client
-            %td.history--contact-name 
+            %td.history--contact-name
               Bertha Carter
               %br
               Leroy Bass
@@ -223,7 +223,7 @@
               Ronnie Romero
           %tr
             %td.history--date 3/24/2016
-            %td.history--event-name 
+            %td.history--event-name
               DND Accepted Match Recommendation
               .history--event-note
                 %strong Note:

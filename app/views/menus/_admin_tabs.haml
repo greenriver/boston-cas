@@ -1,11 +1,11 @@
 .row
   %ul.nav.nav-tabs
     -if can_edit_users?
-      %li{role: "presentation", class: ('active' if current_page?(admin_users_path))}
-        = link_to 'User Accounts', admin_users_path
+      %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_users_path))}
+        = link_to 'User Accounts', admin_users_path, class: 'nav-link'
     -if can_edit_translations?
-      %li{role: "presentation", class: ('active' if current_page?(admin_translation_keys_path))}
-        = link_to 'Manage Translations', admin_translation_keys_path
+      %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_translation_keys_path))}
+        = link_to 'Manage Translations', admin_translation_keys_path, class: 'nav-link'
     -if can_manage_config?
-      %li{role: "presentation", class: ('active' if current_page?(admin_configs_path))}
-        = link_to 'Site Configuration', admin_configs_path
+      %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_configs_path))}
+        = link_to 'Site Configuration', admin_configs_path, class: 'nav-link'
