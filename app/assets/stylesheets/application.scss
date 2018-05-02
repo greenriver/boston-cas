@@ -3,11 +3,28 @@
 *= require select2-bootstrap
 *= require bootstrap-datepicker3
 */
-@import "bootstrap-sprockets";
-@import 'bootstrap-custom';
+
+// Settings
+// (Colors, Variables, Fonts)
+// (Ordered by inclusion)
+@import
+  'settings/colors',
+  'settings/variables',
+  'settings/breakpoints',
+  'settings/spacing',
+  'settings/typography';
+
+// Tools
+// (Mixins, Functions)
+@import
+  'tools/functions',
+  'tools/mixins';
+
+// Vendor
+@import 'vendor/bootstrap/index';
 @import "font-awesome-sprockets";
 @import "font-awesome";
-@import "helpers/mixins";
+
 // @import "base/grid_framework";
 @import "base/typography";
 @import "base/buttons";

@@ -11,7 +11,7 @@ gem 'with_advisory_lock'
 gem "haml-rails"
 gem "sass-rails"
 gem 'autoprefixer-rails'
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.1.1'
 gem "jquery-rails"
 gem 'coffee-rails'
 # TODO move to assets group

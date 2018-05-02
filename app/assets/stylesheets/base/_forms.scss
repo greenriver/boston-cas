@@ -4,7 +4,7 @@
 .requirement-warning {
   color: $brand-danger;
   @include open-sans-medium;
-  @include padding($padding-base-vertical 0);
+  @include padding(space(1) 0);
 }
 .form-actions {
   clear: both;
@@ -37,7 +37,7 @@ label {
   padding-left: 0;
 }
 .has-error {
-  @include form-control-validation($cas-red, $cas-red, $cas-red);
+  /* @include form-control-validation($cas-red, $cas-red, $cas-red); */
 }
 .error .form-control {
   border-color: $cas-red;
