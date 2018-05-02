@@ -29,7 +29,7 @@
         .col-sm-10
           %p
             %select{name: :current_route, style: 'width: 100%;'}
-              %option{value: ''} Filter by Match Route
+              %option{value: ''} Show all Match Routes
               - available_routes.each do |label,value|
                 - selected = @current_route == value
                 %option{value: value, selected: selected}

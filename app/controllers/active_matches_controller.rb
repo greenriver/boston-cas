@@ -20,9 +20,7 @@ class ActiveMatchesController < MatchListBaseController
         [value.capitalize, value]
       end
     end
-    @available_routes = MatchRoutes::Base.filterable_routes.map do |value|
-      [value.capitalize, value]
-    end
+    @available_routes = MatchRoutes::Base.filterable_routes
     @sort_options = ClientOpportunityMatch.sort_options
 
     md = MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
@@ -75,7 +73,7 @@ class ActiveMatchesController < MatchListBaseController
     end
 
     @current_route = params[:current_route]
-    if @current_route.present? && MatchRoutes::Base.filterable_routes.include?(@current_route)
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
       @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
     end
 

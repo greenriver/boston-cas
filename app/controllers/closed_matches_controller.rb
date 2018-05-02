@@ -1,5 +1,4 @@
 class ClosedMatchesController < MatchListBaseController
-  
   before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
   
   def index
@@ -15,9 +14,7 @@ class ClosedMatchesController < MatchListBaseController
     end
     # decision subquery
 
-    @available_routes = MatchRoutes::Base.filterable_routes.map do |value|
-      [value.capitalize, value]
-    end
+    @available_routes = MatchRoutes::Base.filterable_routes
     
     md = MatchDecisions::Base.where(
       'match_id = client_opportunity_matches.id'
@@ -55,6 +52,11 @@ class ClosedMatchesController < MatchListBaseController
       @matches = @matches.public_send(@current_step)
     end
 
+    @current_route = params[:current_route]
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
+      @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
+    end
+
     @matches = @matches
       .references(:client)
       .includes(:client)
@@ -65,7 +67,7 @@ class ClosedMatchesController < MatchListBaseController
 
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @current_step.present?
+    @active_filter = @current_step.present? || @current_route.present?
     @types = MatchRoutes::Base.match_steps
   end
 

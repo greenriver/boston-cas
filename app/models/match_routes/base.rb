@@ -17,7 +17,7 @@ module MatchRoutes
     end
 
     def self.filterable_routes
-      available.pluck(:type)
+      available.map{|r| [r.title, r.type]}.to_h
     end
 
     def self.ensure_all
