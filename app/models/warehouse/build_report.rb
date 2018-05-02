@@ -32,9 +32,10 @@ module Warehouse
             # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
             sub_program = match.sub_program
             current_decision = decisions.last
+            match_route = match.match_route
             previous_updated_at = nil
-            match_started_decision = match.match_recommendation_dnd_staff_decision
-            match_started_at = if match_started_decision&.status == 'accepted'
+            match_started_decision = match.send(match_route.initial_decision)
+            match_started_at = if match_started_decision.started?
               match_started_decision.updated_at
             else
               nil
@@ -53,7 +54,7 @@ module Warehouse
                   step_name += ' - hearing requested'
                 end
               end
-              match_route = match.match_route
+              
               Warehouse::CasReport.create!(
                 client_id: client_id,
                 match_id: match.id,

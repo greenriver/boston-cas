@@ -14,6 +14,10 @@ module MatchDecisions::ProviderOnly
       when :canceled then canceled_status_label
       end
     end
+
+    def started?
+      status&.to_sym == :acknowledged
+    end
     
     def step_name
       "New Match for #{_('HSA')}"

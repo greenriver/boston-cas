@@ -201,6 +201,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
+    elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa
+      true 
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
       true
     else
