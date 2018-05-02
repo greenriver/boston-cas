@@ -44,6 +44,9 @@ msgstr ""
 msgid "Children under age 18 in household"
 msgstr ""
 
+msgid "Client Agrees to Match"
+msgstr ""
+
 msgid "Client sent notice of criminal background hearing date."
 msgstr ""
 
@@ -60,6 +63,9 @@ msgid "DND"
 msgstr ""
 
 msgid "Date and time of criminal background hearing"
+msgstr ""
+
+msgid "Default Match Route"
 msgstr ""
 
 msgid "Ending Veteran & Chronic Homelessness in Boston"
@@ -95,6 +101,9 @@ msgstr ""
 msgid "Housing Subsidy Administrator CORI Hearing"
 msgstr ""
 
+msgid "Housing Subsidy Administrator status update"
+msgstr ""
+
 msgid "Housing Subsidy Administrators"
 msgstr ""
 
@@ -114,6 +123,12 @@ msgid "No criminal background hearing was requested."
 msgstr ""
 
 msgid "Part of a family"
+msgstr ""
+
+msgid "Provider Only Route"
+msgstr ""
+
+msgid "Qualified Opportunities"
 msgstr ""
 
 msgid "Release of information"
