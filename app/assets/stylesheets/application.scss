@@ -1,9 +1,3 @@
-/*
-*= require select2
-*= require select2-bootstrap
-*= require bootstrap-datepicker3
-*/
-
 // Settings
 // (Colors, Variables, Fonts)
 // (Ordered by inclusion)
@@ -21,16 +15,39 @@
   'tools/mixins';
 
 // Vendor
-@import 'vendor/bootstrap/index';
-@import "font-awesome-sprockets";
-@import "font-awesome";
+@import
+  'vendor/bootstrap/index',
+  'font-awesome-sprockets',
+  'font-awesome',
+  'bootstrap-datetimepicker',
+  'select2',
+  'select2-bootstrap',
+  'bootstrap-datepicker3';
 
 // Elements
 @import
+  'elements/body',
   'elements/dl',
-  'elements/html';
+  'elements/html',
+  'elements/main';
 
-// @import "base/grid_framework";
+// Layouts
+@import
+  'layouts/main';
+
+// Objects
+// (High-level items with minimal styling)
+@import
+  'objects/card_grid',
+  'objects/container',
+  'objects/dashboard',
+  'objects/list',
+  'objects/text';
+
+// Components
+@import
+  'components/card';
+
 @import "base/typography";
 @import "base/buttons";
 @import "base/forms";
@@ -51,16 +68,12 @@
 @import "modules/_match_list";
 @import "vendor/icomoon";
 @import "helpers/helper_classes";
-@import 'bootstrap-datetimepicker';
 
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-main {
-  flex: 1 0 auto;
-}
+// Overrides
+@import
+  'overrides/bootstrap';
+
+
 .utility {
   min-height: 60px;
   padding: 8px 0;
@@ -68,39 +81,34 @@ main {
     margin-top: 40px;
   }
 }
+
 .crumbs a {
   margin-right: 12px;
 }
-.alert {
-  z-index: $zIndex-3--notice;
-  @include open-sans-medium;
-}
-.alert a {
-  color: #fff;
-}
-.alert a:hover,
-.alert a:focus {
-  text-decoration: none;
-}
+
 .action-row {
   padding-bottom: 12px;
 }
+
 .add-another {
   margin-top: 24px;
   margin-bottom: 36px;
   text-align: right;
 }
+
 .how-to-popover:focus {
   outline: none;
 }
+
 .popover ol {
   padding-left: 0 !important;
   -webkit-padding-start: 10px !important;
 }
-hr.dark
-{
+
+hr.dark {
   border-top-color: $gray-065;
 }
+
 .home-intro {
   @include lora-normal;
   font-size: 1.2em;

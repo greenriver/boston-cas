@@ -1,0 +1,18 @@
+.container-fluid {
+  padding-right: $container-padding;
+  padding-left: $container-padding;
+}
+
+.alert {
+  z-index: $zIndex-3--notice;
+  @include open-sans-medium;
+}
+
+.alert a {
+  color: #fff;
+}
+
+.alert a:hover,
+.alert a:focus {
+  text-decoration: none;
+}
