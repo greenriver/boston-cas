@@ -20,6 +20,7 @@
           %th First Name
           %th Assessment Score
           %th Agency
+          %th Cohorts
         %tbody
           - @deidentified_clients.each do |deidentified_client|
             %tr
@@ -27,6 +28,7 @@
               %td= deidentified_client.first_name    
               %td= deidentified_client.assessment_score
               %td= deidentified_client.agency
+              %td= simple_format deidentified_client.cohort_names
               - if can_manage_deidentified_clients? 
                 %td
                   = link_to action: :edit, id: deidentified_client do

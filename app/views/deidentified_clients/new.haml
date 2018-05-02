@@ -1,3 +1,5 @@
-= render 'new_form'
+%h1 Add a Deidentifed Client
+= simple_form_for @deidentified_client, url: deidentified_clients_path do |f|
+  = render 'form', f: f
 
 = link_to 'Back', deidentified_clients_path

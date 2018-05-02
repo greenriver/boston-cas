@@ -62,6 +62,7 @@ class Role < ActiveRecord::Base
       :can_create_overall_note,
       :can_enter_deidentified_clients,
       :can_manage_deidentified_clients,
+      :can_add_cohorts_to_deidentified_clients,
     ]
   end
 

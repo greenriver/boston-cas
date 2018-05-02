@@ -1,0 +1,17 @@
+
+= f.error_notification
+
+.row
+  .col-sm-6
+    .form-inputs
+      = f.input :client_identifier, required: true
+      = f.input :assessment_score
+      = f.input :agency
+      - if can_add_cohorts_to_deidentified_clients?
+        = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }
+    .form-actions
+      = f.button :submit, "Submit", class: 'btn btn-primary'
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();
