@@ -37,7 +37,6 @@ module MatchRoutes
       end.to_h
     end
 
-    # TODO: FIXME: this needs to be re-thought for app/models/warehouse/build_report.rb
     def self.match_steps_for_reporting
       all_routes.map(&:match_steps_for_reporting).flatten().uniq.to_h
     end

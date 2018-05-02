@@ -46,8 +46,9 @@ class ClosedMatchesController < MatchListBaseController
     end
     @show_vispdat = show_vispdat?
     
-    if params[:current_step].present? && ClientOpportunityMatch::CLOSED_REASONS.include?(params[:current_step])
-      @matches = @matches.public_send(params[:current_step])
+    @current_step = params[:current_step]
+    if @current_step.present? && ClientOpportunityMatch::CLOSED_REASONS.include?(@current_step)
+      @matches = @matches.public_send(@current_step)
     end
 
     @matches = @matches
@@ -60,7 +61,7 @@ class ClosedMatchesController < MatchListBaseController
 
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @data_source_id.present? || @start_date.present?
+    @active_filter = @current_step.present?
     @types = MatchRoutes::Base.match_steps
   end
 

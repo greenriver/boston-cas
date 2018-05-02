@@ -6,9 +6,7 @@ module MatchRoutes
     end
 
     def self.available_sub_types_for_search
-      [
-        'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
-      ]
+      match_steps_for_reporting.keys
     end
 
     def self.match_steps
@@ -23,12 +21,6 @@ module MatchRoutes
        'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
        'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
        'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
-       # 'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
-       # 'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
-       # 'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
-       # 'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff' => 6,
-       # 'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 7,
-       # 'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
        }
     end
 
