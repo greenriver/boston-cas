@@ -53,11 +53,12 @@ module Warehouse
                   step_name += ' - hearing requested'
                 end
               end
+              match_route = match.match_route
               Warehouse::CasReport.create!(
                 client_id: client_id,
                 match_id: match.id,
                 decision_id: decision.id,
-                decision_order: MatchRoutes::Base.match_steps_for_reporting[decision.type],
+                decision_order: match_route.class.match_steps_for_reporting[decision.type],
                 match_step: step_name,
                 decision_status: decision.label,
                 current_step: decision == current_decision,
