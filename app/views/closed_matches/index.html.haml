@@ -1,10 +1,9 @@
 - sort_options = ClientOpportunityMatch.sort_options
-.row
-  .col-sm-4.col-sm-offset-8
-    - if can_add_vacancies?
-      = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-        %span.icon-plus
-        Submit a Vacancy
+.d-flex.justify-content-end
+  - if can_add_vacancies?
+    = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+      %span.icon-plus
+      Submit a Vacancy
 
 - if show_match_status_facet_nav?
   .row

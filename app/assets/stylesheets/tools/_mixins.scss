@@ -127,7 +127,7 @@
     $pxval: strip-units($pxval);
   }
 
-  $base: $em-base;
+  $base: $font-size-default;
   @if not unitless($base) {
     $base: strip-units($base);
   }
