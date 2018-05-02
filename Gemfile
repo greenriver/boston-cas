@@ -24,7 +24,7 @@ gem 'validates_email_format_of'
 
 gem "simple_form"
 gem 'virtus'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 5.0.9'
 
 gem 'responders'
 gem 'kaminari'

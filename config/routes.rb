@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     match 'active' => 'users/sessions#active', via: :get
     match 'timeout' => 'users/sessions#timeout', via: :get
-  end  
+  end
 
   concern :restorable do
     member { post 'restore' }
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   end
   resources :services, except: :show
   resources :funding_sources, only: [:index, :edit, :update]
-  
+
   # concern that we can drop in at top level too
   # matches and their stuff can either be accessed directly if the user is logged in
   # or via a notification code
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
         resource :acknowledgment, only: [:create], controller: 'match_decision_acknowledgments'
         get :recreate_notifications, on: :member
       end
-      
+
       resource :contacts, only: [:edit, :update], controller: 'match_contacts'
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
@@ -58,7 +58,7 @@ Rails.application.routes.draw do
     end
   end
   manage_matches
-  
+
   resources :active_matches, only: :index
   resources :closed_matches, only: :index
 
@@ -103,7 +103,7 @@ Rails.application.routes.draw do
     end
     resources :roles
     resources :versions, only: [:index]
-    
+
     resources :translation_keys, only: [:index, :update]
     resources :translation_text, only: [:update]
     resources :configs, only: [:index] do
@@ -121,7 +121,7 @@ Rails.application.routes.draw do
   namespace :system_status do
     get :operational
   end
-  
+
   resources :messages, only: [:show, :index] do
     collection do
       get :poll
@@ -134,6 +134,7 @@ Rails.application.routes.draw do
       get 'dnd_match_review'
       get 'match_contacts_modal'
       get 'icon_font'
+      get 'stepped_progress'
     end
   end
 
