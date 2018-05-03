@@ -3,7 +3,7 @@ set :rails_env, "staging"
 
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
-server ENV['STAGING_HOST'], user: ENV.fetch('DEPLOY_USER'), roles: %w{cron app db web job}
+server ENV['STAGING_HOST'], user: fetch(:deploy_user), roles: %w{app db web job cron}, port: fetch(:ssh_port)
 
 set :linked_dirs, fetch(:linked_dirs, []).push('certificates', 'key', '.well_known', 'challenge')
 

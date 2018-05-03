@@ -27,6 +27,9 @@ else
   }
 end
 
+set :ssh_port, ENV.fetch('SSH_PORT') { '22' }
+set :deploy_user , ENV.fetch('DEPLOY_USER')
+
 if ENV['RVM_CUSTOM_PATH']
   set :rvm_custom_path, ENV['RVM_CUSTOM_PATH']
 end
