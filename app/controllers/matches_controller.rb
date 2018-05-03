@@ -8,6 +8,7 @@ class MatchesController < ApplicationController
 
   def show
     @client = @match.client
+    @types = MatchRoutes::Base.match_steps
     @opportunity = @match.opportunity
     current_decision = @match.current_decision
     @show_client_info = @match.show_client_info_to?(access_context.current_contact)
@@ -23,8 +24,8 @@ class MatchesController < ApplicationController
     if @show_files
       t_t = Warehouse::Tagging.arel_table
       columns = {
-        id: :id, 
-        updated_at: :updated_at, 
+        id: :id,
+        updated_at: :updated_at,
         tag_id: t_t[:tag_id].as('tag_id').to_sql
       }
       available_files = Warehouse::File.for_client(@client.remote_id).
@@ -53,12 +54,12 @@ class MatchesController < ApplicationController
       session[:match_status_update] = nil
     end
   end
-  
+
   def history
     @match = match_scope.find(params[:match_id])
     render layout: false
   end
- 
+
   private
 
     def find_match!

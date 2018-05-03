@@ -56,6 +56,11 @@
 @mixin open-sans {
   font-family: 'Open Sans', sans-serif;
 }
+@mixin open-sans-light {
+  @include open-sans;
+  font-style: normal;
+  font-weight: 300;
+}
 @mixin open-sans-normal {
   @include open-sans;
   font-style: normal;

@@ -2,47 +2,56 @@ button.close {
   background-color: inherit;
   border: 0;
 }
+
 .btn {
-  text-transform: uppercase;
   @include open-sans-bold;
 }
+
+.btn-shout {
+  text-transform: uppercase;
+}
+
 .btn-default {
   color: $gray-060;
 }
-.btn-default:hover
-{
+
+.btn-default:hover {
   color: $gray-070;
 }
+
 .btn-default:active,
 .btn-default:focus,
 .btn-default:active:hover,
-.open > .btn-default.dropdown-toggle:focus
-{
+.open > .btn-default.dropdown-toggle:focus {
   background-color: $gray-050;
   color: #FFF;
 }
-.open > .btn-default.dropdown-toggle
-{
+
+.open > .btn-default.dropdown-toggle {
   background-color: $gray-050;
   color: #FFF;
 }
+
 .btn-secondary {
   background-color: $gray-030;
   color: $text-color;
   border-color: $gray-030;
 }
+
 .btn-secondary:hover,
 .btn-secondary:focus {
   background-color: darken($gray-030, 10%);
   border-color: darken($gray-030, 10%);
   color: #000;
 }
+
 .btn-min-width-medium {
   @media (min-width: $screen-xs-min) {
     min-width: 165px;
   }
 }
-.btn [class^="icon-"], 
+
+.btn [class^="icon-"],
 .btn [class*=" icon-"] {
   font-size: rem(12);
 }
@@ -90,4 +99,3 @@ button.close {
   background-color: $brand-primary;
   color: #fff;
 }
-

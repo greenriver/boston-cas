@@ -1,7 +1,7 @@
 $progress-step-size: 37px;
 $progress-step-size-sm: 27px;
 $progress-step-space: 60px;
-$progress-step-space-sm: 18px;
+$progress-step-space-sm: 12px;
 $step-default-color: #858585;
 $step-default-color-d: $gray-080;
 $step-border-color: #E1E1E1;
@@ -40,6 +40,15 @@ $step-border-color: #E1E1E1;
   z-index: 3;
   color: $step-default-color;
   position: relative;
+  transition: .125s transform, .125s border;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  &:hover {
+    transform: scale(1.3) translateZ(0);
+    border-color: $link-color;
+  }
 
   &:last-of-type {
     margin-right: 0;
@@ -58,6 +67,7 @@ $step-border-color: #E1E1E1;
       left: calc(100% + 5px);
       top: 50%;
       transform: translate(0, -50%);
+      transform-origin: center center;
       z-index: 1;
     }
   }
@@ -109,13 +119,33 @@ $step-border-color: #E1E1E1;
 
   &--active {
     color: $white;
+    &:hover {
+      color: $white;
+    }
   }
 
 }
 
 .c-stepped-progress__step-link {
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  text-align: center;
+  justify-content: center;
+  color: inherit;
+  width: 100%;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+  &:active {
+    background: $link-color;
+    color: white;
+    box-shadow: 0 0 0 1px $white;
+  }
 }
 
 .c-stepped-progress__step--complete .c-stepped-progress__step-link,
@@ -132,6 +162,11 @@ $step-border-color: #E1E1E1;
 }
 
 .c-stepped-progress__step--final .c-stepped-progress__step-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  transform: translateZ(0);
   &:after {
     content: '\e911';
   }
@@ -143,5 +178,12 @@ $step-border-color: #E1E1E1;
 }
 
 .c-stepped-progress__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
+  text-align: center;
+  width: 100%;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }

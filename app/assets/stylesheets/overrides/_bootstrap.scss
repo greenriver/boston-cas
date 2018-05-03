@@ -16,3 +16,14 @@
 .alert a:focus {
   text-decoration: none;
 }
+
+// Buttons
+
+.btn-light {
+  border: 1px solid $brand-primary;
+  color: $brand-primary;
+  &:hover {
+    background: $brand-primary;
+    color: $white;
+  }
+}

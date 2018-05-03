@@ -72,7 +72,9 @@
                 %td= match.client.vispdat_score
                 %td= match.client.vispdat_priority_score
               %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
-              %td= render 'current_step', match: match
+              %td
+                = render 'current_step', match: match
+                = match.current_step_name || match.overall_status
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td
                 = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do

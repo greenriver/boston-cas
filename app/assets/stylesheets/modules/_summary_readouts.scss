@@ -24,6 +24,7 @@
   text-transform: uppercase;
   font-size: rem(14);
   text-align: left;
+  @include open-sans-light;
 }
 .summary-readout--tile-color-block {
   color: $cas-red-green;

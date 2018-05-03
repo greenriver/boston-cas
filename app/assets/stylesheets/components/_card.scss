@@ -19,7 +19,6 @@
 }
 
 .c-card--flush {
-  @include card;
   padding: 0;
   .table {
     margin-bottom: 0;
@@ -35,8 +34,7 @@
   }
 }
 
-.c-card--linked,
-.c-card > .c-card__content {
+.c-card--linked {
   cursor: pointer;
   &:focus,
   &:hover {
