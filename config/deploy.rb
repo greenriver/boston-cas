@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.8.1'
+lock '3.10.2'
 
 set :application, 'boston-cas'
 set :repo_url, 'git@github.com:greenriver/boston-cas.git'
@@ -112,3 +112,10 @@ namespace :deploy do
     end
   end
 end
+
+
+task :echo_options do
+  puts "\nDid you run ssh-add before running?\n\n"
+  puts "Deploying as: #{fetch(:deploy_user)}@#{ENV['STAGING_HOST']}:#{fetch(:ssh_port)}:#{deploy_to}\n\n"
+end
+after 'git:wrapper', :echo_options
