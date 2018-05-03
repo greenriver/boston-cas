@@ -145,6 +145,9 @@ class Client < ActiveRecord::Base
     when 'vispdat-priority-score'
       where.not(vispdat_priority_score: nil)
       .order(vispdat_priority_score: :desc)
+    when 'assessment-score'
+      where.not(assessment_score: nil).
+      order(assessment_score: :desc, days_homeless: :desc)
     else
       raise NotImplementedError
     end

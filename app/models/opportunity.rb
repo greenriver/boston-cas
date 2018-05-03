@@ -114,9 +114,13 @@ class Opportunity < ActiveRecord::Base
         where.not(clients: {vispdat_score: nil}).
         order(c_t[:vispdat_score].desc)
     when 'vispdat-priority-score'
-      client_opportunity_matches.joins(:client)
-        .where.not(clients: { vispdat_priority_score: nil }) 
-        .order(c_t[:vispdat_priority_score].desc) 
+      client_opportunity_matches.joins(:client).
+        where.not(clients: { vispdat_priority_score: nil }).
+        order(c_t[:vispdat_priority_score].desc)
+    when 'assessment-score'
+      client_opportunity_matches.joins(:client).
+        where.not(clients: { assessment_score: nil }).
+        order(assessment_score: :desc, days_homeless: :desc)
     else
       raise NotImplementedError
     end
