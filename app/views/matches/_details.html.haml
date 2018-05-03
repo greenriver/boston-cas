@@ -1,17 +1,21 @@
 %section
   %h1 Housing Opportunity: Match Progress
 
-  .summary-readout
-    .summary-readout--tile.summary-readout--tile__green
-      .summary-readout--tile-label.summary-readout--tile-label__outside
-        Status
-      .summary-readout--tile-color-block
-        = match.overall_status
+  .d-flex.align-items-end.mb-4
+    %div
+      %h2 Match Recommendation Details
+      %h4
+        Match ID:
+        %span.font-weight-bold= match.id
+    .d-flex.ml-auto
+      .c-tag{class: ".c-tag--success--#{match.overall_status[:type]}"}
+        .c-tag__title Status
+        .c-tag__wrapper
+          .c-tag__icon.c-tag__icon--sm
+            .icon-checkmark
+          .c-tag__content
+            %span= match.overall_status[:name]
 
-  %h2 Match Recommendation Details
-  %h3
-    Match ID:
-    %span match.id
   .c-card.c-card--flush
     -# These label/value pairs can all be displayed conditionally if present
     .c-card__content

@@ -73,8 +73,8 @@
                 %td= match.client.vispdat_priority_score
               %td= match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
               %td
-                = render 'current_step', match: match
-                = match.current_step_name || match.overall_status
+                = render 'current_step', match: match, size: 'sm'
+                = match.current_step_name || match.overall_status[:name]
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
               %td
                 - if match.current_decision.type == 'MatchDecisions::MatchRecommendationShelterAgency'

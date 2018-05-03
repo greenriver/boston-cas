@@ -28,6 +28,7 @@
 @import
   'elements/body',
   'elements/dl',
+  'elements/headings',
   'elements/html',
   'elements/main',
   'elements/section';
@@ -48,7 +49,9 @@
 // Components
 @import
   'components/card',
-  'components/stepped_progress';
+  'components/separator',
+  'components/stepped_progress',
+  'components/tag';
 
 @import "base/typography";
 @import "base/buttons";

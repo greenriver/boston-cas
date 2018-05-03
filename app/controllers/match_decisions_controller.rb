@@ -9,7 +9,7 @@ class MatchDecisionsController < ApplicationController
   before_action :authorize_decision!
   before_action :authorize_notification_recreation!, only: [:recreate_notifications]
   before_action :set_client, only: [:show, :update]
-  
+
   def show
     @opportunity = @match.opportunity
     @program = @match.program
@@ -19,40 +19,41 @@ class MatchDecisionsController < ApplicationController
     end
     render 'matches/show'
   end
-  
+
   def update
     @program = @match.program
     @sub_program = @match.sub_program
+    @types = MatchRoutes::Base.match_steps
     if !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
-      
+
     elsif @match.closed?
       flash[:error] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
-      
+
     # If expiration date is provided and match is declined
-    elsif decision_params[:shelter_expiration].present? && decision_params[:status] == "declined" 
+    elsif decision_params[:shelter_expiration].present? && decision_params[:status] == "declined"
       flash[:error] = 'Sorry, you cannot decline a match if you have provided an expiration date.'
       render 'matches/show'
-      
-    # If we've been asked to park the client and match is accepted 
-    elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == "accepted" 
+
+    # If we've been asked to park the client and match is accepted
+    elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == "accepted"
       flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
       render 'matches/show'
-    
+
     # If cancel reason is provided and match is declined or accepted
-    elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "accepted" || 
-          decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "declined" 
+    elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "accepted" ||
+          decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "declined"
       flash[:error] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
       render 'matches/show'
-    
+
     # If decline reason is provided and match is canceled or accepted
-    elsif decision_params[:decline_reason_id].present? && decision_params[:status] == "accepted" || 
-          decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled" 
+    elsif decision_params[:decline_reason_id].present? && decision_params[:status] == "accepted" ||
+          decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled"
       flash[:error] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
       render 'matches/show'
-      
+
     # If cancel reason is NOT provided and match is canceled
     elsif decision_params[:administrative_cancel_reason_id].blank? && decision_params[:status] == "canceled"
       flash[:error] = 'Sorry, you must provide a cancel reason to cancel this match.'
@@ -68,7 +69,7 @@ class MatchDecisionsController < ApplicationController
           note = "Shelter review expiration date set to #{new_expiration}."
           MatchEvents::ExpirationChange.create!(
             match_id: @match.id,
-            contact_id: current_contact.id, 
+            contact_id: current_contact.id,
             note: note
           )
         end
@@ -90,7 +91,7 @@ class MatchDecisionsController < ApplicationController
         end
       end
       redirect_to access_context.match_path(@match, redirect: "true")
-    
+
     else
       flash[:error] = "Please review the form problems below."
       render 'matches/show'
@@ -120,7 +121,7 @@ class MatchDecisionsController < ApplicationController
     def find_decision!
       @decision = @match.decision_from_param params[:id]
     end
-    
+
     def authorize_decision!
       unless @decision.accessible_by? current_contact
         flash[:alert] = 'Sorry, you are not authorized to access that.'

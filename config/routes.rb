@@ -135,6 +135,7 @@ Rails.application.routes.draw do
       get 'match_contacts_modal'
       get 'icon_font'
       get 'stepped_progress'
+      get 'tags'
     end
   end
 

@@ -57,6 +57,7 @@ class MatchesController < ApplicationController
 
   def history
     @match = match_scope.find(params[:match_id])
+    @types = MatchRoutes::Base.match_steps
     render layout: false
   end
 

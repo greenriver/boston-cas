@@ -27,3 +27,14 @@
     color: $white;
   }
 }
+
+.checkbox,
+.radio {
+  display: block;
+  input {
+    margin-right: space(1);
+  }
+  label {
+    cursor: pointer;
+  }
+}

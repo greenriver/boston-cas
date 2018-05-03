@@ -3,7 +3,7 @@
   - _('Housing Subsidy Administrators')
   - _('Stabilization Service Providers')
   - _('Housing Search Providers')
-  .detail-box--label= _(title)
+  %h3.detail-box--label= _(title)
   .detail-box--value
     - match.send(contact_type).each do |contact|
       - incomplete_for_contact = MatchProgressUpdates::Base.incomplete_for_contact?(contact_id: contact, match_id: match.id)

@@ -1,19 +1,17 @@
-.d-flex.mb-3.align-items-end
+.d-flex.mb-3.align-items-end.flex-wrap
   - if @match.current_decision.present?
     .d-flex.flex-column
-      .summary-readout
-        .summary-readout--tile.summary-readout--tile__green
-          %h3.summary-readout--tile-label.summary-readout--tile-label__outside
-            Current Step
-          %h2.summary-readout--tile-color-block
-            -if !@match.overall_status == "In Progress"
-              = match.overall_status
+      .summary-readout.mb-3
+        .summary-readout--tile
+          %h3.h4 Current Step
+          %h1.h2
+            -if !@match.overall_status[:name] == "In Progress"
+              = match.overall_status[:name]
             -else
               = @match.current_decision.step_name
-        .summary-readout--tile.summary-readout--tile__blue.margin-left-01
-          .summary-readout--tile-label.summary-readout--tile-label__outside
-            Assigned To
-          .summary-readout--tile-color-block
+        .summary-readout--tile
+          %h3.h4 Assigned To
+          %h1.h2
             = @match.current_decision.try(:actor_type) || 'N/A'
       = render 'match_list_base/current_step', match: @match
   - else

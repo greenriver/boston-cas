@@ -40,21 +40,24 @@ $step-border-color: #E1E1E1;
   z-index: 3;
   color: $step-default-color;
   position: relative;
-  transition: .125s transform, .125s border;
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  -webkit-font-smoothing: subpixel-antialiased;
-  &:hover {
-    transform: scale(1.3) translateZ(0);
-    border-color: $link-color;
-  }
 
   &:last-of-type {
     margin-right: 0;
   }
 
-  &--complete {
+  &--interact {
+    transition: .125s transform, .125s border;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-font-smoothing: subpixel-antialiased;
+    &:hover {
+      transform: scale(1.3) translateZ(0);
+      border-color: $link-color;
+    }
+  }
+
+  &--done {
     border-color: $brand-success-l;
     background: $brand-success-l;
     color: $brand-success;
@@ -80,7 +83,7 @@ $step-border-color: #E1E1E1;
     border-color: $brand-primary;
   }
 
-  &--complete,
+  &--done,
   &--active {
     &:after {
       content: '';
@@ -108,7 +111,7 @@ $step-border-color: #E1E1E1;
     margin-right: 0;
   }
 
-  &--complete {
+  &--done {
     color: darken($brand-success, 10%);
     &:before {
       height: 2px;
@@ -126,7 +129,9 @@ $step-border-color: #E1E1E1;
 
 }
 
-.c-stepped-progress__step-link {
+.c-stepped-progress__step-number,
+.c-stepped-progress__step-link,
+.c-stepped-progress__step-link--static {
   display: flex;
   align-items: stretch;
   text-align: center;
@@ -134,9 +139,18 @@ $step-border-color: #E1E1E1;
   color: inherit;
   width: 100%;
   border-radius: 50%;
+  cursor: normal;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.c-stepped-progress__step--active .c-stepped-progress__step-link {
   backface-visibility: hidden;
   transform: translateZ(0);
   -webkit-font-smoothing: subpixel-antialiased;
+  cursor: pointer;
   &:hover {
     text-decoration: none;
     color: inherit;
@@ -148,42 +162,40 @@ $step-border-color: #E1E1E1;
   }
 }
 
-.c-stepped-progress__step--complete .c-stepped-progress__step-link,
+.c-stepped-progress__step--done .c-stepped-progress__step-link,
 .c-stepped-progress__step--final .c-stepped-progress__step-link {
   &:after {
     @include icon;
   }
 }
 
-.c-stepped-progress__step--complete .c-stepped-progress__step-link {
+.c-stepped-progress__step--done .c-stepped-progress__step-link {
   &:after {
-    content: '\e929';
+    content: #{get-icon-code(checkmark)};
   }
 }
 
+.c-stepped-progress__step--done .c-stepped-progress__step-link,
 .c-stepped-progress__step--final .c-stepped-progress__step-link {
   display: flex;
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
   transform: translateZ(0);
+}
+
+.c-stepped-progress__step--final .c-stepped-progress__step-link {
   &:after {
-    content: '\e911';
+    content: #{get-icon-code(house)};
   }
 }
 
-.c-stepped-progress__step--complete .c-stepped-progress__step-number,
+.c-stepped-progress__step--done .c-stepped-progress__step-number,
 .c-stepped-progress__step--final .c-stepped-progress__step-number {
   display: none;
 }
 
 .c-stepped-progress__step-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-weight: bold;
-  text-align: center;
-  width: 100%;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  align-items: center;
 }

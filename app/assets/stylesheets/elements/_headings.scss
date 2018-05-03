@@ -1,0 +1,30 @@
+h1,
+.h1 {
+  @include open-sans-condensed-bold;
+  font-size: rem(32px);
+  margin-bottom: space(4);
+}
+
+h2,
+.h2 {
+  @include open-sans-bold;
+  font-size: rem(20px);
+  color: $brand-primary;
+  text-transform: uppercase;
+}
+
+h3,
+.h3 {
+  @include open-sans-condensed-bold;
+  font-size: rem(15px);
+  text-transform: uppercase;
+}
+
+h4,
+.h4 {
+  @include open-sans-light;
+  font-size: rem(12px);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 0;
+}

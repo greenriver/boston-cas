@@ -23,14 +23,14 @@
     .col-sm-9
       .row
         .col-sm-3
-          .detail-box--label Program
+          %h3.detail-box--label Program
           .detail-box--value
-          .detail-box--label Sub-Grantee
+          %h3.detail-box--label Sub-Grantee
           .detail-box--value
-          .detail-box--label Sub-Contractor
+          %h3.detail-box--label Sub-Contractor
           .detail-box--value
         .col-sm-3
-          .detail-box--label= "#{Building.model_name.human}"
+          %h3.detail-box--label= "#{Building.model_name.human}"
           .detail-box--value
             Walnut Park
             %br
@@ -38,25 +38,25 @@
             %br
             Boston, MA 02119
         .col-sm-2
-          .detail-box--label Unit
+          %h3.detail-box--label Unit
           .detail-box--value 243-B
         .col-sm-4
-          .detail-box--label Client
+          %h3.detail-box--label Client
           .detail-box--value
             =link_to 'Ronnie Romero', '#'
       .row
         .col-sm-5
-          .detail-box--label Services
+          %h3.detail-box--label Services
           .detail-box--value
             Addiction Support Services
             %br
             Mental Health Services
         .col-sm-7
-          .detail-box--label Rules
+          %h3.detail-box--label Rules
           .detail-box--value
             Must be mental health services eligible
     .col-sm-3
-      .detail-box--label Shelter Agency Contact
+      %h3.detail-box--label Shelter Agency Contact
       .detail-box--value
         Leroy Bass
         %br
@@ -65,7 +65,7 @@
         =link_to 'leroybass@pinestreetinn.org', 'mailto:leroybass@pinestreetinn.org'
         %br
         617.555.1212
-      .detail-box--label
+      %h3.detail-box--label
         = "#{_('Housing Subsidy Administrator')}"
       .detail-box--value
         Bertha Carter

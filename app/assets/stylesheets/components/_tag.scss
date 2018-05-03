@@ -1,0 +1,73 @@
+$tag-height: 37px;
+$tag-correction: $tag-height / 2;
+
+.c-tag {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 0 0 auto;
+}
+
+.c-tag__title {
+  @include open-sans-light;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.c-tag__wrapper {
+  display: flex;
+}
+
+.c-tag__icon {
+  height: $tag-height;
+  width: $tag-height;
+  box-shadow: 0 0 0 2px $body-bg;
+  background: $brand-success-l;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: rem($tag-height - 15);
+  &--sm {
+    font-size: rem($tag-height - 21);
+  }
+}
+
+.c-tag__content {
+  height: $tag-height;
+  min-width: rem(175px);
+  @include open-sans-bold;
+  font-size: 18px;
+  text-transform: uppercase;
+  background: $brand-success-l;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: space(3);
+  padding-left: rem(40px + $tag-correction);
+  transform: translateX($tag-correction * -1);
+  z-index: 1;
+  border-radius: rem(2px);
+  margin-right: (-$tag-correction);
+}
+
+.c-tag__icon,
+.c-tag__content span {
+  color: rgba($black, .6);
+}
+
+$tag-types: (
+  success: $brand-success-l,
+  warning: $brand-warning-l,
+  danger: $brand-danger-l
+);
+
+@each $type, $color in $tag-types {
+  .c-tag--#{$type} {
+    .c-tag__content,
+    .c-tag__icon {
+      background-color: $color;
+    }
+  }
+}
