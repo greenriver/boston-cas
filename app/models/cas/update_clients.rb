@@ -77,7 +77,7 @@ module Cas
         substance_abuse_problem: project_client.substance_abuse?,
         veteran_status_id: project_client.veteran_status.to_i,
         veteran: project_client.veteran_status.to_i == 1,
-        vispdat_priority_score: calculate_vispdat_priority_score(project_client.vispdat_length_homeless_in_days, project_client.vispdat_score),
+        vispdat_priority_score: project_client.calculate_vispdat_priority_score,
         chronic_homeless: project_client.calculated_chronic_homelessness.to_i == 1,
         hiv_aids: project_client.hivaids_status.to_i == 1,
         chronic_health_problem: project_client.chronic_health_condition.to_i == 1,

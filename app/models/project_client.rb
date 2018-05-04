@@ -42,6 +42,16 @@ class ProjectClient < ActiveRecord::Base
     return true
   end
 
-  private
-
+  def calculate_vispdat_priority_score
+    vispdat_length_homeless_in_days ||= 0
+    vispdat_score ||= 0
+    vispdat_prioritized_days_score = if vispdat_length_homeless_in_days >= 730
+      730
+    elsif vispdat_length_homeless_in_days >= 365 && vispdat_score >= 8
+      365
+    else
+      0
+    end
+    vispdat_score + vispdat_prioritized_days_score
+  end
 end
