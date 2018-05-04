@@ -46,6 +46,9 @@ class Client < ActiveRecord::Base
   scope :unavailable, -> {
     where(available: false)
   }
+  scope :available, -> do
+    where(available: true)    
+  end
   scope :fully_matched, -> {
     where(available_candidate: false).
     where.not(id: active_in_match.select(:id))
