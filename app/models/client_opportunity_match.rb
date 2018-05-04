@@ -65,6 +65,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     )
   end
 
+  scope :in_process_or_complete, -> do
+    where(arel_table[:active].eq(true).or(arel_table[:closed].eq(true)))
+  end
+
 
   ######################
   # Contact Associations
