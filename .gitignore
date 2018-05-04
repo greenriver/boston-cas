@@ -50,6 +50,7 @@ bower.json
 /.envrc
 /.powrc
 /.env
+.env.*
 
 # warehouse data
 /var

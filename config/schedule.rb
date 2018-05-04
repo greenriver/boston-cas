@@ -18,7 +18,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-every 1.day, at: '1:00 am' do
+every 1.day, at: '5:00 am' do
   rake "cas:daily"
 end
 
@@ -31,7 +31,7 @@ every 5.minutes do
 end
 
 every 1.day, at: '6:00am' do
-  rake "warehouse:report"  
+  # rake "warehouse:report"  
 end
 
 every 1.day, at: '7:30am' do

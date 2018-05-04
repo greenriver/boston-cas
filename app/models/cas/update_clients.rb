@@ -176,22 +176,6 @@ module Cas
       end
     end
 
-    private
-
-    def calculate_vispdat_priority_score vispdat_length_homeless_in_days, vispdat_score
-      vispdat_length_homeless_in_days ||= 0
-      vispdat_score ||= 0
-      if vispdat_length_homeless_in_days >= 730 && vispdat_score >= 8
-        730 + vispdat_score
-      elsif vispdat_length_homeless_in_days >= 365 && vispdat_score >= 8
-        365 + vispdat_score
-      elsif vispdat_score >= 0 
-        vispdat_score
-      else 
-        0
-      end
-    end
-
     def needs_update?
       ProjectClient.where(needs_update: true).any?
     end
