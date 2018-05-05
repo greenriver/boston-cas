@@ -24,13 +24,17 @@ require 'capistrano/rails/migrations'
 unless ENV['NO_PASSENGER']
   require 'capistrano/passenger'
 end
-require 'capistrano/delayed_job'
+require "whenever/capistrano"
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
+require 'dotenv'
+Dotenv.load('.env', '.env.local')
+
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 
-require 'dotenv'
-Dotenv.load('.env', '.env.local')
+if ENV['DELAYED_JOB_SYSTEMD']!='true'
+  require 'capistrano/delayed_job'
+end

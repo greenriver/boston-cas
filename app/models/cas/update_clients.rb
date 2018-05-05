@@ -11,57 +11,10 @@ module Cas
         # 1. Any project client with an empty client_id
         # 2. Any project client with a client_id that doesn't have a corresponding client
         ProjectClient.transaction do
-          clients = Client.all.pluck(:id)
-          if clients.size == 0
-            to_add = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:id)
-            to_add += ProjectClient.where(sync_with_cas: true).pluck(:id)
-          else
-            project_clients = ProjectClient.where(calculated_chronic_homelessness: 1).pluck(:client_id)
-            project_clients += ProjectClient.where(sync_with_cas: true).pluck(:client_id)
-            missing_clients = ProjectClient.where(client_id: project_clients - clients).pluck(:id)
-            no_clients = ProjectClient.where(calculated_chronic_homelessness: 1).where(client_id: nil).pluck(:id)
-            no_clients += ProjectClient.where(sync_with_cas: true).where(client_id: nil).pluck(:id)
-            probably_clients = ProjectClient.where(sync_with_cas: 1).where.not(client_id: nil).order(client_id: :asc).pluck(:client_id)
-
-            to_add = (no_clients.uniq + missing_clients.uniq).uniq
-            to_delete = (clients - project_clients.uniq).uniq
-            to_update = (probably_clients + (project_clients.uniq & clients)).uniq
-          end
-          if to_delete.any?
-            Rails.logger.info "Removing #{to_delete.length} clients"
-            to_delete.uniq.each do |d|
-              Client.where(id: d).each do |c|
-                c.destroy unless c.active_in_match?
-              end
-            end
-          end
-          Rails.logger.info "Adding #{to_add.length} clients"
-          to_add.each do |a|
-            pc_attr = fetch_project_client(:id, a)
-            c = Client.create(pc_attr)
-            # make note of our new connection in project_clients
-            pc = ProjectClient.find(a)
-            pc.update_attributes(client_id: c.id)
-          end
-          if to_update.any?
-            Rails.logger.info "Updating #{to_update.length} clients"
-            to_update.each do |u|
-              pc_attr = fetch_project_client(:client_id, u)
-              next unless pc_attr
-              pc_attr.delete(:id)
-              c = Client.find_by(id: u)
-              # ignore available flag if this client has previously been merged
-              if c[:merged_into].present?
-                pc_attr.delete(:available)
-              end
-              vispdat_length_homeless_in_days = pc_attr[:vispdat_length_homeless_in_days]
-              vispdat_score = pc_attr[:vispdat_score]
-              pc_attr = pc_attr.merge(vispdat_priority_score: calculate_vispdat_priority_score(vispdat_length_homeless_in_days, vispdat_score))
-              pc_attr.delete(:vispdat_length_homeless_in_days)
-              c.update_attributes(pc_attr)
-            end
-          end
-
+          remove_unused_clients()
+          update_existing_clients()
+          add_missing_clients()
+          
           ProjectClient.update_all(needs_update: false)
         end
         fix_incorrect_available_candidate_clients()
@@ -72,42 +25,93 @@ module Cas
       end
     end
 
-    # Find anyone who should be marked as available_candidate, but for whatever reason isn't marked as such
-    def fix_incorrect_available_candidate_clients
-      MatchRoutes::Base.all_routes.each do |route|
-        clients = Client.available.not_parked.unavailable_in(route)
-        clients.each do |c|
-          if c.client_opportunity_matches.on_route(route).active.none? && c.client_opportunity_matches.success.none?
-            if c.client_opportunity_matches.on_route(route).count < Client.max_candidate_matches
-              c.make_available_in(match_route: route)
-            end
-          end
+    def update_existing_clients
+      count = ProjectClient.update_pending.count
+      puts "Updating #{count} clients"
+      ProjectClient.update_pending.each do |project_client|
+        client = project_client.client
+        attrs = attributes_for_client(project_client)
+        # Ignore merged clients
+        attrs.delete(:available) if client.merged_into.present?
+        client.update(attrs)
+        # make note of our new connection in project_clients
+        project_client.update(client_id: client.id)
+      end
+    end
+
+    def add_missing_clients
+      count = ProjectClient.needs_client.count
+      puts "Adding #{count} clients"
+      ProjectClient.needs_client.each do |project_client|
+        c = Client.create(attributes_for_client(project_client))
+        # make note of our new connection in project_clients
+        project_client.update(client_id: c.id)
+      end
+    end
+
+    def remove_unused_clients
+      clients = Client.available.pluck(:id)
+      project_client_client_ids = ProjectClient.available.has_client.pluck(:client_id)
+
+      clients_to_de_activate = clients - project_client_client_ids
+      puts "Deactivating or deleting #{clients_to_de_activate.count}"
+      Client.where(id: clients_to_de_activate).update_all(available: false)
+      Client.where(id: clients_to_de_activate).each do |client|
+        # remove anyone who never really participated
+        # everyone else just gets marked as available false
+        if client.client_opportunity_matches.in_process_or_complete.blank?
+          client.destroy
         end
       end
     end
 
-    private
-
-    def calculate_vispdat_priority_score vispdat_length_homeless_in_days, vispdat_score
-      vispdat_length_homeless_in_days ||= 0
-      vispdat_score ||= 0
-      if vispdat_length_homeless_in_days > 730 && vispdat_score >= 8
-        730 + vispdat_score
-      elsif vispdat_length_homeless_in_days >= 365 && vispdat_score >= 8
-        365 + vispdat_score
-      elsif vispdat_score >= 0 
-        vispdat_score
-      else 
-        0
+    def attributes_for_client project_client
+      client_attributes = {}
+      project_client_attributes.each do |attribute|
+        client_attributes[attribute] = project_client.send(attribute)
       end
+
+      # Fix up some discrepancies
+      {
+        available: project_client.available?,
+        substance_abuse_problem: project_client.substance_abuse?,
+        veteran_status_id: project_client.veteran_status.to_i,
+        veteran: project_client.veteran_status.to_i == 1,
+        chronic_homeless: project_client.calculated_chronic_homelessness.to_i == 1,
+        hiv_aids: project_client.hivaids_status.to_i == 1,
+        chronic_health_problem: project_client.chronic_health_condition.to_i == 1,
+        ssn_quality: project_client.ssn_quality_code,
+        date_of_birth_quality: project_client.dob_quality_code,
+        race_id: project_client.primary_race,
+        ethnicity_id: project_client.ethnicity,
+        gender_id: project_client.gender,
+      }.each do |key, value|
+        client_attributes[key] = value
+      end
+
+      client_attributes[:developmental_disability] = nil unless client_attributes[:developmental_disability].to_i == 1
+      
+      # remove non-matching column names
+      [
+        :vispdat_length_homeless_in_days,
+        :veteran_status,
+        :calculated_chronic_homelessness,
+        :hivaids_status,
+        :chronic_health_condition,
+        :ssn_quality_code,
+        :dob_quality_code,
+        :primary_race,
+        :ethnicity,
+        :gender,
+      ].each do |key|
+        client_attributes.delete(key)
+      end
+
+      client_attributes
     end
 
-    def needs_update?
-      ProjectClient.where(needs_update: true).any?
-    end
-
-    def fetch_project_client by, id
-      pc = ProjectClient.where(by => id).select(
+    def project_client_attributes
+      @project_client_attributes ||= [
         :first_name,
         :last_name,
         :ssn,
@@ -139,6 +143,7 @@ module Cas
         :housing_release_status,
         :vispdat_score,
         :vispdat_length_homeless_in_days,
+        :vispdat_priority_score,
         :us_citizen,
         :asylee,
         :ineligible_immigrant,
@@ -156,38 +161,23 @@ module Cas
         :sober_housing,
         :enrolled_project_ids,
         :active_cohort_ids
-      ).first
-      return false unless pc.present?
-      pc_attr = pc.attributes.map do |k,v|
-        [k.to_sym, v]
-      end.to_h
-      pc_attr[:available] = pc.available?
-      if pc_attr[:veteran_status] == '1'
-        pc_attr[:veteran] = 1
-      end
-      if pc_attr[:developmental_disability] != 1
-        pc_attr[:developmental_disability] = nil
-      end
-      pc_attr[:substance_abuse_problem] = pc.substance_abuse?
+      ]
+    end
 
-      # convert ProjectClient into Client format
-      {
-        chronic_homeless: :calculated_chronic_homelessness,
-        ssn_quality: :ssn_quality_code,
-        date_of_birth_quality: :dob_quality_code,
-        hiv_aids: :hivaids_status,
-        chronic_health_problem: :chronic_health_condition,
-        race_id: :primary_race,
-        ethnicity_id: :ethnicity,
-        veteran_status_id: :veteran_status,
-        gender_id: :gender,
-      }.each do |destination, source|
-        pc_attr[destination] = pc_attr[source]
-        pc_attr.delete(source)
-      end
-      pc_attr.delete(:id)
+    # Find anyone who should be marked as available_candidate, but for whatever reason isn't marked as such
+    def fix_incorrect_available_candidate_clients
+      MatchRoutes::Base.all_routes.each do |route|
+        clients = Client.available.not_parked.unavailable_in(route)
+        clients.each do |c|
+          if c.client_opportunity_matches.on_route(route).active.none? && c.client_opportunity_matches.success.none?
+            if c.client_opportunity_matches.on_route(route).count < Client.max_candidate_matches
+              c.make_available_in(match_route: route)
+            end
+          end
+        end
 
-      return pc_attr
+    def needs_update?
+      ProjectClient.where(needs_update: true).any?
     end
   end
 end
