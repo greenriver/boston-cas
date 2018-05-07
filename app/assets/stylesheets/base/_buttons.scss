@@ -12,27 +12,27 @@ button.close {
 }
 
 .btn-default {
-  color: $gray-060;
+  @extend .btn-light;
 }
 
-.btn-default:hover {
+/* .btn-default:hover {
   color: $gray-070;
 }
-
-.btn-default:active,
+ */
+/* .btn-default:active,
 .btn-default:focus,
 .btn-default:active:hover,
 .open > .btn-default.dropdown-toggle:focus {
   background-color: $gray-050;
   color: #FFF;
-}
+} */
 
 .open > .btn-default.dropdown-toggle {
   background-color: $gray-050;
   color: #FFF;
 }
 
-.btn-secondary {
+/* .btn-secondary {
   background-color: $gray-030;
   color: $text-color;
   border-color: $gray-030;
@@ -43,6 +43,33 @@ button.close {
   background-color: darken($gray-030, 10%);
   border-color: darken($gray-030, 10%);
   color: #000;
+} */
+
+.btn-success {
+  background: $brand-success-l;
+  border-color: $brand-success;
+  color: rgba($black, 65%);
+  &:hover {
+    background: darken($brand-success-l, 25%);
+  }
+}
+
+.btn-warning {
+  background: $brand-warning-l;
+  border-color: $brand-warning;
+  color: rgba($black, 65%);
+  &:hover {
+    background: darken($brand-warning-l, 25%);
+  }
+}
+
+.btn-danger {
+  background: $brand-danger-l;
+  border-color: $brand-danger;
+  color: rgba($black, 65%);
+  &:hover {
+    background: darken($brand-danger-l, 25%);
+  }
 }
 
 .btn-min-width-medium {

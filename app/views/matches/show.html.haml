@@ -26,7 +26,7 @@
 - if @notification.present?
   - history_path = notification_match_history_path(@notification, @match)
 
-%section.jDynamicHistory{data: {history_path: history_path }}
+.jDynamicHistory{data: {history_path: history_path }}
   = render 'matches/history', match: @match
 
 - if(params[:redirect] == "true")

@@ -20,5 +20,5 @@
     - if @match.can_create_overall_note?(access_context.current_contact)
       .btn-label.btn-label__primary
         &nbsp;
-      = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-light', data: {loads_in_pjax_modal: true} do
+      = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
         Add Note

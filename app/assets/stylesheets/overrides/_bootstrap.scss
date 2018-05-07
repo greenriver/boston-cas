@@ -38,3 +38,22 @@
     cursor: pointer;
   }
 }
+
+// Fix for deprecation in Bootstrap 4
+
+.input-group-addon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: $input-padding-y $input-padding-x;
+  border: 1px solid $input-border-color;
+  border-top-right-radius: $input-border-radius;
+  border-bottom-right-radius: $input-border-radius;
+  border-left: 0;
+  background: $brand-primary-ll;
+  &:hover {
+    background: $brand-primary;
+    color: $white;
+  }
+}

@@ -14,4 +14,26 @@ $nav-tabs-border-radius: 0;
 $link-color: $link-color;
 
 // Buttons
-$btn-padding-x: 1.25rem;
+$btn-padding-x: 2rem;
+$btn-padding-y: .6rem;
+
+$input-border-color: $brand-primary-l;
+
+$primary:       $brand-primary;
+$secondary:     $brand-secondary;
+$success:       $brand-success;
+$info:          $brand-info;
+$warning:       $brand-warning;
+$danger:        $brand-danger;
+
+$theme-colors: () !default;
+$theme-colors: map-merge((
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark
+), $theme-colors);

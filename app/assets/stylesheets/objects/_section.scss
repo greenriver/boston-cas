@@ -1,0 +1,20 @@
+.o-section {
+  margin-bottom: space(8);
+}
+
+.o-section header {
+  display: flex;
+  align-items: flex-end;
+}
+
+.o-section__title {
+
+}
+
+.o-section__note {
+  font-size: rem(13px)
+}
+
+.o-section__actions {
+  margin-left: auto;
+}

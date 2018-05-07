@@ -1,15 +1,14 @@
 = form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
 .jStillWorking.jWorkingWithClient
   = form.input :note, as: :text, hint: 'Please include any notes that would be useful for this match.  e.g. "Client needs an accessible unit."',input_html: {rows: 4, disabled: !(@decision.editable?)}
-    
-  = render 'match_decisions/decline_reason', form: form
 
+  = render 'match_decisions/decline_reason', form: form
 
   - if @match.client.release_of_information.blank? && @match.client.housing_release_status.blank?
     = form.input :release_of_information, as: :boolean, required: true, inline_label: 'Client has signed release of information to share their data with network partners'
   - elsif @match.client.release_of_information.present?
     %p
-      Client signed release of information to share their data with network partners on 
+      Client signed release of information to share their data with network partners on
       %strong
         = @match.client.release_of_information.to_date
     = form.input :release_of_information, as: :hidden, input_html: { value: @match.client.release_of_information}
@@ -17,7 +16,7 @@
     %p
       %strong
         = checkmark(true)
-        Client provided a 
+        Client provided a
         = _(@match.client.housing_release_status)
   = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{_('shelter case manager')} and understands the services attached and the program requirements"
   - if Config.get(:require_cori_release)
@@ -25,7 +24,7 @@
 
   .form-actions.clearfix
     = form.submit 'Indicate Interest in Match', class: 'btn btn-primary jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)
-    = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
+    = form.submit 'Decline Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
 
   %p
     The client does not need to be document-ready in order to indicate interest.

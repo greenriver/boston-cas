@@ -4,10 +4,10 @@
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       - if @decision.status.to_s == 'pending' && access_context.acknowledge_shelter_agency_notification?
         %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
-        = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)
+        = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)
       - else
         .row
-          .col-sm-6
+          .col-sm-6.p-3
             - if @match.shelter_expiration?
               - if can_reject_matches?
                 = render 'match_decisions/shelter_agency_expiration', form: form
@@ -25,7 +25,7 @@
                 = render 'match_decisions/shelter_agency_expiration', form: form
               = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
 
-          .col-sm-6
+          .col-sm-6.p-3
             - if can_reject_matches?
               .well
                 = render 'match_decisions/park_client', form: form
