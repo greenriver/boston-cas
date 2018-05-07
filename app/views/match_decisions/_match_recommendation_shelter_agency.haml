@@ -1,4 +1,4 @@
--# confirmation_text = 'By clicking "OK" you are confirming that you have spoken to the client regarding this specific housing opportunity and that the client understands the opportunity and has stated their interest.  You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client. \n\n For clients who only have a Limited CAS Release you are agreeing to refer to their match number and not their name when speaking with the Supportive Service Provider, Housing Subsidy Administrator, and/or Housing Search Provider. You may refer to them by name once a release has been signed. \n\n By clicking "OK" you are verifying that you are acting in accordance with the Boston HMIS Policies and Procedures found in the HMIS Handbook and in agreement with your signed HMIS User Agreement on file at your agency. Any violations may lead to user access termination and/or eventual employment termination. \n\n If any of the steps above still need to be completed, please click "cancel".'
+-# confirmation_text = 'By clicking 'OK' you are confirming that you have spoken to the client regarding this specific housing opportunity and that the client understands the opportunity and has stated their interest.  You are also confirming that, except for special cases confirmed by the Coordinated Access Manager, you have submitted a CORI release form that has been signed by the client. \n\n For clients who only have a Limited CAS Release you are agreeing to refer to their match number and not their name when speaking with the Supportive Service Provider, Housing Subsidy Administrator, and/or Housing Search Provider. You may refer to them by name once a release has been signed. \n\n By clicking 'OK' you are verifying that you are acting in accordance with the Boston HMIS Policies and Procedures found in the HMIS Handbook and in agreement with your signed HMIS User Agreement on file at your agency. Any violations may lead to user access termination and/or eventual employment termination. \n\n If any of the steps above still need to be completed, please click 'cancel'.'
 %section.match-decision.c-card.c-card--flush.card--block
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
@@ -6,33 +6,92 @@
         %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
         = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)
       - else
-        .row
-          .col-sm-6.p-3
-            - if @match.shelter_expiration?
-              - if can_reject_matches?
-                = render 'match_decisions/shelter_agency_expiration', form: form
-              - if @match.shelter_expiration >= Date.today
-                %p
-                  This match will expire if the client has not expressed interest in the match before
-                  %strong= "#{@match.shelter_expiration}."
-                = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
-              - else
-                %p
-                  This match expired on
-                  %strong= "#{@match.shelter_expiration}."
-            - else
-              - if can_reject_matches?
-                = render 'match_decisions/shelter_agency_expiration', form: form
-              = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
-
-          .col-sm-6.p-3
+        %section
+          - if @match.shelter_expiration?
             - if can_reject_matches?
-              .well
-                = render 'match_decisions/park_client', form: form
-                = render 'match_decisions/cancel_match_form_fields', form: form
-              .well
-                = render 'match_decisions/step_back', form: form
+              = render 'match_decisions/shelter_agency_expiration', form: form
+            - if @match.shelter_expiration >= Date.today
+              %p
+                This match will expire if the client has not expressed interest in the match before
+                %strong= "#{@match.shelter_expiration}."
+            - else
+              %p
+                This match expired on
+                %strong= "#{@match.shelter_expiration}."
+          - else
+            - if can_reject_matches?
+              = render 'match_decisions/shelter_agency_expiration', form: form
+
+          = form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jActionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
+          .jStillWorking.jWorkingWithClient
+
+        .o-choose.o-choose--flush
+          .o-choose__choice.jNoLongerWorkingContent{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--confirm
+                %h3 Accept Match
+            .o-choose__content
+              = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
+          .o-choose__choice.jStillWorkingContent.d-none{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--not-working
+                %h3 Not Working with Client
+            .o-choose__content
+              = render 'match_decisions/not_working_match_form_fields', form: form
+
+          - if can_reject_matches?
+            .o-choose__choice
+              %header.jMatchHeader
+                .o-choose__title
+                  .c-choice-icon.c-choice-icon--reject.jMatchActionIcon
+                  %h3.jMatchActionTitle Decline Match
+                %ul.o-choose__nav.nav.jMatchActionNav
+                  %li.nav-item
+                    %a.nav-link.active{href:'#decline-client', data: {toggle:'tab', type: 'reject', title: 'Decline Match'}, role:'tab', aria:{controls:'decline', selected:'true'}}
+                      %i.icon-cross
+                      Decline
+                  %li.nav-item
+                    %a.nav-link{href:'#cancel-client', data: {toggle:'tab', type: 'cancel', title: 'Cancel Match'}, role:'tab', aria:{controls:'cancel'}}
+                      %i.icon-minus-circle
+                      Cancel
+                  - if can_reject_matches?
+                    %li.nav-item
+                      %a.nav-link{href:'#park-client', data: {toggle:'tab', type: 'park', title: 'Park Match'}, role:'tab', aria:{controls:'park'}}
+                        %i.icon-clock
+                        Park
+              .o-choose__content
+                .tab-content
+                  #decline-client.tab-pane.active{role:'tabpanel', aria: {labelledby:'decline-client'}}
+                    = render 'match_decisions/decline_reason', form: form
+                    = form.submit 'Decline Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
+
+                  - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+                  #cancel-client.tab-pane{role:'tabpanel', aria: {labelledby:'cancel-client'}}
+                    = render 'match_decisions/cancel_match_form_fields', form: form
+                    = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+
+                  #park-client.tab-pane{role:'tabpanel', aria: {labelledby:'park-client'}}
+                    = render 'match_decisions/park_client', form: form
+                    = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
+                    = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+
+                -# .well
+                -#   = render 'match_decisions/step_back', form: form
 
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
+    new App.Matches.ActionNav('.jMatchHeader')
+    $('.jActionToggle input').on('change', function() {
+      var value = $(this).val()
+      var noLongerWorking = 'addClass'
+      var stillWorking = 'removeClass'
+      if (value == 'jStillWorking') {
+        noLongerWorking = 'removeClass'
+        stillWorking = 'addClass'
+      }
+      $('.jNoLongerWorkingContent')[noLongerWorking]('d-none')
+      $('.jStillWorkingContent')[stillWorking]('d-none')
+    })

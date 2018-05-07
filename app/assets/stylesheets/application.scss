@@ -6,6 +6,7 @@
   'settings/variables',
   'settings/breakpoints',
   'settings/spacing',
+  'settings/icons',
   'settings/typography';
 
 // Tools
@@ -30,6 +31,7 @@
   'elements/dl',
   'elements/headings',
   'elements/html',
+  'elements/label',
   'elements/main',
   'elements/section';
 
@@ -41,6 +43,7 @@
 // (High-level items with minimal styling)
 @import
   'objects/card_grid',
+  'objects/choose',
   'objects/container',
   'objects/dashboard',
   'objects/list',

@@ -1,0 +1,19 @@
+label {
+  font-weight: 700;
+}
+
+.label-helper {
+  font-style: italic;
+  font-size: 90%;
+  font-weight: normal;
+  &--optional {
+    color: $brand-primary;
+  }
+  &--required {
+    color: $brand-danger;
+  }
+}
+
+.label--minor {
+  font-weight: normal;
+}

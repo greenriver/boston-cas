@@ -132,10 +132,11 @@ Rails.application.routes.draw do
   unless Rails.env.production?
     resource 'style_guide', only: :none do
       get 'dnd_match_review'
-      get 'match_contacts_modal'
       get 'icon_font'
+      get 'match_contacts_modal'
       get 'stepped_progress'
       get 'tags'
+      get 'typography'
     end
   end
 

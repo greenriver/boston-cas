@@ -1,8 +1,11 @@
 %section.match-decision.c-card.c-card--flush.card--block
   .c-card__content
     .button-row
-      %label.display-block * Add / Review Contacts for Match
+      %label
+        Add / Review Contacts for Match
+        %span.label-helper.label-helper--required
       %div.hint.margin-bottom-01 This step is required
+
       = link_to access_context.edit_match_contacts_path(@match), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
         %span.icon-plus
         Review Contacts for Match
@@ -12,57 +15,60 @@
           = @decision.errors.full_messages_for(:match_contacts).join ". "
     .button-row
       = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_alternate_matches_path(@match.opportunity), target: '_blank'
+
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
       .row
-        %section.col-sm-6.o-choice-block
-          %header.o-choice-block__header
-            %h3 Accept Match Recommendation
-          %label= "Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{_('Shelter Agency')} contact"
-          = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers'}
-          .form-actions.clearfix
-            - @decision.errors[:status].each do |error_message|
-              %p.error-block= error_message
-            - if ! @match.client.has_full_housing_release?
-              .alert.alert-danger
-                = link_to @match.client.full_name, client_path(@match.client)
-                Does not have a full housing release on file.
-          = form.submit 'Accept Match Recommendation', class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
+        .col-md-6
+          = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+      .o-choose.o-choose--flush
+        .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm
+              %h3 Accept Match Recommendation
+          .o-choose__content
+            %label
+              Expire Match
+              %span.label-helper.label-helper--optional optional
+            %p Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{_('Shelter Agency')} contact
+            .row
+              .col-md-6
+                = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers'}
+            .form-actions.clearfix
+              - @decision.errors[:status].each do |error_message|
+                %p.error-block= error_message
+              - if ! @match.client.has_full_housing_release?
+                .alert.alert-danger
+                  = link_to @match.client.full_name, client_path(@match.client)
+                  Does not have a full housing release on file.
+            = form.submit 'Accept Match Recommendation', class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
 
-        %section.col-sm-6.o-choice-block
-          %header.o-choice-block__header
-            %h3 Reject Match Recommendation
-          = render 'match_decisions/decline_reason', form: form
-          - if can_reject_matches?
-            .well
-              = render 'match_decisions/park_client', form: form
-          = form.submit 'Decline Match', class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
-
+        .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+          %header.jMatchHeader
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--reject.jMatchActionIcon
+              %h3.jMatchActionTitle Reject Match Recommendation
+            %ul.o-choose__nav.nav.jMatchActionNav
+              %li.nav-item
+                %a.nav-link{href:"#decline-client", data: {toggle:"tab", type: "reject", title: 'Reject Match Recommendation'}, role:"tab", aria:{controls:"decline", selected:"true"}}
+                  %i.icon-cross
+                  Decline
+              - if can_reject_matches?
+                %li.nav-item
+                  %a.nav-link{href:"#park-client", data: {toggle:"tab", type: "park", title: 'Park Match Recommendation'}, role:"tab", aria:{controls:"park", selected:"true"}}
+                    %i.icon-clock
+                    Park
+          .o-choose__content
+            .tab-content
+              .tab-pane.active{id:"decline-client", role:"tabpanel", aria: {labelledby:"decline-client"}}
+                = render 'match_decisions/decline_reason', form: form
+                = form.submit 'Decline Match', class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+              - if can_reject_matches?
+                .tab-pane{id:"park-client", role:"tabpanel", aria: {labelledby:"park-client"}}
+                  = render 'match_decisions/park_client', form: form
+                  = render 'match_decisions/decline_reason', form: form, client_action: 'park'
+                  = form.submit 'Park Match', class: 'btn btn-warning jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
 
         = content_for :page_js do
           :javascript
-            function update_button_states(e) {
-              var current_target_id = $(e.currentTarget).attr('id');
-
-              var shelter_expiration_present = $('#decision_shelter_expiration').val() != '';
-              if(shelter_expiration_present) {
-                $('.jAccept').prop('disabled', false);
-                $('.jDecline').prop('disabled', true);
-                $('.jButtonStateTriggers').not('#' + current_target_id).val('');
-              }
-
-              var prevent_matching_present = $('#decision_prevent_matching_until').val() != '' && $('#decision_prevent_matching_until').val() != undefined;
-              if(prevent_matching_present) {
-                $('.jAccept').prop('disabled', true);
-                $('.jDecline').prop('disabled', false);
-                $('.jButtonStateTriggers').not('#' + current_target_id).val('');
-              }
-
-              if(! shelter_expiration_present && ! prevent_matching_present) {
-                $('.jAccept').removeAttr('disabled');
-                $('.jDecline').removeAttr('disabled');
-              }
-            }
-
-            $('.jButtonStateTriggers').on("change", update_button_states);
-            $('.jButtonStateTriggers').trigger('change');
+            new App.Matches.ActionNav('.jMatchHeader')

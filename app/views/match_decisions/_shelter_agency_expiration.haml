@@ -1,4 +1,11 @@
 - unless @match.shelter_expiration
-  %label Expiration Date
-  = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
-  = form.submit 'Update Expiration Date', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
+  %p
+    This match currently has no expiration date.
+    %a{href: '#update-date', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
+      Add expiration date
+  #update-date.collapse
+    %label Expiration Date
+    .form-row
+      .col-md-6
+        = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
+    = form.submit 'Update Expiration Date', class: 'btn btn-light mb-6', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}

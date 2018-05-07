@@ -18,6 +18,7 @@ h3,
   @include open-sans-condensed-bold;
   font-size: rem(15px);
   text-transform: uppercase;
+  color: #6C6C6C; // TODO Replace with variable
 }
 
 .h4 {
