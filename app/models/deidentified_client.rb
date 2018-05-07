@@ -40,7 +40,7 @@ class DeidentifiedClient < ActiveRecord::Base
     ProjectClient.where(
       data_source_id: data_source_id).
       where.not(id_in_data_source: DeidentifiedClient.select(:id)).
-      destroy_all
+      delete_all
       
     # update or add for all DeidentifiedClients
     DeidentifiedClient.all.each do |deidentified_client|
