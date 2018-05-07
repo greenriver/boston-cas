@@ -52,6 +52,7 @@ class DeidentifiedClientsController < ApplicationController
     end
     
     def reject_empty_cohort_ids dirty_params
+      return dirty_params if dirty_params[:active_cohort_ids].blank?
       dirty_params[:active_cohort_ids].reject! { |r| r.blank? }
       dirty_params
     end
