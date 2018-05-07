@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 20180505235920) do
     t.boolean  "sober_housing",                                     default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
+    t.string   "client_identifier"
     t.integer  "assessment_score",                                  default: 0,     null: false
   end
 
@@ -227,7 +228,7 @@ ActiveRecord::Schema.define(version: 20180505235920) do
     t.string   "name"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.string   "db_itentifier"
+    t.string   "db_identifier"
   end
 
   create_table "date_of_birth_quality_codes", force: :cascade do |t|
@@ -236,6 +237,20 @@ ActiveRecord::Schema.define(version: 20180505235920) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "deidentified_clients", force: :cascade do |t|
+    t.string   "client_identifier"
+    t.integer  "assessment_score"
+    t.string   "agency"
+    t.string   "first_name",        default: "Anonymous"
+    t.string   "last_name",         default: "Anonymous"
+    t.jsonb    "active_cohort_ids"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "deidentified_clients", ["deleted_at"], name: "index_deidentified_clients_on_deleted_at", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -650,6 +665,7 @@ ActiveRecord::Schema.define(version: 20180505235920) do
     t.boolean  "sober_housing",                          default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
+    t.string   "client_identifier"
     t.integer  "vispdat_priority_score",                 default: 0
     t.integer  "assessment_score",                       default: 0,     null: false
   end
@@ -708,58 +724,61 @@ ActiveRecord::Schema.define(version: 20180505235920) do
   add_index "requirements", ["rule_id"], name: "index_requirements_on_rule_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
-    t.string   "name",                                                null: false
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
-    t.boolean  "can_view_all_clients",                default: false
-    t.boolean  "can_edit_all_clients",                default: false
-    t.boolean  "can_participate_in_matches",          default: false
-    t.boolean  "can_view_all_matches",                default: false
-    t.boolean  "can_see_alternate_matches",           default: false
-    t.boolean  "can_edit_match_contacts",             default: false
-    t.boolean  "can_approve_matches",                 default: false
-    t.boolean  "can_reject_matches",                  default: false
-    t.boolean  "can_act_on_behalf_of_match_contacts", default: false
-    t.boolean  "can_view_reports",                    default: false
-    t.boolean  "can_edit_roles",                      default: false
-    t.boolean  "can_edit_users",                      default: false
-    t.boolean  "can_view_full_ssn",                   default: false
-    t.boolean  "can_view_full_dob",                   default: false
-    t.boolean  "can_view_buildings",                  default: false
-    t.boolean  "can_edit_buildings",                  default: false
-    t.boolean  "can_view_funding_sources",            default: false
-    t.boolean  "can_edit_funding_sources",            default: false
-    t.boolean  "can_view_subgrantees",                default: false
-    t.boolean  "can_edit_subgrantees",                default: false
-    t.boolean  "can_view_vouchers",                   default: false
-    t.boolean  "can_edit_vouchers",                   default: false
-    t.boolean  "can_view_programs",                   default: false
-    t.boolean  "can_edit_programs",                   default: false
-    t.boolean  "can_view_opportunities",              default: false
-    t.boolean  "can_edit_opportunities",              default: false
-    t.boolean  "can_reissue_notifications",           default: false
-    t.boolean  "can_view_units",                      default: false
-    t.boolean  "can_edit_units",                      default: false
-    t.boolean  "can_add_vacancies",                   default: false
-    t.boolean  "can_view_contacts",                   default: false
-    t.boolean  "can_edit_contacts",                   default: false
-    t.boolean  "can_view_rule_list",                  default: false
-    t.boolean  "can_edit_rule_list",                  default: false
-    t.boolean  "can_view_available_services",         default: false
-    t.boolean  "can_edit_available_services",         default: false
-    t.boolean  "can_assign_services",                 default: false
-    t.boolean  "can_assign_requirements",             default: false
-    t.boolean  "can_view_dmh_eligibility",            default: false
-    t.boolean  "can_view_va_eligibility",             default: false, null: false
-    t.boolean  "can_view_hues_eligibility",           default: false, null: false
-    t.boolean  "can_become_other_users",              default: false
-    t.boolean  "can_view_client_confidentiality",     default: false, null: false
-    t.boolean  "can_view_hiv_positive_eligibility",   default: false
-    t.boolean  "can_view_own_closed_matches",         default: false
-    t.boolean  "can_edit_translations",               default: false
-    t.boolean  "can_view_vspdats",                    default: false
-    t.boolean  "can_manage_config",                   default: false
-    t.boolean  "can_create_overall_note",             default: false
+    t.string   "name",                                                    null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.boolean  "can_view_all_clients",                    default: false
+    t.boolean  "can_edit_all_clients",                    default: false
+    t.boolean  "can_participate_in_matches",              default: false
+    t.boolean  "can_view_all_matches",                    default: false
+    t.boolean  "can_see_alternate_matches",               default: false
+    t.boolean  "can_edit_match_contacts",                 default: false
+    t.boolean  "can_approve_matches",                     default: false
+    t.boolean  "can_reject_matches",                      default: false
+    t.boolean  "can_act_on_behalf_of_match_contacts",     default: false
+    t.boolean  "can_view_reports",                        default: false
+    t.boolean  "can_edit_roles",                          default: false
+    t.boolean  "can_edit_users",                          default: false
+    t.boolean  "can_view_full_ssn",                       default: false
+    t.boolean  "can_view_full_dob",                       default: false
+    t.boolean  "can_view_buildings",                      default: false
+    t.boolean  "can_edit_buildings",                      default: false
+    t.boolean  "can_view_funding_sources",                default: false
+    t.boolean  "can_edit_funding_sources",                default: false
+    t.boolean  "can_view_subgrantees",                    default: false
+    t.boolean  "can_edit_subgrantees",                    default: false
+    t.boolean  "can_view_vouchers",                       default: false
+    t.boolean  "can_edit_vouchers",                       default: false
+    t.boolean  "can_view_programs",                       default: false
+    t.boolean  "can_edit_programs",                       default: false
+    t.boolean  "can_view_opportunities",                  default: false
+    t.boolean  "can_edit_opportunities",                  default: false
+    t.boolean  "can_reissue_notifications",               default: false
+    t.boolean  "can_view_units",                          default: false
+    t.boolean  "can_edit_units",                          default: false
+    t.boolean  "can_add_vacancies",                       default: false
+    t.boolean  "can_view_contacts",                       default: false
+    t.boolean  "can_edit_contacts",                       default: false
+    t.boolean  "can_view_rule_list",                      default: false
+    t.boolean  "can_edit_rule_list",                      default: false
+    t.boolean  "can_view_available_services",             default: false
+    t.boolean  "can_edit_available_services",             default: false
+    t.boolean  "can_assign_services",                     default: false
+    t.boolean  "can_assign_requirements",                 default: false
+    t.boolean  "can_view_dmh_eligibility",                default: false
+    t.boolean  "can_view_va_eligibility",                 default: false, null: false
+    t.boolean  "can_view_hues_eligibility",               default: false, null: false
+    t.boolean  "can_become_other_users",                  default: false
+    t.boolean  "can_view_client_confidentiality",         default: false, null: false
+    t.boolean  "can_view_hiv_positive_eligibility",       default: false
+    t.boolean  "can_view_own_closed_matches",             default: false
+    t.boolean  "can_edit_translations",                   default: false
+    t.boolean  "can_view_vspdats",                        default: false
+    t.boolean  "can_manage_config",                       default: false
+    t.boolean  "can_create_overall_note",                 default: false
+    t.boolean  "can_enter_deidentified_clients",          default: false
+    t.boolean  "can_manage_deidentified_clients",         default: false
+    t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

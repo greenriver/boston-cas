@@ -122,6 +122,8 @@ Rails.application.routes.draw do
     get :operational
   end
   
+  resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy,]
+  
   resources :messages, only: [:show, :index] do
     collection do
       get :poll
