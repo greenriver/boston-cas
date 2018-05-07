@@ -8,6 +8,26 @@ class ProjectClient < ActiveRecord::Base
     joins(:data_source).merge(DataSource.where(id: data_source.id))
   end
 
+  scope :available, -> do
+    where(sync_with_cas: true)
+  end
+
+  scope :has_client, -> do
+    where.not(client_id: nil)
+  end
+
+  scope :needs_client, -> do
+    where(
+      arel_table[:client_id].eq(nil).or(
+        arel_table[:client_id].not_in(Client.pluck(:id))
+      )
+    )
+  end
+
+  scope :update_pending, -> do
+    where(needs_update: true)
+  end
+
   # Availability is now determined solely based on the manually set sync_with_cas 
   # column.  This generally maps to the chronically homeless list
   def available?
@@ -25,7 +45,4 @@ class ProjectClient < ActiveRecord::Base
     end
     return true
   end
-
-  private
-
 end

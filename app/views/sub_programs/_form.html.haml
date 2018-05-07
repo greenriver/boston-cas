@@ -1,19 +1,5 @@
 = simple_form_for [@program, @subprogram] do |f|
   = f.error_notification
-  .row
-    .col-sm-6
-      %h3
-        Program Details
-      %table.table
-        %tr
-          %th Name
-          %td= @program.name
-        %tr
-          %th Funding Source
-          %td= @program.funding_source_name
-        %tr
-          %th Contract Start Date
-          %td= @program.contract_start_date.try :strftime, '%m/%d/%Y'
 
   %h3 Sub-Program Details
   .form-inputs

@@ -216,12 +216,3 @@
           %tr
             %th HIV+
             %td= checkmark @client.hiv_positive
-
-  .col-sm-6
-    .row
-      .col-sm-12
-        = render 'potential_duplicates'
-    .row
-      .col-sm-12
-        - if @client.previously_merged?
-          = render 'previously_merged'

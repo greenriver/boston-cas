@@ -11,7 +11,7 @@ class Opportunity < ActiveRecord::Base
   belongs_to :unit, inverse_of: :opportunities
   belongs_to :voucher, inverse_of: :opportunity
 
-  delegate :sub_program, to: :voucher
+  has_one :sub_program, through: :voucher
 
   has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
   has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
@@ -27,6 +27,8 @@ class Opportunity < ActiveRecord::Base
     through: :opportunity_contacts,
     source: :contact
 
+  has_one :match_route, through: :sub_program
+
   attr_accessor :program, :building, :units
 
   scope :with_voucher, -> do
@@ -35,7 +37,18 @@ class Opportunity < ActiveRecord::Base
   scope :available_candidate, -> do
     where(available_candidate: true)
   end
+
+  scope :available_for_poaching, -> do
+    available_candidate_ids = Opportunity.available_candidate.pluck(:id)
+    unstarted_ids = Opportunity.joins(active_match: :match_recommendation_dnd_staff_decision).
+      merge(MatchDecisions::Base.pending).pluck(:id)
+    Opportunity.where(id: available_candidate_ids + unstarted_ids)
+  end
   # after_save :run_match_engine_if_newly_available
+
+  scope :on_route, -> (route) do
+    joins(sub_program: :program).merge(SubProgram.on_route(route))
+  end
 
   def self.text_search(text)
     return none unless text.present?
@@ -54,6 +67,14 @@ class Opportunity < ActiveRecord::Base
     )
   end
 
+  def self.available_as_candidate
+    where(available_candidate: true)
+  end
+
+  def self.ready_to_match
+    available_as_candidate.matchable
+  end
+
   def self.max_candidate_matches
     20
   end
@@ -65,7 +86,7 @@ class Opportunity < ActiveRecord::Base
   def self.associations_adding_services
     [:unit, :voucher]
   end
-  
+
   def opportunity_details
     @_opportunity_detail ||= OpportunityDetails.build self
   end
@@ -78,7 +99,7 @@ class Opportunity < ActiveRecord::Base
 
   def prioritized_matches
     c_t = Client.arel_table
-    case Config.get(:engine_mode)
+    case match_route.match_prioritization.class.slug
     when 'first-date-homeless'
       client_opportunity_matches.joins(:client).
         order(c_t[:calculated_first_homeless_night].asc)
@@ -93,12 +114,22 @@ class Opportunity < ActiveRecord::Base
         where.not(clients: {vispdat_score: nil}).
         order(c_t[:vispdat_score].desc)
     when 'vispdat-priority-score'
-      client_opportunity_matches.joins(:client)
-        .where.not(clients: { vispdat_priority_score: nil }) 
-        .order(c_t[:vispdat_priority_score].desc) 
+      client_opportunity_matches.joins(:client).
+        where.not(clients: { vispdat_priority_score: nil }).
+        order(c_t[:vispdat_priority_score].desc)
+    when 'assessment-score'
+      client_opportunity_matches.joins(:client).
+        where.not(clients: { assessment_score: nil }).
+        order(assessment_score: :desc, days_homeless: :desc)
     else
       raise NotImplementedError
     end
+  end
+
+  def matches_client?(client)
+    requirements_with_inherited.map do |requirment|
+      requirment.clients_that_fit(Client.where(id: client.id)).exists?
+    end.all?
   end
 
   def self.available_stati
@@ -124,7 +155,8 @@ class Opportunity < ActiveRecord::Base
   def stop_matches_and_remove_entire_history_from_existance!
     Opportunity.transaction do
       client_opportunity_matches.each do |match|
-        match.client.update(available_candidate: true, available: true)
+        match.client.update(available: true)
+        match.client.make_unavailable_in(match_route: match_route)
         match.client_opportunity_match_contacts.destroy_all
         match.notifications.destroy_all
         match.destroy

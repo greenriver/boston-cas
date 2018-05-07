@@ -18,6 +18,7 @@ class SubProgram < ActiveRecord::Base
 
   has_many :vouchers
   has_many :file_tags
+  has_one :match_route, through: :program
 
   accepts_nested_attributes_for :program, :vouchers
   accepts_nested_attributes_for :file_tags, allow_destroy: true
@@ -26,6 +27,10 @@ class SubProgram < ActiveRecord::Base
   validates_presence_of :building, if: :has_buildings?
 
   scope :has_buildings, -> {where(program_type: SubProgram.have_buildings)}
+
+  scope :on_route, -> (route) do
+    joins(:program).merge(Program.on_route(route))
+  end
 
   def self.types
     [

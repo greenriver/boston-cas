@@ -2,7 +2,7 @@ module Warehouse
   class FlagHoused
     def run!
       processed = Warehouse::CasHoused.all
-      housed_in_cas = ClientOpportunityMatch.success
+      housed_in_cas = ClientOpportunityMatch.should_alert_warehouse
       to_add = housed_in_cas.where.not(id: processed.pluck(:match_id))
       to_add.each do |match|
         warehouse_client_id = match.client.project_client.id_in_data_source

@@ -74,6 +74,7 @@ class ProgramsController < ApplicationController
         :contract_start_date, 
         :funding_source_id, 
         :confidential,
+        :match_route_id,
         sub_programs_attributes: [
           :id, 
           :name, 

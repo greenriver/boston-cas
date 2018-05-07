@@ -13,10 +13,9 @@ Rails.application.routes.draw do
 
   resources :clients, only: [:index, :show, :update] do
     resources :contacts, except: :show, controller: :client_contacts, concerns: [:restorable]
-    patch 'split', on: :member
     patch :unavailable, on: :member
-    resources :duplicates, controller: 'client_duplicates', only: [:show, :update]
     resources :matches, controller: 'client_matches', only: :index
+    resources :qualified_opportunities, only: [:index, :update]
   end
   resources :opportunities do
     post 'restore'
@@ -84,6 +83,7 @@ Rails.application.routes.draw do
   resources :units, except: :show, concerns: [:restorable]
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
+      resource :contacts, only: [:edit, :update], controller: :program_contacts
       resources :vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection
         delete :unavailable, on: :member
@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     resources :configs, only: [:index] do
       patch :update, on: :collection
     end
+    resources :match_routes, only: [:index, :edit, :update]
   end
   resource :account, only: [:edit, :update]
   resources :resend_notification, only: [:show]

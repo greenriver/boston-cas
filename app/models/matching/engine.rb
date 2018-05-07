@@ -1,20 +1,20 @@
 class Matching::Engine
   class << self
-    def for_available_clients(opportunities)
-      new(available_clients, opportunities)
+    def for_available_clients(opportunities, match_route: )
+      new(available_clients(match_route: match_route), opportunities)
     end
 
-    def create_candidates
-      new(available_clients, available_opportunities).replace_candidates
+    def create_candidates match_route: 
+      new(available_clients(match_route: match_route), available_opportunities).replace_candidates
     end
 
-    def available_client_count
-      available_clients.size
+    def available_client_count match_route:
+      available_clients(match_route: match_route).size
     end
 
-    def available_clients
+    def available_clients match_route:
       # returns AR scope
-      Client.available_for_matching
+      Client.available_for_matching(match_route)
     end
 
     def available_opportunities
@@ -23,15 +23,6 @@ class Matching::Engine
       Opportunity.with_voucher.available_candidate
     end
 
-    def engine_modes
-      {
-        'First date homeless' => 'first-date-homeless',
-        'VI-SPDAT Score' => 'vi-spdat',
-        'Cumulative days homeless' => 'cumulative-homeless-days',
-        'Days homeless in the last three years' => 'homeless-days-last-three-years',
-        'Priority Score' => 'vispdat-priority-score'
-      }
-    end
   end
 
   attr_reader :clients, :opportunities
@@ -68,7 +59,7 @@ class Matching::Engine
     end
   end
 
-  def create_candidate_matches(opportunity)
+  def create_candidate_matches opportunity
     matches_left_to_max = opportunity.matches_left_to_max
 
     client_priority = 1
@@ -88,19 +79,23 @@ class Matching::Engine
     matches_left_to_max - opportunity.matches_left_to_max
   end
 
-  def clients_for_matches(opportunity)
-    opportunity.matching_co_candidates_for_max(prioritized_candidate_clients)
+  def clients_for_matches opportunity
+    opportunity.matching_co_candidates_for_max(prioritized_candidate_clients(match_route: opportunity.match_route))
   end
 
   def prioritized_candidate_opportunities
-    @_prioritized_candidate_opportunities ||= candidates(opportunities).order(:matchability)
+    @_prioritized_candidate_opportunities ||= opportunity_candidates(opportunities).order(:matchability)
   end
 
-  def prioritized_candidate_clients
-    @_prioritized_candidate_clients ||= candidates(clients).prioritized
+  def prioritized_candidate_clients match_route:
+    @_prioritized_candidate_clients = client_candidates(clients, match_route: match_route).prioritized(match_route: match_route)
   end
 
-  def candidates(subjects)
+  def opportunity_candidates subjects
     subjects.ready_to_match.eager_load(:candidate_matches)
+  end
+
+  def client_candidates subjects, match_route:
+    subjects.ready_to_match(match_route: match_route).eager_load(:candidate_matches)
   end
 end

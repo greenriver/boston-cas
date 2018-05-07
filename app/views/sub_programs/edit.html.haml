@@ -5,9 +5,12 @@
   .col-xs-6.button-row.margin-top-03.text-right
     = render 'status_blocks'
 .row
-  .col-xs-12
+  .col-xs-12.margin-bottom-02
     = render 'tab_navigation', active: 'edit'
-.row.margin-top-02
+
+= render 'program_details'
+
+.row
   .col-xs-8
     = render 'form'
 

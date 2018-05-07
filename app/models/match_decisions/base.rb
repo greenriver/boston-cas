@@ -17,6 +17,8 @@ module MatchDecisions
     
     belongs_to :match, class_name: 'ClientOpportunityMatch', inverse_of: :decisions
     belongs_to :contact
+    has_one :program, through: :match
+    has_one :match_route, through: :program
     
     # these need to be present on the base class for preloading
     # subclasses should include MatchDecisions::AcceptsDeclineReason
@@ -33,6 +35,12 @@ module MatchDecisions
     attr_accessor :shelter_expiration
 
     scope :pending, -> { where(status: :pending) }
+    scope :awaiting_action, -> do
+      where(status: [:pending, :acknowledged])
+    end
+    scope :last_updated_before, -> (date) do
+      where(arel_table[:updated_at].lteq(date))
+    end
     
     has_many :decision_action_events,
       class_name: MatchEvents::DecisionAction.name,
@@ -202,17 +210,17 @@ module MatchDecisions
     end
 
     def step_number
-      self.class.match_steps[self.class.name]
+      match_route.class.match_steps[self.class.name]
     end
 
     def previous_step
       return unless step_number.present?
-      previous_step_name = self.class.match_steps.invert[step_number - 1]
+      previous_step_name = match_route.class.match_steps.invert[step_number - 1]
       match.decisions.find_by(type: previous_step_name)
     end
 
     def next_step
-      next_step_name = self.class.match_steps.invert[step_number + 1]
+      next_step_name = match_route.class.match_steps.invert[step_number + 1]
       match.decisions.find_by(type: next_step_name)
     end
 
@@ -221,45 +229,7 @@ module MatchDecisions
         notification.create_for_match! match
       end
     end
-    
-    def self.available_sub_types_for_search
-      [
-        'MatchDecisions::MatchRecommendationDndStaff',
-        'MatchDecisions::MatchRecommendationShelterAgency',
-        'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
-        'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
-        'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
-        'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff',
-        'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
-        # 'MatchDecisions::RecordClientHousedDateShelterAgency',
-        'MatchDecisions::ConfirmMatchSuccessDndStaff',
-      ]
-    end
-    
-    def self.match_steps
-      {
-       'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
-      }
-    end
-
-    def self.match_steps_for_reporting
-      {
-       'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
-       'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff' => 6,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 7,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
-       }
-    end
-    
+        
     def self.closed_match_statuses
       [
         :declined,
@@ -268,12 +238,20 @@ module MatchDecisions
       ]
     end
 
+    def self.match_steps_for_reporting
+      MatchRoutes::Base.match_steps_for_reporting
+    end
+
+    def self.available_sub_types_for_search
+      MatchRoutes::Base.available_sub_types_for_search
+    end
+
     def self.filter_options
-      self.available_sub_types_for_search + self.stalled_match_filter_options
+      MatchRoutes::Base.filter_options
     end
 
     def self.stalled_match_filter_options
-      ['Stalled Matches - with response', 'Stalled Matches - awaiting response']
+      MatchRoutes::Base.stalled_match_filter_options
     end
 
     def canceled_status_label

@@ -1,7 +1,7 @@
 module Matching
   class Matchability
-    def self.update(opportunities)
-      engine = Engine.for_available_clients(opportunities)
+    def self.update(opportunities, match_route:)
+      engine = Engine.for_available_clients(opportunities, match_route: match_route)
       opportunities.each {|opportunity| new(opportunity, engine).update}
     end
 
@@ -15,7 +15,7 @@ module Matching
     end
 
     def current_value
-      matching_client_count.to_f / Matching::Engine.available_client_count
+      matching_client_count.to_f / Matching::Engine.available_client_count(match_route: @opportunity.match_route)
     end
 
     def matching_client_count

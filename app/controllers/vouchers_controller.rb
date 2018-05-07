@@ -42,7 +42,7 @@ class VouchersController < ApplicationController
       Client.transaction do
         matches.each do |m|
           unless m.closed?
-            m.client.update(available_candidate: true)
+            m.client.make_available_in(match_route: m.match_route)
             m.delete
           end
         end

@@ -14,12 +14,15 @@
     %li  
       %a{href: edit_program_sub_program_path(id: @subprogram.id)} Edit Sub-Program
 
-  
-
   - vouchers_active = (active == 'vouchers')
   %li{class: (vouchers_active && 'active'), role: 'presentation'}
     %a{href: program_sub_program_vouchers_path(sub_program_id: @subprogram.id)} 
       Vouchers/Units
+
+  - contacts_active = (active == 'contacts')
+  %li{class: (contacts_active && 'active'), role: 'presentation'}
+    %a{href: edit_program_sub_program_contacts_path(@program, @subprogram)} 
+      Default Contacts
 
   -# if active == 'matches'
     %li.active{role: 'presentation'}

@@ -1,0 +1,7 @@
+.row
+  .col-xs-12
+    .match-decision
+      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+        - if @decision.status.to_s == 'pending'
+          %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
+          = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) 
