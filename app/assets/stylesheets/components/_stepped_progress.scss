@@ -163,15 +163,12 @@ $step-border-color: #E1E1E1;
 }
 
 .c-stepped-progress__step--done .c-stepped-progress__step-link,
-.c-stepped-progress__step--final .c-stepped-progress__step-link {
+.c-stepped-progress__step--done .c-stepped-progress__step-link--static {
   &:after {
     @include icon;
-  }
-}
-
-.c-stepped-progress__step--done .c-stepped-progress__step-link {
-  &:after {
-    content: #{get-icon-code(checkmark)};
+    $check-code: get-icon-code(checkmark);
+    @debug $check-code;
+    content: '\ea10';
   }
 }
 
@@ -184,15 +181,23 @@ $step-border-color: #E1E1E1;
   transform: translateZ(0);
 }
 
-.c-stepped-progress__step--final .c-stepped-progress__step-link {
+.c-stepped-progress__step--final .c-stepped-progress__step-link,
+.c-stepped-progress__step--final .c-stepped-progress__step-link--static {
   &:after {
-    content: #{get-icon-code(house)};
+    @include icon;
+    /* $check-code: get-icon-code(house); */
+    content: '\e911';
   }
 }
 
 .c-stepped-progress__step--done .c-stepped-progress__step-number,
 .c-stepped-progress__step--final .c-stepped-progress__step-number {
   display: none;
+}
+
+.c-stepped-progress__step--done,
+.c-stepped-progress__step--final {
+  align-items: center;
 }
 
 .c-stepped-progress__step-number {
