@@ -19,12 +19,9 @@
           %header
             .o-choose__title
               .c-choice-icon.c-choice-icon--reject
-              %h3 Decline
+              %h3 Review Decline
           .o-choose__content
-            .form-actions
-              = form.submit 'Override Decline and Repeat Last Step', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden_returned'}, disabled: (!@decision.editable?)
-              = form.submit 'Override Decline and Move Forward', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)
-              = form.submit 'Accept Decline', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_confirmed'}, disabled: (!@decision.editable?)
+            = render 'match_decisions/decline_overrides'
 
 -# %section.match-decision.c-card.c-card--flush.card--block
   .c-card__content

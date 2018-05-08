@@ -1,8 +1,16 @@
 .form-actions {
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
   &--right {
     justify-content: flex-end;
+  }
+  &--stacked {
+    display: inline-flex;
+    flex-direction: column;
+    button {
+      margin-bottom: space(3);
+    }
   }
 }
 

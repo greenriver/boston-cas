@@ -2,10 +2,10 @@
   %header.jMatchHeader
     .o-choose__title
       .c-choice-icon.c-choice-icon--reject.jMatchActionIcon
-      %h3.jMatchActionTitle Reject Match Recommendation
+      %h3.jMatchActionTitle Decline Match Recommendation
     %ul.o-choose__nav.nav.jMatchActionNav
       %li.nav-item
-        %a.nav-link{href:"#decline-client", data: {toggle:"tab", type: "reject", title: 'Reject Match Recommendation'}, role:"tab", aria:{controls:"decline", selected:"true"}}
+        %a.nav-link{href:"#decline-client", data: {toggle:"tab", type: "reject", title: 'Decline Match Recommendation'}, role:"tab", aria:{controls:"decline", selected:"true"}}
           %i.icon-cross
           Decline
       %li.nav-item
@@ -20,7 +20,7 @@
           -# = form.submit 'Decline Match', class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
           %button{ class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?) }
             %i.icon-minus-circle
-            Park Match
+            Decline Match
       .tab-pane{id:"park-client", role:"tabpanel", aria: {labelledby:"park-client"}}
         = render 'match_decisions/park_client', form: form
         = render 'match_decisions/decline_reason', form: form, client_action: 'park'

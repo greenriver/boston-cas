@@ -2,7 +2,7 @@
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .o-choose.o-choose--flush.o-choose--flush-top
-        .o-choose__choice
+        .o-choose__choice{ class: ('o-choose__choice--100' unless can_reject_matches?)}
           %header
             .o-choose__title
               .c-choice-icon.c-choice-icon--confirm
@@ -22,7 +22,6 @@
               %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?}
                 %i.icon-checkmark
                 Continue Match
-
 
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form
