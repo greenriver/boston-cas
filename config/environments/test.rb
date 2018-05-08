@@ -50,5 +50,5 @@ Rails.application.configure do
   config.sandbox_email_mode = false
   
   # Devise requires a default URL
-  config.action_mailer.default_url_options = { host: "example.com", port: 443, protocol: :http }
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'] }
 end
