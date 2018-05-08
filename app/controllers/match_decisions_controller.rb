@@ -14,6 +14,7 @@ class MatchDecisionsController < ApplicationController
     @opportunity = @match.opportunity
     @program = @match.program
     @sub_program = @match.sub_program
+    @types = MatchRoutes::Base.match_steps
     if params[:notification_id].present?
       @notification = @access_context.notification
     end
