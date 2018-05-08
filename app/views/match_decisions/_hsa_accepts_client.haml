@@ -1,8 +1,9 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      .o-pre-choose.pb-1
+      .o-pre-choose
         %p After contacting the client and obtaining client consent to proceed and all necessary paperwork submit this form to indicate acceptance of the match for all parties.
+        = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
       .o-choose.o-choose--flush
         .o-choose__choice{ class: ('o-choose__choice--100' unless can_reject_matches?)}
           %header
@@ -10,7 +11,6 @@
               .c-choice-icon.c-choice-icon--confirm
               %h3 Accept Match Recommendation
           .o-choose__content
-            = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
             %p
               %i.icon-info
               If accepted, all involved parties will be notified.

@@ -101,6 +101,12 @@ $step-border-color: #E1E1E1;
     }
   }
 
+  &--final {
+    &::before {
+      display: none;
+    }
+  }
+
 }
 
 .c-stepped-progress--sm {
