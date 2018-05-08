@@ -1,40 +1,37 @@
 %section.match-decision.c-card.c-card--flush.card--block
+  %p.mb-3 Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
+
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      .row
-        .col-sm-6
-          - if can_reject_matches?
-            %h3 Continue Match
-          .form-group
-            .radio
-              %label
-                = form.radio_button :status, :no_hearing
-                = _('A criminal background hearing is not necessary')
-            .radio
-              %label
-                = form.radio_button :status, :scheduled, disabled: ! @decision.editable?
-                = _('There will be a criminal background hearing')
-            .row
-              .form-group.form-group__indented-01
-                %label(for="decision_criminal_hearing_date")= _('Date and time of criminal background hearing')
-              .col-md-6.col-sm-6
-                .form-group.form-group__indented-01
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?), ( 'o-choose__choice--100' unless can_reject_matches?)]}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm
+              %h3 Continue Match
+          .o-choose__content
+            .form-group.jSelections
+              .radio
+                %label
+                  = form.radio_button :status, :no_hearing
+                  = _('A criminal background hearing is not necessary')
+              .radio
+                %label
+                  = form.radio_button :status, :scheduled, disabled: ! @decision.editable?, class: ''
+                  = _('There will be a criminal background hearing')
+            .jScheduled.d-none
+              %label(for="decision_criminal_hearing_date")= _('Date and time of criminal background hearing')
+              .row.form-group
+                .col-md-6
                   = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
 
-          = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
-          .form-actions.clearfix
-            = form.submit 'Submit', class: 'btn btn-primary jSubmit', disabled: !@decision.editable?
-        .col-sm-6
-          - if can_reject_matches?
-            %h3 Cancel Match
-            .well
-              = render 'match_decisions/park_client', form: form
-              = render 'match_decisions/cancel_match_form_fields', form: form
-            .well
-              = render 'match_decisions/step_back', form: form
+            = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+            .form-actions.clearfix
+              = form.submit 'Continue Match', class: 'btn btn-success jSubmit', disabled: !@decision.editable?
 
-      %p
-        Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
+        - if can_reject_matches?
+          = render 'match_decisions/cancel_actions', form: form
+
 = content_for :page_js do
   :javascript
     $('.date_time_picker').datetimepicker({
@@ -56,3 +53,11 @@
 
     $('#decision_prevent_matching_until').on("change", update_button_states);
     $('#decision_prevent_matching_until').trigger('change');
+
+    $('.jSelections input').on('change', function(){
+      var action = 'addClass'
+      if ($(this).val() === 'scheduled') {
+        action = 'removeClass'
+      }
+      $('.jScheduled')[action]('d-none')
+    });

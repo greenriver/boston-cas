@@ -1,0 +1,44 @@
+- action_message ||= ''
+
+.o-choose__choice
+  %header.jMatchHeader
+    .o-choose__title
+      .c-choice-icon.c-choice-icon--reject.jMatchActionIcon
+      %h3.jMatchActionTitle Decline Match
+    %ul.o-choose__nav.nav.jMatchActionNav
+      %li.nav-item
+        %a.nav-link.active{href:'#decline-client', data: {toggle:'tab', type: 'reject', title: 'Decline Match'}, role:'tab', aria:{controls:'decline', selected:'true'}}
+          %i.icon-cross
+          Decline
+      %li.nav-item
+        %a.nav-link{href:'#cancel-client', data: {toggle:'tab', type: 'cancel', title: 'Cancel Match'}, role:'tab', aria:{controls:'cancel'}}
+          %i.icon-minus-circle
+          Cancel
+      - if can_reject_matches?
+        %li.nav-item
+          %a.nav-link{href:'#park-client', data: {toggle:'tab', type: 'park', title: 'Park Match'}, role:'tab', aria:{controls:'park'}}
+            %i.icon-clock
+            Park
+  .o-choose__content
+    .tab-content
+      #decline-client.tab-pane.active{role:'tabpanel', aria: {labelledby:'decline-client'}}
+        = render 'match_decisions/decline_reason', form: form
+        - if action_message
+          %p
+            %i.icon-info
+            = action_message
+        = form.submit 'Decline Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
+
+      - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+      #cancel-client.tab-pane{role:'tabpanel', aria: {labelledby:'cancel-client'}}
+        = render 'match_decisions/cancel_match_form_fields', form: form
+        = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+
+      #park-client.tab-pane{role:'tabpanel', aria: {labelledby:'park-client'}}
+        = render 'match_decisions/park_client', form: form
+        = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
+        = form.submit 'Park Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+
+= content_for :page_js do
+  :javascript
+    new App.Matches.ActionNav('.jMatchHeader')

@@ -12,6 +12,10 @@ $choose-border-color: $gray-030;
     margin-right: -15px;
     margin-bottom: -15px;
   }
+  &--flush-top {
+    margin-top: -15px;
+    border-top: 0;
+  }
 }
 
 .o-choose__choice {

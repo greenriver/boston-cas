@@ -1,0 +1,27 @@
+.o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+  %header.jMatchHeader
+    .o-choose__title
+      .c-choice-icon.c-choice-icon--reject.jMatchActionIcon
+      %h3.jMatchActionTitle Reject Match Recommendation
+    %ul.o-choose__nav.nav.jMatchActionNav
+      %li.nav-item
+        %a.nav-link{href:"#decline-client", data: {toggle:"tab", type: "reject", title: 'Reject Match Recommendation'}, role:"tab", aria:{controls:"decline", selected:"true"}}
+          %i.icon-cross
+          Decline
+      %li.nav-item
+        %a.nav-link{href:"#park-client", data: {toggle:"tab", type: "park", title: 'Park Match Recommendation'}, role:"tab", aria:{controls:"park", selected:"true"}}
+          %i.icon-clock
+          Park
+  .o-choose__content
+    .tab-content
+      .tab-pane.active{id:"decline-client", role:"tabpanel", aria: {labelledby:"decline-client"}}
+        = render 'match_decisions/decline_reason', form: form
+        = form.submit 'Decline Match', class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+      .tab-pane{id:"park-client", role:"tabpanel", aria: {labelledby:"park-client"}}
+        = render 'match_decisions/park_client', form: form
+        = render 'match_decisions/decline_reason', form: form, client_action: 'park'
+        = form.submit 'Park Match', class: 'btn btn-warning jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+
+= content_for :page_js do
+  :javascript
+    new App.Matches.ActionNav('.jMatchHeader')
