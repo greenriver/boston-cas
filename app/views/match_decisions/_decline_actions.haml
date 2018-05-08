@@ -16,12 +16,21 @@
     .tab-content
       .tab-pane.active{id:"decline-client", role:"tabpanel", aria: {labelledby:"decline-client"}}
         = render 'match_decisions/decline_reason', form: form
-        = form.submit 'Decline Match', class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+        .form-actions.form-actions--right
+          -# = form.submit 'Decline Match', class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+          %button{ class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?) }
+            %i.icon-minus-circle
+            Park Match
       .tab-pane{id:"park-client", role:"tabpanel", aria: {labelledby:"park-client"}}
         = render 'match_decisions/park_client', form: form
         = render 'match_decisions/decline_reason', form: form, client_action: 'park'
-        = form.submit 'Park Match', class: 'btn btn-warning jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+        .form-actions.form-actions--right
+          -# = form.submit 'Park Match', class: 'btn btn-warning jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
+          %button{ class: 'btn btn-warning jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !@decision.editable? }
+            %i.icon-minus-circle
+            Park Match
 
 = content_for :page_js do
   :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
     new App.Matches.ActionNav('.jMatchHeader')

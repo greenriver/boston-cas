@@ -6,23 +6,23 @@
   }
 }
 
-
 .help-block {
   @include margin(0 0 8px 0);
+  @extend .label-helper;
+  margin-top: rem(-5px);
+  margin-bottom: space(2);
 }
+
 .requirement-warning {
   color: $brand-danger;
   @include open-sans-medium;
   @include padding(space(1) 0);
 }
+
 .form-actions {
-  clear: both;
   @include margin(10px null);
 }
-label {
-  color: $gray-070;
-  @include open-sans-medium;
-}
+
 .button-row {
   margin-bottom: 24px;
 }

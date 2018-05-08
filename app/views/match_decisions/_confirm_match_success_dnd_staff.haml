@@ -14,7 +14,10 @@
               %h3 Confirm Match
           .o-choose__content
             %p Confirming match success will complete the match and remove the client and voucher/unit from future matching.
-            = form.submit 'Confirm Match Success', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?)
+            -# = form.submit 'Confirm Match Success', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?)
+            %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?)}
+              %i.icon-checkmark
+              Confirm Match Success
 
         .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
           %header
@@ -23,4 +26,8 @@
               %h3 Reject Match
           .o-choose__content
             %p Rejecting the match will close it and return the client and voucher/unit to the available pool for future matching.
-            = form.submit 'Reject Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'rejected'}, disabled: !(@decision.editable?)
+            .form-actions.form-actions--right
+              -# = form.submit 'Reject Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'rejected'}, disabled: !(@decision.editable?)
+              %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'rejected'}, disabled: !(@decision.editable?)}
+                %i.icon-cross
+                Reject Match

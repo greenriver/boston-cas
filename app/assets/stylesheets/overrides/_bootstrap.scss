@@ -58,3 +58,9 @@
     color: $white;
   }
 }
+
+.control-label {
+  &:empty {
+    display: none;
+  }
+}

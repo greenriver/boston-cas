@@ -4,7 +4,12 @@
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       - if @decision.status.to_s == 'pending' && access_context.acknowledge_shelter_agency_notification?
         %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
-        = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)
+        -# = form.submit 'Acknowledge Receipt of Match Details', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)
+        %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)}
+          %i.icon-checkmark
+          Acknowledge Receipt of Match Details
+
+
       - else
         %section
           - if @match.shelter_expiration?
@@ -22,8 +27,7 @@
             - if can_reject_matches?
               = render 'match_decisions/shelter_agency_expiration', form: form
 
-          = form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jActionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
-          .jStillWorking.jWorkingWithClient
+          = form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jActionToggle'
 
         .o-choose.o-choose--flush
           .o-choose__choice.jNoLongerWorkingContent{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
@@ -46,8 +50,7 @@
 
 = content_for :page_js do
   :javascript
-    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
-    new App.Matches.ActionNav('.jMatchHeader')
+    $('.jActionToggle input').first().prop("checked", true)
     $('.jActionToggle input').on('change', function() {
       var value = $(this).val()
       var noLongerWorking = 'addClass'

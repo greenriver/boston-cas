@@ -27,39 +27,8 @@
               If the match is accepted, all involved parties will be notified.
 
             .form-actions
-              = form.submit 'Accept Match Recommendation', class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
-
+              %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
+                %i.icon-checkmark
+                Accept Match Recommendation
         - if can_reject_matches?
           = render 'match_decisions/decline_and_cancel_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'
-
-
-  -# .c-card__content
-    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      .o-choose.o-choose--flush.o-choose--flush-top
-        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?), ( 'o-choose__choice--100' unless can_reject_matches?)]}
-          %header
-            .o-choose__title
-              .c-choice-icon.c-choice-icon--confirm
-              %h3 Continue Match
-          .o-choose__content
-            .form-group
-              .radio
-                %label
-                  = form.radio_button :status, :no_hearing
-                  = _('A criminal background hearing is not necessary')
-              .radio
-                %label
-                  = form.radio_button :status, :scheduled, disabled: ! @decision.editable?
-                  = _('There will be a criminal background hearing')
-              .row
-                .form-group.form-group__indented-01
-                  %label(for="decision_criminal_hearing_date")= _('Date and time of criminal background hearing')
-                .col-md-6.col-sm-6
-                  .form-group.form-group__indented-01
-                    = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
-
-            = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
-            .form-actions.clearfix
-              = form.submit 'Continue Match', class: 'btn btn-success jSubmit', disabled: !@decision.editable?
-
-        - if can_reject_matches?

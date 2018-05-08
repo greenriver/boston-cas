@@ -25,6 +25,10 @@
   = "When you indicate interest, notification will be sent to the #{_('Housing Subsidy Administrator')}. If the #{_('HSA')} has a release, #{_('they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing.')}"
 
 .form-actions
-  = form.submit 'Indicate Interest in Match', class: 'btn btn-success jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)
+  -# = form.submit 'Indicate Interest in Match', class: 'btn btn-success jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)
+  %button{class: 'btn btn-success jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)}
+    %i.icon-checkmark
+    Indicate Interest in Match
+
 
 = render 'match_decisions/shelter_agency_agreement'

@@ -23,21 +23,32 @@
     .tab-content
       #decline-client.tab-pane.active{role:'tabpanel', aria: {labelledby:'decline-client'}}
         = render 'match_decisions/decline_reason', form: form
-        - if action_message
+        - if !action_message.empty?
           %p
             %i.icon-info
             = action_message
-        = form.submit 'Decline Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
+        .form-actions.form-actions--right
+          -# = form.submit 'Decline Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
+          %button{ class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?) }
+            %i.icon-cross
+            Decline Match
 
       - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
       #cancel-client.tab-pane{role:'tabpanel', aria: {labelledby:'cancel-client'}}
         = render 'match_decisions/cancel_match_form_fields', form: form
-        = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+        .form-actions.form-actions--right
+          -# = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+          %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
+            %i.icon-minus-circle
+            Cancel Match
 
       #park-client.tab-pane{role:'tabpanel', aria: {labelledby:'park-client'}}
         = render 'match_decisions/park_client', form: form
         = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
-        = form.submit 'Park Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
+        .form-actions.form-actions--right
+          %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
+            %i.icon-clock
+            Park Match
 
 = content_for :page_js do
   :javascript

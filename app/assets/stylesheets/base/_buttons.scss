@@ -5,6 +5,11 @@ button.close {
 
 .btn {
   @include open-sans-bold;
+  [class^='icon'] {
+    margin-right: space(2);
+  }
+  display: inline-flex;
+  align-items: baseline;
 }
 
 .btn-shout {

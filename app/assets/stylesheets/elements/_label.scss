@@ -1,10 +1,11 @@
 label {
-  font-weight: 700;
+  color: $gray-070;
+  @include open-sans-medium;
 }
 
 .label-helper {
   font-style: italic;
-  font-size: 90%;
+  font-size: 95%;
   font-weight: normal;
   &--optional {
     color: $brand-primary;
