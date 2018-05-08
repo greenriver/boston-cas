@@ -5,6 +5,35 @@
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .form-group
         .row
+          .col-md-6
+            = form.input :client_move_in_date, label: 'Date client will move in', as: :date_picker, disabled: !@decision.editable?
+
+      .row
+        .col-sm-8
+          .row.form-inputs
+            .col-md-8
+              = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--cancel
+              %h3 Cancel Match
+          .o-choose__content
+            = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
+            %p= "#{_('DND')} will receive notification of the housing date."
+
+        - if can_reject_matches?
+          = render 'match_decisions/cancel_actions', form: form
+
+-# .match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    %p
+      Please record the date the client moved in.
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .form-group
+        .row
           .col-xs-5
             = form.input :client_move_in_date, label: 'Date client will move in', as: :date_picker, disabled: !@decision.editable?
 
