@@ -32,9 +32,6 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
   config.active_job.queue_adapter = :test
   
-  # Devise requires a default URL
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'], protocol: :http }
-  
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
 
@@ -51,4 +48,7 @@ Rails.application.configure do
 
   # don't need email sandbox with test deliverer
   config.sandbox_email_mode = false
+  
+  # Devise requires a default URL
+  config.action_mailer.default_url_options = { host: "example.com", port: 443, protocol: :http }
 end
