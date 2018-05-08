@@ -9,10 +9,8 @@
     = link_to new_program_sub_program_path(@program), class: 'btn btn-primary pull-right' do
       %span.icon-plus
       Add a Sub-Program
-    
-.row.margin-top-02
-  .col-sm-12
-    = render 'sub_programs/tab_navigation', active: 'program_details'
+
+= render 'sub_programs/tab_navigation', active: 'program_details'
 .row.margin-top-02
   .col-sm-8
     = simple_form_for @program, url: form_url do |f|
@@ -22,7 +20,7 @@
           %span.icon-warning
           This program has
           = "#{pluralize other_sub_programs, 'other sub-program'}."
-          %br 
+          %br
           = "Any changes you make on this page, including changing rules or services will also affect the #{pluralize other_sub_programs, 'other sub-program'}.  It may make more sense to change the rules on the #{Building.model_name.human.downcase}, sub-grantee or service provider for the sub-program instead."
 
       .form-inputs
@@ -37,5 +35,3 @@
 = content_for :page_js do
   :javascript
     $('select').select2();
-    
-

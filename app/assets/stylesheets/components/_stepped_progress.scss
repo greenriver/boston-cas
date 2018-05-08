@@ -90,7 +90,17 @@ $step-border-color: #E1E1E1;
       height: 3px;
     }
   }
-  &--final { }
+
+  &--canceled {
+    color: $brand-danger;
+    background: $brand-danger-l;
+    border-color: $brand-danger-l;
+    &:hover {
+      color: $brand-danger;
+      background: $brand-danger-l;
+    }
+  }
+
 }
 
 .c-stepped-progress--sm {
@@ -117,6 +127,7 @@ $step-border-color: #E1E1E1;
       height: 2px;
       width: $progress-step-space-sm - 2;
       left: calc(100% + 3px);
+      top: calc(50% + 2px);
     }
   }
 
@@ -166,9 +177,7 @@ $step-border-color: #E1E1E1;
 .c-stepped-progress__step--done .c-stepped-progress__step-link--static {
   &:after {
     @include icon;
-    $check-code: get-icon-code(checkmark);
-    @debug $check-code;
-    content: '\ea10';
+    content: '#{map-get($icons, checkmark)}';
   }
 }
 
@@ -185,18 +194,27 @@ $step-border-color: #E1E1E1;
 .c-stepped-progress__step--final .c-stepped-progress__step-link--static {
   &:after {
     @include icon;
-    /* $check-code: get-icon-code(house); */
-    content: '\e911';
+    content: '#{map-get($icons, house)}';
+  }
+}
+
+.c-stepped-progress__step--canceled .c-stepped-progress__step-link,
+.c-stepped-progress__step--canceled .c-stepped-progress__step-link--static {
+  &:after {
+    @include icon;
+    content: '#{map-get($icons, cross)}';
   }
 }
 
 .c-stepped-progress__step--done .c-stepped-progress__step-number,
-.c-stepped-progress__step--final .c-stepped-progress__step-number {
+.c-stepped-progress__step--final .c-stepped-progress__step-number,
+.c-stepped-progress__step--canceled .c-stepped-progress__step-number {
   display: none;
 }
 
 .c-stepped-progress__step--done,
-.c-stepped-progress__step--final {
+.c-stepped-progress__step--final,
+.c-stepped-progress__step--canceled {
   align-items: center;
 }
 

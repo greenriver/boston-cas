@@ -43,6 +43,5 @@
 }
 
 @function get-icon-code($name) {
-  @debug map-get($icons, "#{$name}");
   @return map-get($icons, "#{$name}");
 }

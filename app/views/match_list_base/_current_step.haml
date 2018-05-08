@@ -1,10 +1,10 @@
 - match_route = match.match_route
-- types = @types[match_route.class.name]
+- types = match_step_types[match_route.class.name]
 - match_decisions = match.decisions.order(id: :asc).where(type: types.keys)
 - size ||= 'lg'
 - small_class = 'c-stepped-progress--sm'
 
-.d-flex.mb-2
+.d-flex
   %ol.c-stepped-progress{"step-count" => "#{match_decisions.count}", class: "#{small_class if size == 'sm'}"}
     - match_decisions.each do |decision|
       - decision_status = decision.incomplete_active_done?

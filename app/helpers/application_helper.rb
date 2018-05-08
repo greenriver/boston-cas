@@ -117,4 +117,8 @@ module ApplicationHelper
     false
   end
 
+  def match_step_types
+    MatchRoutes::Base.match_steps
+  end
+
 end

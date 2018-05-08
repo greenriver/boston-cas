@@ -37,3 +37,7 @@ $theme-colors: map-merge((
   "light":      $light,
   "dark":       $dark
 ), $theme-colors);
+
+// Tooltips
+$tooltip-font-size: 13px;
+$tooltip-max-width: 300px;

@@ -2,13 +2,12 @@
   Edit Contacts for #{@program.name}
 
 .row
-  .col-xs-12.margin-bottom-02
-    = render 'sub_programs/tab_navigation', active: 'contacts'
+  = render 'sub_programs/tab_navigation', active: 'contacts'
 - if @program_contacts.errors.any?
   .errors
     = @program_contacts.errors.full_messages.join ","
 %p
-  The following contacts will be automatically added to any match involving #{@program.name}.  
+  The following contacts will be automatically added to any match involving #{@program.name}.
 = simple_form_for @program_contacts, url: program_sub_program_contacts_path(@program, @subprogram), html: form_html_options.merge(class: 'current-step-form') do |form|
   = render 'contact_manager', contacts_type: 'shelter_agency', heading: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts", available_contacts_method: :available_shelter_agency_contacts, selected_contacts_method: :shelter_agency_contacts
 
@@ -24,7 +23,7 @@
 
   .form-actions.clearfix
     = form.submit "Save", class: 'btn btn-primary'
-  
+
 
 = content_for :page_js do
   :javascript
