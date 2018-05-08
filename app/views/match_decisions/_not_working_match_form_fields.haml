@@ -4,7 +4,6 @@
   .col-md-6
     = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
 .form-actions
-  -# = form.submit 'Not Working with Client', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)
   %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)}
     %i.icon-stop
     Not Working with Client

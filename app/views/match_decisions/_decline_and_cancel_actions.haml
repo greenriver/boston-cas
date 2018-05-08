@@ -28,7 +28,6 @@
             %i.icon-info
             = action_message
         .form-actions.form-actions--right
-          -# = form.submit 'Decline Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
           %button{ class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?) }
             %i.icon-cross
             Decline Match
@@ -37,7 +36,6 @@
       #cancel-client.tab-pane{role:'tabpanel', aria: {labelledby:'cancel-client'}}
         = render 'match_decisions/cancel_match_form_fields', form: form
         .form-actions.form-actions--right
-          -# = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
           %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
             %i.icon-minus-circle
             Cancel Match

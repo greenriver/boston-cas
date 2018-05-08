@@ -18,7 +18,6 @@
             %p
               = "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."
             .form-actions
-              -# = form.submit 'Continue Match', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
               %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?}
                 %i.icon-checkmark
                 Continue Match
