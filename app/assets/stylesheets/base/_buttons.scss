@@ -57,6 +57,12 @@ button.close {
   &:hover {
     background: darken($brand-success-l, 25%);
   }
+  &:disabled,
+  &.disabled {
+    background: desaturate($brand-success-l, 80%);
+    border-color: desaturate($brand-success, 80%);
+    color: rgba($black, .55);
+  }
 }
 
 .btn-warning {
@@ -66,6 +72,12 @@ button.close {
   &:hover {
     background: darken($brand-warning-l, 25%);
   }
+  &:disabled,
+  &.disabled {
+    background: desaturate($brand-warning-l, 80%);
+    border-color: desaturate($brand-warning, 80%);
+    color: rgba($black, .55);
+  }
 }
 
 .btn-danger {
@@ -74,6 +86,12 @@ button.close {
   color: rgba($black, 55%);
   &:hover {
     background: darken($brand-danger-l, 25%);
+  }
+  &:disabled,
+  &.disabled {
+    background: desaturate($brand-danger-l, 80%);
+    border-color: desaturate($brand-danger, 80%);
+    color: rgba($black, .55);
   }
 }
 

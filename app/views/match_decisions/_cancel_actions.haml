@@ -1,18 +1,21 @@
 .o-choose__choice
   %header.jMatchHeader
-    .o-choose__title
-      .c-choice-icon.c-choice-icon--cancel.jMatchActionIcon
-      %h3.jMatchActionTitle Cancel Match
     %ul.o-choose__nav.nav.jMatchActionNav
       %li.nav-item
-        %a.nav-link.active{href:'#cancel-client', data: {toggle:'tab', type: 'cancel', title: 'Cancel Match'}, role:'tab', aria:{controls:'cancel'}}
-          %i.icon-minus-circle
-          Cancel
+        %a.nav-link.active{href:'#cancel-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'cancel'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--cancel
+            %h3
+              %span Cancel
+              %span Match
       - if can_reject_matches?
         %li.nav-item
-          %a.nav-link{href:'#park-client', data: {toggle:'tab', type: 'park', title: 'Park Match'}, role:'tab', aria:{controls:'park'}}
-            %i.icon-clock
-            Park
+          %a.nav-link{href:'#park-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'park'}}
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--park
+              %h3
+                %span Park
+                %span Match
   .o-choose__content
     .tab-content
       - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}

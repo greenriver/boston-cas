@@ -63,12 +63,33 @@ $choose-border-color: $gray-030;
 }
 
 .o-choose__nav {
-  margin-left: auto;
   display: flex;
+  align-items: stretch;
+  align-self: stretch;
 }
 
 .o-choose__nav li {
   margin-right: space(3);
+  display: flex;
+  align-items: stretch;
+  &:not(:last-of-type) {
+    border-right: 1px solid $gray-025;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    padding: 0 space(4) 0 0;
+    transition: .25s opacity;
+    &.active {
+      pointer-events: none;
+    }
+    &:not(.active) {
+      opacity: .4;
+      &:hover {
+        opacity: .85;
+      }
+    }
+  }
 }
 
 .o-choose__title {
