@@ -57,6 +57,9 @@ class ClientsController < ApplicationController
               .count
 
     @active_filter = params[:availability].present? || params[:veteran].present?
+    
+    @available_clients = @clients.available
+    @unavailable_clients = @clients.unavailable
   end
 
   # GET /clients/1
