@@ -25,6 +25,8 @@ class MatchDecisionsController < ApplicationController
     @program = @match.program
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
+    @current_contact = current_contact
+    @match_contacts = @match.match_contacts
     if !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
@@ -108,6 +110,12 @@ class MatchDecisionsController < ApplicationController
       flash[:alert] = "Unable to recreate notifications for this step, it is now locked."
     end
   end
+
+  def cant_edit_self?
+    ! current_contact.user_can_edit_match_contacts? && hsa_can_edit_contacts?
+  end
+  helper_method :cant_edit_self?
+
 
   private
 

@@ -12,6 +12,9 @@
   margin-bottom: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
+  &:empty {
+    margin: 0;
+  }
 }
 .detail-box--header {
   @include margin(18px null 0);

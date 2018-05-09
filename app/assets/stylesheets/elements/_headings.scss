@@ -18,7 +18,7 @@ h3,
   @include open-sans-condensed-bold;
   font-size: rem(16px);
   text-transform: uppercase;
-  color: #6C6C6C; // TODO Replace with variable
+  color: $heading-color;
 }
 
 .h4 {

@@ -7,35 +7,31 @@
         %h3.h3.mb-3
           Add / Review Contacts for Match
 
-          -# = link_to access_context.edit_match_contacts_path(@match), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
-          -#   %span.icon-plus
-          -#   Review Contacts for Match
-          -# - if @decision.errors[:match_contacts].present?
-          -#   .requirement-warning
-          -#     %span.icon-warning
-          -#     = @decision.errors.full_messages_for(:match_contacts).join ". "
+        - if @decision.errors[:match_contacts].present?
+          .requirement-warning.mb-4
+            %span.icon-warning
+            = @decision.errors.full_messages_for(:match_contacts).join ". "
 
-        = simple_form_for @match_contacts, url: access_context.match_contacts_path(@match), html: form_html_options.merge(class: 'current-step-form') do |form|
-          .row
-            .col-sm-6
-              = render 'match_contacts/contact_manager', contacts_type: 'shelter_agency', heading: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts", available_contacts_method: :available_shelter_agency_contacts, selected_contacts_method: :shelter_agency_contacts, required: true
+        .row
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'shelter_agency', heading: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts", available_contacts_method: :available_shelter_agency_contacts, selected_contacts_method: :shelter_agency_contacts, required: true
 
-            .col-sm-6
-              = render 'match_contacts/contact_manager', contacts_type: 'client', heading: 'Client Contacts', available_contacts_method: :available_client_contacts, selected_contacts_method: :client_contacts, required: false
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'client', heading: 'Client Contacts', available_contacts_method: :available_client_contacts, selected_contacts_method: :client_contacts, required: false
 
-          .row
-            .col-sm-6
-              = render 'match_contacts/contact_manager', contacts_type: 'dnd_staff', heading: "#{_('DND')} Staff Contacts", available_contacts_method: :available_dnd_staff_contacts, selected_contacts_method: :dnd_staff_contacts, required: true
+        .row
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'dnd_staff', heading: "#{_('DND')} Staff Contacts", available_contacts_method: :available_dnd_staff_contacts, selected_contacts_method: :dnd_staff_contacts, required: true
 
-            .col-sm-6
-              = render 'match_contacts/contact_manager', contacts_type: 'housing_subsidy_admin', heading: "#{_('Housing Subsidy Administrator')} Contacts", available_contacts_method: :available_housing_subsidy_admin_contacts, selected_contacts_method: :housing_subsidy_admin_contacts, required: true
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'housing_subsidy_admin', heading: "#{_('Housing Subsidy Administrator')} Contacts", available_contacts_method: :available_housing_subsidy_admin_contacts, selected_contacts_method: :housing_subsidy_admin_contacts, required: true
 
-          .row
-            .col-sm-6
-              = render 'match_contacts/contact_manager', contacts_type: 'ssp', heading: "#{_('Stabilization Service Provider')}", available_contacts_method: :available_ssp_contacts, selected_contacts_method: :ssp_contacts, required: false
+        .row
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'ssp', heading: "#{_('Stabilization Service Provider')}", available_contacts_method: :available_ssp_contacts, selected_contacts_method: :ssp_contacts, required: false
 
-            .col-sm-6
-              = render 'match_contacts/contact_manager', contacts_type: 'hsp', heading: "#{_('Housing Search Provider')}", available_contacts_method: :available_hsp_contacts, selected_contacts_method: :hsp_contacts, required: false
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'hsp', heading: "#{_('Housing Search Provider')}", available_contacts_method: :available_hsp_contacts, selected_contacts_method: :hsp_contacts, required: false
 
         .row
           .col-md-6
@@ -45,7 +41,7 @@
           %header
             .o-choose__title
               .c-choice-icon.c-choice-icon--confirm
-              %h3 Accept Match Recommendation
+              %h3 Accept Match
           .o-choose__content
             %label
               Expire Match
@@ -64,7 +60,7 @@
             .form-actions
               %button{class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)}
                 %i.icon-checkmark
-                Accept Match Recommendation
+                Accept Match
 
         - if can_reject_matches?
           = render 'match_decisions/decline_actions', form: form

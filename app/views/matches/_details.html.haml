@@ -19,17 +19,17 @@
   .c-card.c-card--flush
     -# These label/value pairs can all be displayed conditionally if present
     .c-card__content
-      .row
-        .col-sm-3
+      .c-detail-group.row
+        .col-sm-4.c-detail-group.c-detail-group--stacked.c-detail-group--bordered
           = render 'matches/program_details', match: match
           = render 'matches/services', match: match
-        .col-sm-3
+        .col-sm-4.c-detail-group.c-detail-group--stacked.c-detail-group--bordered
           = render 'matches/building_details', match: match
           = render 'matches/rules', match: match
-        .col-sm-3
+        .col-sm-4.c-detail-group.c-detail-group--stacked
           = render 'matches/client_details', match: match
           - if @show_files
             = render 'matches/client_files', match: match
           = render 'matches/active_matches', match: match
-        .col-sm-3
-          = render 'matches/contacts', match: match
+
+      = render 'matches/contacts', match: match
