@@ -8,13 +8,6 @@
             %h3.jMatchActionTitle
               %span Decline
               %span Match
-      %li.nav-item
-        %a.nav-link{href:"#park-client", data: {toggle:"tab"}, role:"tab", aria:{controls:"park", selected:"true"}}
-          .o-choose__title
-            .c-choice-icon.c-choice-icon--park
-            %h3.jMatchActionTitle
-              %span Park
-              %span Match
   .o-choose__content
     .tab-content
       .tab-pane.active{id:"decline-client", role:"tabpanel", aria: {labelledby:"decline-client"}}
@@ -23,13 +16,6 @@
           %button{ class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?) }
             %i.icon-cross
             Decline Match
-      .tab-pane{id:"park-client", role:"tabpanel", aria: {labelledby:"park-client"}}
-        = render 'match_decisions/park_client', form: form
-        = render 'match_decisions/decline_reason', form: form, client_action: 'park'
-        .form-actions.form-actions--right
-          %button{ class: 'btn btn-warning jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !@decision.editable? }
-            %i.icon-clock
-            Park Match
 
 = content_for :page_js do
   :javascript

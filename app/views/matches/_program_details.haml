@@ -1,6 +1,7 @@
-%h3.detail-box--label Match Route
-.detail-box--value
-  = @program.match_route.title
+- if MatchRoutes::Base.more_than_one?
+  %h3.detail-box--label Match Route
+  .detail-box--value
+    = @program.match_route.title
 %h3.detail-box--label Funding Source
 .detail-box--value
   = @program.funding_source.name
