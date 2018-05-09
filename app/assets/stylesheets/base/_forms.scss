@@ -81,13 +81,6 @@
   text-decoration: none;
   color: darken($text-color, 15);
 }
-.selected-contact {
-  margin: 10px;
-}
-.selected-contact--remove-link:hover,
-.selected-contact--remove-link:focus {
-  text-decoration: none;
-}
 .input__button-size {
   padding: 6px 12px;
   border: 1px solid $gray-030;

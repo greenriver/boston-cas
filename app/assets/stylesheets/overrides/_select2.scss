@@ -1,0 +1,20 @@
+.select2-container--bootstrap.select2-container--focus .select2-selection,
+.select2-container--bootstrap.select2-container--open .select2-selection,
+.select2-container--bootstrap .select2-selection--single {
+  @extend .form-control;
+  box-shadow: none;
+  border-color: $input-border-color;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.select2-container--bootstrap .select2-results__option--highlighted[aria-selected] {
+  background-color: $brand-primary;
+}
+
+.select2-container--bootstrap .select2-search--dropdown .select2-search__field {
+  @extend .form-control;
+  min-height: rem(40px);
+  margrin-bottom: space(2);
+}

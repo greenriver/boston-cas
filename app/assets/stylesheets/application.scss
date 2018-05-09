@@ -55,6 +55,7 @@
 @import
   'components/card',
   'components/choice_icon',
+  'components/contact_list',
   'components/separator',
   'components/stepped_progress',
   'components/tag';
@@ -82,7 +83,8 @@
 
 // Overrides
 @import
-  'overrides/bootstrap';
+  'overrides/bootstrap',
+  'overrides/select2';
 
 
 .utility {

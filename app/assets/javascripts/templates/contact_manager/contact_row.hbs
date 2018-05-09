@@ -1,9 +1,11 @@
-<div class="selected-contact" data-contact-row data-contact-id="{{contact.id}}">
+<li class="selected-contact c-contact-list__contact" data-contact-row data-contact-id="{{contact.id}}">
   <input type="hidden" name="{{input_name_prefix}}[]" value="{{contact.id}}">
-  <a href="#" class="selected-contact--remove-link" data-remove-contact-link="{{contact.id}}">
+  <div class="c-contact-list__details">
+    <span>{{contact.name}}</span>
+    <span>{{contact.email}}</span>
+    <span>{{contact.phone}}</span>
+  </div>
+  <a href="#" class="c-contact-list__remove selected-contact--remove-link" data-remove-contact-link="{{contact.id}}">
     <span class="icon-cross"></span>
   </a>
-  {{contact.name}}
-  {{contact.email}}
-  {{contact.phone}}    
-</div>
+</li>

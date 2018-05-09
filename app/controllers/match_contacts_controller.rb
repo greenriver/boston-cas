@@ -11,7 +11,7 @@ class MatchContactsController < ApplicationController
   def edit
     @current_contact = current_contact
   end
-  
+
   def update
     if @match_contacts.update match_contacts_params
       MatchProgressUpdates::Base.update_status_updates @match_contacts
@@ -23,21 +23,21 @@ class MatchContactsController < ApplicationController
       render :edit
     end
   end
-  
+
   private
-  
+
     def match_scope
       ClientOpportunityMatch.all
     end
-  
+
     def set_match
       @match = match_scope.find params[:match_id]
     end
-  
+
     def set_match_contacts
       @match_contacts = @match.match_contacts
     end
-    
+
     def match_contacts_params
       base_params = params[:match_contacts] || ActionController::Parameters.new
       base_params.permit(
@@ -69,7 +69,7 @@ class MatchContactsController < ApplicationController
         end
       end
     end
-    
+
     def require_current_contact_can_edit_match_contacts!
       not_authorized! unless current_contact.user_can_edit_match_contacts? || hsa_can_edit_contacts?
     end
@@ -78,10 +78,10 @@ class MatchContactsController < ApplicationController
       @match.contacts_editable_by_hsa && current_contact.in?(@match.housing_subsidy_admin_contacts)
     end
     helper_method :hsa_can_edit_contacts?
-    
+
     def cant_edit_self?
       ! current_contact.user_can_edit_match_contacts? && hsa_can_edit_contacts?
     end
     helper_method :cant_edit_self?
-  
+
 end
