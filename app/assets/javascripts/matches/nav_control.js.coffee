@@ -10,7 +10,6 @@ class App.Matches.ActionNav
     $icon = $(@element).find('.jMatchActionIcon')
     $icon.removeClass().addClass("jMatchActionIcon c-choice-icon c-choice-icon--#{tabData.type}")
     $title.text(tabData.title)
-    console.log $title, $icon, @element
 
   addListeners: ->
     $(@element).on('click', '.nav-link', @changeTab.bind(@))
