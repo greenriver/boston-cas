@@ -27,6 +27,11 @@ class MatchDecisionsController < ApplicationController
     @types = MatchRoutes::Base.match_steps
     @current_contact = current_contact
     @match_contacts = @match.match_contacts
+
+    if @match_contacts.update match_contacts_params
+      MatchProgressUpdates::Base.update_status_updates @match_contacts
+    end
+
     if !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
@@ -148,5 +153,38 @@ class MatchDecisionsController < ApplicationController
     def decision_params
       @decision.whitelist_params_for_update params
     end
+
+    def match_contacts_params
+      base_params = params[:match_contacts] || ActionController::Parameters.new
+      base_params.permit(
+        shelter_agency_contact_ids: [],
+        housing_subsidy_admin_contact_ids: [],
+        dnd_staff_contact_ids: [],
+        client_contact_ids: [],
+        ssp_contact_ids: [],
+        hsp_contact_ids: []
+      ).tap do |result|
+        if current_contact.user_can_edit_match_contacts?
+          result[:shelter_agency_contact_ids] ||= []
+          result[:client_contact_ids] ||= []
+          result[:dnd_staff_contact_ids] ||= []
+          result[:housing_subsidy_admin_contact_ids] ||= []
+          result[:ssp_contact_ids] ||= []
+          result[:hsp_contact_ids] ||= []
+        elsif hsa_can_edit_contacts?
+          # only allow editing of the hsa contacts
+          result[:shelter_agency_contact_ids] ||= @match.shelter_agency_contact_ids
+          result[:client_contact_ids] ||= @match.client_contact_ids
+          result[:dnd_staff_contact_ids] ||= @match.dnd_staff_contact_ids
+          result[:housing_subsidy_admin_contact_ids] ||= []
+          result[:ssp_contact_ids] ||= @match.ssp_contact_ids
+          result[:hsp_contact_ids] ||= @match.hsp_contact_ids
+
+          # always add self
+          result[:housing_subsidy_admin_contact_ids] << current_contact.id
+        end
+      end
+    end
+
 
 end
