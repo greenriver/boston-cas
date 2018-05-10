@@ -17,14 +17,17 @@
             %h3.jMatchActionTitle
               %span Cancel
               %span Match
-      - if can_reject_matches?
-        %li.nav-item
-          %a.nav-link{href:'#park-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'park'}}
-            .o-choose__title
-              .c-choice-icon.c-choice-icon--park
-              %h3.jMatchActionTitle
-                %span Park
-                %span Match
+      %li.nav-item
+        %a.nav-link{href:'#park-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'park'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--park
+            %h3.jMatchActionTitle
+              %span Park
+              %span Match
+      %li.nav-item.ml-auto
+        %a.nav-link{href:'#backup', data: {toggle:'tab'}, role:'tab', aria:{controls:'backup'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--backup.mr-0
   .o-choose__content
     .tab-content
       #decline-client.tab-pane.active{role:'tabpanel', aria: {labelledby:'decline-client'}}
@@ -53,3 +56,6 @@
           %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
             %i.icon-clock
             Park Match
+
+      #backup.tab-pane{role:'tabpanel', aria: {labelledby:'backup'}}
+        = render 'match_decisions/step_back', form: form

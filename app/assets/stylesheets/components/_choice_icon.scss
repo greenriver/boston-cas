@@ -30,6 +30,13 @@ $choice-icon-type: (
     color: $brand-danger,
     font-size: rem(16px)
   ),
+  backup: (
+    icon: map-get($icons, step-back),
+    background: $gray-030,
+    color: $gray-070,
+    font-size: rem(16px)
+  ),
+
 );
 
 $choice-icon-size: 33px;

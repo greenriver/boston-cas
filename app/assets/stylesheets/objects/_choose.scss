@@ -64,16 +64,22 @@ $choose-border-color: $gray-030;
 
 .o-choose__nav {
   display: flex;
+  width: 100%;
   align-items: stretch;
   align-self: stretch;
 }
 
 .o-choose__nav li {
-  margin-right: space(3);
   display: flex;
   align-items: stretch;
   &:not(:last-of-type) {
     border-right: 1px solid $gray-025;
+    margin-right: space(3);
+  }
+  &:last-of-type {
+    a {
+      padding-right: 0;
+    }
   }
   a {
     display: flex;

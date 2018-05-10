@@ -15,6 +15,10 @@
               %h3
                 %span Park
                 %span Match
+        %li.nav-item.ml-auto
+          %a.nav-link{href:'#backup', data: {toggle:'tab'}, role:'tab', aria:{controls:'backup'}}
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--backup.mr-0
   .o-choose__content
     .tab-content
       - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
@@ -33,6 +37,10 @@
           %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
             %i.icon-clock
             Park Match
+
+      #backup.tab-pane{role:'tabpanel', aria: {labelledby:'backup'}}
+        = render 'match_decisions/step_back', form: form
+
 
 = content_for :page_js do
   :javascript
