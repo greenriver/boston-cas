@@ -7,7 +7,7 @@
   border-bottom: 1px solid $gray-015;
   margin-top: space(4);
   margin-bottom: space(4);
-  width: 100%;
+  width: calc(100% + 60px);
 }
 
 .nav-tabs > li {
@@ -40,4 +40,8 @@
 
 .nav-tabs > li {
   margin-bottom: -2px;
+}
+
+.nav-tabs .nav-link {
+  border: 0;
 }

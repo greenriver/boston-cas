@@ -1,5 +1,5 @@
 .summary-readout--tile {
-  &:first-of-type {
+  &:not(:last-of-type) {
     @include media-breakpoint-up(md) {
       padding-right: space(6);
       border-right: 2px solid $gray-020;
@@ -10,9 +10,14 @@
 
 .summary-readout--tile-label {
   text-transform: uppercase;
-  font-size: rem(14);
+  font-size: rem(18);
   text-align: left;
   @include open-sans-light;
+}
+
+.summary-readout--value {
+  @include open-sans-bold;
+  font-size: rem(20px);
 }
 
 .summary-readout {

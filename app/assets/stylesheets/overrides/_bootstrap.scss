@@ -6,10 +6,12 @@
 .alert {
   z-index: $zIndex-3--notice;
   @include open-sans-medium;
+  width: 100%;
 }
 
 .alert a {
-  color: #fff;
+  color: $black;
+  text-decoration: underline;
 }
 
 .alert a:hover,

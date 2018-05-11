@@ -1,20 +1,19 @@
-.d-flex
+.o-page__title
   %h1= t '.title'
-  .d-flex.justify-content-end
-    - if can_add_vacancies?
+  - if can_add_vacancies?
+    .o-page__action.o-page__action--stacked
       = link_to new_opportunity_path, class: 'btn btn-primary margin-bottom-02' do
         %span.icon-plus
         Submit a Vacancy
-      %br
       %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
         %span.icon-info
         How to Add a Vacancy
 
 - @prompt = t '.search_prompt'
 .row
-  .col-sm-6
+  .col-sm-4
     = render 'search_form'
-  .col-sm-3.sort-filter
+  .col-sm-6.sort-filter
     = render 'filter'
 .row.table-utilities
   .col-sm-8

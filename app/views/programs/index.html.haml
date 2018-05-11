@@ -1,24 +1,21 @@
-
-.row
-  .col-sm-8
-    %h1= t '.title'
-    - @prompt = t '.search_prompt'
-  .col-sm-4.text-right.margin-top-03.buttons-row
-    - if can_edit_programs?
+.o-page__title
+  %h1= t '.title'
+  - @prompt = t '.search_prompt'
+  - if can_edit_programs?
+    .o-page__action.o-page__action--stacked
       = link_to new_program_path, class: 'btn btn-primary margin-bottom-02' do
         %span.icon-plus
         Add a Program
-    %br
-    %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Click on the program name in this page's list</li><li>On Edit Program Details screen, click Add a Sub-Program button</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
-      %span.icon-info
-      How to Add a Sub-Program
+      %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Click on the program name in this page's list</li><li>On Edit Program Details screen, click Add a Sub-Program button</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
+        %span.icon-info
+        How to Add a Sub-Program
 
 .row
   .col-sm-6
     = render 'search_form'
 .row.table-utilities
   .col-sm-8
-    %p= page_entries_info @programs, entry_name: 'Sub-Programs' 
+    %p= page_entries_info @programs, entry_name: 'Sub-Programs'
     :ruby
       columns = ['program_id', 'name', 'building_id']
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
@@ -28,7 +25,7 @@
       titles['building_id'] = "#{Building.model_name.human}"
       titles['name'] = 'Sub-Program'
 .row
-  .col-sm-12  
+  .col-sm-12
     .table-responsive
       %table.table.table-condensed
         %thead
@@ -55,7 +52,7 @@
                 - if ! sp.deleted_at
                   = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
                 - else
-                  = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post         
+                  = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post
               %td{:class => deleted}
                 = sp.site
               %td{:class => deleted}
@@ -66,7 +63,5 @@
                 = sp.in_progress
               %td{:class => deleted}
                 = sp.vacancies
-                        
+
     %p= paginate @programs, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
-    
-  

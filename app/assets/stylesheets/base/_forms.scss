@@ -1,9 +1,15 @@
+.form__actions,
 .form-actions {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   &--right {
     justify-content: flex-end;
+    input,
+    a,
+    button {
+      margin-left: space(2);
+    }
   }
   &--stacked {
     display: inline-flex;

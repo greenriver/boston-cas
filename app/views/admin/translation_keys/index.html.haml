@@ -1,14 +1,14 @@
 - locales = TranslationKey.available_locales
 
--if can_edit_users? 
+-if can_edit_users?
   = render 'menus/admin_tabs'
-  
-%h1 Manage Translations    
+
+%h1 Manage Translations
 .row.table-utilities
   .col-sm-4
     %p= page_entries_info @translation_keys, entry_name: _('translation')
     %p= paginate @translation_keys
-.row 
+.row
   .col-sm-8
     - if @translation_keys.present?
       %table.table.table-condensed
@@ -24,10 +24,10 @@
               - locales.each do |locale|
                 %td
                   - translation = key.translations.detect{|t| t.locale == locale }
-                  = simple_form_for(translation, remote: true, url: admin_translation_text_path(translation.id), method: :patch, html: {class: 'jTranslationTextForm'})do |t|    
-                    = t.input :text, label: false, input_html: {class: 'jTranslationText', rows: 2, cols: 30} 
+                  = simple_form_for(translation, remote: true, url: admin_translation_text_path(translation.id), method: :patch, html: {class: 'jTranslationTextForm'})do |t|
+                    = t.input :text, label: false, input_html: {class: 'jTranslationText', rows: 2, cols: 30}
               %td
-                %button.btn.btn-secondary
+                %button.btn.btn-success
                   Save
   .col-sm-4
     = simple_form_for :search, as: :search, url: admin_translation_keys_path, method: :get do |f|
@@ -52,6 +52,6 @@
           var html = '<div class="jAjaxSave alert alert-' + alert_class + '">' + note + '</div>';
           $('.utility').html(html);
           $('.jAjaxSave').delay(5000).fadeOut(250);
-        } 
+        }
       });
     });

@@ -1,6 +1,7 @@
 .select2-container--bootstrap.select2-container--focus .select2-selection,
 .select2-container--bootstrap.select2-container--open .select2-selection,
-.select2-container--bootstrap .select2-selection--single {
+.select2-selection.select2-selection--single,
+.select2-container--bootstrap.select2-selection--single {
   @extend .form-control;
   box-shadow: none;
   border-color: $input-border-color;
@@ -17,4 +18,16 @@
   @extend .form-control;
   min-height: rem(40px);
   margin: space(2);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &,
+  b {
+    position: static;
+    border-color: $brand-primary transparent transparent transparent;
+  }
 }

@@ -1,16 +1,13 @@
+.o-page__title
+  %h1= t '.title'
+  - if can_edit_contacts?
+    = link_to new_contact_path, class: 'btn btn-primary ml-auto' do
+      %span.icon-plus
+      Add a Contact
 
-.row
-  .col-sm-8
-    %h1= t '.title'
-  .col-sm-4
-    - if can_edit_contacts?
-      = link_to new_contact_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-        %span.icon-plus
-        Add a Contact
-    
 - @prompt = t '.search_prompt'
 .row
-  .col-sm-6
+  .col-sm-4
     = render 'search_form'
 :ruby
   columns = ['last_name', 'first_name', 'middle_name', 'email', 'phone', 'role']
@@ -20,7 +17,7 @@
 .row.table-utilities
   .col-sm-8
     %p= page_entries_info @contacts
-  
+
 .row
   .col-sm-12
     .table-responsive
@@ -48,9 +45,8 @@
               %td= mail_to c.email, nil, target: '_blank'
               %td= c.phone
               %td= c.role
-              %td.text-center= c.client_opportunity_match_contacts.count                 
+              %td.text-center= c.client_opportunity_match_contacts.count
               %td
                 = link_to 'Edit', edit_contact_path(c)
- 
+
     %p= paginate @contacts
-    

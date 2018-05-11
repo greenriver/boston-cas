@@ -137,6 +137,7 @@ Rails.application.routes.draw do
       get 'stepped_progress'
       get 'tags'
       get 'typography'
+      get 'summary'
     end
   end
 

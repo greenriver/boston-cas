@@ -2,35 +2,36 @@
   - filter_class = 'client__filter-active'
 - else
   - filter_class = 'client__filter'
-.btn-group{class: filter_class}
-  %button.btn.btn-default.dropdown-toggle{data: {toggle: :dropdown}}
+%div{class: filter_class}
+  %button.btn.btn-default.dropdown-toggle.mr-4{data: {toggle: :dropdown}}
     Filter
     %span.caret
   .client-filter.dropdown-menu.dropdown-menu-right.options
-    %h3.client__filter-header Limit clients by:
     = form_tag(nil, method: "get") do
       -# preserve sort and search for filtering
-      - if params[:sort] 
+      - if params[:sort]
         = hidden_field_tag :sort, params[:sort]
-      - if params[:direction] 
+      - if params[:direction]
         = hidden_field_tag :direction, params[:direction]
-      - if params[:q] 
+      - if params[:q]
         = hidden_field_tag :q, params[:q]
-      .row
-        .col-sm-6
-          %h4 Availability
-          = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2'
-        .col-sm-6
-          %h4 Veteran
-          = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2'
-     
-      .row.margin-top-02
-        .col-xs-6
-          %p
-            %button.btn.btn-primary.icon-filter{type: :submit}
-              Filter
-        .col-xs-6.text-right
-          %p= link_to ' Clear Filters', clients_path, class: 'btn btn-secondary icon-cross'
+
+      .w-100.mb-2
+        %label.d-block Availability
+        = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2 w-100'
+
+      .w-100.mb-4
+        %label.d-block Veteran
+        = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 w-100'
+
+      .mb-2.d-flex
+        = link_to clients_path, class: 'btn btn-light' do
+          %i.icon-cross
+          Clear
+        %button.btn.btn-primary.ml-auto{type: :submit}
+          %i.icon-filter
+          Filter
+
 = content_for :page_js do
   :javascript
     (function($) {
