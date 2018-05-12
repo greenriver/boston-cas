@@ -225,3 +225,16 @@
       .col-sm-12
         - if @client.previously_merged?
           = render 'previously_merged'
+  
+  .col-sm-6        
+    .row
+      .col-sm-4
+        = render 'client_note_form'
+      .col-sm-8
+        - if @client_notes.any?
+          - @client_notes.order(created_at: :desc).each do |client_note|
+            = render 'client_note', note: client_note
+        - else
+          No notes on file
+  
+      

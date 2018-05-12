@@ -63,6 +63,8 @@ class ClientsController < ApplicationController
   def show
     @dupes = find_potential_dupes
     @splits = find_potential_splits
+    @client_notes = @client.client_notes
+    @client_note = ClientNote.new
   end
 
   def update

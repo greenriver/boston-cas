@@ -29,6 +29,8 @@ class Client < ActiveRecord::Base
   has_many :shelter_agency_contacts,
     through: :shelter_agency_client_contacts,
     source: :contact
+    
+  has_many :client_notes, inverse_of: :client
 
   validates :ssn, length: {maximum: 9}
 

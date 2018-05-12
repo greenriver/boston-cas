@@ -1,0 +1,4 @@
+%h3= "Client Note"
+= simple_form_for @client_note, as: :client_note, url: client_client_notes_path(@client) do |f|
+  = f.input :note, label: 'Note'
+  = f.submit value: 'Add Note', class: 'btn btn-secondary'

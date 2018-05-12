@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180504202048) do
+ActiveRecord::Schema.define(version: 20180511081334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,15 @@ ActiveRecord::Schema.define(version: 20180504202048) do
   add_index "client_contacts", ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
   add_index "client_contacts", ["contact_id"], name: "index_client_contacts_on_contact_id", using: :btree
   add_index "client_contacts", ["deleted_at"], name: "index_client_contacts_on_deleted_at", using: :btree
+
+  create_table "client_notes", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "client_id",  null: false
+    t.string   "note"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "client_opportunity_match_contacts", force: :cascade do |t|
     t.integer  "match_id",                              null: false
@@ -741,6 +750,7 @@ ActiveRecord::Schema.define(version: 20180504202048) do
     t.boolean  "can_enter_deidentified_clients",          default: false
     t.boolean  "can_manage_deidentified_clients",         default: false
     t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
+    t.boolean  "can_delete_client_notes",                 default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

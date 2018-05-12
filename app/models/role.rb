@@ -60,6 +60,7 @@ class Role < ActiveRecord::Base
       :can_view_vspdats,
       :can_manage_config,
       :can_create_overall_note,
+      :can_delete_client_notes,
     ]
   end
 
