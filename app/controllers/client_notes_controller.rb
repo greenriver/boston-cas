@@ -15,8 +15,12 @@ class ClientNotesController < ApplicationController
   def destroy
     @client_note = ClientNote.find(@client_note_id)
     begin
-      @client_note.destroy!
-      flash[:notice] = "Note was successfully deleted."
+      if @client_note.user_can_destroy?(current_user) 
+        @client_note.destroy!
+        flash[:notice] = "Note was successfully deleted."
+      else 
+        raise "You are not authorized to delete this note."
+      end
     rescue Exception => e
       flash[:error] = "Note could not be deleted."
     end
