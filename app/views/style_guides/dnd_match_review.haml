@@ -110,7 +110,7 @@
           Required for match acceptance
     .col-sm-8
       .row.form-inputs
-        .col-xs-6
+        .col-sm-6
           .form-group.select.optional.notification_response_action
             %label.select.optional.control-label{for: 'notification_response_action'}
               Please select one
@@ -136,7 +136,7 @@
                 %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio1', value: 'option1', checked: 'checked'}
                 Project-Based
             .row
-              .col-xs-6.col-xs-offset-1
+              .col-sm-6.col-sm-offset-1
                 .form-group
                   %label.control-label{for: 'building-name'}= "#{Building.model_name.human}"
                   %input{type: 'text', class: 'form-control', name: 'building-name', id: 'building-name'}
@@ -169,7 +169,7 @@
                 We are no longer able to contact this client
             .form-group
               .row
-                .col-xs-5.col-xs-offset-1
+                .col-sm-5.col-sm-offset-1
                   %label.control-label{for: 'date-last-saw-client'}When did you last see this client?
                   .input-group
                     %input{type: 'text', name: 'date-last-saw-client', id: 'date-last-saw-client', class: 'form-control'}
