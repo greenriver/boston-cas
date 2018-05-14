@@ -309,12 +309,15 @@ class Client < ActiveRecord::Base
   end
 
   def self.possible_availability_states
-    {
+    states = {
       active_in_match: 'Active in a match',
-      available_for_matching: 'Available for matching',
-      fully_matched: 'Fully matched',
       unavailable: 'Not available',
     }
+    # raise 'hi'
+    # MatchRoutes::Base.filterable_routes do |title, klass|
+    #   states["available_for_matching_on_route_#{key}"] = "Available for matching on #{title}"
+    # end
+    return states
   end
 
   def available_text

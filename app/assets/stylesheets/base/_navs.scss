@@ -14,14 +14,6 @@
   margin-bottom: 0;
 }
 
-.nav-tabs > li > a,
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
-  border: 0;
-  border-radius: 0;
-}
-
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {
   background: $body-bg;
@@ -29,9 +21,14 @@
   color: $black;
 }
 
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
+.nav-tabs > li.nav-item.active > a,
+.nav-tabs > li.nav-item.active > a:hover,
+.nav-tabs > li.nav-item.active > a:focus,
+.nav-tabs > li.nav-item > a.active,
+.nav-tabs > li.nav-item > a.active:hover,
+.nav-tabs > li.nav-item > a.active:focus {
+  border: 0;
+  border-radius: 0;
   background: lighten($brand-primary-l, 30%);
   color: darken($brand-primary, 40%);
   font-weight: 800;

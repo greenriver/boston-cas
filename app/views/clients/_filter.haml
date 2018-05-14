@@ -16,13 +16,13 @@
       - if params[:q]
         = hidden_field_tag :q, params[:q]
 
-      .w-100.mb-2
+      .w-300.mb-2
         %label.d-block Availability
-        = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2 w-100'
+        = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2', style: 'width: 100%;'
 
-      .w-100.mb-4
+      .w-300.mb-4
         %label.d-block Veteran
-        = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 w-100'
+        = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2', style: 'width: 100%;'
 
       .mb-2.d-flex
         = link_to clients_path, class: 'btn btn-light' do
