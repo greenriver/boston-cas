@@ -4,6 +4,6 @@ class AddDeleteClientNotesPermission < ActiveRecord::Migration
   end
   
   def down
-    remove_column :roles, :can_can_delete_client_notes, :boolean, default: false
+    remove_column :roles, :can_delete_client_notes, :boolean, default: false
   end
 end
