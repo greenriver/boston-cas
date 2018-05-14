@@ -1,5 +1,7 @@
 class MatchesController < ApplicationController
   include HasMatchAccessContext
+  include Decisions
+  include PjaxModalController
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
@@ -7,6 +9,8 @@ class MatchesController < ApplicationController
 
   def show
     @client = @match.client
+    @match_contacts = @match.match_contacts
+    @current_contact = current_contact
     @opportunity = @match.opportunity
     current_decision = @match.current_decision
     @show_client_info = @match.show_client_info_to?(access_context.current_contact)
@@ -22,8 +26,8 @@ class MatchesController < ApplicationController
     if @show_files
       t_t = Warehouse::Tagging.arel_table
       columns = {
-        id: :id, 
-        updated_at: :updated_at, 
+        id: :id,
+        updated_at: :updated_at,
         tag_id: t_t[:tag_id].as('tag_id').to_sql
       }
       available_files = Warehouse::File.for_client(@client.remote_id).
@@ -52,18 +56,22 @@ class MatchesController < ApplicationController
       session[:match_status_update] = nil
     end
   end
-  
+
   def history
     @match = match_scope.find(params[:match_id])
+    @types = MatchRoutes::Base.match_steps
     render layout: false
   end
-  
+
+  def cant_edit_self?
+    ! current_contact.user_can_edit_match_contacts? && hsa_can_edit_contacts?
+  end
+  helper_method :cant_edit_self?
+
   private
 
     def find_match!
       @match = match_scope.find(params[:id])
     end
-
-
 
 end

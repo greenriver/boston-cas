@@ -9,6 +9,7 @@ namespace :cas_seeds do
     create_services
     ensure_all_users_have_contacts
     create_match_decision_reasons
+    create_admin_user
   }
   
   desc 'create fake opportunities'
@@ -58,6 +59,41 @@ namespace :cas_seeds do
       user.contact.save
     end
     
+  end
+
+  desc 'ensure all match routes exist'
+  task ensure_all_match_routes_exist: [:environment, "log:info_to_stdout"] do
+    MatchRoutes::Base.ensure_all
+  end
+
+  desc 'ensure all match prioritization schemes exist'
+  task ensure_all_match_prioritization_schemes_exist: [:environment, "log:info_to_stdout"] do
+    MatchPrioritization::Base.ensure_all
+  end
+
+  desc 'Create a first user'
+  task create_admin_user: [:environment, "log:info_to_stdout"] do
+    # Add a user.  This should not be added in production
+    unless Rails.env =~ /production|staging|test/
+      email = 'noreply@example.com'
+      if User.find_by(email: email).present?
+        puts "A user with the email address #{email} already exists.  You can use the forgot my password option to set a password."
+        return
+      end
+      initial_password = Faker::Internet.password
+      user = User.new
+      user.email = email
+      user.first_name = "Sample"
+      user.last_name = "Admin"
+      user.password = user.password_confirmation = initial_password
+      user.confirmed_at = Time.now
+      user.invitation_accepted_at = Time.now
+      user.receive_initial_notification = true
+      user.save!
+      admin_role = Role.find_by(name: :admin)
+      user.roles << admin_role
+      puts "Created initial admin email:#{user.email}  password:#{user.password}"
+    end
   end
 
   # These have been disabled because they create fake data for development mode

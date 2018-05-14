@@ -10,13 +10,58 @@ class Program < ActiveRecord::Base
   belongs_to :funding_source
   delegate :name, to: :funding_source, allow_nil: true, prefix: true
   
-  has_many :contacts
   has_many :sub_programs, inverse_of: :program, dependent: :destroy
 
   has_many :program_services, inverse_of: :program
   has_many :services, through: :program_services
 
-  validates_presence_of :name
+  ######################
+  # Contact Associations
+  ######################
+  has_many :program_contacts
+  has_many :contacts, through: :program_contacts
+  has_many :housing_subsidy_admin_contacts,
+    -> { where program_contacts: {housing_subsidy_admin: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+  has_many :dnd_contacts,
+    -> { where program_contacts: {dnd_staff: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+  has_many :client_contacts,
+    -> { where program_contacts: {client: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+  has_many :shelter_agency_contacts,
+    -> { where program_contacts: {shelter_agency: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+  has_many :ssp_contacts,
+    -> { where program_contacts: {ssp: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+  has_many :hsp_contacts,
+    -> { where program_contacts: {hsp: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+
+  def default_match_contacts
+    @default_match_contacts ||= ProgramContacts.new program: self
+  end
+
+  belongs_to :match_route, class_name: MatchRoutes::Base.name
+
+  scope :on_route, -> (route) do
+    joins(:match_route).merge(MatchRoutes::Base.where(type: route.class.name))
+  end
+
+  validates_presence_of :name, :match_route_id
   accepts_nested_attributes_for :sub_programs
 
   acts_as_paranoid
@@ -40,6 +85,10 @@ class Program < ActiveRecord::Base
       s << sp.sub_contractor.name if sp.sub_contractor.present?
     end
     s
+  end
+
+  def match_route_fixed?
+    sub_programs.joins(:vouchers).exists?
   end
 
   def self.text_search(text)

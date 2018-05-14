@@ -1,4 +1,4 @@
-.detail-box--label Rules
+%h3.detail-box--label Rules
 .detail-box--value
   - requirements = match.requirements_with_inherited
 
@@ -20,7 +20,7 @@
     None
 
 - if match.sub_program.eligibility_requirement_notes?
-  .detail-box--label
+  %h3.detail-box--label
     Additional Eligibility Requirements
   .detail-box--value
     = match.sub_program.eligibility_requirement_notes

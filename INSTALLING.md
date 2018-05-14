@@ -42,7 +42,7 @@ $ sudo -u postgres createuser -s `whoami`
  ```
 
 ### Install the App
-Let the app finish setting itself up with `ben/setup`
+Let the app finish setting itself up with `bin/setup`
  ```bash
 bin/setup
  ```

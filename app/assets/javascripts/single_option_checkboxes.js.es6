@@ -10,7 +10,7 @@ window.App.SingleOptionCheckboxes = class SingleOptionCheckboxes {
     $(form_element).on('change', `[name="${form_input_name}"]`, evt => {
       $(form_element).find(`[name="${form_input_name}"]`).each( (_i, input_element) => {
         if(input_element != evt.target) {
-          $(input_element).prop('checked', false)  
+          $(input_element).prop('checked', false)
         }
       })
     })

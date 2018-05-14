@@ -3,7 +3,7 @@
 - url = Config.get(:warehouse_url) + "/window/clients/#{client.remote_id}/files"
 - if file_ids.present?
   - url += "?file_ids=#{file_ids}"
-.detail-box--label= link_to 'Files', url, target: '_blank' 
+%h3.detail-box--label= link_to 'Files', url, target: '_blank' 
 .detail-box--value
   - if @show_files
     -# Show the most recent version of any matching files

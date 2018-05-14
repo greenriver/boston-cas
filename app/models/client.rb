@@ -32,18 +32,30 @@ class Client < ActiveRecord::Base
     
   has_many :client_notes, inverse_of: :client
 
+  has_many :unavailable_as_candidate_fors
+
   validates :ssn, length: {maximum: 9}
 
   scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
-  scope :available_for_matching, -> { 
+  scope :not_parked, -> do
+    where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
+  end
+  scope :available_for_matching, -> (match_route )  { 
     # anyone who hasn't been matched fully, isn't parked and isn't active in another match
-    where(available_candidate: true, available: true)
-    .where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
-    .where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
+    available.available_as_candidate(match_route).
+    not_parked.
+    where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
   }
-  scope :available_candidate, -> { where(available_candidate: true) }
+
+  scope :available_as_candidate, -> (match_route) do
+    where.not(id: UnavailableAsCandidateFor.for_route(match_route).select(:client_id))
+  end
+
   scope :active_in_match, -> {
     joins(:client_opportunity_matches).merge(ClientOpportunityMatch.active)
+  }
+  scope :available, -> {
+    where(available: true)
   }
   scope :unavailable, -> {
     where(available: false)
@@ -51,10 +63,15 @@ class Client < ActiveRecord::Base
   scope :available, -> do
     where(available: true)    
   end
-  scope :fully_matched, -> {
-    where(available_candidate: false).
-    where.not(id: active_in_match.select(:id))
-  }
+
+  scope :unavailable_in, -> (route) do
+    joins(:unavailable_as_candidate_fors).merge(UnavailableAsCandidateFor.for_route(route))
+  end
+  # scope :fully_matched, -> {
+  #   where(available_candidate: false).
+  #   where.not(id: active_in_match.select(:id))
+  # }
+
   scope :veteran, -> { where(veteran: true)}
   scope :non_veteran, -> { where(veteran: false)}
   scope :confidential, -> { where(confidential: true) }
@@ -121,22 +138,30 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def self.prioritized
-    case Config.get(:engine_mode)
+  def self.prioritized match_route:
+    c_t = Client.arel_table
+    case match_route.match_prioritization.class.slug
     when 'first-date-homeless'
       order(calculated_first_homeless_night: :asc)
     when 'cumulative-homeless-days'
       order(days_homeless: :desc)
     when 'homeless-days-last-three-years'
-      order(days_homeless_in_last_three_years: :desc)
+      order(c_t[:days_homeless_in_last_three_years].desc)
     when 'vi-spdat' 
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     when 'vispdat-priority-score'
       where.not(vispdat_priority_score: nil)
       .order(vispdat_priority_score: :desc)
+    when 'assessment-score'
+      where.not(assessment_score: nil).
+      order(assessment_score: :desc, days_homeless: :desc)
     else
       raise NotImplementedError
     end
+  end
+
+  def self.ready_to_match match_route:
+    available_as_candidate(match_route: match_route).matchable
   end
 
   def self.max_candidate_matches
@@ -216,8 +241,34 @@ class Client < ActiveRecord::Base
     client_opportunity_matches.active.first
   end
 
+  def active_matches
+    client_opportunity_matches.active
+  end
+
   def active_in_match?
     client_opportunity_matches.active.exists?
+  end
+
+  def available_as_candidate_for_any_route?
+    ! UnavailableAsCandidateFor.where(client_id: id).exists?
+  end
+
+  def make_available_in match_route: 
+    UnavailableAsCandidateFor.where(client_id: id, match_route_type: match_route).destroy_all
+  end
+
+  def make_available_in_all_routes
+    UnavailableAsCandidateFor.where(client_id: id).destroy_all
+  end
+
+  def make_unavailable_in match_route:
+    unavailable_as_candidate_fors.create(match_route_type: match_route.class.name)
+  end
+
+  def make_unavailable_in_all_routes
+    MatchRoutes::Base.all_routes.each do |route|
+      make_unavailable_in match_route: route
+    end
   end
 
   def unavailable(permanent:false)
@@ -238,13 +289,15 @@ class Client < ActiveRecord::Base
         update(available: false)
       else
         # This will re-queue the client once the date is passed
-        update(available_candidate: true)
+        MatchRoutes::Base.all_routes.each do |route|
+          make_unavailable_in match_route: route
+        end
       end
     end
   end
 
   def remote_id
-    project_client.id_in_data_source.presence
+    project_client&.id_in_data_source.presence
   end
 
   def has_full_housing_release?
@@ -258,17 +311,20 @@ class Client < ActiveRecord::Base
   end
 
   def self.possible_availability_states
-    {
+    states = {
       active_in_match: 'Active in a match',
-      available_for_matching: 'Available for matching',
-      fully_matched: 'Fully matched',
       unavailable: 'Not available',
     }
+    # raise 'hi'
+    # MatchRoutes::Base.filterable_routes do |title, klass|
+    #   states["available_for_matching_on_route_#{key}"] = "Available for matching on #{title}"
+    # end
+    return states
   end
 
   def available_text
     if available 
-      if available_candidate
+      if available_as_candidate_for_any_route?
         'Available for matching'
       elsif active_in_match?
         'Active in a match'

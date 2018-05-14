@@ -1,11 +1,9 @@
 = render '/clients/breadcrumbs'
-  
+
 %h1= "Contacts for #{@contact_owner.name}"
 -# @prompt = t '.search_prompt'
 =# render 'search_form'
-.row
-  .col-sm-12
-    = render '/clients/tab_navigation', active: 'contacts', client_id: params[:client_id]
+= render '/clients/tab_navigation', active: 'contacts', client_id: params[:client_id]
 %p= page_entries_info @contact_join_models
 
 %table.table.table-condensed

@@ -1,28 +1,24 @@
-.row
-  .col-sm-9
-    - if @match.current_decision.present?
-      .summary-readout
-        .summary-readout--tile.summary-readout--tile__green
-          .summary-readout--tile-label.summary-readout--tile-label__outside 
-            Current Step
-          .summary-readout--tile-color-block 
-            -if !@match.overall_status == "In Progress"
-              = match.overall_status
+.d-flex.mb-5.align-items-end.flex-wrap
+  - if @match.current_decision.present?
+    .d-flex.flex-column
+      .summary-readout.mb-3
+        .summary-readout--tile
+          %h3.h4 Current Step
+          %h1.h2
+            -if !@match.overall_status[:name] == "In Progress"
+              = match.overall_status[:name]
             -else
               = @match.current_decision.step_name
-        .summary-readout--tile.summary-readout--tile__blue.margin-left-01
-          .summary-readout--tile-label.summary-readout--tile-label__outside 
-            Assigned To
-          .summary-readout--tile-color-block 
+        .summary-readout--tile
+          %h3.h4 Assigned To
+          %h1.h2
             = @match.current_decision.try(:actor_type) || 'N/A'
-        
-    - else
-      %p This match is not active
-  .col-sm-3
+      = render 'match_list_base/current_step', match: @match
+  - else
+    %p This match is not active
+  %div.ml-auto
     - if @match.can_create_overall_note?(access_context.current_contact)
-      .pull-right
-        .btn-label.btn-label__primary
-          &nbsp;
-        = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
-          %span.icon-plus
-          Add Note
+      .btn-label.btn-label__primary
+        &nbsp;
+      = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
+        Add Note

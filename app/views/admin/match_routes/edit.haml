@@ -1,0 +1,11 @@
+- title = "Edit #{@route.title}"
+- content_for :title, title
+%h1= content_for :title
+= simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
+  = f.input :active
+  = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
+  = f.input :should_cancel_other_matches
+  = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false
+  = f.button :submit, value: "Update #{@route.title}"
+  
+  

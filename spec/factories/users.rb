@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :user, class: 'User' do
     first_name 'User'
     last_name 'One'
-    email 'user_one@example.com'
+    sequence(:email) {|n| "user_#{n}@example.com" } 
     password 'abcd1234'
     password_confirmation 'abcd1234'
     email_schedule 'immediate'
@@ -39,4 +39,5 @@ FactoryGirl.define do
     confirmed_at Date.yesterday
     contact
   end
+
 end

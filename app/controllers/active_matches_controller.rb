@@ -13,6 +13,16 @@ class ActiveMatchesController < MatchListBaseController
     end
     # decision subquery
 
+    @available_steps = MatchDecisions::Base.filter_options.map do |value|
+      if MatchDecisions::Base.available_sub_types_for_search.include?(value)
+        [value.constantize.new.step_name, value]
+      else
+        [value.capitalize, value]
+      end
+    end
+    @available_routes = MatchRoutes::Base.filterable_routes
+    @sort_options = ClientOpportunityMatch.sort_options
+
     md = MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
       where.not(status: nil).
       order(created_at: :desc).limit(1)
@@ -44,22 +54,27 @@ class ActiveMatchesController < MatchListBaseController
     end
     @show_vispdat = show_vispdat?
 
-    @filter_step = params[:current_step]
-    if @filter_step.present? && MatchDecisions::Base.filter_options.include?(@filter_step)
-      if MatchDecisions::Base.stalled_match_filter_options.include?(@filter_step)
+    @current_step = params[:current_step]
+    if @current_step.present? && MatchDecisions::Base.filter_options.include?(@current_step)
+      if MatchDecisions::Base.stalled_match_filter_options.include?(@current_step)
         # determine delinquent progress updates
-        if @filter_step == 'Stalled Matches - awaiting response'
+        if @current_step == 'Stalled Matches - awaiting response'
           # We only want matches where no-one has responded to the most recent request
           # This will still show matches where no request has been made, if the match has stalled.
           delinquent_match_ids = ClientOpportunityMatch.delinquent_match_ids
           @matches = @matches.stalled.where(id: delinquent_match_ids) 
-        elsif @filter_step == 'Stalled Matches - with response'
+        elsif @current_step == 'Stalled Matches - with response'
           response_provided_ids = ClientOpportunityMatch.at_least_one_response_in_current_iteration_ids
           @matches = @matches.stalled.where(id: response_provided_ids)
         end
       else
-        @matches = @matches.where(last_decision: {type: @filter_step})
+        @matches = @matches.where(last_decision: {type: @current_step})
       end
+    end
+
+    @current_route = params[:current_route]
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
+      @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
     end
 
     @matches = @matches.references(:client).
@@ -71,8 +86,8 @@ class ActiveMatchesController < MatchListBaseController
 
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @data_source_id.present? || @start_date.present?
-    @types = MatchDecisions::Base.match_steps
+    @active_filter = @current_step.present? || @current_route.present?
+    @types = MatchRoutes::Base.match_steps
   end
   
   

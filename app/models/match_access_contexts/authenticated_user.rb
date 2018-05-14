@@ -17,9 +17,13 @@ module MatchAccessContexts
     end
     
     def contacts_editable?
-      user.can_edit_match_contacts?
+      user.can_edit_match_contacts? || hsa_can_edit_contacts?
     end
     
+    def hsa_can_edit_contacts?
+      controller.match.match_route.contacts_editable_by_hsa && current_contact.in?(controller.match.housing_subsidy_admin_contacts)
+    end
+
     def match_scope
       ClientOpportunityMatch.accessible_by_user user
     end

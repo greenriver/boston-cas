@@ -11,6 +11,11 @@ namespace :cas do
   task update_clients: [:environment, "log:info_to_stdout"] do
     Cas::UpdateClients.new.run!
   end
+  
+  desc "Add/Update ProjectClients from DeidentifiedClients"
+  task update_project_clients_from_deidentified_clients: [:environment, "log:info_to_stdout"] do
+    DeidentifiedClient.new.update_project_clients_from_deidentified_clients
+  end
 
   desc "Update voucher avaiability based on future available dates"
   task update_voucher_availability: [:environment, "log:info_to_stdout"] do

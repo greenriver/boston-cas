@@ -1,25 +1,28 @@
-.row
-  .col-xs-12
-    .match-decision
-      %p
-        Please record the date the client moved in.
-      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-        .form-group
-          .row
-            .col-xs-5
-              = form.input :client_move_in_date, label: 'Date client will move in', as: :date_picker, disabled: !@decision.editable?
-              
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    %p
+      Please record the date the client moved in.
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .form-group
         .row
-          .col-sm-8
-            .row.form-inputs
-              .col-xs-12
-                = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+          .col-md-6
+            = form.input :client_move_in_date, label: 'Date client will move in', as: :date_picker, disabled: !@decision.editable?
 
-        .form-actions.clearfix
-          - if can_reject_matches?
-            .well
-              = render 'match_decisions/park_client', form: form
-              = render 'match_decisions/cancel_match_form_fields', form: form
-          = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
+      .row
+        .col-sm-8
+          .row.form-inputs
+            .col-md-8
+              = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
 
-        %p= "#{_('DND')} will receive notification of the housing date."
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice{ class: ('o-choose__choice--100' unless can_reject_matches?)}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--cancel
+              %h3 Cancel Match
+          .o-choose__content
+            = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
+            %p= "#{_('DND')} will receive notification of the housing date."
+
+        - if can_reject_matches?
+          = render 'match_decisions/cancel_actions', form: form

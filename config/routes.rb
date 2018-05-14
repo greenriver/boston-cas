@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     match 'active' => 'users/sessions#active', via: :get
     match 'timeout' => 'users/sessions#timeout', via: :get
-  end  
+  end
 
   concern :restorable do
     member { post 'restore' }
@@ -13,11 +13,10 @@ Rails.application.routes.draw do
 
   resources :clients, only: [:index, :show, :update] do
     resources :contacts, except: :show, controller: :client_contacts, concerns: [:restorable]
-    patch 'split', on: :member
     patch :unavailable, on: :member
-    resources :duplicates, controller: 'client_duplicates', only: [:show, :update]
     resources :matches, controller: 'client_matches', only: :index
     resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
+    resources :qualified_opportunities, only: [:index, :update]
   end
   resources :opportunities do
     post 'restore'
@@ -41,7 +40,7 @@ Rails.application.routes.draw do
   end
   resources :services, except: :show
   resources :funding_sources, only: [:index, :edit, :update]
-  
+
   # concern that we can drop in at top level too
   # matches and their stuff can either be accessed directly if the user is logged in
   # or via a notification code
@@ -52,7 +51,7 @@ Rails.application.routes.draw do
         resource :acknowledgment, only: [:create], controller: 'match_decision_acknowledgments'
         get :recreate_notifications, on: :member
       end
-      
+
       resource :contacts, only: [:edit, :update], controller: 'match_contacts'
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
@@ -60,7 +59,7 @@ Rails.application.routes.draw do
     end
   end
   manage_matches
-  
+
   resources :active_matches, only: :index
   resources :closed_matches, only: :index
 
@@ -85,6 +84,7 @@ Rails.application.routes.draw do
   resources :units, except: :show, concerns: [:restorable]
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
+      resource :contacts, only: [:edit, :update], controller: :program_contacts
       resources :vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection
         delete :unavailable, on: :member
@@ -104,12 +104,13 @@ Rails.application.routes.draw do
     end
     resources :roles
     resources :versions, only: [:index]
-    
+
     resources :translation_keys, only: [:index, :update]
     resources :translation_text, only: [:update]
     resources :configs, only: [:index] do
       patch :update, on: :collection
     end
+    resources :match_routes, only: [:index, :edit, :update]
   end
   resource :account, only: [:edit, :update]
   resources :resend_notification, only: [:show]
@@ -121,7 +122,9 @@ Rails.application.routes.draw do
   namespace :system_status do
     get :operational
   end
+
   
+  resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy,]
   resources :messages, only: [:show, :index] do
     collection do
       get :poll
@@ -132,8 +135,12 @@ Rails.application.routes.draw do
   unless Rails.env.production?
     resource 'style_guide', only: :none do
       get 'dnd_match_review'
-      get 'match_contacts_modal'
       get 'icon_font'
+      get 'match_contacts_modal'
+      get 'stepped_progress'
+      get 'tags'
+      get 'typography'
+      get 'summary'
     end
   end
 

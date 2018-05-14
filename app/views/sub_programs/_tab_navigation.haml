@@ -1,31 +1,34 @@
 %ul.nav.nav-tabs
   - if active == 'program_details'
-    %li.active{role: 'presentation'}
-      %a{href: '#'} 
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
         Edit Program Details
   - else
-    %li= link_to 'Edit Program Details', [:edit, @program, @subprogram, :program_details]
+    %li.nav-item= link_to 'Edit Program Details', [:edit, @program, @subprogram, :program_details], class: 'nav-link'
 
   - if active == 'edit'
-    %li.active{role: 'presentation'}
-      %a{href: '#'} 
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
         Edit Sub-Program
   - else
-    %li  
-      %a{href: edit_program_sub_program_path(id: @subprogram.id)} Edit Sub-Program
-
-  
+    %li.nav-item
+      %a.nav-link{href: edit_program_sub_program_path(id: @subprogram.id)} Edit Sub-Program
 
   - vouchers_active = (active == 'vouchers')
-  %li{class: (vouchers_active && 'active'), role: 'presentation'}
-    %a{href: program_sub_program_vouchers_path(sub_program_id: @subprogram.id)} 
+  %li.nav-item{class: (vouchers_active && 'active'), role: 'presentation'}
+    %a.nav-link{href: program_sub_program_vouchers_path(sub_program_id: @subprogram.id)}
       Vouchers/Units
+
+  - contacts_active = (active == 'contacts')
+  %li.nav-item{class: (contacts_active && 'active'), role: 'presentation'}
+    %a.nav-link{href: edit_program_sub_program_contacts_path(@program, @subprogram)}
+      Default Contacts
 
   -# if active == 'matches'
     %li.active{role: 'presentation'}
-      %a{href: '#'} 
+      %a{href: '#'}
         Potential Matches
-  -# else 
+  -# else
     %li
-      %a{href: '#'} 
+      %a{href: '#'}
         Potential Matches

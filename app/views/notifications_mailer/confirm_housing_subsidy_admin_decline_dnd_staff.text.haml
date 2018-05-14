@@ -5,7 +5,7 @@ Hello #{@contact.full_name},
 = "The match now requires #{_('DND')} confirmation to fully close it and make the voucher or unit and client available for future matching."
 \
 Please review details here and take action:
-#{notification_match_decision_url @notification, @match, :confirm_housing_subsidy_admin_decline_dnd_staff}
+#{notification_match_url @notification, @match}
 \
 = render 'client_details'
 \
