@@ -35,3 +35,12 @@ th[class^="sort-"] {
   line-height: 1.5;
   padding-right: 2px;
 }
+
+.table tr.no-border,
+table tr.no-border {
+  &,
+  > th,
+  > td {
+    border: 0;
+  }
+}
