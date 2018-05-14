@@ -6,7 +6,7 @@ module MatchPrioritization
       where(active: true).
         order(weight: :asc)
     end
-
+    
     def self.prioritization_schemes
       [
         MatchPrioritization::FirstDateHomeless,
@@ -31,6 +31,10 @@ module MatchPrioritization
 
     def self.slug
       raise NotImplementedError
+    end  
+    
+    def title
+      self.class.title
     end
 
   end

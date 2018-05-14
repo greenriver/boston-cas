@@ -9,3 +9,6 @@
     -if can_manage_config?
       %li{role: "presentation", class: ('active' if current_page?(admin_configs_path))}
         = link_to 'Site Configuration', admin_configs_path
+    -if can_view_all_matches?
+      %li{role: "presentation", class: ('active' if current_page?(admin_match_routes_path))}
+        = link_to 'Match Routes', admin_match_routes_path

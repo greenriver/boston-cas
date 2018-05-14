@@ -14,6 +14,11 @@
         Active
       %th
         HSA can edit HSA contacts
+      %th
+        Should cancel other matches 
+      %th
+        Match prioritization
+        
   %tbody
     - @routes.each do |route|
       %tr
@@ -23,4 +28,8 @@
           = checkmark route.active
         %td
           = checkmark route.contacts_editable_by_hsa
+        %td
+          = checkmark route.should_cancel_other_matches
+        %td
+          = route.match_prioritization.title
         
