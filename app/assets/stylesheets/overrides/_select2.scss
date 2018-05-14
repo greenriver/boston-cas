@@ -32,3 +32,10 @@
     border-color: $brand-primary transparent transparent transparent;
   }
 }
+
+.select2--full-width {
+  &,
+  + .select2-container {
+    width: 100% !important; // Override mis-computed inline width
+  }
+}

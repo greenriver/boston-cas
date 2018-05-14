@@ -10,10 +10,10 @@
         How to Add a Vacancy
 
 - @prompt = t '.search_prompt'
-.row
-  .col-sm-4
+.row.o-search
+  .col-sm-4.o-search__field-wrapper
     = render 'search_form'
-  .col-sm-6.sort-filter
+  .col-sm-6.sort-filter.o-search__actions
     = render 'filter'
 .row.table-utilities
   .col-sm-8
