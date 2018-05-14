@@ -24,9 +24,10 @@
 
   - if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
     .alert.alert-warning
-      %p.icon-warning
+      %p
+        %i.icon-warning
         = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
-        = link_to 'See all parked clients.', reports_parked_clients_path
+        = link_to 'See all parked clients.', reports_parked_clients_path, class: 'ml-2'
 
   .row
     .col-sm-12

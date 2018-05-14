@@ -8,7 +8,8 @@
     = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
 - if Client.parked.any?
   .alert.alert-warning
-    %p.icon-warning
+    %p
+      %i.icon-warning
       = "Some clients are parked. "
       = link_to 'See all parked clients.', reports_parked_clients_path
 
