@@ -58,6 +58,10 @@ class Client < ActiveRecord::Base
   scope :unavailable, -> {
     where(available: false)
   }
+  scope :available, -> do
+    where(available: true)    
+  end
+
   scope :unavailable_in, -> (route) do
     joins(:unavailable_as_candidate_fors).merge(UnavailableAsCandidateFor.for_route(route))
   end
@@ -65,6 +69,7 @@ class Client < ActiveRecord::Base
   #   where(available_candidate: false).
   #   where.not(id: active_in_match.select(:id))
   # }
+
   scope :veteran, -> { where(veteran: true)}
   scope :non_veteran, -> { where(veteran: false)}
   scope :confidential, -> { where(confidential: true) }
@@ -145,6 +150,9 @@ class Client < ActiveRecord::Base
     when 'vispdat-priority-score'
       where.not(vispdat_priority_score: nil)
       .order(vispdat_priority_score: :desc)
+    when 'assessment-score'
+      where.not(assessment_score: nil).
+      order(assessment_score: :desc, days_homeless: :desc)
     else
       raise NotImplementedError
     end

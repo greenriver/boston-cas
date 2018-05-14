@@ -4,7 +4,7 @@ RSpec.describe Client, type: :model do
 
   describe 'prioritized' do
     let!(:clients) { create_list :client, 5 }
-    context 'when prioritization is VispdatPriorityScore' do
+    context 'when prioritized by VispdatPriorityScore' do
       let(:priority) { create :priority_vispdat_priority }
       let(:route) { create :default_route, match_prioritization: priority }
       it 'is an ActiveRecord::Relation' do
@@ -15,7 +15,7 @@ RSpec.describe Client, type: :model do
         expect( Client.prioritized(match_route: route) ).to eq Client.where.not(vispdat_priority_score: nil).order(vispdat_priority_score: :desc)
       end
     end
-    context 'when prioritization is VispdatScore' do
+    context 'when prioritized by VispdatScore' do
       let(:priority) { create :priority_vispdat }
       let(:route) { create :default_route, match_prioritization: priority }
       it 'is an ActiveRecord::Relation' do
@@ -27,7 +27,7 @@ RSpec.describe Client, type: :model do
       end
     end
 
-    context 'when prioritization is DaysHomelessLastThreeYears' do
+    context 'when prioritized by DaysHomelessLastThreeYears' do
       let(:priority) { create :priority_days_homeless_last_three_years }
       let(:route) { create :default_route, match_prioritization: priority }
       it 'is an ActiveRecord::Relation' do
@@ -37,7 +37,7 @@ RSpec.describe Client, type: :model do
         expect( Client.prioritized(match_route: route) ).to eq Client.order(days_homeless_in_last_three_years: :desc)
       end
     end
-    context 'when prioritization is DaysHomeless' do
+    context 'when prioritized by DaysHomeless' do
       let(:priority) { create :priority_days_homeless }
       let(:route) { create :default_route, match_prioritization: priority }
       it 'is an ActiveRecord::Relation' do
@@ -45,6 +45,16 @@ RSpec.describe Client, type: :model do
       end
       it 'orders by days_homeless' do
         expect( Client.prioritized(match_route: route) ).to eq Client.order(days_homeless: :desc)
+      end
+    end
+    context 'when prioritized by AssessmentScore' do
+      let(:priority) { create :priority_assessment_score }
+      let(:route) { create :default_route, match_prioritization: priority }
+      it 'is an ActiveRecord::Relation' do
+        expect( Client.prioritized(match_route: route) ).to be_an ActiveRecord::Relation
+      end
+      it 'orders by assessment_score' do
+        expect( Client.prioritized(match_route: route).pluck(:id, :assessment_score, :days_homeless) ).to eq Client.order(assessment_score: :desc, days_homeless: :desc).pluck(:id, :assessment_score, :days_homeless)
       end
     end
   end

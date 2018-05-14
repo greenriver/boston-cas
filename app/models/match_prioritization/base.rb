@@ -14,7 +14,7 @@ module MatchPrioritization
         MatchPrioritization::VispdatPriorityScore,
         MatchPrioritization::DaysHomeless,
         MatchPrioritization::DaysHomelessLastThreeYears,
-        # MatchPrioritization::AssessmentPriorityScore,
+        MatchPrioritization::AssessmentScore,
       ]
       
     end

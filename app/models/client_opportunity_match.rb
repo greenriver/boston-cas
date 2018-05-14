@@ -88,6 +88,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     success.joins(:match_route).merge(MatchRoutes::Base.should_cancel_other_matches)
   end
 
+  scope :in_process_or_complete, -> do
+    where(arel_table[:active].eq(true).or(arel_table[:closed].eq(true)))
+  end
+
 
   ######################
   # Contact Associations
