@@ -15,6 +15,7 @@
 // Vendor libs
 ////////////////////
 //= require jquery
+//= require popper
 //= require bootstrap
 //= require moment
 //= require jquery_ujs

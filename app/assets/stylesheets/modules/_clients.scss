@@ -1,14 +1,71 @@
-.client__active-match-elsewhere
-{
+.client__active-match-elsewhere {
   background-color: lighten($brand-warning, 15%);
 }
-.client-alternate-name
-{
+
+.client-alternate-name {
   display: inline-block;
   padding: 0 1em;
   margin-bottom: 1em;
 }
+
 .client__filter-active .btn-default {
   background-color: $cob-sg-blue-004;
   color: white;
+}
+
+.clients__client-card {
+  @include card;
+  margin-bottom: space(3);
+  &--flagged {
+    box-shadow: inset 0 0 0 1px $brand-danger-l;
+  }
+}
+
+.client__view_client {
+  float: right;
+}
+
+.clients__client-name {
+  color: $brand-secondary;
+  text-transform: none;
+  margin-bottom: space(5);
+}
+
+.client__details {
+  margin-right: rem(50px);
+  &:first-of-type {
+    min-width: 20%;
+  }
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.client__details ul {
+  margin-bottom: space(5);
+}
+
+.client__details li {
+  margin-bottom: space(1);
+}
+
+.client__details dl {
+  margin-bottom: 0;
+}
+
+.client__details dt,
+.client__details dd {
+  margin-bottom: 0;
+}
+
+.client__details dd {
+  &.featured {
+    font-weight: 600;
+    color: $brand-primary;
+  }
+}
+
+.client__details .inline dt,
+.client__details .inline dd {
+  display: inline-block;
 }

@@ -1,0 +1,10 @@
+.o-pre-choose {
+  margin: -15px -15px 0 -15px;
+  padding: 15px 15px space(6) 15px;
+  background: lighten($body-bg, 1%);
+}
+
+.o-pre-choose input,
+.o-pre-choose textarea {
+  max-width: 700px;
+}

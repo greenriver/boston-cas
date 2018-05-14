@@ -67,13 +67,13 @@ class OpportunitiesController < ApplicationController
   # Bulk create available units with associated available vouchers
   def create
     @opportunity = Opportunity.new(opportunity_params)
-    
-    if params[:opportunity][:program].blank? 
+
+    if params[:opportunity][:program].blank?
       @opportunity.errors[:program] = 'Required'
     else
       sub_program = SubProgram.find(opportunity_params[:program].to_i)
     end
-    
+
     if sub_program.present? && sub_program.has_buildings?
       if params[:opportunity][:building].blank?
         @opportunity.errors[:building] = 'Required'
@@ -100,7 +100,7 @@ class OpportunitiesController < ApplicationController
         voucher.unit = unit
         voucher.save
         voucher.opportunity || voucher.create_opportunity(available: true, available_candidate: true)
-        
+
         vouchers << voucher
       end
       if vouchers.count > 0
@@ -146,7 +146,7 @@ class OpportunitiesController < ApplicationController
     @opportunity = Opportunity.find(params[:id])
   end
 
-  
+
   private def opportunity_scope
     Opportunity.where(success: false, available: true).
       joins(:voucher).
@@ -161,9 +161,9 @@ class OpportunitiesController < ApplicationController
   private def opportunity_params
     params.require(:opportunity)
       .permit(
-        :available, 
-        :unit, 
-        :voucher, 
+        :available,
+        :unit,
+        :voucher,
         :client,
         :program,
         :building,

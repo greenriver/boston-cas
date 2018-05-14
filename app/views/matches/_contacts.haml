@@ -1,29 +1,36 @@
-- match.contact_titles.each do |contact_type, title|
-  -# Force some translations
-  - _('Housing Subsidy Administrators')
-  - _('Stabilization Service Providers')
-  - _('Housing Search Providers')
-  .detail-box--label= _(title)
-  .detail-box--value
-    - match.send(contact_type).each do |contact|
-      - incomplete_for_contact = MatchProgressUpdates::Base.incomplete_for_contact?(contact_id: contact, match_id: match.id)
-      - incomplete_class = if incomplete_for_contact then 'match-contact__stalled' else '' end
+%section.mt-6.c-detail-group.c-detail-group--block
+  %header.d-flex.align-items-center.mb-4
+    %h3.mr-2.mb-0 Contacts
+    - if contacts_editable?
+      .detail-box--link
+        = link_to access_context.edit_match_contacts_path(match), data: {loads_in_pjax_modal: true} do
+          %span.icon-pencil
+          Edit
 
-      .contact
-        - if incomplete_for_contact && can_reject_matches?
-          %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "Status update requested"}}
-          = contact.name
-        - else
-          = contact.name
-        -# TODO record organization as part of the shelter_agency_contact and display it here
-        %br
-        = mail_to contact.email, nil, target: '_blank'
-        - if contact.phone.present? && contact.phone.strip.length > 1
-          %br
-          = contact.phone
+  %ul.c-detail-group__content.list-unstyled
+    - match.contact_titles.each do |contact_type, title|
+      %li.c-detail-group__item
+        -# Force some translations
+        - _('Housing Subsidy Administrators')
+        - _('Stabilization Service Providers')
+        - _('Housing Search Providers')
+        .c-detail-group__title--secondary= _(title)
+        .detail-box--value
+          - match.send(contact_type).each do |contact|
+            - incomplete_for_contact = MatchProgressUpdates::Base.incomplete_for_contact?(contact_id: contact, match_id: match.id)
+            - incomplete_class = if incomplete_for_contact then 'match-contact__stalled' else '' end
 
-- if contacts_editable?
-  .detail-box--link
-    = link_to access_context.edit_match_contacts_path(match), data: {loads_in_pjax_modal: true} do
-      %span.icon-pencil
-      Edit Contacts
+            .contact.mb-2
+              - if incomplete_for_contact && can_reject_matches?
+                %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "Status update requested"}}
+                = contact.name
+              - else
+                = contact.name
+              -# TODO record organization as part of the shelter_agency_contact and display it here
+              %br
+              = mail_to contact.email, nil, target: '_blank'
+              - if contact.phone.present? && contact.phone.strip.length > 1
+                %br
+                = contact.phone
+          - if !match.send(contact_type).any?
+            %p.c-detail-group__no-result No contacts

@@ -4,7 +4,7 @@
   margin-bottom: 24px;
   border: 3px solid darken($cas-red-green, 20);
 }
-.detail-box--label {
+%h3.detail-box--label {
   @include open-sans-condensed-bold;
   text-transform: uppercase;
 }
@@ -12,6 +12,9 @@
   margin-bottom: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
+  &:empty {
+    margin: 0;
+  }
 }
 .detail-box--header {
   @include margin(18px null 0);

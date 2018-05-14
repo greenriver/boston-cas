@@ -84,7 +84,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       )
     )
   end
-  scope :should_alert_warehouse, -> do 
+  scope :should_alert_warehouse, -> do
     success.joins(:match_route).merge(MatchRoutes::Base.should_cancel_other_matches)
   end
 
@@ -158,12 +158,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def self.closed_filter_options
     {
-      'Success' => 'success', 
-      'Rejected/Declined' =>'rejected', 
+      'Success' => 'success',
+      'Rejected/Declined' =>'rejected',
       'Canceled/Pre-Empted' => 'canceled'
     }
   end
-    
+
   def confidential?
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
   end
@@ -191,7 +191,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     elsif contact.in?(shelter_agency_contacts)
       true
     elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
-      true 
+      true
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?)
       true
     else
@@ -206,7 +206,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     elsif contact.in?(shelter_agency_contacts)
       true
     elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa
-      true 
+      true
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
       true
     else
@@ -247,7 +247,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     contact_matches = ClientOpportunityMatchContact.where(
       ClientOpportunityMatchContact.arel_table[:match_id].eq(arel_table[:id])
     ).text_search(text).exists
-    
+
     where(
       client_matches.
       or(opp_matches).
@@ -270,7 +270,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       initialized_decisions.order(created_at: :desc).first
     end
   end
-  
+
   def add_default_contacts!
     add_default_dnd_staff_contacts!
     add_default_housing_subsidy_admin_contacts!
@@ -296,19 +296,22 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def overall_status
     if active?
       if status_declined?
-        "Declined"
+        {name: 'Declined', type: 'danger'}
       else
-        "In Progress"
+        {name: 'In Progress', type: 'success'}
       end
+
     elsif closed?
       case closed_reason
-      when 'success' then 'Success'
-      when 'rejected' then 'Rejected'
-      when 'canceled' then 'Pre-empted'
+      when 'success' then {name: 'Success', type: 'success'}
+      when 'rejected' then {name: 'Rejected', type: 'danger'}
+      when 'canceled' then {name: 'Pre-empted', type: 'danger'}
       end
     else
-      'New'
+       {name: 'New', type: 'success'}
+
     end
+
   end
 
   def status_declined?
@@ -335,7 +338,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def timeline_events
-    event_history = events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all.to_a 
+    event_history = events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all.to_a
     status_history = status_updates.complete.preload(:notification, :contact).to_a
     event_history + status_history
   end
@@ -399,8 +402,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   # Similar to a cancel, but allow the client to re-match the same opportunity
-  # if it comes up again.  Also, don't re-run the matching engine, we'll 
-  # put the opportunity 
+  # if it comes up again.  Also, don't re-run the matching engine, we'll
+  # put the opportunity
   def poached!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
@@ -425,8 +428,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
         # Prevent matching on this route again
         client.make_available_in match_route: route
       end
-      
-      opportunity_related_matches.destroy_all       
+
+      opportunity_related_matches.destroy_all
       opportunity.update available: false, available_candidate: false
       if opportunity.unit != nil
         opportunity.unit.update available: false
@@ -528,7 +531,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
         end.group_by do |row|
           row[:match_id]
         end
-      
+
       updates.map do |match_id, update_requests|
         delinquent = Set.new
         requests_by_contact = update_requests.group_by do |row|

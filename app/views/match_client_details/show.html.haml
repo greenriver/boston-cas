@@ -18,11 +18,11 @@
       = ssn(@client.ssn)
     - else
       none on file
-    %br 
-    Gender: 
+    %br
+    Gender:
     = @client.gender.try(:text) || 'not on file'
-    %br 
-    Race: 
+    %br
+    Race:
     = @client.race.try(:text) || 'not on file'
     %br
     Ethnicity:
@@ -75,7 +75,7 @@
             - if ! match.opportunity_details.sub_program_name.blank?
               = "(#{match.opportunity_details.sub_program_name})"
           %td
-            = match.overall_status
+            = match.overall_status[:name]
 = content_for :modal_only_footer do
   = link_to access_context.match_client_details_path(@match) do
     %span.icon-printer{title: "Printable", data: {toggle: "tooltip", placement: "top"}, aria: {label: 'Printable'}}

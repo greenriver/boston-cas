@@ -1,57 +1,55 @@
-
-.row
-  .col-sm-8
+.o-page
+  .o-page__title
     %h1= t '.title'
-  .col-sm-4.text-right.margin-top-03.buttons-row
     - if can_edit_buildings?
-      = link_to new_building_path, class: 'btn btn-primary margin-bottom-02' do
-        %span.icon-plus
-        = "Add a #{Building.model_name.human}"
-    %br
-    %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
-      %span.icon-info
-      How to Add a Vacancy
-.row
-  .col-sm-12
-    - @prompt = t '.search_prompt'
-    .row
-      .col-sm-6
-        = render 'search_form'
-.row
-  .col-sm-8
-    %p= page_entries_info @buildings
+      .o-page__action.o-page__action--stacked
+        = link_to new_building_path, class: 'btn btn-primary margin-bottom-02' do
+          %span.icon-plus
+          = "Add a #{Building.model_name.human}"
+        %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
+          %span.icon-info
+          How to Add a Vacancy
+  .row
+    .col-sm-12
+      - @prompt = t '.search_prompt'
+      .row
+        .col-sm-6
+          = render 'search_form'
+  .row
+    .col-sm-8
+      %p= page_entries_info @buildings
 
-    :ruby
-      columns = ['id', 'name', 'building_type', 'subgrantee_id']
-      directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
-      titles = {}
-      directions.each {| k,v | titles[k] = @buildings.human_attribute_name(k)}
-      titles['id'].upcase!
-      titles['building_type'] = "#{Building.model_name.human} Type"
-  
-.row.table-utilities
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed.table-hover
-        %thead
-          %tr
-            - titles.each do | k, title |
-              %th
-                = manual_sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-        %tbody
-          - @buildings.each do |building|
+      :ruby
+        columns = ['id', 'name', 'building_type', 'subgrantee_id']
+        directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
+        titles = {}
+        directions.each {| k,v | titles[k] = @buildings.human_attribute_name(k)}
+        titles['id'].upcase!
+        titles['building_type'] = "#{Building.model_name.human} Type"
+
+  .row.table-utilities
+    .col-sm-12
+      .table-responsive
+        %table.table.table-condensed.table-hover
+          %thead
             %tr
-              %td
-                = link_to building_path(building) do
-                  = building.id
-              %td
-                = link_to building_path(building) do
-                  = building.name
-              %td
-                = building.building_type
-              %td
-                - if building.subgrantee_id
-                  = link_to subgrantee_path(building.subgrantee_id) do
-                    = building.subgrantee.name
-    %p= paginate @buildings, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+              - titles.each do | k, title |
+                %th
+                  = manual_sort_link(titles[k], k, directions)
+                  %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+          %tbody
+            - @buildings.each do |building|
+              %tr
+                %td
+                  = link_to building_path(building) do
+                    = building.id
+                %td
+                  = link_to building_path(building) do
+                    = building.name
+                %td
+                  = building.building_type
+                %td
+                  - if building.subgrantee_id
+                    = link_to subgrantee_path(building.subgrantee_id) do
+                      = building.subgrantee.name
+      %p= paginate @buildings, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}

@@ -1,5 +1,5 @@
 - if @client.active_matches.count > 1
-  .detail-box--label
+  %h3.detail-box--label
     Other Active Matches
   - matches = @client.active_matches.to_a - [match]
   - matches.each do |active_match|

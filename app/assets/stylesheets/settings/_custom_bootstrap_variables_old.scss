@@ -1,52 +1,10 @@
-// colors
-$gray-015: rgb(242, 242, 242); // #f2f2f2 COB-sg lightest gray (bg)
-$gray-020: rgb(233, 231, 237); // #E9E7ED
-$gray-025: rgb(228, 228, 228); // #e4e4e4 COB-sg 2nd-to-lightest gray
-$gray-030: rgb(216, 213, 219); // #D8D5DB
-$gray-034: rgb(210, 210, 210); // #d2d2d2 COB-sg 2nd darkest gray
-$gray-040: rgb(196, 193, 199); // #C4C1C7
-$gray-050: rgb(158, 156, 161); // #9E9CA1
-$gray-060: rgb(130, 130, 130); // #828282 COB-sg darkest gray (body)
-$gray-065: rgb(102, 102, 102); // #666
-$gray-070: rgb(64, 64, 64); // #404040
-$gray-080: rgb(51, 51, 51); // #333
 
-// COB-sg colors
-$cob-sg-freedom-trail-red: rgb(251, 77, 66); // #FB4D42
-$cob-sg-charles-blue: rgb(9, 31, 47); // #091F2F
-$cob-sg-optimistic-blue: rgb(40, 139, 238); // #288BE4
-// supporting blues
-$cob-sg-blue-002: #061622;
-$cob-sg-blue-003: #0C2639;
-$cob-sg-blue-004: #45789C; // desaturated
-$cob-sg-blue-005: #51ACFF; // brightest for blue on dark bg
-
-// initial cas colors from GR
-// $cas-blue: rgb(73, 95, 121); // #495F79
-$cas-blue: $cob-sg-charles-blue;
-$cas-red: rgb(119, 55, 71); // #773747
-$cas-green: rgb(50, 88, 71); // #495F79
-$cas-red-green: rgb(231, 223, 221); // #E7DFDD
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Old Bootstrap variables
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-// Z-index scale
-$zIndex-1:   100;
-$zIndex-2:   200;
-$zIndex-3:   300;
-$zIndex-4:   400;
-$zIndex-5:   500;
-$zIndex-6:   600;
-$zIndex-7:   700;
-$zIndex-8:   800;
-$zIndex-9:   900;
-$zIndex-10: 1000;
-
-// Z-index applications Assigning specific and listing here as handy reference
-$zIndex-2--site-name: $zIndex-2;
-$zIndex-3--notice: $zIndex-3;
-
-
-// bootstrap overrides -- copy of bs3 variables 
+// bootstrap overrides -- copy of bs3 variables
 $bootstrap-sass-asset-helper: false !default;
 //
 // Variables
@@ -64,21 +22,12 @@ $gray:                   lighten($gray-base, 33.5%) !default; // #555
 $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
-$brand-primary:         #88A6C9 !default;
-$brand-success:         #BEDACD !default;
-$brand-info:            #88A6C9 !default;
-$brand-warning:         #deb878 !default;
-$brand-danger:          #CA8C9B !default;
-
-
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
 $body-bg:               #fff !default;
-//** Global text color on `<body>`.
-$text-color:            $gray-070;
 
 //** Global textual link color.
 $link-color:            #288be4 !default;
@@ -87,54 +36,6 @@ $link-hover-color:      darken($link-color, 15%) !default;
 //** Link hover decoration.
 $link-hover-decoration: none !default;
 
-
-//== Typography
-//
-//## Font, line-height, and color for body text, headings, and more.
-
-$font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
-//** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
-$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
-$font-family-base: 'Open Sans', sans-serif;
-$font-size-base:          14px !default;
-$em-base: 14px;
-$font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
-$font-size-small:         ceil(($font-size-base * 0.833)) !default; // ~12px
-
-$font-size-h1: 2.074rem;
-$font-size-h2: 1.728rem;
-$font-size-h3: 1.44rem;
-$font-size-h4: 1.2rem;
-$font-size-h5:            $font-size-base !default;
-$font-size-h6:            ceil(($font-size-base * 0.833)) !default; // ~12px
-
-//** Unit-less `line-height` for use in components like buttons.
-$line-height-base:        1.45 !default; 
-//** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
-$line-height-computed:    floor(($font-size-base * $line-height-base)) !default; // ~20px
-
-//** By default, this inherits from the `<body>`.
-$headings-font-family:    'Open Sans Condensed', sans-serif;
-$headings-font-weight:    700 !default;
-$headings-line-height:    1.2 !default;
-$headings-color:          inherit !default;
-
-
-//== Iconography
-//
-//## Specify custom location and filename of the included Glyphicons icon font. Useful for those including Bootstrap via Bower.
-
-//** Load fonts from this directory.
-
-// [converter] If $bootstrap-sass-asset-helper if used, provide path relative to the assets load path.
-// [converter] This is because some asset helpers, such as Sprockets, do not work with file-relative paths.
-$icon-font-path: if($bootstrap-sass-asset-helper, "bootstrap/", "../fonts/bootstrap/") !default;
-
-//** File name for all font files.
-$icon-font-name:          "glyphicons-halflings-regular" !default;
-//** Element ID within SVG icon file.
-$icon-font-svg-id:        "glyphicons_halflingsregular" !default;
 
 
 //== Components
@@ -330,45 +231,6 @@ $zindex-tooltip:           1070 !default;
 $zindex-navbar-fixed:      1030 !default;
 $zindex-modal-background:  1040 !default;
 $zindex-modal:             1050 !default;
-
-
-//== Media queries breakpoints
-//
-//## Define the breakpoints at which your layout will change, adapting to different screen sizes.
-
-// Extra small screen / phone
-//** Deprecated `$screen-xs` as of v3.0.1
-$screen-xs:                  480px !default;
-//** Deprecated `$screen-xs-min` as of v3.2.0
-$screen-xs-min:              $screen-xs !default;
-//** Deprecated `$screen-phone` as of v3.0.1
-$screen-phone:               $screen-xs-min !default;
-
-// Small screen / tablet
-//** Deprecated `$screen-sm` as of v3.0.1
-$screen-sm:                  768px !default;
-$screen-sm-min:              $screen-sm !default;
-//** Deprecated `$screen-tablet` as of v3.0.1
-$screen-tablet:              $screen-sm-min !default;
-
-// Medium screen / desktop
-//** Deprecated `$screen-md` as of v3.0.1
-$screen-md:                  992px !default;
-$screen-md-min:              $screen-md !default;
-//** Deprecated `$screen-desktop` as of v3.0.1
-$screen-desktop:             $screen-md-min !default;
-
-// Large screen / wide desktop
-//** Deprecated `$screen-lg` as of v3.0.1
-$screen-lg:                  1200px !default;
-$screen-lg-min:              $screen-lg !default;
-//** Deprecated `$screen-lg-desktop` as of v3.0.1
-$screen-lg-desktop:          $screen-lg-min !default;
-
-// So media queries don't overlap when required, provide a maximum
-$screen-xs-max:              ($screen-sm-min - 1) !default;
-$screen-sm-max:              ($screen-md-min - 1) !default;
-$screen-md-max:              ($screen-lg-min - 1) !default;
 
 
 //== Grid system
@@ -921,5 +783,3 @@ $dl-horizontal-offset:        $component-offset-horizontal !default;
 $dl-horizontal-breakpoint:    $grid-float-breakpoint !default;
 //** Horizontal line color.
 $hr-border:                   $gray-lighter !default;
-
-

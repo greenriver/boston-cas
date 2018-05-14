@@ -1,25 +1,25 @@
-.row
-  .col-sm-12
+.o-page
+  .o-page__title
     %h1= t '.title'
-    %p 
-      %span.icon-database
-      Funding sources come from the HMIS, and so can not be added here.
-    %p= page_entries_info @funding_sources
+  %p
+    %span.icon-database
+    Funding sources come from the HMIS, and so can not be added here.
+  %p= page_entries_info @funding_sources
 
-.row
-  .col-sm-12
-    - @prompt = t '.search_prompt'
-    .row
-      .col-sm-6
-        = render 'search_form'
-    
-    .table-responsive
-      %table.table.table-condensed.table-hover
-        - @funding_sources.each do |funding_source|
-          %tr
-            %td= funding_source.name
-            %td
-              = link_to edit_funding_source_path(funding_source) do 
-                %span.icon-pencil
-                Edit Rules / Services
-    %p= paginate @funding_sources
+  .row
+    .col-sm-12
+      - @prompt = t '.search_prompt'
+      .row
+        .col-sm-6
+          = render 'search_form'
+
+      .table-responsive
+        %table.table.table-condensed.table-hover
+          - @funding_sources.each do |funding_source|
+            %tr
+              %td= funding_source.name
+              %td
+                = link_to edit_funding_source_path(funding_source) do
+                  %span.icon-pencil
+                  Edit Rules / Services
+      %p= paginate @funding_sources

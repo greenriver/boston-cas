@@ -1,16 +1,15 @@
 .row
   .col-sm-12
-    %h1 
-      Edit Funding Source: 
+    %h1
+      Edit Funding Source:
       = @funding_source.name
 .row
   .col-sm-8
     = simple_form_for @funding_source do |f|
       = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Funding Source'
-      
+
       = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Funding Source'
-      
-      .form_actions
-        = link_to 'Cancel', funding_sources_path, class: 'btn btn-default'
-        = f.submit 'Save', class: 'btn btn-primary'
-      
+
+      .form__actions.form__actions--right.mt-4
+        = link_to 'Cancel', funding_sources_path, class: 'btn btn-default mr-2'
+        = f.submit 'Save', class: 'btn btn-success'

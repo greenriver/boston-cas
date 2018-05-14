@@ -1,5 +1,5 @@
 = form_tag(nil, method: "get") do
   .input-group{style: 'margin-bottom: 20px;'}
     %input.form-control{name: 'q', autofocus: true, type: :text, placeholder: @prompt, value: @query || params[:q]}
-    %span.input-group-btn
+    %span.input-group-append
       %button.btn.btn-default{type: :submit} Search

@@ -1,0 +1,23 @@
+.o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+  %header.jMatchHeader
+    %ul.o-choose__nav.nav.jMatchActionNav
+      %li.nav-item
+        %a.nav-link.active{href:"#decline-client", data: {toggle:"tab"}, role:"tab", aria:{controls:"decline", selected:"true"}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--reject
+            %h3.jMatchActionTitle
+              %span Decline
+              %span Match
+  .o-choose__content
+    .tab-content
+      .tab-pane.active{id:"decline-client", role:"tabpanel", aria: {labelledby:"decline-client"}}
+        = render 'match_decisions/decline_reason', form: form
+        .form-actions.form-actions--right
+          %button{ class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?) }
+            %i.icon-cross
+            Decline Match
+
+= content_for :page_js do
+  :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
+    // new App.Matches.ActionNav('.jMatchHeader')

@@ -1,0 +1,16 @@
+.l-main__content  {
+  padding-right: $nav-side-collapsed-width;
+  transition: .25s padding;
+}
+
+@media (min-width: 1570px) {
+  .l-main__content  {
+    padding-right: $nav-side-width;
+  }
+}
+
+@media (max-width: 1320px) {
+  .l-main__content  {
+    padding-right: 0;
+  }
+}
