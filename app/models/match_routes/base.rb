@@ -16,6 +16,10 @@ module MatchRoutes
       ]
     end
 
+    def self.more_than_one?
+      available.count > 1
+    end
+
     def self.filterable_routes
       available.map{|r| [r.title, r.type]}.to_h
     end
@@ -34,7 +38,7 @@ module MatchRoutes
     def initial_decision
       raise NotImplementedError
     end
-    
+
     def self.match_steps
       all_routes.map do |route|
         [route.name, route.match_steps]

@@ -1,6 +1,6 @@
 module MatchDecisions::ProviderOnly
   class HsaAcknowledgesReceipt < ::MatchDecisions::Base
-    
+
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
@@ -18,7 +18,7 @@ module MatchDecisions::ProviderOnly
     def started?
       status&.to_sym == :acknowledged
     end
-    
+
     def step_name
       "New Match for #{_('HSA')}"
     end
@@ -30,17 +30,17 @@ module MatchDecisions::ProviderOnly
     def contact_actor_type
       nil
     end
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        acknowledged: 'Acknowledged', 
+        pending: 'Pending',
+        acknowledged: 'Acknowledged',
         canceled: 'Canceled',
       }
     end
-    
+
     def editable?
-      super && saved_status !~ /accepted/
+      super && saved_status !~ /acknowledged/
     end
 
     def initialize_decision! send_notifications: true
@@ -52,7 +52,7 @@ module MatchDecisions::ProviderOnly
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
     end
-    
+
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ProviderOnly::MatchInitiationForHsa
@@ -81,21 +81,21 @@ module MatchDecisions::ProviderOnly
     private_constant :StatusCallbacks
 
     private def save_will_accept?
-      saved_status == 'pending' && status == 'accepted'
+      saved_status == 'pending' && status == 'acknowledged'
     end
-    
+
 
     def cant_accept_if_match_closed
       if save_will_accept? && match.closed
         then errors.add :status, "This match has already been closed."
       end
     end
-    
+
     def cant_accept_if_related_active_match
       if save_will_accept? &&
         (match.client_related_matches.active.any? ||
           match.opportunity_related_matches.active.any?)
-        then errors.add :status, "There is already another active match for this client or opportunity"          
+        then errors.add :status, "There is already another active match for this client or opportunity"
       end
     end
 
@@ -117,8 +117,7 @@ module MatchDecisions::ProviderOnly
         errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
       end
     end
- 
+
   end
 
 end
-

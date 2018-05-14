@@ -1,0 +1,9 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+body.menu-open .l-main__content {
+  padding-right: $nav-side-width;
+}

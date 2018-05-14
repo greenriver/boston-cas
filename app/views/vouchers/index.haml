@@ -1,33 +1,32 @@
 = render 'sub_programs/breadcrumbs'
-.row
-  .col-xs-6
-    %h1 
-      Program: 
+.o-page
+  .o-page__title
+    %h1
+      Program:
       = @subprogram.program.name
-  .col-xs-6
-    = render 'sub_programs/status_blocks'
-.row
-  .col-xs-8
+    .o-page__action
+      = render 'sub_programs/status_blocks'
+
+  = render 'sub_programs/tab_navigation', active: 'vouchers'
+
+  .o-page__title.align-items-start.mt-6
     %h2
       Sub-Program:
       = @subprogram.name
-  .col-sm-4
-    = render 'bulk_add_form'
-    .text-right
-      %p
-        - if @subprogram.voucher_count.present? && @subprogram.voucher_count > 0
-          = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
-        - else
-          = "#{@subprogram.vouchers.count} vouchers created"
-    .text-right
+    .o-page__action
+      .d-flex.flex-column.mr-8
+        = render 'bulk_add_form'
+        .text-right
+          %p.mb-0.mt-1
+            - if @subprogram.voucher_count.present? && @subprogram.voucher_count > 0
+              = "#{@subprogram.vouchers.count} of #{@subprogram.voucher_count} total vouchers created"
+            - else
+              = "#{@subprogram.vouchers.count} vouchers created"
       = render 'match_list_base/show_confidential_names'
-.row.margin-top-02
-  .col-sm-12
-    = render 'sub_programs/tab_navigation', active: 'vouchers'
-.row
-  .col-sm-12
-    - if @subprogram.vouchers.count > 0
-      = render 'form'
-    - else
-      %p.alert.alert-info.margin-top-03
-        This program has no vouchers defined yet. Use the Add Vouchers box above to add some.
+  .row
+    .col-sm-12
+      - if @subprogram.vouchers.count > 0
+        = render 'form'
+      - else
+        %p.alert.alert-info.mt-3
+          This program has no vouchers defined yet. Use the Add Vouchers box above to add some.

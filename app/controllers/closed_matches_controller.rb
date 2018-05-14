@@ -1,6 +1,6 @@
 class ClosedMatchesController < MatchListBaseController
   before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
-  
+
   def index
     # search
     if params[:q].present?
@@ -15,7 +15,7 @@ class ClosedMatchesController < MatchListBaseController
     # decision subquery
 
     @available_routes = MatchRoutes::Base.filterable_routes
-    
+
     md = MatchDecisions::Base.where(
       'match_id = client_opportunity_matches.id'
     ).where.not(status: nil).order(created_at: :desc).limit(1)
@@ -46,7 +46,7 @@ class ClosedMatchesController < MatchListBaseController
       sort = sort + ' NULLS LAST'
     end
     @show_vispdat = show_vispdat?
-    
+
     @current_step = params[:current_step]
     if @current_step.present? && ClientOpportunityMatch::CLOSED_REASONS.include?(@current_step)
       @matches = @matches.public_send(@current_step)
@@ -74,7 +74,7 @@ class ClosedMatchesController < MatchListBaseController
   def require_can_view_all_matches_or_can_view_own_closed_matches!
     can_view_all_matches? || can_view_own_closed_matches?
   end
-  
+
   def match_scope
     if can_view_all_matches?
       ClientOpportunityMatch.
@@ -89,7 +89,7 @@ class ClosedMatchesController < MatchListBaseController
         joins(:client)
     end
   end
-  
+
   def set_heading
     @heading = 'Closed Matches'
   end

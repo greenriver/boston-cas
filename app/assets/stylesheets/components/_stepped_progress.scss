@@ -1,0 +1,230 @@
+$progress-step-size: 37px;
+$progress-step-size-sm: 27px;
+$progress-step-space: 60px;
+$progress-step-space-sm: 12px;
+$step-default-color: #858585;
+$step-default-color-d: $gray-080;
+$step-border-color: #E1E1E1;
+
+.c-stepped-progress {
+  display: flex;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  &:after {
+    height: 3px;
+    background: $step-border-color;
+    content: '';
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 0;
+  }
+}
+
+.c-stepped-progress__step {
+  border: 2px solid $step-border-color;
+  font-size: rem(18px);
+  box-shadow: 0 0 0 2px $body-bg;
+  background: $white;
+  height: rem($progress-step-size);
+  width: rem($progress-step-size);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  margin-right: rem($progress-step-space);
+  z-index: 3;
+  color: $step-default-color;
+  position: relative;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &--interact {
+    transition: .125s transform, .125s border;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-font-smoothing: subpixel-antialiased;
+    &:hover {
+      transform: scale(1.3) translateZ(0);
+      border-color: $link-color;
+    }
+  }
+
+  &--done {
+    border-color: $brand-success-l;
+    background: $brand-success-l;
+    color: $brand-success;
+    &:before {
+      content: '';
+      height: 3px;
+      background-color: $brand-success-l;
+      position: absolute;
+      width: $progress-step-space - 2;
+      left: calc(100% + 5px);
+      top: 50%;
+      transform: translate(0, -50%);
+      transform-origin: center center;
+      z-index: 1;
+    }
+  }
+
+  &--active {
+    border-color: $body-bg;
+    background: $brand-primary;
+    color: $white;
+    transform: scale(1.1);
+    border-color: $brand-primary;
+  }
+
+  &--done,
+  &--active {
+    &:after {
+      content: '';
+      height: 3px;
+    }
+  }
+
+  &--canceled {
+    color: $brand-danger;
+    background: $brand-danger-l;
+    border-color: $brand-danger-l;
+    &:hover {
+      color: $brand-danger;
+      background: $brand-danger-l;
+    }
+  }
+
+  &--final {
+    &::before {
+      display: none;
+    }
+  }
+
+}
+
+.c-stepped-progress--sm {
+  &:after {
+    height: 2px;
+  }
+}
+
+.c-stepped-progress--sm .c-stepped-progress__step {
+  height: rem($progress-step-size-sm);
+  width: rem($progress-step-size-sm);
+  border-width: 2px;
+  margin-right: rem($progress-step-space-sm);
+  font-size: rem(12px);
+  color: $step-default-color-d;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &--done {
+    color: darken($brand-success, 10%);
+    &:before {
+      height: 2px;
+      width: $progress-step-space-sm - 2;
+      left: calc(100% + 3px);
+      top: calc(50% + 2px);
+    }
+  }
+
+  &--active {
+    color: $white;
+    &:hover {
+      color: $white;
+    }
+  }
+
+}
+
+.c-stepped-progress__step-number,
+.c-stepped-progress__step-link,
+.c-stepped-progress__step-link--static {
+  display: flex;
+  align-items: stretch;
+  text-align: center;
+  justify-content: center;
+  color: inherit;
+  width: 100%;
+  border-radius: 50%;
+  cursor: normal;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.c-stepped-progress__step--active .c-stepped-progress__step-link {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+  &:active {
+    background: $link-color;
+    color: white;
+    box-shadow: 0 0 0 1px $white;
+  }
+}
+
+.c-stepped-progress__step--done .c-stepped-progress__step-link,
+.c-stepped-progress__step--done .c-stepped-progress__step-link--static {
+  &:after {
+    @include icon;
+    content: '#{map-get($icons, checkmark)}';
+  }
+}
+
+.c-stepped-progress__step--done .c-stepped-progress__step-link,
+.c-stepped-progress__step--final .c-stepped-progress__step-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.c-stepped-progress__step--final .c-stepped-progress__step-link,
+.c-stepped-progress__step--final .c-stepped-progress__step-link--static {
+  &:after {
+    @include icon;
+    content: '#{map-get($icons, house)}';
+  }
+}
+
+.c-stepped-progress__step--canceled .c-stepped-progress__step-link,
+.c-stepped-progress__step--canceled .c-stepped-progress__step-link--static {
+  &:after {
+    @include icon;
+    content: '#{map-get($icons, cross)}';
+  }
+}
+
+.c-stepped-progress__step--done .c-stepped-progress__step-number,
+.c-stepped-progress__step--final .c-stepped-progress__step-number,
+.c-stepped-progress__step--canceled .c-stepped-progress__step-number {
+  display: none;
+}
+
+.c-stepped-progress__step--done,
+.c-stepped-progress__step--final,
+.c-stepped-progress__step--canceled {
+  align-items: center;
+}
+
+.c-stepped-progress__step-number {
+  font-weight: bold;
+  align-items: center;
+}

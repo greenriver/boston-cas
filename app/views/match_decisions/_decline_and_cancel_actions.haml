@@ -1,0 +1,61 @@
+- action_message ||= ''
+
+.o-choose__choice
+  %header.jMatchHeader
+    %ul.o-choose__nav.nav.jMatchActionNav
+      %li.nav-item
+        %a.nav-link.active{href:'#decline-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'decline', selected:'true'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--reject
+            %h3.jMatchActionTitle
+              %span Decline
+              %span Match
+      %li.nav-item
+        %a.nav-link{href:'#cancel-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'cancel'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--cancel
+            %h3.jMatchActionTitle
+              %span Cancel
+              %span Match
+      %li.nav-item
+        %a.nav-link{href:'#park-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'park'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--park
+            %h3.jMatchActionTitle
+              %span Park
+              %span Match
+      %li.nav-item.ml-auto
+        %a.nav-link{href:'#backup', data: {toggle:'tab'}, role:'tab', aria:{controls:'backup'}}
+          .o-choose__title
+            .c-choice-icon.c-choice-icon--backup.mr-0
+  .o-choose__content
+    .tab-content
+      #decline-client.tab-pane.active{role:'tabpanel', aria: {labelledby:'decline-client'}}
+        = render 'match_decisions/decline_reason', form: form
+        - if !action_message.empty?
+          %p
+            %i.icon-info
+            = action_message
+        .form-actions.form-actions--right
+          %button{ class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?) }
+            %i.icon-cross
+            Decline Match
+
+      - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+      #cancel-client.tab-pane{role:'tabpanel', aria: {labelledby:'cancel-client'}}
+        = render 'match_decisions/cancel_match_form_fields', form: form
+        .form-actions.form-actions--right
+          %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
+            %i.icon-minus-circle
+            Cancel Match
+
+      #park-client.tab-pane{role:'tabpanel', aria: {labelledby:'park-client'}}
+        = render 'match_decisions/park_client', form: form
+        = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
+        .form-actions.form-actions--right
+          %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
+            %i.icon-clock
+            Park Match
+
+      #backup.tab-pane{role:'tabpanel', aria: {labelledby:'backup'}}
+        = render 'match_decisions/step_back', form: form
