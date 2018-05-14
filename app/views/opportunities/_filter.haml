@@ -20,7 +20,7 @@
         - Opportunity.available_stati.each do |t|
           - selected = @match_status == t
           %option{value: t, selected: selected}= t
-      .mb-2.d-flex
+      .mb-2.d-flex.mt-6
         = link_to opportunities_path, class: 'btn btn-light' do
           %i.icon-cross
           Clear
