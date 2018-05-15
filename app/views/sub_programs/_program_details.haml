@@ -1,8 +1,8 @@
-.row
-  .col-sm-8
-    %h3 Program Details
+%section.c-card.c-card--flush
+  %h3 Program Details
+  .c-card__content
     %table.table.table-condensed
-      %tr
+      %tr.no-border
         %th Name
         %td= @program.name
       %tr
@@ -14,9 +14,11 @@
       %tr
         %th Match Route
         %td= @program.match_route.title
-    %h3 Settings Inherited from the Match Route
+%section.c-card.c-card--flush
+  %h3 Settings Inherited from the Match Route
+  .c-card__content
     %table.table.table-condensed
-      %tr
+      %tr.no-border
         %th Contacts Editable by #{_('HSA')}?
         %td= checkmark @program.match_route.contacts_editable_by_hsa
       %tr

@@ -39,3 +39,11 @@
     width: 100% !important; // Override mis-computed inline width
   }
 }
+
+.select2--with-prepends {
+  + .select2-container .select2-selection {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    flex: 1 1 auto;
+  }
+}

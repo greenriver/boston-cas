@@ -11,12 +11,19 @@
   @include padding(12px null);
   border-bottom: 1px solid $gray-030;
 }
+
 .add-things-boxes--remove-link,
 .add-things-boxes--remove-link {
   color: $gray-065;
+  margin-left: auto;
+  padding-right: space(2);
 }
+
 .add-things-boxes--right-side {
-  padding-top: 8px;
+  padding: space(2);
+  display: flex;
+  width: 100%;
+  background: $gray-015;
 }
 
 // This colors Rules that aren't persisted a light yellow.
