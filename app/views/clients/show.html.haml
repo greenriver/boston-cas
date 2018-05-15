@@ -28,20 +28,8 @@
         = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
         = link_to 'See all parked clients.', reports_parked_clients_path
 
-  .row
-    .col-sm-12
-      = render 'tab_navigation', active: 'show', client_id: @client.id
-  .row
-    .col-sm-6        
-      .row
-        .col-sm-4
-          = render 'client_note_form'
-        .col-sm-8
-          - if @client_notes.any?
-            - @client_notes.order(created_at: :desc).each do |client_note|
-              = render 'client_note', note: client_note
-          - else
-            No notes on file
+  = render 'tab_navigation', active: 'show', client_id: @client.id        
+  .row  
     .col-sm-6
       = simple_form_for(@client) do |f|
         = f.error_notification
