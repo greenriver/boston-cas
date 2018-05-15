@@ -45,5 +45,10 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     flex: 1 1 auto;
+    min-width: 300px;
+  }
+  + .select2-container {
+    width: auto !important;
+    flex: 1 1 auto;
   }
 }

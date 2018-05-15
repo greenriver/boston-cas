@@ -17,7 +17,7 @@
               %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: requirement.rule_name_with_verb, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s, requirement_display_for_variable: requirement.display_for_variable }}
 
           %label Add Rule Condition
-          .d-flex.align-items-center.flex-wrap
+          .c-binary-choice.d-flex.align-items-center.flex-wrap
             .input-group.mb-2.mr-2
               .input-group-prepend
                 %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
