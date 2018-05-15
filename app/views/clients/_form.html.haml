@@ -3,9 +3,7 @@
   %p
     %strong
       Remove from matches and prevent from matching until:
-  .row
-    .col-xs-6        
-      .input-group.date
-        = f.input_field :prevent_matching_until, as: :date_picker
-    .col-xs-6
-      = f.button :submit, class: 'btn btn-secondary', value: 'Park Client'
+  .d-flex
+    .input-group.date
+      = f.input_field :prevent_matching_until, as: :date_picker
+    = f.button :submit, class: 'btn btn-secondary ml-2', value: 'Park Client'

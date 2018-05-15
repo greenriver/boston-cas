@@ -1,6 +1,6 @@
 - if @notification.present? && @notification.allows_registration? && ! user_signed_in?
   .row
-    .col-sm-6.col-sm-offset-6.text-right
+    .col-sm-6.offset-sm-6.text-right
       .notification--create-account
         = link_to 'create an account', new_notification_registration_path(@notification), class: 'btn btn-default'
 = render 'matches/details', match: @match

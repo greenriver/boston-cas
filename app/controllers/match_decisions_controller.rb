@@ -9,6 +9,7 @@ class MatchDecisionsController < ApplicationController
   before_action :authorize_decision!
   before_action :authorize_notification_recreation!, only: [:recreate_notifications]
   before_action :set_client, only: [:show, :update]
+  before_action :set_contacts, only: [:show, :update]
 
   def show
     @opportunity = @match.opportunity
@@ -25,9 +26,6 @@ class MatchDecisionsController < ApplicationController
     @program = @match.program
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
-    @current_contact = current_contact
-    @match_contacts = @match.match_contacts
-
     if @match_contacts.update match_contacts_params
       MatchProgressUpdates::Base.update_status_updates @match_contacts
     end
@@ -130,6 +128,11 @@ class MatchDecisionsController < ApplicationController
 
     def set_client
       @client = @match.client
+    end
+
+    def set_contacts
+      @current_contact = current_contact
+      @match_contacts = @match.match_contacts
     end
 
     def find_decision!

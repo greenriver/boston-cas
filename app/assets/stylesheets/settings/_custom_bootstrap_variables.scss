@@ -13,9 +13,13 @@ $nav-tabs-border-radius: 0;
 // Links
 $link-color: $link-color;
 
+// Inputs
+$input-btn-padding-y: .6rem;
+$input-padding-y: $input-btn-padding-y;
+
 // Buttons
 $btn-padding-x   : 2rem;
-$btn-padding-y   : .6rem;
+$btn-padding-y   : $input-btn-padding-y;
 $btn-padding-x-sm: 1.5rem;
 $btn-padding-y-sm: .4rem;
 
@@ -45,3 +49,6 @@ $tooltip-font-size: 13px;
 $tooltip-max-width: 300px;
 
 $heading-color: #6C6C6C;
+
+$link-color: $cob-sg-optimistic-blue;
+$link-hover-decoration: none;

@@ -17,7 +17,8 @@
 .select2-container--bootstrap .select2-search--dropdown .select2-search__field {
   @extend .form-control;
   min-height: rem(40px);
-  margin: space(2);
+  margin: rem(5px);
+  width: calc(100% - 10px);
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -29,5 +30,12 @@
   b {
     position: static;
     border-color: $brand-primary transparent transparent transparent;
+  }
+}
+
+.select2--full-width {
+  &,
+  + .select2-container {
+    width: 100% !important; // Override mis-computed inline width
   }
 }

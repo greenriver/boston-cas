@@ -50,6 +50,12 @@ button.close {
     border-color: desaturate($brand-primary, 80%);
     color: rgba($black, .55);
   }
+  &--outline {
+    &:hover,
+    &:focus {
+      background: rgba($brand-primary-l, 25%);
+    }
+  }
 }
 
 .btn-secondary {
@@ -65,6 +71,12 @@ button.close {
     background: desaturate($brand-primary-l, 80%);
     border-color: desaturate($brand-primary, 80%);
     color: rgba($black, .55);
+  }
+  &--outline {
+    &:hover,
+    &:focus {
+      background: rgba($brand-primary-l, 25%);
+    }
   }
 }
 
@@ -83,6 +95,12 @@ button.close {
     border-color: desaturate($brand-success, 80%);
     color: rgba($black, .55);
   }
+  &--outline {
+    &:hover,
+    &:focus {
+      background: rgba($brand-success-l, 25%);
+    }
+  }
 }
 
 .btn-warning {
@@ -98,6 +116,12 @@ button.close {
     background: desaturate($brand-warning-l, 80%);
     border-color: desaturate($brand-warning, 80%);
     color: $black;
+  }
+  &--outline {
+    &:hover,
+    &:focus {
+      background: rgba($brand-warning-l, 25%);
+    }
   }
 }
 
@@ -115,6 +139,17 @@ button.close {
     border-color: desaturate($brand-danger, 80%);
     color: rgba($black, .55);
   }
+  &--outline {
+    &:hover,
+    &:focus {
+      background: rgba($brand-danger-l, 25%);
+    }
+  }
+}
+
+.btn[class*='--outline'] {
+  background: none;
+  border-width: 2px;
 }
 
 .btn-light {
