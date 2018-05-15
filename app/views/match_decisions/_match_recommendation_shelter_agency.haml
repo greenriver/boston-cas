@@ -11,44 +11,49 @@
 
       - else
         .o-pre-choose
-          - if @match.shelter_expiration?
-            - if can_reject_matches?
-              = render 'match_decisions/shelter_agency_expiration', form: form
-            - if @match.shelter_expiration >= Date.today
-              %p
-                This match will expire if the client has not expressed interest in the match before
-                %strong= "#{@match.shelter_expiration}."
-            - else
-              %p
-                This match expired on
-                %strong= "#{@match.shelter_expiration}."
-          - else
-            - if can_reject_matches?
-              = render 'match_decisions/shelter_agency_expiration', form: form
+          = render 'match_decisions/shelter_agency_expiration', form: form
+          
+          - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.today
+            .btn-group.btn-group-toggle.jActionToggle.margin-bottom-02{data: {toggle: :buttons}}
+              -# {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}.each do |title,key|
+              %label.btn.btn-light.active
+                %input{type: :radio, name: :working_with_client, autocomplete: :off, checked: :checked, value: 'jStillWorking'}
+                  The client has
+                  %br.d-sm-none
+                  been at your agency
+                  %br
+                  in the past two weeks
+              %label.btn.btn-light
+                %input{type: :radio, name: :working_with_client, autocomplete: :off, value: 'jNoLongerWorking'}
+                  The client has not
+                  %br.d-sm-none
+                  been at your agency
+                  %br
+                  in the past two weeks
+              -# form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jActionToggle'
 
-          = form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jActionToggle'
+            .o-choose.o-choose--flush
+              .o-choose__choice.jNoLongerWorkingContent{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
+                %header
+                  .o-choose__title
+                    .c-choice-icon.c-choice-icon--confirm
+                    %h3 Accept Match
+                .o-choose__content
+                  = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
+              .o-choose__choice.jStillWorkingContent.d-none{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
+                %header
+                  .o-choose__title
+                    .c-choice-icon.c-choice-icon--not-working
+                    %h3 Not Working with Client
+                .o-choose__content
+                  = render 'match_decisions/not_working_match_form_fields', form: form
 
-        .o-choose.o-choose--flush
-          .o-choose__choice.jNoLongerWorkingContent{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
-            %header
-              .o-choose__title
-                .c-choice-icon.c-choice-icon--confirm
-                %h3 Accept Match
-            .o-choose__content
-              = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
-          .o-choose__choice.jStillWorkingContent.d-none{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
-            %header
-              .o-choose__title
-                .c-choice-icon.c-choice-icon--not-working
-                %h3 Not Working with Client
-            .o-choose__content
-              = render 'match_decisions/not_working_match_form_fields', form: form
-
-          - if can_reject_matches?
-            = render 'match_decisions/decline_and_cancel_actions', form: form
+              - if can_reject_matches?
+                = render 'match_decisions/decline_and_cancel_actions', form: form
 
 = content_for :page_js do
   :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
     $('.jActionToggle input').first().prop("checked", true)
     $('.jActionToggle input').on('change', function() {
       var value = $(this).val()

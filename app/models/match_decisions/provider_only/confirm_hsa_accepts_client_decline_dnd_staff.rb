@@ -52,11 +52,11 @@ module MatchDecisions::ProviderOnly
     
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff
-        m << Notifications::HousingSubsidyAdminDecisionClient
-        m << Notifications::HousingSubsidyAdminDecisionSsp
-        m << Notifications::HousingSubsidyAdminDecisionHsp
-        m << Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency
+        m << Notifications::ProviderOnly::ConfirmHsaDeclineDndStaff
+        m << Notifications::ProviderOnly::HsaDecisionClient
+        m << Notifications::ProviderOnly::HsaDecisionSsp
+        m << Notifications::ProviderOnly::HsaDecisionHsp
+        m << Notifications::ProviderOnly::HsaDecisionShelterAgency
       end
     end
 

@@ -13,10 +13,10 @@
   .modal-dialog(role="document")
     .modal-content(data-pjax-modal-container)
       .modal-header
-        %button.close.pull-right.jCancel(aria-label="Close" type="button")
-          %span.icon-cross(aria-hidden="true")
         %h4.modal-title(data-pjax-modal-title)
           Confirm and Agree
+        %button.close.pull-right.jCancel(aria-label="Close" type="button")
+          %span.icon-cross(aria-hidden="true")
       .modal-body.clearfix
         %p
           = simple_format _('match shelter agency agreement modal')

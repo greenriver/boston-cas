@@ -9,6 +9,7 @@ module MatchDecisions
     # javascript toggle
     attr_accessor :working_with_client
     # validate :note_present_if_status_declined
+    validate :validate_not_working_reasons_present_if_not_working_with_client
     validate :validate_client_last_seen_date_present_if_not_working_with_client
     validate :release_of_information_present_if_match_accepted
     validate :spoken_with_services_agency_and_cori_release_submitted_if_accepted
@@ -146,6 +147,12 @@ module MatchDecisions
       end
     end
     
+    private def validate_not_working_reasons_present_if_not_working_with_client
+      if not_working_with_client_reason.blank? && status == 'not_working_with_client'
+        errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client'
+      end
+    end
+
     private def validate_client_last_seen_date_present_if_not_working_with_client
       if not_working_with_client_reason.present? && client_last_seen_date.blank?
         errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client'

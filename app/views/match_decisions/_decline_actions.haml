@@ -1,39 +1,23 @@
 .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
   %header.jMatchHeader
     %ul.o-choose__nav.nav.jMatchActionNav
-      %li.nav-item
-        %a.nav-link.active{href:"#decline-client", data: {toggle:"tab"}, role:"tab", aria:{controls:"decline", selected:"true"}}
-          .o-choose__title
-            .c-choice-icon.c-choice-icon--reject
-            %h3.jMatchActionTitle
-              %span Decline
-              %span Match
-      %li.nav-item
-        %a.nav-link{href:'#park-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'park'}}
-          .o-choose__title
-            .c-choice-icon.c-choice-icon--park
-            %h3
-              %span Park
-              %span Match
+      = render 'match_decisions/decline_tab'
+      = render 'match_decisions/cancel_tab'
+      = render 'match_decisions/park_tab'
   .o-choose__content
     .tab-content
-      .tab-pane.active{id:"decline-client", role:"tabpanel", aria: {labelledby:"decline-client"}}
-        = render 'match_decisions/decline_reason', form: form
-        .form-actions.form-actions--right
-          %button{ class: 'btn btn-danger jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?) }
-            %i.icon-cross
-            Decline Match
-
-      #park-client.tab-pane{role:'tabpanel', aria: {labelledby:'park-client'}}
-        = render 'match_decisions/park_client', form: form
-        = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
-        .form-actions.form-actions--right
-          %button{ class: 'btn btn-warning jCancel', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable? }
-            %i.icon-clock
-            Park Match
+      = render 'match_decisions/decline_tab_content', form: form, action_message: 'decline'
+      - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+      = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data
+      = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
 
 
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
-    // new App.Matches.ActionNav('.jMatchHeader')
+    $('.jCancelReason label').off('click');
+    $('.jCancelReason').on('click', 'label', function(e){
+      e.preventDefault();
+      checked = $(e.currentTarget).find('input[type="checkbox"]').prop('checked');
+      $(e.currentTarget).find('input[type="checkbox"]').prop('checked', !checked);
+    });

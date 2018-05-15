@@ -187,6 +187,32 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
   end
+
+  def confirm_hsa_decline_dnd_staff notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
+  end
+
+  def hsa_decision_client notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+  end
+
+  def hsa_decision_shelter_agency notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+  end
+
+  def hsa_decision_ssp notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+  end
+
+  def hsa_decision_hsp notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+  end
+
   # End Provider Only
 
   # Progress Updates

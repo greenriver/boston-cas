@@ -1,48 +1,27 @@
 .o-choose__choice
   %header.jMatchHeader
     %ul.o-choose__nav.nav.jMatchActionNav
-      %li.nav-item
-        %a.nav-link.active{href:'#cancel-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'cancel'}}
-          .o-choose__title
-            .c-choice-icon.c-choice-icon--cancel
-            %h3
-              %span Cancel
-              %span Match
-        %li.nav-item
-          %a.nav-link{href:'#park-client', data: {toggle:'tab'}, role:'tab', aria:{controls:'park'}}
-            .o-choose__title
-              .c-choice-icon.c-choice-icon--park
-              %h3
-                %span Park
-                %span Match
-        %li.nav-item.ml-auto
-          %a.nav-link{href:'#backup', data: {toggle:'tab'}, role:'tab', aria:{controls:'backup'}}
-            .o-choose__title
-              .c-choice-icon.c-choice-icon--backup.mr-0
+      = render 'match_decisions/cancel_tab'
+      = render 'match_decisions/park_tab'
+      = render 'match_decisions/backup_tab'
   .o-choose__content
     .tab-content
       - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
-      #cancel-client.tab-pane.active{role:'tabpanel', aria: {labelledby:'cancel-client'}}
-        = render 'match_decisions/cancel_match_form_fields', form: form
-        -# = form.submit 'Cancel Match', class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable?
-        .form-actions.form-actions--right
-          %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
-            %i.icon-minus-circle
-            Cancel Match
-
-      #park-client.tab-pane{role:'tabpanel', aria: {labelledby:'park-client'}}
-        = render 'match_decisions/park_client', form: form
-        = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
-        .form-actions.form-actions--right
-          %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
-            %i.icon-clock
-            Park Match
-
-      #backup.tab-pane{role:'tabpanel', aria: {labelledby:'backup'}}
-        = render 'match_decisions/step_back', form: form
+      = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data
+      = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
+      = render 'match_decisions/backup_tab_content', form: form, cancel_data: cancel_data
 
 
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
     new App.Matches.ActionNav('.jMatchHeader')
+
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
+    new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'))
+    $('.jCancelReason label').off('click');
+    $('.jCancelReason').on('click', 'label', function(e){
+      e.preventDefault();
+      checked = $(e.currentTarget).find('input[type="checkbox"]').prop('checked');
+      $(e.currentTarget).find('input[type="checkbox"]').prop('checked', !checked);
+    });
