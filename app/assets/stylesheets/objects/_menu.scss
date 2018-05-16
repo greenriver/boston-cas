@@ -1,10 +1,11 @@
 .o-menu {
+  position: relative;
   max-width: $nav-side-width;
   flex: 0 0 $nav-side-width;
   align-self: stretch;
   background-color: $cob-sg-charles-blue;
   overflow: auto;
-  z-index: 100;
+  z-index: 500;
   padding: space(6) space(4) space(4);
   @include media-breakpoint-down(md) {
     width: 45vw;
@@ -14,7 +15,7 @@
     bottom: 0;
     padding-top: calc(#{$header-height} + #{space(6)});
     min-height: 100vh;
-    transition: .25s transform;
+    transition: .35s transform ease-in-out;
     &.off-canvas {
       transform: translateX(45vw);
     }
@@ -35,5 +36,23 @@
   &:hover,
   &:focus {
     color: $gray-030;
+  }
+}
+
+.o-menu__to-top {
+  position: fixed;
+  bottom: space(4);
+  right: $nav-side-width / 2;
+  transform: translateX(50%);
+  color: $white;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: .5s opacity;
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
   }
 }

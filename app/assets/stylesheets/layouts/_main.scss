@@ -1,5 +1,5 @@
 .l-main__content  {
-  transition: .25s max-width;
+  transition: .35s max-width ease-in-out;
   max-width: 100%;
   flex: 0 0 100%;
   @include media-breakpoint-up(lg) {
