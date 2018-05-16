@@ -8,7 +8,7 @@ module Notifications::ProviderOnly
     end
     
     def decision
-      match.confirm_hsa_accepts_decline_dnd_staff_decision
+      match.confirm_hsa_accepts_client_decline_dnd_staff_decision
     end
 
     def event_label
