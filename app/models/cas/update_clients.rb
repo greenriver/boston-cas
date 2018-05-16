@@ -26,9 +26,9 @@ module Cas
     end
 
     def update_existing_clients
-      count = ProjectClient.update_pending.count
+      count = ProjectClient.has_client.update_pending.count
       puts "Updating #{count} clients"
-      ProjectClient.update_pending.each do |project_client|
+      ProjectClient.has_client.update_pending.each do |project_client|
         client = project_client.client
         attrs = attributes_for_client(project_client)
         # Ignore merged clients
