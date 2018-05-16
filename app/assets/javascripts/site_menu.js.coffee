@@ -137,4 +137,15 @@ verticalBehavior = ->
 
 $ ->
   # horizontalBehavior()
-  verticalBehavior()
+  # verticalBehavior()
+
+  $vsmContainer = $('.js-menu')
+  $toggle = $('.js-toggle-menu')
+  $document = $(document)
+
+  toggleNav = ->
+    $('body').toggleClass('menu-open')
+    $vsmContainer.toggleClass('off-canvas on-canvas')
+
+  $toggle.click ->
+    toggleNav()

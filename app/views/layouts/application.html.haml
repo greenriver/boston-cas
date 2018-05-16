@@ -21,42 +21,37 @@
 
   %body{class: body_classes}
     %header.o-header--page
-      .container-fluid{class: container_classes}
-        .row
-          .col-sm-10
-            .site-name
-              .site-title
-                = link_to root_path do
-                  = _('Boston Coordinated Access')
-                  - unless Rails.env.production?
-                    %span{style: 'font-size:12px;'}= "[#{Rails.env}]"
-            .tagline
-              = _('Ending Veteran & Chronic Homelessness in Boston')
-          .col-sm-2
-            = render 'layouts/messages'
-            - if user_signed_in?
-              = render 'layouts/site_menu'
-            - else
-              .user-state
-                = link_to(new_user_session_path, :class => 'user-state--link') do
-                  Sign In
-                  %span.icon-enter
+      .container-fluid.d-flex.align-items-center{class: container_classes}
+        .site-name
+          .o-header--page__title.site-title
+            = link_to root_path do
+              %span Boston <br> Coordinated <br> Access
+              - unless Rails.env.production?
+                %span{style: 'font-size:12px;'}= "[#{Rails.env}]"
+        .o-header--page__sub-title.tagline
+          = _('Ending Veteran & Chronic Homelessness in Boston')
+        = render 'layouts/header_nav'
 
+    .d-flex.flex-row-reverse
+      - if user_signed_in?
+        = render 'layouts/site_menu'
 
-    %main.l-main__content
-      .container-fluid{class: container_classes}
-        .row
-          .col-sm-12
-            .utility
-              = render :partial => "utility"
-        - if content_for? :modal_title
-          %h1
-            = yield :modal_title
-        = yield
-        - if content_for? :modal_footer
-          .row
-            = yield :modal_footer
-    %footer
+      %div.l-main__content{ class: ('with-menu' if user_signed_in?) }
+        %main
+          .container-fluid{class: container_classes}
+            .row
+              .col-sm-12
+                .utility
+                  = render :partial => "utility"
+            - if content_for? :modal_title
+              %h1
+                = yield :modal_title
+            = yield
+            - if content_for? :modal_footer
+              .row
+                = yield :modal_footer
+
+    %footer{ class: ('with-menu' if user_signed_in?) }
       .container-fluid{class: container_classes}
         %p.text-center
           = render 'layouts/footer_seal'

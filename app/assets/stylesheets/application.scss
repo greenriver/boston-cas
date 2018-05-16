@@ -48,6 +48,7 @@
   'objects/container',
   'objects/dashboard',
   'objects/list',
+  'objects/menu',
   'objects/page',
   'objects/search',
   'objects/section',
@@ -76,7 +77,6 @@
 @import "modules/current_step";
 @import "modules/history";
 @import "modules/tables";
-@import "modules/site_menu";
 @import "modules/vouchers";
 @import "modules/add_things_boxes";
 @import "modules/clients";
@@ -89,6 +89,10 @@
 @import
   'overrides/bootstrap',
   'overrides/select2';
+
+// Utilities
+@import
+  'utilities/general';
 
 
 .utility {

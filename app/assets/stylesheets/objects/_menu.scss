@@ -1,0 +1,39 @@
+.o-menu {
+  max-width: $nav-side-width;
+  flex: 0 0 $nav-side-width;
+  align-self: stretch;
+  background-color: $cob-sg-charles-blue;
+  overflow: auto;
+  z-index: 100;
+  padding: space(6) space(4) space(4);
+  @include media-breakpoint-down(md) {
+    width: 45vw;
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-top: calc(#{$header-height} + #{space(6)});
+    min-height: 100vh;
+    transition: .25s transform;
+    &.off-canvas {
+      transform: translateX(45vw);
+    }
+  }
+}
+
+.o-menu__group {
+  padding-bottom: space(4);
+  margin-bottom: space(4);
+  border-bottom: 1px solid rgba($white, .25);
+}
+
+.o-menu__link {
+  color: $white;
+  display: block;
+  cursor: pointer;
+  margin-bottom: space(2);
+  &:hover,
+  &:focus {
+    color: $gray-030;
+  }
+}
