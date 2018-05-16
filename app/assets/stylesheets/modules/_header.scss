@@ -112,12 +112,10 @@
     @extend .o-header--page__sub-title;
     padding-top: 22px;
     width: 2rem;
-    .message-count {
-      position: relative;
-      background-color: $cob-sg-optimistic-blue;
-      top: -12px;
-      left: -18px;
-    }
+  }
+  .message-count {
+    background-color: $cob-sg-optimistic-blue;
+    transform: translate(-50%, -50%);
   }
   .show-all {
     margin: 5px auto;
