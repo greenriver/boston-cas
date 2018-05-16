@@ -11,3 +11,8 @@ body {
   margin: 0;
   padding: 0;
 }
+
+body.not-signed-in .l-main__content {
+  max-width: 100%;
+  flex: 0 0 100%;
+}

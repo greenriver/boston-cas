@@ -3,7 +3,7 @@ module MatchDecisions
     
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
-    
+   
     def label
       label_for_status status
     end

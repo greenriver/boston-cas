@@ -13,7 +13,7 @@
             .form-group.jSelections
               .radio
                 %label
-                  = form.radio_button :status, :no_hearing
+                  = form.radio_button :status, :no_hearing, checked: true
                   = _('A criminal background hearing is not necessary')
               .radio
                 %label
@@ -63,3 +63,4 @@
       }
       $('.jScheduled')[action]('d-none')
     });
+    $('.jSelections input:checked').trigger('change');

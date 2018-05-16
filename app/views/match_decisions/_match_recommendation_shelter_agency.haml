@@ -12,19 +12,20 @@
       - else
         .o-pre-choose
           = render 'match_decisions/shelter_agency_expiration', form: form
-          
           - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.today
             .btn-group.btn-group-toggle.jActionToggle.margin-bottom-02{data: {toggle: :buttons}}
               -# {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}.each do |title,key|
-              %label.btn.btn-light.active
+              - this_one = params[:working_with_client] == 'jStillWorking' || params[:working_with_client].blank?
+              %label.btn.btn-light{class: this_one ? 'active' : ''}
                 %input{type: :radio, name: :working_with_client, autocomplete: :off, checked: :checked, value: 'jStillWorking'}
                   The client has
                   %br.d-sm-none
                   been at your agency
                   %br
                   in the past two weeks
-              %label.btn.btn-light
-                %input{type: :radio, name: :working_with_client, autocomplete: :off, value: 'jNoLongerWorking'}
+              - this_one = params[:working_with_client] == 'jNoLongerWorking'
+              %label.btn.btn-light{class: this_one ? 'active' : ''}
+                %input{type: :radio, name: :working_with_client, autocomplete: :off, value: 'jNoLongerWorking', checked: this_one}
                   The client has not
                   %br.d-sm-none
                   been at your agency
@@ -54,7 +55,7 @@
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
-    $('.jActionToggle input').first().prop("checked", true)
+    // $('.jActionToggle input').first().prop("checked", true)
     $('.jActionToggle input').on('change', function() {
       var value = $(this).val()
       var noLongerWorking = 'addClass'
@@ -65,4 +66,5 @@
       }
       $('.jNoLongerWorkingContent')[noLongerWorking]('d-none')
       $('.jStillWorkingContent')[stillWorking]('d-none')
-    })
+    });
+    $('.jActionToggle input[name=working_with_client]:checked').trigger('change');
