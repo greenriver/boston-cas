@@ -30,8 +30,8 @@ RSpec.describe ClientNote, type: :model do
  
  describe 'instance methods' do
     describe 'user_can_destroy?(user)' do
-      let(:admin_role) { create :admin_role } # can_delete_all_notes permission
-      let(:shelter_role) { create :shelter_role }
+      let(:admin_role) { create :admin_role, can_delete_client_notes: true }
+      let(:shelter_role) { create :shelter_role, can_delete_client_notes: false }
         
       let(:bob) { create :user }
       let(:sally) { create :user }
