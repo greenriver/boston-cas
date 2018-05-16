@@ -1,7 +1,7 @@
 - help_text ||= ''
 
 .row
-  .col-md-10
+  .col-lg-8
     .c-card.c-card--flush{ data: {requirement_manager: true, base_object_name: form.object_name} }
       %h3 Rules
       .c-card__content
@@ -23,12 +23,12 @@
                 %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
                 %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
               = select_tag :available_rules, nil, class: 'form-control select2--with-prepends', data: {rule_searcher: true}
-              - form.object.available_rules.each do |rule|
-                %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, variable: rule.variable_requirement?.to_s}}
-                - if rule.variable_requirement?
-                  .jVariableRequirment{data: {rule_id: rule.id}}
-                    = render rule
-            %a{href: '#', class: 'btn btn-primary mb-2', data: {add_button: true}} Add Rule
+            - form.object.available_rules.each do |rule|
+              %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, variable: rule.variable_requirement?.to_s}}
+              - if rule.variable_requirement?
+                .jVariableRequirment{data: {rule_id: rule.id}}
+                  = render rule
+          %a{href: '#', class: 'btn btn-primary mb-2', data: {add_button: true}} Add Rule
 
 = content_for :page_js do
   :javascript

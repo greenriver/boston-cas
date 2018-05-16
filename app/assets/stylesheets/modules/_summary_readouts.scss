@@ -27,7 +27,7 @@
   margin-top: space(4);
   justify-content: space-between;
   @include media-breakpoint-up(md) {
-    min-width: none;
+    min-width: auto;
     margin-top: 0;
     justify-content: flex-star;
   }

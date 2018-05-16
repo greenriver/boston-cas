@@ -5,10 +5,9 @@
     .o-page__action
       = render 'sub_programs/status_blocks'
       - if can_edit_programs?
-        .add-program
-          = link_to new_program_sub_program_path(@program), class: 'btn btn-primary ml-6' do
-            %span.icon-plus
-            Add a Sub-Program
+        = link_to new_program_sub_program_path(@program), class: 'btn btn-primary ml-sm-6' do
+          %span.icon-plus
+          Add a Sub-Program
 
   = render 'sub_programs/tab_navigation', active: 'program_details'
   = simple_form_for @program, url: form_url do |f|
@@ -32,7 +31,7 @@
       = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Program', help_text: "In programs with more than one #{Building.model_name.human.downcase}, when a match is made, only #{Building.model_name.human.downcase} rules for the applicable #{Building.model_name.human.downcase} will be applied.  If you need to ensure a rule will be applied across all #{Building.model_name.human.downcase} in the program, add it on this program screen as well."
 
     .form__actions
-      = f.submit 'Save', class: 'btn btn-success'
+      = f.submit 'Save Program', class: 'btn btn-success'
 
 = content_for :page_js do
   :javascript
