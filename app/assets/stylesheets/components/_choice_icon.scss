@@ -43,12 +43,15 @@ $choice-icon-size: 33px;
 .c-choice-icon {
   height: rem($choice-icon-size);
   width: rem($choice-icon-size);
-  margin-right: space(4);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  @include media-breakpoint-up(lg) {
+    margin-right: space(4);
+  }
 
   &::before {
     @include icon;
