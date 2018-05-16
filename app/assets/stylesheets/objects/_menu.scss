@@ -29,14 +29,9 @@
 }
 
 .o-menu__link {
-  color: $white;
+  @include header-menu-link;
   display: block;
-  cursor: pointer;
   margin-bottom: space(2);
-  &:hover,
-  &:focus {
-    color: $gray-030;
-  }
 }
 
 .o-menu__to-top {
