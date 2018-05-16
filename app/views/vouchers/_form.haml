@@ -84,7 +84,7 @@
               %td(colspan="6" style="border: none; color:red; position: relative; top: -30px;")
                 = voucher.errors.full_messages_for(:base).join(', ')
 
-    = f.button :submit, value: 'Update Vouchers', class: 'btn btn-success'
+    = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary'
 = content_for :page_js do
   :javascript
     $('select').select2();
