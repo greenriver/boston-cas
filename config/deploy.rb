@@ -9,6 +9,7 @@ set :whenever_identifier, ->{ "#{fetch(:client)}-#{fetch(:application)}_#{fetch(
 set :cron_user, ENV.fetch('CRON_USER') { 'ubuntu'}
 set :whenever_roles, [:cron, :production_cron, :staging_cron]
 set :whenever_command, -> { "bash -l -c 'cd #{fetch(:release_path)} && /usr/share/rvm/bin/rvmsudo ./bin/bundle exec whenever -u #{fetch(:cron_user)} --update-crontab #{fetch(:whenever_identifier)} --set \"environment=#{fetch(:rails_env)}\" '" }
+set :passenger_restart_command, 'sudo passenger-config restart-app'
 
 # server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
 
@@ -30,28 +31,20 @@ end
 set :ssh_port, ENV.fetch('SSH_PORT') { '22' }
 set :deploy_user , ENV.fetch('DEPLOY_USER')
 
-if ENV['RVM_CUSTOM_PATH']
-  set :rvm_custom_path, ENV['RVM_CUSTOM_PATH']
+set :rvm_custom_path, ENV.fetch('RVM_CUSTOM_PATH') { '/usr/share/rvm' }
+
+unless ENV['SKIP_JOBS']=='true'
+  after 'passenger:restart', 'delayed_job:restart'
 end
 
-# Delayed Job
-if ENV['DELAYED_JOB_SYSTEMD']=='true'
-  unless ENV['SKIP_JOBS']=='true'
-    after 'passenger:restart', 'delayed_job:restart'
-  end
-else
-  set :delayed_job_workers, 2
-  set :delayed_job_prefix, "#{ENV['CLIENT']}-cas"
-  set :delayed_job_roles, [:job]
-end
-
-task :group_writable do
+task :group_writable_and_owned_by_ubuntu do
   on roles(:web) do
     execute "chmod --quiet g+w -R  #{fetch(:deploy_to)} || echo ok"
-    execute "chgrp --quiet ubuntu -R #{fetch(:deploy_to)} || echo ok"
+    execute "sudo chown --quiet ubuntu:ubuntu -R #{fetch(:deploy_to)} || echo ok"
   end
 end
-after 'deploy:log_revision', :group_writable
+before 'passenger:restart',  :group_writable_and_owned_by_ubuntu
+after 'deploy:log_revision', :group_writable_and_owned_by_ubuntu
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -82,9 +75,7 @@ set :linked_files, fetch(:linked_files, []).push(
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).push(
   'log',
-  'tmp/pids',
-  'tmp/cache',
-  'tmp/sockets',
+  'tmp',
   'public/system',
   'var',
   'app/assets/stylesheets/theme/styles',

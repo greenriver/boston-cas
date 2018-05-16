@@ -80,7 +80,6 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'puma'
 
   # gem 'rack-mini-profiler'
