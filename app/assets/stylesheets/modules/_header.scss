@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   font-weight: 600;
-  span {
+  .additional-context {
     display: none;
     @include media-breakpoint-up(lg) {
       display: inline-block;
@@ -117,6 +117,12 @@
     background-color: $cob-sg-optimistic-blue;
     transform: translate(-50%, -50%);
   }
+  ul li.message {
+    &:last-of-type {
+      margin-bottom: space(4);
+    }
+  }
+
   .show-all {
     margin: 5px auto;
   }

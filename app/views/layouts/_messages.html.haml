@@ -1,10 +1,10 @@
 - if user_signed_in? && current_user.in_app_messages?
-  .email-messages.dropdown
+  .email-messages.dropdown.c-header-nav__link
     %a.dropdown-toggle.email-messages-envelope.c-header-nav__link{ href: '#', role: 'button', data: { toggle: 'dropdown' } }
       %i.icon-envelope-o
       %span.message-count.badge.hide
     %ul.dropdown-menu.dropdown-menu-right
-      %li
+      %li.d-flex.justify-content-center
         .btn-group{role: :group}
           = link_to messages_path(search: :all), class: 'btn btn-light show-all' do
             All messages
