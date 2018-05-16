@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ClientNotes, type: :model do
+RSpec.describe ClientNote, type: :model do
 
   let(:client_note) { create :client_note}
   
@@ -30,19 +30,36 @@ RSpec.describe ClientNotes, type: :model do
  
  describe 'instance methods' do
     describe 'user_can_destroy?(user)' do
-      let(:client_note_written_by_bob) { create :client_note, user: bob}
-      let(:bob) { create :user}
-      let(:sally) { create :user}
+      let(:admin_role) { create :admin_role } # can_delete_all_notes permission
+      let(:shelter_role) { create :shelter_role }
+        
+      let(:bob) { create :user }
+      let(:sally) { create :user }
+      let(:arnold) { create :user }
+
+      let(:client_note_written_by_bob) { create :client_note, user: bob }
       
-      context 'if user is note author' do
+      before do
+        bob.roles << shelter_role
+        sally.roles << shelter_role
+        arnold.roles << admin_role 
+      end
+      
+      context 'if user is note author but does not have permission to delete all notes' do
         it 'user can destroy note' do 
           expect( client_note_written_by_bob.user_can_destroy?( bob ) ).to eq true
         end
       end
     
-      context 'if user is not note author' do
+      context 'if user is not note author and does not have permission to delete all notes' do
         it 'user cannot destroy note' do
           expect( client_note_written_by_bob.user_can_destroy?( sally ) ).to eq false
+        end
+      end
+      
+      context 'if user is not note author but DOES have permission to delete all notes' do
+        it 'user can destroy note' do
+          expect( client_note_written_by_bob.user_can_destroy?( arnold ) ).to eq true
         end
       end
     end
