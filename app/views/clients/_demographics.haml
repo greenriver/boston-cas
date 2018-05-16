@@ -1,0 +1,35 @@
+%section.c-card.c-card--flush
+  %h3 Demographics
+  .c-card__content
+    = simple_form_for(@client) do |f|
+      = f.error_notification
+      %table.table.table-condensed
+        %tbody
+          %tr.no-border
+            %th Age
+            %td= "#{@client.age} (#{date_format(@client.date_of_birth)})"
+          %tr
+            %th SSN
+            %td= masked_ssn @client.ssn
+          %tr
+            %th Gender
+            %td= @client.gender.try(:text)
+          %tr
+            %th Race
+            %td= @client.race.try(:text)
+          %tr
+            %th Ethnicity
+            %td= @client.ethnicity.try(:text)
+          %tr
+            %th Veteran
+            %td= @client.veteran_status.try(:text)
+          - if can_view_client_confidentiality?
+            %tr
+              %th
+                Confidential Client
+                %p.help-block
+                  (name hidden on lists of matches by default)
+              %td= f.input_field :confidential
+            %tr
+              %td.text-right{colspan: 2}
+                = f.button :submit, class: 'btn btn-primary', value: 'Update'
