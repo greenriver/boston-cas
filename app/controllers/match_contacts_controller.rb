@@ -1,7 +1,8 @@
 class MatchContactsController < ApplicationController
   include PjaxModalController
   include HasMatchAccessContext
-
+  include ContactEditPermissions
+  
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :set_match
@@ -73,15 +74,5 @@ class MatchContactsController < ApplicationController
     def require_current_contact_can_edit_match_contacts!
       not_authorized! unless current_contact.user_can_edit_match_contacts? || hsa_can_edit_contacts?
     end
-
-    def hsa_can_edit_contacts?
-      @match.contacts_editable_by_hsa && current_contact.in?(@match.housing_subsidy_admin_contacts)
-    end
-    helper_method :hsa_can_edit_contacts?
-
-    def cant_edit_self?
-      ! current_contact.user_can_edit_match_contacts? && hsa_can_edit_contacts?
-    end
-    helper_method :cant_edit_self?
 
 end

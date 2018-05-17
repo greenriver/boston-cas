@@ -1,16 +1,15 @@
 = render 'breadcrumbs'
-.subgrantee
-  .row
-    .col-sm-7
-      %h1
-        = @subgrantee.name
-        - if @subgrantee.abbreviation
-          (
-          = @subgrantee.abbreviation
-          )
-    .col-sm-5.text-right.buttons-row.margin-top-03
+.subgrantee.o-page
+  .o-page__title
+    %h1
+      = @subgrantee.name
+      - if @subgrantee.abbreviation
+        (
+        = @subgrantee.abbreviation
+        )
+    .o-page__action
       - if can_edit_subgrantees?
-        = link_to edit_subgrantee_path(@subgrantee), class: 'btn btn-primary' do
+        = link_to edit_subgrantee_path(@subgrantee), class: 'btn btn-primary mr-3' do
           %span.icon-pencil
           Edit Subgrantee
         = link_to subgrantee_contacts_path(@subgrantee), class: 'btn btn-primary' do

@@ -1,0 +1,41 @@
+%section.c-card.c-card--flush
+  %h3 Health Information
+  .c-card__content
+    %table.table.table-condensed
+      %tbody
+        %tr
+          %th Developmental Disability
+          %td= checkmark @client.developmental_disability
+        %tr
+          %th Domestic Violence Survivor
+          %td= checkmark @client.domestic_violence
+        %tr
+          %th HIV/AIDS (HUD)
+          %td= checkmark @client.hiv_aids
+        %tr
+          %th Chronic Health Disability
+          %td= checkmark @client.chronic_health_problem
+        %tr
+          %th Mental Health Disability
+          %td= checkmark @client.mental_health_problem
+        %tr
+          %th Substance Abuse Problem
+          %td= checkmark @client.substance_abuse_problem
+        %tr
+          %th Physical Disability
+          %td= checkmark @client.physical_disability
+        %tr
+          %th Disabling Condition
+          %td= checkmark @client.disabling_condition
+        - if can_view_dmh_eligibility?
+          %tr
+            %th DMH Eligible
+            %td= checkmark @client.dmh_eligible
+        - if can_view_hues_eligibility?
+          %tr
+            %th HUES Eligible
+            %td= checkmark @client.hues_eligible
+        - if can_view_hiv_positive_eligibility?
+          %tr
+            %th HIV+
+            %td= checkmark @client.hiv_positive

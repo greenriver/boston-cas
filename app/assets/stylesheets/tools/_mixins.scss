@@ -261,3 +261,11 @@
   background-image: -webkit-linear-gradient($pos-degree $full); // Safari 5.1+, Chrome
   background-image: unquote("linear-gradient(#{$pos-spec}#{$full})");
 }
+
+@mixin header-menu-link {
+  color: $white;
+  &:hover,
+  &:focus {
+    color: $gray-030;
+  }
+}

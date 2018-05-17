@@ -2,7 +2,7 @@
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .o-choose.o-choose--flush.o-choose--flush-top
-        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?), ( 'o-choose__choice--100' unless can_reject_matches?)]}
+        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
           %header
             .o-choose__title
               .c-choice-icon.c-choice-icon--confirm
@@ -30,5 +30,4 @@
               %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
                 %i.icon-checkmark
                 Accept Match
-        - if can_reject_matches?
-          = render 'match_decisions/decline_and_cancel_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'
+        = render 'match_decisions/decline_and_cancel_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'

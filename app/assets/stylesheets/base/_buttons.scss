@@ -165,6 +165,11 @@ button.close {
   &:hover {
     background: $brand-primary-l;
   }
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    background: darken($brand-primary-l, 25%);
+    color: $white;
+  }
 }
 
 .btn-min-width-medium {

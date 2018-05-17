@@ -12,7 +12,7 @@
       %li{class: "c-stepped-progress__step c-stepped-progress__step--#{decision_status} #{ 'c-stepped-progress__step--final' if final}"}
         .sr-only
           = decision.step_name
-        - if decision.editable? && size == 'sm'
+        - if size == 'sm'
           = link_to match_path(match), class: 'c-stepped-progress__step-link', data: {toggle: :tooltip, title: decision.step_name} do
             .c-stepped-progress__step-number= types[decision.type]
         - else

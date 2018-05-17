@@ -61,9 +61,10 @@
 .checkbox .form-group__indented-01 label {
   padding-left: 0;
 }
-.has-error {
-  /* @include form-control-validation($cas-red, $cas-red, $cas-red); */
+.has-error .help-block {
+  color: $brand-danger;
 }
+
 .error .form-control {
   border-color: $cas-red;
 }

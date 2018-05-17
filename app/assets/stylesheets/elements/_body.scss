@@ -1,9 +1,18 @@
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+html {
+  height: 100%;
+  position: relative;
 }
 
-body.menu-open .l-main__content {
-  padding-right: $nav-side-width;
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body.not-signed-in .l-main__content {
+  max-width: 100%;
+  flex: 0 0 100%;
 }

@@ -1,0 +1,13 @@
+%section.c-card.c-card--flush
+  %h3 Notes
+  .c-card__content
+    .row
+      .col-xl-12
+        = render 'client_note_form'
+    .row
+      .col-xl-12
+        - if @client_notes.any?
+          - @client_notes.order(created_at: :desc).each do |client_note|  
+            = render 'client_note', note: client_note
+        - else
+          %p No notes on file

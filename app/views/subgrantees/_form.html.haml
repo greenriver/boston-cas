@@ -2,12 +2,17 @@
   = f.error_notification
   - disabled = false
   - hint = ''
-  .form-inputs
-    = f.input :name, disabled: disabled, hint: hint
-  
-  = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Subgrantee'
-  
-  = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Sub-Grantee'
-  
-  .form-actions
-    = f.button :submit, class: 'btn btn-primary'
+  %section.row
+    .col-md-6
+      .form-inputs
+        = f.input :name, disabled: disabled, hint: hint
+
+  .row
+    .col-md-6
+      = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Subgrantee'
+
+  %section
+    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Sub-Grantee'
+
+  .form__actions
+    = f.button :submit, class: 'btn btn-success'

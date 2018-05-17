@@ -10,7 +10,7 @@
   .alert.alert-warning
     %p
       %i.icon-warning
-      = "Some clients are parked. "
+      = "Some clients are parked.&nbsp;".html_safe
       = link_to 'See all parked clients.', reports_parked_clients_path
 
 %ul.nav.nav-tabs.margin-bottom-02
