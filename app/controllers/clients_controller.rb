@@ -52,7 +52,8 @@ class ClientsController < ApplicationController
 
   # GET /clients/1
   def show
-
+    @client_notes = @client.client_notes
+    @client_note = ClientNote.new
   end
 
   def update

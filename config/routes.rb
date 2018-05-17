@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resources :contacts, except: :show, controller: :client_contacts, concerns: [:restorable]
     patch :unavailable, on: :member
     resources :matches, controller: 'client_matches', only: :index
+    resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
     resources :qualified_opportunities, only: [:index, :update]
   end
   resources :opportunities do

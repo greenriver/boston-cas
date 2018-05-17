@@ -49,6 +49,7 @@ FactoryGirl.define do
     can_edit_translations true
     can_view_vspdats true
     can_create_overall_note true
+    can_delete_client_notes true
   end
 
   factory :shelter_role, class: 'Role' do
