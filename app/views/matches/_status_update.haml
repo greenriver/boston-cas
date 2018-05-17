@@ -1,6 +1,6 @@
 - status_update = @match.status_updates.incomplete_for_contact(contact_id: access_context.current_contact.id).first
 .row
-  .col-xs-12
+  .col-sm-12
     .match-status-update
       %p 
         = "This match has been stalled since #{@match.current_decision.updated_at.to_date}.  Please provide an update to the status of the match."

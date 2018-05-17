@@ -1,14 +1,13 @@
 = render 'breadcrumbs'
-.row
-  .col-xs-6
+
+.o-page
+  .o-page__title
     %h1 Edit Sub-Program
-  .col-xs-6.button-row.margin-top-03.text-right
-    = render 'status_blocks'
-.row
-  .col-xs-12
-    = render 'tab_navigation', active: 'edit'
-.row.margin-top-02
-  .col-xs-8
-    = render 'form'
+    .ml-auto
+      = render 'status_blocks'
 
+  = render 'tab_navigation', active: 'edit'
 
+  = render 'program_details'
+
+  = render 'form'

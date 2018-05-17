@@ -25,16 +25,18 @@ module ClientOpportunityMatches
         dependent: :destroy
 
       # macro to set up a decision within a match
-      def self.has_decision decision_type
+      def self.has_decision decision_type, decision_class_name: nil, notification_class_name: nil
+        decision_class_name ||= "MatchDecisions::#{decision_type.to_s.camelize}"
+        notification_class_name ||= "Notifications::#{decision_type.to_s.camelize}"
         # define the decision_contact association
         # e.g. match_recommendation_dnd_staff_contact
         has_one "#{decision_type}_decision".to_sym,
-          class_name: "MatchDecisions::#{decision_type.to_s.camelize}",
+          class_name: decision_class_name,
           foreign_key: :match_id,
           inverse_of: :match
         
         has_many "#{decision_type}_notifications".to_sym,
-          class_name: "Notifications::#{decision_type.to_s.camelize}",
+          class_name: notification_class_name,
           foreign_key: :client_opportunity_match_id,
           inverse_of: :match
         

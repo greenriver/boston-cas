@@ -15,11 +15,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
   belongs_to :client
   belongs_to :opportunity
   delegate :opportunity_details, to: :opportunity, allow_nil: true
-  delegate :program, to: :sub_program
-  delegate :sub_program, to: :opportunity
+  delegate :contacts_editable_by_hsa, to: :match_route
+  has_one :program, through: :sub_program
+  has_one :sub_program, through: :opportunity
+  has_one :match_route, through: :program
 
   has_many :notifications, class_name: 'Notifications::Base'
 
+  # Default Match Route
   has_decision :match_recommendation_dnd_staff
   has_decision :match_recommendation_shelter_agency
   has_decision :confirm_shelter_agency_decline_dnd_staff
@@ -30,29 +33,46 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :record_client_housed_date_housing_subsidy_administrator
   has_decision :confirm_match_success_dnd_staff
 
+  # Provider Only Match Route
+  # NB: the following class names need to be strings, or it has trouble finding the nested StatusCallback classes
+  has_decision :hsa_acknowledges_receipt, decision_class_name: 'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt', notification_class_name: 'Notifications::ProviderOnly::MatchInitiationForHsa'
+  has_decision :hsa_accepts_client, decision_class_name: 'MatchDecisions::ProviderOnly::HsaAcceptsClient', notification_class_name: 'Notifications::ProviderOnly::HsaAcceptsClient'
+  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
+
   has_one :current_decision
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
 
+  scope :on_route, -> (route) do
+    joins(:program).merge(Program.on_route(route))
+  end
+
   ###################
-  ## Lifecycle Scopes
+  ## Life cycle Scopes
   ###################
 
   scope :proposed, -> { where active: false, closed: false }
   scope :candidate, -> { proposed } #alias
   scope :active, -> { where active: true  }
   scope :closed, -> { where closed: true }
+  scope :open, -> { where closed: false }
   scope :successful, -> { where closed: true, closed_reason: 'success' }
   scope :success, -> {successful} # alias
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
   scope :stalled, -> do
-    md_t = MatchDecisions::Base.arel_table
-    active.joins(:decisions).
-      where(match_decisions: {status: [:pending, :acknowledged]}).
-      where(md_t[:updated_at].lteq(self.stalled_interval.ago))
+    ids = Set.new
+    MatchRoutes::Base.all_routes.each do |route|
+      # instantiate the route
+      route = route.first
+      stall_date = route.stalled_interval.days.ago
+      ids += active.on_route(route).joins(:decisions).merge(
+        MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)
+      ).distinct.pluck(:id)
+    end
+    where(id: ids.to_a)
   end
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
@@ -63,6 +83,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
         md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff'))
       )
     )
+  end
+  scope :should_alert_warehouse, -> do
+    success.joins(:match_route).merge(MatchRoutes::Base.should_cancel_other_matches)
   end
 
   scope :in_process_or_complete, -> do
@@ -133,18 +156,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
     class_name: MatchProgressUpdates::Base.name,
     foreign_key: :match_id
 
-  def self.stalled_interval
-    Config.get(:stalled_interval).days
-  end
-
   def self.closed_filter_options
     {
-      'Success' => 'success', 
-      'Rejected/Declined' =>'rejected', 
+      'Success' => 'success',
+      'Rejected/Declined' =>'rejected',
       'Canceled/Pre-Empted' => 'canceled'
     }
   end
-    
+
   def confidential?
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
   end
@@ -171,6 +190,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       true
     elsif contact.in?(shelter_agency_contacts)
       true
+    elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
+      true
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?)
       true
     else
@@ -183,6 +204,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
     if contact.user_can_view_all_clients?
       true
     elsif contact.in?(shelter_agency_contacts)
+      true
+    elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa
       true
     elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
       true
@@ -224,7 +247,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     contact_matches = ClientOpportunityMatchContact.where(
       ClientOpportunityMatchContact.arel_table[:match_id].eq(arel_table[:id])
     ).text_search(text).exists
-    
+
     where(
       client_matches.
       or(opp_matches).
@@ -247,7 +270,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       initialized_decisions.order(created_at: :desc).first
     end
   end
-  
+
   def add_default_contacts!
     add_default_dnd_staff_contacts!
     add_default_housing_subsidy_admin_contacts!
@@ -272,22 +295,34 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def overall_status
     if active?
-      if match_recommendation_dnd_staff_decision.status == 'decline' ||
-        (match_recommendation_shelter_agency_decision.status == 'declined' && ! confirm_shelter_agency_decline_dnd_staff_decision.status == 'decline_overridden') ||
-        (approve_match_housing_subsidy_admin_decision.status == 'declined' && ! confirm_housing_subsidy_admin_decline_dnd_staff_decision.status == 'decline_overridden')
-        "Declined"
+      if status_declined?
+        {name: 'Declined', type: 'danger'}
       else
-        "In Progress"
+        {name: 'In Progress', type: 'success'}
       end
+
     elsif closed?
       case closed_reason
-      when 'success' then 'Success'
-      when 'rejected' then 'Rejected'
-      when 'canceled' then 'Pre-empted'
+      when 'success' then {name: 'Success', type: 'success'}
+      when 'rejected' then {name: 'Rejected', type: 'danger'}
+      when 'canceled' then {name: 'Pre-empted', type: 'danger'}
       end
     else
-      'New'
+       {name: 'New', type: 'success'}
+
     end
+
+  end
+
+  def status_declined?
+    dnd_status = match_recommendation_dnd_staff_decision&.status
+    shelter_status = match_recommendation_shelter_agency_decision&.status
+    shelter_override_status = confirm_shelter_agency_decline_dnd_staff_decision&.status
+    shelter_declined = (shelter_status == 'declined' && ! shelter_override_status == 'decline_overridden')
+    hsa_status = approve_match_housing_subsidy_admin_decision&.status
+    hsa_override_status = confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status
+    hsa_declined = (hsa_status == 'declined' && ! hsa_override_status == 'decline_overridden')
+    dnd_status == 'decline' || shelter_declined || hsa_declined
   end
 
   def stalled?
@@ -303,7 +338,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def timeline_events
-    event_history = events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all.to_a 
+    event_history = events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all.to_a
     status_history = status_updates.complete.preload(:notification, :contact).to_a
     event_history + status_history
   end
@@ -332,10 +367,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def activate!
     self.class.transaction do
       update! active: true
-      client.update available_candidate: false
+      client.make_unavailable_in(match_route: opportunity.match_route)
       opportunity.update available_candidate: false
       add_default_contacts!
-      match_recommendation_dnd_staff_decision.initialize_decision!
+      self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     end
   end
@@ -343,7 +378,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def rejected!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
-      client.update! available_candidate: true
+      client.make_available_in(match_route: opportunity.match_route)
       opportunity.update! available_candidate: opportunity.active_match.blank?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
@@ -356,7 +391,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def canceled!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
-      client.update! available_candidate: true
+      client.make_available_in(match_route: opportunity.match_route)
       opportunity.update! available_candidate: opportunity.active_match.blank?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
@@ -366,12 +401,35 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
+  # Similar to a cancel, but allow the client to re-match the same opportunity
+  # if it comes up again.  Also, don't re-run the matching engine, we'll
+  # put the opportunity
+  def poached!
+    self.class.transaction do
+      update! active: false, closed: true, closed_reason: 'canceled'
+      client.make_available_in(match_route: opportunity.match_route)
+      opportunity.update! available_candidate: false
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      # Prevent access to this match by notification after 1 week
+      expire_all_notifications()
+    end
+  end
+
   def succeeded!
     self.class.transaction do
+      route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
-      client_related_matches.destroy_all
+      if route.should_cancel_other_matches
+        client_related_matches.destroy_all
+        client.update available: false
+        # Prevent matching on any route
+        client.make_unavailable_in_all_routes
+      else
+        # Prevent matching on this route again
+        client.make_available_in match_route: route
+      end
+
       opportunity_related_matches.destroy_all
-      client.update available: false, available_candidate: false
       opportunity.update available: false, available_candidate: false
       if opportunity.unit != nil
         opportunity.unit.update available: false
@@ -386,15 +444,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def client_related_matches
-    ClientOpportunityMatch
-      .where(client_id: client_id)
-      .where.not(id: id)
+    ClientOpportunityMatch.open.joins(:match_route).
+      where(client_id: client_id).
+      where.not(id: id)
   end
 
   def opportunity_related_matches
-    ClientOpportunityMatch
-      .where(opportunity_id: opportunity_id)
-      .where.not(id: id)
+    ClientOpportunityMatch.
+      where(opportunity_id: opportunity_id).
+      where.not(id: id)
   end
 
   private
@@ -412,16 +470,33 @@ class ClientOpportunityMatch < ActiveRecord::Base
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
+      program.dnd_contacts.each do |contact|
+        assign_match_role_to_contact :dnd_staff, contact
+      end
     end
 
     def add_default_housing_subsidy_admin_contacts!
       opportunity.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
+      program.housing_subsidy_admin_contacts.each do |contact|
+        assign_match_role_to_contact :housing_subsidy_admin, contact
+      end
+      # If for some reason we forgot to setup the default HSA contacts
+      # put the people who usually receive initial notifications in that role
+      if contacts_editable_by_hsa && housing_subsidy_admin_contacts.blank?
+        Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
+          assign_match_role_to_contact :housing_subsidy_admin, contact
+        end
+      end
+
     end
 
     def add_default_client_contacts!
       client.regular_contacts.each do |contact|
+        assign_match_role_to_contact :client, contact
+      end
+      program.client_contacts.each do |contact|
         assign_match_role_to_contact :client, contact
       end
     end
@@ -430,14 +505,21 @@ class ClientOpportunityMatch < ActiveRecord::Base
       client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
+      program.shelter_agency_contacts.each do |contact|
+        assign_match_role_to_contact :shelter_agency, contact
+      end
     end
 
     def add_default_ssp_contacts!
-      
+      program.ssp_contacts.each do |contact|
+        assign_match_role_to_contact :ssp, contact
+      end
     end
 
     def add_default_hsp_contacts!
-      
+      program.hsp_contacts.each do |contact|
+        assign_match_role_to_contact :hsp, contact
+      end
     end
 
     def self.delinquent_match_ids
@@ -449,7 +531,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
         end.group_by do |row|
           row[:match_id]
         end
-      
+
       updates.map do |match_id, update_requests|
         delinquent = Set.new
         requests_by_contact = update_requests.group_by do |row|

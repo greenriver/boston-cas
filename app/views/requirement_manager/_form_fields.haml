@@ -1,34 +1,35 @@
 - help_text ||= ''
-.well.add-things-boxes.add-things-boxes--rules{ data: {requirement_manager: true, base_object_name: form.object_name} }
-  %h3.add-things-boxes--h3 Rules
-  - if help_text.present?
-    %p.margin-bottom-02= help_text
-  
-  = render 'requirement_manager/inherited_rules', inheritee: form.object
-  - if can_assign_requirements?    
-    %h4= selected_requirements_heading
-    %div{ data: {selected_requirements: true} }
-    - form.object.requirements.preload(:rule).order(:created_at).each do |requirement|
-      %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: requirement.rule_name_with_verb, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s, requirement_display_for_variable: requirement.display_for_variable }}
-    
-    %h4 Add Rule Condition
-    .row
-      .col-xs-5.col-sm-5.col-md-4.col-lg-3
-        .btn-group
-          %a{href: '#', class: 'btn btn-rule-condition', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
-          %a{href: '#', class: 'btn btn-rule-condition', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
-      .col-xs-7.col-sm-4.col-md-5.col-lg-7
-        .form-group
-          = select_tag :available_rules, nil, class: 'form-control', data: {rule_searcher: true}
-          - form.object.available_rules.each do |rule|
-            %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, variable: rule.variable_requirement?.to_s}}
-            - if rule.variable_requirement?
-              .jVariableRequirment{data: {rule_id: rule.id}}
-                = render rule
-      .col-xs-12.col-sm-3.col-lg-2.text-right
-        .btn-group
-          %a{href: '#', class: 'btn btn-primary', data: {add_button: true}} Add Rule
-          
+
+.row
+  .col-lg-8
+    .c-card.c-card--flush{ data: {requirement_manager: true, base_object_name: form.object_name} }
+      %h3 Rules
+      .c-card__content
+        - if help_text.present?
+          %p.margin-bottom-02= help_text
+        .mb-6
+          = render 'requirement_manager/inherited_rules', inheritee: form.object
+        - if can_assign_requirements?
+          .mb-6
+            %label= selected_requirements_heading
+            %div{ data: {selected_requirements: true} }
+            - form.object.requirements.preload(:rule).order(:created_at).each do |requirement|
+              %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: requirement.rule_name_with_verb, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s, requirement_display_for_variable: requirement.display_for_variable }}
+
+          %label Add Rule Condition
+          .c-binary-choice.d-flex.align-items-center.flex-wrap
+            .input-group.mb-2.mr-2
+              .input-group-prepend
+                %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
+                %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
+              = select_tag :available_rules, nil, class: 'form-control select2--with-prepends', data: {rule_searcher: true}
+            - form.object.available_rules.each do |rule|
+              %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, variable: rule.variable_requirement?.to_s}}
+              - if rule.variable_requirement?
+                .jVariableRequirment{data: {rule_id: rule.id}}
+                  = render rule
+          %a{href: '#', class: 'btn btn-primary mb-2', data: {add_button: true}} Add Rule
+
 = content_for :page_js do
   :javascript
     $('[data-requirement-manager]').each(function(_i, element) {

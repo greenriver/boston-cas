@@ -2,4 +2,4 @@
   = form.input :note, as: :text, input_html: {rows: 4}, label: false
   - if @match.can_create_administrative_note?(access_context.current_contact)
     = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
-  = form.submit "Save", class: 'btn btn-primary'
+  = form.submit "Save", class: 'btn btn-success'

@@ -1,0 +1,76 @@
+
+$choice-icon-type: (
+  confirm: (
+    icon: map-get($icons, checkmark),
+    background: $brand-success-l,
+    color: $brand-success,
+    font-size: rem(14px)
+  ),
+  cancel: (
+    icon: map-get($icons, minus-circle),
+    background: $brand-warning-l,
+    color: $brand-warning,
+    font-size: rem(20px)
+  ),
+  park: (
+    icon: map-get($icons, clock),
+    background: $brand-warning-l,
+    color: $brand-warning,
+    font-size: rem(20px)
+  ),
+  reject: (
+    icon: map-get($icons, cross),
+    background: $brand-danger-l,
+    color: $brand-danger,
+    font-size: rem(14px)
+  ),
+  not-working: (
+    icon: map-get($icons, stop),
+    background: $brand-danger-l,
+    color: $brand-danger,
+    font-size: rem(16px)
+  ),
+  backup: (
+    icon: map-get($icons, step-back),
+    background: $gray-030,
+    color: $gray-070,
+    font-size: rem(16px)
+  ),
+
+);
+
+$choice-icon-size: 33px;
+.c-choice-icon {
+  height: rem($choice-icon-size);
+  width: rem($choice-icon-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  @include media-breakpoint-up(lg) {
+    margin-right: space(4);
+  }
+
+  &::before {
+    @include icon;
+    content: '';
+  }
+  @each $name, $type in $choice-icon-type {
+    $icon: map-get($type, icon);
+    $background: map-get($type, background);
+    $color: map-get($type, color);
+    $font-size: map-get($type, font-size);
+    &--#{$name} {
+      background: $background;
+      color: $color;
+      @if ($font-size) {
+        font-size: $font-size;
+      }
+      &::before {
+        content: '#{$icon}';
+      }
+    }
+  }
+}

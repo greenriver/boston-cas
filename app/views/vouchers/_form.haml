@@ -52,12 +52,12 @@
               - if voucher.status_match.present?
                 - can_see_details_of_this_match = ClientOpportunityMatch.accessible_by_user(current_user).where(id: voucher.status_match.id).present? rescue false
                 - if can_see_details_of_this_match
-                  = link_to voucher.status_match.overall_status, match_path(voucher.status_match)
+                  = link_to voucher.status_match.overall_status[:name], match_path(voucher.status_match)
                 - else
-                  = voucher.status_match.overall_status
+                  = voucher.status_match.overall_status[:name]
                 - if voucher.status_match.active? && can_reject_matches?
                   %br
-                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'btn btn-secondary btn-xs', method: :delete, data: {confirm: "Stoping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
+                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'btn btn-secondary btn-sm', method: :delete, data: {confirm: "Stoping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
                     Stop Match
 
             %td
@@ -75,16 +75,16 @@
               %span.icon-info{data:{ toggle: :tooltip, placement: :top, title: creation_info.html_safe, html: :true}}
             %td
               - if voucher.can_be_destroyed?
-                = link_to program_sub_program_voucher_path(id: voucher.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-xs' do
+                = link_to program_sub_program_voucher_path(id: voucher.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-sm' do
                   %span.icon-cross
                   Delete
           - if voucher.errors.any?
             %tr
               %td(style="border: none; color:red; position: relative; top: -30px;")
               %td(colspan="6" style="border: none; color:red; position: relative; top: -30px;")
-                = voucher.errors.full_messages_for(:base).join(', ')   
+                = voucher.errors.full_messages_for(:base).join(', ')
 
-    = f.button :submit, value: 'Update Vouchers'
+    = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary'
 = content_for :page_js do
   :javascript
     $('select').select2();
@@ -101,7 +101,7 @@
         $.each(data, function(k,v){
           $child.append($('<option />').attr('value', v[value_method]).text(v[label_method]));
         });
-        
+
         if($child.data('default-parent-id') == id) {
           $child.append('<option value="' + $child.data('default-value') + '">' + $child.data('default-label') + '</option>')
           // restore the original value if still available

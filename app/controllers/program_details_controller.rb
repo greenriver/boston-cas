@@ -39,6 +39,7 @@ class ProgramDetailsController < ApplicationController
           :funding_source_id,
           :confidential,
           :eligibility_requirement_notes,
+          :match_route_id,
           service_ids: [],
           requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
         )

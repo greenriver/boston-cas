@@ -6,13 +6,7 @@ class Config < ActiveRecord::Base
     self.class.invalidate_cache
   end
 
-  def set_defaults
-    self.stalled_interval  ||= if Rails.env.production?
-      30
-    else
-      7
-    end
-    
+  def set_defaults    
     self.dnd_interval  ||= if Rails.env.production?
       7 #days
     else

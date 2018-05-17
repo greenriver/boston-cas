@@ -1,9 +1,10 @@
-.detail-box--label 
+%h3.detail-box--label 
   Client
   - unless match.client.has_full_housing_release?
     .limited-cas-release
       %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "This client has not signed the #{_('HAN release')} and their name cannot be released to the #{_('HSA')}, #{_('SSP')}, or the #{_('HSP')}. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the #{_('HAN release')} at any time during the match the change will be reflected in CAS and their information will become available."}}
-      = _(match.client.housing_release_status) || 'No release on file'
+      - release_status = if match.client.housing_release_status.downcase == 'none on file' || match.client.housing_release_status.blank? then 'No release on file' else _(match.client.housing_release_status) end
+      = release_status
 .detail-box--value
   - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end
   - name = match.client_name_for_contact(access_context.current_contact, hidden: false)

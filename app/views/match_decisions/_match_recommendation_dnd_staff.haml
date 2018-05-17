@@ -1,25 +1,55 @@
-.row
-  .col-xs-12
-    .match-decision
-      .button-row
-        %label.display-block * Add / Review Contacts for Match
-        %div.hint.margin-bottom-01 This step is required
-        = link_to access_context.edit_match_contacts_path(@match), class: 'btn btn-primary', data: {loads_in_pjax_modal: true} do
-          %span.icon-plus
-          Review Contacts for Match
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-pre-choose
+        = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_alternate_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light mb-6'
+
+        %h3.h3.mb-3
+          Add / Review Contacts for Match
+
         - if @decision.errors[:match_contacts].present?
-          .requirement-warning
+          .requirement-warning.mb-4
             %span.icon-warning
             = @decision.errors.full_messages_for(:match_contacts).join ". "
-      .button-row
-        = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_alternate_matches_path(@match.opportunity), target: '_blank'
-      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-        = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+
         .row
           .col-sm-6
-            %h3 Accept Match Recommendation
-            %label= "Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{_('Shelter Agency')} contact"
-            = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers'}
+            = render 'match_contacts/contact_manager', contacts_type: 'shelter_agency', heading: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts", available_contacts_method: :available_shelter_agency_contacts, selected_contacts_method: :shelter_agency_contacts, required: true
+
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'client', heading: 'Client Contacts', available_contacts_method: :available_client_contacts, selected_contacts_method: :client_contacts, required: false
+
+        .row
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'dnd_staff', heading: "#{_('DND')} Staff Contacts", available_contacts_method: :available_dnd_staff_contacts, selected_contacts_method: :dnd_staff_contacts, required: true
+
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'housing_subsidy_admin', heading: "#{_('Housing Subsidy Administrator')} Contacts", available_contacts_method: :available_housing_subsidy_admin_contacts, selected_contacts_method: :housing_subsidy_admin_contacts, required: true
+
+        .row
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'ssp', heading: "#{_('Stabilization Service Provider')}", available_contacts_method: :available_ssp_contacts, selected_contacts_method: :ssp_contacts, required: false
+
+          .col-sm-6
+            = render 'match_contacts/contact_manager', contacts_type: 'hsp', heading: "#{_('Housing Search Provider')}", available_contacts_method: :available_hsp_contacts, selected_contacts_method: :hsp_contacts, required: false
+
+        .row
+          .col-md-6
+            = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+      .o-choose.o-choose--flush
+        .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm.mr-4
+              %h3 Accept Match
+          .o-choose__content
+            %label
+              Expire Match
+              %span.label-helper.label-helper--optional optional
+            %p Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{_('Shelter Agency')} contact
+            .row
+              .col-md-6
+                = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers'}
             .form-actions.clearfix
               - @decision.errors[:status].each do |error_message|
                 %p.error-block= error_message
@@ -27,42 +57,16 @@
                 .alert.alert-danger
                   = link_to @match.client.full_name, client_path(@match.client)
                   Does not have a full housing release on file.
-            = form.submit 'Accept Match Recommendation', class: 'btn btn-primary jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
-          .col-sm-6
-            %h3 Reject Match Recommendation
-            = render 'match_decisions/decline_reason', form: form
-            - if can_reject_matches?
-              .well
-                = render 'match_decisions/park_client', form: form
-            = form.submit 'Decline Match', class: 'btn btn-secondary jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
-          
+            .form-actions
+              %button{class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)}
+                %i.icon-checkmark
+                Accept Match
 
-          = content_for :page_js do
-            :javascript
-              function update_button_states(e) {
-                var current_target_id = $(e.currentTarget).attr('id');
-                
-                var shelter_expiration_present = $('#decision_shelter_expiration').val() != '';
-                if(shelter_expiration_present) {
-                  $('.jAccept').prop('disabled', false);
-                  $('.jDecline').prop('disabled', true);
-                  $('.jButtonStateTriggers').not('#' + current_target_id).val('');
-                }
-                
-                var prevent_matching_present = $('#decision_prevent_matching_until').val() != '' && $('#decision_prevent_matching_until').val() != undefined;
-                if(prevent_matching_present) {
-                  $('.jAccept').prop('disabled', true);
-                  $('.jDecline').prop('disabled', false);
-                  $('.jButtonStateTriggers').not('#' + current_target_id).val('');          
-                }
-                
-                if(! shelter_expiration_present && ! prevent_matching_present) {
-                  $('.jAccept').removeAttr('disabled');
-                  $('.jDecline').removeAttr('disabled');
-                }
-              }
+        - if can_reject_matches?
+          = render 'match_decisions/decline_actions', form: form
 
-              $('.jButtonStateTriggers').on("change", update_button_states);
-              $('.jButtonStateTriggers').trigger('change');
-          
-              
+= content_for :page_js do
+  :javascript
+    $('[data-contact-manager]').each(function(_i, element) {
+      new App.ContactManager.Controller(element);
+    });

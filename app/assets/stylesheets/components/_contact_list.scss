@@ -1,0 +1,28 @@
+.c-contact-list {
+  padding: rem(10px);
+}
+
+.c-contact-list__contact {
+  background: $gray-015;
+  padding: space(2);
+  display: flex;
+  margin: 0 0 5px 0;
+}
+
+.c-contact-list__remove {
+  color: $brand-danger;
+  margin-left: auto;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.c-contact-list__details span {
+  padding-right: space(2);
+  margin-left: space(2);
+  border-right: 1px solid $gray-025;
+  &:empty {
+    display: none;
+  }
+}

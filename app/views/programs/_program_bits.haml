@@ -1,7 +1,9 @@
-= f.input :name, label: 'Program Name'
-= f.association :funding_source, label_method: :name, required: true, label: 'Funding Source'
-= f.input :confidential, label: 'Is this a confidential program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
-%div.form-group.string.optional
-  .row
-    .col-sm-5
-      = f.input :contract_start_date, as: :date_picker, label: 'Contract Start Date', hint: 'This date is only used as a reference and does not affect availability or matches.'
+%section
+  = f.input :name, label: 'Program Name'
+  = f.association :match_route, include_blank: false, input_html: {disabled: @program.match_route_fixed?, class: 'select2--full-width'}
+  = f.association :funding_source, label_method: :name, required: true, label: 'Funding Source', input_html: {class: 'select2--full-width'}
+  = f.input :confidential, label: 'Is this a confidential program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
+  %div.form-group.string.optional
+    .row
+      .col-sm-8
+        = f.input :contract_start_date, as: :date_picker, label: 'Contract Start Date', hint: 'This date is only used as a reference and does not affect availability or matches.'

@@ -8,14 +8,14 @@
   .col-sm-4
     .summary-readout.pull-right
       .summary-readout--tile.summary-readout--tile__green
-        .summary-readout--tile-label.summary-readout--tile-label__outside 
+        .summary-readout--tile-label.summary-readout--tile-label__outside
           Status:
-        .summary-readout--tile-color-block 
+        .summary-readout--tile-color-block
           Pending
       .summary-readout--tile.summary-readout--tile__blue
-        .summary-readout--tile-label.summary-readout--tile-label__outside 
+        .summary-readout--tile-label.summary-readout--tile-label__outside
           Current Step Assigned To:
-        .summary-readout--tile-color-block 
+        .summary-readout--tile-color-block
           Shelter Agency
 .detail-box
   -# These label/value pairs can all be displayed conditionally if present
@@ -23,40 +23,40 @@
     .col-sm-9
       .row
         .col-sm-3
-          .detail-box--label Program
+          %h3.detail-box--label Program
           .detail-box--value
-          .detail-box--label Sub-Grantee
+          %h3.detail-box--label Sub-Grantee
           .detail-box--value
-          .detail-box--label Sub-Contractor
+          %h3.detail-box--label Sub-Contractor
           .detail-box--value
         .col-sm-3
-          .detail-box--label= "#{Building.model_name.human}"
+          %h3.detail-box--label= "#{Building.model_name.human}"
           .detail-box--value
             Walnut Park
             %br
-            237 Walnut Ave, 
+            237 Walnut Ave,
             %br
             Boston, MA 02119
         .col-sm-2
-          .detail-box--label Unit
+          %h3.detail-box--label Unit
           .detail-box--value 243-B
         .col-sm-4
-          .detail-box--label Client
-          .detail-box--value 
+          %h3.detail-box--label Client
+          .detail-box--value
             =link_to 'Ronnie Romero', '#'
       .row
         .col-sm-5
-          .detail-box--label Services
+          %h3.detail-box--label Services
           .detail-box--value
             Addiction Support Services
             %br
             Mental Health Services
         .col-sm-7
-          .detail-box--label Rules
+          %h3.detail-box--label Rules
           .detail-box--value
             Must be mental health services eligible
     .col-sm-3
-      .detail-box--label Shelter Agency Contact
+      %h3.detail-box--label Shelter Agency Contact
       .detail-box--value
         Leroy Bass
         %br
@@ -65,7 +65,7 @@
         =link_to 'leroybass@pinestreetinn.org', 'mailto:leroybass@pinestreetinn.org'
         %br
         617.555.1212
-      .detail-box--label 
+      %h3.detail-box--label
         = "#{_('Housing Subsidy Administrator')}"
       .detail-box--value
         Bertha Carter
@@ -86,15 +86,15 @@
 .row
   .col-sm-12
     .current-step
-      %h3.current-step--heading 
+      %h3.current-step--heading
         Current Step:
         %span.current-step--name Shelter Agency Initial Review
-      %h5.current-step--assignemnt--label 
+      %h5.current-step--assignemnt--label
         Assigned To:
         %span.current-step--assignment--value Shelter Agency
       %p.current-step--introduction
         Placeholder for friendly text about this page and next steps.
-  
+
 
 
 -# if @decision.editable?
@@ -110,7 +110,7 @@
           Required for match acceptance
     .col-sm-8
       .row.form-inputs
-        .col-xs-6
+        .col-sm-6
           .form-group.select.optional.notification_response_action
             %label.select.optional.control-label{for: 'notification_response_action'}
               Please select one
@@ -118,7 +118,7 @@
               %option{value: ''}
               %option{value: 'accepted'}Accept
               %option{value: 'declined'}Decline
-        .col-xs-12
+        .col-sm-12
           .form-group
             %label.control-label{for: 'exampleInputEmail1'}
               Email
@@ -136,7 +136,7 @@
                 %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio1', value: 'option1', checked: 'checked'}
                 Project-Based
             .row
-              .col-xs-6.col-xs-offset-1
+              .col-sm-6.col-sm-offset-1
                 .form-group
                   %label.control-label{for: 'building-name'}= "#{Building.model_name.human}"
                   %input{type: 'text', class: 'form-control', name: 'building-name', id: 'building-name'}
@@ -169,17 +169,17 @@
                 We are no longer able to contact this client
             .form-group
               .row
-                .col-xs-5.col-xs-offset-1
+                .col-sm-5.col-sm-offset-1
                   %label.control-label{for: 'date-last-saw-client'}When did you last see this client?
                   .input-group
                     %input{type: 'text', name: 'date-last-saw-client', id: 'date-last-saw-client', class: 'form-control'}
-                    %span.input-group-addon.icon-calendar
-            
+                    %span.input-group-append.icon-calendar
+
 
       .form-actions
         %p Forms that have two possible actions have a btn-primary (blue) and a btn-secondary (gray).
-        =link_to 'Decline Match', '#', {class: 'btn btn-secondary'}
-        =link_to 'Accept Match Recommendation', '#', {class: 'btn btn-primary margin-left-01'}
+        =link_to 'Decline Match', '#', {class: 'btn btn-danger'}
+        =link_to 'Accept Match', '#', {class: 'btn btn-success margin-left-01'}
       .form-actions
         %p Cancel buttons and toggle switches (e.g. must/can't toggle on rules) use btn-default (white).
         %input{type: 'submit', name: 'commit', value: 'Respond', class: 'btn btn-default'}
@@ -197,7 +197,7 @@
             %td.history--contact-name Bertha Carter
           %tr
             %td.history--date 3/25/2016
-            %td.history--event-name 
+            %td.history--event-name
               Shelter Agency accepted match recommendation
               .history--event-note
                 %strong Note:
@@ -209,13 +209,13 @@
             %td.history--contact-name Leroy Bass
           %tr
             %td.history--date 3/24/2016
-            %td.history--event-name 
+            %td.history--event-name
               Match Notification Sent to HSA
               %br
               Match Notification Sent to Shelter Agency
               %br
               Match Notification Sent to Client
-            %td.history--contact-name 
+            %td.history--contact-name
               Bertha Carter
               %br
               Leroy Bass
@@ -223,7 +223,7 @@
               Ronnie Romero
           %tr
             %td.history--date 3/24/2016
-            %td.history--event-name 
+            %td.history--event-name
               DND Accepted Match Recommendation
               .history--event-note
                 %strong Note:

@@ -1,13 +1,15 @@
 .table-utilities {
-  @media (max-width: $screen-sm-max) { 
+  margin-top: space(2);
+  margin-bottom: space(2);
+  @media (max-width: $screen-sm-max) {
     @include margin(12px null 24px);
   }
 }
-// .table > thead > tr > th, 
-// .table > thead > tr > td, 
-// .table > tbody > tr > th, 
-// .table > tbody > tr > td, 
-// .table > tfoot > tr > th, 
+// .table > thead > tr > th,
+// .table > thead > tr > td,
+// .table > tbody > tr > th,
+// .table > tbody > tr > td,
+// .table > tfoot > tr > th,
 // .table > tfoot > tr > td {
 //   line-height: 1.1;
 // }
@@ -26,10 +28,19 @@ th[class^="sort-"] {
 }
 .btn-sm span[class^="icon-"],
 .btn-sm span[class*="icon-"],
-.btn-xs span[class^="icon-"],
-.btn-xs span[class*="icon-"]
+.btn-sm span[class^="icon-"],
+.btn-sm span[class*="icon-"]
 {
   font-size: 10px;
   line-height: 1.5;
   padding-right: 2px;
+}
+
+.table tr.no-border,
+table tr.no-border {
+  &,
+  > th,
+  > td {
+    border: 0;
+  }
 }

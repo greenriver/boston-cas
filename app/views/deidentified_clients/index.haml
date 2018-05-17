@@ -1,0 +1,44 @@
+- title = 'Deidentifed Clients'
+- content_for :title, title
+
+.row
+  .col-sm-8
+    %h1= content_for :title
+  .col-sm-4
+    .row
+      .col-sm-12
+        = link_to new_deidentified_client_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+          %span.icon-plus
+          Add a Deidentifed Client
+
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %th Last Name
+          %th First Name
+          %th Assessment Score
+          %th Agency
+          %th Cohorts    
+                  
+        %tbody
+          - @deidentified_clients.each do |deidentified_client|
+            %tr
+              %td= deidentified_client.last_name
+              %td= deidentified_client.first_name    
+              %td= deidentified_client.assessment_score
+              %td= deidentified_client.agency
+              %td= simple_format deidentified_client.cohort_names
+              - if can_manage_deidentified_clients? 
+                %td
+                  = link_to action: :edit, id: deidentified_client do
+                    %span.icon-pencil
+                    Edit
+                - if !deidentified_client.involved_in_match?
+                  %td
+                    = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this deidentified_client?"} do
+                      %span.icon-cross
+                      Delete
+                      
+%p= paginate @deidentified_clients

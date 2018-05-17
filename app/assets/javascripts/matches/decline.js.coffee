@@ -8,4 +8,3 @@ class App.Matches.Decline
       else
         @note.hide()
     @trigger.trigger('change')
-  

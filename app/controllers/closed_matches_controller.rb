@@ -1,7 +1,6 @@
 class ClosedMatchesController < MatchListBaseController
-  
   before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
-  
+
   def index
     # search
     if params[:q].present?
@@ -14,6 +13,8 @@ class ClosedMatchesController < MatchListBaseController
       @matches = match_scope
     end
     # decision subquery
+
+    @available_routes = MatchRoutes::Base.filterable_routes
 
     md = MatchDecisions::Base.where(
       'match_id = client_opportunity_matches.id'
@@ -45,9 +46,15 @@ class ClosedMatchesController < MatchListBaseController
       sort = sort + ' NULLS LAST'
     end
     @show_vispdat = show_vispdat?
-    
-    if params[:current_step].present? && ClientOpportunityMatch::CLOSED_REASONS.include?(params[:current_step])
-      @matches = @matches.public_send(params[:current_step])
+
+    @current_step = params[:current_step]
+    if @current_step.present? && ClientOpportunityMatch::CLOSED_REASONS.include?(@current_step)
+      @matches = @matches.public_send(@current_step)
+    end
+
+    @current_route = params[:current_route]
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
+      @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
     end
 
     @matches = @matches
@@ -60,27 +67,29 @@ class ClosedMatchesController < MatchListBaseController
 
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @data_source_id.present? || @start_date.present?
-    @types = MatchDecisions::Base.match_steps
+    @active_filter = @current_step.present? || @current_route.present?
+    @types = MatchRoutes::Base.match_steps
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!
     can_view_all_matches? || can_view_own_closed_matches?
   end
-  
+
   def match_scope
     if can_view_all_matches?
-      ClientOpportunityMatch
-        .accessible_by_user(current_user)
-        .closed
+      ClientOpportunityMatch.
+        accessible_by_user(current_user).
+        closed.
+        joins(:client)
     else
       ClientOpportunityMatch.
         hsa_involved.
         accessible_by_user(current_user).
-        closed
+        closed.
+        joins(:client)
     end
   end
-  
+
   def set_heading
     @heading = 'Closed Matches'
   end

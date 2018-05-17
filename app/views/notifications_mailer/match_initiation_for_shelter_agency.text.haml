@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+The CAS has generated a new match recommendation.  
+\
+This match has not yet been reviewed by the HSA:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

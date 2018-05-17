@@ -1,0 +1,35 @@
+- title = "Match Routes"
+- content_for :title, title
+
+= render :partial => 'menus/admin_tabs'
+
+%h1= content_for :title
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th
+        Route Name
+      %th
+        Active
+      %th
+        HSA can edit HSA contacts
+      %th
+        Should cancel other matches 
+      %th
+        Match prioritization
+        
+  %tbody
+    - @routes.each do |route|
+      %tr
+        %td
+          = link_to route.title, edit_admin_match_route_path(route)
+        %td
+          = checkmark route.active
+        %td
+          = checkmark route.contacts_editable_by_hsa
+        %td
+          = checkmark route.should_cancel_other_matches
+        %td
+          = route.match_prioritization.title
+        

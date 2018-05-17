@@ -1,34 +1,34 @@
 .summary-readout--tile {
-  float: left;
-  @include open-sans-condensed-bold;
+  &:not(:last-of-type) {
+    @include media-breakpoint-up(md) {
+      padding-right: space(6);
+      border-right: 2px solid $gray-020;
+      margin-right: space(6);
+    }
+  }
 }
-.summary-readout--tile__green .summary-readout--tile-label__outside {
-  color: $cas-green;
-}
-.summary-readout--tile__green .summary-readout--tile-color-block {
-  background-color: $cas-green;
-}
-.summary-readout--tile__blue .summary-readout--tile-label__outside {
-  color: $cas-blue;
-}
-.summary-readout--tile__blue .summary-readout--tile-color-block {
-  background-color: $cas-blue;
-}
-.summary-readout--tile__red .summary-readout--tile-label__outside {
-  color: $cas-red;
-}
-.summary-readout--tile__red .summary-readout--tile-color-block {
-  background-color: $cas-red;
-}
+
 .summary-readout--tile-label {
   text-transform: uppercase;
-  font-size: rem(14);
+  font-size: rem(18);
   text-align: left;
+  @include open-sans-light;
 }
-.summary-readout--tile-color-block {
-  color: $cas-red-green;
-  font-size: rem(20);
-  line-height: 1;
-  text-align: center;
-  padding: 9px 12px;
+
+.summary-readout--value {
+  @include open-sans-bold;
+  font-size: rem(20px);
+}
+
+.summary-readout {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 100%;
+  margin-top: space(4);
+  justify-content: space-between;
+  @include media-breakpoint-up(md) {
+    min-width: auto;
+    margin-top: 0;
+    justify-content: flex-star;
+  }
 }

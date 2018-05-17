@@ -11,7 +11,7 @@ gem 'with_advisory_lock'
 gem "haml-rails"
 gem "sass-rails"
 gem 'autoprefixer-rails'
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.1.1'
 gem "jquery-rails"
 gem 'coffee-rails'
 # TODO move to assets group
@@ -24,8 +24,9 @@ gem 'validates_email_format_of'
 
 gem "simple_form"
 gem 'virtus'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 5.0.9'
 
+gem 'responders'
 gem 'kaminari'
 gem 'ransack'
 

@@ -1,41 +1,33 @@
-= form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
-.jStillWorking.jWorkingWithClient
-  = form.input :note, as: :text, hint: 'Please include any notes that would be useful for this match.  e.g. "Client needs an accessible unit."',input_html: {rows: 4, disabled: !(@decision.editable?)}
-    
-  = render 'match_decisions/decline_reason', form: form
+= form.input :note, as: :text, hint: 'Please include any notes that would be useful for this match.  e.g. "Client needs an accessible unit."',input_html: {rows: 4, disabled: !(@decision.editable?)}
 
-
-  - if @match.client.release_of_information.blank? && @match.client.housing_release_status.blank?
-    = form.input :release_of_information, as: :boolean, required: true, inline_label: 'Client has signed release of information to share their data with network partners'
-  - elsif @match.client.release_of_information.present?
-    %p
-      Client signed release of information to share their data with network partners on 
-      %strong
-        = @match.client.release_of_information.to_date
-    = form.input :release_of_information, as: :hidden, input_html: { value: @match.client.release_of_information}
-  - else
-    %p
-      %strong
-        = checkmark(true)
-        Client provided a 
-        = _(@match.client.housing_release_status)
-  = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{_('shelter case manager')} and understands the services attached and the program requirements"
-  - if Config.get(:require_cori_release)
-    = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
-
-  .form-actions.clearfix
-    = form.submit 'Indicate Interest in Match', class: 'btn btn-primary jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)
-    = form.submit 'Decline Match', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?)
-
+- if @match.client.release_of_information.blank? && @match.client.housing_release_status.blank? || @match.client.housing_release_status.downcase == 'none on file'
+  = form.input :release_of_information, as: :boolean, required: true, inline_label: 'Client has signed release of information to share their data with network partners'
+- elsif @match.client.release_of_information.present?
   %p
-    The client does not need to be document-ready in order to indicate interest.
-    %br
-    = "When you indicate interest, notification will be sent to the #{_('Housing Subsidy Administrator')}. If the #{_('HSA')} has a release, #{_('they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing.')}"
-.jNoLongerWorking.jWorkingWithClient
-  = form.association :not_working_with_client_reason, collection: @decision.not_working_with_client_reasons, label: 'If you are no longer working with client, please indicate reason:', as: :check_boxes
-  = form.input :not_working_with_client_reason_other_explanation, as: :text, label: false, placeholder: 'Other reason'
-  = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
-  .form-actions.clearfix
-    = form.submit 'Not Working with Client', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)
+    Client signed release of information to share their data with network partners on
+    %strong
+      = @match.client.release_of_information.to_date
+  = form.input :release_of_information, as: :hidden, input_html: { value: @match.client.release_of_information}
+- else
+  %p
+    %strong
+      = checkmark(true)
+      Client provided a
+      = _(@match.client.housing_release_status)
+
+= form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{_('shelter case manager')} and understands the services attached and the program requirements"
+- if Config.get(:require_cori_release)
+  = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
+
+%p
+  The client does not need to be document-ready in order to indicate interest.
+  %br
+  = "When you indicate interest, notification will be sent to the #{_('Housing Subsidy Administrator')}. If the #{_('HSA')} has a release, #{_('they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing.')}"
+
+.form-actions
+  %button{class: 'btn btn-success jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)}
+    %i.icon-checkmark
+    Indicate Interest in Match
+
 
 = render 'match_decisions/shelter_agency_agreement'

@@ -1,0 +1,22 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-pre-choose
+        %p After contacting the client and obtaining client consent to proceed and all necessary paperwork submit this form to indicate acceptance of the match for all parties.
+        = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+      .o-choose.o-choose--flush
+        .o-choose__choice
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm.mr-4
+              %h3 Accept Match
+          .o-choose__content
+            %p
+              %i.icon-info
+              If accepted, all involved parties will be notified.
+
+            = form.submit 'Accept Match', class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
+
+        = render 'match_decisions/decline_and_cancel_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'
+
+-# = render 'match_decisions/step_back', form: form

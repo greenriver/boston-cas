@@ -2,62 +2,36 @@
   - filter_class = 'client__filter-active'
 - else
   - filter_class = 'client__filter'
-.btn-group{class: filter_class}
-  %button.btn.btn-default.dropdown-toggle{data: {toggle: :dropdown}}
+%div.dropdown{class: filter_class}
+  %button.btn.btn-default.dropdown-toggle.mr-4#filter-dropdown{data: {toggle: :dropdown}}
     Filter
     %span.caret
-  .client-filter.dropdown-menu.dropdown-menu-right.options
-    %h3.client__filter-header Limit clients by:
+  .client-filter.dropdown-menu.dropdown-menu-right.options{aria:{labelledby:"filter-dropdown"}}
     = form_tag(nil, method: "get") do
       -# preserve sort and search for filtering
-      - if params[:sort] 
+      - if params[:sort]
         = hidden_field_tag :sort, params[:sort]
-      - if params[:direction] 
+      - if params[:direction]
         = hidden_field_tag :direction, params[:direction]
-      - if params[:q] 
+      - if params[:q]
         = hidden_field_tag :q, params[:q]
-      .row
-        .col-sm-6
-          %h4 Availability
-          = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2'
-        .col-sm-6
-          %h4 Veteran
-          = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2'
-     
-      .row.margin-top-02
-        .col-xs-6
-          %p
-            %button.btn.btn-primary.icon-filter{type: :submit}
-              Filter
-        .col-xs-6.text-right
-          %p= link_to ' Clear Filters', clients_path, class: 'btn btn-secondary icon-cross'
+
+      .w-300.mb-2
+        %label.d-block Availability
+        = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+
+      .w-100.mb-6
+        %label.d-block Veteran
+        = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+
+      .mb-2.d-flex
+        = link_to clients_path, class: 'btn btn-light' do
+          %i.icon-cross
+          Clear
+        %button.btn.btn-primary.ml-auto{type: :submit}
+          %i.icon-filter
+          Filter
+
 = content_for :page_js do
   :javascript
-    (function($) {
-      $('.select2').select2();
-      var filter_class = '.#{filter_class}'
-      function toggle_clickable(e) {
-        if($(e.target).closest(filter_class).length == 0 ) {
-          $(filter_class).data('closeable', true);
-        }
-      }
-      $(filter_class).on('hide.bs.dropdown', function (e) {
-        var closable = $(this).data('closeable');
-        if(closable) {
-          $('body').off('click', toggle_clickable);
-        }
-        return closable;
-      });
-      $(filter_class).on('show.bs.dropdown', function (e) {
-        $(this).data('closeable', false);
-        // Make clicking outside of the menu close the menu
-        $('body').on('click', toggle_clickable);
-      });
-      $(filter_class).on('click', '*', function(e) {
-        var $target = $(e.target);
-        var closeable = $target.parent().data('closeable');
-        if($target.hasClass('dropdown-toggle') && closeable == false) {
-          $target.parent().data('closeable', true);
-        }
-      });
-    })(jQuery);
+    $('.select2').select2();

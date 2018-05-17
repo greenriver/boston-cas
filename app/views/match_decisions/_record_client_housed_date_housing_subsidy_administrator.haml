@@ -1,24 +1,26 @@
-.row
-  .col-xs-12
-    .match-decision
-      %p
-        Please record the date the client moved in.
-      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-        .form-group
-          .row
-            .col-sm-6
-              = form.input :client_move_in_date, label: 'Lease start date', as: :date_picker, disabled: !@decision.editable?
-              .form-inputs
-                = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
-              %p
-                = "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."
-              .form-actions.clearfix
-                = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
-            .col-sm-6
-              .form-actions.clearfix
-                - if can_reject_matches?
-                  .well
-                    = render 'match_decisions/park_client', form: form
-                    = render 'match_decisions/cancel_match_form_fields', form: form
-                  .well
-                    = render 'match_decisions/step_back', form: form
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice{ class: ('o-choose__choice--100' unless can_reject_matches?)}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm.mr-4
+              %h3 Continue Match
+          .o-choose__content
+            %p
+              Please record the date the client moved in.
+            .row
+              .col-md-6
+                = form.input :client_move_in_date, label: 'Lease start date', as: :date_picker, disabled: !@decision.editable?
+            .form-inputs
+              = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+            %p
+              = "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."
+            .form-actions
+              %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?}
+                %i.icon-checkmark
+                Continue Match
+
+        - if can_reject_matches?
+          = render 'match_decisions/cancel_actions', form: form

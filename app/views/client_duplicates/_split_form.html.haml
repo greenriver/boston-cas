@@ -1,6 +1,0 @@
-= simple_form_for @client, url: split_client_url do |f|
-  = f.error_notification
-  .form-inputs
-    = f.input :source, as: :hidden, input_html: {value: c.id}
-  .form-actions
-    = f.button :submit, "Split from #{@client.first_name} #{@client.last_name}"

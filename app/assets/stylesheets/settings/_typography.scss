@@ -1,0 +1,21 @@
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+
+$font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
+$font-family-base: 'Open Sans', sans-serif;
+
+$font-size-h1: 2.074rem;
+$font-size-h2: 1.728rem;
+$font-size-h3: 1.44rem;
+$font-size-h4: 1.2rem;
+$font-size-h5:            $font-size-default !default;
+$font-size-h6:            ceil(($font-size-default * 0.833)) !default; // ~12px
+
+//** By default, this inherits from the `<body>`.
+$headings-font-family:    'Open Sans Condensed', sans-serif;
+$headings-font-weight:    700 !default;
+$headings-line-height:    1.2 !default;
+$headings-color:          inherit !default;

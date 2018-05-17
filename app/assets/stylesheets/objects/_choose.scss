@@ -1,0 +1,127 @@
+$choose-border-color: $gray-030;
+
+@mixin choose-border($position) {
+  border-#{$position}: 1px solid $choose-border-color;
+}
+
+.o-choose {
+  display: flex;
+  @include choose-border(top);
+  &--flush {
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-bottom: -15px;
+  }
+  &--flush-top {
+    margin-top: -15px;
+    border-top: 0;
+  }
+}
+
+.o-choose__choice {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-bottom: space(4);
+  position: relative;
+  &:not(:last-of-type) {
+    @include choose-border(right);
+  }
+  &--100 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    input {
+      max-width: 400px;
+    }
+  }
+  &--disabled {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      pointer-events: none;
+      background: rgba($white, .75);
+      z-index: 10;
+    }
+  }
+}
+
+.o-choose__choice header {
+  @include choose-border(bottom);
+  display: flex;
+  align-items: center;
+  min-height: rem(70px);
+  padding-left: space(4);
+  padding-right: space(4);
+}
+
+.o-choose__choice input,
+.o-choose__choice textarea {
+  max-width: 700px;
+}
+
+.o-choose__nav {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  align-self: stretch;
+}
+
+.o-choose__nav-item,
+.o-choose__nav li {
+  display: flex;
+  align-items: stretch;
+  @include media-breakpoint-up(xl) {
+    &:not(:last-of-type) {
+      border-right: 1px solid $gray-025;
+      margin-right: space(3);
+    }
+  }
+  &:last-of-type {
+    a {
+      padding-right: 0;
+    }
+  }
+}
+
+
+.o-choose__nav-link {
+  display: flex;
+  align-items: center;
+  padding: space(2) space(4) space(2) 0;
+  transition: .25s opacity;
+  &.active {
+    pointer-events: none;
+  }
+  &:not(.active) {
+    opacity: .4;
+    &:hover {
+      opacity: .85;
+    }
+  }
+}
+
+.o-choose__nav-link-title {
+  display: none;
+  font-size: rem(14px);
+  @include media-breakpoint-up(lg) {
+    display: inline-block;
+    font-size: rem(16px);
+  }
+}
+
+.o-choose__title {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.o-choose__title h3 {
+  margin-bottom: 0;
+}
+
+.o-choose__content {
+  padding: space(4);
+}

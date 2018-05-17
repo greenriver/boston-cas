@@ -14,10 +14,12 @@ module MatchDecisions
 
     has_paper_trail
     acts_as_paranoid
-    
+
     belongs_to :match, class_name: 'ClientOpportunityMatch', inverse_of: :decisions
     belongs_to :contact
-    
+    has_one :program, through: :match
+    has_one :match_route, through: :program
+
     # these need to be present on the base class for preloading
     # subclasses should include MatchDecisions::AcceptsDeclineReason
     # and/or MatchDecisions::AcceptsNotWorkingWithClientReason if they intend to use these
@@ -33,7 +35,13 @@ module MatchDecisions
     attr_accessor :shelter_expiration
 
     scope :pending, -> { where(status: :pending) }
-    
+    scope :awaiting_action, -> do
+      where(status: [:pending, :acknowledged])
+    end
+    scope :last_updated_before, -> (date) do
+      where(arel_table[:updated_at].lteq(date))
+    end
+
     has_many :decision_action_events,
       class_name: MatchEvents::DecisionAction.name,
       foreign_key: :decision_id
@@ -44,11 +52,11 @@ module MatchDecisions
 
     validate :ensure_status_allowed, if: :status
     validate :cancellations, if: :administrative_cancel_reason_id
-    
+
     ####################
     # Attributes
     ####################
-    
+
     alias_attribute :timestamp, :updated_at
 
     def label
@@ -65,15 +73,15 @@ module MatchDecisions
       # can notification responses update this decision?
       false
     end
-    
+
     def to_param
       decision_type
     end
-    
+
     def notifications fetch_strategy: :single_decision
       match.send("#{decision_type}_notifications")
     end
-    
+
     def actor_type
       raise 'Abstract method'
     end
@@ -81,15 +89,15 @@ module MatchDecisions
     def contact_actor_type
       raise 'Abstract method'
     end
-    
+
     def step_name
       raise 'Not implemented'
     end
-    
+
     ######################
     # Decision Lifecycle
-    ######################  
-    
+    ######################
+
     # This method is meant to be called when a decision becomes active
     # do things like set the initial "pending" status and
     # send notifications
@@ -103,23 +111,23 @@ module MatchDecisions
         previous_step.initialize_decision!(send_notifications: send_notifications)
       end
     end
-    
+
     def initialized?
       status.present?
     end
-    
+
     def editable?
       # can this decision be updated by a notification response?
       # override this default behavior in subclasses
       initialized? && match_open?
     end
-    
+
     def match_open?
       !match.closed?
     end
-    
+
     # Sometimes the contacts change during a match and notifications should be re-issued
-    # to everyone including the new contact (This runs the notification part of StatusCallbacks#accepted on 
+    # to everyone including the new contact (This runs the notification part of StatusCallbacks#accepted on
     # on the prior step)
     def recreate_notifications_for_this_step
       notifications_for_this_step.each do |n|
@@ -139,19 +147,19 @@ module MatchDecisions
     def statuses
       {}
     end
-    
+
     # Overridden for decisions that can be overridden by DND and indicate
     # the status visually
     def status_label
       statuses[status && status.to_sym]
     end
-    
+
     def run_status_callback! **dependencies
       status_callbacks.new(self, dependencies).public_send status
     end
 
     # inherit in subclasses and add methods for each entry in #statuses
-    class StatusCallbacks      
+    class StatusCallbacks
       attr_reader :decision, :dependencies
       def initialize decision, options
         @decision = decision
@@ -164,8 +172,8 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
-    
-    
+
+
     def record_action_event! contact:
       decision_action_events.create! match: match, contact: contact, action: status, note: note
     end
@@ -178,11 +186,11 @@ module MatchDecisions
     def self.model_name
       @_model_name ||= ActiveModel::Name.new(self, nil, "decision")
     end
-    
+
     def to_partial_path
       "match_decisions/#{decision_type}"
     end
-    
+
     def permitted_params
       [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation]
     end
@@ -195,24 +203,24 @@ module MatchDecisions
       result.merge! administrative_cancel_reason_id: cancel_reason_id
       result
     end
-    
+
     # override in subclass
     def accessible_by? contact
       false
     end
 
     def step_number
-      self.class.match_steps[self.class.name]
+      match_route.class.match_steps[self.class.name]
     end
 
     def previous_step
       return unless step_number.present?
-      previous_step_name = self.class.match_steps.invert[step_number - 1]
+      previous_step_name = match_route.class.match_steps.invert[step_number - 1]
       match.decisions.find_by(type: previous_step_name)
     end
 
     def next_step
-      next_step_name = self.class.match_steps.invert[step_number + 1]
+      next_step_name = match_route.class.match_steps.invert[step_number + 1]
       match.decisions.find_by(type: next_step_name)
     end
 
@@ -221,45 +229,7 @@ module MatchDecisions
         notification.create_for_match! match
       end
     end
-    
-    def self.available_sub_types_for_search
-      [
-        'MatchDecisions::MatchRecommendationDndStaff',
-        'MatchDecisions::MatchRecommendationShelterAgency',
-        'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
-        'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
-        'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
-        'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff',
-        'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
-        # 'MatchDecisions::RecordClientHousedDateShelterAgency',
-        'MatchDecisions::ConfirmMatchSuccessDndStaff',
-      ]
-    end
-    
-    def self.match_steps
-      {
-       'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 3,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 4,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 5,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 6,
-      }
-    end
 
-    def self.match_steps_for_reporting
-      {
-       'MatchDecisions::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff' => 3,
-       'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
-       'MatchDecisions::ApproveMatchHousingSubsidyAdmin' => 5,
-       'MatchDecisions::ConfirmHousingSubsidyAdminDeclineDndStaff' => 6,
-       'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator' => 7,
-       'MatchDecisions::ConfirmMatchSuccessDndStaff' => 8,
-       }
-    end
-    
     def self.closed_match_statuses
       [
         :declined,
@@ -268,12 +238,20 @@ module MatchDecisions
       ]
     end
 
+    def self.match_steps_for_reporting
+      MatchRoutes::Base.match_steps_for_reporting
+    end
+
+    def self.available_sub_types_for_search
+      MatchRoutes::Base.available_sub_types_for_search
+    end
+
     def self.filter_options
-      self.available_sub_types_for_search + self.stalled_match_filter_options
+      MatchRoutes::Base.filter_options
     end
 
     def self.stalled_match_filter_options
-      ['Stalled Matches - with response', 'Stalled Matches - awaiting response']
+      MatchRoutes::Base.stalled_match_filter_options
     end
 
     def canceled_status_label
@@ -289,7 +267,7 @@ module MatchDecisions
     def backup_status_label
       "Match administratively moved back one step to: #{previous_step.step_name}"
     end
-    
+
     def incomplete_active_done?
       return :canceled if self.class.closed_match_statuses.include?(status.try(:to_sym))
       return :active if editable?
@@ -298,15 +276,15 @@ module MatchDecisions
     end
 
     private
-    
+
       def decision_type
         self.class.to_s.demodulize.underscore
       end
-    
+
       def status_callbacks
         self.class.const_get :StatusCallbacks
       end
-      
+
       def ensure_status_allowed
         if statuses.with_indifferent_access[status].blank?
           errors.add :status, 'is not allowed'
@@ -318,15 +296,15 @@ module MatchDecisions
           errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'"
         end
       end
-      
+
       def notification_class
         "Notifications::#{self.class.to_s.demodulize}".constantize
       end
-      
+
       def saved_status
         changed_attributes[:status] || status
       end
-    
+
   end
-  
+
 end

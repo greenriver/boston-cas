@@ -14,6 +14,7 @@ module ControllerAuthorization
   end
 
   def not_authorized!
-    redirect_to root_path, alert: 'Sorry you are not authorized to do that.'
+    flash[:alert] =  'Sorry you are not authorized to do that.'
+    redirect_to root_path()
   end
 end

@@ -1,31 +1,35 @@
-.row
-  .col-sm-8
-    %h1 Housing Opportunity: Match Progress
-  .col-sm-4
-    .summary-readout.pull-right
-      .summary-readout--tile.summary-readout--tile__green
-        .summary-readout--tile-label.summary-readout--tile-label__outside
-          Status
-        .summary-readout--tile-color-block
-          = match.overall_status
+%section
+  %h1 Housing Opportunity: Match Progress
 
-%h3.detail-box--header 
-  Match Recommendation Details
-  %span.pull-right
-    Match ID:
-    = match.id
-.detail-box
-  -# These label/value pairs can all be displayed conditionally if present
-  .row
-    .col-sm-3
-      = render 'matches/program_details', match: match
-      = render 'matches/services', match: match
-    .col-sm-3
-      = render 'matches/building_details', match: match
-      = render 'matches/rules', match: match
-    .col-sm-3
-      = render 'matches/client_details', match: match
-      - if @show_files
-        = render 'matches/client_files', match: match
-    .col-sm-3
+  .d-flex.align-items-end.mb-4
+    %div
+      %h2 Match Recommendation Details
+      %h6
+        Match ID:
+        %span.font-weight-bold= match.id
+    .d-flex.ml-auto
+      .c-tag{class: "c-tag--#{match.overall_status[:type]}"}
+        .c-tag__title Status
+        .c-tag__wrapper
+          .c-tag__icon.c-tag__icon--sm
+            .icon-checkmark
+          .c-tag__content
+            %span= match.overall_status[:name]
+
+  .c-card.c-card--flush
+    -# These label/value pairs can all be displayed conditionally if present
+    .c-card__content
+      .c-detail-group.row
+        .col-sm-4.c-detail-group.c-detail-group--stacked.c-detail-group--bordered
+          = render 'matches/program_details', match: match
+          = render 'matches/services', match: match
+        .col-sm-4.c-detail-group.c-detail-group--stacked.c-detail-group--bordered
+          = render 'matches/building_details', match: match
+          = render 'matches/rules', match: match
+        .col-sm-4.c-detail-group.c-detail-group--stacked
+          = render 'matches/client_details', match: match
+          - if @show_files
+            = render 'matches/client_files', match: match
+          = render 'matches/active_matches', match: match
+
       = render 'matches/contacts', match: match

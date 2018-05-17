@@ -1,21 +1,19 @@
-.row
-  .col-sm-8
-    %h1= t '.title'
-  .col-sm-4.margin-top-03.text-right
-    - if can_add_vacancies?
+.o-page__title
+  %h1= t '.title'
+  - if can_add_vacancies?
+    .o-page__action.o-page__action--stacked
       = link_to new_opportunity_path, class: 'btn btn-primary margin-bottom-02' do
         %span.icon-plus
         Submit a Vacancy
-      %br
       %a.how-to-popover{'data-toggle': "popover", 'data-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
         %span.icon-info
         How to Add a Vacancy
-  
+
 - @prompt = t '.search_prompt'
-.row
-  .col-sm-6
+.row.o-search
+  .col-sm-4.o-search__field-wrapper
     = render 'search_form'
-  .col-sm-3.sort-filter      
+  .col-sm-6.sort-filter.o-search__actions
     = render 'filter'
 .row.table-utilities
   .col-sm-8
@@ -58,11 +56,11 @@
                 - elsif opportunity.successful_match.present?
                   Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
-                  Available: 
+                  Available:
                   = date_format(opportunity.voucher.date_available)
-                - elsif opportunity.available || opportunity.voucher.available 
+                - elsif opportunity.available || opportunity.voucher.available
                   Available
-                  
+
               %td
                 - unless opportunity.voucher.nil?
                   = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
@@ -76,7 +74,5 @@
                 - unless opportunity.voucher.nil?
                   - unless opportunity.voucher.unit.nil?
                     = "#{opportunity.voucher.unit.try(:building).try(:name)}: #{opportunity.voucher.unit.try(:name)}"
-               
+
     %p= paginate @opportunities, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
-    
-  

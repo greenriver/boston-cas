@@ -1,56 +1,69 @@
 class MatchDecisionsController < ApplicationController
   include HasMatchAccessContext
+  include Decisions
+  include ContactEditPermissions
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :find_match!
   before_action :find_decision!
   before_action :authorize_decision!
-  
+  before_action :authorize_notification_recreation!, only: [:recreate_notifications]
+  before_action :set_client, only: [:show, :update]
+  before_action :set_contacts, only: [:show, :update]
+
   def show
-    @client = @match.client
     @opportunity = @match.opportunity
     @program = @match.program
     @sub_program = @match.sub_program
+    @types = MatchRoutes::Base.match_steps
     if params[:notification_id].present?
       @notification = @access_context.notification
     end
     render 'matches/show'
   end
-  
+
   def update
+
     @program = @match.program
     @sub_program = @match.sub_program
+    @types = MatchRoutes::Base.match_steps
+
+    if params[:match_contacts].present?
+      if @match_contacts.update match_contacts_params
+        MatchProgressUpdates::Base.update_status_updates @match_contacts
+      end
+    end
     if !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
-      
+
     elsif @match.closed?
       flash[:error] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
-      
+
     # If expiration date is provided and match is declined
-    elsif decision_params[:shelter_expiration].present? && decision_params[:status] == "declined" 
+    elsif decision_params[:shelter_expiration].present? && decision_params[:status] == "declined"
       flash[:error] = 'Sorry, you cannot decline a match if you have provided an expiration date.'
       render 'matches/show'
-      
-    # If we've been asked to park the client and match is accepted 
-    elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == "accepted" 
+
+    # If we've been asked to park the client and match is accepted
+    elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == "accepted"
       flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
       render 'matches/show'
-    
+
     # If cancel reason is provided and match is declined or accepted
-    elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "accepted" || 
-          decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "declined" 
+    elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "accepted" ||
+          decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "declined"
       flash[:error] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
       render 'matches/show'
-    
+
     # If decline reason is provided and match is canceled or accepted
-    elsif decision_params[:decline_reason_id].present? && decision_params[:status] == "accepted" || 
-          decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled" 
+    elsif decision_params[:decline_reason_id].present? && decision_params[:status] == "accepted" ||
+          decision_params[:decline_reason_id].present? && decision_params[:status] == "canceled"
       flash[:error] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
       render 'matches/show'
-      
+
     # If cancel reason is NOT provided and match is canceled
     elsif decision_params[:administrative_cancel_reason_id].blank? && decision_params[:status] == "canceled"
       flash[:error] = 'Sorry, you must provide a cancel reason to cancel this match.'
@@ -66,7 +79,7 @@ class MatchDecisionsController < ApplicationController
           note = "Shelter review expiration date set to #{new_expiration}."
           MatchEvents::ExpirationChange.create!(
             match_id: @match.id,
-            contact_id: current_contact.id, 
+            contact_id: current_contact.id,
             note: note
           )
         end
@@ -88,7 +101,7 @@ class MatchDecisionsController < ApplicationController
         end
       end
       redirect_to access_context.match_path(@match, redirect: "true")
-    
+
     else
       flash[:error] = "Please review the form problems below."
       render 'matches/show'
@@ -111,19 +124,68 @@ class MatchDecisionsController < ApplicationController
       @match = match_scope.find params[:match_id]
     end
 
+    def set_client
+      @client = @match.client
+    end
+
+    def set_contacts
+      @current_contact = current_contact
+      @match_contacts = @match.match_contacts
+    end
+
     def find_decision!
       @decision = @match.decision_from_param params[:id]
     end
-    
+
     def authorize_decision!
       unless @decision.accessible_by? current_contact
         flash[:alert] = 'Sorry, you are not authorized to access that.'
         redirect_to access_context.match_path(@match)
       end
     end
-    
+
+    def authorize_notification_recreation!
+      unless can_recreate_this_decision?
+        flash[:alert] = 'Sorry, you are not authorized to access that.'
+        redirect_to access_context.match_path(@match)
+      end
+    end
+
     def decision_params
       @decision.whitelist_params_for_update params
     end
+
+    def match_contacts_params
+      base_params = params[:match_contacts] || ActionController::Parameters.new
+      base_params.permit(
+        shelter_agency_contact_ids: [],
+        housing_subsidy_admin_contact_ids: [],
+        dnd_staff_contact_ids: [],
+        client_contact_ids: [],
+        ssp_contact_ids: [],
+        hsp_contact_ids: []
+      ).tap do |result|
+        if current_contact.user_can_edit_match_contacts?
+          result[:shelter_agency_contact_ids] ||= []
+          result[:client_contact_ids] ||= []
+          result[:dnd_staff_contact_ids] ||= []
+          result[:housing_subsidy_admin_contact_ids] ||= []
+          result[:ssp_contact_ids] ||= []
+          result[:hsp_contact_ids] ||= []
+        elsif hsa_can_edit_contacts?
+          # only allow editing of the hsa contacts
+          result[:shelter_agency_contact_ids] ||= @match.shelter_agency_contact_ids
+          result[:client_contact_ids] ||= @match.client_contact_ids
+          result[:dnd_staff_contact_ids] ||= @match.dnd_staff_contact_ids
+          result[:housing_subsidy_admin_contact_ids] ||= []
+          result[:ssp_contact_ids] ||= @match.ssp_contact_ids
+          result[:hsp_contact_ids] ||= @match.hsp_contact_ids
+
+          # always add self
+          result[:housing_subsidy_admin_contact_ids] << current_contact.id
+        end
+      end
+    end
+
 
 end

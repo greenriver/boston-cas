@@ -1,23 +1,31 @@
-%ul.nav.nav-tabs
+%ul.nav.nav-tabs.margin-bottom-02
   - if active == 'show'
-    %li.active{role: 'presentation'}
-      %a{href: '#'} 
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
         Client Details
   - else
-    %li= link_to 'Client Details', client_path(id: client_id)
+    %li.nav-item= link_to 'Client Details', client_path(id: client_id), class: 'nav-link'
 
   - if active == 'matches'
-    %li.active{role: 'presentation'}
-      %a{href: '#'} 
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
         CAS Housing History
   - else
-    %li  
-      = link_to 'CAS Housing History', client_matches_path(client_id: client_id)
+    %li.nav-item
+      = link_to 'CAS Housing History', client_matches_path(client_id: client_id), class: 'nav-link'
 
   - if active == 'contacts'
-    %li.active{role: 'presentation'}
-      %a{href: '#'} 
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
         Contacts
   - else
-    %li  
-      = link_to 'Contacts', client_contacts_path(client_id: client_id)
+    %li.nav-item
+      = link_to 'Contacts', client_contacts_path(client_id: client_id), class: 'nav-link'
+
+  - if active == 'qualified_opportunities'
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
+        = _('Qualified Opportunities')
+  - else
+    %li.nav-item
+      = link_to _('Qualified Opportunities'), client_qualified_opportunities_path(client_id: client_id), class: 'nav-link'

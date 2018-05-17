@@ -1,9 +1,7 @@
+- client_action ||= 'cancel'
+
+%label Please indicate a reason to #{client_action} this match:
 .cancel-match-fields
-  = form.association :administrative_cancel_reason, collection: MatchDecisionReasons::AdministrativeCancel.available, label: 'If canceling, please indicate reason:', as: :check_boxes, wrapper_html: {class: 'jCancelReason jButtonStateTriggers'}
+  = form.association :administrative_cancel_reason, collection: MatchDecisionReasons::AdministrativeCancel.available, label: '', as: :check_boxes, wrapper_html: {class: 'jCancelReason jButtonStateTriggers'}
   = form.input :administrative_cancel_reason_other_explanation, as: :text, label: 'List any details related to the cancellation below', hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherCancelReason'}
 
-  = form.submit 'Cancel Match', class: 'btn btn-secondary jCancel', data: {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}, disabled: !@decision.editable?
-  = content_for :page_js do
-    :javascript
-      new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
-      new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'))

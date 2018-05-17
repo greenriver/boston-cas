@@ -1,5 +1,5 @@
 = search_form_for @q do |f|
   .input-group{style: 'margin-bottom: 20px;'}
     = f.search_field :text_search, placeholder: @prompt, class: 'form-control', autofocus: true
-    %span.input-group-btn
+    %span.input-group-append
       %button.btn.btn-default{type: :submit} Search

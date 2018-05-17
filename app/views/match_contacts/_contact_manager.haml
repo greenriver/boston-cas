@@ -1,17 +1,37 @@
+- editable = @current_contact.user_can_edit_match_contacts? || (hsa_can_edit_contacts? && contacts_type == 'housing_subsidy_admin')
+- label_helper_text = required ? 'required' : 'optional'
 %div{ data: {contact_manager: true, base_object_name: 'match_contacts', contacts_type: contacts_type} }
-  %label
+  %label.d-flex
     = heading
+    %span.label-helper.ml-auto{class: "label-helper--#{label_helper_text}"}= label_helper_text
+
     -# text instead of spinner because the spinner freezes during the slow DOM rebuilds
     %small(data-loading-spinner) working&hellip;
-  .form-group
-    = select_tag available_contacts_method, nil, data: {contact_searcher: true}, prompt: "Start typing name or select from list."
-    %div{ data: {available_contacts: true} }
-      -# hide all of the duplicates
-      - email = []
-      - @match_contacts.send(available_contacts_method).each do |contact|
-        - if email.exclude? contact.email
-          %div{data: {available_contact: true, contact_id: contact.id, contact_name: contact.name, contact_email: contact.email, contact_phone: contact.phone}}
-          - email << contact.email
-    %div{ data: {selected_contacts: true} }
-      - @match_contacts.send(selected_contacts_method).each do |contact|
-        %div{data: {existing_contact: true, contact_id: contact.id, contact_name: contact.name, contact_email: contact.email, contact_phone: contact.phone}}
+
+  - if editable
+    .form-group
+      = select_tag available_contacts_method, nil, data: {contact_searcher: true}, prompt: "Start typing name or select from list."
+      %div{ data: {available_contacts: true} }
+        -# hide all of the duplicates
+        - email = []
+        - @match_contacts.send(available_contacts_method).each do |contact|
+          - if email.exclude? contact.email
+            %div{data: {available_contact: true, contact_id: contact.id, contact_name: contact.name, contact_email: contact.email, contact_phone: contact.phone}}
+            - email << contact.email
+      %ul.list-unstyled.c-contact-list{ data: {selected_contacts: true} }
+        - @match_contacts.send(selected_contacts_method).each do |contact|
+          - if current_contact.email == contact.email && cant_edit_self?
+            .c-contact-list__contact.selected-contact
+              %span= contact.name
+              %span= contact.email
+              %span= contact.phone
+          - else
+            %div{data: {existing_contact: true, contact_id: contact.id, contact_name: contact.name, contact_email: contact.email, contact_phone: contact.phone}}
+  - else
+    .form-group
+      %div{ data: {selected_contacts: true} }
+        - @match_contacts.send(selected_contacts_method).each do |contact|
+          .c-contact-list__contact.selected-contact.margin-left-04
+            %span= contact.name
+            %span= contact.email
+            %span= contact.phone

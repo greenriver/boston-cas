@@ -1,6 +1,7 @@
+- client_action ||= 'decline'
 
-= form.association :decline_reason, collection: @decision.decline_reasons, label: 'If you are declining this match, please indicate a reason', as: :check_boxes, wrapper_html: {class: 'jDeclineReasons jButtonStateTriggers'}
-= form.input :decline_reason_other_explanation, as: :text, label: 'List any details related to the decline below', hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherDeclineReason'}
+= form.association :decline_reason, collection: @decision.decline_reasons, label: "Please indicate a reason to #{client_action} this match:", as: :check_boxes, wrapper_html: {class: 'jDeclineReasons jButtonStateTriggers'}
+= form.input :decline_reason_other_explanation, as: :text, label: "List any details related to the #{client_action} below", hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherDeclineReason'}
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[decline_reason_id][]')
