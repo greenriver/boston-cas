@@ -12,6 +12,15 @@ button.close {
   align-items: baseline;
 }
 
+.btn-icon-only {
+  @include open-sans-bold;
+  [class^='icon'] {
+    margin-right: 0;
+  }
+  display: inline-flex;
+  align-items: baseline;
+}
+
 .btn-shout {
   text-transform: uppercase;
 }

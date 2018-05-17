@@ -110,4 +110,5 @@ group :test do
   gem "launchy"
   gem 'minitest-reporters'
   gem 'rspec-mocks'
+  gem 'shoulda'
 end

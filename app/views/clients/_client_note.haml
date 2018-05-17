@@ -1,0 +1,10 @@
+.row.border-bottom.padding-01.margin-01
+  .col-sm-12
+    %p= note.note
+  
+  .col-sm-10
+    %p.small.text-muted
+      Posted by #{content_tag(:strong, note.user&.name)} on #{content_tag(:strong, note.created_at)}
+  .col-sm-2.text-right    
+    = link_to(client_client_note_path(note, client_id: @client.id), method: :delete, data: {confirm: "Delete this note?"}, class: 'btn btn-icon-only btn-small btn-danger') do
+      %i.icon-cross
