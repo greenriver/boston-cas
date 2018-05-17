@@ -6,20 +6,39 @@
 .add-things-boxes--h3 {
   margin-top: 0;
 }
+
 .add-things-boxes--added-row {
-  @include margin(null null 18px null);
-  @include padding(12px null);
-  border-bottom: 1px solid $gray-030;
+  display: flex;
+  align-items: stretch;
+  margin-bottom: space(2);
+  @include media-breakpoint-down(sm) {
+    flex-wrap: wrap;
+    margin-bottom: space(4);
+    .btn-group {
+      width: 100%;
+      a {
+        flex: 1 1 auto;
+        text-align: center;
+      }
+    }
+  }
 }
+
 .add-things-boxes--remove-link,
 .add-things-boxes--remove-link {
   color: $gray-065;
+  margin-left: auto;
+  padding-right: space(2);
 }
+
 .add-things-boxes--right-side {
-  padding-top: 8px;
+  padding: space(2) space(4);
+  display: flex;
+  width: 100%;
+  background: lighten($gray-015, 2%);
 }
 
 // This colors Rules that aren't persisted a light yellow.
 .row[data-persisted-id=''] {
-  background-color: #fcf8e3;
+  background-color: $brand-warning-l;
 }

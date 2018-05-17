@@ -1,0 +1,86 @@
+.container-fluid {
+  padding-right: $container-padding;
+  padding-left: $container-padding;
+}
+
+.alert {
+  z-index: $zIndex-3--notice;
+  @include open-sans-medium;
+  width: 100%;
+}
+
+.alert a {
+  color: $black;
+  text-decoration: underline;
+}
+
+.alert p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  [class^='icon'] {
+    margin-right: space(4);
+  }
+}
+
+.alert-dismissible .close {
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.alert a:hover,
+.alert a:focus {
+  text-decoration: none;
+}
+
+// Buttons
+
+.btn-light {
+  border: 1px solid $brand-primary;
+  color: $brand-primary;
+  &:hover {
+    background: $brand-primary;
+    color: $white;
+  }
+}
+
+.checkbox,
+.radio {
+  display: block;
+  input {
+    margin-right: space(1);
+  }
+  label {
+    cursor: pointer;
+    font-weight: normal;
+  }
+}
+
+// Fix for deprecation in Bootstrap 4
+
+.input-group-addon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: $input-padding-y $input-padding-x;
+  border: 1px solid $input-border-color;
+  border-top-right-radius: $input-border-radius;
+  border-bottom-right-radius: $input-border-radius;
+  border-left: 0;
+  background: $brand-primary-ll;
+  &:hover {
+    background: $brand-primary;
+    color: $white;
+  }
+}
+
+.control-label {
+  &:empty {
+    display: none;
+  }
+}
+
+.popover-body {
+  padding: space(4);
+}

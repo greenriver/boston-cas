@@ -2,62 +2,32 @@
   - filter_class = 'filter-sort__filter-active'
 - else
   - filter_class = 'filter-sort__filter'
-.btn-group{class: filter_class}
-  %button.btn.btn-default.dropdown-toggle{data: {toggle: 'dropdown'}}
+%div.dropdown{class: filter_class}
+  %button.btn.btn-default.dropdown-toggle.mr-4{data: {toggle: 'dropdown'}}
     Filter
     %span.caret
   .dropdown-menu.dropdown-menu-right.options
     = form_tag(nil, method: "get") do
       -# preserve sort and search for filtering
-      -# preserve sort and search for filtering
-      - if params[:sort] 
+      - if params[:sort]
         = hidden_field_tag :sort, params[:sort]
-      - if params[:direction] 
+      - if params[:direction]
         = hidden_field_tag :direction, params[:direction]
-      - if params[:q] 
+      - if params[:q]
         = hidden_field_tag :q, params[:q]
-      .row
-        .col-xs-10
-          %p
-            %select{name: :status, style: 'width: 100%;'}
-              %option{value: ''} Filter by Status
-              - Opportunity.available_stati.each do |t|
-                - selected = @match_status == t
-                %option{value: t, selected: selected}= t
-      .row
-        .col-xs-6
-          %p
-            %button.btn.btn-primary.icon-filter{type: :submit} &nbsp;Filter
-        .col-xs-6.text-right
-          %p= link_to ' Clear Filters', opportunities_path, class: 'btn btn-secondary icon-cross'
+      %select.mb-4{name: :status, style: 'width: 100%;'}
+        %option{value: ''} Filter by Status
+        - Opportunity.available_stati.each do |t|
+          - selected = @match_status == t
+          %option{value: t, selected: selected}= t
+      .mb-2.d-flex.mt-6
+        = link_to opportunities_path, class: 'btn btn-light' do
+          %i.icon-cross
+          Clear
+        %button.btn.btn-primary.ml-auto{type: :submit}
+          %i.icon-filter
+          Filter
+
 = content_for :page_js do
   :javascript
     $('select').select2();
-    (function($) {
-      var filter_class = '.#{filter_class}'
-      function toggle_clickable(e) {
-        if($(e.target).closest(filter_class).length == 0 ) {
-          $(filter_class).data('closeable', true);
-        }
-      }
-      $(filter_class).on('hide.bs.dropdown', function (e) {
-        var closable = $(this).data('closeable');
-        if(closable) {
-          $('body').off('click', toggle_clickable);
-        }
-        return closable;
-      });
-      $(filter_class).on('show.bs.dropdown', function (e) {
-        $(this).data('closeable', false);
-        // Make clicking outside of the menu close the menu
-        $('body').on('click', toggle_clickable);
-      });
-      $(filter_class).on('click', '*', function(e) {
-        var $target = $(e.target);
-        var closeable = $target.parent().data('closeable');
-        if($target.hasClass('dropdown-toggle') && closeable == false) {
-          $target.parent().data('closeable', true);
-        }
-      });
-    })(jQuery);
-    

@@ -1,72 +1,69 @@
-#vsm-container.outboard
-  .vsm-group.vsm-group-toggle
-    .vsm-item-link{class: 'jToggleVsm'}
-      .vsm-item-link--description.vsm-item-link--description__collapse.show-open
-        Collapse Menu
-      .menu-icon.menu-link
-        .show-closed
-          %span.menu-link--word Menu
-          %span.icon-menu
-        .show-open
-          %span.icon-arrow-right2
+.o-menu.js-menu.off-canvas
   -# Match related items
-  .vsm-group.vsm-group__group-a
-    = link_to active_matches_path, :class => 'vsm-item-link' do
-      .vsm-item-link--description
+  %ul.o-menu__group.list-unstyled
+    %li.o-menu__item
+      = link_to active_matches_path, class: 'o-menu__link' do
         Matches in Progress
     - if Client.parked.any?
-      = link_to reports_parked_clients_path, :class => 'vsm-item-link' do
-        .vsm-item-link--description
+      %li.o-menu__item
+        = link_to reports_parked_clients_path, class: 'o-menu__link' do
           Parked Clients
   -# Inventory and HMIS related items
   - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_buildings?
-    .vsm-group.vsm-group__group-b
+    %ul.o-menu__group.list-unstyled
       - if can_view_all_clients?
-        = link_to clients_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to clients_path, class: 'o-menu__link' do
             All Clients
+      - if can_enter_deidentified_clients? || can_manage_deidentified_clients?
+        %li.o-menu__item
+          = link_to deidentified_clients_path, class: 'o-menu__link' do
+            Deidentified Clients
       - if can_view_contacts?
-        = link_to contacts_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to contacts_path, class: 'o-menu__link' do
             Contacts
       - if can_view_opportunities?
-        = link_to opportunities_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to opportunities_path, class: 'o-menu__link' do
             Vacancies
       - if can_view_programs?
-        = link_to programs_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to programs_path, class: 'o-menu__link' do
             Programs
       - if can_view_funding_sources?
-        = link_to funding_sources_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to funding_sources_path, class: 'o-menu__link' do
             Funding Sources
       - if can_view_subgrantees?
-        = link_to subgrantees_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to subgrantees_path, class: 'o-menu__link' do
             Sub-Grantees
       - if can_view_buildings?
-        = link_to buildings_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to buildings_path, class: 'o-menu__link' do
             = "#{Building.model_name.human.pluralize}"
       - if can_view_rule_list?
-        = link_to rules_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to rules_path, class: 'o-menu__link' do
             Rules List
       - if can_view_available_services?
-        = link_to services_path, :class => 'vsm-item-link' do
-          .vsm-item-link--description
+        %li.o-menu__item
+          = link_to services_path, class: 'o-menu__link' do
             Services List
   -# Account related items
-  .vsm-group.vsm-group__account
+  %ul.o-menu__group.list-unstyled
     - if can_edit_users? || can_edit_translations?
       = render 'menus/admin_dashboard'
-    = link_to edit_account_path, :class => 'vsm-item-link' do
-      .vsm-item-link--description
+
+  %ul.o-menu__group.no-border.list-unstyled
+    %li.o-menu__item
+      = link_to edit_account_path, class: 'o-menu__link' do
         Edit Account
-    -# = current_user.name
-    = link_to destroy_user_session_path, :method => :delete, :class => 'vsm-item-link' do
-      .vsm-item-link--description
-        Sign Out
-      .menu-icon
+    %li.o-menu__item
+      = link_to destroy_user_session_path, :method => :delete, class: 'o-menu__link' do
+        %span.mr-2 Sign Out
         %i{class: "icon-exit"}
+
+  %a.js-back-to-top.o-menu__to-top.o-menu__link{ href:'#' }
+    Back to Top

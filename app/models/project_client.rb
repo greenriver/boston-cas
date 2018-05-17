@@ -3,6 +3,10 @@ class ProjectClient < ActiveRecord::Base
   has_one :client, required: false, primary_key: :client_id, foreign_key: :id
 
   belongs_to :data_source, required: false
+  
+  scope :in_data_source, -> (data_source) do 
+    joins(:data_source).merge(DataSource.where(id: data_source.id))
+  end
 
   scope :available, -> do
     where(sync_with_cas: true)

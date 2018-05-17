@@ -1,0 +1,10 @@
+#decline-client.tab-pane.active{role: :tabpanel, aria: {labelledby:'decline-client'}}
+  = render 'match_decisions/decline_reason', form: form
+  - if !action_message.empty?
+    %p
+      %i.icon-info
+      = action_message
+  .form-actions.form-actions--right
+    %button{ class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: !(@decision.editable?) }
+      %i.icon-cross
+      Decline Match

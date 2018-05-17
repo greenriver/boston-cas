@@ -1,4 +1,4 @@
-.btn-group.filter-sort__sort
+.filter-sort__sort.dropdown
   %button.btn.btn-default.dropdown-toggle{data: {toggle: 'dropdown'}}
     Sort
     %span.caret
@@ -7,10 +7,10 @@
       - sort_options.each do |opt|
         %li
           - if opt[:visible]
-            = link_to sort_url(@q, opt[:column], default_order: opt[:direction]) do
+            = link_to sort_url(@q, opt[:column], default_order: opt[:direction]), class: 'd-flex align-items-baseline' do
               - if @column == opt[:column] && @direction == opt[:direction]
-                %span.icon-checkbox-checked
-                  = opt[:title]
+                %span.icon-checkbox-checked.mr-1
+                = opt[:title]
               - else
-                %span.icon-checkbox-unchecked
-                  = opt[:title]
+                %span.icon-checkbox-unchecked.mr-1
+                = opt[:title]

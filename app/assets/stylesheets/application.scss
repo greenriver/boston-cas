@@ -1,14 +1,70 @@
-/*
-*= require select2
-*= require select2-bootstrap
-*= require bootstrap-datepicker3
-*/
-@import "bootstrap-sprockets";
-@import 'bootstrap-custom';
-@import "font-awesome-sprockets";
-@import "font-awesome";
-@import "helpers/mixins";
-// @import "base/grid_framework";
+// Settings
+// (Colors, Variables, Fonts)
+// (Ordered by inclusion)
+@import
+  'settings/colors',
+  'settings/variables',
+  'settings/breakpoints',
+  'settings/spacing',
+  'settings/icons',
+  'settings/typography';
+
+// Tools
+// (Mixins, Functions)
+@import
+  'tools/functions',
+  'tools/mixins';
+
+// Vendor
+@import
+  'vendor/bootstrap/index',
+  'font-awesome-sprockets',
+  'font-awesome',
+  'bootstrap-datetimepicker',
+  'select2',
+  'select2-bootstrap',
+  'bootstrap-datepicker3';
+
+// Elements
+@import
+  'elements/body',
+  'elements/dl',
+  'elements/headings',
+  'elements/html',
+  'elements/label',
+  'elements/main',
+  'elements/section';
+
+// Layouts
+@import
+  'layouts/main';
+
+// Objects
+// (High-level items with minimal styling)
+@import
+  'objects/card_grid',
+  'objects/choose',
+  'objects/pre_choose',
+  'objects/container',
+  'objects/dashboard',
+  'objects/list',
+  'objects/menu',
+  'objects/page',
+  'objects/search',
+  'objects/section',
+  'objects/text';
+
+// Components
+@import
+  'components/binary_choice',
+  'components/detail_group',
+  'components/card',
+  'components/choice_icon',
+  'components/contact_list',
+  'components/separator',
+  'components/stepped_progress',
+  'components/tag';
+
 @import "base/typography";
 @import "base/buttons";
 @import "base/forms";
@@ -21,7 +77,6 @@
 @import "modules/current_step";
 @import "modules/history";
 @import "modules/tables";
-@import "modules/site_menu";
 @import "modules/vouchers";
 @import "modules/add_things_boxes";
 @import "modules/clients";
@@ -29,16 +84,17 @@
 @import "modules/_match_list";
 @import "vendor/icomoon";
 @import "helpers/helper_classes";
-@import 'bootstrap-datetimepicker';
 
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-main {
-  flex: 1 0 auto;
-}
+// Overrides
+@import
+  'overrides/bootstrap',
+  'overrides/select2';
+
+// Utilities
+@import
+  'utilities/general';
+
+
 .utility {
   min-height: 60px;
   padding: 8px 0;
@@ -46,39 +102,34 @@ main {
     margin-top: 40px;
   }
 }
+
 .crumbs a {
   margin-right: 12px;
 }
-.alert {
-  z-index: $zIndex-3--notice;
-  @include open-sans-medium;
-}
-.alert a {
-  color: #fff;
-}
-.alert a:hover,
-.alert a:focus {
-  text-decoration: none;
-}
+
 .action-row {
   padding-bottom: 12px;
 }
+
 .add-another {
   margin-top: 24px;
   margin-bottom: 36px;
   text-align: right;
 }
+
 .how-to-popover:focus {
   outline: none;
 }
+
 .popover ol {
   padding-left: 0 !important;
   -webkit-padding-start: 10px !important;
 }
-hr.dark
-{
+
+hr.dark {
   border-top-color: $gray-065;
 }
+
 .home-intro {
   @include lora-normal;
   font-size: 1.2em;

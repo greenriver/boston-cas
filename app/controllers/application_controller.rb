@@ -1,6 +1,9 @@
+require "application_responder"
+
 class ApplicationController < ActionController::Base
   include ControllerAuthorization
-
+  self.responder = ApplicationResponder
+  respond_to :html, :js, :json, :csv
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -9,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :locale
   before_filter :set_gettext_locale
-  
+
   #before_filter :_basic_auth, if: -> { Rails.env.staging? }
   before_filter :set_paper_trail_whodunnit
   before_action :authenticate_user!
@@ -57,7 +60,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_current_location
-    return unless request.get? 
+    return unless request.get?
     return if request.xhr? # don't store ajax calls
     store_location_for(:user, request.url)
   end
@@ -66,13 +69,13 @@ class ApplicationController < ActionController::Base
     session[:locale] = I18n.locale = FastGettext.set_locale(locale)
     super
   end
-  
+
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :name) }
   end
-  
+
   def locale
     default_locale = 'en'
     params[:locale] || session[:locale] || default_locale

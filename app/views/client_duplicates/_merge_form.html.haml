@@ -1,5 +1,0 @@
-= simple_form_for @client, url: client_duplicate_url do |f|
-  = f.error_notification
-  .form-inputs
-  .form-actions
-    = f.button :submit, "Merge #{@dupe.full_name} into #{@client.full_name}"

@@ -1,12 +1,24 @@
-.row
-  .col-xs-12
-    .match-decision
-      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-        = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-pre-choose
+        .form-inputs
+          .row
+            .col-md-6
+              = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+      .o-choose.o-choose--flush
         - if can_reject_matches?
-          .well
-            = render 'match_decisions/park_client', form: form
-        .form-actions.clearfix
-          = form.submit 'Override Decline and Repeat Last Step', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden_returned'}, disabled: (!@decision.editable?)
-          = form.submit 'Override Decline and Move Forward', class: 'btn btn-secondary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)
-          = form.submit 'Accept Decline', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_confirmed'}, disabled: (!@decision.editable?)
+          .o-choose__choice
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--park
+                %h3 Park Client
+            .o-choose__content
+              = render 'match_decisions/park_client', form: form
+        .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--reject
+              %h3 Review Decline
+          .o-choose__content
+            = render 'match_decisions/decline_overrides'

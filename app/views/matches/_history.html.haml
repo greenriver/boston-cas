@@ -1,15 +1,20 @@
-.row.jHistoryCount{:data => {:history_events => @match.timeline_events.count}}
-  .col-xs-12
-    %h3.history History
-    .row
-      .col-sm-7
-        %p.history--note ** All notes recorded in these match process pages will be visible in the history list below.**
-      .col-sm-5.text-right
-        - if can_reissue_notifications?
-          - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
-            = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-secondary margin-bottom-02'
-    %table.table.table-condensed.table-striped
-      %tbody
-      - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
-        = render event, event: event, match: match
-        
+%section.o-section
+  %header
+    .o-section__title
+      %h2 History
+      %p.o-section__note
+        %i.icon-info.mr-2
+        All notes recorded in these match process pages will be visible in the history list below.
+    .o-section__actions
+      - if can_recreate_this_decision?
+        - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
+          = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-sm btn-light'
+  .c-card.c-card--block.c-card--flush.jHistoryCount{:data => {:history_events => @match.timeline_events.count}}
+    .c-card__content
+      .row
+        .col-sm-7
+        .col-sm-5.text-right
+        %table.table.table-condensed.table-striped
+          %tbody
+          - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
+            = render event, event: event, match: match

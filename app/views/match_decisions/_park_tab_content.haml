@@ -1,0 +1,8 @@
+- if can_reject_matches?
+  #park-client.tab-pane{role: :tabpanel, aria: {labelledby:'park-client'}}
+    = render 'match_decisions/park_client', form: form
+    = render 'match_decisions/cancel_match_form_fields', form: form, client_action: 'park'
+    .form-actions.form-actions--right
+      %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
+        %i.icon-clock
+        Park Client

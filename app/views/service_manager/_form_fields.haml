@@ -1,23 +1,24 @@
-.well.add-things-boxes.add-things-boxes--services{ data: {service_manager: true, base_object_name: form.object_name} }
-  %h3.add-things-boxes--h3
+%section.c-card.c-card--flush{ data: {service_manager: true, base_object_name: form.object_name} }
+  %h3
     = heading
     -# text instead of spinner because the spinner freezes during the slow DOM rebuilds
     %small.add-things-boxes--spinner(data-loading-spinner) working&hellip;
-  - if can_assign_services?
-    %div{ data: {selected_services: true} }
-      %input{type: 'hidden', name: "#{form.object_name}[service_ids][]", value: ""}
+  .c-card__content
+    - if can_assign_services?
+      %div{ data: {selected_services: true} }
+        %input{type: 'hidden', name: "#{form.object_name}[service_ids][]", value: ""}
+        - form.object.services.preload(requirements: :rule).each do |service|
+          %div{data: {existing_service: true, service_id: service.id, service_name: service.name, service_requirements_description: service.requirements_description}}
+      .form-group
+        = label_tag "Service Name", "Add a Service"
+        = select_tag :available_services, nil, class: 'form-control select2--full-width', data: {service_searcher: true}
+        %div{ data: {available_services: true} }
+          - form.object.available_services.preload(requirements: :rule).each do |service|
+            %div{data: {available_service: true, service_id: service.id, service_name: service.name, service_requirements_description: service.requirements_description}}
+    - else
       - form.object.services.preload(requirements: :rule).each do |service|
-        %div{data: {existing_service: true, service_id: service.id, service_name: service.name, service_requirements_description: service.requirements_description}}
-    .form-group
-      = label_tag "Service Name", "Add a Service"
-      = select_tag :available_services, nil, class: 'form-control', data: {service_searcher: true}
-      %div{ data: {available_services: true} }
-        - form.object.available_services.preload(requirements: :rule).each do |service|
-          %div{data: {available_service: true, service_id: service.id, service_name: service.name, service_requirements_description: service.requirements_description}}
-  - else
-    - form.object.services.preload(requirements: :rule).each do |service|
-      %div
-        = service.name
+        %div
+          = service.name
 
 = content_for :page_js do
   :javascript

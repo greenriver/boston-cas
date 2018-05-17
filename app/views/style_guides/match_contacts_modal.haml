@@ -14,7 +14,7 @@
       Shelter Agency Contact
     %input{type: 'text', class: 'form-control', id: 'shelter-agency-contact', placeholder: 'Start typing name or select from list'}
   .row
-    .col-xs-12
+    .col-sm-12
       .contact-on-match
         %span.contact-on-match--item
           =link_to '#', {class: 'contact-on-match--icon-link'} do
@@ -26,7 +26,7 @@
         %span.contact-on-match--item
           617.555.1212
   .row
-    .col-xs-12
+    .col-sm-12
       .add-another
         =link_to 'Add another Shelter Agency contact', '#', {class: 'add-another--link'}
   .form-group.has-error
@@ -41,7 +41,7 @@
         %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio1', value: 'option1', checked: 'checked'}
         Project-Based
     .row
-      .col-xs-6.col-xs-offset-1
+      .col-sm-6.col-sm-offset-1
         .form-group
           %label.control-label{for: 'building-name'}= "#{Building.model_name.human}"
           %input{type: 'text', class: 'form-control', name: 'building-name', id: 'building-name'}
@@ -53,5 +53,5 @@
       %label
         %input{type: 'radio', name: 'optionsRadios', id: 'optionsRadio3', value: 'option3'}
         Sponsor-Based
-  .form-actions.clearfix
-    %input{type: 'submit', name: 'commit', value: 'Save', class: 'btn btn-primary pull-right btn-min-width-medium'}
+  .form__actions.form__actions--right
+    %input{type: 'submit', name: 'commit', value: 'Save', class: 'btn btn-success pull-right btn-min-width-medium'}

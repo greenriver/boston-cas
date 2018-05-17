@@ -1,0 +1,19 @@
+Hello #{@contact.full_name},
+\
+= "A #{_('Housing Subsidy Administrator')} has made a decision on a housing opportunity for which the client below applied."
+\
+Decision: #{@match.hsa_accepts_client_decision.status_label}
+\
+View details here:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

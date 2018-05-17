@@ -3,7 +3,7 @@ class BuildingsController < ApplicationController
   before_action :require_can_view_buildings!, except: [:available_units]
   before_action :require_can_add_vacancies!, only: [:available_units]
   before_action :require_can_edit_buildings!, only: [:update, :destroy, :create]
-	before_action :set_building, only: [:show, :edit, :update, :destroy, :available_units]
+	before_action :set_building, only: [:show, :edit, :update, :destroy, :available_units, :units]
   helper_method :sort_column, :sort_direction
 
 	# GET /hmis/buildings

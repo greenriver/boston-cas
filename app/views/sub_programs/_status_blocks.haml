@@ -4,14 +4,17 @@
     .summary-readout--tile-color-block
       .summary-readout--tile-label
         CAS Matched
-      = @subprogram.matched
+      .summary-readout--value
+        = @subprogram.matched
   .summary-readout--tile.summary-readout--tile__blue.margin-left-01
     .summary-readout--tile-color-block
       .summary-readout--tile-label
         In Progress
-      = @subprogram.in_progress
+      .summary-readout--value
+        = @subprogram.in_progress
   .summary-readout--tile.summary-readout--tile__red.margin-left-01
     .summary-readout--tile-color-block
       .summary-readout--tile-label
         Vacancies
-      = @subprogram.vacancies
+      .summary-readout--value
+        = @subprogram.vacancies

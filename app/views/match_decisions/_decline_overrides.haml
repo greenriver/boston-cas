@@ -1,0 +1,12 @@
+.form-actions.form-actions--stacked
+  %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)}
+    %i.icon-checkmark
+    Override Decline and Move Forward
+
+  %button{class: 'btn btn-warning', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden_returned'}, disabled: (!@decision.editable?)}
+    %i.icon-step-back
+    Override Decline and Repeat Last Step
+
+  %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_confirmed'}, disabled: (!@decision.editable?)}
+    %i.icon-cross
+    Approve Decline

@@ -1,25 +1,26 @@
 - if @notification.present? && @notification.allows_registration? && ! user_signed_in?
   .row
-    .col-sm-6.col-sm-offset-6.text-right
-      .notification--create-account   
+    .col-sm-6.offset-sm-6.text-right
+      .notification--create-account
         = link_to 'create an account', new_notification_registration_path(@notification), class: 'btn btn-default'
 = render 'matches/details', match: @match
-= render 'matches/current_step_info'
 
-- if @decision && @decision != @match.current_decision #TODO incorporate contact access rights
-  .row
-    .col-sm-12
-      .current-step
-        %h4.current-step--heading 
-          Viewing Step:
-          %span.current-step--name
-            = @decision.step_name
-            = link_to "[show current step]", access_context.match_path(@match) 
-    
-- if @match.status_updates.incomplete_for_contact(contact_id: access_context.current_contact.id).exists?
-  = render 'matches/status_update'
-- else
-  = render @decision if @decision
+%section
+  = render 'matches/current_step_info'
+  - if @decision && @decision != @match.current_decision #TODO incorporate contact access rights
+    .row
+      .col-sm-12
+        .current-step
+          %h4.current-step--heading.mb-4
+            Viewing Step:
+            %span.current-step--name
+              = @decision.step_name
+              = link_to "[show current step]", access_context.match_path(@match)
+
+  - if @match.status_updates.incomplete_for_contact(contact_id: access_context.current_contact.id).exists?
+    = render 'matches/status_update'
+  - else
+    = render @decision if @decision
 
 - history_path = match_history_path(@match)
 - if @notification.present?
@@ -49,4 +50,3 @@
           });
         }, 10000);
       })(jQuery);
-    

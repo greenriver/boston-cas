@@ -8,14 +8,6 @@ module SubjectForMatches
       end
     end
 
-    def ready_to_match
-      available_as_candidate.matchable
-    end
-
-    def available_as_candidate
-      where(available_candidate: true)
-    end
-
     def matchable
       if column_names.include? :matchability
         where(arel_table[:matchability].gt(0))
@@ -33,9 +25,9 @@ module SubjectForMatches
       where.not(id: RejectedMatch.select(:client_id).where(opportunity_id: co_candidate))
     end
 
-    def max_candidate_matches
-      1
-    end
+    # def max_candidate_matches
+    #   1
+    # end
   end
 
   included do
@@ -44,13 +36,11 @@ module SubjectForMatches
     has_many :rejected_matches
 
     def matching_co_candidates_for_max(co_candidates)
-      @_matching_co_candidates_for_max ||=
-        co_candidates.matching_co_candidate(self).limit(matches_left_to_max)
+      @_matching_co_candidates_for_max ||= co_candidates.matching_co_candidate(self).limit(matches_left_to_max)
     end
 
     def matching_co_candidates(co_candidates)
-      @_matching_co_candidates ||=
-        co_candidates.matching_co_candidate(self)
+      @_matching_co_candidates ||= co_candidates.matching_co_candidate(self)
     end
 
     def matches_left_to_max

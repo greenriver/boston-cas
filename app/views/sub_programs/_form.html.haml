@@ -1,58 +1,53 @@
-= simple_form_for [@program, @subprogram] do |f|
-  = f.error_notification
-  .row
-    .col-sm-6
-      %h3
-        Program Details
-      %table.table
-        %tr
-          %th Name
-          %td= @program.name
-        %tr
-          %th Funding Source
-          %td= @program.funding_source_name
-        %tr
-          %th Contract Start Date
-          %td= @program.contract_start_date.try :strftime, '%m/%d/%Y'
-
+- select2_input_html =  { class: 'select2--full-width' }
+%section.c-card.c-card--flush
   %h3 Sub-Program Details
-  .form-inputs
-    = f.input :name
-    - if @program.confidential?
-      %p This sub-program belongs to a confidential program.  Client names will be hidden when shown in lists of matches by default.
-    - else 
-      = f.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
-    = f.association :housing_subsidy_administrator, label: "#{_('Housing Subsidy Administrator')}"
-    = f.association :service_provider, label: 'Service Provider' 
-    = f.association :sub_contractor, label: 'Sub-Contractor'
-    .form-group.radio_buttons.program-type
-      = f.label :program_type, required: true do
-        %abbr{'data-original-title' => 'required'}*
-        Project, Tenant, or Sponsor-Based?
-      - SubProgram.types.each do |t|
-        .radio
-          = f.label :program_type, for: "sub_program_program_type_#{t[:value].downcase}" do
-            = f.radio_button :program_type, t[:value]
-            = t[:label]
-          - if t[:building]
-            = building = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01'}, input_html: {class: 'jBuilding'}
-    = f.input :voucher_count, label: 'Total Vouchers', hint: 'This value is only used in displaying a total count of available vouchers, and does not affect availability', input_html: {style: 'width: 8em;'}
-    = f.association :file_tags, collection: FileTag.available_tags, selected: @subprogram.file_tags.map(&:tag_id), label: 'Files types from the warehouse to display on matches that involve this sub-program', hint: "These files will be linked from any match involving a client with a #{_('full release')} on file."
-  .well.add-things-boxes.add-things-boxes--rules
-    %h3.add-things-boxes--h3 Rules
-    %p.alert.alert-info.hidden.jRuleWarning
-      %span.icon-info
-      Rules inherited from a site listed above are only visible after save.
-    = render = render 'requirement_manager/inherited_rules', inheritee: @subprogram
-  .form-group.eligibility-requirement-notes
-    = f.input :eligibility_requirement_notes, hint: 'If there are eligibility requirements that don\'t fit within the defined rules, provide a brief explanation here.  They will be displayed on any match involving this opportunity.', label: 'Eligibility Requirement Notes'
-  .form-actions
-    = f.button :submit, value: 'Save', class: 'btn btn-primary'
+  .c-card__content
+    = simple_form_for [@program, @subprogram] do |f|
+      .row.mb-6
+        .col-sm-6
+          = f.error_notification
+          .form-inputs
+            = f.input :name
+            - if @program.confidential?
+              %p This sub-program belongs to a confidential program.  Client names will be hidden when shown in lists of matches by default.
+            - else
+              = f.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
+            = f.association :housing_subsidy_administrator, label: "#{_('Housing Subsidy Administrator')}", input_html: select2_input_html
+            = f.association :service_provider, label: 'Service Provider', input_html: select2_input_html
+            = f.association :sub_contractor, label: 'Sub-Contractor', input_html: select2_input_html
+            .form-group.radio_buttons.program-type
+              = f.label :program_type, required: true do
+                %abbr{'data-original-title' => 'required'}*
+                Project, Tenant, or Sponsor-Based?
+              - SubProgram.types.each do |t|
+                .radio
+                  = f.label :program_type, for: "sub_program_program_type_#{t[:value].downcase}" do
+                    = f.radio_button :program_type, t[:value]
+                    = t[:label]
+                  - if t[:building]
+                    = building = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01'}, input_html: {class: 'jBuilding'}
+            = f.input :voucher_count, label: 'Total Vouchers', hint: 'This value is only used in displaying a total count of available vouchers, and does not affect availability', input_html: {style: 'width: 8em;'}
+            = f.association :file_tags, collection: FileTag.available_tags, selected: @subprogram.file_tags.map(&:tag_id), label: 'Files types from the warehouse to display on matches that involve this sub-program', hint: "These files will be linked from any match involving a client with a #{_('full release')} on file.", input_html: select2_input_html
+
+      %article.mb-6
+        %h2 Rules
+        %p.alert.alert-info.hidden.jRuleWarning
+          %span.icon-info
+          Rules inherited from a site listed above are only visible after save.
+        = render = render 'requirement_manager/inherited_rules', inheritee: @subprogram
+
+      .form-group.eligibility-requirement-notes
+        .row
+          .col-sm-6
+            = f.input :eligibility_requirement_notes, hint: 'If there are eligibility requirements that don\'t fit within the defined rules, provide a brief explanation here.  They will be displayed on any match involving this opportunity.', label: 'Eligibility Requirement Notes'
+
+      .form__actions
+        = f.button :submit, value: 'Save', class: 'btn btn-success'
 
 = content_for :page_js do
   :javascript
     $('select').select2();
-    
+
     $('.program-type').on('change', 'input', function() {
       var have_buildings = #{SubProgram.have_buildings};
       $('div.building').hide();
@@ -72,5 +67,3 @@
         $(this).trigger('change.select2');
       });
     });
-    
-

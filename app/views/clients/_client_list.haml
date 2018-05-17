@@ -1,0 +1,72 @@
+.row.table-utilities
+  .col-sm-4
+    %p= page_entries_info clients
+  .col-sm-8
+    %p.client__current-sort-filter
+      Currently sorted by:
+      %strong= @sorted_by
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table__init-cap-header
+        %thead
+          %tr
+            %th Matches
+            %th Last Name
+            %th First Name
+            %th Homeless Since
+            %th Days Homeless
+            %th Days Homeless in the last three years
+            - if @show_vispdat
+              %th VI-SPDAT
+              %th Priority Score
+            %th Available
+            %th Age
+            %th Gender
+            %th SSN
+            %th Veteran
+            %th Chronic
+        %tbody
+          - clients.each do |client|
+            %tr
+              %td.text-right
+                = link_to client_matches_path(client) do
+                  .badge.badge-success= @matches[client.id]
+              %td
+                = link_to client_path(client) do
+                  = client.last_name
+                  = client_data_quality client, :name
+              %td
+                = link_to client_path(client) do
+                  = client.first_name
+                  = client_data_quality client, :name
+              %td
+                = client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+              %td= number_with_delimiter(client.days_homeless)
+              %td= number_with_delimiter(client.days_homeless_in_last_three_years)
+              - if @show_vispdat
+                %td
+                  = client.vispdat_score
+                %td
+                  = client.vispdat_priority_score
+              %td
+                = client.available_text
+              %td
+                %nobr
+                  - if client.date_of_birth.present?
+                    = client.age
+                  - else
+                    unknown
+                  = client_data_quality client, :date_of_birth
+              %td
+                = client.gender.try(:text)
+              %td
+                %nobr
+                  = masked_ssn client.ssn
+                  = client_data_quality client, :ssn
+              %th.text-center
+                = checkmark client.veteran
+              %th.text-center
+                = checkmark client.chronic_homeless
+
+    %p= paginate clients

@@ -1,31 +1,25 @@
 <div class="row" data-requirement-row data-persisted-id="{{requirement.id}}" data-requirement-rule-id="{{requirement.rule_id}}">
   <div class="col-sm-12">
     <div class="add-things-boxes--added-row">
-      <div class="row">    
-        <div class="col-lg-3 col-sm-5 col-md-4 col-xs-5">
-          <div class="btn-group">
-            <a href="#" class="btn btn-rule-condition {{requirement.must_active}}">MUST</a>
-            <a href="#" class="btn btn-rule-condition {{requirement.cant_active}}">CAN'T</a>
-          </div>
+      <div class="btn-group">
+        <a href="#" class="btn btn-rule-condition pointer-events--none {{requirement.must_active}}">MUST</a>
+        <a href="#" class="btn btn-rule-condition pointer-events--none {{requirement.cant_active}}">CAN'T</a>
+      </div>
+      <div class="add-things-boxes--right-side">
+        <div>
+          <span>{{requirement.rule_name}}</span>
+          <span>{{requirement.display_for_variable}}</span>
         </div>
-        <div class="col-lg-9 col-sm-7 col-md-8 col-xs-7">
-          <div class="add-things-boxes--right-side">
-            <span>{{requirement.rule_name}}</span>
-            <span>{{requirement.display_for_variable}}</span>
-            <div class="pull-right">
-              <a href="#" class="add-things-boxes--remove-link" data-destroy-requirement-link data-destroy-requirement-rule-id="{{requirement.rule_id}}"><i class="icon icon-cross"></i></a>
-            </div>
-          </div>
-        </div>
+        <a href="#" class="add-things-boxes--remove-link" data-destroy-requirement-link data-destroy-requirement-rule-id="{{requirement.rule_id}}"><i class="icon icon-cross"></i></a>
       </div>
     </div>
   </div>
 
-  
+
   <input type="hidden" name="{{input_name_prefix}}[id]" value="{{requirement.id}}">
   <input type="hidden" name="{{input_name_prefix}}[rule_id]" value="{{requirement.rule_id}}">
   <input type="hidden" name="{{input_name_prefix}}[positive]" value="{{requirement.positive_string}}">
   <input type="hidden" name="{{input_name_prefix}}[variable]" value="{{requirement.variable}}">
   <input type="hidden" name="{{input_name_prefix}}[_destroy]" value="0" data-destroy-requirement-input>
-  
+
 </div>

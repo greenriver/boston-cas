@@ -1,0 +1,7 @@
+- if @client.active_matches.count > 1
+  %h3.detail-box--label
+    Other Active Matches
+  - matches = @client.active_matches.to_a - [match]
+  - matches.each do |active_match|
+    .detail-box--value
+      = link_to "Match ID: #{active_match.id} in route: #{active_match.match_route.title}", match_path(active_match)

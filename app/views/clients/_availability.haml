@@ -1,0 +1,91 @@
+%section.c-card.c-card--flush
+  %h3 Availability
+  .c-card__content
+    %table.table.table-condensed
+      %tbody
+        %tr.no-border
+          %td{colspan: 2}
+            = render 'form'
+        %tr
+          %th Available for matching?
+          %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
+            = @client.available_text
+        %tr
+          %th Homeless Since
+          %td= date_format(@client.calculated_first_homeless_night)
+        %tr
+          %th Days Homeless
+          %td= number_with_delimiter(@client.days_homeless)
+        %tr
+          %th Days Homeless in Last Three Years
+          %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
+        %tr
+          %th Last Homeless Contact
+          %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+        %tr
+          %th Chronically Homeless
+          %td= checkmark @client.chronic_homeless
+        %tr
+          %th Disability
+          %td
+            - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
+              = "Verified on #{disability_verified_on}"
+            - else
+              Not Verified
+        %tr
+          %th Housing Release
+          %td
+            = _(@client.housing_release_status.presence) || 'Not Signed'
+        - if @client.release_of_information.present?
+          %tr
+            %th= "#{_('Release of information')} signed on"
+            %td= @client.release_of_information.try(:to_date)
+        %tr
+          %th= _('Housing Authority Eligible')
+          %td= checkmark @client.ha_eligible
+        - if can_view_va_eligibility?
+          %tr
+            %th VA Eligible
+            %td= checkmark @client.va_eligible
+        - if can_view_vspdats?
+          %tr
+            %th VI-SPDAT Score
+            %td= @client.vispdat_score
+          %tr
+            %th
+              Priority Score
+              %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus zero, one (365), or two (730) years of days homeless'}
+            %td= @client.vispdat_priority_score
+        %tr
+          %th= _('U.S Citizen or Permanent Resident')
+          %td= checkmark (@client.us_citizen)
+        %tr
+          %th= _('Asylee, Refugee')
+          %td= checkmark (@client.asylee)
+        %tr
+          %th= _('Ineligible Immigrant (Including Undocumented)')
+          %td= checkmark (@client.ineligible_immigrant)
+        %tr
+          %th= _('Life-Time Sex Offender')
+          %td= checkmark (@client.lifetime_sex_offender)
+        %tr
+          %th= _('Meth Production Conviction')
+          %td= checkmark (@client.meth_production_conviction)
+        %tr
+          %th= _('Part of a family')
+          %td= checkmark (@client.family_member)
+        %tr
+          %th= _('Children under age 18 in household')
+          %td= checkmark (@client.child_in_household)
+        %tr
+          %th= _('CSPECH Eligible')
+          %td= checkmark (@client.cspech_eligible)
+        %tr
+          %th Total Monthly Income
+          %td= number_to_currency(@client.income_total_monthly)
+        %tr
+          %th Willing to live in congregate housing
+          %td= checkmark @client.congregate_housing
+        %tr
+          %th Appropirate for sober supportive housing
+          %td= checkmark @client.sober_housing

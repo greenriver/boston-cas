@@ -1,0 +1,9 @@
+= form.association :not_working_with_client_reason, collection: @decision.not_working_with_client_reasons, label: 'If you are no longer working with client, please indicate reason:', as: :check_boxes
+= form.input :not_working_with_client_reason_other_explanation, as: :text, label: false, placeholder: 'Other reason'
+.row
+  .col-md-6
+    = form.input :client_last_seen_date, label: 'When did you last see this client?', as: :date_picker, disabled: !@decision.editable?
+.form-actions
+  %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'not_working_with_client'}, disabled: !(@decision.editable?)}
+    %i.icon-stop
+    Not Working with Client

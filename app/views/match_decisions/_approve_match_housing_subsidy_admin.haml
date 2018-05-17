@@ -1,36 +1,33 @@
-.row
-  .col-xs-12
-    .match-decision
-      = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-        .row
-          .col-sm-6.jMatchProceeds
-            - if can_reject_matches?
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm.mr-4
               %h3 Continue Match
+            -# .jMatchProceeds
+            -#   - if can_reject_matches?
+            -#     %h3 Continue Match
+          .o-choose__content
             %p
               - hearing_date = @match.schedule_criminal_hearing_housing_subsidy_admin_decision.criminal_hearing_date
               - if hearing_date.present?
-                = "Please note: #{_('a criminal background hearing has been schedule for')}" 
+                = "Please note: #{_('a criminal background hearing has been schedule for')}"
                 %strong
                   = "#{hearing_date.to_s}."
               - else
                 = "Please note: #{_('No criminal background hearing was requested.')}"
-            %p 
-              Once you have enough information about this match, please accept or decline the match accordingly.
-            
-            = render 'match_decisions/decline_reason', form: form
 
             = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
 
-            = form.submit 'Decline Match', class: 'btn btn-secondary jDecline', data: {submit_param_name: 'decision[status]', submit_param_value: 'declined'}, disabled: (!@decision.editable?)
-            = form.submit 'Accept Match Recommendation', class: 'btn btn-primary jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
+            %p
+              %i.icon-info
+              If the match is accepted, all involved parties will be notified.
 
-            %p If the match is declined, the DND will be informed of the decision. If accepted, all involved parties will be notified.
-
-          - if can_reject_matches?
-            .col-sm-6
-              %h3 Cancel Match
-              .well
-                = render 'match_decisions/park_client', form: form
-                = render 'match_decisions/cancel_match_form_fields', form: form
-              .well
-                = render 'match_decisions/step_back', form: form
+            .form-actions
+              %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
+                %i.icon-checkmark
+                Accept Match
+        = render 'match_decisions/decline_and_cancel_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'

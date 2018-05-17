@@ -1,6 +1,6 @@
 = render 'breadcrumbs'
-.row
-  .col-sm-8
+.o-body
+  .o-body__title
     %h1.name
       = @client.full_name
       - if @client.merged_into
@@ -16,212 +16,214 @@
         - @client.alternate_names.split(',').each do |name|
           .client-alternate-name
             = name
-  .col-sm-4
-    - if warehouse_id = @client.remote_id
-      = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
-        Warehouse ID:
-        = warehouse_id
+    .o-body__action
+      - if warehouse_id = @client.remote_id
+        = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
+          Warehouse ID:
+          = warehouse_id
 
-- if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
-  .alert.alert-warning
-    %p.icon-warning
-      = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
-      = link_to 'See all parked clients.', reports_parked_clients_path
+  - if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
+    .alert.alert-warning
+      %p
+        %i.icon-warning
+        = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
+        = link_to 'See all parked clients.', reports_parked_clients_path, class: 'ml-2'
 
-.row
-  .col-sm-12
-    = render 'tab_navigation', active: 'show', client_id: @client.id
-.row
-  .col-sm-6
-    = simple_form_for(@client) do |f|
-      = f.error_notification
-      %h3 Demographics
-      %table.table.table-condensed
-        %tbody
-          %tr
-            %th Age
-            %td= "#{@client.age} (#{date_format(@client.date_of_birth)})"
-          %tr
-            %th SSN
-            %td= masked_ssn @client.ssn
-          %tr
-            %th Gender
-            %td= @client.gender.try(:text)
-          %tr
-            %th Race
-            %td= @client.race.try(:text)
-          %tr
-            %th Ethnicity
-            %td= @client.ethnicity.try(:text)
-          %tr
-            %th Veteran
-            %td= @client.veteran_status.try(:text)
-          - if can_view_client_confidentiality?
-            %tr
-              %th
-                Confidential Client
-                %p.help-block
-                  (name hidden on lists of matches by default)
-              %td= f.input_field :confidential
-            %tr
-              %td.text-right{colspan: 2}
-                = f.button :submit, class: 'btn btn-primary', value: 'Update'
-    %h3 Contact Information
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %th Email
-          %td= @client.email
-        %tr
-          %th Home Phone
-          %td= @client.homephone
-        %tr
-          %th Cell Phone
-          %td= @client.cellphone
-        - if @client.workphone.present?
-          %tr
-            %th Work Phone
-            %td= @client.workphone
-        - if @client.pager.present?
-          %tr
-            %th Pager
-            %td= @client.pager
-  .col-sm-6
-    %h3 Availability
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %td{colspan: 2}
-            = render 'form'
-        %tr
-          %th Available for matching?
-          %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
-            = @client.available_text
-        %tr
-          %th Homeless Since
-          %td= date_format(@client.calculated_first_homeless_night)
-        %tr
-          %th Days Homeless
-          %td= number_with_delimiter(@client.days_homeless)
-        %tr
-          %th Days Homeless in Last Three Years
-          %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
-        %tr
-          %th Last Homeless Contact
-          %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-        %tr
-          %th Chronically Homeless
-          %td= checkmark @client.chronic_homeless
-        %tr
-          %th Disability
-          %td
-            - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
-              = "Verified on #{disability_verified_on}"
-            - else
-              Not Verified
-        %tr
-          %th Housing Release
-          %td
-            = _(@client.housing_release_status.presence) || 'Not Signed'
-        - if @client.release_of_information.present?
-          %tr
-            %th= "#{_('Release of information')} signed on"
-            %td= @client.release_of_information.try(:to_date)
-        %tr
-          %th= _('Housing Authority Eligible')
-          %td= checkmark @client.ha_eligible
-        - if can_view_va_eligibility?
-          %tr
-            %th VA Eligible
-            %td= checkmark @client.va_eligible
-        - if can_view_vspdats?
-          %tr
-            %th VI-SPDAT Score
-            %td= @client.vispdat_score
-          %tr
-            %th 
-              Priority Score
-              %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus zero, one (365), or two (730) years of days homeless'}
-            %td= @client.vispdat_priority_score
-        %tr
-          %th= _('U.S Citizen or Permanent Resident')
-          %td= checkmark (@client.us_citizen)
-        %tr
-          %th= _('Asylee, Refugee')
-          %td= checkmark (@client.asylee)
-        %tr
-          %th= _('Ineligible Immigrant (Including Undocumented)')
-          %td= checkmark (@client.ineligible_immigrant)
-        %tr
-          %th= _('Life-Time Sex Offender')
-          %td= checkmark (@client.lifetime_sex_offender)
-        %tr
-          %th= _('Meth Production Conviction')
-          %td= checkmark (@client.meth_production_conviction)
-        %tr
-          %th= _('Part of a family')
-          %td= checkmark (@client.family_member)
-        %tr
-          %th= _('Children under age 18 in household')
-          %td= checkmark (@client.child_in_household)
-        %tr
-          %th= _('CSPECH Eligible')
-          %td= checkmark (@client.cspech_eligible)
-        %tr
-          %th Total Monthly Income
-          %td= number_to_currency(@client.income_total_monthly)
-        %tr
-          %th Willing to live in congregate housing
-          %td= checkmark @client.congregate_housing
-        %tr
-          %th Appropirate for sober supportive housing
-          %td= checkmark @client.sober_housing
-          
-    %h3 Health Information
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %th Developmental Disability
-          %td= checkmark @client.developmental_disability
-        %tr
-          %th Domestic Violence Survivor
-          %td= checkmark @client.domestic_violence
-        %tr
-          %th HIV/AIDS (HUD)
-          %td= checkmark @client.hiv_aids
-        %tr
-          %th Chronic Health Disability
-          %td= checkmark @client.chronic_health_problem
-        %tr
-          %th Mental Health Disability
-          %td= checkmark @client.mental_health_problem
-        %tr
-          %th Substance Abuse Problem
-          %td= checkmark @client.substance_abuse_problem
-        %tr
-          %th Physical Disability
-          %td= checkmark @client.physical_disability
-        %tr
-          %th Disabling Condition
-          %td= checkmark @client.disabling_condition
-        - if can_view_dmh_eligibility?
-          %tr
-            %th DMH Eligible
-            %td= checkmark @client.dmh_eligible
-        - if can_view_hues_eligibility?
-          %tr
-            %th HUES Eligible
-            %td= checkmark @client.hues_eligible
-        - if can_view_hiv_positive_eligibility?
-          %tr
-            %th HIV+
-            %td= checkmark @client.hiv_positive
+  .row
+    .col-sm-12
+      = render 'tab_navigation', active: 'show', client_id: @client.id
+  .row
+    .col-sm-6
+      %section.c-card.c-card--flush
+        %h3 Demographics
+        .c-card__content
+          = simple_form_for(@client) do |f|
+            = f.error_notification
+            %table.table.table-condensed
+              %tbody
+                %tr.no-border
+                  %th Age
+                  %td= "#{@client.age} (#{date_format(@client.date_of_birth)})"
+                %tr
+                  %th SSN
+                  %td= masked_ssn @client.ssn
+                %tr
+                  %th Gender
+                  %td= @client.gender.try(:text)
+                %tr
+                  %th Race
+                  %td= @client.race.try(:text)
+                %tr
+                  %th Ethnicity
+                  %td= @client.ethnicity.try(:text)
+                %tr
+                  %th Veteran
+                  %td= @client.veteran_status.try(:text)
+                - if can_view_client_confidentiality?
+                  %tr
+                    %th
+                      Confidential Client
+                      %p.help-block
+                        (name hidden on lists of matches by default)
+                    %td= f.input_field :confidential
+                  %tr
+                    %td.text-right{colspan: 2}
+                      = f.button :submit, class: 'btn btn-primary', value: 'Update'
 
-  .col-sm-6
-    .row
-      .col-sm-12
-        = render 'potential_duplicates'
-    .row
-      .col-sm-12
-        - if @client.previously_merged?
-          = render 'previously_merged'
+      %section.c-card.c-card--flush
+        %h3 Contact Information
+        .c-card__content
+          %table.table.table-condensed
+            %tbody
+              %tr.no-border
+                %th Email
+                %td= @client.email
+              %tr
+                %th Home Phone
+                %td= @client.homephone
+              %tr
+                %th Cell Phone
+                %td= @client.cellphone
+              - if @client.workphone.present?
+                %tr
+                  %th Work Phone
+                  %td= @client.workphone
+              - if @client.pager.present?
+                %tr
+                  %th Pager
+                  %td= @client.pager
+
+    .col-sm-6
+      %section.c-card.c-card--flush
+        %h3 Availability
+        .c-card__content
+          %table.table.table-condensed
+            %tbody
+              %tr.no-border
+                %td{colspan: 2}
+                  = render 'form'
+              %tr
+                %th Available for matching?
+                %td.text-center{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
+                  = @client.available_text
+              %tr
+                %th Homeless Since
+                %td= date_format(@client.calculated_first_homeless_night)
+              %tr
+                %th Days Homeless
+                %td= number_with_delimiter(@client.days_homeless)
+              %tr
+                %th Days Homeless in Last Three Years
+                %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
+              %tr
+                %th Last Homeless Contact
+                %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+              %tr
+                %th Chronically Homeless
+                %td= checkmark @client.chronic_homeless
+              %tr
+                %th Disability
+                %td
+                  - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
+                    = "Verified on #{disability_verified_on}"
+                  - else
+                    Not Verified
+              %tr
+                %th Housing Release
+                %td
+                  = _(@client.housing_release_status.presence) || 'Not Signed'
+              - if @client.release_of_information.present?
+                %tr
+                  %th= "#{_('Release of information')} signed on"
+                  %td= @client.release_of_information.try(:to_date)
+              %tr
+                %th= _('Housing Authority Eligible')
+                %td= checkmark @client.ha_eligible
+              - if can_view_va_eligibility?
+                %tr
+                  %th VA Eligible
+                  %td= checkmark @client.va_eligible
+              - if can_view_vspdats?
+                %tr
+                  %th VI-SPDAT Score
+                  %td= @client.vispdat_score
+                %tr
+                  %th
+                    Priority Score
+                    %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus zero, one (365), or two (730) years of days homeless'}
+                  %td= @client.vispdat_priority_score
+              %tr
+                %th= _('U.S Citizen or Permanent Resident')
+                %td= checkmark (@client.us_citizen)
+              %tr
+                %th= _('Asylee, Refugee')
+                %td= checkmark (@client.asylee)
+              %tr
+                %th= _('Ineligible Immigrant (Including Undocumented)')
+                %td= checkmark (@client.ineligible_immigrant)
+              %tr
+                %th= _('Life-Time Sex Offender')
+                %td= checkmark (@client.lifetime_sex_offender)
+              %tr
+                %th= _('Meth Production Conviction')
+                %td= checkmark (@client.meth_production_conviction)
+              %tr
+                %th= _('Part of a family')
+                %td= checkmark (@client.family_member)
+              %tr
+                %th= _('Children under age 18 in household')
+                %td= checkmark (@client.child_in_household)
+              %tr
+                %th= _('CSPECH Eligible')
+                %td= checkmark (@client.cspech_eligible)
+              %tr
+                %th Total Monthly Income
+                %td= number_to_currency(@client.income_total_monthly)
+              %tr
+                %th Willing to live in congregate housing
+                %td= checkmark @client.congregate_housing
+              %tr
+                %th Appropirate for sober supportive housing
+                %td= checkmark @client.sober_housing
+
+      %section.c-card.c-card--flush
+        %h3 Health Information
+        .c-card__content
+          %table.table.table-condensed
+            %tbody
+              %tr
+                %th Developmental Disability
+                %td= checkmark @client.developmental_disability
+              %tr
+                %th Domestic Violence Survivor
+                %td= checkmark @client.domestic_violence
+              %tr
+                %th HIV/AIDS (HUD)
+                %td= checkmark @client.hiv_aids
+              %tr
+                %th Chronic Health Disability
+                %td= checkmark @client.chronic_health_problem
+              %tr
+                %th Mental Health Disability
+                %td= checkmark @client.mental_health_problem
+              %tr
+                %th Substance Abuse Problem
+                %td= checkmark @client.substance_abuse_problem
+              %tr
+                %th Physical Disability
+                %td= checkmark @client.physical_disability
+              %tr
+                %th Disabling Condition
+                %td= checkmark @client.disabling_condition
+              - if can_view_dmh_eligibility?
+                %tr
+                  %th DMH Eligible
+                  %td= checkmark @client.dmh_eligible
+              - if can_view_hues_eligibility?
+                %tr
+                  %th HUES Eligible
+                  %td= checkmark @client.hues_eligible
+              - if can_view_hiv_positive_eligibility?
+                %tr
+                  %th HIV+
+                  %td= checkmark @client.hiv_positive

@@ -1,4 +1,4 @@
-.detail-box--label= "#{Building.model_name.human}"
+%h3.detail-box--label= "#{Building.model_name.human}"
 .detail-box--value
   - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
     = match.opportunity_details.building_name 
@@ -9,5 +9,5 @@
     - else
       = line
     %br
-.detail-box--label Unit
+%h3.detail-box--label Unit
 .detail-box--value= match.opportunity_details.unit_name

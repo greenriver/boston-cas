@@ -9,14 +9,14 @@
       e.preventDefault();
     });
 
-#shelter-agency-modal.modal.fade(tabindex="-1" role="dialog")
+#shelter-agency-modal.modal.fade(role="dialog")
   .modal-dialog(role="document")
     .modal-content(data-pjax-modal-container)
       .modal-header
-        %button.close.pull-right.jCancel(aria-label="Close" type="button")
-          %span.icon-cross(aria-hidden="true")
         %h4.modal-title(data-pjax-modal-title)
           Confirm and Agree
+        %button.close.pull-right.jCancel(aria-label="Close" type="button")
+          %span.icon-cross(aria-hidden="true")
       .modal-body.clearfix
         %p
           = simple_format _('match shelter agency agreement modal')
@@ -30,5 +30,3 @@
           .col-sm-6.text-right
             %button.btn.btn-secondary.pull-right.jCancel(aria-label="Close" pjax-modal-close type="button")
               Cancel
-        
-

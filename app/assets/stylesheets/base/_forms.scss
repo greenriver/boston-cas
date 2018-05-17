@@ -1,25 +1,50 @@
+.form__actions,
+.form-actions {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  &--right {
+    justify-content: flex-end;
+    input,
+    a,
+    button {
+      margin-left: space(2);
+    }
+  }
+  &--stacked {
+    display: inline-flex;
+    flex-direction: column;
+    button {
+      margin-bottom: space(3);
+    }
+  }
+}
+
 .help-block {
   @include margin(0 0 8px 0);
+  @extend .label-helper;
+  margin-top: rem(-5px);
+  margin-bottom: space(2);
 }
+
 .requirement-warning {
   color: $brand-danger;
   @include open-sans-medium;
-  @include padding($padding-base-vertical 0);
+  @include padding(space(1) 0);
 }
+
 .form-actions {
-  clear: both;
   @include margin(10px null);
 }
-label {
-  color: $gray-070;
-  @include open-sans-medium;
-}
+
 .button-row {
   margin-bottom: 24px;
 }
+
 .form-group {
-  margin-bottom: 30px;
+  margin-bottom: space(4);
 }
+
 .form-group__indented-01 {
   @include margin(10px null 10px 40px);
 }
@@ -36,9 +61,10 @@ label {
 .checkbox .form-group__indented-01 label {
   padding-left: 0;
 }
-.has-error {
-  @include form-control-validation($cas-red, $cas-red, $cas-red);
+.has-error .help-block {
+  color: $brand-danger;
 }
+
 .error .form-control {
   border-color: $cas-red;
 }
@@ -61,13 +87,6 @@ label {
 .contact-on-match--icon-link:focus {
   text-decoration: none;
   color: darken($text-color, 15);
-}
-.selected-contact {
-  margin: 10px;
-}
-.selected-contact--remove-link:hover,
-.selected-contact--remove-link:focus {
-  text-decoration: none;
 }
 .input__button-size {
   padding: 6px 12px;

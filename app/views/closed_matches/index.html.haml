@@ -1,30 +1,27 @@
 - sort_options = ClientOpportunityMatch.sort_options
-.row
-  .col-sm-4.col-sm-offset-8
-    - if can_add_vacancies?
-      = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-        %span.icon-plus
-        Submit a Vacancy
-  
-- if show_match_status_facet_nav?
-  .row
+.d-flex.justify-content-end
+  - if can_add_vacancies?
+    = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+      %span.icon-plus
+      Submit a Vacancy
 
-    %ul.nav.nav-tabs
-      %li{role: "presentation", class: ('active' if controller_path == 'active_matches')}
-        = link_to 'Matches in Progress', active_matches_path
-      %li{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
-        = link_to 'Closed Matches', closed_matches_path
+- if show_match_status_facet_nav?
+  %ul.nav.nav-tabs
+    %li.nav-item{role: "presentation", class: ('active' if controller_path == 'active_matches')}
+      = link_to 'Matches in Progress', active_matches_path, class: 'nav-link'
+    %li.nav-item{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
+      = link_to 'Closed Matches', closed_matches_path, class: 'nav-link'
 
 .row
   .col-sm-12
     %h1= @heading
     = render 'help_text'
   - @prompt = t '.search_prompt'
-.row
-  .col-sm-6
+.row.o-search
+  .col-sm-4.o-search__input-wrapper
     = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
-  .col-sm-6.sort-filter
-    = render 'filter', available_steps: ClientOpportunityMatch.closed_filter_options, return_path: closed_matches_path, label_method: :closed
+  .col-sm-8.sort-filter.o-search__actions
+    = render 'filter', available_steps: ClientOpportunityMatch.closed_filter_options, return_path: closed_matches_path, label_method: :closed, available_routes: @available_routes
     = render 'sort', sort_options: sort_options
     = render 'show_confidential_names'
 .row
@@ -34,62 +31,7 @@
     %p.client__current-sort-filter
       Currently sorted by:
       %strong= sort_options.select{|m| m[:column] == @column && m[:direction] == @direction}.first.try(:[], :title)
-.row
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed
-        %thead
-          %tr
-            %th Client
-            %th First Homeless Night
-            %th Days Homeless
-            %th Days Homeless in the last three years
-            - if @show_vispdat
-              %th VI-SPDAT Score
-              %th Priority Score
-            %th Last Changed
-            %th.match-progress-bar-fixed-width Current Step
-            %th Initial Match Date
-            %th Program
-            %th Sub-Program
-            %th Funding Source &amp; Service Provider
-            - if show_links_to_matches?
-              %th
-            - if can_see_alternate_matches?
-              %th Alternate Matches
-        %tbody
-          - @matches.each do |match|
-            - next unless match.client.present?
-            - hide_client_name = match.confidential? && ! params[:confidential_override]
-            %tr
-              %td
-                - if match.client.accessible_by_user? current_user
-                  = link_to client_path(match.client) do
-                    = match.client_name_for_contact current_contact, hidden: hide_client_name
-                - else
-                  = match.client_name_for_contact current_contact, hidden: hide_client_name
-              %td= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-              %td= number_with_delimiter(match.client.days_homeless)
-              %td= number_with_delimiter(match.client.days_homeless_in_last_three_years)
-              - if @show_vispdat
-                %td= match.client.vispdat_score
-                %td= match.client.vispdat_priority_score
-              %td= match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
-              %td= render 'current_step', match: match 
-              %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-              %td
-                = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
-                  = match.opportunity_details.program_name
-              %td
-                = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
-                  = match.opportunity_details.sub_program_name
-              %td= match.opportunity_details.organizations
-              - if show_links_to_matches?
-                %td
-                  = link_to 'View / Update Match', match_path(match)
-              - if can_see_alternate_matches?
-                %td.text-center
-                  = link_to opportunity_matches_path(match.opportunity) do
-                    .badge.badge-success= match.opportunity_related_matches.count
 
-    %p= paginate @matches, params: {sort: @column, direction: @direction}
+%p= paginate @matches, params: {sort: @column, direction: @direction}
+= render 'matches/list', matches: @matches, match_type: 'closed'
+%p= paginate @matches, params: {sort: @column, direction: @direction}

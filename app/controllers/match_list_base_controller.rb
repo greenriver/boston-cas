@@ -32,12 +32,12 @@ class MatchListBaseController < ApplicationController
       sort = sort + ' NULLS LAST'
     end
     
-    @matches = @matches
-      .references(:client)
-      .includes(:client)
-      .order(sort)
-      .preload(:client, :opportunity, :decisions)
-      .page(params[:page]).per(25)
+    @matches = @matches.
+      references(:client).
+      includes(:client).
+      order(sort).
+      preload(:client, :opportunity, :decisions).
+      page(params[:page]).per(25)
     @show_vispdat = show_vispdat?
   end
   
@@ -60,33 +60,15 @@ class MatchListBaseController < ApplicationController
     end
 
     def show_vispdat?
-      can_view_vspdats? && %w(vi-spdat vispdat-priority-score).include?(engine_mode)
-    end
-
-    def engine_mode
-      engine_mode = Config.get(:engine_mode)
+      can_view_vspdats?
     end
 
     def default_sort_direction
-      if show_vispdat? || engine_mode == 'cumulative-homeless-days' || engine_mode == 'homeless-days-last-three-years'
-        'desc'
-      else
-        'asc'
-      end
+      'desc'
     end
 
     def default_sort_column
-      if show_vispdat? && engine_mode=='vi-spdat'
-        'vispdat_score'
-      elsif show_vispdat? && engine_mode=='vispdat-priority-score'
-        'vispdat_priority_score'
-      elsif engine_mode == 'cumulative-homeless-days'
-        'days_homeless'
-      elsif engine_mode == 'homeless-days-last-three-years'
-        'days_homeless_in_last_three_years'
-      else
-        'calculated_first_homeless_night'
-      end
+      'days_homeless_in_last_three_years'
     end
   
     def sort_column

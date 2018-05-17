@@ -1,0 +1,29 @@
+%section.c-card.c-card--flush
+  %h3 Program Details
+  .c-card__content
+    %table.table.table-condensed
+      %tr.no-border
+        %th Name
+        %td= @program.name
+      %tr
+        %th Funding Source
+        %td= @program.funding_source_name
+      %tr
+        %th Contract Start Date
+        %td= @program.contract_start_date.try :strftime, '%m/%d/%Y'
+      %tr
+        %th Match Route
+        %td= @program.match_route.title
+%section.c-card.c-card--flush
+  %h3 Settings Inherited from the Match Route
+  .c-card__content
+    %table.table.table-condensed
+      %tr.no-border
+        %th Contacts Editable by #{_('HSA')}?
+        %td= checkmark @program.match_route.contacts_editable_by_hsa
+      %tr
+        %th Prioritized by
+        %td= @program.match_route.match_prioritization.class.title
+      %tr
+        %th On Completion, will matches with this program cancel other matches for the client?
+        %td= checkmark @program.match_route.should_cancel_other_matches

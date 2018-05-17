@@ -7,7 +7,7 @@ module ApplicationHelper
     end
   end
   # END Permissions
-  # 
+  #
   def yn(boolean)
     boolean ? 'Y': 'N'
   end
@@ -80,7 +80,7 @@ module ApplicationHelper
     ].sample
     "<abbr title=\"#{long}\">#{short}</abbr>".html_safe
   end
-  
+
   def enable_responsive?
     @enable_responsive  = true
   end
@@ -89,15 +89,16 @@ module ApplicationHelper
     [].tap do |result|
       result << params[:controller]
       result << params[:action]
+      result << 'not-signed-in' if current_user.blank?
     end
   end
-  
+
   def container_classes
     [].tap do |result|
       result << 'non-responsive' unless enable_responsive?
     end
   end
-  
+
   def current_contact
     @current_contact || current_user.try(:contact)
   end
@@ -105,11 +106,20 @@ module ApplicationHelper
   def pjax_request?
     request.env['HTTP_X_PJAX'].present?
   end
-  
+
   def human_locale(locale)
     translations = {
       en: 'Text adjustments'
     }
     translations[locale.to_sym].presence || locale
   end
+
+  def show_links_to_matches?
+    false
+  end
+
+  def match_step_types
+    MatchRoutes::Base.match_steps
+  end
+
 end

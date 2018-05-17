@@ -1,0 +1,68 @@
+- matches.each do |match|
+  - hide_client_name = (match.confidential? || match.client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+  - active_in_other_match_class = ''
+  - if match.client.active_in_match? && match.client.active_in_match != match
+    - active_in_other_match_class = 'clients__client-card--flagged'
+
+  .clients__client-card.clients__client.c-card{data: {id: match.client.id}, class: active_in_other_match_class}
+    .client__details
+      .clients__client-name.h3
+        - if match.client.accessible_by_user? current_user
+          = match.client_name_for_contact current_contact, hidden: hide_client_name
+        - else
+          = match.client_name_for_contact current_contact, hidden: hide_client_name
+      %ul.list-unstyled
+        %li
+          %dl.inline
+            %dt First Homeless Night:
+            %dd= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+        %li
+          %dl.inline
+            %dt Days Homeless:
+            %dd= number_with_delimiter(match.client.days_homeless)
+        %li
+          %dl.inline
+            %dt Days Homeless in Last 3 Years:
+            %dd= number_with_delimiter(match.client.days_homeless_in_last_three_years)
+
+    .client__details
+      - if MatchRoutes::Base.more_than_one?
+        %ul.list-unstyled
+          %li
+            %dl.inline
+              %dt Match Route:
+              %dd.feature= match.match_route.title
+      %ul.d-flex.list-unstyled.align-items-center
+        %li
+          %dl
+            %dt Initial Match Date
+            %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+        %li.ml-6.mr-6
+          = render 'current_step', match: match, size: 'sm'
+        - unless match_type == 'opportunity'
+          %li
+            %dl
+              %dt Last Updated
+              %dd
+                - if match_type == 'active'
+                  = match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
+                - else
+                  = match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
+      %ul.d-flex.list-unstyled
+        %li.mr-6
+          %dl
+            %dt Program
+            %dd
+              = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
+                = match.opportunity_details.sub_program_name
+        %li
+          %dl
+            %dt Sub-Program
+            %dd
+              = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
+                = match.opportunity_details.program_name
+    .client__details.flex-column.d-flex.justify-content-start.align-items-center.ml-auto
+      = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
+      - if  match_type != 'opportunity' && can_see_alternate_matches?
+        = link_to opportunity_matches_path(match.opportunity) do
+          #{match.opportunity_related_matches.count} Alternate Matches

@@ -1,15 +1,20 @@
-- match_decisions = match.decisions.order(id: :asc).where(type: @types.keys)
-%ol.match-progress-bar{"step-count" => "#{match_decisions.count}"}
-  - match_decisions.each do |decision|
-    - decision_status = decision.incomplete_active_done?
+- match_route = match.match_route
+- types = match_step_types[match_route.class.name]
+- match_decisions = match.decisions.order(id: :asc).where(type: types.keys)
+- size ||= 'lg'
+- small_class = 'c-stepped-progress--sm'
 
-    %li{class: "match-progress-bar__step match-progress-bar__step--#{decision_status}"}
-      .match-progress-bar__step__name 
-        = decision.step_name
-      - if show_links_to_matches?
-        = link_to match_path(match) do
-          = render 'step_marker', decision: decision 
-      - else
-        = render 'step_marker', decision: decision 
-            
-= match.current_step_name || match.overall_status
+.d-flex
+  %ol.c-stepped-progress{"step-count" => "#{match_decisions.count}", class: "#{small_class if size == 'sm'}"}
+    - match_decisions.each do |decision|
+      - decision_status = decision.incomplete_active_done?
+      - final = types[decision.type].to_i == types.length.to_i
+      %li{class: "c-stepped-progress__step c-stepped-progress__step--#{decision_status} #{ 'c-stepped-progress__step--final' if final}"}
+        .sr-only
+          = decision.step_name
+        - if size == 'sm'
+          = link_to match_path(match), class: 'c-stepped-progress__step-link', data: {toggle: :tooltip, title: decision.step_name} do
+            .c-stepped-progress__step-number= types[decision.type]
+        - else
+          .c-stepped-progress__step-link--static{data: {toggle: :tooltip, title: decision.step_name}}
+            .c-stepped-progress__step-number= types[decision.type]

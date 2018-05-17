@@ -1,0 +1,22 @@
+%section.c-card.c-card--flush
+  %h3 Contact Information
+  .c-card__content
+    %table.table.table-condensed
+      %tbody
+        %tr.no-border
+          %th Email
+          %td= @client.email
+        %tr
+          %th Home Phone
+          %td= @client.homephone
+        %tr
+          %th Cell Phone
+          %td= @client.cellphone
+        - if @client.workphone.present?
+          %tr
+            %th Work Phone
+            %td= @client.workphone
+        - if @client.pager.present?
+          %tr
+            %th Pager
+            %td= @client.pager

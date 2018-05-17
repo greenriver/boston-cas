@@ -1,18 +1,15 @@
-.row
-  .col-sm-4.col-sm-offset-8
-    - if can_add_vacancies?
-      = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-        %span.icon-plus
-        Submit a Vacancy
-  
-- if show_match_status_facet_nav?
-  .row
+.d-flex.justify-content-end
+  - if can_add_vacancies?
+    = link_to new_opportunity_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+      %span.icon-plus
+      Submit a Vacancy
 
-    %ul.nav.nav-tabs
-      %li{role: "presentation", class: ('active' if controller_path == 'active_matches')}
-        = link_to 'Matches in Progress', active_matches_path
-      %li{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
-        = link_to 'Closed Matches', closed_matches_path
+- if show_match_status_facet_nav?
+  %ul.nav.nav-tabs
+    %li.nav-item{role: "presentation", class: ('active' if controller_path == 'active_matches')}
+      = link_to 'Matches in Progress', active_matches_path, class: 'nav-link'
+    %li.nav-item{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
+      = link_to 'Closed Matches', closed_matches_path, class: 'nav-link'
 
 .row
   .col-sm-9
@@ -32,56 +29,57 @@
   directions.each {| k,v | titles[k] = @matches.human_attribute_name(k)}
   titles['client_id'] = 'Client'
   titles['calculated_first_homeless_night'] = "First Homeless Night"
-.row
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed
-        %thead
-          %tr
-            - titles.each do | k, title |
-              %th
-                = manual_sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th Current Step
-            %th Initial Match Date
-            %th Program
-            %th Sub-Program
-            %th Funding Source &amp; Service Provider
-            - if show_links_to_matches?
-              %th
-        %tbody
-          - @matches.each do |match|
-            - hide_client_name = (match.confidential? || match.client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
-            - active_in_other_match_class = ''
-            - if match.client.active_in_match.present? && match.client.active_in_match != match
-              - active_in_other_match_class = 'client__active-match-elsewhere'
-            %tr{class: active_in_other_match_class}
-              %td
-                - if match.client.accessible_by_user? current_user
-                  = link_to client_path(match.client) do
-                    = match.client_name_for_contact current_contact, hidden: hide_client_name
-                - else
-                  = match.client_name_for_contact current_contact, hidden: hide_client_name
-              %td
-                = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-              %td
-                = number_with_delimiter(match.client.days_homeless)
-              %td
-                = number_with_delimiter(match.client.days_homeless_in_last_three_years)
-              - if @show_vispdat
-                %td= match.client.vispdat_score
-                %td= match.client.vispdat_priority_score
-              %td= match.current_step_name || match.overall_status
-              %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-              %td
-                = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
-                  = match.opportunity_details.program_name
-              %td
-                = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
-                  = match.opportunity_details.sub_program_name
-              %td= match.opportunity_details.organizations
-              - if show_links_to_matches?
-                %td
-                  = link_to 'View / Update Match', match_path(match)
 
-    %p= paginate @matches, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+%p= paginate @matches, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+= render 'matches/list', matches: @matches, match_type: 'opportunity'
+%p= paginate @matches, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+
+-# .table-responsive
+  %table.table.table-condensed
+    %thead
+      %tr
+        - titles.each do | k, title |
+          %th
+            = manual_sort_link(titles[k], k, directions)
+            %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+        %th Current Step
+        %th Initial Match Date
+        %th Program
+        %th Sub-Program
+        %th Funding Source &amp; Service Provider
+        - if show_links_to_matches?
+          %th
+    %tbody
+      - @matches.each do |match|
+        - hide_client_name = (match.confidential? || match.client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+        - active_in_other_match_class = ''
+        - if match.client.active_in_match? && match.client.active_in_match != match
+          - active_in_other_match_class = 'client__active-match-elsewhere'
+        %tr{class: active_in_other_match_class}
+          %td
+            - if match.client.accessible_by_user? current_user
+              = link_to client_path(match.client) do
+                = match.client_name_for_contact current_contact, hidden: hide_client_name
+            - else
+              = match.client_name_for_contact current_contact, hidden: hide_client_name
+          %td
+            = match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+          %td
+            = number_with_delimiter(match.client.days_homeless)
+          %td
+            = number_with_delimiter(match.client.days_homeless_in_last_three_years)
+          - if @show_vispdat
+            %td= match.client.vispdat_score
+            %td= match.client.vispdat_priority_score
+          %td= match.current_step_name || match.overall_status[:name]
+          %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+          %td
+            = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
+              = match.opportunity_details.program_name
+          %td
+            = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
+              = match.opportunity_details.sub_program_name
+          %td= match.opportunity_details.organizations
+          - if show_links_to_matches?
+            %td
+              = link_to 'View / Update Match', match_path(match)

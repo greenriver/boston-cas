@@ -1,0 +1,34 @@
+= content_for :modal_title do
+  Edit Contacts for #{@program.name}
+
+.row
+  = render 'sub_programs/tab_navigation', active: 'contacts'
+- if @program_contacts.errors.any?
+  .errors
+    = @program_contacts.errors.full_messages.join ","
+%p
+  The following contacts will be automatically added to any match involving #{@program.name}.
+.row
+  .col-md-6
+    = simple_form_for @program_contacts, url: program_sub_program_contacts_path(@program, @subprogram), html: form_html_options.merge(class: 'current-step-form') do |form|
+      = render 'contact_manager', contacts_type: 'shelter_agency', heading: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts", available_contacts_method: :available_shelter_agency_contacts, selected_contacts_method: :shelter_agency_contacts
+
+      = render 'contact_manager', contacts_type: 'client', heading: 'Client Contacts', available_contacts_method: :available_client_contacts, selected_contacts_method: :client_contacts
+
+      = render 'contact_manager', contacts_type: 'dnd_staff', heading: "#{_('DND')} Staff Contacts", available_contacts_method: :available_dnd_staff_contacts, selected_contacts_method: :dnd_staff_contacts
+
+      = render 'contact_manager', contacts_type: 'housing_subsidy_admin', heading: "#{_('Housing Subsidy Administrator')} Contacts", available_contacts_method: :available_housing_subsidy_admin_contacts, selected_contacts_method: :housing_subsidy_admin_contacts
+
+      = render 'contact_manager', contacts_type: 'ssp', heading: "#{_('Stabilization Service Provider')}", available_contacts_method: :available_ssp_contacts, selected_contacts_method: :ssp_contacts
+
+      = render 'contact_manager', contacts_type: 'hsp', heading: "#{_('Housing Search Provider')}", available_contacts_method: :available_hsp_contacts, selected_contacts_method: :hsp_contacts
+
+      .form-actions.clearfix
+        = form.submit "Save", class: 'btn btn-success'
+
+
+= content_for :page_js do
+  :javascript
+    $('[data-contact-manager]').each(function(_i, element) {
+      new App.ContactManager.Controller(element);
+    });

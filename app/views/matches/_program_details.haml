@@ -1,12 +1,16 @@
-.detail-box--label Funding Source
+- if MatchRoutes::Base.more_than_one?
+  %h3.detail-box--label Match Route
+  .detail-box--value
+    = @program.match_route.title
+%h3.detail-box--label Funding Source
 .detail-box--value
   = @program.funding_source.name
-.detail-box--label Program
+%h3.detail-box--label Program
 .detail-box--value
   = @program.name
   %em
     = link_to @sub_program.name, edit_program_sub_program_path(@program, @sub_program)
-.detail-box--label Service Provider
+%h3.detail-box--label Service Provider
 .detail-box--value= match.opportunity_details.service_provider_name
--#.detail-box--label Sub-Contractor
+-#%h3.detail-box--label Sub-Contractor
 .detail-box--value

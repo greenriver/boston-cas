@@ -1,0 +1,28 @@
+- action_message ||= ''
+
+.o-choose__choice
+  %header.jMatchHeader
+    %ul.o-choose__nav.nav.jMatchActionNav
+      = render 'match_decisions/decline_tab'
+      = render 'match_decisions/cancel_tab'
+      = render 'match_decisions/park_tab'
+      = render 'match_decisions/backup_tab'
+        
+  .o-choose__content
+    .tab-content
+      = render 'match_decisions/decline_tab_content', form: form, action_message: action_message
+      - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+      = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data
+      = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
+      = render 'match_decisions/backup_tab_content', form: form, cancel_data: cancel_data
+        
+= content_for :page_js do
+  :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
+    new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'))
+    $('.jCancelReason label').off('click');
+    $('.jCancelReason').on('click', 'label', function(e){
+      e.preventDefault();
+      checked = $(e.currentTarget).find('input[type="checkbox"]').prop('checked');
+      $(e.currentTarget).find('input[type="checkbox"]').prop('checked', !checked);
+    });
