@@ -173,9 +173,6 @@ msgstr ""
 msgid "full release"
 msgstr ""
 
-msgid "housing subsidy administator"
-msgstr ""
-
 msgid "match shelter agency agreement modal"
 msgstr ""
 

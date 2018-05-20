@@ -25,7 +25,7 @@
         .site-name
           .o-header--page__title.site-title
             = link_to root_path do
-              %span Boston <br> Coordinated <br> Access
+              %span= _('Boston Coordinated Access').split(' ').join('<br />').html_safe
               - unless Rails.env.production?
                 %span{style: 'font-size:12px;'}= "[#{Rails.env}]"
         .o-header--page__sub-title.tagline
