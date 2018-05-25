@@ -15,9 +15,5 @@
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')
-    $('.jCancelReason label').off('click');
-    $('.jCancelReason').on('click', 'label', function(e){
-      e.preventDefault();
-      checked = $(e.currentTarget).find('input[type="checkbox"]').prop('checked');
-      $(e.currentTarget).find('input[type="checkbox"]').prop('checked', !checked);
-    });
+
+= render 'match_decisions/cancel_and_park_js'

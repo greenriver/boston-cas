@@ -19,10 +19,6 @@
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
-    new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'))
-    $('.jCancelReason label').off('click');
-    $('.jCancelReason').on('click', 'label', function(e){
-      e.preventDefault();
-      checked = $(e.currentTarget).find('input[type="checkbox"]').prop('checked');
-      $(e.currentTarget).find('input[type="checkbox"]').prop('checked', !checked);
-    });
+    new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'));
+
+= render 'match_decisions/cancel_and_park_js'

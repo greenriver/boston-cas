@@ -1,0 +1,10 @@
+= content_for :page_js do
+  :javascript
+    $('#park-client .jCancelReason label').each(function(i) {
+      var label_for = $(this).attr('for') + '_';
+      $(this).attr('for', label_for);
+    });
+    $('#park-client .jCancelReason label input[type="checkbox"]').each(function(i) {
+      var id = $(this).attr('id') + '_';
+      $(this).attr('id', id);
+    });

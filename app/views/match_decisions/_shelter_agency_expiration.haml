@@ -5,10 +5,15 @@
         This match expires on 
         %strong= "#{@match.shelter_expiration}."
       - else
-        This match expired on 
-        %strong= "#{@match.shelter_expiration}."
-      %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
-        Update Expiration Date
+        .c-tag__wrapper
+          .c-tag--danger.mr-4
+            .c-tag__icon{style: 'font-size: 1.2rem;'}
+              %i.icon-warning
+          .content
+            This match expired on 
+            %strong= "#{@match.shelter_expiration}."
+            %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
+              Update Expiration Date
     - else 
       This match currently has no expiration date.
       %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
