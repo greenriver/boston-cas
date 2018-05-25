@@ -33,7 +33,7 @@
               = label
 
       .mb-2.d-flex
-        = link_to clients_path, class: 'btn btn-light' do
+        = link_to({action: :index}, class: 'btn btn-light')do
           %i.icon-cross
           Clear
         %button.btn.btn-primary.ml-auto{type: :submit}

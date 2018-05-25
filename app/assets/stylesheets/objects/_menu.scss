@@ -32,6 +32,23 @@
   @include header-menu-link;
   display: block;
   margin-bottom: space(2);
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  &::before {
+    content: '';
+    height: 5px;
+    width: 5px;
+    transform: translateX(-5px);
+    background: rgba($white, 0);
+    border-radius: 50%;
+  }
+  &:focus,
+  &:hover {
+    &::before {
+      background: rgba($white, .5);
+    }
+  }
 }
 
 .o-menu__to-top {

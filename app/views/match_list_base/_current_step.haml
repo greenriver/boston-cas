@@ -5,7 +5,7 @@
 - small_class = 'c-stepped-progress--sm'
 
 .d-flex
-  %ol.c-stepped-progress{"step-count" => "#{match_decisions.count}", class: "#{small_class if size == 'sm'}"}
+  %ol.c-stepped-progress{"step-count" => "#{match_decisions.count}", class: "#{small_class if size == 'sm'} route-#{match_route.class.name.parameterize}"}
     - match_decisions.each do |decision|
       - decision_status = decision.incomplete_active_done?
       - final = types[decision.type].to_i == types.length.to_i

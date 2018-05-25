@@ -204,6 +204,14 @@ $step-border-color: #E1E1E1;
   }
 }
 
+.route-matchroutes-provideronly .c-stepped-progress__step--final .c-stepped-progress__step-link,
+.route-matchroutes-provideronly .c-stepped-progress__step--final .c-stepped-progress__step-link--static {
+  &:after {
+    @include icon;
+    content: '#{map-get($icons, flag)}';
+  }
+}
+
 .c-stepped-progress__step--canceled .c-stepped-progress__step-link,
 .c-stepped-progress__step--canceled .c-stepped-progress__step-link--static {
   &:after {

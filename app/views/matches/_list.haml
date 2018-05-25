@@ -24,7 +24,6 @@
           %dl.inline
             %dt Days Homeless in Last 3 Years:
             %dd= number_with_delimiter(match.client.days_homeless_in_last_three_years)
-
     .client__details
       - if MatchRoutes::Base.more_than_one?
         %ul.list-unstyled
@@ -66,3 +65,16 @@
       - if  match_type != 'opportunity' && can_see_alternate_matches?
         = link_to opportunity_matches_path(match.opportunity) do
           #{match.opportunity_related_matches.count} Alternate Matches
+      - if match.shelter_expiration? 
+        - if match.shelter_expiration < Date.today
+          .c-tag__wrapper.align-items-center
+            .c-tag--danger.mr-4
+              .c-tag__icon{style: 'font-size: 1.2rem;'}
+                %i.icon-warning
+            .content
+              This match expired on 
+              %strong= "#{match.shelter_expiration}."
+        - else
+          .content
+            This match expires on 
+            %strong= "#{match.shelter_expiration}."
