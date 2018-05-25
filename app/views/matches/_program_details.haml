@@ -4,7 +4,7 @@
     = @program.match_route.title
 %h3.detail-box--label Funding Source
 .detail-box--value
-  = @program.funding_source.name
+  = if @program.funding_source.present? then @program.funding_source.name else 'None' end
 %h3.detail-box--label Program
 .detail-box--value
   = @program.name
