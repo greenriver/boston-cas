@@ -1,7 +1,7 @@
 %h3.detail-box--label= "#{Building.model_name.human}"
 .detail-box--value
   - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
-    = match.opportunity_details.building_name 
+    = match.opportunity_details.building_name
     %br
   - match.opportunity_details.building_address.each do |line|
     - if match.opportunity_details.building_map_link
@@ -11,3 +11,19 @@
     %br
 %h3.detail-box--label Unit
 .detail-box--value= match.opportunity_details.unit_name
+%h3.detail-box--label Unit Details
+.detail-box--value
+  - match.opportunity_details.unit_details.each do |line|
+    = line
+    %br
+
+-# %h3.detail-box--label Ground Floor
+  .detail-box--value= match.opportunity_details.unit_on_ground_floor?
+  %h3.detail-box--label Wheelchair Accessible
+  .detail-box--value= match.opportunity_details.unit_is_wheelchair_accessible?
+  %h3.detail-box--label Unit Occupancy
+  .detail-box--value= match.opportunity_details.unit_occupancy
+  %h3.detail-box--label Number of Bedrooms
+  .detail-box--value= match.opportunity_details.unit_bedrooms
+  %h3.detail-box--label Target Population
+  .detail-box--value= match.opportunity_details.unit_target_population
