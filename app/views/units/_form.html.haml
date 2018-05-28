@@ -5,14 +5,18 @@
   .form-inputs.margin-top-02
     - if @unit.in_use? && @unit.active_voucher.present? && @unit.active_match.present?
       - disabled = true
-      %p 
-        This unit is involved in a 
+      %p
+        This unit is involved in a
         = "#{link_to 'match', match_path(@unit.active_match)}, it's availability cannot be adjusted, nor can it be moved to another site.".html_safe
     %label.margin-bottom-00 Is the Unit Available?
     = f.input :available, disabled: disabled
     = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
-        
+    = f.input :occupancy, collection: 1..10, include_blank: false
+    = f.input :number_of_bedrooms, collection: 1..5
+    = f.input :target_population, collection: Unit.target_population_select_array
+    = f.input :ground_floor, as: :radio_buttons
+    = f.input :wheelchair_accessible, as: :radio_buttons
+
   .form-actions
     = f.button :submit
-

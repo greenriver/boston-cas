@@ -10,12 +10,17 @@ class Unit < ActiveRecord::Base
   has_many :opportunities, inverse_of: :unit
   has_many :vouchers, inverse_of: :unit
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
-  has_one :opportunity, through: :active_voucher 
+  has_one :opportunity, through: :active_voucher
 
   delegate :active_match, to: :active_voucher
   delegate :program, to: :active_voucher
 
   validates :name, presence: true
+  validates_inclusion_of :occupancy, :in => 1..10
+
+  TARGET_POPULATION_TYPES = %w(family individual youth)
+
+  validates :target_population, inclusion: { in: TARGET_POPULATION_TYPES }, allow_blank: true
 
   def hmis_managed?
     return true if id_in_data_source
@@ -46,5 +51,9 @@ class Unit < ActiveRecord::Base
 
   def self.associations_adding_services
     [:building]
+  end
+
+  def self.target_population_select_array
+    self::TARGET_POPULATION_TYPES.map { |type| [type.titleize, type] }
   end
 end
