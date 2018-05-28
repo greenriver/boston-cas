@@ -54,3 +54,4 @@ VispdatScoreFourToSeven,VI-SPDAT score of 4 to 7,have
 VispdatScoreEightOrMore,VI-SPDAT score of 8 or more,have
 EnrolledInHmisProject,Enrolled in specified HMIS Project,be
 ActiveInCohort,Active in specified Cohort,be
+RequiringWheelchairAccessibility,Requiring wheelchair accessibility,be
