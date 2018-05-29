@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511081334) do
+ActiveRecord::Schema.define(version: 20180529134126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,6 +200,15 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.jsonb    "active_cohort_ids"
     t.string   "client_identifier"
     t.integer  "assessment_score",                                  default: 0,     null: false
+    t.boolean  "ssvf_eligible",                                     default: false, null: false
+    t.boolean  "rrh_desired",                                       default: false, null: false
+    t.boolean  "youth_rrh_desired",                                 default: false, null: false
+    t.string   "rrh_assessment_contact_info"
+    t.datetime "rrh_assessment_collected_at"
+    t.boolean  "enrolled_in_th",                                    default: false, null: false
+    t.boolean  "enrolled_in_es",                                    default: false, null: false
+    t.boolean  "enrolled_in_sh",                                    default: false, null: false
+    t.boolean  "enrolled_in_so",                                    default: false, null: false
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -677,6 +686,15 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.string   "client_identifier"
     t.integer  "vispdat_priority_score",                 default: 0
     t.integer  "assessment_score",                       default: 0,     null: false
+    t.boolean  "ssvf_eligible",                          default: false, null: false
+    t.boolean  "rrh_desired",                            default: false, null: false
+    t.boolean  "youth_rrh_desired",                      default: false, null: false
+    t.string   "rrh_assessment_contact_info"
+    t.datetime "rrh_assessment_collected_at"
+    t.boolean  "enrolled_in_th",                         default: false, null: false
+    t.boolean  "enrolled_in_es",                         default: false, null: false
+    t.boolean  "enrolled_in_sh",                         default: false, null: false
+    t.boolean  "enrolled_in_so",                         default: false, null: false
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree

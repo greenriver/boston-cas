@@ -8,7 +8,7 @@
     .client__details
       .clients__client-name.h3
         - if match.client.accessible_by_user? current_user
-          = match.client_name_for_contact current_contact, hidden: hide_client_name
+          = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
         - else
           = match.client_name_for_contact current_contact, hidden: hide_client_name
       %ul.list-unstyled
