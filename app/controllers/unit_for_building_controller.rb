@@ -2,7 +2,7 @@ class UnitForBuildingController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_add_vacancies!
   include PjaxModalController
-  
+
   def new
     @buildings = building_scope
     @units = []
@@ -43,9 +43,12 @@ class UnitForBuildingController < ApplicationController
     def building_scope
       Building.all
     end
-    
+
     # Only allow a trusted parameter "white list" through.
     def unit_params
-      params.require(:unit_for_building).permit(:name, :available, :building_id)
+      params.require(:unit_for_building).permit(:name, :available, :building_id,
+        :ground_floor, :wheelchair_accessible, :occupancy, :number_of_bedrooms,
+        :target_population
+      )
     end
 end
