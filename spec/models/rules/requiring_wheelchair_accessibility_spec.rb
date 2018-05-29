@@ -26,13 +26,13 @@ RSpec.describe Rules::RequiringWheelchairAccessibility, type: :model do
     end
     context 'when negative' do
       it 'matches clients that do not require wheelchair accessibility' do
-        expect( clients_that_dont_fit.count ).to eq 2
+        expect(clients_that_dont_fit.count).to eq 2
       end
       it 'contains clients not requiring wheelchair accessibility' do
-        expect( clients_that_dont_fit.ids ).to include *clients_not_requiring_accessibility.map(&:id)
+        expect(clients_that_dont_fit.ids).to include *clients_not_requiring_accessibility.map(&:id)
       end
       it 'does not contain clients requiring wheelchair accessibility' do
-        expect( clients_that_dont_fit.ids ).to_not include *clients_requiring_accessibility.map(&:id)
+        expect(clients_that_dont_fit.ids).to_not include *clients_requiring_accessibility.map(&:id)
       end
     end
   end

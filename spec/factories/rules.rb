@@ -79,4 +79,8 @@ FactoryGirl.define do
     name 'Requiring wheelchair accessibility'
     verb 'be'
   end
+  factory :requiring_ground_floor, class: 'Rules::RequiringGroundFloor' do
+    name 'Requiring ground floor'
+    verb 'be'
+  end
 end
