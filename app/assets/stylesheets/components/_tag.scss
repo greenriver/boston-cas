@@ -57,6 +57,24 @@ $tag-correction: $tag-height / 2;
   color: rgba($black, .6);
 }
 
+.c-tag-pill {
+  border-radius: 10px;
+  padding: space(1) space(3);
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-tag-pill--lg {
+  @extend .c-tag-pill;
+  border-radius: 15px;
+  padding: space(3) space(6);
+  font-size: rem(14px);
+}
+
 $tag-types: (
   success: $brand-success-l,
   warning: $brand-warning-l,

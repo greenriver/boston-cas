@@ -17,8 +17,33 @@
           %th Days Homeless
           %td= number_with_delimiter(@client.days_homeless)
         %tr
-          %th Days Homeless in Last Three Years
+          %th
+            Days Homeless in Last Three Years
+            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH, SO or TH with no overlapping PH'}} 
           %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
+        %tr
+          %th
+            Days Literally Homeless in Last Three Years
+            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH or SO with no overlapping TH or PH'}}         
+          %td= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
+        %tr
+          %th Currently Enrolled in
+          %td
+            - if @client.enrolled_in_es
+              .client__service_type_es
+                .service-type__program-type ES
+            - if @client.enrolled_in_so
+              .client__service_type_so
+                .service-type__program-type SO
+            - if @client.enrolled_in_sh
+              .client__service_type_sh 
+                .service-type__program-type SH
+            - if @client.enrolled_in_th
+              .client__service_type_th 
+                .service-type__program-type TH
+        %tr
+          %th RRH Assessment Collected
+          %td= @client.rrh_assessment_collected_at
         %tr
           %th Last Homeless Contact
           %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
@@ -47,6 +72,9 @@
           %tr
             %th VA Eligible
             %td= checkmark @client.va_eligible
+        %tr
+          %th SSVF Eligible
+          %td= checkmark @client.ssvf_eligible
         - if can_view_vspdats?
           %tr
             %th VI-SPDAT Score
@@ -87,5 +115,15 @@
           %th Willing to live in congregate housing
           %td= checkmark @client.congregate_housing
         %tr
-          %th Appropirate for sober supportive housing
+          %th Appropriate for sober supportive housing
           %td= checkmark @client.sober_housing
+        %tr
+          %th Interested in Rapid Re-Housing
+          %td= checkmark @client.rrh_desired
+        %tr
+          %th Interested in Youth Rapid Re-Housing
+          %td= checkmark @client.youth_rrh_desired
+        - if @client.has_full_housing_release?
+          %tr
+            %th Contact info for maximizing income
+            %td= simple_format @client.rrh_assessment_contact_info

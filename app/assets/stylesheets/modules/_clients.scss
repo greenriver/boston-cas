@@ -69,3 +69,36 @@
 .client__details .inline dd {
   display: inline-block;
 }
+
+.service-type__program-type {
+  background-color: black;
+  @extend .c-tag-pill;
+  color: white;
+}
+
+.client__service_type_es {
+  /* border-bottom: 1px solid #0074D9; */
+  .service-type__program-type {
+    background-color: #0074D9;
+  }
+}
+.client__service_type_th {
+  /* border-bottom: 1px solid #3c84b7; */
+  .service-type__program-type {
+    background-color: #3c84b7;
+  }
+}
+
+.client__service_type_so {
+  /* border-bottom: 1px solid #3D9970; */
+  .service-type__program-type {
+    background-color: #3D9970;
+  }
+}
+
+.client__service_type_sh {
+  /* border-bottom: 1px solid #FF4136; */
+  .service-type__program-type {
+    background-color: #FF4136;
+  }
+}

@@ -160,7 +160,17 @@ module Cas
         :congregate_housing,
         :sober_housing,
         :enrolled_project_ids,
-        :active_cohort_ids
+        :active_cohort_ids,
+        :assessment_score,
+        :ssvf_eligible,
+        :rrh_desired,
+        :youth_rrh_desired,
+        :rrh_assessment_contact_info,
+        :rrh_assessment_collected_at,
+        :enrolled_in_th,
+        :enrolled_in_sh,
+        :enrolled_in_so,
+        :enrolled_in_es,
       ]
     end
 

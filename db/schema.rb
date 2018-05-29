@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180529134126) do
+ActiveRecord::Schema.define(version: 20180529161403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,14 +133,14 @@ ActiveRecord::Schema.define(version: 20180529134126) do
     t.string   "middle_name"
     t.string   "last_name"
     t.string   "name_suffix"
-    t.string   "name_quality",                           limit: 4
-    t.string   "ssn",                                    limit: 9
+    t.string   "name_quality",                                limit: 4
+    t.string   "ssn",                                         limit: 9
     t.date     "date_of_birth"
-    t.string   "gender_other",                           limit: 50
-    t.boolean  "veteran",                                           default: false
-    t.boolean  "chronic_homeless",                                  default: false
-    t.datetime "created_at",                                                        null: false
-    t.datetime "updated_at",                                                        null: false
+    t.string   "gender_other",                                limit: 50
+    t.boolean  "veteran",                                                default: false
+    t.boolean  "chronic_homeless",                                       default: false
+    t.datetime "created_at",                                                             null: false
+    t.datetime "updated_at",                                                             null: false
     t.datetime "deleted_at"
     t.integer  "merged_into"
     t.integer  "split_from"
@@ -153,62 +153,63 @@ ActiveRecord::Schema.define(version: 20180529134126) do
     t.integer  "developmental_disability"
     t.integer  "domestic_violence"
     t.date     "calculated_first_homeless_night"
-    t.boolean  "available",                                         default: true,  null: false
+    t.boolean  "available",                                              default: true,  null: false
     t.string   "homephone"
     t.string   "cellphone"
     t.string   "workphone"
     t.string   "pager"
     t.string   "email"
-    t.boolean  "hiv_aids",                                          default: false
-    t.boolean  "chronic_health_problem",                            default: false
-    t.boolean  "mental_health_problem",                             default: false
-    t.boolean  "substance_abuse_problem",                           default: false
-    t.boolean  "physical_disability",                               default: false
-    t.boolean  "disabling_condition",                               default: false
+    t.boolean  "hiv_aids",                                               default: false
+    t.boolean  "chronic_health_problem",                                 default: false
+    t.boolean  "mental_health_problem",                                  default: false
+    t.boolean  "substance_abuse_problem",                                default: false
+    t.boolean  "physical_disability",                                    default: false
+    t.boolean  "disabling_condition",                                    default: false
     t.datetime "release_of_information"
     t.date     "prevent_matching_until"
-    t.boolean  "dmh_eligible",                                      default: false
-    t.boolean  "va_eligible",                                       default: false, null: false
-    t.boolean  "hues_eligible",                                     default: false, null: false
+    t.boolean  "dmh_eligible",                                           default: false
+    t.boolean  "va_eligible",                                            default: false, null: false
+    t.boolean  "hues_eligible",                                          default: false, null: false
     t.datetime "disability_verified_on"
     t.datetime "housing_assistance_network_released_on"
-    t.boolean  "sync_with_cas",                                     default: false, null: false
+    t.boolean  "sync_with_cas",                                          default: false, null: false
     t.float    "income_total_monthly"
     t.datetime "income_total_monthly_last_collected"
-    t.boolean  "confidential",                                      default: false, null: false
-    t.boolean  "hiv_positive",                                      default: false, null: false
+    t.boolean  "confidential",                                           default: false, null: false
+    t.boolean  "hiv_positive",                                           default: false, null: false
     t.string   "housing_release_status"
     t.integer  "vispdat_score"
-    t.boolean  "ineligible_immigrant",                              default: false, null: false
-    t.boolean  "family_member",                                     default: false, null: false
-    t.boolean  "child_in_household",                                default: false, null: false
-    t.boolean  "us_citizen",                                        default: false, null: false
-    t.boolean  "asylee",                                            default: false, null: false
-    t.boolean  "lifetime_sex_offender",                             default: false, null: false
-    t.boolean  "meth_production_conviction",                        default: false, null: false
+    t.boolean  "ineligible_immigrant",                                   default: false, null: false
+    t.boolean  "family_member",                                          default: false, null: false
+    t.boolean  "child_in_household",                                     default: false, null: false
+    t.boolean  "us_citizen",                                             default: false, null: false
+    t.boolean  "asylee",                                                 default: false, null: false
+    t.boolean  "lifetime_sex_offender",                                  default: false, null: false
+    t.boolean  "meth_production_conviction",                             default: false, null: false
     t.integer  "days_homeless"
-    t.boolean  "ha_eligible",                                       default: false, null: false
+    t.boolean  "ha_eligible",                                            default: false, null: false
     t.integer  "days_homeless_in_last_three_years"
-    t.integer  "vispdat_priority_score",                            default: 0
-    t.integer  "vispdat_length_homeless_in_days",                   default: 0,     null: false
-    t.boolean  "cspech_eligible",                                   default: false
+    t.integer  "vispdat_priority_score",                                 default: 0
+    t.integer  "vispdat_length_homeless_in_days",                        default: 0,     null: false
+    t.boolean  "cspech_eligible",                                        default: false
     t.string   "alternate_names"
     t.date     "calculated_last_homeless_night"
-    t.boolean  "congregate_housing",                                default: false
-    t.boolean  "sober_housing",                                     default: false
+    t.boolean  "congregate_housing",                                     default: false
+    t.boolean  "sober_housing",                                          default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
     t.string   "client_identifier"
-    t.integer  "assessment_score",                                  default: 0,     null: false
-    t.boolean  "ssvf_eligible",                                     default: false, null: false
-    t.boolean  "rrh_desired",                                       default: false, null: false
-    t.boolean  "youth_rrh_desired",                                 default: false, null: false
+    t.integer  "assessment_score",                                       default: 0,     null: false
+    t.boolean  "ssvf_eligible",                                          default: false, null: false
+    t.boolean  "rrh_desired",                                            default: false, null: false
+    t.boolean  "youth_rrh_desired",                                      default: false, null: false
     t.string   "rrh_assessment_contact_info"
     t.datetime "rrh_assessment_collected_at"
-    t.boolean  "enrolled_in_th",                                    default: false, null: false
-    t.boolean  "enrolled_in_es",                                    default: false, null: false
-    t.boolean  "enrolled_in_sh",                                    default: false, null: false
-    t.boolean  "enrolled_in_so",                                    default: false, null: false
+    t.boolean  "enrolled_in_th",                                         default: false, null: false
+    t.boolean  "enrolled_in_es",                                         default: false, null: false
+    t.boolean  "enrolled_in_sh",                                         default: false, null: false
+    t.boolean  "enrolled_in_so",                                         default: false, null: false
+    t.integer  "days_literally_homeless_in_last_three_years",            default: 0
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -622,8 +623,8 @@ ActiveRecord::Schema.define(version: 20180529134126) do
     t.string   "substance_abuse_problem"
     t.date     "entry_date"
     t.date     "exit_date"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
     t.uuid     "clientguid"
     t.string   "middle_name"
     t.integer  "ssn_quality_code"
@@ -642,10 +643,10 @@ ActiveRecord::Schema.define(version: 20180529134126) do
     t.integer  "domestic_violence"
     t.integer  "discharge_type"
     t.integer  "developmental_disability"
-    t.boolean  "us_citizen",                             default: false, null: false
-    t.boolean  "asylee",                                 default: false, null: false
-    t.boolean  "lifetime_sex_offender",                  default: false, null: false
-    t.boolean  "meth_production_conviction",             default: false, null: false
+    t.boolean  "us_citizen",                                  default: false, null: false
+    t.boolean  "asylee",                                      default: false, null: false
+    t.boolean  "lifetime_sex_offender",                       default: false, null: false
+    t.boolean  "meth_production_conviction",                  default: false, null: false
     t.integer  "id_in_data_source"
     t.date     "calculated_first_homeless_night"
     t.date     "calculated_last_homeless_night"
@@ -658,43 +659,44 @@ ActiveRecord::Schema.define(version: 20180529134126) do
     t.string   "workphone"
     t.string   "pager"
     t.string   "email"
-    t.boolean  "dmh_eligible",                           default: false
-    t.boolean  "va_eligible",                            default: false, null: false
-    t.boolean  "hues_eligible",                          default: false, null: false
+    t.boolean  "dmh_eligible",                                default: false
+    t.boolean  "va_eligible",                                 default: false, null: false
+    t.boolean  "hues_eligible",                               default: false, null: false
     t.datetime "disability_verified_on"
     t.datetime "housing_assistance_network_released_on"
-    t.boolean  "sync_with_cas",                          default: false, null: false
+    t.boolean  "sync_with_cas",                               default: false, null: false
     t.float    "income_total_monthly"
     t.datetime "income_total_monthly_last_collected"
-    t.boolean  "hiv_positive",                           default: false, null: false
+    t.boolean  "hiv_positive",                                default: false, null: false
     t.string   "housing_release_status"
-    t.boolean  "needs_update",                           default: false, null: false
+    t.boolean  "needs_update",                                default: false, null: false
     t.integer  "vispdat_score"
-    t.boolean  "ineligible_immigrant",                   default: false, null: false
-    t.boolean  "family_member",                          default: false, null: false
-    t.boolean  "child_in_household",                     default: false, null: false
+    t.boolean  "ineligible_immigrant",                        default: false, null: false
+    t.boolean  "family_member",                               default: false, null: false
+    t.boolean  "child_in_household",                          default: false, null: false
     t.integer  "days_homeless"
-    t.boolean  "ha_eligible",                            default: false, null: false
+    t.boolean  "ha_eligible",                                 default: false, null: false
     t.integer  "days_homeless_in_last_three_years"
-    t.integer  "vispdat_length_homeless_in_days",        default: 0,     null: false
-    t.boolean  "cspech_eligible",                        default: false
+    t.integer  "vispdat_length_homeless_in_days",             default: 0,     null: false
+    t.boolean  "cspech_eligible",                             default: false
     t.string   "alternate_names"
-    t.boolean  "congregate_housing",                     default: false
-    t.boolean  "sober_housing",                          default: false
+    t.boolean  "congregate_housing",                          default: false
+    t.boolean  "sober_housing",                               default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
     t.string   "client_identifier"
-    t.integer  "vispdat_priority_score",                 default: 0
-    t.integer  "assessment_score",                       default: 0,     null: false
-    t.boolean  "ssvf_eligible",                          default: false, null: false
-    t.boolean  "rrh_desired",                            default: false, null: false
-    t.boolean  "youth_rrh_desired",                      default: false, null: false
+    t.integer  "vispdat_priority_score",                      default: 0
+    t.integer  "assessment_score",                            default: 0,     null: false
+    t.boolean  "ssvf_eligible",                               default: false, null: false
+    t.boolean  "rrh_desired",                                 default: false, null: false
+    t.boolean  "youth_rrh_desired",                           default: false, null: false
     t.string   "rrh_assessment_contact_info"
     t.datetime "rrh_assessment_collected_at"
-    t.boolean  "enrolled_in_th",                         default: false, null: false
-    t.boolean  "enrolled_in_es",                         default: false, null: false
-    t.boolean  "enrolled_in_sh",                         default: false, null: false
-    t.boolean  "enrolled_in_so",                         default: false, null: false
+    t.boolean  "enrolled_in_th",                              default: false, null: false
+    t.boolean  "enrolled_in_es",                              default: false, null: false
+    t.boolean  "enrolled_in_sh",                              default: false, null: false
+    t.boolean  "enrolled_in_so",                              default: false, null: false
+    t.integer  "days_literally_homeless_in_last_three_years", default: 0
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree

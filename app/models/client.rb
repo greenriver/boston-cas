@@ -154,7 +154,7 @@ class Client < ActiveRecord::Base
       .order(vispdat_priority_score: :desc)
     when 'assessment-score'
       where.not(assessment_score: nil).
-      order(assessment_score: :desc, days_homeless: :desc)
+      order(assessment_score: :desc, rrh_assessment_collected_at: :desc)
     else
       raise NotImplementedError
     end
@@ -301,7 +301,7 @@ class Client < ActiveRecord::Base
   end
 
   def has_full_housing_release?
-    housing_release_status == 'Full HAN Release'
+    ([_('Full HAN Release')] + Warehouse::AvailableFileTag.full_release.pluck(:name)).include? housing_release_status
   end
 
   # This is only here to allow the translation tool to find it for translating
