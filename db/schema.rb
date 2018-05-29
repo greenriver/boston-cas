@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511081334) do
+ActiveRecord::Schema.define(version: 20180528194118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.boolean  "disabling_condition",                               default: false
     t.datetime "release_of_information"
     t.date     "prevent_matching_until"
-    t.boolean  "dmh_eligible",                                      default: false
+    t.boolean  "dmh_eligible",                                      default: false, null: false
     t.boolean  "va_eligible",                                       default: false, null: false
     t.boolean  "hues_eligible",                                     default: false, null: false
     t.datetime "disability_verified_on"
@@ -192,14 +192,17 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.integer  "vispdat_priority_score",                            default: 0
     t.integer  "vispdat_length_homeless_in_days",                   default: 0,     null: false
     t.boolean  "cspech_eligible",                                   default: false
-    t.string   "alternate_names"
     t.date     "calculated_last_homeless_night"
+    t.string   "alternate_names"
     t.boolean  "congregate_housing",                                default: false
     t.boolean  "sober_housing",                                     default: false
     t.jsonb    "enrolled_project_ids"
     t.jsonb    "active_cohort_ids"
     t.string   "client_identifier"
     t.integer  "assessment_score",                                  default: 0,     null: false
+    t.boolean  "requires_ground_floor",                             default: false, null: false
+    t.boolean  "requires_wheelchair_accessibility",                 default: false, null: false
+    t.integer  "required_number_of_bedrooms",                       default: 1,     null: false
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -649,7 +652,7 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.string   "workphone"
     t.string   "pager"
     t.string   "email"
-    t.boolean  "dmh_eligible",                           default: false
+    t.boolean  "dmh_eligible",                           default: false, null: false
     t.boolean  "va_eligible",                            default: false, null: false
     t.boolean  "hues_eligible",                          default: false, null: false
     t.datetime "disability_verified_on"
@@ -677,6 +680,9 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.string   "client_identifier"
     t.integer  "vispdat_priority_score",                 default: 0
     t.integer  "assessment_score",                       default: 0,     null: false
+    t.boolean  "requires_ground_floor",                  default: false, null: false
+    t.boolean  "requires_wheelchair_accessibility",      default: false, null: false
+    t.integer  "required_number_of_bedrooms",            default: 1,     null: false
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -740,6 +746,7 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.boolean  "can_edit_all_clients",                    default: false
     t.boolean  "can_participate_in_matches",              default: false
     t.boolean  "can_view_all_matches",                    default: false
+    t.boolean  "can_view_own_closed_matches",             default: false
     t.boolean  "can_see_alternate_matches",               default: false
     t.boolean  "can_edit_match_contacts",                 default: false
     t.boolean  "can_approve_matches",                     default: false
@@ -750,6 +757,11 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.boolean  "can_edit_users",                          default: false
     t.boolean  "can_view_full_ssn",                       default: false
     t.boolean  "can_view_full_dob",                       default: false
+    t.boolean  "can_view_dmh_eligibility",                default: false
+    t.boolean  "can_view_va_eligibility",                 default: false
+    t.boolean  "can_view_hues_eligibility",               default: false
+    t.boolean  "can_view_hiv_positive_eligibility",       default: false
+    t.boolean  "can_view_client_confidentiality",         default: false
     t.boolean  "can_view_buildings",                      default: false
     t.boolean  "can_edit_buildings",                      default: false
     t.boolean  "can_view_funding_sources",                default: false
@@ -774,21 +786,15 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.boolean  "can_edit_available_services",             default: false
     t.boolean  "can_assign_services",                     default: false
     t.boolean  "can_assign_requirements",                 default: false
-    t.boolean  "can_view_dmh_eligibility",                default: false
-    t.boolean  "can_view_va_eligibility",                 default: false, null: false
-    t.boolean  "can_view_hues_eligibility",               default: false, null: false
     t.boolean  "can_become_other_users",                  default: false
-    t.boolean  "can_view_client_confidentiality",         default: false, null: false
-    t.boolean  "can_view_hiv_positive_eligibility",       default: false
-    t.boolean  "can_view_own_closed_matches",             default: false
     t.boolean  "can_edit_translations",                   default: false
     t.boolean  "can_view_vspdats",                        default: false
     t.boolean  "can_manage_config",                       default: false
     t.boolean  "can_create_overall_note",                 default: false
+    t.boolean  "can_delete_client_notes",                 default: false
     t.boolean  "can_enter_deidentified_clients",          default: false
     t.boolean  "can_manage_deidentified_clients",         default: false
     t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
-    t.boolean  "can_delete_client_notes",                 default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
@@ -945,12 +951,17 @@ ActiveRecord::Schema.define(version: 20180511081334) do
     t.integer  "adult_only"
     t.integer  "family"
     t.integer  "child_only"
-    t.integer  "building_id",                null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "building_id",                            null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.datetime "deleted_at"
     t.integer  "data_source_id"
     t.string   "data_source_id_column_name"
+    t.boolean  "ground_floor"
+    t.boolean  "wheelchair_accessible"
+    t.integer  "occupancy",                  default: 1
+    t.integer  "number_of_bedrooms"
+    t.string   "target_population"
   end
 
   add_index "units", ["building_id"], name: "index_units_on_building_id", using: :btree

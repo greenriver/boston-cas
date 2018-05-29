@@ -3,7 +3,12 @@
   .form-inputs.margin-top-02
     = f.input :available, as: :boolean
     = f.input :name, label: "#{Unit.model_name.human} name"
-        
+    = f.input :occupancy, collection: 1..10, include_blank: false
+    = f.input :number_of_bedrooms, collection: 1..5
+    = f.input :target_population, collection: Unit.target_population_select_array
+    = f.input :ground_floor, as: :radio_buttons
+    = f.input :wheelchair_accessible, as: :radio_buttons
+
   .form-actions
     = f.button :submit, value: "Update #{Unit.model_name.human}"
 
