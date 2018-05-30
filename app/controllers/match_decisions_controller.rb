@@ -103,7 +103,7 @@ class MatchDecisionsController < ApplicationController
       redirect_to access_context.match_path(@match, redirect: "true")
 
     else
-      flash[:error] = "Please review the form problems below."
+      flash[:error] = "Please review the form problems below.<br /> #{@decision.errors.full_messages.join('; ')}"
       render 'matches/show'
     end
   end

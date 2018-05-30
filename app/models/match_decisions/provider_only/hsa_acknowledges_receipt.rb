@@ -101,10 +101,6 @@ module MatchDecisions::ProviderOnly
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      if save_will_accept? && match.shelter_agency_contacts.none?
-        missing_contacts << "a #{_('Shelter Agency')} Contact"
-      end
-
       if save_will_accept? && match.dnd_staff_contacts.none?
         missing_contacts << "a #{_('DND')} Staff Contact"
       end

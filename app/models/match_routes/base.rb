@@ -68,5 +68,13 @@ module MatchRoutes
     def self.max_matches_per_opportunity
       20
     end
+
+    def required_contact_types
+      [
+        'shelter_agency',
+        'dnd_staff',
+        'housing_subsidy_admin',
+      ]
+    end
   end
 end

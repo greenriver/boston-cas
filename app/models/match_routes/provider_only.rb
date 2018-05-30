@@ -24,6 +24,13 @@ module MatchRoutes
        }
     end
 
+    def required_contact_types
+      [
+        'dnd_staff',
+        'housing_subsidy_admin',
+      ]
+    end
+
     def initial_decision
       :hsa_acknowledges_receipt_decision
     end
