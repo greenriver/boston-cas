@@ -44,6 +44,9 @@
     %br
     Email:
     = @client.email
+    - if @client.has_full_housing_release?
+      %label Contact info for maximizing income
+      .client__housing_release= simple_format @client.rrh_assessment_contact_info
   .row
     .col-sm-6
       %h4 Date of First Homelessness
