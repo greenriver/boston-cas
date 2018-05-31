@@ -254,7 +254,7 @@ class Client < ActiveRecord::Base
   end
 
   def make_available_in match_route: 
-    UnavailableAsCandidateFor.where(client_id: id, match_route_type: match_route).destroy_all
+    UnavailableAsCandidateFor.where(client_id: id, match_route_type: match_route.class.name).destroy_all
   end
 
   def make_available_in_all_routes
