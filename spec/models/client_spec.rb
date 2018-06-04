@@ -54,7 +54,7 @@ RSpec.describe Client, type: :model do
         expect( Client.prioritized(match_route: route) ).to be_an ActiveRecord::Relation
       end
       it 'orders by assessment_score' do
-        expect( Client.prioritized(match_route: route).pluck(:id, :assessment_score, :days_homeless) ).to eq Client.order(assessment_score: :desc, days_homeless: :desc).pluck(:id, :assessment_score, :days_homeless)
+        expect( Client.prioritized(match_route: route).pluck(:id, :assessment_score, :days_homeless) ).to eq Client.order(assessment_score: :desc, rrh_assessment_collected_at: :desc).pluck(:id, :assessment_score, :days_homeless)
       end
     end
   end
