@@ -25,8 +25,8 @@ class Requirement < ActiveRecord::Base
   end
 
   def display_for_variable
-    if str = rule.display_for_variable(variable)
-      "(#{str})"
+    if variable.present?
+      "(#{rule.display_for_variable(variable)})"
     end
   end
 

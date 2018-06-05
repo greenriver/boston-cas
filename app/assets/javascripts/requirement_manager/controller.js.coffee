@@ -51,16 +51,16 @@ class App.RequirementManager.Controller
       if chosen_rule.variable
         $input = $(".jVariableRequirment[data-rule-id=#{chosen_rule.id}]").find('.variable')
         variable = $input.val()
-        display_for_variable = display_for_variable
+        display_for_variable = ''
         if $input.data('options')?
-          display_for_variable = $input.data('options')[variable]
+          display_for_variable = "(#{$input.data('options')[variable]})"
 
       requirement = new App.RequirementManager.Requirement
         rule_id: chosen_rule.id
         rule_name: chosen_rule.name
         positive: @new_requirement_positive_value
         variable: variable
-        display_for_variable: "(#{display_for_variable})"
+        display_for_variable: display_for_variable
       @select_requirement requirement
       @available_rules.remove chosen_rule.id
       @searcher.reset()
@@ -94,7 +94,7 @@ class App.RequirementManager.Controller
     @next_index++
     $(@element).find('[data-selected-requirements]').append requirements_row.to_html()
     if $(".row[data-persisted-id='']").length > 0 && $('.rule-not-persisted-alert').length == 0
-      $('a[data-add-button]').closest('.row').after($('<div>', text: 'Rules marked in yellow have not been saved. Submit this page to activate new rules.', class: 'alert alert-warning rule-not-persisted-alert mt-3'))
+      $('a[data-add-button]').closest('.row').after($('<div>', text: 'Highlighted rules have not been saved. Submit this page to activate new rules.', class: 'alert alert-warning rule-not-persisted-alert mt-3'))
     @selected_requirements.add requirements
 
 
