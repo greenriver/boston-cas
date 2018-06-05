@@ -23,10 +23,7 @@
         %p
           If any of the steps above still need to be completed, please click "Cancel".
       .modal-footer(data-pjax-modal-footer)
-        .row
-          .col-sm-6.text-left
-            %button.btn.btn-primary.jAccept
-              Accept
-          .col-sm-6.text-right
-            %button.btn.btn-secondary.pull-right.jCancel(aria-label="Close" pjax-modal-close type="button")
-              Cancel
+        %button.btn.btn-secondary.pull-right.jCancel(aria-label="Close" pjax-modal-close type="button")
+          Cancel
+        %button.btn.btn-primary.jAccept
+          Accept
