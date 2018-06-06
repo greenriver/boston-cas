@@ -34,14 +34,14 @@
               -# form.input :working_with_client, as: :radio_buttons, collection: {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}, label: 'Has the client above been at your agency recently?',  wrapper_class: 'jActionToggle'
 
             .o-choose.o-choose--flush
-              .o-choose__choice.jNoLongerWorkingContent{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
+              .o-choose__choice.jNoLongerWorkingContent
                 %header
                   .o-choose__title
                     .c-choice-icon.c-choice-icon--confirm.mr-4
                     %h3 Accept Match
                 .o-choose__content
                   = render 'match_decisions/match_recommendation_shelter_agency_fields', form: form
-              .o-choose__choice.jStillWorkingContent.d-none{ class: ( 'o-choose__choice--100' unless can_reject_matches?)}
+              .o-choose__choice.jStillWorkingContent.d-none
                 %header
                   .o-choose__title
                     .c-choice-icon.c-choice-icon--not-working
@@ -50,7 +50,9 @@
                   = render 'match_decisions/not_working_match_form_fields', form: form
 
               - if can_reject_matches?
-                = render 'match_decisions/decline_and_cancel_actions', form: form
+                = render 'match_decisions/decline_and_cancel_backup_actions', form: form
+              - else
+                = render 'match_decisions/decline_actions', form: form
 
 = content_for :page_js do
   :javascript
