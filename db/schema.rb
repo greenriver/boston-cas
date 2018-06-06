@@ -192,8 +192,8 @@ ActiveRecord::Schema.define(version: 20180529161403) do
     t.integer  "vispdat_priority_score",                                 default: 0
     t.integer  "vispdat_length_homeless_in_days",                        default: 0,     null: false
     t.boolean  "cspech_eligible",                                        default: false
-    t.string   "alternate_names"
     t.date     "calculated_last_homeless_night"
+    t.string   "alternate_names"
     t.boolean  "congregate_housing",                                     default: false
     t.boolean  "sober_housing",                                          default: false
     t.jsonb    "enrolled_project_ids"

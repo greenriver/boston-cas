@@ -2,11 +2,14 @@
   - filter_class = 'client__filter-active'
 - else
   - filter_class = 'client__filter'
-%div.dropdown{class: filter_class}
+.dropdown.o-filtration.o-filtration--sm{class: filter_class}
   %button.btn.btn-default.dropdown-toggle.mr-4#filter-dropdown{data: {toggle: :dropdown}}
     Filter
     %span.caret
-  .client-filter.dropdown-menu.dropdown-menu-right.options{aria:{labelledby:"filter-dropdown"}}
+  .o-filtration__container.client-filter.dropdown-menu.dropdown-menu-right.options{aria:{labelledby:"filter-dropdown"}}
+    .o-filtration__header
+      %h3.client__filter-header Filter clients
+
     = form_tag(nil, method: "get") do
       -# preserve sort and search for filtering
       - if params[:sort]
@@ -16,15 +19,15 @@
       - if params[:q]
         = hidden_field_tag :q, params[:q]
 
-      .w-300.mb-2
+      .o-filtration__option
         %label.d-block Availability
         = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
 
-      .w-100.mb-6
+      .o-filtration__option
         %label.d-block Veteran
         = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
 
-      .mb-2.d-flex
+      .o-filtration__actions.form__actions
         = link_to clients_path, class: 'btn btn-light' do
           %i.icon-cross
           Clear
