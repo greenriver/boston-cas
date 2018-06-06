@@ -2,11 +2,14 @@
   - filter_class = 'filter-sort__filter-active'
 - else
   - filter_class = 'filter-sort__filter'
-%div.dropdown{class: filter_class}
-  %button.btn.btn-default.dropdown-toggle.mr-4{data: {toggle: 'dropdown'}}
+.o-filtration.o-filtration--sm.dropdown{class: filter_class}
+  %button.btn.btn-light.dropdown-toggle.mr-4{data: {toggle: 'dropdown'}}
     Filter
     %span.caret
-  .dropdown-menu.dropdown-menu.options
+  .o-filtration__container.dropdown-menu.dropdown-menu.options{aria:{labelledby:"filter-dropdown"}}
+    .o-filtration__header
+      %h3.client__filter-header Filter matches
+
     = form_tag(nil, method: "get") do
       -# preserve sort and search for filtering
       -# preserve sort and search for filtering
@@ -16,7 +19,8 @@
         = hidden_field_tag :direction, params[:direction]
       - if params[:q]
         = hidden_field_tag :q, params[:q]
-      .mb-2
+
+      .o-filtration__option
         %select{name: :current_step, style: 'width: 100%;'}
           %option{value: ''} Filter by Current Step
           - available_steps.each do |label,value|
@@ -24,7 +28,7 @@
             %option{value: value, selected: selected}
               = label
 
-      .mb-4
+      .o-filtration__option
         %select{name: :current_route, style: 'width: 100%;'}
           %option{value: ''} Show all Match Routes
           - available_routes.each do |label,value|
@@ -32,7 +36,7 @@
             %option{value: value, selected: selected}
               = label
 
-      .mb-2.d-flex
+      .o-filtration__actions.form__actions
         = link_to({action: :index}, class: 'btn btn-light')do
           %i.icon-cross
           Clear

@@ -1,9 +1,9 @@
-.filter-sort__sort.dropdown
-  %button.btn.btn-default.dropdown-toggle{data: {toggle: 'dropdown'}}
+.o-filtration.o-filtration--xs.filter-sort__sort.dropdown
+  %button.btn.btn-light.dropdown-toggle{data: {toggle: 'dropdown'}}
     Sort
     %span.caret
-  .dropdown-menu.options
-    %ul
+  .o-filtration__container.dropdown-menu.options
+    %ul.mb-0
       - sort_options.each do |opt|
         %li
           - if opt[:visible]
