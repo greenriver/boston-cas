@@ -30,4 +30,4 @@
               %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
                 %i.icon-checkmark
                 Accept Match
-        = render 'match_decisions/decline_and_cancel_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'
+        = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: 'If the match is declined, the DND will be informed of the decision.'

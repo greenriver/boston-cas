@@ -63,8 +63,8 @@
                 Accept Match
 
         - if can_reject_matches?
-          = render 'match_decisions/decline_actions', form: form
-
+          = render 'match_decisions/decline_and_cancel_actions', form: form
+      
 = content_for :page_js do
   :javascript
     $('[data-contact-manager]').each(function(_i, element) {
