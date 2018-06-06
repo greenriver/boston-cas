@@ -9,16 +9,16 @@ button.close {
     margin-right: space(2);
   }
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
 }
 
 .btn-icon-only {
   @include open-sans-bold;
+  display: inline-flex;
+  align-items: center;
   [class^='icon'] {
     margin-right: 0;
   }
-  display: inline-flex;
-  align-items: baseline;
 }
 
 .btn-shout {
