@@ -84,3 +84,15 @@
 .popover-body {
   padding: space(4);
 }
+
+.pagination .page-item {
+  &.active {
+    pointer-events: none;
+  }
+}
+
+.pagination .page-link {
+  &:hover {
+    color: $link-hover-color;
+  }
+}
