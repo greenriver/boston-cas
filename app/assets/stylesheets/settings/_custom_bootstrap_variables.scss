@@ -50,5 +50,13 @@ $tooltip-max-width: 300px;
 
 $heading-color: $gray-070;
 
+// Links
 $link-color: $cob-sg-optimistic-blue;
+$link-hover-color: darken($link-color, 15%);
 $link-hover-decoration: none;
+$pagination-padding-y: .65rem;
+$pagination-padding-x: 1rem;
+
+// Pagination
+$pagination-color: $link-color;
+$pagination-active-bg: $brand-primary-d;
