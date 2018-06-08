@@ -149,7 +149,7 @@ module MatchProgressUpdates
 
     # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
     def create_new_update_request?
-      submitted_at.present? && submitted_at < self.class.stalled_interval.ago && requested_at < stalled_interval.days.ago
+      submitted_at.present? && submitted_at < stalled_interval.days.ago && requested_at < stalled_interval.days.ago
     end
     
     def never_sent?
