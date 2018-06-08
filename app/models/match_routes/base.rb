@@ -9,6 +9,10 @@ module MatchRoutes
         order(weight: :asc)
     end
 
+    scope :should_cancel_other_matches, -> do
+      where(should_cancel_other_matches: true)
+    end
+
     def self.all_routes
       [
         MatchRoutes::Default,
