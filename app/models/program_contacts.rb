@@ -30,12 +30,30 @@ class ProgramContacts
   
   def save
     if valid?
-      program.shelter_agency_contact_ids = shelter_agency_contact_ids
-      program.client_contact_ids = client_contact_ids
-      program.dnd_contact_ids = dnd_staff_contact_ids
-      program.housing_subsidy_admin_contact_ids = housing_subsidy_admin_contact_ids
-      program.ssp_contact_ids = ssp_contact_ids
-      program.hsp_contact_ids = hsp_contact_ids
+      program.class.transaction do
+        ProgramContact.where(program_id: program.id).delete_all
+        
+        shelter_agency_contact_ids.each do |id|
+          ProgramContact.create(shelter_agency: true, contact_id: id, program_id: program.id)
+        end
+        client_contact_ids.each do |id|
+          ProgramContact.create(client: true, contact_id: id, program_id: program.id)
+        end
+        dnd_staff_contact_ids.each do |id|
+          ProgramContact.create(dnd_staff: true, contact_id: id, program_id: program.id)
+        end
+        housing_subsidy_admin_contact_ids.each do |id|
+          ProgramContact.create(housing_subsidy_admin: true, contact_id: id, program_id: program.id)
+        end
+        ssp_contact_ids.each do |id|
+          ProgramContact.create(ssp: true, contact_id: id, program_id: program.id)
+        end
+        hsp_contact_ids.each do |id|
+          ProgramContact.create(hsp: true, contact_id: id, program_id: program.id)
+        end
+
+        return true
+      end
     end
   end
   
@@ -66,7 +84,7 @@ class ProgramContacts
   def available_hsp_contacts base_scope = Contact.all
     base_scope.where.not(id: hsp_contact_ids)
   end
-
+  
   def persisted?
     true
   end
@@ -117,6 +135,54 @@ class ProgramContacts
 
   def hsp_contacts= contacts
     self.hsp_contact_ids = contacts.map(&:id)
+  end
+  
+  def label_for(input_name)
+    @labels ||= {
+      shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
+      client_contacts: "Client Contacts",
+      dnd_staff_contacts: "#{_('DND')} Staff Contacts", 
+      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts", 
+      ssp_contacts: "#{_('Stabilization Service Provider')}", 
+      hsp_contacts: "#{_('Housing Search Provider')}",
+    }
+    @labels[input_name] || input_name
+  end
+  
+  def contact_type_for(input_name)
+    @contact_types ||= {
+      shelter_agency_contacts: 'shelter_agency',
+      client_contacts: "client",
+      dnd_staff_contacts: "dnd_staff", 
+      housing_subsidy_admin_contacts: "housing_subsidy_admin", 
+      ssp_contacts: "ssp", 
+      hsp_contacts: "hsp",
+    }
+    @contact_types[input_name] || input_name
+  end
+  
+  def available_contacts_method_for input_name
+    @available_contacts_methods ||= {
+      shelter_agency_contacts: :available_shelter_agency_contacts,
+      client_contacts: :available_client_contacts,
+      dnd_staff_contacts: :available_dnd_staff_contacts, 
+      housing_subsidy_admin_contacts: :available_housing_subsidy_admin_contacts, 
+      ssp_contacts: :available_ssp_contacts, 
+      hsp_contacts: :available_hsp_contacts,
+    }
+    @available_contacts_methods[input_name] || input_name
+  end
+  
+  def selected_contacts_method_for input_name
+    @selected_contacts_methods ||= {
+      shelter_agency_contacts: :shelter_agency_contacts,
+      client_contacts: :client_contacts,
+      dnd_staff_contacts: :dnd_staff_contacts, 
+      housing_subsidy_admin_contacts: :housing_subsidy_admin_contacts, 
+      ssp_contacts: :ssp_contacts, 
+      hsp_contacts: :hsp_contacts,
+    }
+    @selected_contacts_methods[input_name] || input_name
   end
 
 end
