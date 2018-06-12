@@ -170,7 +170,9 @@ module MatchProgressUpdates
         match = ClientOpportunityMatch.find(match_id)
         # Short circuit if we are no longer a contact on the match
         next unless match&.progress_update_contact_ids&.include?(contact_id)
-        
+        # Short circuit if the the match update isn't relevant for the current step and contact
+        contact = Contact.find(contact_id)
+        next unless match.current_decision.request_update_for_contact? contact
         # Determine next notification number
         notification_number = self.where(
           contact_id: contact_id,
