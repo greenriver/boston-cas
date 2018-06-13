@@ -168,6 +168,8 @@ module MatchProgressUpdates
       matches = outstanding_contacts_for_stalled_matches
       matches.each do |contact_id, match_id|
         match = ClientOpportunityMatch.find(match_id)
+        # Short circuit if the match no longer has a client
+        next unless match.client.present?
         # Short circuit if we are no longer a contact on the match
         next unless match&.progress_update_contact_ids&.include?(contact_id)
         # Short circuit if the the match update isn't relevant for the current step and contact
