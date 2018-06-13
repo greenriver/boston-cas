@@ -33,7 +33,6 @@
 //= require_tree ./templates
 //= require pjax-modals
 //= require acknowledge_notification
-//= require_tree ./contact_manager
 //= require_tree ./requirement_manager
 //= require_tree ./service_manager
 //= require_tree ./matches

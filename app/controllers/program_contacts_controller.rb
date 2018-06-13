@@ -8,8 +8,7 @@ class ProgramContactsController < ApplicationController
   def edit
   end
   
-  def update
-    
+  def update  
     saved = @program_contacts.update program_contacts_params
     unless request.xhr? 
       if saved 
@@ -18,7 +17,7 @@ class ProgramContactsController < ApplicationController
       else
         raise @program_contacts.errors.full_messages.inspect
         flash[:error] = "Please review the form problems below."
-        render :edit
+        redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
       end
     end
   end

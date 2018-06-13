@@ -125,4 +125,52 @@ class MatchContacts
         [ssp_contact_ids] +
         [hsp_contact_ids]).flatten.compact.uniq
   end
+  
+  def label_for(input_name)
+    @labels ||= {
+      shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
+      client_contacts: "Client Contacts",
+      dnd_staff_contacts: "#{_('DND')} Staff Contacts", 
+      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts", 
+      ssp_contacts: "#{_('Stabilization Service Provider')}", 
+      hsp_contacts: "#{_('Housing Search Provider')}",
+    }
+    @labels[input_name] || input_name
+  end
+  
+  def contact_type_for(input_name)
+    @contact_types ||= {
+      shelter_agency_contacts: 'shelter_agency',
+      client_contacts: "client",
+      dnd_staff_contacts: "dnd_staff", 
+      housing_subsidy_admin_contacts: "housing_subsidy_admin", 
+      ssp_contacts: "ssp", 
+      hsp_contacts: "hsp",
+    }
+    @contact_types[input_name] || input_name
+  end
+  
+  def available_contacts_method_for input_name
+    @available_contacts_methods ||= {
+      shelter_agency_contacts: :available_shelter_agency_contacts,
+      client_contacts: :available_client_contacts,
+      dnd_staff_contacts: :available_dnd_staff_contacts, 
+      housing_subsidy_admin_contacts: :available_housing_subsidy_admin_contacts, 
+      ssp_contacts: :available_ssp_contacts, 
+      hsp_contacts: :available_hsp_contacts,
+    }
+    @available_contacts_methods[input_name] || input_name
+  end
+  
+  def selected_contacts_method_for input_name
+    @selected_contacts_methods ||= {
+      shelter_agency_contacts: :shelter_agency_contacts,
+      client_contacts: :client_contacts,
+      dnd_staff_contacts: :dnd_staff_contacts, 
+      housing_subsidy_admin_contacts: :housing_subsidy_admin_contacts, 
+      ssp_contacts: :ssp_contacts, 
+      hsp_contacts: :hsp_contacts,
+    }
+    @selected_contacts_methods[input_name] || input_name
+  end
 end

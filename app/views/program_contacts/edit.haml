@@ -12,10 +12,9 @@
   .col-md-6.jContactFormWrapper
     = render 'form'
 
-
+  
 = content_for :page_js do
   :javascript
-    
     $('.jContactFormWrapper').on('change', '.jContactField', function(e){
       var $input = $(this);
       var val = $input.val();
@@ -23,14 +22,12 @@
       var input_name = $input.data('input-name');
       var html = '<input type="hidden" name="' + input_name + '" value="' + val + '" />'
       $input.after(html);
-
+      
       $input.closest('form').trigger('submit');
     });
 
     $('.jContactFormWrapper').on('click', '.jContactDelete', function(e){
       e.preventDefault();
-      console.log($('.jContactHidden[value=' + $(this).data('contact-id') + '][name="' + $(this).data('input-name') + '"]'));
-      
       $('.jContactHidden[value=' + $(this).data('contact-id') + '][name="' + $(this).data('input-name') + '"]').remove();
       $(this).closest('form').trigger('submit');
     });
