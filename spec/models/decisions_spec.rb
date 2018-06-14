@@ -11,7 +11,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
       r
       }
     let(:dnd_decision) { create :match_decisions_match_recommendation_dnd_staff }
-    let(:shelter_decision) { create :match_decisions_match_recommendation_shelter_agency }
+    let(:hsa_decision) { create :match_decisions_match_recommendation_hsa_housing_date }
     let(:users) { create_list :user, 10 }
     let(:dnd_user) { users[0] }
     let(:hsa_user) { users[1] }
@@ -22,7 +22,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
 
     before(:each) do 
       match = dnd_decision.match
-      shelter_decision.match = match
+      hsa_decision.match = match
       program = dnd_decision.program
       program.match_route = route
       match.dnd_staff_contacts << dnd_user.contact
@@ -40,7 +40,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
       before(:each) do
         dnd_decision.update(status: :accepted)
         dnd_decision.run_status_callback!
-        shelter_decision.update(status: :pending)
+        hsa_decision.update(status: :pending)
       end
       it 'sets up progress updates for HSP' do
         expect(MatchProgressUpdates::Hsp.pluck(:contact_id).sort).to eq [hsp_user.contact.id].sort
@@ -92,7 +92,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
           MatchProgressUpdates::Base.send_notifications
 
           update = MatchProgressUpdates::ShelterAgency.incomplete_for_contact(contact_id: shelter_user.contact.id).
-            where(match_id: shelter_decision.match.id).first
+            where(match_id: hsa_decision.match.id).first
           update.response = 'Client disappeared'
           update.client_last_seen = Date.yesterday
           update.submitted_at = Time.now
