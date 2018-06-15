@@ -8,20 +8,24 @@ class MatchContactsController < ApplicationController
   before_action :set_match
   before_action :require_current_contact_can_edit_match_contacts!
   before_action :set_match_contacts
+  before_action :set_current_contact
 
   def edit
-    @current_contact = current_contact
   end
 
   def update
-    if @match_contacts.update match_contacts_params
-      MatchProgressUpdates::Base.update_status_updates @match_contacts
-      flash[:notice] = "Match Contacts updated"
-      # TODO redirect back to specific decision if we came from there
-      redirect_to access_context.match_path(@match)
-    else
-      flash[:error] = "Please review the form problems below."
-      render :edit
+    update_params = match_contacts_params
+    saved = @match_contacts.update(update_params)
+    MatchProgressUpdates::Base.update_status_updates @match_contacts if saved
+    unless request.xhr? 
+      if saved 
+        flash[:notice] = "Match Contacts updated"  
+        redirect_to match_path(@match)
+      else
+        raise @match_contacts.errors.full_messages.inspect
+        flash[:error] = "Please review the form problems below."
+        redirect_to :edit
+      end
     end
   end
 
@@ -35,6 +39,10 @@ class MatchContactsController < ApplicationController
       @match = match_scope.find params[:match_id]
     end
 
+    def set_current_contact
+      @current_contact = current_contact
+    end
+    
     def set_match_contacts
       @match_contacts = @match.match_contacts
     end
@@ -58,15 +66,15 @@ class MatchContactsController < ApplicationController
           result[:hsp_contact_ids] ||= []
         elsif hsa_can_edit_contacts?
           # only allow editing of the hsa contacts
-          result[:shelter_agency_contact_ids] ||= @match.shelter_agency_contact_ids
-          result[:client_contact_ids] ||= @match.client_contact_ids
-          result[:dnd_staff_contact_ids] ||= @match.dnd_staff_contact_ids
+          result[:shelter_agency_contact_ids] = @match.shelter_agency_contact_ids
+          result[:client_contact_ids] = @match.client_contact_ids
+          result[:dnd_staff_contact_ids] = @match.dnd_staff_contact_ids
           result[:housing_subsidy_admin_contact_ids] ||= []
-          result[:ssp_contact_ids] ||= @match.ssp_contact_ids
-          result[:hsp_contact_ids] ||= @match.hsp_contact_ids
+          result[:ssp_contact_ids] = @match.ssp_contact_ids
+          result[:hsp_contact_ids] = @match.hsp_contact_ids
 
           # always add self
-          result[:housing_subsidy_admin_contact_ids] << current_contact.id
+          result[:housing_subsidy_admin_contact_ids] << current_contact.id unless result[:housing_subsidy_admin_contact_ids].map(&:to_i).include? current_contact.id
         end
       end
     end

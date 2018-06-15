@@ -1,0 +1,27 @@
+%ul.jMatchContactList.c-detail-group__content.list-unstyled
+  - match.contact_titles.each do |contact_type, title|
+    %li.c-detail-group__item
+      -# Force some translations
+      - _('Housing Subsidy Administrators')
+      - _('Stabilization Service Providers')
+      - _('Housing Search Providers')
+      .c-detail-group__title--secondary= _(title)
+      .detail-box--value
+        - match.send(contact_type).each do |contact|
+          - incomplete_for_contact = MatchProgressUpdates::Base.incomplete_for_contact?(contact_id: contact, match_id: match.id)
+          - incomplete_class = if incomplete_for_contact then 'match-contact__stalled' else '' end
+
+          .contact.mb-2
+            - if incomplete_for_contact && can_reject_matches?
+              %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "Status update requested"}}
+              = contact.name
+            - else
+              = contact.name
+            -# TODO record organization as part of the shelter_agency_contact and display it here
+            %br
+            = mail_to contact.email, nil, target: '_blank'
+            - if contact.phone.present? && contact.phone.strip.length > 1
+              %br
+              = contact.phone
+        - if !match.send(contact_type).any?
+          %p.c-detail-group__no-result No contacts 

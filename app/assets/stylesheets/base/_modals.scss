@@ -10,8 +10,8 @@
 .modal-dialog input[type=submit] {
   float: right;
 }
-.modal-dialog [class^="icon-"], 
-.modal-dialog  [class*=" icon-"] {
+.modal-dialog .close [class^="icon-"], 
+.modal-dialog .close [class*=" icon-"] {
   font-size: rem(12);
   color: #000;
   margin-right: 12px;

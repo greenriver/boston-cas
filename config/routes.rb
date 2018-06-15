@@ -142,6 +142,7 @@ Rails.application.routes.draw do
       get 'tags'
       get 'typography'
       get 'summary'
+      get 'pagination'
     end
   end
 
