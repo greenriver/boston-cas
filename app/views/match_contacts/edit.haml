@@ -5,9 +5,6 @@
   .errors
     = @match_contacts.errors.full_messages.join ","
 
-%p
-  The following contacts will be automatically added to Match.
-
 = render "form"
 
 = content_for :page_js do

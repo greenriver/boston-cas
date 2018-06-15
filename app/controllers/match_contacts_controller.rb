@@ -16,7 +16,7 @@ class MatchContactsController < ApplicationController
   def update
     update_params = match_contacts_params
     saved = @match_contacts.update(update_params)
-    MatchProgressUpdates::Base.update_status_updates @match_contacts
+    MatchProgressUpdates::Base.update_status_updates @match_contacts if saved
     unless request.xhr? 
       if saved 
         flash[:notice] = "Match Contacts updated"  
