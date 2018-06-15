@@ -30,12 +30,12 @@ class MatchContacts
   
   def save
     if valid?
-      match.shelter_agency_contact_ids = shelter_agency_contact_ids
-      match.client_contact_ids = client_contact_ids
-      match.dnd_staff_contact_ids = dnd_staff_contact_ids
-      match.housing_subsidy_admin_contact_ids = housing_subsidy_admin_contact_ids
-      match.ssp_contact_ids = ssp_contact_ids
-      match.hsp_contact_ids = hsp_contact_ids
+      match.shelter_agency_contact_ids = shelter_agency_contact_ids.map(&:to_i)
+      match.client_contact_ids = client_contact_ids.map(&:to_i)
+      match.dnd_staff_contact_ids = dnd_staff_contact_ids.map(&:to_i)
+      match.housing_subsidy_admin_contact_ids = housing_subsidy_admin_contact_ids.map(&:to_i).uniq
+      match.ssp_contact_ids = ssp_contact_ids.map(&:to_i)
+      match.hsp_contact_ids = hsp_contact_ids.map(&:to_i)
     end
   end
   

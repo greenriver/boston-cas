@@ -13,7 +13,7 @@
 = content_for :page_js do
   :javascript
     $('.select2').select2();
-    
+    $('body').off('change', '.jContactField');
     $('body').on('change', '.jContactField', function(e){
       var $input = $(this);
       var val = $input.val();
@@ -24,13 +24,13 @@
       
       $input.closest('form').trigger('submit');
     });
-
+    $('body').off('click', '.jContactDelete');
     $('body').on('click', '.jContactDelete', function(e){
       e.preventDefault();
       $('.jContactHidden[value=' + $(this).data('contact-id') + '][name="' + $(this).data('input-name') + '"]').remove();
       $(this).closest('form').trigger('submit');
     });
-        
+    $('body').off('click', '.jContactSubmit');
     $('body').on('click', '.jContactSubmit', function(e) {
       e.preventDefault();
       $(this).closest('form').trigger('submit');

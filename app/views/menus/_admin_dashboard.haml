@@ -1,4 +1,5 @@
 - if can_edit_users? || can_edit_translations? || can_view_imports? || can_administer_health?
-  %li.o-menu__item
-    = link_to current_user.admin_dashboard_landing_path, class: 'o-menu__link mb-0' do
-      Admin Dashboard
+  %ul.o-menu__group.list-unstyled
+    %li.o-menu__item
+      = link_to current_user.admin_dashboard_landing_path, class: 'o-menu__link mb-0' do
+        Admin Dashboard

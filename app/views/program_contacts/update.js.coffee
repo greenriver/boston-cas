@@ -5,5 +5,5 @@
 <% else %>
   html = "<%= j render 'form' %>"
   $('.jContactForm').replaceWith(html)
-  
+  $('.select2').select2()
 <% end %>

@@ -10,4 +10,5 @@
   
   html = "<%= j render 'match_contacts/match_contacts_list', match: @match_contacts.match %>"
   $('.jMatchContactList').replaceWith(html)
+  $('.select2').select2()
 <% end %>
