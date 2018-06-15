@@ -32,7 +32,7 @@ class Opportunity < ActiveRecord::Base
   attr_accessor :program, :building, :units
 
   scope :with_voucher, -> do
-    where.not(voucher_id: nil)
+    where.not(voucher_id: nil).joins(:voucher)
   end
   scope :available_candidate, -> do
     where(available_candidate: true)

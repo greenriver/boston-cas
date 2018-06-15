@@ -53,6 +53,14 @@ button.close {
   &:hover {
     background: darken($brand-primary-l, 25%);
   }
+  &.active,
+  &:active,
+  &:focus,
+  &:focus:active {
+    background: darken($brand-primary-l, 35%);
+    box-shadow: 0 0 0 2px rgba($brand-primary, .5);
+    outline: 0;
+  }
   &:disabled,
   &.disabled {
     background: desaturate($brand-primary-l, 80%);
@@ -74,6 +82,15 @@ button.close {
   &:hover {
     background: darken($brand-primary-l, 25%);
     border-color: $brand-primary-d
+  }
+  &.active,
+  &:active,
+  &:focus,
+  &:focus:active {
+    background: darken($brand-primary-l, 35%);
+    box-shadow: 0 0 0 2px rgba($brand-primary, .5);
+    color: $white;
+    outline: 0;
   }
   &:disabled,
   &.disabled {
@@ -97,6 +114,15 @@ button.close {
     background: $brand-success-d;
     border-color: $brand-primary-d;
     color: $black;
+  }
+  &.active,
+  &:active,
+  &:focus,
+  &:focus:active {
+    background: darken($brand-success-l, 35%);
+    box-shadow: 0 0 0 2px rgba($brand-success, .5);
+    outline: 0;
+    color: $white;
   }
   &:disabled,
   &.disabled {
@@ -126,6 +152,15 @@ button.close {
     border-color: desaturate($brand-warning, 80%);
     color: $black;
   }
+  &.active,
+  &:active,
+  &:focus,
+  &:focus:active {
+    background: darken($brand-danger-l, 35%);
+    box-shadow: 0 0 0 2px rgba($brand-danger, .5);
+    outline: 0;
+    color: $white;
+  }
   &--outline {
     &:hover,
     &:focus {
@@ -147,6 +182,15 @@ button.close {
     background: desaturate($brand-danger-l, 80%);
     border-color: desaturate($brand-danger, 80%);
     color: rgba($black, .55);
+  }
+  &.active,
+  &:active,
+  &:focus,
+  &:focus:active {
+    background: darken($brand-danger-l, 35%);
+    box-shadow: 0 0 0 2px rgba($brand-danger, .5);
+    outline: 0;
+    color: $white;
   }
   &--outline {
     &:hover,
@@ -171,6 +215,18 @@ button.close {
     color: $white;
   }
 }
+
+// Dropdown toggle buttons
+.open > .btn-light.dropdown-toggle,
+.open > .btn-secondary.dropdown-toggle,
+.open > .dropdown-toggle.btn-default,
+.show > .btn-secondary.dropdown-toggle,
+.show > .btn-light.dropdown-toggle,
+.show > .dropdown-toggle.btn-default {
+  background: $brand-primary;
+  color: $white;
+}
+
 
 .btn-min-width-medium {
   @media (min-width: $screen-xs-min) {

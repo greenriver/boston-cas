@@ -35,7 +35,7 @@ module Warehouse
             match_route = match.match_route
             previous_updated_at = nil
             match_started_decision = match.send(match_route.initial_decision)
-            match_started_at = if match_started_decision.started?
+            match_started_at = if match_started_decision&.started?
               match_started_decision.updated_at
             else
               nil
