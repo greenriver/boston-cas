@@ -276,7 +276,7 @@ class Client < ActiveRecord::Base
     Client.transaction do 
       if active_match.present?
         opportunity = active_match.opportunity
-        active_match.delete
+        active_match.canceled!
         opportunity.update(available_candidate: true)
         Matching::RunEngineJob.perform_later
       end
