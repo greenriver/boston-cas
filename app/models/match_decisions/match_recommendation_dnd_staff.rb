@@ -117,6 +117,8 @@ module MatchDecisions
         then errors.add :status, "There is already another active match for this opportunity"          
       end
     end
+    
+    
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
@@ -140,4 +142,3 @@ module MatchDecisions
   end
 
 end
-

@@ -8,13 +8,17 @@ class ProgramContactsController < ApplicationController
   def edit
   end
   
-  def update
-    if @program_contacts.update program_contacts_params
-      flash[:notice] = "Contacts updated"
-      redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
-    else
-      flash[:error] = "Please review the form problems below."
-      render :edit
+  def update  
+    saved = @program_contacts.update program_contacts_params
+    unless request.xhr? 
+      if saved 
+        flash[:notice] = "Contacts updated"
+        redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
+      else
+        raise @program_contacts.errors.full_messages.inspect
+        flash[:error] = "Please review the form problems below."
+        redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
+      end
     end
   end
   
@@ -47,12 +51,12 @@ class ProgramContactsController < ApplicationController
         ssp_contact_ids: [],
         hsp_contact_ids: []
       ).tap do |result|
-        result[:shelter_agency_contact_ids] ||= []
-        result[:client_contact_ids] ||= []
-        result[:dnd_staff_contact_ids] ||= []
-        result[:housing_subsidy_admin_contact_ids] ||= []
-        result[:ssp_contact_ids] ||= []
-        result[:hsp_contact_ids] ||= []
+        result[:shelter_agency_contact_ids] = result[:shelter_agency_contact_ids]&.map(&:to_i) || []
+        result[:client_contact_ids] = result[:client_contact_ids]&.map(&:to_i) || []
+        result[:dnd_staff_contact_ids] = result[:dnd_staff_contact_ids]&.map(&:to_i) || []
+        result[:housing_subsidy_admin_contact_ids] = result[:housing_subsidy_admin_contact_ids]&.map(&:to_i) || []
+        result[:ssp_contact_ids] = result[:ssp_contact_ids]&.map(&:to_i) || []
+        result[:hsp_contact_ids] = result[:hsp_contact_ids]&.map(&:to_i) || []
       end
     end  
     

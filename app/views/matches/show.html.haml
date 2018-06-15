@@ -29,6 +29,32 @@
 .jDynamicHistory{data: {history_path: history_path }}
   = render 'matches/history', match: @match
 
+= content_for :page_js do
+  :javascript
+    $('body').off('change', '.jContactField');
+    $('body').on('change', '.jContactField', function(e){
+      var $input = $(this);
+      var val = $input.val();
+      var contact_type = $input.data('contact-type');
+      var input_name = $input.data('input-name');
+      var html = '<input type="hidden" name="' + input_name + '" value="' + val + '" />'
+      $input.after(html);
+      
+      $input.closest('form').trigger('submit');
+    });
+    $('body').off('click', '.jContactDelete');
+    $('body').on('click', '.jContactDelete', function(e){
+      e.preventDefault();
+      $('.jContactHidden[value=' + $(this).data('contact-id') + '][name="' + $(this).data('input-name') + '"]').remove();
+      $(this).closest('form').trigger('submit');
+    });
+    $('body').off('click', '.jContactSubmit');
+    $('body').on('click', '.jContactSubmit', function(e) {
+      e.preventDefault();
+      $(this).closest('form').trigger('submit');
+      $('.modal:visible .close').trigger('click');
+    });
+
 - if(params[:redirect] == "true")
   = content_for :page_js do
     :javascript
