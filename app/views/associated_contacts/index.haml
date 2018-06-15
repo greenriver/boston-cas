@@ -1,5 +1,5 @@
 = render 'breadcrumbs'
-  
+
 %h1= "Contacts for #{@contact_owner.name}"
 -# @prompt = t '.search_prompt'
 =# render 'search_form'
@@ -36,4 +36,4 @@
             = link_to "Remove", {action: :destroy, id: contact_join_model}, data: {confirm: "Are you sure you want to remove this contact from this #{@contact_owner.class.name.demodulize.humanize}?", method: :delete}
 
 %p= paginate @contact_join_models
-= link_to 'Add Contact', {action: :new}, class: 'btn btn-default'
+= link_to 'Add Contact', {action: :new}, class: 'btn btn-primary'

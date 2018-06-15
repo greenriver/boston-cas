@@ -149,7 +149,7 @@ module MatchProgressUpdates
 
     # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
     def create_new_update_request?
-      submitted_at.present? && submitted_at < self.class.stalled_interval.ago && requested_at < stalled_interval.days.ago
+      submitted_at.present? && submitted_at < stalled_interval.days.ago && requested_at < stalled_interval.days.ago
     end
     
     def never_sent?
@@ -168,9 +168,13 @@ module MatchProgressUpdates
       matches = outstanding_contacts_for_stalled_matches
       matches.each do |contact_id, match_id|
         match = ClientOpportunityMatch.find(match_id)
+        # Short circuit if the match no longer has a client
+        next unless match.client.present?
         # Short circuit if we are no longer a contact on the match
         next unless match&.progress_update_contact_ids&.include?(contact_id)
-        
+        # Short circuit if the the match update isn't relevant for the current step and contact
+        contact = Contact.find(contact_id)
+        next unless match.current_decision.request_update_for_contact? contact
         # Determine next notification number
         notification_number = self.where(
           contact_id: contact_id,

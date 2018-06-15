@@ -8,3 +8,8 @@
       var id = $(this).attr('id') + '_';
       $(this).attr('id', id);
     });
+    $('.jOtherCancelReason').on('blur', 'textarea', function(e){
+      var new_value = $(this).val();
+      $('.jOtherCancelReason textarea').val(new_value);
+      console.log($('.jOtherCancelReason textarea').val());
+    });

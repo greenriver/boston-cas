@@ -121,9 +121,10 @@ Rails.application.routes.draw do
 
   namespace :system_status do
     get :operational
+    get :cache_status
   end
 
-  
+
   resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy,]
   resources :messages, only: [:show, :index] do
     collection do
@@ -141,6 +142,7 @@ Rails.application.routes.draw do
       get 'tags'
       get 'typography'
       get 'summary'
+      get 'pagination'
     end
   end
 
