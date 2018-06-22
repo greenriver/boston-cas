@@ -30,6 +30,31 @@ class MatchContacts
   
   def save
     if valid?
+      Contact.transaction do
+        ClientOpportunityMatchContact.where(match_id: match.id).delete_all
+        
+        shelter_agency_contact_ids.each do |id|
+          ClientOpportunityMatchContact.create(shelter_agency: true, contact_id: id, match_id: match.id)
+        end
+        client_contact_ids.each do |id|
+          ClientOpportunityMatchContact.create(client: true, contact_id: id, match_id: match.id)
+        end
+        dnd_staff_contact_ids.each do |id|
+          ClientOpportunityMatchContact.create(dnd_staff: true, contact_id: id, match_id: match.id)
+        end
+        housing_subsidy_admin_contact_ids.each do |id|
+          ClientOpportunityMatchContact.create(housing_subsidy_admin: true, contact_id: id, match_id: match.id)
+        end
+        ssp_contact_ids.each do |id|
+          ClientOpportunityMatchContact.create(ssp: true, contact_id: id, match_id: match.id)
+        end
+        hsp_contact_ids.each do |id|
+          ClientOpportunityMatchContact.create(hsp: true, contact_id: id, match_id: match.id)
+        end
+
+        return true
+      end
+
       match.shelter_agency_contact_ids = shelter_agency_contact_ids.map(&:to_i)
       match.client_contact_ids = client_contact_ids.map(&:to_i)
       match.dnd_staff_contact_ids = dnd_staff_contact_ids.map(&:to_i)
