@@ -23,7 +23,8 @@ class DeidentifiedClient < ActiveRecord::Base
     project_client.first_name = first_name
     project_client.last_name = last_name
     project_client.active_cohort_ids = active_cohort_ids
-
+    project_client.assessment_score = assessment_score || 0
+    
     project_client.sync_with_cas = true
     project_client.needs_update = true
     project_client.save
@@ -46,7 +47,7 @@ class DeidentifiedClient < ActiveRecord::Base
     DeidentifiedClient.all.each do |deidentified_client|
       project_client = ProjectClient.where(
         data_source_id: data_source_id, 
-        id_in_data_source: deidentified_client.id
+        id_in_data_source: deidentified_client.id,
       ).first_or_initialize
       deidentified_client.populate_project_client(project_client)
     end

@@ -184,6 +184,10 @@ class Client < ActiveRecord::Base
       c.save(validate: false)
     end
   end
+  
+  def deidentified_client?
+    return first_name.include?("Anonymous")
+  end
 
   def self.accessible_by_user(user)
     if user.can_view_all_clients?

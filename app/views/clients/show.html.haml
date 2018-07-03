@@ -17,7 +17,7 @@
           .client-alternate-name
             = name
     .o-body__action
-      - if warehouse_id = @client.remote_id
+      - if (warehouse_id = @client.remote_id) && !@client.deidentified_client?
         = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
           Warehouse ID:
           = warehouse_id
