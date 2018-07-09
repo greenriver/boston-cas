@@ -24,6 +24,9 @@ class DeidentifiedClient < ActiveRecord::Base
     project_client.last_name = last_name
     project_client.active_cohort_ids = active_cohort_ids
     project_client.assessment_score = assessment_score || 0
+    project_client.date_of_birth = date_of_birth
+    project_client.ssn = ssn
+    project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     
     project_client.sync_with_cas = true
     project_client.needs_update = true

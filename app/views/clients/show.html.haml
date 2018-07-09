@@ -17,10 +17,10 @@
           .client-alternate-name
             = name
     .o-body__action
-      - if (warehouse_id = @client.remote_id) && !@client.deidentified_client?
+      - if (warehouse_id = @client.remote_id)
         = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
-          Warehouse ID:
-          = warehouse_id
+          Remote ID:
+          = @client.data_source_path
 
   - if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
     .alert.alert-warning

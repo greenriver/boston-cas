@@ -41,8 +41,11 @@ class DeidentifiedClientsController < ApplicationController
         :client_identifier, 
         :assessment_score,
         :agency,
+        :dob,
+        :ssn, 
+        :days_homeless_in_the_last_three_years,
         :active_cohort_ids => [],
-      )
+      ).merge(identified: false)
     end
     
     def append_client_identifier dirty_params

@@ -184,10 +184,6 @@ class Client < ActiveRecord::Base
       c.save(validate: false)
     end
   end
-  
-  def deidentified_client?
-    return first_name.include?("Anonymous")
-  end
 
   def self.accessible_by_user(user)
     if user.can_view_all_clients?
@@ -299,9 +295,20 @@ class Client < ActiveRecord::Base
       end
     end
   end
-
+  
   def remote_id
-    project_client&.id_in_data_source.presence
+   @remote_id ||= project_client&.id_in_data_source.presence
+  end
+
+  def remote_data_source
+   @remote_data_source ||= project_client&.data_source_id
+  end
+
+  def data_source_path
+   if remote_data_source && remote_id
+     url = DataSource.where(id: remote_data_source).pluck(:client_url).first
+     return url.gsub(':client_id:', remote_id.to_s) if url
+   end
   end
 
   def has_full_housing_release?
@@ -339,7 +346,6 @@ class Client < ActiveRecord::Base
       'Not available'
     end
   end
-
 
   def self.sort_options(show_vispdat: false)
     [
