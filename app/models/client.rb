@@ -295,7 +295,7 @@ class Client < ActiveRecord::Base
       end
     end
   end
-  
+
   def remote_id
    @remote_id ||= project_client&.id_in_data_source.presence
   end
@@ -304,9 +304,13 @@ class Client < ActiveRecord::Base
    @remote_data_source ||= project_client&.data_source_id
   end
 
+  # Link to the warehouse or other authoritative data source
+  # urls should be placed in `data_sources.client_url` and can include :client_id: which will
+  # be replaced with Client.remote_id
+  # Default URL will use the warehouse setting from the site config
   def data_source_path
    if remote_data_source && remote_id
-     url = DataSource.where(id: remote_data_source).pluck(:client_url).first
+     url = DataSource.where(id: remote_data_source).pluck(:client_url).first || Config.get(:warehouse_url) + "/clients/#{remote_id}"
      return url.gsub(':client_id:', remote_id.to_s) if url
    end
   end

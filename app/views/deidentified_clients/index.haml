@@ -2,20 +2,18 @@
 - content_for :title, title
 
 .row
-  .col-sm-8
-    %h1= content_for :title
   .col-sm-4
-    .row
-      .col-sm-12
-        = link_to new_deidentified_client_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-          %span.icon-plus
-          Add a Deidentifed Client
-    .row
-      .col-sm-12
-        = link_to new_identified_client_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-          %span.icon-plus
-          Add an Identified Client
-  
+    %h1= content_for :title
+  .col-sm-8.d-flex
+    .mb-2.ml-auto
+      = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary' do
+        %span.icon-plus
+        Add a Deidentifed Client
+    .mb-2.ml-2
+      = link_to new_identified_client_path, class: 'btn btn-sm btn-primary' do
+        %span.icon-plus
+        Add an #{_('Identified Client')}
+
 
 .row
   .col-sm-12
@@ -26,24 +24,24 @@
           %th First Name
           %th Assessment Score
           %th Agency
-          %th Cohorts   
+          %th Cohorts
           %th DOB
           %th SSN
           %th Days Homeless in the Last 3 Years
-                    
+
         %tbody
           - @deidentified_clients.each do |deidentified_client|
             %tr
               %td= deidentified_client.last_name
-              %td= deidentified_client.first_name    
+              %td= deidentified_client.first_name
               %td= deidentified_client.assessment_score
               %td= deidentified_client.agency
               %td= simple_format deidentified_client.cohort_names
               %td= deidentified_client.date_of_birth
               %td= deidentified_client.ssn
               %td= deidentified_client.days_homeless_in_the_last_three_years
-        
-              - if can_manage_deidentified_clients? 
+
+              - if can_manage_deidentified_clients?
                 - if deidentified_client.identified
                   %td
                     = link_to edit_identified_client_path(deidentified_client.id) do
@@ -59,5 +57,5 @@
                     = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this deidentified_client?"} do
                       %span.icon-cross
                       Delete
-                      
+
 %p= paginate @deidentified_clients
