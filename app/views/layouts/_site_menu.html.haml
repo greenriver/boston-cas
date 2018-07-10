@@ -18,7 +18,7 @@
       - if can_enter_deidentified_clients? || can_manage_deidentified_clients?
         %li.o-menu__item
           = link_to deidentified_clients_path, class: 'o-menu__link' do
-            Deidentified Clients
+            #{_('De-identified Clients')}
       - if can_view_contacts?
         %li.o-menu__item
           = link_to contacts_path, class: 'o-menu__link' do

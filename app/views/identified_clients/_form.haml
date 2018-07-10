@@ -3,6 +3,8 @@
 .row
   .col-sm-6
     .form-inputs
+      = f.input :first_name
+      = f.input :last_name
       = f.input :client_identifier, required: true
       = f.input :assessment_score
       = f.input :agency

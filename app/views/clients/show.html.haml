@@ -17,9 +17,9 @@
           .client-alternate-name
             = name
     .o-body__action
-      - if warehouse_id = @client.remote_id
-        = link_to Config.get(:warehouse_url) + "/clients/#{warehouse_id}", target: '_blank' do
-          Warehouse ID:
+      - if (warehouse_id = @client.remote_id)
+        = link_to @client.data_source_path, target: '_blank' do
+          Remote ID:
           = warehouse_id
 
   - if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
@@ -29,9 +29,9 @@
         = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
         = link_to 'See all parked clients.', reports_parked_clients_path, class: 'ml-2'
 
-  = render 'tab_navigation', active: 'show', client_id: @client.id        
-  
-  .row  
+  = render 'tab_navigation', active: 'show', client_id: @client.id
+
+  .row
     .col-sm-6
       = render 'demographics'
       = render 'contact'
@@ -40,4 +40,4 @@
     .col-sm-6
       = render 'availability'
       = render 'health'
-      
+
