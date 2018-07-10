@@ -52,6 +52,11 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
       render 'matches/show'
 
+    # If we are overriding a decline, we must have a note
+    elsif decision_params[:status].in?(['decline_overridden', 'decline_overridden_returned']) && decision_params[:note].blank?
+      flash[:error] = 'An override reason is required for to override a decline.'
+      render 'matches/show'
+
     # If cancel reason is provided and match is declined or accepted
     elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "accepted" ||
           decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == "declined"

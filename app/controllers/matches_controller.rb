@@ -6,6 +6,7 @@ class MatchesController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :find_match!, only: [:show]
+  before_action :prevent_page_caching
 
   def show
     @client = @match.client
@@ -72,6 +73,10 @@ class MatchesController < ApplicationController
 
     def find_match!
       @match = match_scope.find(params[:id])
+    end
+
+    def prevent_page_caching
+      response.headers['Cache-Control'] = 'private, max-age=0, no-cache, no-store'
     end
 
 end

@@ -47,7 +47,7 @@ FactoryGirl.define do
     name 'Physically disabling condition'
     verb 'have'
   end
-  factory :income_less_than_50_percent_ami, class: 'Rules::IncomeLessThanFiftyPercentAmi' do 
+  factory :income_less_than_50_percent_ami, class: 'Rules::IncomeLessThanFiftyPercentAmi' do
     name 'Less than 50% Area Median Income (Very Low Income)'
     verb 'have'
   end
@@ -73,6 +73,10 @@ FactoryGirl.define do
   end
   factory :vispdat_more_than_8, class: 'Rules::VispdatScoreEightOrMore' do
     name 'VI-SPDAT score of 8 or more'
+    verb 'have'
+  end
+  factory :assessment_score_greater_than_0, class: 'Rules::AssessmentScoreGreaterThanZero' do
+    name 'Assessment Score greater than zero'
     verb 'have'
   end
 end

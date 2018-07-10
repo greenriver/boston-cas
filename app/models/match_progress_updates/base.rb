@@ -227,7 +227,8 @@ module MatchProgressUpdates
     end
     
     def self.batch_should_notify_dnd
-      matches = ClientOpportunityMatch.where(id: should_notify_dnd.select(:match_id))
+      matches = ClientOpportunityMatch.joins(:client).
+        where(id: should_notify_dnd.select(:match_id))
       
       Notifications::DndProgressUpdateLate.create_for_matches!(matches)
       # Notify DnD for each match
