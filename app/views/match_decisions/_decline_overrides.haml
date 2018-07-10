@@ -10,3 +10,5 @@
   %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_confirmed'}, disabled: (!@decision.editable?)}
     %i.icon-cross
     Approve Decline
+
+  = form.input :note, label: 'Override Reason', hint: 'Required for overriding decline.'
