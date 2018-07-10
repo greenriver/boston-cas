@@ -29,7 +29,7 @@ class Client < ActiveRecord::Base
   has_many :shelter_agency_contacts,
     through: :shelter_agency_client_contacts,
     source: :contact
-    
+
   has_many :client_notes, inverse_of: :client
 
   has_many :unavailable_as_candidate_fors
@@ -40,7 +40,7 @@ class Client < ActiveRecord::Base
   scope :not_parked, -> do
     where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
   end
-  scope :available_for_matching, -> (match_route )  { 
+  scope :available_for_matching, -> (match_route )  {
     # anyone who hasn't been matched fully, isn't parked and isn't active in another match
     available.available_as_candidate(match_route).
     not_parked.
@@ -61,7 +61,7 @@ class Client < ActiveRecord::Base
     where(available: false)
   }
   scope :available, -> do
-    where(available: true)    
+    where(available: true)
   end
 
   scope :unavailable_in, -> (route) do
@@ -147,7 +147,7 @@ class Client < ActiveRecord::Base
       order(days_homeless: :desc)
     when 'homeless-days-last-three-years'
       order(c_t[:days_homeless_in_last_three_years].desc)
-    when 'vi-spdat' 
+    when 'vi-spdat'
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     when 'vispdat-priority-score'
       where.not(vispdat_priority_score: nil)
@@ -253,7 +253,7 @@ class Client < ActiveRecord::Base
     ! UnavailableAsCandidateFor.where(client_id: id).exists?
   end
 
-  def make_available_in match_route: 
+  def make_available_in match_route:
     UnavailableAsCandidateFor.where(client_id: id, match_route_type: match_route.class.name).destroy_all
   end
 
@@ -273,7 +273,7 @@ class Client < ActiveRecord::Base
 
   def unavailable(permanent:false)
     active_match = client_opportunity_matches.active.first
-    Client.transaction do 
+    Client.transaction do
       if active_match.present?
         opportunity = active_match.opportunity
         active_match.canceled!
@@ -323,7 +323,7 @@ class Client < ActiveRecord::Base
   end
 
   def available_text
-    if available 
+    if available
       if available_as_candidate_for_any_route?
         'Available for matching'
       elsif active_in_match?
@@ -347,7 +347,7 @@ class Client < ActiveRecord::Base
       {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', visible: true},
       {title: 'Homeless days', column: 'days_homeless', direction: 'desc', visible: true},
       {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc', visible: true},
-      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},      
+      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', visible: true}
     ]
