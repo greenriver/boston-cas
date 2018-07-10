@@ -1,5 +1,3 @@
-%h1 Edit Deidentifed Client
+%h1 Edit #{_('De-identified Client')}
 = simple_form_for @deidentified_client, url: deidentified_client_path(@deidentified_client.id) do |f|
   = render 'form', f: f
-
-= link_to 'Back', deidentified_clients_path

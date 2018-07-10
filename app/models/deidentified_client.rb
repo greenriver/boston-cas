@@ -7,22 +7,26 @@ class DeidentifiedClient < ActiveRecord::Base
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
-  
+
   has_paper_trail
   acts_as_paranoid
-  
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end
-  
+
   def cohort_names
     Warehouse::Cohort.active.where(id: self.active_cohort_ids).pluck(:name).join("\n")
   end
-  
+
   def populate_project_client project_client
     project_client.first_name = first_name
     project_client.last_name = last_name
     project_client.active_cohort_ids = active_cohort_ids
+    project_client.assessment_score = assessment_score || 0
+    project_client.date_of_birth = date_of_birth
+    project_client.ssn = ssn
+    project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
 
     project_client.sync_with_cas = true
     project_client.needs_update = true
@@ -35,17 +39,17 @@ class DeidentifiedClient < ActiveRecord::Base
 
   def update_project_clients_from_deidentified_clients
     data_source_id = DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
-    
+
     # remove unused ProjectClients
     ProjectClient.where(
       data_source_id: data_source_id).
       where.not(id_in_data_source: DeidentifiedClient.select(:id)).
       delete_all
-      
+
     # update or add for all DeidentifiedClients
     DeidentifiedClient.all.each do |deidentified_client|
       project_client = ProjectClient.where(
-        data_source_id: data_source_id, 
+        data_source_id: data_source_id,
         id_in_data_source: deidentified_client.id
       ).first_or_initialize
       deidentified_client.populate_project_client(project_client)
@@ -53,5 +57,5 @@ class DeidentifiedClient < ActiveRecord::Base
 
     log "Updated #{DeidentifiedClient.count} ProjectClients from DeidentifiedClients"
   end
-  
+
 end
