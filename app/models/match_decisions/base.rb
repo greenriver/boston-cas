@@ -74,6 +74,10 @@ module MatchDecisions
       false
     end
 
+    def expires?
+      false
+    end
+
     def to_param
       decision_type
     end
