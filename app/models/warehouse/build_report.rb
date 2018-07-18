@@ -28,9 +28,10 @@ module Warehouse
           client.client_opportunity_matches.each do |match|
             # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
             decisions = match.decisions.select(&:status).sort_by(&:id)
-            # Debugging 
+            # Debugging
             # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
             sub_program = match.sub_program
+            program = sub_program.program
             current_decision = decisions.last
             match_route = match.match_route
             previous_updated_at = nil
@@ -54,7 +55,7 @@ module Warehouse
                   step_name += ' - hearing requested'
                 end
               end
-              
+
               Warehouse::CasReport.create!(
                 client_id: client_id,
                 match_id: match.id,
@@ -81,7 +82,9 @@ module Warehouse
                 ssp_contacts: contact_details(match.ssp_contacts),
                 admin_contacts: contact_details(match.dnd_staff_contacts),
                 clent_contacts: contact_details(match.client_contacts),
-                hsp_contacts: contact_details(match.hsp_contacts)
+                hsp_contacts: contact_details(match.hsp_contacts),
+                program_name: program.name,
+                sub_program_name: sub_program.name,
               )
               previous_updated_at = decision.updated_at
             end
@@ -91,9 +94,9 @@ module Warehouse
     end
 
     def contact_details contacts
-      contacts.map do |contact| 
+      contacts.map do |contact|
         {
-          name: contact.name, 
+          name: contact.name,
           email: contact.email,
         }
       end
