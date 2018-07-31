@@ -17,7 +17,10 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
   config.log_formatter = ::Logger::Formatter.new
   config.active_record.dump_schema_after_migration = false
-  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours }
+
+  cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
+  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours, ssl: cache_ssl }
+
   config.sandbox_email_mode = true
   config.action_mailer.delivery_method = deliver_method
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
