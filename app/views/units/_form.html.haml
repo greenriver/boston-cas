@@ -12,7 +12,13 @@
     = f.input :available, disabled: disabled
     = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
-        
+    = f.input :ground_floor
+    = f.input :wheelchair_accessible
+    = f.input :occupancy
+    = f.input :household_with_children
+    = f.input :number_of_bedrooms
+    = f.input :target_population
+
   .form-actions
     = f.button :submit
 

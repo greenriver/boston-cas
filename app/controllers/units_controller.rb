@@ -112,7 +112,8 @@ class UnitsController < ApplicationController
     end
     # Only allow a trusted parameter "white list" through.
     def unit_params
-      params.require(:unit).permit(:name, :available, :building_id)
+      params.require(:unit).permit(:name, :available, :building_id, :ground_floor, :wheelchair_accessible,
+                                   :occupancy, :household_with_children, :number_of_bedrooms, :target_population)
     end
 
     def sort_column

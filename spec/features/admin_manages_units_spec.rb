@@ -49,7 +49,15 @@ feature "Admin manages units", type: :feature do
       building2 = create(:building)
       unit = create(:unit, building: building)
       goto_building(building)
-      update_unit(unit, building, name: "New unit name", available: true, building_id: building2.name)
+      update_unit(unit, building, { name: "New unit name",
+                                    available: true,
+                                    building_id: building2.name,
+                                    ground_floor: true,
+                                    wheelchair_accessible: true,
+                                    occupancy: 9,
+                                    household_with_children: true,
+                                    number_of_bedrooms: 3,
+                                    target_population: "Family" })
 
       expect(page).to have_content("New unit name")
       expect(page).to have_content("Unit New unit name was successfully updated.")
@@ -57,9 +65,15 @@ feature "Admin manages units", type: :feature do
       goto_building(building2)
       goto_unit(unit.reload, building2)
 
-      expect(find_field("unit[name]").value).to eq("New unit name")
-      expect(find_field("unit[building_id]").find('option[selected]').text).to eq(building2.name)
-      expect(find_field("unit[available]").checked?).to eq(true)
+      expect(find_unit_field("name").value).to eq("New unit name")
+      expect(find_unit_field("building_id").find('option[selected]').text).to eq(building2.name)
+      expect(find_unit_field("available").checked?).to eq(true)
+      expect(find_unit_field("ground_floor").checked?).to eq(true)
+      expect(find_unit_field("wheelchair_accessible").checked?).to eq(true)
+      expect(find_unit_field("household_with_children").checked?).to eq(true)
+      expect(find_unit_field("occupancy").value).to eq("9")
+      expect(find_unit_field("number_of_bedrooms").value).to eq("3")
+      expect(find_unit_field("target_population").value).to eq("Family")
     end
 
     scenario "failing to update a unit" do
@@ -70,7 +84,7 @@ feature "Admin manages units", type: :feature do
       expect(page).to have_content("Please review the form submission problems below")
     end
   end
-  
+
   def goto_building(building)
     visit root_path
     within ".o-menu" do
@@ -84,14 +98,14 @@ feature "Admin manages units", type: :feature do
     click_on unit.name
   end
 
-  def create_unit(attributes={})
+  def create_unit(attributes = {})
     goto_building(building)
     click_on "Add Unit"
     update_fields(attributes)
     click_on "Create Unit"
   end
 
-  def update_unit(unit, building, attributes={})
+  def update_unit(unit, building, attributes = {})
     goto_unit(unit, building)
     update_fields(attributes)
     click_on "Update Unit"
@@ -107,7 +121,7 @@ feature "Admin manages units", type: :feature do
   end
 
   def update_field(name, value)
-    field = page.find("#unit_#{name}")
+    field = find_unit_field(name)
 
     if field.tag_name == "select"
       field.find(:option, value).select_option
@@ -119,5 +133,9 @@ feature "Admin manages units", type: :feature do
         field.set(value)
       end
     end
+  end
+
+  def find_unit_field(field_name)
+    page.find("#unit_#{field_name}")
   end
 end
