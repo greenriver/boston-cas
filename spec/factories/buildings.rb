@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :building do
-    name "Building"
+    sequence(:name) { |i| "#{Faker::Team.name}#{i}" }
   end
 end

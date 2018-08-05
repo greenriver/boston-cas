@@ -40,4 +40,10 @@ FactoryGirl.define do
     contact
   end
 
+  factory :admin, parent: :user do
+    after :create do |model|
+      admin_role = create(:admin_role)
+      model.roles << admin_role
+    end
+  end
 end
