@@ -23,6 +23,7 @@ module Admin
       if current_user.can_become_other_users?
         @available_for_becoming = User.non_admin.pluck(:id)
       end
+      @inactive_users = User.inactive
     end
 
     def edit
@@ -45,7 +46,7 @@ module Admin
     def update
       @user = user_scope.find params[:id]
       @user.update_attributes user_params
-      if @user.save 
+      if @user.save
         redirect_to({action: :index}, notice: 'User updated')
       else
         flash[:error] = 'Please review the form problems below'
@@ -55,13 +56,13 @@ module Admin
 
     def destroy
       @user = user_scope.find params[:id]
-      @user.destroy
-      redirect_to({action: :index}, notice: 'User deleted')
+      @user.update(active: false)
+      redirect_to({action: :index}, notice: 'User deactivated')
     end
 
     private
       def user_scope
-        User
+        User.active
       end
 
       def user_params

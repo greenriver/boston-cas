@@ -1,6 +1,6 @@
 module MatchDecisions
   class MatchRecommendationShelterAgency < Base
-    
+
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
@@ -17,7 +17,7 @@ module MatchDecisions
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "New Match Awaiting #{_('Shelter Agency')} Review"
@@ -37,7 +37,7 @@ module MatchDecisions
         not_working_with_client_reason_status_label
       ].join ". "
     end
-    
+
 
     def step_name
       "#{_('Shelter Agency')} Initial Review of Match Recommendation"
@@ -47,23 +47,27 @@ module MatchDecisions
       _('Shelter Agency')
     end
 
+    def expires?
+      true
+    end
+
     def contact_actor_type
       :shelter_agency_contacts
     end
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        acknowledged: 'Acknowledged', 
-        accepted: 'Accepted', 
-        declined: 'Declined', 
-        not_working_with_client: 'Pending', 
+        pending: 'Pending',
+        acknowledged: 'Acknowledged',
+        accepted: 'Accepted',
+        declined: 'Declined',
+        not_working_with_client: 'Pending',
         canceled: 'Canceled',
         expiration_update: 'Pending',
         back: 'Pending',
       }
     end
-    
+
     def editable?
       super && saved_status !~ /accepted|declined/
     end
@@ -85,7 +89,7 @@ module MatchDecisions
     end
 
     def accessible_by? contact
-      contact.user_can_act_on_behalf_of_match_contacts? || 
+      contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.shelter_agency_contacts)
     end
 
@@ -120,23 +124,23 @@ module MatchDecisions
         end
         @decision.next_step.initialize_decision!
       end
-      
+
       def declined
         match.confirm_shelter_agency_decline_dnd_staff_decision.initialize_decision!
       end
 
       def not_working_with_client
-        
+
       end
 
       def expiration_update
-        
+
       end
 
       def canceled
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
-      end 
+      end
     end
     private_constant :StatusCallbacks
 
@@ -152,7 +156,7 @@ module MatchDecisions
         decision_action_events.create! match: match, contact: contact, action: status, note: note
       end
     end
-    
+
     private def validate_not_working_reasons_present_if_not_working_with_client
       if not_working_with_client_reason.blank? && status == 'not_working_with_client'
         errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client'
@@ -168,7 +172,7 @@ module MatchDecisions
     private def release_of_information_present_if_match_accepted
       # if the Shelter Agency has just indicated a release has been signed:
       # release_of_information = '1'
-      # if the client previously signed the release 
+      # if the client previously signed the release
       # release_of_information = Time
       if status == 'accepted' && release_of_information == '0'
         errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
@@ -176,7 +180,7 @@ module MatchDecisions
     end
 
     private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
-      if status == 'accepted' 
+      if status == 'accepted'
         if ! client_spoken_with_services_agency
           errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
         end
@@ -192,10 +196,10 @@ module MatchDecisions
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
-        :client_last_seen_date, 
-        :release_of_information, 
-        :working_with_client, 
-        :client_spoken_with_services_agency, 
+        :client_last_seen_date,
+        :release_of_information,
+        :working_with_client,
+        :client_spoken_with_services_agency,
         :cori_release_form_submitted,
         :shelter_expiration
       )

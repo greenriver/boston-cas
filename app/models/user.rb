@@ -19,9 +19,11 @@ class User < ActiveRecord::Base
   scope :developer, -> {joins(:roles).where(roles: {name: 'developer'})}
   scope :dnd_initial_contact, -> {dnd_staff.where receive_initial_notification: true}
   scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {can_add_vacancies: true})}
-  
+  scope :active, -> {where active: true}
+  scope :inactive, -> {where active: false}
+
   has_one :contact, inverse_of: :user
-  
+
   has_many :user_roles, dependent: :destroy, inverse_of: :user
   has_many :roles, through: :user_roles
   has_many :vouchers
@@ -38,6 +40,10 @@ class User < ActiveRecord::Base
   def self.non_admin
     User.where.not(id: User.admin.select(:id)).
       where.not(id: User.developer.select(:id))
+  end
+
+  def active_for_authentication?
+    super && active
   end
 
   def name
@@ -69,7 +75,7 @@ class User < ActiveRecord::Base
       self.send(permission)
     end
   end
-  
+
   def roles_string
     roles
       .map { |r| r.role_name }
@@ -96,7 +102,7 @@ class User < ActiveRecord::Base
       .or(arel_table[:email].matches(query))
     )
   end
-  
+
   def admin_dashboard_landing_path
     return admin_users_path if can_edit_users?
     return admin_translation_keys_path if can_edit_translations?

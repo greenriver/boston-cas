@@ -9,11 +9,11 @@ class VouchersController < ApplicationController
 
   def index
     @vouchers = @subprogram.vouchers.preload(:status_match).order(:id)
-  end  
+  end
 
   def create
     new_vouchers = []
-    vouchers_to_create = voucher_params[:add_vouchers].to_i.times do 
+    vouchers_to_create = voucher_params[:add_vouchers].to_i.times do
       new_vouchers << Voucher.create(sub_program: @subprogram, creator: @current_user)
     end
     if vouchers_to_create == new_vouchers.length
@@ -29,7 +29,7 @@ class VouchersController < ApplicationController
   end
 
   # Find the opportunity with this voucher
-  # Mark any involved clients as available_candidate (potentially they've been matched up to the limit, 
+  # Mark any involved clients as available_candidate (potentially they've been matched up to the limit,
   # deleting this match this frees one up
   # Delete any associated client opportunity matches that aren't complete
   # Remove the opportunity from matching
@@ -42,7 +42,9 @@ class VouchersController < ApplicationController
       Client.transaction do
         matches.each do |m|
           unless m.closed?
-            m.client.make_available_in(match_route: m.match_route)
+            if m.client
+              m.client.make_available_in(match_route: m.match_route)
+            end
             m.delete
           end
         end
@@ -74,13 +76,13 @@ class VouchersController < ApplicationController
         if save_success && voucher.available?
           voucher.opportunity || voucher.create_opportunity!(available: true, available_candidate: true)
         end
-        
+
         if save_success && changed_to_available
           run_match_engine = true
         end
       end
       Matching::RunEngineJob.perform_later if run_match_engine
-      # update the sub_program to reflect changes 
+      # update the sub_program to reflect changes
       @subprogram.update_summary!
       flash[:notice] = "Vouchers updated"
       redirect_to action: :index

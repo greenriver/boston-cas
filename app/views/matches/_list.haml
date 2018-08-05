@@ -65,16 +65,16 @@
       - if  match_type != 'opportunity' && can_see_alternate_matches?
         = link_to opportunity_matches_path(match.opportunity) do
           #{match.opportunity_related_matches.count} Alternate Matches
-      - if match.shelter_expiration? 
+      - if match.shelter_expiration? && match.current_decision&.expires?
         - if match.shelter_expiration < Date.today
           .c-tag__wrapper.align-items-center
             .c-tag--danger.mr-4
               .c-tag__icon{style: 'font-size: 1.2rem;'}
                 %i.icon-warning
             .content
-              This match expired on 
+              This match expired on
               %strong= "#{match.shelter_expiration}."
         - else
           .content
-            This match expires on 
+            This match expires on
             %strong= "#{match.shelter_expiration}."

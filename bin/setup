@@ -47,6 +47,10 @@ Dir.chdir APP_ROOT do
   system "bin/rake cas_seeds:ensure_all_users_have_contacts"
   puts "\n== Adding Available Decision Reasons =="
   system "bin/rake cas_seeds:create_match_decision_reasons"
+  puts "\n== Adding Routes =="
+  system "bin/rake cas_seeds:ensure_all_match_routes_exist"
+  puts "\n== Adding Prioritization schemes =="
+  system "bin/rake cas_seeds:ensure_all_match_prioritization_schemes_exist"
 
   puts "\n== Adding Fake Programs, Sub-Programs, Vouchers, Buildings, Units and associated organizations =="
   system "bin/rake cas_seeds:import_vouchers"
@@ -66,7 +70,7 @@ Dir.chdir APP_ROOT do
   unless File.exist?(variables)
     FileUtils.touch variables
   end
-  
+
   puts "\n== Restarting application server =="
   unless File.exist? 'tmp'
     FileUtils.mkdir 'tmp'

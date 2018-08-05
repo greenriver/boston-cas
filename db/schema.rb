@@ -1030,6 +1030,7 @@ ActiveRecord::Schema.define(version: 20180805204107) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email_schedule",               default: "immediate", null: false
+    t.boolean  "active",                       default: true,        null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

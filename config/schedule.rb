@@ -30,10 +30,14 @@ every 5.minutes do
   rake "cas:update_clients"
 end
 
+every 5.minutes do
+  rake "cas:update_project_clients_from_deidentified_clients"
+end
+
 every 1.day, at: '6:00am' do
-  # rake "warehouse:report"  
+  # rake "warehouse:report"
 end
 
 every 1.day, at: '7:30am' do
-  rake 'cas:request_status_updates'  
+  rake 'cas:request_status_updates'
 end
