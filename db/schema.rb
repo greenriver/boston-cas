@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710125552) do
+ActiveRecord::Schema.define(version: 20180805204107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -970,12 +970,18 @@ ActiveRecord::Schema.define(version: 20180710125552) do
     t.integer  "adult_only"
     t.integer  "family"
     t.integer  "child_only"
-    t.integer  "building_id",                null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "building_id",                                null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.datetime "deleted_at"
     t.integer  "data_source_id"
     t.string   "data_source_id_column_name"
+    t.boolean  "ground_floor",               default: false, null: false
+    t.boolean  "wheelchair_accessible",      default: false, null: false
+    t.integer  "occupancy",                  default: 0,     null: false
+    t.boolean  "household_with_children",    default: false, null: false
+    t.integer  "number_of_bedrooms",         default: 1,     null: false
+    t.string   "target_population"
   end
 
   add_index "units", ["building_id"], name: "index_units_on_building_id", using: :btree
