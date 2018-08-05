@@ -3,6 +3,7 @@ class UnitsController < ApplicationController
   before_action :require_can_view_units!
   before_action :require_can_edit_units!, only: [:update, :destroy, :create]
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
+  before_action :set_available_population, only: [:new, :show, :edit, :update, :create]
   helper_method :sort_column, :sort_direction
   include PjaxModalController
 
@@ -127,5 +128,10 @@ class UnitsController < ApplicationController
     def query_string
       "%#{@query}%"
     end
+
+  def set_available_population
+    population = Unit.available_target_population
+    @available_population = population.map { |p| [_(p), p]}
+  end
 
 end

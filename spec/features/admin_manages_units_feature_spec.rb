@@ -73,7 +73,7 @@ feature "Admin manages units", type: :feature do
       expect(find_unit_field("household_with_children").checked?).to eq(true)
       expect(find_unit_field("occupancy").value).to eq("9")
       expect(find_unit_field("number_of_bedrooms").value).to eq("3")
-      expect(find_unit_field("target_population").value).to eq("Family")
+      expect(find_unit_field("target_population").find('option[selected]').text).to eq("Family")
     end
 
     scenario "failing to update a unit" do

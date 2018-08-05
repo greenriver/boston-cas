@@ -67,3 +67,4 @@ app/assets/stylesheets/theme/styles
 app/assets/images/theme/logo
 app/assets/images/theme/icons
 app/views/root/_homepage_content.haml
+.byebug_history

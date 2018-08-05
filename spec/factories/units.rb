@@ -7,6 +7,6 @@ FactoryGirl.define do
     occupancy 1
     household_with_children false
     number_of_bedrooms 1
-    target_population "Youth"
+    target_population "youth"
   end
 end

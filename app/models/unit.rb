@@ -16,6 +16,11 @@ class Unit < ActiveRecord::Base
   delegate :program, to: :active_voucher
 
   validates :name, presence: true
+  validates :target_population, inclusion: { in: ->(obj) { obj.class.available_target_population }, allow_blank: true }
+
+  def self.available_target_population
+    %w(youth family individual)
+  end
 
   def hmis_managed?
     return true if id_in_data_source

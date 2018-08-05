@@ -17,7 +17,7 @@
     = f.input :occupancy
     = f.input :household_with_children
     = f.input :number_of_bedrooms
-    = f.input :target_population
+    = f.input :target_population, as: :select, collection: @available_population
 
   .form-actions
     = f.button :submit
