@@ -83,6 +83,16 @@ feature "Admin manages units", type: :feature do
 
       expect(page).to have_content("Please review the form submission problems below")
     end
+
+    scenario "successfully deleting a unit" do
+      unit = create(:unit, building: building)
+
+      goto_building(building)
+      expect(page).to have_content(unit.name)
+
+      remove_unit(unit, building)
+      expect(page).to have_content("Unit #{unit.name} was successfully deleted.")
+    end
   end
 
   def goto_building(building)
@@ -137,5 +147,11 @@ feature "Admin manages units", type: :feature do
 
   def find_unit_field(field_name)
     page.find("#unit_#{field_name}")
+  end
+
+  def remove_unit(unit, building)
+    goto_building(building)
+    goto_unit(unit, building)
+    click_on "Delete unit: #{unit.name}"
   end
 end

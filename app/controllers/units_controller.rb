@@ -131,7 +131,7 @@ class UnitsController < ApplicationController
 
   def set_available_population
     population = Unit.available_target_population
-    @available_population = population.map { |p| [_(p), p]}
+    @available_population = population.map { |p| [_(p).titleize, p]}
   end
 
 end
