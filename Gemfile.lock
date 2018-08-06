@@ -527,6 +527,7 @@ DEPENDENCIES
   sass-rails
   select2-rails
   shoulda
+  shoulda-matchers
   simple_form
   slack-notifier
   spring

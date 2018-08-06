@@ -65,6 +65,12 @@ msgstr ""
 msgid "Date and time of criminal background hearing"
 msgstr ""
 
+msgid "De-identified Client"
+msgstr ""
+
+msgid "De-identified Clients"
+msgstr ""
+
 msgid "Default Match Route"
 msgstr ""
 
@@ -92,9 +98,6 @@ msgstr ""
 msgid "Housing Search Providers"
 msgstr ""
 
-msgid "Housing Search Worker"
-msgstr ""
-
 msgid "Housing Subsidy Administrator"
 msgstr ""
 
@@ -105,6 +108,9 @@ msgid "Housing Subsidy Administrator status update"
 msgstr ""
 
 msgid "Housing Subsidy Administrators"
+msgstr ""
+
+msgid "Identified Client"
 msgstr ""
 
 msgid "Ineligible Immigrant (Including Undocumented)"
@@ -138,9 +144,6 @@ msgid "SSP"
 msgstr ""
 
 msgid "Shelter Agency"
-msgstr ""
-
-msgid "Stabilization Service Provider"
 msgstr ""
 
 msgid "Stabilization Service Providers"
