@@ -2,6 +2,8 @@ class Unit < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
+  include HasRequirements
+  include ManagesServices
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include MatchArchive
@@ -46,5 +48,9 @@ class Unit < ActiveRecord::Base
 
   def self.associations_adding_services
     [:building]
+  end
+
+  def inherited_requirements_by_source
+    {}
   end
 end
