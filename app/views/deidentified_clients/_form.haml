@@ -8,7 +8,7 @@
       = f.input :agency
       = f.input :date_of_birth, as: :date_picker
       = f.input :days_homeless_in_the_last_three_years
-      - if can_add_cohorts_to_deidentified_clients?
+      - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
     .form-actions
       = f.button :submit, "Submit", class: 'btn btn-primary'
