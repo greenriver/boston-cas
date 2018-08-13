@@ -79,4 +79,8 @@ FactoryGirl.define do
     name 'Assessment Score greater than zero'
     verb 'have'
   end
+  factory :ground_floor, class: 'Rules::RequiresGroundFloor' do
+    name 'Ground Floor'
+    verb 'have'
+  end
 end
