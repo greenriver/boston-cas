@@ -228,6 +228,10 @@ class Client < ActiveRecord::Base
   end
   alias_method :age_on, :age
 
+  def cohorts
+    Warehouse::Cohort.where(id: active_cohort_ids)
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
