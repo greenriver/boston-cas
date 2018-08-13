@@ -24,7 +24,7 @@ class MatchesController < ApplicationController
     # If the client has a full release on file or the user can see all clients
     # AND if the sub-program has file tags specified
     @show_files = @show_client_info && can_see_client_details && sub_program_has_files
-    if @show_files
+    if @show_files && Warehouse::Base.enabled?
       t_t = Warehouse::Tagging.arel_table
       columns = {
         id: :id,

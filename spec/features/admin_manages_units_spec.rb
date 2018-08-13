@@ -9,7 +9,7 @@ feature "Admin manages units", type: :feature do
   end
 
   let!(:unit) { create(:unit, building: building) }
-  
+
   feature 'Unit CRUD' do
     scenario "viewing all building units" do
       unit2 = create(:unit, building: building)

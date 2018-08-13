@@ -1,9 +1,9 @@
 namespace :cas do
-  
+
   desc "Daily tasks"
   task daily: [:environment, "log:info_to_stdout"] do
-    Warehouse::BuildReport.new.run!
-    Warehouse::FlagHoused.new.run!
+    Warehouse::BuildReport.new.run! if Warehouse::Base.enabled?
+    Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
     Cas::UpdateVoucherAvailability.new.run!
   end
 
@@ -11,7 +11,7 @@ namespace :cas do
   task update_clients: [:environment, "log:info_to_stdout"] do
     Cas::UpdateClients.new.run!
   end
-  
+
   desc "Add/Update ProjectClients from DeidentifiedClients"
   task update_project_clients_from_deidentified_clients: [:environment, "log:info_to_stdout"] do
     DeidentifiedClient.new.update_project_clients_from_deidentified_clients
@@ -33,7 +33,7 @@ namespace :cas do
     ClientOpportunityMatch.active.each do |match|
       match.shelter_agency_contacts.each do |contact|
         MatchProgressUpdates::ShelterAgency.where(
-          contact_id: contact.id, 
+          contact_id: contact.id,
           match_id: match.id,
         ).first_or_create do |update|
           update.notification_number = 0
@@ -41,7 +41,7 @@ namespace :cas do
       end
       match.ssp_contacts.each do |contact|
         MatchProgressUpdates::Ssp.where(
-          contact_id: contact.id, 
+          contact_id: contact.id,
           match_id: match.id,
         ).first_or_create do |update|
           update.notification_number = 0
@@ -49,7 +49,7 @@ namespace :cas do
       end
       match.hsp_contacts.each do |contact|
         MatchProgressUpdates::Hsp.where(
-          contact_id: contact.id, 
+          contact_id: contact.id,
           match_id: match.id,
         ).first_or_create do |update|
           update.notification_number = 0

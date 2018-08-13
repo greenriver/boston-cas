@@ -8,9 +8,10 @@ before_script:
   - cp .rspec.travis .rspec
 
 env:
-  - RAILS_ENV=test DATABASE_ADAPTER=postgresql DATABASE_DB_TEST=boston_cas_test DEFAULT_FROM=greenriver.testing@mailinator.com
+  - RAILS_ENV=test DATABASE_ADAPTER=postgresql DATABASE_DB_TEST=boston_cas_test DEFAULT_FROM=greenriver.testing@mailinator.com DATABASE_WAREHOUSE_DB_TEST=test_hmis_warehouse
 
 script:
+  - createdb $DATABASE_WAREHOUSE_DB_TEST
   - bundle exec rake db:create
   - bundle exec rake db:schema:load
   - bundle exec rspec

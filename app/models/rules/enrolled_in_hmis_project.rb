@@ -4,9 +4,13 @@ class Rules::EnrolledInHmisProject < Rule
   end
 
   def available_projects
-    @available_projects ||= Warehouse::Project.joins(:organization).map do |project|
-      label = "#{project.ProjectName} << #{project.organization.OrganizationName}"
-      [project.id, label]
+    @available_projects ||= if Warehouse::Base.enabled?
+      Warehouse::Project.joins(:organization).map do |project|
+        label = "#{project.ProjectName} << #{project.organization.OrganizationName}"
+        [project.id, label]
+      end
+    else
+      []
     end
   end
 
