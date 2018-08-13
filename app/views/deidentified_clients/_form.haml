@@ -7,7 +7,6 @@
       = f.input :assessment_score
       = f.input :agency
       = f.input :date_of_birth, as: :date_picker
-      = f.input :ssn, label: "SSN"
       = f.input :days_homeless_in_the_last_three_years
       - if can_add_cohorts_to_deidentified_clients?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
