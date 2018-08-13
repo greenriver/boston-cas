@@ -84,14 +84,14 @@ feature "Admin manages units", type: :feature do
     click_on unit.name
   end
 
-  def create_unit(attributes={})
+  def create_unit(attributes = {})
     goto_building(building)
     click_on "Add Unit"
     update_fields(attributes)
     click_on "Create Unit"
   end
 
-  def update_unit(unit, building, attributes={})
+  def update_unit(unit, building, attributes = {})
     goto_unit(unit, building)
     update_fields(attributes)
     click_on "Update Unit"
@@ -107,7 +107,7 @@ feature "Admin manages units", type: :feature do
   end
 
   def update_field(name, value)
-    field = page.find("#unit_#{name}")
+    field = find_unit_field(name)
 
     if field.tag_name == "select"
       field.find(:option, value).select_option
@@ -120,4 +120,9 @@ feature "Admin manages units", type: :feature do
       end
     end
   end
+
+  def find_unit_field(field_name)
+    page.find("#unit_#{field_name}")
+  end
+
 end
