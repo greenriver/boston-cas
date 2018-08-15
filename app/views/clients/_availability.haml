@@ -19,12 +19,12 @@
         %tr
           %th
             Days Homeless in Last Three Years
-            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH, SO or TH with no overlapping PH'}} 
+            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH, SO or TH with no overlapping PH'}}
           %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
         %tr
           %th
             Days Literally Homeless in Last Three Years
-            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH or SO with no overlapping TH or PH'}}         
+            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH or SO with no overlapping TH or PH'}}
           %td= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
         %tr
           %th Currently Enrolled in
@@ -36,10 +36,10 @@
               .client__service_type_so
                 .service-type__program-type SO
             - if @client.enrolled_in_sh
-              .client__service_type_sh 
+              .client__service_type_sh
                 .service-type__program-type SH
             - if @client.enrolled_in_th
-              .client__service_type_th 
+              .client__service_type_th
                 .service-type__program-type TH
         %tr
           %th RRH Assessment Score
@@ -53,6 +53,11 @@
         %tr
           %th Chronically Homeless
           %td= checkmark @client.chronic_homeless
+        %tr
+          %th Cohorts
+          %td
+            - @client.cohorts.map(&:name).each do |name|
+              .mb-4= name
         %tr
           %th Disability
           %td

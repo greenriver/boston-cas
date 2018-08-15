@@ -32,7 +32,7 @@ class SubProgramsController < ApplicationController
     prevent_incorrect_building()
     if @subprogram.save
       @subprogram.file_tags.destroy_all
-      if file_tag_params.any?
+      if file_tag_params.any? && Warehouse::Base.enabled?
         tags = Warehouse::Tag.where(id:file_tag_params).map do |tag|
           @subprogram.file_tags.create(tag_id: tag.id, name: tag.name)
         end
@@ -93,5 +93,5 @@ class SubProgramsController < ApplicationController
       @subprogram.building_id = nil
     end
   end
-  
+
 end

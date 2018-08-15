@@ -74,7 +74,7 @@ module MatchDecisions::ProviderOnly
         @decision.next_step.initialize_decision!
         # Setup recurring status notifications for HSA
         MatchProgressUpdates::Hsa.create_for_match!(match)
-        if match.client.remote_id.present?
+        if match.client.remote_id.present? && Warehouse::Base.enabled?
           Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
         end
       end

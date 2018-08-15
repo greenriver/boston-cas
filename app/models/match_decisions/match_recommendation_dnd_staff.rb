@@ -1,6 +1,6 @@
 module MatchDecisions
   class MatchRecommendationDndStaff < Base
-    
+
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
@@ -20,7 +20,7 @@ module MatchDecisions
     def started?
       status&.to_sym == :accepted
     end
-    
+
     def step_name
       "#{_('DND')} Initial Review"
     end
@@ -32,16 +32,16 @@ module MatchDecisions
     def contact_actor_type
       nil
     end
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        accepted: 'Accept', 
+        pending: 'Pending',
+        accepted: 'Accept',
         declined: 'Decline',
         canceled: 'Canceled',
       }
     end
-    
+
     def editable?
       super && saved_status !~ /accepted|declined/
     end
@@ -68,7 +68,7 @@ module MatchDecisions
     private def decline_reason_scope
       MatchDecisionReasons::DndStaffDecline.all
     end
-    
+
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::MatchRecommendationDndStaff
@@ -85,11 +85,11 @@ module MatchDecisions
         MatchProgressUpdates::Ssp.create_for_match!(match)
         MatchProgressUpdates::Hsp.create_for_match!(match)
         MatchProgressUpdates::ShelterAgency.create_for_match!(match)
-        if match.client.remote_id.present?
+        if match.client.remote_id.present? && Warehouse::Base.enabled?
           Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
         end
       end
-      
+
       def declined
         match.rejected!
       end
@@ -104,21 +104,21 @@ module MatchDecisions
     private def save_will_accept?
       saved_status == 'pending' && status == 'accepted'
     end
-    
+
 
     def cant_accept_if_match_closed
       if save_will_accept? && match.closed
         then errors.add :status, "This match has already been closed."
       end
     end
-    
+
     def cant_accept_if_related_active_match
       if save_will_accept? && match.opportunity_related_matches.active.any?
-        then errors.add :status, "There is already another active match for this opportunity"          
+        then errors.add :status, "There is already another active match for this opportunity"
       end
     end
-    
-    
+
+
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
@@ -138,7 +138,7 @@ module MatchDecisions
         errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
       end
     end
- 
+
   end
 
 end

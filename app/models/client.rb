@@ -228,6 +228,11 @@ class Client < ActiveRecord::Base
   end
   alias_method :age_on, :age
 
+  def cohorts
+    return [] unless Warehouse::Base.enabled?
+    Warehouse::Cohort.where(id: active_cohort_ids)
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
@@ -316,7 +321,12 @@ class Client < ActiveRecord::Base
   end
 
   def has_full_housing_release?
-    ([_('Full HAN Release')] + Warehouse::AvailableFileTag.full_release.pluck(:name)).include? housing_release_status
+    release_tags = if Warehouse::Base.enabled?
+      Warehouse::AvailableFileTag.full_release.pluck(:name)
+    else
+      []
+    end
+    ([_('Full HAN Release')] + release_tags).include? housing_release_status
   end
 
   # This is only here to allow the translation tool to find it for translating
