@@ -426,7 +426,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
         client.make_unavailable_in_all_routes
       else
         # Prevent matching on this route again
-        client.make_available_in match_route: route
+        client.make_unavailable_in match_route: route
       end
 
       opportunity_related_matches.destroy_all
