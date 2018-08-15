@@ -57,6 +57,7 @@ module MatchDecisions
         m << Notifications::HousingSubsidyAdminDecisionSsp
         m << Notifications::HousingSubsidyAdminDecisionHsp
         m << Notifications::HousingSubsidyAdminAcceptedMatchDndStaff
+        m << Notifications::HousingSubsidyAdminDecisionDevelopmentOfficer
       end
     end
 

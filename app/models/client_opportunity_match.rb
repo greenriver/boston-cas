@@ -293,7 +293,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
       housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrators')}",
       ssp_contacts: "#{_('Stabilization Service Providers')}",
       hsp_contacts: "#{_('Housing Search Providers')}",
-      do_contacts: "#{_('Development Officer Contacts')}",
     }
   end
 
