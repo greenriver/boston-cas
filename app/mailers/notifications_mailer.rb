@@ -175,6 +175,11 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Match Decline Accepted")
   end
+
+  def match_success_confirmed_development_officer notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Success Confirmed")
+  end
   # End Default Route
 
   # Provider Only

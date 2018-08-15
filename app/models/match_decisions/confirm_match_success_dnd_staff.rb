@@ -1,20 +1,20 @@
 module MatchDecisions
   class ConfirmMatchSuccessDndStaff < Base
-    
+
     # validate :note_present_if_status_rejected
 
     def statuses
       {
-        pending: 'Pending', 
-        confirmed: 'Confirmed', 
+        pending: 'Pending',
+        confirmed: 'Confirmed',
         rejected: 'Rejected',
       }
     end
-    
+
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('DND')} to confirm match success"
@@ -34,7 +34,7 @@ module MatchDecisions
     def contact_actor_type
       nil
     end
-    
+
     def editable?
       super && status !~ /confirmed|rejected/
     end
@@ -61,22 +61,23 @@ module MatchDecisions
         errors.add :note, 'Please note why the match is declined.'
       end
     end
-    
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
 
       def confirmed
+        Notifications::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
         match.succeeded!
       end
-      
+
       def rejected
         match.rejected!
       end
     end
     private_constant :StatusCallbacks
-    
+
   end
-  
+
 end
 
