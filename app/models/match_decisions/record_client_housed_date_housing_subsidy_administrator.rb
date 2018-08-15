@@ -1,12 +1,12 @@
 module MatchDecisions
   class RecordClientHousedDateHousingSubsidyAdministrator < Base
-    
+
     validate :client_move_in_date_present_if_status_complete
-    
+
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
@@ -27,20 +27,20 @@ module MatchDecisions
     def contact_actor_type
       :housing_subsidy_admin_contacts
     end
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        completed: 'Complete', 
+        pending: 'Pending',
+        completed: 'Complete',
         canceled: 'Canceled',
         back: 'Pending',
       }
     end
-    
+
     def editable?
       super && saved_status !~ /complete/
     end
-    
+
     def permitted_params
       super + [:client_move_in_date]
     end
@@ -75,7 +75,7 @@ module MatchDecisions
       contact.in?(match.ssp_contacts) ||
       contact.in?(match.hsp_contacts)
     end
-    
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -90,14 +90,14 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
-    
-    
+
+
     private def client_move_in_date_present_if_status_complete
       if status == 'completed' && client_move_in_date.blank?
         errors.add :client_move_in_date, 'must be filled in'
       end
     end
-    
+
   end
-  
+
 end

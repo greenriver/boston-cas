@@ -50,7 +50,7 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Housing Recommendation")
   end
-  
+
   def record_client_housed_date_shelter_agency notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Housing Recommendation Approved - Requires Your Action")
@@ -65,12 +65,12 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Housing Recommendation Move-in Date Set")
   end
-  
+
   def confirm_match_success_dnd_staff notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Housing Recommendation - Requires Final Approval")
   end
-  
+
   def criminal_hearing_scheduled_shelter_agency notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Hearing Scheduled")
@@ -85,17 +85,17 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Hearing Scheduled")
   end
-  
+
   def criminal_hearing_scheduled_client notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Hearing Scheduled")
   end
-  
+
   def criminal_hearing_scheduled_dnd_staff notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Hearing Scheduled")
   end
-  
+
   def housing_subsidy_admin_decision_client notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
@@ -115,12 +115,17 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
   end
-  
+
+  def housing_subsidy_admin_decision_development_officer notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+  end
+
   def housing_subsidy_admin_accepted_match_dnd_staff notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Match Accepted by #{_('HSA')}")
   end
-  
+
   def housing_subsidy_admin_declined_match_shelter_agency notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
@@ -232,5 +237,5 @@ class NotificationsMailer < DatabaseMailer
     @contact = contact
     mail(to: @contact.email, subject: "Match Progress Late")
   end
-  
+
 end

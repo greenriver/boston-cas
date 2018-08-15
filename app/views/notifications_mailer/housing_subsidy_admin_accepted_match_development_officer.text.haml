@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+A housing match has been approved for the client below.
+\
+View details here:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

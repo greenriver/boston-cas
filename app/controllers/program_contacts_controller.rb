@@ -7,11 +7,11 @@ class ProgramContactsController < ApplicationController
 
   def edit
   end
-  
-  def update  
+
+  def update
     saved = @program_contacts.update program_contacts_params
-    unless request.xhr? 
-      if saved 
+    unless request.xhr?
+      if saved
         flash[:notice] = "Contacts updated"
         redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
       else
@@ -21,9 +21,9 @@ class ProgramContactsController < ApplicationController
       end
     end
   end
-  
+
   private
-  
+
     def program_scope
       Program.all
     end
@@ -31,16 +31,16 @@ class ProgramContactsController < ApplicationController
     def sub_program_scope
       SubProgram.all
     end
-  
+
     def set_program
       @program = program_scope.find params[:program_id].to_i
       @subprogram = sub_program_scope.find params[:sub_program_id].to_i
     end
-  
+
     def set_program_contacts
       @program_contacts = @program.default_match_contacts
     end
-    
+
     def program_contacts_params
       base_params = params[:program_contacts] || ActionController::Parameters.new
       base_params.permit(
@@ -49,7 +49,8 @@ class ProgramContactsController < ApplicationController
         dnd_staff_contact_ids: [],
         client_contact_ids: [],
         ssp_contact_ids: [],
-        hsp_contact_ids: []
+        hsp_contact_ids: [],
+        do_contact_ids: []
       ).tap do |result|
         result[:shelter_agency_contact_ids] = result[:shelter_agency_contact_ids]&.map(&:to_i) || []
         result[:client_contact_ids] = result[:client_contact_ids]&.map(&:to_i) || []
@@ -57,8 +58,9 @@ class ProgramContactsController < ApplicationController
         result[:housing_subsidy_admin_contact_ids] = result[:housing_subsidy_admin_contact_ids]&.map(&:to_i) || []
         result[:ssp_contact_ids] = result[:ssp_contact_ids]&.map(&:to_i) || []
         result[:hsp_contact_ids] = result[:hsp_contact_ids]&.map(&:to_i) || []
+        result[:do_contact_ids] = result[:do_contact_ids]&.map(&:to_i) || []
       end
-    end  
-    
-  
+    end
+
+
 end

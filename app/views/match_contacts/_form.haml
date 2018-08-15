@@ -10,6 +10,8 @@
   = render 'contact_manager/contact_field', contact_type: :ssp_contacts, input_name: 'match_contacts[ssp_contact_ids][]', object: @match_contacts, form: form, current_contact: @current_contact
 
   = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'match_contacts[hsp_contact_ids][]', object: @match_contacts, form: form, current_contact: @current_contact
-  
+
+  = render 'contact_manager/contact_field', contact_type: :do_contacts, input_name: 'match_contacts[do_contact_ids][]', object: @match_contacts, form: form, current_contact: @current_contact
+
   .form-actions.clearfix
     = form.button :submit, value: "Save", class: 'btn btn-success jContactSubmit'
