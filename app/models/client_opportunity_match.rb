@@ -132,8 +132,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
     through: :client_opportunity_match_contacts,
     source: :contact
 
-    has_many :hsp_contacts,
+  has_many :hsp_contacts,
     -> { where client_opportunity_match_contacts: {hsp: true} },
+    class_name: 'Contact',
+    through: :client_opportunity_match_contacts,
+    source: :contact
+
+  has_many :do_contacts,
+    -> { where client_opportunity_match_contacts: {do: true} },
     class_name: 'Contact',
     through: :client_opportunity_match_contacts,
     source: :contact
@@ -278,6 +284,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     add_default_shelter_agency_contacts!
     add_default_ssp_contacts!
     add_default_hsp_contacts!
+    add_default_do_contacts!
   end
 
   def self.contact_titles
@@ -519,6 +526,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     def add_default_hsp_contacts!
       program.hsp_contacts.each do |contact|
         assign_match_role_to_contact :hsp, contact
+      end
+    end
+
+    def add_default_do_contacts!
+      program.do_contacts.each do |contact|
+        assign_match_role_to_contact :do, contact
       end
     end
 

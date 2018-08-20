@@ -9,7 +9,7 @@ class Program < ActiveRecord::Base
 
   belongs_to :funding_source
   delegate :name, to: :funding_source, allow_nil: true, prefix: true
-  
+
   has_many :sub_programs, inverse_of: :program, dependent: :destroy
 
   has_many :program_services, inverse_of: :program
@@ -47,6 +47,11 @@ class Program < ActiveRecord::Base
     source: :contact
   has_many :hsp_contacts,
     -> { where program_contacts: {hsp: true} },
+    class_name: Contact.name,
+    through: :program_contacts,
+    source: :contact
+  has_many :do_contacts,
+    -> { where program_contacts: {do: true} },
     class_name: Contact.name,
     through: :program_contacts,
     source: :contact
@@ -104,12 +109,12 @@ class Program < ActiveRecord::Base
       .or(funding_source_matches)
     )
   end
-  
+
   def inherited_requirements_by_source
     inherited_service_requirements_by_source
       .merge! inherited_funding_source_requirements_by_source
   end
-  
+
   def self.preload_inherited_requirements
     preload(
         services: {requirements: :rule},
@@ -125,7 +130,7 @@ class Program < ActiveRecord::Base
   def self.associations_adding_services
     [:funding_source]
   end
-  
+
   private
     def inherited_funding_source_requirements_by_source
       {}.tap do |result|
@@ -138,5 +143,5 @@ class Program < ActiveRecord::Base
         end
       end
     end
-      
+
 end

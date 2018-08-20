@@ -1,6 +1,7 @@
 module Warehouse
   class BuildReport
     def run!
+      return nil unless Warehouse::Base.enabled?
       Warehouse::CasReport.transaction do
         # Replace all CAS data in the warehouse every time
         Warehouse::CasReport.delete_all

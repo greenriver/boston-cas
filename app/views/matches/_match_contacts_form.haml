@@ -1,4 +1,4 @@
-= simple_form_for @match_contacts, url: access_context.match_contacts_path(@match), html: { class: 'current-step-form jDnDStaffContactForm' }, remote: true do |form| 
+= simple_form_for @match_contacts, url: access_context.match_contacts_path(@match), html: { class: 'current-step-form jDnDStaffContactForm' }, remote: true do |form|
   .o-pre-choose
     = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_alternate_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light mb-6'
 
@@ -14,15 +14,18 @@
       = render 'contact_manager/contact_field', contact_type: :shelter_agency_contacts, input_name: 'match_contacts[shelter_agency_contact_ids][]', object: @match_contacts, form: form, required: true
     .col-sm-6
       = render 'contact_manager/contact_field', contact_type: :client_contacts, input_name: 'match_contacts[client_contact_ids][]', object: @match_contacts, form: form, required: false
-  
+
   .row
-    .col-sm-6    
+    .col-sm-6
       = render 'contact_manager/contact_field', contact_type: :dnd_staff_contacts, input_name: 'match_contacts[dnd_staff_contact_ids][]', object: @match_contacts, form: form, required: true
     .col-sm-6
       = render 'contact_manager/contact_field', contact_type: :housing_subsidy_admin_contacts, input_name: 'match_contacts[housing_subsidy_admin_contact_ids][]', object: @match_contacts, form: form, required: true
-  
+
   .row
     .col-sm-6
       = render 'contact_manager/contact_field', contact_type: :ssp_contacts, input_name: 'match_contacts[ssp_contact_ids][]', object: @match_contacts, form: form, required: false
     .col-sm-6
-      = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'match_contacts[hsp_contact_ids][]', object: @match_contacts, form: form, required: false  
+      = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'match_contacts[hsp_contact_ids][]', object: @match_contacts, form: form, required: false
+  .row
+    .col-sm-6
+      = render 'contact_manager/contact_field', contact_type: :do_contacts, input_name: 'match_contacts[do_contact_ids][]', object: @match_contacts, form: form, required: false

@@ -16,6 +16,7 @@ class DeidentifiedClient < ActiveRecord::Base
   end
 
   def cohort_names
+    return '' unless Warehouse::Base.enabled?
     Warehouse::Cohort.active.where(id: self.active_cohort_ids).pluck(:name).join("\n")
   end
 
