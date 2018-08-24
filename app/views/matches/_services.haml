@@ -2,6 +2,6 @@
 .detail-box--value
   - services = match.services_with_inherited
   - if services.count > 0
-    = services.map(&:name).join('<br />').html_safe
+    = services.map(&:name).uniq.join('<br />').html_safe
   - else
     None
