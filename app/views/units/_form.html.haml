@@ -12,6 +12,8 @@
     = f.input :available, disabled: disabled
     = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
+
+    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}"
         
   .form-actions
     = f.button :submit
