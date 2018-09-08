@@ -2,11 +2,9 @@ class Unit < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
+  include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include MatchArchive
-  include InheritsRequirementsFromServicesOnly
-  include HasRequirements
-  include Matching::HasOrInheritsRequirements
 
   belongs_to :building, inverse_of: :units
   has_many :opportunities, inverse_of: :unit
@@ -22,10 +20,6 @@ class Unit < ActiveRecord::Base
   def hmis_managed?
     return true if id_in_data_source
     return false
-  end
-
-  def services
-    []
   end
 
   def in_use?
