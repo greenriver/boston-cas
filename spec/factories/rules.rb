@@ -79,4 +79,20 @@ FactoryGirl.define do
     name 'Assessment Score greater than zero'
     verb 'have'
   end
+  factory :requires_ground_floor_unit, class: 'Rules::GroundFloor' do
+    name 'Ground floor unit'
+    verb 'have'
+  end
+  factory :wheelchair_accessible, class: 'Rules::Wheelchair' do
+    name 'Wheelchair accessible unit'
+    verb 'have'
+  end
+  factory :bedrooms_required_3, class: 'Rules::Bedroom' do
+    name 'Minimum number of bedrooms'
+    verb 'have'
+  end
+  factory :minimum_occupancy_4, class: 'Rules::Occupancy' do
+    name 'Minimum occupancy'
+    verb 'have'
+  end
 end
