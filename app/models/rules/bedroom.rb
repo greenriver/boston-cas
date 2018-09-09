@@ -4,11 +4,17 @@ class Rules::Bedroom < Rule
   end
 
   def available_number_of_bedrooms
-    (1..5)
+    [
+      [1, 'One'],
+      [2, 'Two'],
+      [3, 'Three'],
+      [4, 'Four'],
+      [4, 'Five'],
+    ]
   end
 
   def display_for_variable value
-    value
+    available_number_of_bedrooms.to_h.try(:[], value.to_i) || value
   end
 
   def clients_that_fit(scope, requirement)
