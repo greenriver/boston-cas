@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180815132103) do
+ActiveRecord::Schema.define(version: 20180909155739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,9 +211,9 @@ ActiveRecord::Schema.define(version: 20180815132103) do
     t.boolean  "enrolled_in_sh",                                         default: false, null: false
     t.boolean  "enrolled_in_so",                                         default: false, null: false
     t.integer  "days_literally_homeless_in_last_three_years",            default: 0
-    t.boolean  "requires_ground_floor",                                  default: false, null: false
-    t.boolean  "requires_wheelchair_accessibility",                      default: false, null: false
-    t.integer  "required_number_of_bedrooms",                            default: 1,     null: false
+    t.boolean  "requires_ground_floor",                                  default: false
+    t.boolean  "requires_wheelchair_accessibility",                      default: false
+    t.integer  "required_number_of_bedrooms",                            default: 1
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -707,9 +707,9 @@ ActiveRecord::Schema.define(version: 20180815132103) do
     t.boolean  "enrolled_in_sh",                              default: false, null: false
     t.boolean  "enrolled_in_so",                              default: false, null: false
     t.integer  "days_literally_homeless_in_last_three_years", default: 0
-    t.boolean  "requires_ground_floor",                       default: false, null: false
-    t.boolean  "requires_wheelchair_accessibility",           default: false, null: false
-    t.integer  "required_number_of_bedrooms",                 default: 1,     null: false
+    t.boolean  "requires_ground_floor",                       default: false
+    t.boolean  "requires_wheelchair_accessibility",           default: false
+    t.integer  "required_number_of_bedrooms",                 default: 1
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
