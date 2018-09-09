@@ -26,9 +26,9 @@ class Rules::Occupancy < Rule
     if Client.column_names.include?(:required_minimum_occupancy.to_s)
       a_t = Client.arel_table
       if requirement.positive
-        scope.where(a_t[:required_minimum_occupancy].gteq(requirement.variable))
+        scope.where(a_t[:required_minimum_occupancy].lteq(requirement.variable))
       else
-        scope.where(a_t[:required_minimum_occupancy].lt(requirement.variable))
+        scope.where(a_t[:required_minimum_occupancy].gt(requirement.variable))
       end
     else
       raise RuleDatabaseStructureMissing.new("clients.required_minimum_occupancy missing. Cannot check clients against #{self.class}.")
