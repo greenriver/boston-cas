@@ -1,7 +1,7 @@
 - help_text ||= ''
 
 .row
-  .col-lg-8
+  .col-lg-12
     .c-card.c-card--flush{ data: {requirement_manager: true, base_object_name: form.object_name} }
       %h3 Rules
       .c-card__content
@@ -17,12 +17,12 @@
               %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: requirement.rule_name_with_verb, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s, requirement_display_for_variable: requirement.display_for_variable }}
 
           %label Add Rule Condition
-          .c-binary-choice.d-flex.align-items-center.flex-wrap
+          .c-binary-choice
             .input-group.mb-2.mr-2
-              .input-group-prepend
-                %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
-                %a{href: '#', class: 'btn btn-outline-primary', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
-              = select_tag :available_rules, nil, class: 'form-control select2--with-prepends', data: {rule_searcher: true}
+              .d-flex.flex-wrap
+                %a{href: '#', class: 'btn btn-outline-primary', style: 'border-right: 0; border-radius: .25em 0 0 .25em', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
+                %a{href: '#', class: 'btn btn-outline-primary', style: 'border-radius: 0', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
+                = select_tag :available_rules, nil, class: 'form-control select2--with-prepends', data: {rule_searcher: true}
             - form.object.available_rules.each do |rule|
               %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, variable: rule.variable_requirement?.to_s}}
               - if rule.variable_requirement?
