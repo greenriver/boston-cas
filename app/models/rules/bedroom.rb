@@ -9,7 +9,7 @@ class Rules::Bedroom < Rule
       [2, 'Two'],
       [3, 'Three'],
       [4, 'Four'],
-      [4, 'Five'],
+      [5, 'Five'],
     ]
   end
 

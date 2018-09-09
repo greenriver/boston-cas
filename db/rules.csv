@@ -64,4 +64,5 @@ SsvfEligible,Supportive Services for Veterans (SSVF) Eligible,be
 AssessmentScoreGreaterThanZero,Assessment Score greater than zero,have
 GroundFloor,Ground floor unit,have
 Wheelchair,Wheelchair accessible unit,have
-Bedroom,Bedrooms,have
+Bedroom,Minimum number of bedrooms,have
+Occupancy,Minimum occupancy,have
