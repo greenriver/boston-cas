@@ -2,8 +2,8 @@ class Voucher < ActiveRecord::Base
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include MatchArchive
-  
-  scope :available, -> {where available: true} 
+
+  scope :available, -> {where available: true}
   belongs_to :sub_program
   belongs_to :unit
   belongs_to :creator, class_name: 'User', required: false, inverse_of: :vouchers, foreign_key: :user_id
@@ -27,8 +27,8 @@ class Voucher < ActiveRecord::Base
 
   attr_accessor :building_id, :skip_match_locking_validation
 
-  # Default to the building on the sub-program, if there is one.  
-  # If a unit has been assigned, make sure the building matches the unit. 
+  # Default to the building on the sub-program, if there is one.
+  # If a unit has been assigned, make sure the building matches the unit.
   def building
     return sub_program.building unless unit.present?
     unit.building
@@ -70,7 +70,7 @@ class Voucher < ActiveRecord::Base
   def self.associations_adding_services
     [:unit, :sub_program]
   end
-  
+
   def changing_to_available?
     available? && available_changed?
   end

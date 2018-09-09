@@ -9,10 +9,10 @@ class Unit < ActiveRecord::Base
   include Matching::HasOrInheritsRequirements
 
   belongs_to :building, inverse_of: :units
-  has_many :opportunities, inverse_of: :unit
   has_many :vouchers, inverse_of: :unit
+  has_many :opportunities, through: :vouchers
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
-  has_one :opportunity, through: :active_voucher 
+  has_one :opportunity, through: :active_voucher
 
   delegate :active_match, to: :active_voucher
   delegate :program, to: :active_voucher

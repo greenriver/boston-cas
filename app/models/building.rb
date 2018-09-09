@@ -23,7 +23,7 @@ class Building < ActiveRecord::Base
 
   validates_presence_of :name
 
-  def available_units 
+  def available_units
     Unit.where(building_id: id, available: true)
   end
 
@@ -49,7 +49,7 @@ class Building < ActiveRecord::Base
         opp.city = _('Boston')
         opp.state = 'MA'
         opp.zip_code = Faker::Address.zip_code
-      end 
+      end
     end
   end
 

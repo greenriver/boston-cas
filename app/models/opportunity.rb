@@ -8,8 +8,8 @@ class Opportunity < ActiveRecord::Base
   include HasOrInheritsServices
   include MatchArchive
 
-  belongs_to :unit, inverse_of: :opportunities
   belongs_to :voucher, inverse_of: :opportunity
+  has_one :unit, through: :voucher
 
   has_one :sub_program, through: :voucher
 
@@ -80,17 +80,17 @@ class Opportunity < ActiveRecord::Base
   end
 
   def self.associations_adding_requirements
-    [:unit, :voucher]
+    [:voucher]
   end
 
   def self.associations_adding_services
-    [:unit, :voucher]
+    [:voucher]
   end
 
   def opportunity_details
     @_opportunity_detail ||= OpportunityDetails.build self
   end
-  
+
   def newly_available?
     if available && available_changed?
       Matching::MatchAvailableClientsForOpportunityJob.perform_later(self)
