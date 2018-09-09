@@ -14,7 +14,7 @@ module Cas
           remove_unused_clients()
           update_existing_clients()
           add_missing_clients()
-          
+
           ProjectClient.update_all(needs_update: false)
         end
         fix_incorrect_available_candidate_clients()
@@ -90,7 +90,7 @@ module Cas
       end
 
       client_attributes[:developmental_disability] = nil unless client_attributes[:developmental_disability].to_i == 1
-      
+
       # remove non-matching column names
       [
         :vispdat_length_homeless_in_days,
@@ -172,6 +172,10 @@ module Cas
         :enrolled_in_sh,
         :enrolled_in_so,
         :enrolled_in_es,
+        :requires_ground_floor,
+        :requires_wheelchair_accessibility,
+        :required_number_of_bedrooms,
+        :required_minimum_occupancy,
       ]
     end
 

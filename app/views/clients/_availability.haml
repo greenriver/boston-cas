@@ -135,3 +135,15 @@
           %tr
             %th Contact info for maximizing income
             %td= simple_format @client.rrh_assessment_contact_info
+        %tr
+          %th Requires ground floor unit?
+          %td= checkmark @client.requires_ground_floor
+        %tr
+          %th Requires wheelchair accessibility?
+          %td= checkmark @client.requires_wheelchair_accessibility
+        %tr
+          %th Minimum number of bedrooms required?
+          %td= @client.required_number_of_bedrooms
+        %tr
+          %th Minimum occupancy required?
+          %td= @client.required_minimum_occupancy
