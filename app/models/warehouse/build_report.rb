@@ -86,6 +86,7 @@ module Warehouse
                 hsp_contacts: contact_details(match.hsp_contacts),
                 program_name: program.name,
                 sub_program_name: sub_program.name,
+                terminal_status: match.overall_status[:name]
               )
               previous_updated_at = decision.updated_at
             end
