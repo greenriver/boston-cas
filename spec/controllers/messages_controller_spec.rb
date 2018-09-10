@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe MessagesController, type: :controller do
-  let! :contact {create :contact }
-  let! :user  { create :user, contact: contact }
-  let! :event { create :message, user: user }
+  let!(:contact) {create :contact }
+  let!(:user) { create :user, contact: contact }
+  let!(:event) { create :message, user: user }
 
   before(:each) do
     authenticate(user)

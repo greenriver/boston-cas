@@ -40,7 +40,7 @@ gem 'paranoia', '~> 2.0'
 gem 'paper_trail'
 
 gem 'html2haml'
-gem 'devise', '~> 3.5'
+gem 'devise', '~> 4'
 gem 'devise_invitable'
 gem 'handlebars_assets'
 gem 'select2-rails'
