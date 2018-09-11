@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.10.2'
+lock '3.11.0'
 
 set :application, 'boston-cas'
 set :repo_url, 'git@github.com:greenriver/boston-cas.git'
@@ -32,6 +32,7 @@ set :ssh_port, ENV.fetch('SSH_PORT') { '22' }
 set :deploy_user , ENV.fetch('DEPLOY_USER')
 
 set :rvm_custom_path, ENV.fetch('RVM_CUSTOM_PATH') { '/usr/share/rvm' }
+set :rvm_ruby_version, "#{File.read('.ruby-version').strip.split('-')[1]}@global"
 
 unless ENV['SKIP_JOBS']=='true'
   after 'passenger:restart', 'delayed_job:restart'
