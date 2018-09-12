@@ -34,6 +34,8 @@
               %th
                 = manual_sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            - if MatchRoutes::Base.more_than_one?
+              %th Route
             %th Organization
             %th CAS Matched
             %th In Progress
@@ -55,6 +57,9 @@
                   = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post
               %td{:class => deleted}
                 = sp.site
+              - if MatchRoutes::Base.more_than_one?
+                %td{:class => deleted}
+                  = sp.program.match_route.title
               %td{:class => deleted}
                 = sp.organizations.join(', ')
               %td{:class => deleted}

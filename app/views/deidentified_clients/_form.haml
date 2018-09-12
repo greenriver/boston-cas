@@ -10,6 +10,12 @@
       = f.input :days_homeless_in_the_last_three_years
       - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
+      = f.input :veteran
+      = f.input :rrh_desired, label: 'Interested in RRH'
+      = f.input :youth_rrh_desired, label: 'Interested in Youth RRH'
+      = f.input :income_maximization_assistance_requested
+      = f.input :rrh_assessment_contact_info, label: 'Contact information for RRH', hint: 'Only used if income maximization is requested'
+      = f.input :pending_subsidized_housing_placement
     .form-actions
       = f.button :submit, "Submit", class: 'btn btn-primary'
 
