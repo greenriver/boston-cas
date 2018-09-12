@@ -176,6 +176,7 @@ module Cas
         :requires_wheelchair_accessibility,
         :required_number_of_bedrooms,
         :required_minimum_occupancy,
+        :requires_elevator_access,
       ]
     end
 

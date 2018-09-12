@@ -305,8 +305,12 @@ class Client < ActiveRecord::Base
    @remote_id ||= project_client&.id_in_data_source.presence
   end
 
+  def remote_data_source_id
+   @remote_data_source_id ||= project_client&.data_source_id
+  end
+
   def remote_data_source
-   @remote_data_source ||= project_client&.data_source_id
+   @remote_data_source ||= DataSource.find(remote_data_source_id)
   end
 
   # Link to the warehouse or other authoritative data source
@@ -314,17 +318,18 @@ class Client < ActiveRecord::Base
   # be replaced with Client.remote_id
   # Default URL will use the warehouse setting from the site config
   def data_source_path
-   if remote_data_source && remote_id
-     url = DataSource.where(id: remote_data_source).pluck(:client_url).first || Config.get(:warehouse_url) + "/clients/#{remote_id}"
+   if remote_data_source_id && remote_id
+     url = DataSource.where(id: remote_data_source_id).pluck(:client_url).first || Config.get(:warehouse_url) + "/clients/#{remote_id}"
      return url.gsub(':client_id:', remote_id.to_s) if url
    end
   end
 
   def has_full_housing_release?
-    release_tags = if Warehouse::Base.enabled?
+    # If we have a warehouse connected, use the file tags available there
+    release_tags = if Warehouse::Base.enabled? && remote_data_source.db_identifier != 'Deidentified'
       Warehouse::AvailableFileTag.full_release.pluck(:name)
     else
-      []
+      [_('Full HAN Release'), 'Full HAN Release']
     end
     ([_('Full HAN Release')] + release_tags).include? housing_release_status
   end
