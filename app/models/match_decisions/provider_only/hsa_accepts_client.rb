@@ -1,14 +1,14 @@
 module MatchDecisions::ProviderOnly
   class HsaAcceptsClient < ::MatchDecisions::Base
-    
+
     include MatchDecisions::AcceptsDeclineReason
 
-    validate :note_present_if_status_declined
-    
+    # validate :note_present_if_status_declined
+
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} reviewing match"
@@ -39,17 +39,17 @@ module MatchDecisions::ProviderOnly
     def contact_actor_type
       :housing_subsidy_admin_contacts
     end
-    
+
     def statuses
       {
         pending: 'Pending',
-        accepted: 'Accepted', 
+        accepted: 'Accepted',
         declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
       }
     end
-    
+
     def editable?
       super && saved_status !~ /accepted|declined/
     end
@@ -83,7 +83,7 @@ module MatchDecisions::ProviderOnly
     private def decline_reason_scope
       MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
-    
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -108,8 +108,8 @@ module MatchDecisions::ProviderOnly
         errors.add :note, 'Please note why the match is declined.'
       end
     end
-    
+
   end
-  
+
 end
 
