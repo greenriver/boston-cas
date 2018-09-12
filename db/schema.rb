@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180912131907) do
+ActiveRecord::Schema.define(version: 20180912155337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 20180912131907) do
     t.boolean  "requires_wheelchair_accessibility",                      default: false
     t.integer  "required_number_of_bedrooms",                            default: 1
     t.integer  "required_minimum_occupancy",                             default: 1
+    t.integer  "requires_elevator_access",                               default: 1
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -283,6 +284,7 @@ ActiveRecord::Schema.define(version: 20180912131907) do
     t.text     "rrh_assessment_contact_info"
     t.boolean  "income_maximization_assistance_requested", default: false, null: false
     t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
+    t.boolean  "full_release_on_file",                     default: false, null: false
   end
 
   add_index "deidentified_clients", ["deleted_at"], name: "index_deidentified_clients_on_deleted_at", using: :btree
@@ -718,6 +720,7 @@ ActiveRecord::Schema.define(version: 20180912131907) do
     t.boolean  "requires_wheelchair_accessibility",           default: false
     t.integer  "required_number_of_bedrooms",                 default: 1
     t.integer  "required_minimum_occupancy",                  default: 1
+    t.integer  "requires_elevator_access",                    default: 1
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree

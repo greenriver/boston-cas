@@ -5,14 +5,15 @@
   .form-inputs.margin-top-02
     - if @unit.in_use? && @unit.active_voucher.present? && @unit.active_match.present?
       - disabled = true
-      %p 
-        This unit is involved in a 
+      %p
+        This unit is involved in a
         = "#{link_to 'match', match_path(@unit.active_match)}, it's availability cannot be adjusted, nor can it be moved to another site.".html_safe
     %label.margin-bottom-00 Is the Unit Available?
     = f.input :available, disabled: disabled
     = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
-        
+    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}"
+
   .form-actions
     = f.button :submit
 

@@ -32,6 +32,7 @@ class DeidentifiedClient < ActiveRecord::Base
     project_client.rrh_desired = rrh_desired
     project_client.youth_rrh_desired = youth_rrh_desired
     project_client.rrh_assessment_contact_info = rrh_assessment_contact_info if income_maximization_assistance_requested
+    project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
 
     project_client.sync_with_cas = true
     project_client.needs_update = true

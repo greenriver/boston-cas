@@ -26,6 +26,7 @@ module Warehouse
           }
         ).where( at[:status].not_eq nil ).distinct.find_each do |client|
           client_id = client.project_client.id_in_data_source
+          next if client_id.blank?
           client.client_opportunity_matches.each do |match|
             # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
             decisions = match.decisions.select(&:status).sort_by(&:id)
