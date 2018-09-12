@@ -105,6 +105,13 @@ namespace :deploy do
   end
 end
 
+after 'deploy:migrating', :check_for_bootability do
+  on roles(:app)  do
+    within release_path do
+      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), "User.count"
+    end
+  end
+end
 
 task :echo_options do
   puts "\nDid you run ssh-add before running?\n\n"
