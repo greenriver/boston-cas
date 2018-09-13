@@ -38,7 +38,7 @@
               %td= deidentified_client.agency
               %td= simple_format deidentified_client.cohort_names
               %td= deidentified_client.date_of_birth
-              %td= deidentified_client.ssn
+              %td= ssn deidentified_client.ssn
               %td= deidentified_client.days_homeless_in_the_last_three_years
 
               - if can_manage_deidentified_clients?

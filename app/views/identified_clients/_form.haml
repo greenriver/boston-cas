@@ -9,7 +9,7 @@
       = f.input :assessment_score
       = f.input :agency
       = f.input :date_of_birth, as: :date_picker
-      = f.input :ssn, label: "SSN"
+      = f.input :ssn, label: "SSN", input_html: {maxlength: 9}
       = f.input :days_homeless_in_the_last_three_years
       = f.input :full_release_on_file
       - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
