@@ -4,7 +4,7 @@ class IdentifiedClientsController < DeidentifiedClientsController
   before_action :load_deidentified_client, only: [:edit, :update]
 
   def create
-    @deidentified_client = deidentified_client_source.create identified_client_params
+    @deidentified_client = deidentified_client_source.create(clean_params(identified_client_params))
     respond_with(@deidentified_client, location: deidentified_clients_path)
   end
 
@@ -16,8 +16,14 @@ class IdentifiedClientsController < DeidentifiedClientsController
   end
 
   def update
-    @deidentified_client.update(identified_client_params)
+    @deidentified_client.update(clean_params(identified_client_params))
     respond_with(@deidentified_client, location: deidentified_clients_path)
+  end
+
+  def clean_params dirty_params
+    dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
+    dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
+    return dirty_params
   end
 
   private

@@ -11,6 +11,11 @@ class DeidentifiedClient < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
+  # TODO
+  scope :visible_to, -> (user) do
+    all
+  end
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end
