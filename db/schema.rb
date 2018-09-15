@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180912155337) do
+ActiveRecord::Schema.define(version: 20180914235523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,11 +211,10 @@ ActiveRecord::Schema.define(version: 20180912155337) do
     t.boolean  "enrolled_in_sh",                                         default: false, null: false
     t.boolean  "enrolled_in_so",                                         default: false, null: false
     t.integer  "days_literally_homeless_in_last_three_years",            default: 0
-    t.boolean  "requires_ground_floor",                                  default: false
     t.boolean  "requires_wheelchair_accessibility",                      default: false
     t.integer  "required_number_of_bedrooms",                            default: 1
     t.integer  "required_minimum_occupancy",                             default: 1
-    t.integer  "requires_elevator_access",                               default: 1
+    t.boolean  "requires_elevator_access",                               default: false
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -716,11 +715,10 @@ ActiveRecord::Schema.define(version: 20180912155337) do
     t.boolean  "enrolled_in_sh",                              default: false, null: false
     t.boolean  "enrolled_in_so",                              default: false, null: false
     t.integer  "days_literally_homeless_in_last_three_years", default: 0
-    t.boolean  "requires_ground_floor",                       default: false
     t.boolean  "requires_wheelchair_accessibility",           default: false
     t.integer  "required_number_of_bedrooms",                 default: 1
     t.integer  "required_minimum_occupancy",                  default: 1
-    t.integer  "requires_elevator_access",                    default: 1
+    t.boolean  "requires_elevator_access",                    default: false
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -989,12 +987,13 @@ ActiveRecord::Schema.define(version: 20180912155337) do
     t.integer  "adult_only"
     t.integer  "family"
     t.integer  "child_only"
-    t.integer  "building_id",                null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "building_id",                                null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.datetime "deleted_at"
     t.integer  "data_source_id"
     t.string   "data_source_id_column_name"
+    t.boolean  "elevator_accessible",        default: false, null: false
   end
 
   add_index "units", ["building_id"], name: "index_units_on_building_id", using: :btree

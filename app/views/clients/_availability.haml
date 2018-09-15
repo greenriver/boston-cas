@@ -136,8 +136,8 @@
             %th Contact info for maximizing income
             %td= simple_format @client.rrh_assessment_contact_info
         %tr
-          %th Requires ground floor unit?
-          %td= checkmark @client.requires_ground_floor
+          %th Requires elevator access or ground floor unit?
+          %td= checkmark @client.requires_elevator_access
         %tr
           %th Requires wheelchair accessibility?
           %td= checkmark @client.requires_wheelchair_accessibility

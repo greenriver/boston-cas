@@ -127,9 +127,21 @@ class Opportunity < ActiveRecord::Base
   end
 
   def matches_client?(client)
-    requirements_with_inherited.map do |requirment|
-      requirment.clients_that_fit(Client.where(id: client.id)).exists?
-    end.all?
+    client_scope = Client.where(id: client.id)
+    requirement_matches = requirements_with_inherited.map do |requirment|
+      requirment.clients_that_fit(client_scope).exists?
+    end
+    attribute_matches = [
+      add_unit_attributes_filter(client_scope).exists?
+    ]
+    (requirement_matches + attribute_matches).all?
+  end
+
+  def add_unit_attributes_filter(client_scope)
+    if unit.present? && unit.elevator_accessible == false
+      client_scope = client_scope.where(requires_elevator_access: false)
+    end
+    return client_scope
   end
 
   def self.available_stati
