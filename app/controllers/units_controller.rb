@@ -116,6 +116,7 @@ class UnitsController < ApplicationController
         :name,
         :available,
         :building_id,
+        :elevator_accessible,
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end

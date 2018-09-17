@@ -1,13 +1,20 @@
-%h3.detail-box--label= "#{Building.model_name.human}"
-.detail-box--value
-  - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
-    = match.opportunity_details.building_name 
-    %br
-  - match.opportunity_details.building_address.each do |line|
-    - if match.opportunity_details.building_map_link
-      = link_to line, match.opportunity_details.building_map_link, target: '_blank'
-    - else
-      = line
-    %br
-%h3.detail-box--label Unit
-.detail-box--value= match.opportunity_details.unit_name
+- if match.opportunity.unit&.building
+  %h3.detail-box--label= "#{Building.model_name.human}"
+  .detail-box--value
+    - unless match.opportunity_details.building_name == match.opportunity_details.building_address.join(' ')
+      = match.opportunity_details.building_name
+      %br
+    - match.opportunity_details.building_address.each do |line|
+      - if match.opportunity_details.building_map_link
+        = link_to line, match.opportunity_details.building_map_link, target: '_blank'
+      - else
+        = line
+      %br
+- if match.opportunity.unit
+  %h3.detail-box--label Unit
+  .detail-box--value
+    .unit-name
+      = match.opportunity_details.unit_name
+    - if match.opportunity.unit.elevator_accessible
+      .elevator-accessible
+        This unit is elevator accessible or on the ground floor.

@@ -32,7 +32,7 @@
             - disabled = true
           - else
             - disabled_units = voucher&.building&.unavailable_units_for_vouchers_ids
-          %tr
+          %tr{data: {opportunity_id: voucher.opportunity&.id, elevator_access: voucher.unit&.elevator_accessible&.to_s}}
             %td.text-center
               = v.input_field :available, disabled: disabled, as: :boolean
             - if @subprogram.has_buildings?

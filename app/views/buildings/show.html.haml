@@ -2,9 +2,9 @@
 .building
   .row
     .col-sm-6
-      %h1 
+      %h1
         = "#{Building.model_name.human}: #{@building.name}"
-      
+
     .col-sm-6.text-right.margin-top-03.buttons-row
       - if can_edit_buildings?
         = link_to edit_building_path(@building), class: 'btn btn-primary' do
@@ -19,11 +19,11 @@
   .row
     .col-sm-12.text-right
       = render 'match_list_base/show_confidential_names'
-        
+
   %dl
     %dt
       Address
-    %dd  
+    %dd
       - @building.building_address.each do |line|
         - if @building.map_link
           = link_to line, @building.map_link, target: '_blank'
@@ -56,7 +56,7 @@
               %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
           %th Match
       %tbody
-        - @building.units.each do |u|
+        - @building.units.order(created_at: :asc).each do |u|
           %tr
             %td= link_to u.id, edit_unit_path(u)
             %td= link_to u.name || '(no name)', edit_unit_path(u)

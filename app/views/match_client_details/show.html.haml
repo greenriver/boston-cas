@@ -44,6 +44,7 @@
     %br
     Email:
     = @client.email
+    %br
     - if @client.has_full_housing_release?
       %label Contact info for maximizing income
       .client__housing_release= simple_format @client.rrh_assessment_contact_info

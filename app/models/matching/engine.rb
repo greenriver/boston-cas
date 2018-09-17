@@ -4,7 +4,7 @@ class Matching::Engine
       new(available_clients(match_route: match_route), opportunities)
     end
 
-    def create_candidates match_route: 
+    def create_candidates match_route:
       new(available_clients(match_route: match_route), available_opportunities).replace_candidates
     end
 
@@ -80,7 +80,12 @@ class Matching::Engine
   end
 
   def clients_for_matches opportunity
-    opportunity.matching_co_candidates_for_max(prioritized_candidate_clients(match_route: opportunity.match_route))
+    client_scope = prioritized_candidate_clients(match_route: opportunity.match_route)
+    # take into account unit attributes
+    client_scope = opportunity.add_unit_attributes_filter(client_scope)
+
+    opportunity.matching_co_candidates_for_max(client_scope)
+
   end
 
   def prioritized_candidate_opportunities
