@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :locale
   before_filter :set_gettext_locale
+  before_filter :set_hostname
 
   #before_filter :_basic_auth, if: -> { Rails.env.staging? }
   before_filter :set_paper_trail_whodunnit
@@ -84,5 +85,9 @@ class ApplicationController < ActionController::Base
   # don't extend the user's session if its an ajax request.
   def skip_timeout
     request.env['devise.skip_trackable'] = true if request.xhr?
+  end
+
+  def set_hostname
+    @op_hostname ||= `hostname`
   end
 end
