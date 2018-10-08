@@ -46,10 +46,6 @@ module MatchDecisions
       class_name: MatchEvents::DecisionAction.name,
       foreign_key: :decision_id
 
-    has_many :status_updates,
-      class_name: MatchProgressUpdates::Base.name,
-      foreign_key: :decision_id
-
     validate :ensure_status_allowed, if: :status
     validate :cancellations, if: :administrative_cancel_reason_id
 
@@ -76,6 +72,65 @@ module MatchDecisions
 
     def expires?
       false
+    end
+
+    def stallable?
+      false
+    end
+
+    def stalled_after
+      match_route.stalled_interval.days
+    end
+
+    def stalled_contact_types
+      []
+    end
+
+    def stalled_decision_contacts
+      stalled_contact_types.map do |contact_method|
+        match.public_send(contact_method)
+      end.flatten.compact
+    end
+
+    def set_stall_date
+      stall_on = if stallable?
+        Date.today + stalled_after
+      else
+        nil
+      end
+
+      match.update(
+        stall_date: stall_on,
+        stall_contacts_notified: nil,
+        dnd_notified: nil,
+      )
+    end
+
+    def still_active_responses
+      [
+        'Client searching for unit',
+        'Client has submitted request for tenancy',
+        'Client is waiting for project/sponsor based unit to become available',
+        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
+        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
+        'Client has submitted Reasonable Accommodation',
+        other_response,
+      ]
+    end
+
+    def no_longer_active_responses
+      [
+        'Client disappeared',
+        'Client incarcerated',
+        'Client in medical institution',
+        'Client declining services',
+        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} unable to contact client",
+        other_response,
+      ]
+    end
+
+    def other_response
+      'Other (note required)'
     end
 
     def to_param
@@ -105,8 +160,10 @@ module MatchDecisions
     # This method is meant to be called when a decision becomes active
     # do things like set the initial "pending" status and
     # send notifications
-    def initialize_decison! send_notifications: true
-      # no-op override in subclass
+    # All sub-class overrides should call this first
+    def initialize_decision! send_notifications: true
+      # always reset the stall date when the match moves into a new step
+      set_stall_date()
     end
 
     def uninitialize_decision! send_notifications: false

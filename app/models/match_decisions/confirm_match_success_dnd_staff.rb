@@ -40,6 +40,7 @@ module MatchDecisions
     end
 
     def initialize_decision!
+      super(send_notifications: send_notifications)
       update status: 'pending'
       Notifications::ConfirmMatchSuccessDndStaff.create_for_match! match
     end

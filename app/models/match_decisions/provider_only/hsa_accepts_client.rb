@@ -55,6 +55,7 @@ module MatchDecisions::ProviderOnly
     end
 
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
     end

@@ -6,7 +6,7 @@ module MatchProgressUpdates
     attr_accessor :working_with_client
     validates_presence_of :response, :client_last_seen, if: :submitting?
     validate :note_required_if_other!
-    
+
     def to_partial_path
       'match_progress_updates/progress_update'
     end
@@ -17,14 +17,13 @@ module MatchProgressUpdates
 
     belongs_to :notification,
       class_name: Notifications::Base.name
-      
+
     belongs_to :contact,
       inverse_of: :status_updates
     delegate :name, to: :contact, prefix: true
 
     belongs_to :decision,
-      class_name: MatchDecisions::Base.name,
-      inverse_of: :status_updates
+      class_name: MatchDecisions::Base.name
 
     has_one :match_route, through: :match
     delegate :stalled_interval, to: :match_route
@@ -61,7 +60,7 @@ module MatchProgressUpdates
     def self.dnd_interval
       Config.get(:dnd_interval).days
     end
-    
+
     def name
       raise 'Abstract method'
     end
@@ -106,7 +105,7 @@ module MatchProgressUpdates
 
     def note_editable_by? editing_contact
       editing_contact &&
-      contact == editing_contact 
+      contact == editing_contact
     end
 
     def is_editable?
@@ -123,118 +122,11 @@ module MatchProgressUpdates
     end
 
     def self.create_for_match! match
-      match.public_send(self.match_contact_scope).each do |contact| 
-        
+      match.public_send(self.match_contact_scope).each do |contact|
+
         where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
     end
-
-    def self.update_status_updates match_contacts
-      # remove contacts no longer on match
-      match = match_contacts.match
-      match.status_updates.where(submitted_at: nil).
-        where.not(contact_id: match_contacts.progress_update_contact_ids).
-        delete_all
-      # add any new contacts to the match progress updates
-      MatchProgressUpdates::Ssp.create_for_match!(match)
-      MatchProgressUpdates::Hsp.create_for_match!(match)
-      MatchProgressUpdates::ShelterAgency.create_for_match!(match)
-    end
-
-    # Re-send the same request if we requested it before, but haven't had a response
-    # in a reasonable amount of time
-    def resend_update_request?
-      requested_at.present? && submitted_at.blank? && requested_at < stalled_interval.days.ago
-    end
-
-    # Ask for a status update if we submitted one a long time ago and haven't asked again for a while
-    def create_new_update_request?
-      submitted_at.present? && submitted_at < stalled_interval.days.ago && requested_at < stalled_interval.days.ago
-    end
-    
-    def never_sent?
-      requested_at.blank?
-    end
-
-    def self.outstanding_contacts_for_stalled_matches
-      self.joins(:match).merge(ClientOpportunityMatch.stalled).
-        distinct.pluck(:contact_id, :match_id)
-    end
-
-    def self.send_notifications
-      # Get SSP, HSP, & Shelter agency contacts for stalled matches
-      # if we have un-submitted but requested status update where the requested date is less than INTERVAL.ago - queue to send same request again, and update the requested date
-      # if we have a submitted progress update with a response less than INTERVAL.ago - create a new update request
-      matches = outstanding_contacts_for_stalled_matches
-      matches.each do |contact_id, match_id|
-        match = ClientOpportunityMatch.find(match_id)
-        # Short circuit if the match no longer has a client
-        next unless match.client.present?
-        # Short circuit if we are no longer a contact on the match
-        next unless match&.progress_update_contact_ids&.include?(contact_id)
-        # Short circuit if the the match update isn't relevant for the current step and contact
-        contact = Contact.find(contact_id)
-        next unless match.current_decision.request_update_for_contact? contact
-        # Determine next notification number
-        notification_number = self.where(
-          contact_id: contact_id,
-          match_id: match_id,
-        ).count
-        progress_update = self.where(
-          contact_id: contact_id,
-          match_id: match_id,
-        ).order(id: :desc).first
-        requested_at = Time.now
-        decision_id = progress_update.match.current_decision.id
-        if progress_update.never_sent?
-          notification = Notifications::ProgressUpdateRequested.create_for_match!(
-            progress_update.match, 
-            contact: progress_update.contact
-          )
-          progress_update.update(
-            decision_id: decision_id,
-            requested_at: requested_at,
-            notification_id: notification.id,
-            notification_number: 1,
-            dnd_notified_at: nil,
-          )
-        elsif progress_update.resend_update_request?
-          # Re-send same request
-          # Bump requested_at
-          notification = Notifications::Base.find(progress_update.notification_id)
-          notification.deliver
-          progress_update.update(
-            decision_id: decision_id,
-            requested_at: requested_at,
-            dnd_notified_at: nil,
-          )
-        elsif progress_update.create_new_update_request?
-          # Create a new request
-          notification = Notifications::ProgressUpdateRequested.create_for_match!(
-            progress_update.match, 
-            contact: progress_update.contact
-          )
-          new_request = progress_update.class.create(
-            match_id: progress_update.match_id,
-            contact_id: progress_update.contact_id,
-            notification_id: notification.id,
-            notification_number: notification_number,
-            decision_id: decision_id,
-            requested_at: requested_at,
-          )
-        end
-      end
-    end
-    
-    def self.batch_should_notify_dnd
-      matches = ClientOpportunityMatch.joins(:client).
-        where(id: should_notify_dnd.select(:match_id))
-      
-      Notifications::DndProgressUpdateLate.create_for_matches!(matches)
-      # Notify DnD for each match
-      should_notify_dnd.update_all(dnd_notified_at: Time.now)
-    end
-
     def self.match_contact_scope
       raise 'Abstract method'
     end
@@ -245,5 +137,62 @@ module MatchProgressUpdates
       end
     end
 
+    def self.contacts_for_stalled_matches
+      contacts = {}
+      ClientOpportunityMatch.joins(:client).stalled_notifications_unsent.each do |match|
+        match.current_decision.stalled_decision_contacts.each do |contact|
+          contacts[contact.id] ||= Set.new
+          contacts[contact.id] << match.id
+        end
+      end
+    end
+
+    # Send one notification to each contact of a stalled match listing all stalled matches
+    def self.send_notifications
+      contacts = contacts_for_stalled_matches
+      contacts.each do |contact_id, match_ids|
+        notifications = []
+        match_ids.each do |match_id|
+          notifications << Notifications::ProgressUpdateRequested.create_for_match!(
+            match_id: match_id,
+            contact_id: contact_id
+          )
+        end
+        NotificationsMailer.progress_update_requested(notifications.map(&:id)).deliver_later
+        notifications.each(&:record_delivery_event!)
+      end
+      # make note on all matches that a notification was sent
+      match_ids = contacts.values.flatten.uniq
+      ClientOpportunityMatch.where(id: match_ids).update_all(stall_contacts_notified: Time.now)
+    end
+
+    def self.dnd_contacts_for_late_stalled_matches
+      contacts = {}
+      ClientOpportunityMatch.joins(:client).stalled_dnd_notifications_unsent.each do |match|
+        match.current_decision.dnd_staff_contacts.each do |contact|
+          contacts[contact.id] ||= Set.new
+          contacts[contact.id] << match.id
+        end
+      end
+    end
+
+    # send one notification per dnd staff contact
+    def self.batch_should_notify_dnd
+      contacts = dnd_contacts_for_late_stalled_matches
+      contacts.each do |contact_id, match_ids|
+        notifications = []
+        match_ids.each do |match_id|
+          notifications << Notifications::DndProgressUpdateLate.create_for_match!(
+            match_id: match_id,
+            contact_id: contact_id
+          )
+        end
+        NotificationsMailer.dnd_progress_update_late(notifications.map(&:id)).deliver_later
+        notifications.each(&:record_delivery_event!)
+      end
+      # make note on all matches that a notification was sent
+      match_ids = contacts.values.flatten.uniq
+      ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.now)
+    end
   end
 end

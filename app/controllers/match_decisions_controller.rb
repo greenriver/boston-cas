@@ -30,9 +30,7 @@ class MatchDecisionsController < ApplicationController
     @types = MatchRoutes::Base.match_steps
 
     if params[:match_contacts].present?
-      if @match_contacts.update match_contacts_params
-        MatchProgressUpdates::Base.update_status_updates @match_contacts
-      end
+      @match_contacts.update match_contacts_params
     end
     if !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'

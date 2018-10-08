@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       resource :contacts, only: [:edit, :update], controller: 'match_contacts'
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
-      resources :match_progress_updates, only: [:update], shallow: true
+      resources :match_progress_updates, only: [:create], shallow: true
     end
   end
   manage_matches
@@ -124,9 +124,9 @@ Rails.application.routes.draw do
     get :cache_status
   end
 
-  resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy] 
-  resources :identified_clients, only: [:new, :create, :edit, :update] 
-  
+  resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :identified_clients, only: [:new, :create, :edit, :update]
+
   resources :messages, only: [:show, :index] do
     collection do
       get :poll

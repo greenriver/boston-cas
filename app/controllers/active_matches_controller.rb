@@ -59,13 +59,7 @@ class ActiveMatchesController < MatchListBaseController
       if MatchDecisions::Base.stalled_match_filter_options.include?(@current_step)
         # determine delinquent progress updates
         if @current_step == 'Stalled Matches - awaiting response'
-          # We only want matches where no-one has responded to the most recent request
-          # This will still show matches where no request has been made, if the match has stalled.
-          delinquent_match_ids = ClientOpportunityMatch.delinquent_match_ids
-          @matches = @matches.stalled.where(id: delinquent_match_ids) 
-        elsif @current_step == 'Stalled Matches - with response'
-          response_provided_ids = ClientOpportunityMatch.at_least_one_response_in_current_iteration_ids
-          @matches = @matches.stalled.where(id: response_provided_ids)
+          @matches = @matches.stalled_notifications_sent
         end
       else
         @matches = @matches.where(last_decision: {type: @current_step})
@@ -89,16 +83,16 @@ class ActiveMatchesController < MatchListBaseController
     @active_filter = @current_step.present? || @current_route.present?
     @types = MatchRoutes::Base.match_steps
   end
-  
-  
-  
+
+
+
   private def match_scope
     ClientOpportunityMatch.
       accessible_by_user(current_user).
       active.
       joins(:client)
   end
-    
+
   private def set_heading
     @heading = 'Matches in Progress'
   end

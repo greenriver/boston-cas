@@ -44,6 +44,7 @@ module MatchDecisions::ProviderOnly
     end
 
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
     end
@@ -72,8 +73,7 @@ module MatchDecisions::ProviderOnly
 
       def acknowledged
         @decision.next_step.initialize_decision!
-        # Setup recurring status notifications for HSA
-        MatchProgressUpdates::Hsa.create_for_match!(match)
+
         if match.client.remote_id.present? && Warehouse::Base.enabled?
           Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
         end

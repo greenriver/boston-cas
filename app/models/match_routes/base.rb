@@ -62,7 +62,7 @@ module MatchRoutes
     end
 
     def self.stalled_match_filter_options
-      ['Stalled Matches - with response', 'Stalled Matches - awaiting response']
+      ['Stalled Matches - awaiting response']
     end
 
     def self.max_matches_per_client

@@ -16,10 +16,8 @@
             %span.current-step--name
               = @decision.step_name
               = link_to "[show current step]", access_context.match_path(@match)
-
-  - if @match.status_updates.incomplete_for_contact(contact_id: access_context.current_contact.id).exists?
-    = render 'matches/status_update'
-  - else
+  = render 'matches/stall_notice'
+  - unless @match.stalled?
     = render @decision if @decision
 
 - history_path = match_history_path(@match)
@@ -39,7 +37,7 @@
       var input_name = $input.data('input-name');
       var html = '<input type="hidden" name="' + input_name + '" value="' + val + '" />'
       $input.after(html);
-      
+
       $input.closest('form').trigger('submit');
     });
     $('body').off('click', '.jContactDelete');

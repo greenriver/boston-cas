@@ -1,13 +1,13 @@
 module MatchDecisions
   class ScheduleCriminalHearingHousingSubsidyAdmin < Base
-    
+
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
-   
+
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} #{_('researching criminal background and deciding whether to schedule a hearing')}"
@@ -29,22 +29,36 @@ module MatchDecisions
     def contact_actor_type
       :housing_subsidy_admin_contacts
     end
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        scheduled: _('Criminal Background Hearing Scheduled'), 
-        no_hearing: _('There will not be a criminal background hearing'), 
+        pending: 'Pending',
+        scheduled: _('Criminal Background Hearing Scheduled'),
+        no_hearing: _('There will not be a criminal background hearing'),
         canceled: 'Canceled',
         back: 'Pending',
       }
     end
-    
+
     def editable?
       super && saved_status !~ /scheduled|no_hearing/
     end
 
+    def stallable?
+      true
+    end
+
+    def stalled_contact_types
+      @stalled_contact_types ||= [
+        :shelter_agency_contacts,
+        :housing_subsidy_admin_contacts,
+        :ssp_contacts,
+        :hsp_contacts,
+      ]
+    end
+
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
     end
@@ -61,7 +75,7 @@ module MatchDecisions
     def notify_contact_of_action_taken_on_behalf_of contact:
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
-    
+
     def permitted_params
       super + [:criminal_hearing_date]
     end
@@ -77,7 +91,7 @@ module MatchDecisions
       contact.in?(match.ssp_contacts) ||
       contact.in?(match.hsp_contacts)
     end
-    
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -100,7 +114,7 @@ module MatchDecisions
     private_constant :StatusCallbacks
 
     private
-      
+
       def criminal_hearing_date_present_if_scheduled
         if status == 'scheduled' && criminal_hearing_date.blank?
           errors.add :criminal_hearing_date, 'must be filled in'
@@ -112,7 +126,7 @@ module MatchDecisions
           errors.add :criminal_hearing_date, 'must not be filled in'
         end
       end
-    
-  end  
+
+  end
 end
 
