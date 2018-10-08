@@ -88,6 +88,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_hostname
-    @op_hostname ||= `hostname`
+    @op_hostname ||= `hostname` rescue 'test-server'
   end
 end
