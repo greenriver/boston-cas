@@ -73,7 +73,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
   scope :stalled_dnd_notifications_unsent, -> do
     dnd_interval = Config.get(:dnd_interval).days
-    stall_contacts_notified.
+    stalled_notifications_sent.
       where(arel_table[:stall_contacts_notified].lteq(dnd_interval.ago)).
       where(dnd_notified: nil)
   end

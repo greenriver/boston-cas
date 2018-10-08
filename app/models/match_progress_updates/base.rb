@@ -138,12 +138,15 @@ module MatchProgressUpdates
     end
 
     def self.contacts_for_stalled_matches
-      contacts = {}
-      ClientOpportunityMatch.joins(:client).stalled_notifications_unsent.each do |match|
-        match.current_decision.stalled_decision_contacts.each do |contact|
-          contacts[contact.id] ||= Set.new
-          contacts[contact.id] << match.id
+      contacts ||= begin
+        contacts = {}
+        ClientOpportunityMatch.joins(:client).stalled_notifications_unsent.each do |match|
+          match.current_decision.stalled_decision_contacts.each do |contact|
+            contacts[contact.id] ||= Set.new
+            contacts[contact.id] << match.id
+          end
         end
+        contacts
       end
     end
 
@@ -162,17 +165,20 @@ module MatchProgressUpdates
         notifications.each(&:record_delivery_event!)
       end
       # make note on all matches that a notification was sent
-      match_ids = contacts.values.flatten.uniq
+      match_ids = contacts.values.map(&:to_a).flatten.uniq
       ClientOpportunityMatch.where(id: match_ids).update_all(stall_contacts_notified: Time.now)
     end
 
     def self.dnd_contacts_for_late_stalled_matches
-      contacts = {}
-      ClientOpportunityMatch.joins(:client).stalled_dnd_notifications_unsent.each do |match|
-        match.current_decision.dnd_staff_contacts.each do |contact|
-          contacts[contact.id] ||= Set.new
-          contacts[contact.id] << match.id
+      contacts ||= begin
+        contacts = {}
+        ClientOpportunityMatch.joins(:client).stalled_dnd_notifications_unsent.each do |match|
+          match.current_decision.dnd_staff_contacts.each do |contact|
+            contacts[contact.id] ||= Set.new
+            contacts[contact.id] << match.id
+          end
         end
+        contacts
       end
     end
 
@@ -191,7 +197,7 @@ module MatchProgressUpdates
         notifications.each(&:record_delivery_event!)
       end
       # make note on all matches that a notification was sent
-      match_ids = contacts.values.flatten.uniq
+      match_ids = contacts.values.map(&:to_a).flatten.uniq
       ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.now)
     end
   end

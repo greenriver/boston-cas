@@ -78,3 +78,15 @@
           .content
             This match expires on
             %strong= "#{match.shelter_expiration}."
+
+      - decision_stallable = match.current_decision.stallable?
+      - if decision_stallable && match.stalled?
+        %p.o-section__note
+          %i.icon-warning
+          This match stalled on
+          %strong #{match.stall_date}
+      - elsif decision_stallable && match.stall_date.present?
+        %p.o-section__note
+          %i.icon-info.mr-2
+          This match will be considered stalled on
+          %strong #{match.stall_date}.

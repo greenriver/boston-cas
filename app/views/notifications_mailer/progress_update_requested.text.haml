@@ -2,9 +2,9 @@ Hello #{@contact.full_name},
 \
 The following match or matches appear to have stalled, please provide a status update.
 \
-Match Details:
+Matches:
 - @notifications.each do |notification|
-  #{notification_match_url(notification_id: notification.id, match_id: notification.client_opportunity_match_id)}
+  #{notification_match_url(notification_id: notification.id, id: notification.client_opportunity_match_id)}
 \
 \
 \
