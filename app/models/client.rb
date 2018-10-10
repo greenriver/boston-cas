@@ -310,7 +310,7 @@ class Client < ActiveRecord::Base
   end
 
   def remote_data_source
-   @remote_data_source ||= DataSource.find(remote_data_source_id)
+   @remote_data_source ||= DataSource.find(remote_data_source_id) rescue false
   end
 
   # Link to the warehouse or other authoritative data source
@@ -326,7 +326,7 @@ class Client < ActiveRecord::Base
 
   def has_full_housing_release?
     # If we have a warehouse connected, use the file tags available there
-    release_tags = if Warehouse::Base.enabled? && remote_data_source.db_identifier != 'Deidentified'
+    release_tags = if Warehouse::Base.enabled? && remote_data_source&.db_identifier != 'Deidentified'
       Warehouse::AvailableFileTag.full_release.pluck(:name)
     else
       [_('Full HAN Release'), 'Full HAN Release']
