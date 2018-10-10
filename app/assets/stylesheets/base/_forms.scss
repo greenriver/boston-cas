@@ -74,6 +74,9 @@
   color: $cas-red;
   @include open-sans-medium;
 }
+.input-group > .form-control {
+  height: calc(3rem + 2px);
+}
 .form-group .form-group {
   margin-bottom: 6px;
 }
