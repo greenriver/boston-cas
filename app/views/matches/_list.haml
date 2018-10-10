@@ -78,7 +78,7 @@
           .content
             This match expires on
             %strong= "#{match.shelter_expiration}."
-      - decision_stallable = match.current_decision.stallable?
+      - decision_stallable = match.current_decision && match.current_decision.stallable?
       - if decision_stallable && match.stalled?
         %p.o-section__note
           %i.icon-warning
