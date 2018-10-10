@@ -22,16 +22,22 @@
         .o-choose__choice.jNoLongerWorkingContent
           .o-choose__content
             = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
+              -# preserve the notification id if present
+              %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
               = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
               = f.input :response, collection: @decision.still_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
               = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
+
               = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
         .o-choose__choice.jStillWorkingContent.d-none
           .o-choose__content
             = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
+              -# preserve the notification id if present
+              %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
               = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
               = f.input :response, collection: @decision.no_longer_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
               = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
+
               = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
 
 

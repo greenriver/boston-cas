@@ -5,11 +5,10 @@ class MatchProgressUpdatesController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :find_match!
+  before_action :prep_for_show
   before_action :set_update
 
   def create
-    prep_for_show
-
     @update.response = progress_params[:response].reject(&:blank?).uniq.join('; ')
     @update.client_last_seen = progress_params[:client_last_seen]
     @update.note = progress_params[:note]
@@ -20,7 +19,11 @@ class MatchProgressUpdatesController < ApplicationController
     else
       flash[:error] = "Unable to save your response"
     end
-    respond_with(@update, location: match_path(@match))
+    if params[:notification_id]
+      respond_with(@update, location: match_path(@match, notification_id: params[:notification_id]))
+    else
+      respond_with(@update, location: match_path(@match))
+    end
   end
 
   def progress_params

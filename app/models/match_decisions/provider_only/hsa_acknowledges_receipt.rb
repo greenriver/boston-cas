@@ -54,12 +54,6 @@ module MatchDecisions::ProviderOnly
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
-    def request_update_for_contact? contact
-      contact.in?(match.housing_subsidy_admin_contacts) ||
-      contact.in?(match.ssp_contacts) ||
-      contact.in?(match.hsp_contacts)
-    end
-
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ProviderOnly::MatchInitiationForHsa

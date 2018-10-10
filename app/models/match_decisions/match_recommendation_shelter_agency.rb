@@ -94,12 +94,6 @@ module MatchDecisions
       contact.in?(match.shelter_agency_contacts)
     end
 
-    def request_update_for_contact? contact
-      # contact.in?(match.shelter_agency_contacts)
-      # No match update requests should be sent at this stage
-      false
-    end
-
     private def note_present_if_status_declined
       if note.blank? && status == 'declined'
         errors.add :note, 'Please note why the match is declined.'

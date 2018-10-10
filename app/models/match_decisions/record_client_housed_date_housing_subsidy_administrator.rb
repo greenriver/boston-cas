@@ -84,13 +84,6 @@ module MatchDecisions
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
-    def request_update_for_contact? contact
-      contact.in?(match.shelter_agency_contacts) ||
-      contact.in?(match.housing_subsidy_admin_contacts) ||
-      contact.in?(match.ssp_contacts) ||
-      contact.in?(match.hsp_contacts)
-    end
-
     class StatusCallbacks < StatusCallbacks
       def pending
       end

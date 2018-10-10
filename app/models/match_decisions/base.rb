@@ -336,11 +336,6 @@ module MatchDecisions
       :done
     end
 
-    # Override in sub classes
-    def request_update_for_contact? contact
-      false
-    end
-
     private
 
       def decision_type

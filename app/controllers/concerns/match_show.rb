@@ -6,7 +6,7 @@ module MatchShow
       match_id: @match.id,
       contact_id: current_contact.id,
       notification_id: params[:notification_id]&.to_i,
-      decision_id: @decision.id,
+      decision_id: @decision&.id,
       submitted_at: Time.now,
     )
 
@@ -51,7 +51,7 @@ module MatchShow
         end
       end.to_h
     end
-    if current_decision.try :accessible_by?, current_contact
+    if current_decision.try(:accessible_by?, current_contact) || @match.stalled?
       @decision = current_decision
     end
     set_update
