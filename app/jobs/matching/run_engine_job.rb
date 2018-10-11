@@ -1,6 +1,6 @@
 module Matching
-  class RunEngineJob < ActiveJob::Base
-  
+  class RunEngineJob < BaseJob
+
     def perform
       # prevent the engine from running simultaneously
       ClientOpportunityMatch.with_advisory_lock(:engine_lock) do
