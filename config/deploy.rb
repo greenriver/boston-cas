@@ -118,3 +118,11 @@ task :echo_options do
   puts "Deploying as: #{fetch(:deploy_user)} on port: #{fetch(:ssh_port)} to location: #{deploy_to}\n\n"
 end
 after 'git:wrapper', :echo_options
+
+# set this variable on your first deployments to each environment.
+# remove these lines after all servers are deployed.
+# e.g.
+#      MANUAL_SYSTEMD_RESTART=true cap aws_staging deploy
+if ENV['MANUAL_SYSTEMD_RESTART']=='true'
+  after 'deploy:symlink:release', 'delayed_job:restart'
+end
