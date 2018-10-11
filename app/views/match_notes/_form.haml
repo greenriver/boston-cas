@@ -1,5 +1,10 @@
-= simple_form_for @match_note, url: submit_url, as: :match_note, html: {data: {submits_to_pjax_modal: true}} do |form|
+= simple_form_for @match_note, url: submit_url, as: :match_note, html: {data: {submits_to_pjax_modal: request.xhr?}} do |form|
   = form.input :note, as: :text, input_html: {rows: 4}, label: false
   - if @match.can_create_administrative_note?(access_context.current_contact)
     = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
+    = form.input :contact_ids, collection: @match.contacts, label: 'Send note to contacts?', hint: 'If any contacts are selected, this note will be sent directly to them via email.', input_html: {multiple: :multiple, class: :select2}
   = form.submit "Save", class: 'btn btn-success'
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

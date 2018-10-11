@@ -243,4 +243,11 @@ class NotificationsMailer < DatabaseMailer
     mail(to: @contact.email, subject: "Match Progress Late")
   end
 
+  # Notes
+  def note_sent notification, note
+    setup_instance_variables notification
+    @note = note
+    mail(to: @contact.email, subject: "Note from CAS - Requires Your Action")
+  end
+
 end

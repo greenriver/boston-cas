@@ -76,7 +76,7 @@ module MatchProgressUpdates
         'Client is waiting for project/sponsor based unit to become available',
         "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
         "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
-        'Client has submitted Reasonable Accomodation',
+        'Client has submitted Reasonable Accommodation',
         other_response,
       ]
     end
@@ -173,7 +173,7 @@ module MatchProgressUpdates
       contacts ||= begin
         contacts = {}
         ClientOpportunityMatch.joins(:client).stalled_dnd_notifications_unsent.each do |match|
-          match.current_decision.dnd_staff_contacts.each do |contact|
+          match.dnd_staff_contacts.each do |contact|
             contacts[contact.id] ||= Set.new
             contacts[contact.id] << match.id
           end
