@@ -26,7 +26,7 @@
             - form.object.available_rules.each do |rule|
               %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule.name_with_verb, variable: rule.variable_requirement?.to_s}}
               - if rule.variable_requirement?
-                .jVariableRequirment{data: {rule_id: rule.id}}
+                .jVariableRequirment.mb-4{data: {rule_id: rule.id}}
                   = render rule
           %a{href: '#', class: 'btn btn-primary mb-2', data: {add_button: true}} Add Rule
 
