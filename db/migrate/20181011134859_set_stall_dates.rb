@@ -6,7 +6,7 @@ class SetStallDates < ActiveRecord::Migration
     match_ids += MatchDecisions::ApproveMatchHousingSubsidyAdmin.pending.joins(:match).merge(ClientOpportunityMatch.active.open).pluck(:match_id)
     match_ids += MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator.pending.joins(:match).merge(ClientOpportunityMatch.active.open).pluck(:match_id)
     MatchProgressUpdates::Base.where(submitted_at: nil).where(match_id: match_ids.to_a).group(:match_id).maximum(:requested_at).each do |match_id, requested_at|
-      stall_date = requested_at.to_date + 30.days
+      stall_date = (requested_at&.to_date || Date.today) + 30.days
       ClientOpportunityMatch.find(match_id).update(stall_date: stall_date)
     end
   end
