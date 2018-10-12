@@ -14,7 +14,7 @@ class App.RequirementManager.Searcher
     @placeholder = $(@element).attr 'placeholder'
     @_init_select2()
     @_init_select_listener()
-    
+
   _init_select2: ->
     $(@element).select2
       theme: 'bootstrap'
@@ -28,6 +28,8 @@ class App.RequirementManager.Searcher
       rule_id = $(@element).val()
       $(".jVariableRequirment").hide()
       $(".jVariableRequirment[data-rule-id=#{rule_id}]").show()
+      $(".jVariableRequirment[data-rule-id=#{rule_id}] select").css('width', '100%')
+      $(".jVariableRequirment[data-rule-id=#{rule_id}] select").select2()
 
   reset: ->
     # resetting select2 this way currently throws
@@ -38,15 +40,15 @@ class App.RequirementManager.Searcher
     $(@element).select2 'destroy'
     $(@element).find('option').remove()
     @_init_select2()
-    
+
   _select2_data: ->
     result = [{id: "", text: ""}]
-    result = result.concat @available_rules.map (rule) => {text: rule.name, id: rule.id}  
-    result.sort(@_compare_rules)    
-    
-  _compare_rules: (a, b) ->   
-    if a.text < b.text    
-      return -1   
-    if a.text > b.text    
-      return 1    
-    return 0 
+    result = result.concat @available_rules.map (rule) => {text: rule.name, id: rule.id}
+    result.sort(@_compare_rules)
+
+  _compare_rules: (a, b) ->
+    if a.text < b.text
+      return -1
+    if a.text > b.text
+      return 1
+    return 0
