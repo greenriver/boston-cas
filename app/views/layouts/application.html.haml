@@ -53,10 +53,11 @@
                 = yield :modal_footer
 
     %footer{ class: ('with-menu' if user_signed_in?) }
-      .container-fluid{class: container_classes}
-        %p.text-center
+      .container-fluid.w-100{class: container_classes}
+        .d-flex.flex-row.align-items-center
           = render 'layouts/footer_seal'
-          = _('The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.')
+          %p
+            = _('The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.')
 
     = render 'pjax_modal_frame'
     = javascript_include_tag 'application'
