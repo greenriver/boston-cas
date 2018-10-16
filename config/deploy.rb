@@ -119,6 +119,15 @@ task :echo_options do
 end
 after 'git:wrapper', :echo_options
 
+task :trigger_job_restarts do
+  on roles(:app) do
+    within current_path do
+      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), "\"Rails.cache.write('deploy-dir', File.realpath(FileUtils.pwd))\""
+    end
+  end
+end
+after 'deploy:symlink:release', :trigger_job_restarts
+
 # set this variable on your first deployments to each environment.
 # remove these lines after all servers are deployed.
 # e.g.
