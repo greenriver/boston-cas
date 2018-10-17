@@ -4,7 +4,8 @@ namespace :delayed_job do
   task :restart do
     on roles(:job) do
       execute :sudo, "bash -l -c 'systemctl stop delayed_job-#{fetch(:client)}-cas-#{fetch(:rails_env)}.0.service || echo ok'"
-
+    end
+    on roles(:job) do
       execute :sudo, "systemctl start delayed_job-#{fetch(:client)}-cas-#{fetch(:rails_env)}.0.service"
     end
   end
