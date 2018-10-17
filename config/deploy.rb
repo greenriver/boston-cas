@@ -87,12 +87,8 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
 # set :keep_releases, 5
 
 namespace :deploy do
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+  before 'assets:precompile', :touch_theme_variables do
+    on roles(:app)  do
       within shared_path do
         # must exist for asset-precompile to succeed.
         execute :touch, 'app/assets/stylesheets/theme/styles/_variables.scss'
