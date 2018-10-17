@@ -19,7 +19,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
-  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours, raise_errors: false, ssl: cache_ssl }
+  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours, raise_errors: false, ssl: cache_ssl, namespace: :cas }
 
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = deliver_method

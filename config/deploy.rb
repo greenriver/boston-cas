@@ -34,10 +34,6 @@ set :deploy_user , ENV.fetch('DEPLOY_USER')
 set :rvm_custom_path, ENV.fetch('RVM_CUSTOM_PATH') { '/usr/share/rvm' }
 set :rvm_ruby_version, "#{File.read('.ruby-version').strip.split('-')[1]}@global"
 
-unless ENV['SKIP_JOBS']=='true'
-  after 'passenger:restart', 'delayed_job:restart'
-end
-
 task :group_writable_and_owned_by_ubuntu do
   on roles(:web) do
     execute "chmod --quiet g+w -R  #{fetch(:deploy_to)} || echo ok"
@@ -118,6 +114,15 @@ task :echo_options do
   puts "Deploying as: #{fetch(:deploy_user)} on port: #{fetch(:ssh_port)} to location: #{deploy_to}\n\n"
 end
 after 'git:wrapper', :echo_options
+
+task :trigger_job_restarts do
+  on roles(:app) do
+    within current_path do
+      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), "\"Rails.cache.write('deploy-dir', File.realpath(FileUtils.pwd))\""
+    end
+  end
+end
+after 'deploy:symlink:release', :trigger_job_restarts
 
 # set this variable on your first deployments to each environment.
 # remove these lines after all servers are deployed.
