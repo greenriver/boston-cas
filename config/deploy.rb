@@ -34,10 +34,6 @@ set :deploy_user , ENV.fetch('DEPLOY_USER')
 set :rvm_custom_path, ENV.fetch('RVM_CUSTOM_PATH') { '/usr/share/rvm' }
 set :rvm_ruby_version, "#{File.read('.ruby-version').strip.split('-')[1]}@global"
 
-unless ENV['SKIP_JOBS']=='true'
-  after 'passenger:restart', 'delayed_job:restart'
-end
-
 task :group_writable_and_owned_by_ubuntu do
   on roles(:web) do
     execute "chmod --quiet g+w -R  #{fetch(:deploy_to)} || echo ok"
