@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180914235523) do
+ActiveRecord::Schema.define(version: 20181008141707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,9 @@ ActiveRecord::Schema.define(version: 20180914235523) do
     t.json     "universe_state"
     t.integer  "custom_expiration_length"
     t.date     "shelter_expiration"
+    t.date     "stall_date"
+    t.datetime "stall_contacts_notified"
+    t.datetime "dnd_notified"
   end
 
   add_index "client_opportunity_matches", ["active"], name: "index_client_opportunity_matches_on_active", using: :btree
