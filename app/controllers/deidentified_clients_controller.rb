@@ -30,7 +30,7 @@ class DeidentifiedClientsController < ApplicationController
   end
 
   def deidentified_client_source
-    DeidentifiedClient.visible_to(current_user)
+    DeidentifiedClient.deidentified.visible_to(current_user)
   end
 
   private

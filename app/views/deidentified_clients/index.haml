@@ -1,19 +1,11 @@
-- title = 'Deidentifed Clients'
+- title = 'Non-HMIS Clients'
 - content_for :title, title
-
-.row
-  .col-sm-4
-    %h1= content_for :title
-  .col-sm-8.d-flex
-    .mb-2.ml-auto
-      = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary' do
-        %span.icon-plus
-        Add a Deidentifed Client
-    .mb-2.ml-2
-      = link_to new_identified_client_path, class: 'btn btn-sm btn-primary' do
-        %span.icon-plus
-        Add an #{_('Identified Client')}
-
+.d-flex
+  %h1= content_for :title
+  = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
+    %span.icon-plus
+    Add a Deidentifed Client
+= render 'menus/non_hmis_clients'
 
 .row
   .col-sm-12

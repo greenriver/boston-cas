@@ -16,6 +16,14 @@ class DeidentifiedClient < ActiveRecord::Base
     all
   end
 
+  scope :identified, -> do
+    where(identified: true)
+  end
+
+  scope :deidentified, -> do
+    where(identified: false)
+  end
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end

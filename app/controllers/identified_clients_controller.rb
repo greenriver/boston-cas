@@ -5,7 +5,7 @@ class IdentifiedClientsController < DeidentifiedClientsController
 
   def create
     @deidentified_client = deidentified_client_source.create(clean_params(identified_client_params))
-    respond_with(@deidentified_client, location: deidentified_clients_path)
+    respond_with(@deidentified_client, location: identified_clients_path)
   end
 
   def new
@@ -17,7 +17,7 @@ class IdentifiedClientsController < DeidentifiedClientsController
 
   def update
     @deidentified_client.update(clean_params(identified_client_params))
-    respond_with(@deidentified_client, location: deidentified_clients_path)
+    respond_with(@deidentified_client, location: identified_clients_path)
   end
 
   def clean_params dirty_params
@@ -27,6 +27,11 @@ class IdentifiedClientsController < DeidentifiedClientsController
   end
 
   private
+
+    def deidentified_client_source
+      DeidentifiedClient.identified.visible_to(current_user)
+    end
+
     def identified_client_params
       params.require(:deidentified_client).permit(
         :client_identifier,
