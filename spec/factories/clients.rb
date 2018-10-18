@@ -15,5 +15,6 @@ FactoryGirl.define do
     sequence(:days_homeless_in_last_three_years)  {|n| Faker::Number.between(0, 1000) }
     sequence(:rrh_assessment_collected_at) { |n| Faker::Date.between(1.years.ago, Date.yesterday) }
    
+    disability_verified_on nil
   end
 end
