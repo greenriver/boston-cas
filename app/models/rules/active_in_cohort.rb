@@ -5,7 +5,7 @@ class Rules::ActiveInCohort < Rule
 
   def available_cohorts
     return [] unless Warehouse::Base.enabled?
-    Warehouse::Cohort.active.pluck(:id, :name, :short_name).
+    Warehouse::Cohort.visible_in_cas.active.pluck(:id, :name, :short_name).
       map do |id, name, short_name|
         label = short_name.presence || name
         [id, label]

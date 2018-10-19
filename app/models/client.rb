@@ -230,7 +230,7 @@ class Client < ActiveRecord::Base
 
   def cohorts
     return [] unless Warehouse::Base.enabled?
-    Warehouse::Cohort.where(id: active_cohort_ids)
+    Warehouse::Cohort.visible_in_cas.where(id: active_cohort_ids)
   end
 
   def prioritized_matches
