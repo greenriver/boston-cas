@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181018174118) do
+ActiveRecord::Schema.define(version: 20181019154323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -287,6 +287,10 @@ ActiveRecord::Schema.define(version: 20181018174118) do
     t.boolean  "income_maximization_assistance_requested", default: false, null: false
     t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
     t.boolean  "full_release_on_file",                     default: false, null: false
+    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
+    t.integer  "required_number_of_bedrooms",              default: 1
+    t.integer  "required_minimum_occupancy",               default: 1
+    t.boolean  "requires_elevator_access",                 default: false, null: false
   end
 
   add_index "deidentified_clients", ["deleted_at"], name: "index_deidentified_clients_on_deleted_at", using: :btree
@@ -1049,6 +1053,7 @@ ActiveRecord::Schema.define(version: 20181018174118) do
     t.string   "last_name"
     t.string   "email_schedule",               default: "immediate", null: false
     t.boolean  "active",                       default: true,        null: false
+    t.string   "agency"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

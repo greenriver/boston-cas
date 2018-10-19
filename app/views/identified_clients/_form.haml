@@ -7,7 +7,7 @@
       = f.input :last_name
       = f.input :client_identifier, required: true
       = f.input :assessment_score
-      = f.input :agency
+      = f.input :agency, collection: @available_agencies, input_html: {class: :select2}, hint: 'You may lose access to this client record if the agency doesn\'t match your agency'
       = f.input :date_of_birth, as: :date_picker
       = f.input :ssn, label: "SSN", input_html: {maxlength: 9}
       = f.input :days_homeless_in_the_last_three_years
@@ -20,6 +20,10 @@
       = f.input :income_maximization_assistance_requested
       = f.input :pending_subsidized_housing_placement
       = f.input :rrh_assessment_contact_info, label: 'Client and/orCase Manager Contact Information'
+      = f.input :required_number_of_bedrooms, collection: (1..5), include_blank: false
+      = f.input :required_minimum_occupancy, collection: (1..10), include_blank: false
+      = f.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit')
+      = f.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access')
 
     .form-actions
       = f.button :submit, "Submit", class: 'btn btn-primary'
