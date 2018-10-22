@@ -106,31 +106,181 @@ module MatchDecisions
       )
     end
 
+    def all_responses
+      @all_responses ||= [
+        {
+          client_engaging: true, 
+          reason: 'CORI Mitigation - Non-CoC resources only',
+          steps: ['MatchDecisions::ApproveMatchHousingSubsidyAdmin'], # 4
+          requires_note: true,
+        },
+        {
+          client_engaging: true, 
+          reason: 'HSA awaiting paperwork - Non-CoC resources only',
+          steps: ['MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin'], # 3
+          requires_note: true,
+        },
+        {
+          client_engaging: true, 
+          reason: 'CORI hearing scheduled, awaiting date - Non-CoC resources only', # 4
+          steps: ['MatchDecisions::ApproveMatchHousingSubsidyAdmin'],
+          requires_note: true,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Client searching for unit - Mobile voucher only',
+          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
+          requires_note: false,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Client has submitted a Request for Tenancy - Mobile voucher only',
+          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
+          requires_note: false,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Client is waiting for unit to become available - Project or sponsor based unit only',
+          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
+          requires_note: false,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Client has submitted a Reasonable Accommodation',
+          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
+          requires_note: true,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Client is frequently engaging in housing search',
+          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
+          requires_note: true,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Client is infrequently engaging in housing search',
+          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
+          requires_note: true,
+        },
+        {
+          client_engaging: true, 
+          reason: 'Other',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client refusing stabilization services',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client refusing housing',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client refusing housing and stabilization services',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client refusing housing search services',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client disappeared',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: false,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client incarcerated',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: false,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Client in medical institution',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: false,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Shelter agency contact unable to contact client',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+        {
+          client_engaging: false, 
+          reason: 'Other',
+          steps: [
+          'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
+          'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
+          ], # 3,4,5
+          requires_note: true,
+        },
+      ]      
+    end
+
     def still_active_responses
-      [
-        'Client searching for unit',
-        'Client has submitted request for tenancy',
-        'Client is waiting for project/sponsor based unit to become available',
-        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
-        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
-        'Client has submitted Reasonable Accommodation',
-        other_response,
-      ]
+      @still_active_responses ||= all_responses.select do |response|
+        response[:client_engaging] && response[:steps].include?(self.class.name)
+      end.map{|m| m[:reason]}
     end
 
     def no_longer_active_responses
-      [
-        'Client disappeared',
-        'Client incarcerated',
-        'Client in medical institution',
-        'Client declining services',
-        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} unable to contact client",
-        other_response,
-      ]
+      @no_longer_active_responses ||= all_responses.select do |response|
+        ! response[:client_engaging] && response[:steps].include?(self.class.name)
+      end.map{|m| m[:reason]}
     end
-
-    def other_response
-      'Other (note required)'
+      
+    def stalled_responses_requiring_note
+      @stalled_responses_requiring_note ||= all_responses.select do |response|
+        response[:requires_note]
+      end.map{|m| m[:reason]}.uniq
     end
 
     def to_param

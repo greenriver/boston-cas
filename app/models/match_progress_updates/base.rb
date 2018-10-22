@@ -65,32 +65,32 @@ module MatchProgressUpdates
       raise 'Abstract method'
     end
 
-    def other_response
-      'Other (note required)'
-    end
+    # def other_response
+    #   'Other (note required)'
+    # end
 
-    def still_active_responses
-      [
-        'Client searching for unit',
-        'Client has submitted request for tenancy',
-        'Client is waiting for project/sponsor based unit to become available',
-        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
-        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
-        'Client has submitted Reasonable Accommodation',
-        other_response,
-      ]
-    end
+    # def still_active_responses
+    #   [
+    #     'Client searching for unit',
+    #     'Client has submitted request for tenancy',
+    #     'Client is waiting for project/sponsor based unit to become available',
+    #     "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
+    #     "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
+    #     'Client has submitted Reasonable Accommodation',
+    #     other_response,
+    #   ]
+    # end
 
-    def no_longer_active_responses
-      [
-        'Client disappeared',
-        'Client incarcerated',
-        'Client in medical institution',
-        'Client declining services',
-        "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} unable to contact client",
-        other_response,
-      ]
-    end
+    # def no_longer_active_responses
+    #   [
+    #     'Client disappeared',
+    #     'Client incarcerated',
+    #     'Client in medical institution',
+    #     'Client declining services',
+    #     "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} unable to contact client",
+    #     other_response,
+    #   ]
+    # end
 
     def submit!
       @submitting = true
@@ -132,9 +132,13 @@ module MatchProgressUpdates
     end
 
     def note_required_if_other!
-      if response.present? && response.include?(other_response) && note.strip.blank?
-        errors.add :note, "must be filled in if choosing 'Other'"
+      if response.present? && response_requires_note? && note.strip.blank?
+        errors.add :note, "must be filled in for some options"
       end
+    end
+
+    def response_requires_note?
+      (response.split(';').map(&:strip) & MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator.new.stalled_responses_requiring_note).any?
     end
 
     def self.contacts_for_stalled_matches
