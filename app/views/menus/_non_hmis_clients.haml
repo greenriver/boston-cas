@@ -1,0 +1,7 @@
+%ul.nav.nav-tabs
+  -if can_enter_deidentified_clients?
+    %li.nav-item{role: "presentation", class: ('active' if current_page?(deidentified_clients_path))}
+      = link_to 'Deidentified Clients', deidentified_clients_path, class: 'nav-link'
+  -if can_enter_identified_clients?
+    %li.nav-item{role: "presentation", class: ('active' if current_page?(identified_clients_path))}
+      = link_to 'Identified Clients', identified_clients_path, class: 'nav-link'

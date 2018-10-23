@@ -124,9 +124,8 @@ Rails.application.routes.draw do
     get :cache_status
   end
 
-  resources :deidentified_clients, only: [:index, :new, :create, :edit, :update, :destroy]
-  resources :identified_clients, only: [:new, :create, :edit, :update]
-
+  resources :deidentified_clients
+  resources :identified_clients
   resources :messages, only: [:show, :index] do
     collection do
       get :poll

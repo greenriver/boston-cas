@@ -1,15 +1,13 @@
 class IdentifiedClientsController < DeidentifiedClientsController
-  before_action :require_can_enter_deidentified_clients!
-  before_action :require_can_manage_deidentified_clients!, only: [:edit, :update, :destroy]
+  skip_before_action :require_can_enter_deidentified_clients!
+  skip_before_action :require_can_manage_deidentified_clients!
+  before_action :require_can_enter_identified_clients!
+  before_action :require_can_manage_identified_clients!, only: [:edit, :update, :destroy]
   before_action :load_deidentified_client, only: [:edit, :update]
 
   def create
     @deidentified_client = deidentified_client_source.create(clean_params(identified_client_params))
-    respond_with(@deidentified_client, location: deidentified_clients_path)
-  end
-
-  def new
-    @deidentified_client = deidentified_client_source.new
+    respond_with(@deidentified_client, location: identified_clients_path)
   end
 
   def edit
@@ -17,7 +15,7 @@ class IdentifiedClientsController < DeidentifiedClientsController
 
   def update
     @deidentified_client.update(clean_params(identified_client_params))
-    respond_with(@deidentified_client, location: deidentified_clients_path)
+    respond_with(@deidentified_client, location: identified_clients_path)
   end
 
   def clean_params dirty_params
@@ -27,6 +25,11 @@ class IdentifiedClientsController < DeidentifiedClientsController
   end
 
   private
+
+    def deidentified_client_source
+      DeidentifiedClient.identified.visible_to(current_user)
+    end
+
     def identified_client_params
       params.require(:deidentified_client).permit(
         :client_identifier,
@@ -44,6 +47,10 @@ class IdentifiedClientsController < DeidentifiedClientsController
         :income_maximization_assistance_requested,
         :pending_subsidized_housing_placement,
         :full_release_on_file,
+        :requires_wheelchair_accessibility,
+        :required_number_of_bedrooms,
+        :required_minimum_occupancy,
+        :requires_elevator_access,
         :active_cohort_ids => [],
       ).merge(identified: true)
     end

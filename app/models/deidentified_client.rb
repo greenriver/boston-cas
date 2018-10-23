@@ -11,9 +11,23 @@ class DeidentifiedClient < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  # TODO
   scope :visible_to, -> (user) do
-    all
+    if user.can_edit_all_clients?
+      all
+    else
+      where(
+        arel_table[:agency].eq(nil).
+        or(arel_table[:agency].eq(user.agency))
+      )
+    end
+  end
+
+  scope :identified, -> do
+    where(identified: true)
+  end
+
+  scope :deidentified, -> do
+    where(identified: false)
   end
 
   def involved_in_match?
@@ -37,6 +51,12 @@ class DeidentifiedClient < ActiveRecord::Base
     project_client.rrh_desired = rrh_desired
     project_client.youth_rrh_desired = youth_rrh_desired
     project_client.rrh_assessment_contact_info = rrh_assessment_contact_info if income_maximization_assistance_requested
+
+    project_client.required_number_of_bedrooms = required_number_of_bedrooms
+    project_client.required_minimum_occupancy = required_minimum_occupancy
+    project_client.requires_wheelchair_accessibility = requires_wheelchair_accessibility
+    project_client.requires_elevator_access = requires_elevator_access
+
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
 
     project_client.sync_with_cas = true
