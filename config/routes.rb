@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     post 'restore', on: :member
   end
   resources :services, except: :show
-  resources :funding_sources, only: [:index, :edit, :update]
+  resources :funding_sources
 
   # concern that we can drop in at top level too
   # matches and their stuff can either be accessed directly if the user is logged in

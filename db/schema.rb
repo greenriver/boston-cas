@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181024180401) do
+ActiveRecord::Schema.define(version: 20181024232716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -291,6 +291,7 @@ ActiveRecord::Schema.define(version: 20181024180401) do
     t.integer  "required_number_of_bedrooms",              default: 1
     t.integer  "required_minimum_occupancy",               default: 1
     t.boolean  "requires_elevator_access",                 default: false, null: false
+    t.boolean  "family_member",                            default: false, null: false
   end
 
   add_index "deidentified_clients", ["deleted_at"], name: "index_deidentified_clients_on_deleted_at", using: :btree

@@ -49,6 +49,7 @@ class DeidentifiedClientsController < ApplicationController
         :rrh_assessment_contact_info,
         :income_maximization_assistance_requested,
         :pending_subsidized_housing_placement,
+        :family_member,
         :active_cohort_ids => [],
       ).merge(identified: false)
     end

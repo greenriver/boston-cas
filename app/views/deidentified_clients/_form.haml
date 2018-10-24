@@ -11,6 +11,7 @@
       - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
       = f.input :veteran
+      = f.input :family_member, label: _('Part of a family')
       = f.input :rrh_desired, label: 'Interested in RRH'
       = f.input :youth_rrh_desired, label: 'Interested in Youth RRH'
       = f.input :income_maximization_assistance_requested

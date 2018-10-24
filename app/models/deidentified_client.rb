@@ -56,6 +56,7 @@ class DeidentifiedClient < ActiveRecord::Base
     project_client.required_minimum_occupancy = required_minimum_occupancy
     project_client.requires_wheelchair_accessibility = requires_wheelchair_accessibility
     project_client.requires_elevator_access = requires_elevator_access
+    project_client.family_member = family_member
 
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
 

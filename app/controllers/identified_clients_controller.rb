@@ -51,6 +51,7 @@ class IdentifiedClientsController < DeidentifiedClientsController
         :required_number_of_bedrooms,
         :required_minimum_occupancy,
         :requires_elevator_access,
+        :family_member,
         :active_cohort_ids => [],
       ).merge(identified: true)
     end
