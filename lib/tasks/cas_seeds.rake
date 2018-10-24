@@ -96,6 +96,11 @@ namespace :cas_seeds do
     end
   end
 
+  desc 'Create stalled reasons'
+  task stalled_reasons: [:environment, "log:info_to_stdout"] do
+    StalledResponse.ensure_all
+  end
+
   # These have been disabled because they create fake data for development mode
   # we could potentially bring them back as part of a dev-mode only script
 
