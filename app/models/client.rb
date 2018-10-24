@@ -40,7 +40,7 @@ class Client < ActiveRecord::Base
   scope :not_parked, -> do
     where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
   end
-  scope :available_for_matching, -> (match_route )  {
+  scope :available_for_matching, -> (match_route)  {
     # anyone who hasn't been matched fully, isn't parked and isn't active in another match
     available.available_as_candidate(match_route).
     not_parked.
@@ -230,7 +230,7 @@ class Client < ActiveRecord::Base
 
   def cohorts
     return [] unless Warehouse::Base.enabled?
-    Warehouse::Cohort.where(id: active_cohort_ids)
+    Warehouse::Cohort.visible_in_cas.where(id: active_cohort_ids)
   end
 
   def prioritized_matches
@@ -255,7 +255,10 @@ class Client < ActiveRecord::Base
   end
 
   def available_as_candidate_for_any_route?
-    ! UnavailableAsCandidateFor.where(client_id: id).exists?
+    (
+      MatchRoutes::Base.available.pluck(:type) - 
+      UnavailableAsCandidateFor.where(client_id: id).distinct.pluck(:match_route_type)
+    ).any?
   end
 
   def make_available_in match_route:
