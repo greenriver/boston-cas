@@ -125,7 +125,7 @@ module MatchDecisions
       @stalled_responses_requiring_note ||= StalledResponse.active.alphabetical.
         requiring_note.
         distinct.
-        pluck(:response)
+        pluck(:reason)
     end
 
     def to_param
