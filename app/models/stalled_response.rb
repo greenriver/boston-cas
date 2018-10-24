@@ -2,8 +2,8 @@ class StalledResponse < ActiveRecord::Base
   include ActionView::Helpers
   include ActionView::Context
 
-  scope :alphabetical, -> do
-    order(reason: :asc)
+  scope :ordered, -> do
+    order(weight: :asc, reason: :asc)
   end
 
   scope :active, -> do
@@ -72,12 +72,6 @@ class StalledResponse < ActiveRecord::Base
         },
         {
           client_engaging: true, 
-          reason: 'Client searching for unit - Mobile voucher only',
-          steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
-          requires_note: false,
-        },
-        {
-          client_engaging: true, 
           reason: 'Client has submitted a Request for Tenancy - Mobile voucher only',
           steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
           requires_note: false,
@@ -96,13 +90,13 @@ class StalledResponse < ActiveRecord::Base
         },
         {
           client_engaging: true, 
-          reason: 'Client is frequently engaging in housing search',
+          reason: 'Client is frequently engaging in housing search - Mobile voucher only',
           steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
           requires_note: true,
         },
         {
           client_engaging: true, 
-          reason: 'Client is infrequently engaging in housing search',
+          reason: 'Client is infrequently engaging in housing search - Mobile voucher only',
           steps: ['MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator'], # 5
           requires_note: true,
         },
@@ -115,6 +109,7 @@ class StalledResponse < ActiveRecord::Base
           'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
           ], # 3,4,5
           requires_note: true,
+          weight: 100,
         },
         {
           client_engaging: false, 
@@ -205,6 +200,7 @@ class StalledResponse < ActiveRecord::Base
           'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
           ], # 3,4,5
           requires_note: true,
+          weight: 100,
         },
       ]      
     end

@@ -107,7 +107,7 @@ module MatchDecisions
     end
 
     def still_active_responses
-      @still_active_responses ||= StalledResponse.active.alphabetical.
+      @still_active_responses ||= StalledResponse.active.ordered.
         engaging.
         for_decision(self.class.name).
         distinct.
@@ -115,14 +115,14 @@ module MatchDecisions
     end
 
     def no_longer_active_responses
-      @no_longer_active_responses ||= StalledResponse.active.alphabetical.
+      @no_longer_active_responses ||= StalledResponse.active.ordered.
         not_engaging.for_decision(self.class.name).
         distinct.
         map(&:format_for_checkboxes)
     end
       
     def stalled_responses_requiring_note
-      @stalled_responses_requiring_note ||= StalledResponse.active.alphabetical.
+      @stalled_responses_requiring_note ||= StalledResponse.active.ordered.
         requiring_note.
         distinct.
         pluck(:reason)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181024123259) do
+ActiveRecord::Schema.define(version: 20181024180401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -905,6 +905,7 @@ ActiveRecord::Schema.define(version: 20181024123259) do
     t.string  "decision_type",                   null: false
     t.boolean "requires_note",   default: false, null: false
     t.boolean "active",          default: true,  null: false
+    t.integer "weight",          default: 0,     null: false
   end
 
   create_table "sub_programs", force: :cascade do |t|
