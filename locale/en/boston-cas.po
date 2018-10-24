@@ -32,6 +32,9 @@ msgstr ""
 msgid "Boston Coordinated Access System"
 msgstr ""
 
+msgid "Boston's Coordinated Access System"
+msgstr ""
+
 msgid "Boston's Way Home"
 msgstr ""
 
@@ -122,6 +125,9 @@ msgstr ""
 msgid "Limited CAS Release"
 msgstr ""
 
+msgid "Match status update"
+msgstr ""
+
 msgid "Meth Production Conviction"
 msgstr ""
 
@@ -141,6 +147,12 @@ msgid "Qualified Opportunities"
 msgstr ""
 
 msgid "Release of information"
+msgstr ""
+
+msgid "Requires ground floor unit or elevator access"
+msgstr ""
+
+msgid "Requires wheelchair accessible unit"
 msgstr ""
 
 msgid "SSP"
