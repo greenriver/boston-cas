@@ -2,6 +2,7 @@ class DeidentifiedClientsController < ApplicationController
   before_action :require_can_enter_deidentified_clients!
   before_action :require_can_manage_deidentified_clients!, only: [:edit, :update, :destroy]
   before_action :load_deidentified_client, only: [:edit, :update, :destroy]
+  before_action :load_agencies, only: [:new, :edit]
 
   def index
     @deidentified_clients = deidentified_client_source.order(agency: :asc, last_name: :asc, first_name: :asc).page(params[:page]).per(25)
@@ -13,7 +14,7 @@ class DeidentifiedClientsController < ApplicationController
   end
 
   def new
-    @deidentified_client = deidentified_client_source.new
+    @deidentified_client = deidentified_client_source.new(agency: current_user.agency)
   end
 
   def edit
@@ -30,7 +31,7 @@ class DeidentifiedClientsController < ApplicationController
   end
 
   def deidentified_client_source
-    DeidentifiedClient.visible_to(current_user)
+    DeidentifiedClient.deidentified.visible_to(current_user)
   end
 
   private
@@ -48,6 +49,7 @@ class DeidentifiedClientsController < ApplicationController
         :rrh_assessment_contact_info,
         :income_maximization_assistance_requested,
         :pending_subsidized_housing_placement,
+        :family_member,
         :active_cohort_ids => [],
       ).merge(identified: false)
     end
@@ -66,5 +68,9 @@ class DeidentifiedClientsController < ApplicationController
 
     def load_deidentified_client
       @deidentified_client = deidentified_client_source.find params[:id].to_i
+    end
+
+    def load_agencies
+      @available_agencies = User.distinct.pluck(:agency).compact
     end
 end

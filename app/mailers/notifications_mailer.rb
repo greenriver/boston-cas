@@ -226,9 +226,10 @@ class NotificationsMailer < DatabaseMailer
   # End Provider Only
 
   # Progress Updates
-  def progress_update_requested notification
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "Match Progress Update Requested - Requires Your Action")
+  def progress_update_requested notification_ids
+    @notifications = ::Notifications::Base.where(id: notification_ids)
+    @contact = @notifications.first.recipient
+    mail(to: @contact.email, subject: "Match Progress Updates Requested - Requires Your Action")
   end
 
   def progress_update_submitted notification
@@ -236,11 +237,17 @@ class NotificationsMailer < DatabaseMailer
     mail(to: @contact.email, subject: "Match Progress Update Submitted")
   end
 
-  def dnd_progress_update_late notification, contact, matches
-    @notification = notification
-    @matches = matches
-    @contact = contact
+  def dnd_progress_update_late notification_ids
+    @notifications = ::Notifications::Base.where(id: notification_ids)
+    @contact = @notifications.first.recipient
     mail(to: @contact.email, subject: "Match Progress Late")
+  end
+
+  # Notes
+  def note_sent notification, note
+    setup_instance_variables notification
+    @note = note
+    mail(to: @contact.email, subject: "Note from CAS - Requires Your Action")
   end
 
 end

@@ -1,19 +1,58 @@
-- status_update = @match.status_updates.incomplete_for_contact(contact_id: access_context.current_contact.id).first
-.row
-  .col-sm-12
-    .match-status-update
-      %p 
-        = "This match has been stalled since #{@match.current_decision.updated_at.to_date}.  Please provide an update to the status of the match."
-      = simple_form_for status_update, as: :match_progress_updates, url: match_progress_update_path(match_id: @match.id, notification_id: params[:notification_id]) do |f|
-        = f.input :working_with_client, as: :radio_buttons, collection: {'Client is engaging with housing services': 'jStillWorking', 'Client is not engaging with housing services': 'jNoLongerWorking'}, label: 'Is the client engaging with housing services?',  wrapper_class: 'jSectionToggle', wrapper_html: {data: {target: 'jWorkingWithClient'}}
-        .jStillWorking.jNoLongerWorking.jWorkingWithClient
-          .row
-            .col-sm-4
+%section.o-section.mt-6
+  %header
+    .o-section__title
+      %h2 Match Stalled
+  .match-decision.c-card.c-card--flush.card--block
+    .c-card__content
+      .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: {toggle: :buttons}}
+        - this_one = params[:working_with_client] == 'jStillWorking' || params[:working_with_client].blank?
+        %label.btn.btn-light{class: this_one ? 'active' : ''}
+          %input{type: :radio, name: :working_with_client, autocomplete: :off, checked: :checked, value: 'jStillWorking'}
+            Client is engaging
+            %br.d-sm-none
+            with housing services
+        - this_one = params[:working_with_client] == 'jNoLongerWorking'
+        %label.btn.btn-light{class: this_one ? 'active' : ''}
+          %input{type: :radio, name: :working_with_client, autocomplete: :off, value: 'jNoLongerWorking', checked: this_one}
+            Client is not engaging
+            %br.d-sm-none
+            with housing services
+
+      .o-choose.o-choose--flush
+        .o-choose__choice.jNoLongerWorkingContent
+          .o-choose__content
+            = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
+              -# preserve the notification id if present
+              %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
               = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
-        .jStillWorking.jWorkingWithClient
-          = f.input :response, collection: status_update.still_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
-        .jNoLongerWorking.jWorkingWithClient
-          = f.input :response, collection: status_update.no_longer_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
-        .jStillWorking.jNoLongerWorking.jWorkingWithClient
-          = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
-        = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
+              = f.input :response, collection: @decision.still_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
+              = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
+
+              = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
+        .o-choose__choice.jStillWorkingContent.d-none
+          .o-choose__content
+            = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
+              -# preserve the notification id if present
+              %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
+              = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
+              = f.input :response, collection: @decision.no_longer_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
+              = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
+
+              = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
+
+
+
+= content_for :page_js do
+  :javascript
+    $('.jActionToggle input').on('change', function() {
+      var value = $(this).val()
+      var noLongerWorking = 'addClass'
+      var stillWorking = 'removeClass'
+      if (value == 'jStillWorking') {
+        noLongerWorking = 'removeClass'
+        stillWorking = 'addClass'
+      }
+      $('.jNoLongerWorkingContent')[noLongerWorking]('d-none')
+      $('.jStillWorkingContent')[stillWorking]('d-none')
+    });
+    $('.jActionToggle input[name=working_with_client]:checked').trigger('change');

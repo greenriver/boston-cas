@@ -1,20 +1,20 @@
 module MatchDecisions
   class ConfirmShelterAgencyDeclineDndStaff < Base
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        decline_overridden: 'Decline Overridden', 
+        pending: 'Pending',
+        decline_overridden: 'Decline Overridden',
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
       }
     end
-    
+
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('DND')} to confirm match success"
@@ -36,7 +36,7 @@ module MatchDecisions
     def contact_actor_type
       nil
     end
-    
+
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
@@ -46,6 +46,7 @@ module MatchDecisions
     end
 
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
     end
@@ -55,7 +56,7 @@ module MatchDecisions
         m << Notifications::ConfirmShelterAgencyDeclineDndStaff
       end
     end
-    
+
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
@@ -74,7 +75,7 @@ module MatchDecisions
         match.match_recommendation_shelter_agency_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
-      
+
       def decline_confirmed
         Notifications::ShelterAgencyDeclineAccepted.create_for_match! match
         match.rejected!
@@ -86,8 +87,8 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
-    
+
   end
-  
+
 end
 

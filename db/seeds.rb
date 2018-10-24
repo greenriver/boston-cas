@@ -114,3 +114,5 @@ end
 ].each do |name|
   FundingSource.where(name: name).first_or_create!(name: name)
 end
+
+StalledResponse.ensure_all

@@ -63,16 +63,19 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
   scope :stalled, -> do
-    ids = Set.new
-    MatchRoutes::Base.all_routes.each do |route|
-      # instantiate the route
-      route = route.first
-      stall_date = route.stalled_interval.days.ago
-      ids += active.on_route(route).joins(:decisions).merge(
-        MatchDecisions::Base.awaiting_action.last_updated_before(stall_date)
-      ).distinct.pluck(:id)
-    end
-    where(id: ids.to_a)
+    active.where(arel_table[:stall_date].lteq(Date.today))
+  end
+  scope :stalled_notifications_unsent, -> do
+    stalled.where(stall_contacts_notified: nil)
+  end
+  scope :stalled_notifications_sent, -> do
+    stalled.where.not(stall_contacts_notified: nil)
+  end
+  scope :stalled_dnd_notifications_unsent, -> do
+    dnd_interval = Config.get(:dnd_interval).days
+    stalled_notifications_sent.
+      where(arel_table[:stall_contacts_notified].lteq(dnd_interval.ago)).
+      where(dnd_notified: nil)
   end
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
@@ -158,6 +161,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     class_name: MatchEvents::Note.name,
     foreign_key: :match_id
 
+  # Preserved so that history of old mechanism works
   has_many :status_updates,
     class_name: MatchProgressUpdates::Base.name,
     foreign_key: :match_id
@@ -273,7 +277,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   # returns the most recent decision
   def current_decision
     unless closed?
-      initialized_decisions.order(created_at: :desc).first
+      initialized_decisions.order(id: :desc).limit(1).first
     end
   end
 
@@ -360,10 +364,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def match_contacts
     @match_contacts ||= MatchContacts.new match: self
-  end
-
-  def progress_update_contact_ids
-    match_contacts&.progress_update_contact_ids
   end
 
 
@@ -533,65 +533,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
       program.do_contacts.each do |contact|
         assign_match_role_to_contact :do, contact
       end
-    end
-
-    def self.delinquent_match_ids
-      columns = [:contact_id, :match_id, :requested_at, :submitted_at]
-      updates = MatchProgressUpdates::Base.joins(:contact).
-        where(match_id: self.stalled.select(:id)).
-        pluck(*columns).map do |row|
-          Hash[columns.zip(row)]
-        end.group_by do |row|
-          row[:match_id]
-        end
-
-      updates.map do |match_id, update_requests|
-        delinquent = Set.new
-        requests_by_contact = update_requests.group_by do |row|
-          row[:contact_id]
-        end
-        requests_by_contact.each do |contact_id, contact_requests|
-          contact_requests.each do |row|
-            if row[:submitted_at].blank? && row[:requested_at].present? && row[:requested_at] <= Date.today
-              delinquent << contact_id
-            end
-          end
-        end
-        # if every contact is delinquent, show the match
-        if delinquent.size == requests_by_contact.size
-          match_id
-        else
-          nil
-        end
-      end.compact
-    end
-
-    def self.at_least_one_response_in_current_iteration_ids
-      columns = [:contact_id, :match_id, :requested_at, :submitted_at]
-      updates = MatchProgressUpdates::Base.joins(:contact).
-        where(match_id: self.stalled.select(:id)).
-        order(requested_at: :asc).
-        pluck(*columns).map do |row|
-          Hash[columns.zip(row)]
-        end.group_by do |row|
-          row[:match_id]
-        end
-
-      updates.map do |match_id, update_requests|
-        submitted_most_recent = false
-        requests_by_contact = update_requests.group_by do |row|
-          row[:contact_id]
-        end.each do |contact_id, contact_requests|
-          if contact_requests.last[:submitted_at].present?
-            submitted_most_recent = true
-          end
-        end
-        if submitted_most_recent
-          match_id
-        else
-          nil
-        end
-      end.compact
     end
 
     def self.sort_options

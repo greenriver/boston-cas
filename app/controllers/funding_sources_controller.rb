@@ -19,28 +19,37 @@ class FundingSourcesController < ApplicationController
   
   def edit
   end
+
+  def new
+    @funding_source = funding_source_source.new
+  end
   
+  def create
+    @funding_source = funding_source_source.create(funding_source_params)
+    respond_with(@funding_source, location: funding_sources_path)
+  end
+
   def update
-    if @funding_source.update funding_source_params
-      flash[:notice] = "Funding Source saved"
-      redirect_to action: :index
-    else
-      flash[:alert] = 'Please correct the errors below'
-      render :edit
-    end
+    @funding_source.update funding_source_params
+    respond_with(@funding_source, location: funding_sources_path)
   end
   
   private
     def funding_source_scope
-      FundingSource.all
+      funding_source_source.all
     end
 
     def find_funding_source
-      @funding_source = FundingSource.find params[:id]
+      @funding_source = funding_source_source.find params[:id]
+    end
+
+    def funding_source_source
+      FundingSource
     end
     
     def funding_source_params
       params.require(:funding_source).permit(
+        :name,
         service_ids: [],
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )

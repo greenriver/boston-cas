@@ -46,10 +46,6 @@ module MatchDecisions
       class_name: MatchEvents::DecisionAction.name,
       foreign_key: :decision_id
 
-    has_many :status_updates,
-      class_name: MatchProgressUpdates::Base.name,
-      foreign_key: :decision_id
-
     validate :ensure_status_allowed, if: :status
     validate :cancellations, if: :administrative_cancel_reason_id
 
@@ -76,6 +72,60 @@ module MatchDecisions
 
     def expires?
       false
+    end
+
+    def stallable?
+      false
+    end
+
+    def stalled_after
+      match_route.stalled_interval.days
+    end
+
+    def stalled_contact_types
+      []
+    end
+
+    def stalled_decision_contacts
+      stalled_contact_types.map do |contact_method|
+        match.public_send(contact_method)
+      end.flatten.compact
+    end
+
+    def set_stall_date
+      stall_on = if stallable?
+        Date.today + stalled_after
+      else
+        nil
+      end
+
+      match.update(
+        stall_date: stall_on,
+        stall_contacts_notified: nil,
+        dnd_notified: nil,
+      )
+    end
+
+    def still_active_responses
+      @still_active_responses ||= StalledResponse.active.ordered.
+        engaging.
+        for_decision(self.class.name).
+        distinct.
+        map(&:format_for_checkboxes)
+    end
+
+    def no_longer_active_responses
+      @no_longer_active_responses ||= StalledResponse.active.ordered.
+        not_engaging.for_decision(self.class.name).
+        distinct.
+        map(&:format_for_checkboxes)
+    end
+      
+    def stalled_responses_requiring_note
+      @stalled_responses_requiring_note ||= StalledResponse.active.ordered.
+        requiring_note.
+        distinct.
+        pluck(:reason)
     end
 
     def to_param
@@ -105,8 +155,10 @@ module MatchDecisions
     # This method is meant to be called when a decision becomes active
     # do things like set the initial "pending" status and
     # send notifications
-    def initialize_decison! send_notifications: true
-      # no-op override in subclass
+    # All sub-class overrides should call this first
+    def initialize_decision! send_notifications: true
+      # always reset the stall date when the match moves into a new step
+      set_stall_date()
     end
 
     def uninitialize_decision! send_notifications: false
@@ -277,11 +329,6 @@ module MatchDecisions
       return :active if editable?
       return :incomplete if status == :pending || status.blank?
       :done
-    end
-
-    # Override in sub classes
-    def request_update_for_contact? contact
-      false
     end
 
     private

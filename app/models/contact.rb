@@ -1,4 +1,6 @@
 class Contact < ActiveRecord::Base
+  acts_as_paranoid
+  has_paper_trail
 
   belongs_to :user, required: false
   delegate :can_view_all_clients?, :can_edit_match_contacts?, :can_view_all_matches?, :can_reject_matches?, :can_approve_matches?, :can_reject_matches?, :can_act_on_behalf_of_match_contacts?, to: :user, allow_nil: true, prefix: true
@@ -17,11 +19,9 @@ class Contact < ActiveRecord::Base
   has_many :subgrantees, through: :subgrantee_contacts
 
   has_many :events, class_name: MatchEvents::Base.name, inverse_of: :contact
-  has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
   has_many :messages
-
-  acts_as_paranoid
-  has_paper_trail
+  # for backwards compatibility on match history
+  has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
 
   def full_name
     [first_name, last_name].compact.join " "
@@ -49,5 +49,5 @@ class Contact < ActiveRecord::Base
       .or(arel_table[:role].matches(query))
     )
   end
-  
+
 end

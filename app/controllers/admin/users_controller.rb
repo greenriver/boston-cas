@@ -71,6 +71,7 @@ module Admin
           :last_name,
           :email,
           :receive_initial_notification,
+          :agency,
           role_ids: [],
           contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role]
         )

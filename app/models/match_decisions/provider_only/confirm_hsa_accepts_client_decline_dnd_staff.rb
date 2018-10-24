@@ -1,20 +1,20 @@
 module MatchDecisions::ProviderOnly
   class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-    
+
     def statuses
       {
-        pending: 'Pending', 
-        decline_overridden: 'Decline Overridden', 
+        pending: 'Pending',
+        decline_overridden: 'Decline Overridden',
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
        }
     end
-    
+
     def label
       label_for_status status
     end
-    
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('DND')} to confirm match success"
@@ -36,7 +36,7 @@ module MatchDecisions::ProviderOnly
     def contact_actor_type
       nil
     end
-    
+
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
@@ -46,10 +46,11 @@ module MatchDecisions::ProviderOnly
     end
 
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
     end
-    
+
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ProviderOnly::ConfirmHsaDeclineDndStaff
@@ -63,7 +64,7 @@ module MatchDecisions::ProviderOnly
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
-    
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -77,7 +78,7 @@ module MatchDecisions::ProviderOnly
         match.hsa_accepts_client_decision.initialize_decision!
         @decision.uninitialize_decision!(send_notifications: false)
       end
-      
+
       def decline_confirmed
         match.rejected!
         # TODO maybe rerun the matching engine for that vacancy and client
@@ -89,8 +90,8 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
-    
+
   end
-  
+
 end
 

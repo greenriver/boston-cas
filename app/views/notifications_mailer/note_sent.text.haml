@@ -1,0 +1,12 @@
+Hello #{@contact.full_name},
+\
+The following note was sent to you via #{_('Boston\'s Coordinated Access System')}.
+\
+Note:
+#{simple_format @note}
+\
+Details:
+#{notification_match_url @notification, @match}
+\
+\
+= render 'email_footer'

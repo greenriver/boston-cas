@@ -5,13 +5,14 @@ RSpec.describe MatchDecisions::Base, type: :model do
     MatchRoutes::Base.ensure_all
     MatchPrioritization::Base.ensure_all
     let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
-    let(:route) { 
-      r = MatchRoutes::Default.first 
-      r.update(match_prioritization_id: priority.id, stalled_interval: 7)
+    let(:route) {
+      r = MatchRoutes::Default.first
+      r.update(match_prioritization_id: priority.id, stalled_interval: 30)
       r
       }
-    let(:dnd_decision) { create :match_decisions_match_recommendation_dnd_staff }
-    let(:hsa_decision) { create :match_decisions_match_recommendation_hsa_housing_date }
+    let!(:the_match) { create :client_opportunity_match, active: true }
+    let(:a_dnd_decision) { create :match_decisions_match_recommendation_dnd_staff }
+
     let(:users) { create_list :user, 10 }
     let(:dnd_user) { users[0] }
     let(:hsa_user) { users[1] }
@@ -20,107 +21,75 @@ RSpec.describe MatchDecisions::Base, type: :model do
     let(:hsp_user) { users[3] }
     let(:ssp_user) { users[4] }
 
-    before(:each) do 
-      match = dnd_decision.match
-      hsa_decision.match = match
-      program = dnd_decision.program
+    before(:each) do
+      program = a_dnd_decision.program
       program.match_route = route
-      match.dnd_staff_contacts << dnd_user.contact
-      match.housing_subsidy_admin_contacts << hsa_user.contact
-      match.shelter_agency_contacts << shelter_user.contact
-      match.shelter_agency_contacts << shelter_user2.contact
-      match.hsp_contacts << hsp_user.contact
-      match.ssp_contacts << ssp_user.contact
+
+      the_match.dnd_staff_contacts << dnd_user.contact
+      the_match.housing_subsidy_admin_contacts << hsa_user.contact
+      the_match.shelter_agency_contacts << shelter_user.contact
+      the_match.shelter_agency_contacts << shelter_user2.contact
+      the_match.hsp_contacts << hsp_user.contact
+      the_match.ssp_contacts << ssp_user.contact
+
+      the_match.activate!
     end
-    it 'there are no match progress update request initially' do
-      expect(MatchProgressUpdates::Base.count).to be 0
+    it 'there are no stalled matches initially' do
+      expect(ClientOpportunityMatch.stalled.count).to be 0
     end
     describe 'when accepted' do
       let(:stalled_interval) { route.stalled_interval }
       before(:each) do
+        dnd_decision = the_match.current_decision
         dnd_decision.update(status: :accepted)
         dnd_decision.run_status_callback!
-        hsa_decision.update(status: :pending)
       end
-      it 'sets up progress updates for HSP' do
-        expect(MatchProgressUpdates::Hsp.pluck(:contact_id).sort).to eq [hsp_user.contact.id].sort
+      it 'the current decision should be the shelter decision' do
+        expect(the_match.current_decision.class.name).to eq 'MatchDecisions::MatchRecommendationShelterAgency'
       end
-      it 'sets up progress updates for SSP' do
-        expect(MatchProgressUpdates::Ssp.pluck(:contact_id).sort).to eq [ssp_user.contact.id].sort
+      it 'the match still doesn\'t have a stall date' do
+        expect(the_match.stall_date).to be nil
       end
-      it 'sets up progress updates for Shelter Agency' do
-        expect(MatchProgressUpdates::ShelterAgency.pluck(:contact_id).sort).to eq [shelter_user.contact.id, shelter_user2.contact.id].sort
-      end
-      it 'does not expect any responses immediately' do
-        expect(MatchProgressUpdates::Base.outstanding_contacts_for_stalled_matches.size).to be 0
-      end
-      it "does not expect any responses before one stalled interval has passed" do 
-        Timecop.travel(Date.today + stalled_interval - 1) do 
-          expect(MatchProgressUpdates::Base.outstanding_contacts_for_stalled_matches.size).to be 0
+      describe 'when shelter agency accepts' do
+        before(:each) do
+          shelter_decision = the_match.current_decision
+          shelter_decision.update(status: :accepted)
+          shelter_decision.run_status_callback!
+        end
+        it 'the match should have a stall date in the future' do
+          expect(the_match.stall_date.present?).to be true
+        end
+        it 'the match gains a future stall date' do
+          expect(the_match.stall_date).to be > Date.today
+        end
+        it 'the match should not be stalled' do
+          expect(the_match.stalled?).to be false
+        end
+        it 'when time passes, the match becomes stalled' do
+          Timecop.travel(Date.today + stalled_interval + 1) do
+            expect(the_match.stalled?).to be true
+          end
+        end
+        describe 'when a stalled notice is submitted, the match un-stalls' do
+          before(:each) do
+            # This happens when the status update is submitted
+            the_match.current_decision.set_stall_date()
+          end
+          it 'the match should not be stalled' do
+            expect(the_match.stalled?).to be false
+          end
+        end
+        describe 'when a decision is updated, the match un-stalls' do
+          before(:each) do
+            the_decision = the_match.current_decision
+            the_decision.update(status: :scheduled)
+            the_decision.run_status_callback!
+          end
+          it 'the match should not be stalled' do
+            expect(the_match.stalled?).to be false
+          end
         end
       end
-      it "expect some responses after one stalled interval has passed" do 
-        Timecop.travel(Date.today + stalled_interval + 1) do 
-          MatchProgressUpdates::Base.send_notifications
-          contacts_for_stalled_matches_ids = MatchProgressUpdates::Base.outstanding_contacts_for_stalled_matches.map(&:first).uniq.sort
-          contact_ids = [
-            shelter_user.contact.id,
-            shelter_user2.contact.id,
-            hsp_user.contact.id,
-            ssp_user.contact.id,
-          ].uniq.sort
-          expect(contacts_for_stalled_matches_ids).to eq contact_ids
-        end
-      end
-
-      it "expect the same responses after three stalled intervals have passed" do 
-        Timecop.travel(Date.today + stalled_interval * 3) do 
-          MatchProgressUpdates::Base.send_notifications
-          contacts_for_stalled_matches_ids = MatchProgressUpdates::Base.outstanding_contacts_for_stalled_matches.map(&:first).uniq.sort
-          contact_ids = [
-            shelter_user.contact.id,
-            shelter_user2.contact.id,
-            hsp_user.contact.id,
-            ssp_user.contact.id,
-          ].uniq.sort
-          expect(contacts_for_stalled_matches_ids).to eq contact_ids
-        end
-      end
-
-      # TODO - this works in development, won't pass in test
-      # it "expect different responses after someone has submitted a response" do 
-      #   Timecop.travel(Date.today + stalled_interval + 1) do 
-      #     MatchProgressUpdates::Base.send_notifications
-
-      #     update = MatchProgressUpdates::ShelterAgency.incomplete_for_contact(contact_id: shelter_user.contact.id).
-      #       where(match_id: hsa_decision.match.id).first
-      #     update.response = 'Client disappeared'
-      #     update.client_last_seen = Date.yesterday
-      #     update.submitted_at = Time.now
-      #     update.submit!
-
-      #     contacts_for_stalled_matches_ids = MatchProgressUpdates::Base.incomplete.
-      #       outstanding_contacts_for_stalled_matches.map(&:first).uniq.sort
-      #     contact_ids = [
-      #       shelter_user2.contact.id,
-      #       hsp_user.contact.id,
-      #       ssp_user.contact.id,
-      #     ].uniq.sort
-      #     expect(contacts_for_stalled_matches_ids).to eq contact_ids
-      #   end
-      # end
-
-      # TODO 
-      #   Move forward after submitting one far enough that we should re-request it
-      #   verify that the re-request goes in and creates a second request
-      #   but only for the contact who previously submitted
-      #   
-      #   Submit all and verify it no longer requests updates
-      #   
-      #   Verify that appropriate notifications are created when sending notifications before and after a 
-      #   submission
-      #   
-      #   Do this all again on a the provider only route
     end
   end
 end

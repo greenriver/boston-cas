@@ -54,7 +54,12 @@
             %tbody
               - @users.each do |user|
                 %tr
-                  %td= user.name
+                  %td
+                    .user__name
+                      = user.name
+                    - if user.agency
+                      .user__agency
+                        %em.text-muted= user.agency
                   %td
                     = user.email
                   %td= user.roles_string

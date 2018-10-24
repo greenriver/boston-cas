@@ -60,7 +60,7 @@
             %dd
               = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
                 = match.opportunity_details.program_name
-    .client__details.flex-column.d-flex.justify-content-start.align-items-center.ml-auto
+    .client__details.flex-column.d-flex.justify-content-end.align-items-end.ml-auto
       = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
       - if  match_type != 'opportunity' && can_see_alternate_matches?
         = link_to opportunity_matches_path(match.opportunity) do
@@ -78,3 +78,14 @@
           .content
             This match expires on
             %strong= "#{match.shelter_expiration}."
+      - decision_stallable = match.current_decision && match.current_decision.stallable?
+      - if decision_stallable && match.stalled?
+        %p.o-section__note
+          %i.icon-warning
+          This match stalled on
+          %strong #{match.stall_date}
+      - elsif decision_stallable && match.stall_date.present?
+        %p.o-section__note
+          %i.icon-info
+          This match will be considered stalled on
+          %strong #{match.stall_date}.

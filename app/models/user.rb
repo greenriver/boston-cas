@@ -126,4 +126,7 @@ class User < ActiveRecord::Base
     true
   end
 
+  def can_see_non_hmis_clients?
+    can_enter_deidentified_clients? || can_manage_deidentified_clients? || can_enter_identified_clients? || can_manage_identified_clients?
+  end
 end

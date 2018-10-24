@@ -73,6 +73,7 @@ module MatchDecisions
     end
 
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
     end
@@ -91,12 +92,6 @@ module MatchDecisions
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.shelter_agency_contacts)
-    end
-
-    def request_update_for_contact? contact
-      # contact.in?(match.shelter_agency_contacts)
-      # No match update requests should be sent at this stage
-      false
     end
 
     private def note_present_if_status_declined

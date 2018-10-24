@@ -55,6 +55,7 @@ module MatchDecisions::ProviderOnly
     end
 
     def initialize_decision! send_notifications: true
+      super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
     end
@@ -72,12 +73,6 @@ module MatchDecisions::ProviderOnly
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
-    end
-
-    def request_update_for_contact? contact
-      contact.in?(match.housing_subsidy_admin_contacts) ||
-      contact.in?(match.ssp_contacts) ||
-      contact.in?(match.hsp_contacts)
     end
 
     private def decline_reason_scope
