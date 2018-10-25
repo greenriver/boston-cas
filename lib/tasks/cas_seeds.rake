@@ -80,7 +80,7 @@ namespace :cas_seeds do
         puts "A user with the email address #{email} already exists.  You can use the forgot my password option to set a password."
         return
       end
-      initial_password = Faker::Internet.password
+      initial_password = "#{Faker::Internet.password}#{Faker::Internet.password}"
       user = User.new
       user.email = email
       user.first_name = "Sample"
