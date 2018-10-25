@@ -1,6 +1,6 @@
-- if @match.current_decision.stallable? && @match.stalled?
+- if @match.current_decision&.stallable? && @match.stalled?
   = render 'matches/status_update'
-- elsif @match.current_decision.stallable?
+- elsif @match.current_decision&.stallable?
   %p.o-section__note.mb-2
     %i.icon-info
     This match will be considered stalled if it has not progressed by
