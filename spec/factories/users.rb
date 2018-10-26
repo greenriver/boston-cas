@@ -3,8 +3,8 @@ FactoryGirl.define do
     first_name 'User'
     last_name 'One'
     sequence(:email) {|n| "user_#{n}@example.com" } 
-    password 'abcd1234abcd'
-    password_confirmation 'abcd1234abcd'
+    password Digest::SHA256.hexdigest('abcd1234abcd')
+    password_confirmation Digest::SHA256.hexdigest('abcd1234abcd')
     email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
@@ -13,8 +13,8 @@ FactoryGirl.define do
     first_name 'User'
     last_name 'Two'
     email 'user_two@example.com'
-    password 'abcd1234abcd'
-    password_confirmation 'abcd1234abcd'
+    password Digest::SHA256.hexdigest('abcd1234abcd')
+    password_confirmation Digest::SHA256.hexdigest('abcd1234abcd')
     email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
@@ -23,8 +23,8 @@ FactoryGirl.define do
     first_name 'User'
     last_name 'Three'
     email 'user_three@example.com'
-    password 'abcd1234abcd'
-    password_confirmation 'abcd1234abcd'
+    password Digest::SHA256.hexdigest('abcd1234abcd')
+    password_confirmation Digest::SHA256.hexdigest('abcd1234abcd')
     email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
@@ -33,8 +33,8 @@ FactoryGirl.define do
     first_name 'User'
     last_name 'Four'
     email 'user_four@example.com'
-    password 'abcd1234abcd'
-    password_confirmation 'abcd1234abcd'
+    password Digest::SHA256.hexdigest('abcd1234abcd')
+    password_confirmation Digest::SHA256.hexdigest('abcd1234abcd')
     email_schedule 'immediate'
     confirmed_at Date.yesterday
     contact
