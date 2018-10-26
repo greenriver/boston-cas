@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :lockable, :timeoutable, :confirmable
+         :lockable, :timeoutable, :confirmable, :pwned_password
   #has_secure_password # not needed with devise
 
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update

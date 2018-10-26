@@ -56,6 +56,12 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def after_sign_in_path_for(resource)
+    # alert users if their password has been compromised
+    set_flash_message! :alert, :warn_pwned if resource.respond_to?(:pwned?) && resource.pwned?
+    super
+  end
+
   def current_contact
     @current_contact || current_user.try(:contact)
   end
