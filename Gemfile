@@ -7,6 +7,7 @@ gem 'composite_primary_keys', '~> 8.0'
 gem "rails"
 gem 'bcrypt'
 gem 'with_advisory_lock'
+gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 
 gem "haml-rails"
 gem "sass-rails"
