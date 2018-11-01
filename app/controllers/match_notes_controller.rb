@@ -19,7 +19,7 @@ class MatchNotesController < ApplicationController
     @match_note.assign_attributes mn_params
     @match_note.contact = current_contact
     if @match_note.save
-      if mn_params[:contact_ids].delete_if(&:blank?).present?
+      if mn_params[:contact_ids].present? && mn_params[:contact_ids].delete_if(&:blank?).present?
         mn_params[:contact_ids].delete_if(&:blank?).each do |contact_id|
           notification = Notifications::NoteSent.create_for_match! match_id: @match.id, contact_id: contact_id.to_i, note: @match_note.note
         end

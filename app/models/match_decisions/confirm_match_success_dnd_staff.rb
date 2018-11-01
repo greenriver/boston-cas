@@ -39,7 +39,7 @@ module MatchDecisions
       super && status !~ /confirmed|rejected/
     end
 
-    def initialize_decision!
+    def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'
       Notifications::ConfirmMatchSuccessDndStaff.create_for_match! match
