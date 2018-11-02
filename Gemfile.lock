@@ -79,7 +79,7 @@ GEM
       sass (>= 3.5.2)
     bootstrap3-datetimepicker-rails (4.17.42)
       momentjs-rails (>= 2.8.1)
-    brakeman (3.6.1)
+    brakeman (4.3.1)
     builder (3.2.3)
     byebug (9.0.6)
     capistrano (3.11.0)

@@ -49,6 +49,8 @@ class ClosedMatchesController < MatchListBaseController
 
     @current_step = params[:current_step]
     if @current_step.present? && ClientOpportunityMatch::CLOSED_REASONS.include?(@current_step)
+      # This throws a warning for brakeman, but is actually fine, since
+      # it references the CLOSED_REASONS whitelist
       @matches = @matches.public_send(@current_step)
     end
 

@@ -14,6 +14,7 @@ script:
   - createdb $DATABASE_WAREHOUSE_DB_TEST
   - bundle exec rake db:create
   - bundle exec rake db:schema:load
+  - bundle exec brakeman -q --ensure-latest
   - bundle exec rspec
 
 addons:
