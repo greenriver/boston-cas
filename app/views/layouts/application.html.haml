@@ -30,6 +30,8 @@
               - unless Rails.env.production?
                 %span.rails-env{style: 'font-size:12px;'}= "[#{Rails.env}]"
         .o-header--page__sub-title.tagline
+          - if Rails.env.development?
+            = branch_info
           = _('Ending Veteran & Chronic Homelessness in Boston')
         = render 'layouts/header_nav'
 
