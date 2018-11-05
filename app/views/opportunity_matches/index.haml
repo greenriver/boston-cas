@@ -1,0 +1,33 @@
+.row
+  .col-sm-9
+    %h1= @heading
+  - if can_view_client_confidentiality?
+    - if params[:confidential_override].present?
+      = link_to 'Hide Confidential Names', request.query_parameters.except(:confidential_override), class: 'btn btn-light ml-auto align-self-start'
+    - else
+      = link_to 'Show Confidential Names', request.query_parameters.merge({confidential_override: true}), class: 'btn btn-outline-danger ml-auto align-self-start '
+.row
+  - if params[:show_only_available].present?
+    Currently showing only clients who are available to be matched.
+    = link_to 'Show ALL Clients', request.query_parameters.except(:show_only_available), class: 'btn btn-light ml-auto align-self-start'
+  - else
+    Currently showing ALL clients matching the criteria for the opportunity, even if they are already in a match.
+    = link_to 'Show Available Clients', request.query_parameters.merge({show_only_available: true}), class: 'btn btn-light ml-auto align-self-start'
+
+.row
+%table.table.table-condensed
+  %thead
+    %tr
+      %th Client Name
+      %th Activate Match?
+  %tbody
+    - @matches.each do |client|
+      %tr
+        - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+        - if hide_client_name
+          - name = "(name hidden)"
+        - else
+          - name = client.name
+        %td= link_to name, client_path(client)
+        %td= link_to 'Activate Match', opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch
+        %td
