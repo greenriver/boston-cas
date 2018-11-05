@@ -1,7 +1,8 @@
-class OpportunityMatchesController < MatchListBaseController
+class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_all_matches!
   before_action :require_can_edit_all_clients!, only: [:update]
+  before_action :set_heading
 
   prepend_before_action :find_opportunity!
 
@@ -19,6 +20,7 @@ class OpportunityMatchesController < MatchListBaseController
   end
 
   def update
+    # TODO stolen from QualifiedOpportunitiesController -- is it correct?
     client = Client.find params[:client_id].to_i
 
     if active_match = @opportunity.active_match
