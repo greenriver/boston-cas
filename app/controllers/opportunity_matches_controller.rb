@@ -1,6 +1,8 @@
 class OpportunityMatchesController < MatchListBaseController
-
+  before_action :authenticate_user!
   before_action :require_can_view_all_matches!
+  before_action :require_can_edit_all_clients!, only: [:update]
+
   prepend_before_action :find_opportunity!
 
   def index
