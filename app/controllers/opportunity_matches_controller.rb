@@ -15,7 +15,7 @@ class OpportunityMatchesController < MatchListBaseController
     @opportunity.requirements_with_inherited.each do |requirement|
       clients_for_route = clients_for_route.merge(requirement.clients_that_fit(clients_for_route))
     end
-    @matches = clients_for_route.merge(Client.prioritized(match_route: @opportunity.match_route))
+    @matches = clients_for_route.merge(Client.prioritized(match_route: @opportunity.match_route)).page(params[:page]).per(25)
   end
 
   def update
