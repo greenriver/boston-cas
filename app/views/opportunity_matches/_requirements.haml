@@ -1,0 +1,13 @@
+%h3.detail-box--label Rules
+.detail-box--value
+  - requirements = @opportunity.requirements_with_inherited
+  - if requirements.count > 0
+    - requirements.each do |r| 
+      = r.name
+      - if r.variable.present?
+        = r.display_for_variable
+      %em.detail-box--requirement-source
+        = "(#{r.requirer.name})"
+      %br
+  - else
+    None

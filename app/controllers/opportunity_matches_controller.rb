@@ -1,26 +1,27 @@
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_can_view_all_matches!
+  before_action :require_can_see_alternate_matches!
   before_action :require_can_edit_all_clients!, only: [:update]
   before_action :set_heading
 
   prepend_before_action :find_opportunity!
 
   def index
-    if params[:show_only_available].present?
-      clients_for_route = Client.available_for_matching(@opportunity.match_route);
-    else
+    @active = :show_available_clients
+    if params[:show_all_clients].present?
+      @active = :show_all_clients
       clients_for_route = Client.all
+    else
+      clients_for_route = Client.available_for_matching(@opportunity.match_route)
     end
 
-    @opportunity.requirements_with_inherited.each do |requirement|
-      clients_for_route = clients_for_route.merge(requirement.clients_that_fit(clients_for_route))
-    end
-    @matches = clients_for_route.merge(Client.prioritized(match_route: @opportunity.match_route)).page(params[:page]).per(25)
+    @matches = @opportunity.matching_clients(clients_for_route).page(params[:page]).per(25)
+
+    @sub_program = @opportunity.sub_program
+    @program = @sub_program.program
   end
 
   def update
-    # TODO stolen from QualifiedOpportunitiesController -- is it correct?
     client = Client.find params[:client_id].to_i
 
     if active_match = @opportunity.active_match
@@ -39,7 +40,7 @@ class OpportunityMatchesController < ApplicationController
         universe_state: universe_state
     )
     match.activate!
-    redirect_to opportunity_matches_path
+    redirect_to match_path match
   end
 
   private
