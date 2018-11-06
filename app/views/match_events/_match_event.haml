@@ -4,19 +4,16 @@
     = event.name
     - if event.show_note?(current_contact)
       .history--event-note
-        - if event.is_editable?
-          %strong Note:
-          = event.note
-          - if event.note_editable_by? current_contact
-            .history--event-note--actions
-              =link_to edit_match_note_path(match, event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
-                %span.icon-pencil
-                Edit Note
-              =link_to match_note_path(match, event, match_note_referrer_params), data: {method: :delete, confirm: 'Are you sure you want to delete this note?'} do
-                %span.icon-cross
-                Delete Note
-        - else
-          = event.note
+        %strong Note:
+        = event.note
+        - if event.note_editable_by? current_contact
+          .history--event-note--actions
+            =link_to edit_match_note_path(match, event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
+              %span.icon-pencil
+              Edit Note
+            =link_to match_note_path(match, event, match_note_referrer_params), data: {method: :delete, confirm: 'Are you sure you want to delete this note?'} do
+              %span.icon-cross
+              Delete Note
   %td.history--contact-name= event.contact_name
   - if can_reissue_notifications?
     %td.history--resend-notification
