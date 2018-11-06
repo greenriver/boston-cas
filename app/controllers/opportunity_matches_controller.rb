@@ -22,7 +22,7 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def update
-    client = Client.find params[:client_id].to_i
+    client = Client.find params[:id].to_i
 
     if active_match = @opportunity.active_match
       active_match.poached!

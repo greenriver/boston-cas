@@ -6,6 +6,7 @@ class OpportunityAlternateMatchesController < MatchListBaseController
   private
 
     def match_scope
+      raise 'Deprecated!'
       ClientOpportunityMatch
         .accessible_by_user(current_user)
         .candidate

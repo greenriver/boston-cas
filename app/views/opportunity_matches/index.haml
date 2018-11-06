@@ -1,5 +1,5 @@
 - match = @opportunity.active_match
-- :show_all_clients
+- active_client_ids = if match.present? then [match.client_id] else [] end
 .d-flex.justify-content-end
   %h1= @heading
   - if can_view_client_confidentiality?
@@ -27,38 +27,45 @@
   %li.nav-item{role: 'presentation', class: active_class}
     = link_to({action: :index, show_all_clients: :true}, class: 'nav-link') do
       All Clients
-%p= paginate @matches
-%p= page_entries_info @matches
-- if @active == :show_available_clients
-  %p Showing only clients who are available to be matched.
-- else
-  %p 
-    Showing 
-    %strong all
-    clients matching the criteria for the opportunity, even if they are already in a match.
-%table.table.table-condensed
-  %thead
-    %tr
-      %th Client Name
-      %th Activate Match?
-  %tbody
-    - if match.present?
-      - client = match.client
-      - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
-      - if hide_client_name
-        - name = "(name hidden)"
-      - else
-        - name = client.name
-      %tr
-        %td= link_to name, client_path(client)
-        %td= link_to 'Current Active Match', match_path(match)
-    - @matches.each do |client|
-      %tr
-        - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
-        - if hide_client_name
-          - name = "(name hidden)"
-        - else
-          - name = client.name
-        %td= link_to name, client_path(client)
-        %td= link_to 'Activate Match', opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch
-%p=paginate @matches
+
+.c-card.c-card-flush
+  .c-card__content
+    %p= paginate @matches
+    %p= page_entries_info @matches
+    - if @active == :show_available_clients
+      %p Showing only clients who are available to be matched.
+    - else
+      %p 
+        Showing 
+        %strong all
+        clients matching the criteria for the opportunity, even if they are already in a match.
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Client Name
+          %th.text-center Active in match?
+          %th.text-center Activate Match?
+      %tbody
+        - if match.present?
+          - client = match.client
+          - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+          - if hide_client_name
+            - name = "(name hidden)"
+          - else
+            - name = client.name
+          %tr.client--match-active
+            %td= link_to name, client_path(client)
+            %td.text-center= checkmark(client.active_in_match?)
+            %td.text-center= link_to 'Current Active Match', match_path(match)
+        - @matches.each do |client|
+          - next if active_client_ids.include?(client.id)
+          %tr
+            - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+            - if hide_client_name
+              - name = "(name hidden)"
+            - else
+              - name = client.name
+            %td= link_to name, client_path(client)
+            %td.text-center= checkmark(client.active_in_match?)
+            %td.text-center= link_to 'Activate Match Canceling Current', opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch
+    %p=paginate @matches
