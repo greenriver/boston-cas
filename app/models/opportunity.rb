@@ -128,8 +128,8 @@ class Opportunity < ActiveRecord::Base
 
   def matches_client?(client)
     client_scope = Client.where(id: client.id)
-    requirement_matches = requirements_with_inherited.map do |requirment|
-      requirment.clients_that_fit(client_scope).exists?
+    requirement_matches = requirements_with_inherited.map do |requirement|
+      requirement.clients_that_fit(client_scope).exists?
     end
     attribute_matches = [
       add_unit_attributes_filter(client_scope).exists?

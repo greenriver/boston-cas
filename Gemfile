@@ -77,7 +77,6 @@ gem 'grosser-pomo'
 
 group :development do
   gem 'spring'
-  gem 'brakeman', require: false
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
@@ -104,6 +103,8 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'guard-rspec', require: false
   gem 'timecop'
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
 end
 
 group :test do

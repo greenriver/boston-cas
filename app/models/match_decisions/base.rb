@@ -122,7 +122,7 @@ module MatchDecisions
     end
       
     def stalled_responses_requiring_note
-      @stalled_responses_requiring_note ||= StalledResponse.active.ordered.
+      @stalled_responses_requiring_note ||= StalledResponse.active.
         requiring_note.
         distinct.
         pluck(:reason)
