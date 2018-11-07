@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
       resources :match_progress_updates, only: [:create], shallow: true
+      resources :match_progress_update_notes, only: [:edit, :update, :destroy]
     end
   end
   manage_matches
