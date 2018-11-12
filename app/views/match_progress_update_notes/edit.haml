@@ -1,0 +1,11 @@
+= content_for :modal_title do
+  Edit Note
+
+= simple_form_for @update, url: match_match_progress_update_note_path(@match, @update), as: :update, html: {data: {submits_to_pjax_modal: request.xhr?}} do |form|
+  = form.input :note, as: :text, input_html: {rows: 4}, label: false
+  =link_to 'Delete', match_match_progress_update_note_path(@match, @update), class: 'btn btn-danger', data: {method: :delete, confirm: 'Are you sure you want to delete this note?'}
+  = form.submit "Save", class: 'btn btn-success'
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

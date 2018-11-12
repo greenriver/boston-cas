@@ -16,6 +16,7 @@ class QualifiedOpportunitiesController < ApplicationController
 
   def update
     if active_match = @opportunity.active_match
+      MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
       active_match.poached!
     end
 

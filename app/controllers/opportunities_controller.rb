@@ -43,9 +43,6 @@ class OpportunitiesController < ApplicationController
       .preload(:unit, :voucher)
       .page(params[:page]).per(25)
 
-    @matches = ClientOpportunityMatch.group(:opportunity_id)
-      .where(opportunity_id: @opportunities.map(&:id))
-      .count
   end
 
   # GET /hmis/opportunities/1

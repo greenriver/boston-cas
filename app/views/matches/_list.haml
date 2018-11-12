@@ -64,7 +64,7 @@
       = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
       - if  match_type != 'opportunity' && can_see_alternate_matches?
         = link_to opportunity_matches_path(match.opportunity) do
-          #{match.opportunity_related_matches.count} Alternate Matches
+          #{match.opportunity.matching_clients.count} Alternate Matches
       - if match.shelter_expiration? && match.current_decision&.expires?
         - if match.shelter_expiration < Date.today
           .c-tag__wrapper.align-items-center

@@ -104,8 +104,7 @@ module MatchProgressUpdates
     end
 
     def note_editable_by? editing_contact
-      editing_contact &&
-      contact == editing_contact
+      editing_contact.present? && (contact == editing_contact || match.can_create_administrative_note?(editing_contact))
     end
 
     def is_editable?

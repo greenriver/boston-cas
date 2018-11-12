@@ -27,14 +27,13 @@
 .row
   .col-sm-12
     .table-responsive
-      %table.table.table-condensed
+      %table.table.table-condensed.table-striped
         %thead
           %tr
             %th Matches
             - titles.each do | k, title |
               %th{style: 'width: 8em;'}
-                = manual_sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+                = titles[k]
             %th
               Status
             %th
@@ -48,7 +47,7 @@
             %tr
               %td.text-center
                 = link_to opportunity_matches_path(opportunity) do
-                  .badge.badge-success= @matches[opportunity.id]
+                  .badge.badge-success= opportunity.matching_clients.count
               %td{:class => deleted}= opportunity.created_at.to_date
               %td{:class => deleted}
                 - if opportunity.active_match.present?

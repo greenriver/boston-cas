@@ -137,6 +137,14 @@ class Opportunity < ActiveRecord::Base
     (requirement_matches + attribute_matches).all?
   end
 
+  def matching_clients(client_scope=Client.available_for_matching(match_route))
+    requirements_with_inherited.each do |requirement|
+      client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
+    end
+    client_scope = add_unit_attributes_filter(client_scope)
+    client_scope.merge(Client.prioritized(match_route: match_route))
+  end
+
   def add_unit_attributes_filter(client_scope)
     if unit.present? && unit.elevator_accessible == false
       client_scope = client_scope.where(requires_elevator_access: false)

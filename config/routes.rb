@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
     resources :alternate_matches, controller: 'opportunity_alternate_matches', only: :index
-    resources :matches, controller: 'opportunity_matches', only: :index
+    resources :matches, controller: 'opportunity_matches', only: [:index, :update]
   end
   resources :buildings do
     resources :contacts, except: :show, controller: :building_contacts, concerns: [:restorable]
@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
       resources :match_progress_updates, only: [:create], shallow: true
+      resources :match_progress_update_notes, only: [:edit, :update, :destroy]
     end
   end
   manage_matches

@@ -22,3 +22,6 @@
         &nbsp;
       = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
         Add Note
+- if can_reject_matches?
+  .d-flex.mb-5.align-items-end.flex-wrap
+    = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light'
