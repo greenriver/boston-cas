@@ -1,6 +1,6 @@
 %tr
   %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
-  %td.history--event-name      
+  %td.history--event-name
     = event.name
     - if event.client_last_seen.present?
       .history--event-client-last-seen
@@ -13,6 +13,11 @@
       .history--event-note
         %strong Note:
         = event.note
-          
+        - if event.note_editable_by? current_contact
+          .history--event-note--actions
+            =link_to edit_match_match_progress_update_note_path(match, event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
+              %span.icon-pencil
+              Edit Note
+
   %td.history--contact-name= event.contact_name
   %td
