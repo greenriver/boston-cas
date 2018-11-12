@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
     resources :alternate_matches, controller: 'opportunity_alternate_matches', only: :index
-    resources :matches, controller: 'opportunity_matches', only: :index
+    resources :matches, controller: 'opportunity_matches', only: [:index, :update]
   end
   resources :buildings do
     resources :contacts, except: :show, controller: :building_contacts, concerns: [:restorable]

@@ -10,7 +10,8 @@
   = @program.name
   %em
     = link_to @sub_program.name, edit_program_sub_program_path(@program, @sub_program)
-%h3.detail-box--label Service Provider
-.detail-box--value= match.opportunity_details.service_provider_name
--#%h3.detail-box--label Sub-Contractor
-.detail-box--value
+- if match.present?
+  %h3.detail-box--label Service Provider
+  .detail-box--value= match.opportunity_details.service_provider_name
+  -#%h3.detail-box--label Sub-Contractor
+  .detail-box--value
