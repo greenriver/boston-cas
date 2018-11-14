@@ -1,7 +1,7 @@
 # config valid only for current version of Capistrano
 lock '3.11.0'
 
-set :application, 'boston-cas'
+set :application, 'cas'
 set :repo_url, 'git@github.com:greenriver/boston-cas.git'
 set :client, ENV.fetch('CLIENT')
 
