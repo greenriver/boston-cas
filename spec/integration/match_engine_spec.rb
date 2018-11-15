@@ -52,163 +52,163 @@ RSpec.describe "Running the match engine...", type: :request do
   end
 
   #opportunity tests
-  describe "with female requirement" do 
-    let!(:matches) { create_matches( {rule: create(:female), positive: true} ) }
+  # describe "with female requirement" do 
+  #   let!(:matches) { create_matches( {rule: create(:female), positive: true} ) }
     
-    it "matches only female clients" do 
-      expected_ids = Client.where(gender_id: 0).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end
+  #   it "matches only female clients" do 
+  #     expected_ids = Client.where(gender_id: 0).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end
     
-  end
+  # end
   
-  describe "with veteran requirement" do 
-    let!(:matches) { create_matches( {rule: create(:veteran), positive: true} ) }
+  # describe "with veteran requirement" do 
+  #   let!(:matches) { create_matches( {rule: create(:veteran), positive: true} ) }
   
-    it "matches only veteran clients" do
-      expected_ids = Client.where(veteran: true).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end
-  end
+  #   it "matches only veteran clients" do
+  #     expected_ids = Client.where(veteran: true).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end
+  # end
   
-  describe "with sub 50 percent AMI requirement" do     
-    let!(:matches) { create_matches( {rule: create(:income_less_than_50_percent_ami), positive: true} ) }
+  # describe "with sub 50 percent AMI requirement" do     
+  #   let!(:matches) { create_matches( {rule: create(:income_less_than_50_percent_ami), positive: true} ) }
   
-    it "matches only clients with income_total_monthly < AMI (Area Median Income) * 50%" do 
-      expected_ids = Client.where("income_total_monthly < ?", Config.get(:ami) * (0.5)).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end
-  end
+  #   it "matches only clients with income_total_monthly < AMI (Area Median Income) * 50%" do 
+  #     expected_ids = Client.where("income_total_monthly < ?", Config.get(:ami) * (0.5)).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end
+  # end
   
-  describe "between 16 and 25 years old" do
-    let!(:matches) { create_matches( 
-      {rule: create(:sixteen_plus), positive: true}, 
-      {rule: create(:twenty_five_plus), positive: false},
-      ) }
+  # describe "between 16 and 25 years old" do
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:sixteen_plus), positive: true}, 
+  #     {rule: create(:twenty_five_plus), positive: false},
+  #     ) }
   
-    it "Matches only clients between 16 and 25 years old" do 
-      expected_ids = Client.where("date_of_birth < ? AND date_of_birth > ?", Date.today - 16.years, Date.today - 25.years).map(&:id)
-      expect(matches.pluck(:id)).to match_array(expected_ids)
-    end
-  end
+  #   it "Matches only clients between 16 and 25 years old" do 
+  #     expected_ids = Client.where("date_of_birth < ? AND date_of_birth > ?", Date.today - 16.years, Date.today - 25.years).map(&:id)
+  #     expect(matches.pluck(:id)).to match_array(expected_ids)
+  #   end
+  # end
   
-  describe "with chronically homeless, NOT substance abuse problem, veteran, mental health problem requirement" do 
-    let!(:matches) { create_matches( 
-      {rule: create(:veteran), positive: true}, 
-      {rule: create(:chronic_substance_use), positive: false},
-      {rule: create(:chronically_homeless), positive: true},
-      {rule: create(:mental_health_eligible), positive: true}, 
-      ) }
+  # describe "with chronically homeless, NOT substance abuse problem, veteran, mental health problem requirement" do 
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:veteran), positive: true}, 
+  #     {rule: create(:chronic_substance_use), positive: false},
+  #     {rule: create(:chronically_homeless), positive: true},
+  #     {rule: create(:mental_health_eligible), positive: true}, 
+  #     ) }
     
-    it "matches only clients who are chronically homeless, do NOT have a substance abuse problem, are a veteran, and have a mental health problem" do 
-      expected_ids = Client.where(chronic_homeless: true, substance_abuse_problem: false, veteran: true, mental_health_problem: true).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end  
-  end
+  #   it "matches only clients who are chronically homeless, do NOT have a substance abuse problem, are a veteran, and have a mental health problem" do 
+  #     expected_ids = Client.where(chronic_homeless: true, substance_abuse_problem: false, veteran: true, mental_health_problem: true).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end  
+  # end
   
-  describe "with homeless, chronic_homeless, mental health, and substance abuse requirement" do     
-    let!(:matches) { create_matches( 
-      {rule: create(:homeless), positive: true}, 
-      {rule: create(:chronically_homeless), positive: true},
-      {rule: create(:mi_and_sa_co_morbid), positive: true},
-      ) }
+  # describe "with homeless, chronic_homeless, mental health, and substance abuse requirement" do     
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:homeless), positive: true}, 
+  #     {rule: create(:chronically_homeless), positive: true},
+  #     {rule: create(:mi_and_sa_co_morbid), positive: true},
+  #     ) }
   
-    it "clients that match are returned first homeless night asc" do
-      first_night = Client.where(
-        available: true, 
-        chronic_homeless: true, 
-        substance_abuse_problem: true, 
-        mental_health_problem: true
-      ).minimum(:calculated_first_homeless_night)
-      top_match = matches[0]
+  #   it "clients that match are returned first homeless night asc" do
+  #     first_night = Client.where(
+  #       available: true, 
+  #       chronic_homeless: true, 
+  #       substance_abuse_problem: true, 
+  #       mental_health_problem: true
+  #     ).minimum(:calculated_first_homeless_night)
+  #     top_match = matches[0]
   
-      expect(first_night).to eq top_match[:calculated_first_homeless_night]
-    end  
-  end
+  #     expect(first_night).to eq top_match[:calculated_first_homeless_night]
+  #   end  
+  # end
   
-  describe "without physical disability requirement" do 
-    let!(:matches) { create_matches ( {rule: create(:physical_disability), positive: false} ) }
+  # describe "without physical disability requirement" do 
+  #   let!(:matches) { create_matches ( {rule: create(:physical_disability), positive: false} ) }
     
-    it "matches only clients who do not have a physical disability" do 
-      expected_ids = Client.where(physical_disability: false).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end  
-  end
+  #   it "matches only clients who do not have a physical disability" do 
+  #     expected_ids = Client.where(physical_disability: false).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end  
+  # end
   
-  describe "with physical disability and homeless requirement" do 
-    let!(:matches) { create_matches( 
-      {rule: create(:physical_disability), positive: true},
-      {rule: create(:homeless), positive: true}
-      ) }
+  # describe "with physical disability and homeless requirement" do 
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:physical_disability), positive: true},
+  #     {rule: create(:homeless), positive: true}
+  #     ) }
   
-    it "matches only clients who have a physical disability and are homeless" do 
-      expected_ids = Client.where(physical_disability: true, available: true).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end  
-  end
+  #   it "matches only clients who have a physical disability and are homeless" do 
+  #     expected_ids = Client.where(physical_disability: true, available: true).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end  
+  # end
   
-  describe "with physical disability and is male and homeless requirement" do 
-    let!(:matches) { create_matches( 
-      {rule: create(:physical_disability), positive: true},
-      {rule: create(:homeless), positive: true},
-      {rule: create(:male), positive: true}
-      ) }
+  # describe "with physical disability and is male and homeless requirement" do 
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:physical_disability), positive: true},
+  #     {rule: create(:homeless), positive: true},
+  #     {rule: create(:male), positive: true}
+  #     ) }
   
-    it "matches only clients who have a physical disability and are homeless and male" do 
-      expected_ids = Client.where(physical_disability: true, available: true, gender_id: 1).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end  
-  end
+  #   it "matches only clients who have a physical disability and are homeless and male" do 
+  #     expected_ids = Client.where(physical_disability: true, available: true, gender_id: 1).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end  
+  # end
   
-  describe "with physical disability and is male, homeless, and chronically homeless requirement" do 
-    let!(:matches) { create_matches( 
-      {rule: create(:physical_disability), positive: true},
-      {rule: create(:homeless), positive: true},
-      {rule: create(:male), positive: true},
-      {rule: create(:chronically_homeless), positive: true},
-      ) }
+  # describe "with physical disability and is male, homeless, and chronically homeless requirement" do 
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:physical_disability), positive: true},
+  #     {rule: create(:homeless), positive: true},
+  #     {rule: create(:male), positive: true},
+  #     {rule: create(:chronically_homeless), positive: true},
+  #     ) }
   
-    it "matches only clients who have a physical disability and are male, homeless, and chronically homeless" do 
-      expected_ids = Client.where(physical_disability: true, available: true, chronic_homeless: true, gender_id: 1).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end  
-  end
+  #   it "matches only clients who have a physical disability and are male, homeless, and chronically homeless" do 
+  #     expected_ids = Client.where(physical_disability: true, available: true, chronic_homeless: true, gender_id: 1).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end  
+  # end
   
-  describe "with veteran, no chronic substance abuse, chronically homeless, and mental health requirement" do 
-    let!(:matches) { create_matches( 
-      {rule: create(:veteran), positive: true},
-      {rule: create(:chronic_substance_use), positive: false},
-      {rule: create(:chronically_homeless), positive: true},
-      {rule: create(:mental_health_eligible), positive: true},
-      ) }
+  # describe "with veteran, no chronic substance abuse, chronically homeless, and mental health requirement" do 
+  #   let!(:matches) { create_matches( 
+  #     {rule: create(:veteran), positive: true},
+  #     {rule: create(:chronic_substance_use), positive: false},
+  #     {rule: create(:chronically_homeless), positive: true},
+  #     {rule: create(:mental_health_eligible), positive: true},
+  #     ) }
         
-    it "matches only clients who are veterans, chronically homeless, have a mental health problem, and do not have a chronic substance abuse problem" do 
-      expected_ids = Client.where(veteran: true, substance_abuse_problem: false, chronic_homeless: true, mental_health_problem: true).map(&:id)
-      expect(expected_ids).to include *matches.pluck(:id)
-    end 
-  end
+  #   it "matches only clients who are veterans, chronically homeless, have a mental health problem, and do not have a chronic substance abuse problem" do 
+  #     expected_ids = Client.where(veteran: true, substance_abuse_problem: false, chronic_homeless: true, mental_health_problem: true).map(&:id)
+  #     expect(expected_ids).to include *matches.pluck(:id)
+  #   end 
+  # end
   
-  describe "when we create two opportunities, one obviously more restrictive than the other" do
-    let!(:less_restrictive) { create_opportunity( 
-      {rule: create(:veteran), positive: true},
-      ) }
+  # describe "when we create two opportunities, one obviously more restrictive than the other" do
+  #   let!(:less_restrictive) { create_opportunity( 
+  #     {rule: create(:veteran), positive: true},
+  #     ) }
       
-    let!(:more_restrictive) { create_opportunity( 
-      {rule: create(:veteran), positive: true},
-      {rule: create(:chronic_substance_use), positive: false},
-      {rule: create(:chronically_homeless), positive: true},
-      {rule: create(:mental_health_eligible), positive: true},
-      ) }
+  #   let!(:more_restrictive) { create_opportunity( 
+  #     {rule: create(:veteran), positive: true},
+  #     {rule: create(:chronic_substance_use), positive: false},
+  #     {rule: create(:chronically_homeless), positive: true},
+  #     {rule: create(:mental_health_eligible), positive: true},
+  #     ) }
     
-    it "the more restrictive opportunity should have a smaller matchability score" do
-      # Update matchability
-      Matching::Matchability.update(Opportunity.where(id: [less_restrictive.id, more_restrictive.id]), match_route: route)
-      less_restrictive.reload
-      more_restrictive.reload
+  #   it "the more restrictive opportunity should have a smaller matchability score" do
+  #     # Update matchability
+  #     Matching::Matchability.update(Opportunity.where(id: [less_restrictive.id, more_restrictive.id]), match_route: route)
+  #     less_restrictive.reload
+  #     more_restrictive.reload
       
-      expect(less_restrictive.matchability).to be > (more_restrictive.matchability)
-    end
-  end
+  #     expect(less_restrictive.matchability).to be > (more_restrictive.matchability)
+  #   end
+  # end
   
   describe "when we feed the engine one client with many opportunities" do 
     # skip 'need to fixup test data to get varying matchabilities across different opportunities
@@ -256,7 +256,6 @@ RSpec.describe "Running the match engine...", type: :request do
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
       Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
-
       expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities.last)
     end
     
@@ -269,13 +268,13 @@ RSpec.describe "Running the match engine...", type: :request do
       expect(client.prioritized_matches.first.active).to be true
     end
     
-    it "least restrictive opportunity is returned last (highest matchability)" do
+    it "Client is no longer available in the route" do
+
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
       Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
-    
-      expect(client.prioritized_matches.last.opportunity.id).to eq(restrictive_opportunities[1])
+      expect(client.id).to eq(UnavailableAsCandidateFor.where(match_route_type: MatchRoutes::Base.route_name_from_route(route)).first.client_id)
     end
   end
 end

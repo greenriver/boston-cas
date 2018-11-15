@@ -61,7 +61,6 @@ class Matching::Engine
 
   def create_candidate_matches opportunity
     matches_left_to_max = opportunity.matches_left_to_max
-
     client_priority = 1
     clients_for_matches(opportunity).each do |client|
       universe_state = {
