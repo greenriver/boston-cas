@@ -37,7 +37,8 @@ class IdentifiedClientsController < DeidentifiedClientsController
         :agency,
         :first_name,
         :last_name,
-        :dob,
+        :middle_name,
+        :date_of_birth,
         :ssn,
         :days_homeless_in_the_last_three_years,
         :veteran,
@@ -52,6 +53,8 @@ class IdentifiedClientsController < DeidentifiedClientsController
         :required_minimum_occupancy,
         :requires_elevator_access,
         :family_member,
+        :calculated_chronic_homelessness,
+        :gender,
         :active_cohort_ids => [],
       ).merge(identified: true)
     end

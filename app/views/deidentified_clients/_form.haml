@@ -6,12 +6,12 @@
       = f.input :client_identifier, required: true
       = f.input :assessment_score
       = f.input :agency, collection: @available_agencies, input_html: {class: :select2}, hint: 'You may lose access to this client record if the agency doesn\'t match your agency'
-      = f.input :date_of_birth, as: :date_picker
       = f.input :days_homeless_in_the_last_three_years
       - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
-      = f.input :veteran
-      = f.input :family_member, label: _('Part of a family')
+      = f.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}
+      .jChronicallyHomeless
+        = f.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family')
       = f.input :rrh_desired, label: 'Interested in RRH'
       = f.input :youth_rrh_desired, label: 'Interested in Youth RRH'
       = f.input :income_maximization_assistance_requested
@@ -25,6 +25,5 @@
     .form-actions
       = f.button :submit, "Submit", class: 'btn btn-primary'
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+= render 'deidentified_clients/js'
+

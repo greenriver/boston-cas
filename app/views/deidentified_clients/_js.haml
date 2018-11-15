@@ -1,0 +1,13 @@
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();
+    $('.jFamily').on('change', function(e){
+      if($(this).is(':checked')){
+        $('.jChronicallyHomeless').show();
+      } else {
+        $('.jChronicallyHomeless').find('input').removeAttr('checked');
+        $('.jChronicallyHomeless').hide();
+
+      }
+    });
+    $('.jFamily').trigger('change');

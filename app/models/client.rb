@@ -215,10 +215,11 @@ class Client < ActiveRecord::Base
   end
 
   def self.age date:, dob:
-      age = date.year - dob.year
-      age -= 1 if dob > date.years_ago(age)
-      return age
-    end
+    return unless date.present? && dob.present?
+    age = date.year - dob.year
+    age -= 1 if dob > date.years_ago(age)
+    return age
+  end
 
   def age date=Date.today
     return unless date_of_birth.present?

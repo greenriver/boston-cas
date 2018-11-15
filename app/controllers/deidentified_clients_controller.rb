@@ -40,7 +40,7 @@ class DeidentifiedClientsController < ApplicationController
         :client_identifier,
         :assessment_score,
         :agency,
-        :dob,
+        :date_of_birth,
         :ssn,
         :days_homeless_in_the_last_three_years,
         :veteran,
@@ -50,6 +50,8 @@ class DeidentifiedClientsController < ApplicationController
         :income_maximization_assistance_requested,
         :pending_subsidized_housing_placement,
         :family_member,
+        :calculated_chronic_homelessness,
+        :gender,
         :active_cohort_ids => [],
       ).merge(identified: false)
     end

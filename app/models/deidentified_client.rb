@@ -60,6 +60,10 @@ class DeidentifiedClient < ActiveRecord::Base
 
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
 
+    project_client.calculated_chronic_homelessness = calculated_chronic_homelessness
+    project_client.middle_name = middle_name
+    project_client.gender = gender
+
     project_client.sync_with_cas = true
     project_client.needs_update = true
     project_client.save
