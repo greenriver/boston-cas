@@ -161,7 +161,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.ready_to_match match_route:
-    available_as_candidate(match_route: match_route).matchable
+    available_as_candidate(match_route).matchable
   end
 
   def self.max_candidate_matches
@@ -262,7 +262,8 @@ class Client < ActiveRecord::Base
   end
 
   def make_available_in match_route:
-    UnavailableAsCandidateFor.where(client_id: id, match_route_type: match_route.class.name).destroy_all
+    route_name = MatchRoutes::Base.route_name_from_route(match_route)
+    UnavailableAsCandidateFor.where(client_id: id, match_route_type: route_name).destroy_all
   end
 
   def make_available_in_all_routes
@@ -270,7 +271,8 @@ class Client < ActiveRecord::Base
   end
 
   def make_unavailable_in match_route:
-    unavailable_as_candidate_fors.create(match_route_type: match_route.class.name)
+    route_name = MatchRoutes::Base.route_name_from_route(match_route)
+    unavailable_as_candidate_fors.create(match_route_type: route_name)
   end
 
   def make_unavailable_in_all_routes

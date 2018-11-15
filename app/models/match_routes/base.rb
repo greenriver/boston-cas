@@ -20,6 +20,17 @@ module MatchRoutes
       ]
     end
 
+    def self.route_name_from_route route
+      # route can be an instance or a class
+      if route.class == Class
+        route_name = route.name
+      elsif MatchRoutes::Base.all_routes.include?(route.class)
+        route_name = route.class.name
+      else
+        raise "Unknown route type passed #{route.inspect}"
+      end
+    end
+
     def self.more_than_one?
       available.count > 1
     end

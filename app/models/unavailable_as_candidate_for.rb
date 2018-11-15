@@ -5,12 +5,8 @@ class UnavailableAsCandidateFor < ActiveRecord::Base
   belongs_to :client
 
   scope :for_route, -> (route) do
-    # expects an instance, but is sometimes, incorrectly, passed a class
-    if route.class == Class
-      route = route.new
-    end
-
-    where(match_route_type: route.class.name)
+    route_name = MatchRoutes::Base.route_name_from_route(route)
+    where(match_route_type: route_name)
   end
 
   validates_presence_of :match_route_type
