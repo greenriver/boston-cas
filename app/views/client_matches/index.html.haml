@@ -20,6 +20,8 @@
             %th Program
             %th Sub-Program
             %th Funding Source &amp; Service Provider
+            - if MatchRoutes::Base.more_than_one?
+              %th Match Route
             %th Details
         %tbody
           - @matches.each do |match|
@@ -30,6 +32,8 @@
                 = link_to match.opportunity_details.program_name, edit_program_sub_program_path(match.opportunity_details.sub_program.program, match.opportunity_details.sub_program)
               %td= match.opportunity_details.sub_program_name
               %td= match.opportunity_details.organizations
+              - if MatchRoutes::Base.more_than_one?
+                %td= match.match_route.title
               - if show_links_to_matches?
                 %td
                   = link_to 'View / Update Match', match_path(match)
