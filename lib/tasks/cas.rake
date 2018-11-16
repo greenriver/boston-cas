@@ -4,6 +4,7 @@ namespace :cas do
   task daily: [:environment, "log:info_to_stdout"] do
     Warehouse::BuildReport.new.run! if Warehouse::Base.enabled?
     Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
+    Client.ensure_availability
     Cas::UpdateVoucherAvailability.new.run!
   end
 
