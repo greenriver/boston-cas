@@ -3,6 +3,11 @@ module Availability
   
   extend ActiveSupport::Concern
   included do
+
+    def self.ensure_availability
+      self.available.each(&:ensure_availability)
+    end
+
     def ensure_availability
       self.class.transaction do
         unavailable_as_candidate_fors.destroy_all
