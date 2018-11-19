@@ -18,6 +18,11 @@ class Opportunity < ActiveRecord::Base
   # active or successful
   has_one :status_match, -> {where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success')))}, class_name: 'ClientOpportunityMatch'
 
+  has_many :closed_matches, -> do
+    where(closed: true).
+    order(updated_at: :desc)
+  end, class_name: 'ClientOpportunityMatch'
+
   has_many :opportunity_contacts, dependent: :destroy, inverse_of: :opportunity
   has_many :contacts, through: :opportunity_contacts
 

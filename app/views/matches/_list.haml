@@ -37,7 +37,7 @@
             %dt Initial Match Date
             %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
         %li.ml-6.mr-6
-          = render 'current_step', match: match, size: 'sm'
+          = render 'match_list_base/current_step', match: match, size: 'sm'
         - unless match_type == 'opportunity'
           %li
             %dl

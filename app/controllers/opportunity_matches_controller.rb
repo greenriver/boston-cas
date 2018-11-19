@@ -7,16 +7,21 @@ class OpportunityMatchesController < ApplicationController
   prepend_before_action :find_opportunity!
 
   def index
-    @active = :show_available_clients
-    if params[:show_all_clients].present?
-      @active = :show_all_clients
-      clients_for_route = Client.all
-    else
-      clients_for_route = Client.available_for_matching(@opportunity.match_route)
-    end
-
+    clients_for_route = Client.available_for_matching(@opportunity.match_route)
     @matches = @opportunity.matching_clients(clients_for_route).page(params[:page]).per(25)
+    @sub_program = @opportunity.sub_program
+    @program = @sub_program.program
+  end
 
+  def all
+    clients_for_route = Client.all
+    @matches = @opportunity.matching_clients(clients_for_route).page(params[:page]).per(25)
+    @sub_program = @opportunity.sub_program
+    @program = @sub_program.program
+  end
+
+  def closed
+    @matches = @opportunity.closed_matches.page(params[:page]).per(25)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
   end
