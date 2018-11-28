@@ -2,7 +2,7 @@ class DeidentifiedClientsController < ApplicationController
   before_action :require_can_enter_deidentified_clients!
   before_action :require_can_manage_deidentified_clients!, only: [:edit, :update, :destroy]
   before_action :load_deidentified_client, only: [:edit, :update, :destroy]
-  before_action :load_agencies, only: [:new, :edit]
+  before_action :load_agencies
 
   def index
     @deidentified_clients = deidentified_client_source.order(agency: :asc, last_name: :asc, first_name: :asc).page(params[:page]).per(25)
