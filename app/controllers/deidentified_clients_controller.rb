@@ -18,6 +18,7 @@ class DeidentifiedClientsController < ApplicationController
   end
 
   def edit
+
   end
 
   def update
@@ -69,7 +70,13 @@ class DeidentifiedClientsController < ApplicationController
     end
 
     def load_deidentified_client
-      @deidentified_client = deidentified_client_source.find params[:id].to_i
+      # since we sometimes arrive here looking for an identified client
+      # attempt deidentified first, then shuffle them over to identified
+      begin
+        @deidentified_client = deidentified_client_source.find params[:id].to_i
+      rescue
+        redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
+      end
     end
 
     def load_agencies
