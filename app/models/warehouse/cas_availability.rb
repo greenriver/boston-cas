@@ -30,7 +30,7 @@ module Warehouse
         # These clients don't have project clients so they won't have warehouse ids, we'll need
         # to look them up manually, so we'll add them all with a client_id of 0
         ::Client.only_deleted.order(:last_name, :first_name).each do |client|
-          puts "DELETED CLIENT: #{client.last_name}, #{client.first_name} #{client.ssn} #{client.date_of_birth}"
+          puts "DELETED CLIENT: #{client.last_name}, #{client.first_name} #{client.ssn} #{client.date_of_birth} created_at: #{client.created_at} deleted_at: #{client.deleted_at}"
           create!(
             client_id: 0,
             available_at: client.created_at,
