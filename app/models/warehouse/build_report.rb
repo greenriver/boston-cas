@@ -2,6 +2,46 @@ module Warehouse
   class BuildReport
     def run!
       return nil unless Warehouse::Base.enabled?
+      fill_cas_report_table!
+      fill_cas_non_hmis_client_history_table!
+    end
+
+    def fill_cas_non_hmis_client_history_table!
+      history = []
+      # build out entries for each time a client became available
+      ::DeidentifiedClient.with_deleted.each do |client|
+        # availability based on creation
+        available_ons = [client.created_at] + 
+          client.versions.where(event: :create).pluck(:created_at)
+        
+        # unavailability based on deletion
+        unavailable_ons = [client.deleted_at] + 
+          client.versions.where(event: :destroy).pluck(:created_at)
+    
+        available_ons = available_ons.compact.uniq.sort
+        unavailable_ons = unavailable_ons.compact.uniq.sort
+
+        available_ons.each do |available_on|
+          client_history = Warehouse::CasNonHmisClientHistory.new(
+            cas_client_id: client.id,
+            available_on: available_on,
+          )
+          # See if there's a subsequent date for which we are marked unavailable
+          client_history.unavailable_on = unavailable_ons.select{ |d| d > available_on }&.first
+          client_history.part_of_a_family = client.family_member
+          client_history.age_at_available_on = client.age_on(available_on)
+          history << client_history
+        end
+      end
+      Warehouse::CasNonHmisClientHistory.transaction do
+        Warehouse::CasNonHmisClientHistory.delete_all
+        history.each do |ch|
+          ch.save!
+        end
+      end
+    end
+
+    def fill_cas_report_table!
       Warehouse::CasReport.transaction do
         # Replace all CAS data in the warehouse every time
         Warehouse::CasReport.delete_all
@@ -60,6 +100,7 @@ module Warehouse
 
               Warehouse::CasReport.create!(
                 client_id: client_id,
+                cas_client_id: client.id,
                 match_id: match.id,
                 decision_id: decision.id,
                 decision_order: match_route.class.match_steps_for_reporting[decision.type],
@@ -72,6 +113,7 @@ module Warehouse
                 active_match: match.active?,
                 created_at: decision.created_at,
                 updated_at: decision.updated_at,
+                client_move_in_date: decision.client_move_in_date,
                 elapsed_days: elapsed_days.to_i,
                 client_last_seen_date: decision.client_last_seen_date,
                 criminal_hearing_date: decision.criminal_hearing_date,

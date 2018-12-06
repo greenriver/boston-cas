@@ -30,6 +30,21 @@ class DeidentifiedClient < ActiveRecord::Base
     where(identified: false)
   end
 
+  def self.age date:, dob:
+    return unless date.present? && dob.present?
+    age = date.year - dob.year
+    age -= 1 if dob > date.years_ago(age)
+    return age
+  end
+
+  def age date=Date.today
+    return unless date_of_birth.present?
+    date = date.to_date
+    dob = date_of_birth.to_date
+    self.class.age(date: date, dob: dob)
+  end
+  alias_method :age_on, :age
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end

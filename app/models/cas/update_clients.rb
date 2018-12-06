@@ -74,6 +74,7 @@ module Cas
       # Fix up some discrepancies
       {
         available: project_client.available?,
+        client_identifier: "#{project_client.data_source_id}_#{project_client.id_in_data_source}",
         substance_abuse_problem: project_client.substance_abuse?,
         veteran_status_id: project_client.veteran_status.to_i,
         veteran: project_client.veteran_status.to_i == 1,
