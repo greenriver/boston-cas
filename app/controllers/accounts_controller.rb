@@ -12,12 +12,13 @@ class AccountsController < ApplicationController
       changed_notes << "Account name was updated."
     end
     if @user.email_schedule != account_params[:email_schedule]
-      changed_notes << "Email schedule was updated"
+      changed_notes << "Email schedule was updated."
     end
 
     if changed_notes.present?
       flash[:notice] = changed_notes.join(' ')
       @user.update(account_params)
+      sign_in(@user, :bypass => true)
     end
     redirect_to edit_account_path
   end
