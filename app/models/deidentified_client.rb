@@ -1,5 +1,4 @@
 class DeidentifiedClient < ActiveRecord::Base
-  validates :client_identifier, uniqueness: true
   has_one :project_client, ->  do
     where(
       data_source_id: DataSource.where(db_identifier: 'Deidentified').select(:id),
