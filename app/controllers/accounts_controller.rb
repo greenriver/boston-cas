@@ -18,7 +18,7 @@ class AccountsController < ApplicationController
     if changed_notes.present?
       flash[:notice] = changed_notes.join(' ')
       @user.update(account_params)
-      sign_in(@user, :bypass => true)
+      bypass_sign_in(@user)
     end
     redirect_to edit_account_path
   end

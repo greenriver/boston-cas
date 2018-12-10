@@ -12,7 +12,7 @@ class AccountPasswordsController < ApplicationController
     else
       flash[:error] = "Password not changed."
     end
-    sign_in(@user, :bypass => true)
+    bypass_sign_in(@user)
     redirect_to edit_account_password_path
   end
 
