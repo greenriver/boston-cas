@@ -29,10 +29,6 @@ class User < ActiveRecord::Base
   has_many :vouchers
   has_many :messages, through: :contact
 
-  def send_devise_notification(notification, *args)
-    raise 'hi'
-  end
-
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
     super

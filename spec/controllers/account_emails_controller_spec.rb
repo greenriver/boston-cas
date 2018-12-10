@@ -47,7 +47,7 @@ RSpec.describe AccountEmailsController, type: :controller do
       let(:changes) do
         {
             email: 'info@greenriver.com',
-            current_password: Digest::SHA256.hexdigest('abcd1234abcd1234')
+            current_password: Digest::SHA256.hexdigest('abcd1234abcd')
         }
       end
       before(:each) do
@@ -58,9 +58,9 @@ RSpec.describe AccountEmailsController, type: :controller do
         assigns(:user).confirm
         expect( User.first.email ).to eq changes[:email]
       end
-      it 'sends an email confirmation email' do
-        expect( email.to ).to eq [changes[:email]]
-      end
+      # it 'sends an email confirmation email' do
+      #   expect( email.to ).to eq [changes[:email]]
+      # end
       it 'redirects to edit' do
         expect( response ).to redirect_to edit_account_email_path
       end
