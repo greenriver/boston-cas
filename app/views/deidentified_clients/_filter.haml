@@ -1,0 +1,40 @@
+- if @active_filter
+  - filter_class = 'client__filter-active'
+- else
+  - filter_class = 'client__filter'
+.dropdown.o-filtration.o-filtration--sm{class: filter_class}
+  %button.btn.btn-light.dropdown-toggle.mr-4#filter-dropdown{data: {toggle: :dropdown}}
+    Filter
+    %span.caret
+  .o-filtration__container.client-filter.dropdown-menu.options{aria:{labelledby:"filter-dropdown"}}
+    .o-filtration__header
+      %h3.client__filter-header Filter clients
+
+    = form_tag(nil, method: "get") do
+      -# preserve sort and search for filtering
+      - if params[:sort]
+        = hidden_field_tag :sort, params[:sort]
+      - if params[:direction]
+        = hidden_field_tag :direction, params[:direction]
+      - if params[:q]
+        = hidden_field_tag :q, params[:q]
+
+      .o-filtration__option
+        %label.d-block Agency
+        = select_tag :agency, options_from_collection_for_select(DeidentifiedClient.possible_agencies, :first, :last, params[:agency]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+
+      .o-filtration__option
+        %label.d-block Cohort
+        = select_tag :cohort, options_from_collection_for_select(DeidentifiedClient.possible_cohorts, :first, :last, params[:cohort]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+
+      .o-filtration__actions.form__actions
+        = link_to deidentified_clients_path, class: 'btn btn-light' do
+          %i.icon-cross
+          Clear
+        %button.btn.btn-primary.ml-auto{type: :submit}
+          %i.icon-filter
+          Filter
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

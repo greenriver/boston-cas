@@ -5,7 +5,31 @@ class DeidentifiedClientsController < ApplicationController
   before_action :load_agencies
 
   def index
-    @deidentified_clients = deidentified_client_source.order(agency: :asc, last_name: :asc, first_name: :asc).page(params[:page]).per(25)
+    # sort
+    default_sort = 'days_homeless_in_the_last_three_years desc'
+    sort_string = params[:q].try(:[], :s) || default_sort
+    (@column, @direction) = sort_string.split(' ')
+    @sorted_by = DeidentifiedClient.sort_options.select do |m|
+      m[:column] == @column && m[:direction] == @direction
+    end.first[:title]
+
+    # construct query
+    @q = deidentified_client_source.ransack(params[:q])
+    @deidentified_clients = @q.result(distinct: true)
+
+    # filter
+    if params[:agency].present?
+      @deidentified_client = @deidentified_clients.where(agency: params[:agency])
+    end
+    if params[:cohort].present?
+      @deidentified_clients = @deidentified_clients.where('active_cohort_ids @> ?', params[:cohort])
+    end
+    @active_filter = params[:agency].present? || params[:cohort].present?
+
+
+    # paginate
+    @page = params[:page].presence || 1
+    @deidentified_clients = @deidentified_clients.reorder(sort_string).page(@page.to_i).per(25)
   end
 
   def create

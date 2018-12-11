@@ -1,3 +1,10 @@
+.row.table-utilities
+  .col-sm-4
+    %p= page_entries_info @deidentified_clients
+  .col-sm-8
+    %p.client__current-sort-filter
+      Currently sorted by:
+      %strong= @sorted_by
 .row
   .col-sm-12
     .table-responsive

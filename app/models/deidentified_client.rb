@@ -94,4 +94,34 @@ class DeidentifiedClient < ActiveRecord::Base
     log "Updated #{DeidentifiedClient.count} ProjectClients from DeidentifiedClients"
   end
 
+  # Sorting and Searching
+
+  scope :text_search, -> (text) do
+    return none unless text.present?
+    query_string = "%#{text}%"
+    where(arel_table[:client_identifier].matches(query_string))
+  end
+
+  def self.ransackable_scopes(auth_object = nil)
+    [:text_search]
+  end
+
+  def self.sort_options
+    [
+        {title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', visible: true},
+        {title: 'Client Identifier Z-A', column: 'client_identifier', direction: 'desc', visible: true},
+        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', visible: true},
+        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc', visible: true},
+    ]
+  end
+
+  def self.possible_agencies
+    User.distinct.pluck(:id, :agency).to_h
+  end
+
+  def self.possible_cohorts
+    return [] unless Warehouse::Base.enabled?
+    Warehouse::Cohort.active.visible_in_cas.pluck(:id, :name).to_h
+  end
+
 end
