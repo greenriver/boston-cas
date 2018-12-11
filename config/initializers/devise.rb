@@ -15,7 +15,7 @@ Devise.setup do |config|
   config.mailer_sender = 'noreply@greenriver.org'
 
   # Configure the class responsible to send e-mails.
-  config.mailer = 'Devise::Mailer'
+  config.mailer = 'AccountMailer'
   config.parent_mailer = 'ApplicationMailer'
 
   # ==> ORM configuration
