@@ -1,21 +1,20 @@
-class IdentifiedClientsController < DeidentifiedClientsController
-  skip_before_action :require_can_enter_deidentified_clients!
-  skip_before_action :require_can_manage_deidentified_clients!
+class IdentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_identified_clients!
   before_action :require_can_manage_identified_clients!, only: [:edit, :update, :destroy]
-  before_action :load_deidentified_client, only: [:edit, :update]
 
   def create
-    @deidentified_client = deidentified_client_source.create(clean_params(identified_client_params))
-    respond_with(@deidentified_client, location: identified_clients_path)
-  end
-
-  def edit
+    @non_hmis_client = client_source.create(clean_params(identified_client_params))
+    respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
   def update
-    @deidentified_client.update(clean_params(identified_client_params))
-    respond_with(@deidentified_client, location: identified_clients_path)
+    @non_hmis_client.update(clean_params(identified_client_params))
+    respond_with(@non_hmis_client, location: identified_clients_path)
+  end
+
+  def destroy
+    @non_hmis_client.destroy
+    respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
   def clean_params dirty_params
@@ -24,14 +23,25 @@ class IdentifiedClientsController < DeidentifiedClientsController
     return dirty_params
   end
 
+  def sort_options
+    [
+        {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', visible: true},
+        {title: 'Last Name Z-A', column: 'last_name', direction: 'desc', visible: true},
+        {title: 'Age', column: 'date_of_birth', direction: 'asc', visible: true},
+        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', visible: true},
+        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc', visible: true},
+    ]
+  end
+  helper_method :sort_options
+
   private
 
-    def deidentified_client_source
-      DeidentifiedClient.identified.visible_to(current_user)
+    def client_source
+      IdentifiedClient.identified.visible_to(current_user)
     end
 
     def identified_client_params
-      params.require(:deidentified_client).permit(
+      params.require(:identified_client).permit(
         :client_identifier,
         :assessment_score,
         :agency,

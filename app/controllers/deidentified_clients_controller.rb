@@ -1,63 +1,35 @@
-class DeidentifiedClientsController < ApplicationController
+class DeidentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_deidentified_clients!
   before_action :require_can_manage_deidentified_clients!, only: [:edit, :update, :destroy]
-  before_action :load_deidentified_client, only: [:edit, :update, :destroy]
-  before_action :load_agencies
-
-  def index
-    # sort
-    default_sort = 'days_homeless_in_the_last_three_years desc'
-    sort_string = params[:q].try(:[], :s) || default_sort
-    (@column, @direction) = sort_string.split(' ')
-    @sorted_by = DeidentifiedClient.sort_options.select do |m|
-      m[:column] == @column && m[:direction] == @direction
-    end.first[:title]
-
-    # construct query
-    @q = deidentified_client_source.ransack(params[:q])
-    @deidentified_clients = @q.result(distinct: true)
-
-    # filter
-    if params[:agency].present?
-      @deidentified_client = @deidentified_clients.where(agency: params[:agency])
-    end
-    if params[:cohort].present?
-      @deidentified_clients = @deidentified_clients.where('active_cohort_ids @> ?', params[:cohort])
-    end
-    @active_filter = params[:agency].present? || params[:cohort].present?
-
-
-    # paginate
-    @page = params[:page].presence || 1
-    @deidentified_clients = @deidentified_clients.reorder(sort_string).page(@page.to_i).per(25)
-  end
 
   def create
-    @deidentified_client = deidentified_client_source.create(clean_params(deidentified_client_params))
-    respond_with(@deidentified_client, location: deidentified_clients_path)
-  end
-
-  def new
-    @deidentified_client = deidentified_client_source.new(agency: current_user.agency)
-  end
-
-  def edit
-
+    @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
+    respond_with(@non_hmis_client, location: deidentified_clients_path)
   end
 
   def update
-    @deidentified_client.update(clean_params(deidentified_client_params))
-    respond_with(@deidentified_client, location: deidentified_clients_path)
+    @non_hmis_client.update(clean_params(deidentified_client_params))
+    respond_with(@non_hmis_client, location: deidentified_clients_path)
   end
 
   def destroy
-    @deidentified_client.destroy
-    respond_with(@deidentified_client, location: deidentified_clients_path)
+    @non_hmis_client.destroy
+    respond_with(@non_hmis_client, location: deidentified_clients_path)
   end
 
-  def deidentified_client_source
+  def client_source
     DeidentifiedClient.deidentified.visible_to(current_user)
   end
+
+  def sort_options
+    [
+        {title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', visible: true},
+        {title: 'Client Identifier Z-A', column: 'client_identifier', direction: 'desc', visible: true},
+        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', visible: true},
+        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc', visible: true},
+    ]
+  end
+  helper_method :sort_options
 
   private
     def deidentified_client_params
@@ -91,19 +63,5 @@ class DeidentifiedClientsController < ApplicationController
       dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
       dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
       return append_client_identifier(dirty_params)
-    end
-
-    def load_deidentified_client
-      # since we sometimes arrive here looking for an identified client
-      # attempt deidentified first, then shuffle them over to identified
-      begin
-        @deidentified_client = deidentified_client_source.find params[:id].to_i
-      rescue
-        redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
-      end
-    end
-
-    def load_agencies
-      @available_agencies = User.distinct.pluck(:agency).compact
     end
 end

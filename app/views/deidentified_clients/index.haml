@@ -8,7 +8,7 @@
     = render 'clients/search_form'
   .col-sm-8.filter-sort__filter.d-flex
     = render 'filter'
-    = render 'clients/sort', sort_options: DeidentifiedClient.sort_options
+    = render 'clients/sort', sort_options: sort_options
   = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
     %span.icon-plus
     Add a Deidentifed Client

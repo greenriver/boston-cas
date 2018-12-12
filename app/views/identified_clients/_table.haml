@@ -15,36 +15,36 @@
           %th
 
         %tbody
-          - @deidentified_clients.each do |deidentified_client|
+          - @non_hmis_clients.each do |identified_client|
             %tr
               %td
-                = deidentified_client.first_name
-                = deidentified_client.middle_name
-                = deidentified_client.last_name
-              %td= Client.age(date: Date.today, dob:deidentified_client.date_of_birth)
-              %td= deidentified_client.agency
-              %td= checkmark deidentified_client.family_member
-              %td= deidentified_client.assessment_score
+                = identified_client.first_name
+                = identified_client.middle_name
+                = identified_client.last_name
+              %td= Client.age(date: Date.today, dob:identified_client.date_of_birth)
+              %td= identified_client.agency
+              %td= checkmark identified_client.family_member
+              %td= identified_client.assessment_score
               
-              %td= simple_format deidentified_client.cohort_names
+              %td= simple_format identified_client.cohort_names
               
-              %td= deidentified_client.days_homeless_in_the_last_three_years
+              %td= identified_client.days_homeless_in_the_last_three_years
 
               - if can_manage_identified_clients?
-                - if deidentified_client.identified
+                - if identified_client.identified
                   %td
-                    = link_to edit_identified_client_path(deidentified_client.id), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                    = link_to edit_identified_client_path(identified_client.id), class: ['btn', 'btn-sm', 'btn-secondary'] do
                       %span.icon-pencil
                       Edit
                 - else
                   %td
-                    = link_to({action: :edit, id: deidentified_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
+                    = link_to({action: :edit, id: identified_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
                       %span.icon-pencil
                       Edit
-                - if !deidentified_client.involved_in_match?
+                - if !identified_client.involved_in_match?
                   %td
-                    = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this deidentified_client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    = link_to identified_client_path(identified_client),  method: :delete, data: {confirm: "Would you really like to delete this Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
                       %span.icon-cross
                       Delete
 
-%p= paginate @deidentified_clients
+%p= paginate @non_hmis_clients

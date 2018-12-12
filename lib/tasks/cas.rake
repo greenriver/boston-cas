@@ -13,9 +13,9 @@ namespace :cas do
     Cas::UpdateClients.new.run!
   end
 
-  desc "Add/Update ProjectClients from DeidentifiedClients"
+  desc "Add/Update ProjectClients from NonHmisClients"
   task update_project_clients_from_deidentified_clients: [:environment, "log:info_to_stdout"] do
-    DeidentifiedClient.new.update_project_clients_from_deidentified_clients
+    NonHmisClient.new.update_project_clients_from_non_hmis_clients
   end
 
   desc "Update voucher avaiability based on future available dates"
