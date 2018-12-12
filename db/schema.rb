@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181115180005) do
+ActiveRecord::Schema.define(version: 20181212183412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,39 +266,6 @@ ActiveRecord::Schema.define(version: 20181115180005) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "deidentified_clients", force: :cascade do |t|
-    t.string   "client_identifier"
-    t.integer  "assessment_score"
-    t.string   "agency"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.jsonb    "active_cohort_ids"
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
-    t.datetime "deleted_at"
-    t.boolean  "identified"
-    t.date     "date_of_birth"
-    t.string   "ssn"
-    t.integer  "days_homeless_in_the_last_three_years"
-    t.boolean  "veteran",                                  default: false, null: false
-    t.boolean  "rrh_desired",                              default: false, null: false
-    t.boolean  "youth_rrh_desired",                        default: false, null: false
-    t.text     "rrh_assessment_contact_info"
-    t.boolean  "income_maximization_assistance_requested", default: false, null: false
-    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
-    t.boolean  "full_release_on_file",                     default: false, null: false
-    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
-    t.integer  "required_number_of_bedrooms",              default: 1
-    t.integer  "required_minimum_occupancy",               default: 1
-    t.boolean  "requires_elevator_access",                 default: false, null: false
-    t.boolean  "family_member",                            default: false, null: false
-    t.string   "middle_name"
-    t.integer  "calculated_chronic_homelessness"
-    t.integer  "gender"
-  end
-
-  add_index "deidentified_clients", ["deleted_at"], name: "index_deidentified_clients_on_deleted_at", using: :btree
-
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
@@ -531,6 +498,40 @@ ActiveRecord::Schema.define(version: 20181115180005) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "non_hmis_clients", force: :cascade do |t|
+    t.string   "client_identifier"
+    t.integer  "assessment_score"
+    t.string   "agency"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.jsonb    "active_cohort_ids"
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+    t.datetime "deleted_at"
+    t.boolean  "identified"
+    t.date     "date_of_birth"
+    t.string   "ssn"
+    t.integer  "days_homeless_in_the_last_three_years"
+    t.boolean  "veteran",                                  default: false, null: false
+    t.boolean  "rrh_desired",                              default: false, null: false
+    t.boolean  "youth_rrh_desired",                        default: false, null: false
+    t.text     "rrh_assessment_contact_info"
+    t.boolean  "income_maximization_assistance_requested", default: false, null: false
+    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
+    t.boolean  "full_release_on_file",                     default: false, null: false
+    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
+    t.integer  "required_number_of_bedrooms",              default: 1
+    t.integer  "required_minimum_occupancy",               default: 1
+    t.boolean  "requires_elevator_access",                 default: false, null: false
+    t.boolean  "family_member",                            default: false, null: false
+    t.string   "middle_name"
+    t.integer  "calculated_chronic_homelessness"
+    t.integer  "gender"
+    t.string   "type"
+  end
+
+  add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
 
   create_table "notifications", force: :cascade do |t|
     t.string   "type"
