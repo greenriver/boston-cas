@@ -101,7 +101,7 @@ class NonHmisClient < ActiveRecord::Base
     Rails.logger.info message
   end
 
-  def update_project_clients_from_deidentified_clients
+  def update_project_clients_from_non_hmis_clients
     data_source_id = DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
 
     # remove unused ProjectClients
