@@ -216,26 +216,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "cd6f47b64e20452a36d13abdd8572f7ab40c0b0b5b5a9e602f4a6ddbdcfe64c9",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/clients_controller.rb",
-      "line": 39,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "client_scope.ransack(params[:q]).result(:distinct => true).veteran.non_veteran.public_send(:all).reorder(((params[:q][:s] or \"days_homeless_in_last_three_years desc\") + \" NULLS LAST\"))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ClientsController",
-        "method": "index"
-      },
-      "user_input": "params[:q][:s]",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "cf9fa747c96c496625affc43ebc9ecdb01c696ca61f911e2de7da2f6188b251d",
@@ -333,6 +313,6 @@
       "note": ""
     }
   ],
-  "updated": "2018-11-02 16:51:33 -0400",
+  "updated": "2018-12-13 16:20:58 -0500",
   "brakeman_version": "4.3.1"
 }
