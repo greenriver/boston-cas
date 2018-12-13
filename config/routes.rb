@@ -116,7 +116,11 @@ Rails.application.routes.draw do
     end
     resources :match_routes, only: [:index, :edit, :update]
   end
+
   resource :account, only: [:edit, :update]
+  resource :account_email, only: [:edit, :update]
+  resource :account_password, only: [:edit, :update]
+
   resources :resend_notification, only: [:show]
 
   namespace :reports do

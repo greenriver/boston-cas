@@ -7,5 +7,4 @@ class DeidentifiedClient < NonHmisClient
     text.strip!
     where(search_alternate_name(text))
   end
-
 end
