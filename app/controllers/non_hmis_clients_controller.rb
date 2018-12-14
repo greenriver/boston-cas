@@ -74,8 +74,4 @@ class NonHmisClientsController < ApplicationController
     @available_agencies = User.distinct.pluck(:agency).compact
   end
 
-  def nhc_t
-    NonHmisClient.arel_table
-  end
-
 end
