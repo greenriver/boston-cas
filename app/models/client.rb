@@ -375,17 +375,19 @@ class Client < ActiveRecord::Base
 
   def self.sort_options(show_vispdat: false)
     [
-      {title: 'Last name A-Z', column: 'last_name', direction: 'asc', visible: true},
-      {title: 'Last name Z-A', column: 'last_name', direction: 'desc', visible: true},
-      {title: 'First name A-Z', column: 'first_name', direction: 'asc', visible: true},
-      {title: 'First name Z-A', column: 'first_name', direction: 'desc', visible: true},
-      {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc', visible: true},
-      {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', visible: true},
-      {title: 'Homeless days', column: 'days_homeless', direction: 'desc', visible: true},
-      {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc', visible: true},
-      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc', visible: true},
-      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', visible: show_vispdat},
-      {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', visible: true}
+      {title: 'Last name A-Z', column: 'last_name', direction: 'asc', query: 'LOWER(last_name) ASC', visible: true},
+      {title: 'Last name Z-A', column: 'last_name', direction: 'desc', query: 'LOWER(last_name) DESC', visible: true},
+      {title: 'First name A-Z', column: 'first_name', direction: 'asc', query: 'LOWER(first_name) ASC', visible: true},
+      {title: 'First name Z-A', column: 'first_name', direction: 'desc', query: 'LOWER(first_name) DESC', visible: true},
+      {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc', query: 'data_of_birth DESC', visible: true},
+      {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', query: 'data_of_birth ASC', visible: true},
+      {title: 'Homeless days', column: 'days_homeless', direction: 'desc', query: 'days_homeless DESC', visible: true},
+      {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc',
+          query: 'days_homeless_in_last_three_years DESC', visible: true},
+      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
+          query: 'calculated_first_homeless_night ASC', visible: true},
+      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', query: 'vispdat_score DESC', visible: show_vispdat},
+      {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', query: 'vispdat_priority_score DESC', visible: true}
     ]
   end
 end

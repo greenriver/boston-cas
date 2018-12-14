@@ -5,12 +5,9 @@
   .o-filtration__container.dropdown-menu.options
     %ul.mb-0
       - sort_options.each do |opt|
-        %li
-          - if opt[:visible]
-            = link_to sort_url(@q, opt[:column], default_order: opt[:direction]), class: 'd-flex align-items-baseline' do
-              - if @column == opt[:column] && @direction == opt[:direction]
-                %span.icon-checkbox-checked.mr-1
-                = opt[:title]
-              - else
-                %span.icon-checkbox-unchecked.mr-1
-                = opt[:title]
+        - if opt[:visible]
+          - if @column == opt[:column] && @direction == opt[:direction]
+            - title = "<span class='icon-checkbox-checked'></span> #{opt[:title]}".html_safe
+          - else
+            - title = "<span class='icon-checkbox-unchecked'></span> #{opt[:title]}".html_safe
+          %li= sort_as_link(title, opt[:column], opt[:direction])

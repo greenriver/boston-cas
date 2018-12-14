@@ -30,7 +30,7 @@ class IdentifiedClientsController < NonHmisClientsController
         {title: 'Age', column: 'date_of_birth', direction: 'asc', query: 'date_of_birth ASC', visible: true},
         {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', query: 'assessment_score DESC', visible: true},
         {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-            query: 'days_homeless_in_the_last_three_years DEC', visible: true},
+            query: 'days_homeless_in_the_last_three_years DESC', visible: true},
     ]
   end
   helper_method :sort_options

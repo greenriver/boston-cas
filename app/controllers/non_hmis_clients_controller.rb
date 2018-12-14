@@ -4,7 +4,7 @@ class NonHmisClientsController < ApplicationController
 
   def index
     # sort
-    sort_order = sorter(params[:q].try(:[], :s))
+    sort_order = sorter
     @sorted_by = sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
@@ -42,13 +42,15 @@ class NonHmisClientsController < ApplicationController
   def edit
   end
 
-  def sorter(param_value)
-    if param_value.blank?
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
+
+    if @column.blank?
       @column = 'days_homeless_in_the_last_three_years'
       @direction = 'desc'
       sort_string = "#{@column} #{@direction}"
     else
-      (@column, @direction) = param_value.split(' ')
       sort_string = sort_options.select do |m|
         m[:column] == @column && m[:direction] == @direction
       end.first[:query]

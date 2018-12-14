@@ -9,13 +9,13 @@ class ClientsController < ApplicationController
   # GET /hmis/clients
   def index
     @show_vispdat = can_view_vspdats?
-    sort_string = sorter(params[:q].try(:[], :s))
+    sort_string = sorter
      
     @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
     @q = client_scope.ransack(params[:q])
-    @clients = @q.result(distinct: true)
+    @clients = @q.result(distinct: false)
     # Filter
     if params[:veteran].present?
       if params[:veteran] == '1'
@@ -77,26 +77,24 @@ class ClientsController < ApplicationController
 
   private
 
-  def sorter(param_value)
-    if param_value.blank?
-      param_value = 'days_homeless_in_last_three_years desc'
-    end
-    (@column, @direction) = param_value.split(' ')
-    arel_column = c_t[@column]
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
 
-    if @direction == "asc"
-      sort_string = arel_column.asc.to_sql
+    if @column.blank?
+      @column = 'days_homeless_in_last_three_years'
+      @direction = 'desc'
+      sort_string = "#{@column} #{@direction}"
     else
-      sort_string = arel_column.desc.to_sql
+      sort_string = Client.sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.first[:query]
     end
+
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort_string += ' NULLS LAST'
     end
     return sort_string
-  end
-
-  def c_t
-    Client.arel_table
   end
 
   def client_scope
