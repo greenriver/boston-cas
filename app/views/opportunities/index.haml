@@ -54,7 +54,8 @@
               %td{:class => deleted}= opportunity.created_at.to_date
               %td{:class => deleted}
                 - if opportunity.active_match.present?
-                  Match in Progress
+                  = link_to match_path(opportunity.active_match), data: {toggle: :tooltip, title: opportunity.active_match.current_decision.label} do
+                    = opportunity.active_match.current_decision.step_name
                 - elsif opportunity.successful_match.present?
                   Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
