@@ -9,12 +9,7 @@ class ClientsController < ApplicationController
   # GET /hmis/clients
   def index
     @show_vispdat = can_view_vspdats?
-    default_sort = 'days_homeless_in_last_three_years desc'
-    sort_string = params[:q].try(:[], :s) || default_sort
-    (@column, @direction) = sort_string.split(' ')
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort_string = sort_string + ' NULLS LAST'
-    end
+    sort_string = sorter(params[:q].try(:[], :s))
      
     @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
       m[:column] == @column && m[:direction] == @direction
@@ -81,6 +76,28 @@ class ClientsController < ApplicationController
   end
 
   private
+
+  def sorter(param_value)
+    if param_value.blank?
+      param_value = 'days_homeless_in_last_three_years desc'
+    end
+    (@column, @direction) = param_value.split(' ')
+    arel_column = c_t[@column]
+
+    if @direction == "asc"
+      sort_string = arel_column.asc.to_sql
+    else
+      sort_string = arel_column.desc.to_sql
+    end
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort_string += ' NULLS LAST'
+    end
+    return sort_string
+  end
+
+  def c_t
+    Client.arel_table
+  end
 
   def client_scope
     Client.accessible_by_user(current_user)

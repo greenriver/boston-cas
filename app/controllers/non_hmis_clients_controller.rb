@@ -4,9 +4,7 @@ class NonHmisClientsController < ApplicationController
 
   def index
     # sort
-    default_sort = 'days_homeless_in_the_last_three_years desc'
-    sort_string = params[:q].try(:[], :s) || default_sort
-    (@column, @direction) = sort_string.split(' ')
+    sort_order = sorter(params[:q].try(:[], :s))
     @sorted_by = sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
@@ -34,7 +32,7 @@ class NonHmisClientsController < ApplicationController
 
     # paginate
     @page = params[:page].presence || 1
-    @non_hmis_clients = @non_hmis_clients.reorder(sort_string).page(@page.to_i).per(25)
+    @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
   end
 
   def new
@@ -42,6 +40,24 @@ class NonHmisClientsController < ApplicationController
   end
 
   def edit
+  end
+
+  def sorter(param_value)
+    if param_value.blank?
+      param_value = 'days_homeless_in_the_last_three_years desc'
+    end
+    (@column, @direction) = param_value.split(' ')
+    arel_column = nhc_t[@column]
+
+    if @direction == "asc"
+      sort_string = arel_column.asc.to_sql
+    else
+      sort_string = arel_column.desc.to_sql
+    end
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort_string += ' NULLS LAST'
+    end
+    return sort_string
   end
 
   def load_client
@@ -57,4 +73,9 @@ class NonHmisClientsController < ApplicationController
   def load_agencies
     @available_agencies = User.distinct.pluck(:agency).compact
   end
+
+  def nhc_t
+    NonHmisClient.arel_table
+  end
+
 end
