@@ -39,7 +39,7 @@
             %th
               Program
             %th
-              Sub-program
+              Sub-Program
             %th
               Voucher Type
             %th= "#{Building.model_name.human} & Unit"
@@ -65,14 +65,16 @@
                   Available
               %td
                 - unless opportunity.voucher.nil?
-                  = opportunity.voucher.sub_program.program.name
+                  = link_to edit_program_sub_program_program_details_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = opportunity.voucher.sub_program.program.name
               %td
                 - unless opportunity.voucher.nil?
-                  = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                  = link_to edit_program_sub_program_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
                     = opportunity.voucher.sub_program.name
               %td
                 - unless opportunity.voucher.nil?
-                  = "#{opportunity.voucher.sub_program.program_type}"
+                  = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = "#{opportunity.voucher.sub_program.program_type}"
               %td
                 - unless opportunity.unit.nil?
                   = link_to edit_unit_path(opportunity.unit) do
