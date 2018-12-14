@@ -25,11 +25,12 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def sort_options
     [
-        {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', visible: true},
-        {title: 'Last Name Z-A', column: 'last_name', direction: 'desc', visible: true},
-        {title: 'Age', column: 'date_of_birth', direction: 'asc', visible: true},
-        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', visible: true},
-        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc', visible: true},
+        {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', query: 'LOWER(last_name) ASC', visible: true},
+        {title: 'Last Name Z-A', column: 'last_name', direction: 'desc', query: 'LOWER(last_name) DESC', visible: true},
+        {title: 'Age', column: 'date_of_birth', direction: 'asc', query: 'date_of_birth ASC', visible: true},
+        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', query: 'assessment_score DESC', visible: true},
+        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
+            query: 'days_homeless_in_the_last_three_years DEC', visible: true},
     ]
   end
   helper_method :sort_options

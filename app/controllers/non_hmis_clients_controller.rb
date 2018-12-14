@@ -11,7 +11,7 @@ class NonHmisClientsController < ApplicationController
 
     # construct query
     @q = client_source.ransack(params[:q])
-    @non_hmis_clients = @q.result(distinct: true)
+    @non_hmis_clients = @q.result(distinct: false)
 
     # filter
     if params[:agency].present?
@@ -44,16 +44,16 @@ class NonHmisClientsController < ApplicationController
 
   def sorter(param_value)
     if param_value.blank?
-      param_value = 'days_homeless_in_the_last_three_years desc'
-    end
-    (@column, @direction) = param_value.split(' ')
-    arel_column = nhc_t[@column]
-
-    if @direction == "asc"
-      sort_string = arel_column.asc.to_sql
+      @column = 'days_homeless_in_the_last_three_years'
+      @direction = 'desc'
+      sort_string = "#{@column} #{@direction}"
     else
-      sort_string = arel_column.desc.to_sql
+      (@column, @direction) = param_value.split(' ')
+      sort_string = sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.first[:query]
     end
+
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort_string += ' NULLS LAST'
     end
