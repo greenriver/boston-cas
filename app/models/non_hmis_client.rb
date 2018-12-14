@@ -74,7 +74,7 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def self.possible_agencies
-    User.distinct.pluck(:id, :agency).to_h
+    User.distinct.pluck(:agency).compact
   end
 
   def self.possible_cohorts

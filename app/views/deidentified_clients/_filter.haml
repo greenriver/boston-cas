@@ -21,7 +21,7 @@
 
       .o-filtration__option
         %label.d-block Agency
-        = select_tag :agency, options_from_collection_for_select(NonHmisClient.possible_agencies, :first, :last, params[:agency]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :agency, options_for_select(NonHmisClient.possible_agencies, params[:agency]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
 
       .o-filtration__option
         %label.d-block Cohort
