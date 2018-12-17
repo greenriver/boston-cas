@@ -16,8 +16,8 @@
         = hidden_field_tag :sort, params[:sort]
       - if params[:direction]
         = hidden_field_tag :direction, params[:direction]
-      - if params[:q]
-        = hidden_field_tag :q, params[:q]
+      - if params[:q].is_a? Hash
+        = hidden_field_tag 'q[text_search]', params[:q][:text_search]
 
       .o-filtration__option
         %label.d-block Agency
