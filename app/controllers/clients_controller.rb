@@ -77,6 +77,11 @@ class ClientsController < ApplicationController
 
   private
 
+  def filter_terms
+    [ :availability, :veteran ]
+  end
+  helper_method :filter_terms
+
   def sorter
     @column = params[:sort]
     @direction = params[:direction]

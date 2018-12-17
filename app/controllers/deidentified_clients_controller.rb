@@ -32,6 +32,11 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
   helper_method :sort_options
 
+  def filter_terms
+    [ :agency, :cohort ]
+  end
+  helper_method :filter_terms
+
   private
     def deidentified_client_params
       params.require(:deidentified_client).permit(

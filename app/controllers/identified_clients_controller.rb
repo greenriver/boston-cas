@@ -35,6 +35,11 @@ class IdentifiedClientsController < NonHmisClientsController
   end
   helper_method :sort_options
 
+  def filter_terms
+    [ :agency, :cohort, :family_member ]
+  end
+  helper_method :filter_terms
+
   private
 
     def client_source
