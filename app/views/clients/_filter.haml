@@ -28,7 +28,7 @@
         = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
 
       .o-filtration__actions.form__actions
-        = link_to clients_path, class: 'btn btn-light' do
+        = link_to clients_path(params.slice(:sort, :direction, :q)), class: 'btn btn-light' do
           %i.icon-cross
           Clear
         %button.btn.btn-primary.ml-auto{type: :submit}
