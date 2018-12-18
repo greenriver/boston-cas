@@ -61,6 +61,8 @@ class DeidentifiedClient < ActiveRecord::Base
     project_client.date_of_birth = date_of_birth
     project_client.ssn = ssn
     project_client.days_homeless_in_last_three_years = days_homeless_in_the_last_three_years
+    project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
+    project_client.days_homeless = days_homeless_in_the_last_three_years
     project_client.veteran_status = 1 if veteran
     project_client.rrh_desired = rrh_desired
     project_client.youth_rrh_desired = youth_rrh_desired
