@@ -53,7 +53,7 @@ class NonHmisClientsController < ApplicationController
     else
       sort_string = sort_options.select do |m|
         m[:column] == @column && m[:direction] == @direction
-      end.first[:query]
+      end.first[:order]
     end
 
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'

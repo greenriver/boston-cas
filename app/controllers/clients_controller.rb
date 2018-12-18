@@ -93,7 +93,7 @@ class ClientsController < ApplicationController
     else
       sort_string = Client.sort_options.select do |m|
         m[:column] == @column && m[:direction] == @direction
-      end.first[:query]
+      end.first[:order]
     end
 
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
