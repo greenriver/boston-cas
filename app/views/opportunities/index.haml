@@ -37,8 +37,11 @@
             %th
               Status
             %th
-              Voucher
-              %em (Type)
+              Program
+            %th
+              Sub-Program
+            %th
+              Voucher Type
             %th= "#{Building.model_name.human} & Unit"
         %tbody
           - @opportunities.each do |opportunity|
@@ -51,7 +54,8 @@
               %td{:class => deleted}= opportunity.created_at.to_date
               %td{:class => deleted}
                 - if opportunity.active_match.present?
-                  Match in Progress
+                  = link_to match_path(opportunity.active_match), data: {toggle: :tooltip, title: opportunity.active_match.current_decision.label} do
+                    = opportunity.active_match.current_decision.step_name
                 - elsif opportunity.successful_match.present?
                   Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
@@ -59,13 +63,18 @@
                   = date_format(opportunity.voucher.date_available)
                 - elsif opportunity.available || opportunity.voucher.available
                   Available
-
+              %td
+                - unless opportunity.voucher.nil?
+                  = link_to edit_program_sub_program_program_details_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = opportunity.voucher.sub_program.program.name
+              %td
+                - unless opportunity.voucher.nil?
+                  = link_to edit_program_sub_program_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = opportunity.voucher.sub_program.name
               %td
                 - unless opportunity.voucher.nil?
                   = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
-                    = opportunity.voucher.sub_program.program.name
-                  %em
-                    = "(#{opportunity.voucher.sub_program.program_type})"
+                    = "#{opportunity.voucher.sub_program.program_type}"
               %td
                 - unless opportunity.unit.nil?
                   = link_to edit_unit_path(opportunity.unit) do
