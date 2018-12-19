@@ -15,7 +15,7 @@ class NonHmisClientsController < ApplicationController
 
     # filter
     if params[:agency].present?
-      @non_hmis_client = @non_hmis_clients.where(agency: params[:agency])
+      @non_hmis_clients = @non_hmis_clients.where(agency: params[:agency])
     end
     if params[:cohort].present?
       @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', params[:cohort])
