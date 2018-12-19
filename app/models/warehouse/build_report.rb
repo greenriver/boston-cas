@@ -4,6 +4,32 @@ module Warehouse
       return nil unless Warehouse::Base.enabled?
       fill_cas_report_table!
       fill_cas_non_hmis_client_history_table!
+      fill_cas_vacancy_table!
+    end
+
+    def fill_cas_vacancy_table!
+      Warehouse::CasVacancy.delete_all
+
+      ::Voucher.with_deleted.each do |voucher|
+        vacancy = Warehouse::CasVacancy.new(program_id: voucher.sub_program.program.id, sub_program_id: voucher.sub_program_id)
+
+        if voucher.deleted_at
+          vacancy.destroy!
+        else
+          vacancy.program_name = voucher.program.name
+          vacancy.sub_program_name = voucher.sub_program.name
+          vacancy.program_type = voucher.sub_program.program_type
+          vacancy.route_name = voucher.program.match_route.title
+
+          vacancy.vacancy_created_at = voucher.created_at
+          vacancy.vacancy_made_available_at = voucher.available_at
+          vacancy.first_matched_at = ClientOpportunityMatch.joins(:opportunity).
+              where(opportunities: { voucher_id: voucher.id } ).
+              order(Opportunity.arel_table[:created_at]).last&.created_at
+
+          vacancy.save!
+        end
+      end
     end
 
     def fill_cas_non_hmis_client_history_table!
