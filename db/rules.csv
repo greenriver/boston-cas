@@ -43,6 +43,7 @@ OneYearHomeless,365 homeless days
 OneEightyDaysHomelessLastThreeYears,180 homeless days in past three years,have
 OneYearHomelessLastThreeYears,365 homeless days in past three years,have
 TwoSeventyDaysHomeless,270 homeless days,have
+TwoSeventyDaysHomelessLastThreeYears,270 homeless days in past three years,have
 ChildInHousehold,Children under age 18 in household,have
 HousingAuthorityEligible,Housing Authority Eligible,be
 DisablingCondition,Disabling Condition,have
