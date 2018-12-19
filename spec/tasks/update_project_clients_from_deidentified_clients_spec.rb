@@ -4,8 +4,8 @@ describe "rake cas:update_project_clients_from_deidentified_clients", type: :tas
   let!(:warehouse_data_source) { create :data_source, :warehouse}
   let!(:deidentified_data_source) { create :data_source, :deidentified}
   
-  let!(:deidentified_client_john) { create :deidentified_client, client_identifier: "john", active_cohort_ids: ["1", "5", "7"] }
-  let!(:deidentified_client_mary) { create :deidentified_client, client_identifier: "mary", active_cohort_ids: ["4", "9"] }
+  let!(:deidentified_client_john) { create :non_hmis_client, client_identifier: "john", active_cohort_ids: ["1", "5", "7"] }
+  let!(:deidentified_client_mary) { create :non_hmis_client, client_identifier: "mary", active_cohort_ids: ["4", "9"] }
 
   let!(:project_client_alice)  { create :project_client, data_source: warehouse_data_source, first_name: "alice" }
   let!(:project_client_arnold)  { create :project_client, data_source: deidentified_data_source, first_name: "arnold" }

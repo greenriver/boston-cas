@@ -1,4 +1,13 @@
 = search_form_for @q do |f|
+  -# Preserve sort and filtering
+  - if params[:sort]
+    = hidden_field_tag :sort, params[:sort]
+  - if params[:direction]
+    = hidden_field_tag :direction, params[:direction]
+  - filter_terms.each do | term |
+    - if params[term]
+      = hidden_field_tag term, params[term]
+
   .input-group{style: 'margin-bottom: 20px;'}
     = f.search_field :text_search, placeholder: @prompt, class: 'form-control', autofocus: true
     %span.input-group-append

@@ -1,3 +1,10 @@
+.row.table-utilities
+  .col-sm-4
+    %p= page_entries_info @non_hmis_clients
+  .col-sm-8
+    %p.client__current-sort-filter
+      Currently sorted by:
+      %strong= @sorted_by
 .row
   .col-sm-12
     .table-responsive
@@ -12,7 +19,7 @@
           %th
 
         %tbody
-          - @deidentified_clients.each do |deidentified_client|
+          - @non_hmis_clients.each do |deidentified_client|
             %tr
               %td= deidentified_client.client_identifier
               %td= deidentified_client.agency
@@ -33,8 +40,8 @@
                       Edit
                 - if !deidentified_client.involved_in_match?
                   %td
-                    = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this deidentified_client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this De-identified Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
                       %span.icon-cross
                       Delete
 
-%p= paginate @deidentified_clients
+%p= paginate @non_hmis_clients
