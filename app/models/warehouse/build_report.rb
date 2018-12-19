@@ -10,7 +10,7 @@ module Warehouse
     def fill_cas_vacancy_table!
       Warehouse::CasVacancy.delete_all
 
-      ::Voucher.with_deleted.each do |voucher|
+      ::Voucher.all.each do |voucher|
         vacancy = Warehouse::CasVacancy.new(program_id: voucher.sub_program.program.id, sub_program_id: voucher.sub_program_id)
 
         if voucher.deleted_at
