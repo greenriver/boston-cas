@@ -9,7 +9,7 @@ module Warehouse
     def fill_cas_non_hmis_client_history_table!
       history = []
       # build out entries for each time a client became available
-      ::DeidentifiedClient.with_deleted.each do |client|
+      ::DeidentifiedCPRlient.with_deleted.each do |client|
         # availability based on creation
         available_ons = [client.created_at] + 
           client.versions.where(event: :create).pluck(:created_at)
