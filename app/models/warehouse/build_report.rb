@@ -13,23 +13,27 @@ module Warehouse
       ::Voucher.all.each do |voucher|
         vacancy = Warehouse::CasVacancy.new(program_id: voucher.sub_program.program.id, sub_program_id: voucher.sub_program_id)
 
-        if voucher.deleted_at
-          vacancy.destroy!
-        else
-          vacancy.program_name = voucher.program.name
-          vacancy.sub_program_name = voucher.sub_program.name
-          vacancy.program_type = voucher.sub_program.program_type
-          vacancy.route_name = voucher.program.match_route.title
+        vacancy.program_name = voucher.program.name
+        vacancy.sub_program_name = voucher.sub_program.name
+        vacancy.program_type = voucher.sub_program.program_type
+        vacancy.route_name = voucher.program.match_route.title
 
-          vacancy.vacancy_created_at = voucher.created_at
-          vacancy.vacancy_made_available_at = voucher.available_at
-          vacancy.first_matched_at = ClientOpportunityMatch.joins(:opportunity).
-              where(opportunities: { voucher_id: voucher.id } ).
-              order(Opportunity.arel_table[:created_at]).last&.created_at
+        vacancy.vacancy_created_at = voucher.created_at
+        vacancy.vacancy_made_available_at = voucher.available_at
+        vacancy.first_matched_at = ClientOpportunityMatch.joins(:opportunity).
+            where(opportunities: { voucher_id: voucher.id } ).maximum(attribute_to_sql(Opportunity, :created_at))
 
-          vacancy.save!
-        end
+        vacancy.save!
       end
+    end
+
+    # Utility method to generate sql for an attribute name
+    private def attribute_to_sql(klass, attribute_name)
+      arel_table = klass.arel_table
+      connection = arel_table.engine.connection
+      table_name = connection.quote_table_name(arel_table.name)
+      column_name = connection.quote_column_name(attribute_name)
+      "#{table_name}.#{column_name}"
     end
 
     def fill_cas_non_hmis_client_history_table!
