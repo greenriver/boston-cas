@@ -9,18 +9,13 @@ class ClientsController < ApplicationController
   # GET /hmis/clients
   def index
     @show_vispdat = can_view_vspdats?
-    default_sort = 'days_homeless_in_last_three_years desc'
-    sort_string = params[:q].try(:[], :s) || default_sort
-    (@column, @direction) = sort_string.split(' ')
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort_string = sort_string + ' NULLS LAST'
-    end
+    sort_string = sorter
      
     @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
     @q = client_scope.ransack(params[:q])
-    @clients = @q.result(distinct: true)
+    @clients = @q.result(distinct: false)
     # Filter
     if params[:veteran].present?
       if params[:veteran] == '1'
@@ -81,6 +76,31 @@ class ClientsController < ApplicationController
   end
 
   private
+
+  def filter_terms
+    [ :availability, :veteran ]
+  end
+  helper_method :filter_terms
+
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
+
+    if @column.blank?
+      @column = 'days_homeless_in_last_three_years'
+      @direction = 'desc'
+      sort_string = "#{@column} #{@direction}"
+    else
+      sort_string = Client.sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.first[:order]
+    end
+
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort_string += ' NULLS LAST'
+    end
+    return sort_string
+  end
 
   def client_scope
     Client.accessible_by_user(current_user)
