@@ -13,6 +13,7 @@ class Users::InvitationsController < Devise::InvitationsController
     user_attrs = invite_params[:contact_attributes].except(:phone)
     user_attrs[:role_ids] = invite_params[:role_ids]
     user_attrs[:email] = user_attrs[:email].downcase
+    user_attrs[:agency] = invite_params[:agency]
     @user = User.invite!(user_attrs, current_user)
     c_t = Contact.arel_table
     contact = Contact.where(email: user_attrs[:email].downcase).first_or_create
@@ -51,6 +52,7 @@ class Users::InvitationsController < Devise::InvitationsController
       :first_name,
       :last_name,
       :email,
+      :agency,
       role_ids: [],
       contact_attributes: [:first_name, :last_name, :phone, :email]
       )
