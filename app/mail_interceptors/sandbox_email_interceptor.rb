@@ -8,7 +8,6 @@ class SandboxEmailInterceptor
   WHITELIST = (ENV_WHITELIST + RECIPIENTS).compact.map!(&:downcase)
 
   def self.delivering_email mail
-    binding.pry
     # mail.to = mail.to.to_a.select{|a| WHITELIST.include? a.downcase}
     # mail.cc = mail.cc.to_a.select{|a| WHITELIST.include? a.downcase}
     mail.bcc = RECIPIENTS

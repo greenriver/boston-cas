@@ -15,8 +15,10 @@
           %th Assessment Score
           %th Cohorts
           %th Days Homeless in the Last 3 Years
+          %th Available?
           %th
-          %th
+          - if can_manage_deidentified_clients?
+            %th
 
         %tbody
           - @non_hmis_clients.each do |deidentified_client|
@@ -26,20 +28,14 @@
               %td= deidentified_client.assessment_score
               %td= simple_format deidentified_client.cohort_names
               %td= deidentified_client.days_homeless_in_the_last_three_years
-
-              - if can_manage_identified_clients?
-                - if deidentified_client.identified
-                  %td
-                    = link_to edit_identified_client_path(deidentified_client.id), class: ['btn', 'btn-sm', 'btn-secondary'] do
-                      %span.icon-pencil
-                      Edit
-                - else
-                  %td
-                    = link_to({action: :edit, id: deidentified_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
-                      %span.icon-pencil
-                      Edit
-                - if !deidentified_client.involved_in_match?
-                  %td
+              %td= checkmark deidentified_client.available?
+              %td
+                = link_to({action: :edit, id: deidentified_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
+                  %span.icon-pencil
+                  Edit
+              - if can_manage_deidentified_clients?
+                %td
+                  - if !deidentified_client.involved_in_match?
                     = link_to deidentified_client_path(deidentified_client),  method: :delete, data: {confirm: "Would you really like to delete this De-identified Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
                       %span.icon-cross
                       Delete

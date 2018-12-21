@@ -1,6 +1,7 @@
 class NonHmisClientsController < ApplicationController
   before_action :load_client, only: [:edit, :update, :destroy]
   before_action :load_agencies
+  before_action :set_active_filter, only: [:index]
 
   def index
     # sort
@@ -14,22 +15,19 @@ class NonHmisClientsController < ApplicationController
     @non_hmis_clients = @q.result(distinct: false)
 
     # filter
-    if params[:agency].present?
-      @non_hmis_clients = @non_hmis_clients.where(agency: params[:agency])
+    if clean_agency.present?
+      @non_hmis_clients = @non_hmis_clients.where(agency: clean_agency)
     end
-    if params[:cohort].present?
-      @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', params[:cohort])
+    if clean_cohort.present?
+      @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', clean_cohort)
     end
-    if params[:family_member].present?
-      if params[:family_member] == 'true'
-        @non_hmis_clients = @non_hmis_clients.family_member(true)
-      else
-        @non_hmis_clients = @non_hmis_clients.family_member(false)
-      end
+    if clean_available.present?
+      @non_hmis_clients = @non_hmis_clients.where(available: clean_available)
     end
-    @active_filter = params[:agency].present? || params[:cohort].present? || params[:family_member].present?
-
-
+    if clean_family_member.present?
+      @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member)
+    end
+    
     # paginate
     @page = params[:page].presence || 1
     @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
@@ -74,6 +72,26 @@ class NonHmisClientsController < ApplicationController
 
   def load_agencies
     @available_agencies = User.distinct.pluck(:agency).compact
+  end
+
+  def set_active_filter
+    @active_filter = filter_terms.map{|k| params[k].present?}.any?
+  end
+
+  def clean_agency
+    NonHmisClient.possible_agencies.detect{|m| m.downcase == params[:agency]&.downcase}
+  end
+
+  def clean_cohort
+    NonHmisClient.possible_cohorts.keys.detect{|m| m.to_i == params[:cohort]&.to_i}.to_s
+  end
+
+  def clean_available
+    [true, false].detect{|m| m.to_s == params[:available]}
+  end
+
+  def clean_family_member
+    [true, false].detect{|m| m.to_s == params[:family_member]}
   end
 
 end

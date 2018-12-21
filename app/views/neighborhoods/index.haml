@@ -1,13 +1,11 @@
 - title = "Neighborhoods"
 - content_for :title, title
 
-= render :partial => 'menus/admin_tabs'
-
 .o-page
   .o-page__title
     %h1= content_for :title
     .o-page__action.o-page__action--stacked
-      = link_to new_admin_neighborhood_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+      = link_to new_neighborhood_path, class: 'btn btn-primary pull-right margin-bottom-02' do
         %span.icon-plus
         Add a Neighborhood
 
@@ -37,11 +35,11 @@
                 %td
                   = neighborhood.name
                 %td
-                  = link_to edit_admin_neighborhood_path(neighborhood), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                  = link_to edit_neighborhood_path(neighborhood), class: ['btn', 'btn-sm', 'btn-secondary'] do
                     %span.icon-pencil
                     Edit
                 %td
-                  = link_to admin_neighborhood_path(neighborhood),  method: :delete, data: {confirm: "Would you really like to delete neighborhood? #{neighborhood.name}"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                  = link_to neighborhood_path(neighborhood),  method: :delete, data: {confirm: "Would you really like to delete the neighborhood #{neighborhood.name}?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
                     %span.icon-cross
                     Delete
       %p= paginate @neighborhoods
