@@ -10,6 +10,10 @@ class NonHmisClient < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
+  scope :available, -> do
+    where(available: true)
+  end
+
   scope :visible_to, -> (user) do
     if user.can_edit_all_clients?
       all
@@ -109,7 +113,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.middle_name = middle_name
     project_client.gender = gender
 
-    project_client.sync_with_cas = true
+    project_client.sync_with_cas = self.available
     project_client.needs_update = true
     project_client.save
   end

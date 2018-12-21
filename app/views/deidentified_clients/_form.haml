@@ -21,7 +21,7 @@
       = f.input :required_minimum_occupancy, collection: (1..10), include_blank: false
       = f.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit')
       = f.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access')
-
+      = f.input :available, lable: 'Available for matching?'
     .form-actions
       = f.button :submit, "Submit", class: 'btn btn-primary'
 
