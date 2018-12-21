@@ -47,6 +47,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1
   def show
+    @neighborhood = NeighborhoodInterest.new
     @client_notes = @client.client_notes
     @client_note = ClientNote.new
   end
@@ -74,6 +75,11 @@ class ClientsController < ApplicationController
     @client.unavailable(permanent: true)
     redirect_to action: :show
   end
+
+  def available_neighborhoods
+    Neighborhood.where.not(id: NeighborhoodInterest.for_client(@client).pluck(:neighborhood_id))
+  end
+  helper_method :available_neighborhoods
 
   private
 
