@@ -35,6 +35,8 @@ class Client < ActiveRecord::Base
 
   has_many :unavailable_as_candidate_fors
 
+  has_many :neighborhood_interests
+
   validates :ssn, length: {maximum: 9}
 
   scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
