@@ -13,6 +13,7 @@
           %th Cohorts
           
           %th Days Homeless in the Last 3 Years
+          %th Available?
           %th
           %th
 
@@ -30,22 +31,17 @@
               %td= simple_format identified_client.cohort_names
               
               %td= identified_client.days_homeless_in_the_last_three_years
-
+              %td= checkmark(identified_client.available)
+              %td
+                = link_to({action: :edit, id: identified_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
+                  %span.icon-pencil
+                  Edit
               - if can_manage_identified_clients?
-                - if identified_client.identified
-                  %td
-                    = link_to edit_identified_client_path(identified_client.id), class: ['btn', 'btn-sm', 'btn-secondary'] do
-                      %span.icon-pencil
-                      Edit
-                - else
-                  %td
-                    = link_to({action: :edit, id: identified_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
-                      %span.icon-pencil
-                      Edit
-                - if !identified_client.involved_in_match?
-                  %td
+                %td              
+                  - if !identified_client.involved_in_match?
                     = link_to identified_client_path(identified_client),  method: :delete, data: {confirm: "Would you really like to delete this Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
                       %span.icon-cross
                       Delete
+
 
 %p= paginate @non_hmis_clients

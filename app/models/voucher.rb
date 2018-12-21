@@ -71,6 +71,22 @@ class Voucher < ActiveRecord::Base
     [:unit, :sub_program]
   end
 
+  def available_at
+    cursor = self
+
+    while cursor
+      if cursor.available
+        previous = cursor.paper_trail.previous_version
+        if previous.nil? || ! previous.available
+          return cursor.updated_at
+        end
+      end
+      cursor = cursor.paper_trail.previous_version
+    end
+
+    return nil
+  end
+
   def changing_to_available?
     available? && available_changed?
   end

@@ -36,7 +36,7 @@ class IdentifiedClientsController < NonHmisClientsController
   helper_method :sort_options
 
   def filter_terms
-    [ :agency, :cohort, :family_member ]
+    [ :agency, :cohort, :family_member, :available ]
   end
   helper_method :filter_terms
 
@@ -71,6 +71,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :family_member,
         :calculated_chronic_homelessness,
         :gender,
+        :available,
         :active_cohort_ids => [],
       ).merge(identified: true)
     end
