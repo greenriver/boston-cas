@@ -1,6 +1,6 @@
 .row
   .col-sm-8
-    = simple_form_for [:admin, @neighborhood] do |f|
+    = simple_form_for @neighborhood do |f|
       = f.error_notification
       .form-inputs
         = f.input :name
