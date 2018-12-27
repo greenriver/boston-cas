@@ -1,24 +1,12 @@
 %section.c-card.c-card--flush
   %h3 Neighborhood Interests
   .c-card__content
-    = simple_form_for(@neighborhood, url: client_neighborhood_interests_path(@client)) do |f|
-      = f.error_notification
-      %table.table.table-condensed
-        %tbody
-          - @client.neighborhood_interests.each_with_index do |interest, index|
+    %table.table.table-condensed
+      %tbody
+        - if @neighborhood_interests.present?
+          - @neighborhood_interests.each_with_index do |interest, index|
             %tr{class: ('no-border' if index == 0)}
               %td
-                = interest.neighborhood.name
-              %td
-                = link_to client_neighborhood_interest_path(interest, client_id: @client.id),  method: :delete, data: {confirm: "Would you really like to remove #{interest.neighborhood.name} from the neighborhood interests?"}, class: ['btn', ] do
-                  %span.icon-cross
-          %tr{class: ('no-border' if @client.neighborhood_interests.size == 0)}
-            %td{colspan: 2}
-              = f.input :neighborhood_id, collection: available_neighborhoods, label: false, input_html: {multiple: :multiple, class: [:select2], style: 'width: 100%'}
-          %tr.no-border
-            %td.text-right{colspan: 2}
-              = f.button :submit, class: 'btn btn-primary', value: 'Add Neighborhood Interest'
-
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+                = interest
+        - else
+          None specified
