@@ -16,7 +16,6 @@ Rails.application.routes.draw do
     patch :unavailable, on: :member
     resources :matches, controller: 'client_matches', only: :index
     resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
-    resources :neighborhood_interests, controller: 'neighborhood_interests', only: [:destroy, :create]
     resources :qualified_opportunities, only: [:index, :update]
   end
 
