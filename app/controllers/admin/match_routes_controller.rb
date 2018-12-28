@@ -23,7 +23,8 @@ module Admin
     def update_params
       params.require(:match_route).permit(
         :active,
-        :contacts_editable_by_hsa, 
+        :contacts_editable_by_hsa,
+        :should_run_engine,
         :should_cancel_other_matches,
         :match_prioritization_id,
       ) 

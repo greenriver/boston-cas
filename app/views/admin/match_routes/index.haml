@@ -15,6 +15,8 @@
       %th
         HSA can edit HSA contacts
       %th
+        Should run engine
+      %th
         Should cancel other matches 
       %th
         Match prioritization
@@ -28,6 +30,8 @@
           = checkmark route.active
         %td
           = checkmark route.contacts_editable_by_hsa
+        %td
+          = checkmark route.should_run_engine
         %td
           = checkmark route.should_cancel_other_matches
         %td
