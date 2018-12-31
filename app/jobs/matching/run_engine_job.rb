@@ -6,10 +6,8 @@ module Matching
       ClientOpportunityMatch.with_advisory_lock(:engine_lock) do
         # TODO replaced all_routes with available -- this means inactive routes will not be run, I believe this was the intended behavior, anyway?
         MatchRoutes::Base.available.each do |route|
-          if route.should_run_engine
-            Matching::Matchability.update(Opportunity.on_route(route), match_route: route)
-            Matching::Engine.create_candidates(match_route: route)
-          end
+          Matching::Matchability.update(Opportunity.on_route(route), match_route: route)
+          Matching::Engine.create_candidates(match_route: route)
         end
       end
     end

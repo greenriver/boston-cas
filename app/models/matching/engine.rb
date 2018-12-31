@@ -5,7 +5,8 @@ class Matching::Engine
     end
 
     def create_candidates match_route:
-      new(available_clients(match_route: match_route), available_opportunities).replace_candidates
+      activate_priority_match = match_route.should_activate_match
+      new(available_clients(match_route: match_route), available_opportunities).replace_candidates(activate_priority_match)
     end
 
     def available_client_count match_route:
@@ -32,8 +33,8 @@ class Matching::Engine
     @opportunities = opportunities
   end
 
-  def replace_candidates
-    destroy_candidates && create_candidates
+  def replace_candidates(activate_priority_match)
+    destroy_candidates && create_candidates(activate_priority_match)
   end
 
   def destroy_candidates
@@ -44,9 +45,9 @@ class Matching::Engine
     end
   end
 
-  def create_candidates
+  def create_candidates(activate_priority_match)
     prioritized_candidate_opportunities.each do |opportunity|
-      create_candidate_matches(opportunity)
+      create_candidate_matches(opportunity, activate_priority_match)
     end
   end
 
@@ -59,7 +60,7 @@ class Matching::Engine
     end
   end
 
-  def create_candidate_matches opportunity
+  def create_candidate_matches(opportunity, activate_priority_match)
     matches_left_to_max = opportunity.matches_left_to_max
     client_priority = 1
     clients_for_matches(opportunity).each do |client|
@@ -71,7 +72,7 @@ class Matching::Engine
       }
       match =
         client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
-      match.activate! if client_priority == 1
+      match.activate! if client_priority == 1 && activate_priority_match
       client_priority += 1
     end
 

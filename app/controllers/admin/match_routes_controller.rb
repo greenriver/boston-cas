@@ -24,7 +24,7 @@ module Admin
       params.require(:match_route).permit(
         :active,
         :contacts_editable_by_hsa,
-        :should_run_engine,
+        :should_activate_match,
         :should_cancel_other_matches,
         :match_prioritization_id,
       ) 

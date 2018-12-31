@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181228164135) do
+ActiveRecord::Schema.define(version: 20181231180419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,6 +219,8 @@ ActiveRecord::Schema.define(version: 20181228164135) do
     t.integer  "required_minimum_occupancy",                             default: 1
     t.boolean  "requires_elevator_access",                               default: false
     t.jsonb    "neighborhood_interests",                                 default: [],    null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -479,7 +481,7 @@ ActiveRecord::Schema.define(version: 20181228164135) do
     t.integer  "stalled_interval",            default: 7,     null: false
     t.integer  "match_prioritization_id",     default: 5,     null: false
     t.boolean  "should_cancel_other_matches", default: true,  null: false
-    t.boolean  "should_run_engine",           default: true,  null: false
+    t.boolean  "should_activate_match",       default: true,  null: false
   end
 
   create_table "messages", force: :cascade do |t|
@@ -546,6 +548,12 @@ ActiveRecord::Schema.define(version: 20181228164135) do
     t.string   "type"
     t.boolean  "available",                                default: true,  null: false
     t.jsonb    "neighborhood_interests",                   default: [],    null: false
+    t.float    "income_total_monthly"
+    t.boolean  "disabling_condition",                      default: false
+    t.boolean  "physical_disability",                      default: false
+    t.boolean  "developmental_disability",                 default: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -749,6 +757,8 @@ ActiveRecord::Schema.define(version: 20181228164135) do
     t.integer  "required_minimum_occupancy",                  default: 1
     t.boolean  "requires_elevator_access",                    default: false
     t.jsonb    "neighborhood_interests",                      default: [],    null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
