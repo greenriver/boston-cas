@@ -1,6 +1,7 @@
 class NonHmisClientsController < ApplicationController
   before_action :load_client, only: [:edit, :update, :destroy]
   before_action :load_agencies
+  before_action :load_neighborhoods
   before_action :set_active_filter, only: [:index]
 
   def index
@@ -72,6 +73,10 @@ class NonHmisClientsController < ApplicationController
 
   def load_agencies
     @available_agencies = User.distinct.pluck(:agency).compact
+  end
+
+  def load_neighborhoods
+    @neighborhoods = Neighborhood.order(:name).pluck(:id, :name)
   end
 
   def set_active_filter
