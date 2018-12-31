@@ -227,7 +227,7 @@ class NotificationsMailer < DatabaseMailer
 
   # Set Aside
 
-  def new_set_aside_opportunity_available notification
+  def match_initiation_for_set_aside notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "A new Set-Aside Opportunity has been added")
   end

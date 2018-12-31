@@ -1,5 +1,5 @@
 module Notifications::HomelessSetAside
-  class MatchInitiationForHsa < ::Notifications::Base
+  class MatchInitiationForSetAside < ::Notifications::Base
 
     def self.create_for_match! match
       match.housing_subsidy_admin_contacts.each do |contact|
