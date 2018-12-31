@@ -117,6 +117,8 @@ Rails.application.routes.draw do
     resources :match_routes, only: [:index, :edit, :update]
   end
 
+  resources :neighborhoods
+
   resource :account, only: [:edit, :update]
   resource :account_email, only: [:edit, :update]
   resource :account_password, only: [:edit, :update]

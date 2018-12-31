@@ -499,6 +499,12 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "neighborhoods", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "non_hmis_clients", force: :cascade do |t|
     t.string   "client_identifier"
     t.integer  "assessment_score"
@@ -847,6 +853,7 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
+    t.boolean  "can_manage_neighborhoods",                default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
