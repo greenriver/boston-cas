@@ -27,6 +27,7 @@
       = f.input :rrh_assessment_contact_info, label: 'Client and/orCase Manager Contact Information'
       = f.input :required_number_of_bedrooms, collection: (1..5), include_blank: false
       = f.input :required_minimum_occupancy, collection: (1..10), include_blank: false
+      = f.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }
       = f.input :disabling_condition
       = f.input :physical_disability
       = f.input :developmental_disability

@@ -20,6 +20,7 @@ class IdentifiedClientsController < NonHmisClientsController
   def clean_params dirty_params
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
+    dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
     return dirty_params
   end
 
@@ -79,6 +80,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :physical_disability,
         :developmental_disability,
         :active_cohort_ids => [],
+        :neighborhood_interests => [],
       ).merge(identified: true)
     end
 end
