@@ -116,6 +116,11 @@ class NonHmisClient < ActiveRecord::Base
     project_client.gender = gender
     project_client.neighborhood_interests = neighborhood_interests
 
+    project_client.income_total_monthly = income_total_monthly
+    project_client.disabling_condition = if disabling_condition then 1 else nil end
+    project_client.physical_disability = if physical_disability then 1 else nil end
+    project_client.developmental_disability = if developmental_disability then 1 else nil end
+
     project_client.sync_with_cas = self.available
     project_client.needs_update = true
     project_client.save
