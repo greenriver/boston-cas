@@ -67,6 +67,7 @@ class Role < ActiveRecord::Base
       :can_enter_identified_clients,
       :can_manage_identified_clients,
       :can_add_cohorts_to_identified_clients,
+      :can_manage_neighborhoods,
     ]
   end
 

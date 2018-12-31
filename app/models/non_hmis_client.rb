@@ -111,6 +111,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.calculated_chronic_homelessness = calculated_chronic_homelessness
     project_client.middle_name = middle_name
     project_client.gender = gender
+    project_client.neighborhood_interests = neighborhood_interests
 
     project_client.income_total_monthly = income_total_monthly
     project_client.disabling_condition = 1 if disabling_condition

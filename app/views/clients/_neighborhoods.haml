@@ -1,0 +1,12 @@
+%section.c-card.c-card--flush
+  %h3 Neighborhood Interests
+  .c-card__content
+    %table.table.table-condensed
+      %tbody
+        - if @neighborhood_interests.present?
+          - @neighborhood_interests.each_with_index do |interest, index|
+            %tr{class: ('no-border' if index == 0)}
+              %td
+                = interest
+        - else
+          None specified

@@ -49,6 +49,7 @@ class ClientsController < ApplicationController
   def show
     @client_notes = @client.client_notes
     @client_note = ClientNote.new
+    @neighborhood_interests = Neighborhood.where(id: @client.neighborhood_interests).order(:name).pluck(:name)
   end
 
   def update
