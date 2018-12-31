@@ -1,4 +1,5 @@
 class Client < ActiveRecord::Base
+  before_create :assign_tie_breaker
 
   include SubjectForMatches
   include MatchArchive
@@ -148,6 +149,9 @@ class Client < ActiveRecord::Base
       order(days_homeless: :desc)
     when 'homeless-days-last-three-years'
       order(c_t[:days_homeless_in_last_three_years].desc)
+    when 'homeless-days-last-three-years-random-tie-breaker'
+      order(c_t[:days_homeless_in_last_three_years].desc).
+      order(tie_breaker: :asc)
     when 'vi-spdat'
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     when 'vispdat-priority-score'
@@ -159,6 +163,11 @@ class Client < ActiveRecord::Base
     else
       raise NotImplementedError
     end
+  end
+
+  # A random number for prioritizations that require a tie-breaker
+  def assign_tie_breaker
+    tie_breaker = rand
   end
 
   def self.ready_to_match match_route:
