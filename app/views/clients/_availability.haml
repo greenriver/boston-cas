@@ -27,6 +27,15 @@
             %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH or SO with no overlapping TH or PH'}}
           %td= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
         %tr
+          %th
+            Days Homeless
+          %td
+            - if date_days_homeless_verified = @client.date_days_homeless_verified.try(:strftime, I18n.t('date.formats.default'))
+              - who_verified_days_homeless = @client.who_verified_days_homeless.present? ? "(#{@client.who_verified_days_homeless})" : ""
+              = "Verified on #{date_days_homeless_verified}  #{who_verified_days_homeless}"
+            - else
+              Not Verified
+        %tr
           %th Currently Enrolled in
           %td
             - if @client.enrolled_in_es

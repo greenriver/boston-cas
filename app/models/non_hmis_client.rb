@@ -96,6 +96,9 @@ class NonHmisClient < ActiveRecord::Base
     project_client.days_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     project_client.days_homeless = days_homeless_in_the_last_three_years
+    project_client.date_days_homeless_verified = date_days_homeless_verified
+    project_client.who_verified_days_homeless = who_verified_days_homeless
+
     project_client.veteran_status = 1 if veteran
     project_client.rrh_desired = rrh_desired
     project_client.youth_rrh_desired = youth_rrh_desired
