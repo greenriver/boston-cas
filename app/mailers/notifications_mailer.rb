@@ -225,6 +225,15 @@ class NotificationsMailer < DatabaseMailer
 
   # End Provider Only
 
+  # Set Aside
+
+  def new_set_aside_opportunity_available notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "A new Set-Aside Opportunity has been added")
+  end
+
+  # end Set Aside
+
   # Progress Updates
   def progress_update_requested notification_ids
     @notifications = ::Notifications::Base.where(id: notification_ids)
