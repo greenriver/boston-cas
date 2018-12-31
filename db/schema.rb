@@ -549,6 +549,10 @@ ActiveRecord::Schema.define(version: 20181228202641) do
     t.date     "date_days_homeless_verified"
     t.string   "who_verified_days_homeless"
     t.jsonb    "neighborhood_interests",                   default: [],    null: false
+    t.float    "income_total_monthly"
+    t.boolean  "disabling_condition",                      default: false
+    t.boolean  "physical_disability",                      default: false
+    t.boolean  "developmental_disability",                 default: false
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree

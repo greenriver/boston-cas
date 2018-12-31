@@ -57,6 +57,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :date_of_birth,
         :ssn,
         :days_homeless_in_the_last_three_years,
+        :date_days_homeless_verified,
+        :who_verified_days_homeless,
         :veteran,
         :rrh_desired,
         :youth_rrh_desired,
