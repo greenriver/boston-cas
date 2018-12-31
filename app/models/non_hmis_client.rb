@@ -114,6 +114,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.calculated_chronic_homelessness = calculated_chronic_homelessness
     project_client.middle_name = middle_name
     project_client.gender = gender
+    project_client.neighborhood_interests = neighborhood_interests
 
     project_client.sync_with_cas = self.available
     project_client.needs_update = true
