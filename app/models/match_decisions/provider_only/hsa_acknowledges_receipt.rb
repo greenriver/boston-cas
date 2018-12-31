@@ -58,6 +58,7 @@ module MatchDecisions::ProviderOnly
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ProviderOnly::MatchInitiationForHsa
         m << Notifications::ProviderOnly::MatchInitiationForShelterAgency
+        m << Notifications::ProviderOnly::MatchInitiationForSsp
       end
     end
 
