@@ -177,6 +177,7 @@ module Cas
         :required_number_of_bedrooms,
         :required_minimum_occupancy,
         :requires_elevator_access,
+        :neighborhood_interests,
       ]
     end
 
