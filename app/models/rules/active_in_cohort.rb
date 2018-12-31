@@ -17,7 +17,7 @@ class Rules::ActiveInCohort < Rule
   end
 
   def clients_that_fit(scope, requirement)
-    if Client.column_names.include?(:enrolled_project_ids.to_s)
+    if Client.column_names.include?(:active_cohort_ids.to_s)
       if requirement.positive
         where = 'active_cohort_ids @> ?'
       else
