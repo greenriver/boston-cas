@@ -1,0 +1,3 @@
+- rule = interested_in_neighborhood
+%h4 Neighborhood
+= select_tag(:variable, options_from_collection_for_select(rule.available_neighborhoods, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_neighborhoods.to_h.to_json})

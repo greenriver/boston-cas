@@ -10,6 +10,8 @@
       = f.input :date_of_birth, as: :date_picker
       = f.input :ssn, label: "SSN", input_html: {maxlength: 9}
       = f.input :days_homeless_in_the_last_three_years
+      = f.input :date_days_homeless_verified, as: :date_picker
+      = f.input :who_verified_days_homeless
       = f.input :full_release_on_file
       - if can_add_cohorts_to_identified_clients? && Warehouse::Base.enabled?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"

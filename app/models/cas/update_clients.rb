@@ -153,6 +153,8 @@ module Cas
         :family_member,
         :child_in_household,
         :days_homeless,
+        :date_days_homeless_verified,
+        :who_verified_days_homeless,
         :days_homeless_in_last_three_years,
         :days_literally_homeless_in_last_three_years,
         :ha_eligible,
@@ -177,6 +179,7 @@ module Cas
         :required_number_of_bedrooms,
         :required_minimum_occupancy,
         :requires_elevator_access,
+        :neighborhood_interests,
       ]
     end
 
