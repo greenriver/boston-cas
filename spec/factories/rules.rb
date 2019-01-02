@@ -95,4 +95,14 @@ FactoryGirl.define do
     name 'Minimum occupancy'
     verb 'have'
   end
+  factory :neighborhood_cambridge, class: 'Neighborhood' do
+    name 'Cambridge'
+  end
+  factory :neighborhood_beacon_hill, class: 'Neighborhood' do
+    name 'Beacon Hill'
+  end
+  factory :interested_in_cambridge, class: 'Rules::InterestedInNeighborhood' do
+    name 'Interested in Neighborhood'
+    verb 'be'
+  end
 end
