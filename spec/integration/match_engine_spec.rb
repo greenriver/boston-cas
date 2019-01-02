@@ -255,7 +255,7 @@ RSpec.describe "Running the match engine...", type: :request do
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
-      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates(false)
+      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
       expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities.last)
     end
     
@@ -263,7 +263,7 @@ RSpec.describe "Running the match engine...", type: :request do
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
-      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates(true)
+      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
       
       expect(client.prioritized_matches.first.active).to be true
     end
@@ -273,7 +273,7 @@ RSpec.describe "Running the match engine...", type: :request do
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
-      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates(true)
+      Matching::Engine.new(Client.where(id: client.id), Opportunity.where(id: restrictive_opportunities)).create_candidates
       expect(client.id).to eq(UnavailableAsCandidateFor.where(match_route_type: MatchRoutes::Base.route_name_from_route(route)).first.client_id)
     end
   end
