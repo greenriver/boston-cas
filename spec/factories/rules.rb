@@ -119,5 +119,9 @@ FactoryGirl.define do
     name 'Active in Cohort'
     verb 'be'
   end
+  factory :verified_days_homeless, class: 'Rules::VerifiedDaysHomeless' do
+    name 'Verified Days Homeless'
+    verb "have"
+  end
 end
 
