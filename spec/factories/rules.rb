@@ -123,5 +123,9 @@ FactoryGirl.define do
     name 'Verified Days Homeless'
     verb "have"
   end
+  factory :interested_in_rrh, class: 'Rules::InterestedInRrh' do
+    name "Interested in RRH"
+    verb "be"
+  end
 end
 
