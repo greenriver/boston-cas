@@ -170,6 +170,15 @@ class Client < ActiveRecord::Base
     tie_breaker = rand
   end
 
+  def self.add_missing_tie_breakers
+    c_t = Client.arel_table
+    update = Arel::UpdateManager.new(c_t.engine)
+    update.table(c_t)
+    update.set([[c_t[:tie_breaker], Arel.sql('random()')]]).where(c_t[:tie_breaker].eq(nil))
+    result = ActiveRecord::Base.connection.execute(update.to_sql)
+    log "Updated #{result.cmd_tuples} clients with missing tie_breakers"
+  end
+
   def self.ready_to_match match_route:
     available_as_candidate(match_route).matchable
   end
@@ -398,5 +407,9 @@ class Client < ActiveRecord::Base
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]
+  end
+
+  def self.log message
+    Rails.logger.info message
   end
 end

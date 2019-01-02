@@ -2,10 +2,7 @@ class AddRandomTieBreakerToClient < ActiveRecord::Migration
   def up
     add_column :clients, :tie_breaker, :float
 
-    Client.find_each do |client|
-      client.tie_breaker = rand
-      client.save!
-    end
+    Client.add_missing_tie_breakers
   end
 
   def down
