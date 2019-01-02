@@ -20,6 +20,9 @@ RSpec.describe Rules::InterestedInNeighborhood, type: :model do
     let!(:sue) {
       client = create :client, first_name: 'Sue', neighborhood_interests: [ ]
     }
+    let!(:zelda) {
+      client = create :client, first_name: 'Zelda', neighborhood_interests: [ "#{cambridge.id}" ]
+    }
 
     let!(:positive) { create :requirement, rule: rule, positive: true, variable: cambridge.id }
     let!(:negative) { create :requirement, rule: rule, positive: false, variable: cambridge.id }
@@ -43,11 +46,14 @@ RSpec.describe Rules::InterestedInNeighborhood, type: :model do
       it 'contains Sue' do
         expect(clients_that_fit.ids).to include sue.id
       end
+      it 'does not contain Zelda' do
+        expect(clients_that_fit.ids).to_not include zelda.id
+      end
     end
 
     context 'when negative' do
-      it 'matches 2' do
-        expect(clients_that_dont_fit.count).to eq(2)
+      it 'matches 3' do
+        expect(clients_that_dont_fit.count).to eq(3)
       end
       it 'does not contain Bob' do
         expect(clients_that_dont_fit.ids).to_not include bob.id
@@ -60,6 +66,9 @@ RSpec.describe Rules::InterestedInNeighborhood, type: :model do
       end
       it 'contains Sue' do
         expect(clients_that_dont_fit.ids).to include sue.id
+      end
+      it 'contains Zelda' do
+        expect(clients_that_dont_fit.ids).to include zelda.id
       end
     end
 
