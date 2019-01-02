@@ -105,4 +105,19 @@ FactoryGirl.define do
     name 'Interested in Neighborhood'
     verb 'be'
   end
+  factory :cohort_a, class: 'Warehouse::Cohort' do
+    name "Cohort A"
+    active_cohort true
+    visible_in_cas true
+  end
+  factory :cohort_b, class: 'Warehouse::Cohort' do
+    name "Cohort B"
+    active_cohort true
+    visible_in_cas true
+  end
+  factory :active_in_cohort_a, class: 'Rules::ActiveInCohort' do
+    name 'Active in Cohort'
+    verb 'be'
+  end
 end
+
