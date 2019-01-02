@@ -127,5 +127,9 @@ FactoryGirl.define do
     name "Interested in RRH"
     verb "be"
   end
+  factory :interested_in_youth_rrh, class: 'Rules::InterestedInYouthRrh' do
+    name "Interested in Youth RRH"
+    verb "be"
+  end
 end
 
