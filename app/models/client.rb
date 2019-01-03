@@ -1,4 +1,5 @@
 class Client < ActiveRecord::Base
+  before_create :assign_tie_breaker
 
   include SubjectForMatches
   include MatchArchive
@@ -148,6 +149,9 @@ class Client < ActiveRecord::Base
       order(days_homeless: :desc)
     when 'homeless-days-last-three-years'
       order(c_t[:days_homeless_in_last_three_years].desc)
+    when 'homeless-days-last-three-years-random-tie-breaker'
+      order(c_t[:days_homeless_in_last_three_years].desc).
+      order(tie_breaker: :asc)
     when 'vi-spdat'
       where.not(vispdat_score: nil).order(vispdat_score: :desc)
     when 'vispdat-priority-score'
@@ -159,6 +163,20 @@ class Client < ActiveRecord::Base
     else
       raise NotImplementedError
     end
+  end
+
+  # A random number for prioritizations that require a tie-breaker
+  def assign_tie_breaker
+    tie_breaker = rand
+  end
+
+  def self.add_missing_tie_breakers
+    c_t = Client.arel_table
+    update = Arel::UpdateManager.new(c_t.engine)
+    update.table(c_t)
+    update.set([[c_t[:tie_breaker], Arel.sql('random()')]]).where(c_t[:tie_breaker].eq(nil))
+    result = ActiveRecord::Base.connection.execute(update.to_sql)
+    log "Updated #{result.cmd_tuples} clients with missing tie_breakers"
   end
 
   def self.ready_to_match match_route:
@@ -389,5 +407,9 @@ class Client < ActiveRecord::Base
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]
+  end
+
+  def self.log message
+    Rails.logger.info message
   end
 end
