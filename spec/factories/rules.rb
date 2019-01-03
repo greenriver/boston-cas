@@ -151,5 +151,9 @@ FactoryGirl.define do
     name "Age greater than 25"
     verb "be"
   end
+  factory :aids_or_related_diseases, class: 'Rules::AidsOrRelatedDiseases' do
+    name "AIDS or related diseases"
+    verb "have"
+  end
 end
 
