@@ -143,5 +143,9 @@ FactoryGirl.define do
     name "Age greater than 65"
     verb "be"
   end
+  factory :age_greater_than_sixty_two, class: 'Rules::AgeGreaterThanSixtyTwo' do
+    name "Age greater than 62"
+    verb "be"
+  end
 end
 
