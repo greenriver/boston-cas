@@ -163,5 +163,9 @@ FactoryGirl.define do
     name "An asylee"
     verb "be"
   end
+  factory :child_in_household, class: 'Rules::ChildInHousehold' do
+    name "Child in household"
+    verb "have"
+  end
 end
 
