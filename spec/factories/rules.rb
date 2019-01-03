@@ -175,5 +175,9 @@ FactoryGirl.define do
     name "Developmental Disability"
     verb "have"
   end
+  factory :disabling_condition, class: 'Rules::DisablingCondition' do
+    name "Disabling Condition"
+    verb "have"
+  end
 end
 
