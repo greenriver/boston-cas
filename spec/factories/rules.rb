@@ -167,5 +167,9 @@ FactoryGirl.define do
     name "Child in household"
     verb "have"
   end
+  factory :cspech_eligible, class: 'Rules::CspechEligible' do
+    name 'CSPECH eligible'
+    verb 'be'
+  end
 end
 
