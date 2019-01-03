@@ -95,25 +95,9 @@ FactoryGirl.define do
     name 'Minimum occupancy'
     verb 'have'
   end
-  factory :neighborhood_cambridge, class: 'Neighborhood' do
-    name 'Cambridge'
-  end
-  factory :neighborhood_beacon_hill, class: 'Neighborhood' do
-    name 'Beacon Hill'
-  end
   factory :interested_in_cambridge, class: 'Rules::InterestedInNeighborhood' do
     name 'Interested in Neighborhood'
     verb 'be'
-  end
-  factory :cohort_a, class: 'Warehouse::Cohort' do
-    name "Cohort A"
-    active_cohort true
-    visible_in_cas true
-  end
-  factory :cohort_b, class: 'Warehouse::Cohort' do
-    name "Cohort B"
-    active_cohort true
-    visible_in_cas true
   end
   factory :active_in_cohort_a, class: 'Rules::ActiveInCohort' do
     name 'Active in Cohort'
