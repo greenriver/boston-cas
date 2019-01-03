@@ -168,8 +168,12 @@ FactoryGirl.define do
     verb "have"
   end
   factory :cspech_eligible, class: 'Rules::CspechEligible' do
-    name 'CSPECH eligible'
-    verb 'be'
+    name "CSPECH eligible"
+    verb "be"
+  end
+  factory :developmental_disability, class: 'Rules::DevelopmentalDisability' do
+    name "Developmental Disability"
+    verb "have"
   end
 end
 
