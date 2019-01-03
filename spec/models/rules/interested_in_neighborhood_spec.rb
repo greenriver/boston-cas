@@ -8,24 +8,15 @@ RSpec.describe Rules::InterestedInNeighborhood, type: :model do
 
     let!(:rule) { create :interested_in_cambridge }
 
-    let!(:bob) {
-      client = create :client, first_name: 'Bob', neighborhood_interests: [ cambridge.id ]
-    }
-    let!(:roy) {
-      client = create :client, first_name: 'Roy', neighborhood_interests: [ beacon_hill.id ]
-    }
-    let!(:mary) {
-      client = create :client, first_name: 'Mary', neighborhood_interests: [ cambridge.id, beacon_hill.id ]
-    }
-    let!(:sue) {
-      client = create :client, first_name: 'Sue', neighborhood_interests: [ ]
-    }
-    let!(:zelda) {
-      client = create :client, first_name: 'Zelda', neighborhood_interests: [ "#{cambridge.id}" ]
-    }
+    let!(:bob) { create :client, first_name: 'Bob', neighborhood_interests: [ cambridge.id ] }
+    let!(:roy) { create :client, first_name: 'Roy', neighborhood_interests: [ beacon_hill.id ] }
+    let!(:mary) { create :client, first_name: 'Mary', neighborhood_interests: [ cambridge.id, beacon_hill.id ] }
+    let!(:sue) { create :client, first_name: 'Sue', neighborhood_interests: [ ] }
+    let!(:zelda) { create :client, first_name: 'Zelda', neighborhood_interests: [ "#{cambridge.id}" ] }
 
     let!(:positive) { create :requirement, rule: rule, positive: true, variable: cambridge.id }
     let!(:negative) { create :requirement, rule: rule, positive: false, variable: cambridge.id }
+
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 

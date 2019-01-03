@@ -7,21 +7,14 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
 
     let!(:rule) { create :active_in_cohort_a }
 
-    let!(:bob) {
-      client = create :client, first_name: 'Bob', active_cohort_ids: [ cohort_a.id ]
-    }
-    let!(:roy) {
-      client = create :client, first_name: 'Roy', active_cohort_ids: [ cohort_b.id ]
-    }
-    let!(:mary) {
-      client = create :client, first_name: 'Mary', active_cohort_ids: [ cohort_a.id, cohort_b.id ]
-    }
-    let!(:sue) {
-      client = create :client, first_name: 'Sue', active_cohort_ids: nil
-    }
+    let!(:bob) { create :client, first_name: 'Bob', active_cohort_ids: [ cohort_a.id ] }
+    let!(:roy) { create :client, first_name: 'Roy', active_cohort_ids: [ cohort_b.id ] }
+    let!(:mary) { create :client, first_name: 'Mary', active_cohort_ids: [ cohort_a.id, cohort_b.id ] }
+    let!(:sue) { create :client, first_name: 'Sue', active_cohort_ids: nil }
 
     let!(:positive) { create :requirement, rule: rule, positive: true, variable: cohort_a.id }
     let!(:negative) { create :requirement, rule: rule, positive: false, variable: cohort_a.id }
+
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 

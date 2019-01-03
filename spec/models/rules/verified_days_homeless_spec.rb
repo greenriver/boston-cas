@@ -4,15 +4,12 @@ RSpec.describe Rules::VerifiedDaysHomeless, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :verified_days_homeless }
 
-    let!(:bob) {
-      client = create :client, first_name: 'Bob', date_days_homeless_verified: Date.today
-    }
-    let!(:roy) {
-      client = create :client, first_name: 'Roy'
-    }
+    let!(:bob) { create :client, first_name: 'Bob', date_days_homeless_verified: Date.today }
+    let!(:roy) { create :client, first_name: 'Roy', date_days_homeless_verified: nil }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
+
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 

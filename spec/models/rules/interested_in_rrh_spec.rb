@@ -4,15 +4,12 @@ RSpec.describe Rules::InterestedInRrh, type: :model do
 
   let!(:rule) { create :interested_in_rrh }
 
-  let!(:bob) {
-    client = create :client, first_name: 'Bob', rrh_desired: true
-  }
-  let!(:roy) {
-    client = create :client, first_name: 'Roy', rrh_desired: false
-  }
+  let!(:bob) { create :client, first_name: 'Bob', rrh_desired: true }
+  let!(:roy) { create :client, first_name: 'Roy', rrh_desired: false }
 
   let!(:positive) { create :requirement, rule: rule, positive: true }
   let!(:negative) { create :requirement, rule: rule, positive: false }
+
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
   let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 
