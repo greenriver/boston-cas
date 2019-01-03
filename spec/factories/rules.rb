@@ -159,5 +159,9 @@ FactoryGirl.define do
     name "Appropriate for sober supportive housing"
     verb "be"
   end
+  factory :asylee, class: 'Rules::Asylee' do
+    name "An asylee"
+    verb "be"
+  end
 end
 
