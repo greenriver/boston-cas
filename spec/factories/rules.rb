@@ -155,5 +155,9 @@ FactoryGirl.define do
     name "AIDS or related diseases"
     verb "have"
   end
+  factory :appropriate_for_sober_supportive_housing, class: 'Rules::AppropriateForSoberSupportiveHousing' do
+    name "Appropriate for sober supportive housing"
+    verb "be"
+  end
 end
 
