@@ -179,5 +179,9 @@ FactoryGirl.define do
     name "Disabling Condition"
     verb "have"
   end
+  factory :dmh_eligible, class: 'Rules::DmhEligible' do
+    name "DMH Eligible"
+    verb "be"
+  end
 end
 
