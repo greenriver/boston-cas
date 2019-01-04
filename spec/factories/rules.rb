@@ -211,5 +211,9 @@ FactoryGirl.define do
     name "Enrolled in TH"
     verb "be"
   end
+  factory :ground_floor, class: 'Rules::GroundFloor' do
+    name "Ground Floor Access Requirement"
+    verb "have"
+  end
 end
 
