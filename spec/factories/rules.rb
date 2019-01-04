@@ -287,5 +287,9 @@ FactoryGirl.define do
     name "US Citizen"
     verb "be"
   end
+  factory :va_eligible, class: 'Rules::VaEligible' do
+    name "VA Eligible"
+    verb "be"
+  end
 end
 
