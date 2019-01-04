@@ -4,8 +4,8 @@ RSpec.describe Rules::GroundFloor, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :ground_floor }
 
-    let!(:bob) { create :client, first_name: 'Bob', requires_ground_floor: true }
-    let!(:roy) { create :client, first_name: 'Roy', requires_ground_floor: false }
+    let!(:bob) { create :client, first_name: 'Bob', requires_elevator_access: true }
+    let!(:roy) { create :client, first_name: 'Roy', requires_elevator_access: false }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
