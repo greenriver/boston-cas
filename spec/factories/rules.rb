@@ -187,5 +187,9 @@ FactoryGirl.define do
     name "Domestic Violence Survivor"
     verb "be"
   end
+  factory :elevator, class: 'Rules::Elevator' do
+    name "Elevator Access Need"
+    verb "have"
+  end
 end
 
