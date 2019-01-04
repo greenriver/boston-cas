@@ -283,5 +283,9 @@ FactoryGirl.define do
     name "SSVF Eligible"
     verb "be"
   end
+  factory :us_citizen, class: 'Rules::UsCitizen' do
+    name "US Citizen"
+    verb "be"
+  end
 end
 
