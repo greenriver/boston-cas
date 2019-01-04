@@ -183,5 +183,9 @@ FactoryGirl.define do
     name "DMH Eligible"
     verb "be"
   end
+  factory :domestic_violence_survivor, class: 'Rules::DomesticViolenceSurvivor' do
+    name "Domestic Violence Survivor"
+    verb "be"
+  end
 end
 
