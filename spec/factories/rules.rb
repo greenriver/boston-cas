@@ -271,5 +271,9 @@ FactoryGirl.define do
     name "Part of a Family"
     verb "be"
   end
+  factory :ssvf_eligible, class: 'Rules::SsvfEligible' do
+    name "SSVF Eligible"
+    verb "be"
+  end
 end
 
