@@ -51,6 +51,10 @@ FactoryGirl.define do
     name 'Less than 50% Area Median Income (Very Low Income)'
     verb 'have'
   end
+  factory :income_less_than_60_percent_ami, class: 'Rules::IncomeLessThanSixtyPercentAmi' do
+    name 'Less than 60% Area Median Income (Very Low Income)'
+    verb 'have'
+  end
   factory :low_income, class: 'Rules::IncomeLessThanEightyPercentAmi' do
     name 'Less than 80% Area Median Income (Low Income)'
     verb 'have'
