@@ -199,5 +199,9 @@ FactoryGirl.define do
     name "Enrolled in HMIS Project"
     verb "be"
   end
+  factory :enrolled_in_sh, class: 'Rules::EnrolledInSh' do
+    name "Enrolled in SH"
+    verb "be"
+  end
 end
 
