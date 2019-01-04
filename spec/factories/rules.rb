@@ -247,5 +247,9 @@ FactoryGirl.define do
     name "Meth Production Conviction"
     verb "have"
   end
+  factory :one_eighty_days_homeless, class: 'Rules::OneEightyDaysHomeless' do
+    name "Homeless 180 days"
+    verb "be"
+  end
 end
 
