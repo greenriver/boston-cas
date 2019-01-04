@@ -18,7 +18,7 @@ RSpec.describe Rules::IncomeLessThanSixtyPercentAmi, type: :model do
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
   let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
   
-  describe 'clients_that_fit IncomeLessThanFiftyPercentAmi' do
+  describe 'clients_that_fit IncomeLessThanSixtyPercentAmi' do
 
     context 'when positive' do
       it 'matches boundary, low, and no income' do
