@@ -3,9 +3,9 @@ class Rules::OneYearHomeless < Rule
     c_t = Client.arel_table
     if Client.column_names.include?(:days_homeless.to_s)
       if requirement.positive
-        where = c_t[:days_homeless].gt(365)
+        where = c_t[:days_homeless].gteq(365)
       else
-        where = c_t[:days_homeless].lteq(365)
+        where = c_t[:days_homeless].lt(365)
       end
       scope.where(where)
     else
