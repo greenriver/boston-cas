@@ -43,6 +43,10 @@ FactoryGirl.define do
     name 'Chronically homeless, mental health, and substance abuse'
     verb 'be'
   end
+  factory :mi_sa_or_co_morbid, class: 'Rules::MiSaOrCoMorbid' do
+    name 'Chronically homeless, mental health, or substance abuse'
+    verb 'be'
+  end
   factory :physical_disability, class: 'Rules::PhysicalDisablingCondition' do
     name 'Physically disabling condition'
     verb 'have'
