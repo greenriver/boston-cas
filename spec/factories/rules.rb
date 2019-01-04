@@ -47,6 +47,10 @@ FactoryGirl.define do
     name 'Physically disabling condition'
     verb 'have'
   end
+  factory :income_less_than_30_percent_ami, class: 'Rules::IncomeLessThanThirtyPercentAmi' do
+    name 'Less than 30% Area Median Income (Very Low Income)'
+    verb 'have'
+  end
   factory :income_less_than_50_percent_ami, class: 'Rules::IncomeLessThanFiftyPercentAmi' do
     name 'Less than 50% Area Median Income (Very Low Income)'
     verb 'have'
