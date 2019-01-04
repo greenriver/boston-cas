@@ -191,5 +191,9 @@ FactoryGirl.define do
     name "Elevator Access Need"
     verb "have"
   end
+  factory :enrolled_in_es, class: 'Rules::EnrolledInEs' do
+    name "Enrolled in ES"
+    verb "be"
+  end
 end
 
