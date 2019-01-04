@@ -263,5 +263,9 @@ FactoryGirl.define do
     name "Homeless 365 days in the last three years"
     verb "be"
   end
+  factory :part_of_a_family, class: 'Rules::PartOfAFamily' do
+    name "Part of a Family"
+    verb "be"
+  end
 end
 
