@@ -219,5 +219,9 @@ FactoryGirl.define do
     name "Housing Authority Eligible"
     verb "be"
   end
+  factory :hues_eligible, class: 'Rules::HuesEligible' do
+    name "HUES Eligible"
+    verb "be"
+  end
 end
 
