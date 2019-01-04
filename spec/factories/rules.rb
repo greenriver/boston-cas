@@ -251,5 +251,9 @@ FactoryGirl.define do
     name "Homeless 180 days"
     verb "be"
   end
+  factory :one_eighty_days_homeless_last_three_years, class: 'Rules::OneEightyDaysHomelessLastThreeYears' do
+    name "Homeless 180 days in the last three years"
+    verb "be"
+  end
 end
 
