@@ -215,5 +215,9 @@ FactoryGirl.define do
     name "Ground Floor Access Requirement"
     verb "have"
   end
+  factory :housing_authority_eligible, class: 'Rules::HousingAuthorityEligible' do
+    name "Housing Authority Eligible"
+    verb "be"
+  end
 end
 
