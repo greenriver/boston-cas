@@ -239,5 +239,9 @@ FactoryGirl.define do
     name "A Lifetime Sex Offender"
     verb "be"
   end
+  factory :meth_production_conviction, class: 'Rules::MethProductionConviction' do
+    name "Meth Production Conviction"
+    verb "have"
+  end
 end
 
