@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Rules::DevelopmentalDisability, type: :model do
+RSpec.describe Rules::DisablingCondition, type: :model do
   describe 'clients_that_fit' do
-    let!(:rule) { create :developmental_disability }
+    let!(:rule) { create :disabling_condition }
 
-    let!(:bob) { create :client, first_name: 'Bob', developmental_disability: true }
-    let!(:roy) { create :client, first_name: 'Roy', developmental_disability: false }
+    let!(:bob) { create :client, first_name: 'Bob', disabling_condition: true }
+    let!(:roy) { create :client, first_name: 'Roy', disabling_condition: false }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
