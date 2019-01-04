@@ -235,5 +235,9 @@ FactoryGirl.define do
     name "An Ineligible Immigrant"
     verb "be"
   end
+  factory :lifetime_sex_offender, class: 'Rules::LifetimeSexOffender' do
+    name "A Lifetime Sex Offender"
+    verb "be"
+  end
 end
 
