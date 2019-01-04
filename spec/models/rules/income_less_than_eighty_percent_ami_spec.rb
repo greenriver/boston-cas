@@ -51,7 +51,7 @@ RSpec.describe Rules::IncomeLessThanEightyPercentAmi, type: :model do
         expect( clients_that_dont_fit.ids ).to include *high_income_clients.map(&:id)
       end
       it 'does not contain the boundary client' do
-        expect( clients_that_fit.ids ).to_not include boundary_client.id
+        expect( clients_that_dont_fit.ids ).to_not include boundary_client.id
       end
       it 'does not contain low income clients' do
         expect( clients_that_dont_fit.ids ).to_not include *low_income_clients.map(&:id)
