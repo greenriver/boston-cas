@@ -291,5 +291,9 @@ FactoryGirl.define do
     name "VA Eligible"
     verb "be"
   end
+  factory :verified_disability, class: 'Rules::VerifiedDisability' do
+    name "Verified Disability"
+    verb "have"
+  end
 end
 
