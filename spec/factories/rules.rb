@@ -256,7 +256,7 @@ FactoryGirl.define do
     verb "be"
   end
   factory :two_seventy_days_homeless, class: 'Rules::TwoSeventyDaysHomeless' do
-    name "Homeless 270å days"
+    name "Homeless 270 days"
     verb "be"
   end
   factory :one_year_homeless, class: 'Rules::OneYearHomeless' do
@@ -264,7 +264,11 @@ FactoryGirl.define do
     verb "be"
   end
   factory :one_eighty_days_homeless_last_three_years, class: 'Rules::OneEightyDaysHomelessLastThreeYears' do
-    name "Homeless 180 days in the last three years"
+   name "Homeless 180 days in the last three years"
+    verb "be"
+  end
+  factory :two_seventy_days_homeless_last_three_years, class: 'Rules::TwoSeventyDaysHomelessLastThreeYears' do
+    name "Homeless 270 days in the last three years"
     verb "be"
   end
   factory :one_year_homeless_last_three_years, class: 'Rules::OneYearHomelessLastThreeYears' do
