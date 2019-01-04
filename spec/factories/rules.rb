@@ -207,5 +207,9 @@ FactoryGirl.define do
     name "Enrolled in SO"
     verb "be"
   end
+  factory :enrolled_in_th, class: 'Rules::EnrolledInTh' do
+    name "Enrolled in TH"
+    verb "be"
+  end
 end
 
