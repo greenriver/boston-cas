@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Rules::EnrolledInHmisProject, type: :model do
+  before { skip "Requires warehouse classes"}
+
   describe 'clients_that_fit' do
 
     let!(:project_a) { create :project_a }

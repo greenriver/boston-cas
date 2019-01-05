@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Rules::ActiveInCohort, type: :model do
+  before { skip "Requires warehouse classes" }
+
   describe 'clients_that_fit' do
     let!(:cohort_a) { create :cohort_a }
     let!(:cohort_b) { create :cohort_b }
