@@ -299,5 +299,9 @@ FactoryGirl.define do
     name "Transgender"
     verb "be"
   end
+  factory :willing_to_live_in_congregate_housing, class: "Rules::WillingToLiveInCongregateHousing" do
+    name "Willing to live in congregate housing"
+    verb "be"
+  end
 end
 
