@@ -295,5 +295,9 @@ FactoryGirl.define do
     name "Verified Disability"
     verb "have"
   end
+  factory :transgender, class: 'Rules::Transgender' do
+    name "Transgender"
+    verb "be"
+  end
 end
 
