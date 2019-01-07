@@ -59,7 +59,7 @@ class Matching::Engine
     end
   end
 
-  def create_candidate_matches opportunity
+  def create_candidate_matches(opportunity)
     matches_left_to_max = opportunity.matches_left_to_max
     client_priority = 1
     clients_for_matches(opportunity).each do |client|
@@ -71,7 +71,7 @@ class Matching::Engine
       }
       match =
         client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
-      match.activate! if client_priority == 1
+      match.activate! if client_priority == 1 && opportunity.match_route.should_activate_match
       client_priority += 1
     end
 

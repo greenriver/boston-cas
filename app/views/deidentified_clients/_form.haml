@@ -7,6 +7,8 @@
       = f.input :assessment_score
       = f.input :agency, collection: @available_agencies, input_html: {class: :select2}, hint: 'You may lose access to this client record if the agency doesn\'t match your agency'
       = f.input :days_homeless_in_the_last_three_years
+      = f.input :date_days_homeless_verified, as: :date_picker
+      = f.input :who_verified_days_homeless
       - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
         = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
       = f.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}
@@ -14,11 +16,16 @@
         = f.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family')
       = f.input :rrh_desired, label: 'Interested in RRH'
       = f.input :youth_rrh_desired, label: 'Interested in Youth RRH'
+      = f.input :income_total_monthly, label: 'Total monthly income'
       = f.input :income_maximization_assistance_requested
       = f.input :pending_subsidized_housing_placement
       = f.input :rrh_assessment_contact_info, label: 'Case Manager Contact Information'
       = f.input :required_number_of_bedrooms, collection: (1..5), include_blank: false
       = f.input :required_minimum_occupancy, collection: (1..10), include_blank: false
+      = f.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }
+      = f.input :disabling_condition
+      = f.input :physical_disability
+      = f.input :developmental_disability
       = f.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit')
       = f.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access')
       = f.input :available, label: 'Available for matching?'
