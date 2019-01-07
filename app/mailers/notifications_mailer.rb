@@ -193,9 +193,20 @@ class NotificationsMailer < DatabaseMailer
     mail(to: @contact.email, subject: "New Housing Recommendation")
   end
 
+  def match_initiation_for_ssp notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "New Housing Recommendation")
+  end
+
+
   def hsa_accepts_client notification
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
+  end
+
+  def hsa_accepts_client_ssp_notification notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match accepted by #{_('HSA')}")
   end
 
   def confirm_hsa_decline_dnd_staff notification

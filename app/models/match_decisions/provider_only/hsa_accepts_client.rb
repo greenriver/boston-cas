@@ -84,6 +84,7 @@ module MatchDecisions::ProviderOnly
       end
 
       def accepted
+        Notifications::ProviderOnly::HsaAcceptsClientSspNotification.create_for_match! match
         match.succeeded!
       end
 
