@@ -8,5 +8,9 @@ module MatchPrioritization
     def self.slug
       'assessment-score'
     end
+
+    def self.column_name
+      'assessment_score'
+    end
   end
 end

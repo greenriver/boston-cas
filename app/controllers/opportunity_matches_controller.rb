@@ -44,6 +44,16 @@ class OpportunityMatchesController < ApplicationController
     redirect_to match_path match
   end
 
+  def priority_label
+    @opportunity.match_route.match_prioritization.title
+  end
+  helper_method :priority_label
+
+  def priority_value(client)
+    client.send(@opportunity.match_route.match_prioritization.column_name)
+  end
+  helper_method :priority_value
+
   private
 
     def match_scope

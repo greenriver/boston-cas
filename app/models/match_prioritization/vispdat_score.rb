@@ -8,5 +8,9 @@ module MatchPrioritization
     def self.slug
       'vi-spdat'
     end
+
+    def self.column_name
+      'vispdat_score'
+    end
   end
 end

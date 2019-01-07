@@ -32,11 +32,18 @@ module MatchPrioritization
 
     def self.slug
       raise NotImplementedError
-    end  
+    end
+
+    def self.column_name
+      raise NotImplementedError
+    end
     
     def title
       self.class.title
     end
 
+    def column_name
+      self.class.column_name
+    end
   end
 end
