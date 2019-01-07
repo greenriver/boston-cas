@@ -84,6 +84,7 @@ module MatchDecisions::HomelessSetAside
       end
 
       def accepted
+        Notifications::HomelessSetAside::HsaAcceptsClientSspNotification.create_for_match! match
         match.succeeded!
       end
 

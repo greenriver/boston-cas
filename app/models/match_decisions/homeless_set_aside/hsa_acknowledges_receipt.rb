@@ -58,6 +58,7 @@ module MatchDecisions::HomelessSetAside
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HomelessSetAside::MatchInitiationForSetAside
         m << Notifications::HomelessSetAside::MatchInitiationForShelterAgency
+        m << Notifications::HomelessSetAside::MatchInitiationForSsp
       end
     end
 
