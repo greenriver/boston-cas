@@ -391,6 +391,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
+  def matched!
+    self.class.trasaction do
+      add_default_contacts!
+      self.send(match_route.initial_decision).initialize_decision!
+    end
+  end
+
   def rejected!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
