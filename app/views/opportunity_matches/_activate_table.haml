@@ -6,36 +6,31 @@
       %thead
         %tr
           %th Client Name
-          %th.text-center Active in match?
+
+          %th.text-center Other Active Matches
           %th.text-center Activate Match?
       %tbody
-        - if match.present?
-          - client = match.client
+        - @matches.each do |client|
           - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
           - if hide_client_name
             - name = "(name hidden)"
           - else
             - name = client.name
-          %tr.client--match-active
-            %td= link_to name, client_path(client)
-            %td.text-center= checkmark(client.active_in_match?)
-            %td.text-center= link_to 'Current Active Match', match_path(match)
-        - @matches.each do |client|
-          - next if active_client_ids.include?(client.id)
-          %tr
-            - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
-            - if hide_client_name
-              - name = "(name hidden)"
-            - else
-              - name = client.name
-            %td= link_to name, client_path(client)
-            %td.text-center= checkmark(client.active_in_match?)
-            - match_warning = "Activating this match will cancel all other active matches for #{client.name}."
-            - if active_match.present?
-              - text = 'Activate Match Canceling Current'
-              - match_warning += " In addition, it will cancel this match involving #{active_match.client.name}."
-            - else
-              - text = 'Activate Match'
-              
-            %td.text-center= link_to text, opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch, data: {confirm: match_warning}
+          - if active_client_ids.include?(client.id)
+            %tr.client--match-active
+              %td= link_to name, client_path(client)
+              %td.text-center= checkmark(client.active_in_match?)
+              %td.text-center= link_to 'Current Active Match', match_path(match)
+          - else
+            %tr
+              %td= link_to name, client_path(client)
+              %td.text-center= checkmark(client.active_in_match?)
+              - match_warning = "Activating this match will cancel all other active matches for #{client.name}."
+              - if active_match.present?
+                - text = 'Activate Match Canceling Current'
+                - match_warning += " In addition, it will cancel this match involving #{active_match.client.name}."
+              - else
+                - text = 'Activate Match'
+
+              %td.text-center= link_to text, opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch, data: {confirm: match_warning}
     %p=paginate @matches

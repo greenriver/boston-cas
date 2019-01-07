@@ -8,7 +8,9 @@ class OpportunityMatchesController < ApplicationController
 
   def index
     clients_for_route = Client.available_for_matching(@opportunity.match_route)
-    @matches = @opportunity.matching_clients(clients_for_route).page(params[:page]).per(25)
+    @actives = @opportunity.active_matches.map { |match| match.client }
+    @availables = @opportunity.matching_clients(clients_for_route)
+    @matches = Kaminari.paginate_array(@actives + @availables).page(params[:page]).per(25)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
   end
