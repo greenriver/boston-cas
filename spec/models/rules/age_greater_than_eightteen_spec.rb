@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Rules::AgeGreaterThanEightteen, type: :model do
   describe 'clients_that_fit' do
 
-    let!(:rule) { create :age_greater_than_eighteen }
+    let!(:rule) { create :eighteen_plus }
 
     let!(:bob) { create :client, first_name: 'Bob', date_of_birth: Date.today - 17.years }
     let!(:roy) { create :client, first_name: 'Roy',  date_of_birth: Date.today - 18.years }

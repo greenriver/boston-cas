@@ -131,10 +131,10 @@ FactoryGirl.define do
     name "Interested in Youth RRH"
     verb "be"
   end
-  factory :age_greater_than_eighteen, class: 'Rules::AgeGreaterThanEightteen' do
-    name "Age greater than 18"
-    verb "be"
-  end
+  # factory :age_greater_than_eighteen, class: 'Rules::AgeGreaterThanEightteen' do
+  #   name "Age greater than 18"
+  #   verb "be"
+  # end
   factory :age_greater_than_fifty, class: 'Rules::AgeGreaterThanFifty' do
     name "Age greater than 50"
     verb "be"
@@ -147,10 +147,10 @@ FactoryGirl.define do
     name "Age greater than 45"
     verb "be"
   end
-  factory :age_greater_than_sixteen, class: 'Rules::AgeGreaterThanSixteen' do
-    name "Age greater than 16"
-    verb "be"
-  end
+  # factory :age_greater_than_sixteen, class: 'Rules::AgeGreaterThanSixteen' do
+  #   name "Age greater than 16"
+  #   verb "be"
+  # end
   factory :age_greater_than_sixty, class: 'Rules::AgeGreaterThanSixty' do
     name "Age greater than 60"
     verb "be"
@@ -163,10 +163,10 @@ FactoryGirl.define do
     name "Age greater than 62"
     verb "be"
   end
-  factory :age_greater_than_twenty_five, class: 'Rules::AgeGreaterThanTwentyFive' do
-    name "Age greater than 25"
-    verb "be"
-  end
+  # factory :age_greater_than_twenty_five, class: 'Rules::AgeGreaterThanTwentyFive' do
+  #   name "Age greater than 25"
+  #   verb "be"
+  # end
   factory :aids_or_related_diseases, class: 'Rules::AidsOrRelatedDiseases' do
     name "AIDS or related diseases"
     verb "have"
