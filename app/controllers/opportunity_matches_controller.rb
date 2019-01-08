@@ -7,9 +7,9 @@ class OpportunityMatchesController < ApplicationController
   prepend_before_action :find_opportunity!
 
   def index
-    # clients_for_route = Client.available_for_matching(@opportunity.match_route)
+    clients_for_route = Client.available_for_matching(@opportunity.match_route)
     @actives = @opportunity.active_matches.map { |match| match.client }
-    @availables = @opportunity.matching_clients
+    @availables = @opportunity.matching_clients(clients_for_route)
     @matches = Kaminari.paginate_array(@actives + @availables).page(params[:page]).per(25)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
@@ -82,10 +82,6 @@ class OpportunityMatchesController < ApplicationController
     end
   end
   helper_method :match_routes
-
-  class Checkboxes < OpenStruct
-    include ActiveModel::Model
-  end
 
   private
 
