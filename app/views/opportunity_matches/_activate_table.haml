@@ -20,13 +20,15 @@
             %tr.client--match-active
               %td= link_to name, client_path(client)
               %td.text-center= priority_value(client)
-              %td.text-center= checkmark(client.active_in_match?)
+              %td.text-center
+                = render 'client_match_routes', client: client
               %td.text-center= link_to 'Current Active Match', match_path(match)
           - else
             %tr
               %td= link_to name, client_path(client)
               %td.text-center= priority_value(client)
-              %td.text-center= checkmark(client.active_in_match?)
+              %td.text-center
+                = render 'client_match_routes', client: client
               - match_warning = "Activating this match will cancel all other active matches for #{client.name}."
               - if active_match.present?
                 - text = 'Activate Match Canceling Current'

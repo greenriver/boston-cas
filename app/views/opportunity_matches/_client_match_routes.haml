@@ -1,0 +1,5 @@
+- match_routes(client).each_with_index do | route, index |
+  - if index == 0
+    = link_to "#{route.first}(#{route.last})", client_qualified_opportunities_path(client)
+  - else
+    %br= link_to "#{route.first}(#{route.last})", client_qualified_opportunities_path(client)

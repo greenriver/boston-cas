@@ -54,6 +54,14 @@ class OpportunityMatchesController < ApplicationController
   end
   helper_method :priority_value
 
+  def match_routes(client)
+    counts = client.client_opportunity_matches.joins(:program, :match_route).group(:type).count
+    counts.map do | key, value |
+      [ key.constantize.new.title, value ]
+    end
+  end
+  helper_method :match_routes
+
   private
 
     def match_scope
