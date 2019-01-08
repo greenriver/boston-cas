@@ -1,0 +1,8 @@
+- match_warning = "Activating this match will cancel all other active matches for #{client.name}."
+- if @opportunity.active_match.present?
+  - text = 'Activate Match Canceling Current'
+  - match_warning += " In addition, it will cancel this match involving #{active_match.client.name}."
+- else
+  - text = 'Activate Match'
+
+%td.text-center= link_to text, opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch, data: {confirm: match_warning}
