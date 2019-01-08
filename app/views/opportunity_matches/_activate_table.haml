@@ -29,12 +29,5 @@
               %td.text-center= priority_value(client)
               %td.text-center
                 = render 'client_match_routes', client: client
-              - match_warning = "Activating this match will cancel all other active matches for #{client.name}."
-              - if active_match.present?
-                - text = 'Activate Match Canceling Current'
-                - match_warning += " In addition, it will cancel this match involving #{active_match.client.name}."
-              - else
-                - text = 'Activate Match'
-
-              %td.text-center= link_to text, opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch, data: {confirm: match_warning}
+              =render 'activate_button', client: client
     %p=paginate @matches
