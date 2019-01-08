@@ -7,9 +7,9 @@ class OpportunityMatchesController < ApplicationController
   prepend_before_action :find_opportunity!
 
   def index
-    clients_for_route = Client.available_for_matching(@opportunity.match_route)
+    # clients_for_route = Client.available_for_matching(@opportunity.match_route)
     @actives = @opportunity.active_matches.map { |match| match.client }
-    @availables = @opportunity.matching_clients(clients_for_route)
+    @availables = @opportunity.matching_clients
     @matches = Kaminari.paginate_array(@actives + @availables).page(params[:page]).per(25)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
@@ -24,18 +24,33 @@ class OpportunityMatchesController < ApplicationController
   def create
     client_ids_to_activate = params[:checkboxes].reject { | key, value | value != "1" }.keys.map(&:to_i)
     client_ids_to_activate.each do | client_id |
-      match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity)
+      matches = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false)
+      if matches.count == 0
+        match = create_match(client_id)
+      else
+        match = matches.first # should never be more than one
+      end
       match.activate!
     end
+    redirect_to opportunity_matches_path(@opportunity)
   end
 
   def update
-    client = Client.find params[:id].to_i
+    client_id =  params[:id].to_i
 
     if active_match = @opportunity.active_match
       MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
       active_match.poached!
     end
+
+    match = create_match(client_id)
+
+    match.activate!
+    redirect_to match_path match
+  end
+
+  def create_match(client_id)
+    client = Client.find(client_id)
 
     universe_state = {
         requirements: @opportunity.requirements_for_archive,
@@ -43,13 +58,11 @@ class OpportunityMatchesController < ApplicationController
         opportunity: @opportunity.opportunity_details.opportunity_for_archive,
         client: client.prepare_for_archive,
     }
-    match = client.candidate_matches.create(
+    client.candidate_matches.create(
         opportunity: @opportunity,
         client: client,
         universe_state: universe_state
     )
-    match.activate!
-    redirect_to match_path match
   end
 
   def priority_label
