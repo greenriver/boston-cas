@@ -21,6 +21,14 @@ class OpportunityMatchesController < ApplicationController
     @program = @sub_program.program
   end
 
+  def create
+    client_ids_to_activate = params[:checkboxes].reject { | key, value | value != "1" }.keys.map(&:to_i)
+    client_ids_to_activate.each do | client_id |
+      match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity)
+      match.activate!
+    end
+  end
+
   def update
     client = Client.find params[:id].to_i
 
@@ -61,6 +69,10 @@ class OpportunityMatchesController < ApplicationController
     end
   end
   helper_method :match_routes
+
+  class Checkboxes < OpenStruct
+    include ActiveModel::Model
+  end
 
   private
 
