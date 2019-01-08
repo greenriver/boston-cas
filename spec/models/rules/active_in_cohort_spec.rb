@@ -1,21 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Rules::ActiveInCohort, type: :model do
-  before { skip "Requires warehouse classes" }
-
   describe 'clients_that_fit' do
-    let!(:cohort_a) { create :cohort_a }
-    let!(:cohort_b) { create :cohort_b }
+    let!(:cohort_a) { 3 }
+    let!(:cohort_b) { 5 }
 
     let!(:rule) { create :active_in_cohort }
 
-    let!(:bob) { create :client, first_name: 'Bob', active_cohort_ids: [ cohort_a.id ] }
-    let!(:roy) { create :client, first_name: 'Roy', active_cohort_ids: [ cohort_b.id ] }
-    let!(:mary) { create :client, first_name: 'Mary', active_cohort_ids: [ cohort_a.id, cohort_b.id ] }
+    let!(:bob) { create :client, first_name: 'Bob', active_cohort_ids: [ cohort_a ] }
+    let!(:roy) { create :client, first_name: 'Roy', active_cohort_ids: [ cohort_b ] }
+    let!(:mary) { create :client, first_name: 'Mary', active_cohort_ids: [ cohort_a, cohort_b ] }
     let!(:sue) { create :client, first_name: 'Sue', active_cohort_ids: nil }
 
-    let!(:positive) { create :requirement, rule: rule, positive: true, variable: cohort_a.id }
-    let!(:negative) { create :requirement, rule: rule, positive: false, variable: cohort_a.id }
+    let!(:positive) { create :requirement, rule: rule, positive: true, variable: cohort_a }
+    let!(:negative) { create :requirement, rule: rule, positive: false, variable: cohort_a }
 
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }

@@ -1,23 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Rules::EnrolledInHmisProject, type: :model do
-  before { skip "Requires warehouse classes"}
-
   describe 'clients_that_fit' do
 
-    let!(:project_a) { create :project_a }
-    let!(:project_b) { create :project_b }
+    let!(:project_a) { 7 }
+    let!(:project_b) { 11 }
 
     let!(:rule) { create :enrolled_in_hmis_project_a }
 
-    let!(:bob) { create :client, first_name: 'Bob', enrolled_project_ids: [ project_a.id ] }
-    let!(:roy) { create :client, first_name: 'Roy', enrolled_project_ids: [ project_b.id ] }
-    let!(:mary) { create :client, first_name: 'Mary', enrolled_project_ids: [ project_a.id, project_b.id ] }
+    let!(:bob) { create :client, first_name: 'Bob', enrolled_project_ids: [ project_a ] }
+    let!(:roy) { create :client, first_name: 'Roy', enrolled_project_ids: [ project_b ] }
+    let!(:mary) { create :client, first_name: 'Mary', enrolled_project_ids: [ project_a, project_b ] }
     let!(:sue) { create :client, first_name: 'Sue', enrolled_project_ids: nil }
-    let!(:zelda) { create :client, first_name: 'Zelda', enrolled_project_ids: [ "#{project_a.id}" ] }
+    let!(:zelda) { create :client, first_name: 'Zelda', enrolled_project_ids: [ "#{project_a}" ] }
 
-    let!(:positive) { create :requirement, rule: rule, positive: true, variable: project_a.id }
-    let!(:negative) { create :requirement, rule: rule, positive: false, variable: project_a.id }
+    let!(:positive) { create :requirement, rule: rule, positive: true, variable: project_a }
+    let!(:negative) { create :requirement, rule: rule, positive: false, variable: project_a }
 
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
