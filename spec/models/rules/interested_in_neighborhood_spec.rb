@@ -6,7 +6,7 @@ RSpec.describe Rules::InterestedInNeighborhood, type: :model do
     let!(:cambridge) { create :neighborhood_cambridge }
     let!(:beacon_hill) { create :neighborhood_beacon_hill }
 
-    let!(:rule) { create :interested_in_cambridge }
+    let!(:rule) { create :interested_in_neighborhood }
 
     let!(:bob) { create :client, first_name: 'Bob', neighborhood_interests: [ cambridge.id ] }
     let!(:roy) { create :client, first_name: 'Roy', neighborhood_interests: [ beacon_hill.id ] }

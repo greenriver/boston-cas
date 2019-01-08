@@ -7,7 +7,7 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
     let!(:cohort_a) { create :cohort_a }
     let!(:cohort_b) { create :cohort_b }
 
-    let!(:rule) { create :active_in_cohort_a }
+    let!(:rule) { create :active_in_cohort }
 
     let!(:bob) { create :client, first_name: 'Bob', active_cohort_ids: [ cohort_a.id ] }
     let!(:roy) { create :client, first_name: 'Roy', active_cohort_ids: [ cohort_b.id ] }

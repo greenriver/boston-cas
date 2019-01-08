@@ -103,19 +103,19 @@ FactoryGirl.define do
     name 'Wheelchair accessible unit'
     verb 'have'
   end
-  factory :bedrooms_required_3, class: 'Rules::Bedroom' do
+  factory :bedrooms_required, class: 'Rules::Bedroom' do
     name 'Minimum number of bedrooms'
     verb 'have'
   end
-  factory :minimum_occupancy_4, class: 'Rules::Occupancy' do
+  factory :minimum_occupancy, class: 'Rules::Occupancy' do
     name 'Minimum occupancy'
     verb 'have'
   end
-  factory :interested_in_cambridge, class: 'Rules::InterestedInNeighborhood' do
+  factory :interested_in_neighborhood, class: 'Rules::InterestedInNeighborhood' do
     name 'Interested in Neighborhood'
     verb 'be'
   end
-  factory :active_in_cohort_a, class: 'Rules::ActiveInCohort' do
+  factory :active_in_cohort, class: 'Rules::ActiveInCohort' do
     name 'Active in Cohort'
     verb 'be'
   end
