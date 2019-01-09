@@ -17,7 +17,7 @@ module MatchDecisions
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm match success"
+      when :pending then "#{_('DND')} to confirm #{_('Shelter Agency')} decline"
       when :decline_overridden then "#{_('Shelter Agency')} Decline overridden by DND.  Match proceeding to #{_('Housing Subsidy Administrator')}"
       when :decline_overridden_returned then "#{_('Shelter Agency')} overridden by #{_('DND')}.  Match returned to the #{_('Shelter Agency')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
