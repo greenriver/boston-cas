@@ -1,13 +1,11 @@
-ello #{@contact.full_name},
+Hello #{@contact.full_name},
 \
-The CAS has generated a new set-aside match.
+The CAS has generated one or more matches on the #{@match_route}.
 \
 Please acknowledge receipt of this match and review the associated HSA contacts.
 \
-Please review details:
-#{notification_match_url @notification, @match}
-\
-= render 'client_details'
+Please review the details at:
+#{opportunity_matches_url(@match.opportunity)}
 \
 = render 'location_details'
 \

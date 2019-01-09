@@ -1,5 +1,5 @@
 module Notifications::HomelessSetAside
-  class MatchInitiationForSetAside < ::Notifications::Base
+  class MatchInitiationForManualNotification < ::Notifications::Base
 
     def self.create_for_match! match
       match.housing_subsidy_admin_contacts.each do |contact|
@@ -8,7 +8,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of match detail"
+      "#{_('Housing Subsidy Administrator')} notified of match"
     end
     
     def show_client_info?
