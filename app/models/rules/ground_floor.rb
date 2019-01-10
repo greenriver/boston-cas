@@ -1,9 +1,9 @@
 class Rules::GroundFloor < Rule
   def clients_that_fit(scope, requirement)
-    if Client.column_names.include?(:requires_ground_floor.to_s)
-      scope.where(requires_ground_floor: requirement.positive)
+    if Client.column_names.include?(:requires_elevator_access.to_s)
+      scope.where(requires_elevator_access: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.requires_ground_floor missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing.new("clients.requires_elevator_access missing. Cannot check clients against #{self.class}.")
     end
   end
 end

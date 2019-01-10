@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Rules::Occupancy, type: :model do
 
-  let!(:rule) { create :minimum_occupancy_4 }
+  let!(:rule) { create :minimum_occupancy }
 
   let!(:bob) {
     client = create :client, first_name: 'Bob', required_minimum_occupancy: 4

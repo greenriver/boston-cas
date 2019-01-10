@@ -3,9 +3,9 @@ class Rules::AgeGreaterThanSixteen < Rule
     if Client.column_names.include?(:date_of_birth.to_s)
       years_ago = Date.today - 16.years
       if requirement.positive
-        where = "date_of_birth < ?"
+        where = "date_of_birth <= ?"
       else
-        where = "date_of_birth >= ?"
+        where = "date_of_birth > ?"
       end
       scope.where(where, years_ago)
     else
