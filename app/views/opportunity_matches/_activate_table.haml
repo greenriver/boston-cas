@@ -1,8 +1,8 @@
 .c-card.c-card-flush
   .c-card__content
     = simple_form_for :checkboxes do |f|
-      %p= page_entries_info @matches
-      %p= paginate @matches
+      - # %p= page_entries_info @matches
+      - # %p= paginate @matches
       %table.table.table-striped
         %thead
           %tr
@@ -34,6 +34,6 @@
                   = render 'activate_button', client: client
                 - else
                   = render 'activate_checkbox', client: client, f: f
-      %p=paginate @matches
+      - # %p=paginate @matches
       - if not @opportunity.match_route.should_activate_match
         .float-right= f.button :submit, value: 'Activate Matches'
