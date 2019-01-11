@@ -13,7 +13,7 @@ class Opportunity < ActiveRecord::Base
 
   has_one :sub_program, through: :voucher
 
-  has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
+  #has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
   has_many :active_matches, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
 
   has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
@@ -47,7 +47,7 @@ class Opportunity < ActiveRecord::Base
 
   scope :available_for_poaching, -> do
     available_candidate_ids = Opportunity.available_candidate.pluck(:id)
-    unstarted_ids = Opportunity.joins(active_match: :match_recommendation_dnd_staff_decision).
+    unstarted_ids = Opportunity.joins(active_matches: :match_recommendation_dnd_staff_decision).
       merge(MatchDecisions::Base.pending).pluck(:id)
     Opportunity.where(id: available_candidate_ids + unstarted_ids)
   end

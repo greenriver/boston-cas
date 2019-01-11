@@ -395,7 +395,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
       client.make_available_in(match_route: opportunity.match_route)
-      opportunity.update! available_candidate: opportunity.active_match.blank?
+      opportunity.update! available_candidate: opportunity.active_matches.blank?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
@@ -408,7 +408,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client.make_available_in(match_route: opportunity.match_route)
-      opportunity.update! available_candidate: opportunity.active_match.blank?
+      opportunity.update! available_candidate: opportunity.active_matches.blank?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)

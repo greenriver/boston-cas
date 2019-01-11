@@ -36,7 +36,7 @@ class VouchersController < ApplicationController
   # Set the Voucher as available = false
   def unavailable
     opportunity = @voucher.opportunity
-    active_match = opportunity.active_match
+    active_match = opportunity.active_matches.first
     if active_match.present?
       matches = @voucher.opportunity.client_opportunity_matches
       Client.transaction do

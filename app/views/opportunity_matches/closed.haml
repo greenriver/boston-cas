@@ -1,5 +1,5 @@
-- match = active_match = @opportunity.active_match
-- active_client_ids = if match.present? then [match.client_id] else [] end
+- match = active_match = @opportunity.active_match.first
+- active_client_ids = @opportunity.active_matches.pluck(:client_id)
 = render 'match_details', match: match
 = render 'tab_navigation', match: match
 

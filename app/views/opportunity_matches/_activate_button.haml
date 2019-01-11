@@ -1,7 +1,7 @@
 - match_warning = "Activating this match will cancel all other active matches for #{client.name}."
-- if @opportunity.active_match.present?
+- if @opportunity.active_matches.present?
   - text = 'Activate Match Canceling Current'
-  - match_warning += " In addition, it will cancel this match involving #{@opportunity.active_match.client.name}."
+  - match_warning += " In addition, it will cancel this match involving #{@opportunity.active_matches.first.client.name}."
 - else
   - text = 'Activate Match'
 

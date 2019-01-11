@@ -15,7 +15,7 @@ class Unit < ActiveRecord::Base
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
 
-  delegate :active_match, to: :active_voucher
+  delegate :active_matches, to: :active_voucher
   delegate :program, to: :active_voucher
 
   validates :name, presence: true

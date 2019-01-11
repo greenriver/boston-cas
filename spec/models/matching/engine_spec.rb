@@ -50,7 +50,7 @@ RSpec.describe Matching::Engine, type: :model do
     end
     it ' and client match is the same as opportunity active match' do
       Matching::RunEngineJob.perform_now
-      expect(client.client_opportunity_matches.first).to eq(simple_opportunity.active_match)
+      expect(client.client_opportunity_matches.first).to eq(simple_opportunity.active_matches.first)
     end
 
     
