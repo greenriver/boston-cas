@@ -54,7 +54,7 @@ module MatchDecisions::HomelessSetAside
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HomelessSetAside::ConfirmHsaDeclineDndStaff
-        m << Notifications:: HomelessSetAside::HsaDecisionClient
+        m << Notifications::HomelessSetAside::HsaDecisionClient
         m << Notifications::HomelessSetAside::HsaDecisionSsp
         m << Notifications::HomelessSetAside::HsaDecisionHsp
         m << Notifications::HomelessSetAside::HsaDecisionShelterAgency
