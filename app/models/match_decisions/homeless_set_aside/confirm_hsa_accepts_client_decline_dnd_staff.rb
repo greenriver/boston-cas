@@ -17,7 +17,7 @@ module MatchDecisions::HomelessSetAside
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm match success"
+      when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator')} decline"
       when :decline_overridden then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match successful"
       when :decline_overridden_returned then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
