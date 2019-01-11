@@ -24,12 +24,8 @@ class OpportunityMatchesController < ApplicationController
   def create
     client_ids_to_activate = params[:checkboxes].reject { | key, value | value != "1" }.keys.map(&:to_i)
     client_ids_to_activate.each do | client_id |
-      matches = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false)
-      if matches.count == 0
-        match = create_match(client_id)
-      else
-        match = matches.first # should never be more than one
-      end
+      matches = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
+          first_or_create(create_match_attributes(client_id))
       match.activate!
     end
     redirect_to opportunity_matches_path(@opportunity)
@@ -38,31 +34,33 @@ class OpportunityMatchesController < ApplicationController
   def update
     client_id =  params[:id].to_i
 
-    if active_match = @opportunity.active_match
+    active_match = @opportunity.active_matches.first
+    if active_match
       MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
       active_match.poached!
     end
 
-    match = create_match(client_id)
+    match = ClientOpportunityMatch.create(create_match_attributes(client_id))
 
     match.activate!
     redirect_to match_path match
   end
 
-  def create_match(client_id)
+  def create_match_attributes(client_id)
     client = Client.find(client_id)
 
     universe_state = {
-        requirements: @opportunity.requirements_for_archive,
-        services: @opportunity.services_for_archive,
-        opportunity: @opportunity.opportunity_details.opportunity_for_archive,
-        client: client.prepare_for_archive,
+      requirements: @opportunity.requirements_for_archive,
+      services: @opportunity.services_for_archive,
+      opportunity: @opportunity.opportunity_details.opportunity_for_archive,
+      client: client.prepare_for_archive,
     }
-    client.candidate_matches.create(
-        opportunity: @opportunity,
-        client: client,
-        universe_state: universe_state
-    )
+
+    return {
+      opportunity: @opportunity,
+      client: client,
+      universe_state: universe_state
+    }
   end
 
   def priority_label
