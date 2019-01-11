@@ -157,6 +157,10 @@ class Opportunity < ActiveRecord::Base
     return client_scope
   end
 
+  def notify_contacts_of_manual_match(match)
+    Notifications::MatchInitiationForManualNotification.create_for_match! match
+  end
+
   def self.available_stati
     [
       'Match in Progress',

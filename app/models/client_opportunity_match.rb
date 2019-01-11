@@ -394,7 +394,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def matched!
     self.class.trasaction do
       add_default_contacts!
-      self.send(match_route.initial_decision).initialize_decision!
+      opportunity.notify_contacts_of_manual_match(self)
     end
   end
 
