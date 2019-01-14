@@ -81,7 +81,6 @@ module MatchDecisions::HomelessSetAside
 
       def decline_confirmed
         match.rejected!
-        # TODO maybe rerun the matching engine for that vacancy and client
       end
 
       def canceled
