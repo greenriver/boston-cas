@@ -53,10 +53,13 @@
                   .badge.badge-success= opportunity.matching_clients.count
               %td{:class => deleted}= opportunity.created_at.to_date
               %td{:class => deleted}
-                - if opportunity.active_matches.present?
+                - active_matches = opportunity.active_matches.count
+                - if active_matches == 1
                   - active_match = opportunity.active_matches.first
                   = link_to match_path(active_match), data: {toggle: :tooltip, title: active_match.current_decision.label} do
                     = active_match.current_decision.step_name
+                - elsif active_matches > 1
+                  link_to 'Multiple Matches', opportunity_matches_path(opportunity)
                 - elsif opportunity.successful_match.present?
                   Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
