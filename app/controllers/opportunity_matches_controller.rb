@@ -24,7 +24,7 @@ class OpportunityMatchesController < ApplicationController
   def create
     client_ids_to_activate = params[:checkboxes].reject { | key, value | value != "1" }.keys.map(&:to_i)
     client_ids_to_activate.each do | client_id |
-      matches = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
+      match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
           first_or_create(create_match_attributes(client_id))
       match.activate!
     end
