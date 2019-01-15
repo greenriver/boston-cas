@@ -12,7 +12,7 @@
             %th.text-center Activate Match?
         %tbody
           - @matches.each do |client|
-            - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?)) && ! params[:confidential_override]
             - if hide_client_name
               - name = "(name hidden)"
             - else
@@ -23,7 +23,7 @@
                 %td.text-center= priority_value(client)
                 %td.text-center
                   = render 'client_match_routes', client: client
-                %td.text-center= link_to 'Current Active Match', match_path(match)
+                %td.text-center= link_to 'Current Active Match', match_path(client.match_for_opportunity(@opportunity))
             - else
               %tr
                 %td= link_to name, client_path(client)
