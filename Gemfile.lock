@@ -79,7 +79,7 @@ GEM
       sass (>= 3.5.2)
     bootstrap3-datetimepicker-rails (4.17.42)
       momentjs-rails (>= 2.8.1)
-    brakeman (4.3.1)
+    brakeman (4.4.0)
     builder (3.2.3)
     bundler-audit (0.6.0)
       bundler (~> 1.2)
