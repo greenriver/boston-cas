@@ -3,6 +3,7 @@ module MatchEvents
     # Overall Match Notes are implemented as events
     validates :note, presence: true
     attr_accessor :contact_ids
+    attr_accessor :include_content
 
     def name
       if admin_note

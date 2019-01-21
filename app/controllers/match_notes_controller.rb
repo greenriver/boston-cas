@@ -21,7 +21,8 @@ class MatchNotesController < ApplicationController
     if @match_note.save
       if mn_params[:contact_ids].present? && mn_params[:contact_ids].delete_if(&:blank?).present?
         mn_params[:contact_ids].delete_if(&:blank?).each do |contact_id|
-          notification = Notifications::NoteSent.create_for_match! match_id: @match.id, contact_id: contact_id.to_i, note: @match_note.note
+          include_content = match_note_params[:include_content]
+          notification = Notifications::NoteSent.create_for_match! match_id: @match.id, contact_id: contact_id.to_i, note: @match_note.note, include_content: include_content
         end
       end
       redirect_to success_path
@@ -100,6 +101,7 @@ class MatchNotesController < ApplicationController
         permit(
           :note,
           :admin_note,
+          :include_content,
           contact_ids: []
         )
     end

@@ -258,6 +258,7 @@ class NotificationsMailer < DatabaseMailer
   def note_sent notification, note
     setup_instance_variables notification
     @note = note
+    @include_content = notification.include_content
     mail(to: @contact.email, subject: "Note from CAS - Requires Your Action")
   end
 

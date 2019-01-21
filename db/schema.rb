@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181221143527) do
+ActiveRecord::Schema.define(version: 20190121144954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,10 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.integer  "required_number_of_bedrooms",                            default: 1
     t.integer  "required_minimum_occupancy",                             default: 1
     t.boolean  "requires_elevator_access",                               default: false
+    t.jsonb    "neighborhood_interests",                                 default: [],    null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
+    t.float    "tie_breaker"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -478,6 +482,7 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.integer  "stalled_interval",            default: 7,     null: false
     t.integer  "match_prioritization_id",     default: 5,     null: false
     t.boolean  "should_cancel_other_matches", default: true,  null: false
+    t.boolean  "should_activate_match",       default: true,  null: false
   end
 
   create_table "messages", force: :cascade do |t|
@@ -497,6 +502,19 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.string   "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "neighborhood_interests", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "neighborhood_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "neighborhoods", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "non_hmis_clients", force: :cascade do |t|
@@ -530,6 +548,13 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.integer  "gender"
     t.string   "type"
     t.boolean  "available",                                default: true,  null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
+    t.jsonb    "neighborhood_interests",                   default: [],    null: false
+    t.float    "income_total_monthly"
+    t.boolean  "disabling_condition",                      default: false
+    t.boolean  "physical_disability",                      default: false
+    t.boolean  "developmental_disability",                 default: false
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -537,11 +562,12 @@ ActiveRecord::Schema.define(version: 20181221143527) do
   create_table "notifications", force: :cascade do |t|
     t.string   "type"
     t.string   "code"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.integer  "client_opportunity_match_id"
     t.integer  "recipient_id"
     t.datetime "expires_at"
+    t.boolean  "include_content",             default: true
   end
 
   create_table "opportunities", force: :cascade do |t|
@@ -732,6 +758,9 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.integer  "required_number_of_bedrooms",                 default: 1
     t.integer  "required_minimum_occupancy",                  default: 1
     t.boolean  "requires_elevator_access",                    default: false
+    t.jsonb    "neighborhood_interests",                      default: [],    null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -847,6 +876,7 @@ ActiveRecord::Schema.define(version: 20181221143527) do
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
+    t.boolean  "can_manage_neighborhoods",                default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
