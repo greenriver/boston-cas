@@ -1,4 +1,4 @@
-module MatchDecisions::ProviderOnly
+module MatchDecisions::HomelessSetAside
   class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
 
     def statuses
@@ -53,11 +53,11 @@ module MatchDecisions::ProviderOnly
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::ProviderOnly::ConfirmHsaDeclineDndStaff
-        m << Notifications::ProviderOnly::HsaDecisionClient
-        m << Notifications::ProviderOnly::HsaDecisionSsp
-        m << Notifications::ProviderOnly::HsaDecisionHsp
-        m << Notifications::ProviderOnly::HsaDecisionShelterAgency
+        m << Notifications::HomelessSetAside::ConfirmHsaDeclineDndStaff
+        m << Notifications::HomelessSetAside::HsaDecisionClient
+        m << Notifications::HomelessSetAside::HsaDecisionSsp
+        m << Notifications::HomelessSetAside::HsaDecisionHsp
+        m << Notifications::HomelessSetAside::HsaDecisionShelterAgency
       end
     end
 
@@ -81,7 +81,6 @@ module MatchDecisions::ProviderOnly
 
       def decline_confirmed
         match.rejected!
-        # TODO maybe rerun the matching engine for that vacancy and client
       end
 
       def canceled

@@ -391,6 +391,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
+  def matched!
+    self.class.trasaction do
+      add_default_contacts!
+      opportunity.notify_contacts_of_manual_match(self)
+    end
+  end
+
   def rejected!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'

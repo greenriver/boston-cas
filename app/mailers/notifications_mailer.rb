@@ -236,14 +236,15 @@ class NotificationsMailer < DatabaseMailer
 
   # End Provider Only
 
-  # Set Aside
+  # Manual Activation
 
-  def new_set_aside_opportunity_available notification
+  def match_initiation_for_manual_activation notification
     setup_instance_variables notification
-    mail(to: @contact.email, subject: "A new Set-Aside Opportunity has been added")
+    @route_name = @opportunity.match_route.title
+    mail(to: @contact.email, subject: "New match candidates have been added on the #{@route_name}")
   end
 
-  # end Set Aside
+  # end Manual Activation
 
   # Progress Updates
   def progress_update_requested notification_ids

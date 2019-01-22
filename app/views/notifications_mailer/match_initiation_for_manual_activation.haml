@@ -1,0 +1,15 @@
+Hello #{@contact.full_name},
+\
+The CAS has generated one or more matches on the #{@match_route}.
+\
+Please review the details at:
+#{opportunity_matches_url(@match.opportunity)}
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'
