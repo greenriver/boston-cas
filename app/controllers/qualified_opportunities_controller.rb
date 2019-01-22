@@ -15,9 +15,15 @@ class QualifiedOpportunitiesController < ApplicationController
   end
 
   def update
-    if active_match = @opportunity.active_match
-      MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
-      active_match.poached!
+    if @opportunity.match_route.should_cancel_other_matches
+      if @opportunity.active_matches.count > 1
+        raise NotImplementedError
+      else
+        if active_match = @opportunity.active_matches.first
+          MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
+          active_match.poached!
+        end
+      end
     end
 
     universe_state = {

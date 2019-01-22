@@ -262,9 +262,13 @@ class Client < ActiveRecord::Base
     #client_opportunity_matches.inspect
   end
 
-  def active_in_match
-    client_opportunity_matches.active.first
+  def match_for_opportunity(opportunity)
+    client_opportunity_matches.active.where(opportunity: opportunity).first
   end
+
+  # def active_in_match
+  #   client_opportunity_matches.active.first
+  # end
 
   def active_matches
     client_opportunity_matches.active

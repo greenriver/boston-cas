@@ -1,0 +1,8 @@
+- match_routes(client).each_with_index do | route, index |
+  - route_name = route.first
+  - matches = route.last
+  - anchor_text = "#{route_name} (#{matches})"
+  - if index == 0
+    = link_to anchor_text, client_qualified_opportunities_path(client)
+  - else
+    %br= link_to anchor_text, client_qualified_opportunities_path(client)

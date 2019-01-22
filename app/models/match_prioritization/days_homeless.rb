@@ -8,5 +8,9 @@ module MatchPrioritization
     def self.slug
       'cumulative-homeless-days'
     end
+
+    def self.column_name
+      'days_homeless'
+    end
   end
 end

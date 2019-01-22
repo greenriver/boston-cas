@@ -1,41 +1,39 @@
 .c-card.c-card-flush
   .c-card__content
-    %p= page_entries_info @matches
-    %p= paginate @matches    
-    %table.table.table-striped
-      %thead
-        %tr
-          %th Client Name
-          %th.text-center Active in match?
-          %th.text-center Activate Match?
-      %tbody
-        - if match.present?
-          - client = match.client
-          - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
-          - if hide_client_name
-            - name = "(name hidden)"
-          - else
-            - name = client.name
-          %tr.client--match-active
-            %td= link_to name, client_path(client)
-            %td.text-center= checkmark(client.active_in_match?)
-            %td.text-center= link_to 'Current Active Match', match_path(match)
-        - @matches.each do |client|
-          - next if active_client_ids.include?(client.id)
+    = simple_form_for :checkboxes do |f|
+      - # %p= page_entries_info @matches
+      - # %p= paginate @matches
+      %table.table.table-striped
+        %thead
           %tr
-            - hide_client_name = (client.confidential? || client.active_in_match.try(:confidential?)) && ! params[:confidential_override]
+            %th Client Name
+            %th.text-center= priority_label
+            %th.text-center Other Active Matches
+            %th.text-center Activate Match?
+        %tbody
+          - @matches.each do |client|
+            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?)) && ! params[:confidential_override]
             - if hide_client_name
               - name = "(name hidden)"
             - else
               - name = client.name
-            %td= link_to name, client_path(client)
-            %td.text-center= checkmark(client.active_in_match?)
-            - match_warning = "Activating this match will cancel all other active matches for #{client.name}."
-            - if active_match.present?
-              - text = 'Activate Match Canceling Current'
-              - match_warning += " In addition, it will cancel this match involving #{active_match.client.name}."
+            - if active_client_ids.include?(client.id)
+              %tr.client--match-active
+                %td= link_to name, client_path(client)
+                %td.text-center= priority_value(client)
+                %td.text-center
+                  = render 'client_match_routes', client: client
+                %td.text-center= link_to 'Current Active Match', match_path(client.match_for_opportunity(@opportunity))
             - else
-              - text = 'Activate Match'
-              
-            %td.text-center= link_to text, opportunity_match_path(@opportunity, client), class: 'btn btn-light mb-2', method: :patch, data: {confirm: match_warning}
-    %p=paginate @matches
+              %tr
+                %td= link_to name, client_path(client)
+                %td.text-center= priority_value(client)
+                %td.text-center
+                  = render 'client_match_routes', client: client
+                - if @opportunity.match_route.should_activate_match
+                  = render 'activate_button', client: client
+                - else
+                  = render 'activate_checkbox', client: client, f: f
+      - # %p=paginate @matches
+      - if not @opportunity.match_route.should_activate_match
+        .float-right= f.button :submit, value: 'Activate Matches'

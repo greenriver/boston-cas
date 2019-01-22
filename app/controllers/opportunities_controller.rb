@@ -198,7 +198,7 @@ class OpportunitiesController < ApplicationController
   end
 
   private def matches_in_progress
-    @opportunities.joins(:active_match).distinct
+    @opportunities.joins(:active_matches).distinct
   end
 
   private def available_in_the_future

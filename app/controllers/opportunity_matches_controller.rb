@@ -8,14 +8,9 @@ class OpportunityMatchesController < ApplicationController
 
   def index
     clients_for_route = Client.available_for_matching(@opportunity.match_route)
-    @matches = @opportunity.matching_clients(clients_for_route).page(params[:page]).per(25)
-    @sub_program = @opportunity.sub_program
-    @program = @sub_program.program
-  end
-
-  def all
-    clients_for_route = Client.all
-    @matches = @opportunity.matching_clients(clients_for_route).page(params[:page]).per(25)
+    @actives = @opportunity.active_matches.map { |match| match.client }
+    @availables = @opportunity.matching_clients(clients_for_route)
+    @matches = Kaminari.paginate_array(@actives + @availables) # .page(params[:page]).per(25)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
   end
@@ -26,28 +21,65 @@ class OpportunityMatchesController < ApplicationController
     @program = @sub_program.program
   end
 
-  def update
-    client = Client.find params[:id].to_i
+  def create
+    client_ids_to_activate = params[:checkboxes].reject { | key, value | value != "1" }.keys.map(&:to_i)
+    client_ids_to_activate.each do | client_id |
+      match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
+          first_or_create(create_match_attributes(client_id))
+      match.activate!
+    end
+    redirect_to opportunity_matches_path(@opportunity)
+  end
 
-    if active_match = @opportunity.active_match
+  def update
+    client_id =  params[:id].to_i
+
+    active_match = @opportunity.active_matches.first
+    if active_match
       MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
       active_match.poached!
     end
 
-    universe_state = {
-        requirements: @opportunity.requirements_for_archive,
-        services: @opportunity.services_for_archive,
-        opportunity: @opportunity.opportunity_details.opportunity_for_archive,
-        client: client.prepare_for_archive,
-    }
-    match = client.candidate_matches.create(
-        opportunity: @opportunity,
-        client: client,
-        universe_state: universe_state
-    )
+    match = ClientOpportunityMatch.create(create_match_attributes(client_id))
+
     match.activate!
     redirect_to match_path match
   end
+
+  def create_match_attributes(client_id)
+    client = Client.find(client_id)
+
+    universe_state = {
+      requirements: @opportunity.requirements_for_archive,
+      services: @opportunity.services_for_archive,
+      opportunity: @opportunity.opportunity_details.opportunity_for_archive,
+      client: client.prepare_for_archive,
+    }
+
+    return {
+      opportunity: @opportunity,
+      client: client,
+      universe_state: universe_state
+    }
+  end
+
+  def priority_label
+    @opportunity.match_route.match_prioritization.title
+  end
+  helper_method :priority_label
+
+  def priority_value(client)
+    client.send(@opportunity.match_route.match_prioritization.column_name)
+  end
+  helper_method :priority_value
+
+  def match_routes(client)
+    counts = client.client_opportunity_matches.joins(:program, :match_route).group(:type).count
+    counts.map do | key, value |
+      [ key.constantize.new.title, value ]
+    end
+  end
+  helper_method :match_routes
 
   private
 
