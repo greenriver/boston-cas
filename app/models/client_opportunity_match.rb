@@ -39,6 +39,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :hsa_accepts_client, decision_class_name: 'MatchDecisions::ProviderOnly::HsaAcceptsClient', notification_class_name: 'Notifications::ProviderOnly::HsaAcceptsClient'
   has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
+  # Set-Asides Match Route
+  has_decision :hsa_acknowledges_receipt, decision_class_name: 'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt', notification_class_name: 'Notifications::HomelessSetAside::MatchInitiationForHsa'
+  has_decision :hsa_accepts_client, decision_class_name: 'MatchDecisions::HomelessSetAside::HsaAcceptsClient', notification_class_name: 'Notifications::HomelessSetAside::HsaAcceptsClient'
+  has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::HomelessSetAside::ConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
+
   has_one :current_decision
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
