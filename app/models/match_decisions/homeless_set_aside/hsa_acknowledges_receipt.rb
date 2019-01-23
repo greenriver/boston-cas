@@ -4,7 +4,7 @@ module MatchDecisions::HomelessSetAside
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
-    validate :cant_accept_if_related_active_match
+    validate :can_only_accept_an_opportunity_once
     validate :ensure_required_contacts_present_on_accept
 
     def label_for_status status
@@ -92,11 +92,9 @@ module MatchDecisions::HomelessSetAside
       end
     end
 
-    def cant_accept_if_related_active_match
-      if save_will_accept? &&
-        (match.client_related_matches.active.any? ||
-          match.opportunity_related_matches.active.any?)
-        then errors.add :status, "There is already another active match for this client or opportunity"
+    def can_only_accept_an_opportunity_once
+      if save_will_accept? && match.already_active_for_opportunity.any?
+        then errors.add :status, "The receipt of this opportunity has already been acknowledged"
       end
     end
 

@@ -483,6 +483,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
       where.not(id: id)
   end
 
+  def already_active_for_opportunity
+    # This might be better to check for the sub-program...
+    ClientOpportunityMatch.active.
+      where(client_id: client_id, opportunity_id: opportunity_id).
+      where.not(id: id)
+  end
+
   private
 
     def assign_match_role_to_contact role, contact
