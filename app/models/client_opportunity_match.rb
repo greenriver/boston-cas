@@ -457,7 +457,25 @@ class ClientOpportunityMatch < ActiveRecord::Base
         client.make_unavailable_in match_route: route
       end
 
-      opportunity_related_matches.destroy_all
+      if route.should_activate_match
+        # If the match was automatically activated, we just need to clean up any leftovers
+        opportunity_related_matches.destroy_all
+      else
+        opportunity_related_matches.each do |match|
+          if match.active
+            opportunity.notify_contacts_of_success(self)
+            MatchEvents::DecisionAction.create(match_id: match.id,
+                decision_id: match.current_decision.id,
+                action: :canceled)
+            reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
+            match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+            match.poached!
+          else
+            match.destroy
+          end
+        end
+      end
+
       opportunity.update available: false, available_candidate: false
       if opportunity.unit != nil
         opportunity.unit.update available: false

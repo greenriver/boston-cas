@@ -34,10 +34,11 @@ class OpportunityMatchesController < ApplicationController
   def update
     client_id =  params[:id].to_i
 
-    active_match = @opportunity.active_matches.first
-    if active_match
-      MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
-      active_match.poached!
+    if @opportunity.match_route.should_cancel_other_matches
+      @opportunity.active_matches do |active_match|
+        MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
+        active_match.poached!
+      end
     end
 
     match = ClientOpportunityMatch.create(create_match_attributes(client_id))
