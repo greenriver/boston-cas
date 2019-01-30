@@ -21,7 +21,7 @@ module CasSeeds
       'Health and Safety',
     ]
 
-    # I think this was supposed to be HSA_PROVIDER_ONLY_REASONS?
+    # TODO: For Provider-Only route, rename HSA_PROVIDER_ONLY_REASONS?
     HSA_PRIORITY_ONLY_REASONS = [
       'Household did not respond',
       'Ineligible for Housing Program',
