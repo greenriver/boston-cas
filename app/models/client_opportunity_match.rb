@@ -207,7 +207,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       past_first_step_or_not_default_route?
     elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
       past_first_step_or_not_default_route?
-    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?)
+    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
       past_first_step_or_not_default_route?
     else
       false
@@ -220,6 +220,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
       current_decision != self.send(match_route.initial_decision)
     else
       true
+    end
+  end
+
+  def client_info_approved_for_release?
+    if match_route.class.name == 'MatchRoutes::Default'
+      return shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?
+    else
+      client&.has_full_housing_release? || false
     end
   end
 
