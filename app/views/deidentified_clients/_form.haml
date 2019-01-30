@@ -16,7 +16,7 @@
       = f.input :youth_rrh_desired, label: 'Interested in Youth RRH'
       = f.input :income_maximization_assistance_requested
       = f.input :pending_subsidized_housing_placement
-      = f.input :rrh_assessment_contact_info, label: 'Case Manager Contact Information'
+      = f.input :rrh_assessment_contact_info, label: 'Case Manager Contact Information', hint: 'Do not include any personal information about the client in this box'
       = f.input :required_number_of_bedrooms, collection: (1..5), include_blank: false
       = f.input :required_minimum_occupancy, collection: (1..10), include_blank: false
       = f.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit')
