@@ -220,6 +220,10 @@ class Client < ActiveRecord::Base
     end
   end
 
+  def non_hmis?
+    NonHmisClient.joins(:client).merge(Client.where(id: id)).exists?
+  end
+
   def merged_with_name
     c = Client.find(merged_into)
     c.full_name

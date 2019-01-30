@@ -45,7 +45,13 @@
     Email:
     = @client.email
     %br
-    - if @client.has_full_housing_release?
+    - if @client.non_hmis?
+      %label Client and/or Case Manager Contact Information
+      .client__housing_release
+        For Non-HMIS Client #{@client.remote_id}
+        %br
+        = simple_format @client.rrh_assessment_contact_info
+    - elsif @client.has_full_housing_release?
       %label Contact info for maximizing income
       .client__housing_release= simple_format @client.rrh_assessment_contact_info
   .row
