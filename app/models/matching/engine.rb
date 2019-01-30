@@ -74,7 +74,7 @@ class Matching::Engine
       if opportunity.match_route.should_activate_match
         match.activate! if client_priority == 1
       else
-        match.matched!
+        match.matched! if client_priority == 1
       end
 
       client_priority += 1

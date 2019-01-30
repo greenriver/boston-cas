@@ -238,10 +238,12 @@ class NotificationsMailer < DatabaseMailer
 
   # Manual Activation
 
-  def match_initiation_for_manual_activation notification
+  def match_initiation_for_manual_notification notification
     setup_instance_variables notification
-    @route_name = @match.match_route.title
-    mail(to: @contact.email, subject: "New match candidates have been added on the #{@route_name}")
+    if @match.present?
+      @route_name = @match.match_route.title
+      mail(to: @contact.email, subject: "New match candidates have been added on the #{@route_name}")
+    end
   end
 
   def housing_opportunity_successfully_filled notification
