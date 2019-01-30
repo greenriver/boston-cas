@@ -242,7 +242,7 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     if @match.present?
       @route_name = @match.match_route.title
-      mail(to: @contact.email, subject: "New match candidates have been added on the #{@route_name}")
+      mail(to: @contact.email, subject: "New matches have been added on the #{@route_name}")
     end
   end
 

@@ -70,11 +70,13 @@ class Matching::Engine
         client: client.prepare_for_archive,
       }
       match = client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
-
-      if opportunity.match_route.should_activate_match
-        match.activate! if client_priority == 1
-      else
-        match.matched! if client_priority == 1
+      
+      if client_priority == 1
+        if opportunity.match_route.should_activate_match
+          match.activate!
+        else
+          match.matched!
+        end
       end
 
       client_priority += 1
