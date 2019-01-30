@@ -21,6 +21,7 @@ module CasSeeds
       'Health and Safety',
     ]
 
+    # I think this was supposed to be HSA_PROVIDER_ONLY_REASONS?
     HSA_PRIORITY_ONLY_REASONS = [
       'Household did not respond',
       'Ineligible for Housing Program',
@@ -28,6 +29,8 @@ module CasSeeds
       'Self-resolved',
       'Falsification of documents',
       'Health and Safety',
+      'Housed',
+      'Other housing opportunity',
     ]
 
     SHELTER_AGENCY_REASONS = [
