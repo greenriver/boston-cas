@@ -105,7 +105,7 @@ class Opportunity < ActiveRecord::Base
   end
 
   def prioritized_matches
-    client_opportunity_matches.joins(:client).prioritized_by_client(match_route: match_route)
+    ClientOpportunityMatch.prioritized_by_client(match_route, client_opportunity_matches.joins(:client))
   end
 
   def matches_client?(client)
@@ -124,7 +124,7 @@ class Opportunity < ActiveRecord::Base
       client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
     end
     client_scope = add_unit_attributes_filter(client_scope)
-    client_scope.merge(Client.prioritized(match_route: match_route))
+    client_scope.merge(Client.prioritized(match_route, client_scope))
   end
 
   def add_unit_attributes_filter(client_scope)

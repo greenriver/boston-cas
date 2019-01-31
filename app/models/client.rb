@@ -140,8 +140,8 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def self.prioritized match_route:
-    match_route.match_prioritization.prioritization_for_clients
+  def self.prioritized(match_route, scope)
+    match_route.match_prioritization.prioritization_for_clients(scope)
   end
 
   # A random number for prioritizations that require a tie-breaker

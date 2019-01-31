@@ -582,8 +582,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
       end
     end
 
-    def self.prioritized_by_client(match_route:)
-      match_route.match_prioritization.prioritization_for_clients
+    def self.prioritized_by_client(match_route, scope)
+      match_route.match_prioritization.prioritization_for_clients(scope)
     end
 
     def self.sort_options

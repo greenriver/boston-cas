@@ -5,8 +5,8 @@ module MatchPrioritization
       'Days homeless in the last three years with random tie-breaker'
     end
 
-    def self.prioritization_for_clients
-      order(c_t[:days_homeless_in_last_three_years].desc.to_sql + ' NULLS LAST').
+    def self.prioritization_for_clients(scope)
+      scope.order(c_t[:days_homeless_in_last_three_years].desc.to_sql + ' NULLS LAST').
           order(c_t[:tie_breaker].asc)
     end
 

@@ -35,14 +35,12 @@ module MatchPrioritization
       raise NotImplementedError
     end
 
-    def self.prioritization_for_clients
+    def self.prioritization_for_clients(scope)
       raise NotImplementedError
     end
 
-    def prioritization_for_clients
-      # the from is a hack around an STI issue -- referring to the method causes the type field to be
-      # referenced in the generated sql
-      self.class.prioritization_for_clients.from('clients, match_prioritizations')
+    def prioritization_for_clients(scope)
+      self.class.prioritization_for_clients(scope)
     end
     
     def title
