@@ -105,32 +105,7 @@ class Opportunity < ActiveRecord::Base
   end
 
   def prioritized_matches
-    c_t = Client.arel_table
-    case match_route.match_prioritization.class.slug
-    when 'first-date-homeless'
-      client_opportunity_matches.joins(:client).
-        order(c_t[:calculated_first_homeless_night].asc)
-    when 'cumulative-homeless-days'
-      client_opportunity_matches.joins(:client).
-        order(c_t[:days_homeless].desc)
-    when 'homeless-days-last-three-years'
-      client_opportunity_matches.joins(:client).
-      order(c_t[:days_homeless_in_last_three_years].desc)
-    when 'vi-spdat'
-      client_opportunity_matches.joins(:client).
-        where.not(clients: {vispdat_score: nil}).
-        order(c_t[:vispdat_score].desc)
-    when 'vispdat-priority-score'
-      client_opportunity_matches.joins(:client).
-        where.not(clients: { vispdat_priority_score: nil }).
-        order(c_t[:vispdat_priority_score].desc)
-    when 'assessment-score'
-      client_opportunity_matches.joins(:client).
-        where.not(clients: { assessment_score: nil }).
-        order(assessment_score: :desc, days_homeless: :desc)
-    else
-      raise NotImplementedError
-    end
+    client_opportunity_matches.joins(:client).prioritized_by_client(match_route: match_route)
   end
 
   def matches_client?(client)

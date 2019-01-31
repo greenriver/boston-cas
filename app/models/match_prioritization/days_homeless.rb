@@ -5,8 +5,8 @@ module MatchPrioritization
       'Cumulative days homeless'
     end
 
-    def self.slug
-      'cumulative-homeless-days'
+    def self.prioritization_for_clients
+      order(c_t[:days_homeless].desc)
     end
 
     def self.column_name

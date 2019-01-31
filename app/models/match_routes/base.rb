@@ -2,7 +2,7 @@ module MatchRoutes
   class Base < ActiveRecord::Base
     self.table_name = :match_routes
 
-    belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name
+    belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
 
     scope :available, -> do
       where(active: true).
