@@ -140,29 +140,8 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def self.prioritized match_route:
-    c_t = Client.arel_table
-    case match_route.match_prioritization.class.slug
-    when 'first-date-homeless'
-      order(calculated_first_homeless_night: :asc)
-    when 'cumulative-homeless-days'
-      order(days_homeless: :desc)
-    when 'homeless-days-last-three-years'
-      order(c_t[:days_homeless_in_last_three_years].desc)
-    when 'homeless-days-last-three-years-random-tie-breaker'
-      order(c_t[:days_homeless_in_last_three_years].desc).
-      order(tie_breaker: :asc)
-    when 'vi-spdat'
-      where.not(vispdat_score: nil).order(vispdat_score: :desc)
-    when 'vispdat-priority-score'
-      where.not(vispdat_priority_score: nil)
-      .order(vispdat_priority_score: :desc)
-    when 'assessment-score'
-      where.not(assessment_score: nil).
-      order(assessment_score: :desc, rrh_assessment_collected_at: :desc)
-    else
-      raise NotImplementedError
-    end
+  def self.prioritized(match_route, scope)
+    match_route.match_prioritization.prioritization_for_clients(scope)
   end
 
   # A random number for prioritizations that require a tie-breaker

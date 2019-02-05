@@ -5,8 +5,9 @@ module MatchPrioritization
       'VI-SPDAT Score'
     end
 
-    def self.slug
-      'vi-spdat'
+    def self.prioritization_for_clients(scope)
+      scope.where.not(c_t[:vispdat_score].eq(nil))
+          .order(c_t[:vispdat_score].desc)
     end
 
     def self.column_name

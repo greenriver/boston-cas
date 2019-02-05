@@ -590,6 +590,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
       end
     end
 
+    def self.prioritized_by_client(match_route, scope)
+      match_route.match_prioritization.prioritization_for_clients(scope)
+    end
+
     def self.sort_options
       [
         {title: 'Oldest match', column: 'created_at', direction: 'asc'},
