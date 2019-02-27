@@ -120,6 +120,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.disabling_condition = if disabling_condition then 1 else nil end
     project_client.physical_disability = if physical_disability then 1 else nil end
     project_client.developmental_disability = if developmental_disability then 1 else nil end
+    project_client.domestic_violence = 1 if domestic_violence
 
     project_client.sync_with_cas = self.available
     project_client.needs_update = true

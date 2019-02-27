@@ -8,22 +8,18 @@
 .detail-box--value
   - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end
   - name = match.client_name_for_contact(access_context.current_contact, hidden: false)
-  - if @show_client_info
-    -# If we have permission to see the client details, present a modal
+  - if ! user_signed_in?
+    -# Provide the option to login to see more
+    = link_to link do
+      = name
+  - else
     = link_to link, data: {loads_in_pjax_modal: true} do
       = name
       - unless user_signed_in?
         -# If we would have permission to see the client details if we logged in, show age
         %br
-        Age: 
+        Age:
         = match.client.age || 'unknown'
-  - elsif ! user_signed_in?
-    -# Provide the option to login to see more
-    = link_to link do
-      = name
-  - else
-    -# Even though we are logged in, we don't have permission
-    = name
   - if can_view_all_clients? && warehouse_id = match.client.remote_id
     %br
     = link_to @client.data_source_path, target: '_blank' do

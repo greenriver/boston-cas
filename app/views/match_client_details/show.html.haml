@@ -1,7 +1,14 @@
 = content_for :modal_title do
   Client Details
 - unless @match.show_client_info_to? current_contact
-  %p Sorry, you are not able to see that information at this time
+  - if @client.non_hmis?
+    %label Client and/or Case Manager Contact Information
+    .client__housing_release
+      For Non-HMIS Client #{@client.remote_id}
+      %br
+      = simple_format @client.rrh_assessment_contact_info
+  - else
+    %p Sorry, you are not able to see that information at this time
 - else
   %p
     %strong
