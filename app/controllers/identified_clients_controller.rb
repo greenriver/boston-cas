@@ -72,6 +72,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :calculated_chronic_homelessness,
         :gender,
         :available,
+        :domestic_violence,
         :active_cohort_ids => [],
       ).merge(identified: true)
     end
