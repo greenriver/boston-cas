@@ -9,6 +9,23 @@ class Role < ActiveRecord::Base
     name.to_s.humanize.gsub('Dnd', 'DND').gsub('Hsa', 'HSA')
   end
 
+  def administrative?
+    Role.administrative_permissions.each do |permission|
+      return true if send(permission) == true
+    end
+    return false
+  end
+
+  def self.administrative_permissions
+    [
+        :can_edit_roles,
+        :can_edit_users,
+        :can_become_other_users,
+        :can_edit_translations,
+        :can_manage_config,
+    ]
+  end
+
   def self.permissions
     [
       :can_view_all_clients, 

@@ -43,8 +43,22 @@ module Admin
       @opportunity_contacts = Opportunity.where(id: OpportunityContact.where(contact_id: @user.contact).select(:opportunity_id))
     end
 
+    def confirm
+      @user = user_scope.find(params[:id].to_i)
+      if ! adding_admin?
+        update
+      end
+    end
+
     def update
       @user = user_scope.find params[:id]
+      if adding_admin?
+        if ! current_user.valid_password?(confirmation_params[:confirmation_password])
+          flash[:error] = "User not updated. Incorrect password"
+          render :confirm
+          return
+        end
+      end
       @user.update_attributes user_params
       if @user.save
         redirect_to({action: :index}, notice: 'User updated')
@@ -61,6 +75,25 @@ module Admin
     end
 
     private
+      def adding_admin?
+        existing_roles = @user.user_roles
+        existing_roles.each do |role|
+          # User is already an admin, so we aren't adding anything
+          return false if role.administrative?
+        end
+
+        assigned_roles = user_params[:role_ids] || []
+        added_role_ids = assigned_roles - existing_roles.pluck(:role_id)
+        added_role_ids.reject { |id| id.empty? }.each do |id|
+          role = Role.find(id.to_i)
+          if role.administrative?
+            @admin_role_name = role.role_name
+            return true
+          end
+        end
+        false
+      end
+
       def user_scope
         User.active
       end
@@ -76,6 +109,13 @@ module Admin
           contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role]
         )
       end
+
+      def confirmation_params
+        params.require(:user).permit(
+          :confirmation_password
+        )
+      end
+
       def sort_column
         user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
       end
