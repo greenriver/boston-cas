@@ -23,7 +23,9 @@
       = f.input :rrh_assessment_contact_info, label: 'Case Manager Contact Information', hint: 'Do not include any personal information about the client in this box'
       = f.input :required_number_of_bedrooms, collection: (1..5), include_blank: false
       = f.input :required_minimum_occupancy, collection: (1..10), include_blank: false
-      = f.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }
+      = f.input :interested_in_set_asides, input_html: {class: 'jInterestedInSetAsides'}
+      .jNeighborhoodInterests
+        = f.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }
       = f.input :disabling_condition
       = f.input :physical_disability
       = f.input :developmental_disability
