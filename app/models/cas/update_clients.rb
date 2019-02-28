@@ -180,6 +180,7 @@ module Cas
         :required_minimum_occupancy,
         :requires_elevator_access,
         :neighborhood_interests,
+        :interested_in_set_asides,
       ]
     end
 
