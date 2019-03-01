@@ -13,6 +13,7 @@ module MatchRoutes
       {
           'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
           'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
+          'MatchDecisions::HomelessSetAside::RecordClientHousedDateHousingSubsidyAdministrator' => 3,
       }
     end
 
@@ -20,6 +21,7 @@ module MatchRoutes
       {
           'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
           'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
+          'MatchDecisions::HomelessSetAside::RecordClientHousedDateHousingSubsidyAdministrator' => 3,
           'MatchDecisions::HomelessSetAside::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
       }
     end

@@ -84,8 +84,9 @@ module MatchDecisions::HomelessSetAside
       end
 
       def accepted
+        @decision.next_step.initialize_decision!
+
         Notifications::HomelessSetAside::HsaAcceptsClientSspNotification.create_for_match! match
-        match.succeeded!
       end
 
       def declined
