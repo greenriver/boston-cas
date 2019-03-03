@@ -5,6 +5,7 @@ module Admin
 
     before_action :authenticate_user!
     before_action :require_can_edit_users!
+    before_action :set_user, only: [:edit, :confirm, :update, :destroy]
 
     helper_method :sort_column, :sort_direction
 
@@ -27,7 +28,6 @@ module Admin
     end
 
     def edit
-      @user = user_scope.find params[:id]
       # check for existing contact with the same email
       contact = Contact.where("LOWER(email) = ?", @user.email.downcase)&.first
       if ! @user.contact
@@ -44,14 +44,12 @@ module Admin
     end
 
     def confirm
-      @user = user_scope.find(params[:id].to_i)
       if ! adding_admin?
         update
       end
     end
 
     def update
-      @user = user_scope.find params[:id]
       if adding_admin?
         if ! current_user.valid_password?(confirmation_params[:confirmation_password])
           flash[:error] = "User not updated. Incorrect password"
@@ -59,7 +57,7 @@ module Admin
           return
         end
       end
-      @user.update_attributes user_params
+      @user.assign_attributes(user_params)
       if @user.save
         redirect_to({action: :index}, notice: 'User updated')
       else
@@ -69,7 +67,6 @@ module Admin
     end
 
     def destroy
-      @user = user_scope.find params[:id]
       @user.update(active: false)
       redirect_to({action: :index}, notice: 'User deactivated')
     end
@@ -122,6 +119,10 @@ module Admin
 
       def sort_direction
         %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+      end
+
+      def set_user
+        @user = user_scope.find params[:id].to_i
       end
   end
 
