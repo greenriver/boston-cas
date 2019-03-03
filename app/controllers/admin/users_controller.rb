@@ -5,6 +5,7 @@ module Admin
 
     before_action :authenticate_user!
     before_action :require_can_edit_users!
+    before_action :set_user, only: [:edit, :confirm, :update, :destroy]
 
     helper_method :sort_column, :sort_direction
 
@@ -27,7 +28,6 @@ module Admin
     end
 
     def edit
-      @user = user_scope.find params[:id]
       # check for existing contact with the same email
       contact = Contact.where("LOWER(email) = ?", @user.email.downcase)&.first
       if ! @user.contact
@@ -43,9 +43,21 @@ module Admin
       @opportunity_contacts = Opportunity.where(id: OpportunityContact.where(contact_id: @user.contact).select(:opportunity_id))
     end
 
+    def confirm
+      if ! adding_admin?
+        update
+      end
+    end
+
     def update
-      @user = user_scope.find params[:id]
-      @user.update_attributes user_params
+      if adding_admin?
+        if ! current_user.valid_password?(confirmation_params[:confirmation_password])
+          flash[:error] = "User not updated. Incorrect password"
+          render :confirm
+          return
+        end
+      end
+      @user.assign_attributes(user_params)
       if @user.save
         redirect_to({action: :index}, notice: 'User updated')
       else
@@ -55,12 +67,30 @@ module Admin
     end
 
     def destroy
-      @user = user_scope.find params[:id]
       @user.update(active: false)
       redirect_to({action: :index}, notice: 'User deactivated')
     end
 
     private
+      def adding_admin?
+        existing_roles = @user.user_roles
+        existing_roles.each do |role|
+          # User is already an admin, so we aren't adding anything
+          return false if role.administrative?
+        end
+
+        assigned_roles = user_params[:role_ids] || []
+        added_role_ids = assigned_roles - existing_roles.pluck(:role_id)
+        added_role_ids.reject { |id| id.empty? }.each do |id|
+          role = Role.find(id.to_i)
+          if role.administrative?
+            @admin_role_name = role.role_name
+            return true
+          end
+        end
+        false
+      end
+
       def user_scope
         User.active
       end
@@ -76,12 +106,23 @@ module Admin
           contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role]
         )
       end
+
+      def confirmation_params
+        params.require(:user).permit(
+          :confirmation_password
+        )
+      end
+
       def sort_column
         user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
       end
 
       def sort_direction
         %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+      end
+
+      def set_user
+        @user = user_scope.find params[:id].to_i
       end
   end
 
