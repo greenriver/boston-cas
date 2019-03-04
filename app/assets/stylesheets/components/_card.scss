@@ -56,9 +56,6 @@
 .c-card__content-blocks {
   display: flex;
   flex-wrap: wrap;
-  @include media-breakpoint-up(xl) {
-    justify-content: space-between;
-  }
 }
 
 .c-card__content-block {
@@ -67,9 +64,9 @@
   margin-bottom: space(6);
   margin-right: space(6);
   @include media-breakpoint-up(sm) {
-    flex: 1 1 200px;
-    min-width: 200px;
-    max-width: 300px;
+    flex: 1 1 300px;
+    min-width: 250px;
+    max-width: 250px;
   }
 }
 

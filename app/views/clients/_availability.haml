@@ -1,11 +1,11 @@
 %section.c-card.c-card--flush
   %h3 Availability
   .c-card__content
+    = render 'availability_status'
     %table.table.table-condensed
       %tbody
         %tr.no-border
           %td{colspan: 2}
-            = render 'form'
         %tr
           %th Available for matching?
           %td{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
@@ -156,3 +156,8 @@
         %tr
           %th Minimum occupancy required?
           %td= @client.required_minimum_occupancy
+
+  .c-card__content
+    = render 'health'
+    = render 'contact'
+    = render 'neighborhoods'
