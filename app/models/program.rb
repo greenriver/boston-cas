@@ -6,6 +6,7 @@ class Program < ActiveRecord::Base
   include InheritsRequirementsFromServices
   include ManagesServices
   include MatchArchive
+  include ControlledVisibility
 
   belongs_to :funding_source
   delegate :name, to: :funding_source, allow_nil: true, prefix: true
