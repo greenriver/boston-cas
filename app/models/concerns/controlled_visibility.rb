@@ -5,11 +5,18 @@ module ControlledVisibility
     has_many :entity_view_permissions, as: :entity
 
     scope :visible_for, -> (user) {
-      EntityViewPermission.where(user: user)
+      evp_t = EntityViewPermission.arel_table
+      joins(:entity_view_permissions).where(
+          evp_t[:user_id].eq(user.id)
+      )
     }
 
     scope :editable_for, -> (user) {
-      EntityViewPermission.where(user: user, editable: true)
+      evp_t = EntityViewPermission.arel_table
+      joins(:entity_view_permissions).where(
+          evp_t[:user_id].eq(user.id),
+          evp_t[:editable].eq(true)
+      )
     }
   end
 
