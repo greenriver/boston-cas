@@ -8,6 +8,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   position: relative;
+  z-index: 0;
   &::after {
     content: '';
     position:absolute;
@@ -32,4 +33,13 @@
 .c-detailed-list__value {
   margin-left: auto;
   font-weight: bold;
+}
+
+.c-detailed-list__value {
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.c-detailed-list__value .icon {
+  font-size: 20px;
 }

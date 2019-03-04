@@ -5,43 +5,43 @@
   %ul.c-detailed-list<
     %li.c-detailed-list__item
       %span.c-detailed-list__label Developmental Disability
-      %span.c-detailed-list__value= checkmark @client.developmental_disability
+      %span.c-detailed-list__value= boolean_icon @client.developmental_disability
     %li.c-detailed-list__item
       %span.c-detailed-list__label Domestic Violence Survivor
-      %span.c-detailed-list__value= checkmark @client.domestic_violence
+      %span.c-detailed-list__value= boolean_icon @client.domestic_violence
     %li.c-detailed-list__item
       %span.c-detailed-list__label HIV/AIDS (HUD)
-      %span.c-detailed-list__value= checkmark @client.hiv_aids
+      %span.c-detailed-list__value= boolean_icon @client.hiv_aids
     %li.c-detailed-list__item
       %span.c-detailed-list__label Chronic Health Disability
-      %span.c-detailed-list__value= checkmark @client.chronic_health_problem
+      %span.c-detailed-list__value= boolean_icon @client.chronic_health_problem
     %li.c-detailed-list__item
       %span.c-detailed-list__label Mental Health Disability
-      %span.c-detailed-list__value= checkmark @client.mental_health_problem
+      %span.c-detailed-list__value= boolean_icon @client.mental_health_problem
     %li.c-detailed-list__item
       %span.c-detailed-list__label Substance Abuse Problem
-      %span.c-detailed-list__value= checkmark @client.substance_abuse_problem
+      %span.c-detailed-list__value= boolean_icon @client.substance_abuse_problem
     %li.c-detailed-list__item
       %span.c-detailed-list__label Physical Disability
-      %span.c-detailed-list__value= checkmark @client.physical_disability
+      %span.c-detailed-list__value= boolean_icon @client.physical_disability
     %li.c-detailed-list__item
       %span.c-detailed-list__label Disabling Condition
-      %span.c-detailed-list__value= checkmark @client.disabling_condition
+      %span.c-detailed-list__value= boolean_icon @client.disabling_condition
 
     - if can_view_dmh_eligibility?
       %li.c-detailed-list__item
         %span.c-detailed-list__label DMH Eligible
-        %span.c-detailed-list__value= checkmark @client.dmh_eligible
+        %span.c-detailed-list__value= boolean_icon @client.dmh_eligible
 
     - if can_view_hues_eligibility?
       %li.c-detailed-list__item
         %span.c-detailed-list__label HUES Eligible
-        %span.c-detailed-list__value= checkmark @client.hues_eligible
+        %span.c-detailed-list__value= boolean_icon @client.hues_eligible
 
     - if can_view_hiv_positive_eligibility?
       %li.c-detailed-list__item
         %span.c-detailed-list__label HIV+
-        %span.c-detailed-list__value= checkmark @client.hiv_positive
+        %span.c-detailed-list__value= boolean_icon @client.hiv_positive
 
     %li.c-detailed-list__item
       %span.c-detailed-list__label Disability

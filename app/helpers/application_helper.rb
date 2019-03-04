@@ -17,7 +17,8 @@ module ApplicationHelper
   end
 
   def boolean_icon(boolean)
-    boolean ? '✓': ''
+    icon = boolean ? 'checkmark-circle' : 'times-circle-o'
+    content_tag :i, '', class: "icon icon-#{icon}"
   end
 
   def ssn(number)

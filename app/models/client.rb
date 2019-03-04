@@ -263,7 +263,7 @@ class Client < ActiveRecord::Base
 
   def available_as_candidate_for_any_route?
     (
-      MatchRoutes::Base.available.pluck(:type) - 
+      MatchRoutes::Base.available.pluck(:type) -
       UnavailableAsCandidateFor.where(client_id: id).distinct.pluck(:match_route_type)
     ).any?
   end
@@ -376,6 +376,13 @@ class Client < ActiveRecord::Base
     else
       'Not available'
     end
+  end
+
+  def has_enrollments?
+    self.enrolled_in_th ||
+    self.enrolled_in_sh ||
+    self.enrolled_in_so ||
+    self.enrolled_in_es
   end
 
   def self.sort_options(show_vispdat: false)

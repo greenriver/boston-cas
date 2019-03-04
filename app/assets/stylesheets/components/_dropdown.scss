@@ -1,4 +1,8 @@
-/* .c-dropdown { } */
+.c-dropdown { }
+
+.c-dropdown__menu {
+  z-index: 10;
+}
 
 .c-dropdown__menu--sized {
   min-width: 400px;

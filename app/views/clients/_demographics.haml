@@ -28,10 +28,10 @@
             %h5 Confidential Client
             - confidential = @client.confidential
             .btn-group.btn-group-toggle.mb-3{"data-toggle" => "buttons"}
-              %label.btn.btn-secondary{class: ('active' if confidential)}
+              %label.btn.btn-sm.btn-secondary{class: ('active' if confidential)}
                 = f.radio_button :confidential, true, {checked: confidential, data: {remote: true, method: 'patch'}}
                 Confidential
-              %label.btn.btn-secondary{class: ('active' if !confidential)}
+              %label.btn.btn-sm.btn-secondary{class: ('active' if !confidential)}
                 = f.radio_button :confidential, false, {checked: !confidential, data: {remote: true, method: 'patch'}}
                 Public
 
