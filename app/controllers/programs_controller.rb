@@ -41,6 +41,7 @@ class ProgramsController < ApplicationController
   def create
     @program = Program.new program_params
     if @program.save
+      EntityViewPermission.create(entity: @program, user: current_user, editable: true)
       # there should only be one sub-program immediately after a program create
       @sub_program = @program.sub_programs.first
       redirect_to action: :index
