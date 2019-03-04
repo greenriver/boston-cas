@@ -1,22 +1,18 @@
-%section.c-card.c-card--flush
-  %h3 Contact Information
-  .c-card__content
-    %table.table.table-condensed
-      %tbody
-        %tr.no-border
-          %th Email
-          %td= @client.email
-        %tr
-          %th Home Phone
-          %td= @client.homephone
-        %tr
-          %th Cell Phone
-          %td= @client.cellphone
-        - if @client.workphone.present?
-          %tr
-            %th Work Phone
-            %td= @client.workphone
-        - if @client.pager.present?
-          %tr
-            %th Pager
-            %td= @client.pager
+.c-card__content-blocks
+  .c-card__content-block
+    %h5 Email
+    %span.c-card__content-block-text= @client.email || 'NA'
+  .c-card__content-block
+    %h5 Home Phone
+    %span.c-card__content-block-text= @client.homephone || 'NA'
+  .c-card__content-block
+    %h5 Cell Phone
+    %span.c-card__content-block-text= @client.cellphone || 'NA'
+  - if @client.workphone.present?
+    .c-card__content-block
+      %h5 Work Phone
+      %span.c-card__content-block-text= @client.workphone || 'NA'
+  - if @client.pager.present?
+    .c-card__content-block
+      %h5 Pager
+      %span.c-card__content-block-text= @client.pager || 'NA'

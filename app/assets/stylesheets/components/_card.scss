@@ -77,8 +77,17 @@
 
 .c-card__content-block-text {
   font-weight: 800;
+  &:empty {
+    margin-bottom: -30px;
+  }
 }
 
 .c-card__content-block-text--secondary {
   font-weight: normal;
+}
+
+.c-card__rule {
+  margin-left: -16px;
+  margin-right: -16px;
+  border-width: 2px;
 }
