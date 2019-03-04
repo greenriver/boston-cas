@@ -32,13 +32,15 @@
   = render 'tab_navigation', active: 'show', client_id: @client.id
 
   .row
-    .col-sm-6
+    .col-sm-12
       = render 'demographics'
+  .row
+    .col-sm-6
       = render 'contact'
       = render 'neighborhoods'
+      = render 'availability'
       = render 'client_notes'
 
     .col-sm-6
-      = render 'availability'
+      = render 'client_notes'
       = render 'health'
-

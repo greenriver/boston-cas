@@ -52,5 +52,36 @@
   font-weight: 800;
 }
 
-.c-card__description {
+/* .c-card__description { } */
+.c-card__content-blocks {
+  display: flex;
+  flex-wrap: wrap;
+  @include media-breakpoint-up(xl) {
+    justify-content: space-between;
+  }
+}
+
+.c-card__content-block {
+  flex: 1 1 100%;
+  min-width: 100%;
+  margin-bottom: space(6);
+  margin-right: space(6);
+  @include media-breakpoint-up(sm) {
+    flex: 1 1 200px;
+    min-width: 200px;
+    max-width: 300px;
+  }
+}
+
+.c-card__content-block h5 {
+  text-transform: uppercase;
+  color: $cob-sg-blue-004;
+}
+
+.c-card__content-block-text {
+  font-weight: 800;
+}
+
+.c-card__content-block-text--secondary {
+  font-weight: normal;
 }
