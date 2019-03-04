@@ -58,6 +58,7 @@
 // Components
 @import
   'components/binary_choice',
+  'components/detailed_list',
   'components/detail_group',
   'components/card',
   'components/choice_icon',
@@ -84,7 +85,7 @@
 @import "modules/clients";
 @import "modules/filter_sort";
 @import "modules/_match_list";
-@import "vendor/icomoon";
+@import "vendor/icons";
 @import "helpers/helper_classes";
 
 // Overrides
@@ -94,6 +95,7 @@
 
 // Utilities
 @import
+  'utilities/font',
   'utilities/general';
 
 

@@ -31,12 +31,10 @@
 
   = render 'tab_navigation', active: 'show', client_id: @client.id
 
-  .row
-    .col-sm-12
+  .row.mt-6
+    .col-sm-5
       = render 'demographics'
-  .row
+      = render 'client_notes'
+
     .col-sm-7
       = render 'availability'
-
-    .col-sm-5
-      = render 'client_notes'

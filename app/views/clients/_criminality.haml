@@ -1,0 +1,13 @@
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-gavel
+    %h5 Criminality
+  -# %dl
+    %dt.c-detailed-list__label Developmental Disability
+    %dd.c-detailed-list__value= boolean_icon @client.developmental_disability
+  %tr
+    %th= _('Life-Time Sex Offender')
+    %td= boolean_icon (@client.lifetime_sex_offender)
+  %tr
+    %th= _('Meth Production Conviction')
+    %td= boolean_icon (@client.meth_production_conviction)

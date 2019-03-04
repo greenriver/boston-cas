@@ -1,12 +1,10 @@
-%section.c-card.c-card--flush
-  %h3 Neighborhood Interests
-  .c-card__content
-    %table.table.table-condensed
-      %tbody
-        - if @neighborhood_interests.present?
-          - @neighborhood_interests.each_with_index do |interest, index|
-            %tr{class: ('no-border' if index == 0)}
-              %td
-                = interest
-        - else
-          None specified
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-medkit
+    %h5 Neighborhood Interests
+  - if @neighborhood_interests.present?
+    %ul.list-unstyled
+      - @neighborhood_interests.each_with_index do |interest, index|
+        %li= interest
+  - else
+    %p None specified

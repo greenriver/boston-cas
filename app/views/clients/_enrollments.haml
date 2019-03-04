@@ -1,0 +1,17 @@
+.col-md-6.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-file-drawn
+    %h5 Enrollments
+  %li.c-detailed-list__item.list-unstyled
+    - if @client.enrolled_in_es
+      .client__service_type_es
+        .service-type__program-type ES
+    - if @client.enrolled_in_so
+      .client__service_type_so
+        .service-type__program-type SO
+    - if @client.enrolled_in_sh
+      .client__service_type_sh
+        .service-type__program-type SH
+    - if @client.enrolled_in_th
+      .client__service_type_th
+        .service-type__program-type TH

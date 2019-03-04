@@ -59,19 +59,36 @@
 }
 
 .c-card__content-block {
-  flex: 1 1 100%;
-  min-width: 100%;
   margin-bottom: space(6);
-  margin-right: space(6);
-  @include media-breakpoint-up(sm) {
-    flex: 1 1 300px;
-    min-width: 250px;
-    max-width: 250px;
-  }
 }
 
+.c-card__content-group {
+  margin-bottom: space(6);
+}
+
+.c-card__content-group p {
+  background: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 2;
+}
+
+.c-card__content-group h5,
 .c-card__content-block h5 {
   text-transform: uppercase;
+  color: $cob-sg-blue-004;
+}
+
+.c-card__content-group-heading {
+  display: flex;
+  align-items: baseline;
+  border-bottom: 2px solid $cob-sg-blue-004;
+  margin-bottom: space(2);
+}
+
+.c-card__content-group-icon {
+  margin-right: space(2);
+  font-size: 18px;
   color: $cob-sg-blue-004;
 }
 

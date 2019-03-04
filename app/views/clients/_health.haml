@@ -1,41 +1,52 @@
-%section.c-card.c-card--flush
-  %h3 Health Information
-  .c-card__content
-    %table.table.table-condensed
-      %tbody
-        %tr
-          %th Developmental Disability
-          %td= checkmark @client.developmental_disability
-        %tr
-          %th Domestic Violence Survivor
-          %td= checkmark @client.domestic_violence
-        %tr
-          %th HIV/AIDS (HUD)
-          %td= checkmark @client.hiv_aids
-        %tr
-          %th Chronic Health Disability
-          %td= checkmark @client.chronic_health_problem
-        %tr
-          %th Mental Health Disability
-          %td= checkmark @client.mental_health_problem
-        %tr
-          %th Substance Abuse Problem
-          %td= checkmark @client.substance_abuse_problem
-        %tr
-          %th Physical Disability
-          %td= checkmark @client.physical_disability
-        %tr
-          %th Disabling Condition
-          %td= checkmark @client.disabling_condition
-        - if can_view_dmh_eligibility?
-          %tr
-            %th DMH Eligible
-            %td= checkmark @client.dmh_eligible
-        - if can_view_hues_eligibility?
-          %tr
-            %th HUES Eligible
-            %td= checkmark @client.hues_eligible
-        - if can_view_hiv_positive_eligibility?
-          %tr
-            %th HIV+
-            %td= checkmark @client.hiv_positive
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-medkit
+    %h5 Health
+  %ul.c-detailed-list<
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Developmental Disability
+      %span.c-detailed-list__value= checkmark @client.developmental_disability
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Domestic Violence Survivor
+      %span.c-detailed-list__value= checkmark @client.domestic_violence
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label HIV/AIDS (HUD)
+      %span.c-detailed-list__value= checkmark @client.hiv_aids
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Chronic Health Disability
+      %span.c-detailed-list__value= checkmark @client.chronic_health_problem
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Mental Health Disability
+      %span.c-detailed-list__value= checkmark @client.mental_health_problem
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Substance Abuse Problem
+      %span.c-detailed-list__value= checkmark @client.substance_abuse_problem
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Physical Disability
+      %span.c-detailed-list__value= checkmark @client.physical_disability
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Disabling Condition
+      %span.c-detailed-list__value= checkmark @client.disabling_condition
+
+    - if can_view_dmh_eligibility?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label DMH Eligible
+        %span.c-detailed-list__value= checkmark @client.dmh_eligible
+
+    - if can_view_hues_eligibility?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label HUES Eligible
+        %span.c-detailed-list__value= checkmark @client.hues_eligible
+
+    - if can_view_hiv_positive_eligibility?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label HIV+
+        %span.c-detailed-list__value= checkmark @client.hiv_positive
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Disability
+      %span.c-detailed-list__value
+        - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
+          = "Verified on #{disability_verified_on}"
+        - else
+          Not Verified

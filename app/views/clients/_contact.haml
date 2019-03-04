@@ -1,18 +1,19 @@
-.c-card__content-blocks
-  .c-card__content-block
+- not_specified = '<span class="font-no-data">Not specified</span>'.html_safe
+.row.c-card__content-block.col-md-12.col-lg-6s
+  .c-card__content-block.col-md-12.col-lg-6
     %h5 Email
-    %span.c-card__content-block-text= @client.email || 'NA'
-  .c-card__content-block
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.email || not_specified
+  .c-card__content-block.col-md-12.col-lg-6
     %h5 Home Phone
-    %span.c-card__content-block-text= @client.homephone || 'NA'
-  .c-card__content-block
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.homephone || not_specified
+  .c-card__content-block.col-md-12.col-lg-6
     %h5 Cell Phone
-    %span.c-card__content-block-text= @client.cellphone || 'NA'
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.cellphone || not_specified
   - if @client.workphone.present?
-    .c-card__content-block
+    .c-card__content-block.col-md-12.col-lg-6
       %h5 Work Phone
-      %span.c-card__content-block-text= @client.workphone || 'NA'
+      %span.c-card__content-block.col-md-12.col-lg-6-text= @client.workphone || not_specified
   - if @client.pager.present?
-    .c-card__content-block
+    .c-card__content-block.col-md-12.col-lg-6
       %h5 Pager
-      %span.c-card__content-block-text= @client.pager || 'NA'
+      %span.c-card__content-block.col-md-12.col-lg-6-text= @client.pager || not_specified
