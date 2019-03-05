@@ -98,13 +98,9 @@ module Warehouse
           client_id = client.project_client.id_in_data_source
           next if client_id.blank?
           client.client_opportunity_matches.each do |match|
-            # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
-            decisions = match.decisions.select(&:status).sort_by(&:id)
-            # Debugging
-            # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
             sub_program = match.sub_program
+            next unless sub_program.present?
             program = sub_program.program
-            current_decision = decisions.last
             match_route = match.match_route
             previous_updated_at = nil
             match_started_decision = match.send(match_route.initial_decision)
@@ -113,6 +109,13 @@ module Warehouse
             else
               nil
             end
+            # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
+            decisions = match.decisions.select do |decision| 
+              decision.status.present? && match_route.class.match_steps_for_reporting[decision.type].present?
+            end.sort_by(&:id)
+            # Debugging
+            # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
+            current_decision = decisions.last
             decisions.each_with_index do |decision, idx|
               if previous_updated_at
                 elapsed_days = ( decision.updated_at.to_date - previous_updated_at.to_date ).to_i

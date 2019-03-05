@@ -115,6 +115,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.middle_name = middle_name
     project_client.gender = gender
     project_client.neighborhood_interests = neighborhood_interests
+    project_client.interested_in_set_asides = interested_in_set_asides
 
     project_client.income_total_monthly = income_total_monthly
     project_client.disabling_condition = if disabling_condition then 1 else nil end

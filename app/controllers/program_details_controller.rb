@@ -1,10 +1,10 @@
 class ProgramDetailsController < ApplicationController
+  include ProgramPermissions
   
   before_action :authenticate_user!
-  before_action :require_can_view_programs!
-  before_action :require_can_edit_programs!, only: [:create, :update, :destroy]
   before_action :set_program
   before_action :set_subprogram
+  before_action :check_edit_permission!, only: [:edit, :update]
 
   def edit
   end
@@ -19,10 +19,6 @@ class ProgramDetailsController < ApplicationController
   end
 
   private
-    def program_scope
-      Program.all
-    end
-
     def set_program
       @program = program_scope.find(params[:program_id])
     end
