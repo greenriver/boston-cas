@@ -1,7 +1,6 @@
 class SubProgramsController < ApplicationController
   before_action :authenticate_user!
-  # before_action :require_can_view_programs!
-  before_action :require_can_edit_programs!, only: [:update, :destroy, :create]
+  before_action :require_can_edit_programs!, only: [:destroy, :create]
   before_action :set_program
   before_action :set_sub_program, only: [:edit, :update, :destroy]
 
@@ -49,63 +48,67 @@ class SubProgramsController < ApplicationController
   end
 
   private
-  # Only allow a trusted parameter "white list" through.
-  def sub_program_params
-    params.require(:sub_program).
-      permit(
-        :id,
-        :name,
-        :voucher_count,
-        :subgrantee_id, # Service provider
-        :sub_contractor_id,
-        :program_type,
-        :building_id,
-        :hsa_id,
-        :confidential,
-        :eligibility_requirement_notes,
-      )
-  end
-
-  def file_tag_params
-    params.require(:sub_program)[:file_tag_ids].
-      map(&:presence).compact.map(&:to_i) || []
-  end
-
-  def program_scope
-    if can_view_programs?
-      return Program.all
-    elsif can_view_assigned_programs?
-      return Program.visible_for(current_user)
-    else
-      not_authorized!
+    # Only allow a trusted parameter "white list" through.
+    def sub_program_params
+      params.require(:sub_program).
+        permit(
+          :id,
+          :name,
+          :voucher_count,
+          :subgrantee_id, # Service provider
+          :sub_contractor_id,
+          :program_type,
+          :building_id,
+          :hsa_id,
+          :confidential,
+          :eligibility_requirement_notes,
+        )
     end
-  end
 
-  def sub_program_scope
-    if can_view_programs?
-      return SubProgram.all
-    elsif can_view_assigned_programs?
-      return SubProgram.visible_for(current_user)
-    else
-      not_authorized!
+    def file_tag_params
+      params.require(:sub_program)[:file_tag_ids].
+        map(&:presence).compact.map(&:to_i) || []
     end
-  end
 
-
-  # Use callbacks to share common setup or constraints between actions.
-
-  def set_program
-    @program = program_scope.find(params[:program_id])
-  end
-
-  def set_sub_program
-    @subprogram = sub_program_scope.find(params[:id])
-  end
-  def prevent_incorrect_building
-    # make sure we unset the building if we shouldn't have one.
-    unless @subprogram.has_buildings?
-      @subprogram.building_id = nil
+    def check_edit_permission!
+      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_for?(current_user))
     end
-  end
 
+    def program_scope
+      if can_view_programs?
+        return Program.all
+      elsif can_view_assigned_programs?
+        return Program.visible_for(current_user)
+      else
+        not_authorized!
+      end
+    end
+
+    def sub_program_scope
+      if can_view_programs?
+        return SubProgram.all
+      elsif can_view_assigned_programs?
+        return SubProgram.visible_for(current_user)
+      else
+        not_authorized!
+      end
+    end
+
+    # Use callbacks to share common setup or constraints between actions.
+
+    def set_program
+      @program = program_scope.find(params[:program_id])
+    end
+
+    def set_sub_program
+      @subprogram = sub_program_scope.find(params[:id])
+      check_edit_permission!
+    end
+
+    def prevent_incorrect_building
+      # make sure we unset the building if we shouldn't have one.
+      unless @subprogram.has_buildings?
+        @subprogram.building_id = nil
+      end
+    end
 end

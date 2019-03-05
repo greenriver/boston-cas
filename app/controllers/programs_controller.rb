@@ -1,8 +1,6 @@
 class ProgramsController < ApplicationController
   before_action :authenticate_user!
-  # before_action :require_can_view_programs!
-  before_action :require_can_edit_programs!, only: [:update, :destroy, :create]
-  before_action :set_program, only: [:edit, :update, :destroy]
+  before_action :require_can_edit_programs!, only: [:create]
   
   helper_method :sort_column, :sort_direction
 
@@ -33,7 +31,6 @@ class ProgramsController < ApplicationController
 
   end
 
-
   def new
     @program = program_source.new(sub_programs: [SubProgram.new({program_type: 'Project-Based'})])
   end
@@ -52,74 +49,58 @@ class ProgramsController < ApplicationController
     end
   end
 
-
   private
-  def program_source
-    Program
-  end
-
-  def program_scope
-    if can_view_programs?
-      return Program.all
-    elsif can_view_assigned_programs?
-      return Program.visible_for(current_user)
-    else
-      not_authorized!
+    def program_source
+      Program
     end
-  end
 
-  def sub_program_scope
-    if can_view_programs?
-      return SubProgram.all
-    elsif can_view_assigned_programs?
-      return SubProgram.visible_for(current_user)
-    else
-      not_authorized!
+    def sub_program_scope
+      if can_view_programs?
+        return SubProgram.all
+      elsif can_view_assigned_programs?
+        return SubProgram.visible_for(current_user)
+      else
+        not_authorized!
+      end
     end
-  end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_program
-    @program = program_scope.find(params[:id])
-  end
-
-  def program_params
-    params.require(:program).
-      permit(
-        :name, 
-        :contract_start_date, 
-        :funding_source_id, 
-        :confidential,
-        :match_route_id,
-        sub_programs_attributes: [
-          :id, 
-          :name, 
-          :subgrantee_id, # Service provider
-          :sub_contractor_id,
-          :program_type, 
-          :building_id, 
-          :hsa_id,
+    def program_params
+      params.require(:program).
+        permit(
+          :name,
+          :contract_start_date,
+          :funding_source_id,
           :confidential,
-          :eligibility_requirement_notes,
-        ],
-        service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-  end
+          :match_route_id,
+          sub_programs_attributes: [
+            :id,
+            :name,
+            :subgrantee_id, # Service provider
+            :sub_contractor_id,
+            :program_type,
+            :building_id,
+            :hsa_id,
+            :confidential,
+            :eligibility_requirement_notes,
+          ],
+          service_ids: [],
+          requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
+        )
+    end
 
-  def adding_sub_program
-    program_params[:sub_program].present?
-  end
+    def adding_sub_program
+      program_params[:sub_program].present?
+    end
 
-  def sort_column
-    SubProgram.column_names.include?(params[:sort]) ? params[:sort] : 'program_id'
-  end
+    def sort_column
+      SubProgram.column_names.include?(params[:sort]) ? params[:sort] : 'program_id'
+    end
 
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
 
-  def query_string
-    "%#{@query}%"
-  end
+    def query_string
+      "%#{@query}%"
+    end
 end
