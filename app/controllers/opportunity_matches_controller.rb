@@ -1,7 +1,8 @@
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_can_see_alternate_matches!
-  before_action :require_can_edit_all_clients!, only: [:update]
+  # before_action :require_can_see_alternate_matches!
+  before_action :require_access_to_opportunity!
+  before_action :require_can_edit_all_clients!, only: [:create, :update]
   before_action :set_heading
 
   prepend_before_action :find_opportunity!
@@ -83,6 +84,10 @@ class OpportunityMatchesController < ApplicationController
   helper_method :match_routes
 
   private
+
+    def require_access_to_opportunity!
+      not_authorized! if ! ( current_user.can_see_alternate_matches? || @opportunity.hsa_for?(current_user))
+    end
 
     def match_scope
       ClientOpportunityMatch
