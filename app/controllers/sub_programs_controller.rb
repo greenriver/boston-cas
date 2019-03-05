@@ -1,4 +1,6 @@
 class SubProgramsController < ApplicationController
+  include ProgramPermissions
+  
   before_action :authenticate_user!
   before_action :require_can_edit_programs!, only: [:destroy, :create]
   before_action :set_program

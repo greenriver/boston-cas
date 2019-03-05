@@ -1,4 +1,5 @@
 class ProgramDetailsController < ApplicationController
+  include ProgramPermissions
   
   before_action :authenticate_user!
   before_action :set_program
@@ -18,20 +19,6 @@ class ProgramDetailsController < ApplicationController
   end
 
   private
-    def program_scope
-      if can_view_programs?
-        return Program.all
-      elsif can_view_assigned_programs?
-        return Program.visible_by(current_user)
-      else
-        not_authorized!
-      end
-    end
-
-    def check_edit_permission!
-      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_by?(current_user))
-    end
-
     def set_program
       @program = program_scope.find(params[:program_id])
     end

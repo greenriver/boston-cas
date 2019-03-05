@@ -1,4 +1,5 @@
 class ProgramsController < ApplicationController
+  include ProgramPermissions
   before_action :authenticate_user!
   before_action :require_can_edit_programs!, only: [:create]
   
@@ -52,16 +53,6 @@ class ProgramsController < ApplicationController
   private
     def program_source
       Program
-    end
-
-    def sub_program_scope
-      if can_view_programs?
-        return SubProgram.all
-      elsif can_view_assigned_programs?
-        return SubProgram.visible_by(current_user)
-      else
-        not_authorized!
-      end
     end
 
     def program_params
