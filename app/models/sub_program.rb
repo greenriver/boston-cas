@@ -131,6 +131,17 @@ class SubProgram < ActiveRecord::Base
     [:program, :service_provider, :sub_contractor]
   end
 
+  # Get visibility from the associated Program
+  delegate :visible_for?, to: :program
+  delegate :editable_for?, to: :program
+
+  scope :visible_for, ->(user) {
+    joins(:program).merge(Program.visible_for(user))
+  }
+  scope :editable_for, ->(user) {
+    joins(:program).merge(Program.editable_for(user))
+  }
+
   private
     def inherited_service_provider_requirements_by_source
       {}.tap do |result|

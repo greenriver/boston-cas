@@ -1,6 +1,6 @@
 class ProgramsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_can_view_programs!
+  # before_action :require_can_view_programs!
   before_action :require_can_edit_programs!, only: [:update, :destroy, :create]
   before_action :set_program, only: [:edit, :update, :destroy]
   
@@ -57,12 +57,27 @@ class ProgramsController < ApplicationController
   def program_source
     Program
   end
+
   def program_scope
-    Program.all
+    if can_view_programs?
+      return Program.all
+    elsif can_view_assigned_programs?
+      return Program.visible_for(current_user)
+    else
+      not_authorized!
+    end
   end
+
   def sub_program_scope
-    SubProgram
+    if can_view_programs?
+      return SubProgram.all
+    elsif can_view_assigned_programs?
+      return SubProgram.visible_for(current_user)
+    else
+      not_authorized!
+    end
   end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_program
     @program = program_scope.find(params[:id])

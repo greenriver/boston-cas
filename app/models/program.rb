@@ -73,6 +73,14 @@ class Program < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
+  def visible_for? user
+    user.can_view_programs || (user.can_view_assigned_programs && super )
+  end
+
+  def editable_for user
+    user.can_edit_programs || (user.can_edit_assigned_programs && super )
+  end
+
   def sites
     s = []
     sub_programs.each do |sp|

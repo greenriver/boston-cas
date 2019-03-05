@@ -46,15 +46,21 @@
               - deleted = "deleted"
             %tr
               %td{:class => deleted}
-                - if ! sp.deleted_at
-                  = link_to sp.program.name, edit_program_sub_program_path(sp.program, sp)
+                - if can_edit_programs? || sp.editable_for?(current_user)
+                  - if ! sp.deleted_at
+                    = link_to sp.program.name, edit_program_sub_program_path(sp.program, sp)
+                  - else
+                    = link_to "Restore #{sp.program.name}", program_restore_path(sp.program.id), method: :post
                 - else
-                  = link_to "Restore #{program.name}", program_restore_path(sp.program.id), method: :post
+                  = sp.program.name
               %td{:class => deleted}
-                - if ! sp.deleted_at
-                  = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
+                - if can_edit_programs? || sp.editable_for?(current_user)
+                  - if ! sp.deleted_at
+                    = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
+                  - else
+                    = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post
                 - else
-                  = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post
+                  = sp.name
               %td{:class => deleted}
                 = sp.site
               - if MatchRoutes::Base.more_than_one?

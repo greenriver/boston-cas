@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190301210931) do
+ActiveRecord::Schema.define(version: 20190304213833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -892,6 +892,8 @@ ActiveRecord::Schema.define(version: 20190301210931) do
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
     t.boolean  "can_manage_neighborhoods",                default: false
+    t.boolean  "can_view_assigned_programs",              default: false
+    t.boolean  "can_edit_assigned_programs",              default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
