@@ -39,4 +39,5 @@ Dir.chdir APP_ROOT do
   end
   restart = File.join %w(tmp restart.txt)
   FileUtils.touch restart
+  system 'puma-dev -stop'
 end
