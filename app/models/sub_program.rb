@@ -132,14 +132,14 @@ class SubProgram < ActiveRecord::Base
   end
 
   # Get visibility from the associated Program
-  delegate :visible_for?, to: :program
-  delegate :editable_for?, to: :program
+  delegate :visible_by?, to: :program
+  delegate :editable_by?, to: :program
 
-  scope :visible_for, ->(user) {
-    joins(:program).merge(Program.visible_for(user))
+  scope :visible_by, ->(user) {
+    joins(:program).merge(Program.visible_by(user))
   }
-  scope :editable_for, ->(user) {
-    joins(:program).merge(Program.editable_for(user))
+  scope :editable_by, ->(user) {
+    joins(:program).merge(Program.editable_by(user))
   }
 
   private

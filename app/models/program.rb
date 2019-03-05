@@ -73,11 +73,11 @@ class Program < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
-  def visible_for? user
+  def visible_by? user
     user.can_view_programs || (user.can_view_assigned_programs && super )
   end
 
-  def editable_for user
+  def editable_by? user
     user.can_edit_programs || (user.can_edit_assigned_programs && super )
   end
 

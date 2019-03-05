@@ -22,14 +22,14 @@ class ProgramDetailsController < ApplicationController
       if can_view_programs?
         return Program.all
       elsif can_view_assigned_programs?
-        return Program.visible_for(current_user)
+        return Program.visible_by(current_user)
       else
         not_authorized!
       end
     end
 
     def check_edit_permission!
-      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_for?(current_user))
+      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_by?(current_user))
     end
 
     def set_program

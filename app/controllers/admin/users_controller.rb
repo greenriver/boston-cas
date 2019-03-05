@@ -101,7 +101,7 @@ module Admin
       end
 
       def set_editable_programs
-        @editable_programs = Program.editable_for(@user).pluck(:entity_id)
+        @editable_programs = Program.editable_by(@user).pluck(:entity_id)
       end
 
       def sort_column

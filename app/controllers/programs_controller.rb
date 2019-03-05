@@ -58,7 +58,7 @@ class ProgramsController < ApplicationController
       if can_view_programs?
         return SubProgram.all
       elsif can_view_assigned_programs?
-        return SubProgram.visible_for(current_user)
+        return SubProgram.visible_by(current_user)
       else
         not_authorized!
       end

@@ -46,7 +46,7 @@
               - deleted = "deleted"
             %tr
               %td{:class => deleted}
-                - if can_edit_programs? || sp.editable_for?(current_user)
+                - if can_edit_programs? || sp.editable_by?(current_user)
                   - if ! sp.deleted_at
                     = link_to sp.program.name, edit_program_sub_program_path(sp.program, sp)
                   - else
@@ -54,7 +54,7 @@
                 - else
                   = sp.program.name
               %td{:class => deleted}
-                - if can_edit_programs? || sp.editable_for?(current_user)
+                - if can_edit_programs? || sp.editable_by?(current_user)
                   - if ! sp.deleted_at
                     = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
                   - else

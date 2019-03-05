@@ -29,14 +29,14 @@ class ProgramContactsController < ApplicationController
 
   private
     def check_edit_permission!
-      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_for?(current_user))
+      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_by?(current_user))
     end
 
     def program_scope
       if can_view_programs?
         return Program.all
       elsif can_view_assigned_programs?
-        return Program.visible_for(current_user)
+        return Program.visible_by(current_user)
       else
         not_authorized!
       end
@@ -46,7 +46,7 @@ class ProgramContactsController < ApplicationController
       if can_view_programs?
         return SubProgram.all
       elsif can_view_assigned_programs?
-        return SubProgram.visible_for(current_user)
+        return SubProgram.visible_by(current_user)
       else
         not_authorized!
       end
