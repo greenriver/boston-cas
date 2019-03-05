@@ -12,7 +12,7 @@ gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem "haml-rails"
 gem "sass-rails"
 gem 'autoprefixer-rails'
-gem 'bootstrap', '~> 4.1.1'
+gem 'bootstrap', '~> 4.3.1'
 gem "jquery-rails"
 gem 'coffee-rails'
 # TODO move to assets group

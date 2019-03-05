@@ -5,7 +5,7 @@ module Admin
 
     before_action :authenticate_user!
     before_action :require_can_edit_users!
-    before_action :set_user, only: [:edit, :update, :destroy]
+    before_action :set_user, only: [:edit, :confirm, :update, :destroy]
     before_action :set_editable_programs, only: [:edit, :update]
 
     helper_method :sort_column, :sort_direction
@@ -44,11 +44,28 @@ module Admin
       @opportunity_contacts = Opportunity.where(id: OpportunityContact.where(contact_id: @user.contact).select(:opportunity_id))
     end
 
+    def confirm
+      if ! adding_admin?
+        update
+      end
+    end
+
     def update
+<<<<<<< HEAD
       requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
       update_editable_programs(requested_programs)
 
       @user.update_attributes user_params
+=======
+      if adding_admin?
+        if ! current_user.valid_password?(confirmation_params[:confirmation_password])
+          flash[:error] = "User not updated. Incorrect password"
+          render :confirm
+          return
+        end
+      end
+      @user.assign_attributes(user_params)
+>>>>>>> pre-release
       if @user.save
         redirect_to({action: :index}, notice: 'User updated')
       else
@@ -63,6 +80,7 @@ module Admin
     end
 
     private
+<<<<<<< HEAD
       def update_editable_programs(requested_programs)
         removed_programs = @editable_programs - requested_programs
         removed_programs.each do |program_id|
@@ -76,6 +94,25 @@ module Admin
       end
       def set_user
         @user = user_scope.find params[:id]
+=======
+      def adding_admin?
+        existing_roles = @user.user_roles
+        existing_roles.each do |role|
+          # User is already an admin, so we aren't adding anything
+          return false if role.administrative?
+        end
+
+        assigned_roles = user_params[:role_ids] || []
+        added_role_ids = assigned_roles - existing_roles.pluck(:role_id)
+        added_role_ids.reject { |id| id.empty? }.each do |id|
+          role = Role.find(id.to_i)
+          if role.administrative?
+            @admin_role_name = role.role_name
+            return true
+          end
+        end
+        false
+>>>>>>> pre-release
       end
 
       def user_scope
@@ -94,6 +131,7 @@ module Admin
         )
       end
 
+<<<<<<< HEAD
       def programs_params
         params.require(:user).permit(
           editable_programs: [],
@@ -104,12 +142,24 @@ module Admin
         @editable_programs = Program.editable_by(@user).pluck(:entity_id)
       end
 
+=======
+      def confirmation_params
+        params.require(:user).permit(
+          :confirmation_password
+        )
+      end
+
+>>>>>>> pre-release
       def sort_column
         user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
       end
 
       def sort_direction
         %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+      end
+
+      def set_user
+        @user = user_scope.find params[:id].to_i
       end
   end
 
