@@ -55,6 +55,10 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def initial_contacts_for_match
+      raise NotImplementedError
+    end
+
     def self.match_steps
       all_routes.map do |route|
         [route.name, route.match_steps]
