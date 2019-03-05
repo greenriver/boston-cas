@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190228165352) do
+ActiveRecord::Schema.define(version: 20190304213833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,6 +307,17 @@ ActiveRecord::Schema.define(version: 20190228165352) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "entity_view_permissions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "entity_id",   null: false
+    t.string   "entity_type", null: false
+    t.boolean  "editable"
+    t.datetime "deleted_at"
+  end
+
+  add_index "entity_view_permissions", ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id", using: :btree
+  add_index "entity_view_permissions", ["user_id"], name: "index_entity_view_permissions_on_user_id", using: :btree
 
   create_table "ethnicities", force: :cascade do |t|
     t.integer  "numeric"
@@ -881,6 +892,8 @@ ActiveRecord::Schema.define(version: 20190228165352) do
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
     t.boolean  "can_manage_neighborhoods",                default: false
+    t.boolean  "can_view_assigned_programs",              default: false
+    t.boolean  "can_edit_assigned_programs",              default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
