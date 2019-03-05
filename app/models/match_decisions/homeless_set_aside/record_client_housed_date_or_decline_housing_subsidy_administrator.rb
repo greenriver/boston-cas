@@ -1,5 +1,6 @@
 module MatchDecisions::HomelessSetAside
-  class RecordClientHousedDateHousingSubsidyAdministrator < ::MatchDecisions::Base
+  class RecordClientHousedDateOrDeclineHousingSubsidyAdministrator < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
 
     validate :client_move_in_date_present_if_status_complete
 
@@ -81,6 +82,10 @@ module MatchDecisions::HomelessSetAside
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
           contact.in?(match.housing_subsidy_admin_contacts)
+    end
+
+    def decline_reason_scope
+      MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
 
     class StatusCallbacks < StatusCallbacks
