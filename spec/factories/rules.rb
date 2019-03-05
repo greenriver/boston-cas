@@ -303,5 +303,9 @@ FactoryGirl.define do
     name "Willing to live in congregate housing"
     verb "be"
   end
+  factory :interested_in_set_asides, class: "Rules::InterestedInSetAsides" do
+    name "Interested in set-asides"
+    verb "be"
+  end
 end
 

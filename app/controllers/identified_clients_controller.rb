@@ -80,6 +80,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :physical_disability,
         :developmental_disability,
         :domestic_violence,
+        :interested_in_set_asides,
         :active_cohort_ids => [],
         :neighborhood_interests => [],
       ).merge(identified: true)
