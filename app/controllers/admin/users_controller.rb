@@ -51,12 +51,6 @@ module Admin
     end
 
     def update
-<<<<<<< HEAD
-      requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
-      update_editable_programs(requested_programs)
-
-      @user.update_attributes user_params
-=======
       if adding_admin?
         if ! current_user.valid_password?(confirmation_params[:confirmation_password])
           flash[:error] = "User not updated. Incorrect password"
@@ -64,8 +58,9 @@ module Admin
           return
         end
       end
+      requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
+      update_editable_programs(requested_programs)
       @user.assign_attributes(user_params)
->>>>>>> pre-release
       if @user.save
         redirect_to({action: :index}, notice: 'User updated')
       else
@@ -80,7 +75,7 @@ module Admin
     end
 
     private
-<<<<<<< HEAD
+
       def update_editable_programs(requested_programs)
         removed_programs = @editable_programs - requested_programs
         removed_programs.each do |program_id|
@@ -92,9 +87,7 @@ module Admin
           EntityViewPermission.create(entity: Program.find(program_id), user: @user, editable: true)
         end
       end
-      def set_user
-        @user = user_scope.find params[:id]
-=======
+
       def adding_admin?
         existing_roles = @user.user_roles
         existing_roles.each do |role|
@@ -111,8 +104,7 @@ module Admin
             return true
           end
         end
-        false
->>>>>>> pre-release
+        return false
       end
 
       def user_scope
@@ -131,7 +123,6 @@ module Admin
         )
       end
 
-<<<<<<< HEAD
       def programs_params
         params.require(:user).permit(
           editable_programs: [],
@@ -142,14 +133,13 @@ module Admin
         @editable_programs = Program.editable_by(@user).pluck(:entity_id)
       end
 
-=======
+
       def confirmation_params
         params.require(:user).permit(
           :confirmation_password
         )
       end
 
->>>>>>> pre-release
       def sort_column
         user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
       end
@@ -162,5 +152,4 @@ module Admin
         @user = user_scope.find params[:id].to_i
       end
   end
-
 end
