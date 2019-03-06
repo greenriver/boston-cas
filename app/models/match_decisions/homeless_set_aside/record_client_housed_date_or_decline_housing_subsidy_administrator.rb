@@ -96,6 +96,10 @@ module MatchDecisions::HomelessSetAside
         match.succeeded!
       end
 
+      def declined
+        match.confirm_hsa_accepts_client_decline_dnd_staff_decision.initialize_decision!
+      end
+
       def canceled
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
