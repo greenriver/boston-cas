@@ -21,8 +21,8 @@ module MatchRoutes
       {
           'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
           'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
           'MatchDecisions::HomelessSetAside::RecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
+          'MatchDecisions::HomelessSetAside::ConfirmHsaAcceptsClientDeclineDndStaff' => 4,
       }
     end
 
