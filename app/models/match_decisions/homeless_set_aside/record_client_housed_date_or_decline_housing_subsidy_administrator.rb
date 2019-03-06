@@ -12,8 +12,18 @@ module MatchDecisions::HomelessSetAside
       case status.to_sym
         when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
         when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+        when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
         when :canceled then canceled_status_label
         when :back then backup_status_label
+      end
+    end
+
+    # if we've overridden this decision, indicate that (this is sent to the client)
+    def status_label
+      if match.confirm_hsa_accepts_client_decline_dnd_staff_decision.status == 'decline_overridden'
+        'Approved'
+      else
+        statuses[status && status.to_sym]
       end
     end
 
@@ -40,7 +50,7 @@ module MatchDecisions::HomelessSetAside
     end
 
     def editable?
-      super && saved_status !~ /complete/
+      super && saved_status !~ /complete|declined/
     end
 
     def stallable?
