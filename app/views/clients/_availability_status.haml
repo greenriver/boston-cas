@@ -1,0 +1,8 @@
+.c-tag.c-tag--full-width{class: "c-tag--#{@client.available ? 'success' : 'warning'}"}
+  .c-tag__wrapper
+    .c-tag__icon.c-tag__icon--sm
+      .icon-checkmark
+    .c-tag__content
+      %span.c-tag__label=@client.available_text
+      .c-tag__action
+        = render 'park_client_form'

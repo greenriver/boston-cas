@@ -1,0 +1,13 @@
+.dropdown.c-dropdown
+  %a#park-client-dropdown.btn.btn-sm.btn-secondary.dropdown-toggle{aria: {expanded:  'false', haspopup:  'true'}, data: {toggle:  'dropdown'}, href:  '#', role:  'button'}
+    Park Client
+  .c-dropdown__menu.c-dropdown__menu--sized.dropdown-menu.dropdown-menu-right.p-4{"aria-labelledby" => "park-client-dropdown"}
+    = simple_form_for(@client) do |f|
+      = f.error_notification
+      %p
+        %strong
+          Remove from matches and prevent from matching until:
+      .d-flex
+        .input-group.date
+          = f.input_field :prevent_matching_until, as: :date_picker
+        = f.button :submit, class: 'btn btn-secondary ml-2', value: 'Park Client'

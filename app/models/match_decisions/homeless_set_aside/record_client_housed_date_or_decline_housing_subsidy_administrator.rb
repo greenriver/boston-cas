@@ -1,5 +1,6 @@
 module MatchDecisions::HomelessSetAside
-  class RecordClientHousedDateHousingSubsidyAdministrator < ::MatchDecisions::Base
+  class RecordClientHousedDateOrDeclineHousingSubsidyAdministrator < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
 
     validate :client_move_in_date_present_if_status_complete
 
@@ -11,8 +12,18 @@ module MatchDecisions::HomelessSetAside
       case status.to_sym
         when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
         when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+        when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
         when :canceled then canceled_status_label
         when :back then backup_status_label
+      end
+    end
+
+    # if we've overridden this decision, indicate that (this is sent to the client)
+    def status_label
+      if match.confirm_hsa_accepts_client_decline_dnd_staff_decision.status == 'decline_overridden'
+        'Approved'
+      else
+        statuses[status && status.to_sym]
       end
     end
 
@@ -32,13 +43,14 @@ module MatchDecisions::HomelessSetAside
       {
           pending: 'Pending',
           completed: 'Complete',
+          declined: 'Declined',
           canceled: 'Canceled',
           back: 'Pending',
       }
     end
 
     def editable?
-      super && saved_status !~ /complete/
+      super && saved_status !~ /complete|declined/
     end
 
     def stallable?
@@ -83,12 +95,20 @@ module MatchDecisions::HomelessSetAside
           contact.in?(match.housing_subsidy_admin_contacts)
     end
 
+    def decline_reason_scope
+      MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
 
       def completed
         match.succeeded!
+      end
+
+      def declined
+        match.confirm_hsa_accepts_client_decline_dnd_staff_decision.initialize_decision!
       end
 
       def canceled

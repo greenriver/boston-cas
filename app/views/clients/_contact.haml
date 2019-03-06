@@ -1,22 +1,19 @@
-%section.c-card.c-card--flush
-  %h3 Contact Information
-  .c-card__content
-    %table.table.table-condensed
-      %tbody
-        %tr.no-border
-          %th Email
-          %td= @client.email
-        %tr
-          %th Home Phone
-          %td= @client.homephone
-        %tr
-          %th Cell Phone
-          %td= @client.cellphone
-        - if @client.workphone.present?
-          %tr
-            %th Work Phone
-            %td= @client.workphone
-        - if @client.pager.present?
-          %tr
-            %th Pager
-            %td= @client.pager
+- not_specified = '<span class="font-no-data">Not specified</span>'.html_safe
+.row.c-card__content-blocks
+  .c-card__content-block.col-md-12.col-lg-6
+    %h5 Email
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.email || not_specified
+  .c-card__content-block.col-md-12.col-lg-6
+    %h5 Home Phone
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.homephone || not_specified
+  .c-card__content-block.col-md-12.col-lg-6
+    %h5 Cell Phone
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.cellphone || not_specified
+  - if @client.workphone.present?
+    .c-card__content-block.col-md-12.col-lg-6
+      %h5 Work Phone
+      %span.c-card__content-block.col-md-12.col-lg-6-text= @client.workphone || not_specified
+  - if @client.pager.present?
+    .c-card__content-block.col-md-12.col-lg-6
+      %h5 Pager
+      %span.c-card__content-block.col-md-12.col-lg-6-text= @client.pager || not_specified
