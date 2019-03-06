@@ -1,10 +1,9 @@
-.row.border-bottom.padding-01.margin-01
-  .col-sm-12
-    %p= note.note
-  
-  .col-sm-10
-    %p.small.text-muted
+.mb-6
+  %p= simple_format note.note
+
+  .d-flex.align-items-center.flex-wrap
+    %p.small.text-muted.mb-0
       Posted by #{content_tag(:strong, note.user&.name)} on #{content_tag(:strong, note.created_at)}
-  .col-sm-2.text-right    
-    = link_to(client_client_note_path(note, client_id: @client.id), method: :delete, data: {confirm: "Delete this note?"}, class: 'btn btn-icon-only btn-small btn-danger') do
-      %i.icon-cross
+    .ml-auto
+      = link_to(client_client_note_path(note, client_id: @client.id), method: :delete, data: {confirm: "Delete this note?"}, class: 'btn btn-icon-only btn-small btn-danger py-2 px-2') do
+        %i.icon-cross

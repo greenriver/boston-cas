@@ -1,158 +1,20 @@
 %section.c-card.c-card--flush
   %h3 Availability
   .c-card__content
-    %table.table.table-condensed
-      %tbody
-        %tr.no-border
-          %td{colspan: 2}
-            = render 'form'
-        %tr
-          %th Available for matching?
-          %td{data: {toggle: :tooltip}, title: 'Availability is controlled by the Data Warehouse'}
-            = @client.available_text
-        %tr
-          %th Homeless Since
-          %td= date_format(@client.calculated_first_homeless_night)
-        %tr
-          %th Days Homeless
-          %td= number_with_delimiter(@client.days_homeless)
-        %tr
-          %th
-            Days Homeless in Last Three Years
-            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH, SO or TH with no overlapping PH'}}
-          %td= number_with_delimiter(@client.days_homeless_in_last_three_years)
-        %tr
-          %th
-            Days Literally Homeless in Last Three Years
-            %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH or SO with no overlapping TH or PH'}}
-          %td= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
-        %tr
-          %th
-            Days Homeless
-          %td
-            - if date_days_homeless_verified = @client.date_days_homeless_verified.try(:strftime, I18n.t('date.formats.default'))
-              - who_verified_days_homeless = @client.who_verified_days_homeless.present? ? "(#{@client.who_verified_days_homeless})" : ""
-              = "Verified on #{date_days_homeless_verified}  #{who_verified_days_homeless}"
-            - else
-              Not Verified
-        %tr
-          %th Currently Enrolled in
-          %td
-            - if @client.enrolled_in_es
-              .client__service_type_es
-                .service-type__program-type ES
-            - if @client.enrolled_in_so
-              .client__service_type_so
-                .service-type__program-type SO
-            - if @client.enrolled_in_sh
-              .client__service_type_sh
-                .service-type__program-type SH
-            - if @client.enrolled_in_th
-              .client__service_type_th
-                .service-type__program-type TH
-        %tr
-          %th RRH Assessment Score
-          %td= @client.assessment_score
-        %tr
-          %th RRH Assessment Collected
-          %td= @client.rrh_assessment_collected_at
-        %tr
-          %th Last Homeless Contact
-          %td= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-        %tr
-          %th Chronically Homeless
-          %td= checkmark @client.chronic_homeless
-        %tr
-          %th Cohorts
-          %td
-            - @client.cohorts.map(&:name).each do |name|
-              .mb-4= name
-        %tr
-          %th Disability
-          %td
-            - if disability_verified_on = @client.disability_verified_on.try(:strftime, I18n.t('date.formats.default'))
-              = "Verified on #{disability_verified_on}"
-            - else
-              Not Verified
-        %tr
-          %th Housing Release
-          %td
-            = _(@client.housing_release_status.presence) || 'Not Signed'
-        - if @client.release_of_information.present?
-          %tr
-            %th= "#{_('Release of information')} signed on"
-            %td= @client.release_of_information.try(:to_date)
-        %tr
-          %th= _('Housing Authority Eligible')
-          %td= checkmark @client.ha_eligible
-        - if can_view_va_eligibility?
-          %tr
-            %th VA Eligible
-            %td= checkmark @client.va_eligible
-        %tr
-          %th SSVF Eligible
-          %td= checkmark @client.ssvf_eligible
-        - if can_view_vspdats?
-          %tr
-            %th VI-SPDAT Score
-            %td= @client.vispdat_score
-          %tr
-            %th
-              Priority Score
-              %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus zero, one (365), two (730), or three (1095) years of days homeless'}
-            %td= @client.vispdat_priority_score
-        %tr
-          %th= _('U.S Citizen or Permanent Resident')
-          %td= checkmark (@client.us_citizen)
-        %tr
-          %th= _('Asylee, Refugee')
-          %td= checkmark (@client.asylee)
-        %tr
-          %th= _('Ineligible Immigrant (Including Undocumented)')
-          %td= checkmark (@client.ineligible_immigrant)
-        %tr
-          %th= _('Life-Time Sex Offender')
-          %td= checkmark (@client.lifetime_sex_offender)
-        %tr
-          %th= _('Meth Production Conviction')
-          %td= checkmark (@client.meth_production_conviction)
-        %tr
-          %th= _('Part of a family')
-          %td= checkmark (@client.family_member)
-        %tr
-          %th= _('Children under age 18 in household')
-          %td= checkmark (@client.child_in_household)
-        %tr
-          %th= _('CSPECH Eligible')
-          %td= checkmark (@client.cspech_eligible)
-        %tr
-          %th Total Monthly Income
-          %td= number_to_currency(@client.income_total_monthly)
-        %tr
-          %th Willing to live in congregate housing
-          %td= checkmark @client.congregate_housing
-        %tr
-          %th Appropriate for sober supportive housing
-          %td= checkmark @client.sober_housing
-        %tr
-          %th Interested in Rapid Re-Housing
-          %td= checkmark @client.rrh_desired
-        %tr
-          %th Interested in Youth Rapid Re-Housing
-          %td= checkmark @client.youth_rrh_desired
-        - if @client.has_full_housing_release?
-          %tr
-            %th Contact info for maximizing income
-            %td= simple_format @client.rrh_assessment_contact_info
-        %tr
-          %th Requires elevator access or ground floor unit?
-          %td= checkmark @client.requires_elevator_access
-        %tr
-          %th Requires wheelchair accessibility?
-          %td= checkmark @client.requires_wheelchair_accessibility
-        %tr
-          %th Minimum number of bedrooms required?
-          %td= @client.required_number_of_bedrooms
-        %tr
-          %th Minimum occupancy required?
-          %td= @client.required_minimum_occupancy
+    = render 'availability_status'
+    %hr.c-card__rule
+
+    = render 'housing_requirements'
+    = render 'neighborhoods'
+    = render 'homelessness'
+    = render 'domestic'
+    = render 'criminality'
+    = render 'health'
+
+    .row
+      = render 'scores'
+      = render 'eligibility'
+
+    .row
+      = render 'enrollments'
+      = render 'cohorts'
