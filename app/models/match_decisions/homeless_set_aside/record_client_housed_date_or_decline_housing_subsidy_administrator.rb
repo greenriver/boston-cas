@@ -33,6 +33,7 @@ module MatchDecisions::HomelessSetAside
       {
           pending: 'Pending',
           completed: 'Complete',
+          declined: 'Declined',
           canceled: 'Canceled',
           back: 'Pending',
       }
