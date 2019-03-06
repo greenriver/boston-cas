@@ -31,7 +31,7 @@
         %li.o-menu__item
           = link_to opportunities_path, class: 'o-menu__link' do
             Vacancies
-      - if can_view_programs?
+      - if can_view_programs? || can_view_assigned_programs?
         %li.o-menu__item
           = link_to programs_path, class: 'o-menu__link' do
             Programs

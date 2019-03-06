@@ -13,7 +13,7 @@ module MatchRoutes
       {
           'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
           'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::RecordClientHousedDateHousingSubsidyAdministrator' => 3,
+          'MatchDecisions::HomelessSetAside::RecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
       }
     end
 
@@ -22,7 +22,7 @@ module MatchRoutes
           'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
           'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
           'MatchDecisions::HomelessSetAside::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
-          'MatchDecisions::HomelessSetAside::RecordClientHousedDateHousingSubsidyAdministrator' => 3,
+          'MatchDecisions::HomelessSetAside::RecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
       }
     end
 
@@ -37,5 +37,8 @@ module MatchRoutes
       :hsa_acknowledges_receipt_decision
     end
 
+    def initial_contacts_for_match
+      :housing_subsidy_admin_contacts
+    end
   end
 end

@@ -1,9 +1,10 @@
 class ProgramContactsController < ApplicationController
   include PjaxModalController
+  include ProgramPermissions
 
-  before_action :require_can_edit_programs!
   before_action :set_program
   before_action :set_program_contacts
+  before_action :check_edit_permission!
 
   def edit
   end
@@ -22,16 +23,13 @@ class ProgramContactsController < ApplicationController
     end
   end
 
+  def hsa_can_edit_contacts?
+    @program.match_route.contacts_editable_by_hsa
+  end
+  helper_method :hsa_can_edit_contacts?
+
   private
-
-    def program_scope
-      Program.all
-    end
-
-    def sub_program_scope
-      SubProgram.all
-    end
-
+    
     def set_program
       @program = program_scope.find params[:program_id].to_i
       @subprogram = sub_program_scope.find params[:sub_program_id].to_i

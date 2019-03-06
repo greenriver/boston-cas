@@ -151,6 +151,13 @@ class Opportunity < ActiveRecord::Base
     ]
   end
 
+  def hsa_for?(user)
+    voucher.
+        sub_program.
+        program.
+        housing_subsidy_admin_contacts.pluck(:user_id).include?(user.id)
+  end
+
   # NOTE: This cleans up the opportunity and all associated items
   # making it as though this never happened.  Use with extreme caution
   # remove contacts from all matches <- this happens automatically (dependent destroy)
