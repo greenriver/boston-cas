@@ -12,7 +12,8 @@
             %th.text-center Activate Match?
         %tbody
           - @matches.each do |client|
-            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?)) && ! params[:confidential_override]
+            - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?
+            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?) || confidential_opportunity) && ! params[:confidential_override]
             - if hide_client_name
               - name = "(name hidden)"
             - else

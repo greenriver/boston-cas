@@ -151,6 +151,10 @@ class Opportunity < ActiveRecord::Base
     ]
   end
 
+  def confidential?
+    sub_program.confidential? || sub_program.program.confidential?
+  end
+
   def hsa_for?(user)
     voucher.
         sub_program.
