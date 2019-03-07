@@ -6,7 +6,7 @@ module Admin
     before_action :authenticate_user!
     before_action :require_can_edit_users!
     before_action :set_user, only: [:edit, :confirm, :update, :destroy]
-    before_action :set_editable_programs, only: [:edit, :update]
+    before_action :set_editable_programs, only: [:edit, :confirm, :update]
 
     helper_method :sort_column, :sort_direction
 
