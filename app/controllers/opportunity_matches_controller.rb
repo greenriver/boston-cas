@@ -2,7 +2,7 @@ class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   # before_action :require_can_see_alternate_matches!
   before_action :require_access_to_opportunity!
-  before_action :require_can_edit_all_clients!, only: [:create, :update]
+  before_action :require_can_activate_matches!, only: [:create, :update]
   before_action :set_heading
 
   prepend_before_action :find_opportunity!
@@ -76,7 +76,11 @@ class OpportunityMatchesController < ApplicationController
   helper_method :priority_value
 
   def match_routes(client)
-    counts = client.client_opportunity_matches.active.open.joins(:program, :match_route).group(:type).count
+    counts = client.client_opportunity_matches.active.open.
+        joins(:program, :match_route).
+        where.not(opportunity: @opportunity).
+        group(:type).
+        count
     counts.map do | key, value |
       [ key.constantize.new.title, value ]
     end
@@ -86,7 +90,19 @@ class OpportunityMatchesController < ApplicationController
   private
 
     def require_access_to_opportunity!
-      not_authorized! if ! ( current_user.can_see_alternate_matches? || @opportunity.hsa_for?(current_user))
+      not_authorized! unless (current_user.can_see_alternate_matches? ||
+          @opportunity.visible_by?(current_user))
+    end
+
+    def can_activate_matches?
+      (current_user.can_edit_all_clients? ||
+          @opportunity.editable_by?(current_user)) &&
+          ! @opportunity.successful_match
+    end
+    helper_method :can_activate_matches?
+
+    def require_can_activate_matches!
+      not_authorized! unless can_activate_matches?
     end
 
     def match_scope

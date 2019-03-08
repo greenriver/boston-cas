@@ -188,13 +188,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
     # admins & DND see everything
     if user.can_view_all_matches?
       all
-    # Allow logged-in users to see any match they are a contact on
+    # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
     elsif user.present?
       contact = user.contact
-      subquery = ClientOpportunityMatchContact
+      contact_subquery = ClientOpportunityMatchContact
         .where(contact_id: contact.id)
-        .select(:match_id)
-      where(id: subquery)
+        .pluck(:match_id)
+      visible_subquery = visible_by(user).pluck(:id)
+      where(id: contact_subquery + visible_subquery)
     else
       none
     end
@@ -214,6 +215,17 @@ class ClientOpportunityMatch < ActiveRecord::Base
       false
     end
   end
+
+  # Get visibility from the associated Program
+  delegate :visible_by?, to: :program
+  delegate :editable_by?, to: :program
+
+  scope :visible_by, ->(user) {
+    joins(:program).merge(Program.visible_by(user))
+  }
+  scope :editable_by, ->(user) {
+    joins(:program).merge(Program.editable_by(user))
+  }
 
   def past_first_step_or_not_default_route?
     return true if current_decision.blank?

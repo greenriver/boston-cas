@@ -9,10 +9,12 @@
             %th Client Name
             %th.text-center= priority_label
             %th.text-center Other Active Matches
-            %th.text-center Activate Match?
+            - if can_activate_matches?
+              %th.text-center Activate Match?
         %tbody
           - @matches.each do |client|
-            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?)) && ! params[:confidential_override]
+            - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?
+            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?) || confidential_opportunity) && ! params[:confidential_override]
             - if hide_client_name
               - name = "(name hidden)"
             - else
@@ -30,10 +32,11 @@
                 %td.text-center= priority_value(client)
                 %td.text-center
                   = render 'client_match_routes', client: client
-                - if @opportunity.match_route.should_activate_match
-                  = render 'activate_button', client: client
-                - else
-                  = render 'activate_checkbox', client: client, f: f
+                - if can_activate_matches?
+                  - if @opportunity.match_route.should_activate_match
+                    = render 'activate_button', client: client
+                  - else
+                    = render 'activate_checkbox', client: client, f: f
       - # %p=paginate @matches
-      - if not @opportunity.match_route.should_activate_match
+      - if ! @opportunity.match_route.should_activate_match && can_activate_matches?
         .float-right= f.button :submit, value: 'Activate Matches'

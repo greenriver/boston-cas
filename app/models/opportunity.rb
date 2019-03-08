@@ -151,12 +151,20 @@ class Opportunity < ActiveRecord::Base
     ]
   end
 
-  def hsa_for?(user)
-    voucher.
-        sub_program.
-        program.
-        housing_subsidy_admin_contacts.pluck(:user_id).include?(user.id)
+  def confidential?
+    sub_program.confidential? || sub_program.program.confidential?
   end
+
+  # Get visibility from the associated SubProgram
+  delegate :visible_by?, to: :sub_program
+  delegate :editable_by?, to: :sub_program
+
+  scope :visible_by, ->(user) {
+    joins(:sub_program).merge(SubProgram.visible_by(user))
+  }
+  scope :editable_by, ->(user) {
+    joins(:sub_program).merge(SubProgram.editable_by(user))
+  }
 
   # NOTE: This cleans up the opportunity and all associated items
   # making it as though this never happened.  Use with extreme caution
