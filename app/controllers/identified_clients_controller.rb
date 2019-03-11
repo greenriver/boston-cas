@@ -76,4 +76,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :active_cohort_ids => [],
       ).merge(identified: true)
     end
+
+    def client_type
+      _('De-Identified Clients')
+    end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190227194216) do
+ActiveRecord::Schema.define(version: 20190311182518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,6 +222,7 @@ ActiveRecord::Schema.define(version: 20190227194216) do
     t.date     "date_days_homeless_verified"
     t.string   "who_verified_days_homeless"
     t.float    "tie_breaker"
+    t.boolean  "interested_in_set_asides",                               default: false
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -306,6 +307,17 @@ ActiveRecord::Schema.define(version: 20190227194216) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "entity_view_permissions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "entity_id",   null: false
+    t.string   "entity_type", null: false
+    t.boolean  "editable"
+    t.datetime "deleted_at"
+  end
+
+  add_index "entity_view_permissions", ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id", using: :btree
+  add_index "entity_view_permissions", ["user_id"], name: "index_entity_view_permissions_on_user_id", using: :btree
 
   create_table "ethnicities", force: :cascade do |t|
     t.integer  "numeric"
@@ -556,6 +568,7 @@ ActiveRecord::Schema.define(version: 20190227194216) do
     t.boolean  "physical_disability",                      default: false
     t.boolean  "developmental_disability",                 default: false
     t.boolean  "domestic_violence",                        default: false, null: false
+    t.boolean  "interested_in_set_asides",                 default: false
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -762,6 +775,7 @@ ActiveRecord::Schema.define(version: 20190227194216) do
     t.jsonb    "neighborhood_interests",                      default: [],    null: false
     t.date     "date_days_homeless_verified"
     t.string   "who_verified_days_homeless"
+    t.boolean  "interested_in_set_asides",                    default: false
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -878,6 +892,10 @@ ActiveRecord::Schema.define(version: 20190227194216) do
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
     t.boolean  "can_manage_neighborhoods",                default: false
+    t.boolean  "can_view_assigned_programs",              default: false
+    t.boolean  "can_edit_assigned_programs",              default: false
+    t.boolean  "can_export_deidentified_clients",         default: false
+    t.boolean  "can_export_identified_clients",           default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

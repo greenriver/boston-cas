@@ -3,6 +3,8 @@ class NonHmisClientsController < ApplicationController
   before_action :load_agencies
   before_action :set_active_filter, only: [:index]
 
+  helper_method :client_type
+
   def index
     # sort
     sort_order = sorter
@@ -27,10 +29,17 @@ class NonHmisClientsController < ApplicationController
     if clean_family_member.present?
       @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member)
     end
+    respond_to do |format|
+      format.html do
+        # paginate
+        @page = params[:page].presence || 1
+        @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
+      end
+      format.xlsx do 
+
+      end
+    end
     
-    # paginate
-    @page = params[:page].presence || 1
-    @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
   end
 
   def new

@@ -4,6 +4,16 @@ GIT
   specs:
     select2-rails (4.0.6.pre.rc.1)
 
+GIT
+  remote: https://github.com/randym/axlsx.git
+  revision: c593a08b2a929dac7aa8dc418b55e26b4c49dc34
+  specs:
+    axlsx (3.0.0.pre)
+      htmlentities (~> 4.3, >= 4.3.4)
+      mimemagic (~> 0.3)
+      nokogiri (~> 1.8, >= 1.8.2)
+      rubyzip (~> 1.2, >= 1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -67,6 +77,9 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
+    axlsx_rails (0.5.2)
+      actionpack (>= 3.1)
+      axlsx (>= 2.0.1)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -214,6 +227,7 @@ GEM
       haml (>= 4.0, < 6)
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
+    htmlentities (4.3.4)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -255,6 +269,7 @@ GEM
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2018.0812)
+    mimemagic (0.3.3)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -391,6 +406,7 @@ GEM
     ruby_dep (1.5.0)
     ruby_parser (3.9.0)
       sexp_processor (~> 4.1)
+    rubyzip (1.2.2)
     sass (3.7.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -486,6 +502,8 @@ DEPENDENCIES
   attribute_normalizer
   auto-session-timeout
   autoprefixer-rails
+  axlsx!
+  axlsx_rails
   bcrypt
   bootstrap (~> 4.3.1)
   bootstrap3-datetimepicker-rails (~> 4.17.42)
@@ -563,4 +581,4 @@ DEPENDENCIES
   with_advisory_lock
 
 BUNDLED WITH
-   1.17.0
+   1.17.2
