@@ -22,6 +22,15 @@ class ProgramsController < ApplicationController
       column = 'buildings.name'
     end
     sort = "#{column} #{sort_direction}"
+
+    @available_routes = MatchRoutes::Base.filterable_routes
+    @current_route = params[:current_route]
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
+      @programs = @programs.joins(:match_route).where(match_routes: {type: @current_route})
+    end
+
+    @active_filter = @current_route.present?
+
     @programs = @programs
       .includes(:program)
       .references(:program)
@@ -106,4 +115,9 @@ class ProgramsController < ApplicationController
   def query_string
     "%#{@query}%"
   end
+
+  def filter_terms
+    [ :current_route ]
+  end
+  helper_method :filter_terms
 end
