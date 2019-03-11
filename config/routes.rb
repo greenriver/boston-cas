@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
     resources :qualified_opportunities, only: [:index, :update]
   end
+  resources :unavailable_clients, only: [:index]
   resources :opportunities do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]

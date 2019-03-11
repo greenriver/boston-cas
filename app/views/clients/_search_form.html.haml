@@ -1,4 +1,4 @@
-= search_form_for @q do |f|
+= search_form_for @q, class: :jSearch do |f|
   -# Preserve sort and filtering
   - if params[:sort]
     = hidden_field_tag :sort, params[:sort]
