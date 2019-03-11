@@ -15,6 +15,12 @@ class ProgramsController < ApplicationController
     end
 
     # sort / paginate
+    sort_string = sorter
+     
+    @sorted_by = Program.sort_options.select do |m| 
+      m[:column] == @column && m[:direction] == @direction
+    end.first[:title]
+
     column = "sub_programs.#{sort_column}"
     if sort_column == 'program_id'
       column = 'programs.name'
@@ -37,7 +43,7 @@ class ProgramsController < ApplicationController
       .includes(:building)
       .references(:building)
       .preload(:program)
-      .order(sort)
+      .reorder(sort_string)
       .page(params[:page]).per(25)
 
   end
@@ -120,4 +126,24 @@ class ProgramsController < ApplicationController
     [ :current_route ]
   end
   helper_method :filter_terms
+
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
+
+    if @column.blank?
+      @column = 'program_id'
+      @direction = 'asc'
+      sort_string = "#{@column} #{@direction}"
+    else
+      sort_string = Program.sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.first[:order]
+    end
+
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort_string += ' NULLS LAST'
+    end
+    return sort_string
+  end
 end
