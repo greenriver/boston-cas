@@ -75,8 +75,10 @@ gem 'gettext', '>=3.0.2', require: false
 gem 'ruby_parser', require: false
 gem 'grosser-pomo'
 
-gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
-gem 'axlsx_rails'
+# gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
+# gem 'axlsx_rails'
+gem 'spreadsheet', require: false
+gem 'xlsxtream', require: false
 
 group :development do
   gem 'spring'

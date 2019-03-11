@@ -78,6 +78,6 @@ class IdentifiedClientsController < NonHmisClientsController
     end
 
     def client_type
-      _('De-Identified Clients')
+      _('Identified Clients')
     end
 end
