@@ -77,8 +77,9 @@ gem 'grosser-pomo'
 
 # gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
 # gem 'axlsx_rails'
-gem 'spreadsheet', require: false
+# gem 'spreadsheet', require: false
 gem 'xlsxtream', require: false
+# NOTE: maybe https://github.com/weshatheleopard/rubyXL
 
 group :development do
   gem 'spring'
