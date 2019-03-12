@@ -22,10 +22,7 @@
 
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
-                - if client.accessible_by_user?(current_user)
-                  = link_to name, client_path(client)
-                - else
-                  = name
+                = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
 
               %td.text-center= priority_value(client)
               %td.text-center
