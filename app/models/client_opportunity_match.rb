@@ -414,7 +414,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       add_default_contacts!
       self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
-      related_proposed_matches.destroy_all if ! match_route.should_activate_matches
+      related_proposed_matches.destroy_all if ! match_route.should_activate_match
     end
   end
 
