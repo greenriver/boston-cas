@@ -409,7 +409,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def activate!
     self.class.transaction do
       update! active: true
-      client.make_unavailable_in(match_route: opportunity.match_route)
+      client.make_unavailable_in(match_route: opportunity.match_route) if match_route.should_prevent_multiple_matches_per_client
       opportunity.update available_candidate: false
       add_default_contacts!
       self.send(match_route.initial_decision).initialize_decision!

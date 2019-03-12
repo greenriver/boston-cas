@@ -26,6 +26,7 @@ module Admin
         :contacts_editable_by_hsa,
         :should_activate_match,
         :should_cancel_other_matches,
+        :should_prevent_multiple_matches_per_client,
         :match_prioritization_id,
       ) 
     end 

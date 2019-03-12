@@ -17,7 +17,9 @@
       %th
         Should activate match
       %th
-        Should cancel other matches 
+        Should cancel other matches
+      %th
+        Should prevent multiple matches per client
       %th
         Match prioritization
         
@@ -34,6 +36,8 @@
           = checkmark route.should_activate_match
         %td
           = checkmark route.should_cancel_other_matches
+        %td
+          = checkmark route.should_prevent_multiple_matches_per_client
         %td
           = route.match_prioritization.title
         
