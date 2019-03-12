@@ -137,8 +137,8 @@ class Program < ActiveRecord::Base
       {title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true},
       {title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true},
       {title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true},
-      {title: 'Building A-Z', column: 'bilding_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true},
-      {title: 'Building Z-A', column: 'bilding_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true},
+      {title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true},
+      {title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true},
     ]
   end
 
