@@ -414,6 +414,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       add_default_contacts!
       self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      related_proposed_matches.destroy_all if ! match_route.should_activate_matches
     end
   end
 
@@ -521,6 +522,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     ClientOpportunityMatch.
       where(opportunity_id: opportunity_id).
       where.not(id: id)
+  end
+
+  def related_proposed_matches
+    ClientOpportunityMatch.
+      proposed.
+      where(opportunity_id: opportunity_id)
   end
 
   def already_active_for_opportunity
