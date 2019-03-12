@@ -52,14 +52,20 @@
           %dl
             %dt Program
             %dd
-              = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
+              - if match.sub_program.editable_by?(current_user)
+                = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
+                  = match.opportunity_details.program_name
+              - else
                 = match.opportunity_details.program_name
               
         %li
           %dl
             %dt Sub-Program
             %dd
-              = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
+              - if match.sub_program.editable_by?(current_user)
+                = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
+                  = match.opportunity_details.sub_program_name
+              - else
                 = match.opportunity_details.sub_program_name
     .client__details.flex-column.d-flex.justify-content-end.align-items-end.ml-auto
       = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
