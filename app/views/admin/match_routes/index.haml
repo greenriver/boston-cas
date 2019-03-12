@@ -17,6 +17,8 @@
       %th
         Should activate match
       %th
+        Allow multiple active matches
+      %th
         Should cancel other matches
       %th
         Should prevent multiple matches per client
@@ -34,6 +36,8 @@
           = checkmark route.contacts_editable_by_hsa
         %td
           = checkmark route.should_activate_match
+        %td
+          = checkmark route.allow_multiple_active_matches
         %td
           = checkmark route.should_cancel_other_matches
         %td

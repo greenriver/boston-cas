@@ -33,10 +33,10 @@
                 %td.text-center
                   = render 'client_match_routes', client: client
                 - if can_activate_matches?
-                  - if @opportunity.match_route.should_activate_match
+                  - unless @opportunity.match_route.allow_multiple_active_matches
                     = render 'activate_button', client: client
                   - else
                     = render 'activate_checkbox', client: client, f: f
       - # %p=paginate @matches
-      - if ! @opportunity.match_route.should_activate_match && can_activate_matches?
+      - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
         .float-right= f.button :submit, value: 'Activate Matches'

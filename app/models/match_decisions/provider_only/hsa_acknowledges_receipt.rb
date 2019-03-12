@@ -100,7 +100,7 @@ module MatchDecisions::ProviderOnly
     end
 
     def cant_accept_if_opportunity_has_related_active_match
-      if save_will_accept? && match.opportunity_related_matches.active.any? && match_route.should_activate_match
+      if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
       then errors.add :status, "There is already another active match for this opportunity"
       end
     end

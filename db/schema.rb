@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190312162603) do
+ActiveRecord::Schema.define(version: 20190312164357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -496,6 +496,7 @@ ActiveRecord::Schema.define(version: 20190312162603) do
     t.boolean  "should_cancel_other_matches",                default: true,  null: false
     t.boolean  "should_activate_match",                      default: true,  null: false
     t.boolean  "should_prevent_multiple_matches_per_client", default: true,  null: false
+    t.boolean  "allow_multiple_active_matches",              default: false, null: false
   end
 
   create_table "messages", force: :cascade do |t|
