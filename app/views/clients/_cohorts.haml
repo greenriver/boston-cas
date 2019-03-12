@@ -5,6 +5,6 @@
   - if @client.cohorts.any?
     %ul.c-detailed-list<
       - @client.cohorts.map(&:name).each do |name|
-        %li.c-detailed-list__item.mb-4= name
+        %li.list-unstyled.mb-2= name
   - else
     %p.font-no-data None
