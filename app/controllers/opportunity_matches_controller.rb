@@ -1,9 +1,9 @@
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
-  # before_action :require_can_see_alternate_matches!
   before_action :require_access_to_opportunity!
   before_action :require_can_activate_matches!, only: [:create, :update]
   before_action :set_heading
+  before_action :set_show_confidential_names
 
   prepend_before_action :find_opportunity!
 
@@ -87,6 +87,11 @@ class OpportunityMatchesController < ApplicationController
   end
   helper_method :match_routes
 
+  def show_confidential_names?
+    @show_confidential_names
+  end
+  helper_method :show_confidential_names?
+
   private
 
     def require_access_to_opportunity!
@@ -103,6 +108,10 @@ class OpportunityMatchesController < ApplicationController
 
     def require_can_activate_matches!
       not_authorized! unless can_activate_matches?
+    end
+
+    def set_show_confidential_names
+      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
     end
 
     def match_scope

@@ -1,5 +1,5 @@
 - if can_view_client_confidentiality?
-  - if params[:confidential_override].present?
+  - if show_confidential_names?
     = link_to 'Hide Confidential Names', request.query_parameters.except(:confidential_override), class: 'btn btn-light ml-auto align-self-start'
   - else
     = link_to 'Show Confidential Names', request.query_parameters.merge({confidential_override: true}), class: 'btn btn-outline-danger ml-auto align-self-start '
