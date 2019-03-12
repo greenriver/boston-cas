@@ -37,6 +37,9 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label Interested in Youth Rapid Re-Housing
       %span.c-detailed-list__value= boolean_icon @client.youth_rrh_desired
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Interested in Set-Asides
+      %span.c-detailed-list__value= boolean_icon @client.interested_in_set_asides
 
     - if @client.non_hmis?
       %li
