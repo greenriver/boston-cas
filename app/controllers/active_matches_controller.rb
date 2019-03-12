@@ -84,8 +84,6 @@ class ActiveMatchesController < MatchListBaseController
     @types = MatchRoutes::Base.match_steps
   end
 
-
-
   private def match_scope
     ClientOpportunityMatch.
       accessible_by_user(current_user).

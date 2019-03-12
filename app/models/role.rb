@@ -80,9 +80,11 @@ class Role < ActiveRecord::Base
       :can_delete_client_notes,
       :can_enter_deidentified_clients,
       :can_manage_deidentified_clients,
+      :can_export_deidentified_clients,
       :can_add_cohorts_to_deidentified_clients,
       :can_enter_identified_clients,
       :can_manage_identified_clients,
+      :can_export_identified_clients,
       :can_add_cohorts_to_identified_clients,
     ]
   end

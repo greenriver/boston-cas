@@ -124,6 +124,7 @@ module Admin
       def set_user
         @user = user_scope.find params[:id].to_i
       end
+
   end
 
 end

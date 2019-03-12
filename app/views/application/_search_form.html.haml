@@ -1,4 +1,12 @@
 = form_tag(nil, method: "get") do
+  -# Preserve sort and filtering
+  - if params[:sort]
+    = hidden_field_tag :sort, params[:sort]
+  - if params[:direction]
+    = hidden_field_tag :direction, params[:direction]
+  - filter_terms.each do | term |
+    - if params[term]
+      = hidden_field_tag term, params[term]
   .input-group{style: 'margin-bottom: 20px;'}
     %input.form-control{name: 'q', autofocus: true, type: :text, placeholder: @prompt, value: @query || params[:q]}
     %span.input-group-append

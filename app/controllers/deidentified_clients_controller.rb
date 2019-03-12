@@ -72,4 +72,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
       return append_client_identifier(dirty_params)
     end
+
+    def client_type
+      _('De-Identified Clients')
+    end
 end

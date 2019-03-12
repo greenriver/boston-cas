@@ -1,0 +1,4 @@
+class UnavailableClientsController < ClientsController
+  
+
+end

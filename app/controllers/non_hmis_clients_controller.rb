@@ -1,9 +1,13 @@
+require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   before_action :load_client, only: [:edit, :update, :destroy]
   before_action :load_agencies
   before_action :set_active_filter, only: [:index]
 
+  helper_method :client_type
+
   def index
+
     # sort
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
@@ -27,10 +31,31 @@ class NonHmisClientsController < ApplicationController
     if clean_family_member.present?
       @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member)
     end
-    
-    # paginate
-    @page = params[:page].presence || 1
-    @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
+    respond_to do |format|
+      format.html do
+        # paginate
+        @page = params[:page].presence || 1
+        @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
+      end
+      format.xlsx do 
+        download
+      end
+    end
+  end
+
+  def download
+    io = StringIO.new
+    xlsx = Xlsxtream::Workbook.new(io)
+    xlsx.write_worksheet client_type do |sheet|
+      sheet << client_source.new.download_headers
+      @non_hmis_clients.each do |client|
+        sheet << client.download_data
+      end
+    end
+    xlsx.close
+    send_data io.string,
+      filename: "#{client_type}.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
   def new

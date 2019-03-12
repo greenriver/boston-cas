@@ -1,0 +1,41 @@
+- if @active_filter
+  - filter_class = 'filter-sort__filter-active'
+- else
+  - filter_class = 'filter-sort__filter'
+.o-filtration.o-filtration--sm.dropdown{class: filter_class}
+  %button.btn.btn-light.dropdown-toggle.mr-4{data: {toggle: 'dropdown'}}
+    Filter
+    %span.caret
+  .o-filtration__container.dropdown-menu.dropdown-menu.options{aria:{labelledby:"filter-dropdown"}}
+    .o-filtration__header
+      %h3.client__filter-header Filter matches
+
+    = form_tag(nil, method: "get") do
+      -# preserve sort and search for filtering
+      -# preserve sort and search for filtering
+      - if params[:sort]
+        = hidden_field_tag :sort, params[:sort]
+      - if params[:direction]
+        = hidden_field_tag :direction, params[:direction]
+      - if params[:q]
+        = hidden_field_tag :q, params[:q]
+
+      .o-filtration__option
+        %select{name: :current_route, style: 'width: 100%;'}
+          %option{value: ''} Show all Match Routes
+          - @available_routes.each do |label,value|
+            - selected = @current_route == value
+            %option{value: value, selected: selected}
+              = label
+
+      .o-filtration__actions.form__actions
+        = link_to({action: :index}, class: 'btn btn-light')do
+          %i.icon-cross
+          Clear
+        %button.btn.btn-primary.ml-auto{type: :submit}
+          %i.icon-filter
+          Filter
+
+= content_for :page_js do
+  :javascript
+    $('select').select2();

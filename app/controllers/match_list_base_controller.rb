@@ -82,5 +82,10 @@ class MatchListBaseController < ApplicationController
     def query_string
       "%#{params[:q]}%"
     end
+
+    def filter_terms
+      [ :current_step, :current_route ]
+    end
+    helper_method :filter_terms
   
 end

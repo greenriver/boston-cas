@@ -24,6 +24,10 @@ en:
     index:
       title: 'Manage Clients'
       search_prompt: 'Search clients...'
+  unavailable_clients:
+    index:
+      title: 'Manage Clients'
+      search_prompt: 'Search clients...'
   matches:
     index:
       title: 'Matches in Progress'

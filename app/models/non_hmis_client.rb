@@ -143,4 +143,12 @@ class NonHmisClient < ActiveRecord::Base
     log "Updated #{NonHmisClient.count} ProjectClients from NonHmisClient"
   end
 
+  def download_data
+    raise NotImplementedError
+  end
+
+  def download_headers
+    raise NotImplementedError
+  end
+
 end

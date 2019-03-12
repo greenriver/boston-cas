@@ -64,7 +64,7 @@ module ApplicationHelper
     sort_direction = (direction.nil? || direction == 'asc') ? 'asc' : 'desc'
     sort = {'sort' => column, 'direction' => sort_direction}
     params.merge!(sort)
-    link_to(link_text, params)
+    link_to(link_text, params, class: :jSort)
   end
 
   def fake_partner

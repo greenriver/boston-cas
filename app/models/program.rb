@@ -131,6 +131,17 @@ class Program < ActiveRecord::Base
     [:funding_source]
   end
 
+  def self.sort_options
+    [
+      {title: 'Program A-Z', column: 'program_id', direction: 'asc', order: 'LOWER(programs.name) ASC', visible: true},
+      {title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true},
+      {title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true},
+      {title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true},
+      {title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true},
+      {title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true},
+    ]
+  end
+
   private
     def inherited_funding_source_requirements_by_source
       {}.tap do |result|

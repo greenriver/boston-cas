@@ -14,7 +14,7 @@
   %h3.detail-box--label Unit
   .detail-box--value
     .unit-name
-      = match.opportunity_details.unit_name
+      = link_to_if can_edit_buildings?, match.opportunity_details.unit_name, building_path(match&.opportunity&.unit&.building)
     - if match.opportunity.unit.elevator_accessible
       .elevator-accessible
         This unit is elevator accessible or on the ground floor.
