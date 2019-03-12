@@ -83,6 +83,11 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :email, :password, :password_confirmation, :name])
   end
 
+  def filter_terms
+    [  ]
+  end
+  helper_method :filter_terms
+
   def locale
     default_locale = 'en'
     params[:locale] || session[:locale] || default_locale

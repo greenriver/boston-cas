@@ -13,8 +13,9 @@ class RulesController < ApplicationController
     base_scope =
       rule_scope.
       with_deleted.
+      preload(requirements: :requirer).
       page(params[:page]).
-      per(25).
+      per(250).
       order(sort_column => sort_direction)
     if params[:q]
       rule_arel = Rule.arel_table

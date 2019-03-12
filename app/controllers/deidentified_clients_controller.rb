@@ -81,4 +81,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
       return append_client_identifier(dirty_params)
     end
+
+    def client_type
+      _('De-Identified Clients')
+    end
 end

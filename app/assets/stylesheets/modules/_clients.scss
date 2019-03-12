@@ -8,7 +8,10 @@
   margin-bottom: 1em;
 }
 
-.client__filter-active .btn-default {
+.client__filter-active .btn-default,
+.filter-sort__filter-active .btn-default,
+.filter-sort__filter-active .btn-light,
+{
   background-color: $brand-primary-ll;
 }
 

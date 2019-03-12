@@ -20,6 +20,7 @@ class OpportunitiesController < ApplicationController
     @match_status = params[:status] if Opportunity.available_stati.include?(params[:status]) || nil
 
     if @match_status.present?
+      @active_filter = true
       case @match_status
       when 'Match in Progress'
         @opportunities = matches_in_progress
@@ -205,4 +206,9 @@ class OpportunitiesController < ApplicationController
     vt = Voucher.arel_table
     @opportunities.joins(:voucher).where(vt[:date_available].gt(Date.today)).distinct
   end
+
+  def filter_terms
+    [ :status ]
+  end
+  helper_method :filter_terms
 end

@@ -85,4 +85,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :neighborhood_interests => [],
       ).merge(identified: true)
     end
+
+    def client_type
+      _('Identified Clients')
+    end
 end
