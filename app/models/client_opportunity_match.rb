@@ -471,7 +471,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
       route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
       if route.should_cancel_other_matches
-        client_related_matches.destroy_all
+        client_related_matches.each do |match|
+          MatchEvents::DecisionAction.create(match_id: match.id,
+              decision_id: match.current_decision.id,
+              action: :canceled)
+          reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
+          match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+          match.poached!
+        end
         client.update available: false
         # Prevent matching on any route
         client.make_unavailable_in_all_routes
