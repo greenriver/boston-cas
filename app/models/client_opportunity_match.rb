@@ -472,11 +472,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
       update! active: false, closed: true, closed_reason: 'success'
       if route.should_cancel_other_matches
         client_related_matches.each do |match|
-          MatchEvents::DecisionAction.create(match_id: match.id,
-              decision_id: match.current_decision.id,
-              action: :canceled)
-          reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
-          match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+          if match.current_decision.present?
+            MatchEvents::DecisionAction.create(match_id: match.id,
+                decision_id: match.current_decision.id,
+                action: :canceled)
+            reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
+            match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+          end
           match.poached!
         end
         client.update available: false
