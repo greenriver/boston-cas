@@ -75,7 +75,7 @@ module MatchDecisions::HomelessSetAside
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.hsa_accepts_client_decision.initialize_decision!
+        match.set_asides_hsa_accepts_client_decision.initialize_decision!
         @decision.uninitialize_decision!(send_notifications: false)
       end
 

@@ -251,8 +251,17 @@ class NotificationsMailer < DatabaseMailer
     @route_name = @match.match_route.title
     mail(to: @contact.email, subject: "Housing opportunity successfully filled on the #{@route_name}")
   end
-
+  
   # end Manual Activation
+
+  # Set Asides
+
+  def set_asides_hsa_accepts_client notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
+  end
+
+  # end Set Asides
 
   # Progress Updates
   def progress_update_requested notification_ids

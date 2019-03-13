@@ -21,7 +21,7 @@ module MatchDecisions::HomelessSetAside
 
     # if we've overridden this decision, indicate that (this is sent to the client)
     def status_label
-      if match.confirm_hsa_accepts_client_decline_dnd_staff_decision.status == 'decline_overridden'
+      if match.set_asides_confirm_hsa_accepts_client_decline_dnd_staff_decision.status == 'decline_overridden'
         'Approved'
       else
         statuses[status && status.to_sym]
@@ -90,7 +90,7 @@ module MatchDecisions::HomelessSetAside
       end
 
       def declined
-        match.confirm_hsa_accepts_client_decline_dnd_staff_decision.initialize_decision!
+        match.set_asides_confirm_hsa_accepts_client_decline_dnd_staff_decision.initialize_decision!
       end
 
       def canceled

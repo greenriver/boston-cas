@@ -34,7 +34,7 @@ module MatchRoutes
     end
 
     def initial_decision
-      :hsa_acknowledges_receipt_decision
+      :set_asides_hsa_acknowledges_receipt_decision
     end
 
     def initial_contacts_for_match

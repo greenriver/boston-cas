@@ -8,7 +8,7 @@ module Notifications::HomelessSetAside
     end
     
     def decision
-      match.confirm_hsa_accepts_client_decline_dnd_staff_decision
+      match.set_asides_confirm_hsa_accepts_client_decline_dnd_staff_decision
     end
 
     def event_label

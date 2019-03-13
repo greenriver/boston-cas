@@ -94,7 +94,7 @@ module MatchDecisions::ProviderOnly
     end
 
     def cant_accept_if_client_has_related_active_match
-      if save_will_accept? && match.client_related_matches.active.any
+      if save_will_accept? && match.client_related_matches.active.exists?
         then errors.add :status, "There is already another active match for this client"
       end
     end
