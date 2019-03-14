@@ -148,6 +148,16 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
+  def client_name_for_contact contact, hidden:
+    if hidden
+      '(name hidden)'
+    elsif show_client_info_to?(contact)
+      client.full_name
+    else
+      "(name withheld)"
+    end
+  end
+
   def self.prioritized(match_route, scope)
     match_route.match_prioritization.prioritization_for_clients(scope)
   end
