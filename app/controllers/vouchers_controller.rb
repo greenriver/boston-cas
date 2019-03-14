@@ -6,6 +6,7 @@ class VouchersController < ApplicationController
   before_action :set_voucher, only: [:update, :destroy, :unavailable]
   before_action :set_sub_program, only: [:create, :index, :bulk_update, :unavailable]
   before_action :set_program, only: [:index, :bulk_update, :unavailable]
+  before_action :set_show_confidential_names
 
   def index
     @vouchers = @subprogram.vouchers.preload(:status_match).order(:id)
@@ -36,9 +37,8 @@ class VouchersController < ApplicationController
   # Set the Voucher as available = false
   def unavailable
     opportunity = @voucher.opportunity
-    active_match = opportunity.active_match
-    if active_match.present?
-      matches = @voucher.opportunity.client_opportunity_matches
+    if opportunity.active_matches.exists?
+      matches = opportunity.client_opportunity_matches
       Client.transaction do
         matches.each do |m|
           unless m.closed?
@@ -102,24 +102,35 @@ class VouchersController < ApplicationController
     redirect_to action: :index
   end
 
+  def show_confidential_names?
+    @show_confidential_names
+  end
+  helper_method :show_confidential_names?
+
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_voucher
-    @voucher = Voucher.find(params[:id].to_i)
-  end
-  def set_sub_program
-    @subprogram = SubProgram.find(params[:sub_program_id].to_i)
-  end
-  def set_program
-    @program = Program.find(params[:program_id].to_i)
-  end
-  # Only allow a trusted parameter "white list" through.
-  def voucher_params
-    params.require(:sub_program).
-      permit(
-        :sub_program_id,
-        :add_vouchers,
-        vouchers_attributes: [:id, :available, :unit_id, :date_available],
-      )
-  end
+    def set_voucher
+      @voucher = Voucher.find(params[:id].to_i)
+    end
+
+    def set_sub_program
+      @subprogram = SubProgram.find(params[:sub_program_id].to_i)
+    end
+
+    def set_program
+      @program = Program.find(params[:program_id].to_i)
+    end
+
+    def set_show_confidential_names
+      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def voucher_params
+      params.require(:sub_program).
+        permit(
+          :sub_program_id,
+          :add_vouchers,
+          vouchers_attributes: [:id, :available, :unit_id, :date_available],
+        )
+    end
 end

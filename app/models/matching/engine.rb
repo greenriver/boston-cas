@@ -5,7 +5,7 @@ class Matching::Engine
     end
 
     def create_candidates match_route:
-      new(available_clients(match_route: match_route), available_opportunities).replace_candidates
+      new(available_clients(match_route: match_route), available_opportunities(match_route: match_route)).replace_candidates
     end
 
     def available_client_count match_route:
@@ -17,10 +17,10 @@ class Matching::Engine
       Client.available_for_matching(match_route)
     end
 
-    def available_opportunities
+    def available_opportunities match_route:
       # returns AR scope
       # Need to require a voucher or else we end up with very odd situations
-      Opportunity.with_voucher.available_candidate
+      Opportunity.with_voucher.available_candidate.on_route(match_route)
     end
 
   end
@@ -59,7 +59,7 @@ class Matching::Engine
     end
   end
 
-  def create_candidate_matches opportunity
+  def create_candidate_matches(opportunity)
     matches_left_to_max = opportunity.matches_left_to_max
     client_priority = 1
     clients_for_matches(opportunity).each do |client|
@@ -69,9 +69,16 @@ class Matching::Engine
         opportunity: opportunity.opportunity_details.opportunity_for_archive,
         client: client.prepare_for_archive,
       }
-      match =
-        client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
-      match.activate! if client_priority == 1
+      match = client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
+      
+      if client_priority == 1
+        if opportunity.match_route.should_activate_match
+          match.activate!
+        else
+          match.matched!
+        end
+      end
+
       client_priority += 1
     end
 
@@ -92,7 +99,7 @@ class Matching::Engine
   end
 
   def prioritized_candidate_clients match_route:
-    @_prioritized_candidate_clients = client_candidates(clients, match_route: match_route).prioritized(match_route: match_route)
+    @_prioritized_candidate_clients = Client.prioritized(match_route, client_candidates(clients, match_route: match_route))
   end
 
   def opportunity_candidates subjects

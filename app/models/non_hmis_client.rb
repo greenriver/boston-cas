@@ -96,6 +96,9 @@ class NonHmisClient < ActiveRecord::Base
     project_client.days_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     project_client.days_homeless = days_homeless_in_the_last_three_years
+    project_client.date_days_homeless_verified = date_days_homeless_verified
+    project_client.who_verified_days_homeless = who_verified_days_homeless
+
     project_client.veteran_status = 1 if veteran
     project_client.rrh_desired = rrh_desired
     project_client.youth_rrh_desired = youth_rrh_desired
@@ -111,6 +114,13 @@ class NonHmisClient < ActiveRecord::Base
     project_client.calculated_chronic_homelessness = calculated_chronic_homelessness
     project_client.middle_name = middle_name
     project_client.gender = gender
+    project_client.neighborhood_interests = neighborhood_interests
+    project_client.interested_in_set_asides = interested_in_set_asides
+
+    project_client.income_total_monthly = income_total_monthly
+    project_client.disabling_condition = if disabling_condition then 1 else nil end
+    project_client.physical_disability = if physical_disability then 1 else nil end
+    project_client.developmental_disability = if developmental_disability then 1 else nil end
     project_client.domestic_violence = 1 if domestic_violence
 
     project_client.sync_with_cas = self.available

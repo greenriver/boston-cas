@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
     resources :alternate_matches, controller: 'opportunity_alternate_matches', only: :index
-    resources :matches, controller: 'opportunity_matches', only: [:index, :update] do
+    resources :matches, controller: 'opportunity_matches', only: [:index, :create, :update] do
       get :all, on: :collection
       get :closed, on: :collection
     end
@@ -120,6 +120,8 @@ Rails.application.routes.draw do
     end
     resources :match_routes, only: [:index, :edit, :update]
   end
+
+  resources :neighborhoods
 
   resource :account, only: [:edit, :update]
   resource :account_email, only: [:edit, :update]

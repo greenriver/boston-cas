@@ -1,0 +1,16 @@
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-child
+    %h5 Domestic
+  %ul.c-detailed-list<
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Part of a family')
+      %span.c-detailed-list__value= boolean_icon (@client.family_member)
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Children under age 18 in household')
+      %span.c-detailed-list__value= boolean_icon (@client.child_in_household)
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Total Monthly Income
+      %span.c-detailed-list__value= number_to_currency(@client.income_total_monthly)

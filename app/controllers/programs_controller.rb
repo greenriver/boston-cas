@@ -1,8 +1,7 @@
 class ProgramsController < ApplicationController
+  include ProgramPermissions
   before_action :authenticate_user!
-  before_action :require_can_view_programs!
-  before_action :require_can_edit_programs!, only: [:update, :destroy, :create]
-  before_action :set_program, only: [:edit, :update, :destroy]
+  before_action :require_can_edit_programs!, only: [:create]
   
   helper_method :sort_column, :sort_direction
 
@@ -48,7 +47,6 @@ class ProgramsController < ApplicationController
 
   end
 
-
   def new
     @program = program_source.new(sub_programs: [SubProgram.new({program_type: 'Project-Based'})])
   end
@@ -56,6 +54,7 @@ class ProgramsController < ApplicationController
   def create
     @program = Program.new program_params
     if @program.save
+      EntityViewPermission.create(entity: @program, user: current_user, editable: true)
       # there should only be one sub-program immediately after a program create
       @sub_program = @program.sub_programs.first
       redirect_to action: :index
@@ -66,84 +65,74 @@ class ProgramsController < ApplicationController
     end
   end
 
-
   private
-  def program_source
-    Program
-  end
-  def program_scope
-    Program.all
-  end
-  def sub_program_scope
-    SubProgram
-  end
-  # Use callbacks to share common setup or constraints between actions.
-  def set_program
-    @program = program_scope.find(params[:id])
-  end
+    def program_source
+      Program
+    end
 
-  def program_params
-    params.require(:program).
-      permit(
-        :name, 
-        :contract_start_date, 
-        :funding_source_id, 
-        :confidential,
-        :match_route_id,
-        sub_programs_attributes: [
-          :id, 
-          :name, 
-          :subgrantee_id, # Service provider
-          :sub_contractor_id,
-          :program_type, 
-          :building_id, 
-          :hsa_id,
+    def program_params
+      params.require(:program).
+        permit(
+          :name,
+          :contract_start_date,
+          :funding_source_id,
           :confidential,
-          :eligibility_requirement_notes,
-        ],
-        service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-  end
-
-  def adding_sub_program
-    program_params[:sub_program].present?
-  end
-
-  def sort_column
-    SubProgram.column_names.include?(params[:sort]) ? params[:sort] : 'program_id'
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
-
-  def query_string
-    "%#{@query}%"
-  end
-
-  def filter_terms
-    [ :current_route ]
-  end
-  helper_method :filter_terms
-
-  def sorter
-    @column = params[:sort]
-    @direction = params[:direction]
-
-    if @column.blank?
-      @column = 'program_id'
-      @direction = 'asc'
-      sort_string = "#{@column} #{@direction}"
-    else
-      sort_string = Program.sort_options.select do |m|
-        m[:column] == @column && m[:direction] == @direction
-      end.first[:order]
+          :match_route_id,
+          sub_programs_attributes: [
+            :id,
+            :name,
+            :subgrantee_id, # Service provider
+            :sub_contractor_id,
+            :program_type,
+            :building_id,
+            :hsa_id,
+            :confidential,
+            :eligibility_requirement_notes,
+          ],
+          service_ids: [],
+          requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
+        )
     end
 
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort_string += ' NULLS LAST'
+    def adding_sub_program
+      program_params[:sub_program].present?
     end
-    return sort_string
-  end
+
+    def sort_column
+      SubProgram.column_names.include?(params[:sort]) ? params[:sort] : 'program_id'
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
+    def query_string
+      "%#{@query}%"
+    end
+
+    def filter_terms
+      [ :current_route ]
+    end
+    helper_method :filter_terms
+
+    def sorter
+      @column = params[:sort]
+      @direction = params[:direction]
+
+      if @column.blank?
+        @column = 'program_id'
+        @direction = 'asc'
+        sort_string = "#{@column} #{@direction}"
+      else
+        sort_string = Program.sort_options.select do |m|
+          m[:column] == @column && m[:direction] == @direction
+        end.first[:order]
+      end
+
+      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+        sort_string += ' NULLS LAST'
+      end
+      return sort_string
+    end
+
 end

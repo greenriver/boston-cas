@@ -25,7 +25,7 @@ module CasSeeds
     HSA_PRIORITY_ONLY_REASONS = [
       'Household did not respond',
       'Ineligible for Housing Program',
-      'Client refused offer',
+      'Client is requesting to be removed from consideration for 30 days',
       'Self-resolved',
       'Falsification of documents',
       'Health and Safety',
@@ -60,7 +60,8 @@ module CasSeeds
       'Vacancy should not have been entered',
       'Client received another housing opportunity',
       'Client no longer eligible for match',
-      'Client deceased'
+      'Client deceased',
+      'Vacancy filled by other client'
     ]
 
     def run!

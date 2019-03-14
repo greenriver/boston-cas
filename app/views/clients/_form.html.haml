@@ -1,9 +1,0 @@
-= simple_form_for(@client) do |f|
-  = f.error_notification
-  %p
-    %strong
-      Remove from matches and prevent from matching until:
-  .d-flex
-    .input-group.date
-      = f.input_field :prevent_matching_until, as: :date_picker
-    = f.button :submit, class: 'btn btn-secondary ml-2', value: 'Park Client'

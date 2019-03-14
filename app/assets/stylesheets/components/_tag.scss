@@ -35,7 +35,7 @@ $tag-correction: $tag-height / 2;
 }
 
 .c-tag__content {
-  height: $tag-height;
+  min-height: $tag-height;
   min-width: rem(175px);
   @include open-sans-bold;
   font-size: 18px;
@@ -53,9 +53,33 @@ $tag-correction: $tag-height / 2;
 }
 
 .c-tag__icon,
-.c-tag__content span {
+.c-tag__content > span {
   color: rgba($black, .6);
 }
+
+.c-tag__action {
+  margin-left: auto;
+}
+
+// ~~~~~~~~~~~~~~~~~~
+// Full width variant
+
+.c-tag--full-width .c-tag__content {
+  justify-content: flex-start;
+  padding-left: rem(10px + $tag-correction);
+}
+
+.c-tag--full-width .c-tag__icon {
+  flex: 0 0 auto;
+}
+
+.c-tag--full-width .c-tag__content {
+  flex: 1 1 auto;
+}
+
+
+// ~~~~
+// Pill
 
 .c-tag-pill {
   border-radius: 10px;

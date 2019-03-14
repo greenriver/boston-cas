@@ -1,0 +1,18 @@
+.col-md-6.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-award
+    %h5 Eligibility
+  %ul.c-detailed-list<
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Housing Authority Eligible')
+      %span.c-detailed-list__value= boolean_icon @client.ha_eligible
+    - if can_view_va_eligibility?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label VA Eligible
+        %span.c-detailed-list__value= boolean_icon @client.va_eligible
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label SSVF Eligible
+      %span.c-detailed-list__value= boolean_icon @client.ssvf_eligible
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('CSPECH Eligible')
+      %span.c-detailed-list__value= boolean_icon (@client.cspech_eligible)

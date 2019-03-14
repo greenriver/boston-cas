@@ -37,3 +37,7 @@ end
 every 1.day, at: '7:30am' do
   rake 'cas:request_status_updates'
 end
+
+every 1.hour do
+  rake "cas:add_missing_tie_breakers"
+end

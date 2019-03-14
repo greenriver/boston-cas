@@ -1,0 +1,53 @@
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-clipboard-check
+    %h5 Housing Requirements & History
+  %ul.c-detailed-list<
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Housing Release
+      %span.c-detailed-list__value
+        = _(@client.housing_release_status.presence) || 'Not Signed'
+
+    - if @client.release_of_information.present?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label= "#{_('Release of information')} signed on"
+        %span.c-detailed-list__value= @client.release_of_information.try(:to_date)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Requires elevator access or ground floor unit?
+      %span.c-detailed-list__value= boolean_icon @client.requires_elevator_access
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Requires wheelchair accessibility?
+      %span.c-detailed-list__value= boolean_icon @client.requires_wheelchair_accessibility
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Minimum number of bedrooms required?
+      %span.c-detailed-list__value= @client.required_number_of_bedrooms
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Minimum occupancy required?
+      %span.c-detailed-list__value= @client.required_minimum_occupancy
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Willing to live in congregate housing
+      %span.c-detailed-list__value= boolean_icon @client.congregate_housing
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Appropriate for sober supportive housing
+      %span.c-detailed-list__value= boolean_icon @client.sober_housing
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Interested in Rapid Re-Housing
+      %span.c-detailed-list__value= boolean_icon @client.rrh_desired
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Interested in Youth Rapid Re-Housing
+      %span.c-detailed-list__value= boolean_icon @client.youth_rrh_desired
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Interested in Set-Asides
+      %span.c-detailed-list__value= boolean_icon @client.interested_in_set_asides
+
+    - if @client.non_hmis?
+      %li
+        %span.c-detailed-list__label Client and/or Case Manager Contact Information
+        .mt-2.ml-8.o-text--normal= simple_format @client.rrh_assessment_contact_info
+
+    - elsif @client.has_full_housing_release?
+      %li
+        %span.c-detailed-list__label Contact info for maximizing income
+        .mt-2.ml-8.o-text--normal= simple_format @client.rrh_assessment_contact_info
+

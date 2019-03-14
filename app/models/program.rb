@@ -6,6 +6,7 @@ class Program < ActiveRecord::Base
   include InheritsRequirementsFromServices
   include ManagesServices
   include MatchArchive
+  include ControlledVisibility
 
   belongs_to :funding_source
   delegate :name, to: :funding_source, allow_nil: true, prefix: true
@@ -71,6 +72,14 @@ class Program < ActiveRecord::Base
 
   acts_as_paranoid
   has_paper_trail
+
+  def visible_by? user
+    user.can_view_programs || (user.can_view_assigned_programs && super )
+  end
+
+  def editable_by? user
+    user.can_edit_programs || (user.can_edit_assigned_programs && super )
+  end
 
   def sites
     s = []

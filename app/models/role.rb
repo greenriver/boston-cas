@@ -56,8 +56,10 @@ class Role < ActiveRecord::Base
       :can_edit_subgrantees, 
       :can_view_vouchers, 
       :can_edit_vouchers, 
-      :can_view_programs, 
-      :can_edit_programs, 
+      :can_view_programs,
+      :can_view_assigned_programs,
+      :can_edit_programs,
+      :can_edit_assigned_programs,
       :can_view_opportunities, 
       :can_edit_opportunities, 
       :can_reissue_notifications, 
@@ -86,6 +88,7 @@ class Role < ActiveRecord::Base
       :can_manage_identified_clients,
       :can_export_identified_clients,
       :can_add_cohorts_to_identified_clients,
+      :can_manage_neighborhoods,
     ]
   end
 

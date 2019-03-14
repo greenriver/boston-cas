@@ -236,6 +236,33 @@ class NotificationsMailer < DatabaseMailer
 
   # End Provider Only
 
+  # Manual Activation
+
+  def match_initiation_for_manual_notification notification
+    setup_instance_variables notification
+    if @match.present?
+      @route_name = @match.match_route.title
+      mail(to: @contact.email, subject: "New matches have been added on the #{@route_name}")
+    end
+  end
+
+  def housing_opportunity_successfully_filled notification
+    setup_instance_variables notification
+    @route_name = @match.match_route.title
+    mail(to: @contact.email, subject: "Housing opportunity successfully filled on the #{@route_name}")
+  end
+  
+  # end Manual Activation
+
+  # Set Asides
+
+  def set_asides_hsa_accepts_client notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
+  end
+
+  # end Set Asides
+
   # Progress Updates
   def progress_update_requested notification_ids
     @notifications = ::Notifications::Base.where(id: notification_ids)

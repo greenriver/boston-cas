@@ -1,7 +1,7 @@
 class MatchListBaseController < ApplicationController
-  
   before_action :authenticate_user!
   before_action :set_heading
+  before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
   
   def index
@@ -61,6 +61,15 @@ class MatchListBaseController < ApplicationController
 
     def show_vispdat?
       can_view_vspdats?
+    end
+
+    def show_confidential_names?
+      @show_confidential_names
+    end
+    helper_method :show_confidential_names?
+
+    def set_show_confidential_names
+      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
     end
 
     def default_sort_direction
