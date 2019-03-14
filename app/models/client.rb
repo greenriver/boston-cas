@@ -152,7 +152,7 @@ class Client < ActiveRecord::Base
     if hidden
       '(name hidden)'
     elsif contact.user_can_view_all_clients?
-      client.full_name
+      full_name
     else
       "(name withheld)"
     end
