@@ -4,10 +4,10 @@
 = simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
   = f.input :active
   = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
-  = f.input :should_activate_match
-  = f.input :allow_multiple_active_matches
-  = f.input :should_cancel_other_matches
-  = f.input :should_prevent_multiple_matches_per_client
+  = f.input :should_activate_match, label: 'Activate highest priority match automatically'
+  = f.input :allow_multiple_active_matches, label: 'Allow multiple active matches on single opportunity'
+  = f.input :should_cancel_other_matches, 'Cancel other matches on success'
+  = f.input :should_prevent_multiple_matches_per_client, label: 'Prevent multiple active matches per client on route'
   = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false
   = f.button :submit, value: "Update #{@route.title}"
   
