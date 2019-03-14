@@ -20,7 +20,9 @@ module CasSeeds
         'Services for elders',
         'Services for HUES clients',
         'Services for Women & families',
-        'Services for families'
+        'Services for families',
+        'Mobile case manager/counselor available 5 nights per week',
+        'Medical care on site as needed',
       ].each do |s|
         Service.where(name: s).first_or_create(name: s)
       end
