@@ -35,7 +35,7 @@ class OpportunityMatchesController < ApplicationController
   def update
     client_id =  params[:id].to_i
 
-    if @opportunity.match_route.should_cancel_other_matches
+    unless @opportunity.match_route.allow_multiple_active_matches
       @opportunity.active_matches do |active_match|
         MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
         active_match.poached!
