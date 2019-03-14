@@ -5,7 +5,7 @@ class Matching::Engine
     end
 
     def create_candidates match_route:
-      new(available_clients(match_route: match_route), available_opportunities).replace_candidates
+      new(available_clients(match_route: match_route), available_opportunities(match_route: match_route)).replace_candidates
     end
 
     def available_client_count match_route:
@@ -17,10 +17,10 @@ class Matching::Engine
       Client.available_for_matching(match_route)
     end
 
-    def available_opportunities
+    def available_opportunities match_route:
       # returns AR scope
       # Need to require a voucher or else we end up with very odd situations
-      Opportunity.with_voucher.available_candidate
+      Opportunity.with_voucher.available_candidate.on_route(match_route)
     end
 
   end

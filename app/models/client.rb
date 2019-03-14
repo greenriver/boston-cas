@@ -42,16 +42,16 @@ class Client < ActiveRecord::Base
   scope :not_parked, -> do
     where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
   end
-  scope :available_for_matching, -> (match_route)  {
+  scope :available_for_matching, -> (match_route)  do
     # anyone who hasn't been matched fully, isn't parked
     available_clients = available.available_as_candidate(match_route).not_parked
     # and unless allowed by the route, isn't active in another match
     if match_route.should_prevent_multiple_matches_per_client
-      available_clients.where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
+      available_clients.where.not(id: ClientOpportunityMatch.active.joins(:client).select(arel_table[:id]))
     else
       available_clients
     end
-  }
+  end
 
   scope :available_as_candidate, -> (match_route) do
     where.not(id: UnavailableAsCandidateFor.for_route(match_route).select(:client_id))
