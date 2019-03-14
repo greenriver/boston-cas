@@ -47,7 +47,11 @@ class Client < ActiveRecord::Base
     available_clients = available.available_as_candidate(match_route).not_parked
     # and unless allowed by the route, isn't active in another match
     if match_route.should_prevent_multiple_matches_per_client
-      available_clients.where.not(id: ClientOpportunityMatch.active.joins(:client).select(arel_table[:id]))
+      available_clients.where.not(
+        id: ClientOpportunityMatch.active.
+          on_route(match_route).
+          joins(:client).select(arel_table[:id])
+      )
     else
       available_clients
     end
