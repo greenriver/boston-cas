@@ -1,8 +1,6 @@
 module MatchDecisions::HomelessSetAside
-  class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/set_asides_confirm_hsa_accepts_client_decline_dnd_staff' 
-    end
+  class SetAsidesConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
+    
     def statuses
       {
         pending: 'Pending',

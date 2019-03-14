@@ -1,8 +1,6 @@
 module MatchDecisions::HomelessSetAside
-  class HsaAcknowledgesReceipt < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/set_asides_hsa_acknowledges_receipt' 
-    end
+  class SetAsidesHsaAcknowledgesReceipt < ::MatchDecisions::Base
+    
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed

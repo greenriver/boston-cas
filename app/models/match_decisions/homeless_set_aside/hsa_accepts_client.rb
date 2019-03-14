@@ -1,8 +1,5 @@
 module MatchDecisions::HomelessSetAside
-  class HsaAcceptsClient < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/set_asides_hsa_accepts_client' 
-    end
+  class SetAsidesHsaAcceptsClient < ::MatchDecisions::Base
     
     include MatchDecisions::AcceptsDeclineReason
 

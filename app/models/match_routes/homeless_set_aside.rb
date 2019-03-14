@@ -11,18 +11,18 @@ module MatchRoutes
 
     def self.match_steps
       {
-          'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
-          'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::RecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
+          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
+          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
+          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
       }
     end
 
     def self.match_steps_for_reporting
       {
-          'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 1,
-          'MatchDecisions::HomelessSetAside::HsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::RecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
-          'MatchDecisions::HomelessSetAside::ConfirmHsaAcceptsClientDeclineDndStaff' => 4,
+          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
+          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
+          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
+          'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff' => 4,
       }
     end
 

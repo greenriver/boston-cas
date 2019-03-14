@@ -1,9 +1,6 @@
 module MatchDecisions::HomelessSetAside
-  class RecordClientHousedDateOrDeclineHousingSubsidyAdministrator < ::MatchDecisions::Base
+  class SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    def to_partial_path 
-      'match_decisions/set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator' 
-    end
 
     validate :client_move_in_date_present_if_status_complete
 
