@@ -1,6 +1,8 @@
 module MatchDecisions::ProviderOnly
   class HsaAcknowledgesReceipt < ::MatchDecisions::Base
-
+    def to_partial_path 
+      'match_decisions/hsa_acknowledges_receipt' 
+    end
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed

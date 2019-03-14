@@ -1,6 +1,9 @@
 module MatchDecisions::HomelessSetAside
   class HsaAcceptsClient < ::MatchDecisions::Base
-
+    def to_partial_path 
+      'match_decisions/set_asides_hsa_accepts_client' 
+    end
+    
     include MatchDecisions::AcceptsDeclineReason
 
     # validate :note_present_if_status_declined

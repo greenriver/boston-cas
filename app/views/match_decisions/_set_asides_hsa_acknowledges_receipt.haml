@@ -1,0 +1,9 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      - if @decision.status.to_s == 'pending'
+        %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
+        .form-actions
+          %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)}
+            %i.icon-checkmark
+            Acknowledge Receipt of Match Details

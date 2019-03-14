@@ -1,6 +1,8 @@
 module MatchDecisions::ProviderOnly
   class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-
+    def to_partial_path 
+      'match_decisions/confirm_hsa_accepts_client_decline_dnd_staff' 
+    end
     def statuses
       {
         pending: 'Pending',
