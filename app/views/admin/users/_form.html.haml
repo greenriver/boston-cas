@@ -1,4 +1,4 @@
-= simple_form_for [:admin, @user] do |f|
+= simple_form_for [:admin, @user], url: confirm_admin_user_path, method: :post do |f|
   = f.error_notification
   .form-inputs
     = f.simple_fields_for :contact do |contact_fields|
@@ -15,13 +15,17 @@
           = @user.errors.messages[:email].last.humanize
       = contact_fields.input :email, as: :email, required: true
       = f.input :agency
-    .form--checkbox-groups
-      %h3 CAS Roles for Access Permissions
-      = f.association :roles, as: :check_boxes, label_method: :role_name, collection: Role.available_roles
-    .form--checkbox-groups
-      %h3 Additional Options
-      = f.input :receive_initial_notification
-
+    .row
+      .col-md-6
+        .form--checkbox-groups
+          %h3 CAS Roles for Access Permissions
+          = f.association :roles, as: :check_boxes, label_method: :role_name, collection: Role.available_roles
+        .form--checkbox-groups
+          %h3 Additional Options
+          = f.input :receive_initial_notification
+      .col-md-6
+        %h3 Program Permissions
+        = f.input :editable_programs, as: :select, label: 'Editable Programs', collection: Program.order(:name), selected: @editable_programs, input_html: {multiple: true, class: :select2}
   .form-actions
     = f.button :submit, class: 'btn btn-primary'
 

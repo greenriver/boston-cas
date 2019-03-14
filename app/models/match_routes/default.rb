@@ -36,5 +36,9 @@ module MatchRoutes
     def initial_decision
       :match_recommendation_dnd_staff_decision
     end
+
+    def initial_contacts_for_match
+      :dnd_staff_contacts
+    end
   end
 end

@@ -13,6 +13,9 @@
 .row
   .col-sm-6
     = render 'search_form'
+  .col-sm-6.filter-sort__filter.d-flex
+    = render 'filter'
+    = render 'sort', sort_options: Program.sort_options
 .row.table-utilities
   .col-sm-8
     %p= page_entries_info @programs, entry_name: 'Sub-Programs'
@@ -46,15 +49,21 @@
               - deleted = "deleted"
             %tr
               %td{:class => deleted}
-                - if ! sp.deleted_at
-                  = link_to sp.program.name, edit_program_sub_program_path(sp.program, sp)
+                - if can_edit_programs? || sp.editable_by?(current_user)
+                  - if ! sp.deleted_at
+                    = link_to sp.program.name, edit_program_sub_program_path(sp.program, sp)
+                  - else
+                    = link_to "Restore #{sp.program.name}", program_restore_path(sp.program.id), method: :post
                 - else
-                  = link_to "Restore #{program.name}", program_restore_path(sp.program.id), method: :post
+                  = sp.program.name
               %td{:class => deleted}
-                - if ! sp.deleted_at
-                  = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
+                - if can_edit_programs? || sp.editable_by?(current_user)
+                  - if ! sp.deleted_at
+                    = link_to sp.name, edit_program_sub_program_path(sp.program, sp)
+                  - else
+                    = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post
                 - else
-                  = link_to "Restore #{sp.name}", program_restore_path(sp.program.id), method: :post
+                  = sp.name
               %td{:class => deleted}
                 = sp.site
               - if MatchRoutes::Base.more_than_one?

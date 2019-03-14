@@ -39,6 +39,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :hsa_accepts_client, decision_class_name: 'MatchDecisions::ProviderOnly::HsaAcceptsClient', notification_class_name: 'Notifications::ProviderOnly::HsaAcceptsClient'
   has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
+  # Set-Asides Match Route
+  has_decision :set_asides_hsa_acknowledges_receipt, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt', notification_class_name: 'Notifications::HomelessSetAside::MatchInitiationForHsa'
+  has_decision :set_asides_hsa_accepts_client, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient', notification_class_name: 'Notifications::HomelessSetAside::HsaAcceptsClient'
+  has_decision :set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator', notification_class_name: 'Notifications::RecordClientHousedDateHousingSubsidyAdministrator'
+  has_decision :set_asides_confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
+
   has_one :current_decision
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
@@ -182,13 +188,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
     # admins & DND see everything
     if user.can_view_all_matches?
       all
-    # Allow logged-in users to see any match they are a contact on
+    # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
     elsif user.present?
       contact = user.contact
-      subquery = ClientOpportunityMatchContact
+      contact_subquery = ClientOpportunityMatchContact
         .where(contact_id: contact.id)
-        .select(:match_id)
-      where(id: subquery)
+        .pluck(:match_id)
+      visible_subquery = visible_by(user).pluck(:id)
+      where(id: contact_subquery + visible_subquery)
     else
       none
     end
@@ -208,6 +215,17 @@ class ClientOpportunityMatch < ActiveRecord::Base
       false
     end
   end
+
+  # Get visibility from the associated Program
+  delegate :visible_by?, to: :program
+  delegate :editable_by?, to: :program
+
+  scope :visible_by, ->(user) {
+    joins(:program).merge(Program.visible_by(user))
+  }
+  scope :editable_by, ->(user) {
+    joins(:program).merge(Program.editable_by(user))
+  }
 
   def past_first_step_or_not_default_route?
     return true if current_decision.blank?
@@ -391,19 +409,28 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def activate!
     self.class.transaction do
       update! active: true
-      client.make_unavailable_in(match_route: opportunity.match_route)
+      client.make_unavailable_in(match_route: match_route) if match_route.should_prevent_multiple_matches_per_client
       opportunity.update available_candidate: false
       add_default_contacts!
       self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      related_proposed_matches.destroy_all if ! match_route.should_activate_match
+    end
+  end
+
+  def matched!
+    self.class.transaction do
+      opportunity.update available_candidate: false
+      add_default_contacts!
+      opportunity.notify_contacts_of_manual_match(self)
     end
   end
 
   def rejected!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
-      client.make_available_in(match_route: opportunity.match_route)
-      opportunity.update! available_candidate: opportunity.active_match.blank?
+      client.make_available_in(match_route: match_route)
+      opportunity.update! available_candidate: !opportunity.active_matches.exists?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
@@ -415,8 +442,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def canceled!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
-      client.make_available_in(match_route: opportunity.match_route)
-      opportunity.update! available_candidate: opportunity.active_match.blank?
+      client.make_available_in(match_route: match_route)
+      opportunity.update! available_candidate: !opportunity.active_matches.exists?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
@@ -431,7 +458,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def poached!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
-      client.make_available_in(match_route: opportunity.match_route)
+      client.make_available_in(match_route: match_route)
       opportunity.update! available_candidate: false
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
@@ -444,7 +471,16 @@ class ClientOpportunityMatch < ActiveRecord::Base
       route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
       if route.should_cancel_other_matches
-        client_related_matches.destroy_all
+        client_related_matches.each do |match|
+          if match.current_decision.present?
+            MatchEvents::DecisionAction.create(match_id: match.id,
+                decision_id: match.current_decision.id,
+                action: :canceled)
+            reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
+            match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+          end
+          match.poached!
+        end
         client.update available: false
         # Prevent matching on any route
         client.make_unavailable_in_all_routes
@@ -453,7 +489,25 @@ class ClientOpportunityMatch < ActiveRecord::Base
         client.make_unavailable_in match_route: route
       end
 
-      opportunity_related_matches.destroy_all
+      if route.should_activate_match
+        # If the match was automatically activated, we just need to clean up any leftovers
+        opportunity_related_matches.destroy_all
+      else
+        opportunity_related_matches.each do |match|
+          if match.active
+            opportunity.notify_contacts_of_success(self)
+            MatchEvents::DecisionAction.create(match_id: match.id,
+                decision_id: match.current_decision.id,
+                action: :canceled)
+            reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
+            match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+            match.poached!
+          else
+            match.destroy
+          end
+        end
+      end
+
       opportunity.update available: false, available_candidate: false
       if opportunity.unit != nil
         opportunity.unit.update available: false
@@ -476,6 +530,19 @@ class ClientOpportunityMatch < ActiveRecord::Base
   def opportunity_related_matches
     ClientOpportunityMatch.
       where(opportunity_id: opportunity_id).
+      where.not(id: id)
+  end
+
+  def related_proposed_matches
+    ClientOpportunityMatch.
+      proposed.
+      where(opportunity_id: opportunity_id)
+  end
+
+  def already_active_for_opportunity
+    # This might be better to check for the sub-program...
+    ClientOpportunityMatch.active.
+      where(client_id: client_id, opportunity_id: opportunity_id).
       where.not(id: id)
   end
 
@@ -550,6 +617,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
       program.do_contacts.each do |contact|
         assign_match_role_to_contact :do, contact
       end
+    end
+
+    def self.prioritized_by_client(match_route, scope)
+      match_route.match_prioritization.prioritization_for_clients(scope)
     end
 
     def self.sort_options

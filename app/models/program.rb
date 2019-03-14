@@ -6,6 +6,7 @@ class Program < ActiveRecord::Base
   include InheritsRequirementsFromServices
   include ManagesServices
   include MatchArchive
+  include ControlledVisibility
 
   belongs_to :funding_source
   delegate :name, to: :funding_source, allow_nil: true, prefix: true
@@ -72,6 +73,14 @@ class Program < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
+  def visible_by? user
+    user.can_view_programs || (user.can_view_assigned_programs && super )
+  end
+
+  def editable_by? user
+    user.can_edit_programs || (user.can_edit_assigned_programs && super )
+  end
+
   def sites
     s = []
     sub_programs.each do |sp|
@@ -129,6 +138,17 @@ class Program < ActiveRecord::Base
 
   def self.associations_adding_services
     [:funding_source]
+  end
+
+  def self.sort_options
+    [
+      {title: 'Program A-Z', column: 'program_id', direction: 'asc', order: 'LOWER(programs.name) ASC', visible: true},
+      {title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true},
+      {title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true},
+      {title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true},
+      {title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true},
+      {title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true},
+    ]
   end
 
   private

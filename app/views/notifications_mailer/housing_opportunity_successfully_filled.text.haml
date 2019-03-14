@@ -1,0 +1,13 @@
+Hello #{@contact.full_name},
+\
+The #{@match_route} opportunity at
+
+= render 'location_details'
+
+has been filled. Details are available at
+#{opportunity_matches_url(@match.opportunity)}
+\
+\
+\
+\
+= render 'email_footer'

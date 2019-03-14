@@ -13,7 +13,9 @@ class Opportunity < ActiveRecord::Base
 
   has_one :sub_program, through: :voucher
 
-  has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
+  #has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
+  has_many :active_matches, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
+
   has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
   # active or successful
   has_one :status_match, -> {where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success')))}, class_name: 'ClientOpportunityMatch'
@@ -45,7 +47,7 @@ class Opportunity < ActiveRecord::Base
 
   scope :available_for_poaching, -> do
     available_candidate_ids = Opportunity.available_candidate.pluck(:id)
-    unstarted_ids = Opportunity.joins(active_match: :match_recommendation_dnd_staff_decision).
+    unstarted_ids = Opportunity.joins(active_matches: :match_recommendation_dnd_staff_decision).
       merge(MatchDecisions::Base.pending).pluck(:id)
     Opportunity.where(id: available_candidate_ids + unstarted_ids)
   end
@@ -103,32 +105,7 @@ class Opportunity < ActiveRecord::Base
   end
 
   def prioritized_matches
-    c_t = Client.arel_table
-    case match_route.match_prioritization.class.slug
-    when 'first-date-homeless'
-      client_opportunity_matches.joins(:client).
-        order(c_t[:calculated_first_homeless_night].asc)
-    when 'cumulative-homeless-days'
-      client_opportunity_matches.joins(:client).
-        order(c_t[:days_homeless].desc)
-    when 'homeless-days-last-three-years'
-      client_opportunity_matches.joins(:client).
-      order(c_t[:days_homeless_in_last_three_years].desc)
-    when 'vi-spdat'
-      client_opportunity_matches.joins(:client).
-        where.not(clients: {vispdat_score: nil}).
-        order(c_t[:vispdat_score].desc)
-    when 'vispdat-priority-score'
-      client_opportunity_matches.joins(:client).
-        where.not(clients: { vispdat_priority_score: nil }).
-        order(c_t[:vispdat_priority_score].desc)
-    when 'assessment-score'
-      client_opportunity_matches.joins(:client).
-        where.not(clients: { assessment_score: nil }).
-        order(assessment_score: :desc, days_homeless: :desc)
-    else
-      raise NotImplementedError
-    end
+    ClientOpportunityMatch.prioritized_by_client(match_route, client_opportunity_matches.joins(:client))
   end
 
   def matches_client?(client)
@@ -147,7 +124,7 @@ class Opportunity < ActiveRecord::Base
       client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
     end
     client_scope = add_unit_attributes_filter(client_scope)
-    client_scope.merge(Client.prioritized(match_route: match_route))
+    client_scope.merge(Client.prioritized(match_route, client_scope))
   end
 
   def add_unit_attributes_filter(client_scope)
@@ -155,6 +132,14 @@ class Opportunity < ActiveRecord::Base
       client_scope = client_scope.where(requires_elevator_access: false)
     end
     return client_scope
+  end
+
+  def notify_contacts_of_manual_match(match)
+    Notifications::MatchInitiationForManualNotification.create_for_match! match
+  end
+
+  def notify_contacts_of_success(match)
+    Notifications::HousingOpportunitySuccessfullyFilled.create_for_match! match
   end
 
   def self.available_stati
@@ -165,6 +150,21 @@ class Opportunity < ActiveRecord::Base
       'Successful',
     ]
   end
+
+  def confidential?
+    sub_program.confidential? || sub_program.program.confidential?
+  end
+
+  # Get visibility from the associated SubProgram
+  delegate :visible_by?, to: :sub_program
+  delegate :editable_by?, to: :sub_program
+
+  scope :visible_by, ->(user) {
+    joins(:sub_program).merge(SubProgram.visible_by(user))
+  }
+  scope :editable_by, ->(user) {
+    joins(:sub_program).merge(SubProgram.editable_by(user))
+  }
 
   # NOTE: This cleans up the opportunity and all associated items
   # making it as though this never happened.  Use with extreme caution

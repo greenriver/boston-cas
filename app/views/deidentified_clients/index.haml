@@ -1,4 +1,4 @@
-- title = 'Non-HMIS Clients'
+- title = _('Non-HMIS Clients')
 - content_for :title, title
 .d-flex
   %h1= content_for :title
@@ -6,9 +6,14 @@
 .row
   .col-sm-4
     = render 'clients/search_form'
-  .col-sm-8.filter-sort__filter.d-flex
+  .col-sm-6.filter-sort__filter.d-flex
     = render 'filter'
     = render 'clients/sort', sort_options: sort_options
+  .col-sm-2.text-right
+    - if can_export_deidentified_clients?
+      = link_to deidentified_clients_path(format: :xlsx), class: 'btn btn-sm btn-secondary ml-auto' do
+        %i.icon-download2
+        Download
   = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
     %span.icon-plus
     Add a Deidentifed Client

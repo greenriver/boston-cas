@@ -1,0 +1,36 @@
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-house
+    %h5 Homelessness
+  %ul.c-detailed-list<
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Homeless Since
+      %span.c-detailed-list__value= date_format(@client.calculated_first_homeless_night)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Days Homeless
+      %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label
+        Days Homeless in Last Three Years
+        %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH, SO or TH with no overlapping PH'}}
+      %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless_in_last_three_years)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label
+        Days Literally Homeless in Last Three Years
+        %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH or SO with no overlapping TH or PH'}}
+      %span.c-detailed-list__value= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label
+        Days Homeless
+      %span.c-detailed-list__value
+        - if date_days_homeless_verified = @client.date_days_homeless_verified.try(:strftime, I18n.t('date.formats.default'))
+          - who_verified_days_homeless = @client.who_verified_days_homeless.present? ? "(#{@client.who_verified_days_homeless})" : ""
+          = "Verified on #{date_days_homeless_verified}  #{who_verified_days_homeless}"
+        - else
+          Not Verified
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Last Homeless Contact
+      %span.c-detailed-list__value= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Chronically Homeless
+      %span.c-detailed-list__value= boolean_icon @client.chronic_homeless

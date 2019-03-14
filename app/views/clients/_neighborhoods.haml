@@ -1,0 +1,10 @@
+.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-map
+    %h5 Neighborhood Interests
+  - if @neighborhood_interests.present?
+    %ul.list-unstyled
+      - @neighborhood_interests.each_with_index do |interest, index|
+        %li= interest
+  - else
+    %p.font-no-data None specified

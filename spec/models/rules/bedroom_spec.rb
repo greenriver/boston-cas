@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Rules::Bedroom, type: :model do
 
-  let!(:rule) { create :bedrooms_required_3 }
+  let!(:rule) { create :bedrooms_required }
 
   let!(:bob) {
     client = create :client, first_name: 'Bob', required_number_of_bedrooms: 4

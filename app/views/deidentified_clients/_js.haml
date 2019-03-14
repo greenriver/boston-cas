@@ -10,4 +10,12 @@
 
       }
     });
+    $('.jInterestedInSetAsides').on('change', function(e){
+      if($(this).is(':checked')){
+        $('.jNeighborhoodInterests').show();
+      } else {
+        $('.jNeighborhoodInterests').hide();
+      }
+    });
     $('.jFamily').trigger('change');
+    $('.jInterestedInSetAsides').trigger('change');

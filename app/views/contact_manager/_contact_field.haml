@@ -15,14 +15,15 @@
           = "#{contact.name} | "
           = contact.email
         -# Don't allow removal of self if you can't edit all contacts 
-        - if current_contact.user_can_edit_match_contacts? || current_contact.id != contact.id
+        - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
           = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
             %i.icon-cross
 - else
   .form-group
     %label.mb-4= label
     %div{ data: {selected_contacts: true} }
-      - @match_contacts.send(selected_contacts_method).each do |contact|
+      - contacts = @match_contacts || object
+      - contacts.send(selected_contacts_method).each do |contact|
         .c-contact-list__contact.selected-contact.margin-left-04
           %span= contact.name
           %span= contact.email

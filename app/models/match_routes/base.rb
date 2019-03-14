@@ -2,7 +2,7 @@ module MatchRoutes
   class Base < ActiveRecord::Base
     self.table_name = :match_routes
 
-    belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name
+    belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
 
     scope :available, -> do
       where(active: true).
@@ -17,6 +17,7 @@ module MatchRoutes
       [
         MatchRoutes::Default,
         MatchRoutes::ProviderOnly,
+        MatchRoutes::HomelessSetAside,
       ]
     end
 
@@ -51,6 +52,10 @@ module MatchRoutes
     end
 
     def initial_decision
+      raise NotImplementedError
+    end
+
+    def initial_contacts_for_match
       raise NotImplementedError
     end
 

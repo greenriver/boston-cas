@@ -9,6 +9,23 @@ class Role < ActiveRecord::Base
     name.to_s.humanize.gsub('Dnd', 'DND').gsub('Hsa', 'HSA')
   end
 
+  def administrative?
+    Role.administrative_permissions.each do |permission|
+      return true if send(permission) == true
+    end
+    return false
+  end
+
+  def self.administrative_permissions
+    [
+        :can_edit_roles,
+        :can_edit_users,
+        :can_become_other_users,
+        :can_edit_translations,
+        :can_manage_config,
+    ]
+  end
+
   def self.permissions
     [
       :can_view_all_clients, 
@@ -39,8 +56,10 @@ class Role < ActiveRecord::Base
       :can_edit_subgrantees, 
       :can_view_vouchers, 
       :can_edit_vouchers, 
-      :can_view_programs, 
-      :can_edit_programs, 
+      :can_view_programs,
+      :can_view_assigned_programs,
+      :can_edit_programs,
+      :can_edit_assigned_programs,
       :can_view_opportunities, 
       :can_edit_opportunities, 
       :can_reissue_notifications, 
@@ -63,10 +82,13 @@ class Role < ActiveRecord::Base
       :can_delete_client_notes,
       :can_enter_deidentified_clients,
       :can_manage_deidentified_clients,
+      :can_export_deidentified_clients,
       :can_add_cohorts_to_deidentified_clients,
       :can_enter_identified_clients,
       :can_manage_identified_clients,
+      :can_export_identified_clients,
       :can_add_cohorts_to_identified_clients,
+      :can_manage_neighborhoods,
     ]
   end
 

@@ -62,6 +62,6 @@
             %td= link_to u.name || '(no name)', edit_unit_path(u)
             %td=checkmark u.available
             %td
-              - if u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_match&.present?
+              - if false && u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_matches&.present?
                 - match = u.active_match
-                = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! params[:confidential_override].present?), match_path(match)
+                = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?), match_path(match)

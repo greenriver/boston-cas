@@ -50,6 +50,8 @@ FactoryGirl.define do
     can_view_vspdats true
     can_create_overall_note true
     can_delete_client_notes true
+    can_enter_deidentified_clients true
+    can_manage_deidentified_clients true
   end
 
   factory :shelter_role, class: 'Role' do

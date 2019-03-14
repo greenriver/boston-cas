@@ -1,4 +1,5 @@
 class Client < ActiveRecord::Base
+  before_create :assign_tie_breaker
 
   include SubjectForMatches
   include MatchArchive
@@ -41,12 +42,20 @@ class Client < ActiveRecord::Base
   scope :not_parked, -> do
     where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
   end
-  scope :available_for_matching, -> (match_route)  {
-    # anyone who hasn't been matched fully, isn't parked and isn't active in another match
-    available.available_as_candidate(match_route).
-    not_parked.
-    where.not(id: ClientOpportunityMatch.active.joins(:client).select("#{Client.quoted_table_name}.id"))
-  }
+  scope :available_for_matching, -> (match_route)  do
+    # anyone who hasn't been matched fully, isn't parked
+    available_clients = available.available_as_candidate(match_route).not_parked
+    # and unless allowed by the route, isn't active in another match
+    if match_route.should_prevent_multiple_matches_per_client
+      available_clients.where.not(
+        id: ClientOpportunityMatch.active.
+          on_route(match_route).
+          joins(:client).select(arel_table[:id])
+      )
+    else
+      available_clients
+    end
+  end
 
   scope :available_as_candidate, -> (match_route) do
     where.not(id: UnavailableAsCandidateFor.for_route(match_route).select(:client_id))
@@ -139,26 +148,32 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
-  def self.prioritized match_route:
-    c_t = Client.arel_table
-    case match_route.match_prioritization.class.slug
-    when 'first-date-homeless'
-      order(calculated_first_homeless_night: :asc)
-    when 'cumulative-homeless-days'
-      order(days_homeless: :desc)
-    when 'homeless-days-last-three-years'
-      order(c_t[:days_homeless_in_last_three_years].desc)
-    when 'vi-spdat'
-      where.not(vispdat_score: nil).order(vispdat_score: :desc)
-    when 'vispdat-priority-score'
-      where.not(vispdat_priority_score: nil)
-      .order(vispdat_priority_score: :desc)
-    when 'assessment-score'
-      where.not(assessment_score: nil).
-      order(assessment_score: :desc, rrh_assessment_collected_at: :desc)
+  def client_name_for_contact contact, hidden:
+    if hidden
+      '(name hidden)'
+    elsif contact.user_can_view_all_clients?
+      full_name
     else
-      raise NotImplementedError
+      "(name withheld)"
     end
+  end
+
+  def self.prioritized(match_route, scope)
+    match_route.match_prioritization.prioritization_for_clients(scope)
+  end
+
+  # A random number for prioritizations that require a tie-breaker
+  def assign_tie_breaker
+    tie_breaker = rand
+  end
+
+  def self.add_missing_tie_breakers
+    c_t = Client.arel_table
+    update = Arel::UpdateManager.new(c_t.engine)
+    update.table(c_t)
+    update.set([[c_t[:tie_breaker], Arel.sql('random()')]]).where(c_t[:tie_breaker].eq(nil))
+    result = ActiveRecord::Base.connection.execute(update.to_sql)
+    log "Updated #{result.cmd_tuples} clients with missing tie_breakers"
   end
 
   def self.ready_to_match match_route:
@@ -248,9 +263,13 @@ class Client < ActiveRecord::Base
     #client_opportunity_matches.inspect
   end
 
-  def active_in_match
-    client_opportunity_matches.active.first
+  def match_for_opportunity(opportunity)
+    client_opportunity_matches.active.where(opportunity: opportunity).first
   end
+
+  # def active_in_match
+  #   client_opportunity_matches.active.first
+  # end
 
   def active_matches
     client_opportunity_matches.active
@@ -262,7 +281,7 @@ class Client < ActiveRecord::Base
 
   def available_as_candidate_for_any_route?
     (
-      MatchRoutes::Base.available.pluck(:type) - 
+      MatchRoutes::Base.available.pluck(:type) -
       UnavailableAsCandidateFor.where(client_id: id).distinct.pluck(:match_route_type)
     ).any?
   end
@@ -377,6 +396,13 @@ class Client < ActiveRecord::Base
     end
   end
 
+  def has_enrollments?
+    self.enrolled_in_th ||
+    self.enrolled_in_sh ||
+    self.enrolled_in_so ||
+    self.enrolled_in_es
+  end
+
   def self.sort_options(show_vispdat: false)
     [
       {title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
@@ -393,5 +419,9 @@ class Client < ActiveRecord::Base
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]
+  end
+
+  def self.log message
+    Rails.logger.info message
   end
 end

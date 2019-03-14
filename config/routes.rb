@@ -18,11 +18,12 @@ Rails.application.routes.draw do
     resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
     resources :qualified_opportunities, only: [:index, :update]
   end
+  resources :unavailable_clients, only: [:index]
   resources :opportunities do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
     resources :alternate_matches, controller: 'opportunity_alternate_matches', only: :index
-    resources :matches, controller: 'opportunity_matches', only: [:index, :update] do
+    resources :matches, controller: 'opportunity_matches', only: [:index, :create, :update] do
       get :all, on: :collection
       get :closed, on: :collection
     end
@@ -105,6 +106,9 @@ Rails.application.routes.draw do
       resource :resend_invitation, only: :create
       resource :recreate_invitation, only: :create
       resource :become, only: [:show]
+      member do
+        post :confirm
+      end
     end
     resources :roles
     resources :versions, only: [:index]
@@ -116,6 +120,8 @@ Rails.application.routes.draw do
     end
     resources :match_routes, only: [:index, :edit, :update]
   end
+
+  resources :neighborhoods
 
   resource :account, only: [:edit, :update]
   resource :account_email, only: [:edit, :update]

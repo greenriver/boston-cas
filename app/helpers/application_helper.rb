@@ -16,6 +16,11 @@ module ApplicationHelper
     boolean ? '✓': ''
   end
 
+  def boolean_icon(boolean)
+    icon = boolean ? 'checkmark-circle' : 'times-circle-o'
+    content_tag :i, '', class: "icon icon-#{icon}"
+  end
+
   def ssn(number)
     # pad with leading 0s if we don't have enough characters
     number = number.to_s.rjust(9, '0') if number.present?
@@ -64,7 +69,7 @@ module ApplicationHelper
     sort_direction = (direction.nil? || direction == 'asc') ? 'asc' : 'desc'
     sort = {'sort' => column, 'direction' => sort_direction}
     params.merge!(sort)
-    link_to(link_text, params)
+    link_to(link_text, params, class: :jSort)
   end
 
   def fake_partner

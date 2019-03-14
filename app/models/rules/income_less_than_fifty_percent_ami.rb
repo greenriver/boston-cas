@@ -5,10 +5,10 @@ class Rules::IncomeLessThanFiftyPercentAmi < Rule
       ami = Config.get(:ami)
       ami_partial = (ami * 0.5) / 12 #50% AMI
       if requirement.positive
-        where = c_t[:income_total_monthly].lt(ami_partial).
+        where = c_t[:income_total_monthly].lteq(ami_partial).
           or(c_t[:income_total_monthly].eq(nil))
       else
-        where = c_t[:income_total_monthly].gteq(ami_partial)
+        where = c_t[:income_total_monthly].gt(ami_partial)
       end
       scope.where(where)
     else

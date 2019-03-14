@@ -2,11 +2,7 @@
   - active_class = if action_name == 'index' then 'active' else '' end
   %li.nav-item{role: 'presentation', class: active_class}
     = link_to({action: :index}, class: 'nav-link') do
-      Available Clients
-  - active_class = if action_name == 'all' then 'active' else '' end
-  %li.nav-item{role: 'presentation', class: active_class}
-    = link_to({action: :all}, class: 'nav-link') do
-      All Clients
+      Matched Clients
   - active_class = if action_name == 'closed' then 'active' else '' end
   %li.nav-item{role: 'presentation', class: active_class}
     = link_to({action: :closed}, class: 'nav-link') do

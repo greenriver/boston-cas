@@ -60,9 +60,9 @@
           - if voucher.status_match.client.present?
             - if can_view_all_matches?
               = link_to client_path(voucher.status_match.client) do
-                = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! params[:confidential_override].present?
+                = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! show_confidential_names?
             - else
-              = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! params[:confidential_override].present?
+              = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! show_confidential_names?
         %h3.detail-box--label.mt-4 Alternate Clients
         .detail-box-value
           - if voucher.opportunity.present?

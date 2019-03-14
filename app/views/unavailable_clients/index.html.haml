@@ -1,0 +1,23 @@
+%h1= t '.title'
+- @prompt = t '.search_prompt'
+.row
+  .col-sm-4
+    = render 'search_form'
+  .col-sm-8.filter-sort__filter.d-flex
+    = render 'filter'
+    = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
+- if Client.parked.any?
+  .alert.alert-warning
+    %p
+      %i.icon-warning
+      = "Some clients are parked.&nbsp;".html_safe
+      = link_to 'See all parked clients.', reports_parked_clients_path
+
+%ul.nav.nav-tabs.margin-bottom-02
+  %li.nav-item= link_to 'Available Clients', clients_path, class: 'nav-link'
+    
+  %li.nav-item= link_to 'Unavailable Clients', unavailable_clients_path, class: 'nav-link active'
+
+.tab-content
+  .tab-pane.fade.show.active#unavailable{role: :tabpanel, aria: {labelledby: 'Unavailable Clients'}}
+    = render 'client_list', clients: @unavailable_clients

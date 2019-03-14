@@ -14,15 +14,10 @@
       = link_to 'See all parked clients.', reports_parked_clients_path
 
 %ul.nav.nav-tabs.margin-bottom-02
-  %li.nav-item{role: 'presentation'}
-    %a.nav-link.active#available-clients{href: '#available', data: {toggle: :tab}, role: :tab, aria: {controls: :available, selected: true}}
-      Available Clients
-  %li.nav-item
-    %a.nav-link#unavailable-clients{href: '#unavailable', data: {toggle: :tab}, role: :tab, aria: {controls: :unavailable, selected: false}}
-      Unavailable Clients
+  %li.nav-item= link_to 'Available Clients', clients_path, class: 'nav-link active'
+    
+  %li.nav-item= link_to 'Unavailable Clients', unavailable_clients_path, class: 'nav-link'
 
 .tab-content
   .tab-pane.fade.show.active#available{role: :tabpanel, aria: {labelledby: 'Available Clients'}}
     = render 'client_list', clients: @available_clients
-  .tab-pane.fade#unavailable{role: :tabpanel, aria: {labelledby: 'Unavailable Clients'}}
-    = render 'client_list', clients: @unavailable_clients

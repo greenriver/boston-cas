@@ -1,7 +1,16 @@
-.mt-8.d-flex
+:scss
+  .c-code-card {
+    background: #1E1D15;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    padding: 20px;
+  }
+
+.my-8.d-flex
   .d-flex.mr-3
     .c-tag.c-tag--success
-      .c-tag__title Status
+      .c-tag__title Status (success)
       .c-tag__wrapper
         .c-tag__icon.c-tag__icon--sm
           .icon-checkmark
@@ -9,7 +18,7 @@
           %span In Progress
   .d-flex.mr-3
     .c-tag.c-tag--warning
-      .c-tag__title Status
+      .c-tag__title Status (warning)
       .c-tag__wrapper
         .c-tag__icon
           .icon-minus-circle
@@ -17,7 +26,7 @@
           %span Pre-empted
   .d-flex.mr-3
     .c-tag.c-tag--warning
-      .c-tag__title Status
+      .c-tag__title Status (warning)
       .c-tag__wrapper
         .c-tag__icon
           .icon-clock
@@ -25,9 +34,20 @@
           %span Parked
   .d-flex.mr-3
     .c-tag.c-tag--danger
-      .c-tag__title Status
+      .c-tag__title Status (danger)
       .c-tag__wrapper
         .c-tag__icon.c-tag__icon--sm
           .icon-cross
         .c-tag__content
           %span Pre-empted
+
+%pre.c-code-card
+  %code
+    :preserve
+      .c-tag.c-tag--success
+        .c-tag__title Status
+        .c-tag__wrapper
+          .c-tag__icon.c-tag__icon--sm
+            .icon-checkmark
+          .c-tag__content
+            %span In Progress

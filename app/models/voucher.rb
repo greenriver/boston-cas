@@ -23,7 +23,7 @@ class Voucher < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
-  delegate :active_match, to: :opportunity
+  delegate :active_matches, to: :opportunity
 
   attr_accessor :building_id, :skip_match_locking_validation
 

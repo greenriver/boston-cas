@@ -3,9 +3,9 @@ class Rules::OneEightyDaysHomelessLastThreeYears < Rule
     c_t = Client.arel_table
     if Client.column_names.include?(:days_homeless_in_last_three_years.to_s)
       if requirement.positive
-        where = c_t[:days_homeless_in_last_three_years].gt(180)
+        where = c_t[:days_homeless_in_last_three_years].gteq(180)
       else
-        where = c_t[:days_homeless_in_last_three_years].lteq(180)
+        where = c_t[:days_homeless_in_last_three_years].lt(180)
       end
       scope.where(where)
     else

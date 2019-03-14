@@ -1,6 +1,8 @@
 module MatchDecisions::ProviderOnly
   class HsaAcceptsClient < ::MatchDecisions::Base
-
+    def to_partial_path 
+      'match_decisions/hsa_accepts_client' 
+    end
     include MatchDecisions::AcceptsDeclineReason
 
     # validate :note_present_if_status_declined

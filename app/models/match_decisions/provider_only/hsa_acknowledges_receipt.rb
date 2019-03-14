@@ -1,10 +1,13 @@
 module MatchDecisions::ProviderOnly
   class HsaAcknowledgesReceipt < ::MatchDecisions::Base
-
+    def to_partial_path 
+      'match_decisions/hsa_acknowledges_receipt' 
+    end
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
-    validate :cant_accept_if_related_active_match
+    validate :cant_accept_if_client_has_related_active_match
+    validate :cant_accept_if_opportunity_has_related_active_match
     validate :ensure_required_contacts_present_on_accept
 
     def label_for_status status
@@ -92,11 +95,15 @@ module MatchDecisions::ProviderOnly
       end
     end
 
-    def cant_accept_if_related_active_match
-      if save_will_accept? &&
-        (match.client_related_matches.active.any? ||
-          match.opportunity_related_matches.active.any?)
-        then errors.add :status, "There is already another active match for this client or opportunity"
+    def cant_accept_if_client_has_related_active_match
+      if save_will_accept? && match.client_related_matches.active.on_route(match_route).exists? && ! match_route.allow_multiple_active_matches
+        then errors.add :status, "There is already another active match for this client"
+      end
+    end
+
+    def cant_accept_if_opportunity_has_related_active_match
+      if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
+      then errors.add :status, "There is already another active match for this opportunity"
       end
     end
 
