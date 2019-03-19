@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
          :lockable, :timeoutable, :confirmable, :pwned_password
   #has_secure_password # not needed with devise
 
+  attr_accessor :editable_programs
+  
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
   validates :first_name, presence: true, length: {maximum: 40}
   validates :last_name, presence: true, length: {maximum: 40}
