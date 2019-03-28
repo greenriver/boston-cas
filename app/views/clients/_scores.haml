@@ -7,16 +7,15 @@
       - collected = @client.rrh_assessment_collected_at
       %span.c-detailed-list__label RRH Assessment Collected
       %span.c-detailed-list__value= collected ? collected : boolean_icon(false)
-    - if @client.rrh_assessment_collected_at
-      %li.c-detailed-list__item
-        %span.c-detailed-list__label RRH Assessment Score
-        %span.c-detailed-list__value= @client.assessment_score
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Assessment Score
+      %span.c-detailed-list__value= @client.assessment_score
     - if can_view_vspdats?
       %li.c-detailed-list__item
         %span.c-detailed-list__label VI-SPDAT Score
         %span.c-detailed-list__value= @client.vispdat_score
       %li.c-detailed-list__item
         %span.c-detailed-list__label
-          %span Priority Score
-          %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus zero, one (365), two (730), or three (1095) years of days homeless'}
+          %span VI-SPDAT Priority Score
+          %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus a set amount based on other criteria.  See the warehouse CAS Readiness page for details.'}
         %span.c-detailed-list__value= @client.vispdat_priority_score
