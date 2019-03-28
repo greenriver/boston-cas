@@ -8,7 +8,7 @@ module MatchPrioritization
       where(active: true).
         order(weight: :asc)
     end
-    
+
     def self.prioritization_schemes
       [
         MatchPrioritization::FirstDateHomeless,
@@ -18,6 +18,7 @@ module MatchPrioritization
         MatchPrioritization::DaysHomelessLastThreeYears,
         MatchPrioritization::DaysHomelessLastThreeYearsRandomTieBreaker,
         MatchPrioritization::AssessmentScore,
+        MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
       ]
     end
 
@@ -42,7 +43,7 @@ module MatchPrioritization
     def prioritization_for_clients(scope)
       self.class.prioritization_for_clients(scope)
     end
-    
+
     def title
       self.class.title
     end
