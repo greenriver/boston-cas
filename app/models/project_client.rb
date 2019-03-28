@@ -45,4 +45,11 @@ class ProjectClient < ActiveRecord::Base
     end
     return true
   end
+
+  # Attempt to find matching contacts for data coming from the warehouse
+  def shelter_agency_contacts
+    default_shelter_agency_contacts&.map do |email|
+      Contact.where(Contact.arel_table[:email].matches(email))&.first
+    end&.compact || []
+  end
 end

@@ -2,13 +2,13 @@ module Admin
   class MatchRoutesController < ApplicationController
     before_action :require_can_manage_config!
     before_action :load_match_route, only: [:edit, :update]
- 
+
     def index
       @routes = MatchRoutes::Base.all.order("id DESC")
     end
 
     def edit
-     
+
     end
 
     def update
@@ -28,9 +28,10 @@ module Admin
         :allow_multiple_active_matches,
         :should_cancel_other_matches,
         :should_prevent_multiple_matches_per_client,
+        :default_shelter_agency_contacts_from_project_client,
         :match_prioritization_id,
-      ) 
-    end 
+      )
+    end
 
     def flash_interpolation_options
       { resource_name: 'Match Route' }

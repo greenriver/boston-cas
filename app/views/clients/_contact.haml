@@ -17,3 +17,7 @@
     .c-card__content-block.col-md-12.col-lg-6
       %h5 Pager
       %span.c-card__content-block.col-md-12.col-lg-6-text= @client.pager || not_specified
+  - if @client.project_client.default_shelter_agency_contacts
+    .c-card__content-block.col-md-12.col-lg-12
+      %h5 #{_('Shelter Agency Contacts')} from HMIS
+      %span.c-card__content-block.col-md-12.col-lg-12-text= @client.project_client.default_shelter_agency_contacts.join(', ')

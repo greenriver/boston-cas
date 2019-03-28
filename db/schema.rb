@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190314172444) do
+ActiveRecord::Schema.define(version: 20190328160354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -485,18 +485,19 @@ ActiveRecord::Schema.define(version: 20190314172444) do
   add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
 
   create_table "match_routes", force: :cascade do |t|
-    t.string   "type",                                                       null: false
-    t.boolean  "active",                                     default: true,  null: false
-    t.integer  "weight",                                     default: 10,    null: false
-    t.boolean  "contacts_editable_by_hsa",                   default: false, null: false
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
-    t.integer  "stalled_interval",                           default: 7,     null: false
-    t.integer  "match_prioritization_id",                    default: 5,     null: false
-    t.boolean  "should_cancel_other_matches",                default: true,  null: false
-    t.boolean  "should_activate_match",                      default: true,  null: false
-    t.boolean  "should_prevent_multiple_matches_per_client", default: true,  null: false
-    t.boolean  "allow_multiple_active_matches",              default: false, null: false
+    t.string   "type",                                                                null: false
+    t.boolean  "active",                                              default: true,  null: false
+    t.integer  "weight",                                              default: 10,    null: false
+    t.boolean  "contacts_editable_by_hsa",                            default: false, null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.integer  "stalled_interval",                                    default: 7,     null: false
+    t.integer  "match_prioritization_id",                             default: 5,     null: false
+    t.boolean  "should_cancel_other_matches",                         default: true,  null: false
+    t.boolean  "should_activate_match",                               default: true,  null: false
+    t.boolean  "should_prevent_multiple_matches_per_client",          default: true,  null: false
+    t.boolean  "allow_multiple_active_matches",                       default: false, null: false
+    t.boolean  "default_shelter_agency_contacts_from_project_client", default: false, null: false
   end
 
   create_table "messages", force: :cascade do |t|
@@ -778,6 +779,7 @@ ActiveRecord::Schema.define(version: 20190314172444) do
     t.date     "date_days_homeless_verified"
     t.string   "who_verified_days_homeless"
     t.boolean  "interested_in_set_asides",                    default: false
+    t.jsonb    "default_shelter_agency_contacts"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
