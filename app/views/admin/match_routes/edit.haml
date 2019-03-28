@@ -8,7 +8,8 @@
   = f.input :allow_multiple_active_matches, label: 'Allow multiple active matches on single opportunity'
   = f.input :should_cancel_other_matches, label: 'Cancel other matches on success'
   = f.input :should_prevent_multiple_matches_per_client, label: 'Prevent multiple active matches per client on route'
+  = f.input :default_shelter_agency_contacts_from_project_client, label: 'Attempt to add default shelter agency contacts from client record'
   = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false
   = f.button :submit, value: "Update #{@route.title}"
-  
-  
+
+

@@ -229,7 +229,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def past_first_step_or_not_default_route?
     return true if current_decision.blank?
-    if match_route.class.name == 'MatchRoutes::Default' 
+    if match_route.class.name == 'MatchRoutes::Default'
       current_decision != self.send(match_route.initial_decision)
     else
       true
@@ -598,6 +598,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
       end
       program.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
+      end
+      if match_route.default_shelter_agency_contacts_from_project_client?
+        client.project_client.shelter_agency_contacts.each do |contact|
+          assign_match_role_to_contact :shelter_agency, contact
+        end
       end
     end
 

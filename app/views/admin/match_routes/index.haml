@@ -8,40 +8,26 @@
 %table.table.table-condensed
   %thead
     %tr
-      %th
-        Route Name
-      %th
-        Active
-      %th
-        HSA can edit HSA contacts
-      %th
-        Activate highest priority match automatically
-      %th
-        Allow multiple active matches on single opportunity
-      %th
-        Cancel other matches on success
-      %th
-        Allow multiple active matches per client on route
-      %th
-        Match prioritization
-        
+      %th Route Name
+      %th Active
+      %th HSA can edit HSA contacts
+      %th Activate highest priority match automatically
+      %th Allow multiple active matches on single opportunity
+      %th Cancel other matches on success
+      %th Allow multiple active matches per client on route
+      %th Attempt to add default shelter agency contacts from client record
+      %th Match prioritization
+
   %tbody
     - @routes.each do |route|
       %tr
-        %td
-          = link_to route.title, edit_admin_match_route_path(route)
-        %td
-          = checkmark route.active
-        %td
-          = checkmark route.contacts_editable_by_hsa
-        %td
-          = checkmark route.should_activate_match
-        %td
-          = checkmark route.allow_multiple_active_matches
-        %td
-          = checkmark route.should_cancel_other_matches
-        %td
-          = checkmark(! route.should_prevent_multiple_matches_per_client)
-        %td
-          = route.match_prioritization.title
-        
+        %td= link_to route.title, edit_admin_match_route_path(route)
+        %td= checkmark route.active
+        %td= checkmark route.contacts_editable_by_hsa
+        %td= checkmark route.should_activate_match
+        %td= checkmark route.allow_multiple_active_matches
+        %td= checkmark route.should_cancel_other_matches
+        %td= checkmark(! route.should_prevent_multiple_matches_per_client)
+        %td= checkmark(route.default_shelter_agency_contacts_from_project_client)
+        %td= route.match_prioritization.title
+
