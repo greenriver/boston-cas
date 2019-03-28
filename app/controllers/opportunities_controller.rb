@@ -108,7 +108,11 @@ class OpportunitiesController < ApplicationController
       else
         flash[:alert] = "There was an error creating new #{Opportunity.model_name.human}"
       end
-      redirect_to action: :index
+      if can_view_opportunities?
+        redirect_to action: :index
+      else
+        redirect_to active_matches_path
+      end
     end
   end
 
