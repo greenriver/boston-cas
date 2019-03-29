@@ -312,6 +312,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   # returns the most recent decision
   def current_decision
     unless closed?
+      # FIXME, should look for next decision on route based on route #match_steps
       initialized_decisions.order(id: :desc).limit(1).first
     end
   end
