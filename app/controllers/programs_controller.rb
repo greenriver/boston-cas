@@ -2,21 +2,21 @@ class ProgramsController < ApplicationController
   include ProgramPermissions
   before_action :authenticate_user!
   before_action :require_can_edit_programs!, only: [:create]
-  
+
   helper_method :sort_column, :sort_direction
 
   def index
     # search
     @programs = if params[:q].present?
-      sub_program_scope.text_search(params[:q])
-    else
-      sub_program_scope
+                  sub_program_scope.text_search(params[:q])
+                else
+                  sub_program_scope
     end
 
     # sort / paginate
     sort_string = sorter
-     
-    @sorted_by = Program.sort_options.select do |m| 
+
+    @sorted_by = Program.sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
 
@@ -30,25 +30,24 @@ class ProgramsController < ApplicationController
 
     @available_routes = MatchRoutes::Base.filterable_routes
     @current_route = params[:current_route]
-    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
-      @programs = @programs.joins(:match_route).where(match_routes: {type: @current_route})
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.value?(@current_route)
+      @programs = @programs.joins(:match_route).where(match_routes: { type: @current_route })
     end
 
     @active_filter = @current_route.present?
 
-    @programs = @programs
-      .includes(:program)
-      .references(:program)
-      .includes(:building)
-      .references(:building)
-      .preload(:program)
-      .reorder(sort_string)
-      .page(params[:page]).per(25)
-
+    @programs = @programs.
+      includes(:program).
+      references(:program).
+      includes(:building).
+      references(:building).
+      preload(:program).
+      reorder(sort_string).
+      page(params[:page]).per(25)
   end
 
   def new
-    @program = program_source.new(sub_programs: [SubProgram.new({program_type: 'Project-Based'})])
+    @program = program_source.new(sub_programs: [SubProgram.new(program_type: 'Project-Based')])
   end
 
   def create
@@ -58,81 +57,81 @@ class ProgramsController < ApplicationController
       # there should only be one sub-program immediately after a program create
       @sub_program = @program.sub_programs.first
       redirect_to action: :index
-       flash[:notice] = "New program \"<a href=\"#{edit_program_sub_program_path(@program, @sub_program)}\">#{@program.name}</a>\" created"
+      flash[:notice] = "New program \"<a href=\"#{edit_program_sub_program_path(@program, @sub_program)}\">#{@program.name}</a>\" created"
     else
-      flash[:error] = "Please review the form problems below."
+      flash[:error] = 'Please review the form problems below.'
       render :new
     end
   end
 
   private
-    def program_source
-      Program
-    end
 
-    def program_params
-      params.require(:program).
-        permit(
+  def program_source
+    Program
+  end
+
+  def program_params
+    params.require(:program).
+      permit(
+        :name,
+        :contract_start_date,
+        :funding_source_id,
+        :confidential,
+        :match_route_id,
+        sub_programs_attributes: [
+          :id,
           :name,
-          :contract_start_date,
-          :funding_source_id,
+          :subgrantee_id, # Service provider
+          :sub_contractor_id,
+          :program_type,
+          :building_id,
+          :hsa_id,
           :confidential,
-          :match_route_id,
-          sub_programs_attributes: [
-            :id,
-            :name,
-            :subgrantee_id, # Service provider
-            :sub_contractor_id,
-            :program_type,
-            :building_id,
-            :hsa_id,
-            :confidential,
-            :eligibility_requirement_notes,
-          ],
-          service_ids: [],
-          requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-        )
+          :eligibility_requirement_notes,
+        ],
+        service_ids: [],
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+      )
+  end
+
+  def adding_sub_program
+    program_params[:sub_program].present?
+  end
+
+  def sort_column
+    SubProgram.column_names.include?(params[:sort]) ? params[:sort] : 'program_id'
+  end
+
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def query_string
+    "%#{@query}%"
+  end
+
+  def filter_terms
+    [:current_route]
+  end
+  helper_method :filter_terms
+
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
+
+    if @column.blank?
+      @column = 'program_id'
+      @direction = 'asc'
+      sort_string = "#{@column} #{@direction}"
+    else
+      sort_string = Program.sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.first[:order]
     end
 
-    def adding_sub_program
-      program_params[:sub_program].present?
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      sort_string += ' NULLS LAST'
     end
-
-    def sort_column
-      SubProgram.column_names.include?(params[:sort]) ? params[:sort] : 'program_id'
-    end
-
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
-
-    def query_string
-      "%#{@query}%"
-    end
-
-    def filter_terms
-      [ :current_route ]
-    end
-    helper_method :filter_terms
-
-    def sorter
-      @column = params[:sort]
-      @direction = params[:direction]
-
-      if @column.blank?
-        @column = 'program_id'
-        @direction = 'asc'
-        sort_string = "#{@column} #{@direction}"
-      else
-        sort_string = Program.sort_options.select do |m|
-          m[:column] == @column && m[:direction] == @direction
-        end.first[:order]
-      end
-
-      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-        sort_string += ' NULLS LAST'
-      end
-      return sort_string
-    end
-
+    sort_string
+  end
 end

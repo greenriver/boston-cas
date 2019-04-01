@@ -26,35 +26,36 @@ class SubProgram < ActiveRecord::Base
 
   validates_presence_of :building, if: :has_buildings?
 
-  scope :has_buildings, -> {where(program_type: SubProgram.have_buildings)}
+  scope :has_buildings, -> { where(program_type: SubProgram.have_buildings) }
 
-  scope :on_route, -> (route) do
+  scope :on_route, lambda { |route|
     joins(:program).merge(Program.on_route(route))
-  end
+  }
 
   def self.types
     [
-      {value: 'Project-Based', label: 'Project-Based', building: true},
-      {value: 'Tenant-Based', label: 'Tenant-Based', building: false},
-      {value: 'Sponsor-Based', label: 'Sponsor-Based (mobile)', building: false},
-      {value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true},
+      { value: 'Project-Based', label: 'Project-Based', building: true },
+      { value: 'Tenant-Based', label: 'Tenant-Based', building: false },
+      { value: 'Sponsor-Based', label: 'Sponsor-Based (mobile)', building: false },
+      { value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true },
     ]
   end
 
   def program_type_label
-    SubProgram.types.select{|m| m[:value] == program_type}.first[:label]
+    SubProgram.types.select {|m| m[:value] == program_type }.first[:label]
   end
 
   def update_summary!
     update_matched
     update_in_progress
     update_vacancies
-    self.save
+    save
   end
+
   # returns a useful array of types that have buildings attached
   def self.have_buildings
     b = []
-    types.select{|sp| sp[:building] == true}.each do |sp|
+    types.select {|sp| sp[:building] == true }.each do |sp|
       b << sp[:value]
     end
     b
@@ -67,11 +68,12 @@ class SubProgram < ActiveRecord::Base
   # The following methods are for populating the index page
   def site
     if building.blank?
-      return 'Scattered Sites'
+      'Scattered Sites'
     else
-      return building.name
+      building.name
     end
   end
+
   # which organizations are involved hint: subgrantee (service provider) + sub-contractor
   def organizations
     [].tap do |result|
@@ -84,130 +86,130 @@ class SubProgram < ActiveRecord::Base
     return none unless text.present?
 
     program_matches = Program.where(
-      Program.arel_table[:id].eq arel_table[:program_id]
+      Program.arel_table[:id].eq arel_table[:program_id],
     ).text_search(text).exists
 
     building_matches = Building.where(
-      Building.arel_table[:id].eq arel_table[:building_id]
+      Building.arel_table[:id].eq arel_table[:building_id],
     ).text_search(text).exists
 
     subgrantee_matches = Subgrantee.where(
-      Subgrantee.arel_table[:id].eq arel_table[:subgrantee_id]
+      Subgrantee.arel_table[:id].eq arel_table[:subgrantee_id],
     ).text_search(text).exists
 
     query = "%#{text}%"
     where(
-      arel_table[:name].matches(query)
-      .or(program_matches)
-      .or(building_matches)
-      .or(subgrantee_matches)
+      arel_table[:name].matches(query).
+      or(program_matches).
+      or(building_matches).
+      or(subgrantee_matches),
     )
   end
 
   def inherited_requirements_by_source
-    {}
-      .merge! inherited_program_requirements_by_source
-      .merge! inherited_service_provider_requirements_by_source
-      .merge! inherited_sub_contractor_requirements_by_source
-      .merge! inherited_building_requirements_by_source
+    {}.
+      merge! inherited_program_requirements_by_source.
+      merge! inherited_service_provider_requirements_by_source.
+      merge! inherited_sub_contractor_requirements_by_source.
+      merge! inherited_building_requirements_by_source
   end
 
   def self.preload_inherited_requirements
-    preload(service_provider: {requirements: :rule, services: {requirements: :rule}})
-    .preload(sub_contractor: {requirements: :rule, services: {requirements: :rule}})
-    .preload(building: {requirements: :rule, services: {requirements: :rule}})
-    .preload(program: {
-      requirements: :rule,
-      services: {requirements: :rule},
-      funding_source: { requirements: :rule, services: {requirements: :rule} }
-    })
+    preload(service_provider: { requirements: :rule, services: { requirements: :rule } }).
+      preload(sub_contractor: { requirements: :rule, services: { requirements: :rule } }).
+      preload(building: { requirements: :rule, services: { requirements: :rule } }).
+      preload(program: {
+               requirements: :rule,
+      services: { requirements: :rule },
+      funding_source: { requirements: :rule, services: { requirements: :rule } },
+             })
   end
 
   def self.associations_adding_requirements
-    [:program, :service_provider, :sub_contractor]
+    %i[program service_provider sub_contractor]
   end
 
   def self.associations_adding_services
-    [:program, :service_provider, :sub_contractor]
+    %i[program service_provider sub_contractor]
   end
 
   # Get visibility from the associated Program
   delegate :visible_by?, to: :program
   delegate :editable_by?, to: :program
 
-  scope :visible_by, ->(user) {
+  scope :visible_by, lambda { |user|
     joins(:program).merge(Program.visible_by(user))
   }
-  scope :editable_by, ->(user) {
+  scope :editable_by, lambda { |user|
     joins(:program).merge(Program.editable_by(user))
   }
 
   private
-    def inherited_service_provider_requirements_by_source
-      {}.tap do |result|
-        if service_provider.present?
-            result.merge! service_provider.inherited_requirements_by_source
-          result[service_provider] = []
-          service_provider.requirements.each do |requirement|
-            result[service_provider] << requirement
-          end
+
+  def inherited_service_provider_requirements_by_source
+    {}.tap do |result|
+      if service_provider.present?
+          result.merge! service_provider.inherited_requirements_by_source
+        result[service_provider] = []
+        service_provider.requirements.each do |requirement|
+          result[service_provider] << requirement
         end
       end
     end
+  end
 
-    def inherited_program_requirements_by_source
-      {}.tap do |result|
-        if program.present?
-          result.merge! program.inherited_requirements_by_source
-          result[program] = []
-          program.requirements.each do |requirement|
-            result[program] << requirement
-          end
+  def inherited_program_requirements_by_source
+    {}.tap do |result|
+      if program.present?
+        result.merge! program.inherited_requirements_by_source
+        result[program] = []
+        program.requirements.each do |requirement|
+          result[program] << requirement
         end
       end
     end
+  end
 
-    def inherited_sub_contractor_requirements_by_source
-      {}.tap do |result|
-        if sub_contractor.present?
-            result.merge! sub_contractor.inherited_requirements_by_source
-          result[sub_contractor] = []
-          sub_contractor.requirements.each do |requirement|
-            result[sub_contractor] << requirement
-          end
+  def inherited_sub_contractor_requirements_by_source
+    {}.tap do |result|
+      if sub_contractor.present?
+          result.merge! sub_contractor.inherited_requirements_by_source
+        result[sub_contractor] = []
+        sub_contractor.requirements.each do |requirement|
+          result[sub_contractor] << requirement
         end
       end
     end
+  end
 
-    def inherited_building_requirements_by_source
-      {}.tap do |result|
-        if building.present?
-            result.merge! building.inherited_requirements_by_source
-          result[building] = []
-          building.requirements.each do |requirement|
-            result[building] << requirement
-          end
+  def inherited_building_requirements_by_source
+    {}.tap do |result|
+      if building.present?
+          result.merge! building.inherited_requirements_by_source
+        result[building] = []
+        building.requirements.each do |requirement|
+          result[building] << requirement
         end
       end
     end
+  end
 
-    def update_matched
-      self[:matched] = 0
-      vouchers.each do |v|
-        self[:matched] += 1 if v.status_match.present? && v.status_match.successful?
-      end
+  def update_matched
+    self[:matched] = 0
+    vouchers.each do |v|
+      self[:matched] += 1 if v.status_match.present? && v.status_match.successful?
     end
+  end
 
-    def update_in_progress
-      self[:in_progress] = 0
-      vouchers.each do |v|
-        self[:in_progress] += 1 if v.status_match.present? && v.status_match.active?
-      end
-      #v.object.status_match.overall_status[:name]
+  def update_in_progress
+    self[:in_progress] = 0
+    vouchers.each do |v|
+      self[:in_progress] += 1 if v.status_match.present? && v.status_match.active?
     end
+    # v.object.status_match.overall_status[:name]
+  end
 
-    def update_vacancies
-      self[:vacancies] = vouchers.where(available: true).count
-    end
-
+  def update_vacancies
+    self[:vacancies] = vouchers.where(available: true).count
+  end
 end

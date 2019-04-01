@@ -14,9 +14,10 @@ class FundingSource < ActiveRecord::Base
 
   def self.text_search(text)
     return none unless text.present?
+
     query = "%#{text}%"
     where(
-      arel_table[:name].matches(query)
+      arel_table[:name].matches(query),
     )
   end
 

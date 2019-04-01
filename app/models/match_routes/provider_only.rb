@@ -1,6 +1,5 @@
 module MatchRoutes
   class ProviderOnly < Base
-
     def title
       _('Provider Only Route')
     end
@@ -11,17 +10,17 @@ module MatchRoutes
 
     def self.match_steps
       {
-       'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
-       'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
+        'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
+        'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
       }
     end
 
     def self.match_steps_for_reporting
       {
-       'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
-       'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
-       'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
-       }
+        'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
+        'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
+        'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
+      }
     end
 
     def required_contact_types

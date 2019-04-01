@@ -3,13 +3,13 @@ class MatchListBaseController < ApplicationController
   before_action :set_heading
   before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
-  
+
   def index
     # search
     @matches = if params[:q].present?
-      match_scope.text_search(params[:q])
-    else
-      match_scope
+                 match_scope.text_search(params[:q])
+               else
+                 match_scope
     end
 
     # sort / paginate
@@ -29,9 +29,9 @@ class MatchListBaseController < ApplicationController
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort = sort + ' NULLS LAST'
+      sort += ' NULLS LAST'
     end
-    
+
     @matches = @matches.
       references(:client).
       includes(:client).
@@ -40,61 +40,61 @@ class MatchListBaseController < ApplicationController
       page(params[:page]).per(25)
     @show_vispdat = show_vispdat?
   end
-  
+
   protected
-    # This is painful, but we need to prevent leaking of client names
-    # via targeted search
-    def visible_match_ids
-      contact = current_user.contact
-      contact.client_opportunity_match_contacts.map(&:match).map do |m| 
-        m.id if m.try(:show_client_info_to?, contact) || false
-      end.compact
-    end
 
-    def match_scope
-      raise 'abstract method'
-    end
-    
-    def set_heading
-      raise 'abstract method'
-    end
+  # This is painful, but we need to prevent leaking of client names
+  # via targeted search
+  def visible_match_ids
+    contact = current_user.contact
+    contact.client_opportunity_match_contacts.map(&:match).map do |m|
+      m.id if m.try(:show_client_info_to?, contact) || false
+    end.compact
+  end
 
-    def show_vispdat?
-      can_view_vspdats?
-    end
+  def match_scope
+    raise 'abstract method'
+  end
 
-    def show_confidential_names?
-      @show_confidential_names
-    end
-    helper_method :show_confidential_names?
+  def set_heading
+    raise 'abstract method'
+  end
 
-    def set_show_confidential_names
-      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
-    end
+  def show_vispdat?
+    can_view_vspdats?
+  end
 
-    def default_sort_direction
-      'desc'
-    end
+  def show_confidential_names?
+    @show_confidential_names
+  end
+  helper_method :show_confidential_names?
 
-    def default_sort_column
-      'days_homeless_in_last_three_years'
-    end
-  
-    def sort_column
-      (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
-    end
+  def set_show_confidential_names
+    @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : default_sort_direction
-    end
+  def default_sort_direction
+    'desc'
+  end
 
-    def query_string
-      "%#{params[:q]}%"
-    end
+  def default_sort_column
+    'days_homeless_in_last_three_years'
+  end
 
-    def filter_terms
-      [ :current_step, :current_route ]
-    end
-    helper_method :filter_terms
-  
+  def sort_column
+    (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
+  end
+
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : default_sort_direction
+  end
+
+  def query_string
+    "%#{params[:q]}%"
+  end
+
+  def filter_terms
+    [:current_step, :current_route]
+  end
+  helper_method :filter_terms
 end

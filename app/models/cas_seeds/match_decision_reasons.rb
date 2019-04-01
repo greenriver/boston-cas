@@ -1,17 +1,16 @@
 module CasSeeds
   class MatchDecisionReasons
-    
     DND_REASONS = [
       "Client won't be eligible for services",
       "Client won't be eligible for housing type",
       "Client won't be eligible based on funding source",
-      "Client has another housing option",
-    ]
+      'Client has another housing option',
+    ].freeze
 
     HSA_REASONS = [
-      "CORI",
-      "SORI",
-      "Immigration status",
+      'CORI',
+      'SORI',
+      'Immigration status',
       'Household did not respond after initial acceptance of match',
       'Ineligible for Housing Program',
       'Client refused offer',
@@ -19,7 +18,7 @@ module CasSeeds
       'Falsification of documents',
       'Additional screening criteria imposed by third parties',
       'Health and Safety',
-    ]
+    ].freeze
 
     # TODO: For Provider-Only route, rename HSA_PROVIDER_ONLY_REASONS?
     HSA_PRIORITY_ONLY_REASONS = [
@@ -31,23 +30,23 @@ module CasSeeds
       'Health and Safety',
       'Housed',
       'Other housing opportunity',
-    ]
+    ].freeze
 
     SHELTER_AGENCY_REASONS = [
-      "Does not agree to services",
-      "Unwilling to live in that neighborhood",
-      "Unwilling to live in SRO",
-      "Does not want housing at this time",
-      "Unsafe environment for this person",
-      "Client has another housing option",
-    ]
+      'Does not agree to services',
+      'Unwilling to live in that neighborhood',
+      'Unwilling to live in SRO',
+      'Does not want housing at this time',
+      'Unsafe environment for this person',
+      'Client has another housing option',
+    ].freeze
 
     SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS = [
-      "Barred from working with agency",
-      "Hospitalized",
-      "Don’t know / disappeared",
-      "Incarcerated",
-    ]
+      'Barred from working with agency',
+      'Hospitalized',
+      'Don’t know / disappeared',
+      'Incarcerated',
+    ].freeze
 
     ADMINISTRATIVE_CANCEL_REASONS = [
       'Match expired',
@@ -61,8 +60,8 @@ module CasSeeds
       'Client received another housing opportunity',
       'Client no longer eligible for match',
       'Client deceased',
-      'Vacancy filled by other client'
-    ]
+      'Vacancy filled by other client',
+    ].freeze
 
     def run!
       create_other_reason!
@@ -76,14 +75,13 @@ module CasSeeds
     end
 
     private def create_other_reason!
-      ::MatchDecisionReasons::Other.all.first_or_create! name: "Other"
+      ::MatchDecisionReasons::Other.all.first_or_create! name: 'Other'
     end
-    
 
     private def create_dnd_reasons!
       DND_REASONS.each do |reason_name|
         ::MatchDecisionReasons::DndStaffDecline.where(name: reason_name).first_or_create!
-      end    
+      end
     end
 
     private def create_hsa_reasons!
@@ -117,8 +115,7 @@ module CasSeeds
     private def create_admin_cancel_reasons!
       ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name|
         ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name).first_or_create!
-      end    
+      end
     end
-
   end
 end

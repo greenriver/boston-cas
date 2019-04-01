@@ -7,22 +7,22 @@ class User < ActiveRecord::Base
   devise :invitable, :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable,
          :lockable, :timeoutable, :confirmable, :pwned_password
-  #has_secure_password # not needed with devise
+  # has_secure_password # not needed with devise
 
   attr_accessor :editable_programs
-  
-  validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
-  validates :first_name, presence: true, length: {maximum: 40}
-  validates :last_name, presence: true, length: {maximum: 40}
+
+  validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: { maximum: 250 }, on: :update
+  validates :first_name, presence: true, length: { maximum: 40 }
+  validates :last_name, presence: true, length: { maximum: 40 }
   validates :email_schedule, inclusion: { in: Message::SCHEDULES }, allow_blank: false
 
-  scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
-  scope :dnd_staff, -> {joins(:roles).where(roles: {can_edit_all_clients: true})}
-  scope :developer, -> {joins(:roles).where(roles: {name: 'developer'})}
-  scope :dnd_initial_contact, -> {dnd_staff.where receive_initial_notification: true}
-  scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {can_add_vacancies: true})}
-  scope :active, -> {where active: true}
-  scope :inactive, -> {where active: false}
+  scope :admin, -> { joins(:roles).where(roles: { name: 'admin' }) }
+  scope :dnd_staff, -> { joins(:roles).where(roles: { can_edit_all_clients: true }) }
+  scope :developer, -> { joins(:roles).where(roles: { name: 'developer' }) }
+  scope :dnd_initial_contact, -> { dnd_staff.where receive_initial_notification: true }
+  scope :housing_subsidy_admin, -> { joins(:roles).where(roles: { can_add_vacancies: true }) }
+  scope :active, -> { where active: true }
+  scope :inactive, -> { where active: false }
 
   has_one :contact, inverse_of: :user
 
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   has_many :messages, through: :contact
 
   accepts_nested_attributes_for :contact
-  def contact_attributes= contact_attributes
+  def contact_attributes=(contact_attributes)
     super
     self.first_name = contact.first_name
     self.last_name = contact.last_name
@@ -65,23 +65,23 @@ class User < ActiveRecord::Base
     end
   end
 
- # define helper methods for looking up if this
- # user has an permission through one of its roles
- Role.permissions.each do |permission|
+  # define helper methods for looking up if this
+  # user has an permission through one of its roles
+  Role.permissions.each do |permission|
     define_method(permission) do
       @permisisons ||= load_effective_permissions
       @permisisons[permission]
     end
 
     define_method("#{permission}?") do
-      self.send(permission)
+      send(permission)
     end
   end
 
   def roles_string
-    roles
-      .map { |r| r.role_name }
-      .join(', ')
+    roles.
+      map { |r| r.role_name }.
+      join(', ')
   end
 
   def invitation_status
@@ -99,9 +99,9 @@ class User < ActiveRecord::Base
 
     query = "%#{text}%"
     where(
-      arel_table[:first_name].matches(query)
-      .or(arel_table[:last_name].matches(query))
-      .or(arel_table[:email].matches(query))
+      arel_table[:first_name].matches(query).
+      or(arel_table[:last_name].matches(query)).
+      or(arel_table[:email].matches(query)),
     )
   end
 
@@ -114,6 +114,7 @@ class User < ActiveRecord::Base
   # https://github.com/plataformatec/devise/wiki/How-To:-Add-timeout_in-value-dynamically
   def timeout_in
     return 2.hours if can_act_on_behalf_of_match_contacts?
+
     30.minutes
   end
 

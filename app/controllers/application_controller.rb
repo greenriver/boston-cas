@@ -1,4 +1,4 @@
-require "application_responder"
+require 'application_responder'
 
 class ApplicationController < ActionController::Base
   include ControllerAuthorization
@@ -14,11 +14,11 @@ class ApplicationController < ActionController::Base
   before_filter :set_gettext_locale
   before_filter :set_hostname
 
-  #before_filter :_basic_auth, if: -> { Rails.env.staging? }
+  # before_filter :_basic_auth, if: -> { Rails.env.staging? }
   before_filter :set_paper_trail_whodunnit
   before_action :authenticate_user!
   # Allow devise login links to pass along a destination
-  after_filter :store_current_location, :unless => :devise_controller?
+  after_filter :store_current_location, unless: :devise_controller?
 
   if Rails.configuration.force_ssl
     force_ssl
@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   def _basic_auth
     authenticate_or_request_with_http_basic do |user, password|
       user == Rails.application.secrets.basic_auth_user && \
-      password == Rails.application.secrets.basic_auth_password
+        password == Rails.application.secrets.basic_auth_password
     end
   end
 
@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
     payload[:user_id] = current_user&.id
     payload[:pid] = Process.pid
     payload[:request_id] = request.uuid
-    payload[:request_start] = request.headers['HTTP_X_REQUEST_START'].try(:gsub, /\At=/,'')
+    payload[:request_start] = request.headers['HTTP_X_REQUEST_START'].try(:gsub, /\At=/, '')
   end
 
   def info_for_paper_trail
@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
       user_id: current_user&.id,
       notification_code: params[:notification_id],
       session_id: request.env['rack.session.record']&.session_id,
-      request_id: request.uuid
+      request_id: request.uuid,
     }
   end
 
@@ -69,6 +69,7 @@ class ApplicationController < ActionController::Base
   def store_current_location
     return unless request.get?
     return if request.xhr? # don't store ajax calls
+
     store_location_for(:user, request.url)
   end
 
@@ -84,7 +85,7 @@ class ApplicationController < ActionController::Base
   end
 
   def filter_terms
-    [  ]
+    []
   end
   helper_method :filter_terms
 
@@ -99,6 +100,10 @@ class ApplicationController < ActionController::Base
   end
 
   def set_hostname
-    @op_hostname ||= `hostname` rescue 'test-server'
+    @op_hostname ||= begin
+                       `hostname`
+                     rescue StandardError
+                       'test-server'
+                     end
   end
 end

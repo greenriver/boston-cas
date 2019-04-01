@@ -3,27 +3,26 @@ module Warehouse
   class CasAvailability < Base
     self.table_name = 'cas_availabilities'
 
-
     def self.backfill
-      self.transaction do 
+      transaction do
         ::Client.available.each do |client|
-          if client.project_client.data_source_id == 1
-            create!(
-              client_id: client.project_client.id_in_data_source,
-              available_at: client.created_at,
-            )
-          end
+          next unless client.project_client.data_source_id == 1
+
+          create!(
+            client_id: client.project_client.id_in_data_source,
+            available_at: client.created_at,
+          )
         end
 
         ::Client.unavailable.each do |client|
-          client.versions.where(event: :update).reverse.each do |version|
-            if version.reify.available == true
-              create!(
-                client_id: client.project_client.id_in_data_source,
-                available_at: client.created_at,
-                unavailable_at: version.created_at,
-              )
-            end
+          client.versions.where(event: :update).reverse_each do |version|
+            next unless version.reify.available == true
+
+            create!(
+              client_id: client.project_client.id_in_data_source,
+              available_at: client.created_at,
+              unavailable_at: version.created_at,
+            )
           end
         end
 

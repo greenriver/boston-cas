@@ -7,7 +7,7 @@ class Rules::AppropriateForSoberSupportiveHousing < Rule
         scope.where(sober_housing: false)
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.sober_housing missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.sober_housing missing. Cannot check clients against #{self.class}."
     end
   end
 end

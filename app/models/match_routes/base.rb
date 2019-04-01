@@ -4,14 +4,14 @@ module MatchRoutes
 
     belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
 
-    scope :available, -> do
+    scope :available, lambda {
       where(active: true).
         order(weight: :asc)
-    end
+    }
 
-    scope :should_cancel_other_matches, -> do
+    scope :should_cancel_other_matches, lambda {
       where(should_cancel_other_matches: true)
-    end
+    }
 
     def self.all_routes
       [
@@ -21,7 +21,7 @@ module MatchRoutes
       ]
     end
 
-    def self.route_name_from_route route
+    def self.route_name_from_route(route)
       # route can be an instance or a class
       if route.class == Class
         route_name = route.name
@@ -37,7 +37,7 @@ module MatchRoutes
     end
 
     def self.filterable_routes
-      available.map{|r| [r.title, r.type]}.to_h
+      available.map { |r| [r.title, r.type] }.to_h
     end
 
     def self.ensure_all
@@ -66,15 +66,15 @@ module MatchRoutes
     end
 
     def self.match_steps_for_reporting
-      all_routes.map(&:match_steps_for_reporting).flatten().uniq.to_h
+      all_routes.map(&:match_steps_for_reporting).flatten.uniq.to_h
     end
 
     def self.available_sub_types_for_search
-      all_routes.map(&:available_sub_types_for_search).flatten().uniq
+      all_routes.map(&:available_sub_types_for_search).flatten.uniq
     end
 
     def self.filter_options
-      self.available_sub_types_for_search + self.stalled_match_filter_options
+      available_sub_types_for_search + stalled_match_filter_options
     end
 
     def self.stalled_match_filter_options

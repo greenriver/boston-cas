@@ -1,18 +1,16 @@
 # Tools for ensuring client availability
 module Availability
-  
   extend ActiveSupport::Concern
   included do
-
     def self.ensure_availability
-      self.available.each(&:ensure_availability)
+      available.each(&:ensure_availability)
     end
 
     def ensure_availability
       self.class.transaction do
         unavailable_as_candidate_fors.destroy_all
         unavailable_routes.each do |route|
-          self.make_unavailable_in match_route: route
+          make_unavailable_in match_route: route
         end
       end
     end

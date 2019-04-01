@@ -8,7 +8,6 @@ class NonHmisClientsController < ApplicationController
   helper_method :client_type
 
   def index
-
     # sort
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
@@ -38,7 +37,7 @@ class NonHmisClientsController < ApplicationController
         @page = params[:page].presence || 1
         @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
       end
-      format.xlsx do 
+      format.xlsx do
         download
       end
     end
@@ -55,8 +54,8 @@ class NonHmisClientsController < ApplicationController
     end
     xlsx.close
     send_data io.string,
-      filename: "#{client_type}.xlsx",
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              filename: "#{client_type}.xlsx",
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   end
 
   def new
@@ -83,17 +82,16 @@ class NonHmisClientsController < ApplicationController
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort_string += ' NULLS LAST'
     end
-    return sort_string
+    sort_string
   end
 
   def load_client
     # since we sometimes arrive here looking for an identified client
     # attempt deidentified first, then shuffle them over to identified
-    begin
-      @non_hmis_client = client_source.find params[:id].to_i
-    rescue
-      redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
-    end
+
+    @non_hmis_client = client_source.find params[:id].to_i
+  rescue StandardError
+    redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
   end
 
   def load_agencies
@@ -105,23 +103,22 @@ class NonHmisClientsController < ApplicationController
   end
 
   def set_active_filter
-    @active_filter = filter_terms.map{|k| params[k].present?}.any?
+    @active_filter = filter_terms.map { |k| params[k].present? }.any?
   end
 
   def clean_agency
-    NonHmisClient.possible_agencies.detect{|m| m.downcase == params[:agency]&.downcase}
+    NonHmisClient.possible_agencies.detect { |m| m.downcase == params[:agency]&.downcase }
   end
 
   def clean_cohort
-    NonHmisClient.possible_cohorts.keys.detect{|m| m.to_i == params[:cohort]&.to_i}.to_s
+    NonHmisClient.possible_cohorts.keys.detect { |m| m.to_i == params[:cohort]&.to_i }.to_s
   end
 
   def clean_available
-    [true, false].detect{|m| m.to_s == params[:available]}
+    [true, false].detect { |m| m.to_s == params[:available] }
   end
 
   def clean_family_member
-    [true, false].detect{|m| m.to_s == params[:family_member]}
+    [true, false].detect { |m| m.to_s == params[:family_member] }
   end
-
 end

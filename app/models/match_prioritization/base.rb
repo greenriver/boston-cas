@@ -4,10 +4,10 @@ module MatchPrioritization
 
     has_many :match_route, class_name: MatchRoutes::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
 
-    scope :available, -> do
+    scope :available, lambda {
       where(active: true).
         order(weight: :asc)
-    end
+    }
 
     def self.prioritization_schemes
       [
@@ -36,7 +36,7 @@ module MatchPrioritization
       raise NotImplementedError
     end
 
-    def self.prioritization_for_clients(scope)
+    def self.prioritization_for_clients(_scope)
       raise NotImplementedError
     end
 

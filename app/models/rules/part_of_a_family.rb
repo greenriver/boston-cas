@@ -3,7 +3,7 @@ class Rules::PartOfAFamily < Rule
     if Client.column_names.include?(:family_member.to_s)
       scope.where(family_member: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.family_member missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.family_member missing. Cannot check clients against #{self.class}."
     end
   end
 end

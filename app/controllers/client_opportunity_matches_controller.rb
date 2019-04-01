@@ -2,15 +2,15 @@ class ClientOpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_match, only: [:show]
   before_action :require_can_view_all_matches!
-  
+
   helper_method :sort_column, :sort_direction
 
   def index
     # search
     @matches = if params[:q].present?
-      match_scope.text_search(params[:q])
-    else
-      match_scope
+                 match_scope.text_search(params[:q])
+               else
+                 match_scope
     end
 
     # client filter
@@ -20,14 +20,14 @@ class ClientOpportunityMatchesController < ApplicationController
 
     # opportunity filter
     if params[:opportunity_id].present? && (@opportunity = Opportunity.find(params[:opportunity_id].to_i))
-      @matches = @matches.where(opportunity_id: @opportunity.id) 
+      @matches = @matches.where(opportunity_id: @opportunity.id)
     end
 
     # sort / paginate
-    @matches = @matches
-      .order(sort_column => sort_direction)
-      .preload(:client, :opportunity, :notifications)
-      .page(params[:page]).per(25)
+    @matches = @matches.
+      order(sort_column => sort_direction).
+      preload(:client, :opportunity, :notifications).
+      page(params[:page]).per(25)
   end
 
   def show
@@ -40,12 +40,12 @@ class ClientOpportunityMatchesController < ApplicationController
   def create
     client = Client.order('RANDOM()').first
     opportunity = Opportunity.where(available: true).order('RANDOM()').first
-    
+
     match = ClientOpportunityMatch.create!(
       score: Faker::Number.between(25, 100),
       client: client,
       opportunity: opportunity,
-      proposed_at: Date.today
+      proposed_at: Date.today,
     )
     match.add_default_contacts!
     match.match_recommendation_dnd_staff_decision.initialize_decision!
@@ -62,7 +62,7 @@ class ClientOpportunityMatchesController < ApplicationController
   def set_match
     @match = match_scope.find(params[:id])
   end
-  
+
   def authorization_record
     @match
   end
@@ -72,11 +72,10 @@ class ClientOpportunityMatchesController < ApplicationController
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
   def query_string
     "%#{params[:q]}%"
   end
-
 end

@@ -3,7 +3,7 @@ class Voucher < ActiveRecord::Base
   include HasOrInheritsServices
   include MatchArchive
 
-  scope :available, -> {where available: true}
+  scope :available, -> { where available: true }
   belongs_to :sub_program
   belongs_to :unit
   belongs_to :creator, class_name: 'User', required: false, inverse_of: :vouchers, foreign_key: :user_id
@@ -31,17 +31,21 @@ class Voucher < ActiveRecord::Base
   # If a unit has been assigned, make sure the building matches the unit.
   def building
     return sub_program.building unless unit.present?
+
     unit.building
   end
+
   # Default the units available to the voucher to the sub-program building.
   # If a unit has already been assigned, scope it to the associated building
   def units
     return sub_program.building.available_units_for_vouchers unless unit.present?
+
     [unit] + unit.building.available_units_for_vouchers.to_a
   end
 
   def units_including_unavailable
     return sub_program.building.units_for_vouchers unless unit.present?
+
     [unit] + unit.building.units_for_vouchers.to_a
   end
 
@@ -49,26 +53,26 @@ class Voucher < ActiveRecord::Base
     return none unless text.present?
 
     unit_matches = Unit.where(
-      Unit.arel_table[:id].eq arel_table[:unit_id]
+      Unit.arel_table[:id].eq arel_table[:unit_id],
     ).text_search(text).exists
 
     sub_program_matches = SubProgram.where(
-      SubProgram.arel_table[:id].eq arel_table[:sub_program_id]
+      SubProgram.arel_table[:id].eq arel_table[:sub_program_id],
     ).text_search(text).exists
 
     query = "%#{text}%"
     where(
-      unit_matches
-      .or(sub_program_matches)
+      unit_matches.
+      or(sub_program_matches),
     )
   end
 
   def self.associations_adding_requirements
-    [:unit, :sub_program]
+    %i[unit sub_program]
   end
 
   def self.associations_adding_services
-    [:unit, :sub_program]
+    %i[unit sub_program]
   end
 
   def available_at
@@ -77,14 +81,14 @@ class Voucher < ActiveRecord::Base
     while cursor
       if cursor.available
         previous = cursor.paper_trail.previous_version
-        if previous.nil? || ! previous.available
+        if previous.nil? || !previous.available
           return cursor.updated_at
         end
       end
       cursor = cursor.paper_trail.previous_version
     end
 
-    return nil
+    nil
   end
 
   def changing_to_available?
@@ -92,7 +96,7 @@ class Voucher < ActiveRecord::Base
   end
 
   def can_be_destroyed?
-    ! client_opportunity_matches.exists?
+    !client_opportunity_matches.exists?
   end
 
   private def cant_update_when_active_or_successful_match
@@ -106,14 +110,13 @@ class Voucher < ActiveRecord::Base
 
   private def cant_have_unit_in_use
     if unit.try(:in_use?) && unit_id_changed?
-      errors.add :unit_id, "Unit in use"
+      errors.add :unit_id, 'Unit in use'
     end
   end
 
   private def requires_unit_if_avaiable
     if available && unit_id.blank? && sub_program.has_buildings?
-      errors.add :unit_id, "Unit required to make the voucher available"
+      errors.add :unit_id, 'Unit required to make the voucher available'
     end
   end
-
 end

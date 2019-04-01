@@ -1,5 +1,5 @@
 class Testing::Matching::CandidateGeneration
-  #@@engine_class = ::Matching::ClientOpportunityEngine
+  # @@engine_class = ::Matching::ClientOpportunityEngine
 
   include ActiveModel::Model
 

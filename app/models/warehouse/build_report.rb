@@ -2,6 +2,7 @@ module Warehouse
   class BuildReport
     def run!
       return nil unless Warehouse::Base.enabled?
+
       fill_cas_report_table!
       fill_cas_non_hmis_client_history_table!
       fill_cas_vacancy_table!
@@ -21,7 +22,7 @@ module Warehouse
         vacancy.vacancy_created_at = voucher.created_at
         vacancy.vacancy_made_available_at = voucher.available_at
         vacancy.first_matched_at = ClientOpportunityMatch.joins(:opportunity).
-            where(opportunities: { voucher_id: voucher.id } ).maximum(attribute_to_sql(Opportunity, :created_at))
+          where(opportunities: { voucher_id: voucher.id }).maximum(attribute_to_sql(Opportunity, :created_at))
 
         vacancy.save!
       end
@@ -41,13 +42,13 @@ module Warehouse
       # build out entries for each time a client became available
       ::DeidentifiedClient.with_deleted.each do |client|
         # availability based on creation
-        available_ons = [client.created_at] + 
-          client.versions.where(event: :create).pluck(:created_at)
-        
+        available_ons = [client.created_at] +
+                        client.versions.where(event: :create).pluck(:created_at)
+
         # unavailability based on deletion
-        unavailable_ons = [client.deleted_at] + 
-          client.versions.where(event: :destroy).pluck(:created_at)
-    
+        unavailable_ons = [client.deleted_at] +
+                          client.versions.where(event: :destroy).pluck(:created_at)
+
         available_ons = available_ons.compact.uniq.sort
         unavailable_ons = unavailable_ons.compact.uniq.sort
 
@@ -57,7 +58,7 @@ module Warehouse
             available_on: available_on,
           )
           # See if there's a subsequent date for which we are marked unavailable
-          client_history.unavailable_on = unavailable_ons.select{ |d| d > available_on }&.first
+          client_history.unavailable_on = unavailable_ons.select { |d| d > available_on }&.first
           client_history.part_of_a_family = client.family_member
           client_history.age_at_available_on = client.age_on(available_on)
           history << client_history
@@ -76,49 +77,43 @@ module Warehouse
         # Replace all CAS data in the warehouse every time
         Warehouse::CasReport.delete_all
         at = MatchDecisions::Base.arel_table
-        ::Client.joins( :project_client, client_opportunity_matches: :decisions ).preload(
+        ::Client.joins(:project_client, client_opportunity_matches: :decisions).preload(
           :project_client,
-          {
-            client_opportunity_matches: [
-              :dnd_staff_contacts,
-              :housing_subsidy_admin_contacts,
-              :client_contacts,
-              :shelter_agency_contacts,
-              :ssp_contacts,
-              :hsp_contacts,
-              decisions: [
-                :decline_reason,
-                :not_working_with_client_reason,
-                :administrative_cancel_reason,
-              ],
-              opportunity: [voucher: :sub_program],
-            ]
-          }
-        ).where( at[:status].not_eq nil ).distinct.find_each do |client|
+          client_opportunity_matches: [
+            :dnd_staff_contacts,
+            :housing_subsidy_admin_contacts,
+            :client_contacts,
+            :shelter_agency_contacts,
+            :ssp_contacts,
+            :hsp_contacts,
+            decisions: [:decline_reason, :not_working_with_client_reason, :administrative_cancel_reason],
+            opportunity: [voucher: :sub_program],
+          ],
+        ).where(at[:status].not_eq(nil)).distinct.find_each do |client|
           client_id = client.project_client.id_in_data_source
           next if client_id.blank?
+
           client.client_opportunity_matches.each do |match|
             sub_program = match.sub_program
             next unless sub_program.present?
+
             program = sub_program.program
             match_route = match.match_route
             previous_updated_at = nil
             match_started_decision = match.send(match_route.initial_decision)
             match_started_at = if match_started_decision&.started?
-              match_started_decision.updated_at
-            else
-              nil
-            end
+                                 match_started_decision.updated_at
+                               end
             # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
-            decisions = match.decisions.select do |decision| 
+            decisions = match.decisions.select do |decision|
               decision.status.present? && match_route.class.match_steps_for_reporting[decision.type].present?
             end.sort_by(&:id)
             # Debugging
             # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
             current_decision = decisions.last
-            decisions.each_with_index do |decision, idx|
+            decisions.each_with_index do |decision, _idx|
               if previous_updated_at
-                elapsed_days = ( decision.updated_at.to_date - previous_updated_at.to_date ).to_i
+                elapsed_days = (decision.updated_at.to_date - previous_updated_at.to_date).to_i
               end
               # we want to be able to report on wether or not the HSA requested a CORI check
               # so we'll split that step into two
@@ -140,9 +135,9 @@ module Warehouse
                 match_step: step_name,
                 decision_status: decision.label,
                 current_step: decision == current_decision,
-                decline_reason: explain( decision, :decline_reason ),
-                not_working_with_client_reason: explain( decision, :not_working_with_client_reason ),
-                administrative_cancel_reason: explain( decision, :administrative_cancel_reason ),
+                decline_reason: explain(decision, :decline_reason),
+                not_working_with_client_reason: explain(decision, :not_working_with_client_reason),
+                administrative_cancel_reason: explain(decision, :administrative_cancel_reason),
                 active_match: match.active?,
                 created_at: decision.created_at,
                 updated_at: decision.updated_at,
@@ -172,7 +167,7 @@ module Warehouse
       end
     end
 
-    def contact_details contacts
+    def contact_details(contacts)
       contacts.map do |contact|
         {
           name: contact.name,
@@ -185,7 +180,7 @@ module Warehouse
       if r = decision.send(reason)
         explanation = r.name
         if r.other?
-          explanation = "#{explanation}: #{ decision.send "#{reason}_other_explanation" }"
+          explanation = "#{explanation}: #{decision.send "#{reason}_other_explanation"}"
         end
         explanation
       end

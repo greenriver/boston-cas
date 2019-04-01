@@ -1,24 +1,25 @@
 module OpportunityDetails
   class ViaUnit < Base
-
     delegate :unit, to: :opportunity
     delegate :sub_program, to: :voucher
 
     def unit_name
       unit.name
     end
-    
+
     def building_name
       unit.building.try :name
     end
 
     def building_address
       return [] if unit.building.nil?
+
       unit.building.building_address
     end
-    
+
     def building_map_link
       return nil if voucher.building.nil?
+
       voucher.building.map_link
     end
 
@@ -29,7 +30,7 @@ module OpportunityDetails
     def sub_program_name
       sub_program&.name
     end
-    
+
     def service_provider_name
       sub_program&.service_provider&.name
     end
@@ -63,14 +64,13 @@ module OpportunityDetails
     end
 
     def services
-      # TODO implement me
+      # TODO: implement me
       []
     end
-    
+
     def rules_with_source
-      # TODO implement me
+      # TODO: implement me
       []
     end
-    
   end
 end

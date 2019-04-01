@@ -1,6 +1,5 @@
 module MatchRoutes
   class HomelessSetAside < Base
-
     def title
       _('Homeless Set-Aside Route')
     end
@@ -11,25 +10,25 @@ module MatchRoutes
 
     def self.match_steps
       {
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
+        'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
+        'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
+        'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
       }
     end
 
     def self.match_steps_for_reporting
       {
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
-          'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff' => 4,
+        'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
+        'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
+        'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
+        'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff' => 4,
       }
     end
 
     def required_contact_types
       [
-          'dnd_staff',
-          'housing_subsidy_admin',
+        'dnd_staff',
+        'housing_subsidy_admin',
       ]
     end
 

@@ -3,13 +3,13 @@ class AccountEmailsController < ApplicationController
   before_action :set_user
 
   def edit
-    render "accounts/edit"
+    render 'accounts/edit'
   end
 
   def update
     changed_notes = []
     if @user.email != account_params[:email]
-      changed_notes << "Account email was updated, check your inbox for a confirmation link."
+      changed_notes << 'Account email was updated, check your inbox for a confirmation link.'
     end
 
     if @user.update_with_password(account_params)
@@ -32,5 +32,4 @@ class AccountEmailsController < ApplicationController
   private def set_user
     @user = current_user
   end
-
 end

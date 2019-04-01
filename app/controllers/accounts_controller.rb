@@ -3,16 +3,15 @@ class AccountsController < ApplicationController
   before_action :set_user
 
   def edit
-
   end
 
   def update
     changed_notes = []
     if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
-      changed_notes << "Account name was updated."
+      changed_notes << 'Account name was updated.'
     end
     if @user.email_schedule != account_params[:email_schedule]
-      changed_notes << "Email schedule was updated."
+      changed_notes << 'Email schedule was updated.'
     end
 
     if changed_notes.present?
@@ -35,5 +34,4 @@ class AccountsController < ApplicationController
   private def set_user
     @user = current_user
   end
-
 end

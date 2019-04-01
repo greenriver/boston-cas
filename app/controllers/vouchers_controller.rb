@@ -21,7 +21,7 @@ class VouchersController < ApplicationController
       flash[:notice] = "#{vouchers_to_create} vouchers added"
       redirect_to action: :index
     else
-      flash[:error] = "Please review the form problems below."
+      flash[:error] = 'Please review the form problems below.'
       redirect_to action: :index
     end
   end
@@ -41,28 +41,27 @@ class VouchersController < ApplicationController
       matches = opportunity.client_opportunity_matches
       Client.transaction do
         matches.each do |m|
-          unless m.closed?
-            if m.client
-              m.client.make_available_in(match_route: m.match_route)
-            end
-            m.delete
-          end
+          next if m.closed?
+
+          m.client&.make_available_in(match_route: m.match_route)
+          m.delete
         end
         opportunity.update(available: false, available_candidate: false)
         @voucher.update(available: false)
       end
       @subprogram.update_summary!
     else
-      flash[:error] = "The selected voucher does not have an active match, and cannot be stopped."
+      flash[:error] = 'The selected voucher does not have an active match, and cannot be stopped.'
     end
     redirect_to action: :index
   end
 
   def bulk_update
     @vouchers = []
-    voucher_params[:vouchers_attributes].each do |i,v|
-      voucher = @subprogram.vouchers.preload(:status_match).detect {|subp_voucher| subp_voucher.id == v[:id].to_i}
+    voucher_params[:vouchers_attributes].each do |_i, v|
+      voucher = @subprogram.vouchers.preload(:status_match).detect { |subp_voucher| subp_voucher.id == v[:id].to_i }
       raise ActiveRecord::NotFound unless voucher
+
       voucher.assign_attributes(v)
       @vouchers << voucher
     end
@@ -84,7 +83,7 @@ class VouchersController < ApplicationController
       Matching::RunEngineJob.perform_later if run_match_engine
       # update the sub_program to reflect changes
       @subprogram.update_summary!
-      flash[:notice] = "Vouchers updated"
+      flash[:notice] = 'Vouchers updated'
       redirect_to action: :index
     else # some voucher is invalid
       flash[:alert] = 'Vouchers could not be updated.  Please correct the errors below.'
@@ -108,29 +107,30 @@ class VouchersController < ApplicationController
   helper_method :show_confidential_names?
 
   private
-    def set_voucher
-      @voucher = Voucher.find(params[:id].to_i)
-    end
 
-    def set_sub_program
-      @subprogram = SubProgram.find(params[:sub_program_id].to_i)
-    end
+  def set_voucher
+    @voucher = Voucher.find(params[:id].to_i)
+  end
 
-    def set_program
-      @program = Program.find(params[:program_id].to_i)
-    end
+  def set_sub_program
+    @subprogram = SubProgram.find(params[:sub_program_id].to_i)
+  end
 
-    def set_show_confidential_names
-      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
-    end
+  def set_program
+    @program = Program.find(params[:program_id].to_i)
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def voucher_params
-      params.require(:sub_program).
-        permit(
-          :sub_program_id,
-          :add_vouchers,
-          vouchers_attributes: [:id, :available, :unit_id, :date_available],
-        )
-    end
+  def set_show_confidential_names
+    @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def voucher_params
+    params.require(:sub_program).
+      permit(
+        :sub_program_id,
+        :add_vouchers,
+        vouchers_attributes: [:id, :available, :unit_id, :date_available],
+      )
+  end
 end

@@ -9,7 +9,7 @@ class Rules::Transgender < Rule
         scope.where.not(gender_id: transgender)
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.gender_id missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.gender_id missing. Cannot check clients against #{self.class}."
     end
   end
 end

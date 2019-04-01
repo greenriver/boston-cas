@@ -3,7 +3,7 @@
 module InheritsRequirementsFromServicesOnly
   extend ActiveSupport::Concern
   include InheritsRequirementsFromServices
-  
+
   def inherited_requirements_by_source
     inherited_service_requirements_by_source
   end
@@ -13,6 +13,4 @@ module InheritsRequirementsFromServicesOnly
       preload_inherited_service_requirements
     end
   end
-
 end
-

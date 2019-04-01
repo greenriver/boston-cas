@@ -1,6 +1,5 @@
 module MatchDecisions
   class ConfirmMatchSuccessDndStaff < Base
-
     # validate :note_present_if_status_rejected
 
     def statuses
@@ -15,7 +14,7 @@ module MatchDecisions
       label_for_status status
     end
 
-    def label_for_status status
+    def label_for_status(status)
       case status.to_sym
       when :pending then "#{_('DND')} to confirm match success"
       when :confirmed then "#{_('DND')} confirms match success"
@@ -39,7 +38,7 @@ module MatchDecisions
       super && status !~ /confirmed|rejected/
     end
 
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       super(send_notifications: send_notifications)
       update status: 'pending'
       Notifications::ConfirmMatchSuccessDndStaff.create_for_match! match
@@ -53,7 +52,7 @@ module MatchDecisions
       end
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
@@ -77,8 +76,5 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end
-

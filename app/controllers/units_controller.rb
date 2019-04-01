@@ -10,16 +10,16 @@ class UnitsController < ApplicationController
   def index
     # search
     @units = if params[:q].present?
-      unit_scope.text_search(params[:q])
-    else
-      unit_scope
+               unit_scope.text_search(params[:q])
+             else
+               unit_scope
     end
 
     # sort / paginate
-    @units = @units
-      .order(sort_column => sort_direction)
-      .preload(:building)
-      .page(params[:page]).per(25)
+    @units = @units.
+      order(sort_column => sort_direction).
+      preload(:building).
+      page(params[:page]).per(25)
   end
 
   # GET /hmis/units/1
@@ -30,7 +30,6 @@ class UnitsController < ApplicationController
   def new
     @unit = Unit.new
     set_building
-
   end
 
   # GET /hmis/units/1/edit
@@ -61,14 +60,14 @@ class UnitsController < ApplicationController
         # make sure we have an opportunity with the associated unit
         # Or not, since we don't want to double up on opportunities with vouchers that
         # might also include this unit
-        #op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
+        # op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
-      if ! pjax_request?
+      unless pjax_request?
         redirect_to building_path(@unit.building)
       end
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> was successfully updated."
     else
-      render :edit, {:flash => { :error => 'Unable to update unit <strong>#{@unit[:name]}</strong>.'}}
+      render :edit, flash: { error: 'Unable to update unit <strong>#{@unit[:name]}</strong>.' }
     end
   end
 
@@ -78,7 +77,7 @@ class UnitsController < ApplicationController
     if @unit.destroy
       redirect_to building_path(building), notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
     else
-      render :edit, {:flash => { :error => 'Unable to delete unit <strong>#{@unit[:name]}</strong>.'}}
+      render :edit, flash: { error: 'Unable to delete unit <strong>#{@unit[:name]}</strong>.' }
     end
   end
 
@@ -88,7 +87,7 @@ class UnitsController < ApplicationController
       @unit = Unit.find(params[:id])
       redirect_to units_path, notice: "Unit <strong>#{@unit[:name]}</strong> successfully restored."
     else
-      render :edit, {:flash => { :error => 'Unable to restore unit.'}}
+      render :edit, flash: { error: 'Unable to restore unit.' }
     end
   end
 
@@ -97,40 +96,42 @@ class UnitsController < ApplicationController
   end
 
   private
-    def unit_scope
-      Unit
-    end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unit
-      @unit = Unit.find(params[:id])
-    end
 
-    def set_building
-      if params[:building_id]
-        @unit.building = Building.find(params[:building_id])
-      end
-    end
-    # Only allow a trusted parameter "white list" through.
-    def unit_params
-      params.require(:unit).permit(
-        :name,
-        :available,
-        :building_id,
-        :elevator_accessible,
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  def unit_scope
+    Unit
+  end
 
-    def sort_column
-      Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_unit
+    @unit = Unit.find(params[:id])
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  def set_building
+    if params[:building_id]
+      @unit.building = Building.find(params[:building_id])
     end
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
+  # Only allow a trusted parameter "white list" through.
+  def unit_params
+    params.require(:unit).permit(
+      :name,
+      :available,
+      :building_id,
+      :elevator_accessible,
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+  end
 
+  def sort_column
+    Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
+
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def query_string
+    "%#{@query}%"
+  end
 end

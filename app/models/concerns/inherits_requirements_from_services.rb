@@ -2,7 +2,7 @@
 # from services, so the common code is here
 module InheritsRequirementsFromServices
   extend ActiveSupport::Concern
-  
+
   def inherited_service_requirements_by_source
     {}.tap do |result|
       services.each do |service|
@@ -16,9 +16,7 @@ module InheritsRequirementsFromServices
 
   module ClassMethods
     def preload_inherited_service_requirements
-      preload services: {requirements: :rules}
+      preload services: { requirements: :rules }
     end
   end
-
 end
-

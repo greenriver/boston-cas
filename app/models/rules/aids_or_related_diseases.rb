@@ -8,7 +8,7 @@ class Rules::AidsOrRelatedDiseases < Rule
         scope.where(c_t[:hiv_aids].eq(false).and(c_t[:hiv_positive].eq(false)))
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.hiv_aids missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.hiv_aids missing. Cannot check clients against #{self.class}."
     end
   end
 end

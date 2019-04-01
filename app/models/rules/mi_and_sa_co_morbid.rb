@@ -8,7 +8,7 @@ class Rules::MiAndSaCoMorbid < Rule
         scope.where(c_t[:mental_health_problem].eq(false).or(c_t[:substance_abuse_problem].eq(false)))
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.mental_health_problem or clients.substance_abuse_problem missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.mental_health_problem or clients.substance_abuse_problem missing. Cannot check clients against #{self.class}."
     end
   end
 end

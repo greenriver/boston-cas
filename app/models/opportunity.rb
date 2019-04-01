@@ -13,64 +13,64 @@ class Opportunity < ActiveRecord::Base
 
   has_one :sub_program, through: :voucher
 
-  #has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
-  has_many :active_matches, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
+  # has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
+  has_many :active_matches, -> { where(active: true, closed: false) }, class_name: 'ClientOpportunityMatch'
 
-  has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
+  has_one :successful_match, -> { where closed: true, closed_reason: 'success' }, class_name: 'ClientOpportunityMatch'
   # active or successful
-  has_one :status_match, -> {where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success')))}, class_name: 'ClientOpportunityMatch'
+  has_one :status_match, -> { where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success'))) }, class_name: 'ClientOpportunityMatch'
 
-  has_many :closed_matches, -> do
+  has_many :closed_matches, lambda {
     where(closed: true).
-    order(updated_at: :desc)
-  end, class_name: 'ClientOpportunityMatch'
+      order(updated_at: :desc)
+  }, class_name: 'ClientOpportunityMatch'
 
   has_many :opportunity_contacts, dependent: :destroy, inverse_of: :opportunity
   has_many :contacts, through: :opportunity_contacts
 
   has_many :housing_subsidy_admin_contacts,
-    -> { where opportunity_contacts: {housing_subsidy_admin: true} },
-    class_name: 'Contact',
-    through: :opportunity_contacts,
-    source: :contact
+           -> { where opportunity_contacts: { housing_subsidy_admin: true } },
+           class_name: 'Contact',
+           through: :opportunity_contacts,
+           source: :contact
 
   has_one :match_route, through: :sub_program
 
   attr_accessor :program, :building, :units
 
-  scope :with_voucher, -> do
+  scope :with_voucher, lambda {
     where.not(voucher_id: nil).joins(:voucher)
-  end
-  scope :available_candidate, -> do
+  }
+  scope :available_candidate, lambda {
     where(available_candidate: true)
-  end
+  }
 
-  scope :available_for_poaching, -> do
+  scope :available_for_poaching, lambda {
     available_candidate_ids = Opportunity.available_candidate.pluck(:id)
     unstarted_ids = Opportunity.joins(active_matches: :match_recommendation_dnd_staff_decision).
       merge(MatchDecisions::Base.pending).pluck(:id)
     Opportunity.where(id: available_candidate_ids + unstarted_ids)
-  end
+  }
   # after_save :run_match_engine_if_newly_available
 
-  scope :on_route, -> (route) do
+  scope :on_route, lambda { |route|
     joins(sub_program: :program).merge(SubProgram.on_route(route))
-  end
+  }
 
   def self.text_search(text)
     return none unless text.present?
 
     unit_matches = Unit.where(
-      Unit.arel_table[:id].eq arel_table[:unit_id]
+      Unit.arel_table[:id].eq arel_table[:unit_id],
     ).text_search(text).exists
 
     voucher_matches = Voucher.where(
-      Voucher.arel_table[:id].eq arel_table[:voucher_id]
+      Voucher.arel_table[:id].eq arel_table[:voucher_id],
     ).text_search(text).exists
 
     where(
-      unit_matches
-      .or(voucher_matches)
+      unit_matches.
+      or(voucher_matches),
     )
   end
 
@@ -114,12 +114,12 @@ class Opportunity < ActiveRecord::Base
       requirement.clients_that_fit(client_scope).exists?
     end
     attribute_matches = [
-      add_unit_attributes_filter(client_scope).exists?
+      add_unit_attributes_filter(client_scope).exists?,
     ]
     (requirement_matches + attribute_matches).all?
   end
 
-  def matching_clients(client_scope=Client.available_for_matching(match_route))
+  def matching_clients(client_scope = Client.available_for_matching(match_route))
     requirements_with_inherited.each do |requirement|
       client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
     end
@@ -131,7 +131,7 @@ class Opportunity < ActiveRecord::Base
     if unit.present? && unit.elevator_accessible == false
       client_scope = client_scope.where(requires_elevator_access: false)
     end
-    return client_scope
+    client_scope
   end
 
   def notify_contacts_of_manual_match(match)
@@ -159,10 +159,10 @@ class Opportunity < ActiveRecord::Base
   delegate :visible_by?, to: :sub_program
   delegate :editable_by?, to: :sub_program
 
-  scope :visible_by, ->(user) {
+  scope :visible_by, lambda { |user|
     joins(:sub_program).merge(SubProgram.visible_by(user))
   }
-  scope :editable_by, ->(user) {
+  scope :editable_by, lambda { |user|
     joins(:sub_program).merge(SubProgram.editable_by(user))
   }
 

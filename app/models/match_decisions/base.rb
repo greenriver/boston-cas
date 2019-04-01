@@ -35,16 +35,16 @@ module MatchDecisions
     attr_accessor :shelter_expiration
 
     scope :pending, -> { where(status: :pending) }
-    scope :awaiting_action, -> do
+    scope :awaiting_action, lambda {
       where(status: [:pending, :acknowledged])
-    end
-    scope :last_updated_before, -> (date) do
+    }
+    scope :last_updated_before, lambda { |date|
       where(arel_table[:updated_at].lteq(date))
-    end
+    }
 
     has_many :decision_action_events,
-      class_name: MatchEvents::DecisionAction.name,
-      foreign_key: :decision_id
+             class_name: MatchEvents::DecisionAction.name,
+             foreign_key: :decision_id
 
     validate :ensure_status_allowed, if: :status
     validate :cancellations, if: :administrative_cancel_reason_id
@@ -61,9 +61,9 @@ module MatchDecisions
     end
 
     def contact_name
-      contact && contact.full_name
+      contact&.full_name
     end
-    alias_method :actor_name, :contact_name
+    alias actor_name contact_name
 
     def editable?
       # can notification responses update this decision?
@@ -94,10 +94,8 @@ module MatchDecisions
 
     def set_stall_date
       stall_on = if stallable?
-        Date.today + stalled_after
-      else
-        nil
-      end
+                   Date.today + stalled_after
+                 end
 
       match.update(
         stall_date: stall_on,
@@ -120,7 +118,7 @@ module MatchDecisions
         distinct.
         map(&:format_for_checkboxes)
     end
-      
+
     def stalled_responses_requiring_note
       @stalled_responses_requiring_note ||= StalledResponse.active.
         requiring_note.
@@ -132,7 +130,7 @@ module MatchDecisions
       decision_type
     end
 
-    def notifications fetch_strategy: :single_decision
+    def notifications(fetch_strategy: :single_decision)
       match.send("#{decision_type}_notifications")
     end
 
@@ -156,16 +154,14 @@ module MatchDecisions
     # do things like set the initial "pending" status and
     # send notifications
     # All sub-class overrides should call this first
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       # always reset the stall date when the match moves into a new step
-      set_stall_date()
+      set_stall_date
     end
 
-    def uninitialize_decision! send_notifications: false
+    def uninitialize_decision!(send_notifications: false)
       update(status: nil)
-      if previous_step
-        previous_step.initialize_decision!(send_notifications: send_notifications)
-      end
+      previous_step&.initialize_decision!(send_notifications: send_notifications)
     end
 
     def initialized?
@@ -210,14 +206,14 @@ module MatchDecisions
       statuses[status && status.to_sym]
     end
 
-    def run_status_callback! **dependencies
+    def run_status_callback!(**dependencies)
       status_callbacks.new(self, dependencies).public_send status
     end
 
     # inherit in subclasses and add methods for each entry in #statuses
     class StatusCallbacks
       attr_reader :decision, :dependencies
-      def initialize decision, options
+      def initialize(decision, _options)
         @decision = decision
         @dependencies = dependencies
       end
@@ -229,18 +225,16 @@ module MatchDecisions
     end
     private_constant :StatusCallbacks
 
-
-    def record_action_event! contact:
+    def record_action_event!(contact:)
       decision_action_events.create! match: match, contact: contact, action: status, note: note
     end
 
     # override in subclass
-    def notify_contact_of_action_taken_on_behalf_of contact:
-
+    def notify_contact_of_action_taken_on_behalf_of(contact:)
     end
 
     def self.model_name
-      @_model_name ||= ActiveModel::Name.new(self, nil, "decision")
+      @_model_name ||= ActiveModel::Name.new(self, nil, 'decision')
     end
 
     def to_partial_path
@@ -251,17 +245,17 @@ module MatchDecisions
       [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation]
     end
 
-    def whitelist_params_for_update params
+    def whitelist_params_for_update(params)
       result = params.require(:decision).permit(permitted_params)
       # also allow one cancel reason
       reason_id_array = Array.wrap params.require(:decision)[:administrative_cancel_reason_id]
       cancel_reason_id = reason_id_array.select(&:present?).first
-      result.merge! administrative_cancel_reason_id: cancel_reason_id
+      result[:administrative_cancel_reason_id] = cancel_reason_id
       result
     end
 
     # override in subclass
-    def accessible_by? contact
+    def accessible_by?(_contact)
       false
     end
 
@@ -271,6 +265,7 @@ module MatchDecisions
 
     def previous_step
       return unless step_number.present?
+
       previous_step_name = match_route.class.match_steps.invert[step_number - 1]
       match.decisions.find_by(type: previous_step_name)
     end
@@ -287,11 +282,7 @@ module MatchDecisions
     end
 
     def self.closed_match_statuses
-      [
-        :declined,
-        :canceled,
-        :rejected,
-      ]
+      [:declined, :canceled, :rejected]
     end
 
     def self.match_steps_for_reporting
@@ -328,39 +319,38 @@ module MatchDecisions
       return :canceled if self.class.closed_match_statuses.include?(status.try(:to_sym))
       return :active if editable?
       return :incomplete if status == :pending || status.blank?
+
       :done
     end
 
     private
 
-      def decision_type
-        self.class.to_s.demodulize.underscore
-      end
+    def decision_type
+      self.class.to_s.demodulize.underscore
+    end
 
-      def status_callbacks
-        self.class.const_get :StatusCallbacks
-      end
+    def status_callbacks
+      self.class.const_get :StatusCallbacks
+    end
 
-      def ensure_status_allowed
-        if statuses.with_indifferent_access[status].blank?
-          errors.add :status, 'is not allowed'
-        end
+    def ensure_status_allowed
+      if statuses.with_indifferent_access[status].blank?
+        errors.add :status, 'is not allowed'
       end
+    end
 
-      def cancellations
-        if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
-          errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'"
-        end
+    def cancellations
+      if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
+        errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'"
       end
+    end
 
-      def notification_class
-        "Notifications::#{self.class.to_s.demodulize}".constantize
-      end
+    def notification_class
+      "Notifications::#{self.class.to_s.demodulize}".constantize
+    end
 
-      def saved_status
-        changed_attributes[:status] || status
-      end
-
+    def saved_status
+      changed_attributes[:status] || status
+    end
   end
-
 end

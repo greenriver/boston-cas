@@ -3,7 +3,7 @@ class Rules::DisablingCondition < Rule
     if Client.column_names.include?(:disabling_condition.to_s)
       scope.where(disabling_condition: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.disabling_condition missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.disabling_condition missing. Cannot check clients against #{self.class}."
     end
   end
 end

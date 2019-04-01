@@ -2,7 +2,7 @@ module Matching
   class Matchability
     def self.update(opportunities, match_route:)
       engine = Engine.for_available_clients(opportunities, match_route: match_route)
-      opportunities.each {|opportunity| new(opportunity, engine).update}
+      opportunities.each { |opportunity| new(opportunity, engine).update }
     end
 
     def initialize(opportunity, engine)

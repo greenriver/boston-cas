@@ -1,7 +1,7 @@
 class NotificationSessionsController < Devise::SessionsController
   before_action :load_notification!
 
-  # TODO maybe not needed
+  # TODO: maybe not needed
 
   # GET /resource/sign_in
   # def new
@@ -23,5 +23,4 @@ class NotificationSessionsController < Devise::SessionsController
   def load_notification!
     @notification = Notifications::Base.find_by code: params[:notification_id]
   end
-
 end

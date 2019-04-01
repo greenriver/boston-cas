@@ -33,6 +33,5 @@ module CasSeeds
 
       Rails.logger.info "Removed #{remove_rule_ids.count} rules"
     end
-
   end
 end

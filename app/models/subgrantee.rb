@@ -11,7 +11,7 @@ class Subgrantee < ActiveRecord::Base
 
   has_many :subgrantee_contacts, dependent: :destroy, inverse_of: :subgrantee
   has_many :contacts, through: :subgrantee_contacts
-  
+
   has_many :subgrantee_services, inverse_of: :subgrantee
   has_many :services, through: :subgrantee_services
 
@@ -25,7 +25,7 @@ class Subgrantee < ActiveRecord::Base
 
     query = "%#{text}%"
     where(
-      arel_table[:name].matches(query)
+      arel_table[:name].matches(query),
     )
   end
 

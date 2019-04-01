@@ -3,7 +3,7 @@ class Rules::Asylee < Rule
     if Client.column_names.include?(:asylee.to_s)
       scope.where(asylee: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.asylee missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.asylee missing. Cannot check clients against #{self.class}."
     end
   end
 end

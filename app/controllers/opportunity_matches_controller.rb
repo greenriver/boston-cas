@@ -23,10 +23,10 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def create
-    client_ids_to_activate = params[:checkboxes].reject { | key, value | value != "1" }.keys.map(&:to_i)
-    client_ids_to_activate.each do | client_id |
+    client_ids_to_activate = params[:checkboxes].select { |_key, value| value == '1' }.keys.map(&:to_i)
+    client_ids_to_activate.each do |client_id|
       match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
-          first_or_create(create_match_attributes(client_id))
+        first_or_create(create_match_attributes(client_id))
       match.activate!
     end
     redirect_to opportunity_matches_path(@opportunity)
@@ -58,10 +58,10 @@ class OpportunityMatchesController < ApplicationController
       client: client.prepare_for_archive,
     }
 
-    return {
+    {
       opportunity: @opportunity,
       client: client,
-      universe_state: universe_state
+      universe_state: universe_state,
     }
   end
 
@@ -77,12 +77,12 @@ class OpportunityMatchesController < ApplicationController
 
   def match_routes(client)
     counts = client.client_opportunity_matches.active.open.
-        joins(:program, :match_route).
-        where.not(opportunity: @opportunity).
-        group(:type).
-        count
-    counts.map do | key, value |
-      [ key.constantize.new.title, value ]
+      joins(:program, :match_route).
+      where.not(opportunity: @opportunity).
+      group(:type).
+      count
+    counts.map do |key, value|
+      [key.constantize.new.title, value]
     end
   end
   helper_method :match_routes
@@ -94,38 +94,37 @@ class OpportunityMatchesController < ApplicationController
 
   private
 
-    def require_access_to_opportunity!
-      not_authorized! unless (current_user.can_see_alternate_matches? ||
-          @opportunity.visible_by?(current_user))
-    end
+  def require_access_to_opportunity!
+    not_authorized! unless current_user.can_see_alternate_matches? ||
+                           @opportunity.visible_by?(current_user)
+  end
 
-    def can_activate_matches?
-      (current_user.can_edit_all_clients? ||
-          @opportunity.editable_by?(current_user)) &&
-          ! @opportunity.successful_match
-    end
-    helper_method :can_activate_matches?
+  def can_activate_matches?
+    (current_user.can_edit_all_clients? ||
+        @opportunity.editable_by?(current_user)) &&
+      !@opportunity.successful_match
+  end
+  helper_method :can_activate_matches?
 
-    def require_can_activate_matches!
-      not_authorized! unless can_activate_matches?
-    end
+  def require_can_activate_matches!
+    not_authorized! unless can_activate_matches?
+  end
 
-    def set_show_confidential_names
-      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
-    end
+  def set_show_confidential_names
+    @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
+  end
 
-    def match_scope
-      ClientOpportunityMatch
-        .accessible_by_user(current_user)
-        .where(opportunity_id: @opportunity.id)
-    end
+  def match_scope
+    ClientOpportunityMatch.
+      accessible_by_user(current_user).
+      where(opportunity_id: @opportunity.id)
+  end
 
-    def find_opportunity!
-      @opportunity = Opportunity.find params[:opportunity_id]
-    end
+  def find_opportunity!
+    @opportunity = Opportunity.find params[:opportunity_id]
+  end
 
-    def set_heading
-      @heading = "Eligible Clients for Vacancy"
-    end
-
+  def set_heading
+    @heading = 'Eligible Clients for Vacancy'
+  end
 end

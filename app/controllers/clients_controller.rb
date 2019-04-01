@@ -10,8 +10,8 @@ class ClientsController < ApplicationController
   def index
     @show_vispdat = can_view_vspdats?
     sort_string = sorter
-     
-    @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
+
+    @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
     @q = client_scope.ransack(params[:q])
@@ -25,20 +25,20 @@ class ClientsController < ApplicationController
       end
     end
     if params[:availability].present?
-      available_scope = Client.possible_availability_states.keys.detect{ |m| m == params[:availability].to_sym}
+      available_scope = Client.possible_availability_states.keys.detect { |m| m == params[:availability].to_sym }
       available_scope ||= :all
       @clients = @clients.public_send(available_scope)
     end
     # paginate
     @page = params[:page].presence || 1
     @clients = @clients.reorder(sort_string).page(@page.to_i).per(25)
-    
+
     client_ids = @clients.map(&:id)
 
-    @matches = ClientOpportunityMatch
-              .group(:client_id)
-              .where(client_id: client_ids)
-              .count
+    @matches = ClientOpportunityMatch.
+      group(:client_id).
+      where(client_id: client_ids).
+      count
 
     @active_filter = params[:availability].present? || params[:veteran].present?
     @available_clients = @clients.available
@@ -54,14 +54,14 @@ class ClientsController < ApplicationController
 
   def update
     if @client.update(client_params)
-      # If we have a future prevent_matching_until date, remove the client from 
+      # If we have a future prevent_matching_until date, remove the client from
       # any current matches
       if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
         @client.unavailable(permanent: false)
       end
-      redirect_to client_path(@client), notice: "Client updated"
+      redirect_to client_path(@client), notice: 'Client updated'
     else
-      render :show, {flash: {error: 'Unable update client.'}}
+      render :show, flash: { error: 'Unable update client.' }
     end
   end
 
@@ -79,7 +79,7 @@ class ClientsController < ApplicationController
   private
 
   def filter_terms
-    [ :availability, :veteran ]
+    [:availability, :veteran]
   end
   helper_method :filter_terms
 
@@ -100,12 +100,13 @@ class ClientsController < ApplicationController
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort_string += ' NULLS LAST'
     end
-    return sort_string
+    sort_string
   end
 
   def client_scope
     Client.accessible_by_user(current_user)
   end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_client
     @client = client_scope.find(params[:id])
@@ -122,11 +123,10 @@ class ClientsController < ApplicationController
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
   def query_string
     "%#{@query}%"
   end
-
 end

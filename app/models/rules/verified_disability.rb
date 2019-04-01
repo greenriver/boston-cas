@@ -7,7 +7,7 @@ class Rules::VerifiedDisability < Rule
         scope.where(disability_verified_on: nil)
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.disability_verified_on missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.disability_verified_on missing. Cannot check clients against #{self.class}."
     end
   end
 end

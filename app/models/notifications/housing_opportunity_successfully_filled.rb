@@ -1,7 +1,6 @@
 module Notifications
   class HousingOpportunitySuccessfullyFilled < Base
-
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       contacts = match.contacts
 
       contacts.each do |contact|

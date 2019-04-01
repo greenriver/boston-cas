@@ -3,19 +3,19 @@ require 'pathname'
 require 'fileutils'
 
 # path to your application root.
-APP_ROOT = Pathname.new File.expand_path('../../',  __FILE__)
+APP_ROOT = Pathname.new File.expand_path('../../', __FILE__)
 
 Dir.chdir APP_ROOT do
   # This script is a starting point to setup your application.
   # Add necessary setup steps to this file:
 
-  puts "== Installing dependencies =="
-  system "gem install bundler --conservative"
-  system "bundle check || bundle install"
+  puts '== Installing dependencies =='
+  system 'gem install bundler --conservative'
+  system 'bundle check || bundle install'
 
   ymls = [
-    "secrets.yml",
-    "letsencrypt_plugin.yml"
+    'secrets.yml',
+    'letsencrypt_plugin.yml',
   ]
   ymls.each do |file|
     file = File.join('config', file)
@@ -26,47 +26,47 @@ Dir.chdir APP_ROOT do
   end
   unless File.exist?('.env')
     puts "\n== Creating .env"
-    FileUtils.cp ".env.sample", ".env"
+    FileUtils.cp '.env.sample', '.env'
   end
-  unless File.exist?("config/letsencrypt_plugin.yml")
+  unless File.exist?('config/letsencrypt_plugin.yml')
     puts "\n== Creating config/letsencrypt_plugin.yml =="
-    system "cp config/letsencrypt_plugin.yml.sample config/letsencrypt_plugin.yml"
+    system 'cp config/letsencrypt_plugin.yml.sample config/letsencrypt_plugin.yml'
   end
 
   puts "\n== Preparing CAS database =="
-  system "bin/rake db:create"
-  system "bin/rake db:migrate"
+  system 'bin/rake db:create'
+  system 'bin/rake db:migrate'
 
   puts "\n== Generating Seed Data for CAS Database =="
-  system "bin/rake db:seed"
+  system 'bin/rake db:seed'
   puts "\n== Adding Available Rules =="
-  system "bin/rake cas_seeds:create_rules"
+  system 'bin/rake cas_seeds:create_rules'
   puts "\n== Adding Available Services =="
-  system "bin/rake cas_seeds:create_services"
+  system 'bin/rake cas_seeds:create_services'
   puts "\n== Fixing any broken user accounts, adding contacts =="
-  system "bin/rake cas_seeds:ensure_all_users_have_contacts"
+  system 'bin/rake cas_seeds:ensure_all_users_have_contacts'
   puts "\n== Adding Available Decision Reasons =="
-  system "bin/rake cas_seeds:create_match_decision_reasons"
+  system 'bin/rake cas_seeds:create_match_decision_reasons'
   puts "\n== Adding Routes =="
-  system "bin/rake cas_seeds:ensure_all_match_routes_exist"
+  system 'bin/rake cas_seeds:ensure_all_match_routes_exist'
   puts "\n== Adding Prioritization schemes =="
-  system "bin/rake cas_seeds:ensure_all_match_prioritization_schemes_exist"
+  system 'bin/rake cas_seeds:ensure_all_match_prioritization_schemes_exist'
 
   puts "\n== Adding Fake Programs, Sub-Programs, Vouchers, Buildings, Units and associated organizations =="
-  system "bin/rake cas_seeds:import_vouchers"
+  system 'bin/rake cas_seeds:import_vouchers'
   puts "\n== Marking some fake opportunities as available for matching =="
-  system "bin/rake cas_seeds:create_opportunities"
+  system 'bin/rake cas_seeds:create_opportunities'
 
   puts "\n== Removing old logs and tempfiles =="
   FileUtils.rm_f Dir.glob(File.join('log', '*'))
   FileUtils.rm_rf Dir.glob(File.join('tmp', 'cache'))
 
   puts "\n== Creating styles/_variables.scss =="
-  styles = File.join %w(app assets stylesheets theme styles)
+  styles = File.join ['app', 'assets', 'stylesheets', 'theme', 'styles']
   unless File.directory?(styles)
     FileUtils.mkdir(styles)
   end
-  variables = File.join styles, "_variables.scss"
+  variables = File.join styles, '_variables.scss'
   unless File.exist?(variables)
     FileUtils.touch variables
   end
@@ -75,6 +75,6 @@ Dir.chdir APP_ROOT do
   unless File.exist? 'tmp'
     FileUtils.mkdir 'tmp'
   end
-  restart = File.join %w(tmp restart.txt)
+  restart = File.join ['tmp', 'restart.txt']
   FileUtils.touch restart
 end

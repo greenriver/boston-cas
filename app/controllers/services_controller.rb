@@ -9,7 +9,7 @@ class ServicesController < ApplicationController
     @services = Service.all
   end
 
-    # GET /services/new
+  # GET /services/new
   def new
     @service = Service.new
   end
@@ -47,16 +47,17 @@ class ServicesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_service
-      @service = Service.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def service_params
-      params.require(:service).permit(
-        :name,
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_service
+    @service = Service.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def service_params
+    params.require(:service).permit(
+      :name,
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+  end
 end

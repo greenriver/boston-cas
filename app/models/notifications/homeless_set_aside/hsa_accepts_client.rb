@@ -1,7 +1,6 @@
 module Notifications::HomelessSetAside
   class HsaAcceptsClient < ::Notifications::Base
-
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
       end
@@ -10,7 +9,7 @@ module Notifications::HomelessSetAside
     def event_label
       "#{_('Housing Subsidy Administrator')} reviews match with client"
     end
-    
+
     def show_client_info?
       true
     end
@@ -26,6 +25,5 @@ module Notifications::HomelessSetAside
     def contacts_editable?
       true
     end
-    
   end
 end

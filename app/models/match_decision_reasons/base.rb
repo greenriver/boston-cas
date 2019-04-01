@@ -22,6 +22,5 @@ module MatchDecisionReasons
     def not_working_with_client?
       false
     end
-
   end
 end

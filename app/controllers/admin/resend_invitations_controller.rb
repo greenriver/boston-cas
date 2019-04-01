@@ -8,6 +8,5 @@ module Admin
       flash[:notice] = "Account activation instructions resent to #{@user.email}"
       redirect_to admin_users_path
     end
-
   end
 end

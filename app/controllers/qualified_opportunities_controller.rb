@@ -10,7 +10,7 @@ class QualifiedOpportunitiesController < ApplicationController
       joins(:opportunity).
       pluck(Opportunity.arel_table[:id].as('id').to_sql)
     @opportunities = opportunity_scope.select do |opportunity|
-      opportunity.matches_client?(@client) && ! @client_active_opportunity_ids.include?(opportunity.id)
+      opportunity.matches_client?(@client) && !@client_active_opportunity_ids.include?(opportunity.id)
     end
   end
 
@@ -29,9 +29,9 @@ class QualifiedOpportunitiesController < ApplicationController
       client: @client.prepare_for_archive,
     }
     match = @client.candidate_matches.create(
-      opportunity: @opportunity, 
-      client: @client, 
-      universe_state: @universe_state
+      opportunity: @opportunity,
+      client: @client,
+      universe_state: @universe_state,
     )
     match.activate!
     redirect_to match_path match

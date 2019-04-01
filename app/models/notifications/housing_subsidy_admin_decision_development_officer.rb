@@ -2,7 +2,7 @@ module Notifications
   class HousingSubsidyAdminDecisionDevelopmentOfficer < Base
     # Notification sent to a client of a decision made by the housing subsidy administrator
 
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       match.do_contacts.each do |contact|
         create! match: match, recipient: contact
       end
@@ -11,6 +11,5 @@ module Notifications
     def event_label
       "#{_('Development Officer')} sent notice of #{_('Housing Subsidy Administrator')}'s decision."
     end
-
   end
 end

@@ -1,6 +1,5 @@
 module MatchProgressUpdates
   class Hsa < Base
-    
     def name
       _('Housing Subsidy Administrator status update')
     end

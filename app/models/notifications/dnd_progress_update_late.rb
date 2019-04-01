@@ -6,13 +6,12 @@ module Notifications
     def deliver
     end
 
-    def self.create_for_match! match_id:, contact_id:
+    def self.create_for_match!(match_id:, contact_id:)
       create! client_opportunity_match_id: match_id, recipient_id: contact_id
     end
 
     def event_label
       "Progress update late, #{_('DND')} notified"
     end
-
   end
 end

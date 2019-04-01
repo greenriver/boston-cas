@@ -3,7 +3,7 @@ class Rules::IncomeLessThanThirtyPercentAmi < Rule
     if Client.column_names.include?(:income_total_monthly.to_s)
       c_t = Client.arel_table
       ami = Config.get(:ami)
-      ami_partial = (ami * 0.3) / 12 #30% AMI
+      ami_partial = (ami * 0.3) / 12 # 30% AMI
       if requirement.positive
         where = c_t[:income_total_monthly].lteq(ami_partial).
           or(c_t[:income_total_monthly].eq(nil))
@@ -12,7 +12,7 @@ class Rules::IncomeLessThanThirtyPercentAmi < Rule
       end
       scope.where(where)
     else
-      raise RuleDatabaseStructureMissing.new("clients.income_total_monthly missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.income_total_monthly missing. Cannot check clients against #{self.class}."
     end
   end
 end

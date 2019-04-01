@@ -1,6 +1,5 @@
 module MatchDecisions
   class MatchRecommendationShelterAgency < Base
-
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
@@ -18,7 +17,7 @@ module MatchDecisions
       label_for_status status
     end
 
-    def label_for_status status
+    def label_for_status(status)
       case status.to_sym
       when :pending then "New Match Awaiting #{_('Shelter Agency')} Review"
       when :acknowledged then "Match acknowledged by #{_('Shelter Agency')}.  In review"
@@ -34,10 +33,9 @@ module MatchDecisions
     private def decline_status_label
       [
         "Match declined by #{_('Shelter Agency')}. Reason: #{decline_reason_name}",
-        not_working_with_client_reason_status_label
-      ].join ". "
+        not_working_with_client_reason_status_label,
+      ].join '. '
     end
-
 
     def step_name
       "#{_('Shelter Agency')} Initial Review of Match Recommendation"
@@ -72,7 +70,7 @@ module MatchDecisions
       super && saved_status !~ /accepted|declined/
     end
 
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
@@ -85,13 +83,13 @@ module MatchDecisions
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of(contact:)
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.shelter_agency_contacts)
+        contact.in?(match.shelter_agency_contacts)
     end
 
     private def note_present_if_status_declined
@@ -103,7 +101,6 @@ module MatchDecisions
     private def decline_reason_scope
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
-
 
     class StatusCallbacks < StatusCallbacks
       def pending
@@ -125,11 +122,9 @@ module MatchDecisions
       end
 
       def not_working_with_client
-
       end
 
       def expiration_update
-
       end
 
       def canceled
@@ -141,7 +136,7 @@ module MatchDecisions
 
     # Override default behavior to send additional notification to DND contacts
     # if status = 'not_working_with_client'
-    def record_action_event! contact:
+    def record_action_event!(contact:)
       if status == 'not_working_with_client'
         Notifications::NoLongerWorkingWithClient.create_for_match! match
         decision_action_events.create! match: match, contact: contact, action: status, note: note, not_working_with_client_reason_id: not_working_with_client_reason_id, client_last_seen_date: client_last_seen_date
@@ -176,11 +171,11 @@ module MatchDecisions
 
     private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
       if status == 'accepted'
-        if ! client_spoken_with_services_agency
+        unless client_spoken_with_services_agency
           errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
         end
-        if Config.get(:require_cori_release) && ! cori_release_form_submitted
-         errors.add :cori_release_form_submitted, 'A CORI release form is required.'
+        if Config.get(:require_cori_release) && !cori_release_form_submitted
+          errors.add :cori_release_form_submitted, 'A CORI release form is required.'
         end
       end
     end
@@ -189,16 +184,15 @@ module MatchDecisions
       decline_reason.blank? && not_working_with_client_reason.blank?
     end
 
-    def whitelist_params_for_update params
+    def whitelist_params_for_update(params)
       super.merge params.require(:decision).permit(
         :client_last_seen_date,
         :release_of_information,
         :working_with_client,
         :client_spoken_with_services_agency,
         :cori_release_form_submitted,
-        :shelter_expiration
+        :shelter_expiration,
       )
     end
   end
 end
-

@@ -14,9 +14,9 @@ module Warehouse
           client_id: warehouse_client_id,
           cas_client_id: cas_client_id,
           match_id: match_id,
-          housed_on: housed_on
+          housed_on: housed_on,
         )
       end
-    end    
+    end
   end
 end

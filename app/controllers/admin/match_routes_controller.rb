@@ -4,11 +4,10 @@ module Admin
     before_action :load_match_route, only: [:edit, :update]
 
     def index
-      @routes = MatchRoutes::Base.all.order("id DESC")
+      @routes = MatchRoutes::Base.all.order('id DESC')
     end
 
     def edit
-
     end
 
     def update

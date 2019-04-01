@@ -3,14 +3,13 @@ module UpdateableAttributes
   # updating attributes
   #
   # the including object must implement #save
-  
-  def assign_attributes attrs = {}
+
+  def assign_attributes(attrs = {})
     attrs.each { |attr, value| send "#{attr}=", value }
   end
-  
-  def update attrs = {}
+
+  def update(attrs = {})
     assign_attributes attrs
     save
   end
-  
 end

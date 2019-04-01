@@ -7,7 +7,7 @@ class Rules::InterestedInNeighborhood < Rule
     Neighborhood.order(:name).pluck(:id, :name)
   end
 
-  def display_for_variable value
+  def display_for_variable(value)
     available_neighborhoods.to_h.try(:[], value.to_i) || value
   end
 
@@ -20,7 +20,7 @@ class Rules::InterestedInNeighborhood < Rule
       end
       scope.where(where, requirement.variable.to_s)
     else
-      raise RuleDatabaseStructureMissing.new("clients.neighborhood_interests missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.neighborhood_interests missing. Cannot check clients against #{self.class}."
     end
   end
 end

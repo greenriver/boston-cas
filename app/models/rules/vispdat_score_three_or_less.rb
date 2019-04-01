@@ -9,7 +9,7 @@ class Rules::VispdatScoreThreeOrLess < Rule
       end
       scope.where(where)
     else
-      raise RuleDatabaseStructureMissing.new("clients.vispdat_score missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.vispdat_score missing. Cannot check clients against #{self.class}."
     end
   end
 end

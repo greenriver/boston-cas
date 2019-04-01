@@ -5,8 +5,8 @@ class ClientNote < ActiveRecord::Base
 
   acts_as_paranoid
   has_paper_trail
-  
+
   def user_can_destroy?(user)
-    user.id == self.user_id || user.can_delete_client_notes?
+    user.id == user_id || user.can_delete_client_notes?
   end
 end

@@ -3,7 +3,7 @@ class Rules::MethProductionConviction < Rule
     if Client.column_names.include?(:meth_production_conviction.to_s)
       scope.where(meth_production_conviction: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.meth_production_conviction missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.meth_production_conviction missing. Cannot check clients against #{self.class}."
     end
   end
 end

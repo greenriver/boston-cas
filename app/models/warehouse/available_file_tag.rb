@@ -1,25 +1,23 @@
 module Warehouse
   class AvailableFileTag < Base
-
-    scope :ordered, -> do 
+    scope :ordered, lambda {
       order(weight: :asc, group: :asc, name: :asc)
-    end
+    }
 
-    scope :consent_forms, -> do
+    scope :consent_forms, lambda {
       where(consent_form: true)
-    end
+    }
 
-    scope :full_release, -> do
+    scope :full_release, lambda {
       consent_forms.where(full_release: true)
-    end
+    }
 
-    scope :partial_consent, -> do
+    scope :partial_consent, lambda {
       consent_forms.where(full_release: false)
-    end
+    }
 
-    scope :document_ready, -> do
+    scope :document_ready, lambda {
       where(document_ready: true)
-    end
-
+    }
   end
 end

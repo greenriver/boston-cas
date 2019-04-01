@@ -2,13 +2,13 @@ module Warehouse
   class Client < Base
     self.table_name = :Client
 
-    scope :for_client, -> (warehouse_client_id) do
+    scope :for_client, lambda { |warehouse_client_id|
       where(id: warehouse_client_id)
-    end
+    }
 
-    scope :needs_history_pdf, -> do
+    scope :needs_history_pdf, lambda {
       where(generate_history_pdf: true)
-    end
+    }
 
     def queue_history_pdf_generation
       update(generate_history_pdf: true)

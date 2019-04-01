@@ -18,13 +18,13 @@ module Testing::Matching
     def submitted_params
       params.
         require(:testing_matching_candidate_generation).
-        permit({clients: [], opportunities: []})
+        permit(clients: [], opportunities: [])
     end
 
     helper_method :multi
 
     def multi(form, attribute, collection)
-      form.input attribute, collection: collection, input_html: {multiple: true}
+      form.input attribute, collection: collection, input_html: { multiple: true }
     end
   end
 end

@@ -1,12 +1,11 @@
 module Notifications
   class ConfirmShelterAgencyDeclineDndStaff < Base
-    
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
-    
+
     def decision
       match.confirm_shelter_agency_decline_dnd_staff_decision
     end
@@ -14,6 +13,5 @@ module Notifications
     def event_label
       "#{_('DND')} notified of #{_('Shelter Agency')} decline.  Confirmation pending."
     end
-
   end
 end

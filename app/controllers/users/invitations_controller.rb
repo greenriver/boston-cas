@@ -1,5 +1,4 @@
 class Users::InvitationsController < Devise::InvitationsController
-
   prepend_before_action :require_can_edit_users!, only: [:new, :create]
 
   # GET /resource/invitation/new
@@ -26,9 +25,9 @@ class Users::InvitationsController < Devise::InvitationsController
     contact.update(first_name: @user.first_name, last_name: @user.last_name)
     @user.update(contact: contact)
     if resource.errors.empty?
-      if is_flashing_format? && self.resource.invitation_sent_at
+      if is_flashing_format? && resource.invitation_sent_at
 
-        set_flash_message :notice, :send_instructions, :email => user_attrs['email']
+        set_flash_message :notice, :send_instructions, email: user_attrs['email']
       end
       redirect_to admin_users_path
     else
@@ -60,15 +59,13 @@ class Users::InvitationsController < Devise::InvitationsController
       :email,
       :agency,
       role_ids: [],
-      contact_attributes: [:first_name, :last_name, :phone, :email]
+      contact_attributes: [:first_name, :last_name, :phone, :email],
     )
   end
 
   private def programs_params
     params.require(:user).permit(
-        editable_programs: [],
+      editable_programs: [],
     )
   end
-
 end
-

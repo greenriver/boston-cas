@@ -1,6 +1,5 @@
 module MatchProgressUpdates
   class Ssp < Base
-    
     def name
       'Stabilization Service Provider status update'
     end

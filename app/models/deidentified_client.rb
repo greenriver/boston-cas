@@ -2,48 +2,50 @@ class DeidentifiedClient < NonHmisClient
   validates :client_identifier, uniqueness: true
 
   # Search only the client identifier
-  scope :text_search, -> (text) do
+  scope :text_search, lambda { |text|
     return none unless text.present?
+
     text.strip!
     where(search_alternate_name(text))
-  end
+  }
 
   def download_headers
     [
-      "id",
-      "Client Identifier",
-      "First Name",
-      "Middle name",
-      "Last Name",
-      "Assessment Score",
-      "Agency",
-      "Active Cohorts",
-      "DOB",
-      "SSN",
-      "Days homeless in the last three years",
-      "Veteran",
+      'id',
+      'Client Identifier',
+      'First Name',
+      'Middle name',
+      'Last Name',
+      'Assessment Score',
+      'Agency',
+      'Active Cohorts',
+      'DOB',
+      'SSN',
+      'Days homeless in the last three years',
+      'Veteran',
       'Interested in RRH',
       'Interested in Youth RRH',
       'Client and/or Case Manager Contact Information',
-      "Income maximization assistance requested",
-      "Pending subsidized housing placement",
-      "Full release on file",
-      "Requires wheelchair accessibility",
-      "Required number of bedrooms",
-      "Required minimum occupancy",
-      "Requires elevator access",
+      'Income maximization assistance requested',
+      'Pending subsidized housing placement',
+      'Full release on file',
+      'Requires wheelchair accessibility',
+      'Required number of bedrooms',
+      'Required minimum occupancy',
+      'Requires elevator access',
       _('Part of a family'),
       _('Chronically homeless family'),
-      "Gender",
-      _("Date days homeless verified"),
-      "Who verified days homeless",
-      "Total monthly income",
-      "Disabling condition",
-      "Physical disability",
-      "Developmental disability",
-      "Domestic violence survivor",
+      'Gender',
+      _('Date days homeless verified'),
+      'Who verified days homeless',
+      'Total monthly income',
+      'Disabling condition',
+      'Physical disability',
+      'Developmental disability',
+      'Domestic violence survivor',
     ]
   end
+
   def download_data
     [
       id,

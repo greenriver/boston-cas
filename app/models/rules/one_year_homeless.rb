@@ -9,7 +9,7 @@ class Rules::OneYearHomeless < Rule
       end
       scope.where(where)
     else
-      raise RuleDatabaseStructureMissing.new("clients.days_homeless missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.days_homeless missing. Cannot check clients against #{self.class}."
     end
   end
 end

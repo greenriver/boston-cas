@@ -1,13 +1,12 @@
 module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcknowledgesReceipt < ::MatchDecisions::Base
-    
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
     validate :can_only_accept_an_opportunity_once
     validate :ensure_required_contacts_present_on_accept
 
-    def label_for_status status
+    def label_for_status(status)
       case status.to_sym
       when :pending then "New Match Awaiting Acknowledgment by #{_('HSA')}"
       when :acknowledged then "Match acknowledged by #{_('HSA')}.  In review"
@@ -43,15 +42,15 @@ module MatchDecisions::HomelessSetAside
       super && saved_status !~ /acknowledged/
     end
 
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+        contact.in?(match.housing_subsidy_admin_contacts)
     end
 
     def notifications_for_this_step
@@ -85,16 +84,15 @@ module MatchDecisions::HomelessSetAside
       saved_status == 'pending' && status == 'acknowledged'
     end
 
-
     def cant_accept_if_match_closed
       if save_will_accept? && match.closed
-        then errors.add :status, "This match has already been closed."
+        then errors.add :status, 'This match has already been closed.'
       end
     end
 
     def can_only_accept_an_opportunity_once
       if save_will_accept? && match.already_active_for_opportunity.any?
-        then errors.add :status, "The receipt of this opportunity has already been acknowledged"
+        then errors.add :status, 'The receipt of this opportunity has already been acknowledged'
       end
     end
 
@@ -112,7 +110,5 @@ module MatchDecisions::HomelessSetAside
         errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
       end
     end
-
   end
-
 end

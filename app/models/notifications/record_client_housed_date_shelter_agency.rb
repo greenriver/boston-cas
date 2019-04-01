@@ -1,12 +1,11 @@
 module Notifications
   class RecordClientHousedDateShelterAgency < Base
-    
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
-    
+
     def decision
       match.record_client_housed_date_shelter_agency_decision
     end
@@ -14,6 +13,5 @@ module Notifications
     def event_label
       "#{_('Shelter Agency')} notified of approved match and asked to record date client housed"
     end
-
   end
 end

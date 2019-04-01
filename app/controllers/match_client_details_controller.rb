@@ -1,7 +1,7 @@
 class MatchClientDetailsController < ApplicationController
   include HasMatchAccessContext
   include PjaxModalController
-  
+
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
 
@@ -14,18 +14,17 @@ class MatchClientDetailsController < ApplicationController
 
   private
 
-    def set_match
-      @match = match_scope.find params[:match_id]
-    end
+  def set_match
+    @match = match_scope.find params[:match_id]
+  end
 
-    def set_client
-      @client = @match.client
-    end
+  def set_client
+    @client = @match.client
+  end
 
-    def match_history_scope
-      ClientOpportunityMatch
-        .closed
-        .where(client_id: @client.id)
-    end
-
+  def match_history_scope
+    ClientOpportunityMatch.
+      closed.
+      where(client_id: @client.id)
+  end
 end

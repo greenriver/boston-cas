@@ -3,7 +3,7 @@ class Rules::InterestedInRrh < Rule
     if Client.column_names.include?(:rrh_desired.to_s)
       scope.where(rrh_desired: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.rrh_desired missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.rrh_desired missing. Cannot check clients against #{self.class}."
     end
   end
 end

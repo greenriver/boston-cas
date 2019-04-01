@@ -6,7 +6,7 @@ class ClosedMatchesController < MatchListBaseController
     if params[:q].present?
       search_scope = match_scope.text_search(params[:q])
       unless current_user.can_view_all_clients?
-        search_scope = search_scope.where(id: visible_match_ids())
+        search_scope = search_scope.where(id: visible_match_ids)
       end
       @matches = search_scope
     else
@@ -17,7 +17,7 @@ class ClosedMatchesController < MatchListBaseController
     @available_routes = MatchRoutes::Base.filterable_routes
 
     md = MatchDecisions::Base.where(
-      'match_id = client_opportunity_matches.id'
+      'match_id = client_opportunity_matches.id',
     ).where.not(status: nil).order(created_at: :desc).limit(1)
 
     # sort / paginate
@@ -33,7 +33,7 @@ class ClosedMatchesController < MatchListBaseController
     elsif sort_column == 'days_homeless_in_last_three_years'
       column = 'clients.days_homeless_in_last_three_years'
     elsif sort_column == 'last_decision'
-      column = "last_decision.updated_at"
+      column = 'last_decision.updated_at'
     elsif sort_column == 'current_step'
       column = 'last_decision.type'
     elsif sort_column == 'vispdat_score'
@@ -43,7 +43,7 @@ class ClosedMatchesController < MatchListBaseController
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort = sort + ' NULLS LAST'
+      sort += ' NULLS LAST'
     end
     @show_vispdat = show_vispdat?
 
@@ -55,17 +55,17 @@ class ClosedMatchesController < MatchListBaseController
     end
 
     @current_route = params[:current_route]
-    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
-      @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
+    if @current_route.present? && MatchRoutes::Base.filterable_routes.value?(@current_route)
+      @matches = @matches.joins(:match_route).where(match_routes: { type: @current_route })
     end
 
-    @matches = @matches
-      .references(:client)
-      .includes(:client)
-      .joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision")
-      .order(sort)
-      .preload(:client, :opportunity, :decisions)
-      .page(params[:page]).per(25)
+    @matches = @matches.
+      references(:client).
+      includes(:client).
+      joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
+      order(sort).
+      preload(:client, :opportunity, :decisions).
+      page(params[:page]).per(25)
 
     @column = sort_column
     @direction = sort_direction
@@ -97,12 +97,11 @@ class ClosedMatchesController < MatchListBaseController
   end
 
   private def sort_column
-    available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
+    available_sort = ClientOpportunityMatch.sort_options.map { |m| m[:column] }
     available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
-
 end

@@ -9,7 +9,7 @@ class Rules::AssessmentScoreGreaterThanZero < Rule
       end
       scope.where(where)
     else
-      raise RuleDatabaseStructureMissing.new("clients.assessment_score missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.assessment_score missing. Cannot check clients against #{self.class}."
     end
   end
 end

@@ -1,5 +1,4 @@
 class Program < ActiveRecord::Base
-
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include HasRequirements
@@ -22,40 +21,40 @@ class Program < ActiveRecord::Base
   has_many :program_contacts
   has_many :contacts, through: :program_contacts
   has_many :housing_subsidy_admin_contacts,
-    -> { where program_contacts: {housing_subsidy_admin: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { housing_subsidy_admin: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
   has_many :dnd_contacts,
-    -> { where program_contacts: {dnd_staff: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { dnd_staff: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
   has_many :client_contacts,
-    -> { where program_contacts: {client: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { client: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
   has_many :shelter_agency_contacts,
-    -> { where program_contacts: {shelter_agency: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { shelter_agency: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
   has_many :ssp_contacts,
-    -> { where program_contacts: {ssp: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { ssp: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
   has_many :hsp_contacts,
-    -> { where program_contacts: {hsp: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { hsp: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
   has_many :do_contacts,
-    -> { where program_contacts: {do: true} },
-    class_name: Contact.name,
-    through: :program_contacts,
-    source: :contact
+           -> { where program_contacts: { do: true } },
+           class_name: Contact.name,
+           through: :program_contacts,
+           source: :contact
 
   def default_match_contacts
     @default_match_contacts ||= ProgramContacts.new program: self
@@ -63,9 +62,9 @@ class Program < ActiveRecord::Base
 
   belongs_to :match_route, class_name: MatchRoutes::Base.name
 
-  scope :on_route, -> (route) do
+  scope :on_route, lambda { |route|
     joins(:match_route).merge(MatchRoutes::Base.where(type: route.class.name))
-  end
+  }
 
   validates_presence_of :name, :match_route_id
   accepts_nested_attributes_for :sub_programs
@@ -73,18 +72,18 @@ class Program < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
 
-  def visible_by? user
-    user.can_view_programs || (user.can_view_assigned_programs && super )
+  def visible_by?(user)
+    user.can_view_programs || (user.can_view_assigned_programs && super)
   end
 
-  def editable_by? user
-    user.can_edit_programs || (user.can_edit_assigned_programs && super )
+  def editable_by?(user)
+    user.can_edit_programs || (user.can_edit_assigned_programs && super)
   end
 
   def sites
     s = []
     sub_programs.each do |sp|
-      if sp.building == nil
+      if sp.building.nil?
         s << 'Scattered Sites'
       else
         s << sp.building.name
@@ -92,6 +91,7 @@ class Program < ActiveRecord::Base
     end
     s
   end
+
   def organizations
     s = []
     sub_programs.each do |sp|
@@ -109,31 +109,31 @@ class Program < ActiveRecord::Base
     return none unless text.present?
 
     funding_source_matches = FundingSource.where(
-      FundingSource.arel_table[:id].eq arel_table[:funding_source_id]
+      FundingSource.arel_table[:id].eq arel_table[:funding_source_id],
     ).text_search(text).exists
 
     query = "%#{text}%"
     where(
-      arel_table[:name].matches(query)
-      .or(funding_source_matches)
+      arel_table[:name].matches(query).
+      or(funding_source_matches),
     )
   end
 
   def inherited_requirements_by_source
-    inherited_service_requirements_by_source
-      .merge! inherited_funding_source_requirements_by_source
+    inherited_service_requirements_by_source.
+      merge! inherited_funding_source_requirements_by_source
   end
 
   def self.preload_inherited_requirements
     preload(
-        services: {requirements: :rule},
-        funding_source: { requirements: :rule, services: {requirements: :rule} },
-        subgrantee: { requirements: :rule, services: {requirements: :rule} }
+      services: { requirements: :rule },
+      funding_source: { requirements: :rule, services: { requirements: :rule } },
+      subgrantee: { requirements: :rule, services: { requirements: :rule } },
       )
   end
 
   def self.associations_adding_requirements
-    [:funding_source, :services]
+    %i[funding_source services]
   end
 
   def self.associations_adding_services
@@ -142,26 +142,26 @@ class Program < ActiveRecord::Base
 
   def self.sort_options
     [
-      {title: 'Program A-Z', column: 'program_id', direction: 'asc', order: 'LOWER(programs.name) ASC', visible: true},
-      {title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true},
-      {title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true},
-      {title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true},
-      {title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true},
-      {title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true},
+      { title: 'Program A-Z', column: 'program_id', direction: 'asc', order: 'LOWER(programs.name) ASC', visible: true },
+      { title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true },
+      { title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true },
+      { title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true },
+      { title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true },
+      { title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true },
     ]
   end
 
   private
-    def inherited_funding_source_requirements_by_source
-      {}.tap do |result|
-        if funding_source.present?
-          result.merge! funding_source.inherited_requirements_by_source
-          result[funding_source] = []
-          funding_source.requirements.each do |requirement|
-            result[funding_source] << requirement
-          end
+
+  def inherited_funding_source_requirements_by_source
+    {}.tap do |result|
+      if funding_source.present?
+        result.merge! funding_source.inherited_requirements_by_source
+        result[funding_source] = []
+        funding_source.requirements.each do |requirement|
+          result[funding_source] << requirement
         end
       end
     end
-
+  end
 end

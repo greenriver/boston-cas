@@ -3,7 +3,7 @@ class Rules::DevelopmentalDisability < Rule
     if Client.column_names.include?(:developmental_disability.to_s)
       scope.where(developmental_disability: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.developmental_disability missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.developmental_disability missing. Cannot check clients against #{self.class}."
     end
   end
 end

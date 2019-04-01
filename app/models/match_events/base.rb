@@ -5,7 +5,7 @@ module MatchEvents
     # match generation by the CAS
     # notifications being sent
     # actors accepting or declining the match
-    
+
     self.table_name = 'match_events'
 
     has_paper_trail
@@ -15,37 +15,37 @@ module MatchEvents
     end
 
     belongs_to :match,
-      class_name: 'ClientOpportunityMatch',
-      inverse_of: :events
+               class_name: 'ClientOpportunityMatch',
+               inverse_of: :events
 
     belongs_to :notification,
-      class_name: 'Notifications::Base'
-      
+               class_name: 'Notifications::Base'
+
     belongs_to :decision,
-      class_name: 'MatchDecisions::Base'
-      
+               class_name: 'MatchDecisions::Base'
+
     belongs_to :contact,
-      inverse_of: :events
+               inverse_of: :events
     delegate :name, to: :contact, allow_nil: :true, prefix: true
 
     belongs_to :not_working_with_client_reason, class_name: 'MatchDecisionReasons::Base'
-    
+
     def name
       raise 'Abstract method'
     end
-    
+
     def timestamp
       created_at
     end
-    
+
     def date
       timestamp.to_date
     end
-    
-    def note_editable_by? editing_contact
+
+    def note_editable_by?(editing_contact)
       editing_contact.present? && (contact == editing_contact || match.can_create_administrative_note?(editing_contact))
     end
-    
+
     def remove_note!
       self.note = nil
       save
@@ -55,9 +55,8 @@ module MatchEvents
       false
     end
 
-    def show_note?(current_contact)
+    def show_note?(_current_contact)
       false
     end
-
   end
 end

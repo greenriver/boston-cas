@@ -3,7 +3,7 @@ class Rules::DmhEligible < Rule
     if Client.column_names.include?(:dmh_eligible.to_s)
       scope.where(dmh_eligible: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.dmh_eligible missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.dmh_eligible missing. Cannot check clients against #{self.class}."
     end
   end
 end

@@ -6,8 +6,8 @@ module HasMatchAccessContext
     helper MatchAccessContextsHelper
 
     delegate :current_contact,
-      :match_scope,
-      to: :access_context
+             :match_scope,
+             to: :access_context
   end
 
   def require_match_access_context!
@@ -15,5 +15,4 @@ module HasMatchAccessContext
     @access_context = MatchAccessContexts.build(self)
     @access_context.authenticate!
   end
-
 end

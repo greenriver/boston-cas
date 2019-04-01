@@ -1,8 +1,9 @@
 module MatchDecisions::ProviderOnly
   class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/confirm_hsa_accepts_client_decline_dnd_staff' 
+    def to_partial_path
+      'match_decisions/confirm_hsa_accepts_client_decline_dnd_staff'
     end
+
     def statuses
       {
         pending: 'Pending',
@@ -10,14 +11,14 @@ module MatchDecisions::ProviderOnly
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
-       }
+      }
     end
 
     def label
       label_for_status status
     end
 
-    def label_for_status status
+    def label_for_status(status)
       case status.to_sym
       when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator')} decline"
       when :decline_overridden then "#{_('Housing Subsidy Administrator')} decline overridden by #{_('DND')}.  Match successful"
@@ -47,7 +48,7 @@ module MatchDecisions::ProviderOnly
       super
     end
 
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
@@ -63,7 +64,7 @@ module MatchDecisions::ProviderOnly
       end
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
@@ -83,7 +84,7 @@ module MatchDecisions::ProviderOnly
 
       def decline_confirmed
         match.rejected!
-        # TODO maybe rerun the matching engine for that vacancy and client
+        # TODO: maybe rerun the matching engine for that vacancy and client
       end
 
       def canceled
@@ -92,8 +93,5 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end
-

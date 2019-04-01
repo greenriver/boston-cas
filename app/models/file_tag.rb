@@ -3,6 +3,7 @@ class FileTag < ActiveRecord::Base
 
   def self.available_tags
     return [] unless Warehouse::Base.enabled?
+
     Warehouse::Tag.available
   end
 end

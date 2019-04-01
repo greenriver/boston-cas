@@ -4,14 +4,11 @@ module OpportunityDetails
   # associations
 
   # factory method
-  def self.build opportunity
+  def self.build(opportunity)
     if opportunity.voucher.present?
       ViaVoucher.new opportunity
     elsif opportunity.unit.present?
       ViaUnit.new opportunity
-    else
-      # Blank.new opportunity
     end
   end
-
 end

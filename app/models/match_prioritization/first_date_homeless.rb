@@ -1,6 +1,5 @@
 module MatchPrioritization
   class FirstDateHomeless < Base
-
     def self.title
       'First date homeless'
     end

@@ -1,68 +1,65 @@
 module MatchAccessContexts
   class Notification
-    
     attr_reader :controller, :notification
-    
-    def initialize controller
+
+    def initialize(controller)
       @controller = controller
       @notification = Notifications::Base.find_by code: controller.params[:notification_id].to_s
     end
-    
+
     def current_contact
       @notification.recipient
     end
-    
+
     def contacts_editable?
       @notification.contacts_editable?
     end
-    
+
     def acknowledge_shelter_agency_notification?
       true
     end
-    
+
     def match_scope
       ClientOpportunityMatch.where(id: notification.client_opportunity_match_id)
     end
-    
+
     def authenticate!
       if @notification.expires_at.nil?
-        return true
+        true
       elsif @notification.expired?
         controller.redirect_to controller.notification_reissue_request_path(@notification)
-        return false
+        false
       else
-        return true
+        true
       end
     end
-    
+
     ################
     ### Path Helpers
     ################
-    
-    def match_path match, opts = {}
+
+    def match_path(match, opts = {})
       controller.notification_match_path(@notification, match, opts)
     end
-    
-    def match_decision_path match, decision, opts = {}
+
+    def match_decision_path(match, decision, opts = {})
       controller.notification_match_decision_path @notification, match, decision, opts
     end
-    
-    def match_decision_acknowledgment_path match, decision, opts = {}
+
+    def match_decision_acknowledgment_path(match, decision, opts = {})
       controller.notification_match_decision_acknowledgment_path @notification, match, decision, opts
     end
-    
-    def edit_match_contacts_path match, opts = {}
+
+    def edit_match_contacts_path(match, opts = {})
       controller.edit_notification_match_contacts_path @notification, match, opts
     end
-    
-    def match_contacts_path match, opts = {}
+
+    def match_contacts_path(match, opts = {})
       controller.notification_match_contacts_path @notification, match, opts
     end
 
-    def match_client_details_path match, opts = {}
+    def match_client_details_path(match, opts = {})
       controller.notification_match_client_details_path @notification, match, opts
     end
-    
-    
   end
 end

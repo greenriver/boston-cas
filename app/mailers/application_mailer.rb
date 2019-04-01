@@ -6,7 +6,7 @@ class ApplicationMailer < ActionMailer::Base
     ActionMailer::Base.register_interceptor SandboxEmailInterceptor
   end
 
-  def notification_expired message
+  def notification_expired(message)
     @contact = message[:recipient]
     @body = message[:body]
     @subject = message[:subject]

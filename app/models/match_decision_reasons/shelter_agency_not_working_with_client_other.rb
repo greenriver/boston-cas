@@ -1,6 +1,5 @@
 module MatchDecisionReasons
   class ShelterAgencyNotWorkingWithClientOther < Base
-
     def other?
       true
     end
@@ -8,6 +7,5 @@ module MatchDecisionReasons
     def not_working_with_client?
       true
     end
-
   end
 end

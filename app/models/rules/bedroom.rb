@@ -13,7 +13,7 @@ class Rules::Bedroom < Rule
     ]
   end
 
-  def display_for_variable value
+  def display_for_variable(value)
     available_number_of_bedrooms.to_h.try(:[], value.to_i) || value
   end
 
@@ -26,7 +26,7 @@ class Rules::Bedroom < Rule
         scope.where(a_t[:required_number_of_bedrooms].gt(requirement.variable))
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.required_number_of_bedrooms missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.required_number_of_bedrooms missing. Cannot check clients against #{self.class}."
     end
   end
 end

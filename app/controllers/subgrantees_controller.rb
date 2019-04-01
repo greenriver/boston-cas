@@ -4,20 +4,20 @@ class SubgranteesController < ApplicationController
   before_action :require_can_edit_subgrantees!, only: [:update, :destroy, :create]
   before_action :set_subgrantee, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
-  
+
   # GET /hmis/subgrantees
   def index
     # search
     @subgrantees = if params[:q].present?
-      subgrantee_scope.text_search(params[:q])
-    else
-      subgrantee_scope
+                     subgrantee_scope.text_search(params[:q])
+                   else
+                     subgrantee_scope
     end
 
     # sort / paginate
-    @subgrantees = @subgrantees
-      .order(sort_column => sort_direction)
-      .page(params[:page]).per(25)
+    @subgrantees = @subgrantees.
+      order(sort_column => sort_direction).
+      page(params[:page]).per(25)
   end
 
   def new
@@ -50,37 +50,38 @@ class SubgranteesController < ApplicationController
   end
 
   private
-    def subgrantee_scope
-      Subgrantee
-    end
-  
-    def building_scope
-      Building
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def subgrantee_params
-      params_base = params[:subgrantee] || ActionController::Parameters.new
-      params_base.permit(
-        :name,
-        service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
-    
-    def set_subgrantee
-      @subgrantee = subgrantee_scope.find(params[:id])
-    end
-    
-    def sort_column
-      Subgrantee.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  def subgrantee_scope
+    Subgrantee
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
+  def building_scope
+    Building
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
+  # Only allow a trusted parameter "white list" through.
+  def subgrantee_params
+    params_base = params[:subgrantee] || ActionController::Parameters.new
+    params_base.permit(
+      :name,
+      service_ids: [],
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+  end
+
+  def set_subgrantee
+    @subgrantee = subgrantee_scope.find(params[:id])
+  end
+
+  def sort_column
+    Subgrantee.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
+
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def query_string
+    "%#{@query}%"
+  end
 end

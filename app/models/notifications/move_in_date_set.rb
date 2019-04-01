@@ -1,7 +1,6 @@
 module Notifications
   class MoveInDateSet < Base
-    
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
       end
@@ -21,6 +20,5 @@ module Notifications
     def event_label
       "#{_('Shelter Agency')}, #{_('Housing Subsidy Administrator')}, #{_('Stabilization Service Provider')}, and #{_('Housing Search Provider')} contacts notified, lease start date set."
     end
-
   end
 end

@@ -3,13 +3,13 @@ class Rules::SeenInLastThirtyDays < Rule
     c_t = Client.arel_table
     if last_seen = c_t[:calculated_last_homeless_night]
       if requirement.positive
-        where = c_t[:calculated_last_homeless_night].gteq( 30.days.ago )
+        where = c_t[:calculated_last_homeless_night].gteq(30.days.ago)
       else
-        where = c_t[:calculated_last_homeless_night].lt( 30.days.ago )
+        where = c_t[:calculated_last_homeless_night].lt(30.days.ago)
       end
       scope.where(where)
     else
-      raise RuleDatabaseStructureMissing.new("calculated_last_homeless_night is missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "calculated_last_homeless_night is missing. Cannot check clients against #{self.class}."
     end
   end
 end

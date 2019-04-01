@@ -7,7 +7,7 @@ class Rules::WillingToLiveInCongregateHousing < Rule
         scope.where(congregate_housing: false)
       end
     else
-      raise RuleDatabaseStructureMissing.new("clients.congregate_housing missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.congregate_housing missing. Cannot check clients against #{self.class}."
     end
   end
 end

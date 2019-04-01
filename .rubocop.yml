@@ -3,13 +3,14 @@ AllCops:
     - '**/Rakefile'
     - '**/config.ru'
     - 'lib/tasks/**/*'
-    - 'app/**/*'
+    - 'app/**/*.rb'
   Exclude:
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
     - 'bin/{rails,rake}'
     - 'app/assets/**/*'
+    - '**/.DS_Store'
 
 # We don't care about method length, since we check method cyclomatic
 # complexity.
@@ -20,8 +21,11 @@ Metrics/ClassLength:
 Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be a Fixnum or
   # a Float.
-  Max: 35
+  # Max: 50
+  Enabled: false
 
+Style/ExpandPathArguments:
+  Enabled: false
 # Trailing commas make for clearer diffs because the last line won't appear
 # to have been changed, as it would if it lacked a comma and had one added.
 Style/TrailingCommaInArguments:
@@ -43,10 +47,6 @@ Style/PercentLiteralDelimiters:
 Style/AndOr:
   Enabled: true
 
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'app/controllers/**/*'
-
 Style/ConditionalAssignment:
   Enabled: false
 
@@ -63,4 +63,53 @@ Style/RescueStandardError:
   Enabled: true
 
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
+
+Style/WordArray:
+  EnforcedStyle: brackets
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Security/YAMLLoad:
+  Enabled: false
+
+# Needed because of set_asides...
+Naming/AccessorMethodName:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Lint/RescueException:
+  Enabled: false
+
+Metrics/ModuleLength:
   Enabled: false

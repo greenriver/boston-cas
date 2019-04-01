@@ -12,7 +12,7 @@ class Unit < ActiveRecord::Base
   belongs_to :building, inverse_of: :units
   has_many :vouchers, inverse_of: :unit
   has_many :opportunities, through: :vouchers
-  has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
+  has_one :active_voucher, -> { where available: true }, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
 
   delegate :active_matches, to: :active_voucher
@@ -22,7 +22,8 @@ class Unit < ActiveRecord::Base
 
   def hmis_managed?
     return true if id_in_data_source
-    return false
+
+    false
   end
 
   def services
@@ -37,13 +38,13 @@ class Unit < ActiveRecord::Base
     return none unless text.present?
 
     building_matches = Building.where(
-      Building.arel_table[:id].eq arel_table[:building_id]
+      Building.arel_table[:id].eq arel_table[:building_id],
     ).text_search(text).exists
 
     query = "%#{text}%"
     where(
-      arel_table[:name].matches(query)
-      .or(building_matches)
+      arel_table[:name].matches(query).
+      or(building_matches),
     )
   end
 

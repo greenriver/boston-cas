@@ -12,48 +12,48 @@ module MatchProgressUpdates
     end
 
     belongs_to :match,
-      class_name: ClientOpportunityMatch.name,
-      inverse_of: :status_updates
+               class_name: ClientOpportunityMatch.name,
+               inverse_of: :status_updates
 
     belongs_to :notification,
-      class_name: Notifications::Base.name
+               class_name: Notifications::Base.name
 
     belongs_to :contact,
-      inverse_of: :status_updates
+               inverse_of: :status_updates
     delegate :name, to: :contact, prefix: true
 
     belongs_to :decision,
-      class_name: MatchDecisions::Base.name
+               class_name: MatchDecisions::Base.name
 
     has_one :match_route, through: :match
     delegate :stalled_interval, to: :match_route
 
-    scope :incomplete, -> do
+    scope :incomplete, lambda {
       mpu_t = arel_table
       joins(:match).
-      merge(ClientOpportunityMatch.stalled).
-      where(submitted_at: nil)
+        merge(ClientOpportunityMatch.stalled).
+        where(submitted_at: nil)
       # where(mpu_t[:due_at].lteq(Time.new))
-    end
+    }
 
-    scope :incomplete_for_contact, -> (contact_id:) do
+    scope :incomplete_for_contact, lambda { |contact_id:|
       incomplete.
-      where.not(requested_at: nil).
-      where(contact_id: contact_id)
-    end
+        where.not(requested_at: nil).
+        where(contact_id: contact_id)
+    }
 
-    scope :complete, -> do
+    scope :complete, lambda {
       where.not(submitted_at: nil)
-    end
+    }
 
     # any status updates that have been requested over DND interval ago (currently 1 week)
-    scope :should_notify_dnd, -> do
+    scope :should_notify_dnd, lambda {
       mpu_t = arel_table
       incomplete.
-      where.not(requested_at: nil).
-      where(mpu_t[:requested_at].lteq(dnd_interval.ago)).
-      where(dnd_notified_at: nil)
-    end
+        where.not(requested_at: nil).
+        where(mpu_t[:requested_at].lteq(dnd_interval.ago)).
+        where(dnd_notified_at: nil)
+    }
 
     alias_attribute :timestamp, :submitted_at
 
@@ -103,7 +103,7 @@ module MatchProgressUpdates
       @submitting
     end
 
-    def note_editable_by? editing_contact
+    def note_editable_by?(editing_contact)
       editing_contact.present? && (contact == editing_contact || match.can_create_administrative_note?(editing_contact))
     end
 
@@ -120,19 +120,19 @@ module MatchProgressUpdates
         where(match_id: match_id).exists?
     end
 
-    def self.create_for_match! match
-      match.public_send(self.match_contact_scope).each do |contact|
-
+    def self.create_for_match!(match)
+      match.public_send(match_contact_scope).each do |contact|
         where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
     end
+
     def self.match_contact_scope
       raise 'Abstract method'
     end
 
     def note_required_if_other!
       if response.present? && response_requires_note? && note.strip.blank?
-        errors.add :note, "must be filled in for some options"
+        errors.add :note, 'must be filled in for some options'
       end
     end
 
@@ -161,7 +161,7 @@ module MatchProgressUpdates
         match_ids.each do |match_id|
           notifications << Notifications::ProgressUpdateRequested.create_for_match!(
             match_id: match_id,
-            contact_id: contact_id
+            contact_id: contact_id,
           )
         end
         NotificationsMailer.progress_update_requested(notifications.map(&:id)).deliver_later
@@ -193,7 +193,7 @@ module MatchProgressUpdates
         match_ids.each do |match_id|
           notifications << Notifications::DndProgressUpdateLate.create_for_match!(
             match_id: match_id,
-            contact_id: contact_id
+            contact_id: contact_id,
           )
         end
         NotificationsMailer.dnd_progress_update_late(notifications.map(&:id)).deliver_later

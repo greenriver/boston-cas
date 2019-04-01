@@ -5,16 +5,16 @@ class Rules::EnrolledInHmisProject < Rule
 
   def available_projects
     @available_projects ||= if Warehouse::Base.enabled?
-      Warehouse::Project.joins(:organization).map do |project|
-        label = "#{project.ProjectName} << #{project.organization.OrganizationName}"
-        [project.id, label]
-      end
-    else
-      []
+                              Warehouse::Project.joins(:organization).map do |project|
+                                label = "#{project.ProjectName} << #{project.organization.OrganizationName}"
+                                [project.id, label]
+                              end
+                            else
+                              []
     end
   end
 
-  def display_for_variable value
+  def display_for_variable(value)
     available_projects.to_h.try(:[], value.to_i) || value
   end
 
@@ -27,7 +27,7 @@ class Rules::EnrolledInHmisProject < Rule
       end
       scope.where(where, requirement.variable.to_s)
     else
-      raise RuleDatabaseStructureMissing.new("clients.enrolled_project_ids missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.enrolled_project_ids missing. Cannot check clients against #{self.class}."
     end
   end
 end

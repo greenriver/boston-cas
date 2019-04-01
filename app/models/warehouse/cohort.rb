@@ -1,11 +1,11 @@
 module Warehouse
   class Cohort < Base
-    scope :active, -> do
+    scope :active, lambda {
       where(active_cohort: true, deleted_at: nil)
-    end
+    }
 
-    scope :visible_in_cas, -> do
+    scope :visible_in_cas, lambda {
       where(visible_in_cas: true)
-    end
+    }
   end
 end

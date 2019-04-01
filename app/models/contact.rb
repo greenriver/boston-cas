@@ -24,9 +24,9 @@ class Contact < ActiveRecord::Base
   has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
 
   def full_name
-    [first_name, last_name].compact.join " "
+    [first_name, last_name].compact.join ' '
   end
-  alias_method :name, :full_name
+  alias name full_name
 
   def name_with_email
     "#{name} <#{email}>"
@@ -41,13 +41,12 @@ class Contact < ActiveRecord::Base
 
     query = "%#{text}%"
     where(
-      arel_table[:first_name].matches(query)
-      .or(arel_table[:last_name].matches(query))
-      .or(arel_table[:email].matches(query))
-      .or(arel_table[:phone].matches(query))
-      .or(arel_table[:cell_phone].matches(query))
-      .or(arel_table[:role].matches(query))
+      arel_table[:first_name].matches(query).
+      or(arel_table[:last_name].matches(query)).
+      or(arel_table[:email].matches(query)).
+      or(arel_table[:phone].matches(query)).
+      or(arel_table[:cell_phone].matches(query)).
+      or(arel_table[:role].matches(query)),
     )
   end
-
 end

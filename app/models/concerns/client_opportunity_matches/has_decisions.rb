@@ -17,28 +17,27 @@ module ClientOpportunityMatches
       # to initialize the appropriate classes
       @@decision_types = []
 
-
       has_many :decisions,
-        class_name: 'MatchDecisions::Base',
-        foreign_key: 'match_id',
-        inverse_of: :match,
-        dependent: :destroy
+               class_name: 'MatchDecisions::Base',
+               foreign_key: 'match_id',
+               inverse_of: :match,
+               dependent: :destroy
 
       # macro to set up a decision within a match
-      def self.has_decision decision_type, decision_class_name: nil, notification_class_name: nil
+      def self.has_decision(decision_type, decision_class_name: nil, notification_class_name: nil)
         decision_class_name ||= "MatchDecisions::#{decision_type.to_s.camelize}"
         notification_class_name ||= "Notifications::#{decision_type.to_s.camelize}"
         # define the decision_contact association
         # e.g. match_recommendation_dnd_staff_contact
         has_one "#{decision_type}_decision".to_sym,
-          class_name: decision_class_name,
-          foreign_key: :match_id,
-          inverse_of: :match
+                class_name: decision_class_name,
+                foreign_key: :match_id,
+                inverse_of: :match
 
         has_many "#{decision_type}_notifications".to_sym,
-          class_name: notification_class_name,
-          foreign_key: :client_opportunity_match_id,
-          inverse_of: :match
+                 class_name: notification_class_name,
+                 foreign_key: :client_opportunity_match_id,
+                 inverse_of: :match
 
         @@decision_types << decision_type
       end
@@ -47,7 +46,7 @@ module ClientOpportunityMatches
       after_create :create_decisions!
     end
 
-    def decision_from_param param
+    def decision_from_param(param)
       if param.to_sym.in? @@decision_types
         send "#{param}_decision"
       end
@@ -59,16 +58,15 @@ module ClientOpportunityMatches
 
     private
 
-      def create_decisions!
-        @@decision_types.each do |decision_type|
-          self.send("create_#{decision_type}_decision")
-        end
+    def create_decisions!
+      @@decision_types.each do |decision_type|
+        send("create_#{decision_type}_decision")
       end
+    end
 
-      def decisions_for_events
-        initialized_decisions
-          .preload(:contact).to_a
-      end
-
+    def decisions_for_events
+      initialized_decisions.
+        preload(:contact).to_a
+    end
   end
 end

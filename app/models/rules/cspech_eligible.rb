@@ -3,7 +3,7 @@ class Rules::CspechEligible < Rule
     if Client.column_names.include?(:cspech_eligible.to_s)
       scope.where(cspech_eligible: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.cspech_eligible missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.cspech_eligible missing. Cannot check clients against #{self.class}."
     end
   end
 end

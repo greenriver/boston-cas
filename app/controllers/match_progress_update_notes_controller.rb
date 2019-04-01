@@ -22,11 +22,11 @@ class MatchProgressUpdateNotesController < ApplicationController
   def destroy
     unless @update.note_editable_by?(current_contact)
       flash[:error] = 'You do not have permission to delete this note'
-      redirect_to redirect_to match_path(@match) and return
+      redirect_to(redirect_to(match_path(@match))) && return
     end
     if @update.response_requires_note?
       flash[:error] = 'This note cannot be deleted as it is required by the kind of response'
-      redirect_to match_path(@match) and return
+      redirect_to(match_path(@match)) && return
     end
     # The note is not a separate object, so we nil out the note field in the update
     @update.note = nil
@@ -52,5 +52,4 @@ class MatchProgressUpdateNotesController < ApplicationController
     params.require(:update).
       permit(:note)
   end
-
 end

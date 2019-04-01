@@ -12,11 +12,11 @@ class RulesController < ApplicationController
     @query = params[:q]
     base_scope =
       rule_scope.
-      with_deleted.
-      preload(requirements: :requirer).
-      page(params[:page]).
-      per(250).
-      order(sort_column => sort_direction)
+        with_deleted.
+        preload(requirements: :requirer).
+        page(params[:page]).
+        per(250).
+        order(sort_column => sort_direction)
     if params[:q]
       rule_arel = Rule.arel_table
       @rules = base_scope.where(rule_arel[:name].matches(query_string))
@@ -53,23 +53,24 @@ class RulesController < ApplicationController
   ## end actions
 
   protected
-    def rule_scope
-      Rule
-    end
 
-    def set_rule
-      @rule = rule_scope.find(params[:id])
-    end
+  def rule_scope
+    Rule
+  end
 
-    def sort_column
-      Rule.column_names.include?(params[:sort]) ? params[:sort] : 'name'
-    end
+  def set_rule
+    @rule = rule_scope.find(params[:id])
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
+  def sort_column
+    Rule.column_names.include?(params[:sort]) ? params[:sort] : 'name'
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def query_string
+    "%#{@query}%"
+  end
 end

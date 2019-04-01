@@ -1,7 +1,7 @@
 module MatchDecisions::ProviderOnly
   class HsaAcknowledgesReceipt < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/hsa_acknowledges_receipt' 
+    def to_partial_path
+      'match_decisions/hsa_acknowledges_receipt'
     end
     include MatchDecisions::AcceptsDeclineReason
 
@@ -10,7 +10,7 @@ module MatchDecisions::ProviderOnly
     validate :cant_accept_if_opportunity_has_related_active_match
     validate :ensure_required_contacts_present_on_accept
 
-    def label_for_status status
+    def label_for_status(status)
       case status.to_sym
       when :pending then "New Match Awaiting Acknowledgment by #{_('HSA')}"
       when :acknowledged then "Match acknowledged by #{_('HSA')}.  In review"
@@ -46,15 +46,15 @@ module MatchDecisions::ProviderOnly
       super && saved_status !~ /acknowledged/
     end
 
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+        contact.in?(match.housing_subsidy_admin_contacts)
     end
 
     def notifications_for_this_step
@@ -88,22 +88,21 @@ module MatchDecisions::ProviderOnly
       saved_status == 'pending' && status == 'acknowledged'
     end
 
-
     def cant_accept_if_match_closed
       if save_will_accept? && match.closed
-        then errors.add :status, "This match has already been closed."
+        then errors.add :status, 'This match has already been closed.'
       end
     end
 
     def cant_accept_if_client_has_related_active_match
-      if save_will_accept? && match.client_related_matches.active.on_route(match_route).exists? && ! match_route.allow_multiple_active_matches
-        then errors.add :status, "There is already another active match for this client"
+      if save_will_accept? && match.client_related_matches.active.on_route(match_route).exists? && !match_route.allow_multiple_active_matches
+        then errors.add :status, 'There is already another active match for this client'
       end
     end
 
     def cant_accept_if_opportunity_has_related_active_match
-      if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
-      then errors.add :status, "There is already another active match for this opportunity"
+      if save_will_accept? && match.opportunity_related_matches.active.any? && !match_route.allow_multiple_active_matches
+      then errors.add :status, 'There is already another active match for this opportunity'
       end
     end
 
@@ -121,7 +120,5 @@ module MatchDecisions::ProviderOnly
         errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
       end
     end
-
   end
-
 end

@@ -5,9 +5,9 @@ class NeighborhoodsController < ApplicationController
 
   def index
     @neighborhoods = if params[:q].present?
-      neighborhood_scope.text_search(params[:q])
-    else
-      neighborhood_scope
+                       neighborhood_scope.text_search(params[:q])
+                     else
+                       neighborhood_scope
     end
 
     @neighborhoods = @neighborhoods.page(params[:page])
@@ -27,7 +27,6 @@ class NeighborhoodsController < ApplicationController
   end
 
   def edit
-
   end
 
   def update
@@ -56,5 +55,4 @@ class NeighborhoodsController < ApplicationController
   def neighborhood_scope
     Neighborhood.order(:name)
   end
-
 end

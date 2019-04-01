@@ -9,7 +9,7 @@ class Rules::Income < Rule
       end
       scope.where(where)
     else
-      raise RuleDatabaseStructureMissing.new("clients.income_total_monthly missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.income_total_monthly missing. Cannot check clients against #{self.class}."
     end
   end
 end

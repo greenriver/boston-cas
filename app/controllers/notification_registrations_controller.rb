@@ -15,9 +15,9 @@ class NotificationRegistrationsController < Devise::RegistrationsController
       @user[role] = true
     end
     @user.invite!
-    flash[:notice] = "Please check your email for login information."
+    flash[:notice] = 'Please check your email for login information.'
     redirect_to new_notification_session_path(@notification)
-  end 
+  end
 
   private def load_notification!
     @notification = Notifications::Base.find_by code: params[:notification_id]
@@ -30,7 +30,7 @@ class NotificationRegistrationsController < Devise::RegistrationsController
 
   private def ensure_contact_has_no_user!
     if @contact.user
-      flash[:alert] = "You already have an account.  Please login or use the Reset Account Password form below."
+      flash[:alert] = 'You already have an account.  Please login or use the Reset Account Password form below.'
       redirect_to new_notification_session_path(@notification)
     end
   end
@@ -41,8 +41,4 @@ class NotificationRegistrationsController < Devise::RegistrationsController
       redirect_to new_notification_session_path(@notification)
     end
   end
-  
-  
-  
-
 end

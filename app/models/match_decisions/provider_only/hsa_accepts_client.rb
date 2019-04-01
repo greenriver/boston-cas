@@ -1,7 +1,7 @@
 module MatchDecisions::ProviderOnly
   class HsaAcceptsClient < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/hsa_accepts_client' 
+    def to_partial_path
+      'match_decisions/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
 
@@ -11,7 +11,7 @@ module MatchDecisions::ProviderOnly
       label_for_status status
     end
 
-    def label_for_status status
+    def label_for_status(status)
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} reviewing match"
       when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
@@ -56,7 +56,7 @@ module MatchDecisions::ProviderOnly
       super && saved_status !~ /accepted|declined/
     end
 
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true)
       super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
@@ -68,13 +68,13 @@ module MatchDecisions::ProviderOnly
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of(contact:)
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+        contact.in?(match.housing_subsidy_admin_contacts)
     end
 
     private def decline_reason_scope
@@ -106,8 +106,5 @@ module MatchDecisions::ProviderOnly
         errors.add :note, 'Please note why the match is declined.'
       end
     end
-
   end
-
 end
-

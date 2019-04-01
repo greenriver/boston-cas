@@ -20,18 +20,18 @@ module MatchDecisions
       raise 'abstract method not implemented'
     end
 
-    def whitelist_params_for_update params
+    def whitelist_params_for_update(params)
       result = super
       reason_id_array = Array.wrap params.require(:decision)[:decline_reason_id]
       decline_reason_id = reason_id_array.select(&:present?).first
-      result.merge! decline_reason_id: decline_reason_id
+      result[:decline_reason_id] = decline_reason_id
 
       result.merge! params.require(:decision).permit(:decline_reason_other_explanation)
-      return result
-    end    
+      result
+    end
 
     private def validate_decline_reason
-      if status == "declined" && decline_reason_blank?
+      if status == 'declined' && decline_reason_blank?
         errors.add :decline_reason, 'please indicate the reason for declining'
       end
 
@@ -46,18 +46,16 @@ module MatchDecisions
 
     def decline_reason_name
       if decline_reason.blank?
-        "none given"
+        'none given'
       elsif decline_reason.other?
         "Other (#{decline_reason_other_explanation})"
       else
-        reason = "#{decline_reason.name}"
+        reason = decline_reason.name.to_s
         if decline_reason_other_explanation.present?
           reason += ". Note: #{decline_reason_other_explanation}"
         end
         reason
       end
     end
-    
-
   end
 end

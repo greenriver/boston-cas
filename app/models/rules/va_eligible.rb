@@ -3,7 +3,7 @@ class Rules::VaEligible < Rule
     if Client.column_names.include?(:va_eligible.to_s)
       scope.where(va_eligible: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.va_eligible missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.va_eligible missing. Cannot check clients against #{self.class}."
     end
   end
 end

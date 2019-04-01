@@ -4,27 +4,27 @@ module ControlledVisibility
   included do
     has_many :entity_view_permissions, as: :entity
 
-    scope :visible_by, -> (user) {
+    scope :visible_by, lambda { |user|
       evp_t = EntityViewPermission.arel_table
       joins(:entity_view_permissions).where(
-          evp_t[:user_id].eq(user.id)
+        evp_t[:user_id].eq(user.id),
       )
     }
 
-    scope :editable_by, -> (user) {
+    scope :editable_by, lambda { |user|
       evp_t = EntityViewPermission.arel_table
       joins(:entity_view_permissions).where(
-          evp_t[:user_id].eq(user.id),
-          evp_t[:editable].eq(true)
+        evp_t[:user_id].eq(user.id),
+        evp_t[:editable].eq(true),
       )
     }
   end
 
-  def visible_by? user
+  def visible_by?(user)
     entity_view_permissions.where(user: user).present?
   end
 
-  def editable_by? user
+  def editable_by?(user)
     entity_view_permissions.where(user: user, editable: true).present?
   end
 end

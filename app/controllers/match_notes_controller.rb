@@ -47,7 +47,7 @@ class MatchNotesController < ApplicationController
   def destroy
     unless @match_note.note_editable_by?(current_contact)
       flash[:error] = 'You do not have permission to delete this note'
-      redirect_to success_path and return
+      redirect_to(success_path) && return
     end
     @match_note.note = nil
     @match_note.remove_note!
@@ -56,54 +56,53 @@ class MatchNotesController < ApplicationController
 
   private
 
-    ################################
-    ## New / Create Setup
-    ################################
+  ################################
+  ## New / Create Setup
+  ################################
 
-    def set_match!
-      @match = match_scope.find params[:match_id]
-    end
+  def set_match!
+    @match = match_scope.find params[:match_id]
+  end
 
-    def authorize_add_note!
-      not_authorized unless @match.can_create_overall_note?(current_contact)
-    end
+  def authorize_add_note!
+    not_authorized unless @match.can_create_overall_note?(current_contact)
+  end
 
-    ################################
-    ## Edit / Update / Destroy Setup
-    ################################
+  ################################
+  ## Edit / Update / Destroy Setup
+  ################################
 
-    def set_match_note!
-      @match_note = MatchEvents::Base
-        .where(match_id: @match.id)
-        .find params[:id]
-    end
+  def set_match_note!
+    @match_note = MatchEvents::Base.
+      where(match_id: @match.id).
+      find params[:id]
+  end
 
-    def authorize_note_editable!
-      not_authorized! unless @match_note.note_editable_by? current_contact
-    end
+  def authorize_note_editable!
+    not_authorized! unless @match_note.note_editable_by? current_contact
+  end
 
-    def build_match_note
-      @match_note = @match.note_events.build
-    end
+  def build_match_note
+    @match_note = @match.note_events.build
+  end
 
-    ################################
-    ## Additional Utilities
-    ################################
+  ################################
+  ## Additional Utilities
+  ################################
 
-    def success_path
-      # TODO detect if we came from a specific decision and
-      # go there instead
-      access_context.match_path(@match)
-    end
+  def success_path
+    # TODO: detect if we came from a specific decision and
+    # go there instead
+    access_context.match_path(@match)
+  end
 
-    def match_note_params
-      params.require(:match_note).
-        permit(
-          :note,
-          :admin_note,
-          :include_content,
-          contact_ids: []
-        )
-    end
-
+  def match_note_params
+    params.require(:match_note).
+      permit(
+        :note,
+        :admin_note,
+        :include_content,
+        contact_ids: [],
+      )
+  end
 end

@@ -1,7 +1,6 @@
 module Notifications
   class ProgressUpdateSubmitted < Base
-    
-    def self.create_for_match! match
+    def self.create_for_match!(match)
       match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
       end

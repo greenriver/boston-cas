@@ -1,6 +1,5 @@
 module CasSeeds
   class Services
-
     def run!
       [
         'Case management',
@@ -27,6 +26,5 @@ module CasSeeds
         Service.where(name: s).first_or_create(name: s)
       end
     end
-
   end
 end

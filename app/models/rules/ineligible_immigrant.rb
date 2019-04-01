@@ -3,7 +3,7 @@ class Rules::IneligibleImmigrant < Rule
     if Client.column_names.include?(:ineligible_immigrant.to_s)
       scope.where(ineligible_immigrant: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.ineligible_immigrant missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.ineligible_immigrant missing. Cannot check clients against #{self.class}."
     end
   end
 end

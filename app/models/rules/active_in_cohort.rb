@@ -5,6 +5,7 @@ class Rules::ActiveInCohort < Rule
 
   def available_cohorts
     return [] unless Warehouse::Base.enabled?
+
     Warehouse::Cohort.visible_in_cas.active.pluck(:id, :name, :short_name).
       map do |id, name, short_name|
         label = short_name.presence || name
@@ -12,7 +13,7 @@ class Rules::ActiveInCohort < Rule
       end
   end
 
-  def display_for_variable value
+  def display_for_variable(value)
     available_cohorts.to_h.try(:[], value.to_i) || value
   end
 
@@ -25,7 +26,7 @@ class Rules::ActiveInCohort < Rule
       end
       scope.where(where, requirement.variable.to_s)
     else
-      raise RuleDatabaseStructureMissing.new("clients.active_cohort_ids missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.active_cohort_ids missing. Cannot check clients against #{self.class}."
     end
   end
 end

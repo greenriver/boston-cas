@@ -3,7 +3,7 @@ class Rules::Veteran < Rule
     if Client.column_names.include?(:veteran.to_s)
       scope.where(veteran: requirement.positive)
     else
-      raise RuleDatabaseStructureMissing.new("clients.veteran missing. Cannot check clients against #{self.class}.")
+      raise RuleDatabaseStructureMissing, "clients.veteran missing. Cannot check clients against #{self.class}."
     end
   end
 end

@@ -1,6 +1,5 @@
 module MatchProgressUpdates
   class Hsp < Base
-    
     def name
       'Housing Search Provider status update'
     end
