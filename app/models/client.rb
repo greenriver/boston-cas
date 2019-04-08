@@ -403,7 +403,7 @@ class Client < ActiveRecord::Base
     self.enrolled_in_es
   end
 
-  def self.sort_options(show_vispdat: false)
+  def self.sort_options(show_vispdat: false, show_assessment: false)
     [
       {title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
       {title: 'Last name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true},
@@ -416,6 +416,7 @@ class Client < ActiveRecord::Base
           order: 'days_homeless_in_last_three_years DESC', visible: true},
       {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
           order: 'calculated_first_homeless_night ASC', visible: true},
+      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_vispdat},
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]

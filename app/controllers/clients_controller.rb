@@ -9,9 +9,10 @@ class ClientsController < ApplicationController
   # GET /hmis/clients
   def index
     @show_vispdat = can_view_vspdats?
+    @show_assessment = Client.where.not(assessment_score: 0).exists?
     sort_string = sorter
-     
-    @sorted_by = Client.sort_options(show_vispdat: @show_vispdat).select do |m| 
+
+    @sorted_by = Client.sort_options(show_vispdat: @show_vispdat, show_assessment: @show_assessment).select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
     @q = client_scope.ransack(params[:q])
@@ -32,7 +33,7 @@ class ClientsController < ApplicationController
     # paginate
     @page = params[:page].presence || 1
     @clients = @clients.reorder(sort_string).page(@page.to_i).per(25)
-    
+
     client_ids = @clients.map(&:id)
 
     @matches = ClientOpportunityMatch
@@ -54,7 +55,7 @@ class ClientsController < ApplicationController
 
   def update
     if @client.update(client_params)
-      # If we have a future prevent_matching_until date, remove the client from 
+      # If we have a future prevent_matching_until date, remove the client from
       # any current matches
       if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
         @client.unavailable(permanent: false)
