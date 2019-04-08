@@ -119,6 +119,10 @@ FactoryGirl.define do
     name 'Active in Cohort'
     verb 'be'
   end
+  factory :tagged_with, class: 'Rules::TaggedWith' do
+    name 'Specified tag'
+    verb 'have'
+  end
   factory :verified_days_homeless, class: 'Rules::VerifiedDaysHomeless' do
     name 'Verified Days Homeless'
     verb "have"

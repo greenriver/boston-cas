@@ -5,13 +5,13 @@ module MatchPrioritization
       'Assessment Score'
     end
 
-    def self.prioritization_for_clients(scope)
+    def self.prioritization_for_clients(scope, match_route:)
       scope.where.not(c_t[:assessment_score].eq(nil)).
           order(c_t[:assessment_score].desc).
           order(c_t[:rrh_assessment_collected_at].desc)
     end
 
-    def self.column_name
+    def self.client_priortization_value_method
       'assessment_score'
     end
   end

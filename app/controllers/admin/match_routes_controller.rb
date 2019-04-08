@@ -30,6 +30,7 @@ module Admin
         :should_prevent_multiple_matches_per_client,
         :default_shelter_agency_contacts_from_project_client,
         :match_prioritization_id,
+        :tag_id,
       )
     end
 

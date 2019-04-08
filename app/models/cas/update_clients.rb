@@ -181,6 +181,7 @@ module Cas
         :requires_elevator_access,
         :neighborhood_interests,
         :interested_in_set_asides,
+        :tags,
       ]
     end
 

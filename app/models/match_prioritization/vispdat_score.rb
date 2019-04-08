@@ -5,12 +5,12 @@ module MatchPrioritization
       'VI-SPDAT Score'
     end
 
-    def self.prioritization_for_clients(scope)
+    def self.prioritization_for_clients(scope, match_route:)
       scope.where.not(c_t[:vispdat_score].eq(nil))
           .order(c_t[:vispdat_score].desc)
     end
 
-    def self.column_name
+    def self.client_priortization_value_method
       'vispdat_score'
     end
   end

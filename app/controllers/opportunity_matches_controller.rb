@@ -71,7 +71,12 @@ class OpportunityMatchesController < ApplicationController
   helper_method :priority_label
 
   def priority_value(client)
-    client.send(@opportunity.match_route.match_prioritization.column_name)
+    meth = @opportunity.match_route.match_prioritization.client_priortization_value_method
+    if client.class.column_names.include?(meth.to_s)
+      client.send(meth)
+    else
+      client.send(meth, match_route: @opportunity.match_route)
+    end
   end
   helper_method :priority_value
 

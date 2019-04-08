@@ -254,6 +254,11 @@ class Client < ActiveRecord::Base
     Warehouse::Cohort.visible_in_cas.where(id: active_cohort_ids)
   end
 
+  def rank_for_tag match_route:
+    tag_id = match_route.tag_id
+    tags.try(:[], tag_id.to_s)
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)

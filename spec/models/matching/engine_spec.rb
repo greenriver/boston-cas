@@ -8,8 +8,8 @@ RSpec.describe Matching::Engine, type: :model do
   # MatchRoutes::ProviderOnly.first.update(should_cancel_other_matches: false)
   let(:priority) { create :priority_vispdat_priority }
   let(:route) { create :default_route, match_prioritization: priority }
-  let!(:client) { create :client }  
-  let!(:program_with_all_rules) { 
+  let!(:client) { create :client }
+  let!(:program_with_all_rules) {
     # make sure we have all of the rules
     requirements = Rule.all.map do |rule|
       if rule.variable_requirement?
@@ -52,9 +52,5 @@ RSpec.describe Matching::Engine, type: :model do
       Matching::RunEngineJob.perform_now
       expect(client.client_opportunity_matches.first).to eq(simple_opportunity.active_matches.first)
     end
-
-    
   end
-
 end
-Client.arel_table[:date_of_birth]
