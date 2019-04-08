@@ -6,9 +6,9 @@ RSpec.describe MatchPrioritization::Rank, type: :model do
   # MatchRoutes::Base.ensure_all
   # MatchPrioritization::Base.ensure_all
 
-  let(:priority) { create :priority_rank }
-  let(:tag) { create :tag }
-  let(:route) { create :default_route, match_prioritization: priority, tag_id: tag.id }
+  let!(:priority) { create :priority_rank }
+  let!(:tag) { create :tag }
+  let!(:route) { create :default_route, match_prioritization: priority, tag_id: tag.id }
   let!(:matching_client_1) { create :client, tags: {tag.id => 2} }
   let!(:matching_client_2) { create :client, tags: {tag.id => 3} }
   let!(:non_matching_client) { create :client }
@@ -23,16 +23,13 @@ RSpec.describe MatchPrioritization::Rank, type: :model do
 
   describe "engine runs" do
     it 'and does not throw an error' do
-      binding.pry
-      expect { Matching::RunEngineJob.perform_now }.to_not raise_error
+      expect { Matching::RunEngineJob.new.perform }.to_not raise_error
     end
-    it 'and finds a match' do
-      expect {
-        Matching::RunEngineJob.perform_now
-      }.to change(ClientOpportunityMatch, :count).by(2)
+    it 'and finds a match', perform_enqueued: true do
+      expect { Matching::RunEngineJob.new.perform }.to change(ClientOpportunityMatch, :count).by(2)
     end
     it ' and client match is the same as opportunity active match' do
-      Matching::RunEngineJob.perform_now
+      Matching::RunEngineJob.new.perform
       expect(matching_client_1.client_opportunity_matches.first).to eq(simple_opportunity.active_matches.first)
     end
   end

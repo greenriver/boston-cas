@@ -6,8 +6,8 @@ RSpec.describe Matching::Engine, type: :model do
   # MatchRoutes::Base.ensure_all
   # MatchPrioritization::Base.ensure_all
   # MatchRoutes::ProviderOnly.first.update(should_cancel_other_matches: false)
-  let(:priority) { create :priority_vispdat_priority }
-  let(:route) { create :default_route, match_prioritization: priority }
+  let!(:priority) { create :priority_vispdat_priority }
+  let!(:route) { create :default_route, match_prioritization: priority }
   let!(:client) { create :client }
   let!(:program_with_all_rules) {
     # make sure we have all of the rules
@@ -41,15 +41,15 @@ RSpec.describe Matching::Engine, type: :model do
 
   describe "engine runs" do
     it 'and does not throw an error' do
-      expect { Matching::RunEngineJob.perform_now }.to_not raise_error
+      expect { Matching::RunEngineJob.new.perform }.to_not raise_error
     end
     it 'and finds a match' do
       expect {
-        Matching::RunEngineJob.perform_now
+        Matching::RunEngineJob.new.perform
       }.to change(ClientOpportunityMatch, :count).by(1)
     end
     it ' and client match is the same as opportunity active match' do
-      Matching::RunEngineJob.perform_now
+      Matching::RunEngineJob.new.perform
       expect(client.client_opportunity_matches.first).to eq(simple_opportunity.active_matches.first)
     end
   end
