@@ -314,7 +314,7 @@ class Client < ActiveRecord::Base
         active_match.canceled!
         MatchEvents::Parked.create!(
             match_id: active_match.id,
-            contact_id: user&.id
+            contact_id: user&.contact&.id
         )
         opportunity.update(available_candidate: true)
         Matching::RunEngineJob.perform_later
@@ -390,7 +390,7 @@ class Client < ActiveRecord::Base
     prevent_matching_until.present? && prevent_matching_until > Date.today
   end
 
-  def available?
+  def available_for_matching?
     if parked?
       return false
     else
@@ -399,7 +399,7 @@ class Client < ActiveRecord::Base
   end
 
   def available_text
-    if available?
+    if available_for_matching?
       if available_as_candidate_for_any_route?
         'Available for matching'
       elsif active_in_match?
