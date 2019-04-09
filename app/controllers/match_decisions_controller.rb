@@ -100,7 +100,7 @@ class MatchDecisionsController < ApplicationController
         if decision_params[:prevent_matching_until].to_date > Date.today
           client = @match.client
           client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
-          client.unavailable(permanent: false)
+          client.unavailable(permanent: false, user: current_user)
         end
       end
       redirect_to access_context.match_path(@match, redirect: "true")
