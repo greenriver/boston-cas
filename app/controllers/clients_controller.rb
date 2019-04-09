@@ -57,7 +57,7 @@ class ClientsController < ApplicationController
       # If we have a future prevent_matching_until date, remove the client from 
       # any current matches
       if @client.parked?
-        @client.unavailable(permanent: false, user: current_user)
+        @client.unavailable(permanent: false, contact_id: current_contact.id)
       end
       redirect_to client_path(@client), notice: "Client updated"
     else
