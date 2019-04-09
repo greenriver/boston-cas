@@ -10,7 +10,7 @@ module MatchPrioritization
           .order(c_t[:vispdat_score].desc)
     end
 
-    def self.client_priortization_value_method
+    def self.client_prioritization_value_method
       'vispdat_score'
     end
   end

@@ -33,7 +33,7 @@ module MatchPrioritization
       raise NotImplementedError
     end
 
-    def self.client_priortization_value_method
+    def self.client_prioritization_value_method
       raise NotImplementedError
     end
 
@@ -49,8 +49,8 @@ module MatchPrioritization
       self.class.title
     end
 
-    def client_priortization_value_method
-      self.class.client_priortization_value_method
+    def client_prioritization_value_method
+      self.class.client_prioritization_value_method
     end
 
     def self.c_t

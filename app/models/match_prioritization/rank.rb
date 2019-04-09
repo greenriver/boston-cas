@@ -10,7 +10,7 @@ module MatchPrioritization
       scope.where("tags ->> '#{tag_id}' is not null").order("tags->>'#{tag_id}' asc NULLS LAST")
     end
 
-    def self.client_priortization_value_method
+    def self.client_prioritization_value_method
       'rank_for_tag'
     end
 

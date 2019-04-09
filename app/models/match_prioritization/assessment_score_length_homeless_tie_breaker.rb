@@ -11,7 +11,7 @@ module MatchPrioritization
           order(c_t[:days_homeless].desc)
     end
 
-    def self.client_priortization_value_method
+    def self.client_prioritization_value_method
       'assessment_score'
     end
   end
