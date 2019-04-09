@@ -421,7 +421,7 @@ class Client < ActiveRecord::Base
           order: 'days_homeless_in_last_three_years DESC', visible: true},
       {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
           order: 'calculated_first_homeless_night ASC', visible: true},
-      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_vispdat},
+      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_assessment},
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]
