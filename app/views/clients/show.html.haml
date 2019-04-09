@@ -22,7 +22,7 @@
           Remote ID:
           = warehouse_id
 
-  - if @client.prevent_matching_until.present? && @client.prevent_matching_until > Date.today
+  - if @client.parked?
     .alert.alert-warning
       %p
         %i.icon-warning
