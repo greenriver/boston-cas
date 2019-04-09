@@ -2,7 +2,7 @@ class ProgramsController < ApplicationController
   include ProgramPermissions
   before_action :authenticate_user!
   before_action :require_can_edit_programs!, only: [:create]
-  
+
   helper_method :sort_column, :sort_direction
 
   def index
@@ -15,8 +15,8 @@ class ProgramsController < ApplicationController
 
     # sort / paginate
     sort_string = sorter
-     
-    @sorted_by = Program.sort_options.select do |m| 
+
+    @sorted_by = Program.sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
 
@@ -37,8 +37,7 @@ class ProgramsController < ApplicationController
     @active_filter = @current_route.present?
 
     @programs = @programs
-      .includes(:program)
-      .references(:program)
+      .joins(:program)
       .includes(:building)
       .references(:building)
       .preload(:program)

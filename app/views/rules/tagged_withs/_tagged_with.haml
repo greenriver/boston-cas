@@ -1,0 +1,3 @@
+- rule = tagged_with
+%h4 Tag
+= select_tag(:variable, options_from_collection_for_select(rule.available_tags, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_tags.to_h.to_json})

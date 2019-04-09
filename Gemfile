@@ -98,7 +98,7 @@ group :development do
   gem 'letter_opener'
   gem 'quiet_assets'
   gem 'ruby-prof'
-  gem 'rb-readline'
+  # gem 'rb-readline'
 end
 
 group :development, :test do

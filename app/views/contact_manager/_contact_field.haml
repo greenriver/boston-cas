@@ -1,9 +1,9 @@
-- label = object.label_for(contact_type) 
-- contacts_type = object.contact_type_for(contact_type) 
+- label = object.label_for(contact_type)
+- contacts_type = object.contact_type_for(contact_type)
 - available_contacts_method = object.available_contacts_method_for(contact_type)
-- selected_contacts_method = object.selected_contacts_method_for(contact_type)  
+- selected_contacts_method = object.selected_contacts_method_for(contact_type)
 
-- editable = current_contact&.user_can_edit_match_contacts? || (hsa_can_edit_contacts? && contacts_type == 'housing_subsidy_admin')
+- editable = current_user&.can_edit_match_contacts? || current_contact&.user_can_edit_match_contacts? || (hsa_can_edit_contacts? && contacts_type == 'housing_subsidy_admin')
 
 - if editable
   = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, include_blank: true, input_html: {class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name}}
@@ -14,7 +14,7 @@
         .c-contact-list__details
           = "#{contact.name} | "
           = contact.email
-        -# Don't allow removal of self if you can't edit all contacts 
+        -# Don't allow removal of self if you can't edit all contacts
         - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
           = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
             %i.icon-cross

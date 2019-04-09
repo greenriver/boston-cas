@@ -19,6 +19,7 @@ module MatchPrioritization
         MatchPrioritization::DaysHomelessLastThreeYearsRandomTieBreaker,
         MatchPrioritization::AssessmentScore,
         MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
+        MatchPrioritization::Rank,
       ]
     end
 
@@ -32,28 +33,32 @@ module MatchPrioritization
       raise NotImplementedError
     end
 
-    def self.column_name
+    def self.client_prioritization_value_method
       raise NotImplementedError
     end
 
-    def self.prioritization_for_clients(scope)
+    def self.prioritization_for_clients(scope, match_route:)
       raise NotImplementedError
     end
 
     def prioritization_for_clients(scope)
-      self.class.prioritization_for_clients(scope)
+      self.class.prioritization_for_clients(scope, match_route: match_route.first)
     end
 
     def title
       self.class.title
     end
 
-    def column_name
-      self.class.column_name
+    def client_prioritization_value_method
+      self.class.client_prioritization_value_method
     end
 
     def self.c_t
       c_t = Client.arel_table
+    end
+
+    def requires_tag?
+      false
     end
   end
 end

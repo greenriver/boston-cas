@@ -11,13 +11,13 @@ module ClientOpportunityMatches
     # 2.  create this associated record when the match is created
     # 3.  define a `has_many example_notifications` association which returns records of type `Notifications::Example`
     extend ActiveSupport::Concern
-    
+
     included do
       # this class variable is used by #decisions
-      # to initialize the appropriate classes      
+      # to initialize the appropriate classes
       @@decision_types = []
 
-      
+
       has_many :decisions,
         class_name: 'MatchDecisions::Base',
         foreign_key: 'match_id',
@@ -34,24 +34,25 @@ module ClientOpportunityMatches
           class_name: decision_class_name,
           foreign_key: :match_id,
           inverse_of: :match
-        
+
         has_many "#{decision_type}_notifications".to_sym,
           class_name: notification_class_name,
           foreign_key: :client_opportunity_match_id,
           inverse_of: :match
-        
+
         @@decision_types << decision_type
       end
-      
+
+      # FIXME: This should create decisions in the order for the route (maybe also only create the decisions that should be on the route)
       after_create :create_decisions!
     end
-  
+
     def decision_from_param param
       if param.to_sym.in? @@decision_types
         send "#{param}_decision"
       end
     end
-    
+
     def initialized_decisions
       decisions.where.not(status: nil)
     end
@@ -63,11 +64,11 @@ module ClientOpportunityMatches
           self.send("create_#{decision_type}_decision")
         end
       end
-      
+
       def decisions_for_events
         initialized_decisions
           .preload(:contact).to_a
       end
-    
+
   end
 end

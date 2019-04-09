@@ -1,6 +1,6 @@
 class SubProgramsController < ApplicationController
   include ProgramPermissions
-  
+
   before_action :authenticate_user!
   before_action :require_can_edit_programs!, only: [:destroy, :create]
   before_action :set_program
@@ -16,7 +16,7 @@ class SubProgramsController < ApplicationController
   end
 
   def create
-    @subprogram = sub_program_source.new
+    @subprogram = SubProgram.new
     @subprogram.assign_attributes sub_program_params
     prevent_incorrect_building()
     if @subprogram.save

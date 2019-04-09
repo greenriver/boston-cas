@@ -343,7 +343,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rb-readline (0.5.4)
     redis (4.0.1)
     redis-actionpack (5.0.2)
       actionpack (>= 4.0, < 6)
@@ -543,7 +542,6 @@ DEPENDENCIES
   rails
   rails-erd
   ransack
-  rb-readline
   redis-rails
   responders
   rspec-mocks

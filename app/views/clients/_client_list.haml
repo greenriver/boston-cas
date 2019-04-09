@@ -17,6 +17,8 @@
             %th Homeless Since
             %th Days Homeless
             %th Days Homeless in the last three years
+            - if @show_assessment
+              %th Assessment Score
             - if @show_vispdat
               %th VI-SPDAT
               %th Priority Score
@@ -44,6 +46,8 @@
                 = client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
               %td= number_with_delimiter(client.days_homeless)
               %td= number_with_delimiter(client.days_homeless_in_last_three_years)
+              - if @show_assessment
+                %td= client.assessment_score
               - if @show_vispdat
                 %td
                   = client.vispdat_score

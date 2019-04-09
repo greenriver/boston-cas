@@ -254,6 +254,11 @@ class Client < ActiveRecord::Base
     Warehouse::Cohort.visible_in_cas.where(id: active_cohort_ids)
   end
 
+  def rank_for_tag match_route:
+    tag_id = match_route.tag_id
+    tags.try(:[], tag_id.to_s)
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
@@ -403,7 +408,7 @@ class Client < ActiveRecord::Base
     self.enrolled_in_es
   end
 
-  def self.sort_options(show_vispdat: false)
+  def self.sort_options(show_vispdat: false, show_assessment: false)
     [
       {title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
       {title: 'Last name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true},
@@ -416,6 +421,7 @@ class Client < ActiveRecord::Base
           order: 'days_homeless_in_last_three_years DESC', visible: true},
       {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
           order: 'calculated_first_homeless_night ASC', visible: true},
+      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_assessment},
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]
