@@ -122,6 +122,7 @@ Rails.application.routes.draw do
   end
 
   resources :neighborhoods
+  resources :tags
 
   resource :account, only: [:edit, :update]
   resource :account_email, only: [:edit, :update]

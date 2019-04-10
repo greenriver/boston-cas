@@ -1,0 +1,45 @@
+- title = "Tags"
+- content_for :title, title
+
+.o-page
+  .o-page__title
+    %h1= content_for :title
+    .o-page__action.o-page__action--stacked
+      = link_to new_tag_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+        %span.icon-plus
+        Add a Tag
+
+  .row
+    .col-sm-12
+      - @prompt = "Search tags..."
+      .row
+        .col-sm-6
+          = render 'search_form'
+  .row
+    .col-sm-8
+      %p= page_entries_info @tags
+
+  .row.table-utilities
+    .col-sm-12
+      .table-responsive
+        %table.table.table-condensed
+          %thead
+            %tr
+              %th
+                Name
+              %th
+              %th
+          %tbody
+            - @tags.each do |tag|
+              %tr
+                %td
+                  = tag.name
+                %td
+                  = link_to edit_tag_path(tag), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                    %span.icon-pencil
+                    Edit
+                %td
+                  = link_to tag_path(tag),  method: :delete, data: {confirm: "Would you really like to delete the tag #{tag.name}?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    %span.icon-cross
+                    Delete
+      %p= paginate @tags

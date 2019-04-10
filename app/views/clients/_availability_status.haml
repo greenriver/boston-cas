@@ -1,4 +1,4 @@
-.c-tag.c-tag--full-width{class: "c-tag--#{@client.available ? 'success' : 'warning'}"}
+.c-tag.c-tag--full-width{class: "c-tag--#{@client.is_available_for_matching? ? 'success' : 'warning'}"}
   .c-tag__wrapper
     .c-tag__icon.c-tag__icon--sm
       .icon-checkmark

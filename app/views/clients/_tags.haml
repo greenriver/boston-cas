@@ -1,0 +1,18 @@
+.col-md-6.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-group
+    %h5 Tags
+  - if @client.tags.present?
+    %table.table
+      %thead
+        %tr
+          %th Tag
+          %th Rank
+      %tbody
+        - @client.tags.each do |id, rank|
+          - tag = Tag.find(id)
+          %tr
+            %td= tag&.name
+            %td= rank
+  - else
+    %p.font-no-data None

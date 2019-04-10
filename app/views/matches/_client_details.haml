@@ -1,4 +1,4 @@
-%h3.detail-box--label 
+%h3.detail-box--label
   Client
   - unless match.client.has_full_housing_release?
     .limited-cas-release
@@ -20,8 +20,14 @@
         %br
         Age:
         = match.client.age || 'unknown'
-  - if can_view_all_clients? && warehouse_id = match.client.remote_id
-    %br
-    = link_to @client.data_source_path, target: '_blank' do
-      Remote ID:
-      = warehouse_id
+  .mt-1
+    - if user_signed_in? && warehouse_id = match.client.remote_id # show if you are logged in
+      %br
+      = link_to @client.data_source_path, target: '_blank' do
+        Remote ID:
+        = warehouse_id
+    - if can_view_all_clients? # only show to admins
+      %br
+      = link_to @client, target: '_blank' do
+        CAS Client ID:
+        = @client.id

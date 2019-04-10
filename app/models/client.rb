@@ -254,6 +254,11 @@ class Client < ActiveRecord::Base
     Warehouse::Cohort.visible_in_cas.where(id: active_cohort_ids)
   end
 
+  def rank_for_tag match_route:
+    tag_id = match_route.tag_id
+    tags.try(:[], tag_id.to_s)
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
@@ -306,12 +311,16 @@ class Client < ActiveRecord::Base
     end
   end
 
-  def unavailable(permanent:false)
+  def unavailable(permanent:false, contact_id:nil)
     active_match = client_opportunity_matches.active.first
     Client.transaction do
       if active_match.present?
         opportunity = active_match.opportunity
         active_match.canceled!
+        MatchEvents::Parked.create!(
+            match_id: active_match.id,
+            contact_id: contact_id
+        )
         opportunity.update(available_candidate: true)
         Matching::RunEngineJob.perform_later
       end
@@ -382,8 +391,20 @@ class Client < ActiveRecord::Base
     return states
   end
 
+  def parked?
+    prevent_matching_until.present? && prevent_matching_until > Date.today
+  end
+
+  def is_available_for_matching?
+    if parked?
+      return false
+    else
+      return available
+    end
+  end
+
   def available_text
-    if available
+    if is_available_for_matching?
       if available_as_candidate_for_any_route?
         'Available for matching'
       elsif active_in_match?
@@ -392,7 +413,11 @@ class Client < ActiveRecord::Base
         'Fully matched'
       end
     else
-      'Not available'
+      if parked?
+        "Parked until #{prevent_matching_until}"
+      else
+        'Not available'
+      end
     end
   end
 
@@ -416,7 +441,7 @@ class Client < ActiveRecord::Base
           order: 'days_homeless_in_last_three_years DESC', visible: true},
       {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
           order: 'calculated_first_homeless_night ASC', visible: true},
-      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_vispdat},
+      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_assessment},
       {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
       {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
     ]

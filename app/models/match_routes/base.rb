@@ -3,6 +3,7 @@ module MatchRoutes
     self.table_name = :match_routes
 
     belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
+    belongs_to :tag
 
     scope :available, -> do
       where(active: true).
@@ -12,6 +13,8 @@ module MatchRoutes
     scope :should_cancel_other_matches, -> do
       where(should_cancel_other_matches: true)
     end
+
+    validate :has_tag_if_prioritization_requires_it
 
     def self.all_routes
       [
@@ -95,6 +98,13 @@ module MatchRoutes
         'dnd_staff',
         'housing_subsidy_admin',
       ]
+    end
+
+    private def has_tag_if_prioritization_requires_it
+      if tag_id.blank? && match_prioritization&.requires_tag?
+
+        errors.add :tag_id, "Chosen prioritization scheme requires a tag be set"
+      end
     end
   end
 end

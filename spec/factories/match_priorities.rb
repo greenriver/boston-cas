@@ -17,4 +17,7 @@ FactoryGirl.define do
   factory :priority_assessment_score, class: 'MatchPrioritization::AssessmentScore' do
     active true
   end
+  factory :priority_rank, class: 'MatchPrioritization::Rank' do
+    active true
+  end
 end

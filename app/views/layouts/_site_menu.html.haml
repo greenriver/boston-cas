@@ -51,6 +51,10 @@
         %li.o-menu__item
           = link_to neighborhoods_path, class: 'o-menu__link' do
             Neighborhoods
+      - if can_manage_tags?
+        %li.o-menu__item
+          = link_to tags_path, class: 'o-menu__link' do
+            Tags
       - if can_view_rule_list?
         %li.o-menu__item
           = link_to rules_path, class: 'o-menu__link' do
