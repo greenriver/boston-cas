@@ -1,6 +1,6 @@
 module CasSeeds
   class MatchDecisionReasons
-    
+
     DND_REASONS = [
       "Client won't be eligible for services",
       "Client won't be eligible for housing type",
@@ -25,7 +25,7 @@ module CasSeeds
     HSA_PRIORITY_ONLY_REASONS = [
       'Household did not respond',
       'Ineligible for Housing Program',
-      'Client is requesting to be removed from consideration for 30 days',
+      'Client is requesting to be removed from consideration for 60 days',
       'Self-resolved',
       'Falsification of documents',
       'Health and Safety',
@@ -78,12 +78,12 @@ module CasSeeds
     private def create_other_reason!
       ::MatchDecisionReasons::Other.all.first_or_create! name: "Other"
     end
-    
+
 
     private def create_dnd_reasons!
       DND_REASONS.each do |reason_name|
         ::MatchDecisionReasons::DndStaffDecline.where(name: reason_name).first_or_create!
-      end    
+      end
     end
 
     private def create_hsa_reasons!
@@ -117,7 +117,7 @@ module CasSeeds
     private def create_admin_cancel_reasons!
       ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name|
         ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name).first_or_create!
-      end    
+      end
     end
 
   end
