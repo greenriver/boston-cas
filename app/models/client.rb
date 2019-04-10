@@ -311,12 +311,16 @@ class Client < ActiveRecord::Base
     end
   end
 
-  def unavailable(permanent:false)
+  def unavailable(permanent:false, contact_id:nil)
     active_match = client_opportunity_matches.active.first
     Client.transaction do
       if active_match.present?
         opportunity = active_match.opportunity
         active_match.canceled!
+        MatchEvents::Parked.create!(
+            match_id: active_match.id,
+            contact_id: contact_id
+        )
         opportunity.update(available_candidate: true)
         Matching::RunEngineJob.perform_later
       end
@@ -387,8 +391,20 @@ class Client < ActiveRecord::Base
     return states
   end
 
+  def parked?
+    prevent_matching_until.present? && prevent_matching_until > Date.today
+  end
+
+  def is_available_for_matching?
+    if parked?
+      return false
+    else
+      return available
+    end
+  end
+
   def available_text
-    if available
+    if is_available_for_matching?
       if available_as_candidate_for_any_route?
         'Available for matching'
       elsif active_in_match?
@@ -397,7 +413,11 @@ class Client < ActiveRecord::Base
         'Fully matched'
       end
     else
-      'Not available'
+      if parked?
+        "Parked until #{prevent_matching_until}"
+      else
+        'Not available'
+      end
     end
   end
 
