@@ -123,6 +123,8 @@ class NonHmisClient < ActiveRecord::Base
     project_client.developmental_disability = if developmental_disability then 1 else nil end
     project_client.domestic_violence = 1 if domestic_violence
 
+    project_client.tags = cas_tags
+
     project_client.sync_with_cas = self.available
     project_client.needs_update = true
     project_client.save
@@ -130,6 +132,14 @@ class NonHmisClient < ActiveRecord::Base
 
   def log message
     Rails.logger.info message
+  end
+
+  def cas_tags
+    @cas_tags = {}
+    Tag.where(rrh_assessment_trigger: true).each do |tag|
+      @cas_tags[tag.id] = assessment_score if assessment_score.present?
+    end
+    return @cas_tags
   end
 
   def update_project_clients_from_non_hmis_clients
