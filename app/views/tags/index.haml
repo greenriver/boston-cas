@@ -25,15 +25,15 @@
         %table.table.table-condensed
           %thead
             %tr
-              %th
-                Name
+              %th Name
+              %th= _('Added to assessed clients')
               %th
               %th
           %tbody
             - @tags.each do |tag|
               %tr
-                %td
-                  = tag.name
+                %td= tag.name
+                %td= checkmark tag.rrh_assessment_trigger
                 %td
                   = link_to edit_tag_path(tag), class: ['btn', 'btn-sm', 'btn-secondary'] do
                     %span.icon-pencil

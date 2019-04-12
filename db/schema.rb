@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190408153531) do
+ActiveRecord::Schema.define(version: 20190411183854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -567,13 +567,13 @@ ActiveRecord::Schema.define(version: 20190408153531) do
     t.integer  "gender"
     t.string   "type"
     t.boolean  "available",                                default: true,  null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
     t.jsonb    "neighborhood_interests",                   default: [],    null: false
     t.float    "income_total_monthly"
     t.boolean  "disabling_condition",                      default: false
     t.boolean  "physical_disability",                      default: false
     t.boolean  "developmental_disability",                 default: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
     t.boolean  "domestic_violence",                        default: false, null: false
     t.boolean  "interested_in_set_asides",                 default: false
     t.jsonb    "tags"
@@ -901,11 +901,11 @@ ActiveRecord::Schema.define(version: 20190408153531) do
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
+    t.boolean  "can_manage_neighborhoods",                default: false
     t.boolean  "can_view_assigned_programs",              default: false
     t.boolean  "can_edit_assigned_programs",              default: false
     t.boolean  "can_export_deidentified_clients",         default: false
     t.boolean  "can_export_identified_clients",           default: false
-    t.boolean  "can_manage_neighborhoods",                default: false
     t.boolean  "can_manage_tags",                         default: false
   end
 
@@ -1039,6 +1039,7 @@ ActiveRecord::Schema.define(version: 20190408153531) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.boolean  "rrh_assessment_trigger", default: false, null: false
   end
 
   create_table "translation_keys", force: :cascade do |t|
