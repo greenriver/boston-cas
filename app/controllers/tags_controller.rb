@@ -50,7 +50,7 @@ class TagsController < ApplicationController
   end
 
   def tag_params
-    params.require(:tag).permit(:name)
+    params.require(:tag).permit(:name, :rrh_assessment_trigger)
   end
 
   def tag_scope

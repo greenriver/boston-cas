@@ -20,6 +20,9 @@ msgstr ""
 msgid "A criminal background hearing is not necessary"
 msgstr ""
 
+msgid "Added to assessed clients"
+msgstr ""
+
 msgid "Asylee, Refugee"
 msgstr ""
 
@@ -38,6 +41,9 @@ msgstr ""
 msgid "Boston's Way Home"
 msgstr ""
 
+msgid "CAS"
+msgstr ""
+
 msgid "CSPECH Eligible"
 msgstr ""
 
@@ -45,6 +51,9 @@ msgid "Case Workers"
 msgstr ""
 
 msgid "Children under age 18 in household"
+msgstr ""
+
+msgid "Chronically homeless family"
 msgstr ""
 
 msgid "City of Boston"
@@ -71,6 +80,12 @@ msgstr ""
 msgid "Date and time of criminal background hearing"
 msgstr ""
 
+msgid "Date days homeless verified"
+msgstr ""
+
+msgid "De-Identified Clients"
+msgstr ""
+
 msgid "De-identified Client"
 msgstr ""
 
@@ -90,6 +105,9 @@ msgid "HSA"
 msgstr ""
 
 msgid "HSP"
+msgstr ""
+
+msgid "Homeless Set-Aside Route"
 msgstr ""
 
 msgid "Housing Authority Eligible"
@@ -114,6 +132,9 @@ msgid "Housing Subsidy Administrators"
 msgstr ""
 
 msgid "Identified Client"
+msgstr ""
+
+msgid "Identified Clients"
 msgstr ""
 
 msgid "Ineligible Immigrant (Including Undocumented)"
@@ -161,10 +182,22 @@ msgstr ""
 msgid "Shelter Agency"
 msgstr ""
 
+msgid "Shelter Agency Contacts"
+msgstr ""
+
+msgid "Should this tag be added to anyone with an assessment score?"
+msgstr ""
+
 msgid "Stabilization Service Providers"
 msgstr ""
 
 msgid "Stabilization Services Provider"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Tags"
 msgstr ""
 
 msgid "The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care."

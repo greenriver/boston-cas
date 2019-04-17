@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-24 19:54-0400\n"
-"PO-Revision-Date: 2018-10-24 19:54-0400\n"
+"POT-Creation-Date: 2019-04-12 09:48-0400\n"
+"PO-Revision-Date: 2019-04-12 09:48-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,6 +19,9 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 msgid "A criminal background hearing is not necessary"
+msgstr ""
+
+msgid "Added to assessed clients"
 msgstr ""
 
 msgid "Asylee, Refugee"
@@ -39,6 +42,9 @@ msgstr ""
 msgid "Boston's Way Home"
 msgstr ""
 
+msgid "CAS"
+msgstr ""
+
 msgid "CSPECH Eligible"
 msgstr ""
 
@@ -46,6 +52,9 @@ msgid "Case Workers"
 msgstr ""
 
 msgid "Children under age 18 in household"
+msgstr ""
+
+msgid "Chronically homeless family"
 msgstr ""
 
 msgid "City of Boston"
@@ -72,6 +81,12 @@ msgstr ""
 msgid "Date and time of criminal background hearing"
 msgstr ""
 
+msgid "Date days homeless verified"
+msgstr ""
+
+msgid "De-Identified Clients"
+msgstr ""
+
 msgid "De-identified Client"
 msgstr ""
 
@@ -91,6 +106,9 @@ msgid "HSA"
 msgstr ""
 
 msgid "HSP"
+msgstr ""
+
+msgid "Homeless Set-Aside Route"
 msgstr ""
 
 msgid "Housing Authority Eligible"
@@ -115,6 +133,9 @@ msgid "Housing Subsidy Administrators"
 msgstr ""
 
 msgid "Identified Client"
+msgstr ""
+
+msgid "Identified Clients"
 msgstr ""
 
 msgid "Ineligible Immigrant (Including Undocumented)"
@@ -162,10 +183,22 @@ msgstr ""
 msgid "Shelter Agency"
 msgstr ""
 
+msgid "Shelter Agency Contacts"
+msgstr ""
+
+msgid "Should this tag be added to anyone with an assessment score?"
+msgstr ""
+
 msgid "Stabilization Service Providers"
 msgstr ""
 
 msgid "Stabilization Services Provider"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Tags"
 msgstr ""
 
 msgid "The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care."

@@ -4,6 +4,7 @@
       = f.error_notification
       .form-inputs
         = f.input :name
+        = f.input :rrh_assessment_trigger, label: _('Should this tag be added to anyone with an assessment score?')
 
       .form_actions
       = f.button :submit
