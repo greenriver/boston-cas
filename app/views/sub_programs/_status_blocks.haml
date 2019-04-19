@@ -3,9 +3,9 @@
   .summary-readout--tile.summary-readout--tile__green
     .summary-readout--tile-color-block
       .summary-readout--tile-label
-        CAS Matched
+        Available/Unmatched
       .summary-readout--value
-        = @subprogram.matched
+        = @subprogram.vacancies
   .summary-readout--tile.summary-readout--tile__blue.margin-left-01
     .summary-readout--tile-color-block
       .summary-readout--tile-label
@@ -15,6 +15,6 @@
   .summary-readout--tile.summary-readout--tile__red.margin-left-01
     .summary-readout--tile-color-block
       .summary-readout--tile-label
-        Vacancies
+        Successful
       .summary-readout--value
-        = @subprogram.vacancies
+        = @subprogram.matched

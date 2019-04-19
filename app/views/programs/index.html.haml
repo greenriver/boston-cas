@@ -40,9 +40,9 @@
             - if MatchRoutes::Base.more_than_one?
               %th Route
             %th Organization
-            %th CAS Matched
+            %th Available/Unmatched
             %th In Progress
-            %th Vacancies
+            %th Sucessful
         %tbody
           - @programs.each do |sp|
             - if sp.deleted_at
@@ -72,10 +72,10 @@
               %td{:class => deleted}
                 = sp.organizations.join(', ')
               %td{:class => deleted}
-                = sp.matched
+                = sp.vacancies
               %td{:class => deleted}
                 = sp.in_progress
               %td{:class => deleted}
-                = sp.vacancies
+                = sp.matched
 
     %p= paginate @programs, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}

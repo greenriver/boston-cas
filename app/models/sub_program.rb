@@ -207,7 +207,10 @@ class SubProgram < ActiveRecord::Base
     end
 
     def update_vacancies
-      self[:vacancies] = vouchers.where(available: true).count
+      self[:vacancies] = 0
+      vouchers.where(available: true).each do |v|
+        self[:vacancies] += 1 unless v.status_match.present?
+      end
     end
 
 end
