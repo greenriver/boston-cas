@@ -1,0 +1,17 @@
+%ul.nav.nav-tabs{role: :tablist}
+  %li.nav-item{role: :presentation}
+    %a.nav-link.active{href: '#available-vouchers', aria: {controls: 'available-vouchers'}, data: {toggle: :tab}, role: :tab} Available/Unmatched
+  %li.nav-item{role: :presentation}
+    %a.nav-link{href: '#in-progress-vouchers', aria: {controls: 'in-progress-vouchers'}, data: {toggle: :tab}, role: :tab} In Progress
+  %li.nav-item{role: :presentation}
+    %a.nav-link{href: '#successful-vouchers', aria: {controls: 'successful-vouchers'}, data: {toggle: :tab}, role: :tab} Successful
+
+.tab-content
+  #available-vouchers.tab-pane.active{role: :tabpanel}
+    = render "form", vouchers: @available_vouchers
+
+  #in-progress-vouchers.tab-pane{role: :tabpanel}
+    = render "form", vouchers: @in_progress_vouchers
+
+  #successful-vouchers.tab-pane{role: :tabpanel}
+    = render "form", vouchers: @successful_vouchers

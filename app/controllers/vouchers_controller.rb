@@ -10,6 +10,10 @@ class VouchersController < ApplicationController
 
   def index
     @vouchers = @subprogram.vouchers.preload(:status_match).order(:id)
+
+    @available_vouchers = @vouchers.select{|v| ! v.status_match.present?}
+    @in_progress_vouchers = @vouchers.select{|v| v.status_match.present? && v.status_match.active}
+    @successful_vouchers = @vouchers.select{|v| v.status_match.present? && v.status_match.successful?}
   end
 
   def create
