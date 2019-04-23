@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190418182829) do
+ActiveRecord::Schema.define(version: 20190423200343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -500,6 +500,7 @@ ActiveRecord::Schema.define(version: 20190418182829) do
     t.boolean  "allow_multiple_active_matches",                       default: false, null: false
     t.boolean  "default_shelter_agency_contacts_from_project_client", default: false, null: false
     t.integer  "tag_id"
+    t.boolean  "show_default_contact_types",                          default: true
   end
 
   add_index "match_routes", ["tag_id"], name: "index_match_routes_on_tag_id", using: :btree

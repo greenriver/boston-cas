@@ -31,6 +31,7 @@ module Admin
         :default_shelter_agency_contacts_from_project_client,
         :match_prioritization_id,
         :tag_id,
+        :show_default_contact_types,
       )
     end
 

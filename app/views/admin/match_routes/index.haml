@@ -17,6 +17,7 @@
       %th Allow multiple active matches per client on route
       %th Attempt to add default shelter agency contacts from client record
       %th Match prioritization
+      %th Show the default contact types on a match
       %th= _('Tag')
 
   %tbody
@@ -31,5 +32,6 @@
         %td= checkmark(! route.should_prevent_multiple_matches_per_client)
         %td= checkmark(route.default_shelter_agency_contacts_from_project_client)
         %td= route.match_prioritization.title
+        %td= checkmark(route.show_default_contact_types)
         %td= route.tag&.name
 
