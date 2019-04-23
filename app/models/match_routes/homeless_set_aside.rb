@@ -11,18 +11,16 @@ module MatchRoutes
 
     def self.match_steps
       {
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
+          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 1,
+          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 2,
       }
     end
 
     def self.match_steps_for_reporting
       {
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt' => 1,
-          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 2,
-          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 3,
-          'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff' => 4,
+          'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient' => 1,
+          'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator' => 2,
+          'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff' => 3,
       }
     end
 
@@ -34,7 +32,7 @@ module MatchRoutes
     end
 
     def initial_decision
-      :set_asides_hsa_acknowledges_receipt_decision
+      :set_asides_hsa_accepts_client_decision
     end
 
     def initial_contacts_for_match

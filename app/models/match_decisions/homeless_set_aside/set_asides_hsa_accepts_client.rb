@@ -4,6 +4,7 @@ module MatchDecisions::HomelessSetAside
     include MatchDecisions::AcceptsDeclineReason
 
     # validate :note_present_if_status_declined
+    validate :ensure_required_contacts_present_on_accept
 
     def label
       label_for_status status
@@ -106,6 +107,24 @@ module MatchDecisions::HomelessSetAside
       end
     end
 
+    private def save_will_accept?
+      saved_status == 'pending' && status == 'accepted'
+    end
+
+    private def ensure_required_contacts_present_on_accept
+      missing_contacts = []
+      if save_will_accept? && match.dnd_staff_contacts.none?
+        missing_contacts << "a #{_('DND')} Staff Contact"
+      end
+
+      if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+        missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact"
+      end
+
+      if missing_contacts.any?
+        errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
+      end
+    end
   end
 
 end
