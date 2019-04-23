@@ -10,10 +10,8 @@ class VouchersController < ApplicationController
 
   def index
     @vouchers = @subprogram.vouchers.preload(:status_match).order(:id)
-
-    @available_vouchers = @vouchers.select{|v| ! v.status_match.present?}
-    @in_progress_vouchers = @vouchers.select{|v| v.status_match.present? && v.status_match.active}
-    @successful_vouchers = @vouchers.select{|v| v.status_match.present? && v.status_match.successful?}
+    @vouchers_for_page = @vouchers.select{|v| ! v.status_match.present?}
+    @voucher_state = "available or unmatched"
   end
 
   def create

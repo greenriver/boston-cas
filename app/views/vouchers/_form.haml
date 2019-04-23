@@ -5,6 +5,9 @@
   .d-flex
     - if vouchers.count > 0
       = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto'
+    - else
+      %p.alert.alert-info.mt-3
+        This program has no #{@voucher_state} vouchers.
 = content_for :page_js do
   :javascript
     $('select').select2();
