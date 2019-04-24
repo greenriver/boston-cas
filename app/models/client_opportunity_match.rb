@@ -327,6 +327,16 @@ class ClientOpportunityMatch < ActiveRecord::Base
     add_default_do_contacts!
   end
 
+  def current_contacts
+    contacts_with_info = {}
+    match_contacts.input_names.each do |input_name|
+      if match_contacts.send(input_name).count > 0
+        contacts_with_info[input_name] = match_contacts.label_for input_name
+      end
+    end
+    contacts_with_info
+  end
+
   def self.contact_titles
     {
       shelter_agency_contacts: "#{_('Shelter Agency')} Contacts",

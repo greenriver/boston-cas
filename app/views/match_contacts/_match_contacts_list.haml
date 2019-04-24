@@ -1,5 +1,10 @@
 %ul.jMatchContactList.c-detail-group__content.list-unstyled
-  - match.contact_titles.each do |contact_type, title|
+  - if match.match_route.show_default_contact_types
+    - contact_titles = match.contact_titles
+  - else
+    - contact_titles = match.current_contacts
+
+  - contact_titles.each do |contact_type, title|
     %li.c-detail-group__item
       -# Force some translations
       - _('Housing Subsidy Administrators')
