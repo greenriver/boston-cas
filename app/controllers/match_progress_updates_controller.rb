@@ -13,7 +13,7 @@ class MatchProgressUpdatesController < ApplicationController
     @update.client_last_seen = progress_params[:client_last_seen]
     @update.note = progress_params[:note]
     if @update.valid?
-      @decision.set_stall_date()
+      @decision&.set_stall_date()
       @update.save
       Notifications::ProgressUpdateSubmitted.create_for_match!(@match)
     else
