@@ -32,8 +32,9 @@ module Notifications
     end
     
     def deliver
-      DeliverJob.perform_later(self)
+      DeliverJob.perform_later(self) if match.match_route.send_notifications
     end
+
     class DeliverJob < ActiveJob::Base
       def perform(notification)
         NotificationsMailer.send(notification.notification_type, notification).deliver_now
