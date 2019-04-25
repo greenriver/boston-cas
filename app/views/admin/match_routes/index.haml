@@ -11,6 +11,7 @@
       %th Route Name
       %th Active
       %th HSA can edit HSA contacts
+      %th Send email to contacts
       %th Activate highest priority match automatically
       %th Allow multiple active matches on single opportunity
       %th Cancel other matches on success
@@ -25,6 +26,7 @@
         %td= link_to route.title, edit_admin_match_route_path(route)
         %td= checkmark route.active
         %td= checkmark route.contacts_editable_by_hsa
+        %td= checkmark route.send_notifications
         %td= checkmark route.should_activate_match
         %td= checkmark route.allow_multiple_active_matches
         %td= checkmark route.should_cancel_other_matches
