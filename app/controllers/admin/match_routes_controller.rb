@@ -32,6 +32,7 @@ module Admin
         :match_prioritization_id,
         :tag_id,
         :show_default_contact_types,
+        :send_notifications,
       )
     end
 

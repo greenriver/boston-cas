@@ -1,0 +1,10 @@
+%ul.nav.nav-tabs{role: :tablist}
+  %li.nav-item{role: :presentation, class: ('active' if current_page?(program_sub_program_vouchers_path))}
+    = link_to 'Available/Unmatched', program_sub_program_vouchers_path, class: 'nav-link'
+  %li.nav-item{role: :presentation, class: ('active' if current_page?(program_sub_program_in_progress_vouchers_path))}
+    = link_to 'In Progress', program_sub_program_in_progress_vouchers_path, class: 'nav-link'
+  %li.nav-item{role: :presentation, class: ('active' if current_page?(program_sub_program_successful_vouchers_path))}
+    = link_to 'Successful', program_sub_program_successful_vouchers_path, class: 'nav-link'
+
+= render "form", vouchers: @vouchers_for_page
+

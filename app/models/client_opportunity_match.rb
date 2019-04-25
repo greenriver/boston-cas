@@ -40,7 +40,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
   # Set-Asides Match Route
-  has_decision :set_asides_hsa_acknowledges_receipt, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt', notification_class_name: 'Notifications::HomelessSetAside::MatchInitiationForHsa'
   has_decision :set_asides_hsa_accepts_client, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesHsaAcceptsClient', notification_class_name: 'Notifications::HomelessSetAside::HsaAcceptsClient'
   has_decision :set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator', notification_class_name: 'Notifications::RecordClientHousedDateHousingSubsidyAdministrator'
   has_decision :set_asides_confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'

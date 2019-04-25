@@ -4,6 +4,7 @@
 = simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
   = f.input :active
   = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
+  = f.input :send_notifications, label: 'Send emails to contacts'
   = f.input :should_activate_match, label: 'Activate highest priority match automatically'
   = f.input :allow_multiple_active_matches, label: 'Allow multiple active matches on single opportunity'
   = f.input :should_cancel_other_matches, label: 'Cancel other matches on success'

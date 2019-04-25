@@ -1,9 +1,13 @@
 = simple_form_for @subprogram, url: bulk_update_program_sub_program_vouchers_path, html: {class: 'bulk-vouchers'}  do |f|
   = f.error_notification
-  = f.simple_fields_for :vouchers, @vouchers do |v|
+  = f.simple_fields_for :vouchers, vouchers do |v|
     = render 'voucher', f: f, v: v
-  .d-flex 
-    = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto'
+  .d-flex
+    - if vouchers.count > 0
+      = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto'
+    - else
+      %p.alert.alert-info.mt-3
+        This program has no #{@voucher_state} vouchers.
 = content_for :page_js do
   :javascript
     $('select').select2();

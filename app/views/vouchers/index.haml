@@ -26,7 +26,7 @@
   .row
     .col-sm-12
       - if @subprogram.vouchers.count > 0
-        = render 'form'
+        = render 'tabs'
       - else
         %p.alert.alert-info.mt-3
           This program has no vouchers defined yet. Use the Add Vouchers box above to add some.
