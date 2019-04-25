@@ -326,7 +326,25 @@ class ClientOpportunityMatch < ActiveRecord::Base
     add_default_do_contacts!
   end
 
-  def self.contact_titles
+  def contact_titles
+    if match_route.show_default_contact_types
+      default_contact_titles
+    else
+      current_contact_titles
+    end
+  end
+
+  def current_contact_titles
+    contacts_with_info = {}
+    match_contacts.input_names.each do |input_name|
+      if match_contacts.send(input_name).count > 0
+        contacts_with_info[input_name] = match_contacts.label_for input_name
+      end
+    end
+    contacts_with_info
+  end
+
+  def self.default_contact_titles
     {
       shelter_agency_contacts: "#{_('Shelter Agency')} Contacts",
       housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrators')}",
@@ -335,8 +353,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
     }
   end
 
-  def contact_titles
-    self.class.contact_titles
+  def default_contact_titles
+    self.class.default_contact_titles
   end
 
   def overall_status

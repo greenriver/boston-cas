@@ -10,6 +10,7 @@
   = f.input :should_cancel_other_matches, label: 'Cancel other matches on success'
   = f.input :should_prevent_multiple_matches_per_client, label: 'Prevent multiple active matches per client on route'
   = f.input :default_shelter_agency_contacts_from_project_client, label: 'Attempt to add default shelter agency contacts from client record'
+  = f.input :show_default_contact_types, label: 'Show the default contact types on a match'
   = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false, input_html: { class: :select2 }
   = f.association :tag, include_blank: 'Optional Tag', input_html: { class: :select2 }, hint: 'Assigning a tag is required if the route is prioritized by rank.'
   = f.button :submit, value: "Update #{@route.title}"

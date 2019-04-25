@@ -169,6 +169,21 @@ class MatchContacts
         [hsp_contact_ids]).flatten.compact.uniq
   end
 
+  def self.input_names
+    [
+      :shelter_agency_contacts,
+      :dnd_staff_contacts,
+      :housing_subsidy_admin_contacts,
+      :ssp_contacts,
+      :hsp_contacts,
+      :do_contacts,
+    ]
+  end
+
+  def input_names
+    self.class.input_names
+  end
+
   def label_for(input_name)
     @labels ||= {
       shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
