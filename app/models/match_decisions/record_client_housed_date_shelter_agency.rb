@@ -1,6 +1,9 @@
 module MatchDecisions
   class RecordClientHousedDateShelterAgency < Base
 
+    attr_accessor :building_id
+    attr_accessor :unit_id
+
     validate :client_move_in_date_present_if_status_complete
 
     def label
@@ -71,6 +74,7 @@ module MatchDecisions
       end
 
       def completed
+        # TODO update the voucher if the building/unit was changed
         match.confirm_match_success_dnd_staff_decision.initialize_decision!
       end
 
@@ -80,6 +84,13 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
+
+    def whitelist_params_for_update params
+      super.merge params.require(:decision).permit(
+        :building_id,
+        :unit_id,
+      )
+    end
 
     private
 

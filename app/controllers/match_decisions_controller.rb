@@ -24,6 +24,7 @@ class MatchDecisionsController < ApplicationController
   end
 
   def update
+    raise hi
 
     @program = @match.program
     @sub_program = @match.sub_program
