@@ -91,7 +91,7 @@ module MatchDecisions
       end
 
       def completed
-        # TODO update the voucher if the building/unit was changed
+        match.update_unit(@decision.unit_id)
         @decision.next_step.initialize_decision!
       end
 

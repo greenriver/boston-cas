@@ -2,6 +2,7 @@ class MatchDecisionsController < ApplicationController
   include HasMatchAccessContext
   include Decisions
   include ContactEditPermissions
+  include MatchBuildingAndUnit
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
@@ -24,8 +25,6 @@ class MatchDecisionsController < ApplicationController
   end
 
   def update
-    raise hi
-
     @program = @match.program
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
