@@ -1,6 +1,6 @@
 module MatchDecisions::HomelessSetAside
   class SetAsidesConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-    
+
     def statuses
       {
         pending: 'Pending',

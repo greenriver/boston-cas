@@ -1,6 +1,6 @@
 module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcceptsClient < ::MatchDecisions::Base
-    
+
     include MatchDecisions::AcceptsDeclineReason
 
     # validate :note_present_if_status_declined
@@ -18,6 +18,10 @@ module MatchDecisions::HomelessSetAside
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
+    end
+
+    def started?
+      status&.to_sym == :accepted
     end
 
     # if we've overridden this decision, indicate that (this is sent to the client)
