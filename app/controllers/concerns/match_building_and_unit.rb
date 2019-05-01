@@ -2,6 +2,11 @@ module MatchBuildingAndUnit
   extend ActiveSupport::Concern
 
   included do
+    def notification_id
+      params[:notification_id]
+    end
+    helper_method :notification_id
+
     def has_unit?
       voucher.unit
     end
