@@ -13,7 +13,7 @@ module MatchBuildingAndUnit
     helper_method :has_unit?
 
     def default_building_id
-      voucher.unit.building
+      voucher.unit.building&.id
     end
     helper_method :default_building_id
 

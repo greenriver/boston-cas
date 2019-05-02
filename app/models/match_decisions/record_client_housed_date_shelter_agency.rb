@@ -74,7 +74,6 @@ module MatchDecisions
       end
 
       def completed
-        match.update_unit(@decision.unit_id)
         match.confirm_match_success_dnd_staff_decision.initialize_decision!
       end
 

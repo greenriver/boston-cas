@@ -107,7 +107,6 @@ module MatchDecisions::HomelessSetAside
       end
 
       def completed
-        match.update_unit(@decision.unit_id)
         match.succeeded!
       end
 

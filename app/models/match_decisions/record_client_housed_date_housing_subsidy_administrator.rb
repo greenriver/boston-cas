@@ -91,7 +91,6 @@ module MatchDecisions
       end
 
       def completed
-        match.update_unit(@decision.unit_id)
         @decision.next_step.initialize_decision!
       end
 

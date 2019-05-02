@@ -88,6 +88,7 @@ class MatchDecisionsController < ApplicationController
         end
       end
       @decision.record_action_event! contact: current_contact
+      @decision.record_updated_unit! unit_id: decision_params[:unit_id], contact_id: current_contact.id
       @decision.run_status_callback!
       if @decision.contact_actor_type.present? && decision_params[:status] != "back"
         unless current_contact.in?(@match.send(@decision.contact_actor_type))

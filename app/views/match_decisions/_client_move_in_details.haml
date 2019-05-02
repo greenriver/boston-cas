@@ -25,14 +25,17 @@
   :javascript
     $('select').select2();
     $('.building-and-unit').on('change', '.building', function() {
-      var parent = this.id
-      var id = this.value
+      var parent = this.id;
+      var id = this.value;
       var notification_id = this.getAttribute('notification_id');
-      var prefix = notification_id? "/notifications/" + notification_id : ""
+      var prefix = '';
+      if(notification_id !== null) {
+        prefix = '/notifications/' + notification_id + '/';
+      }
       var $child = $('.unit');
       var value_method = $child.data('value-method');
       var label_method = $child.data('label-method');
-      var url = prefix $child.data('url').replace(':id', id);
+      var url = prefix + $child.data('url').replace(':id', id);
       $.get(url, function(data) {
         // remove previous options
         $child.children().remove();
@@ -41,7 +44,7 @@
         });
 
         if($child.data('default-parent-id').id == id) {
-          $child.append('<option value="' + $child.data('default-value') + '">' + $child.data('default-label') + '</option>')
+          $child.append('<option value="' + $child.data('default-value') + '">' + $child.data('default-label') + '</option>');
           // restore the original value if still available
           $child.val($child.data('default-value'));
         }

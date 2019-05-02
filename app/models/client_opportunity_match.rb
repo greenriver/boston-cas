@@ -546,13 +546,6 @@ class ClientOpportunityMatch < ActiveRecord::Base
       where.not(id: id)
   end
 
-  def update_unit(unit_id)
-    if opportunity.voucher.unit.present?  && opportunity.voucher.unit_id != unit_id
-      opportunity.voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
-      MatchEvents::UnitUpdated.create(match_id: id)
-    end
-  end
-
   private
 
     def assign_match_role_to_contact role, contact
