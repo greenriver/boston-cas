@@ -2,6 +2,7 @@ class MatchDecisionsController < ApplicationController
   include HasMatchAccessContext
   include Decisions
   include ContactEditPermissions
+  include MatchBuildingAndUnit
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
@@ -24,7 +25,6 @@ class MatchDecisionsController < ApplicationController
   end
 
   def update
-
     @program = @match.program
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
@@ -88,6 +88,7 @@ class MatchDecisionsController < ApplicationController
         end
       end
       @decision.record_action_event! contact: current_contact
+      @decision.record_updated_unit! unit_id: decision_params[:unit_id], contact_id: current_contact.id
       @decision.run_status_callback!
       if @decision.contact_actor_type.present? && decision_params[:status] != "back"
         unless current_contact.in?(@match.send(@decision.contact_actor_type))
