@@ -1,0 +1,16 @@
+%table.table.table-condensed
+  %thead
+    %tr
+      %th Step Name
+      %th Notifications
+  %tbody
+    - route.class.match_steps.keys.each do |step_class_name|
+      - step = step_class_name.constantize.new
+      %tr
+        %td= step.step_name
+        %td
+          %ul.list-unstyled
+            - step.notifications_for_this_step.each do |notification_class|
+              - notification = notification_class.new
+              %li= notification.event_label
+              %br
