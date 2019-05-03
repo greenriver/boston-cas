@@ -74,8 +74,9 @@ module MatchDecisions
     end
 
     def notifications_for_this_step
+      housing_scheduled = match&.schedule_criminal_hearing_housing_subsidy_admin_decision&.status == 'scheduled'
       @notifications_for_this_step ||= [].tap do |m|
-        if match.schedule_criminal_hearing_housing_subsidy_admin_decision.status == 'scheduled'
+        if match.nil? || housing_scheduled
           m << Notifications::CriminalHearingScheduledClient
           m << Notifications::CriminalHearingScheduledSsp
           m << Notifications::CriminalHearingScheduledHsp
