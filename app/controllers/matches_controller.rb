@@ -3,7 +3,6 @@ class MatchesController < ApplicationController
   include Decisions
   include MatchShow
   include PjaxModalController
-  include MatchBuildingAndUnit
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
