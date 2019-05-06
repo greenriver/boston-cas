@@ -5,6 +5,8 @@
 
 %h1= content_for :title
 
+%h2 Settings
+
 %table.table.table-condensed
   %thead
     %tr
@@ -37,3 +39,10 @@
         %td= checkmark(route.show_default_contact_types)
         %td= route.tag&.name
 
+%h2 Notifications
+
+.row
+  - @routes.each do |route|
+    .col
+      %h3= route.title
+      = render 'notifications', route: route
