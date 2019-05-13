@@ -90,7 +90,8 @@ class VouchersController < ApplicationController
       redirect_to action: :index
     else # some voucher is invalid
       flash[:alert] = 'Vouchers could not be updated.  Please correct the errors below.'
-      render :index
+      redirect_to action: :index
+      #render :index
     end
   end
 
