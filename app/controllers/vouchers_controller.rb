@@ -87,12 +87,10 @@ class VouchersController < ApplicationController
       # update the sub_program to reflect changes
       @subprogram.update_summary!
       flash[:notice] = "Vouchers updated"
-      redirect_to action: :index
     else # some voucher is invalid
       flash[:alert] = 'Vouchers could not be updated.  Please correct the errors below.'
-      redirect_to action: :index
-      #render :index
     end
+    redirect_to action: :index
   end
 
   def destroy
