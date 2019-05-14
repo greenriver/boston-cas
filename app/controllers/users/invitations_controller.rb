@@ -8,8 +8,25 @@ class Users::InvitationsController < Devise::InvitationsController
     @user.build_contact
   end
 
+  def confirm
+    @user = User.new
+    @user.build_contact
+    if ! creating_admin?
+      update
+    end
+  end
+
   # POST /resource/invitation
   def create
+    if creating_admin?
+      if ! current_user.valid_password?(confirmation_params[:confirmation_password])
+        flash[:error] = "User not updated. Incorrect password"
+        @user = User.new
+        @user.build_contact
+        render :confirm
+        return
+      end
+    end
     user_attrs = invite_params[:contact_attributes].except(:phone)
     user_attrs[:role_ids] = invite_params[:role_ids]
     user_attrs[:email] = user_attrs[:email].downcase
@@ -68,6 +85,24 @@ class Users::InvitationsController < Devise::InvitationsController
     params.require(:user).permit(
         editable_programs: [],
     )
+  end
+
+  private def confirmation_params
+    params.require(:user).permit(
+      :confirmation_password
+    )
+  end
+
+  private def creating_admin?
+    role_ids = invite_params[:role_ids]&.compact&.map(&:to_i) || []
+    role_ids.each do |id|
+      role = Role.find(id)
+      if role.administrative?
+        @admin_role_name = role.name.humanize
+        return true
+      end
+    end
+    return false
   end
 
 end
