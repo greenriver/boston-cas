@@ -73,4 +73,4 @@
               %th.text-center
                 = checkmark client.chronic_homeless
 
-    %p= paginate clients
+    %p= paginate clients, params: {direction: @direction, sort: @column}

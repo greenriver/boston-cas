@@ -5,7 +5,7 @@
     %h1 Add a User Account
 
   .col-sm-8
-    = simple_form_for @user, url: user_invitation_path do |f|
+    = simple_form_for @user, url: confirm_users_invitations_path do |f|
       = f.error_notification message: "Please correct the following errors: #{@user.errors.full_messages.join('. ')}"
 
       .form-inputs
