@@ -90,6 +90,8 @@ class VouchersController < ApplicationController
       redirect_to action: :index
     else # some voucher is invalid
       flash[:alert] = 'Vouchers could not be updated.  Please correct the errors below.'
+      @vouchers_for_page = @vouchers.select{|v| ! v.status_match.present?}
+      @voucher_state = "available or unmatched"
       render :index
     end
   end
