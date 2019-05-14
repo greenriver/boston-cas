@@ -12,7 +12,7 @@ class Users::InvitationsController < Devise::InvitationsController
     @user = User.new
     @user.build_contact
     if ! creating_admin?
-      update
+      create
     end
   end
 
@@ -94,7 +94,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   private def creating_admin?
-    role_ids = invite_params[:role_ids]&.compact&.map(&:to_i) || []
+    role_ids = invite_params[:role_ids]&.select{|v| v.present?}&.map(&:to_i) || []
     role_ids.each do |id|
       role = Role.find(id)
       if role.administrative?
