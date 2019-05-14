@@ -18,6 +18,7 @@ class SubProgramsController < ApplicationController
   def create
     @subprogram = SubProgram.new
     @subprogram.assign_attributes sub_program_params
+    @subprogram.program = @program
     prevent_incorrect_building()
     if @subprogram.save
       redirect_to action: :index, controller: :programs
