@@ -1,31 +1,38 @@
 .row
   .col-sm-12
     %h1 Currently Parked Clients
+
+- @prompt = t '.search_prompt'
+.row
+  .col-sm-6
+    = render 'search_form'
+
+.row
 - if @clients.any?
   %p= "The following clients have been removed from matching temporarily"
   %p= page_entries_info @clients
-  .row
-    .col-sm-12
-      .table-responsive
-        %table.table.table-condensed.table-hover
-          %thead
-            %tr
-              %th Last Name
-              %th First Name
-              %th Parked Until
-              %th Added
-              %th By
 
-            %tbody
-            - @clients.each do |client|
-              - parked_match = client.client_opportunity_matches.joins(:events).where('match_events' => {:type => 'MatchEvents::Parked'}).order(:created_at => :desc).first
-              - contact = parked_match.contacts.first
-              %tr
-                %td= link_to_if can_view_all_clients?, client.last_name, client_path(client)
-                %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
-                %td= client.prevent_matching_until
-                %td= parked_match.created_at
-                %td= contact.name_with_email
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th Last Name
+            %th First Name
+            %th Parked Until
+            %th Added
+            %th By
+
+          %tbody
+          - @clients.each do |client|
+            - parked_match = client.client_opportunity_matches.joins(:events).where('match_events' => {:type => 'MatchEvents::Parked'}).order(:created_at => :desc).first
+            - contact = parked_match.contacts.first
+            %tr
+              %td= link_to_if can_view_all_clients?, client.last_name, client_path(client)
+              %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
+              %td= client.prevent_matching_until
+              %td= parked_match.created_at
+              %td= contact.name_with_email
   %p= paginate @clients
 - else
   %p No parked clients at this time.
