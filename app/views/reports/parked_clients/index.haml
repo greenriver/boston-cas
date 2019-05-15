@@ -13,13 +13,19 @@
               %th Last Name
               %th First Name
               %th Parked Until
-          %tbody
+              %th Added
+              %th By
+
+            %tbody
             - @clients.each do |client|
+              - parked_match = client.client_opportunity_matches.joins(:events).where('match_events' => {:type => 'MatchEvents::Parked'}).order(:created_at => :desc).first
+              - contact = parked_match.contacts.first
               %tr
-                %td
-                  = link_to_if can_view_all_clients?, client.last_name, client_path(client)
+                %td= link_to_if can_view_all_clients?, client.last_name, client_path(client)
                 %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
                 %td= client.prevent_matching_until
+                %td= parked_match.created_at
+                %td= contact.name_with_email
   %p= paginate @clients
 - else
   %p No parked clients at this time.
