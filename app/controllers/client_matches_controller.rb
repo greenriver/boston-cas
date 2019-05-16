@@ -1,22 +1,32 @@
-class ClientMatchesController < MatchListBaseController
-  
+class ClientMatchesController < ApplicationController
+  before_action :authenticate_user!
   before_action :require_can_view_all_matches!
-  prepend_before_action :find_client!
-  
+  before_action :find_client!
+
+  def index
+    @matches = match_scope.
+      references(:client).
+      includes(:client).
+      preload(:client, :opportunity, :decisions).
+      page(params[:page]).per(25)
+  end
+
+
+  def active_tab
+    'matches'
+  end
+  helper_method :active_tab
+
   private
 
     def match_scope
-      ClientOpportunityMatch
-        .accessible_by_user(current_user)
-        .where(client_id: @client.id)
+      ClientOpportunityMatch.
+        accessible_by_user(current_user).
+        open.
+        where(client_id: @client.id)
     end
     
     def find_client!
       @client = Client.find(params[:client_id].to_i)
     end
-    
-    def set_heading
-      @heading = "Matches for #{@client.name}"
-    end
-
 end

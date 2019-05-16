@@ -1,14 +1,12 @@
 = render '/clients/breadcrumbs'
 .row
   .col-sm-12
-    %h1= @heading
+    %h1
+      Matches for #{@client.name}
 .row
   .col-sm-12
-    = render '/clients/tab_navigation', active: 'matches', client_id: params[:client_id]
+    = render '/clients/tab_navigation', active: active_tab, client_id: params[:client_id]
 
-.row
-  .col-sm-12
-    = render 'help_text'
 .row
   .col-sm-12
     .table-responsive
