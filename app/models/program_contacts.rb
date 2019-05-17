@@ -77,7 +77,9 @@ class ProgramContacts
   end
 
   def available_housing_subsidy_admin_contacts base_scope = Contact.all
-    base_scope.where.not(id: housing_subsidy_admin_contact_ids)
+    base_scope
+      .where(user_id: User.housing_subsidy_admin)
+      .where.not(id: housing_subsidy_admin_contact_ids)
   end
 
   def available_ssp_contacts base_scope = Contact.all
