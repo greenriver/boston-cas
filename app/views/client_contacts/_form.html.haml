@@ -1,0 +1,15 @@
+= simple_form_for @client_contacts, url: client_contacts_path(@client),  html: form_html_options.merge(class: 'current-step-form jContactForm'), remote: true  do |form|
+
+  = render 'contact_manager/contact_field', contact_type: :regular_contacts, input_name: 'client_contacts[regular_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact
+
+  = render 'contact_manager/contact_field', contact_type: :shelter_agency_contacts, input_name: 'client_contacts[shelter_agency_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact
+
+  = render 'contact_manager/contact_field', contact_type: :dnd_staff_contacts, input_name: 'client_contacts[dnd_staff_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact
+
+  = render 'contact_manager/contact_field', contact_type: :housing_subsidy_admin_contacts, input_name: 'client_contacts[housing_subsidy_admin_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact
+
+  = render 'contact_manager/contact_field', contact_type: :ssp_contacts, input_name: 'client_contacts[ssp_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact
+
+  = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'client_contacts[hsp_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact
+
+  = render 'contact_manager/contact_field', contact_type: :do_contacts, input_name: 'client_contacts[do_contact_ids][]', object: @client_contacts, form: form, current_contact: @current_contact

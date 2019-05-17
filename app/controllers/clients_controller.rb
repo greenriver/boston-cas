@@ -66,6 +66,19 @@ class ClientsController < ApplicationController
     end
   end
 
+  def park
+    if @client.update(client_params)
+      # If we have a future prevent_matching_until date, remove the client from
+      # any current matches
+      if @client.parked?
+        @client.unavailable(permanent: false, contact_id: current_contact.id)
+      end
+      redirect_to client_path(@client), notice: "Client updated"
+    else
+      render :show, {flash: {error: 'Unable update client.'}}
+    end
+  end
+
   # PATCH /clients/:id/unavailable
   # Find any matches where the client is the active client
   # Remove the client from the match

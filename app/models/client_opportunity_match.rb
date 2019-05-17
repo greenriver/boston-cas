@@ -457,9 +457,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  def canceled!
+  def canceled! (contact_id)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
+      MatchEvents::Cancelled.create!(
+          match_id: self.id,
+          contact_id: contact_id
+      )
       client.make_available_in(match_route: match_route)
       opportunity.update! available_candidate: !opportunity.active_matches.exists?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
@@ -576,15 +580,21 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
 
     def add_default_dnd_staff_contacts!
+      client.dnd_staff_contacts.each do |contact|
+        assign_match_role_to_contact :dnd_staff, contact
+      end
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
-      program.dnd_contacts.each do |contact|
+      program.dnd_staff_contacts.each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
     end
 
     def add_default_housing_subsidy_admin_contacts!
+      client.housing_subsidy_admin_contacts.each do |contact|
+        assign_match_role_to_contact :housing_subsidy_admin, contact
+      end
       opportunity.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
@@ -625,18 +635,27 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
 
     def add_default_ssp_contacts!
+      client.ssp_contacts.each do |contact|
+        assign_match_role_to_contact :ssp, contact
+      end
       program.ssp_contacts.each do |contact|
         assign_match_role_to_contact :ssp, contact
       end
     end
 
     def add_default_hsp_contacts!
+      client.hsp_contacts.each do |contact|
+        assign_match_role_to_contact :hsp, contact
+      end
       program.hsp_contacts.each do |contact|
         assign_match_role_to_contact :hsp, contact
       end
     end
 
     def add_default_do_contacts!
+      client.do_contacts.each do |contact|
+        assign_match_role_to_contact :do, contact
+      end
       program.do_contacts.each do |contact|
         assign_match_role_to_contact :do, contact
       end

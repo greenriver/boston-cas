@@ -23,7 +23,7 @@ class ProgramContacts
     super #ActiveModel attribute initializer
     self.shelter_agency_contacts = program.shelter_agency_contacts
     self.client_contacts = program.client_contacts
-    self.dnd_staff_contacts = program.dnd_contacts
+    self.dnd_staff_contacts = program.dnd_staff_contacts
     self.housing_subsidy_admin_contacts = program.housing_subsidy_admin_contacts
     self.ssp_contacts = program.ssp_contacts
     self.hsp_contacts = program.hsp_contacts
