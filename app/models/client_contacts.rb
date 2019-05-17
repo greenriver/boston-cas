@@ -19,7 +19,7 @@ class ClientContacts
   delegate :to_param, to: :client
 
   def initialize **attrs
-    raise "must provide cliewt" unless attrs[:client]
+    raise "must provide client" unless attrs[:client]
     super #ActiveModel attribute initializer
     self.shelter_agency_contacts = client.shelter_agency_contacts
     self.regular_contacts = client.regular_contacts
@@ -185,30 +185,12 @@ class ClientContacts
     self.class.input_names
   end
 
-  def label_for(input_name)
-    @labels ||= {
-        shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
-        regular_contacts: "Client Contacts",
-        dnd_staff_contacts: "#{_('DND')} Staff Contacts",
-        housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts",
-        ssp_contacts: "#{_('Stabilization Service Provider')}",
-        hsp_contacts: "#{_('Housing Search Provider')}",
-        do_contacts: "#{_('Development Officer Contacts')}",
-    }
-    @labels[input_name] || input_name
+  def label_for input_name
+    Contact.label_for(input_name)
   end
 
-  def contact_type_for(input_name)
-    @contact_types ||= {
-        shelter_agency_contacts: 'shelter_agency',
-        regular_contacts: "regular",
-        dnd_staff_contacts: "dnd_staff",
-        housing_subsidy_admin_contacts: "housing_subsidy_admin",
-        ssp_contacts: "ssp",
-        hsp_contacts: "hsp",
-        do_contacts: "do",
-    }
-    @contact_types[input_name] || input_name
+  def contact_type_for input_name
+    Contact.contact_type_for(input_name)
   end
 
   def available_contacts_method_for input_name

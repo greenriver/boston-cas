@@ -1,6 +1,5 @@
 module Reports
   class ParkedClientsController < ApplicationController
-    before_action :authenticate_user!
 
     def index
       base_scope =
@@ -10,16 +9,14 @@ module Reports
           Client.non_confidential.full_release.parked
         end
 
-      @clients =
-          if params[:q].present?
-            base_scope.text_search(params[:q])
-          else
-            base_scope
-          end
+      @clients = base_scope
+      if params[:q].present?
+        @clients = @clients.text_search(params[:q])
+      end
 
       @clients = @clients.
-          order(prevent_matching_until: :asc).
-          page(params[:page].to_i).per(25)
+        order(prevent_matching_until: :asc).
+        page(params[:page].to_i).per(25)
     end
   end
 end

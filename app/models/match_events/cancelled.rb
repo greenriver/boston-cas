@@ -2,7 +2,7 @@ module MatchEvents
   class Cancelled < Base
 
     def name
-      'Match was cancelled by Client'
+      'Match canceled.'
     end
 
   end

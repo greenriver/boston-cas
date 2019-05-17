@@ -14,8 +14,6 @@ module MatchEvents
       'match_events/match_event'
     end
 
-    scope :parked, -> { where(:type == 'MatchEvents::Parked').order(created_at: :desc) }
-
     # There are some events - such as parking, that are not linked to matches/etc.
     belongs_to :match,
       class_name: 'ClientOpportunityMatch',

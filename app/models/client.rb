@@ -355,25 +355,18 @@ class Client < ActiveRecord::Base
   end
 
   def unavailable(permanent:false, contact_id:nil)
-    active_match = client_opportunity_matches.active.first
     Client.transaction do
-      if active_match.present?
+
+      active_matches do |active_match|
         active_match.canceled!(contact_id)
-
-        opportunity = active_match.opportunity
-        opportunity.update(available_candidate: true)
-
-        Matching::RunEngineJob.perform_later
-
-        MatchEvents::Parked.create!(
-            match_id: active_match.id,
-            contact_id: contact_id
-        )
-      else
-        MatchEvents::Parked.create!(
-            contact_id: contact_id
-        )
+        active_match.opportunity.update(available_candidate: true)
       end
+
+      Matching::RunEngineJob.perform_later
+      MatchEvents::Parked.create!(
+          client_id: self.id,
+          contact_id: contact_id
+      )
 
       if client_opportunity_matches.proposed.any?
         client_opportunity_matches.proposed.each do |opp|

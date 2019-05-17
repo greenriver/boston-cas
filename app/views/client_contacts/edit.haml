@@ -1,11 +1,15 @@
-= content_for :modal_title do
-  Edit Default Client Contacts
+= render '/clients/breadcrumbs'
+
+%h1= "Default Contacts for #{@client.name}"
+-# @prompt = t '.search_prompt'
+=# render 'search_form'
+= render '/clients/tab_navigation', active: 'contacts', client_id: params[:client_id]
 
 - if @client_contacts.errors.any?
   .errors
     = @client_contacts.errors.full_messages.join ","
 %p
-  The following default client contacts will be automatically added to any match.
+  The following default client contacts will be automatically added to any match involving #{@client.full_name}.
 
 .row
   .col-md-6.jContactFormWrapper

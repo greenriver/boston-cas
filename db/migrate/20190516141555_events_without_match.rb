@@ -6,8 +6,7 @@ class EventsWithoutMatch < ActiveRecord::Migration
     MatchEvents::Base.all.each do |event|
 
       unless event.match.nil?
-        event.client = event.match.client
-        event.save!
+        event.update(client_id: match.client_id)
       end
     end
   end

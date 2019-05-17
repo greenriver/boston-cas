@@ -2,7 +2,6 @@ class ClientContactsController <  ApplicationController
   include PjaxModalController
   #include ContactEditPermissions
 
-  skip_before_action :authenticate_user!
   before_action :set_client
   before_action :set_client_contacts
   before_action :set_current_contact

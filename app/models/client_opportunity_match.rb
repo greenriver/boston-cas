@@ -457,10 +457,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  def canceled! (contact_id)
+  def canceled! (contact_id:nil)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       MatchEvents::Cancelled.create!(
+          client_id: self.client.id,
           match_id: self.id,
           contact_id: contact_id
       )
@@ -495,7 +496,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
       if route.should_cancel_other_matches
         client_related_matches.each do |match|
           if match.current_decision.present?
-            MatchEvents::DecisionAction.create(match_id: match.id,
+            MatchEvents::DecisionAction.create(
+                client_id: match.client.id,
+                match_id: match.id,
                 decision_id: match.current_decision.id,
                 action: :canceled)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
@@ -518,7 +521,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
         opportunity_related_matches.each do |match|
           if match.active
             opportunity.notify_contacts_of_success(self)
-            MatchEvents::DecisionAction.create(match_id: match.id,
+            MatchEvents::DecisionAction.create(
+                client_id: match.client.id,
+                match_id: match.id,
                 decision_id: match.current_decision.id,
                 action: :canceled)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')

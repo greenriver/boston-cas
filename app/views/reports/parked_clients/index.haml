@@ -25,7 +25,7 @@
 
           %tbody
           - @clients.each do |client|
-            - parked_match = client.events.parked.first
+            - parked_match = client.parked_events.order(created_at: :desc).limit(1).first
             - contact = parked_match.contact
             %tr
               %td= link_to_if can_view_all_clients?, client.last_name, client_path(client)
