@@ -111,7 +111,7 @@ class Voucher < ActiveRecord::Base
   end
 
   private def requires_unit_if_avaiable
-    if available && unit_id.blank? && sub_program.has_buildings?
+    if changing_to_available? && unit_id.blank? && sub_program.has_buildings?
       errors.add :unit_id, "Unit required to make the voucher available"
     end
   end
