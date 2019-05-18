@@ -1,7 +1,7 @@
 class NonHmisClient < ActiveRecord::Base
   has_one :project_client, ->  do
     where(
-        data_source_id: DataSource.where(db_identifier: 'Deidentified').select(:id),
+        data_source_id: NonHmisClient.data_source_id
     )
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
@@ -71,6 +71,10 @@ class NonHmisClient < ActiveRecord::Base
   end
   scope :search_alternate_name, -> (name) do
     arel_table[:client_identifier].lower.matches("%#{name.downcase}%")
+  end
+
+  def self.data_source_id
+    DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
   end
 
   def self.ransackable_scopes(auth_object = nil)
@@ -143,11 +147,12 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def update_project_clients_from_non_hmis_clients
-    data_source_id = DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
+
+    my_data_source_id = NonHmisClient.data_source_id
 
     # remove unused ProjectClients
     ProjectClient.where(
-        data_source_id: data_source_id).
+        data_source_id: my_data_source_id).
         where.not(id_in_data_source: NonHmisClient.select(:id)).
         delete_all
 

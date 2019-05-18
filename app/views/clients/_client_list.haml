@@ -1,3 +1,4 @@
+- non_hmis_source_id = NonHmisClient.data_source_id
 .row.table-utilities
   .col-sm-4
     %p= page_entries_info clients
@@ -28,6 +29,7 @@
             %th SSN
             %th Veteran
             %th Chronic
+            %th
         %tbody
           - clients.each do |client|
             %tr
@@ -68,9 +70,19 @@
                 %nobr
                   = masked_ssn client.ssn
                   = client_data_quality client, :ssn
-              %th.text-center
+              %td.text-center
                 = checkmark client.veteran
-              %th.text-center
+              %td.text-center
                 = checkmark client.chronic_homeless
+              %td
+                - if client.project_client.data_source_id == non_hmis_source_id
+                  - if client.project_client.is_deidentified?
+                    = link_to edit_deidentified_client_path(client.project_client.id_in_data_source), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                      %span.icon-pencil
+                      Edit
+                  - else
+                    = link_to edit_identified_client_path(client.project_client.id_in_data_source), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                      %span.icon-pencil
+                      Edit
 
     %p= paginate clients, params: {direction: @direction, sort: @column}
