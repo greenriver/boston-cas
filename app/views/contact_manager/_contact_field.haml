@@ -8,7 +8,7 @@
 - if editable
   = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, include_blank: true, input_html: {class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name}}
   %div{ data: {selected_contacts: true} }
-    - object.send(selected_contacts_method)&.each do |contact|
+    - object.send(selected_contacts_method).each do |contact|
       .selected-contact.c-contact-list__contact.margin-0
         %input{type: :hidden, name: input_name, value: contact.id, class: :jContactHidden}
         .c-contact-list__details
@@ -22,7 +22,8 @@
   .form-group
     %label.mb-4= label
     %div{ data: {selected_contacts: true} }
-      - object.send(selected_contacts_method)&.each do |contact|
+      - contacts = @match_contacts || object
+      - contacts.send(selected_contacts_method).each do |contact|
         .c-contact-list__contact.selected-contact.margin-left-04
           %span= contact.name
           %span= contact.email

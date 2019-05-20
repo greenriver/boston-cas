@@ -21,59 +21,20 @@ class Client < ActiveRecord::Base
   has_many :contacts, through: :client_contacts
 
   has_many :regular_client_contacts, -> { where regular: true},
-           class_name: 'ClientContact'
+    class_name: 'ClientContact'
   has_many :regular_contacts,
-           through: :regular_client_contacts,
-           source: :contact
+    through: :regular_client_contacts,
+    source: :contact
 
   has_many :shelter_agency_client_contacts, -> { where shelter_agency: true},
-           class_name: 'ClientContact'
+    class_name: 'ClientContact'
   has_many :shelter_agency_contacts,
-           through: :shelter_agency_client_contacts,
-           source: :contact
-
-  has_many :dnd_staff_client_contacts, -> { where dnd_staff: true},
-           class_name: 'ClientContact'
-  has_many :dnd_staff_contacts,
-           through: :dnd_staff_client_contacts,
-           source: :contact
-
-  has_many :housing_subsidy_admin_client_contacts, -> { where housing_subsidy_admin: true},
-           class_name: 'ClientContact'
-  has_many :housing_subsidy_admin_contacts,
-           through: :housing_subsidy_admin_client_contacts,
-           source: :contact
-
-  has_many :hsp_client_contacts, -> { where hsp: true},
-           class_name: 'ClientContact'
-  has_many :hsp_contacts,
-           through: :hsp_client_contacts,
-           source: :contact
-
-  has_many :ssp_client_contacts, -> { where ssp: true},
-           class_name: 'ClientContact'
-  has_many :ssp_contacts,
-           through: :ssp_client_contacts,
-           source: :contact
-
-  has_many :do_client_contacts, -> { where do: true},
-           class_name: 'ClientContact'
-  has_many :do_contacts,
-           through: :do_client_contacts,
-           source: :contact
+    through: :shelter_agency_client_contacts,
+    source: :contact
 
   has_many :client_notes, inverse_of: :client
 
   has_many :unavailable_as_candidate_fors
-
-  has_many :match_events,
-           source: :events
-
-  has_many :events,
-           class_name: 'MatchEvents::Base'
-
-  has_many :parked_events,
-           class_name: 'MatchEvents::Parked'
 
   validates :ssn, length: {maximum: 9}
 
@@ -195,10 +156,6 @@ class Client < ActiveRecord::Base
     else
       "(name withheld)"
     end
-  end
-
-  def default_client_contacts
-    @default_client_contacts ||= ClientContacts.new client: self
   end
 
   def self.prioritized(match_route, scope)
@@ -355,19 +312,18 @@ class Client < ActiveRecord::Base
   end
 
   def unavailable(permanent:false, contact_id:nil)
+    active_match = client_opportunity_matches.active.first
     Client.transaction do
-
-      active_matches do |active_match|
-        active_match.canceled!(contact_id)
-        active_match.opportunity.update(available_candidate: true)
+      if active_match.present?
+        opportunity = active_match.opportunity
+        active_match.canceled!
+        MatchEvents::Parked.create!(
+            match_id: active_match.id,
+            contact_id: contact_id
+        )
+        opportunity.update(available_candidate: true)
+        Matching::RunEngineJob.perform_later
       end
-
-      Matching::RunEngineJob.perform_later
-      MatchEvents::Parked.create!(
-          client_id: self.id,
-          contact_id: contact_id
-      )
-
       if client_opportunity_matches.proposed.any?
         client_opportunity_matches.proposed.each do |opp|
           opp.delete

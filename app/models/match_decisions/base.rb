@@ -241,7 +241,7 @@ module MatchDecisions
         details = match.opportunity_details
         previous_unit = "#{details.unit_name} at #{details.building_name}"
         voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
-        MatchEvents::UnitUpdated.create(client_id: match.client.id, match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
+        MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
       end
     end
 

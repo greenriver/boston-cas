@@ -81,7 +81,6 @@ class MatchDecisionsController < ApplicationController
         if old_expiration.blank? || old_expiration.to_date != new_expiration.to_date
           note = "Shelter review expiration date set to #{new_expiration}."
           MatchEvents::ExpirationChange.create!(
-            client_id: @match.client.id,
             match_id: @match.id,
             contact_id: current_contact.id,
             note: note

@@ -111,9 +111,9 @@ module MatchDecisions
         match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
       end
 
-      def canceled contact
+      def canceled
         Notifications::MatchCanceled.create_for_match! match
-        match.canceled! contact&.id
+        match.canceled!
       end
     end
     private_constant :StatusCallbacks
