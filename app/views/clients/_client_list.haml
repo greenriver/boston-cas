@@ -1,4 +1,3 @@
-- non_hmis_source_id = NonHmisClient.data_source_id
 .row.table-utilities
   .col-sm-4
     %p= page_entries_info clients
@@ -75,14 +74,9 @@
               %td.text-center
                 = checkmark client.chronic_homeless
               %td
-                - if client.project_client.data_source_id == non_hmis_source_id
-                  - if client.project_client.is_deidentified?
-                    = link_to edit_deidentified_client_path(client.project_client.id_in_data_source), class: ['btn', 'btn-sm', 'btn-secondary'] do
-                      %span.icon-pencil
-                      Edit
-                  - else
-                    = link_to edit_identified_client_path(client.project_client.id_in_data_source), class: ['btn', 'btn-sm', 'btn-secondary'] do
-                      %span.icon-pencil
-                      Edit
+                - if client.project_client.source_non_hmis?
+                  = link_to edit_deidentified_client_path(client.project_client.id_in_data_source), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                    %span.icon-pencil
+                    Edit
 
     %p= paginate clients, params: {direction: @direction, sort: @column}

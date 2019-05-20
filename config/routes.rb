@@ -162,6 +162,7 @@ Rails.application.routes.draw do
     get :cache_status
   end
 
+  resources :non_hmis_clients, only: [:edit]
   resources :deidentified_clients
   resources :identified_clients
   resources :messages, only: [:show, :index] do
