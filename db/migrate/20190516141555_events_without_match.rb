@@ -3,10 +3,10 @@ class EventsWithoutMatch < ActiveRecord::Migration
     add_column :match_events, :client_id, :integer
 
     # link up existing events to the sourcing client
-    MatchEvents::Base.all.each do |event|
+    MatchEvents::Base.find_each do |event|
 
       unless event.match.nil?
-        event.update(client_id: match.client_id)
+        event.update(client_id: event.match.client_id)
       end
     end
   end
