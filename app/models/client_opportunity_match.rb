@@ -457,9 +457,14 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  def canceled!
+  def canceled! (contact_id:nil)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
+      MatchEvents::Cancelled.create!(
+          client_id: self.client.id,
+          match_id: self.id,
+          contact_id: contact_id
+      )
       client.make_available_in(match_route: match_route)
       opportunity.update! available_candidate: !opportunity.active_matches.exists?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
@@ -491,7 +496,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
       if route.should_cancel_other_matches
         client_related_matches.each do |match|
           if match.current_decision.present?
-            MatchEvents::DecisionAction.create(match_id: match.id,
+            MatchEvents::DecisionAction.create(
+                client_id: match.client.id,
+                match_id: match.id,
                 decision_id: match.current_decision.id,
                 action: :canceled)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
@@ -514,7 +521,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
         opportunity_related_matches.each do |match|
           if match.active
             opportunity.notify_contacts_of_success(self)
-            MatchEvents::DecisionAction.create(match_id: match.id,
+            MatchEvents::DecisionAction.create(
+                client_id: match.client.id,
+                match_id: match.id,
                 decision_id: match.current_decision.id,
                 action: :canceled)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
@@ -576,15 +585,21 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
 
     def add_default_dnd_staff_contacts!
+      client.dnd_staff_contacts.each do |contact|
+        assign_match_role_to_contact :dnd_staff, contact
+      end
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
-      program.dnd_contacts.each do |contact|
+      program.dnd_staff_contacts.each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
     end
 
     def add_default_housing_subsidy_admin_contacts!
+      client.housing_subsidy_admin_contacts.each do |contact|
+        assign_match_role_to_contact :housing_subsidy_admin, contact
+      end
       opportunity.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
@@ -625,18 +640,27 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
 
     def add_default_ssp_contacts!
+      client.ssp_contacts.each do |contact|
+        assign_match_role_to_contact :ssp, contact
+      end
       program.ssp_contacts.each do |contact|
         assign_match_role_to_contact :ssp, contact
       end
     end
 
     def add_default_hsp_contacts!
+      client.hsp_contacts.each do |contact|
+        assign_match_role_to_contact :hsp, contact
+      end
       program.hsp_contacts.each do |contact|
         assign_match_role_to_contact :hsp, contact
       end
     end
 
     def add_default_do_contacts!
+      client.do_contacts.each do |contact|
+        assign_match_role_to_contact :do, contact
+      end
       program.do_contacts.each do |contact|
         assign_match_role_to_contact :do, contact
       end

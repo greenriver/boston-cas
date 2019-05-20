@@ -94,9 +94,9 @@ module MatchDecisions
         @decision.next_step.initialize_decision!
       end
 
-      def canceled
+      def canceled contact
         Notifications::MatchCanceled.create_for_match! match
-        match.canceled!
+        match.canceled! contact&.id
       end
     end
     private_constant :StatusCallbacks

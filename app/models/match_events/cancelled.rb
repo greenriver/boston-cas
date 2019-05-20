@@ -1,8 +1,8 @@
 module MatchEvents
-  class Parked < Base
+  class Cancelled < Base
 
     def name
-      'Client was parked'
+      'Match canceled.'
     end
 
   end

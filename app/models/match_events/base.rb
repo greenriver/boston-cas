@@ -5,7 +5,7 @@ module MatchEvents
     # match generation by the CAS
     # notifications being sent
     # actors accepting or declining the match
-    
+
     self.table_name = 'match_events'
 
     has_paper_trail
@@ -14,19 +14,26 @@ module MatchEvents
       'match_events/match_event'
     end
 
+    # There are some events - such as parking, that are not linked to matches/etc.
     belongs_to :match,
       class_name: 'ClientOpportunityMatch',
-      inverse_of: :events
+      inverse_of: :events,
+      required: false
 
     belongs_to :notification,
-      class_name: 'Notifications::Base'
+      class_name: 'Notifications::Base',
+      required: false
       
     belongs_to :decision,
-      class_name: 'MatchDecisions::Base'
+      class_name: 'MatchDecisions::Base',
+      required: false
       
     belongs_to :contact,
       inverse_of: :events
     delegate :name, to: :contact, allow_nil: :true, prefix: true
+
+    belongs_to :client,
+      inverse_of: :events
 
     belongs_to :not_working_with_client_reason, class_name: 'MatchDecisionReasons::Base'
     
