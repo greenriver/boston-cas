@@ -1,25 +1,38 @@
 .row
   .col-sm-12
     %h1 Currently Parked Clients
+
+- @prompt = t '.search_prompt'
+.row
+  .col-sm-6
+    = render 'search_form'
+
+.row
 - if @clients.any?
   %p= "The following clients have been removed from matching temporarily"
   %p= page_entries_info @clients
-  .row
-    .col-sm-12
-      .table-responsive
-        %table.table.table-condensed.table-hover
-          %thead
-            %tr
-              %th Last Name
-              %th First Name
-              %th Parked Until
+
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th Last Name
+            %th First Name
+            %th Parked Until
+            %th Added
+            %th By
+
           %tbody
-            - @clients.each do |client|
-              %tr
-                %td
-                  = link_to_if can_view_all_clients?, client.last_name, client_path(client)
-                %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
-                %td= client.prevent_matching_until
+          - @clients.each do |client|
+            - parked_match = client.parked_events.order(created_at: :desc).limit(1).first
+            - contact = parked_match.contact
+            %tr
+              %td= link_to_if can_view_all_clients?, client.last_name, client_path(client)
+              %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
+              %td= client.prevent_matching_until
+              %td= time_ago_in_words(parked_match.created_at)+' ago'
+              %td= contact.name_with_email
   %p= paginate @clients
 - else
   %p No parked clients at this time.
