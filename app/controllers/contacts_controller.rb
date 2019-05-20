@@ -79,7 +79,7 @@ class ContactsController < ApplicationController
         :email,
         :phone,
         :cell_phone,
-        :role
+        :role,
       )
     end
 

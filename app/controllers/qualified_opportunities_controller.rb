@@ -17,7 +17,7 @@ class QualifiedOpportunitiesController < ApplicationController
   def update
     if @opportunity.match_route.should_cancel_other_matches
       @opportunity.active_matches do |active_match|
-        MatchEvents::DecisionAction.create(client_id: active_match.client.id, match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
+        MatchEvents::DecisionAction.create(match_id: active_match.id, decision_id: active_match.current_decision.id, action: :canceled, contact_id: current_user.contact&.id)
         active_match.poached!
       end
     end

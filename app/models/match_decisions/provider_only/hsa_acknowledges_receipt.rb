@@ -77,9 +77,9 @@ module MatchDecisions::ProviderOnly
         end
       end
 
-      def canceled contact
+      def canceled
         Notifications::MatchCanceled.create_for_match! match
-        match.canceled! contact&.id
+        match.canceled!
       end
     end
     private_constant :StatusCallbacks

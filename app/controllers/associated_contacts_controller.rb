@@ -60,12 +60,12 @@ class AssociatedContactsController < ApplicationController
   def destroy
     @contact_join_model = contact_join_model_source.find params[:id]
     @contact_join_model.destroy
-    redirect_to({action: :index}, notice: "Contact removed")
+    redirect_to({action: :index}, notice: "Contact removed from building")
   end
   
   def restore
     contact_join_model_source.restore(params[:id])
-    redirect_to( {action: :index}, notice: "Contact restored.")
+    redirect_to( {action: :index}, notice: "Contact restored to building.")
   end
 
   private

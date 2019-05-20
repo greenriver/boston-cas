@@ -85,9 +85,9 @@ module MatchDecisions
         # TODO maybe rerun the matching engine for that vacancy and client
       end
 
-      def canceled contact
+      def canceled
         Notifications::MatchCanceled.create_for_match! match
-        match.canceled! contact&.id
+        match.canceled!
       end
     end
     private_constant :StatusCallbacks

@@ -26,7 +26,7 @@ class Program < ActiveRecord::Base
     class_name: Contact.name,
     through: :program_contacts,
     source: :contact
-  has_many :dnd_staff_contacts,
+  has_many :dnd_contacts,
     -> { where program_contacts: {dnd_staff: true} },
     class_name: Contact.name,
     through: :program_contacts,

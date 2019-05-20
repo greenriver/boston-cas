@@ -78,7 +78,7 @@ en:
       title: 'Object History'
   reissue_notifications:
       index:
-        title: 'Outstanding Requests for Notifications'
+        title: 'Oustanding Requests for Notifications'
   active_matches:
       index:
         title: 'Active Matches'
@@ -87,10 +87,6 @@ en:
       index:
         title: 'Closed Matches'
         search_prompt: 'Search closed matches...'
-  reports:
-    parked_clients:
-        index:
-          search_prompt: 'Search clients...'
   activerecord:
     models:
       building: 'Site'
