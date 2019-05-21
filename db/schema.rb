@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190520184428) do
+ActiveRecord::Schema.define(version: 20190521154725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -595,6 +595,7 @@ ActiveRecord::Schema.define(version: 20190520184428) do
     t.boolean  "fifty_five_plus"
     t.boolean  "sixty_two_plus"
     t.integer  "warehouse_client_id"
+    t.string   "voucher_agency"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -925,6 +926,7 @@ ActiveRecord::Schema.define(version: 20190520184428) do
     t.boolean  "can_export_deidentified_clients",         default: false
     t.boolean  "can_export_identified_clients",           default: false
     t.boolean  "can_manage_tags",                         default: false
+    t.boolean  "can_manage_imported_clients",             default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

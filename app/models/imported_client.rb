@@ -1,0 +1,2 @@
+class ImportedClient < NonHmisClient
+end

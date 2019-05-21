@@ -1,2 +1,0 @@
-class ImportedNonHmisClient < NonHmisClient
-end
