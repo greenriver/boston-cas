@@ -2,14 +2,12 @@ module Reports
   class ParkedClientsController < ApplicationController
 
     def index
-      base_scope =
-        if can_view_all_clients?
-          Client.parked
-        else
-          Client.non_confidential.full_release.parked
-        end
 
-      @clients = base_scope
+      @clients = Client.parked
+      unless can_view_all_clients?
+        @clients = @clients.non_confidential.full_release
+      end
+
       if params[:q].present?
         @clients = @clients.text_search(params[:q])
       end

@@ -457,7 +457,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  def canceled! (contact_id:nil)
+  def canceled! (contact_id: nil)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       MatchEvents::Cancelled.create!(

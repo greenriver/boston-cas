@@ -101,7 +101,7 @@ module MatchDecisions
 
       def canceled contact
         Notifications::MatchCanceled.create_for_match! match
-        match.canceled! contact&.id
+        match.canceled!(contact_id: contact&.id)
       end
     end
     private_constant :StatusCallbacks

@@ -10,8 +10,7 @@ class ClientContactsController <  ApplicationController
   end
 
   def update
-    update_params = client_contacts_params
-    saved = @client_contacts.update(update_params)
+    saved = @client_contacts.update(client_contacts_params)
     unless request.xhr?
       if saved
         flash[:notice] = "Default Client Contacts updated"
@@ -27,7 +26,7 @@ class ClientContactsController <  ApplicationController
   private
 
   def set_client
-    @client = Client.find params[:client_id]
+    @client = Client.find params[:client_id].to_i
   end
 
   def set_client_contacts

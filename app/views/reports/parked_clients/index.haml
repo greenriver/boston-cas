@@ -31,7 +31,7 @@
               %td= link_to_if can_view_all_clients?, client.last_name, client_path(client)
               %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
               %td= client.prevent_matching_until
-              %td= time_ago_in_words(parked_match.created_at)+' ago'
+              %td= parked_match.created_at.to_date
               %td= contact.name_with_email
   %p= paginate @clients
 - else
