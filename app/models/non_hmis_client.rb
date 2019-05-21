@@ -153,7 +153,7 @@ class NonHmisClient < ActiveRecord::Base
     # remove unused ProjectClients
     ProjectClient.where(
         data_source_id: data_source_id).
-        where.not(id_in_data_source: NonHmisClient.deidentified_data_source.select(:id)).
+        where.not(id_in_data_source: NonHmisClient.select(:id)).
         delete_all
 
     # update or add for all NonHmisClients
