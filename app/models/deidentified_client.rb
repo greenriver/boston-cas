@@ -44,6 +44,7 @@ class DeidentifiedClient < NonHmisClient
       "Domestic violence survivor",
     ]
   end
+
   def download_data
     [
       id,
@@ -79,5 +80,9 @@ class DeidentifiedClient < NonHmisClient
       developmental_disability,
       domestic_violence,
     ]
+  end
+
+  def client_scope
+    DeidentifiedClient.all
   end
 end
