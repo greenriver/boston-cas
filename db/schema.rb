@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190521202957) do
+ActiveRecord::Schema.define(version: 20190522181548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -382,6 +382,15 @@ ActiveRecord::Schema.define(version: 20190521202957) do
     t.string   "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "imported_clients_csvs", force: :cascade do |t|
+    t.string   "filename"
+    t.integer  "user_id"
+    t.string   "content_type"
+    t.string   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "letsencrypt_plugin_challenges", force: :cascade do |t|
