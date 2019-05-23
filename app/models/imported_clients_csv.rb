@@ -31,6 +31,15 @@ class ImportedClientsCsv < ActiveRecord::Base
   VETERAN = 30
   NEIGHBORHOODS = 31
 
+  attr_reader :added, :touched, :problems
+
+  def initialize(attributes = {})
+    super(attributes)
+    @added = 0
+    @touched = 0
+    @problems = {}
+  end
+
   def import
     CSV.parse(content, headers: true) do |row|
       client = ImportedClient.where(
@@ -38,11 +47,13 @@ class ImportedClientsCsv < ActiveRecord::Base
         last_name: row[HOH_LAST_NAME],
         email: row[HOH_EMAIL]
       ).first_or_create do |client|
+        @added += 1
         client.interested_in_set_asides = true
         client.available = false
         client.identified = true
       end
       if client.imported_timestamp.nil? || row[FORM_TIMESTAMP].to_time > client.imported_timestamp
+        @touched += 1 if client.imported_timestamp.present?
         client.update(
           imported_timestamp: row[FORM_TIMESTAMP].to_time,
 
@@ -82,7 +93,8 @@ class ImportedClientsCsv < ActiveRecord::Base
     if status.present?
       status
     else
-      # TBD report missing field
+      add_problem(row, 'Housing Status', 'is required')
+      nil
     end
   end
 
@@ -97,9 +109,13 @@ class ImportedClientsCsv < ActiveRecord::Base
 
   def days_homeless(row)
     begin
-      Integer(row[DAYS_HOMELESS])
+      days = Integer(row[DAYS_HOMELESS])
+      if days > 1096
+        add_problem(row, 'Days Homeless', 'is greater than 1096')
+      end
+      days
     rescue
-      # TBD report non-numeric days homeless
+      add_problem(row, 'Days Homeless', "#{row[DAYS_HOMELESS]} is not a valid number")
       0
     end
   end
@@ -109,7 +125,8 @@ class ImportedClientsCsv < ActiveRecord::Base
     if name.present?
       name
     else
-      # TBD report missing field
+      add_problem(row, 'Shelter Name', 'is required')
+      nil
     end
   end
 
@@ -119,10 +136,12 @@ class ImportedClientsCsv < ActiveRecord::Base
       if date.present?
         date
       else
-        # TBD report missing entry date
+        add_problem(row, 'Entry Date', 'is required')
+        nil
       end
     rescue
-      # TBD report invalid format
+      add_problem(row, 'Entry Date', "#{row[ENTRY_DATE]} is not a valid date")
+      nil
     end
   end
 
@@ -132,19 +151,19 @@ class ImportedClientsCsv < ActiveRecord::Base
     if name.present?
     info << name
     else
-      # TBD report missing name
+      add_problem(row, 'Case Manager Name', 'is required')
     end
     phone = row[CASE_MANAGER_PHONE]
     if phone.present?
       info << phone
     else
-      # TBD report missing phone
+      add_problem(row, 'Case Manager Phone', 'is required')
     end
     email = row[CASE_MANAGER_EMAIL]
     if email.present?
       info << email
     else
-      # TBD report missing email
+      add_problem(row, 'Case Manager Email', 'is required')
     end
     info.join(' / ')
   end
@@ -154,7 +173,8 @@ class ImportedClientsCsv < ActiveRecord::Base
     if phone.present?
       phone
     else
-      # TBD report missing phone
+      add_problem(row, 'Client Phone', 'is required')
+      nil
     end
   end
 
@@ -162,7 +182,8 @@ class ImportedClientsCsv < ActiveRecord::Base
     begin
       Float(row[ANNUAL_INCOME]) / 12
     rescue
-      # TBD report invalid income
+      add_problem(row, 'Annual Income', "#{row[ANNUAL_INCOME]} is not a valid number")
+      0
     end
   end
 
@@ -175,7 +196,8 @@ class ImportedClientsCsv < ActiveRecord::Base
     if yes_no_to_bool(row[VOUCHER]) && agency.present?
       agency
     else
-      # TBD voucher agency is missing
+      add_problem(row, 'Voucher Agency', 'is required')
+      nil
     end
   end
 
@@ -219,9 +241,18 @@ class ImportedClientsCsv < ActiveRecord::Base
 
   def determine_neighborhood_interests(row)
     neighborhoods = row[NEIGHBORHOODS].split(';')
-    neighborhoods.flat_map do |neighborhood_name|
+    interests = neighborhoods.flat_map do |neighborhood_name|
       Neighborhood.where(name: neighborhood_name).pluck(:id)
     end
+    if interests.size != neighborhoods.size
+      add_problem(row, 'Neighborhoods', 'not all neighborhoods are valid')
+    end
+    interests
   end
 
+  def add_problem(row, field, description)
+    client = [ row[HOH_FIRST_NAME], row[HOH_LAST_NAME], row[HOH_EMAIL] ]
+    @problems[client] ||= []
+    @problems[client] << {field: field, description: description}
+  end
 end

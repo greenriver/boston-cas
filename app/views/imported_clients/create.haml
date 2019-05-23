@@ -1,0 +1,31 @@
+= render 'breadcrumbs'
+%h1
+  Upload Complete
+
+%ul.list-unstyled
+  %li= "#{@csv.added} new clients added"
+  %li= "#{@csv.touched} existing clients updated"
+  %li= "#{@csv.problems.count} records with problems"
+
+- if @csv.problems.count > 0
+  .row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %th Client
+          %th Field
+          %th Problem
+        %tbody
+          - @csv.problems.each do |client, problems|
+            - problems.each_with_index do |problem, index|
+              %tr
+                - if index == 0
+                  %td= client.join(' ')
+                - else
+                  %td
+                %td= problem[:field]
+                %td= problem[:description]
+
+.row
+  = link_to 'Return to Clients', imported_clients_path, class: 'btn btn-sm btn-primary'

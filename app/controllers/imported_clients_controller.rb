@@ -13,16 +13,14 @@ class ImportedClientsController < NonHmisClientsController
     end
 
     file = import_params[:file]
-    csv = ImportedClientsCsv.create(
+    @csv = ImportedClientsCsv.create(
       filename: file.original_filename,
       user_id: current_user.id,
       content_type: file.content_type,
       content: file.read,
     )
 
-    csv.import
-
-    redirect_to imported_clients_path
+    @csv.import
   end
 
   def update
