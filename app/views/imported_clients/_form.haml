@@ -40,6 +40,9 @@
 - if @non_hmis_client.have_tenant_voucher
   .row
     = "Client has tenant-based housing choice voucher administered by #{@non_hmis_client.voucher_agency}"
+- if @non_hmis_client.veteran
+  .row
+    = "Client is a veteran"
 .row
   = "Annual income is #{number_to_currency(@non_hmis_client.income_total_monthly * 12)}"
 - if @non_hmis_client.fifty_five_plus && ! @non_hmis_client.sixty_two_plus
@@ -69,14 +72,15 @@
       SRO is OK.
     - if @non_hmis_client.studio_ok
       Studio apartment is OK.
-    - if @non_hmis_client.required_number_of_bedrooms > 1
-      = "Needs #{@non_hmis_client.required_number_of_bedrooms} bedrooms"
+- if @non_hmis_client.required_number_of_bedrooms > 1
+  .row
+    = "Needs #{@non_hmis_client.required_number_of_bedrooms} bedrooms"
 .row
   %h4 Neighborhood Interests
 .row
   - neighborhood_hash = @neighborhoods.to_h
-  - @non_hmis_client.neighborhood_interests.each do |interest|
-    %ul.list-unstyled
+  %ul.list-unstyled
+    - @non_hmis_client.neighborhood_interests.each do |interest|
       %li= neighborhood_hash[interest]
 %hr
 .row
