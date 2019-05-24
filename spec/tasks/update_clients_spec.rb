@@ -4,8 +4,8 @@ describe "rake cas:update_clients", type: :task do
   let!(:warehouse_data_source) { create :data_source, :warehouse}
   let!(:deidentified_data_source) { create :data_source, :deidentified}
   
-  let!(:deidentified_client_john) { create :non_hmis_client, client_identifier: "john" }
-  let!(:deidentified_client_mary) { create :non_hmis_client, client_identifier: "mary" }
+  let!(:deidentified_client_john) { create :deidentified_client, client_identifier: "john" }
+  let!(:deidentified_client_mary) { create :deidentified_client, client_identifier: "mary" }
 
   let!(:existing_client) {create :client, first_name: 'joe' }
 
