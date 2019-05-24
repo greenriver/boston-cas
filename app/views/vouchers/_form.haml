@@ -1,3 +1,5 @@
+= render 'search'
+
 = simple_form_for @subprogram, url: bulk_update_program_sub_program_vouchers_path, html: {class: 'bulk-vouchers'}  do |f|
   = f.error_notification
   = f.simple_fields_for :vouchers, vouchers do |v|
