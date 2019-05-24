@@ -5,7 +5,7 @@ class ImportedClientsController < NonHmisClientsController
   end
 
   def create
-    if !params[:file]
+    if !params[:imported_clients_csv]&.[](:file)
       @upload = ImportedClientsCsv.new
       flash[:alert] = _("You must attach a file in the form.")
       render :new

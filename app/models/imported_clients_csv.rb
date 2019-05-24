@@ -42,11 +42,29 @@ class ImportedClientsCsv < ActiveRecord::Base
 
   def import
     CSV.parse(content, headers: true) do |row|
+      first_name = row[HOH_FIRST_NAME]
+      if first_name.blank?
+        add_problem(row, 'HoH First Name', 'is required')
+        next
+      end
+
+      last_name = row[HOH_LAST_NAME]
+      if last_name.blank?
+        add_problem(row, 'HoH Last Name', 'is required')
+        next
+      end
+
+      email = row[HOH_EMAIL]
+      if email.blank?
+        add_problem(row, 'HoH Email', 'is required')
+        next
+      end
+
       client = ImportedClient.where(
-        first_name: row[HOH_FIRST_NAME],
-        last_name: row[HOH_LAST_NAME],
-        email: row[HOH_EMAIL]
-      ).first_or_create do |client|
+        first_name: first_name,
+        last_name: last_name,
+        email: email
+      ).first_or_initialize do |client|
         @added += 1
         client.interested_in_set_asides = true
         client.available = false
@@ -54,7 +72,7 @@ class ImportedClientsCsv < ActiveRecord::Base
       end
       if client.imported_timestamp.nil? || row[FORM_TIMESTAMP].to_time > client.imported_timestamp
         @touched += 1 if client.imported_timestamp.present?
-        client.update(
+        client.update!(
           imported_timestamp: row[FORM_TIMESTAMP].to_time,
 
           set_asides_housing_status: housing_status(row),
@@ -82,7 +100,7 @@ class ImportedClientsCsv < ActiveRecord::Base
           sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
           date_of_birth: calculate_dob(row),
           veteran: yes_no_to_bool(row[VETERAN]),
-          neighborhood_interests: determine_neighborhood_interests(row)
+          neighborhood_interests: determine_neighborhood_interests(row),
         )
       end
     end
