@@ -1,4 +1,5 @@
 class ImportedClientsController < NonHmisClientsController
+  before_action :require_can_manage_imported_clients!
 
   def update
     @non_hmis_client.update(client_params)
