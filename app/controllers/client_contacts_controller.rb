@@ -15,7 +15,6 @@ class ClientContactsController < ApplicationController
         flash[:notice] = "Default Client Contacts updated"
         redirect_to client_path(@client)
       else
-        raise @client_contacts.errors.full_messages.inspect
         flash[:error] = "Please review the form problems below."
         redirect_to :edit
       end
