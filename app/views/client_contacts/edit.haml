@@ -1,0 +1,36 @@
+= render '/clients/breadcrumbs'
+
+%h1= "Default Contacts for #{@client.name}"
+-# @prompt = t '.search_prompt'
+=# render 'search_form'
+= render '/clients/tab_navigation', active: 'contacts', client_id: params[:client_id]
+
+- if @client_contacts.errors.any?
+  .errors
+    = @client_contacts.errors.full_messages.join ","
+%p
+  The following default client contacts will be automatically added to any match involving #{@client.full_name}.
+
+.row
+  .col-md-6.jContactFormWrapper
+    = render 'form'
+
+= content_for :page_js do
+  :javascript
+    $('.jContactFormWrapper').on('change', '.jContactField', function(e){
+      var $input = $(this);
+      var val = $input.val();
+      var contact_type = $input.data('contact-type');
+      var input_name = $input.data('input-name');
+      var html = '<input type="hidden" name="' + input_name + '" value="' + val + '" />'
+      $input.after(html);
+
+      $input.closest('form').trigger('submit');
+    });
+
+    $('.jContactFormWrapper').on('click', '.jContactDelete', function(e){
+      e.preventDefault();
+      $('.jContactHidden[value=' + $(this).data('contact-id') + '][name="' + $(this).data('input-name') + '"]').remove();
+      $(this).closest('form').trigger('submit');
+    });
+    $('.select2').select2();
