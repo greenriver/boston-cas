@@ -17,10 +17,10 @@
   - if active == 'contacts'
     %li.nav-item.active{role: 'presentation'}
       %a.nav-link{href: '#'}
-        Contacts
+        Default Contacts
   - else
     %li.nav-item
-      = link_to 'Contacts', client_contacts_path(client_id: client_id), class: 'nav-link'
+      = link_to 'Default Contacts', edit_client_contacts_path(client_id: client_id), class: 'nav-link'
 
   - if active == 'qualified_opportunities'
     %li.nav-item.active{role: 'presentation'}
