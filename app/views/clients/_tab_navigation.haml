@@ -9,10 +9,18 @@
   - if active == 'matches'
     %li.nav-item.active{role: 'presentation'}
       %a.nav-link{href: '#'}
-        CAS Housing History
+        Active Matches
   - else
     %li.nav-item
-      = link_to 'CAS Housing History', client_matches_path(client_id: client_id), class: 'nav-link'
+      = link_to 'Active Matches', client_matches_path(client_id: client_id), class: 'nav-link'
+
+  - if active == 'history'
+    %li.nav-item.active{role: 'presentation'}
+      %a.nav-link{href: '#'}
+        Closed Matches
+  - else
+    %li.nav-item
+      = link_to 'Closed Matches', client_closed_matches_path(client_id: client_id), class: 'nav-link'
 
   - if active == 'contacts'
     %li.nav-item.active{role: 'presentation'}
