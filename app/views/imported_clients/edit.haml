@@ -1,0 +1,3 @@
+%h1 Edit #{_('Imported Client')}
+= simple_form_for @non_hmis_client, url: imported_client_path(@non_hmis_client.id) do |f|
+  = render 'form', f: f

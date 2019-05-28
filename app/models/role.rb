@@ -92,6 +92,7 @@ class Role < ActiveRecord::Base
       :can_add_cohorts_to_identified_clients,
       :can_manage_neighborhoods,
       :can_manage_tags,
+      :can_manage_imported_clients,
     ]
   end
 

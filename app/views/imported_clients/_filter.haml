@@ -1,0 +1,40 @@
+- if @active_filter
+  - filter_class = 'client__filter-active'
+- else
+  - filter_class = 'client__filter'
+.dropdown.o-filtration.o-filtration--sm{class: filter_class}
+  %button.btn.btn-default.dropdown-toggle.mr-4#filter-dropdown{data: {toggle: :dropdown}}
+    Filter
+    %span.caret
+  .o-filtration__container.client-filter.dropdown-menu.options{aria:{labelledby:"filter-dropdown"}}
+    .o-filtration__header
+      %h3.client__filter-header Filter clients
+
+    = form_tag(nil, method: "get") do
+      -# preserve sort and search for filtering
+      - if params[:sort]
+        = hidden_field_tag :sort, params[:sort]
+      - if params[:direction]
+        = hidden_field_tag :direction, params[:direction]
+      - if params[:q].is_a? Hash
+        = hidden_field_tag 'q[text_search]', params[:q][:text_search]
+
+      .o-filtration__option
+        %label.d-block Family Member?
+        = select_tag :family_member, options_from_collection_for_select({true: "Yes", false: "No"}, :first, :last, params[:family_member]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+
+      .o-filtration__option
+        %label.d-block Available?
+        = select_tag :available, options_from_collection_for_select([['Yes', true], ['No', false]], :last, :first, params[:available]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+
+      .o-filtration__actions.form__actions
+        = link_to imported_clients_path(params.slice(:sort, :direction, :q)), class: 'btn btn-light' do
+          %i.icon-cross
+          Clear
+        %button.btn.btn-primary.ml-auto{type: :submit}
+          %i.icon-filter
+          Filter
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

@@ -1,0 +1,13 @@
+- title = _('Imported Clients')
+- content_for :title, title
+.d-flex
+  %h1= content_for :title
+  - @prompt = "Search Clients..."
+.row
+  .col-sm-4
+    = render 'clients/search_form'
+  .col-sm-6.filter-sort__filter.d-flex
+    = render 'filter'
+    = render 'clients/sort', sort_options: sort_options
+= render 'menus/non_hmis_clients'
+= render 'table'

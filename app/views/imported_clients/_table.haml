@@ -1,0 +1,28 @@
+.row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %th Last Name
+          %th First Name
+          %th Family Member
+          %th Days Homeless in the Last 3 Years
+          %th Warehouse Client Id
+          %th Available?
+          %th
+
+        %tbody
+          - @non_hmis_clients.each do |imported_client|
+            %tr
+              %td= imported_client.last_name
+              %td= imported_client.first_name
+              %td= checkmark imported_client.family_member
+              %td= imported_client.days_homeless_in_the_last_three_years
+              %td= imported_client.warehouse_client_id
+              %td= checkmark(imported_client.available)
+              %td
+                = link_to({action: :edit, id: imported_client}, class: ['btn', 'btn-sm', 'btn-secondary']) do
+                  %span.icon-pencil
+                  Edit
+
+%p= paginate @non_hmis_clients
