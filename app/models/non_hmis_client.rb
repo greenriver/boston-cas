@@ -1,8 +1,6 @@
 class NonHmisClient < ActiveRecord::Base
-  has_one :project_client, ->  do
-    where(
-        data_source_id: DataSource.where(db_identifier: 'Deidentified').select(:id),
-    )
+  has_one :project_client, -> do
+    where(data_source_id: DataSource.non_hmis.select(:id))
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
@@ -143,19 +141,17 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def update_project_clients_from_non_hmis_clients
-    data_source_id = DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
-
     # remove unused ProjectClients
     ProjectClient.where(
-        data_source_id: data_source_id).
-        where.not(id_in_data_source: NonHmisClient.select(:id)).
-        delete_all
+      data_source_id: DataSource.non_hmis.select(:id)).
+      where.not(id_in_data_source: NonHmisClient.select(:id)).
+      delete_all
 
     # update or add for all NonHmisClients
-    NonHmisClient.all.each do |client|
+    NonHmisClient.all.find_each do |client|
       project_client = ProjectClient.where(
-          data_source_id: data_source_id,
-          id_in_data_source: client.id
+        data_source_id: DataSource.non_hmis.pluck(:id),
+        id_in_data_source: client.id
       ).first_or_initialize
       client.populate_project_client(project_client)
     end
