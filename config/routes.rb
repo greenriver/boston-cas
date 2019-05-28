@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :buildings do
     resources :contacts, except: :show, controller: :building_contacts, concerns: [:restorable]
     get :available_units, on: :member
+    get :available_move_in_units, on: :member
     get :available_units_for_vouchers, on: :member
     get :units, on: :member
     resources :units, only: :new
@@ -86,6 +87,11 @@ Rails.application.routes.draw do
 
   resources :notifications, only: [:show] do
     manage_matches
+
+    resources :buildings, only: :show do
+      get :available_move_in_units, on: :member
+    end
+
     resource :reissue_request, only: [:show]
     devise_scope :user do
       resources :sessions, only: [:new, :create], controller: 'notification_sessions'

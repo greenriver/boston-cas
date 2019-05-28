@@ -97,6 +97,7 @@ module Warehouse
         ).where( at[:status].not_eq nil ).distinct.find_each do |client|
           client_id = client.project_client.id_in_data_source
           next if client_id.blank?
+          data_source = data_source_name(client.project_client.data_source_id)
           client.client_opportunity_matches.each do |match|
             sub_program = match.sub_program
             next unless sub_program.present?
@@ -132,6 +133,7 @@ module Warehouse
               end
 
               Warehouse::CasReport.create!(
+                source_data_source: data_source,
                 client_id: client_id,
                 cas_client_id: client.id,
                 match_id: match.id,
@@ -169,6 +171,16 @@ module Warehouse
             end
           end
         end
+      end
+    end
+
+    def data_source_name data_source_id
+      @non_hmis_data_source_id ||= DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
+      @data_source_names ||= Hash[DataSource.pluck(:id, :name)]
+      if data_source_id == @non_hmis_data_source_id
+        "Non-HMIS"
+      else
+        @data_source_names[data_source_id]
       end
     end
 

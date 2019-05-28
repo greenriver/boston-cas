@@ -30,4 +30,4 @@ class App.RequirementManager.Requirement
   # id of our own
   store_key: -> @rule_id
   
-  to_rule: -> new App.RequirementManager.Rule id: @rule_id, name: @rule_name
+  to_rule: -> new App.RequirementManager.Rule id: @rule_id, name: @rule_name, variable: @variable

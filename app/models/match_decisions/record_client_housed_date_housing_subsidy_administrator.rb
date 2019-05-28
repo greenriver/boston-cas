@@ -1,6 +1,9 @@
 module MatchDecisions
   class RecordClientHousedDateHousingSubsidyAdministrator < Base
 
+    attr_accessor :building_id
+    attr_accessor :unit_id
+
     validate :client_move_in_date_present_if_status_complete
 
     def label
@@ -98,6 +101,12 @@ module MatchDecisions
     end
     private_constant :StatusCallbacks
 
+    def whitelist_params_for_update params
+      super.merge params.require(:decision).permit(
+        :building_id,
+        :unit_id,
+      )
+    end
 
     private def client_move_in_date_present_if_status_complete
       if status == 'completed' && client_move_in_date.blank?
