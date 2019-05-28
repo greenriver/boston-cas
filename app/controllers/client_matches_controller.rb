@@ -25,8 +25,13 @@ class ClientMatchesController < ApplicationController
         open.
         where(client_id: @client.id)
     end
-    
+
     def find_client!
       @client = Client.find(params[:client_id].to_i)
     end
+
+    def show_links_to_matches?
+      true
+    end
+    helper_method :show_links_to_matches?
 end
