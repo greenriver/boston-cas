@@ -6,6 +6,7 @@ class MatchContacts
   # maybe add some DSl?
   include ActiveModel::Model
   include UpdateableAttributes
+  include RelatedDefaultContacts
 
   attr_accessor :match,
     :shelter_agency_contact_ids,
@@ -70,48 +71,8 @@ class MatchContacts
     end
   end
 
-  def available_shelter_agency_contacts base_scope = Contact.all
-    base_scope.where.not(id: shelter_agency_contact_ids)
-  end
-
   def available_client_contacts base_scope = Contact.all
     base_scope.where.not(id: client_contact_ids)
-  end
-
-  def available_dnd_staff_contacts base_scope = Contact.all
-    base_scope
-      .where(user_id: User.dnd_staff)
-      .where.not(id: dnd_staff_contact_ids)
-  end
-
-  def available_housing_subsidy_admin_contacts base_scope = Contact.all
-    base_scope
-      .where(user_id: User.housing_subsidy_admin)
-      .where.not(id: housing_subsidy_admin_contact_ids)
-  end
-
-  def available_ssp_contacts base_scope = Contact.all
-    base_scope.where.not(id: ssp_contact_ids)
-  end
-
-  def available_hsp_contacts base_scope = Contact.all
-    base_scope.where.not(id: hsp_contact_ids)
-  end
-
-  def available_do_contacts base_scope = Contact.all
-    base_scope.where.not(id: do_contact_ids)
-  end
-
-  def persisted?
-    true
-  end
-
-  def shelter_agency_contacts
-    Contact.find shelter_agency_contact_ids
-  end
-
-  def shelter_agency_contacts= contacts
-    self.shelter_agency_contact_ids = contacts.map(&:id)
   end
 
   def client_contacts
@@ -120,46 +81,6 @@ class MatchContacts
 
   def client_contacts= contacts
     self.client_contact_ids = contacts.map(&:id)
-  end
-
-  def dnd_staff_contacts
-    Contact.find dnd_staff_contact_ids
-  end
-
-  def dnd_staff_contacts= contacts
-    self.dnd_staff_contact_ids = contacts.map(&:id)
-  end
-
-  def housing_subsidy_admin_contacts
-    Contact.find housing_subsidy_admin_contact_ids
-  end
-
-  def housing_subsidy_admin_contacts= contacts
-    self.housing_subsidy_admin_contact_ids = contacts.map(&:id)
-  end
-
-  def ssp_contacts
-    Contact.find ssp_contact_ids
-  end
-
-  def hsp_contacts
-    Contact.find hsp_contact_ids
-  end
-
-  def do_contacts
-    Contact.find do_contact_ids
-  end
-
-  def ssp_contacts= contacts
-    self.ssp_contact_ids = contacts.map(&:id)
-  end
-
-  def hsp_contacts= contacts
-    self.hsp_contact_ids = contacts.map(&:id)
-  end
-
-  def do_contacts= contacts
-    self.do_contact_ids = contacts.map(&:id)
   end
 
   # Only some contact types receive notifications
@@ -182,32 +103,6 @@ class MatchContacts
 
   def input_names
     self.class.input_names
-  end
-
-  def label_for(input_name)
-    @labels ||= {
-      shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
-      client_contacts: "Client Contacts",
-      dnd_staff_contacts: "#{_('DND')} Staff Contacts",
-      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts",
-      ssp_contacts: "#{_('Stabilization Service Provider')}",
-      hsp_contacts: "#{_('Housing Search Provider')}",
-      do_contacts: "#{_('Development Officer Contacts')}",
-    }
-    @labels[input_name] || input_name
-  end
-
-  def contact_type_for(input_name)
-    @contact_types ||= {
-      shelter_agency_contacts: 'shelter_agency',
-      client_contacts: "client",
-      dnd_staff_contacts: "dnd_staff",
-      housing_subsidy_admin_contacts: "housing_subsidy_admin",
-      ssp_contacts: "ssp",
-      hsp_contacts: "hsp",
-      do_contacts: "do",
-    }
-    @contact_types[input_name] || input_name
   end
 
   def available_contacts_method_for input_name

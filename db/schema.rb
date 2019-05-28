@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190425134921) do
+ActiveRecord::Schema.define(version: 20190521154725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,13 +61,18 @@ ActiveRecord::Schema.define(version: 20190425134921) do
   add_index "buildings", ["subgrantee_id"], name: "index_buildings_on_subgrantee_id", using: :btree
 
   create_table "client_contacts", force: :cascade do |t|
-    t.integer  "client_id",                      null: false
-    t.integer  "contact_id",                     null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "client_id",                             null: false
+    t.integer  "contact_id",                            null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.datetime "deleted_at"
-    t.boolean  "shelter_agency", default: false, null: false
-    t.boolean  "regular",        default: false, null: false
+    t.boolean  "shelter_agency",        default: false, null: false
+    t.boolean  "regular",               default: false, null: false
+    t.boolean  "dnd_staff",             default: false, null: false
+    t.boolean  "housing_subsidy_admin", default: false, null: false
+    t.boolean  "ssp",                   default: false, null: false
+    t.boolean  "hsp",                   default: false, null: false
+    t.boolean  "do",                    default: false, null: false
   end
 
   add_index "client_contacts", ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
@@ -446,6 +451,7 @@ ActiveRecord::Schema.define(version: 20190425134921) do
     t.integer  "not_working_with_client_reason_id"
     t.date     "client_last_seen_date"
     t.boolean  "admin_note",                        default: false, null: false
+    t.integer  "client_id"
   end
 
   add_index "match_events", ["decision_id"], name: "index_match_events_on_decision_id", using: :btree
@@ -569,16 +575,33 @@ ActiveRecord::Schema.define(version: 20190425134921) do
     t.integer  "gender"
     t.string   "type"
     t.boolean  "available",                                default: true,  null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
     t.jsonb    "neighborhood_interests",                   default: [],    null: false
     t.float    "income_total_monthly"
     t.boolean  "disabling_condition",                      default: false
     t.boolean  "physical_disability",                      default: false
     t.boolean  "developmental_disability",                 default: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
     t.boolean  "domestic_violence",                        default: false, null: false
     t.boolean  "interested_in_set_asides",                 default: false
     t.jsonb    "tags"
+    t.datetime "imported_timestamp"
+    t.string   "set_asides_housing_status"
+    t.boolean  "set_asides_resident"
+    t.string   "shelter_name"
+    t.date     "entry_date"
+    t.string   "case_manager_contact_info"
+    t.string   "phone_number"
+    t.string   "email"
+    t.boolean  "have_tenant_voucher"
+    t.string   "children_info"
+    t.boolean  "studio_ok"
+    t.boolean  "one_br_ok"
+    t.boolean  "sro_ok"
+    t.boolean  "fifty_five_plus"
+    t.boolean  "sixty_two_plus"
+    t.integer  "warehouse_client_id"
+    t.string   "voucher_agency"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -903,12 +926,13 @@ ActiveRecord::Schema.define(version: 20190425134921) do
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
+    t.boolean  "can_manage_neighborhoods",                default: false
     t.boolean  "can_view_assigned_programs",              default: false
     t.boolean  "can_edit_assigned_programs",              default: false
     t.boolean  "can_export_deidentified_clients",         default: false
     t.boolean  "can_export_identified_clients",           default: false
-    t.boolean  "can_manage_neighborhoods",                default: false
     t.boolean  "can_manage_tags",                         default: false
+    t.boolean  "can_manage_imported_clients",             default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
