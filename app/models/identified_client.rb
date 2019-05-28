@@ -113,4 +113,8 @@ class IdentifiedClient < NonHmisClient
       domestic_violence,
     ]
   end
+
+  def client_scope
+    IdentifiedClient.all
+  end
 end

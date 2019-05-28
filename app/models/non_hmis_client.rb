@@ -85,6 +85,11 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def populate_project_client project_client
+    set_project_client_fields project_client
+    project_client.save
+  end
+
+  def set_project_client_fields project_client
     project_client.first_name = first_name
     project_client.last_name = last_name
     project_client.active_cohort_ids = active_cohort_ids
@@ -125,7 +130,6 @@ class NonHmisClient < ActiveRecord::Base
 
     project_client.sync_with_cas = self.available
     project_client.needs_update = true
-    project_client.save
   end
 
   def log message
@@ -147,8 +151,9 @@ class NonHmisClient < ActiveRecord::Base
       where.not(id_in_data_source: NonHmisClient.select(:id)).
       delete_all
 
-    # update or add for all NonHmisClients
-    NonHmisClient.all.find_each do |client|
+
+    # update or add clients
+    client_scope.find_each do |client|
       project_client = ProjectClient.where(
         data_source_id: DataSource.non_hmis.pluck(:id),
         id_in_data_source: client.id
@@ -156,7 +161,15 @@ class NonHmisClient < ActiveRecord::Base
       client.populate_project_client(project_client)
     end
 
-    log "Updated #{NonHmisClient.count} ProjectClients from NonHmisClient"
+    log "Updated #{client_scope.count} ProjectClients from #{self.class.name}"
+  end
+
+  def client_scope
+    raise NotImplementedError
+  end
+
+  def self.ds_identifier
+    'Deidentified'
   end
 
   def download_data
