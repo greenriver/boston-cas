@@ -74,8 +74,8 @@
               %td.text-center
                 = checkmark client.chronic_homeless
               %td
-                - if client.project_client.source_non_hmis?
-                  = link_to edit_deidentified_client_path(client.project_client.id_in_data_source), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                - if client.remote_id.present?
+                  = link_to client.data_source_path, class: ['btn', 'btn-sm', 'btn-secondary'] do
                     %span.icon-pencil
                     Edit
 
