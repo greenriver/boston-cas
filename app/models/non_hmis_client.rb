@@ -148,9 +148,9 @@ class NonHmisClient < ActiveRecord::Base
       delete_all
 
     # update or add for all NonHmisClients
-    NonHmisClient.all.each do |client|
+    NonHmisClient.all.find_each do |client|
       project_client = ProjectClient.where(
-        data_source_id: DataSource.non_hmis.select(:id),
+        data_source_id: DataSource.non_hmis.pluck(:id),
         id_in_data_source: client.id
       ).first_or_initialize
       client.populate_project_client(project_client)
