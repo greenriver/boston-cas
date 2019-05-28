@@ -1,6 +1,5 @@
-class ClientContactsController < AssociatedContactsController
+class ClientContactsController < ApplicationController
   include PjaxModalController
-  #include ContactEditPermissions
 
   before_action :set_client
   before_action :set_client_contacts

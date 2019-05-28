@@ -1,4 +1,4 @@
-module MatchArchive
+module RelatedDefaultContacts
   extend ActiveSupport::Concern
 
   def available_shelter_agency_contacts base_scope = Contact.all
