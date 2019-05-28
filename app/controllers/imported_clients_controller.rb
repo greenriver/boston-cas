@@ -6,11 +6,6 @@ class ImportedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: imported_clients_path)
   end
 
-  def yes_no(bool)
-    bool ? 'Yes' : 'No'
-  end
-  helper_method :yes_no
-
   def sort_options
     [
       {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
