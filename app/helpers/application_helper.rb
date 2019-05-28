@@ -16,6 +16,10 @@ module ApplicationHelper
     boolean ? '✓': ''
   end
 
+  def yes_no(bool)
+    bool ? 'Yes' : 'No'
+  end
+
   def boolean_icon(boolean)
     icon = boolean ? 'checkmark-circle' : 'times-circle-o'
     content_tag :i, '', class: "icon icon-#{icon}"

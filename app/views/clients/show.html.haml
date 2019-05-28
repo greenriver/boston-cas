@@ -17,10 +17,10 @@
           .client-alternate-name
             = name
     .o-body__action
-      - if (warehouse_id = @client.remote_id)
+      - if @client.remote_id.present?
         = link_to @client.data_source_path, target: '_blank' do
           Remote ID:
-          = warehouse_id
+          = @client.remote_id
 
   - if @client.parked?
     .alert.alert-warning

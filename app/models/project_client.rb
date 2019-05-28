@@ -28,6 +28,14 @@ class ProjectClient < ActiveRecord::Base
     where(needs_update: true)
   end
 
+  def is_deidentified?
+    NonHmisClient.where(id: self.id_in_data_source, identified: false).exists?
+  end
+
+  def is_identified?
+    NonHmisClient.where(id: self.id_in_data_source, identified: true).exists?
+  end
+
   # Availability is now determined solely based on the manually set sync_with_cas
   # column.  This generally maps to the chronically homeless list
   def available?

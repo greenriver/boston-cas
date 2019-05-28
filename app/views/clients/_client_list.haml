@@ -28,6 +28,7 @@
             %th SSN
             %th Veteran
             %th Chronic
+            %th
         %tbody
           - clients.each do |client|
             %tr
@@ -68,9 +69,14 @@
                 %nobr
                   = masked_ssn client.ssn
                   = client_data_quality client, :ssn
-              %th.text-center
+              %td.text-center
                 = checkmark client.veteran
-              %th.text-center
+              %td.text-center
                 = checkmark client.chronic_homeless
+              %td
+                - if client.remote_id.present?
+                  = link_to client.data_source_path, class: ['btn', 'btn-sm', 'btn-secondary'] do
+                    %span.icon-pencil
+                    Edit
 
     %p= paginate clients, params: {direction: @direction, sort: @column}

@@ -61,13 +61,18 @@ ActiveRecord::Schema.define(version: 20190523150841) do
   add_index "buildings", ["subgrantee_id"], name: "index_buildings_on_subgrantee_id", using: :btree
 
   create_table "client_contacts", force: :cascade do |t|
-    t.integer  "client_id",                      null: false
-    t.integer  "contact_id",                     null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "client_id",                             null: false
+    t.integer  "contact_id",                            null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.datetime "deleted_at"
-    t.boolean  "shelter_agency", default: false, null: false
-    t.boolean  "regular",        default: false, null: false
+    t.boolean  "shelter_agency",        default: false, null: false
+    t.boolean  "regular",               default: false, null: false
+    t.boolean  "dnd_staff",             default: false, null: false
+    t.boolean  "housing_subsidy_admin", default: false, null: false
+    t.boolean  "ssp",                   default: false, null: false
+    t.boolean  "hsp",                   default: false, null: false
+    t.boolean  "do",                    default: false, null: false
   end
 
   add_index "client_contacts", ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
@@ -171,7 +176,7 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.boolean  "disabling_condition",                                    default: false
     t.datetime "release_of_information"
     t.date     "prevent_matching_until"
-    t.boolean  "dmh_eligible",                                           default: false, null: false
+    t.boolean  "dmh_eligible",                                           default: false
     t.boolean  "va_eligible",                                            default: false, null: false
     t.boolean  "hues_eligible",                                          default: false, null: false
     t.datetime "disability_verified_on"
@@ -196,8 +201,8 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.integer  "vispdat_priority_score",                                 default: 0
     t.integer  "vispdat_length_homeless_in_days",                        default: 0,     null: false
     t.boolean  "cspech_eligible",                                        default: false
-    t.date     "calculated_last_homeless_night"
     t.string   "alternate_names"
+    t.date     "calculated_last_homeless_night"
     t.boolean  "congregate_housing",                                     default: false
     t.boolean  "sober_housing",                                          default: false
     t.jsonb    "enrolled_project_ids"
@@ -455,6 +460,7 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.integer  "not_working_with_client_reason_id"
     t.date     "client_last_seen_date"
     t.boolean  "admin_note",                        default: false, null: false
+    t.integer  "client_id"
   end
 
   add_index "match_events", ["decision_id"], name: "index_match_events_on_decision_id", using: :btree
@@ -767,7 +773,7 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.string   "workphone"
     t.string   "pager"
     t.string   "email"
-    t.boolean  "dmh_eligible",                                default: false, null: false
+    t.boolean  "dmh_eligible",                                default: false
     t.boolean  "va_eligible",                                 default: false, null: false
     t.boolean  "hues_eligible",                               default: false, null: false
     t.datetime "disability_verified_on"
@@ -878,7 +884,6 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.boolean  "can_edit_all_clients",                    default: false
     t.boolean  "can_participate_in_matches",              default: false
     t.boolean  "can_view_all_matches",                    default: false
-    t.boolean  "can_view_own_closed_matches",             default: false
     t.boolean  "can_see_alternate_matches",               default: false
     t.boolean  "can_edit_match_contacts",                 default: false
     t.boolean  "can_approve_matches",                     default: false
@@ -889,11 +894,6 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.boolean  "can_edit_users",                          default: false
     t.boolean  "can_view_full_ssn",                       default: false
     t.boolean  "can_view_full_dob",                       default: false
-    t.boolean  "can_view_dmh_eligibility",                default: false
-    t.boolean  "can_view_va_eligibility",                 default: false
-    t.boolean  "can_view_hues_eligibility",               default: false
-    t.boolean  "can_view_hiv_positive_eligibility",       default: false
-    t.boolean  "can_view_client_confidentiality",         default: false
     t.boolean  "can_view_buildings",                      default: false
     t.boolean  "can_edit_buildings",                      default: false
     t.boolean  "can_view_funding_sources",                default: false
@@ -918,23 +918,29 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.boolean  "can_edit_available_services",             default: false
     t.boolean  "can_assign_services",                     default: false
     t.boolean  "can_assign_requirements",                 default: false
+    t.boolean  "can_view_dmh_eligibility",                default: false
+    t.boolean  "can_view_va_eligibility",                 default: false, null: false
+    t.boolean  "can_view_hues_eligibility",               default: false, null: false
     t.boolean  "can_become_other_users",                  default: false
+    t.boolean  "can_view_client_confidentiality",         default: false, null: false
+    t.boolean  "can_view_hiv_positive_eligibility",       default: false
+    t.boolean  "can_view_own_closed_matches",             default: false
     t.boolean  "can_edit_translations",                   default: false
     t.boolean  "can_view_vspdats",                        default: false
     t.boolean  "can_manage_config",                       default: false
     t.boolean  "can_create_overall_note",                 default: false
-    t.boolean  "can_delete_client_notes",                 default: false
     t.boolean  "can_enter_deidentified_clients",          default: false
     t.boolean  "can_manage_deidentified_clients",         default: false
     t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
+    t.boolean  "can_delete_client_notes",                 default: false
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
-    t.boolean  "can_manage_neighborhoods",                default: false
     t.boolean  "can_view_assigned_programs",              default: false
     t.boolean  "can_edit_assigned_programs",              default: false
     t.boolean  "can_export_deidentified_clients",         default: false
     t.boolean  "can_export_identified_clients",           default: false
+    t.boolean  "can_manage_neighborhoods",                default: false
     t.boolean  "can_manage_tags",                         default: false
     t.boolean  "can_manage_imported_clients",             default: false
   end

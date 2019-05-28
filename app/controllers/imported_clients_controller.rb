@@ -1,4 +1,5 @@
 class ImportedClientsController < NonHmisClientsController
+  before_action :require_can_manage_imported_clients!
 
   def new
     @upload = ImportedClientsCsv.new
@@ -27,11 +28,6 @@ class ImportedClientsController < NonHmisClientsController
     @non_hmis_client.update(client_params)
     respond_with(@non_hmis_client, location: imported_clients_path)
   end
-
-  def yes_no(bool)
-    bool ? 'Yes' : 'No'
-  end
-  helper_method :yes_no
 
   def sort_options
     [

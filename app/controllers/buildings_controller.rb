@@ -1,9 +1,13 @@
 class BuildingsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_can_view_buildings!, except: [:available_units]
+  include HasMatchAccessContext
+
+  before_action :authenticate_user!, except: [:available_move_in_units]
+  before_action :require_match_access_context!, only: [:available_move_in_units]
+
+  before_action :require_can_view_buildings!, except: [:available_units, :available_move_in_units]
   before_action :require_can_add_vacancies!, only: [:available_units]
   before_action :require_can_edit_buildings!, only: [:update, :destroy, :create]
-	before_action :set_building, only: [:show, :edit, :update, :destroy, :available_units, :units]
+	before_action :set_building, only: [:show, :edit, :update, :destroy, :available_units, :available_move_in_units, :units]
   before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
 
@@ -68,6 +72,11 @@ class BuildingsController < ApplicationController
     respond_to do |format|
       format.json { render json: @available_units, only: [:id, :name, :building_id] }
     end
+  end
+
+  # Forwarder to allow different access control
+  def available_move_in_units
+    available_units
   end
 
   def units
