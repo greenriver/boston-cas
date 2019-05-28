@@ -54,6 +54,7 @@ class Contact < ActiveRecord::Base
     choices = {
       shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
       client_contacts: "Client Contacts",
+      regular_contacts: "Client Contacts",
       dnd_staff_contacts: "#{_('DND')} Staff Contacts",
       housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts",
       ssp_contacts: "#{_('Stabilization Service Provider')}",
@@ -67,6 +68,7 @@ class Contact < ActiveRecord::Base
     choices = {
       shelter_agency_contacts: 'shelter_agency',
       client_contacts: "client",
+      regular_contacts: "client",
       dnd_staff_contacts: "dnd_staff",
       housing_subsidy_admin_contacts: "housing_subsidy_admin",
       ssp_contacts: "ssp",
