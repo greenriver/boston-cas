@@ -21,7 +21,12 @@ class ImportedClientsController < NonHmisClientsController
       content: file.read,
     )
 
-    @csv.import
+    if ! @csv.import
+      @upload = ImportedClientsCsv.new
+      flash[:alert] = _("The file header is incorrect.")
+      render :new
+      return
+    end
   end
 
   def update
