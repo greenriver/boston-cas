@@ -37,7 +37,6 @@ class ImportedClientsCsv < ActiveRecord::Base
     super(attributes)
     @added = 0
     @touched = 0
-    @problems = {}
     @clients = []
   end
 
