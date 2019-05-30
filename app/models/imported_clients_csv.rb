@@ -31,35 +31,22 @@ class ImportedClientsCsv < ActiveRecord::Base
   VETERAN = 30
   NEIGHBORHOODS = 31
 
-  attr_reader :added, :touched, :problems
+  attr_reader :added, :touched, :problems, :clients
 
   def initialize(attributes = {})
     super(attributes)
     @added = 0
     @touched = 0
     @problems = {}
+    @clients = []
   end
 
   def import
     if check_header
       CSV.parse(content, headers: true) do |row|
         first_name = row[HOH_FIRST_NAME]
-        if first_name.blank?
-          add_problem(row, 'HoH First Name', 'is required')
-          next
-        end
-
         last_name = row[HOH_LAST_NAME]
-        if last_name.blank?
-          add_problem(row, 'HoH Last Name', 'is required')
-          next
-        end
-
         email = row[HOH_EMAIL]
-        if email.blank?
-          add_problem(row, 'HoH Email', 'is required')
-          next
-        end
 
         client = ImportedClient.where(
           first_name: first_name,
@@ -72,21 +59,22 @@ class ImportedClientsCsv < ActiveRecord::Base
           client.identified = true
         end
         if client.imported_timestamp.nil? || row[FORM_TIMESTAMP].to_time > client.imported_timestamp
+          @clients << client
           @touched += 1 if client.imported_timestamp.present?
-          client.update!(
+          client.update(
             imported_timestamp: row[FORM_TIMESTAMP].to_time,
 
-            set_asides_housing_status: housing_status(row),
+            set_asides_housing_status: row[HOUSING_STATUS],
             domestic_violence: fleeing_domestic_violence?(row),
             set_asides_resident: resident?(row),
             days_homeless_in_the_last_three_years: days_homeless(row),
-            shelter_name: shelter_name(row),
-            entry_date: entry_date(row),
-            case_manager_contact_info: case_manager(row),
-            phone_number: phone_number(row),
+            shelter_name: row[SHELTER_NAME],
+            entry_date: row[ENTRY_DATE].to_date,
+            case_manager_contact_info: case_manager(client, row),
+            phone_number: row[HOH_PHONE],
             income_total_monthly: monthly_income(row),
             have_tenant_voucher: yes_no_to_bool(row[VOUCHER]),
-            voucher_agency: voucher_agency(row),
+            voucher_agency: row[VOUCHER_AGENCY],
             children_info: row[CHILDREN],
             family_member: family?(row),
             studio_ok: studio_ok?(row),
@@ -101,23 +89,13 @@ class ImportedClientsCsv < ActiveRecord::Base
             sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
             date_of_birth: calculate_dob(row),
             veteran: yes_no_to_bool(row[VETERAN]),
-            neighborhood_interests: determine_neighborhood_interests(row),
+            neighborhood_interests: determine_neighborhood_interests(client, row),
           )
         end
       end
       return true
     else
       return false
-    end
-  end
-
-  def housing_status(row)
-    status = row[HOUSING_STATUS]
-    if status.present?
-      status
-    else
-      add_problem(row, 'Housing Status', 'is required')
-      nil
     end
   end
 
@@ -131,97 +109,38 @@ class ImportedClientsCsv < ActiveRecord::Base
   end
 
   def days_homeless(row)
-    begin
-      days = Integer(row[DAYS_HOMELESS])
-      if days > 1096
-        add_problem(row, 'Days Homeless', 'is greater than 1096')
-      end
-      days
-    rescue
-      add_problem(row, 'Days Homeless', "#{row[DAYS_HOMELESS]} is not a valid number")
-      0
-    end
+    Integer(row[DAYS_HOMELESS]) rescue nil
   end
 
-  def shelter_name(row)
-    name = row[SHELTER_NAME]
-    if name.present?
-      name
-    else
-      add_problem(row, 'Shelter Name', 'is required')
-      nil
-    end
-  end
-
-  def entry_date(row)
-    begin
-      date = row[ENTRY_DATE].to_date
-      if date.present?
-        date
-      else
-        add_problem(row, 'Entry Date', 'is required')
-        nil
-      end
-    rescue
-      add_problem(row, 'Entry Date', "#{row[ENTRY_DATE]} is not a valid date")
-      nil
-    end
-  end
-
-  def case_manager(row)
+  def case_manager(client, row)
     info = []
     name = row[CASE_MANAGER_NAME]
     if name.present?
     info << name
     else
-      add_problem(row, 'Case Manager Name', 'is required')
+      client.errors.add(:case_manager_contact_info, 'case manager name can\'t be blank')
     end
     phone = row[CASE_MANAGER_PHONE]
     if phone.present?
       info << phone
     else
-      add_problem(row, 'Case Manager Phone', 'is required')
+      client.errors.add(:case_manager_contact_info, 'case manager phone can\'t be blank')
     end
     email = row[CASE_MANAGER_EMAIL]
     if email.present?
       info << email
     else
-      add_problem(row, 'Case Manager Email', 'is required')
+      client.errors.add(:case_manager_contact_info, 'case manager email can\'t be blank')
     end
     info.join(' / ')
   end
 
-  def phone_number(row)
-    phone = row[HOH_PHONE]
-    if phone.present?
-      phone
-    else
-      add_problem(row, 'Client Phone', 'is required')
-      nil
-    end
-  end
-
   def monthly_income(row)
-    begin
-      Float(row[ANNUAL_INCOME]) / 12
-    rescue
-      add_problem(row, 'Annual Income', "#{row[ANNUAL_INCOME]} is not a valid number")
-      0
-    end
+    Float(row[ANNUAL_INCOME]) / 12 rescue nil
   end
 
   def yes_no_to_bool(val)
     val == "Yes"
-  end
-
-  def voucher_agency(row)
-    agency = row[VOUCHER_AGENCY]
-    if yes_no_to_bool(row[VOUCHER]) && agency.present?
-      agency
-    else
-      add_problem(row, 'Voucher Agency', 'is required')
-      nil
-    end
   end
 
   def family?(row)
@@ -262,24 +181,18 @@ class ImportedClientsCsv < ActiveRecord::Base
     return nil
   end
 
-  def determine_neighborhood_interests(row)
+  def determine_neighborhood_interests(client, row)
     neighborhoods = row[NEIGHBORHOODS].split(';')
     interests = neighborhoods.flat_map do |neighborhood_name|
       Neighborhood.where(name: neighborhood_name).pluck(:id)
     end
     if interests.size != neighborhoods.size
-      add_problem(row, 'Neighborhoods', 'not all neighborhoods are valid')
+      client.errors.add(:neighborhood_interests, 'not all neighborhoods are valid')
     end
     interests
   end
 
   def check_header
     content.lines.first == "\"Timestamp\",\"Username\",\"I certify that the below mentioned household fits each part of the Boston Homeless Set Aside Preference definition (below) to the best of my knowledge. I understand that as case manager I must obtain documentation of Homeless Status and retain that documentation in a client file to be provided upon request. I certify this by typing my name below.\",\"Household is currently: \",\"\",\"Cumulative number of days in the last three years that the household has met the definition above and is documented according to the documentation requirements below. This number cannot exceed 1096. \",\"I have obtained documentation according to the documentation requirements described above. I acknowledge that the household has voluntarily shown interest and willingness to participate in the Boston Homeless Set Aside Preference and move to a new apartment. I certify this by typing my name below. \",\"Name of shelter where household resides. If household is unsheltered, living on the street, please state this.\",\"Date household entered above mentioned shelter. If household is unsheltered, living on the street, please enter the date household began living on the street. \",\"Case manager/shelter provider contact name \",\"Case manager/shelter provider contact phone number \",\"Case manager/shelter provider email address\",\"I acknowledge the above statement by typing my name below. \",\"First Name of head of household \",\"Last Name of head of household \",\"Head of household phone number\",\"Head of household email address\",\"What is the estimated annual income for your household next year?\",\"Do you currently have a tenant-based housing choice voucher? \",\"If you have a tenant-based housing choice voucher, what is the administering housing authority/agency?\",\"What is the age and gender of each of the children in the household? (this information may be used by some housing providers to determine the number of bedrooms your household may receive priority for)\",\"If you are a family with children, would you consider a studio?\",\"If you are a family with children, would you consider a one bedroom?\",\"If you are an individual, would you consider living in an SRO (single room occupancy)?\",\"If you are an individual, would you consider living in a studio?\",\"If you need a bedroom size larger than SRO, studio, or 1 bedroom, please choose a size below. \",\"Are you seeking any of the following due to a disability?  If yes, you may have to provide documentation of disability - related need.)\",\"Are you interested in applying for housing units targeted for persons with disabilities?  (the definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)\",\"Are you 55 years of age or older?\",\"Are you 62 years of age or older?\",\"Are you a veteran?\",\"Check off all the Boston neighborhoods you are willing to live in. Since these units are rare, the more neighborhoods you are willing to live in helps your chances of being match to a unit. \"\n"
-  end
-
-  def add_problem(row, field, description)
-    client = [ row[HOH_FIRST_NAME], row[HOH_LAST_NAME], row[HOH_EMAIL] ]
-    @problems[client] ||= []
-    @problems[client] << {field: field, description: description}
   end
 end

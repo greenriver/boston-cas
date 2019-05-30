@@ -2,30 +2,31 @@
 %h1
   Upload Complete
 
+- problems = @csv.clients.reduce(0){ |sum, client| sum += client.errors.count }
+
 %ul.list-unstyled
   %li= "#{@csv.added} new clients added"
   %li= "#{@csv.touched} existing clients updated"
-  %li= "#{@csv.problems.count} records with problems"
+  %li= "#{problems} records with problems"
 
-- if @csv.problems.count > 0
+- if problems > 0
   .row
   .col-sm-12
     .table-responsive
       %table.table.table-condensed
         %thead
           %th Client
-          %th Field
+          %th Item
           %th Problem
         %tbody
-          - @csv.problems.each do |client, problems|
-            - problems.each_with_index do |problem, index|
+          - @csv.clients.each do |client|
+            - client.errors.each_with_index do |error, index|
               %tr
                 - if index == 0
-                  %td= client.join(' ')
+                  %td= "#{client.first_name} #{client.last_name} (#{client.date_of_birth})"
                 - else
                   %td
-                %td= problem[:field]
-                %td= problem[:description]
-
+                %td= error.first.to_s.humanize
+                %td= error.last.capitalize
 .row
   = link_to 'Return to Clients', imported_clients_path, class: 'btn btn-sm btn-primary'

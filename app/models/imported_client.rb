@@ -5,6 +5,16 @@ class ImportedClient < NonHmisClient
     )
   end, foreign_key: :id_in_data_source, required: false
 
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :email, presence: true
+  validates :set_asides_housing_status, presence: true
+  validates :days_homeless_in_the_last_three_years, presence: true, numericality: { less_than_or_equal_to: 1096 }
+  validates :shelter_name, presence: true
+  validates :entry_date, presence: true
+  validates :phone_number, presence: true
+  validates :income_total_monthly, presence: true, numericality: true
+  validates :voucher_agency, presence: true, if: :have_tenant_voucher?
 
   def populate_project_client project_client
     set_project_client_fields project_client
