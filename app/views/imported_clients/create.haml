@@ -23,7 +23,7 @@
             - client.errors.each_with_index do |error, index|
               %tr
                 - if index == 0
-                  %td= "#{client.first_name} #{client.last_name} (#{client.date_of_birth})"
+                  %td= "#{client.first_name} #{client.last_name} (#{client.email})"
                 - else
                   %td
                 %td= error.first.to_s.humanize
