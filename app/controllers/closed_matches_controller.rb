@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class ClosedMatchesController < MatchListBaseController
   before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
 

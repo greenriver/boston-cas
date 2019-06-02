@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module OpportunityDetails
   # the classes in this module encapsulate the details for a given opportunity
   # which may be fetched via multiple strategies depending on the opportunity's

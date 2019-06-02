@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class AssociatedContactsController < ApplicationController
   # Abstract class for managing contacts associated with a record,
   # e.g. ClientContactsController

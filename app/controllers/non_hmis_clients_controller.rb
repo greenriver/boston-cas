@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   before_action :load_client, only: [:edit, :update, :destroy]

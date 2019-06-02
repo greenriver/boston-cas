@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module MatchProgressUpdates
   class Anyone < Base
     validates_presence_of :response, :client_last_seen

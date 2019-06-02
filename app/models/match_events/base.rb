@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module MatchEvents
   class Base < ::ActiveRecord::Base
     # match events represent anything that happens in the lifecyle of a match

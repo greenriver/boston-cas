@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class DeidentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_deidentified_clients!
   before_action :require_can_manage_deidentified_clients!, only: [:edit, :update, :destroy]

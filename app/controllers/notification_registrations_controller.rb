@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class NotificationRegistrationsController < Devise::RegistrationsController
   before_action :load_notification!
   before_action :ensure_notification_allows_registration!

@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 # The unwitting consequence of decentralizing the network of requirements was
 # that I had to put code in place to avoid inifinitely looping (in two
 # different ways). There are a few different ways this code can be improved.

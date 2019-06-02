@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module ClientOpportunityMatches
   module HasDecisions
     # Individual decision and notification points in the lifecycle of a match

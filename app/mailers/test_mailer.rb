@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 # bundle exec rails runner 'TestMailer.ping("somebody@greenriver.com").deliver_now'
 class TestMailer < ActionMailer::Base
   default from: ENV.fetch('DEFAULT_FROM')
