@@ -31,6 +31,12 @@ gem 'responders'
 gem 'kaminari'
 gem 'ransack'
 
+# File processing
+gem 'carrierwave'
+gem 'carrierwave-i18n'
+gem 'ruby-filemagic'
+gem 'mini_magick'
+
 # No attachment to unicorn here-- probably want to go with passenger or puma
 gem 'unicorn-rails'
 gem 'redis-rails'

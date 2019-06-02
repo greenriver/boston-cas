@@ -108,6 +108,11 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    carrierwave (1.2.2)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    carrierwave-i18n (0.2.0)
     choice (0.2.0)
     chronic (0.10.2)
     coderay (1.1.2)
@@ -255,6 +260,7 @@ GEM
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2018.0812)
+    mini_magick (4.8.0)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
@@ -385,6 +391,7 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+    ruby-filemagic (0.7.2)
     ruby-graphviz (1.2.2)
     ruby-prof (0.16.2)
     ruby-progressbar (1.8.1)
@@ -500,6 +507,8 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   capybara
+  carrierwave
+  carrierwave-i18n
   coffee-rails
   composite_primary_keys (~> 8.0)
   csv (>= 1.0.2)
@@ -530,6 +539,7 @@ DEPENDENCIES
   letsencrypt_plugin
   letter_opener
   lograge
+  mini_magick
   minitest-reporters
   momentjs-rails (>= 2.9.0)
   paper_trail
@@ -546,6 +556,7 @@ DEPENDENCIES
   responders
   rspec-mocks
   rspec-rails
+  ruby-filemagic
   ruby-prof
   ruby_parser
   sass-rails

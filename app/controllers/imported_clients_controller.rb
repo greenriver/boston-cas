@@ -1,6 +1,34 @@
 class ImportedClientsController < NonHmisClientsController
   before_action :require_can_manage_imported_clients!
 
+  def new
+    @upload = ImportedClientsCsv.new
+  end
+
+  def create
+    if !params[:imported_clients_csv]&.[](:file)
+      @upload = ImportedClientsCsv.new
+      flash[:alert] = _("You must attach a file in the form.")
+      render :new
+      return
+    end
+
+    file = import_params[:file]
+    @csv = ImportedClientsCsv.create(
+      filename: file.original_filename,
+      user_id: current_user.id,
+      content_type: file.content_type,
+      content: file.read,
+    )
+
+    if ! @csv.import
+      @upload = ImportedClientsCsv.new
+      flash[:alert] = _("The file header is incorrect.")
+      render :new
+      return
+    end
+  end
+
   def update
     @non_hmis_client.update(client_params)
     respond_with(@non_hmis_client, location: imported_clients_path)
@@ -29,6 +57,12 @@ class ImportedClientsController < NonHmisClientsController
     params.require(:imported_client).permit(
       :warehouse_client_id,
       :available,
+    )
+  end
+
+  def import_params
+    params.require(:imported_clients_csv).permit(
+      :file
     )
   end
 end

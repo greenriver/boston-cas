@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190521202957) do
+ActiveRecord::Schema.define(version: 20190523150841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -389,6 +389,15 @@ ActiveRecord::Schema.define(version: 20190521202957) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "imported_clients_csvs", force: :cascade do |t|
+    t.string   "filename"
+    t.integer  "user_id"
+    t.string   "content_type"
+    t.string   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "letsencrypt_plugin_challenges", force: :cascade do |t|
     t.text     "response"
     t.datetime "created_at", null: false
@@ -602,6 +611,7 @@ ActiveRecord::Schema.define(version: 20190521202957) do
     t.boolean  "sixty_two_plus"
     t.integer  "warehouse_client_id"
     t.string   "voucher_agency"
+    t.boolean  "interested_in_disabled_housing"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
