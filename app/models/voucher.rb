@@ -95,6 +95,35 @@ class Voucher < ActiveRecord::Base
     ! client_opportunity_matches.exists?
   end
 
+  # Searching by client name
+
+  def self.ransackable_scopes(auth_object = nil)
+    [:client_search]
+  end
+
+  scope :client_search, -> (text) do
+    return none unless text.present?
+    text.strip!
+    if text.include?(',')
+      last, first = text.split(',').map(&:strip)
+    else
+      first, last = text.split(' ').map(&:strip) if text.include?(' ')
+    end
+
+    if first.present? && last.present?
+      where = Client.arel_table[:first_name].lower.matches("%#{first.downcase}%").
+        or(Client.arel_table[:last_name].lower.matches("%#{last.downcase}%"))
+    elsif first.present?
+      where = Client.arel_table[:first_name].lower.matches("%#{first.downcase}%")
+    elsif last.present?
+      where = Client.arel_table[:last_name].lower.matches("%#{last.downcase}%")
+    else
+      where = Client.arel_table[:first_name].lower.matches("%#{text.downcase}%").
+        or(Client.arel_table[:last_name].lower.matches("%#{text.downcase}%"))
+    end
+    joins(status_match: :client).where(where)
+  end
+
   private def cant_update_when_active_or_successful_match
     if status_match.present?
       condition = status_match.successful? ? 'successful match' : 'match in progress'
@@ -111,7 +140,7 @@ class Voucher < ActiveRecord::Base
   end
 
   private def requires_unit_if_avaiable
-    if available && unit_id.blank? && sub_program.has_buildings?
+    if changing_to_available? && unit_id.blank? && sub_program.has_buildings?
       errors.add :unit_id, "Unit required to make the voucher available"
     end
   end

@@ -1,0 +1,8 @@
+- if @q.present?
+  .row
+    .col-md-6
+      = simple_form_for @q, url: url_for, method: :get, class: :jSearch do |f|
+        .input-group{style: 'margin-bottom: 20px;'}
+          = f.search_field :client_search, placeholder: 'Client name...', class: 'form-control', autofocus: true
+          %span.input-group-append
+            %button.btn.btn-primary{type: :submit} Search
