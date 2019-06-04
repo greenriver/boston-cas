@@ -1,7 +1,13 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class AssociatedContactsController < ApplicationController
   # Abstract class for managing contacts associated with a record,
   # e.g. ClientContactsController
-  
+
   before_action :authenticate_user!
   before_action :set_contact_owner!
   before_action :set_contact_join_model!, only: [:edit, :update, :destroy]
@@ -22,7 +28,7 @@ class AssociatedContactsController < ApplicationController
       .page(params[:page])
       .per(15)
   end
-  
+
   def new
     @contact_join_model = contact_join_model_source.new
     @contact_join_model.build_contact
@@ -33,7 +39,7 @@ class AssociatedContactsController < ApplicationController
       @available_contacts
     end
   end
-  
+
   def create
     @contact_join_model = contact_join_model_source.new contact_join_model_params
     if @contact_join_model.save
@@ -44,10 +50,10 @@ class AssociatedContactsController < ApplicationController
       render :new
     end
   end
-  
+
   def edit
   end
-  
+
   def update
     if @contact_join_model.update contact_join_model_params
       redirect_to({action: :index}, notice: "Contact updated")
@@ -56,16 +62,16 @@ class AssociatedContactsController < ApplicationController
       render :edit
     end
   end
-  
+
   def destroy
     @contact_join_model = contact_join_model_source.find params[:id]
     @contact_join_model.destroy
-    redirect_to({action: :index}, notice: "Contact removed from building")
+    redirect_to({action: :index}, notice: "Contact removed")
   end
-  
+
   def restore
     contact_join_model_source.restore(params[:id])
-    redirect_to( {action: :index}, notice: "Contact restored to building.")
+    redirect_to( {action: :index}, notice: "Contact restored")
   end
 
   private
@@ -73,7 +79,7 @@ class AssociatedContactsController < ApplicationController
     def set_contact_owner!
       @contact_owner = contact_owner_source.find(params["#{contact_owner_source.model_name.singular_route_key}_id"])
     end
-    
+
     def set_contact_join_model!
       @contact_join_model = contact_join_model_source.find params[:id]
     end
@@ -81,7 +87,7 @@ class AssociatedContactsController < ApplicationController
     def contact_owner_source
       raise 'Abstract method'
     end
-    
+
     def contact_join_model_source
       raise 'Abstract method'
     end
@@ -112,7 +118,7 @@ class AssociatedContactsController < ApplicationController
         ]
       )
     end
-    
+
     def join_model_class
       raise "Abstract Method"
     end

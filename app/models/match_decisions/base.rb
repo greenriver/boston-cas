@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module MatchDecisions
   class Base < ActiveRecord::Base
     # MatchDecision objects represent individual decision points
@@ -236,8 +242,8 @@ module MatchDecisions
 
     def record_updated_unit! unit_id:, contact_id:
       voucher = match.opportunity.voucher
-      return unless voucher.unit.present?
-      if voucher.unit_id != unit_id
+      return unless unit_id.present? && voucher.unit.present?
+      if voucher.unit_id != unit_id.to_i
         details = match.opportunity_details
         previous_unit = "#{details.unit_name} at #{details.building_name}"
         voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)

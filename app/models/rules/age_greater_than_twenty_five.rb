@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class Rules::AgeGreaterThanTwentyFive < Rule
   def clients_that_fit(scope, requirement)
     if Client.column_names.include?(:date_of_birth.to_s)

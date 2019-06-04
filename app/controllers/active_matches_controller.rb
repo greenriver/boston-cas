@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class ActiveMatchesController < MatchListBaseController
   helper_method :sort_column, :sort_direction
   def index

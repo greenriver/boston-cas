@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class Client < ActiveRecord::Base
   before_create :assign_tie_breaker
 
@@ -27,10 +33,40 @@ class Client < ActiveRecord::Base
     source: :contact
 
   has_many :shelter_agency_client_contacts, -> { where shelter_agency: true},
-    class_name: 'ClientContact'
+           class_name: 'ClientContact'
   has_many :shelter_agency_contacts,
-    through: :shelter_agency_client_contacts,
-    source: :contact
+           through: :shelter_agency_client_contacts,
+           source: :contact
+
+  has_many :dnd_staff_client_contacts, -> { where dnd_staff: true},
+           class_name: 'ClientContact'
+  has_many :dnd_staff_contacts,
+           through: :dnd_staff_client_contacts,
+           source: :contact
+
+  has_many :housing_subsidy_admin_client_contacts, -> { where housing_subsidy_admin: true},
+           class_name: 'ClientContact'
+  has_many :housing_subsidy_admin_contacts,
+           through: :housing_subsidy_admin_client_contacts,
+           source: :contact
+
+  has_many :hsp_client_contacts, -> { where hsp: true},
+           class_name: 'ClientContact'
+  has_many :hsp_contacts,
+           through: :hsp_client_contacts,
+           source: :contact
+
+  has_many :ssp_client_contacts, -> { where ssp: true},
+           class_name: 'ClientContact'
+  has_many :ssp_contacts,
+           through: :ssp_client_contacts,
+           source: :contact
+
+  has_many :do_client_contacts, -> { where do: true},
+           class_name: 'ClientContact'
+  has_many :do_contacts,
+           through: :do_client_contacts,
+           source: :contact
 
   has_many :client_notes, inverse_of: :client
 
@@ -156,6 +192,10 @@ class Client < ActiveRecord::Base
     else
       "(name withheld)"
     end
+  end
+
+  def default_client_contacts
+    @default_client_contacts ||= ClientContacts.new client: self
   end
 
   def self.prioritized(match_route, scope)

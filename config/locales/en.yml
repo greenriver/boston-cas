@@ -74,11 +74,11 @@ en:
       title: 'Services'
       search_prompt: 'Search services...'
   versions:
-    index: 
+    index:
       title: 'Object History'
   reissue_notifications:
       index:
-        title: 'Oustanding Requests for Notifications'
+        title: 'Outstanding Requests for Notifications'
   active_matches:
       index:
         title: 'Active Matches'
@@ -90,7 +90,7 @@ en:
   activerecord:
     models:
       building: 'Site'
-      opportunity: 
+      opportunity:
         one: 'Vacancy'
         other: 'Vacancies'
     attributes:
@@ -99,5 +99,5 @@ en:
         ssn: 'SSN'
         date_of_birth: 'DOB'
         hiv_aids: 'HIV aids'
-    
+
 

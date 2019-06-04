@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module Admin
   class VersionsController < ApplicationController
     before_action :require_can_act_on_behalf_of_match_contacts!

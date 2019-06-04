@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class ProjectClient < ActiveRecord::Base
 
   has_one :client, required: false, primary_key: :client_id, foreign_key: :id

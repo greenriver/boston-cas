@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class ClientOpportunityMatch < ActiveRecord::Base
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
@@ -579,7 +585,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
-      program.dnd_contacts.each do |contact|
+      program.dnd_staff_contacts.each do |contact|
+        assign_match_role_to_contact :dnd_staff, contact
+      end
+      client.dnd_staff_contacts.each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
     end
@@ -589,6 +598,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
       program.housing_subsidy_admin_contacts.each do |contact|
+        assign_match_role_to_contact :housing_subsidy_admin, contact
+      end
+      client.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
       # If for some reason we forgot to setup the default HSA contacts
@@ -628,16 +640,25 @@ class ClientOpportunityMatch < ActiveRecord::Base
       program.ssp_contacts.each do |contact|
         assign_match_role_to_contact :ssp, contact
       end
+      client.ssp_contacts.each do |contact|
+        assign_match_role_to_contact :ssp, contact
+      end
     end
 
     def add_default_hsp_contacts!
       program.hsp_contacts.each do |contact|
         assign_match_role_to_contact :hsp, contact
       end
+      client.hsp_contacts.each do |contact|
+        assign_match_role_to_contact :hsp, contact
+      end
     end
 
     def add_default_do_contacts!
       program.do_contacts.each do |contact|
+        assign_match_role_to_contact :do, contact
+      end
+      client.do_contacts.each do |contact|
         assign_match_role_to_contact :do, contact
       end
     end
