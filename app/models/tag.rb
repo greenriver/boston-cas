@@ -15,4 +15,8 @@ class Tag < ActiveRecord::Base
     where(arel_table[:name].lower.matches("%#{text.downcase}%"))
   end
 
+  def on_cohort?
+    Warehouse::Cohort.active.where(tag_id: id).exists?
+  end
+
 end
