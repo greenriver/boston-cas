@@ -1,7 +1,13 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module MatchDecisions::ProviderOnly
   class HsaAcknowledgesReceipt < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/hsa_acknowledges_receipt' 
+    def to_partial_path
+      'match_decisions/hsa_acknowledges_receipt'
     end
     include MatchDecisions::AcceptsDeclineReason
 
@@ -72,7 +78,7 @@ module MatchDecisions::ProviderOnly
       def acknowledged
         @decision.next_step.initialize_decision!
 
-        if match.client.remote_id.present? && Warehouse::Base.enabled?
+        if !match.client.non_hmis? && match.client.remote_id.present? && Warehouse::Base.enabled?
           Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
         end
       end

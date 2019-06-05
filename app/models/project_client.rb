@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class ProjectClient < ActiveRecord::Base
 
   has_one :client, required: false, primary_key: :client_id, foreign_key: :id
@@ -26,6 +32,14 @@ class ProjectClient < ActiveRecord::Base
 
   scope :update_pending, -> do
     where(needs_update: true)
+  end
+
+  def is_deidentified?
+    NonHmisClient.where(id: self.id_in_data_source, identified: false).exists?
+  end
+
+  def is_identified?
+    NonHmisClient.where(id: self.id_in_data_source, identified: true).exists?
   end
 
   # Availability is now determined solely based on the manually set sync_with_cas

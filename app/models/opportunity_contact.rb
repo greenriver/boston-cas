@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class OpportunityContact < ActiveRecord::Base
 
   belongs_to :opportunity, required: true, inverse_of: :opportunity_contacts

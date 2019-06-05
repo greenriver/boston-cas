@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module ControllerAuthorization
   extend ActiveSupport::Concern
   delegate *Role.permissions.map{|m| "#{m}?".to_sym}, to: :current_user, allow_nil: true

@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 module MatchDecisions
   class Base < ActiveRecord::Base
     # MatchDecision objects represent individual decision points
@@ -120,7 +126,7 @@ module MatchDecisions
         distinct.
         map(&:format_for_checkboxes)
     end
-      
+
     def stalled_responses_requiring_note
       @stalled_responses_requiring_note ||= StalledResponse.active.
         requiring_note.
@@ -232,6 +238,17 @@ module MatchDecisions
 
     def record_action_event! contact:
       decision_action_events.create! match: match, contact: contact, action: status, note: note
+    end
+
+    def record_updated_unit! unit_id:, contact_id:
+      voucher = match.opportunity.voucher
+      return unless unit_id.present? && voucher.unit.present?
+      if voucher.unit_id != unit_id.to_i
+        details = match.opportunity_details
+        previous_unit = "#{details.unit_name} at #{details.building_name}"
+        voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
+        MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
+      end
     end
 
     # override in subclass
