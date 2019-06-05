@@ -6,10 +6,13 @@
 
 module MatchDecisions::ProviderOnly
   class HsaAcceptsClient < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/hsa_accepts_client' 
+    def to_partial_path
+      'match_decisions/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
+
+    attr_accessor :building_id
+    attr_accessor :unit_id
 
     # validate :note_present_if_status_declined
 
@@ -106,6 +109,13 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
+
+    def whitelist_params_for_update params
+      super.merge params.require(:decision).permit(
+        :building_id,
+        :unit_id,
+      )
+    end
 
     private def note_present_if_status_declined
       if note.blank? && status == 'declined'
