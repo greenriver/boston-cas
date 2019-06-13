@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class RulesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_rule_list!

@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class ClientNote < ActiveRecord::Base
   belongs_to :client, required: true
   belongs_to :user, required: true

@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 # Most things with inherited rules only inherit
 # from services, so the common code is here
 module InheritsRequirementsFromServices

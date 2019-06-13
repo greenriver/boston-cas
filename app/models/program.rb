@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class Program < ActiveRecord::Base
 
   include Matching::HasOrInheritsRequirements
@@ -26,7 +32,7 @@ class Program < ActiveRecord::Base
     class_name: Contact.name,
     through: :program_contacts,
     source: :contact
-  has_many :dnd_contacts,
+  has_many :dnd_staff_contacts,
     -> { where program_contacts: {dnd_staff: true} },
     class_name: Contact.name,
     through: :program_contacts,

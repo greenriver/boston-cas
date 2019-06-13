@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 # This is used to determine whether or not a client is available to match a 
 # specific match route, existence of a record in this table for a given route
 # means the client is unavailable.

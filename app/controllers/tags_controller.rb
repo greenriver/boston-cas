@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2019 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+###
+
 class TagsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_manage_tags!

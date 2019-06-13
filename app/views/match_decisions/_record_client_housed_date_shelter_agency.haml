@@ -1,5 +1,14 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
+    - if has_unit?
+      %p
+        Please confirm the client's building and unit.
+        .form-inputs
+          .building-and-unit
+            = form.input :building_id, collection: Building.all, selected: default_building_id , label: 'Building', disabled: !@decision.editable?, input_html: {class: 'building', notification_id: notification_id}
+            = form.input :unit_id, collection: candidate_units, selected: default_unit_id, label: 'Unit', disabled: !@decision.editable?,
+              input_html: {class: 'unit', data: {dependent: true, url: '/buildings/:id/available_move_in_units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}}
+      %hr
     %p
       Please record the date the client moved in.
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
@@ -26,3 +35,33 @@
 
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form
+
+= content_for :page_js do
+  :javascript
+    $('select').select2();
+    $('.building-and-unit').on('change', '.building', function() {
+      var parent = this.id;
+      var id = this.value;
+      var notification_id = this.getAttribute('notification_id');
+      var prefix = '';
+      if(notification_id !== null) {
+        prefix = '/notifications/' + notification_id + '/';
+      }
+      var $child = $('.unit');
+      var value_method = $child.data('value-method');
+      var label_method = $child.data('label-method');
+      var url = prefix + $child.data('url').replace(':id', id);
+      $.get(url, function(data) {
+        // remove previous options
+        $child.children().remove();
+        $.each(data, function(k,v){
+          $child.append($('<option />').attr('value', v[value_method]).text(v[label_method]));
+        });
+
+        if($child.data('default-parent-id').id == id) {
+          $child.append('<option value="' + $child.data('default-value') + '">' + $child.data('default-label') + '</option>');
+          // restore the original value if still available
+          $child.val($child.data('default-value'));
+        }
+      }, 'json');
+    });
