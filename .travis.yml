@@ -20,3 +20,7 @@ script:
 
 addons:
   postgresql: "9.5"
+
+before_install:
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
