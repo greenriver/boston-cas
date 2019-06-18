@@ -48,8 +48,8 @@ class DeidentifiedClient < NonHmisClient
       "Physical disability",
       "Developmental disability",
       "Domestic violence survivor",
-      "Created at",
-      "Updated at",
+      "Created",
+      "Last Update",
     ]
   end
   def download_data

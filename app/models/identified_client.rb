@@ -81,8 +81,8 @@ class IdentifiedClient < NonHmisClient
       "Physical disability",
       "Developmental disability",
       "Domestic violence survivor",
-      "Created at",
-      "Updated at",
+      "Created",
+      "Last Update",
     ]
   end
 
