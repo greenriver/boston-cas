@@ -44,7 +44,7 @@ class NonHmisClientsController < ApplicationController
         @page = params[:page].presence || 1
         @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
       end
-      format.xlsx do 
+      format.xlsx do
         download
       end
     end
@@ -93,12 +93,18 @@ class NonHmisClientsController < ApplicationController
   end
 
   def load_client
-    # since we sometimes arrive here looking for an identified client
-    # attempt deidentified first, then shuffle them over to identified
     begin
       @non_hmis_client = client_source.find params[:id].to_i
     rescue
-      redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
+      client = NonHmisClient.find params[:id].to_i
+      case client.type
+      when 'DeidentifiedClient'
+        redirect_to polymorphic_path([action_name, :deidentified_client], id: params[:id])
+      when 'IdentifiedClient'
+        redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
+      when 'ImportedClient'
+        redirect_to polymorphic_path([action_name, :imported_client], id: params[:id])
+      end
     end
   end
 
