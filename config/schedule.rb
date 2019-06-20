@@ -30,7 +30,7 @@ every 1.minutes do
   rake "cas:update_clients"
 end
 
-every 30.seconds do
+every 1.minutes do
   rake "cas:update_project_clients_from_deidentified_clients"
 end
 
