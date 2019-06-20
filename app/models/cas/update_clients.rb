@@ -8,26 +8,29 @@ module Cas
   class UpdateClients
 
     def run!
-      if needs_update?
-        to_add = []
-        to_delete = []
-        to_update = []
+      return if Client.advisory_lock_exists?(:update_clients)
+      Client.with_advisory_lock(:update_clients) do
+        if needs_update?
+          to_add = []
+          to_delete = []
+          to_update = []
 
-        # add clients for:
-        # 1. Any project client with an empty client_id
-        # 2. Any project client with a client_id that doesn't have a corresponding client
-        ProjectClient.transaction do
-          remove_unused_clients()
-          update_existing_clients()
-          add_missing_clients()
+          # add clients for:
+          # 1. Any project client with an empty client_id
+          # 2. Any project client with a client_id that doesn't have a corresponding client
+          ProjectClient.transaction do
+            remove_unused_clients()
+            update_existing_clients()
+            add_missing_clients()
 
-          ProjectClient.update_all(needs_update: false)
+            ProjectClient.update_all(needs_update: false)
+          end
+          fix_incorrect_available_candidate_clients()
+          # Data has changed, see if we have any new matches
+          Matching::RunEngineJob.perform_later
+        else
+          fix_incorrect_available_candidate_clients()
         end
-        fix_incorrect_available_candidate_clients()
-        # Data has changed, see if we have any new matches
-        Matching::RunEngineJob.perform_later
-      else
-        fix_incorrect_available_candidate_clients()
       end
     end
 
