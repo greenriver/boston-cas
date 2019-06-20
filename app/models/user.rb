@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   #has_secure_password # not needed with devise
 
   attr_accessor :editable_programs
-  
+
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
   validates :first_name, presence: true, length: {maximum: 40}
   validates :last_name, presence: true, length: {maximum: 40}
@@ -135,6 +135,7 @@ class User < ActiveRecord::Base
   end
 
   def can_see_non_hmis_clients?
-    can_enter_deidentified_clients? || can_manage_deidentified_clients? || can_enter_identified_clients? || can_manage_identified_clients?
+    can_enter_deidentified_clients? || can_manage_deidentified_clients? || can_enter_identified_clients? || can_manage_identified_clients? ||
+      can_manage_imported_clients?
   end
 end
