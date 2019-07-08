@@ -48,6 +48,8 @@ class DeidentifiedClient < NonHmisClient
       "Physical disability",
       "Developmental disability",
       "Domestic violence survivor",
+      "Created",
+      "Last Update",
     ]
   end
 
@@ -85,6 +87,8 @@ class DeidentifiedClient < NonHmisClient
       physical_disability,
       developmental_disability,
       domestic_violence,
+      created_at,
+      updated_at,
     ]
   end
 

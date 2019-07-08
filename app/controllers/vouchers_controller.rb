@@ -15,7 +15,7 @@ class VouchersController < ApplicationController
   before_action :set_show_confidential_names
 
   def index
-    @vouchers = @subprogram.vouchers.preload(:status_match).order(:id)
+    @vouchers = @subprogram.vouchers.order(:id)
     @vouchers_for_page = @vouchers.select{|v| ! v.status_match.present?}
     @voucher_state = "available or unmatched"
   end

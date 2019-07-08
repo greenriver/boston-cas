@@ -115,6 +115,10 @@ FactoryGirl.define do
     name 'Interested in Neighborhood'
     verb 'be'
   end
+  factory :require_interest_in_neighborhood, class: 'Rules::RequireInterestInNeighborhood' do
+    name 'At least one neighborhood preference'
+    verb 'have'
+  end
   factory :active_in_cohort, class: 'Rules::ActiveInCohort' do
     name 'Active in Cohort'
     verb 'be'
