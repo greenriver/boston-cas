@@ -68,6 +68,7 @@ Bedroom,Minimum number of bedrooms,have
 Occupancy,Minimum occupancy,have
 VerifiedDisability,Verified disability,have
 VerifiedDaysHomeless,Verified days homeless,have
-InterestedInNeighborhood,Interested in Neighborhood,be
+InterestedInNeighborhood,Interested in Neighborhood (or have no preference),be
 InterestedInSetAsides,Interested in set-asides,be
 TaggedWith,Specified tag,have
+RequireInterestInNeighborhood,At least one Neighborhood preference,have

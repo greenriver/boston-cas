@@ -25,7 +25,8 @@ module CasSeeds
       csv.each do |row|
         incoming_rules << "Rules::#{row['Class Name']}"
         rules = Rule.where(type: "Rules::#{row['Class Name']}")
-        rules.first_or_create! name: row['Rule Name'], verb: row['Verb']
+        rule = rules.first_or_create! name: row['Rule Name'], verb: row['Verb']
+        rule.update(name: row['Rule Name'], verb: row['Verb'])
       end
       final_count = Rule.count
       Rails.logger.info "Created #{final_count - initial_count} rules"
