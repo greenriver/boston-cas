@@ -67,38 +67,43 @@ class VouchersController < ApplicationController
   end
 
   def bulk_update
-    @vouchers = []
-    voucher_params[:vouchers_attributes].each do |i,v|
-      voucher = @subprogram.vouchers.preload(:status_match).detect {|subp_voucher| subp_voucher.id == v[:id].to_i}
-      raise ActiveRecord::NotFound unless voucher
-      voucher.assign_attributes(v)
-      @vouchers << voucher
-    end
-
-    if @vouchers.all?(&:valid?)
-      run_match_engine = false
-      @vouchers.each do |voucher|
-        # check this before we save the voucher
-        changed_to_available = voucher.changing_to_available?
-        save_success = voucher.save
-        if save_success && voucher.available?
-          voucher.opportunity || voucher.create_opportunity!(available: true, available_candidate: true)
-        end
-
-        if save_success && changed_to_available
-          run_match_engine = true
-        end
-      end
-      Matching::RunEngineJob.perform_later if run_match_engine
-      # update the sub_program to reflect changes
-      @subprogram.update_summary!
-      flash[:notice] = "Vouchers updated"
+    if Voucher.advisory_lock_exists?('voucher_bulk_update')
       redirect_to action: :index
-    else # some voucher is invalid
-      flash[:alert] = 'Vouchers could not be updated.  Please correct the errors below.'
-      @vouchers_for_page = @vouchers.select{|v| ! v.status_match.present?}
-      @voucher_state = "available or unmatched"
-      render :index
+    end
+    Voucher.with_advisory_lock('voucher_bulk_update') do
+      @vouchers = []
+      voucher_params[:vouchers_attributes].each do |i,v|
+        voucher = @subprogram.vouchers.preload(:status_match).detect {|subp_voucher| subp_voucher.id == v[:id].to_i}
+        raise ActiveRecord::NotFound unless voucher
+        voucher.assign_attributes(v)
+        @vouchers << voucher
+      end
+
+      if @vouchers.all?(&:valid?)
+        run_match_engine = false
+        @vouchers.each do |voucher|
+          # check this before we save the voucher
+          changed_to_available = voucher.changing_to_available?
+          save_success = voucher.save
+          if save_success && voucher.available?
+            voucher.create_opportunity!(available: true, available_candidate: true) if voucher.opportunity.blank?
+          end
+
+          if save_success && changed_to_available
+            run_match_engine = true
+          end
+        end
+        Matching::RunEngineJob.perform_later if run_match_engine
+        # update the sub_program to reflect changes
+        @subprogram.update_summary!
+        flash[:notice] = "Vouchers updated"
+        redirect_to action: :index
+      else # some voucher is invalid
+        flash[:alert] = 'Vouchers could not be updated.  Please correct the errors below.'
+        @vouchers_for_page = @vouchers.select{|v| ! v.status_match.present?}
+        @voucher_state = "available or unmatched"
+        render :index
+      end
     end
   end
 

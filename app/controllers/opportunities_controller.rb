@@ -102,8 +102,8 @@ class OpportunitiesController < ApplicationController
         end
         voucher = Voucher.new(sub_program: sub_program, available: true, creator: @current_user)
         voucher.unit = unit
-        voucher.save
-        voucher.opportunity || voucher.create_opportunity(available: true, available_candidate: true)
+        voucher.save!
+        voucher.create_opportunity(available: true, available_candidate: true)
 
         vouchers << voucher
       end
