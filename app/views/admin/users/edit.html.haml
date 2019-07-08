@@ -2,11 +2,7 @@
 .row
   .col-sm-12
     %h1
-      Edit User Account: 
+      Edit User Account:
       = @user.name
   .col-sm-8
     = render 'form'
-
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();

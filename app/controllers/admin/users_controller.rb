@@ -125,7 +125,8 @@ module Admin
           :receive_initial_notification,
           :agency,
           role_ids: [],
-          contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role]
+          contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role],
+          requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
         )
       end
 

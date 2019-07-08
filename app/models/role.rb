@@ -38,6 +38,7 @@ class Role < ActiveRecord::Base
     [
       :can_view_all_clients,
       :can_edit_all_clients,
+      :can_edit_clients_based_on_rules,
       :can_participate_in_matches,
       :can_view_all_matches,
       :can_view_own_closed_matches,
