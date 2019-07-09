@@ -7,12 +7,14 @@
       %thead
         %tr
           %th= _('Tag')
-          %th Rank
+          %th Value
+          %th From Assessment?
       %tbody
         - @client.tags.each do |id, rank|
           - tag = Tag.find(id)
           %tr
             %td= tag&.name
-            %td= rank
+            %td.text-center= rank
+            %td.c-detailed-list__value.text-center= boolean_icon tag&.rrh_assessment_trigger
   - else
     %p.font-no-data None
