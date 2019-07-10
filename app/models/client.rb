@@ -74,6 +74,28 @@ class Client < ActiveRecord::Base
 
   validates :ssn, length: {maximum: 9}
 
+  scope :visible_by, -> (user) do
+    if user.can_view_all_clients? || user.can_edit_all_clients?
+      current_scope
+    elsif user.can_edit_clients_based_on_rules?
+      client_scope = current_scope
+      user.requirements.each do |requirement|
+        client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
+      end
+      client_scope
+    else
+      none
+    end
+  end
+
+  scope :editable_by, -> (user) do
+    if user.can_edit_all_clients? || user.can_edit_clients_based_on_rules?
+      visible_by(user)
+    else
+      none
+    end
+  end
+
   scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
   scope :not_parked, -> do
     where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
@@ -242,19 +264,11 @@ class Client < ActiveRecord::Base
   end
 
   def self.accessible_by_user(user)
-    if user.can_view_all_clients?
-      all
-    else
-      none
-    end
+    visible_by(user)
   end
 
   def accessible_by_user?(user)
-    if user.can_view_all_clients?
-      true
-    else
-      false
-    end
+    visible_by(user).exists?
   end
 
   def non_hmis?

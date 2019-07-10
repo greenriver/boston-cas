@@ -26,12 +26,8 @@ every 1.day, at: '4:00 am' do
   rake "messages:daily"
 end
 
-every 5.minutes do
+every 1.minutes do
   rake "cas:update_clients"
-end
-
-every 5.minutes do
-  rake "cas:update_project_clients_from_deidentified_clients"
 end
 
 every 1.day, at: '7:30am' do

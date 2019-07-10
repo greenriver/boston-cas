@@ -52,6 +52,7 @@ class DeidentifiedClient < NonHmisClient
       "Last Update",
     ]
   end
+
   def download_data
     [
       id,
@@ -89,5 +90,9 @@ class DeidentifiedClient < NonHmisClient
       created_at,
       updated_at,
     ]
+  end
+
+  def client_scope
+    DeidentifiedClient.all
   end
 end

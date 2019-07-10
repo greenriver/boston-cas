@@ -38,6 +38,7 @@ class Role < ActiveRecord::Base
     [
       :can_view_all_clients,
       :can_edit_all_clients,
+      :can_edit_clients_based_on_rules,
       :can_participate_in_matches,
       :can_view_all_matches,
       :can_view_own_closed_matches,
@@ -98,6 +99,7 @@ class Role < ActiveRecord::Base
       :can_add_cohorts_to_identified_clients,
       :can_manage_neighborhoods,
       :can_manage_tags,
+      :can_manage_imported_clients,
     ]
   end
 

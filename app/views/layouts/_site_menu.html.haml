@@ -11,7 +11,7 @@
   -# Inventory and HMIS related items
   - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_buildings? || current_user.can_see_non_hmis_clients?
     %ul.o-menu__group.list-unstyled
-      - if can_view_all_clients?
+      - if current_user.can_view_some_clients?
         %li.o-menu__item
           = link_to clients_path, class: 'o-menu__link' do
             All Clients
@@ -20,8 +20,11 @@
           - if can_enter_deidentified_clients? || can_manage_deidentified_clients?
             = link_to deidentified_clients_path, class: 'o-menu__link' do
               #{_('Non-HMIS Clients')}
-          - else
+          - elsif can_enter_identified_clients? || can_manage_identified_clients?
             = link_to identified_clients_path, class: 'o-menu__link' do
+              #{_('Non-HMIS Clients')}
+          - elsif can_manage_imported_clients?
+            = link_to imported_clients_path, class: 'o-menu__link' do
               #{_('Non-HMIS Clients')}
       - if can_view_contacts?
         %li.o-menu__item

@@ -123,4 +123,8 @@ class IdentifiedClient < NonHmisClient
       updated_at,
     ]
   end
+
+  def client_scope
+    IdentifiedClient.all
+  end
 end

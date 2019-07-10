@@ -83,6 +83,10 @@ FactoryGirl.define do
     name 'VI-SPDAT score of 3 or less'
     verb 'have'
   end
+  factory :vispdat_less_than_4, class: 'Rules::VispdatScoreFourOrLess' do
+    name 'VI-SPDAT score of 4 or less'
+    verb 'have'
+  end
   factory :vispdat_between_4_and_7, class: 'Rules::VispdatScoreFourToSeven' do
     name 'VI-SPDAT score of 4 to 7'
     verb 'have'

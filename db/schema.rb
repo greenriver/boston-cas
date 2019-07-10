@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190523150841) do
+ActiveRecord::Schema.define(version: 20190710155706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.float    "tie_breaker"
     t.boolean  "interested_in_set_asides",                               default: false
     t.jsonb    "tags"
+    t.string   "case_manager_contact_info"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -821,6 +822,7 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.boolean  "interested_in_set_asides",                    default: false
     t.jsonb    "default_shelter_agency_contacts"
     t.jsonb    "tags"
+    t.string   "case_manager_contact_info"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -943,6 +945,7 @@ ActiveRecord::Schema.define(version: 20190523150841) do
     t.boolean  "can_export_identified_clients",           default: false
     t.boolean  "can_manage_tags",                         default: false
     t.boolean  "can_manage_imported_clients",             default: false
+    t.boolean  "can_edit_clients_based_on_rules",         default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

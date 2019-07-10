@@ -165,6 +165,7 @@ Rails.application.routes.draw do
 
   resources :deidentified_clients
   resources :identified_clients
+  resources :imported_clients
   resources :messages, only: [:show, :index] do
     collection do
       get :poll

@@ -1,0 +1,13 @@
+= render 'breadcrumbs'
+
+%h1
+  Import Clients
+%p
+  Use this form to upload a CSV of set-aside preference forms.
+
+= simple_form_for @upload, url: imported_clients_path, method: :post do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :file, as: :file, label: false
+  .form-actions
+    = f.button :submit, value: 'Upload CSV'
