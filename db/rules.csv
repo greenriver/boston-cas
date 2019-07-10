@@ -72,3 +72,4 @@ InterestedInNeighborhood,Interested in Neighborhood (or have no preference),be
 InterestedInSetAsides,Interested in set-asides,be
 TaggedWith,Specified tag,have
 RequireInterestInNeighborhood,At least one Neighborhood preference,have
+VispdatScoreFourOrLess,VI-SPDAT score of 4 or less,have
