@@ -141,7 +141,7 @@ class ClientsController < ApplicationController
   end
 
   def some_clients_editable!
-    Client.editable_by(user).exists?
+    Client.editable_by(current_user).exists?
   end
 
 end

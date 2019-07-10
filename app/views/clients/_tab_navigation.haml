@@ -10,7 +10,7 @@
     %li.nav-item.active{role: 'presentation'}
       %a.nav-link{href: '#'}
         Active Matches
-  - else
+  - elsif can_view_all_matches?
     %li.nav-item
       = link_to 'Active Matches', client_matches_path(client_id: client_id), class: 'nav-link'
 
@@ -18,7 +18,7 @@
     %li.nav-item.active{role: 'presentation'}
       %a.nav-link{href: '#'}
         Closed Matches
-  - else
+  - elsif can_view_all_matches?
     %li.nav-item
       = link_to 'Closed Matches', client_closed_matches_path(client_id: client_id), class: 'nav-link'
 

@@ -4,5 +4,6 @@
       .icon-checkmark
     .c-tag__content
       %span.c-tag__label=@client.available_text
-      .c-tag__action
-        = render 'park_client_form'
+      - if can_reject_matches?
+        .c-tag__action
+          = render 'park_client_form'

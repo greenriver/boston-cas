@@ -6,8 +6,8 @@
 
 class QualifiedOpportunitiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_can_view_all_clients!
-  before_action :require_can_edit_all_clients!, only: [:update]
+  before_action :some_clients_viewable!
+  before_action :some_clients_editable!, only: [:update]
   before_action :set_client
   before_action :set_opportunity, only: [:update]
 
@@ -35,8 +35,8 @@ class QualifiedOpportunitiesController < ApplicationController
       client: @client.prepare_for_archive,
     }
     match = @client.candidate_matches.create(
-      opportunity: @opportunity, 
-      client: @client, 
+      opportunity: @opportunity,
+      client: @client,
       universe_state: @universe_state
     )
     match.activate!
@@ -44,7 +44,7 @@ class QualifiedOpportunitiesController < ApplicationController
   end
 
   def set_client
-    @client = Client.find params[:client_id].to_i
+    @client = client_scope.find params[:client_id].to_i
   end
 
   def set_opportunity
@@ -54,5 +54,17 @@ class QualifiedOpportunitiesController < ApplicationController
   def opportunity_scope
     Opportunity.available_for_poaching.joins(sub_program: :program).
       order(Program.arel_table[:name].asc, SubProgram.arel_table[:name].asc, id: :asc)
+  end
+
+  def client_scope
+    Client.accessible_by_user(current_user)
+  end
+
+  def some_clients_viewable!
+    client_scope.exists?
+  end
+
+  def some_clients_editable!
+    Client.editable_by(current_user).exists?
   end
 end
