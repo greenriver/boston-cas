@@ -1,8 +1,9 @@
-%section.c-card.c-card--flush
-  %h3 Notes
-  .c-card__content
-    - if @client_notes.any?
-      - @client_notes.order(created_at: :desc).each do |client_note|
-        = render 'client_note', note: client_note
-      %hr.c-card__rule
-    = render 'client_note_form'
+- if can_edit_all_clients?
+  %section.c-card.c-card--flush
+    %h3 Notes
+    .c-card__content
+      - if @client_notes.any?
+        - @client_notes.order(created_at: :desc).each do |client_note|
+          = render 'client_note', note: client_note
+        %hr.c-card__rule
+      = render 'client_note_form'

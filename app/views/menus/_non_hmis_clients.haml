@@ -5,3 +5,6 @@
   -if can_enter_identified_clients?
     %li.nav-item{role: "presentation", class: ('active' if current_page?(identified_clients_path))}
       = link_to 'Identified Clients', identified_clients_path, class: 'nav-link'
+  -if can_manage_imported_clients?
+    %li.nav-item{role: "presentation", class: ('active' if current_page?(imported_clients_path))}
+      = link_to 'Imported Clients', imported_clients_path, class: 'nav-link'

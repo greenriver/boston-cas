@@ -6,8 +6,8 @@
 
 class ClientsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_can_view_all_clients!
-  before_action :require_can_edit_all_clients!, only: [:update, :destroy]
+  before_action :some_clients_viewable!
+  before_action :some_clients_editable!, only: [:update, :destroy]
   before_action :set_client, only: [:show, :edit, :update, :destroy, :unavailable]
 
   helper_method :sort_column, :sort_direction
@@ -134,6 +134,14 @@ class ClientsController < ApplicationController
 
   def query_string
     "%#{@query}%"
+  end
+
+  def some_clients_viewable!
+    client_scope.exists?
+  end
+
+  def some_clients_editable!
+    Client.editable_by(current_user).exists?
   end
 
 end

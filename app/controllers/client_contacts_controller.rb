@@ -76,4 +76,9 @@ class ClientContactsController < ApplicationController
       ClientContact
     end
 
+    def hsa_can_edit_contacts?
+      false
+    end
+    helper_method :hsa_can_edit_contacts?
+
 end

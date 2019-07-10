@@ -1,0 +1,97 @@
+= f.error_notification
+%h3 Contact Information
+%p
+  %b Phone:
+  %br
+  = @non_hmis_client.phone_number
+%p
+  %b Email:
+  %br
+  = @non_hmis_client.email
+
+%h3 Case Manager
+%p
+  = @non_hmis_client.case_manager_contact_info
+%p
+  = @non_hmis_client.rrh_assessment_contact_info
+
+%h3 Housing Status
+%p
+  %b Current Status:
+  %br
+  = @non_hmis_client.set_asides_housing_status
+%p
+  %b Days Homeless:
+  %br
+  = @non_hmis_client.days_homeless_in_the_last_three_years
+- if @non_hmis_client.shelter_name.present?
+  %p
+    = "(#{@non_hmis_client.shelter_name} since #{@non_hmis_client.entry_date})"
+%p
+  %b Resident?
+  %br
+  = yes_no(@non_hmis_client.set_asides_resident)
+%p
+  %b Interested in Set-Asides?
+  %br
+  = yes_no(@non_hmis_client.interested_in_set_asides)
+  - if @non_hmis_client.interested_in_set_asides
+    = ", applied #{@non_hmis_client.imported_timestamp}"
+
+%h3 Client Information
+%p
+  - if @non_hmis_client.have_tenant_voucher
+    = "Client has tenant-based housing choice voucher administered by #{@non_hmis_client.voucher_agency}"
+    %br
+  - if @non_hmis_client.veteran
+    = "Client is a veteran"
+%p
+  = "Annual income is #{number_to_currency(@non_hmis_client.income_total_monthly * 12)}"
+- if @non_hmis_client.fifty_five_plus && ! @non_hmis_client.sixty_two_plus
+  %p
+    Client is 55+
+- if @non_hmis_client.sixty_two_plus
+  %p
+    Client is 62+
+- if @non_hmis_client.disabling_condition
+  %p
+    Client has disabling condition.
+- if @non_hmis_client.requires_wheelchair_accessibility
+  %p
+    Wheelchair accessibility is required.
+- if @non_hmis_client.requires_elevator_access
+  %p
+    Elevator access is required.
+- if @non_hmis_client.family_member
+  %p
+    = "Client is part of a family with children: #{@non_hmis_client.children_info}"
+  %p
+    - if @non_hmis_client.studio_ok
+      Studio apartment is OK.
+      %br
+    - if @non_hmis_client.one_br_ok
+      One BR apartment is OK.
+- else
+  %p
+    - if @non_hmis_client.sro_ok
+      SRO is OK.
+      %br
+    - if @non_hmis_client.studio_ok
+      Studio apartment is OK.
+- if @non_hmis_client.required_number_of_bedrooms > 1
+  %p
+    = "Needs #{@non_hmis_client.required_number_of_bedrooms} bedrooms"
+
+%h4 Neighborhood Interests
+- neighborhood_hash = @neighborhoods.to_h
+%ul.list-unstyled
+  - @non_hmis_client.neighborhood_interests.each do |interest|
+    %li= neighborhood_hash[interest]
+%hr
+.row
+  .col-sm-6
+    .form-inputs
+      = f.input :warehouse_client_id, label: 'Warehouse Client ID'
+      = f.input :available
+    .form-actions
+      = f.button :submit, "Submit", class: 'btn btn-primary'

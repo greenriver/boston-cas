@@ -91,6 +91,11 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def populate_project_client project_client
+    set_project_client_fields project_client
+    project_client.save
+  end
+
+  def set_project_client_fields project_client
     project_client.first_name = first_name
     project_client.last_name = last_name
     project_client.active_cohort_ids = active_cohort_ids
@@ -102,6 +107,10 @@ class NonHmisClient < ActiveRecord::Base
     project_client.days_homeless = days_homeless_in_the_last_three_years
     project_client.date_days_homeless_verified = date_days_homeless_verified
     project_client.who_verified_days_homeless = who_verified_days_homeless
+
+    project_client.cellphone =  phone_number
+    project_client.email = email
+    project_client.case_manager_contact_info = case_manager_contact_info
 
     project_client.veteran_status = 1 if veteran
     project_client.rrh_desired = rrh_desired
@@ -131,7 +140,6 @@ class NonHmisClient < ActiveRecord::Base
 
     project_client.sync_with_cas = self.available
     project_client.needs_update = true
-    project_client.save
   end
 
   def log message
@@ -153,8 +161,9 @@ class NonHmisClient < ActiveRecord::Base
       where.not(id_in_data_source: NonHmisClient.select(:id)).
       delete_all
 
-    # update or add for all NonHmisClients
-    NonHmisClient.all.find_each do |client|
+
+    # update or add clients
+    client_scope.find_each do |client|
       project_client = ProjectClient.where(
         data_source_id: DataSource.non_hmis.pluck(:id),
         id_in_data_source: client.id
@@ -162,7 +171,15 @@ class NonHmisClient < ActiveRecord::Base
       client.populate_project_client(project_client)
     end
 
-    log "Updated #{NonHmisClient.count} ProjectClients from NonHmisClient"
+    log "Updated #{client_scope.count} ProjectClients from #{self.class.name}"
+  end
+
+  def client_scope
+    raise NotImplementedError
+  end
+
+  def self.ds_identifier
+    'Deidentified'
   end
 
   def download_data

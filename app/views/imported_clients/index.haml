@@ -1,0 +1,17 @@
+- title = _('Imported Clients')
+- content_for :title, title
+.d-flex
+  %h1= content_for :title
+  - @prompt = "Search Clients..."
+.row
+  .col-sm-4
+    = render 'clients/search_form'
+  .col-sm-6.filter-sort__filter.d-flex
+    = render 'filter'
+    = render 'clients/sort', sort_options: sort_options
+  .col-sm-2.text-right
+    = link_to new_imported_client_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
+      %span.icon-upload2
+      Upload CSV
+= render 'menus/non_hmis_clients'
+= render 'table'

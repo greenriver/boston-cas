@@ -1,0 +1,5 @@
+= render 'breadcrumbs'
+
+%h1 Edit #{@non_hmis_client.first_name} #{@non_hmis_client.last_name}
+= simple_form_for @non_hmis_client, url: imported_client_path(@non_hmis_client.id) do |f|
+  = render 'form', f: f
