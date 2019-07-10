@@ -21,3 +21,7 @@
     .c-card__content-block.col-md-12.col-lg-12
       %h5 #{_('Shelter Agency Contacts')} from HMIS
       %span.c-card__content-block.col-md-12.col-lg-12-text= @client.project_client.default_shelter_agency_contacts.join(', ')
+  - if @client.case_manager_contact_info
+    .c-card__content-block.col-md-12.col-lg-12
+      %h5 Case Manager Contact
+      %span.c-card__content-block.col-md-12.col-lg-12-text= @client.case_manager_contact_info

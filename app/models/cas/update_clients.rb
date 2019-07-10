@@ -191,6 +191,7 @@ module Cas
         :neighborhood_interests,
         :interested_in_set_asides,
         :tags,
+        :case_manager_contact_info,
       ]
     end
 

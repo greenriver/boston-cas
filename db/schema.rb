@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190708181554) do
+ActiveRecord::Schema.define(version: 20190710155706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20190708181554) do
     t.float    "tie_breaker"
     t.boolean  "interested_in_set_asides",                               default: false
     t.jsonb    "tags"
+    t.string   "case_manager_contact_info"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -821,6 +822,7 @@ ActiveRecord::Schema.define(version: 20190708181554) do
     t.boolean  "interested_in_set_asides",                    default: false
     t.jsonb    "default_shelter_agency_contacts"
     t.jsonb    "tags"
+    t.string   "case_manager_contact_info"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
@@ -882,7 +884,6 @@ ActiveRecord::Schema.define(version: 20190708181554) do
     t.datetime "updated_at",                                              null: false
     t.boolean  "can_view_all_clients",                    default: false
     t.boolean  "can_edit_all_clients",                    default: false
-    t.boolean  "can_edit_clients_based_on_rules",         default: false
     t.boolean  "can_participate_in_matches",              default: false
     t.boolean  "can_view_all_matches",                    default: false
     t.boolean  "can_view_own_closed_matches",             default: false
@@ -910,9 +911,7 @@ ActiveRecord::Schema.define(version: 20190708181554) do
     t.boolean  "can_view_vouchers",                       default: false
     t.boolean  "can_edit_vouchers",                       default: false
     t.boolean  "can_view_programs",                       default: false
-    t.boolean  "can_view_assigned_programs",              default: false
     t.boolean  "can_edit_programs",                       default: false
-    t.boolean  "can_edit_assigned_programs",              default: false
     t.boolean  "can_view_opportunities",                  default: false
     t.boolean  "can_edit_opportunities",                  default: false
     t.boolean  "can_reissue_notifications",               default: false
@@ -935,15 +934,18 @@ ActiveRecord::Schema.define(version: 20190708181554) do
     t.boolean  "can_delete_client_notes",                 default: false
     t.boolean  "can_enter_deidentified_clients",          default: false
     t.boolean  "can_manage_deidentified_clients",         default: false
-    t.boolean  "can_export_deidentified_clients",         default: false
     t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
-    t.boolean  "can_export_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
     t.boolean  "can_manage_neighborhoods",                default: false
+    t.boolean  "can_view_assigned_programs",              default: false
+    t.boolean  "can_edit_assigned_programs",              default: false
+    t.boolean  "can_export_deidentified_clients",         default: false
+    t.boolean  "can_export_identified_clients",           default: false
     t.boolean  "can_manage_tags",                         default: false
     t.boolean  "can_manage_imported_clients",             default: false
+    t.boolean  "can_edit_clients_based_on_rules",         default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree

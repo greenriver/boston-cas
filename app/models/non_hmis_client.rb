@@ -110,6 +110,7 @@ class NonHmisClient < ActiveRecord::Base
 
     project_client.cellphone =  phone_number
     project_client.email = email
+    project_client.case_manager_contact_info = case_manager_contact_info
 
     project_client.veteran_status = 1 if veteran
     project_client.rrh_desired = rrh_desired
