@@ -268,7 +268,7 @@ class Client < ActiveRecord::Base
   end
 
   def accessible_by_user?(user)
-    visible_by(user).exists?
+    self.class.where(id: id).visible_by(user).exists?
   end
 
   def non_hmis?
