@@ -88,7 +88,7 @@ gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 
 group :development do
-  gem 'spring'
+  # gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'

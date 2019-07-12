@@ -95,21 +95,27 @@ class MatchDecisionsController < ApplicationController
       end
       @decision.record_action_event! contact: current_contact
       @decision.record_updated_unit! unit_id: decision_params[:unit_id], contact_id: current_contact.id
-      @decision.run_status_callback!
+
+      # If we've been asked to park the client do so.  This will set the match status to canceled
+      # Don't run the status callbacks unless we aren't parking as they will
+      # re-enable the client for matching
+      if can_reject_matches? && decision_params[:prevent_matching_until].present?
+        if decision_params[:prevent_matching_until].to_date > Date.today
+          client = @match.client
+          client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
+          client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match)
+        end
+      else
+        @decision.run_status_callback!
+      end
+
+      # Note this was done on-behalf of someone else
       if @decision.contact_actor_type.present? && decision_params[:status] != "back"
         unless current_contact.in?(@match.send(@decision.contact_actor_type))
           @decision.notify_contact_of_action_taken_on_behalf_of contact: current_contact
         end
       end
       flash[:notice] = "Thank you, your response has been entered." unless request.xhr?
-      # If we've been asked to park the client
-      if can_reject_matches? && decision_params[:prevent_matching_until].present?
-        if decision_params[:prevent_matching_until].to_date > Date.today
-          client = @match.client
-          client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
-          client.unavailable(permanent: false, contact_id: current_contact.id)
-        end
-      end
       redirect_to access_context.match_path(@match, redirect: "true")
 
     else
