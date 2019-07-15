@@ -52,7 +52,7 @@ We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to
 - Amazon Web Services provides cloud hosting services. Configured via various env variables.  Services used outside of hosting are S3 and Glacier.
   Terms: https://aws.amazon.com/service-terms/
 
-- ExceptionNotification can send exceptions to a slack channel. Configuration is done via env `EXCEPTION_WEBHOOK*`
+- Exceptions can be sent to a slack channel. Configuration is done via env `EXCEPTION_WEBHOOK*`
 
 
 ### Developer Prerequisites
