@@ -212,7 +212,19 @@ class Client < ActiveRecord::Base
     elsif contact.user_can_view_all_clients?
       full_name
     else
-      "(name withheld)"
+      if project_client.non_hmis_client_identifier.blank?
+        '(name withheld)'
+      else
+        project_client.client_identifier
+      end
+    end
+  end
+
+  def client_identifier_label contact
+    if project_client.non_hmis_client_identifier.present? && !contact.user_can_view_all_clients?
+      'Client Identifier'
+    else
+      'Client Name'
     end
   end
 
