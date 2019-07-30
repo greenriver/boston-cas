@@ -21,7 +21,7 @@ namespace :cas do
       # DataSource = 'Imported'
       ImportedClient.new.update_project_clients_from_non_hmis_clients
     end
-
+    exit if Client.advisory_lock_exists?(:update_clients)
     Cas::UpdateClients.new.run!
   end
 
