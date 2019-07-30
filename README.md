@@ -47,7 +47,15 @@ We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to
 ##### Editing Program Roles
 ![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/rules-editing.png)
 
-### Developer Prequisites
+## Third-party Service Dependencies
+
+- Amazon Web Services provides cloud hosting services. Configured via various env variables.  Services used outside of hosting are S3 and Glacier.
+  Terms: https://aws.amazon.com/service-terms/
+
+- Exceptions can be sent to a slack channel. Configuration is done via env `EXCEPTION_WEBHOOK*`
+
+
+### Developer Prerequisites
 
 If you are unfamilar with contributing to open source projects on github you may first want to read some of the guides at:  https://guides.github.com/
 
