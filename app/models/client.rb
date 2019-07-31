@@ -215,7 +215,7 @@ class Client < ActiveRecord::Base
       if project_client.non_hmis_client_identifier.blank?
         '(name withheld)'
       else
-        project_client.client_identifier
+        project_client.non_hmis_client_identifier
       end
     end
   end
