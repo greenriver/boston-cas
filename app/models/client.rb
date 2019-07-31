@@ -221,7 +221,7 @@ class Client < ActiveRecord::Base
   end
 
   def client_identifier_label contact
-    if project_client.non_hmis_client_identifier.present? && !contact.user_can_view_all_clients?
+    if project_client&.non_hmis_client_identifier.present? && !contact.user_can_view_all_clients?
       'Client Identifier'
     else
       'Client Name'
