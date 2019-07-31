@@ -98,6 +98,7 @@ class NonHmisClient < ActiveRecord::Base
   def set_project_client_fields project_client
     project_client.first_name = first_name
     project_client.last_name = last_name
+    project_client.non_hmis_client_identifier = client_identifier
     project_client.active_cohort_ids = active_cohort_ids
     project_client.assessment_score = assessment_score || 0
     project_client.date_of_birth = date_of_birth

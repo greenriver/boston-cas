@@ -270,7 +270,11 @@ class ClientOpportunityMatch < ActiveRecord::Base
     elsif show_client_info_to?(contact)
       client.full_name
     else
-      "(name withheld — #{id})"
+      if client&.project_client&.non_hmis_client_identifier.blank?
+        "(name withheld — #{id})"
+      else
+        client&.project_client&.non_hmis_client_identifier
+      end
     end
   end
 

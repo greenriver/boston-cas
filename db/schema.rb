@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190710155706) do
+ActiveRecord::Schema.define(version: 20190726125407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -823,6 +823,7 @@ ActiveRecord::Schema.define(version: 20190710155706) do
     t.jsonb    "default_shelter_agency_contacts"
     t.jsonb    "tags"
     t.string   "case_manager_contact_info"
+    t.string   "non_hmis_client_identifier"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree

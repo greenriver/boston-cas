@@ -11,12 +11,14 @@
             %th.text-center Other Active Matches
             - if can_activate_matches?
               %th.text-center Activate Match?
+            - else
+              %th
         %tbody
           - @matches.each do |client|
             - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?
             - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?) || confidential_opportunity) && ! show_confidential_names?
             - name = client.client_name_for_contact current_user.contact, hidden: hide_client_name
-            
+
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
                 = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
@@ -33,6 +35,8 @@
                     = render 'activate_button', client: client
                   - else
                     = render 'activate_checkbox', client: client, f: f
+                - else
+                  %td
 
       - # %p=paginate @matches
       - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
