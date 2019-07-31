@@ -81,7 +81,17 @@ class ActiveMatchesController < MatchListBaseController
       includes(:client).
       joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
       order(sort).
-      preload(:client, :opportunity, :decisions).
+      preload(
+        :opportunity,
+        :decisions,
+        :match_route,
+        :sub_program,
+        :program,
+        client: [
+          :project_client,
+          :active_matches,
+        ]
+      ).
       page(params[:page]).per(25)
 
     @column = sort_column

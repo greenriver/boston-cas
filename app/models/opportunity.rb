@@ -19,9 +19,6 @@ class Opportunity < ActiveRecord::Base
 
   has_one :sub_program, through: :voucher
 
-  #has_one :active_match, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
-  has_many :active_matches, -> {where(active: true, closed: false)}, class_name: 'ClientOpportunityMatch'
-
   has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
   # active or successful
   has_one :status_match, -> {where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success')))}, class_name: 'ClientOpportunityMatch'

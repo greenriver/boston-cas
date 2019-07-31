@@ -35,7 +35,12 @@ module SubjectForMatches
 
   included do
     has_many :client_opportunity_matches
-    has_many :candidate_matches, -> {where(selected: false, closed: false)}, class_name: "ClientOpportunityMatch"
+    has_many :candidate_matches, -> do
+      where(selected: false, closed: false)
+    end, class_name: "ClientOpportunityMatch"
+    has_many :active_matches, -> do
+      where(active: true, closed: false)
+    end, class_name: "ClientOpportunityMatch"
     has_many :rejected_matches
 
     def matching_co_candidates_for_max(co_candidates)

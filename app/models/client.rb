@@ -342,12 +342,14 @@ class Client < ActiveRecord::Base
   #   client_opportunity_matches.active.first
   # end
 
-  def active_matches
-    client_opportunity_matches.active
-  end
+  # Deprecated, moved to SubjectForMatches
+  # def active_matches
+  #   client_opportunity_matches.active
+  # end
 
+  # NOTE: this uses any? instead of exists? so that data can pre pre-loaded in batches
   def active_in_match?
-    client_opportunity_matches.active.exists?
+    active_matches.any?
   end
 
   def available_as_candidate_for_any_route?

@@ -57,7 +57,7 @@
                   = match.opportunity_details.program_name
               - else
                 = match.opportunity_details.program_name
-              
+
         %li
           %dl
             %dt Sub-Program
@@ -72,6 +72,7 @@
       - if  match_type != 'opportunity' && can_see_alternate_matches?
         = link_to opportunity_matches_path(match.opportunity) do
           #{match.opportunity.matching_clients.count} Alternate Matches
+          -# Alternate Matches
       - if match.shelter_expiration? && match.current_decision&.expires?
         - if match.shelter_expiration < Date.today
           .c-tag__wrapper.align-items-center

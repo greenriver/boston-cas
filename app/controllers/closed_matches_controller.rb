@@ -65,13 +65,23 @@ class ClosedMatchesController < MatchListBaseController
       @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
     end
 
-    @matches = @matches
-      .references(:client)
-      .includes(:client)
-      .joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision")
-      .order(sort)
-      .preload(:client, :opportunity, :decisions)
-      .page(params[:page]).per(25)
+    @matches = @matches.
+      references(:client).
+      includes(:client).
+      joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
+      order(sort).
+      preload(
+        :opportunity,
+        :decisions,
+        :match_route,
+        :sub_program,
+        :program,
+        client: [
+          :project_client,
+          :active_matches,
+        ]
+      ).
+      page(params[:page]).per(25)
 
     @column = sort_column
     @direction = sort_direction
