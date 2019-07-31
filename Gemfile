@@ -96,7 +96,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'puma'
 
-  # gem 'rack-mini-profiler'
+  gem 'rack-mini-profiler', require: false
   gem 'test-unit', '~> 3.0', require: false
 
   gem 'rails-erd'

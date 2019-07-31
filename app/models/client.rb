@@ -212,7 +212,19 @@ class Client < ActiveRecord::Base
     elsif contact.user_can_view_all_clients?
       full_name
     else
-      "(name withheld)"
+      if project_client.non_hmis_client_identifier.blank?
+        '(name withheld)'
+      else
+        project_client.non_hmis_client_identifier
+      end
+    end
+  end
+
+  def client_identifier_label contact
+    if project_client&.non_hmis_client_identifier.present? && !contact.user_can_view_all_clients?
+      'Client Identifier'
+    else
+      'Client Name'
     end
   end
 
@@ -330,12 +342,14 @@ class Client < ActiveRecord::Base
   #   client_opportunity_matches.active.first
   # end
 
-  def active_matches
-    client_opportunity_matches.active
-  end
+  # Deprecated, moved to SubjectForMatches
+  # def active_matches
+  #   client_opportunity_matches.active
+  # end
 
+  # NOTE: this uses any? instead of exists? so that data can pre pre-loaded in batches
   def active_in_match?
-    client_opportunity_matches.active.exists?
+    active_matches.any?
   end
 
   def available_as_candidate_for_any_route?
