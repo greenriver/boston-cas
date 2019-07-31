@@ -9,6 +9,9 @@
     - match_decisions.each do |decision|
       - decision_status = decision.incomplete_active_done?
       - final = types[decision.type].to_i == types.length.to_i
+      -# if a step is canceled, but not the final step, don't show the red 'X'
+      - if decision_status == :canceled && !final
+        - decision_status = :done
       %li{class: "c-stepped-progress__step c-stepped-progress__step--#{decision_status} #{ 'c-stepped-progress__step--final' if final}"}
         .sr-only
           = decision.step_name
