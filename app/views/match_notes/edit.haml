@@ -1,7 +1,7 @@
 = content_for :modal_title do
   Edit Note
 
-= simple_form_for @match_note, url: match_note_path(@match, @match_note, match_note_referrer_params), as: :match_note, html: {data: {submits_to_pjax_modal: request.xhr?}} do |form|
+= simple_form_for @match_note, url: match_note_path(@match, @match_note, match_note_referrer_params), as: :match_note do |form|
   = form.input :note, as: :text, input_html: {rows: 4}, label: false
   - if @match.can_create_administrative_note?(access_context.current_contact)
     = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
