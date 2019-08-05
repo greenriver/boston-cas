@@ -3,8 +3,14 @@ require 'rails_helper'
 RSpec.describe MatchDecisionsController, type: :controller do
   let(:admin) { create(:user) }
   let(:admin_role) { create :admin_role }
+  let(:priority) { create :priority_vispdat_priority }
+  let(:route) { create :default_route, match_prioritization: priority }
+  let(:program) { create :program, match_route: route }
+  let(:sub_program) { create :sub_program, program: program }
+  let(:voucher) { create :voucher, sub_program: sub_program }
+  let(:opportunity) { create :opportunity, voucher: voucher }
   let(:decision) { create :match_decisions_match_recommendation_dnd_staff}
-  let(:match) { create :client_opportunity_match }
+  let(:match) { create :client_opportunity_match, opportunity: opportunity }
 
   before do
     authenticate admin
