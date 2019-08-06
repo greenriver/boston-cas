@@ -16,6 +16,7 @@ class Tag < ActiveRecord::Base
   end
 
   def on_cohort?
+    return false unless id.present?
     Warehouse::Cohort.active.where(tag_id: id).exists?
   end
 

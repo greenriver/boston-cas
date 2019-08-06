@@ -1,5 +1,6 @@
 .row
   .col-sm-8
+    = render 'usage'
     = simple_form_for @tag do |f|
       = f.error_notification
       .form-inputs
@@ -8,7 +9,7 @@
           %p.o-color--warning.icon-warning
             Tag is associated with a cohort in the Warehouse
         - if ! @tag.on_cohort? || @tag.rrh_assessment_trigger
-          = f.input :rrh_assessment_trigger, label: _('Should this tag be added to anyone with an assessment score?')
+          = f.input :rrh_assessment_trigger, label: _('Should this tag be added to anyone with an assessment score?'), hint: 'Choosing this option will prevent using this tag on a cohort.'
 
       .form_actions
       = f.button :submit
