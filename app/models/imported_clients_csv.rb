@@ -2,34 +2,38 @@ class ImportedClientsCsv < ActiveRecord::Base
 
   mount_uploader :file, ImportedClientsCsvFileUploader
 
-  FORM_TIMESTAMP = 0
-  HOUSING_STATUS = 3
-  RESIDENT = 4
-  DAYS_HOMELESS = 5
-  SHELTER_NAME = 7
-  ENTRY_DATE = 8
-  CASE_MANAGER_NAME = 9
-  CASE_MANAGER_PHONE = 10
-  CASE_MANAGER_EMAIL = 11
-  HOH_FIRST_NAME = 13
-  HOH_LAST_NAME = 14
-  HOH_PHONE = 15
-  HOH_EMAIL = 16
-  ANNUAL_INCOME = 17
-  VOUCHER = 18
-  VOUCHER_AGENCY = 19
-  CHILDREN = 20
-  FAMILY_STUDIO = 21
-  FAMILY_ONE_BR = 22
-  SRO = 23
-  INDIVIDUAL_STUDIO = 24
-  BEDROOMS = 25
-  ACCESSIBILITY_NEEDS = 26
-  INTERESTED_IN_DISABLED_HOUSING = 27
-  FIFTY_FIVE = 28
-  SIXTY_TWO = 29
-  VETERAN = 30
-  NEIGHBORHOODS = 31
+  FORM_TIMESTAMP = 0 # A
+  USER_EMAIL = 1 # B
+  # HOUSEHOLD_ACKNOWLEDGEMENT = 2 # C - not in use
+  HOUSING_STATUS = 3 # D
+  DAYS_HOMELESS = 4 # E
+  # HOMELESS_CERTIFICATION = 5 # F - not in use
+  SHELTER_NAME = 6 # G
+  ENTRY_DATE = 7 # H
+  CASE_MANAGER_NAME = 8 # I
+  CASE_MANAGER_PHONE = 9 # J
+  # ADDITIONAL_ACKNOWLEDGEMENT = 10 # K - not in use
+  HOH_FIRST_NAME = 11 # L
+  HOH_LAST_NAME = 12 # M
+  HOH_PHONE = 13 # N
+  HOH_EMAIL = 14 # O
+  FAMILY_STUDIO = 15 # P
+  CHILDREN = 16 # Q
+  FAMILY_ONE_BR = 17 # R
+  SRO = 18 # S
+  INDIVIDUAL_STUDIO = 19 # T
+  ACCESSIBILITY_NEEDS = 20 # U
+  INTERESTED_IN_DISABLED_HOUSING = 21 # V
+  FIFTY_FIVE = 22 # W
+  SIXTY_TWO = 23 # X
+  VETERAN = 24 # Y
+  NEIGHBORHOODS = 25 # Z
+  CASE_MANAGER_EMAIL = 26 # AA
+  RESIDENT = 27 # AB
+  BEDROOMS = 28 # AC
+  ANNUAL_INCOME = 29 # AD
+  VOUCHER = 30 # AE
+  VOUCHER_AGENCY = 31 # AF
 
   attr_reader :added, :touched, :problems, :clients
 
@@ -192,6 +196,22 @@ class ImportedClientsCsv < ActiveRecord::Base
   end
 
   def check_header
-    content.lines.first == "\"Timestamp\",\"Username\",\"I certify that the below mentioned household fits each part of the Boston Homeless Set Aside Preference definition (below) to the best of my knowledge. I understand that as case manager I must obtain documentation of Homeless Status and retain that documentation in a client file to be provided upon request. I certify this by typing my name below.\",\"Household is currently: \",\"\",\"Cumulative number of days in the last three years that the household has met the definition above and is documented according to the documentation requirements below. This number cannot exceed 1096. \",\"I have obtained documentation according to the documentation requirements described above. I acknowledge that the household has voluntarily shown interest and willingness to participate in the Boston Homeless Set Aside Preference and move to a new apartment. I certify this by typing my name below. \",\"Name of shelter where household resides. If household is unsheltered, living on the street, please state this.\",\"Date household entered above mentioned shelter. If household is unsheltered, living on the street, please enter the date household began living on the street. \",\"Case manager/shelter provider contact name \",\"Case manager/shelter provider contact phone number \",\"Case manager/shelter provider email address\",\"I acknowledge the above statement by typing my name below. \",\"First Name of head of household \",\"Last Name of head of household \",\"Head of household phone number\",\"Head of household email address\",\"What is the estimated annual income for your household next year?\",\"Do you currently have a tenant-based housing choice voucher? \",\"If you have a tenant-based housing choice voucher, what is the administering housing authority/agency?\",\"What is the age and gender of each of the children in the household? (this information may be used by some housing providers to determine the number of bedrooms your household may receive priority for)\",\"If you are a family with children, would you consider a studio?\",\"If you are a family with children, would you consider a one bedroom?\",\"If you are an individual, would you consider living in an SRO (single room occupancy)?\",\"If you are an individual, would you consider living in a studio?\",\"If you need a bedroom size larger than SRO, studio, or 1 bedroom, please choose a size below. \",\"Are you seeking any of the following due to a disability?  If yes, you may have to provide documentation of disability - related need.)\",\"Are you interested in applying for housing units targeted for persons with disabilities?  (the definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)\",\"Are you 55 years of age or older?\",\"Are you 62 years of age or older?\",\"Are you a veteran?\",\"Check off all the Boston neighborhoods you are willing to live in. Since these units are rare, the more neighborhoods you are willing to live in helps your chances of being match to a unit. \"\n"
+    incoming = CSV.parse(content.lines.first).flatten.map{|m| m&.strip}
+    expected = CSV.parse(expected_header).flatten.map{|m| m&.strip}
+    # You can update the header string with File.read('path/to/file.csv').lines.first
+    # Using CSV parse in case the quoting styles differ
+    if incoming == expected
+      return true
+    else
+
+      Rails.logger.error (incoming - expected).inspect
+      Rails.logger.error (expected - incoming).inspect
+    end
+    return false
+  end
+
+  def expected_header
+    "Timestamp,Email Address,I certify that the below mentioned household fits each part of the Boston Homeless Set Aside Preference definition (below) to the best of my knowledge. I understand that as case manager I must obtain documentation of Homeless Status and retain that documentation in a client file to be provided upon request. I certify this by typing my name below.,Household is currently: ,Cumulative number of days in the last three years that the household has met the definition above and is documented according to the documentation requirements below. This number cannot exceed 1096. ,I have obtained documentation according to the documentation requirements described above. I acknowledge that the household has voluntarily shown interest and willingness to participate in the Boston Homeless Set Aside Preference and move to a new apartment. I certify this by typing my name below. ,\"Name of shelter where household resides. If household is unsheltered, living on the street, please state this.\",\"Date household entered above mentioned shelter. If household is unsheltered, living on the street, please enter the date household began living on the street. \",Case manager/shelter provider contact name ,Case manager/shelter provider contact phone number ,I acknowledge the above statement by typing my name below. ,First Name (head of household),Last Name (head of household),Head of household phone number,Head of household email address,\"If you are a family with children, would you consider a studio?\",What is the age and gender of each of the children in the household? (this information may be used by some housing providers to determine the number of bedrooms your household may receive priority for),\"If you are a family with children, would you consider a one bedroom?\",\"If you are an individual, would you consider living in an SRO (single room occupancy)?\",\"If you are an individual, would you consider living in a studio?\",\"Are you seeking any of the following due to a disability?  If yes, you may have to provide documentation of disability - related need.\",\"Are you interested in applying for housing units targeted for persons with disabilities? (the definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)\",Are you 55 years of age or older?,Are you 62 years of age or older?,Are you a veteran?,\"Check off all the Boston neighborhoods you are willing to live in. Since these units are rare, the more neighborhoods you are willing to live in helps your chances of being match to a unit. \",Case manager/shelter provider email address,,\"If you need a bedroom size larger than SRO, studio, or 1 bedroom, please choose a size below. \",What is the estimated annual income for your household next year?,Do you currently have a tenant-based housing choice voucher? ,\"If you have a tenant-based housing choice voucher, what is the administering housing authority/agency?\",Housed?,Notes,Allston / Brighton,Back Bay / Fenway / South End,Charlestown,Dorchester - 02121,Dorchester - 02122,Dorchester - 02124,Dorchester - 02125,Downtown / Beacon Hill / North End / Chinatown / Gov Center / West End,East Boston,Hyde Park,Jamaica Plain,Mattapan,Mission Hill,Roslindale,Roxbury - 02119,South Boston / Seaport,West Roxbury\r\n"
   end
 end
+
