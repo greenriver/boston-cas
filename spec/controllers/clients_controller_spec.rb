@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe ClientsController, type: :controller do
-  let(:admin) { create(:user) }
-  let(:admin_role) { create :admin_role }
-  let(:decision) { create :match_decisions_match_recommendation_dnd_staff}
-  let(:priority) { create :priority_vispdat_priority }
-  let(:route) { create :default_route, match_prioritization: priority }
-  let(:program) { create :program, match_route: route }
-  let(:sub_program) { create :sub_program, program: program }
-  let(:voucher) { create :voucher, sub_program: sub_program }
-  let(:opportunity) { create :opportunity, voucher: voucher }
-  let(:match) { create :client_opportunity_match, opportunity: opportunity }
+  let!(:admin) { create(:user) }
+  let!(:admin_role) { create :admin_role }
+  let!(:decision) { create :match_decisions_match_recommendation_dnd_staff}
+  let!(:priority) { create :priority_vispdat_priority }
+  let!(:route) { create :default_route, match_prioritization: priority }
+  let!(:program) { create :program, match_route: route }
+  let!(:sub_program) { create :sub_program, program: program }
+  let!(:voucher) { create :voucher, sub_program: sub_program }
+  let!(:opportunity) { create :opportunity, voucher: voucher }
+  let!(:match) { create :client_opportunity_match, opportunity: opportunity }
 
   before do
     authenticate admin
@@ -33,7 +33,7 @@ RSpec.describe ClientsController, type: :controller do
       end
       describe 'after parking' do
         before(:each) do
-          patch :update, client: {prevent_matching_until: Date.tomorrow}, id: match.client.id
+          patch :update, client: {prevent_matching_until: Date.today + 2.days}, id: match.client.id
         end
         it 'client no longer has any active matches' do
           aggregate_failures 'checking counts' do
