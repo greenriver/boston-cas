@@ -10,7 +10,11 @@ RSpec.describe MatchDecisions::Base, type: :model do
       r.update(match_prioritization_id: priority.id, stalled_interval: 30)
       r
       }
-    let!(:the_match) { create :client_opportunity_match, active: true }
+    let(:program) { create :program, match_route: route }
+    let(:sub_program) { create :sub_program, program: program }
+    let(:voucher) { create :voucher, sub_program: sub_program }
+    let(:opportunity) { create :opportunity, voucher: voucher }
+    let!(:the_match) { create :client_opportunity_match, opportunity: opportunity, active: true }
     let(:a_dnd_decision) { create :match_decisions_match_recommendation_dnd_staff }
 
     let(:users) { create_list :user, 10 }

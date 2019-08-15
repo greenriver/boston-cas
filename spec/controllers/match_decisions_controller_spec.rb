@@ -1,10 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe MatchDecisionsController, type: :controller do
-  let(:admin) { create(:user) }
-  let(:admin_role) { create :admin_role }
-  let(:decision) { create :match_decisions_match_recommendation_dnd_staff}
-  let(:match) { create :client_opportunity_match }
+  let!(:admin) { create(:user) }
+  let!(:admin_role) { create :admin_role }
+  let!(:priority) { create :priority_vispdat_priority }
+  let!(:route) { create :default_route, match_prioritization: priority }
+  let!(:program) { create :program, match_route: route }
+  let!(:sub_program) { create :sub_program, program: program }
+  let!(:voucher) { create :voucher, sub_program: sub_program }
+  let!(:opportunity) { create :opportunity, voucher: voucher }
+  let!(:decision) { create :match_decisions_match_recommendation_dnd_staff}
+  let!(:match) { create :client_opportunity_match, opportunity: opportunity }
 
   before do
     authenticate admin
@@ -25,7 +31,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
       end
       describe 'after parking' do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_hsa_housing_date, :canceled, :parked, administrative_cancel_reason_id: [24], prevent_matching_until: Date.tomorrow)
+          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_hsa_housing_date, :canceled, :parked, administrative_cancel_reason_id: [24], prevent_matching_until: Date.today + 2.days)
         end
         it 'client has one active match' do
           aggregate_failures 'checking counts' do
