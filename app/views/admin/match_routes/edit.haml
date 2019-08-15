@@ -12,7 +12,7 @@
   = f.input :default_shelter_agency_contacts_from_project_client, label: 'Attempt to add default shelter agency contacts from client record'
   = f.input :show_default_contact_types, label: 'Show the default contact types on a match'
   = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false, input_html: { class: :select2 }
-  = f.input :stalled_interval, collection: stall_intervals, label: "Days until a match is considered stalled"
+  = f.input :stalled_interval, collection: @route.stall_intervals, label: "Days until a match is considered stalled"
   = f.association :tag, include_blank: 'Optional Tag', input_html: { class: :select2 }, hint: 'Assigning a tag is required if the route is prioritized by rank.'
   = f.button :submit, value: "Update #{@route.title}"
 

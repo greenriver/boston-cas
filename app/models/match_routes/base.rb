@@ -106,6 +106,15 @@ module MatchRoutes
       ]
     end
 
+    def stall_intervals
+      {
+        'No stalled notifications' => 0,
+        '7 days' => 7,
+        '14 days' => 14,
+        '30 days' => 30,
+      }
+    end
+
     private def has_tag_if_prioritization_requires_it
       if tag_id.blank? && match_prioritization&.requires_tag?
 
