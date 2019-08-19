@@ -39,6 +39,7 @@ module Admin
         :tag_id,
         :show_default_contact_types,
         :send_notifications,
+        :stalled_interval,
       )
     end
 
