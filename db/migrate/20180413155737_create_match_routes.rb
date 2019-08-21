@@ -8,6 +8,10 @@ class CreateMatchRoutes < ActiveRecord::Migration
       t.timestamps null: false
     end
 
+    # You might have to temporarily comment out references to tags in this
+    # model to get past this. Had to mask a `belongs_to :tag` as well as a
+    # validation with a check for the tag_id column existing. In the future,
+    # this might not be enough if references to tags expand beyond these.
     MatchRoutes::Base.ensure_all
     default_route = MatchRoutes::Default.first.id || 1 
 
