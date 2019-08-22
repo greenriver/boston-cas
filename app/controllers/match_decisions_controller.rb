@@ -46,11 +46,6 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
 
-    # If expiration date is provided and match is declined
-    elsif decision_params[:shelter_expiration].present? && decision_params[:status] == "declined"
-      flash[:error] = 'Sorry, you cannot decline a match if you have provided an expiration date.'
-      render 'matches/show'
-
     # If we've been asked to park the client and match is accepted
     elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == "accepted"
       flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'

@@ -9,7 +9,10 @@ module MatchRoutes
     self.table_name = :match_routes
 
     belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
-    belongs_to :tag
+
+    if column_names.include?('tag_id')
+      belongs_to :tag
+    end
 
     scope :available, -> do
       where(active: true).
@@ -20,7 +23,9 @@ module MatchRoutes
       where(should_cancel_other_matches: true)
     end
 
-    validate :has_tag_if_prioritization_requires_it
+    if column_names.include?('tag_id')
+      validate :has_tag_if_prioritization_requires_it
+    end
 
     def self.all_routes
       [
@@ -104,6 +109,15 @@ module MatchRoutes
         'dnd_staff',
         'housing_subsidy_admin',
       ]
+    end
+
+    def stall_intervals
+      {
+        'No stalled notifications' => 0,
+        '7 days' => 7,
+        '14 days' => 14,
+        '30 days' => 30,
+      }
     end
 
     private def has_tag_if_prioritization_requires_it
