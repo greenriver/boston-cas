@@ -4,7 +4,7 @@ class CreateDeidentifiedClientsXlsx < ActiveRecord::Migration
       t.string :filename
       t.references :user
       t.string :content_type
-      t.string :content
+      t.binary :content
 
       t.timestamps
     end

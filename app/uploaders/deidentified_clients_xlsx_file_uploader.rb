@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'carrierwave/uploader/magic_mime_whitelist'
 
-class DeidentifiedClientsXlsFileUploader < CarrierWave::Uploader::Base
+class DeidentifiedClientsXlsxFileUploader < CarrierWave::Uploader::Base
   # more robust check of the bytes in the upload using libmagic
   include CarrierWave::Uploader::MagicMimeWhitelist
   # we will use mini magics API to process attachments
@@ -23,7 +23,7 @@ class DeidentifiedClientsXlsFileUploader < CarrierWave::Uploader::Base
 
   # NOTE if you make changes here it would be a good idea to update test/uploaders/attachment_uploader_test.rb
   WHITELIST = IceNine.deep_freeze(%w(
-    text/plain
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
   ))
 
   MANIPULATEABLE = IceNine.deep_freeze(

@@ -1,0 +1,13 @@
+= render 'breadcrumbs'
+
+%h1
+  Upload De-Identified Clients
+
+  Use this form to upload an XLSX of de-identified clients.
+
+= simple_form_for @upload, url: import_deidentified_clients_path, method: :post do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :file, as: :file, label: false
+  .form-actions
+    = f.button :submit, value: 'Upload Excel'
