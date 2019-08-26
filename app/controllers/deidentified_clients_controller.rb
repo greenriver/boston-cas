@@ -36,13 +36,28 @@ class DeidentifiedClientsController < NonHmisClientsController
     end
 
     file = import_params[:file]
-    @upload = DeidentifiedClientsXlsx.create(
-      filename: file.original_filename,
-      user_id: current_user.id,
-      content_type: file.content_type,
-      content: file.read,
-    )
-    # TODO process @upload
+    begin
+      @upload = DeidentifiedClientsXlsx.create(
+        filename: file.original_filename,
+        user_id: current_user.id,
+        content_type: file.content_type,
+        content: file.read,
+      )
+    rescue
+      @upload = DeidentifiedClientsXlsx.new
+      flash[:alert] = _("Cannot read uploaded file, is it an XLSX?")
+      render :choose_upload
+      return
+    end
+
+    if ! @upload.valid_header?
+      @upload = DeidentifiedClientsXlsx.new
+      flash[:alert] = _("Uploaded file does not have the correct header. Incorrect file?")
+      render :choose_upload
+      return
+    end
+
+    @upload.import
   end
 
   def client_source
