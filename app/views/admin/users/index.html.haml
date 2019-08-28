@@ -59,7 +59,7 @@
                       = user.name
                     - if user.agency
                       .user__agency
-                        %em.text-muted= user.agency
+                        %em.text-muted= user.agency.name
                   %td
                     = user.email
                   %td= user.roles_string

@@ -14,7 +14,7 @@
         .alert.alert-danger
           = @user.errors.messages[:email].last.humanize
       = contact_fields.input :email, as: :email, required: true
-      = f.input :agency
+      = f.input :agency_id, collection: @agencies, label_method: :name, value_method: :id, required: false, include_blank: 'Unknown', input_html: {class: [:select2, :jManualSelect2] }
     .row
       .col-md-6
         .form--checkbox-groups

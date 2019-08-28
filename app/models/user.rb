@@ -38,6 +38,8 @@ class User < ActiveRecord::Base
   has_many :vouchers
   has_many :messages, through: :contact
 
+  belongs_to :agency
+
   accepts_nested_attributes_for :contact
   def contact_attributes= contact_attributes
     super

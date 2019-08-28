@@ -36,7 +36,7 @@ class Users::InvitationsController < Devise::InvitationsController
     user_attrs = invite_params[:contact_attributes].except(:phone)
     user_attrs[:role_ids] = invite_params[:role_ids]
     user_attrs[:email] = user_attrs[:email].downcase
-    user_attrs[:agency] = invite_params[:agency]
+    user_attrs[:agency_id] = invite_params[:agency_id]
     @user = User.invite!(user_attrs, current_user)
 
     requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
@@ -81,7 +81,7 @@ class Users::InvitationsController < Devise::InvitationsController
       :first_name,
       :last_name,
       :email,
-      :agency,
+      :agency_id,
       role_ids: [],
       contact_attributes: [:first_name, :last_name, :phone, :email]
     )
