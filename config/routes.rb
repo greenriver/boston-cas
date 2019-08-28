@@ -134,6 +134,7 @@ Rails.application.routes.draw do
         post :confirm
       end
     end
+    resources :agencies
     resources :roles
     resources :versions, only: [:index]
 
