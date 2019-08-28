@@ -24,7 +24,7 @@ class NonHmisClient < ActiveRecord::Base
     else
       where(
         arel_table[:agency].eq(nil).
-        or(arel_table[:agency].eq(user.agency))
+        or(arel_table[:agency].eq(user.agency.name))
       )
     end
   end
@@ -82,7 +82,7 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def self.possible_agencies
-    User.distinct.pluck(:agency).compact
+    Agency.order(:name).pluck(:name)
   end
 
   def self.possible_cohorts

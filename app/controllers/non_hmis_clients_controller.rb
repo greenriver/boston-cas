@@ -66,7 +66,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def new
-    @non_hmis_client = client_source.new(agency: current_user.agency)
+    @non_hmis_client = client_source.new(agency: current_user.agency.name)
   end
 
   def edit
@@ -109,7 +109,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def load_agencies
-    @available_agencies = User.distinct.pluck(:agency).compact
+    @available_agencies = Agency.order(:name).pluck(:name)
   end
 
   def load_neighborhoods
