@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190726125407) do
+ActiveRecord::Schema.define(version: 20190826180204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -276,6 +276,15 @@ ActiveRecord::Schema.define(version: 20190726125407) do
     t.string   "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "deidentified_clients_xlsxes", force: :cascade do |t|
+    t.string   "filename"
+    t.integer  "user_id"
+    t.string   "content_type"
+    t.binary   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -613,6 +622,9 @@ ActiveRecord::Schema.define(version: 20190726125407) do
     t.integer  "warehouse_client_id"
     t.string   "voucher_agency"
     t.boolean  "interested_in_disabled_housing"
+    t.boolean  "chronic_health_condition"
+    t.boolean  "mental_health_problem"
+    t.boolean  "substance_abuse_problem"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree

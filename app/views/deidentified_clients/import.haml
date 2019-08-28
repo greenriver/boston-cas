@@ -1,0 +1,33 @@
+= render 'breadcrumbs'
+
+%h1
+  Upload Complete
+
+- problems = @upload.clients.reduce(0){ |sum, client| sum += client.errors.count }
+
+%ul.list-unstyled
+  %li= "#{@upload.added} new clients added"
+  %li= "#{@upload.touched} existing clients updated"
+  %li= "#{problems} records with problems"
+
+- if problems > 0
+  .row
+  .col-sm-12
+    .table-responsive
+      %table.table.table-condensed
+        %thead
+          %th Client
+          %th Item
+          %th Problem
+        %tbody
+          - @upload.clients.each do |client|
+            - client.errors.each_with_index do |error, index|
+              %tr
+                - if index == 0
+                  %td= "#{client.client_identifier}"
+                - else
+                  %td
+                %td= error.first.to_s.humanize
+                %td= error.last.capitalize
+.row
+  = link_to 'Return to Clients', deidentified_clients_path, class: 'btn btn-sm btn-primary'
