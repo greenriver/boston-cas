@@ -14,7 +14,7 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     parse_xlsx if ! @xlsx
 
     # Assume data is on default sheet, and header starts at A1
-    @xlsx.row(1) == file_header
+    @xlsx.row(1) == self.class.file_header
   end
 
   def import
@@ -138,8 +138,8 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     end
 
   end
-  
-  private def file_header
+
+  def self.file_header
     [
       'Date Information Collected',
       'Date Entered Program',
@@ -160,7 +160,7 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
       'HOPWA',
       'Client\'s last residential zip code ',
       'VI-SPDAT Score'
-    ]
+    ].freeze
   end
 
   private def file_attributes
