@@ -137,6 +137,10 @@ class NonHmisClient < ActiveRecord::Base
     project_client.developmental_disability = if developmental_disability then 1 else nil end
     project_client.domestic_violence = 1 if domestic_violence
 
+    project_client.chronic_health_condition = if chronic_health_condition then 1 else nil end
+    project_client.mental_health_problem = if mental_health_problem then 1 else nil end
+    project_client.substance_abuse_problem = if substance_abuse_problem then "Yes" else "No" end
+
     project_client.tags = cas_tags
 
     project_client.sync_with_cas = self.available

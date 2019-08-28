@@ -506,8 +506,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
                 action: :canceled)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+            match.poached!
+          else
+            match.destroy
           end
-          match.poached!
         end
         client.update available: false
         # Prevent matching on any route
