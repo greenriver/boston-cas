@@ -1,13 +1,20 @@
 = content_for :page_js do
   :javascript
     $('.select2').select2();
+    $('.jContact').on('change', function(e){
+      var contact_id = $('.jContact').val();
+      if(contact_id == ""){
+        $('.jAgency').show();
+      } else {
+        $('.jAgency').hide();
+      }
+    });
     $('.jFamily').on('change', function(e){
       if($(this).is(':checked')){
         $('.jChronicallyHomeless').show();
       } else {
         $('.jChronicallyHomeless').find('input').removeAttr('checked');
         $('.jChronicallyHomeless').hide();
-
       }
     });
     $('.jInterestedInSetAsides').on('change', function(e){
@@ -17,5 +24,6 @@
         $('.jNeighborhoodInterests').hide();
       }
     });
+    $('.jContact').trigger('change');
     $('.jFamily').trigger('change');
     $('.jInterestedInSetAsides').trigger('change');

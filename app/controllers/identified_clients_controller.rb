@@ -27,6 +27,14 @@ class IdentifiedClientsController < NonHmisClientsController
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
     dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
+    if can_edit_all_clients?
+      contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
+      if contact_agency_id.present?
+        dirty_params[:agency_id] = contact_agency_id
+      end
+    else
+      dirty_params[:agency_id] = current_user.contact.id
+    end
     return dirty_params
   end
 
@@ -60,6 +68,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :client_identifier,
         :assessment_score,
         :agency_id,
+        :contact_id,
         :first_name,
         :last_name,
         :middle_name,

@@ -11,6 +11,7 @@ class NonHmisClient < ActiveRecord::Base
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
   belongs_to :agency
+  belongs_to :contact
 
   has_paper_trail
   acts_as_paranoid

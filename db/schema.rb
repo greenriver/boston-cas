@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190828194347) do
+ActiveRecord::Schema.define(version: 20190829142655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -632,6 +632,7 @@ ActiveRecord::Schema.define(version: 20190828194347) do
     t.boolean  "mental_health_problem"
     t.boolean  "substance_abuse_problem"
     t.integer  "agency_id"
+    t.integer  "contact_id"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
