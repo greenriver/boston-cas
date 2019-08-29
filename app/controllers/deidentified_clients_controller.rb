@@ -57,7 +57,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       return
     end
 
-    @upload.import
+    @upload.import(current_user.agency)
   end
 
   def client_source
@@ -87,7 +87,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       params.require(:deidentified_client).permit(
         :client_identifier,
         :assessment_score,
-        :agency,
+        :agency_id,
         :date_of_birth,
         :ssn,
         :days_homeless_in_the_last_three_years,

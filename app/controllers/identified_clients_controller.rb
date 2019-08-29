@@ -59,7 +59,7 @@ class IdentifiedClientsController < NonHmisClientsController
       params.require(:identified_client).permit(
         :client_identifier,
         :assessment_score,
-        :agency,
+        :agency_id,
         :first_name,
         :last_name,
         :middle_name,
