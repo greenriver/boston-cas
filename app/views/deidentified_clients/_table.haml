@@ -24,7 +24,7 @@
           - @non_hmis_clients.each do |deidentified_client|
             %tr
               %td= deidentified_client.client_identifier
-              %td= deidentified_client.agency
+              %td= deidentified_client.agency&.name
               %td= deidentified_client.assessment_score
               %td= simple_format deidentified_client.cohort_names
               %td= deidentified_client.days_homeless_in_the_last_three_years

@@ -7,7 +7,6 @@
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   before_action :load_client, only: [:edit, :update, :destroy]
-  before_action :load_agencies
   before_action :load_neighborhoods
   before_action :set_active_filter, only: [:index]
 
@@ -66,7 +65,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def new
-    @non_hmis_client = client_source.new(agency: current_user.agency.name)
+    @non_hmis_client = client_source.new(agency_id: current_user.agency.id)
   end
 
   def edit
@@ -106,10 +105,6 @@ class NonHmisClientsController < ApplicationController
         redirect_to polymorphic_path([action_name, :imported_client], id: params[:id])
       end
     end
-  end
-
-  def load_agencies
-    @available_agencies = Agency.order(:name).pluck(:name)
   end
 
   def load_neighborhoods

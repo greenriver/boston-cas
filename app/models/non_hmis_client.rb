@@ -10,6 +10,7 @@ class NonHmisClient < ActiveRecord::Base
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
+  belongs_to :agency
 
   has_paper_trail
   acts_as_paranoid
@@ -23,8 +24,8 @@ class NonHmisClient < ActiveRecord::Base
       all
     else
       where(
-        arel_table[:agency].eq(nil).
-        or(arel_table[:agency].eq(user.agency.name))
+        arel_table[:agency_id].eq(nil).
+        or(arel_table[:agency_id].eq(user.agency.id))
       )
     end
   end

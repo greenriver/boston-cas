@@ -6,7 +6,7 @@
       = f.input :client_identifier, required: true
       = f.input :assessment_score
       = f.input :domestic_violence, label: 'Domestic violence survivor'
-      = f.input :agency, collection: @available_agencies, input_html: {class: :select2}, hint: 'You may lose access to this client record if the agency doesn\'t match your agency'
+      = f.association :agency, input_html: {class: :select2}, hint: 'You may lose access to this client record if the agency doesn\'t match your agency'
       = f.input :days_homeless_in_the_last_three_years
       = f.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment'
       = f.input :who_verified_days_homeless
