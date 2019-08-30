@@ -4,6 +4,11 @@
   Import Clients
 %p
   Use this form to upload a CSV of set-aside preference forms.
+  The file must have the following headers, in the following order:
+
+%ul
+  - @upload.parsed_expected_header.each do |header|
+    %li= header
 
 = simple_form_for @upload, url: imported_clients_path, method: :post do |f|
   = f.error_notification
