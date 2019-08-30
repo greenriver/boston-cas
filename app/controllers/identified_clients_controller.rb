@@ -28,12 +28,14 @@ class IdentifiedClientsController < NonHmisClientsController
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
     dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
     if can_edit_all_clients?
+      # if we chose a contact, we'll use the agency from that contact
+      # otherwise, use the agency for the current user
       contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
       if contact_agency_id.present?
         dirty_params[:agency_id] = contact_agency_id
       end
     else
-      dirty_params[:agency_id] = current_user.contact.id
+      dirty_params[:agency_id] = current_user.agency.id
     end
     return dirty_params
   end
