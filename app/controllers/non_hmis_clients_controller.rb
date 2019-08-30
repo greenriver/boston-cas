@@ -116,14 +116,14 @@ class NonHmisClientsController < ApplicationController
 
   def load_contacts
     @contacts = {}
-    user_scope = User.active.order(:email)
+    user_scope = User.active.joins(:contact).order(:email)
     unless can_edit_all_clients?
       user_scope = user_scope.where(agency_id: current_user.agency.id)
     end
     user_scope.each do |user|
       agency_name = user.agency&.name || 'Unknown'
       @contacts[agency_name] ||= []
-      @contacts[agency_name] << [ "#{user.first_name} #{user.last_name} | #{user.email}", user.contact.id ]
+      @contacts[agency_name] << [ "#{user.first_name} #{user.last_name} | #{user.email}", user.contact&.id ] if user.
     end
   end
 
