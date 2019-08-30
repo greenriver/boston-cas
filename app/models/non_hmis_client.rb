@@ -10,6 +10,8 @@ class NonHmisClient < ActiveRecord::Base
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
+  belongs_to :agency
+  belongs_to :contact
 
   has_paper_trail
   acts_as_paranoid
@@ -23,8 +25,8 @@ class NonHmisClient < ActiveRecord::Base
       all
     else
       where(
-        arel_table[:agency].eq(nil).
-        or(arel_table[:agency].eq(user.agency.name))
+        arel_table[:agency_id].eq(nil).
+        or(arel_table[:agency_id].eq(user.agency.id))
       )
     end
   end
@@ -141,6 +143,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.mental_health_problem = if mental_health_problem then 1 else nil end
     project_client.substance_abuse_problem = if substance_abuse_problem then "Yes" else "No" end
 
+    project_client.default_shelter_agency_contacts = [ contact&.email ] if contact_id.present?
     project_client.tags = cas_tags
 
     project_client.sync_with_cas = self.available

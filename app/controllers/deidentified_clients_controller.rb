@@ -57,7 +57,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       return
     end
 
-    @upload.import
+    @upload.import(current_user.agency)
   end
 
   def client_source
@@ -87,7 +87,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       params.require(:deidentified_client).permit(
         :client_identifier,
         :assessment_score,
-        :agency,
+        :agency_id,
+        :contact_id,
         :date_of_birth,
         :ssn,
         :days_homeless_in_the_last_three_years,
@@ -124,14 +125,20 @@ class DeidentifiedClientsController < NonHmisClientsController
       dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
       dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
       dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
+      if can_edit_all_clients?
+        contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
+        dirty_params[:agency_id] = contact_agency_id if contact_agency_id.present?
+      else
+        dirty_params[:agency_id] = current_user.contact.id
+      end
       return append_client_identifier(dirty_params)
     end
 
-  def import_params
-    params.require(:deidentified_clients_xlsx).permit(
-      :file
-    )
-  end
+    def import_params
+      params.require(:deidentified_clients_xlsx).permit(
+        :file
+      )
+    end
 
     def client_type
       _('De-Identified Clients')

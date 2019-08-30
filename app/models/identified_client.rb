@@ -93,7 +93,7 @@ class IdentifiedClient < NonHmisClient
       middle_name,
       last_name,
       assessment_score,
-      agency,
+      agency&.name,
       cohort_names,
       date_of_birth,
       ssn,
