@@ -123,7 +123,7 @@ class NonHmisClientsController < ApplicationController
     user_scope.each do |user|
       agency_name = user.agency&.name || 'Unknown'
       @contacts[agency_name] ||= []
-      @contacts[agency_name] << [ "#{user.first_name} #{user.last_name} | #{user.email}", user.contact&.id ] if user.
+      @contacts[agency_name] << [ "#{user.first_name} #{user.last_name} | #{user.email}", user.contact&.id ]
     end
   end
 
