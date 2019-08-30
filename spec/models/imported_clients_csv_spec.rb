@@ -1,15 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe ImportedClientsCsv, type: :model do
+  let(:agency) { create :agency }
+
   it 'refuses to load an invalid file header' do
     csv = read 'invalid_header.csv'
-    expect(csv.import).to be false
+    expect(csv.import(agency)).to be false
     expect(ImportedClient.count).to eq 0
   end
 
   it 'skips invalid rows' do
     csv = read 'invalid_row.csv'
-    expect(csv.import).to be true
+    expect(csv.import(agency)).to be true
     expect(ImportedClient.count).to eq 4
     expect(ImportedClient.all.map{ |c| c.email }).not_to include('test@test.com')
     expect(ImportedClient.all.map{ |c| c.email }).to include('test2@test.com', 'test3@test.com','test4@test.com','test5@test.com')
@@ -17,18 +19,18 @@ RSpec.describe ImportedClientsCsv, type: :model do
 
   it 'doesn\'t duplicate rows' do
     csv = read 'duplicated_row.csv'
-    expect(csv.import).to be true
+    expect(csv.import(agency)).to be true
     expect(ImportedClient.count).to eq 1
   end
 
   it 'handles existing clients' do
     csv = read 'first.csv'
-    expect(csv.import).to be true
+    expect(csv.import(agency)).to be true
     expect(ImportedClient.count).to eq 5
     expect(ImportedClient.all.map{ |c| c.email }).to include('test@test.com', 'test2@test.com', 'test3@test.com','test4@test.com','test5@test.com')
 
     csv = read 'second.csv'
-    expect(csv.import).to be true
+    expect(csv.import(agency)).to be true
     expect(ImportedClient.count).to eq 8
     expect(ImportedClient.all.map{ |c| c.first_name }).to include('TestX')
     expect(ImportedClient.all.map{ |c| c.last_name }).to include('McTest2')
