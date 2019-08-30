@@ -48,6 +48,7 @@ module Admin
       @subgrantee_contacts = Subgrantee.where(id: SubgranteeContact.where(contact_id: @user.contact).select(:subgrantee_id))
       @building_contacts = Building.where(id: BuildingContact.where(contact_id: @user.contact).select(:building_id))
       @opportunity_contacts = Opportunity.where(id: OpportunityContact.where(contact_id: @user.contact).select(:opportunity_id))
+      @agencies = Agency.order(:name)
     end
 
     def confirm
@@ -123,7 +124,7 @@ module Admin
           :last_name,
           :email,
           :receive_initial_notification,
-          :agency,
+          :agency_id,
           role_ids: [],
           contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role],
           requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]

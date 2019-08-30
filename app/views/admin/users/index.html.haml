@@ -9,6 +9,7 @@
         %span.icon-plus
         Add a User Account
       = link_to 'Manage Roles', admin_roles_path
+      = link_to 'Manage Agencies', admin_agencies_path
 
   - @prompt = t '.search_prompt'
 
@@ -59,7 +60,7 @@
                       = user.name
                     - if user.agency
                       .user__agency
-                        %em.text-muted= user.agency
+                        %em.text-muted= user.agency.name
                   %td
                     = user.email
                   %td= user.roles_string
