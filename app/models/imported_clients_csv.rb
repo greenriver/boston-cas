@@ -197,7 +197,7 @@ class ImportedClientsCsv < ActiveRecord::Base
 
   def check_header
     incoming = CSV.parse(content.lines.first).flatten.map{|m| m&.strip}
-    expected = parsed_expected_header.flatten.map{|m| m&.strip}
+    expected = parsed_expected_header.map{|m| m&.strip}
     # You can update the header string with File.read('path/to/file.csv').lines.first
     # Using CSV parse in case the quoting styles differ
     if incoming == expected
@@ -211,7 +211,7 @@ class ImportedClientsCsv < ActiveRecord::Base
   end
 
   def parsed_expected_header
-    CSV.parse(expected_header)
+    CSV.parse(expected_header).flatten
   end
 
   def expected_header
