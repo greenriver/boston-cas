@@ -134,6 +134,7 @@ Rails.application.routes.draw do
         post :confirm
       end
     end
+    resources :agencies
     resources :roles
     resources :versions, only: [:index]
 
@@ -163,7 +164,12 @@ Rails.application.routes.draw do
     get :cache_status
   end
 
-  resources :deidentified_clients
+  resources :deidentified_clients do
+    collection do
+      get :choose_upload
+      post :import
+    end
+  end
   resources :identified_clients
   resources :imported_clients
   resources :messages, only: [:show, :index] do

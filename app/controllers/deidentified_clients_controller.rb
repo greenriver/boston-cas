@@ -23,6 +23,43 @@ class DeidentifiedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: deidentified_clients_path)
   end
 
+  def choose_upload
+    @upload = DeidentifiedClientsXlsx.new
+  end
+
+  def import
+    if !params[:deidentified_clients_xlsx]&.[](:file)
+      @upload = DeidentifiedClientsXlsx.new
+      flash[:alert] = _("You must attach a file in the form.")
+      render :choose_upload
+      return
+    end
+
+    file = import_params[:file]
+    begin
+      @upload = DeidentifiedClientsXlsx.create(
+        filename: file.original_filename,
+        user_id: current_user.id,
+        content_type: file.content_type,
+        content: file.read,
+      )
+    rescue
+      @upload = DeidentifiedClientsXlsx.new
+      flash[:alert] = _("Cannot read uploaded file, is it an XLSX?")
+      render :choose_upload
+      return
+    end
+
+    if ! @upload.valid_header?
+      @upload = DeidentifiedClientsXlsx.new
+      flash[:alert] = _("Uploaded file does not have the correct header. Incorrect file?")
+      render :choose_upload
+      return
+    end
+
+    @upload.import(current_user.agency)
+  end
+
   def client_source
     DeidentifiedClient.deidentified.visible_to(current_user)
   end
@@ -50,7 +87,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       params.require(:deidentified_client).permit(
         :client_identifier,
         :assessment_score,
-        :agency,
+        :agency_id,
+        :contact_id,
         :date_of_birth,
         :ssn,
         :days_homeless_in_the_last_three_years,
@@ -87,7 +125,19 @@ class DeidentifiedClientsController < NonHmisClientsController
       dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
       dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
       dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
+      if can_edit_all_clients?
+        contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
+        dirty_params[:agency_id] = contact_agency_id if contact_agency_id.present?
+      else
+        dirty_params[:agency_id] = current_user.contact.id
+      end
       return append_client_identifier(dirty_params)
+    end
+
+    def import_params
+      params.require(:deidentified_clients_xlsx).permit(
+        :file
+      )
     end
 
     def client_type

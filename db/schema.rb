@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190726125407) do
+ActiveRecord::Schema.define(version: 20190829142655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agencies", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "building_contacts", force: :cascade do |t|
     t.integer  "building_id", null: false
@@ -276,6 +282,15 @@ ActiveRecord::Schema.define(version: 20190726125407) do
     t.string   "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "deidentified_clients_xlsxes", force: :cascade do |t|
+    t.string   "filename"
+    t.integer  "user_id"
+    t.string   "content_type"
+    t.binary   "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -557,7 +572,7 @@ ActiveRecord::Schema.define(version: 20190726125407) do
   create_table "non_hmis_clients", force: :cascade do |t|
     t.string   "client_identifier"
     t.integer  "assessment_score"
-    t.string   "agency"
+    t.string   "deprecated_agency"
     t.string   "first_name"
     t.string   "last_name"
     t.jsonb    "active_cohort_ids"
@@ -613,6 +628,11 @@ ActiveRecord::Schema.define(version: 20190726125407) do
     t.integer  "warehouse_client_id"
     t.string   "voucher_agency"
     t.boolean  "interested_in_disabled_housing"
+    t.boolean  "chronic_health_condition"
+    t.boolean  "mental_health_problem"
+    t.boolean  "substance_abuse_problem"
+    t.integer  "agency_id"
+    t.integer  "contact_id"
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -1176,7 +1196,8 @@ ActiveRecord::Schema.define(version: 20190726125407) do
     t.string   "last_name"
     t.string   "email_schedule",               default: "immediate", null: false
     t.boolean  "active",                       default: true,        null: false
-    t.string   "agency"
+    t.string   "deprecated_agency"
+    t.integer  "agency_id"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

@@ -44,7 +44,7 @@ class ImportedClientsCsv < ActiveRecord::Base
     @clients = []
   end
 
-  def import
+  def import(agency)
     if check_header
       CSV.parse(content, headers: true) do |row|
         first_name = row[HOH_FIRST_NAME]
@@ -66,6 +66,7 @@ class ImportedClientsCsv < ActiveRecord::Base
           @touched += 1 if client.imported_timestamp.present?
           client.update(
             imported_timestamp: row[FORM_TIMESTAMP].to_time,
+            agency_id: agency&.id,
 
             set_asides_housing_status: row[HOUSING_STATUS],
             domestic_violence: fleeing_domestic_violence?(row),

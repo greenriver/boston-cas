@@ -7,8 +7,8 @@
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   before_action :load_client, only: [:edit, :update, :destroy]
-  before_action :load_agencies
   before_action :load_neighborhoods
+  before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]
 
   helper_method :client_type
@@ -66,10 +66,12 @@ class NonHmisClientsController < ApplicationController
   end
 
   def new
-    @non_hmis_client = client_source.new(agency: current_user.agency)
+    @non_hmis_client = client_source.new(agency_id: current_user.agency.id)
+    @contact_id = current_user.contact.id
   end
 
   def edit
+    @contact_id = @non_hmis_client.contact_id
   end
 
   def sorter
@@ -108,12 +110,30 @@ class NonHmisClientsController < ApplicationController
     end
   end
 
-  def load_agencies
-    @available_agencies = User.distinct.pluck(:agency).compact
-  end
-
   def load_neighborhoods
     @neighborhoods = Neighborhood.order(:name).pluck(:id, :name)
+  end
+
+  def load_contacts
+    @contacts = {}
+    user_scope = User.active.order(:email)
+    unless can_edit_all_clients?
+      user_scope = user_scope.where(agency_id: current_user.agency.id)
+    end
+    user_scope.each do |user|
+      agency_name = user.agency&.name || 'Unknown'
+      @contacts[agency_name] ||= []
+      @contacts[agency_name] << [ "#{user.first_name} #{user.last_name} | #{user.email}", user.contact.id ]
+    end
+  end
+
+  def agency_id_for_contact(contact_id)
+    if contact_id.present?
+      contact = Contact.find(contact_id.to_i)
+      return contact.user&.agency_id
+    else
+      return nil
+    end
   end
 
   def set_active_filter

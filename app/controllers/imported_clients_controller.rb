@@ -14,14 +14,14 @@ class ImportedClientsController < NonHmisClientsController
     end
 
     file = import_params[:file]
-    @csv = ImportedClientsCsv.create(
+    @upload = ImportedClientsCsv.create(
       filename: file.original_filename,
       user_id: current_user.id,
       content_type: file.content_type,
       content: file.read,
     )
 
-    if ! @csv.import
+    if ! @csv.import(current_user.agency)
       @upload = ImportedClientsCsv.new
       flash[:alert] = _("The file header is incorrect.")
       render :new
