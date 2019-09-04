@@ -66,7 +66,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def new
-    @non_hmis_client = client_source.new(agency_id: current_user.agency.id)
+    @non_hmis_client = client_source.new(agency_id: current_user.agency&.id)
     @contact_id = current_user.contact.id
   end
 
@@ -118,7 +118,12 @@ class NonHmisClientsController < ApplicationController
     @contacts = {}
     user_scope = User.active.joins(:contact).order(:email)
     unless can_edit_all_clients?
-      user_scope = user_scope.where(agency_id: current_user.agency.id)
+      if current_user.agency.present?
+        user_scope = user_scope.where(agency_id: current_user.agency.id)
+      else
+        # if the current user doesn't have an agency, they can only assign this client to themselves
+        user_scope = user_scope.where(id: current_user.id)
+      end
     end
     user_scope.each do |user|
       agency_name = user.agency&.name || 'Unknown'
