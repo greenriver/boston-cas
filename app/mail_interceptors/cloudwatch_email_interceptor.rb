@@ -9,7 +9,8 @@ class CloudwatchEmailInterceptor
     message.headers({
       'X-SES-CLIENT' => ENV.fetch('CLIENT') { 'UnknownClient' },
       'X-SES-APP' => 'CAS',
-      'X-SES-CONFIGURATION-SET' => ENV.fetch('SES_CONFIG_SET') { 'OpenPathConfigSet' }
+      'X-SES-CONFIGURATION-SET' => ENV.fetch('SES_CONFIG_SET') { 'OpenPathConfigSet' },
+      'X-SES-ENVIRONMENT' => Rails.env
     })
   end
 end
