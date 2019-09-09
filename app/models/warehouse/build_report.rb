@@ -16,7 +16,7 @@ module Warehouse
     def fill_cas_vacancy_table!
       Warehouse::CasVacancy.delete_all
 
-      ::Voucher.all.each do |voucher|
+      ::Voucher.all.preload(sub_program: :program).each do |voucher|
         vacancy = Warehouse::CasVacancy.new(program_id: voucher.sub_program.program.id, sub_program_id: voucher.sub_program_id)
 
         vacancy.program_name = voucher.program.name
@@ -47,13 +47,13 @@ module Warehouse
       # build out entries for each time a client became available
       ::DeidentifiedClient.with_deleted.each do |client|
         # availability based on creation
-        available_ons = [client.created_at] + 
+        available_ons = [client.created_at] +
           client.versions.where(event: :create).pluck(:created_at)
-        
+
         # unavailability based on deletion
-        unavailable_ons = [client.deleted_at] + 
+        unavailable_ons = [client.deleted_at] +
           client.versions.where(event: :destroy).pluck(:created_at)
-    
+
         available_ons = available_ons.compact.uniq.sort
         unavailable_ons = unavailable_ons.compact.uniq.sort
 
@@ -96,9 +96,10 @@ module Warehouse
                 :decline_reason,
                 :not_working_with_client_reason,
                 :administrative_cancel_reason,
+                decision_action_events: { contact: :agency },
               ],
-              opportunity: [voucher: :sub_program],
-            ]
+              opportunity: [ voucher: :sub_program ],
+            ],
           }
         ).where( at[:status].not_eq nil ).distinct.find_each do |client|
           client_id = client.project_client.id_in_data_source
@@ -117,7 +118,7 @@ module Warehouse
               nil
             end
             # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
-            decisions = match.decisions.select do |decision| 
+            decisions = match.decisions.select do |decision|
               decision.status.present? && match_route.class.match_steps_for_reporting[decision.type].present?
             end.sort_by(&:id)
             # Debugging
@@ -127,7 +128,7 @@ module Warehouse
               if previous_updated_at
                 elapsed_days = ( decision.updated_at.to_date - previous_updated_at.to_date ).to_i
               end
-              # we want to be able to report on wether or not the HSA requested a CORI check
+              # we want to be able to report on whether or not the HSA requested a CORI check
               # so we'll split that step into two
               step_name = decision.step_name
               if decision.type == 'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin'
@@ -136,6 +137,13 @@ module Warehouse
                 elsif decision.status == 'scheduled'
                   step_name += ' - hearing requested'
                 end
+              end
+
+              # If this a canceled or declined decision, log who did it
+              event_contact = if decision.status.in?(['declined', 'canceled'])
+                decision.decision_action_events.select do |da|
+                  da.type == 'MatchEvents::DecisionAction' && da.action == decision.status
+                end.first.contact
               end
 
               Warehouse::CasReport.create!(
@@ -149,6 +157,8 @@ module Warehouse
                 decision_status: decision.label,
                 current_step: decision == current_decision,
                 decline_reason: explain( decision, :decline_reason ),
+                event_contact: event_contact&.name_with_email,
+                event_contact_agency: event_contact&.agency&.name,
                 not_working_with_client_reason: explain( decision, :not_working_with_client_reason ),
                 administrative_cancel_reason: explain( decision, :administrative_cancel_reason ),
                 active_match: match.active?,
