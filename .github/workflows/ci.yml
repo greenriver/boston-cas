@@ -25,6 +25,7 @@ jobs:
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2'
     - name: 'Install gems'
+      run: |
         bundle install --jobs 4 --retry 3
     - name: Run bundle-audit
       run: |
