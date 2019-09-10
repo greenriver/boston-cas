@@ -18,7 +18,8 @@ jobs:
         sudo apt-get install \
           postgresql postgresql-contrib \
           redis-server \
-          libmagic-dev
+          libmagic-dev \
+          libpq-dev
         sudo -upostgres createuser --echo --superuser $USER #give the runner
         createdb --echo
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
