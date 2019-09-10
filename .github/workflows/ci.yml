@@ -21,7 +21,8 @@ jobs:
           libmagic-dev
         sudo -upostgres createuser --echo --superuser $USER #give the runner
         createdb --echo
-        gem install bundler
+        gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+        gem install bundler -v '< 2'
         bundle install --jobs 4 --retry 3
     - name: Run bundle-audit
       run: |
