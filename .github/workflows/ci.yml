@@ -14,6 +14,8 @@ jobs:
       with:
         ruby-version: 2.5.x
     - name: Set up dependancies
+      env:
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
       run: |
         sudo apt-get install \
           postgresql postgresql-contrib \
@@ -22,6 +24,7 @@ jobs:
           libpq-dev
         sudo -upostgres createuser --echo --superuser $USER #give the runner
         createdb --echo
+        createdb $DATABASE_WAREHOUSE_DB_TEST
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2'
     - name: 'Install gems'
