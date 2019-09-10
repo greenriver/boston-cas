@@ -1,0 +1,45 @@
+name: Audit and Test
+
+on:
+  push:
+    branches:
+    - github-actions
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby 2.5
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.5.1
+    - name: Set up dependancies
+      run: |
+        sudo apt-get update
+        sudo apt-get install \
+          postgresql postgresql-contrib \
+          redis-server \
+          libmagic-dev
+        sudo -upostgres createuser --echo --superuser $USER #give the runner
+        createdb --echo
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Run bundle-audit
+      run: |
+        bundle exec bundle-audit check --update
+    - name: Run brakeman
+      run: |
+        bundle exec brakeman -q --ensure-latest --no-pager --except PermitAttributes,Render
+    - name: Prepare test db
+      run: |
+        bundle exec rails db:drop db:create db:schema:load RAILS_ENV=test
+    - name: Run tests
+      env:
+        DATABASE_ADAPTER: postgresql
+        DATABASE_DB_TEST: boston_cas_test
+        DEFAULT_FROM: greenriver.testing@mailinator.com
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+        HOSTNAME: openpath.host
+        PORT: 80
+      run: |
+        bundle exec rspec RAILS_ENV=test
