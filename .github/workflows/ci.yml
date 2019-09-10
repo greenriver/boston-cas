@@ -15,8 +15,6 @@ jobs:
         ruby-version: 2.5.x
     - name: Set up dependancies
       run: |
-        sudo rm /var/lib/apt/lists/*
-        sudo apt-get update
         sudo apt-get install \
           postgresql postgresql-contrib \
           redis-server \
