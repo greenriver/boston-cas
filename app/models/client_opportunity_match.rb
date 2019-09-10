@@ -50,6 +50,18 @@ class ClientOpportunityMatch < ActiveRecord::Base
   has_decision :set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator', notification_class_name: 'Notifications::RecordClientHousedDateHousingSubsidyAdministrator'
   has_decision :set_asides_confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
+  # Match Route Four
+  has_decision :four_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Four::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Four::MatchRecommendationDndStaff'
+  has_decision :four_match_recommendation_shelter_agency, decision_class_name: 'MatchDecisions::Four::MatchRecommendationShelterAgency', notification_class_name: 'Notifications::Four::MatchRecommendationShelterAgency'
+  has_decision :four_confirm_shelter_agency_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmShelterAgencyDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmShelterAgencyDeclineDndStaff'
+  has_decision :four_match_recommendation_hsa, decision_class_name: 'MatchDecisions::Four::MatchRecommendationHsa', notification_class_name: 'Notifications::Four::MatchRecommendationHsa'
+  has_decision :four_confirm_hsa_initial_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHsaInitialDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHsaInitialDeclineDndStaff'
+  has_decision :four_schedule_criminal_hearing_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin', notification_class_name: 'Notifications::Four::ScheduleCriminalHearingHousingSubsidyAdmin'
+  has_decision :four_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Four::CriminalHearingScheduledClient'
+  has_decision :four_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHousingSubsidyAdminDeclineDndStaff'
+  has_decision :four_record_client_housed_date_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator', notification_class_name: 'Notifications::Four::HousingSubsidyAdminDecisionClient'
+  has_decision :four_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Four::ConfirmMatchSuccessDndStaff'
+
   has_one :current_decision
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
