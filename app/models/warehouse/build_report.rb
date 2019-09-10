@@ -63,7 +63,7 @@ module Warehouse
             available_on: available_on,
           )
           # See if there's a subsequent date for which we are marked unavailable
-          client_history.unavailable_on = unavailable_ons.select{ |d| d > available_on }&.first
+          client_history.unavailable_on = unavailable_ons.detect{ |d| d > available_on }
           client_history.part_of_a_family = client.family_member
           client_history.age_at_available_on = client.age_on(available_on)
           history << client_history
@@ -141,9 +141,9 @@ module Warehouse
 
               # If this a canceled or declined decision, log who did it
               event_contact = if decision.status.in?(['declined', 'canceled'])
-                decision.decision_action_events.select do |da|
+                decision.decision_action_events.detect do |da|
                   da.type == 'MatchEvents::DecisionAction' && da.action == decision.status
-                end.first.contact
+                end&.contact
               end
 
               Warehouse::CasReport.create!(
