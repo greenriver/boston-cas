@@ -3,7 +3,12 @@ name: Audit and Test
 on:
   push:
     branches:
-    - github-actions
+    - master
+    - pre-release
+  pull_request:
+    - opened
+    - synchronize
+    - reopened
 jobs:
   build:
     runs-on: ubuntu-18.04
