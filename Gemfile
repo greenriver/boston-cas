@@ -106,6 +106,7 @@ group :development do
   gem 'quiet_assets'
   gem 'ruby-prof'
   # gem 'rb-readline'
+  gem 'active_record_query_trace'
 end
 
 group :development, :test do

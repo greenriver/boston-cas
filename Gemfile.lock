@@ -29,6 +29,7 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_record_query_trace (1.6.2)
     activejob (4.2.11.1)
       activesupport (= 4.2.11.1)
       globalid (>= 0.3.0)
@@ -495,6 +496,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_record_query_trace
   activerecord-import
   activerecord-session_store
   attribute_normalizer
