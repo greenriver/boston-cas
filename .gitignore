@@ -39,6 +39,8 @@ app/mail_interceptors/sandbox_email_interceptor.rb
 /vendor/assets/bower_components
 *.bowerrc
 bower.json
+.byebug_history
+.sass-cache/
 
 # Ignore pow environment settings
 .powenv

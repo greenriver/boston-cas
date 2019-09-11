@@ -50,6 +50,10 @@ gem 'html2haml'
 gem 'devise', '~> 4'
 gem 'devise_invitable'
 gem 'devise-pwned_password'
+
+gem 'authtrail' # for logging login attempts
+gem 'maxminddb' # for local geocoding of login attempts
+
 gem 'handlebars_assets'
 gem 'select2-rails', git: 'https://github.com/greenriver/select2-rails.git'
 gem 'fuzzy_match'
@@ -106,6 +110,7 @@ group :development do
   gem 'quiet_assets'
   gem 'ruby-prof'
   # gem 'rb-readline'
+  gem 'active_record_query_trace'
 end
 
 group :development, :test do
