@@ -48,9 +48,10 @@ RSpec.describe Matching::Engine, type: :model do
         Matching::RunEngineJob.new.perform
       }.to change(ClientOpportunityMatch, :count).by(1)
     end
-    it ' and client match is the same as opportunity active match' do
+    it ' and client matches one of the opportunities' do
       Matching::RunEngineJob.new.perform
-      expect(simple_opportunity.active_matches.first).to eq(client.client_opportunity_matches.first)
+      expect(ClientOpportunityMatch.first.client_id).to eq(client.id)
+      expect(ClientOpportunityMatch.first.opportunity).to be_in([simple_opportunity, complex_opportunity, income_opportunity])
     end
   end
 end
