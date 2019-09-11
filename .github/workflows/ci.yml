@@ -1,14 +1,6 @@
 name: Audit and Test
 
-on:
-  push:
-    branches:
-    - master
-    - pre-release
-  pull_request:
-    - opened
-    - synchronize
-    - reopened
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-18.04
