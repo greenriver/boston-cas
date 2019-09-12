@@ -17,6 +17,10 @@ module Notifications::Four
       "#{_('Housing Subsidy Administrator')} notified of potential match"
     end
 
+    def decision
+      match.four_match_recommendation_hsa_decision
+    end
+
     def show_client_info?
       true
     end

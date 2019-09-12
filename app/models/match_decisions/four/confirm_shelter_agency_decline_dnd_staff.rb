@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class ConfirmShelterAgencyDeclineDndStaff < Base
+  class ConfirmShelterAgencyDeclineDndStaff < ::MatchDecisions::Base
 
     def statuses
       {
@@ -67,18 +67,22 @@ module MatchDecisions::Four
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
+    def to_param
+      :four_confirm_shelter_agency_decline_dnd_staff
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
 
       def decline_overridden
-        match.schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
+        match.four_schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
         # TODO notify shelter agency of decline override
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.match_recommendation_shelter_agency_decision.initialize_decision!
+        match.four_match_recommendation_shelter_agency_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
 

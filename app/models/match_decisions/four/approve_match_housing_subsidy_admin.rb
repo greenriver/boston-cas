@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class ApproveMatchHousingSubsidyAdmin < Base
+  class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
 
     include MatchDecisions::AcceptsDeclineReason
 
@@ -101,6 +101,10 @@ module MatchDecisions::Four
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
+    def to_param
+      :four_approve_match_housing_subsidy_admin
+    end
+
     private def decline_reason_scope
       MatchDecisionReasons::HousingSubsidyAdminDecline.active
     end
@@ -114,7 +118,7 @@ module MatchDecisions::Four
       end
 
       def declined
-        match.confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
+        match.four_confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
       end
 
       def canceled

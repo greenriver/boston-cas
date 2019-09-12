@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class ScheduleCriminalHearingHousingSubsidyAdmin < Base
+  class ScheduleCriminalHearingHousingSubsidyAdmin < ::MatchDecisions::Base
 
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
@@ -71,10 +71,9 @@ module MatchDecisions::Four
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Four::ScheduleCriminalHearingHousingSubsidyAdmin
         m << Notifications::Four::ScheduleCriminalHearingSsp
         m << Notifications::Four::ScheduleCriminalHearingHsp
-        m << Notifications::Four::ShelterAgencyAccepted
+        m << Notifications::Four::HousingSubsidyAdministratorAccepted
       end
     end
 
@@ -89,6 +88,10 @@ module MatchDecisions::Four
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
+    end
+
+    def to_param
+      :four_schedule_criminal_hearing_housing_subsidy_admin
     end
 
     class StatusCallbacks < StatusCallbacks

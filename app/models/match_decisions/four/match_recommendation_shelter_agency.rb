@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class MatchRecommendationShelterAgency < Base
+  class MatchRecommendationShelterAgency < ::MatchDecisions::Base
 
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
@@ -100,6 +100,10 @@ module MatchDecisions::Four
       contact.in?(match.shelter_agency_contacts)
     end
 
+    def to_param
+      :four_match_recommendation_shelter_agency
+    end
+
     private def note_present_if_status_declined
       if note.blank? && status == 'declined'
         errors.add :note, 'Please note why the match is declined.'
@@ -127,7 +131,7 @@ module MatchDecisions::Four
       end
 
       def declined
-        match.confirm_shelter_agency_decline_dnd_staff_decision.initialize_decision!
+        match.four_confirm_shelter_agency_decline_dnd_staff_decision.initialize_decision!
       end
 
       def not_working_with_client

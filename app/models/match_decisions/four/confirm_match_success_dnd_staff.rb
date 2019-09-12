@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class ConfirmMatchSuccessDndStaff < Base
+  class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
 
     # validate :note_present_if_status_rejected
 
@@ -61,6 +61,10 @@ module MatchDecisions::Four
 
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
+    end
+
+    def to_param
+      :four_confirm_match_success_dnd_staff
     end
 
     private def note_present_if_status_rejected

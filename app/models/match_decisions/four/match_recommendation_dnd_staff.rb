@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class MatchRecommendationDndStaff < Base
+  class MatchRecommendationDndStaff < ::MatchDecisions::Base
 
     include MatchDecisions::AcceptsDeclineReason
 
@@ -66,6 +66,10 @@ module MatchDecisions::Four
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
+    def to_param
+      :four_match_recommendation_dnd_staff
+    end
+
     private def note_present_if_status_declined
       if note.blank? && status == 'declined'
         errors.add :note, 'Please note why the match is declined.'
@@ -90,7 +94,7 @@ module MatchDecisions::Four
         @decision.next_step.initialize_decision!
 
         if match.client.remote_id.present? && Warehouse::Base.enabled?
-          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation rescue nil
         end
       end
 

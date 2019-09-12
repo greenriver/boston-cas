@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class ConfirmHsaInitialDeclineDndStaff < Base
+  class ConfirmHsaInitialDeclineDndStaff < ::MatchDecisions::Base
 
     def statuses
       {
@@ -65,7 +65,6 @@ module MatchDecisions::Four
         m << Notifications::HousingSubsidyAdminDecisionHsp
         m << Notifications::HousingSubsidyAdminDecisionDevelopmentOfficer
         m << Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency
-        m << Notifications::HousingSubsidyAdminDecisionHsa
       end
     end
 
@@ -73,23 +72,26 @@ module MatchDecisions::Four
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
+    def to_param
+      :four_confirm_hsa_initial_decline_dnd_staff
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
 
       def decline_overridden
-        match.record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
+        match.four_record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.approve_match_housing_subsidy_admin_decision.initialize_decision!
+        match.four_confirm_hsa_initial_decline_dnd_staff_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
 
       def decline_confirmed
         match.rejected!
-        # TODO maybe rerun the matching engine for that vacancy and client
       end
 
       def canceled

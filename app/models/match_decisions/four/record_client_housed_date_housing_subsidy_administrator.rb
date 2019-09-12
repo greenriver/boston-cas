@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class RecordClientHousedDateHousingSubsidyAdministrator < Base
+  class RecordClientHousedDateHousingSubsidyAdministrator < ::MatchDecisions::Base
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -74,12 +74,12 @@ module MatchDecisions::Four
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Four::HousingSubsidyAdminDecisionClient
-        m << Notifications::Four::HousingSubsidyAdminDecisionShelterAgency
-        m << Notifications::Four::HousingSubsidyAdminDecisionSsp
-        m << Notifications::Four::HousingSubsidyAdminDecisionHsp
-        m << Notifications::Four::HousingSubsidyAdminAcceptedMatchDndStaff
-        m << Notifications::Four::HousingSubsidyAdminDecisionDevelopmentOfficer
+        m << Notifications::HousingSubsidyAdminDecisionClient
+        m << Notifications::HousingSubsidyAdminDecisionShelterAgency
+        m << Notifications::HousingSubsidyAdminDecisionSsp
+        m << Notifications::HousingSubsidyAdminDecisionHsp
+        m << Notifications::HousingSubsidyAdminAcceptedMatchDndStaff
+        m << Notifications::HousingSubsidyAdminDecisionDevelopmentOfficer
       end
     end
 
@@ -90,6 +90,10 @@ module MatchDecisions::Four
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
+    end
+
+    def to_param
+      :four_record_client_housed_date_housing_subsidy_administrator
     end
 
     class StatusCallbacks < StatusCallbacks

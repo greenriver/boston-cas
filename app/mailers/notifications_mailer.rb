@@ -10,6 +10,7 @@ class NotificationsMailer < DatabaseMailer
     @notification = notification
     @match = notification.match
     @contact = notification.recipient
+    @decision = notification.decision
   end
 
   def match_recommendation_dnd_staff notification
@@ -257,7 +258,7 @@ class NotificationsMailer < DatabaseMailer
     @route_name = @match.match_route.title
     mail(to: @contact.email, subject: "Housing opportunity successfully filled on the #{@route_name}")
   end
-  
+
   # end Manual Activation
 
   # Set Asides
@@ -268,6 +269,19 @@ class NotificationsMailer < DatabaseMailer
   end
 
   # end Set Asides
+
+  # Match Route Four
+
+  def match_recommendation_hsa notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
+  end
+
+  def housing_subsidy_administrator_accepted notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match accepted by #{_('HSA')}")
+  end
+  # end Match Route Four
 
   # Progress Updates
   def progress_update_requested notification_ids

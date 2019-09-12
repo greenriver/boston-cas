@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Four
-  class MatchRecommendationHsa < Base
+  class MatchRecommendationHsa < ::MatchDecisions::Base
 
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
@@ -14,7 +14,6 @@ module MatchDecisions::Four
     attr_accessor :release_of_information
     # javascript toggle
     attr_accessor :working_with_client
-    validate :note_present_if_status_declined
 
     def label
       label_for_status status
@@ -42,7 +41,7 @@ module MatchDecisions::Four
     end
 
     def actor_type
-      _('Housing Subsidy Administrator')
+      _('HSA')
     end
 
     def expires?
@@ -50,7 +49,7 @@ module MatchDecisions::Four
     end
 
     def contact_actor_type
-      :shelter_agency_contacts
+      :housing_subsidy_admin_contacts
     end
 
     def statuses
@@ -85,7 +84,11 @@ module MatchDecisions::Four
 
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.shelter_agency_contacts)
+      contact.in?(match.housing_subsidy_admin_contacts)
+    end
+
+    def to_param
+      :four_match_recommendation_hsa
     end
 
     private def note_present_if_status_declined
@@ -95,6 +98,7 @@ module MatchDecisions::Four
     end
 
     private def decline_reason_scope
+      # FIXME: this may be different
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
@@ -104,15 +108,11 @@ module MatchDecisions::Four
       end
 
       def accepted
-        # Only update the client's release_of_information attribute if we just set it
-        if @decision.release_of_information == '1'
-          match.client.update_attribute(:release_of_information, Time.now)
-        end
         @decision.next_step.initialize_decision!
       end
 
       def declined
-        match.confirm_shelter_agency_decline_dnd_staff_decision.initialize_decision!
+        match.four_confirm_hsa_initial_decline_dnd_staff_decision.initialize_decision!
       end
 
       def canceled
