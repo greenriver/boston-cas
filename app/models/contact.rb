@@ -28,6 +28,7 @@ class Contact < ActiveRecord::Base
   has_many :messages
   # for backwards compatibility on match history
   has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
+  has_one :agency, through: :user
 
   def full_name
     [first_name, last_name].compact.join " "
