@@ -59,7 +59,12 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     result[:mental_health_problem] = yes_no_to_bool(client, :mental_health_problem, row[:mental_health_problem])
     result[:substance_abuse_problem] = yes_no_to_bool(client, :substance_abuse_problem, row[:substance_abuse_problem])
     result[:hopwa] = yes_no_to_bool(client, :hopwa, row[:hopwa])
-    result[:assessment_score] = convert_to_score(client, :assessment_score, row[:assessment_score])
+    result[:vispdat_score] = convert_to_score(client, :vispdat_score, row[:vispdat_score])
+    result[:vispdat_priority_score] = ProjectClient.calculate_vispdat_priority_score(
+      vispdat_score: result[:vispdat_score],
+      days_homeless: result[:days_homeless_in_the_last_three_years],
+      veteran_status: result[:veteran]
+    )
     result.delete(:hopwa)
     result.delete(:last_zip)
 
@@ -184,7 +189,7 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
       :substance_abuse_problem,
       :hopwa, # not in model
       :last_zip, # not in model
-      :assessment_score,
+      :vispdat_score,
     ]
   end
 

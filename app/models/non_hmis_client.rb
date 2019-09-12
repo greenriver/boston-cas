@@ -146,6 +146,9 @@ class NonHmisClient < ActiveRecord::Base
     project_client.default_shelter_agency_contacts = [ contact&.email ] if contact_id.present?
     project_client.tags = cas_tags
 
+    project_client.vispdat_score = vispdat_score
+    project_client.vispdat_priority_score = vispdat_priority_score
+
     project_client.sync_with_cas = self.available
     project_client.needs_update = true
   end
