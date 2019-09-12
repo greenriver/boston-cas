@@ -10,7 +10,7 @@ module Admin
     before_action :set_config
     
     def index
-      
+      @vispdat_prioritization_schemes = ProjectClient.vispdat_prioritization_schemes
     end
 
     def update
@@ -26,7 +26,8 @@ module Admin
         :dnd_interval,
         :warehouse_url,
         :require_cori_release,
-        :ami
+        :ami,
+        :vispdat_prioritization_scheme,
       )
     end
 
