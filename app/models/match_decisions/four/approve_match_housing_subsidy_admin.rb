@@ -83,17 +83,17 @@ module MatchDecisions::Four
       housing_scheduled = match&.schedule_criminal_hearing_housing_subsidy_admin_decision&.status == 'scheduled'
       @notifications_for_this_step ||= [].tap do |m|
         if match.nil? || housing_scheduled
-          m << Notifications::Four::CriminalHearingScheduledClient
-          m << Notifications::Four::CriminalHearingScheduledSsp
-          m << Notifications::Four::CriminalHearingScheduledHsp
-          m << Notifications::Four::CriminalHearingScheduledDndStaff
-          m << Notifications::Four::CriminalHearingScheduledShelterAgency
+          m << Notifications::CriminalHearingScheduledClient
+          m << Notifications::CriminalHearingScheduledSsp
+          m << Notifications::CriminalHearingScheduledHsp
+          m << Notifications::CriminalHearingScheduledDndStaff
+          m << Notifications::CriminalHearingScheduledShelterAgency
         end
       end
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::Four::OnBehalfOf.create_for_match! match, contact_actor_type
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
     def accessible_by? contact
@@ -118,7 +118,7 @@ module MatchDecisions::Four
       end
 
       def canceled
-        Notifications::Four::MatchCanceled.create_for_match! match
+        Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end

@@ -43,7 +43,7 @@ module MatchRoutes
     end
 
     def initial_decision
-      :match_recommendation_dnd_staff_decision
+      :four_match_recommendation_dnd_staff
     end
 
     def initial_contacts_for_match

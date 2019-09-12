@@ -60,12 +60,12 @@ module MatchDecisions::Four
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Four::ConfirmHsaInitialDeclineDndStaff
-        m << Notifications::Four::HousingSubsidyAdminDecisionClient
-        m << Notifications::Four::HousingSubsidyAdminDecisionSsp
-        m << Notifications::Four::HousingSubsidyAdminDecisionHsp
-        m << Notifications::Four::HousingSubsidyAdminDecisionDevelopmentOfficer
-        m << Notifications::Four::HousingSubsidyAdminDeclinedMatchShelterAgency
-        m << Notifications::Four::HousingSubsidyAdminDecisionHsa
+        m << Notifications::HousingSubsidyAdminDecisionClient
+        m << Notifications::HousingSubsidyAdminDecisionSsp
+        m << Notifications::HousingSubsidyAdminDecisionHsp
+        m << Notifications::HousingSubsidyAdminDecisionDevelopmentOfficer
+        m << Notifications::HousingSubsidyAdminDeclinedMatchShelterAgency
+        m << Notifications::HousingSubsidyAdminDecisionHsa
       end
     end
 
@@ -93,7 +93,7 @@ module MatchDecisions::Four
       end
 
       def canceled
-        Notifications::Four::MatchCanceled.create_for_match! match
+        Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end

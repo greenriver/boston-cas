@@ -84,7 +84,7 @@ module MatchDecisions::Four
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::Four::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
     def accessible_by? contact
@@ -101,7 +101,7 @@ module MatchDecisions::Four
       end
 
       def canceled
-        Notifications::Four::MatchCanceled.create_for_match! match
+        Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end

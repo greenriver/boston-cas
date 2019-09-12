@@ -54,7 +54,7 @@ module MatchDecisions::Four
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         # m << Notifications::Four::RecordClientHousedDateHousingSubsidyAdministrator
-        m << Notifications::Four::MoveInDateSet # Sent to both HSA and Shelter Agency
+        m << Notifications::MoveInDateSet # Sent to both HSA and Shelter Agency
         m << Notifications::Four::ConfirmMatchSuccessDndStaff
       end
     end
@@ -74,7 +74,7 @@ module MatchDecisions::Four
       end
 
       def confirmed
-        Notifications::Four::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
+        Notifications::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
         match.succeeded!
       end
 

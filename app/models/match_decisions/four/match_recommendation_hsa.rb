@@ -14,9 +14,7 @@ module MatchDecisions::Four
     attr_accessor :release_of_information
     # javascript toggle
     attr_accessor :working_with_client
-    # validate :note_present_if_status_declined
-    validate :release_of_information_present_if_match_accepted
-    validate :spoken_with_services_agency_and_cori_release_submitted_if_accepted
+    validate :note_present_if_status_declined
 
     def label
       label_for_status status
@@ -25,7 +23,6 @@ module MatchDecisions::Four
     def label_for_status status
       case status.to_sym
       when :pending then "Match Awaiting #{_('Housing Subsidy Administrator')} Review"
-      when :acknowledged then "Match acknowledged by #{_('Housing Subsidy Administrator')}.  In review"
       when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}."
       when :declined then decline_status_label
       when :canceled then canceled_status_label
@@ -59,7 +56,6 @@ module MatchDecisions::Four
     def statuses
       {
         pending: 'Pending',
-        acknowledged: 'Acknowledged',
         accepted: 'Accepted',
         declined: 'Declined',
         canceled: 'Canceled',
@@ -84,7 +80,7 @@ module MatchDecisions::Four
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact:
-      Notifications::Four::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
     def accessible_by? contact
@@ -107,9 +103,6 @@ module MatchDecisions::Four
       def pending
       end
 
-      def acknowledged
-      end
-
       def accepted
         # Only update the client's release_of_information attribute if we just set it
         if @decision.release_of_information == '1'
@@ -123,44 +116,16 @@ module MatchDecisions::Four
       end
 
       def canceled
-        Notifications::Four::MatchCanceled.create_for_match! match
+        Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end
     private_constant :StatusCallbacks
 
-    private def release_of_information_present_if_match_accepted
-      # if the Shelter Agency has just indicated a release has been signed:
-      # release_of_information = '1'
-      # if the client previously signed the release
-      # release_of_information = Time
-      if status == 'accepted' && release_of_information == '0'
-        errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
-      end
-    end
-
-    private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
-      if status == 'accepted'
-        if ! client_spoken_with_services_agency
-          errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
-        end
-        if Config.get(:require_cori_release) && ! cori_release_form_submitted
-         errors.add :cori_release_form_submitted, 'A CORI release form is required.'
-        end
-      end
-    end
-
     private def decline_reason_blank?
       decline_reason.blank?
     end
 
-    def whitelist_params_for_update params
-      super.merge params.require(:decision).permit(
-        :release_of_information,
-        :client_spoken_with_services_agency,
-        :cori_release_form_submitted,
-      )
-    end
   end
 end
 
