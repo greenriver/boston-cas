@@ -5,6 +5,8 @@
     .form-inputs
       = f.input :client_identifier, required: true
       = f.input :assessment_score
+      = f.input :vispdat_score
+      = f.input :vispdat_priority_score
       = f.input :domestic_violence, label: 'Domestic violence survivor'
       - if can_edit_all_clients?
         .jAgency
