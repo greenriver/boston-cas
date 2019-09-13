@@ -105,7 +105,8 @@ class MatchDecisionsController < ApplicationController
       end
 
       # Note this was done on-behalf of someone else
-      if @decision.contact_actor_type.present? && decision_params[:status] != "back"
+      # don't make note if the action is stepping back or setting the expiration
+      if @decision.contact_actor_type.present? && decision_params[:status] != "back" && decision_params[:shelter_expiration].blank?
         unless current_contact.in?(@match.send(@decision.contact_actor_type))
           @decision.notify_contact_of_action_taken_on_behalf_of contact: current_contact
         end
@@ -126,6 +127,7 @@ class MatchDecisionsController < ApplicationController
       redirect_to access_context.match_decision_path(@match, @decision, redirect: "true")
     else
       flash[:alert] = "Unable to recreate notifications for this step, it is now locked."
+      redirect_to access_context.match_decision_path(@match, @decision, redirect: "true")
     end
   end
 

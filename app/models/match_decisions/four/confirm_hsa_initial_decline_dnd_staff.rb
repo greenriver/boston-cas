@@ -86,7 +86,7 @@ module MatchDecisions::Four
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.four_confirm_hsa_initial_decline_dnd_staff_decision.initialize_decision!
+        match.four_match_recommendation_hsa_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
 

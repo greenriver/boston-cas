@@ -14,6 +14,7 @@ module MatchDecisions
         pending: 'Pending',
         confirmed: 'Confirmed',
         rejected: 'Rejected',
+        canceled: 'Canceled', # added to support cancellations caused by other match success
       }
     end
 
@@ -26,6 +27,7 @@ module MatchDecisions
       when :pending then "#{_('DND')} to confirm match success"
       when :confirmed then "#{_('DND')} confirms match success"
       when :rejected then "Match rejected by #{_('DND')}"
+      when :canceled then 'Match canceled'
       end
     end
 

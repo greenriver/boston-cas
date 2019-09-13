@@ -281,6 +281,11 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: "Match accepted by #{_('HSA')}")
   end
+
+  def confirm_hsa_initial_decline_dnd_staff notification
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
+  end
   # end Match Route Four
 
   # Progress Updates
