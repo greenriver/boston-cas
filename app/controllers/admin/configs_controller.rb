@@ -8,9 +8,9 @@ module Admin
   class ConfigsController < ApplicationController
     before_action :require_can_manage_config!
     before_action :set_config
-    
+
     def index
-      
+
     end
 
     def update
@@ -26,7 +26,8 @@ module Admin
         :dnd_interval,
         :warehouse_url,
         :require_cori_release,
-        :ami
+        :ami,
+        :vispdat_prioritization_scheme,
       )
     end
 
@@ -37,6 +38,6 @@ module Admin
     def config_source
       Config
     end
-  
+
   end
 end

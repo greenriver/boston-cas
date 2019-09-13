@@ -87,6 +87,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       params.require(:deidentified_client).permit(
         :client_identifier,
         :assessment_score,
+        :vispdat_score,
+        :vispdat_priority_score,
         :agency_id,
         :contact_id,
         :date_of_birth,
