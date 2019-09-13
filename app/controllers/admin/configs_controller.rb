@@ -8,9 +8,9 @@ module Admin
   class ConfigsController < ApplicationController
     before_action :require_can_manage_config!
     before_action :set_config
-    
+
     def index
-      @vispdat_prioritization_schemes = ProjectClient.vispdat_prioritization_schemes
+
     end
 
     def update
@@ -38,6 +38,6 @@ module Admin
     def config_source
       Config
     end
-  
+
   end
 end
