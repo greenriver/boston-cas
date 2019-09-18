@@ -498,6 +498,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
     self.class.transaction do
       route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
+
+      # Cancel other matches on other routes
       if route.should_cancel_other_matches
         client_related_matches.each do |match|
           if match.current_decision.present?
@@ -519,16 +521,17 @@ class ClientOpportunityMatch < ActiveRecord::Base
         client.make_unavailable_in match_route: route
       end
 
-      if route.should_activate_match
+      # Cleanup other matches on the same opportunity
+      if route.should_activate_match && ! route.allow_multiple_active_matches
         # If the match was automatically activated, we just need to clean up any leftovers
         opportunity_related_matches.destroy_all
       else
         opportunity_related_matches.each do |match|
           if match.active
-            opportunity.notify_contacts_of_success(self)
             MatchEvents::DecisionAction.create(match_id: match.id,
                 decision_id: match.current_decision.id,
                 action: :canceled)
+            opportunity.notify_contacts_opportunity_taken(match)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
             match.poached!
