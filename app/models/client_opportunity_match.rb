@@ -242,7 +242,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def client_info_approved_for_release?
-    if match_route.class.name == 'MatchRoutes::Default'
+    if match_route.class.name.in?([ 'MatchRoutes::Default' ])
       return shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?
     else
       client&.has_full_housing_release? || false
