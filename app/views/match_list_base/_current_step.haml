@@ -16,7 +16,10 @@
         .sr-only
           = decision.step_name
         - if size == 'sm'
-          = link_to match_path(match), class: 'c-stepped-progress__step-link', data: {toggle: :tooltip, title: decision.step_name} do
+          - link = '#'
+          - if can_reject_matches? || match.past_first_step_or_all_steps_visible?
+            - link = match_path(match)
+          = link_to link, class: 'c-stepped-progress__step-link', data: {toggle: :tooltip, title: decision.step_name} do
             .c-stepped-progress__step-number= types[decision.type]
         - else
           .c-stepped-progress__step-link--static{data: {toggle: :tooltip, title: decision.step_name}}
