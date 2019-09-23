@@ -16,7 +16,7 @@ module Notifications
     end
 
     def event_label
-      'Vacancy filled by other client'
+      'Contact notified that vacancy was filled by other client'
     end
   end
 end

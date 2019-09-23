@@ -30,7 +30,7 @@
               = link_to 'Edit', edit_program_sub_program_unit_for_building_path(program_id: @program.id, sub_program_id: @subprogram.id, id: 1), data: {loads_in_pjax_modal: true}, class: 'jEditUnit btn btn-sm btn-secondary'
         - else
           %h3.detail-box--label Voucher Only
-          
+
       .col-sm-4.c-detail-group.c-detail-group--stacked.c-detail-group--bordered
         %h3.detail-box--label Availability
         .row
@@ -50,24 +50,30 @@
             - else
               = voucher.status_match.overall_status[:name]
             - if voucher.status_match.active? && can_reject_matches?
-              = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'ml-auto btn btn-secondary btn-sm', method: :delete, data: {confirm: "Stoping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
+              = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'ml-auto btn btn-secondary btn-sm', method: :delete, data: {confirm: "Stopping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
                 Stop Match
           - else
             No Match
         - if voucher.status_match.present?
-          %h3.detail-box--label.mt-4 Client
+          %h3.detail-box--label.mt-4 Active Clients
           .detail-box-value.d-flex.flex-wrap
           - if voucher.status_match.client.present?
             - if can_view_all_matches?
-              = link_to client_path(voucher.status_match.client) do
-                = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! show_confidential_names?
+              - voucher.client_opportunity_matches.each do |match|
+                - next unless match.active?
+                .client-name
+                  = link_to client_path(match.client) do
+                    = match.client_name_for_contact current_contact, hidden: match.confidential? && ! show_confidential_names?
             - else
-              = voucher.status_match.client_name_for_contact current_contact, hidden: voucher.status_match.confidential? && ! show_confidential_names?
+              - voucher.client_opportunity_matches.each do |match|
+                - next unless match.active?
+                .client-name
+                  = match.client_name_for_contact current_contact, hidden: match.confidential? && ! show_confidential_names?
         %h3.detail-box--label.mt-4 Alternate Clients
         .detail-box-value
           - if voucher.opportunity.present?
-            = link_to opportunity_matches_path(voucher.opportunity) do 
-              Matching Clients
+            = link_to opportunity_matches_path(voucher.opportunity) do
+              Prioritized Clients
     .detail-box-value.d-flex.flex-wrap.justify-content-end.align-items-end
       - if voucher.can_be_destroyed?
         = link_to program_sub_program_voucher_path(id: voucher.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-sm' do
