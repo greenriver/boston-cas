@@ -68,6 +68,9 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     result.delete(:hopwa)
     result.delete(:last_zip)
 
+    result[:last_name] = "Anonymous - #{row[:client_identifier]}"
+    result[:first_name] = "Anonymous - #{row[:client_identifier]}"
+
     result
   end
 
