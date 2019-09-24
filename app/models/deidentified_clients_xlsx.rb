@@ -10,7 +10,7 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     @xlsx.row(1) == self.class.file_header
   end
 
-  def import(agency)
+  def import(agency, force_update: false)
     @added = 0
     @touched = 0
     @clients = []
@@ -25,7 +25,7 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
         cleaned = clean_row(client, row) rescue next
         cleaned[:agency_id] = agency&.id
         cleaned[:identified] = false # mark as de-identified client
-        if client.updated_at.nil? || cleaned[:updated_at] > client.updated_at.to_date
+        if force_update || client.updated_at.nil? || cleaned[:updated_at] > client.updated_at.to_date
           @added +=1 if client.updated_at.nil?
           @touched += 1 if client.updated_at.present?
           client.update(cleaned)
