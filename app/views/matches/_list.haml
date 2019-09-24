@@ -11,19 +11,20 @@
           = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
         - else
           = match.client_name_for_contact current_contact, hidden: hide_client_name
-      %ul.list-unstyled
-        %li
-          %dl.inline
-            %dt First Homeless Night:
-            %dd= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-        %li
-          %dl.inline
-            %dt Days Homeless:
-            %dd= number_with_delimiter(match.client.days_homeless)
-        %li
-          %dl.inline
-            %dt Days Homeless in Last 3 Years:
-            %dd= number_with_delimiter(match.client.days_homeless_in_last_three_years)
+      - if match.client.accessible_by_user? current_user
+        %ul.list-unstyled
+          %li
+            %dl.inline
+              %dt First Homeless Night:
+              %dd= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
+          %li
+            %dl.inline
+              %dt Days Homeless:
+              %dd= number_with_delimiter(match.client.days_homeless)
+          %li
+            %dl.inline
+              %dt Days Homeless in Last 3 Years:
+              %dd= number_with_delimiter(match.client.days_homeless_in_last_three_years)
     .client__details
       - if MatchRoutes::Base.more_than_one?
         %ul.list-unstyled
@@ -68,32 +69,34 @@
               - else
                 = match.opportunity_details.sub_program_name
     .client__details.flex-column.d-flex.justify-content-end.align-items-end.ml-auto
-      = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
-      - if  match_type != 'opportunity' && can_see_alternate_matches?
-        = link_to opportunity_matches_path(match.opportunity) do
-          -# #{match.opportunity.matching_clients.count} Alternate Matches
-          Alternate Matches
-      - if match.shelter_expiration? && match.current_decision&.expires?
-        - if match.shelter_expiration < Date.today
-          .c-tag__wrapper.align-items-center
-            .c-tag--danger.mr-4
-              .c-tag__icon{style: 'font-size: 1.2rem;'}
-                %i.icon-warning
+      - if can_reject_matches? || match.past_first_step_or_all_steps_visible?
+        = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
+        - if  match_type != 'opportunity' && can_see_alternate_matches?
+          = link_to opportunity_matches_path(match.opportunity) do
+            Prioritized Clients
+        - if match.shelter_expiration? && match.current_decision&.expires?
+          - if match.shelter_expiration < Date.today
+            .c-tag__wrapper.align-items-center
+              .c-tag--danger.mr-4
+                .c-tag__icon{style: 'font-size: 1.2rem;'}
+                  %i.icon-warning
+              .content
+                This match expired on
+                %strong= "#{match.shelter_expiration}."
+          - else
             .content
-              This match expired on
+              This match expires on
               %strong= "#{match.shelter_expiration}."
-        - else
-          .content
-            This match expires on
-            %strong= "#{match.shelter_expiration}."
-      - decision_stallable = match.current_decision && match.current_decision.stallable?
-      - if decision_stallable && match.stalled?
-        %p.o-section__note
-          %i.icon-warning
-          This match stalled on
-          %strong #{match.stall_date}
-      - elsif decision_stallable && match.stall_date.present?
-        %p.o-section__note
-          %i.icon-info
-          This match will be considered stalled on
-          %strong #{match.stall_date}.
+        - decision_stallable = match.current_decision && match.current_decision.stallable?
+        - if decision_stallable && match.stalled?
+          %p.o-section__note
+            %i.icon-warning
+            This match stalled on
+            %strong #{match.stall_date}
+        - elsif decision_stallable && match.stall_date.present?
+          %p.o-section__note
+            %i.icon-info
+            This match will be considered stalled on
+            %strong #{match.stall_date}.
+      - else
+        This match is not currently available.
