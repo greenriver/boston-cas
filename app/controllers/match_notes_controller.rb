@@ -25,10 +25,13 @@ class MatchNotesController < ApplicationController
     @match_note.assign_attributes mn_params
     @match_note.contact = current_contact
     if @match_note.save
-      if mn_params[:contact_ids].present? && mn_params[:contact_ids].delete_if(&:blank?).present?
-        mn_params[:contact_ids].delete_if(&:blank?).each do |contact_id|
-          include_content = match_note_params[:include_content]
-          notification = Notifications::NoteSent.create_for_match! match_id: @match.id, contact_id: contact_id.to_i, note: @match_note.note, include_content: include_content
+      if @match.can_create_administrative_note?(current_contact) || current_user.can_send_notes_via_email?
+        contact_ids = mn_params[:contact_ids].delete_if(&:blank?) if mn_params[:contact_ids].present?
+        if contact_ids.present?
+          contact_ids.each do |contact_id|
+            include_content = match_note_params[:include_content]
+            notification = Notifications::NoteSent.create_for_match! match_id: @match.id, contact_id: contact_id.to_i, note: @match_note.note, include_content: include_content
+          end
         end
       end
       redirect_to success_path
