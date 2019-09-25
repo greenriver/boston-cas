@@ -2,12 +2,12 @@
 %h1
   Upload Complete
 
-- problems = @csv.clients.reduce(0){ |sum, client| sum += client.errors.count }
+- problems = @upload.clients.reduce(0){ |sum, client| sum += client.errors.count }
 
 %ul.list-unstyled
-  %li= "#{@csv.added} new clients added"
-  %li= "#{@csv.touched} existing clients updated"
-  %li= "#{problems} records with problems"
+  %li= "#{@upload.added} new clients added"
+  %li= "#{@upload.touched} existing clients updated"
+  %li= "#{problems} problems detected"
 
 - if problems > 0
   .row
@@ -19,7 +19,7 @@
           %th Item
           %th Problem
         %tbody
-          - @csv.clients.each do |client|
+          - @upload.clients.each do |client|
             - client.errors.each_with_index do |error, index|
               %tr
                 - if index == 0
