@@ -105,11 +105,19 @@ class ImportedClientsCsv < ActiveRecord::Base
   end
 
   def convert_to_time(str)
-    DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
+    begin
+      DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
+    rescue
+      DateTime.parse(str)
+    end
   end
 
   def convert_to_date(str)
-    Date.strptime(str, '%m/%d/%Y')
+    begin
+      Date.strptime(str, '%m/%d/%Y')
+    rescue
+      Date.parse(str)
+    end
   end
 
   def fleeing_domestic_violence?(row)
