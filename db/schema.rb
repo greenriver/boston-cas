@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190912201023) do
+ActiveRecord::Schema.define(version: 20190925195307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -991,6 +991,7 @@ ActiveRecord::Schema.define(version: 20190912201023) do
     t.boolean  "can_manage_tags",                         default: false
     t.boolean  "can_manage_imported_clients",             default: false
     t.boolean  "can_edit_clients_based_on_rules",         default: false
+    t.boolean  "can_send_notes_via_email",                default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
