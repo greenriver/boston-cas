@@ -15,9 +15,10 @@
               %th
         %tbody
           - @matches.each do |client|
+            - match = client.match_for_opportunity(@opportunity)
             - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?
-            - hide_client_name = (client.confidential? || client.match_for_opportunity(@opportunity).try(:confidential?) || confidential_opportunity) && ! show_confidential_names?
-            - name = client.client_name_for_contact current_user.contact, hidden: hide_client_name
+            - hide_client_name = (client.confidential? || match.try(:confidential?) || confidential_opportunity) && ! show_confidential_names?
+            - name = match&.client_name_for_contact(current_user.contact, hidden: hide_client_name) || client.client_name_for_contact(current_user.contact, hidden: hide_client_name)
 
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
@@ -28,7 +29,7 @@
                 = render 'client_match_routes', client: client
 
               - if active_client_ids.include?(client.id)
-                %td.text-center= link_to 'Current Active Match', match_path(client.match_for_opportunity(@opportunity))
+                %td.text-center= link_to 'Current Active Match', match_path(match)
               -else
                 - if can_activate_matches?
                   - unless @opportunity.match_route.allow_multiple_active_matches
