@@ -61,11 +61,12 @@ class ImportedClientsCsv < ActiveRecord::Base
           client.available = false
           client.identified = true
         end
-        if client.imported_timestamp.nil? || row[FORM_TIMESTAMP].to_time > client.imported_timestamp
+        timestamp = convert_to_time(row[FORM_TIMESTAMP])
+        if client.imported_timestamp.nil? || timestamp > client.imported_timestamp
           @clients << client
           @touched += 1 if client.imported_timestamp.present?
           client.update(
-            imported_timestamp: row[FORM_TIMESTAMP].to_time,
+            imported_timestamp: timestamp,
             agency_id: agency&.id,
 
             set_asides_housing_status: row[HOUSING_STATUS],
@@ -73,7 +74,7 @@ class ImportedClientsCsv < ActiveRecord::Base
             set_asides_resident: resident?(row),
             days_homeless_in_the_last_three_years: days_homeless(row),
             shelter_name: row[SHELTER_NAME],
-            entry_date: row[ENTRY_DATE].to_date,
+            entry_date: convert_to_date(row[ENTRY_DATE]),
             case_manager_contact_info: case_manager(client, row),
             phone_number: row[HOH_PHONE],
             income_total_monthly: monthly_income(row),
@@ -101,6 +102,14 @@ class ImportedClientsCsv < ActiveRecord::Base
     else
       return false
     end
+  end
+
+  def convert_to_time(str)
+    DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
+  end
+
+  def convert_to_date(str)
+    Date.strptime(str, '%m/%d/%Y')
   end
 
   def fleeing_domestic_violence?(row)
@@ -156,6 +165,8 @@ class ImportedClientsCsv < ActiveRecord::Base
   end
 
   def bedrooms(row)
+    return nil unless row[BEDROOMS].present?
+
     bedrooms = row[BEDROOMS].gsub(/bedroom/, '').to_i
     if bedrooms > 1
       bedrooms
