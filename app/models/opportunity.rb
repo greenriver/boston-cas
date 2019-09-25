@@ -141,7 +141,7 @@ class Opportunity < ActiveRecord::Base
     Notifications::MatchInitiationForManualNotification.create_for_match! match
   end
 
-  def notify_contacts_of_success(match)
+  def notify_contacts_opportunity_taken(match)
     Notifications::HousingOpportunitySuccessfullyFilled.create_for_match! match
   end
 

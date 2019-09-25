@@ -1,11 +1,12 @@
 Hello #{@contact.full_name},
 \
-The #{@match_route} opportunity at
-
+The following match has been canceled. There were multiple clients matched to this vacancy and another client was able to complete the entire process and received the unit. The client on the linked match will be immediately returned to the pool of clients who are eligible for opportunities through CAS.
+\
+#{notification_match_url @notification, @match}
+\
+The #{@route_name} opportunity at
+\
 = render 'location_details'
-
-has been filled. Details are available at
-#{opportunity_matches_url(@match.opportunity)}
 \
 \
 \
