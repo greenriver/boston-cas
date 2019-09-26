@@ -6,7 +6,7 @@
   - if @match.can_create_administrative_note?(access_context.current_contact)
     = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
   - if @match.can_create_administrative_note?(access_context.current_contact) || current_user.can_send_notes_via_email?
-    = form.input :include_content, as: :boolean, label: 'Include note content in email?'
+    = form.input :include_content, as: :boolean, label: 'Include note content in email?', hint: 'Do not include client details in the note if you include the content in the email.'
     = form.input :contact_ids, collection: @match.contacts, label: 'Send note to contacts?', hint: 'If any contacts are selected, this note will be sent directly to them via email.', input_html: {multiple: :multiple, class: [:select2], style: 'width: 100%'}
   = form.submit "Save", class: 'btn btn-success'
 
