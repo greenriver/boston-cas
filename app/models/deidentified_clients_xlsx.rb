@@ -3,13 +3,6 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
   mount_uploader :file, DeidentifiedClientsXlsxFileUploader
   attr_reader :added, :touched, :problems, :clients
 
-  def initialize(attributes = {})
-    super(attributes)
-    @added = 0
-    @touched = 0
-    @clients = []
-  end
-
   def valid_header?
     parse_xlsx if ! @xlsx
 
@@ -17,7 +10,11 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     @xlsx.row(1) == self.class.file_header
   end
 
-  def import(agency)
+  def import(agency, force_update: false)
+    @added = 0
+    @touched = 0
+    @clients = []
+
     if valid_header?
       @xlsx.each_with_index do |raw, index|
         next if skip?(raw, index)
@@ -28,7 +25,7 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
         cleaned = clean_row(client, row) rescue next
         cleaned[:agency_id] = agency&.id
         cleaned[:identified] = false # mark as de-identified client
-        if client.updated_at.nil? || cleaned[:updated_at] > client.updated_at.to_date
+        if force_update || client.updated_at.nil? || cleaned[:updated_at] > client.updated_at.to_date
           @added +=1 if client.updated_at.nil?
           @touched += 1 if client.updated_at.present?
           client.update(cleaned)
@@ -45,12 +42,15 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
   def clean_row(client, row)
     result = row.dup
 
+    result[:updated_at] = parse_date(client, 'Information collected at', row[:updated_at])
     check_date(client, result[:updated_at])
+    result[:entry_date] = parse_date(client, 'Date entered program', row[:entry_date])
     result.delete(:exit_date)
     result.delete(:date_first_homeless)
     result.delete(:occurrences_of_homelessness)
     result[:days_homeless_in_the_last_three_years] = convert_to_days(client, row[:days_homeless_in_the_last_three_years])
     result[:family_member] = yes_no_to_bool(client, :family_member, row[:family_member])
+    result[:date_of_birth] = parse_date(client, 'Date of birth (client)', row[:date_of_birth])
     result[:veteran] = yes_no_to_bool(client, :veteran, row[:veteran])
     result[:disabling_condition] = yes_no_to_bool(client, :disabling_condition, row[:disabling_condition])
     result[:developmental_disability] = yes_no_to_bool(client, :developmental_disability, row[:developmental_disability])
@@ -68,17 +68,29 @@ class DeidentifiedClientsXlsx < ActiveRecord::Base
     result.delete(:hopwa)
     result.delete(:last_zip)
 
+    result[:last_name] = "Anonymous - #{row[:client_identifier]}"
+    result[:first_name] = "Anonymous - #{row[:client_identifier]}"
+
     result
+  end
+
+  def parse_date(client, column, date)
+    return date if date.is_a?(Date)
+    return Date.parse('1900-01-01') + date.days if date.is_a?(Integer)
+    return Date.parse(date) if Date.is_a?(String)
+
+    client.errors.add(column, "'#{date}' cannot be parsed as a date")
+    raise "invalid date"
   end
 
   def check_date(client, date)
     begin
       if date < Date.parse('2000-01-01') || date > Date.parse('2999-12-31')
-        client.errors.add('information collected at', "'#{date}' is out of expected range")
+        client.errors.add('Information collected at', "'#{date}' is out of expected range")
         raise "date out of range"
       end
     rescue
-      client.errors.add('information collected at', "'#{date}' cannot be parsed as a date")
+      client.errors.add('Information collected at', "'#{date}' cannot be parsed as a date")
       raise "invalid date"
     end
   end

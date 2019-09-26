@@ -7,7 +7,7 @@
 class InProgressVouchersController < VouchersController
   def index
     @vouchers = @subprogram.vouchers.order(:id)
-    @q = @vouchers.ransack(params[:q])
+    @q = @vouchers.preload(:client_opportunity_matches).ransack(params[:q])
     @vouchers_for_page = @q.result.select{|v| v.status_match.present? && v.status_match.active}
     if params[:q]&.[](:client_search).present?
       @vouchers_for_page = @vouchers_for_page.select{|v| v.status_match.present? && !v.status_match.confidential?}

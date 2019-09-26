@@ -255,9 +255,9 @@ class NotificationsMailer < DatabaseMailer
   def housing_opportunity_successfully_filled notification
     setup_instance_variables notification
     @route_name = @match.match_route.title
-    mail(to: @contact.email, subject: "Housing opportunity successfully filled on the #{@route_name}")
+    mail(to: @contact.email, subject: 'Match Canceled - Vacancy filled by other client')
   end
-  
+
   # end Manual Activation
 
   # Set Asides
