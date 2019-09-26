@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-29 19:22-0400\n"
-"PO-Revision-Date: 2019-04-29 19:22-0400\n"
+"POT-Creation-Date: 2019-09-26 08:33-0400\n"
+"PO-Revision-Date: 2019-09-26 08:33-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -46,6 +46,9 @@ msgid "CAS"
 msgstr ""
 
 msgid "CSPECH Eligible"
+msgstr ""
+
+msgid "Cannot read uploaded file, is it an XLSX?"
 msgstr ""
 
 msgid "Case Workers"
@@ -93,6 +96,9 @@ msgstr ""
 msgid "Default Match Route"
 msgstr ""
 
+msgid "Do not include client details in the note if you include the content in the email."
+msgstr ""
+
 msgid "Ending Veteran & Chronic Homelessness in Boston"
 msgstr ""
 
@@ -136,6 +142,9 @@ msgid "Identified Client"
 msgstr ""
 
 msgid "Identified Clients"
+msgstr ""
+
+msgid "Imported Clients"
 msgstr ""
 
 msgid "Ineligible Immigrant (Including Undocumented)"
@@ -207,6 +216,9 @@ msgstr ""
 msgid "The client does not need to be document-ready in order to indicate interest."
 msgstr ""
 
+msgid "The file header is incorrect."
+msgstr ""
+
 msgid "There will be a criminal background hearing"
 msgstr ""
 
@@ -219,7 +231,13 @@ msgstr ""
 msgid "U.S Citizen or Permanent Resident"
 msgstr ""
 
+msgid "Uploaded file does not have the correct header. Incorrect file?"
+msgstr ""
+
 msgid "When you indicate interest, notification will be sent to the"
+msgstr ""
+
+msgid "You must attach a file in the form."
 msgstr ""
 
 msgid "a criminal background hearing has been schedule for"
