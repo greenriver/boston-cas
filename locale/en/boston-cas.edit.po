@@ -47,6 +47,9 @@ msgstr ""
 msgid "CSPECH Eligible"
 msgstr ""
 
+msgid "Cannot read uploaded file, is it an XLSX?"
+msgstr ""
+
 msgid "Case Workers"
 msgstr ""
 
@@ -92,6 +95,9 @@ msgstr ""
 msgid "Default Match Route"
 msgstr ""
 
+msgid "Do not include client details in the note if you include the content in the email."
+msgstr ""
+
 msgid "Ending Veteran & Chronic Homelessness in Boston"
 msgstr ""
 
@@ -135,6 +141,9 @@ msgid "Identified Client"
 msgstr ""
 
 msgid "Identified Clients"
+msgstr ""
+
+msgid "Imported Clients"
 msgstr ""
 
 msgid "Ineligible Immigrant (Including Undocumented)"
@@ -206,6 +215,9 @@ msgstr ""
 msgid "The client does not need to be document-ready in order to indicate interest."
 msgstr ""
 
+msgid "The file header is incorrect."
+msgstr ""
+
 msgid "There will be a criminal background hearing"
 msgstr ""
 
@@ -218,7 +230,13 @@ msgstr ""
 msgid "U.S Citizen or Permanent Resident"
 msgstr ""
 
+msgid "Uploaded file does not have the correct header. Incorrect file?"
+msgstr ""
+
 msgid "When you indicate interest, notification will be sent to the"
+msgstr ""
+
+msgid "You must attach a file in the form."
 msgstr ""
 
 msgid "a criminal background hearing has been schedule for"
