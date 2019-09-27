@@ -6,7 +6,7 @@
 
 class Rules::VashEligible < Rule
   def clients_that_fit(scope, requirement)
-    if Client.column_names.include?(:hues_eligible.to_s)
+    if Client.column_names.include?(:vash_eligible.to_s)
       scope.where(vash_eligible: requirement.positive)
     else
       raise RuleDatabaseStructureMissing.new("clients.vash_eligible missing. Cannot check clients against #{self.class}.")
