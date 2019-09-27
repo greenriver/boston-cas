@@ -17,6 +17,11 @@
   %p
     = "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."
   .form-actions
+    - if @decision.match.opportunity_related_matches.active.exists?
+      %button{class: 'btn btn-warning mb-1', data: {submit_param_name: 'decision[status]', submit_param_value: 'other_clients_canceled'}, disabled: !@decision.editable?}
+        %i.icon-warning
+        Client moving into housing, cancel other active matches on opportunity!
+
     %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?}
       %i.icon-checkmark
       = submit_label

@@ -19,6 +19,7 @@ module MatchDecisions
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
+      when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
       when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -40,6 +41,7 @@ module MatchDecisions
     def statuses
       {
         pending: 'Pending',
+        other_clients_canceled: 'Pending, other matches on opportunity canceled',
         completed: 'Complete',
         canceled: 'Canceled',
         back: 'Pending',
@@ -94,6 +96,10 @@ module MatchDecisions
 
     class StatusCallbacks < StatusCallbacks
       def pending
+      end
+
+      def other_clients_canceled
+        match.cancel_opportunity_related_matches
       end
 
       def completed
