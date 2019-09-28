@@ -2,7 +2,7 @@
 lock '3.11.1'
 
 set :application, 'cas'
-set :repo_url, 'git@github.com:greenriver/boston-cas.git'
+set :repo_url, 'https://github.com/greenriver/boston-cas.git'
 set :client, ENV.fetch('CLIENT')
 
 set :whenever_identifier, ->{ "#{fetch(:client)}-#{fetch(:application)}_#{fetch(:stage)}" }
