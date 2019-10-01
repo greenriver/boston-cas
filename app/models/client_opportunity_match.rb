@@ -554,7 +554,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
-  def cancel_opportunity_related_matches
+  def cancel_opportunity_related_matches!
     opportunity_related_matches.active.each do |match|
       MatchEvents::DecisionAction.create(match_id: match.id,
         decision_id: match.current_decision.id,

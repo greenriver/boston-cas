@@ -99,7 +99,7 @@ module MatchDecisions
       end
 
       def other_clients_canceled
-        match.cancel_opportunity_related_matches
+        match.cancel_opportunity_related_matches!
       end
 
       def completed
