@@ -20,7 +20,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   belongs_to :client
   belongs_to :opportunity
-  belongs_to :match_route
+  belongs_to :match_route, class_name: 'MatchRoutes::Base'
 
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   delegate :contacts_editable_by_hsa, to: :match_route
