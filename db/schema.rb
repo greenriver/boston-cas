@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190927195501) do
+ActiveRecord::Schema.define(version: 20191001183520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 20190927195501) do
     t.date     "stall_date"
     t.datetime "stall_contacts_notified"
     t.datetime "dnd_notified"
+    t.integer  "match_route_id"
   end
 
   add_index "client_opportunity_matches", ["active"], name: "index_client_opportunity_matches_on_active", using: :btree
