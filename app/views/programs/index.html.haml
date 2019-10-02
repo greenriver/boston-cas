@@ -68,7 +68,7 @@
                 = sp.site
               - if MatchRoutes::Base.more_than_one?
                 %td{:class => deleted}
-                  = sp.program.match_route.title
+                  = sp.program.match_route&.title
               %td{:class => deleted}
                 = sp.organizations.join(', ')
               %td{:class => deleted}

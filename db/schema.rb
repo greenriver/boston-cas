@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190925195307) do
+ActiveRecord::Schema.define(version: 20190927195501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 20190925195307) do
     t.boolean  "interested_in_set_asides",                               default: false
     t.jsonb    "tags"
     t.string   "case_manager_contact_info"
+    t.boolean  "vash_eligible"
   end
 
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
@@ -868,6 +869,7 @@ ActiveRecord::Schema.define(version: 20190925195307) do
     t.jsonb    "tags"
     t.string   "case_manager_contact_info"
     t.string   "non_hmis_client_identifier"
+    t.boolean  "vash_eligible"
   end
 
   add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
