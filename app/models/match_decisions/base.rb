@@ -40,9 +40,9 @@ module MatchDecisions
     # We provide an option to expire the shelter agency initial review
     attr_accessor :shelter_expiration
 
-    scope :pending, -> { where(status: :pending) }
+    scope :pending, -> { where(status: [:pending, :other_clients_canceled]) }
     scope :awaiting_action, -> do
-      where(status: [:pending, :acknowledged])
+      where(status: [:pending, :other_clients_canceled, :acknowledged])
     end
     scope :last_updated_before, -> (date) do
       where(arel_table[:updated_at].lteq(date))
@@ -344,7 +344,7 @@ module MatchDecisions
     def incomplete_active_done?
       return :canceled if self.class.closed_match_statuses.include?(status.try(:to_sym))
       return :active if editable?
-      return :incomplete if status == :pending || status.blank?
+      return :incomplete if status == :pending || status == :other_clients_canceled || status.blank?
       :done
     end
 
