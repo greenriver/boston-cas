@@ -75,10 +75,7 @@ class Matching::Engine
         opportunity: opportunity.opportunity_details.opportunity_for_archive,
         client: client.prepare_for_archive,
       }
-      match = client.candidate_matches.create(opportunity: opportunity,
-        client: client,
-        match_route: opportunity.match_route,
-        universe_state: universe_state)
+      match = client.candidate_matches.create(opportunity: opportunity, client: client, universe_state: universe_state)
       
       if client_priority == 1
         if opportunity.match_route.should_activate_match

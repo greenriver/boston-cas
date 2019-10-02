@@ -37,7 +37,6 @@ class QualifiedOpportunitiesController < ApplicationController
     match = @client.candidate_matches.create(
       opportunity: @opportunity,
       client: @client,
-      match_route: @opportunity.match_route,
       universe_state: @universe_state
     )
     match.activate!

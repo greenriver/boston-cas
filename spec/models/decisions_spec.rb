@@ -14,7 +14,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
     let(:sub_program) { create :sub_program, program: program }
     let(:voucher) { create :voucher, sub_program: sub_program }
     let(:opportunity) { create :opportunity, voucher: voucher }
-    let!(:the_match) { create :client_opportunity_match, match_route: route, opportunity: opportunity, active: true }
+    let!(:the_match) { create :client_opportunity_match, opportunity: opportunity, active: true }
     let(:a_dnd_decision) { create :match_decisions_match_recommendation_dnd_staff }
 
     let(:users) { create_list :user, 10 }
