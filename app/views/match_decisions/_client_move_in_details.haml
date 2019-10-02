@@ -1,3 +1,16 @@
+- other_active_count = @decision.match.opportunity_related_matches.active.count
+- if other_active_count.positive?
+  .mb-6
+    %p
+      = _('Do you expect this client to be successful in this match?')
+      %br
+      = "Mark this step as likely to succeed, and cancel #{pluralize(other_active_count, 'other match')}:"
+
+    %button{class: 'btn btn-warning mb-1', data: {submit_param_name: 'decision[status]', submit_param_value: 'other_clients_canceled', confirm: "Canceling #{pluralize(other_active_count, 'other match')}!  This will notify everyone invloved in the other matches that the vacancy is no longer available.  Would you like to proceed?"}, disabled: !@decision.editable?}
+      %i.icon-checkmark
+      = "Cancel #{pluralize(other_active_count, 'other match')}!"
+
+  %hr
 - if has_unit?
   %p
     Please confirm the client's building and unit.
@@ -17,10 +30,6 @@
   %p
     = "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."
   .form-actions
-    - if @decision.match.opportunity_related_matches.active.exists?
-      %button{class: 'btn btn-warning mb-1', data: {submit_param_name: 'decision[status]', submit_param_value: 'other_clients_canceled'}, disabled: !@decision.editable?}
-        %i.icon-warning
-        Client moving into housing, cancel other active matches on opportunity!
 
     %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?}
       %i.icon-checkmark
