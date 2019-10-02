@@ -59,7 +59,7 @@
                   = link_to match_path(active_match), data: {toggle: :tooltip, title: active_match.current_decision.label} do
                     = active_match.current_decision.step_name
                 - elsif active_matches > 1
-                  = link_to 'Multiple Matches', opportunity_matches_path(opportunity)
+                  = render 'multiple_matches', opportunity: opportunity
                 - elsif opportunity.successful_match.present?
                   Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
