@@ -13,19 +13,28 @@ class ImportedClientsController < NonHmisClientsController
       return
     end
 
-    file = import_params[:file]
-    @upload = ImportedClientsCsv.create(
-      filename: file.original_filename,
-      user_id: current_user.id,
-      content_type: file.content_type,
-      content: file.read,
-    )
+    begin
+      file = import_params[:file]
+      content = file.read
+      content = content.encode('UTF-8', 'binary', invalid: :replace, undef: :replace)
 
-    if ! @csv.import(current_user.agency)
+      @upload = ImportedClientsCsv.create(
+        filename: file.original_filename,
+        user_id: current_user.id,
+        content_type: file.content_type,
+        content: content,
+      )
+
+      if ! @upload.import(current_user.agency)
+        @upload = ImportedClientsCsv.new
+        flash[:alert] = _("The file header is incorrect.")
+        render :new
+        return
+      end
+    rescue
       @upload = ImportedClientsCsv.new
-      flash[:alert] = _("The file header is incorrect.")
+      flash[:alert] = _("Unable to upload file, is it a CSV?")
       render :new
-      return
     end
   end
 

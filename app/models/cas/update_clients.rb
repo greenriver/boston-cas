@@ -192,6 +192,7 @@ module Cas
         :interested_in_set_asides,
         :tags,
         :case_manager_contact_info,
+        :vash_eligible,
       ]
     end
 

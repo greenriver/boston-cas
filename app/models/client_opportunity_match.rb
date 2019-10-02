@@ -20,11 +20,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   belongs_to :client
   belongs_to :opportunity
+  belongs_to :match_route, class_name: 'MatchRoutes::Base'
+
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   delegate :contacts_editable_by_hsa, to: :match_route
   has_one :program, through: :sub_program
   has_one :sub_program, through: :opportunity
-  has_one :match_route, through: :program
 
   has_many :notifications, class_name: 'Notifications::Base'
 
@@ -564,6 +565,18 @@ class ClientOpportunityMatch < ActiveRecord::Base
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
     end
+  end
+
+  def cancel_opportunity_related_matches!
+    opportunity_related_matches.active.each do |match|
+      MatchEvents::DecisionAction.create(match_id: match.id,
+        decision_id: match.current_decision.id,
+        action: :canceled)
+      opportunity.notify_contacts_opportunity_taken(match)
+      reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
+      match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
+      match.poached!
+      end
   end
 
   def client_related_matches

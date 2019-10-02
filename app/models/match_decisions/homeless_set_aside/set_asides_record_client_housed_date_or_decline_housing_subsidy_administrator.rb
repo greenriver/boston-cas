@@ -20,6 +20,7 @@ module MatchDecisions::HomelessSetAside
     def label_for_status status
       case status.to_sym
         when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
+        when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
         when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
         when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
         when :canceled then canceled_status_label
@@ -51,6 +52,7 @@ module MatchDecisions::HomelessSetAside
     def statuses
       {
           pending: 'Pending',
+          other_clients_canceled: 'Pending, other matches on opportunity canceled',
           completed: 'Complete',
           declined: 'Declined',
           canceled: 'Canceled',
@@ -110,6 +112,10 @@ module MatchDecisions::HomelessSetAside
 
     class StatusCallbacks < StatusCallbacks
       def pending
+      end
+
+      def other_clients_canceled
+        match.cancel_opportunity_related_matches!
       end
 
       def completed
