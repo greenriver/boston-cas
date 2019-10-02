@@ -13,9 +13,6 @@ RSpec.describe ClientOpportunityMatch, type: :model do
         program = match.sub_program.program
         program.match_route = default_route
         program.save
-
-        match.match_route = program.match_route
-        match.save
       }
       it 'a notification is created' do
         match.dnd_staff_contacts << user.contact
@@ -61,9 +58,6 @@ RSpec.describe ClientOpportunityMatch, type: :model do
         program = match.sub_program.program
         program.match_route = default_route
         program.save
-
-        match.match_route = program.match_route
-        match.save
       }
       it 'a notification is created' do
         match.dnd_staff_contacts << user.contact
@@ -123,9 +117,6 @@ RSpec.describe ClientOpportunityMatch, type: :model do
         program = match.sub_program.program
         program.match_route = provider_route
         program.save
-
-        match.match_route = program.match_route
-        match.save
       }
       it 'a notification is created' do
         match.housing_subsidy_admin_contacts << user.contact
@@ -171,9 +162,6 @@ RSpec.describe ClientOpportunityMatch, type: :model do
         program = match.sub_program.program
         program.match_route = provider_route
         program.save
-
-        match.match_route = program.match_route
-        match.save
       }
       it 'a notification is created' do
         match.housing_subsidy_admin_contacts << user.contact
