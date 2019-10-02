@@ -10,7 +10,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
   let!(:voucher) { create :voucher, sub_program: sub_program }
   let!(:opportunity) { create :opportunity, voucher: voucher }
   let!(:decision) { create :match_decisions_match_recommendation_dnd_staff}
-  let!(:match) { create :client_opportunity_match, opportunity: opportunity }
+  let!(:match) { create :client_opportunity_match, match_route: route, opportunity: opportunity }
 
   before do
     authenticate admin
@@ -22,7 +22,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
   describe 'When parking' do
     describe 'before parking happens' do
       let!(:hsa_decision) { create :match_decisions_match_recommendation_hsa_housing_date }
-      let!(:other_match) { create :client_opportunity_match, client: match.client }
+      let!(:other_match) { create :client_opportunity_match, match_route: route, client: match.client }
 
       it 'client has two active matches' do
         aggregate_failures 'checking counts' do

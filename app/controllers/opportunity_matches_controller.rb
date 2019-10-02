@@ -67,6 +67,7 @@ class OpportunityMatchesController < ApplicationController
     return {
       opportunity: @opportunity,
       client: client,
+      match_route: @opportunity.match_route,
       universe_state: universe_state
     }
   end

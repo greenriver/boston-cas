@@ -24,7 +24,7 @@ module MatchDecisions
     belongs_to :match, class_name: 'ClientOpportunityMatch', inverse_of: :decisions
     belongs_to :contact
     has_one :program, through: :match
-    has_one :match_route, through: :program
+    has_one :match_route, through: :match
 
     # these need to be present on the base class for preloading
     # subclasses should include MatchDecisions::AcceptsDeclineReason
