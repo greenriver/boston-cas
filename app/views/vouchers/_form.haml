@@ -6,7 +6,7 @@
     = render 'voucher', f: f, v: v
   .d-flex
     - if vouchers.count > 0
-      = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto'
+      = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto', disabled: @subprogram.closed?
     - else
       %p.alert.alert-info.mt-3
         This program has no #{@voucher_state} vouchers.

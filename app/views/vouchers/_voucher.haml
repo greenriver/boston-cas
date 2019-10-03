@@ -4,7 +4,7 @@
 - default_building_id = voucher.building.try(:id)
 - default_unit_id = voucher.unit.try(:id)
 - default_unit_name = voucher.unit.try(:name)
-- if voucher.status_match.present?
+- if voucher.status_match.present? || @subprogram.closed?
   - disabled = true
 - else
   - disabled_units = voucher&.building&.unavailable_units_for_vouchers_ids
