@@ -34,7 +34,9 @@
             %th
               Status
             %th
-              Created on
+              Created On
+            %th
+              Prioritized Clients
         %tbody
           - @opportunities.each do |opportunity|
             - if opportunity.deleted_at
@@ -76,5 +78,7 @@
                 - elsif opportunity.available || opportunity.voucher.available
                   Available
               %td{:class => deleted}= opportunity.created_at.to_date
-
+              %td.text-center
+                = link_to opportunity_matches_path(opportunity) do
+                  .badge.badge-success= opportunity.matching_clients.count
     %p= paginate @opportunities
