@@ -42,6 +42,11 @@ class ProgramsController < ApplicationController
 
     @active_filter = @current_route.present?
 
+    @include_closed = params[:include_closed]
+    if @include_closed.blank?
+      @programs = @programs.open
+    end
+
     @programs = @programs
       .joins(:program)
       .includes(:building)
@@ -49,7 +54,6 @@ class ProgramsController < ApplicationController
       .preload(:program)
       .reorder(sort_string)
       .page(params[:page]).per(25)
-
   end
 
   def new

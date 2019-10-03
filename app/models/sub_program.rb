@@ -38,6 +38,14 @@ class SubProgram < ActiveRecord::Base
     joins(:program).merge(Program.on_route(route))
   end
 
+  scope :open, -> do
+    where(closed: false)
+  end
+
+  scope :closed, -> do
+    where(closed: true)
+  end
+
   def self.types
     [
       {value: 'Project-Based', label: 'Project-Based', building: true},
