@@ -32,7 +32,7 @@
         .checkbox
           %label{for: :include_closed}
             %input#include_closed.boolean.optional{name: :include_closed, type: :checkbox, value: 1, checked: @include_closed}
-            Include closed projects?
+            Only closed programs?
 
       .o-filtration__actions.form__actions
         = link_to({action: :index}, class: 'btn btn-light')do

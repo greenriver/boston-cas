@@ -55,6 +55,12 @@ class SubProgram < ActiveRecord::Base
     ]
   end
 
+  def name_with_status
+    @name_with_status = name
+    @name_with_status += ' (Closed) ' if self.closed?
+    @name_with_status.presence || '(unnamed)'
+  end
+
   def program_type_label
     SubProgram.types.select{|m| m[:value] == program_type}.first[:label]
   end

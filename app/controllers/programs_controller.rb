@@ -45,6 +45,8 @@ class ProgramsController < ApplicationController
     @include_closed = params[:include_closed]
     if @include_closed.blank?
       @programs = @programs.open
+    else
+      @programs = @programs.closed
     end
 
     @programs = @programs
