@@ -2,7 +2,10 @@
 
 .o-page
   .o-page__title
-    %h1 Edit Sub-Program
+    - if ! @subprogram.closed?
+      %h1 Edit Sub-Program
+    - else
+      %h1 CLOSED Sub-Program
     .ml-auto
       = render 'status_blocks'
 
