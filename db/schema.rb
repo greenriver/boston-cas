@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191001183520) do
+ActiveRecord::Schema.define(version: 20191002201201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1079,6 +1079,7 @@ ActiveRecord::Schema.define(version: 20191001183520) do
     t.integer  "voucher_count",                 default: 0
     t.boolean  "confidential",                  default: false, null: false
     t.text     "eligibility_requirement_notes"
+    t.boolean  "closed",                        default: false
   end
 
   add_index "sub_programs", ["building_id"], name: "index_sub_programs_on_building_id", using: :btree
