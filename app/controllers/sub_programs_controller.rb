@@ -8,9 +8,9 @@ class SubProgramsController < ApplicationController
   include ProgramPermissions
 
   before_action :authenticate_user!
-  before_action :require_can_edit_programs!, only: [:destroy, :create]
+  before_action :require_can_edit_programs!, only: [:destroy, :create, :close]
   before_action :set_program
-  before_action :set_sub_program, only: [:edit, :update, :destroy]
+  before_action :set_sub_program, only: [:edit, :update, :destroy, :close]
 
   def new
     program = Program.find(params[:program_id])
@@ -54,6 +54,16 @@ class SubProgramsController < ApplicationController
   end
 
   def destroy
+  end
+
+  def close
+    if @subprogram.vouchers.available.empty?
+      @subprogram.update(closed: true)
+      redirect_to programs_path
+    else
+      flash[:error] = "#{@subprogram.name.capitalize} has available vouchers, and cannot be closed."
+      redirect_to action: :edit
+    end
   end
 
   private

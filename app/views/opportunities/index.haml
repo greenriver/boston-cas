@@ -18,40 +18,50 @@
 .row.table-utilities
   .col-sm-8
     %p= page_entries_info @opportunities, entry_name: 'vacancy'
-    :ruby
-      columns = ['id']
-      directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
-      titles = {}
-      directions.each {| k,v | titles[k] = @opportunities.human_attribute_name(k)}
-      titles['id'] = 'Created on'
 .row
   .col-sm-12
     .table-responsive
       %table.table.table-condensed.table-striped
         %thead
           %tr
-            %th Matches
-            - titles.each do | k, title |
-              %th{style: 'width: 8em;'}
-                = titles[k]
+            %th= "#{Building.model_name.human} & Unit"
             %th
-              Status
-            %th
-              Program
+              Voucher Type
             %th
               Sub-Program
             %th
-              Voucher Type
-            %th= "#{Building.model_name.human} & Unit"
+              Program
+            %th
+              Status
+            %th
+              Created On
+            %th
+              Prioritized Clients
         %tbody
           - @opportunities.each do |opportunity|
             - if opportunity.deleted_at
               - deleted = "deleted"
             %tr
-              %td.text-center
-                = link_to opportunity_matches_path(opportunity) do
-                  .badge.badge-success= opportunity.matching_clients.count
-              %td{:class => deleted}= opportunity.created_at.to_date
+              %td
+                - unless opportunity.unit.nil?
+                  = link_to edit_unit_path(opportunity.unit) do
+                    = "#{opportunity.try(:unit).try(:building).try(:name)}: #{opportunity.try(:unit).try(:name)}"
+                - else
+                  - unless opportunity.voucher.nil?
+                    - unless opportunity.voucher.unit.nil?
+                      = "#{opportunity.voucher.unit.try(:building).try(:name)}: #{opportunity.voucher.unit.try(:name)}"
+              %td
+                - unless opportunity.voucher.nil?
+                  = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = "#{opportunity.voucher.sub_program.program_type}"
+              %td
+                - unless opportunity.voucher.nil?
+                  = link_to edit_program_sub_program_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = opportunity.voucher.sub_program.name
+              %td
+                - unless opportunity.voucher.nil?
+                  = link_to edit_program_sub_program_program_details_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
+                    = opportunity.voucher.sub_program.program.name
               %td{:class => deleted}
                 - active_matches = opportunity.active_matches.count
                 - if active_matches == 1
@@ -59,7 +69,7 @@
                   = link_to match_path(active_match), data: {toggle: :tooltip, title: active_match.current_decision.label} do
                     = active_match.current_decision.step_name
                 - elsif active_matches > 1
-                  = link_to 'Multiple Matches', opportunity_matches_path(opportunity)
+                  = render 'multiple_matches', opportunity: opportunity
                 - elsif opportunity.successful_match.present?
                   Successful
                 - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
@@ -67,24 +77,8 @@
                   = date_format(opportunity.voucher.date_available)
                 - elsif opportunity.available || opportunity.voucher.available
                   Available
-              %td
-                - unless opportunity.voucher.nil?
-                  = link_to edit_program_sub_program_program_details_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
-                    = opportunity.voucher.sub_program.program.name
-              %td
-                - unless opportunity.voucher.nil?
-                  = link_to edit_program_sub_program_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
-                    = opportunity.voucher.sub_program.name
-              %td
-                - unless opportunity.voucher.nil?
-                  = link_to program_sub_program_vouchers_path(opportunity.voucher.sub_program.program, opportunity.voucher.sub_program) do
-                    = "#{opportunity.voucher.sub_program.program_type}"
-              %td
-                - unless opportunity.unit.nil?
-                  = link_to edit_unit_path(opportunity.unit) do
-                    = "#{opportunity.try(:unit).try(:building).try(:name)}: #{opportunity.try(:unit).try(:name)}"
-                - unless opportunity.voucher.nil?
-                  - unless opportunity.voucher.unit.nil?
-                    = "#{opportunity.voucher.unit.try(:building).try(:name)}: #{opportunity.voucher.unit.try(:name)}"
-
-    %p= paginate @opportunities, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+              %td{:class => deleted}= opportunity.created_at.to_date
+              %td.text-center
+                = link_to opportunity_matches_path(opportunity) do
+                  .badge.badge-success= opportunity.matching_clients.count
+    %p= paginate @opportunities

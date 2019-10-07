@@ -38,6 +38,14 @@ class SubProgram < ActiveRecord::Base
     joins(:program).merge(Program.on_route(route))
   end
 
+  scope :open, -> do
+    where(closed: false)
+  end
+
+  scope :closed, -> do
+    where(closed: true)
+  end
+
   def self.types
     [
       {value: 'Project-Based', label: 'Project-Based', building: true},
@@ -45,6 +53,12 @@ class SubProgram < ActiveRecord::Base
       {value: 'Sponsor-Based', label: 'Sponsor-Based (mobile)', building: false},
       {value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true},
     ]
+  end
+
+  def name_with_status
+    @name_with_status = name
+    @name_with_status += ' (Closed) ' if self.closed?
+    @name_with_status.presence || '(unnamed)'
   end
 
   def program_type_label

@@ -105,6 +105,10 @@ Rails.application.routes.draw do
   resources :units, except: :show, concerns: [:restorable]
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
+      member do
+        get :close
+      end
+
       resource :contacts, only: [:edit, :update], controller: :program_contacts
       resources :vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection

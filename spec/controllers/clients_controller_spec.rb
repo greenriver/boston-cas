@@ -10,7 +10,7 @@ RSpec.describe ClientsController, type: :controller do
   let!(:sub_program) { create :sub_program, program: program }
   let!(:voucher) { create :voucher, sub_program: sub_program }
   let!(:opportunity) { create :opportunity, voucher: voucher }
-  let!(:match) { create :client_opportunity_match, opportunity: opportunity }
+  let!(:match) { create :client_opportunity_match, match_route: route, opportunity: opportunity }
 
   before do
     authenticate admin
@@ -24,7 +24,7 @@ RSpec.describe ClientsController, type: :controller do
       let!(:hsa_decision) { create :match_decisions_match_recommendation_hsa_housing_date }
       let!(:other_voucher) { create :voucher, sub_program: sub_program }
       let!(:other_opportunity) { create :opportunity, voucher: other_voucher }
-      let!(:other_match) { create :client_opportunity_match, client: match.client, opportunity: other_opportunity }
+      let!(:other_match) { create :client_opportunity_match, client: match.client, match_route: route, opportunity: other_opportunity }
 
       it 'client has two active matches' do
         aggregate_failures 'checking counts' do
