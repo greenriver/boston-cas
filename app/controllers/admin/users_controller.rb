@@ -81,6 +81,15 @@ module Admin
       redirect_to({action: :index}, notice: 'User deactivated')
     end
 
+    def reactivate
+      @user = User.inactive.find(params[:id].to_i)
+      pass = Devise.friendly_token(50)
+      @user.update(active: true, password: pass, password_confirmation: pass)
+      @user.send_reset_password_instructions
+      redirect_to({action: :index}, notice: "User #{@user.name} re-activated")
+
+    end
+
     private
 
       def update_editable_programs(requested_programs)

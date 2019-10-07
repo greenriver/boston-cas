@@ -134,6 +134,7 @@ Rails.application.routes.draw do
       resource :resend_invitation, only: :create
       resource :recreate_invitation, only: :create
       resource :become, only: [:show]
+      patch :reactivate, on: :member
       member do
         post :confirm
       end
