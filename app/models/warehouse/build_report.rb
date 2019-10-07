@@ -22,7 +22,7 @@ module Warehouse
         vacancy.program_name = voucher.program.name
         vacancy.sub_program_name = voucher.sub_program.name
         vacancy.program_type = voucher.sub_program.program_type
-        vacancy.route_name = voucher.program.match_route.title
+        vacancy.route_name = voucher.program.match_route&.title || 'unknown'
 
         vacancy.vacancy_created_at = voucher.created_at
         vacancy.vacancy_made_available_at = voucher.available_at
@@ -151,10 +151,11 @@ module Warehouse
                 client_id: client_id,
                 cas_client_id: client.id,
                 match_id: match.id,
+                vacancy_id: match.opportunity_id,
                 decision_id: decision.id,
                 decision_order: match_route.class.match_steps_for_reporting[decision.type],
                 match_step: step_name,
-                decision_status: decision.label,
+                decision_status: decision.label || 'unknown',
                 current_step: decision == current_decision,
                 decline_reason: explain( decision, :decline_reason ),
                 event_contact: event_contact&.name_with_email,
