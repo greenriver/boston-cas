@@ -4,6 +4,7 @@
     - hide_client_name = match.client.confidential? || match.try(:confidential?) || confidential_opportunity
     - name = match&.client_name_for_contact(current_user.contact, hidden: hide_client_name) || client.client_name_for_contact(current_user.contact, hidden: hide_client_name)
     %li
-      = link_to_if match.client.accessible_by_user?(current_user), name, match_path(match)
-    %em.small
-      #{match.current_decision.step_name}
+      = link_to_if match.client.accessible_by_user?(current_user), match.current_decision&.step_name || 'inactive', match_path(match)
+    .mb-2
+      %em.small
+        = name
