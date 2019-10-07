@@ -21,17 +21,28 @@
     = csrf_meta_tags
 
   %body{class: body_classes}
+    - unless Rails.env.production?
+      #non-production-warning
+        .d-flex.pt-2.pb-2
+          - if Rails.env.development?
+            .git-branch.ml-auto
+              = branch_info
+            .rails-env.ml-4.mr-6
+              .navbar-text
+                %span.label.label-success
+                  = Rails.env
+          - else
+            .rails-env.ml-auto.mr-6
+              .navbar-text
+                %span.label.label-success
+                  = Rails.env
     %header.o-header--page
       .container-fluid.d-flex.align-items-center{class: container_classes}
         .site-name
           .o-header--page__title.site-title
             = link_to root_path do
               %span= _('Boston Coordinated Access').split(' ').join('<br />').html_safe
-              - unless Rails.env.production?
-                %span.rails-env{style: 'font-size:12px;'}= "[#{Rails.env}]"
         .o-header--page__sub-title.tagline
-          - if Rails.env.development?
-            = branch_info
           = _('Ending Veteran & Chronic Homelessness in Boston')
         = render 'layouts/header_nav'
 
