@@ -108,7 +108,8 @@ class Program < ActiveRecord::Base
   end
 
   def match_route_fixed?
-    sub_programs.joins(:vouchers).exists?
+    false # NOTE, this was changed 9/7/2019 as matches should be able to support this change now
+    # sub_programs.joins(:vouchers).exists?
   end
 
   def self.text_search(text)
