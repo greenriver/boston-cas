@@ -30,11 +30,10 @@
             = f.association :file_tags, collection: FileTag.available_tags, selected: @subprogram.file_tags.map(&:tag_id), label: 'Files types from the warehouse to display on matches that involve this sub-program', hint: "These files will be linked from any match involving a client with a #{_('full release')} on file.", input_html: select2_input_html
 
         .col-sm-6.text-right.mb-4
-          - if can_edit_programs? && @subprogram.vouchers.available.empty?
-            - if ! @subprogram.closed?
-              = link_to close_program_sub_program_path(@program, @subprogram), class: 'btn btn-danger ml-sm-6', data: {confirm: 'Are you sure you want to close this sub-program?'} do
-                %span.icon-cross
-                Close Sub-Program
+          - if @subprogram.persisted? && can_edit_programs? && @subprogram.vouchers.available.empty? && ! @subprogram.closed?
+            = link_to close_program_sub_program_path(@program, @subprogram), class: 'btn btn-danger ml-sm-6', data: {confirm: 'Are you sure you want to close this sub-program?'} do
+              %span.icon-cross
+              Close Sub-Program
       %article.mb-6
         %h2 Rules
         %p.alert.alert-info.hidden.jRuleWarning
