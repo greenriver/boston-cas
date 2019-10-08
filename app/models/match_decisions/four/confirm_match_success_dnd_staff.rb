@@ -4,8 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-module MatchDecisions
-  class ConfirmMatchSuccessDndStaff < Base
+module MatchDecisions::Four
+  class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
 
     # validate :note_present_if_status_rejected
 
@@ -50,19 +50,23 @@ module MatchDecisions
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'
-      Notifications::ConfirmMatchSuccessDndStaff.create_for_match! match
+      Notifications::Four::ConfirmMatchSuccessDndStaff.create_for_match! match
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        # m << Notifications::RecordClientHousedDateHousingSubsidyAdministrator
+        # m << Notifications::Four::RecordClientHousedDateHousingSubsidyAdministrator
         m << Notifications::MoveInDateSet # Sent to both HSA and Shelter Agency
-        m << Notifications::ConfirmMatchSuccessDndStaff
+        m << Notifications::Four::ConfirmMatchSuccessDndStaff
       end
     end
 
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
+    end
+
+    def to_param
+      :four_confirm_match_success_dnd_staff
     end
 
     private def note_present_if_status_rejected

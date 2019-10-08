@@ -1,6 +1,6 @@
 = form.input :note, as: :text, hint: 'Please include any notes that would be useful for this match.  e.g. "Client needs an accessible unit."',input_html: {rows: 4, disabled: !(@decision.editable?)}
 
-- if @match.client.release_of_information.blank? && @match.client.housing_release_status.blank? || @match.client.housing_release_status.downcase == 'none on file'
+- if @match.client.release_of_information.blank? && (@match.client.housing_release_status.blank? || @match.client.housing_release_status.downcase == 'none on file')
   = form.input :release_of_information, as: :boolean, required: true, inline_label: 'Client has signed release of information to share their data with network partners'
 - elsif @match.client.release_of_information.present?
   %p

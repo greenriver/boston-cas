@@ -1,9 +1,9 @@
 Hello #{@contact.full_name},
 \
-CAS has a new housing recommendation that requires your review.
+A housing match has been accepted for the client below.
 \
 View details here:
-#{notification_match_decision_url @notification, @match, @decision}
+#{notification_match_url @notification, @match}
 \
 = render 'client_details'
 \

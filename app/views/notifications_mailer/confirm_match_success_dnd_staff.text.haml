@@ -5,7 +5,7 @@ A client move-in date has been noted for a housing match in CAS.
 = "The match now requires final approval from #{_('DND')} staff to complete."
 \
 Please reiew the details of the match and note final approval here:
-#{notification_match_decision_url @notification, @match, :confirm_match_success_dnd_staff}
+#{notification_match_decision_url @notification, @match, @decision}
 \
 = render 'client_details'
 \
