@@ -4,4 +4,10 @@ FactoryGirl.define do
     sequence(:last_name) {|n| "Last#{n}" }
     sequence(:email) {|n| "user_#{n}@example.com" }
   end
+
+  factory :macbeth, class: 'Contact' do
+    first_name 'William'
+    last_name 'Shakespeare'
+    email 'macbeth@scotland.gov.uk'
+  end
 end
