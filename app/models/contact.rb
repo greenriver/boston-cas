@@ -30,6 +30,8 @@ class Contact < ActiveRecord::Base
   has_many :status_updates, class_name: MatchProgressUpdates::Base.name, inverse_of: :contact
   has_one :agency, through: :user
 
+  validates_presence_of :first_name, :last_name, :email
+
   def full_name
     [first_name, last_name].compact.join " "
   end

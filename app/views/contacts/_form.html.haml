@@ -4,12 +4,12 @@
   - hint = ''
   .form-inputs
     = f.input :first_name, required: true, disabled: disabled, hint: hint
-    = f.input :middle_name, required: true, disabled: disabled
+    = f.input :middle_name, disabled: disabled
     = f.input :last_name, required: true, disabled: disabled
     = f.input :role, disabled: disabled
     = f.input :email, as: :email, required: true, disabled: disabled
-    = f.input :phone, required: true, disabled: disabled
-    = f.input :cell_phone, required: false, disabled: disabled
+    = f.input :phone, disabled: disabled
+    = f.input :cell_phone, disabled: disabled
 
   .form-actions
     = f.button :submit
