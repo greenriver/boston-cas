@@ -86,7 +86,7 @@ class Opportunity < ActiveRecord::Base
   end
 
   def self.max_candidate_matches
-    20
+    1
   end
 
   def self.associations_adding_requirements
@@ -112,7 +112,7 @@ class Opportunity < ActiveRecord::Base
   end
 
   def matches_client?(client)
-    client_scope = Client.where(id: client.id)
+    client_scope = Client.where(id: client.id).not_rejected_for(id)
     requirement_matches = requirements_with_inherited.map do |requirement|
       requirement.clients_that_fit(client_scope).exists?
     end
@@ -127,6 +127,7 @@ class Opportunity < ActiveRecord::Base
       client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
     end
     client_scope = add_unit_attributes_filter(client_scope)
+    client_scope = client_scope.not_rejected_for(id)
     client_scope.merge(Client.prioritized(match_route, client_scope))
   end
 

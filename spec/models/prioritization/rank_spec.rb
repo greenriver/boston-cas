@@ -26,7 +26,7 @@ RSpec.describe MatchPrioritization::Rank, type: :model do
       expect { Matching::RunEngineJob.new.perform }.to_not raise_error
     end
     it 'and finds a match', perform_enqueued: true do
-      expect { Matching::RunEngineJob.new.perform }.to change(ClientOpportunityMatch, :count).by(2)
+      expect { Matching::RunEngineJob.new.perform }.to change(ClientOpportunityMatch, :count).by(1)
     end
     it ' and client match is the same as opportunity active match' do
       Matching::RunEngineJob.new.perform

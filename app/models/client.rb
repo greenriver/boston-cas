@@ -255,7 +255,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.max_candidate_matches
-    6
+    1
   end
 
   def self.randomize_pii
