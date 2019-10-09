@@ -10,6 +10,10 @@
   = link_to_if can_edit_programs?, @program.name, edit_program_sub_program_program_details_path(@program, @sub_program)
   %em
     = link_to_if can_edit_programs?, @sub_program.name, edit_program_sub_program_path(@program, @sub_program)
+  - if @program.description.present?
+    %h5.mt-4 Program Description
+    = simple_format(@program.description)
+
 - if match.present?
   %h3.detail-box--label Service Provider
   .detail-box--value= match.opportunity_details.service_provider_name

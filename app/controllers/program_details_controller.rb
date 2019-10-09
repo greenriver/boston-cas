@@ -6,7 +6,7 @@
 
 class ProgramDetailsController < ApplicationController
   include ProgramPermissions
-  
+
   before_action :authenticate_user!
   before_action :set_program
   before_action :set_subprogram
@@ -36,8 +36,9 @@ class ProgramDetailsController < ApplicationController
     def program_params
       params.require(:program).
         permit(
-          :name, 
-          :contract_start_date, 
+          :name,
+          :description,
+          :contract_start_date,
           :funding_source_id,
           :confidential,
           :eligibility_requirement_notes,

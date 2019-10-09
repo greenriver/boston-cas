@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191002201201) do
+ActiveRecord::Schema.define(version: 20191009133059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -768,6 +768,7 @@ ActiveRecord::Schema.define(version: 20191002201201) do
     t.datetime "deleted_at"
     t.boolean  "confidential",        default: false, null: false
     t.integer  "match_route_id",      default: 1
+    t.text     "description"
   end
 
   add_index "programs", ["contact_id"], name: "index_programs_on_contact_id", using: :btree

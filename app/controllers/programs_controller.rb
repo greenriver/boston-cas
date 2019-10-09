@@ -85,6 +85,7 @@ class ProgramsController < ApplicationController
       params.require(:program).
         permit(
           :name,
+          :description,
           :contract_start_date,
           :funding_source_id,
           :confidential,
