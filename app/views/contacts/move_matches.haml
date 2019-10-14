@@ -1,0 +1,19 @@
+= render 'breadcrumbs'
+.row
+  .col-sm-12
+    %h1
+      Move Match Contacts for
+      = @contact.full_name
+
+.row
+  .col-sm-8
+    = simple_form_for :move_contacts, url: update_matches_contact_path(@contact) do |f|
+      .form-inputs
+        = f.input :destination, collection: @contacts, label: 'Assign match contacts to', input_html: { class: :select2 }
+
+      .form-actions
+        = f.button :submit, value: 'Move All Contacts'
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();
