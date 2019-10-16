@@ -28,6 +28,7 @@ module Admin
         :require_cori_release,
         :ami,
         :vispdat_prioritization_scheme,
+        non_hmis_fields: [],
       )
     end
 
