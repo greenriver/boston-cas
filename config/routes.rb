@@ -101,7 +101,12 @@ Rails.application.routes.draw do
 
   end
 
-  resources :contacts, except: :show
+  resources :contacts, except: :show do
+    member do
+      get :move_matches
+      post :update_matches
+    end
+  end
   resources :units, except: :show, concerns: [:restorable]
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
