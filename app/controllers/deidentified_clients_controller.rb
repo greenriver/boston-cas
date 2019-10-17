@@ -89,6 +89,7 @@ class DeidentifiedClientsController < NonHmisClientsController
         :assessment_score,
         :vispdat_score,
         :vispdat_priority_score,
+        :veteran,
         :agency_id,
         :contact_id,
         :date_of_birth,
