@@ -10,6 +10,7 @@
         = f.input :vispdat_score
       - if Config.get(:non_hmis_fields).include?('vispdat_priority_score')
         = f.input :vispdat_priority_score
+      = f.input :veteran
       = f.input :domestic_violence, label: 'Domestic violence survivor'
       - if can_edit_all_clients?
         .jAgency
