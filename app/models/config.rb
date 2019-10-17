@@ -7,6 +7,7 @@
 class Config < ActiveRecord::Base
   after_save :invalidate_cache
   before_create :set_defaults
+  serialize :non_hmis_fields, Array
 
   def invalidate_cache
     self.class.invalidate_cache

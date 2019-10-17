@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191009133059) do
+ActiveRecord::Schema.define(version: 20191016174457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(version: 20191009133059) do
     t.boolean "require_cori_release",          default: true
     t.integer "ami",                           default: 66600,            null: false
     t.string  "vispdat_prioritization_scheme", default: "length_of_time"
+    t.text    "non_hmis_fields"
   end
 
   create_table "contacts", force: :cascade do |t|
