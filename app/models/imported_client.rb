@@ -13,7 +13,7 @@ class ImportedClient < NonHmisClient
   validates :shelter_name, presence: true
   validates :entry_date, presence: true
   validates :phone_number, presence: true
-  validates :income_total_monthly, presence: true, numericality: true
+  # validates :income_total_monthly, presence: true, numericality: true
   validates :voucher_agency, presence: true, if: :have_tenant_voucher?
 
   def populate_project_client project_client

@@ -11,8 +11,8 @@ class ContactsController < ApplicationController
   
   before_action :authenticate_user!
   before_action :require_can_view_contacts!
-  before_action :require_can_edit_contacts!, only: [:update, :destroy, :create]
-  before_action :set_contact, only: [:edit, :update, :destroy]
+  before_action :require_can_edit_contacts!, only: [:update, :destroy, :create, :move_matches, :update_matches]
+  before_action :set_contact, only: [:edit, :update, :destroy, :move_matches, :update_matches]
   helper_method :sort_column, :sort_direction
   
   def index
@@ -63,6 +63,24 @@ class ContactsController < ApplicationController
     flash[:notice] = 'Contact deleted'
     redirect_to({action: :index})
   end
+
+  def move_matches
+    @contacts = contact_scope
+  end
+
+  def update_matches
+    destination = update_matches_params[:destination].to_i
+    if destination.positive?
+      ClientOpportunityMatchContact.
+        where(contact_id: @contact.id).
+        update_all(contact_id: destination)
+      flash[:notice] = 'Matches updated'
+      redirect_to action: :index
+    else
+      flash[:error] = 'Matches unchanged, no destination specified'
+      redirect_to action: :move_matches
+    end
+  end
   
   private
     def contact_source
@@ -86,6 +104,12 @@ class ContactsController < ApplicationController
         :phone,
         :cell_phone,
         :role,
+      )
+    end
+
+    def update_matches_params
+      params.require(:move_contacts).permit(
+        :destination,
       )
     end
 

@@ -1,0 +1,21 @@
+= render 'breadcrumbs'
+.row
+  .col-sm-12
+    %h1
+      Move Match Contacts for
+      = @contact.full_name
+
+.row
+  .col-sm-8
+    .alert.alert-danger
+      %p Please note, moving all matches from this contact to another will prevent this contact from accessing any matches.  Match history will still indicate that notifications previously sent to this contact went to this contact, but future notifications will go to the contact specified below.
+    = simple_form_for :move_contacts, url: update_matches_contact_path(@contact) do |f|
+      .form-inputs
+        = f.input :destination, collection: @contacts, label: 'Assign match contacts to', input_html: { class: :select2 }
+
+      .form-actions
+        = f.button :submit, value: 'Move All Contacts'
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();
