@@ -132,7 +132,7 @@ class DeidentifiedClientsController < NonHmisClientsController
         contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
         dirty_params[:agency_id] = contact_agency_id if contact_agency_id.present?
       else
-        dirty_params[:agency_id] = current_user.contact.id
+        dirty_params[:agency_id] = current_user.agency_id
       end
       return append_client_identifier(dirty_params)
     end
