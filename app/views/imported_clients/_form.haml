@@ -46,7 +46,8 @@
   - if @non_hmis_client.veteran
     = "Client is a veteran"
 %p
-  = "Annual income is #{number_to_currency(@non_hmis_client.income_total_monthly * 12)}"
+  - annual_income = @non_hmis_client.income_total_monthly.present? ? @non_hmis_client.income_total_monthly * 12 : 0
+  = "Annual income is #{number_to_currency(annual_income)}"
 - if @non_hmis_client.fifty_five_plus && ! @non_hmis_client.sixty_two_plus
   %p
     Client is 55+
