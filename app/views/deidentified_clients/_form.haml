@@ -4,9 +4,13 @@
   .col-sm-6
     .form-inputs
       = f.input :client_identifier, required: true
-      = f.input :assessment_score
-      = f.input :vispdat_score
-      = f.input :vispdat_priority_score
+      - if Config.get(:non_hmis_fields).include?('assessment_score')
+        = f.input :assessment_score
+      - if Config.get(:non_hmis_fields).include?('vispdat_score')
+        = f.input :vispdat_score
+      - if Config.get(:non_hmis_fields).include?('vispdat_priority_score')
+        = f.input :vispdat_priority_score
+      = f.input :veteran
       = f.input :domestic_violence, label: 'Domestic violence survivor'
       - if can_edit_all_clients?
         .jAgency

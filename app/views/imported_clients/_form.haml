@@ -79,7 +79,7 @@
       %br
     - if @non_hmis_client.studio_ok
       Studio apartment is OK.
-- if @non_hmis_client.required_number_of_bedrooms > 1
+- if @non_hmis_client.required_number_of_bedrooms.present? && @non_hmis_client.required_number_of_bedrooms > 1
   %p
     = "Needs #{@non_hmis_client.required_number_of_bedrooms} bedrooms"
 

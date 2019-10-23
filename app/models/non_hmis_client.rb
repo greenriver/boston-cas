@@ -201,4 +201,12 @@ class NonHmisClient < ActiveRecord::Base
     raise NotImplementedError
   end
 
+  def self.optional_field_names
+    @field_names ||= {
+      assessment_score: 'Assessment Score',
+      vispdat_score: 'VI-SPDAT Score',
+      vispdat_priority_score: 'VI-SPDAT Priority Score',
+    }
+  end
+
 end
