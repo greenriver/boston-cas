@@ -212,7 +212,7 @@ class Client < ActiveRecord::Base
     elsif user.can_view_all_clients? || accessible_by_user?(user)
       full_name
     else
-      client_name_for_contact user.contact, hidden
+      client_name_for_contact user.contact, hidden: hidden
     end
   end
 
