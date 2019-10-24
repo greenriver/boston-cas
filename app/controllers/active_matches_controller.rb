@@ -21,9 +21,26 @@ class ActiveMatchesController < MatchListBaseController
 
     @available_steps = MatchDecisions::Base.filter_options.map do |value|
       if MatchDecisions::Base.available_sub_types_for_search.include?(value)
-        [value.constantize.new.step_name, value]
-      else
-        [value.capitalize, value]
+        option = [
+          value.constantize.new.step_name,
+          value,
+        ]
+        if MatchRoutes::Base.more_than_one?
+          MatchRoutes::Base.all_routes.each do |route|
+            next unless route.available_sub_types_for_search.include?(value)
+            title = "#{value.constantize.new.step_name} on #{route.new.title}"
+            option = [
+              title,
+              value
+            ]
+          end
+        end
+        option
+      else # Handle stalled situation that doesn't match a decision name
+        [
+          value.capitalize,
+          value
+        ]
       end
     end
     @available_routes = MatchRoutes::Base.filterable_routes
