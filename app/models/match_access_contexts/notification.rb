@@ -6,31 +6,33 @@
 
 module MatchAccessContexts
   class Notification
-    
+
     attr_reader :controller, :notification
-    
+
     def initialize controller
       @controller = controller
       @notification = Notifications::Base.find_by code: controller.params[:notification_id].to_s
     end
-    
+
     def current_contact
       @notification.recipient
     end
-    
+
     def contacts_editable?
       @notification.contacts_editable?
     end
-    
+
     def acknowledge_shelter_agency_notification?
       true
     end
-    
+
     def match_scope
       ClientOpportunityMatch.where(id: notification.client_opportunity_match_id)
     end
-    
+
     def authenticate!
+      return false unless @notification.present?
+
       if @notification.expires_at.nil?
         return true
       elsif @notification.expired?
@@ -40,27 +42,27 @@ module MatchAccessContexts
         return true
       end
     end
-    
+
     ################
     ### Path Helpers
     ################
-    
+
     def match_path match, opts = {}
       controller.notification_match_path(@notification, match, opts)
     end
-    
+
     def match_decision_path match, decision, opts = {}
       controller.notification_match_decision_path @notification, match, decision, opts
     end
-    
+
     def match_decision_acknowledgment_path match, decision, opts = {}
       controller.notification_match_decision_acknowledgment_path @notification, match, decision, opts
     end
-    
+
     def edit_match_contacts_path match, opts = {}
       controller.edit_notification_match_contacts_path @notification, match, opts
     end
-    
+
     def match_contacts_path match, opts = {}
       controller.notification_match_contacts_path @notification, match, opts
     end
@@ -68,7 +70,7 @@ module MatchAccessContexts
     def match_client_details_path match, opts = {}
       controller.notification_match_client_details_path @notification, match, opts
     end
-    
-    
+
+
   end
 end
