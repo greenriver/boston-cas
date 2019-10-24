@@ -206,6 +206,16 @@ class Client < ActiveRecord::Base
   end
   alias_method :name, :full_name
 
+  def client_name_for_user user, hidden:
+    if hidden
+      '(name hidden)'
+    elsif user.can_view_all_clients? || accessible_by_user?(user)
+      full_name
+    else
+      client_name_for_contact user.contact, hidden: hidden
+    end
+  end
+
   def client_name_for_contact contact, hidden:
     if hidden
       '(name hidden)'

@@ -153,6 +153,12 @@ class NonHmisClient < ActiveRecord::Base
     project_client.needs_update = true
   end
 
+  def annual_income
+    return 0 unless income_total_monthly.present?
+
+    income_total_monthly * 12
+  end
+
   def log message
     Rails.logger.info message
   end
