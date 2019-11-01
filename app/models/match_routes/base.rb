@@ -121,6 +121,13 @@ module MatchRoutes
       }
     end
 
+    def housing_types
+      [
+        'RRH',
+        'PSH',
+      ]
+    end
+
     private def has_tag_if_prioritization_requires_it
       if tag_id.blank? && match_prioritization&.requires_tag?
 
