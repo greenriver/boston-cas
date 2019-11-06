@@ -27,6 +27,8 @@ module MatchAccessContexts
     end
 
     def match_scope
+      return ClientOpportunityMatch.none unless notification.present?
+
       ClientOpportunityMatch.where(id: notification.client_opportunity_match_id)
     end
 

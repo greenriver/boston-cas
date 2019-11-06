@@ -15,6 +15,9 @@
             .icon-checkmark
           .c-tag__content
             %span= match.overall_status[:name]
+  - if match.opportunity.multiple_active_matches?
+    .alert.alert-warning
+      %p This match is part of a Multiple Match for a single vacancy. Please be advised that other clients have also been matched to this vacancy and the first client to successfully complete the CAS process with the #{_('HSA')} will be offered the unit.
 
   .c-card.c-card--flush
     -# These label/value pairs can all be displayed conditionally if present

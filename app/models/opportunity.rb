@@ -97,6 +97,10 @@ class Opportunity < ActiveRecord::Base
     [:voucher]
   end
 
+  def multiple_active_matches?
+    active_matches.count > 1
+  end
+
   def opportunity_details
     @_opportunity_detail ||= OpportunityDetails.build self
   end

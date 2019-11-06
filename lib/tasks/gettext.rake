@@ -9,7 +9,7 @@ namespace :gettext do
 
     require 'pomo'
     require 'pathname'
-    
+
     #find all files we want to read
     po_files = []
     Pathname.new(folder).find do |p|
@@ -49,4 +49,8 @@ namespace :gettext do
     Rake::Task['gettext:sync_po_to_db'].invoke
   end
 
+  desc "sync translation"
+  task sync: :environment do
+    Rake::Task["gettext:sync_to_po_and_db"].invoke
+  end
 end
