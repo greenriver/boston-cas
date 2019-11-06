@@ -3,6 +3,7 @@
 %h1= content_for :title
 = simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
   = f.input :active
+  = f.input :housing_type, collection: @route.housing_types, include_blank: 'None', input_html: { class: :select2 }
   = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
   = f.input :send_notifications, label: 'Send emails to contacts'
   = f.input :should_activate_match, label: 'Activate highest priority match automatically'

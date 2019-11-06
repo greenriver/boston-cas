@@ -40,6 +40,7 @@ module Admin
         :show_default_contact_types,
         :send_notifications,
         :stalled_interval,
+        :housing_type,
       )
     end
 

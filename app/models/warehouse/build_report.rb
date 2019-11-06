@@ -183,6 +183,7 @@ module Warehouse
                 sub_program_name: sub_program.name,
                 terminal_status: match.overall_status[:name],
                 match_route: match_route.title,
+                housing_type: match_route.housing_type,
               )
               previous_updated_at = decision.updated_at
             end
