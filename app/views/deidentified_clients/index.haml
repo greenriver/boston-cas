@@ -10,9 +10,10 @@
     = render 'filter'
     = render 'clients/sort', sort_options: sort_options
   .col-sm-4.text-right
-    = link_to choose_upload_deidentified_clients_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
-      %span.icon-upload2
-      Upload Excel
+    - if can_upload_deidentified_clients?
+      = link_to choose_upload_deidentified_clients_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
+        %span.icon-upload2
+        Upload Excel
     - if can_export_deidentified_clients?
       = link_to deidentified_clients_path(format: :xlsx), class: 'btn btn-sm btn-secondary ml-auto' do
         %i.icon-download2
