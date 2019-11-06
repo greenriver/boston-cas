@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191016174457) do
+ActiveRecord::Schema.define(version: 20191101184424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -558,6 +558,7 @@ ActiveRecord::Schema.define(version: 20191016174457) do
     t.integer  "tag_id"
     t.boolean  "show_default_contact_types",                          default: true
     t.boolean  "send_notifications",                                  default: true
+    t.string   "housing_type"
   end
 
   add_index "match_routes", ["tag_id"], name: "index_match_routes_on_tag_id", using: :btree
@@ -997,6 +998,7 @@ ActiveRecord::Schema.define(version: 20191016174457) do
     t.boolean  "can_manage_imported_clients",             default: false
     t.boolean  "can_edit_clients_based_on_rules",         default: false
     t.boolean  "can_send_notes_via_email",                default: false
+    t.boolean  "can_upload_deidentified_clients",         default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
