@@ -17,7 +17,7 @@ module Matching
     end
 
     def update
-      @opportunity.update_attribute(:matchability, current_value)
+      @opportunity.update_attribute(:matchability, current_value) if @opportunity.matchability != current_value
     end
 
     def current_value
