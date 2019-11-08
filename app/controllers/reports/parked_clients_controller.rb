@@ -10,14 +10,17 @@ module Reports
   	
     def index
       if can_view_all_clients?
-        @clients = Client.parked.
-          order(prevent_matching_until: :asc).
-          page(params[:page].to_i).per(25)
+        clients = parked_scope
       else
-        @clients = Client.non_confidential.full_release.parked.
-          order(prevent_matching_until: :asc).
-          page(params[:page].to_i).per(25)
+        clients = parked_scope.non_confidential.full_release
       end
+      @clients = clients.
+        order(prevent_matching_until: :asc).
+        page(params[:page].to_i).per(25)
+    end
+
+    def parked_scope
+      Client.accessible_by_user(current_user).parked
     end
   end
 end
