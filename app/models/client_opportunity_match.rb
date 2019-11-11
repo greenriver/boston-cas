@@ -219,9 +219,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
     end
   end
 
+  def accessible_by? user
+    self.class.accessible_by_user(user).where(id: id).exists?
+  end
+
   def show_client_info_to? contact
     return false unless contact
-    if contact.user_can_view_all_clients?
+    if contact.user_can_view_all_clients? || accessible_by?(contact.user)
       true
     elsif contact.in?(shelter_agency_contacts)
       past_first_step_or_all_steps_visible?
@@ -278,17 +282,19 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def client_name_for_contact contact, hidden:
-    if hidden
-      '(name hidden)'
-    elsif show_client_info_to?(contact)
-      client.full_name
+    if show_client_info_to?(contact)
+      hide_name(name: client.full_name, hidden: hidden)
     else
       if client&.project_client&.non_hmis_client_identifier.blank?
         "(name withheld — #{id})"
       else
-        client&.project_client&.non_hmis_client_identifier
+        hide_name(name: client&.project_client&.non_hmis_client_identifier, hidden: hidden)
       end
     end
+  end
+
+  def hide_name name:, hidden:
+    hidden ? '(name hidden)' : name
   end
 
   def shelter_agency_approval_or_dnd_override?

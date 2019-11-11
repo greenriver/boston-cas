@@ -207,27 +207,27 @@ class Client < ActiveRecord::Base
   alias_method :name, :full_name
 
   def client_name_for_user user, hidden:
-    if hidden
-      '(name hidden)'
-    elsif user.can_view_all_clients? || accessible_by_user?(user)
-      full_name
+    if user.can_view_all_clients? || accessible_by_user?(user)
+      hide_name(name: full_name, hidden: hidden)
     else
       client_name_for_contact user.contact, hidden: hidden
     end
   end
 
   def client_name_for_contact contact, hidden:
-    if hidden
-      '(name hidden)'
-    elsif contact.user_can_view_all_clients?
-      full_name
+    if contact.user_can_view_all_clients?
+      hide_name(name: full_name, hidden: hidden)
     else
       if project_client.non_hmis_client_identifier.blank?
         '(name withheld)'
       else
-        project_client.non_hmis_client_identifier
+        hide_name(name: project_client.non_hmis_client_identifier, hidden: hidden)
       end
     end
+  end
+
+  def hide_name name:, hidden:
+    hidden ? '(name hidden)' : name
   end
 
   def client_identifier_label contact
