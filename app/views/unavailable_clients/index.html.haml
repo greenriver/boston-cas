@@ -6,7 +6,7 @@
   .col-sm-8.filter-sort__filter.d-flex
     = render 'filter'
     = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
-- if Client.parked.any?
+- if Client.accessible_by_user(current_user).parked.any?
   .alert.alert-warning
     %p
       %i.icon-warning
