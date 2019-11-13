@@ -79,7 +79,7 @@ module MatchDecisions::ProviderOnly
         @decision.next_step.initialize_decision!
 
         if !match.client.non_hmis? && match.client.remote_id.present? && Warehouse::Base.enabled?
-          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation rescue nil
         end
       end
 

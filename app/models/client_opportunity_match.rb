@@ -548,7 +548,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
             match.poached!
-          else
+          elsif ! match.closed?
             match.destroy
           end
         end

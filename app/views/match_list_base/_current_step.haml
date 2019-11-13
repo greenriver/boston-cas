@@ -8,9 +8,10 @@
   %ol.c-stepped-progress{"step-count" => "#{match_decisions.count}", class: "#{small_class if size == 'sm'} route-#{match_route.class.name.parameterize}"}
     - match_decisions.each do |decision|
       - decision_status = decision.incomplete_active_done?
+      - next_decision = match_decisions.find_by(type: types.keys[types.keys.index(decision.type) + 1])
       - final = types[decision.type].to_i == types.length.to_i
-      -# if a step is canceled, but not the final step, don't show the red 'X'
-      - if decision_status == :canceled && !final
+      -# if a step is canceled, but the next step has a status
+      - if decision_status == :canceled && (next_decision.present? && next_decision.status.present?)
         - decision_status = :done
       %li{class: "c-stepped-progress__step c-stepped-progress__step--#{decision_status} #{ 'c-stepped-progress__step--final' if final}"}
         .sr-only
