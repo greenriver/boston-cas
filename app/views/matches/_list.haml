@@ -1,6 +1,7 @@
 - matches.each do |match|
   - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
   - active_in_other_match_class = ''
+  - next if match.client.blank?
   - if match.client.active_in_match? && match.client.match_for_opportunity(match.opportunity) != match
     - active_in_other_match_class = 'clients__client-card--flagged'
 
