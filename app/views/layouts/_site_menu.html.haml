@@ -4,7 +4,7 @@
     %li.o-menu__item
       = link_to active_matches_path, class: 'o-menu__link' do
         Matches in Progress
-    - if Client.parked.any?
+    - if Client.accessible_by_user(current_user).parked.any?
       %li.o-menu__item
         = link_to reports_parked_clients_path, class: 'o-menu__link' do
           Parked Clients
