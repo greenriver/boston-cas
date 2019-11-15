@@ -8,14 +8,14 @@ before_script:
   - cp .rspec.travis .rspec
 
 env:
-  - RAILS_ENV=test DATABASE_ADAPTER=postgresql DATABASE_DB_TEST=boston_cas_test DEFAULT_FROM=greenriver.testing@mailinator.com DATABASE_WAREHOUSE_DB_TEST=test_hmis_warehouse HOSTNAME=openpath.host PORT=80
+  - RAILS_ENV=test DATABASE_ADAPTER=postgresql DATABASE_DB_TEST=boston_cas_test DEFAULT_FROM=greenriver.testing@mailinator.com DATABASE_WAREHOUSE_DB_TEST=test_hmis_warehouse HOSTNAME=openpath.host PORT=80 CLIENT=test
 
 script:
   - createdb $DATABASE_WAREHOUSE_DB_TEST
   - bundle exec rake db:create
   - bundle exec rake db:schema:load
   - bundle exec brakeman -q --ensure-latest
-  - bundle exec bundle-audit check --update
+  - bundle exec bundle-audit check --update --ignore CVE-2019-16676 CVE-2017-1002201
   - bundle exec rspec
 
 addons:
