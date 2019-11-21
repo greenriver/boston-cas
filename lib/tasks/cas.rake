@@ -9,6 +9,7 @@ namespace :cas do
     Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
     Client.ensure_availability
     Cas::UpdateVoucherAvailability.new.run!
+    UnavailableAsCandidateFor.cleanup_expired!
   end
 
   desc "Add/Update Clients with chronically homeless"
