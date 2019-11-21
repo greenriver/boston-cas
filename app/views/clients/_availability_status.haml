@@ -7,3 +7,12 @@
       - if can_reject_matches?
         .c-tag__action
           = render 'park_client_form'
+- if @client.unavailable_as_candidate_fors.exists? && @client.is_available_for_matching?
+  .blocked-on-routes
+    %p.m-2.mt-4.muted-text
+      %em #{@client.name} will not match any vacancies on the following routes.  This is generally because they have completed a successful match on the route previously.
+    %ul.ml-2.c-detailed-list<
+      - @client.unavailable_as_candidate_fors.each do |uf|
+        %li.list-unstyled= uf.route&.title
+
+
