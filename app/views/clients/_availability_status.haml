@@ -9,14 +9,17 @@
           = render 'park_client_form'
 - if @client.unavailable_as_candidate_fors.exists? && @client.is_available_for_matching?
   .blocked-on-routes
-    - if UnavailableAsCandidateFor.expiration_length > 0
-      %p.m-2.mt-4.muted-text
+    %p.m-2.mt-4.muted-text
+      - if UnavailableAsCandidateFor.expiration_length > 0
         %em Clients are blocked from matching on the same route for #{UnavailableAsCandidateFor.describe_expiration_length} after a complete and successful match.
+      - else
+        %em Clients are blocked from matching on the same route after a complete and successful match.
     %p.m-2.mt-4.muted-text
       %em #{@client.name} will not match any vacancies on the following routes:
     %ul.ml-2.c-detailed-list<
       - @client.unavailable_as_candidate_fors.each do |uf|
         %li.c-detailed-list__item
           %span.c-detailed-list__label= uf.route&.title
-          %span.c-detailed-list__value= link_to 'Make Available', client_unavailable_on_route_path(@client, uf), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: "Are you sure you would like #{@client.name} to be available for matching on the #{uf.route.title}?" }
+          - if Client.editable_by(current_user).where(id: @client.id).exists?
+            %span.c-detailed-list__value= link_to 'Make Available', client_unavailable_on_route_path(@client, uf), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: "Are you sure you would like #{@client.name} to be available for matching on the #{uf.route.title}?" }
 

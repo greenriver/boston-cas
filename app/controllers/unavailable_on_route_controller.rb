@@ -32,7 +32,7 @@ class UnavailableOnRouteController < ApplicationController
   end
 
   def some_clients_editable!
-    Client.editable_by(current_user).exists?
+    Client.editable_by(current_user).where(id: params[:client_id].to_i).exists?
   end
 
   def flash_interpolation_options
