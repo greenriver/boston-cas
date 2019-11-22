@@ -3,6 +3,8 @@
     = simple_form_for :checkboxes do |f|
       - # %p= page_entries_info @matches
       - # %p= paginate @matches
+      - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
+        .float-right.mb-4= f.button :submit, value: 'Activate Matches'
       %table.table.table-striped
         %thead
           %tr
