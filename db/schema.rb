@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191113174716) do
+ActiveRecord::Schema.define(version: 20191121212710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(version: 20191113174716) do
     t.integer "ami",                           default: 66600,            null: false
     t.string  "vispdat_prioritization_scheme", default: "length_of_time"
     t.text    "non_hmis_fields"
+    t.integer "unavailable_for_length",        default: 0
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -1154,8 +1155,10 @@ ActiveRecord::Schema.define(version: 20191113174716) do
   add_index "translation_texts", ["translation_key_id"], name: "index_translation_texts_on_translation_key_id", using: :btree
 
   create_table "unavailable_as_candidate_fors", force: :cascade do |t|
-    t.integer "client_id",        null: false
-    t.string  "match_route_type", null: false
+    t.integer  "client_id",                                        null: false
+    t.string   "match_route_type",                                 null: false
+    t.datetime "created_at",       default: '2019-11-21 21:30:36', null: false
+    t.datetime "updated_at",       default: '2019-11-21 21:30:36', null: false
   end
 
   add_index "unavailable_as_candidate_fors", ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id", using: :btree
