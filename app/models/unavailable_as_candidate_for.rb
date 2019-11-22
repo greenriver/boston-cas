@@ -33,6 +33,10 @@ class UnavailableAsCandidateFor < ActiveRecord::Base
     Config.get(:unavailable_for_length)
   end
 
+  def self.describe_expiration_length
+    available_expiration_lengths.invert[expiration_length]
+  end
+
   def self.cleanup_expired!
     return if expiration_length == 0
     where(arel_table[:created_at].lt(expiration_length.days.ago)).destroy_all

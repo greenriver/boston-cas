@@ -1,6 +1,6 @@
 - match_route = match.match_route
 - types = match_step_types[match_route.class.name]
-- match_decisions = match.decisions.order(id: :asc).where(type: types.keys)
+- match_decisions = match.decisions.order(id: :asc).where(type: types&.keys)
 - size ||= 'lg'
 - small_class = 'c-stepped-progress--sm'
 
