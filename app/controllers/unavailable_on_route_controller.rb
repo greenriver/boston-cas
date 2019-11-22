@@ -15,7 +15,6 @@ class UnavailableOnRouteController < ApplicationController
       flash[:notice] = "#{@client.name} is now available to match on the #{@unavailable_for.route&.title}"
     else
       flash[:error] = "Unable to make #{@client.name} available on the #{@unavailable_for.route&.title}"
-      render :new
     end
     redirect_to client_path(@client)
   end
