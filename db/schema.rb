@@ -1157,8 +1157,8 @@ ActiveRecord::Schema.define(version: 20191121212710) do
   create_table "unavailable_as_candidate_fors", force: :cascade do |t|
     t.integer  "client_id",                                        null: false
     t.string   "match_route_type",                                 null: false
-    t.datetime "created_at",       default: '2019-11-21 21:30:36', null: false
-    t.datetime "updated_at",       default: '2019-11-21 21:30:36', null: false
+    t.datetime "created_at",       default: '2019-11-22 19:45:02', null: false
+    t.datetime "updated_at",       default: '2019-11-22 19:45:02', null: false
   end
 
   add_index "unavailable_as_candidate_fors", ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id", using: :btree
