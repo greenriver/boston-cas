@@ -1,0 +1,8 @@
+.o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
+  %header.jMatchHeader
+    %ul.o-choose__nav.nav.jMatchActionNav
+      = render 'match_decisions/destroy_tab'
+
+  .o-choose__content
+    .tab-content
+      = render 'match_decisions/destroy_tab_content', form: form
