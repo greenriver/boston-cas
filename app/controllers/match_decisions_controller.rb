@@ -88,32 +88,38 @@ class MatchDecisionsController < ApplicationController
           )
         end
       end
-      @decision.record_action_event! contact: current_contact
-      @decision.record_updated_unit! unit_id: decision_params[:unit_id], contact_id: current_contact.id
 
-      # If we've been asked to park the client do so.  This will set the match status to canceled
-      # Don't run the status callbacks unless we aren't parking as they will
-      # re-enable the client for matching
-      if can_reject_matches? && decision_params[:prevent_matching_until].present?
-        if decision_params[:prevent_matching_until].to_date > Date.today
-          client = @match.client
-          client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
-          client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match)
-        end
+      if can_delete_matches? && decision_params[:status] == "destroy"
+        opportunity = @match.opportunity
+        @match.reset_and_destroy!
+        redirect_to opportunity_matches_path(opportunity)
       else
-        @decision.run_status_callback!
-      end
+        @decision.record_action_event! contact: current_contact
+        @decision.record_updated_unit! unit_id: decision_params[:unit_id], contact_id: current_contact.id
 
-      # Note this was done on-behalf of someone else
-      # don't make note if the action is stepping back or setting the expiration
-      if @decision.contact_actor_type.present? && decision_params[:status] != "back" && decision_params[:shelter_expiration].blank?
-        unless current_contact.in?(@match.send(@decision.contact_actor_type))
-          @decision.notify_contact_of_action_taken_on_behalf_of contact: current_contact
+        # If we've been asked to park the client do so.  This will set the match status to canceled
+        # Don't run the status callbacks unless we aren't parking as they will
+        # re-enable the client for matching
+        if can_reject_matches? && decision_params[:prevent_matching_until].present?
+          if decision_params[:prevent_matching_until].to_date > Date.today
+            client = @match.client
+            client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
+            client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match)
+          end
+        else
+          @decision.run_status_callback!
         end
-      end
-      flash[:notice] = "Thank you, your response has been entered." unless request.xhr?
-      redirect_to access_context.match_path(@match, redirect: "true")
 
+        # Note this was done on-behalf of someone else
+        # don't make note if the action is stepping back or setting the expiration
+        if @decision.contact_actor_type.present? && decision_params[:status] != "back" && decision_params[:shelter_expiration].blank?
+          unless current_contact.in?(@match.send(@decision.contact_actor_type))
+            @decision.notify_contact_of_action_taken_on_behalf_of contact: current_contact
+          end
+        end
+        flash[:notice] = "Thank you, your response has been entered." unless request.xhr?
+        redirect_to access_context.match_path(@match, redirect: "true")
+      end
     else
       flash[:error] = "Please review the form problems below.<br /> #{@decision.errors.full_messages.join('; ')}"
       render 'matches/show'
