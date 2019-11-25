@@ -15,7 +15,6 @@ module MatchShow
       decision_id: @decision&.id,
       submitted_at: Time.now,
     )
-
   end
 
   def prep_for_show

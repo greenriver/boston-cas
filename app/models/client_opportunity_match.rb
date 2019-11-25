@@ -462,6 +462,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
     Matching::RunEngineJob.perform_later
   end
 
+  def can_be_reopened?
+    # TODO
+    true
+  end
+
+  def reopen!
+    # TODO
+  end
+
   def activate!
     self.class.transaction do
       update! active: true
