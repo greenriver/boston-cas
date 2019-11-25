@@ -463,12 +463,16 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def can_be_reopened?
-    # TODO
+    return false if client_related_matches.on_route(match_route).active.exists? && match_route.should_prevent_multiple_matches_per_client
+    return false if opportunity.active_matches.exists? && !match_route.allow_multiple_active_matches
+
     true
   end
 
   def reopen!
-    # TODO
+    client.make_unavailable_in(match_route: match_route)
+    update(closed: false, active: true, closed_reason: nil)
+    current_decision.update(status: :pending)
   end
 
   def activate!
