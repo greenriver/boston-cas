@@ -103,6 +103,7 @@ class Role < ActiveRecord::Base
       :can_send_notes_via_email,
       :can_upload_deidentified_clients,
       :can_delete_matches,
+      :can_reopen_matches,
     ]
   end
 
