@@ -462,9 +462,17 @@ class ClientOpportunityMatch < ActiveRecord::Base
     Matching::RunEngineJob.perform_later
   end
 
+  def would_be_client_multiple_match
+    client_related_matches.on_route(match_route).active.exists? && match_route.should_prevent_multiple_matches_per_client
+  end
+
+  def would_be_opportunity_multiple_match
+    opportunity.active_matches.exists? && !match_route.allow_multiple_active_matches
+  end
+
   def can_be_reopened?
-    return false if client_related_matches.on_route(match_route).active.exists? && match_route.should_prevent_multiple_matches_per_client
-    return false if opportunity.active_matches.exists? && !match_route.allow_multiple_active_matches
+    return false if would_be_client_multiple_match
+    return false if would_be_opportunity_multiple_match
 
     true
   end

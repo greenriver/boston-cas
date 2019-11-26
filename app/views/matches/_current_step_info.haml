@@ -15,21 +15,33 @@
             = @match.current_decision.try(:actor_type) || 'N/A'
       = render 'match_list_base/current_step', match: @match
   - else
-    %p This match is not active
+    -  description = 'This match is not active'
+    - if can_reopen_matches? && ! @match.can_be_reopened?
+      - description += ', and cannot be reopened because'
+      - if @match.would_be_client_multiple_match
+        - emit_and = true
+        - description += ' the client already has an active match on this route'
+      - if @match.would_be_opportunity_multiple_match
+        - if emit_and
+          - description += ', and'
+        = description
+        there is already another active match on&nbsp;
+        = link_to 'this opportunity.', opportunity_matches_path(@match.opportunity)
+      - else
+        = description + '.'
+    - else
+      = description + '.'
   %div.ml-auto
     - if @match.can_create_overall_note?(access_context.current_contact)
       .btn-label.btn-label__primary
         &nbsp;
       = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
         Add Note
-- if can_reopen_matches?
-  -if @match.can_be_reopened?
-    .d-flex.mb-5.align-items-end.flex-wrap
-      = link_to 'Re-open this match', match_reopen_path(@match), class: 'btn btn-outline-danger', data: {confirm: "Are you sure you want to re-open this match?"}
-      - if can_reject_matches?
-        = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_matches_path(@match.opportunity), target: '_blank', class: 'ml-5 btn btn-light'
-  - else
-    %p This match cannot be re-opened due to other active matches
-    - if can_reject_matches?
-      .d-flex.mb-5.align-items-end.flex-wrap
-        = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light'
+
+- if can_reject_matches?
+  .d-flex.mb-5.align-items-end.flex-wrap
+    = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light'
+
+    - if can_reopen_matches? && @match.can_be_reopened?
+      .ml-auto
+        = link_to 'Re-open this match', match_reopen_path(@match), class: 'btn btn-outline-danger', data: {confirm: "Are you sure you want to re-open this match?"}
