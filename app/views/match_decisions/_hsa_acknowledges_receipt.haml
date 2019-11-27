@@ -6,7 +6,7 @@
           %header
             .o-choose__title
               .c-choice-icon.c-choice-icon--confirm.mr-4
-              %h3 Accept Match
+              %h3 Acknowledge Match
           .o-choose__content
             - if @decision.status.to_s == 'pending'
               %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
