@@ -454,11 +454,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def reset_and_destroy!
-    client.make_available_in(match_route: match_route)
-    opportunity.update! available_candidate: !opportunity.active_matches.exists?
-    opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
-    expire_all_notifications
-    destroy
+    self.class.transaction do
+      client.make_available_in(match_route: match_route)
+      opportunity.update! available_candidate: !opportunity.active_matches.exists?
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      expire_all_notifications
+      destroy
+    end
     Matching::RunEngineJob.perform_later
   end
 
@@ -478,10 +480,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def reopen!(contact)
-    client.make_unavailable_in(match_route: match_route)
-    update(closed: false, active: true, closed_reason: nil)
-    current_decision.update(status: :pending)
-    MatchEvents::Reopened.create(match_id: match.id, contact_id: contact.id)
+    self.class.transaction do
+      client.make_unavailable_in(match_route: match_route)
+      update(closed: false, active: true, closed_reason: nil)
+      current_decision.update(status: :pending)
+      MatchEvents::Reopened.create(match_id: match.id, contact_id: contact.id)
+    end
   end
 
   def activate!
