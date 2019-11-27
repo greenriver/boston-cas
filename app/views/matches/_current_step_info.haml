@@ -15,22 +15,7 @@
             = @match.current_decision.try(:actor_type) || 'N/A'
       = render 'match_list_base/current_step', match: @match
   - else
-    -  description = 'This match is not active'
-    - if can_reopen_matches? && ! @match.can_be_reopened?
-      - description += ', and cannot be re-opened because'
-      - if @match.would_be_client_multiple_match
-        - emit_and = true
-        - description += ' the client already has an active match on this route'
-      - if @match.would_be_opportunity_multiple_match
-        - if emit_and
-          - description += ', and'
-        = description
-        there is already another active match on&nbsp;
-        = link_to 'this opportunity.', opportunity_matches_path(@match.opportunity)
-      - else
-        = description + '.'
-    - else
-      = description + '.'
+    = @match.describe_closed_state
   %div.ml-auto
     - if @match.can_create_overall_note?(access_context.current_contact)
       .btn-label.btn-label__primary

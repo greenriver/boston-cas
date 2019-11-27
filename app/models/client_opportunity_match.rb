@@ -8,6 +8,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include ClientOpportunityMatches::HasDecisions
+  include ActionView::Helpers
+  include Rails.application.routes.url_helpers
 
   def self.model_name
     @_model_name ||= ActiveModel::Name.new(self, nil, 'match')
@@ -477,6 +479,21 @@ class ClientOpportunityMatch < ActiveRecord::Base
     return false if would_be_opportunity_multiple_match
 
     true
+  end
+
+  def describe_closed_state
+    restrictions = []
+    restrictions << 'the client already has an active match on this route' if would_be_client_multiple_match
+    restrictions << 'there is already another active match on&nbsp;' +
+      link_to('this opportunity.', opportunity_matches_path(opportunity)) if would_be_opportunity_multiple_match
+
+    html = 'This match is not active'
+    if restrictions.present?
+      html += ', and cannot be re-opened because ' + restrictions.join(', and ')
+    else
+      html += '.'
+    end
+    html.html_safe
   end
 
   def reopen!(contact)
