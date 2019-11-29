@@ -77,6 +77,13 @@ class Opportunity < ActiveRecord::Base
     )
   end
 
+  def self.match_text_search(text)
+    return none unless text.present?
+
+    joins(:client_opportunity_matches).
+      merge(ClientOpportunityMatch.text_search(text)).distinct
+  end
+
   def self.available_as_candidate
     where(available_candidate: true)
   end

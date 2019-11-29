@@ -6,20 +6,52 @@
 
 class ActiveMatchesController < MatchListBaseController
   helper_method :sort_column, :sort_direction
-  def index
-    # search
-    if params[:q].present?
-      search_scope = match_scope.text_search(params[:q])
-      unless current_user.can_view_all_clients?
-        search_scope = search_scope.where(id: visible_match_ids())
-      end
-      @matches = search_scope
-    else
-      @matches = match_scope
-    end
-    # decision subquery
+  before_action :set_available_steps, :set_available_routes, :set_sort_options
 
-    @available_steps = MatchDecisions::Base.filter_options.map do |value|
+  def index
+    @opportunities = search_opportunities(opportunity_scope)
+
+    @show_vispdat = show_vispdat?
+
+    @current_step = params[:current_step]
+    @opportunities = filter_by_step(@current_step, @opportunities)
+
+    @current_route = params[:current_route]
+    @opportunities = filter_by_route(@current_route, @opportunities)
+
+    @opportunities = @opportunities.merge(match_source.references(:client)).
+      includes(client_opportunity_matches: :client).
+      joins(Arel.sql("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision")).
+      order(sort_opportunities()).
+      preload(
+        client_opportunity_matches:
+        [
+          :decisions,
+          :match_route,
+          :sub_program,
+          :program,
+          client: [
+            :project_client,
+            :active_matches,
+          ],
+        ]
+      ).
+      page(params[:page]).per(25)
+
+    @column = sort_column
+    @direction = sort_direction
+    @active_filter = @current_step.present? || @current_route.present?
+    @types = MatchRoutes::Base.match_steps
+  end
+
+  private def decision_sub_query
+    MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
+      where.not(status: nil).
+      order(created_at: :desc).limit(1)
+  end
+
+  private def set_available_steps
+    @available_steps ||= MatchDecisions::Base.filter_options.map do |value|
       if MatchDecisions::Base.available_sub_types_for_search.include?(value)
         option = [
           value.constantize.new.step_name,
@@ -43,13 +75,54 @@ class ActiveMatchesController < MatchListBaseController
         ]
       end
     end
-    @available_routes = MatchRoutes::Base.filterable_routes
-    @sort_options = ClientOpportunityMatch.sort_options
 
-    md = MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
-      where.not(status: nil).
-      order(created_at: :desc).limit(1)
+  end
 
+  private def set_available_routes
+    @available_routes ||= MatchRoutes::Base.filterable_routes
+  end
+
+  private def set_sort_options
+    @sort_options ||= ClientOpportunityMatch.sort_options
+  end
+
+  private def opportunity_source
+    Opportunity
+  end
+
+  private def opportunity_scope
+    opportunity_source.joins(client_opportunity_matches: [:client, :match_route]).
+      merge(match_source.accessible_by_user(current_user).active)
+  end
+
+  private def match_source
+    ClientOpportunityMatch
+  end
+
+  private def set_heading
+    @heading = 'Matches in Progress'
+  end
+
+  private def sort_column
+    available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
+    available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
+  end
+
+  private def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
+
+  private def search_opportunities scope
+    return scope unless params[:q].present?
+    search_scope = scope.match_text_search(params[:q])
+    unless current_user.can_view_all_clients?
+      search_scope = search_scope.joins(:client_oppotunity_match).
+        merge(match_source.where(id: visible_match_ids()))
+    end
+    search_scope
+  end
+
+  private def sort_opportunities
     # sort / paginate
     column = "client_opportunity_matches.#{sort_column}"
     if sort_column == 'calculated_first_homeless_night'
@@ -75,66 +148,25 @@ class ActiveMatchesController < MatchListBaseController
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort = sort + ' NULLS LAST'
     end
-    @show_vispdat = show_vispdat?
+  end
 
-    @current_step = params[:current_step]
-    if @current_step.present? && MatchDecisions::Base.filter_options.include?(@current_step)
-      if MatchDecisions::Base.stalled_match_filter_options.include?(@current_step)
-        # determine delinquent progress updates
-        if @current_step == 'Stalled Matches - awaiting response'
-          @matches = @matches.stalled_notifications_sent
-        end
-      else
-        @matches = @matches.where(last_decision: {type: @current_step})
+  private def filter_by_step step, scope
+    return scope unless step.present? && MatchDecisions::Base.filter_options.include?(step)
+    if MatchDecisions::Base.stalled_match_filter_options.include?(step)
+      # determine delinquent progress updates
+      if step == 'Stalled Matches - awaiting response'
+        scope = scope.merge(match_source.stalled_notifications_sent)
       end
+    else
+      scope = scope.merge(match_source.where(last_decision: {type: step}))
     end
-
-    @current_route = params[:current_route]
-    if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
-      @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
-    end
-
-    @matches = @matches.references(:client).
-      includes(:client).
-      joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
-      order(sort).
-      preload(
-        :opportunity,
-        :decisions,
-        :match_route,
-        :sub_program,
-        :program,
-        client: [
-          :project_client,
-          :active_matches,
-        ]
-      ).
-      page(params[:page]).per(25)
-
-    @column = sort_column
-    @direction = sort_direction
-    @active_filter = @current_step.present? || @current_route.present?
-    @types = MatchRoutes::Base.match_steps
+    scope
   end
 
-  private def match_scope
-    ClientOpportunityMatch.
-      accessible_by_user(current_user).
-      active.
-      joins(:client, :match_route)
-  end
+  private def filter_by_route route, scope
+    return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
 
-  private def set_heading
-    @heading = 'Matches in Progress'
-  end
-
-  private def sort_column
-    available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
-    available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
-  end
-
-  private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    scope.merge(match_source.joins(:match_route).where(match_routes: {type: route}))
   end
 
 end

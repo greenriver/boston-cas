@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191121212710) do
+ActiveRecord::Schema.define(version: 20191129174912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1000,6 +1000,8 @@ ActiveRecord::Schema.define(version: 20191121212710) do
     t.boolean  "can_edit_clients_based_on_rules",         default: false
     t.boolean  "can_send_notes_via_email",                default: false
     t.boolean  "can_upload_deidentified_clients",         default: false
+    t.boolean  "can_delete_matches",                      default: false
+    t.boolean  "can_reopen_matches",                      default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
@@ -1271,10 +1273,11 @@ ActiveRecord::Schema.define(version: 20191121212710) do
     t.date     "date_available"
     t.integer  "sub_program_id"
     t.integer  "unit_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.datetime "deleted_at"
     t.integer  "user_id"
+    t.datetime "made_available_at"
   end
 
   add_index "vouchers", ["deleted_at"], name: "index_vouchers_on_deleted_at", using: :btree
