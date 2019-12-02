@@ -1,11 +1,13 @@
+- # FIXME: we need to pass this in where ever we call it
+- match_scope = :active_matches
 - opportunities.each do |opportunity|
-  - matches = opportunity.client_opportunity_matches
+  - matches = opportunity.send(:match_scope)
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
   - building = unit&.building
   - voucher = opportunity.voucher
-  - max_updated_at = (opportunity.client_opportunity_matches.map(&:updated_at) + opportunity.client_opportunity_matches.map(&:current_decision).map(&:updated_at)).compact.max
+  - max_updated_at = (opportunity.send(:match_scope)&.map(&:updated_at) + opportunity.send(:match_scope).map(&:current_decision).compact.map(&:updated_at)).compact.max
   .clients__client-card.clients__client.c-card
     .row
       .col-4
@@ -43,7 +45,7 @@
               Prioritized Clients
       .col-8
         - matches.each do |match|
-          - updated_at = if match_type == 'active' then  match.current_decision.updated_at else match.updated_at end
+          - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
           - active_in_other_match_class = ''
           - next if match.client.blank?
@@ -69,11 +71,11 @@
                     %dl
                       %dt.text-nowrap Last Updated
                       %dd
-                        - updated_at = match.current_decision.updated_at
+                        - updated_at = match.current_decision&.updated_at
                         - if match_type == 'active'
-                          = updated_at.to_date.strftime(I18n.t('date.formats.default'))
+                          = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
                         - else
-                          = updated_at.to_date.strftime(I18n.t('date.formats.default'))
+                          = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
                         - if updated_at == max_updated_at && matches.count > 1
                           *
               .mt-0.mb-4

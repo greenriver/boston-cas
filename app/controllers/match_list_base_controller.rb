@@ -9,7 +9,7 @@ class MatchListBaseController < ApplicationController
   before_action :set_heading
   before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
-  
+
   def index
     # search
     @matches = if params[:q].present?
@@ -18,12 +18,28 @@ class MatchListBaseController < ApplicationController
       match_scope
     end
 
+    @matches = @matches.
+      references(:client).
+      includes(:client).
+      order(sort_opportunities()).
+      preload(:client, :opportunity, :decisions).
+      page(params[:page]).per(25)
+    @show_vispdat = show_vispdat?
+  end
+
+  private def sort_opportunities
     # sort / paginate
     column = "client_opportunity_matches.#{sort_column}"
     if sort_column == 'calculated_first_homeless_night'
       column = 'clients.calculated_first_homeless_night'
-    elsif sort_column == 'client_id'
+    elsif sort_column == 'last_name'
       column = 'clients.last_name'
+    elsif sort_column == 'first_name'
+      column = 'clients.first_name'
+    elsif sort_column == 'last_decision'
+      column = "last_decision.updated_at"
+    elsif sort_column == 'current_step'
+      column = 'last_decision.type'
     elsif sort_column == 'days_homeless'
       column = 'clients.days_homeless'
     elsif sort_column == 'days_homeless_in_last_three_years'
@@ -32,27 +48,31 @@ class MatchListBaseController < ApplicationController
       column = 'clients.vispdat_score'
     elsif sort_column == 'vispdat_priority_score'
       column = 'clients.vispdat_priority_score'
+    elsif sort_column == 'client_id'
+      column = 'clients.last_name'
     end
     sort = "#{column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort = sort + ' NULLS LAST'
     end
-    
-    @matches = @matches.
-      references(:client).
-      includes(:client).
-      order(sort).
-      preload(:client, :opportunity, :decisions).
-      page(params[:page]).per(25)
-    @show_vispdat = show_vispdat?
   end
-  
+
+  private def search_opportunities scope
+    return scope unless params[:q].present?
+    search_scope = scope.match_text_search(params[:q])
+    unless current_user.can_view_all_clients?
+      search_scope = search_scope.joins(:client_oppotunity_match).
+        where(id: match_source.where(id: visible_match_ids()).select(:opportunity_id))
+    end
+    search_scope
+  end
+
   protected
     # This is painful, but we need to prevent leaking of client names
     # via targeted search
     def visible_match_ids
       contact = current_user.contact
-      contact.client_opportunity_match_contacts.map(&:match).map do |m| 
+      contact.client_opportunity_match_contacts.map(&:match).map do |m|
         m.id if m.try(:show_client_info_to?, contact) || false
       end.compact
     end
@@ -60,7 +80,7 @@ class MatchListBaseController < ApplicationController
     def match_scope
       raise 'abstract method'
     end
-    
+
     def set_heading
       raise 'abstract method'
     end
@@ -85,7 +105,7 @@ class MatchListBaseController < ApplicationController
     def default_sort_column
       'days_homeless_in_last_three_years'
     end
-  
+
     def sort_column
       (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
     end
@@ -102,5 +122,5 @@ class MatchListBaseController < ApplicationController
       [ :current_step, :current_route ]
     end
     helper_method :filter_terms
-  
+
 end

@@ -26,31 +26,6 @@ class ClosedMatchesController < MatchListBaseController
       'match_id = client_opportunity_matches.id'
     ).where.not(status: nil).order(created_at: :desc).limit(1)
 
-    # sort / paginate
-    column = "client_opportunity_matches.#{sort_column}"
-    if sort_column == 'calculated_first_homeless_night'
-      column = 'clients.calculated_first_homeless_night'
-    elsif sort_column == 'last_name'
-      column = 'clients.last_name'
-    elsif sort_column == 'first_name'
-      column = 'clients.first_name'
-    elsif sort_column == 'days_homeless'
-      column = 'clients.days_homeless'
-    elsif sort_column == 'days_homeless_in_last_three_years'
-      column = 'clients.days_homeless_in_last_three_years'
-    elsif sort_column == 'last_decision'
-      column = "last_decision.updated_at"
-    elsif sort_column == 'current_step'
-      column = 'last_decision.type'
-    elsif sort_column == 'vispdat_score'
-      column = 'clients.vispdat_score'
-    elsif sort_column == 'vispdat_priority_score'
-      column = 'clients.vispdat_priority_score'
-    end
-    sort = "#{column} #{sort_direction}"
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort = sort + ' NULLS LAST'
-    end
     @show_vispdat = show_vispdat?
 
     @current_step = params[:current_step]
@@ -69,7 +44,7 @@ class ClosedMatchesController < MatchListBaseController
       references(:client).
       includes(:client).
       joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
-      order(sort).
+      order(sort_opportunities()).
       preload(
         :opportunity,
         :decisions,

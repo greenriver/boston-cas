@@ -322,10 +322,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     ).text_search(text).exists
 
     where(
-      client_matches.
-      or(opp_matches).
-      or(contact_matches).
-      or(arel_table[:id].eq(text))
+      Arel.sql(
+        client_matches.
+        or(opp_matches).
+        or(contact_matches).
+        or(arel_table[:id].eq(text)).to_sql
+      )
     )
   end
 
