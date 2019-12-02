@@ -457,12 +457,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def reset_and_destroy!
     self.class.transaction do
-      client.make_available_in(match_route: match_route)
+     client.make_available_in(match_route: match_route)
+      update(active: false)
       opportunity.update! available_candidate: !opportunity.active_matches.exists?
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       expire_all_notifications
       destroy
-    end
+   end
     Matching::RunEngineJob.perform_later
   end
 
@@ -475,6 +476,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def can_be_reopened?
+    return false if active?
     return false if would_be_client_multiple_match
     return false if would_be_opportunity_multiple_match
 
