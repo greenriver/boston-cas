@@ -503,7 +503,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
       client.make_unavailable_in(match_route: match_route)
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
-      MatchEvents::Reopened.create(match_id: match.id, contact_id: contact.id)
+      MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
     end
   end
 
