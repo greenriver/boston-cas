@@ -455,6 +455,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def reset_and_destroy!
     client.make_available_in(match_route: match_route)
+    update(active: false)
     opportunity.update! available_candidate: !opportunity.active_matches.exists?
     opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
     expire_all_notifications
