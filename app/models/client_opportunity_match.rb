@@ -8,6 +8,8 @@ class ClientOpportunityMatch < ActiveRecord::Base
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include ClientOpportunityMatches::HasDecisions
+  include ActionView::Helpers
+  include Rails.application.routes.url_helpers
 
   def self.model_name
     @_model_name ||= ActiveModel::Name.new(self, nil, 'match')
@@ -452,6 +454,58 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def expire_all_notifications(on: 1.week.from_now.to_date)
     notifications.update_all(expires_at: on)
+  end
+
+  def reset_and_destroy!
+    self.class.transaction do
+     client.make_available_in(match_route: match_route)
+      update(active: false)
+      opportunity.update! available_candidate: !opportunity.active_matches.exists?
+      opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
+      expire_all_notifications
+      destroy
+   end
+    Matching::RunEngineJob.perform_later
+  end
+
+  def would_be_client_multiple_match
+    client_related_matches.on_route(match_route).active.exists? && match_route.should_prevent_multiple_matches_per_client
+  end
+
+  def would_be_opportunity_multiple_match
+    opportunity.active_matches.exists? && !match_route.allow_multiple_active_matches
+  end
+
+  def can_be_reopened?
+    return false if active?
+    return false if would_be_client_multiple_match
+    return false if would_be_opportunity_multiple_match
+
+    true
+  end
+
+  def describe_closed_state
+    restrictions = []
+    restrictions << 'the client already has an active match on this route' if would_be_client_multiple_match
+    restrictions << 'there is already another active match on&nbsp;' +
+      link_to('this opportunity.', opportunity_matches_path(opportunity)) if would_be_opportunity_multiple_match
+
+    html = 'This match is not active'
+    if restrictions.present?
+      html += ', and cannot be re-opened because ' + restrictions.join(', and ')
+    else
+      html += '.'
+    end
+    html.html_safe
+  end
+
+  def reopen!(contact)
+    self.class.transaction do
+      client.make_unavailable_in(match_route: match_route)
+      update(closed: false, active: true, closed_reason: nil)
+      current_decision.update(status: :pending)
+      MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
+    end
   end
 
   def activate!

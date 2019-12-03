@@ -45,6 +45,7 @@ module MatchDecisions::ProviderOnly
         pending: 'Pending',
         acknowledged: 'Acknowledged',
         canceled: 'Canceled',
+        destroy: 'Destroy',
       }
     end
 

@@ -22,7 +22,6 @@ module MatchDecisions::HomelessSetAside
       when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
       when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
-      when :back then backup_status_label
       end
     end
 
@@ -57,7 +56,7 @@ module MatchDecisions::HomelessSetAside
         accepted: 'Accepted',
         declined: 'Declined',
         canceled: 'Canceled',
-        back: 'Pending',
+        destroy: 'Destroy',
       }
     end
 

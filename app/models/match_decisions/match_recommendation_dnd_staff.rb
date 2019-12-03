@@ -45,6 +45,7 @@ module MatchDecisions
         accepted: 'Accept',
         declined: 'Decline',
         canceled: 'Canceled',
+        destroy: 'Destroy',
       }
     end
 
