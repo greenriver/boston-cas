@@ -1,16 +1,15 @@
 - # FIXME: we need to pass this in where ever we call it
-- match_scope = :active_matches
 - opportunities.each do |opportunity|
-  - matches = opportunity.send(match_scope)
+  - matches = opportunity.send(@match_state)
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
   - building = unit&.building
   - voucher = opportunity.voucher
-  - max_updated_at = (opportunity.send(match_scope)&.map(&:updated_at) + opportunity.send(match_scope).map(&:current_decision).compact.map(&:updated_at)).compact.max
+  - max_updated_at = (opportunity.send(@match_state)&.map(&:updated_at) + opportunity.send(@match_state).map(&:current_decision).compact.map(&:updated_at)).compact.max
   .clients__client-card.clients__client.c-card
     .row
-      .col-3
+      .col-2
         %dl.inline
           %dt Program:
           %dd
@@ -39,11 +38,11 @@
         %dl.inline.mt-6
           %dt Available Since:
           %dd= voucher.made_available_at.try(:strftime, I18n.t('date.formats.default')) || 'unknown'
-        - if can_reject_matches? || match.past_first_step_or_all_steps_visible?
+        - if can_reject_matches? || matches.map(&:past_first_step_or_all_steps_visible?).any?
           - if  match_type != 'opportunity' && can_see_alternate_matches?
             = link_to opportunity_matches_path(opportunity) do
               Prioritized Clients
-      .col-9
+      .col-10
         - matches.each do |match|
           - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
@@ -51,62 +50,70 @@
           - next if match.client.blank?
           - if match.client.active_in_match? && match.client.match_for_opportunity(match.opportunity) != match
             - active_in_other_match_class = 'clients__client-card--flagged'
-          .row.client__match{data: {id: match.client.id}, class: active_in_other_match_class}
-            .col.text-right
-              %strong.clients__client-name
-                - if match.client.accessible_by_user? current_user
-                  = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
-                - else
-                  = match.client_name_for_contact current_contact, hidden: hide_client_name
-            .col
-              %ul.d-flex.list-unstyled.align-items-center.mb-0
-                %li
-                  %dl
-                    %dt.text-nowrap Initial Match Date
-                    %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-                %li.ml-6.mr-6
-                  = render 'match_list_base/current_step', match: match, size: 'sm'
-                - unless match_type == 'opportunity'
+          .match-step-status.mb-4
+            .row.client__match.mb-4{data: {id: match.client.id}, class: active_in_other_match_class}
+              .col
+                .text-lg-right
+                  %strong.clients__client-name
+                    - if match.client.accessible_by_user? current_user
+                      = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
+                    - else
+                      = match.client_name_for_contact current_contact, hidden: hide_client_name
+              .col
+                %ul.d-flex.list-unstyled.align-items-center.mb-0
                   %li
                     %dl
-                      %dt.text-nowrap Last Updated
-                      %dd
-                        - updated_at = match.current_decision&.updated_at
-                        - if match_type == 'active'
-                          = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
-                        - else
-                          = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
-                        - if updated_at == max_updated_at && matches.count > 1
-                          *
-              .mt-0.mb-4
-                - if match.shelter_expiration? && match.current_decision&.expires?
-                  - if match.shelter_expiration < Date.today
+                      %dt.text-nowrap Initial Match Date
+                      %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+                  %li.ml-6.mr-6
+                    = render 'match_list_base/current_step', match: match, size: 'sm'
+                  - unless match_type == 'opportunity'
+                    %li
+                      %dl
+                        %dt.text-nowrap Last Updated
+                        %dd
+                          - updated_at = match.current_decision&.updated_at
+                          - if match_type == 'active'
+                            = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
+                          - else
+                            = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
+                          - if updated_at == max_updated_at && matches.count > 1
+                            *
+                .mt-0.mb-4
+                  - if match.shelter_expiration? && match.current_decision&.expires?
+                    - if match.shelter_expiration < Date.today
+                      .c-tag__wrapper.align-items-center
+                        .c-tag--danger.mr-4
+                          .c-tag__icon.c-tag__icon--xs
+                            %i.icon-warning
+                        .content
+                          This match expired on
+                          %strong= "#{match.shelter_expiration}."
+                    - else
+                      .content
+                        This match expires on
+                        %strong= "#{match.shelter_expiration}."
+                .mt-0.mb-4
+                  - decision_stallable = match.current_decision && match.current_decision.stallable?
+                  - if decision_stallable && match.stalled?
                     .c-tag__wrapper.align-items-center
-                      .c-tag--danger.mr-4
+                      .c-tag--warning.mr-4
                         .c-tag__icon.c-tag__icon--xs
                           %i.icon-warning
                       .content
-                        This match expired on
-                        %strong= "#{match.shelter_expiration}."
-                  - else
-                    .content
-                      This match expires on
-                      %strong= "#{match.shelter_expiration}."
-              .mt-0.mb-4
-                - decision_stallable = match.current_decision && match.current_decision.stallable?
-                - if decision_stallable && match.stalled?
-                  .content
-                    %i.icon-warning
-                    This match stalled on
-                    %strong #{match.stall_date}
-                - elsif decision_stallable && match.stall_date.present?
-                  .content
-                    %i.icon-info
-                    This match will be considered stalled on
-                    %strong #{match.stall_date}.
+                        This match stalled on
+                        %strong #{match.stall_date}
+                  - elsif decision_stallable && match.stall_date.present?
+                    .c-tag__wrapper.align-items-center
+                      .c-tag--warning.mr-4
+                        .c-tag__icon.c-tag__icon--xs
+                          %i.icon-info
+                      .content
+                        This match will be considered stalled on
+                        %strong #{match.stall_date}.
 
-            .client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
-              - if can_reject_matches? || match.past_first_step_or_all_steps_visible?
-                = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
-              - else
-                This match is not currently available.
+              .col.client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
+                - if can_reject_matches? || match&.past_first_step_or_all_steps_visible?
+                  = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
+                - else
+                  This match is not currently available.

@@ -9,7 +9,7 @@ class ActiveMatchesController < MatchListBaseController
   before_action :set_available_steps, :set_available_routes, :set_sort_options
 
   def index
-
+    @match_state = :active_matches
     @matches = match_scope
     @show_vispdat = show_vispdat?
     @current_step = params[:current_step]
