@@ -9,40 +9,38 @@
   - max_updated_at = (opportunity.send(@match_state)&.map(&:updated_at) + opportunity.send(@match_state).map(&:current_decision).compact.map(&:updated_at)).compact.max
   .clients__client-card.clients__client.c-card
     .row
-      .col-2
+      .col-3
         %dl.inline
           %dt Program:
           %dd
             = link_to program.name, edit_program_sub_program_program_details_path(program_id: program, sub_program_id: sub_program)
-        %dl.inline
-          %dt Sub-Program:
-          %dd
-            = link_to sub_program.name, edit_program_sub_program_path(program_id: program, id: sub_program)
-        - if building
+            %br
+            %em
+              = link_to sub_program.name, edit_program_sub_program_path(program_id: program, id: sub_program)
+            .text-muted
+              = sub_program.program_type_label
+
+        - if building && unit
           %dl.inline
-            %dt Building:
-            %dd= building.name
-        - if unit
-          %dl.inline
-            %dt Unit:
-            %dd= unit.name
-        %dl.inline
-          %dt Voucher Type:
-          %dd= sub_program.program_type_label
+            %dt Unit & Building:
+            %dd
+              = unit.name
+              %br
+              = building.name
         - if MatchRoutes::Base.more_than_one?
           %ul.list-unstyled
             %li
               %dl.inline
                 %dt Match Route:
                 %dd.feature= opportunity.match_route&.title
-        %dl.inline.mt-6
+        %dl.inline
           %dt Available Since:
           %dd= voucher.made_available_at.try(:strftime, I18n.t('date.formats.default')) || 'unknown'
         - if can_reject_matches? || matches.map(&:past_first_step_or_all_steps_visible?).any?
           - if  match_type != 'opportunity' && can_see_alternate_matches?
             = link_to opportunity_matches_path(opportunity) do
               Prioritized Clients
-      .col-10
+      .col-9.mt-5
         - matches.each do |match|
           - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
