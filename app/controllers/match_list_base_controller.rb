@@ -109,60 +109,132 @@ class MatchListBaseController < ApplicationController
     search_scope
   end
 
-  protected
-    # This is painful, but we need to prevent leaking of client names
-    # via targeted search
-    def visible_match_ids
-      contact = current_user.contact
-      contact.client_opportunity_match_contacts.map(&:match).map do |m|
-        m.id if m.try(:show_client_info_to?, contact) || false
-      end.compact
+  private def filter_by_step step, scope
+    return scope unless step.present? && MatchDecisions::Base.filter_options.include?(step)
+    if MatchDecisions::Base.stalled_match_filter_options.include?(step)
+      # determine delinquent progress updates
+      if step == 'Stalled Matches - awaiting response'
+        scope = scope.stalled_notifications_sent
+      end
+    else
+      scope = scope.where(last_decision: {type: step}).select(:opportunity_id)
     end
+    scope
+  end
 
-    def match_scope
-      raise 'abstract method'
-    end
+  private def filter_by_route route, scope
+    return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
+    match_source.joins(:match_route).
+      where(match_routes: {type: route})
+  end
 
-    def set_heading
-      raise 'abstract method'
-    end
+  private def decision_sub_query
+    MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
+      where.not(status: nil).
+      order(created_at: :desc).limit(1)
+  end
 
-    def show_vispdat?
-      can_view_vspdats?
-    end
+  private def opportunity_source
+    Opportunity
+  end
 
-    def show_confidential_names?
-      @show_confidential_names
-    end
-    helper_method :show_confidential_names?
+  private def opportunity_scope
+    opportunity_source.joins(client_opportunity_matches: [:client, :match_route]).
+      merge(match_scope)
+  end
 
-    def set_show_confidential_names
-      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
-    end
+  private def match_source
+    ClientOpportunityMatch
+  end
 
-    def default_sort_direction
-      'desc'
-    end
+  private def set_available_routes
+    @available_routes ||= MatchRoutes::Base.filterable_routes
+  end
 
-    def default_sort_column
-      'days_homeless_in_last_three_years'
-    end
+  private def set_sort_options
+    @sort_options ||= ClientOpportunityMatch.sort_options
+  end
 
-    def sort_column
-      @sort_column ||= (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
+  private def set_available_steps
+    @available_steps ||= MatchDecisions::Base.filter_options.map do |value|
+      if MatchDecisions::Base.available_sub_types_for_search.include?(value)
+        option = [
+          value.constantize.new.step_name,
+          value,
+        ]
+        if MatchRoutes::Base.more_than_one?
+          MatchRoutes::Base.all_routes.each do |route|
+            next unless route.available_sub_types_for_search.include?(value)
+            title = "#{value.constantize.new.step_name} on #{route.new.title}"
+            option = [
+              title,
+              value
+            ]
+          end
+        end
+        option
+      else # Handle stalled situation that doesn't match a decision name
+        [
+          value.capitalize,
+          value
+        ]
+      end
     end
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : default_sort_direction
-    end
+  # This is painful, but we need to prevent leaking of client names
+  # via targeted search
+  private def visible_match_ids
+    contact = current_user.contact
+    contact.client_opportunity_match_contacts.map(&:match).map do |m|
+      m.id if m.try(:show_client_info_to?, contact) || false
+    end.compact
+  end
 
-    def query_string
-      "%#{params[:q]}%"
-    end
+  private def match_scope
+    raise 'abstract method'
+  end
 
-    def filter_terms
-      [ :current_step, :current_route ]
-    end
-    helper_method :filter_terms
+  private def set_heading
+    raise 'abstract method'
+  end
+
+  private def show_vispdat?
+    can_view_vspdats?
+  end
+
+  private def show_confidential_names?
+    @show_confidential_names
+  end
+  helper_method :show_confidential_names?
+
+  private def set_show_confidential_names
+    @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
+  end
+
+  private def default_sort_direction
+    'desc'
+  end
+
+  private def default_sort_column
+    'days_homeless_in_last_three_years'
+  end
+
+  private def sort_column
+    @sort_column ||= (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
+  end
+
+  private def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : default_sort_direction
+  end
+
+  private def query_string
+    "%#{params[:q]}%"
+  end
+
+  private def filter_terms
+    [ :current_step, :current_route ]
+  end
+  helper_method :filter_terms
 
 end
