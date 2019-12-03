@@ -19,15 +19,6 @@
               %i.icon-checkmark
               Confirm Match Success
 
-        .o-choose__choice{class: ('o-choose__choice--disabled' if !@decision.editable?)}
-          %header
-            .o-choose__title
-              .c-choice-icon.c-choice-icon--reject
-              %h3 Reject Match
-          .o-choose__content
-            %p Rejecting the match will close it and return the client and voucher/unit to the available pool for future matching.
-            .form-actions.form-actions--right
-              -# = form.submit 'Reject Match', class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'rejected'}, disabled: !(@decision.editable?)
-              %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'rejected'}, disabled: !(@decision.editable?)}
-                %i.icon-cross
-                Reject Match
+        = render 'match_decisions/reject_actions', form: form
+
+

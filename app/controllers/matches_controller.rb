@@ -13,6 +13,7 @@ class MatchesController < ApplicationController
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
+  before_action :require_can_reopen_matches!, only: [:reopen]
   before_action :find_match!, only: [:show]
   before_action :prevent_page_caching
 
@@ -20,11 +21,16 @@ class MatchesController < ApplicationController
     prep_for_show
   end
 
-
   def history
     @match = match_scope.find(params[:match_id])
     @types = MatchRoutes::Base.match_steps
     render layout: false
+  end
+
+  def reopen
+    @match = match_scope.find(params[:match_id])
+    @match.reopen!(current_contact)
+    redirect_to match_path(@match)
   end
 
   def cant_edit_self?

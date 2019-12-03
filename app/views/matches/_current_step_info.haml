@@ -15,13 +15,19 @@
             = @match.current_decision.try(:actor_type) || 'N/A'
       = render 'match_list_base/current_step', match: @match
   - else
-    %p This match is not active
+    = @match.describe_closed_state
   %div.ml-auto
     - if @match.can_create_overall_note?(access_context.current_contact)
       .btn-label.btn-label__primary
         &nbsp;
       = link_to new_match_note_path(@match, match_note_referrer_params), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
         Add Note
+
 - if can_reject_matches?
   .d-flex.mb-5.align-items-end.flex-wrap
     = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light'
+
+    - if can_reopen_matches? && @match.closed?
+      .ml-auto
+        = link_to_if @match.can_be_reopened?, 'Re-open this match', match_reopen_path(@match), class: 'btn btn-outline-danger', data: {confirm: "Are you sure you want to re-open this match?"} do
+          %button.btn.btn-outline-dark.disabled Re-open this Match
