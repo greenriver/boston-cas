@@ -57,31 +57,34 @@ class MatchListBaseController < ApplicationController
     end
   end
 
-  private def sort_matches
-    # sort / paginate
-    column = "client_opportunity_matches.#{sort_column}"
-    if sort_column == 'calculated_first_homeless_night'
-      column = 'clients.calculated_first_homeless_night'
+  private def qualified_match_sort_column
+    @qualified_match_sort_column ||= if sort_column == 'calculated_first_homeless_night'
+      'clients.calculated_first_homeless_night'
     elsif sort_column == 'last_name'
-      column = 'clients.last_name'
+      'clients.last_name'
     elsif sort_column == 'first_name'
-      column = 'clients.first_name'
+      'clients.first_name'
     elsif sort_column == 'last_decision'
-      column = "last_decision.updated_at"
+      "last_decision.updated_at"
     elsif sort_column == 'current_step'
-      column = 'last_decision.type'
+      'last_decision.type'
     elsif sort_column == 'days_homeless'
-      column = 'clients.days_homeless'
+      'clients.days_homeless'
     elsif sort_column == 'days_homeless_in_last_three_years'
-      column = 'clients.days_homeless_in_last_three_years'
+      'clients.days_homeless_in_last_three_years'
     elsif sort_column == 'vispdat_score'
-      column = 'clients.vispdat_score'
+      'clients.vispdat_score'
     elsif sort_column == 'vispdat_priority_score'
-      column = 'clients.vispdat_priority_score'
+      'clients.vispdat_priority_score'
     elsif sort_column == 'client_id'
-      column = 'clients.last_name'
+      'clients.last_name'
+    else
+      "client_opportunity_matches.#{sort_column}"
     end
-    sort = "#{column} #{sort_direction}"
+  end
+
+  private def sort_matches
+    sort = "#{qualified_match_sort_column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       sort = sort + ' NULLS LAST'
     end
@@ -146,7 +149,7 @@ class MatchListBaseController < ApplicationController
     end
 
     def sort_column
-      (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
+      @sort_column ||= (match_scope.column_names + ['last_decision', 'current_step', 'days_homeless', 'days_homeless_in_last_three_years', 'vispdat_score']).include?(params[:sort]) ? params[:sort] : default_sort_column
     end
 
     def sort_direction

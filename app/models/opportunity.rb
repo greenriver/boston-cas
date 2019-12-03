@@ -7,6 +7,7 @@
 class Opportunity < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
+  extend OrderAsSpecified
 
   include SubjectForMatches # loads methods and relationships
   include HasRequirements

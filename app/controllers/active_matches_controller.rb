@@ -9,6 +9,7 @@ class ActiveMatchesController < MatchListBaseController
   before_action :set_available_steps, :set_available_routes, :set_sort_options
 
   def index
+
     @matches = match_scope
     @show_vispdat = show_vispdat?
     @current_step = params[:current_step]
@@ -18,39 +19,58 @@ class ActiveMatchesController < MatchListBaseController
     @search_string = params[:q]
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
+      joins(:client).
       order(sort_matches())
     @column = sort_column
     @direction = sort_direction
     @active_filter = @current_step.present? || @current_route.present?
     @types = MatchRoutes::Base.match_steps
 
-    @opportunities = opportunity_scope.where(id: @matches.select(:opportunity_id)).
-      distinct.
-      # FIXME: still can't sort
-      # Temp table?
-      # or
-      # https://stackoverflow.com/questions/6332043/sql-order-by-multiple-values-in-specific-order
-      page(params[:page]).per(25)
+    @page_size = 25
+    @page = params[:page] || 0
+    opportunity_ids = @matches.pluck(:opportunity_id, qualified_match_sort_column).
+      map(&:first).
+      uniq
 
-    # raise 'hi'
+    # NOTE: Ordering may need to be adjusted based on postgres version https://stackoverflow.com/a/29598910
+    @opportunities = opportunity_scope.where(id: opportunity_ids).
+      order_as_specified(distinct_on: true, id: opportunity_ids).
+      # order("array_position(ARRAY#{opportunity_ids}, opportunities.id)").
+      preload(
+        :voucher,
+        :match_route,
+        sub_program: [:program],
+        active_matches:
+        [
+          :decisions,
+          :match_route,
+          :sub_program,
+          :program,
+          client: [
+            :project_client,
+            :active_matches,
+          ],
+        ]
+      ).
+      page(@page).per(@page_size)
 
     # @opportunities = search_opportunities(opportunity_scope).
     #   joins(Arel.sql("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision"))
     # @opportunities = @opportunities.distinct.
     #   order(sort_opportunities()).
-    #   preload(
-    #     active_matches:
-    #     [
-    #       :decisions,
-    #       :match_route,
-    #       :sub_program,
-    #       :program,
-    #       client: [
-    #         :project_client,
-    #         :active_matches,
-    #       ],
-    #     ]
-    #   ).
+      # preload(
+      #   active_matches:
+      #   [
+      #     :decisions,
+      #     :match_route,
+      #     :sub_program,
+      #     :program,
+      #     client: [
+      #       :project_client,
+      #       :active_matches,
+      #     ],
+      #   ]
+      # ).
     #   page(params[:page]).per(25)
 
   end
@@ -124,12 +144,12 @@ class ActiveMatchesController < MatchListBaseController
     @heading = 'Matches in Progress'
   end
 
-  private def sort_column
+  def sort_column
     available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
-    available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
+    @sort_column ||= available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
   end
 
-  private def sort_direction
+  def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 

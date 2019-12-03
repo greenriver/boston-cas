@@ -10,7 +10,7 @@
   - max_updated_at = (opportunity.send(match_scope)&.map(&:updated_at) + opportunity.send(match_scope).map(&:current_decision).compact.map(&:updated_at)).compact.max
   .clients__client-card.clients__client.c-card
     .row
-      .col-4
+      .col-3
         %dl.inline
           %dt Program:
           %dd
@@ -43,7 +43,7 @@
           - if  match_type != 'opportunity' && can_see_alternate_matches?
             = link_to opportunity_matches_path(opportunity) do
               Prioritized Clients
-      .col-8
+      .col-9
         - matches.each do |match|
           - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?

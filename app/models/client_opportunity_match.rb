@@ -341,10 +341,9 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   # returns the most recent decision
   def current_decision
-    unless closed?
-      # FIXME, should look for next decision on route based on route #match_steps
-      initialized_decisions.order(id: :desc).limit(1).first
-    end
+    return nil if closed?
+    # FIXME, should look for next decision on route based on route #match_steps
+    @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
   end
 
   def add_default_contacts!
