@@ -9,42 +9,54 @@ class ActiveMatchesController < MatchListBaseController
   before_action :set_available_steps, :set_available_routes, :set_sort_options
 
   def index
-    @opportunities = search_opportunities(opportunity_scope).
-      joins(Arel.sql("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision"))
-
+    @matches = match_scope
     @show_vispdat = show_vispdat?
-
     @current_step = params[:current_step]
-    #@opportunities = filter_by_step(@current_step, @opportunities)
-
+    @matches = filter_by_step(@current_step, @matches)
     @current_route = params[:current_route]
-    #@opportunities = filter_by_route(@current_route, @opportunities)
-
-    @opportunities = @opportunities.distinct.
-      order(sort_opportunities()).
-      preload(
-        active_matches:
-        [
-          :decisions,
-          :match_route,
-          :sub_program,
-          :program,
-          client: [
-            :project_client,
-            :active_matches,
-          ],
-        ]
-      ).
-      page(params[:page]).per(25)
-    console
+    @matches = filter_by_route(@current_route, @matches)
+    @search_string = params[:q]
+    @matches = search_matches(@search_string, @matches)
+    @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
+      order(sort_matches())
     @column = sort_column
     @direction = sort_direction
     @active_filter = @current_step.present? || @current_route.present?
     @types = MatchRoutes::Base.match_steps
+
+    @opportunities = opportunity_scope.where(id: @matches.select(:opportunity_id)).
+      distinct.
+      # FIXME: still can't sort
+      # Temp table?
+      # or
+      # https://stackoverflow.com/questions/6332043/sql-order-by-multiple-values-in-specific-order
+      page(params[:page]).per(25)
+
+    # raise 'hi'
+
+    # @opportunities = search_opportunities(opportunity_scope).
+    #   joins(Arel.sql("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision"))
+    # @opportunities = @opportunities.distinct.
+    #   order(sort_opportunities()).
+    #   preload(
+    #     active_matches:
+    #     [
+    #       :decisions,
+    #       :match_route,
+    #       :sub_program,
+    #       :program,
+    #       client: [
+    #         :project_client,
+    #         :active_matches,
+    #       ],
+    #     ]
+    #   ).
+    #   page(params[:page]).per(25)
+
   end
 
   private def decision_sub_query
-    MatchDecisions::Base.where('id = client_opportunity_matches.opportunity_id').
+    MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
       where.not(status: nil).
       order(created_at: :desc).limit(1)
   end
@@ -90,16 +102,22 @@ class ActiveMatchesController < MatchListBaseController
   end
 
   private def opportunity_scope
-    o_t = Opportunity.arel_table
-    # Need to include this for sorting
-    ld_t = MatchDecisions::Base.arel_table.alias('last_decision')
+    # o_t = Opportunity.arel_table
+    # # Need to include this for sorting
+    # ld_t = MatchDecisions::Base.arel_table.alias('last_decision')
+    # opportunity_source.joins(client_opportunity_matches: [:client, :match_route]).
+    #   select(o_t[:id], o_t[:voucher_id], ld_t[:updated_at]).
+    #   where(id: match_source.accessible_by_user(current_user).active.select(:opportunity_id))
     opportunity_source.joins(client_opportunity_matches: [:client, :match_route]).
-      select(o_t[:id], o_t[:voucher_id], ld_t[:updated_at]).
-      where(id: match_source.accessible_by_user(current_user).active.select(:opportunity_id))
+      merge(match_source.accessible_by_user(current_user).active)
   end
 
   private def match_source
     ClientOpportunityMatch
+  end
+
+  private def match_scope
+    match_source.accessible_by_user(current_user).active
   end
 
   private def set_heading
@@ -120,27 +138,18 @@ class ActiveMatchesController < MatchListBaseController
     if MatchDecisions::Base.stalled_match_filter_options.include?(step)
       # determine delinquent progress updates
       if step == 'Stalled Matches - awaiting response'
-        scope = scope.where(
-          id: match_source.
-            stalled_notifications_sent.select(:opportunity_id)
-        )
+        scope = scope.stalled_notifications_sent
       end
     else
-      scope = scope.where(
-        id: match_source.
-          where(last_decision: {type: step}).select(:opportunity_id)
-      )
+      scope = scope.where(last_decision: {type: step}).select(:opportunity_id)
     end
     scope
   end
 
   private def filter_by_route route, scope
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
-
-    scope.where(
-      id: match_source.joins(:match_route).
-        where(match_routes: {type: route}).select(:opportunity_id)
-    )
+    match_source.joins(:match_route).
+      where(match_routes: {type: route})
   end
 
 end

@@ -1,13 +1,13 @@
 - # FIXME: we need to pass this in where ever we call it
 - match_scope = :active_matches
 - opportunities.each do |opportunity|
-  - matches = opportunity.send(:match_scope)
+  - matches = opportunity.send(match_scope)
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
   - building = unit&.building
   - voucher = opportunity.voucher
-  - max_updated_at = (opportunity.send(:match_scope)&.map(&:updated_at) + opportunity.send(:match_scope).map(&:current_decision).compact.map(&:updated_at)).compact.max
+  - max_updated_at = (opportunity.send(match_scope)&.map(&:updated_at) + opportunity.send(match_scope).map(&:current_decision).compact.map(&:updated_at)).compact.max
   .clients__client-card.clients__client.c-card
     .row
       .col-4
