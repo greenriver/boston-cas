@@ -344,6 +344,7 @@ module MatchDecisions
     def incomplete_active_done?
       status_sym = status.try(:to_sym)
       return :canceled if self.class.closed_match_statuses.include?(status_sym)
+      return :canceled if status_sym == :pending && match.closed?
       return :active if editable?
       return :incomplete if status_sym == :pending || status_sym == :other_clients_canceled || status.blank?
       :done
