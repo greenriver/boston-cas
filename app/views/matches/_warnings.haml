@@ -31,11 +31,13 @@
         This match will be considered stalled on
         %strong #{match.stall_date}.
 .mt-0.mb-4
-  - decision = match.decisions.canceled_other_clients.last
-  - if decision
+  - # NOTE: This uses an event because the decision status changes as the match progresses
+  - # If the match was backed up or others were added to the match after the HSA closed the
+  - # other matches, this may be inaccurate
+  - if match.decision_actions.canceled_other_clients.exists?
     .c-tag__wrapper.align-items-center
       .c-tag--info.mr-4
         .c-tag__icon.c-tag__icon--xs
           %i.icon-info
       .content
-        = decision.label
+        = "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
