@@ -48,6 +48,10 @@ module MatchDecisions
       where(arel_table[:updated_at].lteq(date))
     end
 
+    scope :canceled_other_clients, -> do
+      where(status: :other_clients_canceled)
+    end
+
     has_many :decision_action_events,
       class_name: MatchEvents::DecisionAction.name,
       foreign_key: :decision_id

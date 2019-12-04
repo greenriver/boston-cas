@@ -76,39 +76,9 @@
                           - else
                             = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
                           - if updated_at == max_updated_at && matches.count > 1
-                            *
-                .mt-0.mb-4
-                  - if match.shelter_expiration? && match.current_decision&.expires?
-                    - if match.shelter_expiration < Date.today
-                      .c-tag__wrapper.align-items-center
-                        .c-tag--danger.mr-4
-                          .c-tag__icon.c-tag__icon--xs
-                            %i.icon-warning
-                        .content
-                          This match expired on
-                          %strong= "#{match.shelter_expiration}."
-                    - else
-                      .content
-                        This match expires on
-                        %strong= "#{match.shelter_expiration}."
-                .mt-0.mb-4
-                  - decision_stallable = match.current_decision && match.current_decision.stallable?
-                  - if decision_stallable && match.stalled?
-                    .c-tag__wrapper.align-items-center
-                      .c-tag--warning.mr-4
-                        .c-tag__icon.c-tag__icon--xs
-                          %i.icon-warning
-                      .content
-                        This match stalled on
-                        %strong #{match.stall_date}
-                  - elsif decision_stallable && match.stall_date.present?
-                    .c-tag__wrapper.align-items-center
-                      .c-tag--warning.mr-4
-                        .c-tag__icon.c-tag__icon--xs
-                          %i.icon-info
-                      .content
-                        This match will be considered stalled on
-                        %strong #{match.stall_date}.
+                            %span.text-success
+                              *
+                = render 'matches/warnings', match: match
 
               .col.client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
                 - if can_reject_matches? || match&.past_first_step_or_all_steps_visible?

@@ -187,6 +187,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     class_name: MatchEvents::Note.name,
     foreign_key: :match_id
 
+  has_many :decision_actions,
+    class_name: MatchEvents::DecisionAction,
+    foreign_key: :match_id
+
   # Preserved so that history of old mechanism works
   has_many :status_updates,
     class_name: MatchProgressUpdates::Base.name,
