@@ -105,6 +105,11 @@ class NonHmisClient < ActiveRecord::Base
     project_client.assessment_score = assessment_score || 0
     project_client.date_of_birth = date_of_birth
     project_client.ssn = ssn
+    if actively_homeless
+      project_client.calculated_last_homeless_night = Date.current
+    else
+      project_client.calculated_last_homeless_night = nil
+    end
     project_client.days_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
     project_client.days_homeless = days_homeless_in_the_last_three_years
@@ -212,6 +217,7 @@ class NonHmisClient < ActiveRecord::Base
       assessment_score: 'Assessment Score',
       vispdat_score: 'VI-SPDAT Score',
       vispdat_priority_score: 'VI-SPDAT Priority Score',
+      actively_homeless: 'Actively Homeless',
     }
   end
 
