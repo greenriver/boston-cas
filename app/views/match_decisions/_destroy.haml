@@ -1,0 +1,8 @@
+.match__step-back
+  %p
+    %b Delete this match!
+  %p
+    The match will not appear in the history, and no notification will be sent.
+  .form__actions.form__actions--right
+    %button{ class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'destroy'}, disabled: !@decision.editable? }
+      Delete Match!

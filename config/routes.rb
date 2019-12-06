@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       resource :client_details, only: [:show], controller: 'match_client_details'
       resources :match_progress_updates, only: [:create], shallow: true
       resources :match_progress_update_notes, only: [:edit, :update, :destroy]
+      get :reopen
     end
   end
   manage_matches

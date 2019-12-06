@@ -16,6 +16,8 @@
         .jAgency
           = f.association :agency, input_html: {class: :select2}
       = f.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }
+      - if Config.get(:non_hmis_fields).include?('actively_homeless')
+        = f.input :actively_homeless, hint: 'Checking this box will allow the client to match rules that require homeless activity in the past 30 or 90 days.'
       = f.input :days_homeless_in_the_last_three_years
       = f.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment'
       = f.input :who_verified_days_homeless
