@@ -209,20 +209,16 @@ class ClientOpportunityMatch < ActiveRecord::Base
   end
 
   def self.accessible_by_user user
+    return none unless user
     # admins & DND see everything
-    if user.can_view_all_matches?
-      all
+    return all if user.can_view_all_matches?
     # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
-    elsif user.present?
-      contact = user.contact
-      contact_subquery = ClientOpportunityMatchContact
-        .where(contact_id: contact.id)
-        .pluck(:match_id)
-      visible_subquery = visible_by(user).pluck(:id)
-      where(id: contact_subquery + visible_subquery)
-    else
-      none
-    end
+    contact = user.contact
+    contact_subquery = ClientOpportunityMatchContact
+      .where(contact_id: contact.id)
+      .pluck(:match_id)
+    visible_subquery = visible_by(user).pluck(:id)
+    where(id: contact_subquery + visible_subquery)
   end
 
   def accessible_by? user

@@ -113,6 +113,7 @@ class DeidentifiedClientsController < NonHmisClientsController
         :developmental_disability,
         :domestic_violence,
         :interested_in_set_asides,
+        :actively_homeless,
         :active_cohort_ids => [],
         :neighborhood_interests => [],
       ).merge(identified: false)
