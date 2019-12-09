@@ -60,6 +60,10 @@ class DeidentifiedClientsController < NonHmisClientsController
     @upload.import(current_user.agency)
   end
 
+  def assessment_type
+    Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
+  end
+
   def client_source
     DeidentifiedClient.deidentified.visible_to(current_user)
   end
@@ -92,6 +96,7 @@ class DeidentifiedClientsController < NonHmisClientsController
         :active_cohort_ids => [],
         :client_assessments_attributes => [
           :id,
+          :type,
           :assessment_score,
           :vispdat_score,
           :vispdat_priority_score,
@@ -141,6 +146,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       if dirty_params.dig(:client_assessments_attributes, '0', :neighborhood_interests).present?
         dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests] = dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
       end
+
+      dirty_params[:client_assessments_attributes]['0'][:type] = assessment_type
 
       return append_client_identifier(dirty_params)
     end

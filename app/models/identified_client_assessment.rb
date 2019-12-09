@@ -5,4 +5,9 @@
 ###
 
 class IdentifiedClientAssessment < NonHmisAssessment
+  def self.assessments
+    {
+      "Default Assessment" => "IdentifiedClientAssessment"
+    }
+  end
 end

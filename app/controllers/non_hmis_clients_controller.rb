@@ -67,7 +67,7 @@ class NonHmisClientsController < ApplicationController
 
   def new
     @non_hmis_client = client_source.new(agency_id: current_user.agency&.id)
-    @assessment = @non_hmis_client.client_assessments.build
+    @assessment = build_assessment
     @contact_id = current_user.contact.id
   end
 
@@ -93,6 +93,10 @@ class NonHmisClientsController < ApplicationController
       sort_string += ' NULLS LAST'
     end
     return sort_string
+  end
+
+  def build_assessment
+    assessment_type.constantize.new
   end
 
   def load_client
@@ -162,5 +166,4 @@ class NonHmisClientsController < ApplicationController
   def clean_family_member
     [true, false].detect{|m| m.to_s == params[:family_member]}
   end
-
 end

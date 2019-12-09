@@ -14,6 +14,8 @@
       = f.input :ami, label: 'Individual Average Median Income'
       = f.input :vispdat_prioritization_scheme, collection: ProjectClient.vispdat_prioritization_schemes, label: 'VI-SPDAT Prioritization Scheme', include_blank: false, input_html: { class: :select2 }
     .col-sm-6
+      = f.input :identified_client_assessment, collection: IdentifiedClientAssessment.assessments, include_blank: false, input_html: { class: :select2 }
+      = f.input :deidentified_client_assessment, collection: DeidentifiedClientAssessment.assessments, include_blank: false, input_html: { class: :select2 }
       = f.input :non_hmis_fields, collection: NonHmisClient.optional_field_names.invert, label: 'Fields shown for Non-HMIS clients', input_html: { multiple: true, class: 'select2' }
       = f.input :unavailable_for_length, collection: UnavailableAsCandidateFor.available_expiration_lengths, label: 'How long should a client be unavailable on a specific route after a successful match?', input_html: { class: 'select2'}
   .row

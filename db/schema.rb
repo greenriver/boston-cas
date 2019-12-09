@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191209014722) do
+ActiveRecord::Schema.define(version: 20191209185632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,13 +243,15 @@ ActiveRecord::Schema.define(version: 20191209014722) do
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
 
   create_table "configs", force: :cascade do |t|
-    t.integer "dnd_interval",                                             null: false
-    t.string  "warehouse_url",                                            null: false
-    t.boolean "require_cori_release",          default: true
-    t.integer "ami",                           default: 66600,            null: false
-    t.string  "vispdat_prioritization_scheme", default: "length_of_time"
+    t.integer "dnd_interval",                                                            null: false
+    t.string  "warehouse_url",                                                           null: false
+    t.boolean "require_cori_release",           default: true
+    t.integer "ami",                            default: 66600,                          null: false
+    t.string  "vispdat_prioritization_scheme",  default: "length_of_time"
     t.text    "non_hmis_fields"
-    t.integer "unavailable_for_length",        default: 0
+    t.integer "unavailable_for_length",         default: 0
+    t.string  "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
+    t.string  "identified_client_assessment",   default: "IdentifiedClientAssessment"
   end
 
   create_table "contacts", force: :cascade do |t|

@@ -29,6 +29,8 @@ module Admin
         :ami,
         :vispdat_prioritization_scheme,
         :unavailable_for_length,
+        :identified_client_assessment,
+        :deidentified_client_assessment,
         non_hmis_fields: [],
       )
     end

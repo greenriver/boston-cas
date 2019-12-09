@@ -23,6 +23,10 @@ class IdentifiedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
+  def assessment_type
+    Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
+  end
+
   def clean_params dirty_params
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
@@ -41,6 +45,8 @@ class IdentifiedClientsController < NonHmisClientsController
     if dirty_params.dig(:client_assessments_attributes, '0', :neighborhood_interests).present?
       dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests] = dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
     end
+
+    dirty_params[:client_assessments_attributes]['0'][:type] = assessment_type
 
     return dirty_params
   end
@@ -84,6 +90,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :active_cohort_ids => [],
         :client_assessments_attributes => [
           :id,
+          :type,
           :assessment_score,
           :days_homeless_in_the_last_three_years,
           :date_days_homeless_verified,
