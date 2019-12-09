@@ -67,7 +67,7 @@ class NonHmisClientsController < ApplicationController
 
   def new
     @non_hmis_client = client_source.new(agency_id: current_user.agency&.id)
-    @non_hmis_client.client_assessments.build
+    @assessment = @non_hmis_client.client_assessments.build
     @contact_id = current_user.contact.id
   end
 
@@ -98,6 +98,7 @@ class NonHmisClientsController < ApplicationController
   def load_client
     begin
       @non_hmis_client = client_source.find params[:id].to_i
+      @assessment = @non_hmis_client.current_assessment
     rescue
       client = NonHmisClient.find params[:id].to_i
       case client.type

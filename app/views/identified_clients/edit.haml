@@ -7,6 +7,7 @@
         = render 'client', form: f
         %hr
         = f.simple_fields_for :client_assessments, @non_hmis_client.current_assessment do |a|
-          = render 'assessment', form: a
+          - # view is versioned, so choose view based on model type
+          = render @assessment.model_name.element, form: a
       .form-actions
         = f.button :submit, "Update Client", class: 'btn btn-primary'
