@@ -67,6 +67,7 @@ class NonHmisClientsController < ApplicationController
 
   def new
     @non_hmis_client = client_source.new(agency_id: current_user.agency&.id)
+    @non_hmis_client.client_assessments.build
     @contact_id = current_user.contact.id
   end
 

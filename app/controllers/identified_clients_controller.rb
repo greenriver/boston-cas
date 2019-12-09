@@ -26,7 +26,7 @@ class IdentifiedClientsController < NonHmisClientsController
   def clean_params dirty_params
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
-    dirty_params[:neighborhood_interests] = dirty_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
+
     if can_edit_all_clients?
       # if we chose a contact, we'll use the agency from that contact
       # otherwise, use the agency for the current user
@@ -37,6 +37,11 @@ class IdentifiedClientsController < NonHmisClientsController
     else
       dirty_params[:agency_id] = current_user.agency.id
     end
+
+    if dirty_params.dig(:client_assessments_attributes, '0', :neighborhood_interests).present?
+      dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests] = dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
+    end
+
     return dirty_params
   end
 
@@ -67,8 +72,6 @@ class IdentifiedClientsController < NonHmisClientsController
 
     def identified_client_params
       params.require(:identified_client).permit(
-        :client_identifier,
-        :assessment_score,
         :agency_id,
         :contact_id,
         :first_name,
@@ -76,32 +79,35 @@ class IdentifiedClientsController < NonHmisClientsController
         :middle_name,
         :date_of_birth,
         :ssn,
-        :days_homeless_in_the_last_three_years,
-        :date_days_homeless_verified,
-        :who_verified_days_homeless,
-        :veteran,
-        :rrh_desired,
-        :youth_rrh_desired,
-        :rrh_assessment_contact_info,
-        :income_maximization_assistance_requested,
-        :pending_subsidized_housing_placement,
         :full_release_on_file,
-        :requires_wheelchair_accessibility,
-        :required_number_of_bedrooms,
-        :required_minimum_occupancy,
-        :requires_elevator_access,
-        :family_member,
-        :calculated_chronic_homelessness,
-        :gender,
         :available,
-        :income_total_monthly,
-        :disabling_condition,
-        :physical_disability,
-        :developmental_disability,
-        :domestic_violence,
-        :interested_in_set_asides,
         :active_cohort_ids => [],
-        :neighborhood_interests => [],
+        :client_assessments_attributes => [
+          :id,
+          :assessment_score,
+          :days_homeless_in_the_last_three_years,
+          :date_days_homeless_verified,
+          :who_verified_days_homeless,
+          :veteran,
+          :rrh_desired,
+          :youth_rrh_desired,
+          :rrh_assessment_contact_info,
+          :income_maximization_assistance_requested,
+          :pending_subsidized_housing_placement,
+          :requires_wheelchair_accessibility,
+          :required_number_of_bedrooms,
+          :required_minimum_occupancy,
+          :requires_elevator_access,
+          :family_member,
+          :calculated_chronic_homelessness,
+          :income_total_monthly,
+          :disabling_condition,
+          :physical_disability,
+          :developmental_disability,
+          :domestic_violence,
+          :interested_in_set_asides,
+          :neighborhood_interests => [],
+        ]
       ).merge(identified: true)
     end
 

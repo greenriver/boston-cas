@@ -10,6 +10,9 @@ class NonHmisClient < ActiveRecord::Base
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
+
+  has_many :non_hmis_assessments
+
   belongs_to :agency
   belongs_to :contact
 
@@ -40,7 +43,9 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   scope :family_member, -> (status) do
-    where(family_member: status)
+    joins(:non_hmis_assessments).
+      where(family_member: status).
+      distinct
   end
 
   def self.age date:, dob:
@@ -64,17 +69,19 @@ class NonHmisClient < ActiveRecord::Base
 
   def cohort_names
     return '' unless Warehouse::Base.enabled?
+
     Warehouse::Cohort.active.where(id: self.active_cohort_ids).pluck(:name).join("\n")
   end
 
   # Sorting and Searching
-
   scope :search_first_name, -> (name) do
     arel_table[:first_name].lower.matches("%#{name.downcase}%")
   end
+
   scope :search_last_name, -> (name) do
     arel_table[:last_name].lower.matches("%#{name.downcase}%")
   end
+
   scope :search_alternate_name, -> (name) do
     arel_table[:client_identifier].lower.matches("%#{name.downcase}%")
   end
@@ -89,6 +96,7 @@ class NonHmisClient < ActiveRecord::Base
 
   def self.possible_cohorts
     return [] unless Warehouse::Base.enabled?
+
     Warehouse::Cohort.active.visible_in_cas.pluck(:id, :name).to_h
   end
 
@@ -98,65 +106,66 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def set_project_client_fields project_client
+    # NonHmisClient fields
     project_client.first_name = first_name
     project_client.last_name = last_name
     project_client.non_hmis_client_identifier = client_identifier
     project_client.active_cohort_ids = active_cohort_ids
-    project_client.assessment_score = assessment_score || 0
     project_client.date_of_birth = date_of_birth
     project_client.ssn = ssn
-    project_client.days_homeless_in_last_three_years = days_homeless_in_the_last_three_years
-    project_client.days_literally_homeless_in_last_three_years = days_homeless_in_the_last_three_years
-    project_client.days_homeless = days_homeless_in_the_last_three_years
-    project_client.date_days_homeless_verified = date_days_homeless_verified
-    project_client.who_verified_days_homeless = who_verified_days_homeless
-
-    project_client.cellphone =  phone_number
-    project_client.email = email
-    project_client.case_manager_contact_info = case_manager_contact_info
-
-    project_client.veteran_status = 1 if veteran
-    project_client.rrh_desired = rrh_desired
-    project_client.youth_rrh_desired = youth_rrh_desired
-    project_client.rrh_assessment_contact_info = rrh_assessment_contact_info
-    project_client.required_number_of_bedrooms = required_number_of_bedrooms
-    project_client.required_minimum_occupancy = required_minimum_occupancy
-    project_client.requires_wheelchair_accessibility = requires_wheelchair_accessibility
-    project_client.requires_elevator_access = requires_elevator_access
-    project_client.family_member = family_member
-
-    project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
-
-    project_client.calculated_chronic_homelessness = calculated_chronic_homelessness
     project_client.middle_name = middle_name
     project_client.gender = gender
-    project_client.neighborhood_interests = neighborhood_interests
-    project_client.interested_in_set_asides = interested_in_set_asides
-
-    project_client.income_total_monthly = income_total_monthly
-    project_client.disabling_condition = if disabling_condition then 1 else nil end
-    project_client.physical_disability = if physical_disability then 1 else nil end
-    project_client.developmental_disability = if developmental_disability then 1 else nil end
-    project_client.domestic_violence = 1 if domestic_violence
-
-    project_client.chronic_health_condition = if chronic_health_condition then 1 else nil end
-    project_client.mental_health_problem = if mental_health_problem then 1 else nil end
-    project_client.substance_abuse_problem = if substance_abuse_problem then "Yes" else "No" end
-
-    project_client.default_shelter_agency_contacts = [ contact&.email ] if contact_id.present?
+    project_client.email = email
+    project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
     project_client.tags = cas_tags
+    project_client.default_shelter_agency_contacts = [ contact&.email ] if contact_id.present?
+    project_client.sync_with_cas = self.available
+
+    # current_assessment fields
+    project_client.assessment_score = current_assessment.assessment_score || 0
+    project_client.days_homeless_in_last_three_years = current_assessment.days_homeless_in_the_last_three_years
+    project_client.days_literally_homeless_in_last_three_years = current_assessment.days_homeless_in_the_last_three_years
+    project_client.days_homeless = current_assessment.days_homeless_in_the_last_three_years
+    project_client.date_days_homeless_verified = current_assessment.date_days_homeless_verified
+    project_client.who_verified_days_homeless = current_assessment.who_verified_days_homeless
+
+    project_client.cellphone =  current_assessment.phone_number
+    project_client.case_manager_contact_info = current_assessment.case_manager_contact_info
+
+    project_client.veteran_status = 1 if current_assessment.veteran
+    project_client.rrh_desired = current_assessment.rrh_desired
+    project_client.youth_rrh_desired = current_assessment.youth_rrh_desired
+    project_client.rrh_assessment_contact_info = current_assessment.rrh_assessment_contact_info
+    project_client.required_number_of_bedrooms = current_assessment.required_number_of_bedrooms
+    project_client.required_minimum_occupancy = current_assessment.required_minimum_occupancy
+    project_client.requires_wheelchair_accessibility = current_assessment.requires_wheelchair_accessibility
+    project_client.requires_elevator_access = current_assessment.requires_elevator_access
+    project_client.family_member = current_assessment.family_member
+
+    project_client.calculated_chronic_homelessness = current_assessment.calculated_chronic_homelessness
+    project_client.neighborhood_interests = current_assessment.neighborhood_interests
+    project_client.interested_in_set_asides = current_assessment.interested_in_set_asides
+
+    project_client.income_total_monthly = current_assessment.income_total_monthly
+    project_client.disabling_condition = if current_assessment.disabling_condition then 1 else nil end
+    project_client.physical_disability = if current_assessment.physical_disability then 1 else nil end
+    project_client.developmental_disability = if current_assessment.developmental_disability then 1 else nil end
+    project_client.domestic_violence = 1 if current_assessment.domestic_violence
+
+    project_client.chronic_health_condition = if current_assessment.chronic_health_condition then 1 else nil end
+    project_client.mental_health_problem = if current_assessment.mental_health_problem then 1 else nil end
+    project_client.substance_abuse_problem = if current_assessment.substance_abuse_problem then "Yes" else "No" end
 
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
 
-    project_client.sync_with_cas = self.available
     project_client.needs_update = true
   end
 
   def annual_income
-    return 0 unless income_total_monthly.present?
+    return 0 unless current_assessment&.income_total_monthly.present?
 
-    income_total_monthly * 12
+    current_assessment.income_total_monthly * 12
   end
 
   def log message
@@ -196,7 +205,7 @@ class NonHmisClient < ActiveRecord::Base
   end
 
   def self.ds_identifier
-    'Deidentified'
+    'Deidentified' # Name is historical -- data source also includes identified clients
   end
 
   def download_data
@@ -214,5 +223,4 @@ class NonHmisClient < ActiveRecord::Base
       vispdat_priority_score: 'VI-SPDAT Priority Score',
     }
   end
-
 end

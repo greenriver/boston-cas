@@ -21,7 +21,7 @@
                 = link_to({action: :edit, id: imported_client}) do
                   = imported_client.first_name
               %td= checkmark imported_client.family_member
-              %td= imported_client.days_homeless_in_the_last_three_years
+              %td= imported_client.current_assessment.days_homeless_in_the_last_three_years
               %td= imported_client.warehouse_client_id
               %td= checkmark(imported_client.available)
               - if current_user.can_view_some_clients?

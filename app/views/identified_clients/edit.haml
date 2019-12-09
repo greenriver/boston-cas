@@ -1,3 +1,12 @@
 %h1 Edit #{_('Identified Client')}
 = simple_form_for @non_hmis_client, url: identified_client_path(@non_hmis_client.id) do |f|
-  = render 'form', f: f
+  = f.error_notification
+  .row
+    .col-sm-6
+      .form-inputs
+        = render 'client', form: f
+        %hr
+        = f.simple_fields_for :client_assessments, @non_hmis_client.current_assessment do |a|
+          = render 'assessment', form: a
+      .form-actions
+        = f.button :submit, "Update Client", class: 'btn btn-primary'
