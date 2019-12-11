@@ -227,17 +227,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def show_client_info_to? contact
     return false unless contact
-    if contact.user_can_view_all_clients? || accessible_by?(contact.user)
-      true
-    elsif contact.in?(shelter_agency_contacts)
-      past_first_step_or_all_steps_visible?
-    elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
-      past_first_step_or_all_steps_visible?
-    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
-      past_first_step_or_all_steps_visible?
-    else
-      false
-    end
+    return true if contact.user_can_view_all_clients?
+    return past_first_step_or_all_steps_visible? if contact.in?(shelter_agency_contacts)
+    return past_first_step_or_all_steps_visible? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
+    return past_first_step_or_all_steps_visible? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
+
+    client.accessible_by_user?(contact.user)
   end
 
   # Get visibility from the associated Program
@@ -270,17 +265,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   def can_see_match_yet? contact
     return false unless contact
-    if contact.user_can_view_all_clients?
-      true
-    elsif contact.in?(shelter_agency_contacts)
-      true
-    elsif contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa
-      true
-    elsif (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
-      true
-    else
-      false
-    end
+    return true if contact.user_can_view_all_clients?
+    return true if contact.in?(shelter_agency_contacts)
+
+    return true if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa
+    return true if  (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
+
+    false
   end
 
   def client_name_for_contact contact, hidden:
