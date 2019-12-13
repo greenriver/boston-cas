@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191209185632) do
+ActiveRecord::Schema.define(version: 20191209201917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -609,7 +609,6 @@ ActiveRecord::Schema.define(version: 20191209185632) do
     t.text     "rrh_assessment_contact_info"
     t.boolean  "income_maximization_assistance_requested", default: false, null: false
     t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
-    t.boolean  "full_release_on_file",                     default: false, null: false
     t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
     t.integer  "required_number_of_bedrooms"
     t.integer  "required_minimum_occupancy"
@@ -649,6 +648,13 @@ ActiveRecord::Schema.define(version: 20191209185632) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "ssvf_eligible",                            default: false
+    t.boolean  "veteran_rrh_desired",                      default: false
+    t.boolean  "rrh_th_desired",                           default: false
+    t.boolean  "dv_rrh_desired",                           default: false
+    t.integer  "income_total_annual",                      default: 0
+    t.boolean  "other_accessibility",                      default: false
+    t.boolean  "disabled_housing",                         default: false
   end
 
   create_table "non_hmis_clients", force: :cascade do |t|

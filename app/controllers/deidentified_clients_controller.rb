@@ -121,6 +121,8 @@ class DeidentifiedClientsController < NonHmisClientsController
           :required_minimum_occupancy,
           :requires_wheelchair_accessibility,
           :requires_elevator_access,
+          :youth_rrh_aggregate,
+          :dv_rrh_aggregate,
           :neighborhood_interests => [],
         ]
       ).merge(identified: false)
@@ -129,25 +131,13 @@ class DeidentifiedClientsController < NonHmisClientsController
     def append_client_identifier dirty_params
       dirty_params[:last_name] = "Anonymous - #{dirty_params[:client_identifier]}"
       dirty_params[:first_name] = "Anonymous - #{dirty_params[:client_identifier]}"
+
       return dirty_params
     end
 
     def clean_params dirty_params
-      dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
-      dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
-
-      if can_edit_all_clients?
-        contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
-        dirty_params[:agency_id] = contact_agency_id if contact_agency_id.present?
-      else
-        dirty_params[:agency_id] = current_user.agency_id
-      end
-
-      if dirty_params.dig(:client_assessments_attributes, '0', :neighborhood_interests).present?
-        dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests] = dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
-      end
-
-      dirty_params[:client_assessments_attributes]['0'][:type] = assessment_type
+      dirty_params = clean_client_params(dirty_params)
+      dirty_params = clean_assessment_params(dirty_params)
 
       return append_client_identifier(dirty_params)
     end

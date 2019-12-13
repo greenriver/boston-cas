@@ -13,6 +13,11 @@ class NonHmisClient < ActiveRecord::Base
 
   has_many :non_hmis_assessments
 
+  def current_assessment
+    NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
+  end
+
+
   belongs_to :agency
   belongs_to :contact
 

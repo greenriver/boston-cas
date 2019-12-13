@@ -7,9 +7,7 @@
 class DeidentifiedClient < NonHmisClient
   validates :client_identifier, uniqueness: true
   has_many :client_assessments, class_name: 'DeidentifiedClientAssessment', foreign_key: :non_hmis_client_id, dependent: :destroy
-  has_one :current_assessment, -> { order(created_at: :desc) }, class_name: 'DeidentifiedClientAssessment', foreign_key: :non_hmis_client_id
   accepts_nested_attributes_for :client_assessments
-  accepts_nested_attributes_for :current_assessment
 
   # Search only the client identifier
   scope :text_search, -> (text) do

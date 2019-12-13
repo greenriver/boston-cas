@@ -28,25 +28,8 @@ class IdentifiedClientsController < NonHmisClientsController
   end
 
   def clean_params dirty_params
-    dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
-    dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
-
-    if can_edit_all_clients?
-      # if we chose a contact, we'll use the agency from that contact
-      # otherwise, use the agency for the current user
-      contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
-      if contact_agency_id.present?
-        dirty_params[:agency_id] = contact_agency_id
-      end
-    else
-      dirty_params[:agency_id] = current_user.agency.id
-    end
-
-    if dirty_params.dig(:client_assessments_attributes, '0', :neighborhood_interests).present?
-      dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests] = dirty_params[:client_assessments_attributes]['0'][:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
-    end
-
-    dirty_params[:client_assessments_attributes]['0'][:type] = assessment_type
+    dirty_params = clean_client_params(dirty_params)
+    dirty_params = clean_assessment_params(dirty_params)
 
     return dirty_params
   end
@@ -113,6 +96,8 @@ class IdentifiedClientsController < NonHmisClientsController
           :developmental_disability,
           :domestic_violence,
           :interested_in_set_asides,
+          :youth_rrh_aggregate,
+          :dv_rrh_aggregate,
           :neighborhood_interests => [],
         ]
       ).merge(identified: true)

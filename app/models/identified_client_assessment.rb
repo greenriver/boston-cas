@@ -7,7 +7,8 @@
 class IdentifiedClientAssessment < NonHmisAssessment
   def self.assessments
     {
-      "Default Assessment" => "IdentifiedClientAssessment"
+      'Default Assessment' => 'IdentifiedClientAssessment',
+      'Pathways Assessment' => 'IdentifiedPathwaysAssessment',
     }
   end
 end

@@ -5,10 +5,10 @@
 ###
 
 class DeidentifiedClientAssessment < NonHmisAssessment
-
   def self.assessments
     {
-      "Default Assessment" => "DedentifiedClientAssessment"
+      'Default Assessment' => 'DeidentifiedClientAssessment',
+      'Pathways Assessment' => 'DeidentifiedPathwaysAssessment',
     }
   end
 end
