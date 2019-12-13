@@ -107,7 +107,8 @@ $tag-correction: $tag-height / 2;
 $tag-types: (
   success: $brand-success-l,
   warning: $brand-warning-l,
-  danger: $brand-danger-l
+  danger: $brand-danger-l,
+  info: $brand-info,
 );
 
 @each $type, $color in $tag-types {
