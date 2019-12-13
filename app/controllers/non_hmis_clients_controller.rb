@@ -6,7 +6,7 @@
 
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
-  before_action :load_client, only: [:edit, :update, :destroy]
+  before_action :load_client, only: [:edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]
@@ -73,6 +73,11 @@ class NonHmisClientsController < ApplicationController
 
   def edit
     @contact_id = @non_hmis_client.contact_id
+  end
+
+  def new_assessment
+    @assessment = build_assessment
+    render :edit
   end
 
   def sorter

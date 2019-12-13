@@ -181,8 +181,15 @@ Rails.application.routes.draw do
       get :choose_upload
       post :import
     end
+    member do
+      get :new_assessment
+    end
   end
-  resources :identified_clients
+  resources :identified_clients do
+    member do
+      get :new_assessment
+    end
+  end
   resources :imported_clients
   resources :messages, only: [:show, :index] do
     collection do
