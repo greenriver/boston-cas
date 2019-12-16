@@ -1,7 +1,7 @@
 = form.input :assessment_score
 = form.input :domestic_violence, label: 'Domestic violence survivor'
 - if Config.get(:non_hmis_fields).include?('actively_homeless')
-  = f.input :actively_homeless, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.'
+  = form.input :actively_homeless, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.'
 = form.input :days_homeless_in_the_last_three_years
 = form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment'
 = form.input :who_verified_days_homeless
