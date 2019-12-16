@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191209201917) do
+ActiveRecord::Schema.define(version: 20191216162908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -655,6 +655,7 @@ ActiveRecord::Schema.define(version: 20191209201917) do
     t.integer  "income_total_annual",                      default: 0
     t.boolean  "other_accessibility",                      default: false
     t.boolean  "disabled_housing",                         default: false
+    t.boolean  "actively_homeless",                        default: false, null: false
   end
 
   create_table "non_hmis_clients", force: :cascade do |t|
@@ -723,6 +724,7 @@ ActiveRecord::Schema.define(version: 20191209201917) do
     t.integer  "contact_id"
     t.integer  "vispdat_score",                            default: 0
     t.integer  "vispdat_priority_score",                   default: 0
+    t.boolean  "actively_homeless",                        default: false, null: false
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree

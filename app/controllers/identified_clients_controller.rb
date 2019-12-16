@@ -75,6 +75,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :id,
           :type,
           :assessment_score,
+          :actively_homeless,
           :days_homeless_in_the_last_three_years,
           :date_days_homeless_verified,
           :who_verified_days_homeless,

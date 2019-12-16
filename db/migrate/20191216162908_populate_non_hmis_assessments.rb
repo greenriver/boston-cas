@@ -4,6 +4,7 @@ class PopulateNonHmisAssessments < ActiveRecord::Migration
       assessment = client.client_assessments.build
 
       assessment.assessment_score = client.assessment_score
+      assessment.actively_homeless = client.actively_homeless
       assessment.days_homeless_in_the_last_three_years = client.days_homeless_in_the_last_three_years
       assessment.veteran = client.veteran
       assessment.rrh_desired = client.rrh_desired
@@ -11,7 +12,6 @@ class PopulateNonHmisAssessments < ActiveRecord::Migration
       assessment.rrh_assessment_contact_info = client.rrh_assessment_contact_info
       assessment.income_maximization_assistance_requested = client.income_maximization_assistance_requested
       assessment.pending_subsidized_housing_placement = client.pending_subsidized_housing_placement
-      assessment.full_release_on_file = client.full_release_on_file
       assessment.requires_wheelchair_accessibility = client.requires_wheelchair_accessibility
       assessment.required_number_of_bedrooms = client.required_number_of_bedrooms
       assessment.required_minimum_occupancy = client.required_minimum_occupancy

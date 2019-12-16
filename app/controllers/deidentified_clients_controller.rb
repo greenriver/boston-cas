@@ -101,6 +101,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :vispdat_score,
           :vispdat_priority_score,
           :veteran,
+          :actively_homeless,
           :days_homeless_in_the_last_three_years,
           :date_days_homeless_verified,
           :who_verified_days_homeless,
