@@ -107,7 +107,7 @@ class NonHmisClientsController < ApplicationController
   def load_client
     begin
       @non_hmis_client = client_source.find params[:id].to_i
-      @assessment = @non_hmis_client.current_assessment
+      @assessment = load_assessment || @non_hmis_client.current_assessment
     rescue
       client = NonHmisClient.find params[:id].to_i
       case client.type
@@ -119,6 +119,10 @@ class NonHmisClientsController < ApplicationController
         redirect_to polymorphic_path([action_name, :imported_client], id: params[:id])
       end
     end
+  end
+
+  def load_assessment
+    NonHmisAssessment.find(params[:assessment_id].to_i) if params[:assessment_id]
   end
 
   def load_neighborhoods

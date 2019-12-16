@@ -7,6 +7,7 @@
         = render 'client', form: f
         %hr
         .form-actions
+          = render 'assessments'
           = link_to new_assessment_identified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
             %span.icon-plus
             Add New Assessment
