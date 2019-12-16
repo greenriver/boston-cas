@@ -122,6 +122,7 @@ class NonHmisClient < ActiveRecord::Base
     project_client.gender = gender
     project_client.email = email
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
+    project_client.housing_release_status = _('Limited CAS Release') if limited_release_on_file
     project_client.tags = cas_tags
     project_client.default_shelter_agency_contacts = [ contact&.email ] if contact_id.present?
     project_client.sync_with_cas = self.available
