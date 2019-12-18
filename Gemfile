@@ -1,7 +1,7 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "pg", '~> 0'
+gem "pg", '~> 0.20'
 gem 'activerecord-import'
 gem 'composite_primary_keys', '~> 8.0'
 gem "rails", '~> 4.2'
@@ -25,7 +25,7 @@ gem 'validates_email_format_of'
 
 gem "simple_form"
 gem 'virtus'
-gem 'font-awesome-sass', '~> 5.0.13'
+gem 'font-awesome-sass'
 
 gem 'responders'
 gem 'kaminari'
