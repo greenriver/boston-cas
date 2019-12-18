@@ -559,7 +559,7 @@ DEPENDENCIES
   momentjs-rails (>= 2.9.0)
   paper_trail
   paranoia (~> 2.0)
-  pg (~> 0.20)
+  pg (~> 0.20.0)
   pry-byebug
   pry-rails
   puma

@@ -1,7 +1,7 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "pg", '~> 0.20'
+gem "pg", '~> 0.20.0'
 gem 'activerecord-import'
 gem 'composite_primary_keys', '~> 8.0'
 gem "rails", '~> 4.2'
