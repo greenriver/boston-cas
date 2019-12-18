@@ -1,23 +1,23 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :priority_days_homeless, class: 'MatchPrioritization::DaysHomeless' do
-    active true
+    active { true }
   end
   factory :priority_first_date, class: 'MatchPrioritization::FirstDateHomeless' do
-    active true
+    active { true }
   end
   factory :priority_vispdat, class: 'MatchPrioritization::VispdatScore' do
-    active true
+    active { true }
   end
   factory :priority_vispdat_priority, class: 'MatchPrioritization::VispdatPriorityScore' do
-    active true
+    active { true }
   end
   factory :priority_days_homeless_last_three_years, class: 'MatchPrioritization::DaysHomelessLastThreeYears' do
-    active true
+    active { true }
   end
   factory :priority_assessment_score, class: 'MatchPrioritization::AssessmentScore' do
-    active true
+    active { true }
   end
   factory :priority_rank, class: 'MatchPrioritization::Rank' do
-    active true
+    active { true }
   end
 end

@@ -118,7 +118,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'foreman'
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'guard-rspec', require: false
   gem 'timecop'
   gem 'brakeman', require: false

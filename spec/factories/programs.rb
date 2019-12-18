@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :program, class: 'Program' do
-    name 'Test Program'
+    name { 'Test Program' }
 
   end
 end
