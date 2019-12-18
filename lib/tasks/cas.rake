@@ -14,22 +14,22 @@ namespace :cas do
 
   desc "Add/Update Clients with chronically homeless"
   task update_clients: [:environment, "log:info_to_stdout"] do
-    exit if IdentifiedClient.advisory_lock_exists?(:non_hmis_clients)
-    IdentifiedClient.with_advisory_lock(:non_hmis_clients) do
+    exit if IdentifiedClient.advisory_lock_exists?('non_hmis_clients')
+    IdentifiedClient.with_advisory_lock('non_hmis_clients') do
       # DataSource = 'Deidentified'
       IdentifiedClient.new.update_project_clients_from_non_hmis_clients
       DeidentifiedClient.new.update_project_clients_from_non_hmis_clients
       # DataSource = 'Imported'
       ImportedClient.new.update_project_clients_from_non_hmis_clients
     end
-    exit if Client.advisory_lock_exists?(:update_clients)
+    exit if Client.advisory_lock_exists?('update_clients')
     Cas::UpdateClients.new.run!
   end
 
   desc "Add/Update ProjectClients from NonHmisClients"
   task update_project_clients_from_deidentified_clients: [:environment, "log:info_to_stdout"] do
-    exit if IdentifiedClient.advisory_lock_exists?(:non_hmis_clients)
-    IdentifiedClient.with_advisory_lock(:non_hmis_clients) do
+    exit if IdentifiedClient.advisory_lock_exists?('non_hmis_clients')
+    IdentifiedClient.with_advisory_lock('non_hmis_clients') do
       # DataSource = 'Deidentified'
       IdentifiedClient.new.update_project_clients_from_non_hmis_clients
       DeidentifiedClient.new.update_project_clients_from_non_hmis_clients

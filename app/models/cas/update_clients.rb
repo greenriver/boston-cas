@@ -8,8 +8,8 @@ module Cas
   class UpdateClients
 
     def run!
-      return if Client.advisory_lock_exists?(:update_clients)
-      Client.with_advisory_lock(:update_clients) do
+      return if Client.advisory_lock_exists?('update_clients')
+      Client.with_advisory_lock('update_clients') do
         if needs_update?
           to_add = []
           to_delete = []
