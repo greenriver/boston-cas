@@ -1,5 +1,3 @@
-//= require namespace
-
 // Use checkboxes like radio buttons that can also be completely un-selected
 // Example Usage: new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[match_decision_reason][]')
 window.App.SingleOptionCheckboxes = class SingleOptionCheckboxes {
