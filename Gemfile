@@ -3,8 +3,8 @@ source "https://rubygems.org"
 
 gem "pg", '~> 0.20.0'
 gem 'activerecord-import'
-gem 'composite_primary_keys', '~> 10.0'
-gem "rails", '~> 5.1.7'
+gem 'composite_primary_keys', '~> 11.0'
+gem "rails", '~> 5.2.4.1'
 gem 'bcrypt'
 gem 'with_advisory_lock'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
