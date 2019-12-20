@@ -60,7 +60,8 @@ module ApplicationHelper
     sort_direction = (direction.nil? || direction == 'asc') ? 'desc' : 'asc'
     sort = {'sort' => column, 'direction' => sort_direction}
     params.merge!(sort)
-    link_to(link_text, params)
+    # FIXME: un-safe params
+    link_to(link_text, params.permit!)
   end
 
   def client_data_quality(model, fld)
@@ -79,7 +80,8 @@ module ApplicationHelper
     sort_direction = (direction.nil? || direction == 'asc') ? 'asc' : 'desc'
     sort = {'sort' => column, 'direction' => sort_direction}
     params.merge!(sort)
-    link_to(link_text, params, class: :jSort)
+    # FIXME: un-safe params
+    link_to(link_text, params.permit!, class: :jSort)
   end
 
   def fake_partner

@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
 
   def info_for_paper_trail
     {
-      user_id: current_user&.id,
+      user_id: warden&.user&.id,
       notification_code: params[:notification_id],
       session_id: request.env['rack.session.record']&.session_id,
       request_id: request.uuid

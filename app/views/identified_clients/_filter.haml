@@ -32,7 +32,7 @@
         = select_tag :family_member, options_from_collection_for_select({true: "Yes", false: "No"}, :first, :last, params[:family_member]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
 
       .o-filtration__actions.form__actions
-        = link_to identified_clients_path(params.slice(:sort, :direction, :q)), class: 'btn btn-light' do
+        = link_to identified_clients_path(params.permit(:sort, :direction, :q)), class: 'btn btn-light' do
           %i.icon-cross
           Clear
         %button.btn.btn-primary.ml-auto{type: :submit}
