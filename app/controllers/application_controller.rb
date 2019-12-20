@@ -17,14 +17,14 @@ class ApplicationController < ActionController::Base
   prepend_before_action :skip_timeout
 
   helper_method :locale
-  before_filter :set_gettext_locale
-  before_filter :set_hostname
+  before_action :set_gettext_locale
+  before_action :set_hostname
 
-  #before_filter :_basic_auth, if: -> { Rails.env.staging? }
-  before_filter :set_paper_trail_whodunnit
+  #before_action :_basic_auth, if: -> { Rails.env.staging? }
+  before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!
   # Allow devise login links to pass along a destination
-  after_filter :store_current_location, :unless => :devise_controller?
+  after_action :store_current_location, :unless => :devise_controller?
 
   if Rails.configuration.force_ssl
     force_ssl

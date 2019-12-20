@@ -33,7 +33,7 @@ RSpec.describe ClientsController, type: :controller do
       end
       describe 'after parking' do
         before(:each) do
-          patch :update, client: {prevent_matching_until: Date.today + 2.days}, id: match.client.id
+          patch :update, params: { client: {prevent_matching_until: Date.today + 2.days}, id: match.client.id }
         end
         it 'client no longer has any active matches' do
           aggregate_failures 'checking counts' do

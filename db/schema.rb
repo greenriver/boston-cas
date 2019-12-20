@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191205010912) do
+ActiveRecord::Schema.define(version: 20191216204509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,11 +27,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.datetime "deleted_at"
+    t.index ["building_id"], name: "index_building_contacts_on_building_id", using: :btree
+    t.index ["contact_id"], name: "index_building_contacts_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_building_contacts_on_deleted_at", using: :btree
   end
-
-  add_index "building_contacts", ["building_id"], name: "index_building_contacts_on_building_id", using: :btree
-  add_index "building_contacts", ["contact_id"], name: "index_building_contacts_on_contact_id", using: :btree
-  add_index "building_contacts", ["deleted_at"], name: "index_building_contacts_on_deleted_at", using: :btree
 
   create_table "building_services", force: :cascade do |t|
     t.integer  "building_id"
@@ -40,11 +38,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.datetime "deleted_at"
+    t.index ["building_id"], name: "index_building_services_on_building_id", using: :btree
+    t.index ["deleted_at"], name: "index_building_services_on_deleted_at", using: :btree
+    t.index ["service_id"], name: "index_building_services_on_service_id", using: :btree
   end
-
-  add_index "building_services", ["building_id"], name: "index_building_services_on_building_id", using: :btree
-  add_index "building_services", ["deleted_at"], name: "index_building_services_on_deleted_at", using: :btree
-  add_index "building_services", ["service_id"], name: "index_building_services_on_service_id", using: :btree
 
   create_table "buildings", force: :cascade do |t|
     t.string   "name"
@@ -61,10 +58,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "state"
     t.string   "zip_code"
     t.string   "geo_code"
+    t.index ["id_in_data_source"], name: "index_buildings_on_id_in_data_source", using: :btree
+    t.index ["subgrantee_id"], name: "index_buildings_on_subgrantee_id", using: :btree
   end
-
-  add_index "buildings", ["id_in_data_source"], name: "index_buildings_on_id_in_data_source", using: :btree
-  add_index "buildings", ["subgrantee_id"], name: "index_buildings_on_subgrantee_id", using: :btree
 
   create_table "client_contacts", force: :cascade do |t|
     t.integer  "client_id",                             null: false
@@ -79,11 +75,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "ssp",                   default: false, null: false
     t.boolean  "hsp",                   default: false, null: false
     t.boolean  "do",                    default: false, null: false
+    t.index ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
+    t.index ["contact_id"], name: "index_client_contacts_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_client_contacts_on_deleted_at", using: :btree
   end
-
-  add_index "client_contacts", ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
-  add_index "client_contacts", ["contact_id"], name: "index_client_contacts_on_contact_id", using: :btree
-  add_index "client_contacts", ["deleted_at"], name: "index_client_contacts_on_deleted_at", using: :btree
 
   create_table "client_notes", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -108,11 +103,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "ssp",                   default: false, null: false
     t.boolean  "hsp",                   default: false, null: false
     t.boolean  "do",                    default: false, null: false
+    t.index ["contact_id"], name: "index_client_opportunity_match_contacts_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_client_opportunity_match_contacts_on_deleted_at", using: :btree
+    t.index ["match_id"], name: "index_client_opportunity_match_contacts_on_match_id", using: :btree
   end
-
-  add_index "client_opportunity_match_contacts", ["contact_id"], name: "index_client_opportunity_match_contacts_on_contact_id", using: :btree
-  add_index "client_opportunity_match_contacts", ["deleted_at"], name: "index_client_opportunity_match_contacts_on_deleted_at", using: :btree
-  add_index "client_opportunity_match_contacts", ["match_id"], name: "index_client_opportunity_match_contacts_on_match_id", using: :btree
 
   create_table "client_opportunity_matches", force: :cascade do |t|
     t.integer  "score"
@@ -134,15 +128,14 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "stall_contacts_notified"
     t.datetime "dnd_notified"
     t.integer  "match_route_id"
+    t.index ["active"], name: "index_client_opportunity_matches_on_active", using: :btree
+    t.index ["client_id"], name: "index_client_opportunity_matches_on_client_id", using: :btree
+    t.index ["closed"], name: "index_client_opportunity_matches_on_closed", using: :btree
+    t.index ["closed_reason"], name: "index_client_opportunity_matches_on_closed_reason", using: :btree
+    t.index ["contact_id"], name: "index_client_opportunity_matches_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_client_opportunity_matches_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
+    t.index ["opportunity_id"], name: "index_client_opportunity_matches_on_opportunity_id", using: :btree
   end
-
-  add_index "client_opportunity_matches", ["active"], name: "index_client_opportunity_matches_on_active", using: :btree
-  add_index "client_opportunity_matches", ["client_id"], name: "index_client_opportunity_matches_on_client_id", using: :btree
-  add_index "client_opportunity_matches", ["closed"], name: "index_client_opportunity_matches_on_closed", using: :btree
-  add_index "client_opportunity_matches", ["closed_reason"], name: "index_client_opportunity_matches_on_closed_reason", using: :btree
-  add_index "client_opportunity_matches", ["contact_id"], name: "index_client_opportunity_matches_on_contact_id", using: :btree
-  add_index "client_opportunity_matches", ["deleted_at"], name: "index_client_opportunity_matches_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
-  add_index "client_opportunity_matches", ["opportunity_id"], name: "index_client_opportunity_matches_on_opportunity_id", using: :btree
 
   create_table "clients", force: :cascade do |t|
     t.string   "first_name"
@@ -183,7 +176,7 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "disabling_condition",                                    default: false
     t.datetime "release_of_information"
     t.date     "prevent_matching_until"
-    t.boolean  "dmh_eligible",                                           default: false
+    t.boolean  "dmh_eligible",                                           default: false, null: false
     t.boolean  "va_eligible",                                            default: false, null: false
     t.boolean  "hues_eligible",                                          default: false, null: false
     t.datetime "disability_verified_on"
@@ -208,8 +201,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.integer  "vispdat_priority_score",                                 default: 0
     t.integer  "vispdat_length_homeless_in_days",                        default: 0,     null: false
     t.boolean  "cspech_eligible",                                        default: false
-    t.string   "alternate_names"
     t.date     "calculated_last_homeless_night"
+    t.string   "alternate_names"
     t.boolean  "congregate_housing",                                     default: false
     t.boolean  "sober_housing",                                          default: false
     t.jsonb    "enrolled_project_ids"
@@ -238,18 +231,19 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.jsonb    "tags"
     t.string   "case_manager_contact_info"
     t.boolean  "vash_eligible"
+    t.index ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
   end
 
-  add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
-
   create_table "configs", force: :cascade do |t|
-    t.integer "dnd_interval",                                             null: false
-    t.string  "warehouse_url",                                            null: false
-    t.boolean "require_cori_release",          default: true
-    t.integer "ami",                           default: 66600,            null: false
-    t.string  "vispdat_prioritization_scheme", default: "length_of_time"
+    t.integer "dnd_interval",                                                            null: false
+    t.string  "warehouse_url",                                                           null: false
+    t.boolean "require_cori_release",           default: true
+    t.integer "ami",                            default: 66600,                          null: false
+    t.string  "vispdat_prioritization_scheme",  default: "length_of_time"
     t.text    "non_hmis_fields"
-    t.integer "unavailable_for_length",        default: 0
+    t.integer "unavailable_for_length",         default: 0
+    t.string  "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
+    t.string  "identified_client_assessment",   default: "IdentifiedClientAssessment"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -269,10 +263,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "role_in_organization"
     t.string   "cell_phone"
     t.string   "middle_name"
+    t.index ["deleted_at"], name: "index_contacts_on_deleted_at", using: :btree
+    t.index ["user_id"], name: "index_contacts_on_user_id", using: :btree
   end
-
-  add_index "contacts", ["deleted_at"], name: "index_contacts_on_deleted_at", using: :btree
-  add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "data_sources", force: :cascade do |t|
     t.string   "name"
@@ -310,9 +303,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "disabling_conditions", force: :cascade do |t|
     t.integer  "numeric"
@@ -341,10 +333,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "entity_type", null: false
     t.boolean  "editable"
     t.datetime "deleted_at"
+    t.index ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id", using: :btree
+    t.index ["user_id"], name: "index_entity_view_permissions_on_user_id", using: :btree
   end
-
-  add_index "entity_view_permissions", ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id", using: :btree
-  add_index "entity_view_permissions", ["user_id"], name: "index_entity_view_permissions_on_user_id", using: :btree
 
   create_table "ethnicities", force: :cascade do |t|
     t.integer  "numeric"
@@ -365,11 +356,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_funding_source_services_on_deleted_at", using: :btree
+    t.index ["funding_source_id"], name: "index_funding_source_services_on_funding_source_id", using: :btree
+    t.index ["service_id"], name: "index_funding_source_services_on_service_id", using: :btree
   end
-
-  add_index "funding_source_services", ["deleted_at"], name: "index_funding_source_services_on_deleted_at", using: :btree
-  add_index "funding_source_services", ["funding_source_id"], name: "index_funding_source_services_on_funding_source_id", using: :btree
-  add_index "funding_source_services", ["service_id"], name: "index_funding_source_services_on_service_id", using: :btree
 
   create_table "funding_sources", force: :cascade do |t|
     t.string   "name"
@@ -447,10 +437,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "region"
     t.string   "country"
     t.datetime "created_at"
+    t.index ["identity"], name: "index_login_activities_on_identity", using: :btree
+    t.index ["ip"], name: "index_login_activities_on_ip", using: :btree
   end
-
-  add_index "login_activities", ["identity"], name: "index_login_activities_on_identity", using: :btree
-  add_index "login_activities", ["ip"], name: "index_login_activities_on_ip", using: :btree
 
   create_table "match_decision_reasons", force: :cascade do |t|
     t.string   "name",                      null: false
@@ -458,9 +447,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active",     default: true, null: false
+    t.index ["type"], name: "index_match_decision_reasons_on_type", using: :btree
   end
-
-  add_index "match_decision_reasons", ["type"], name: "index_match_decision_reasons_on_type", using: :btree
 
   create_table "match_decisions", force: :cascade do |t|
     t.integer  "match_id"
@@ -481,12 +469,11 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "deleted_at"
     t.integer  "administrative_cancel_reason_id"
     t.string   "administrative_cancel_reason_other_explanation"
+    t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id", using: :btree
+    t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id", using: :btree
+    t.index ["match_id"], name: "index_match_decisions_on_match_id", using: :btree
+    t.index ["not_working_with_client_reason_id"], name: "index_match_decisions_on_not_working_with_client_reason_id", using: :btree
   end
-
-  add_index "match_decisions", ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id", using: :btree
-  add_index "match_decisions", ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id", using: :btree
-  add_index "match_decisions", ["match_id"], name: "index_match_decisions_on_match_id", using: :btree
-  add_index "match_decisions", ["not_working_with_client_reason_id"], name: "index_match_decisions_on_not_working_with_client_reason_id", using: :btree
 
   create_table "match_events", force: :cascade do |t|
     t.string   "type"
@@ -503,12 +490,11 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.date     "client_last_seen_date"
     t.boolean  "admin_note",                        default: false, null: false
     t.integer  "client_id"
+    t.index ["decision_id"], name: "index_match_events_on_decision_id", using: :btree
+    t.index ["match_id"], name: "index_match_events_on_match_id", using: :btree
+    t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id", using: :btree
+    t.index ["notification_id"], name: "index_match_events_on_notification_id", using: :btree
   end
-
-  add_index "match_events", ["decision_id"], name: "index_match_events_on_decision_id", using: :btree
-  add_index "match_events", ["match_id"], name: "index_match_events_on_match_id", using: :btree
-  add_index "match_events", ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id", using: :btree
-  add_index "match_events", ["notification_id"], name: "index_match_events_on_notification_id", using: :btree
 
   create_table "match_prioritizations", force: :cascade do |t|
     t.string   "type",                      null: false
@@ -534,13 +520,12 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.date     "client_last_seen"
+    t.index ["contact_id"], name: "index_match_progress_updates_on_contact_id", using: :btree
+    t.index ["decision_id"], name: "index_match_progress_updates_on_decision_id", using: :btree
+    t.index ["match_id"], name: "index_match_progress_updates_on_match_id", using: :btree
+    t.index ["notification_id"], name: "index_match_progress_updates_on_notification_id", using: :btree
+    t.index ["type"], name: "index_match_progress_updates_on_type", using: :btree
   end
-
-  add_index "match_progress_updates", ["contact_id"], name: "index_match_progress_updates_on_contact_id", using: :btree
-  add_index "match_progress_updates", ["decision_id"], name: "index_match_progress_updates_on_decision_id", using: :btree
-  add_index "match_progress_updates", ["match_id"], name: "index_match_progress_updates_on_match_id", using: :btree
-  add_index "match_progress_updates", ["notification_id"], name: "index_match_progress_updates_on_notification_id", using: :btree
-  add_index "match_progress_updates", ["type"], name: "index_match_progress_updates_on_type", using: :btree
 
   create_table "match_routes", force: :cascade do |t|
     t.string   "type",                                                                null: false
@@ -560,9 +545,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "show_default_contact_types",                          default: true
     t.boolean  "send_notifications",                                  default: true
     t.string   "housing_type"
+    t.index ["tag_id"], name: "index_match_routes_on_tag_id", using: :btree
   end
-
-  add_index "match_routes", ["tag_id"], name: "index_match_routes_on_tag_id", using: :btree
 
   create_table "messages", force: :cascade do |t|
     t.string   "from",                       null: false
@@ -596,10 +580,70 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "updated_at"
   end
 
+  create_table "non_hmis_assessments", force: :cascade do |t|
+    t.integer  "non_hmis_client_id"
+    t.string   "type"
+    t.integer  "assessment_score"
+    t.integer  "days_homeless_in_the_last_three_years"
+    t.boolean  "veteran",                                  default: false, null: false
+    t.boolean  "rrh_desired",                              default: false, null: false
+    t.boolean  "youth_rrh_desired",                        default: false, null: false
+    t.text     "rrh_assessment_contact_info"
+    t.boolean  "income_maximization_assistance_requested", default: false, null: false
+    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
+    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
+    t.integer  "required_number_of_bedrooms"
+    t.integer  "required_minimum_occupancy"
+    t.boolean  "requires_elevator_access",                 default: false, null: false
+    t.boolean  "family_member",                            default: false, null: false
+    t.integer  "calculated_chronic_homelessness"
+    t.json     "neighborhood_interests",                   default: [],    null: false
+    t.float    "income_total_monthly"
+    t.boolean  "disabling_condition",                      default: false, null: false
+    t.boolean  "physical_disability",                      default: false, null: false
+    t.boolean  "developmental_disability",                 default: false, null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
+    t.boolean  "domestic_violence",                        default: false, null: false
+    t.boolean  "interested_in_set_asides",                 default: false, null: false
+    t.string   "set_asides_housing_status"
+    t.boolean  "set_asides_resident"
+    t.string   "shelter_name"
+    t.date     "entry_date"
+    t.string   "case_manager_contact_info"
+    t.string   "phone_number"
+    t.boolean  "have_tenant_voucher"
+    t.string   "children_info"
+    t.boolean  "studio_ok"
+    t.boolean  "one_br_ok"
+    t.boolean  "sro_ok"
+    t.boolean  "fifty_five_plus"
+    t.boolean  "sixty_two_plus"
+    t.string   "voucher_agency"
+    t.boolean  "interested_in_disabled_housing"
+    t.boolean  "chronic_health_condition"
+    t.boolean  "mental_health_problem"
+    t.boolean  "substance_abuse_problem"
+    t.integer  "vispdat_score"
+    t.integer  "vispdat_priority_score"
+    t.datetime "imported_timestamp"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "ssvf_eligible",                            default: false
+    t.boolean  "veteran_rrh_desired",                      default: false
+    t.boolean  "rrh_th_desired",                           default: false
+    t.boolean  "dv_rrh_desired",                           default: false
+    t.integer  "income_total_annual",                      default: 0
+    t.boolean  "other_accessibility",                      default: false
+    t.boolean  "disabled_housing",                         default: false
+    t.boolean  "actively_homeless",                        default: false, null: false
+  end
+
   create_table "non_hmis_clients", force: :cascade do |t|
     t.string   "client_identifier"
     t.integer  "assessment_score"
-    t.string   "deprecated_agency"
+    t.string   "agency"
     t.string   "first_name"
     t.string   "last_name"
     t.jsonb    "active_cohort_ids"
@@ -627,13 +671,13 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.integer  "gender"
     t.string   "type"
     t.boolean  "available",                                default: true,  null: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
-    t.jsonb    "neighborhood_interests",                   default: [],    null: false
+    t.json     "neighborhood_interests",                   default: []
     t.float    "income_total_monthly"
     t.boolean  "disabling_condition",                      default: false
     t.boolean  "physical_disability",                      default: false
     t.boolean  "developmental_disability",                 default: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
     t.boolean  "domestic_violence",                        default: false, null: false
     t.boolean  "interested_in_set_asides",                 default: false
     t.jsonb    "tags"
@@ -663,9 +707,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.integer  "vispdat_score",                            default: 0
     t.integer  "vispdat_priority_score",                   default: 0
     t.boolean  "actively_homeless",                        default: false, null: false
+    t.boolean  "limited_release_on_file",                  default: false, null: false
+    t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
   end
-
-  add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
 
   create_table "notifications", force: :cascade do |t|
     t.string   "type"
@@ -689,11 +733,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "available_candidate", default: true
     t.integer  "voucher_id"
     t.boolean  "success",             default: false
+    t.index ["deleted_at"], name: "index_opportunities_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
+    t.index ["unit_id"], name: "index_opportunities_on_unit_id", using: :btree
+    t.index ["voucher_id"], name: "index_opportunities_on_voucher_id", using: :btree
   end
-
-  add_index "opportunities", ["deleted_at"], name: "index_opportunities_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
-  add_index "opportunities", ["unit_id"], name: "index_opportunities_on_unit_id", using: :btree
-  add_index "opportunities", ["voucher_id"], name: "index_opportunities_on_voucher_id", using: :btree
 
   create_table "opportunity_contacts", force: :cascade do |t|
     t.integer  "opportunity_id",                        null: false
@@ -702,19 +745,17 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "updated_at",                            null: false
     t.datetime "deleted_at"
     t.boolean  "housing_subsidy_admin", default: false, null: false
+    t.index ["contact_id"], name: "index_opportunity_contacts_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at", using: :btree
+    t.index ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id", using: :btree
   end
-
-  add_index "opportunity_contacts", ["contact_id"], name: "index_opportunity_contacts_on_contact_id", using: :btree
-  add_index "opportunity_contacts", ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at", using: :btree
-  add_index "opportunity_contacts", ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id", using: :btree
 
   create_table "opportunity_properties", force: :cascade do |t|
     t.integer  "opportunity_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id", using: :btree
   end
-
-  add_index "opportunity_properties", ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id", using: :btree
 
   create_table "physical_disabilities", force: :cascade do |t|
     t.integer  "numeric"
@@ -744,10 +785,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "ssp",                   default: false, null: false
     t.boolean  "hsp",                   default: false, null: false
     t.boolean  "do",                    default: false, null: false
+    t.index ["contact_id"], name: "index_program_contacts_on_contact_id", using: :btree
+    t.index ["program_id"], name: "index_program_contacts_on_program_id", using: :btree
   end
-
-  add_index "program_contacts", ["contact_id"], name: "index_program_contacts_on_contact_id", using: :btree
-  add_index "program_contacts", ["program_id"], name: "index_program_contacts_on_program_id", using: :btree
 
   create_table "program_services", force: :cascade do |t|
     t.integer  "program_id"
@@ -755,11 +795,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_program_services_on_deleted_at", using: :btree
+    t.index ["program_id"], name: "index_program_services_on_program_id", using: :btree
+    t.index ["service_id"], name: "index_program_services_on_service_id", using: :btree
   end
-
-  add_index "program_services", ["deleted_at"], name: "index_program_services_on_deleted_at", using: :btree
-  add_index "program_services", ["program_id"], name: "index_program_services_on_program_id", using: :btree
-  add_index "program_services", ["service_id"], name: "index_program_services_on_service_id", using: :btree
 
   create_table "programs", force: :cascade do |t|
     t.string   "name"
@@ -773,12 +812,11 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "confidential",        default: false, null: false
     t.integer  "match_route_id",      default: 1
     t.text     "description"
+    t.index ["contact_id"], name: "index_programs_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_programs_on_deleted_at", using: :btree
+    t.index ["funding_source_id"], name: "index_programs_on_funding_source_id", using: :btree
+    t.index ["subgrantee_id"], name: "index_programs_on_subgrantee_id", using: :btree
   end
-
-  add_index "programs", ["contact_id"], name: "index_programs_on_contact_id", using: :btree
-  add_index "programs", ["deleted_at"], name: "index_programs_on_deleted_at", using: :btree
-  add_index "programs", ["funding_source_id"], name: "index_programs_on_funding_source_id", using: :btree
-  add_index "programs", ["subgrantee_id"], name: "index_programs_on_subgrantee_id", using: :btree
 
   create_table "project_clients", force: :cascade do |t|
     t.string   "first_name"
@@ -825,7 +863,7 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "workphone"
     t.string   "pager"
     t.string   "email"
-    t.boolean  "dmh_eligible",                                default: false
+    t.boolean  "dmh_eligible",                                default: false, null: false
     t.boolean  "va_eligible",                                 default: false, null: false
     t.boolean  "hues_eligible",                               default: false, null: false
     t.datetime "disability_verified_on"
@@ -876,12 +914,11 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "case_manager_contact_info"
     t.string   "non_hmis_client_identifier"
     t.boolean  "vash_eligible"
+    t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
+    t.index ["client_id"], name: "index_project_clients_on_client_id", using: :btree
+    t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth", using: :btree
+    t.index ["source_last_changed"], name: "index_project_clients_on_source_last_changed", using: :btree
   end
-
-  add_index "project_clients", ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
-  add_index "project_clients", ["client_id"], name: "index_project_clients_on_client_id", using: :btree
-  add_index "project_clients", ["date_of_birth"], name: "index_project_clients_on_date_of_birth", using: :btree
-  add_index "project_clients", ["source_last_changed"], name: "index_project_clients_on_source_last_changed", using: :btree
 
   create_table "project_programs", force: :cascade do |t|
     t.string   "id_in_data_source"
@@ -900,21 +937,19 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.datetime "request_sent_at"
+    t.index ["deleted_at"], name: "index_reissue_requests_on_deleted_at", using: :btree
+    t.index ["notification_id"], name: "index_reissue_requests_on_notification_id", using: :btree
+    t.index ["reissued_by"], name: "index_reissue_requests_on_reissued_by", using: :btree
   end
-
-  add_index "reissue_requests", ["deleted_at"], name: "index_reissue_requests_on_deleted_at", using: :btree
-  add_index "reissue_requests", ["notification_id"], name: "index_reissue_requests_on_notification_id", using: :btree
-  add_index "reissue_requests", ["reissued_by"], name: "index_reissue_requests_on_reissued_by", using: :btree
 
   create_table "rejected_matches", force: :cascade do |t|
     t.integer  "client_id",      null: false
     t.integer  "opportunity_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["client_id"], name: "index_rejected_matches_on_client_id", using: :btree
+    t.index ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id", using: :btree
   end
-
-  add_index "rejected_matches", ["client_id"], name: "index_rejected_matches_on_client_id", using: :btree
-  add_index "rejected_matches", ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id", using: :btree
 
   create_table "requirements", force: :cascade do |t|
     t.integer  "rule_id"
@@ -925,11 +960,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "variable"
+    t.index ["deleted_at"], name: "index_requirements_on_deleted_at", using: :btree
+    t.index ["requirer_type", "requirer_id"], name: "index_requirements_on_requirer_type_and_requirer_id", using: :btree
+    t.index ["rule_id"], name: "index_requirements_on_rule_id", using: :btree
   end
-
-  add_index "requirements", ["deleted_at"], name: "index_requirements_on_deleted_at", using: :btree
-  add_index "requirements", ["requirer_type", "requirer_id"], name: "index_requirements_on_requirer_type_and_requirer_id", using: :btree
-  add_index "requirements", ["rule_id"], name: "index_requirements_on_rule_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",                                                    null: false
@@ -939,6 +973,7 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "can_edit_all_clients",                    default: false
     t.boolean  "can_participate_in_matches",              default: false
     t.boolean  "can_view_all_matches",                    default: false
+    t.boolean  "can_view_own_closed_matches",             default: false
     t.boolean  "can_see_alternate_matches",               default: false
     t.boolean  "can_edit_match_contacts",                 default: false
     t.boolean  "can_approve_matches",                     default: false
@@ -949,6 +984,11 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "can_edit_users",                          default: false
     t.boolean  "can_view_full_ssn",                       default: false
     t.boolean  "can_view_full_dob",                       default: false
+    t.boolean  "can_view_dmh_eligibility",                default: false
+    t.boolean  "can_view_va_eligibility",                 default: false
+    t.boolean  "can_view_hues_eligibility",               default: false
+    t.boolean  "can_view_hiv_positive_eligibility",       default: false
+    t.boolean  "can_view_client_confidentiality",         default: false
     t.boolean  "can_view_buildings",                      default: false
     t.boolean  "can_edit_buildings",                      default: false
     t.boolean  "can_view_funding_sources",                default: false
@@ -973,21 +1013,15 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "can_edit_available_services",             default: false
     t.boolean  "can_assign_services",                     default: false
     t.boolean  "can_assign_requirements",                 default: false
-    t.boolean  "can_view_dmh_eligibility",                default: false
-    t.boolean  "can_view_va_eligibility",                 default: false, null: false
-    t.boolean  "can_view_hues_eligibility",               default: false, null: false
     t.boolean  "can_become_other_users",                  default: false
-    t.boolean  "can_view_client_confidentiality",         default: false, null: false
-    t.boolean  "can_view_hiv_positive_eligibility",       default: false
-    t.boolean  "can_view_own_closed_matches",             default: false
     t.boolean  "can_edit_translations",                   default: false
     t.boolean  "can_view_vspdats",                        default: false
     t.boolean  "can_manage_config",                       default: false
     t.boolean  "can_create_overall_note",                 default: false
+    t.boolean  "can_delete_client_notes",                 default: false
     t.boolean  "can_enter_deidentified_clients",          default: false
     t.boolean  "can_manage_deidentified_clients",         default: false
     t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
-    t.boolean  "can_delete_client_notes",                 default: false
     t.boolean  "can_enter_identified_clients",            default: false
     t.boolean  "can_manage_identified_clients",           default: false
     t.boolean  "can_add_cohorts_to_identified_clients",   default: false
@@ -1003,9 +1037,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "can_upload_deidentified_clients",         default: false
     t.boolean  "can_delete_matches",                      default: false
     t.boolean  "can_reopen_matches",                      default: false
+    t.index ["name"], name: "index_roles_on_name", using: :btree
   end
-
-  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
   create_table "rules", force: :cascade do |t|
     t.string   "name",       null: false
@@ -1014,9 +1047,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "deleted_at"
     t.string   "type"
     t.string   "verb"
+    t.index ["deleted_at"], name: "index_rules_on_deleted_at", using: :btree
   end
-
-  add_index "rules", ["deleted_at"], name: "index_rules_on_deleted_at", using: :btree
 
   create_table "secondary_races", force: :cascade do |t|
     t.integer  "numeric"
@@ -1031,11 +1063,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_service_rules_on_deleted_at", using: :btree
+    t.index ["rule_id"], name: "index_service_rules_on_rule_id", using: :btree
+    t.index ["service_id"], name: "index_service_rules_on_service_id", using: :btree
   end
-
-  add_index "service_rules", ["deleted_at"], name: "index_service_rules_on_deleted_at", using: :btree
-  add_index "service_rules", ["rule_id"], name: "index_service_rules_on_rule_id", using: :btree
-  add_index "service_rules", ["service_id"], name: "index_service_rules_on_service_id", using: :btree
 
   create_table "services", force: :cascade do |t|
     t.string   "name",       null: false
@@ -1049,10 +1080,9 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
+    t.index ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
   end
-
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "social_security_number_quality_codes", force: :cascade do |t|
     t.integer  "numeric"
@@ -1088,12 +1118,11 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "confidential",                  default: false, null: false
     t.text     "eligibility_requirement_notes"
     t.boolean  "closed",                        default: false
+    t.index ["building_id"], name: "index_sub_programs_on_building_id", using: :btree
+    t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at", using: :btree
+    t.index ["program_id"], name: "index_sub_programs_on_program_id", using: :btree
+    t.index ["subgrantee_id"], name: "index_sub_programs_on_subgrantee_id", using: :btree
   end
-
-  add_index "sub_programs", ["building_id"], name: "index_sub_programs_on_building_id", using: :btree
-  add_index "sub_programs", ["deleted_at"], name: "index_sub_programs_on_deleted_at", using: :btree
-  add_index "sub_programs", ["program_id"], name: "index_sub_programs_on_program_id", using: :btree
-  add_index "sub_programs", ["subgrantee_id"], name: "index_sub_programs_on_subgrantee_id", using: :btree
 
   create_table "subgrantee_contacts", force: :cascade do |t|
     t.integer  "subgrantee_id", null: false
@@ -1101,11 +1130,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.datetime "deleted_at"
+    t.index ["contact_id"], name: "index_subgrantee_contacts_on_contact_id", using: :btree
+    t.index ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at", using: :btree
+    t.index ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id", using: :btree
   end
-
-  add_index "subgrantee_contacts", ["contact_id"], name: "index_subgrantee_contacts_on_contact_id", using: :btree
-  add_index "subgrantee_contacts", ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at", using: :btree
-  add_index "subgrantee_contacts", ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id", using: :btree
 
   create_table "subgrantee_services", force: :cascade do |t|
     t.integer  "subgrantee_id"
@@ -1113,11 +1141,10 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_subgrantee_services_on_deleted_at", using: :btree
+    t.index ["service_id"], name: "index_subgrantee_services_on_service_id", using: :btree
+    t.index ["subgrantee_id"], name: "index_subgrantee_services_on_subgrantee_id", using: :btree
   end
-
-  add_index "subgrantee_services", ["deleted_at"], name: "index_subgrantee_services_on_deleted_at", using: :btree
-  add_index "subgrantee_services", ["service_id"], name: "index_subgrantee_services_on_service_id", using: :btree
-  add_index "subgrantee_services", ["subgrantee_id"], name: "index_subgrantee_services_on_subgrantee_id", using: :btree
 
   create_table "subgrantees", force: :cascade do |t|
     t.string   "name"
@@ -1143,9 +1170,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "key",        default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["key"], name: "index_translation_keys_on_key", using: :btree
   end
-
-  add_index "translation_keys", ["key"], name: "index_translation_keys_on_key", using: :btree
 
   create_table "translation_texts", force: :cascade do |t|
     t.text     "text"
@@ -1153,19 +1179,17 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.integer  "translation_key_id", null: false
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.index ["translation_key_id"], name: "index_translation_texts_on_translation_key_id", using: :btree
   end
-
-  add_index "translation_texts", ["translation_key_id"], name: "index_translation_texts_on_translation_key_id", using: :btree
 
   create_table "unavailable_as_candidate_fors", force: :cascade do |t|
     t.integer  "client_id",                                        null: false
     t.string   "match_route_type",                                 null: false
-    t.datetime "created_at",       default: '2019-11-22 19:45:02', null: false
-    t.datetime "updated_at",       default: '2019-11-22 19:45:02', null: false
+    t.datetime "created_at",       default: '2019-11-22 18:08:17', null: false
+    t.datetime "updated_at",       default: '2019-11-22 18:08:17', null: false
+    t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id", using: :btree
+    t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type", using: :btree
   end
-
-  add_index "unavailable_as_candidate_fors", ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id", using: :btree
-  add_index "unavailable_as_candidate_fors", ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type", using: :btree
 
   create_table "units", force: :cascade do |t|
     t.integer  "id_in_data_source"
@@ -1186,21 +1210,19 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.integer  "data_source_id"
     t.string   "data_source_id_column_name"
     t.boolean  "elevator_accessible",        default: false, null: false
+    t.index ["building_id"], name: "index_units_on_building_id", using: :btree
+    t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
+    t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source", using: :btree
   end
-
-  add_index "units", ["building_id"], name: "index_units_on_building_id", using: :btree
-  add_index "units", ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
-  add_index "units", ["id_in_data_source"], name: "index_units_on_id_in_data_source", using: :btree
 
   create_table "user_roles", force: :cascade do |t|
     t.integer  "role_id"
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_user_roles_on_role_id", using: :btree
+    t.index ["user_id"], name: "index_user_roles_on_user_id", using: :btree
   end
-
-  add_index "user_roles", ["role_id"], name: "index_user_roles_on_role_id", using: :btree
-  add_index "user_roles", ["user_id"], name: "index_user_roles_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                                              null: false
@@ -1237,15 +1259,14 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.boolean  "active",                       default: true,        null: false
     t.string   "deprecated_agency"
     t.integer  "agency_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
+    t.index ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
-
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-  add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
-  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",         null: false
@@ -1258,9 +1279,8 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.string   "session_id"
     t.string   "request_id"
     t.string   "notification_code"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   create_table "veteran_statuses", force: :cascade do |t|
     t.integer  "numeric"
@@ -1274,16 +1294,14 @@ ActiveRecord::Schema.define(version: 20191205010912) do
     t.date     "date_available"
     t.integer  "sub_program_id"
     t.integer  "unit_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.datetime "deleted_at"
     t.integer  "user_id"
-    t.datetime "made_available_at"
+    t.index ["deleted_at"], name: "index_vouchers_on_deleted_at", using: :btree
+    t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id", using: :btree
+    t.index ["unit_id"], name: "index_vouchers_on_unit_id", using: :btree
   end
-
-  add_index "vouchers", ["deleted_at"], name: "index_vouchers_on_deleted_at", using: :btree
-  add_index "vouchers", ["sub_program_id"], name: "index_vouchers_on_sub_program_id", using: :btree
-  add_index "vouchers", ["unit_id"], name: "index_vouchers_on_unit_id", using: :btree
 
   add_foreign_key "opportunities", "vouchers"
   add_foreign_key "programs", "contacts"

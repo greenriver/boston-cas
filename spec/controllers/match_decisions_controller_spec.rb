@@ -31,7 +31,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
       end
       describe 'after parking' do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_hsa_housing_date, :canceled, :parked, administrative_cancel_reason_id: [24], prevent_matching_until: Date.today + 2.days)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_hsa_housing_date, :canceled, :parked, administrative_cancel_reason_id: [24], prevent_matching_until: Date.today + 2.days) }
         end
         it 'client has one active match' do
           aggregate_failures 'checking counts' do
@@ -56,7 +56,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
   describe 'PUT #update' do
     context 'with valid attributes' do
       before(:each) do
-        patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff)
+        patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff) }
       end
 
       it "redirects to match#show" do
@@ -68,7 +68,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if expiration date is provided and match is declined" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :declined, :shelter_expiration)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :declined, :shelter_expiration) }
         end
 
         it "flashes an error" do
@@ -82,7 +82,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if we've been asked to park the client and match is accepted" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :accepted, :parked)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :accepted, :parked) }
         end
 
         it "flashes an error" do
@@ -96,7 +96,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if cancel reason is provided and match is declined" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :declined, :cancel_reason)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :declined, :cancel_reason) }
         end
 
         it "flashes an error" do
@@ -110,7 +110,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if cancel reason is provided and match is accepted" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :accepted, :cancel_reason)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :accepted, :cancel_reason) }
         end
 
         it "flashes an error" do
@@ -124,7 +124,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if decline reason is provided and match is accepted" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :accepted, :decline_reason)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :accepted, :decline_reason) }
         end
 
         it "flashes an error" do
@@ -138,7 +138,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if decline reason is provided and match is canceled" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :canceled, :decline_reason)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :canceled, :decline_reason) }
         end
 
         it "flashes an error" do
@@ -152,7 +152,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
 
       context "if cancel reason is not provided and match is canceled" do
         before(:each) do
-          patch :update, match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :canceled, :cancel_reason_absent)
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_dnd_staff, :canceled, :cancel_reason_absent) }
         end
 
         it "flashes an error" do

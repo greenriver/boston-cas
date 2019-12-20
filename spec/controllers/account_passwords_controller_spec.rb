@@ -36,7 +36,7 @@ RSpec.describe AccountPasswordsController, type: :controller do
       end
 
       before(:each) do
-        patch :update, user: changes
+        patch :update, params: { user: changes }
       end
 
       it 'has an error' do
@@ -57,7 +57,7 @@ RSpec.describe AccountPasswordsController, type: :controller do
         }
       end
       before(:each) do
-        patch :update, user: changes
+        patch :update, params: { user: changes }
       end
 
       it 'sends password confirmation email' do

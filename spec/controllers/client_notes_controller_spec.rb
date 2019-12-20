@@ -15,11 +15,13 @@ RSpec.describe ClientNotesController, type: :controller do
   describe 'DELETE #destroy' do
 
     it 'deletes the note' do 
-      expect{ delete :destroy, id: client_note, client_id: client_note.client_id }.to change( ClientNote, :count ).by( -1 )
+      expect {
+        delete :destroy, params: { id: client_note, client_id: client_note.client_id }
+      }.to change( ClientNote, :count ).by( -1 )
     end
     
     it 'redirects to Client/#show' do
-      delete :destroy, id: client_note, client_id: client_note.client_id
+      delete :destroy, params: { id: client_note, client_id: client_note.client_id }
       expect( response ).to redirect_to( client_path(client_note.client_id ))
     end
   end
@@ -27,7 +29,7 @@ RSpec.describe ClientNotesController, type: :controller do
   describe "POST #create_note" do
     context "with valid attributes" do
       before do
-        post :create, client_note: attributes_for(:client_note), client_id: client.id 
+        post :create, params: { client_note: attributes_for(:client_note), client_id: client.id }
       end
       
       it "creates client note" do
@@ -40,7 +42,9 @@ RSpec.describe ClientNotesController, type: :controller do
     end
     
     context "with invalid attributes" do
-      before { post :create, client_note: { :note=>"" }, client_id: client.id } #invalid because note is an empty string
+      before do
+        post :create, params: { client_note: { :note=>"" }, client_id: client.id } #invalid because note is an empty string
+      end
       
       it "does not save the new contact" do   
         expect(ClientNote.count).to eq(initial_note_count)
