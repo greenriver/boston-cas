@@ -18,7 +18,7 @@ module Notifications
       foreign_key: 'client_opportunity_match_id'
 
     belongs_to :recipient, class_name: 'Contact'
-    delegate :name, to: :recipient, allow_blank: true, prefix: true
+    delegate :name, to: :recipient, allow_nil: true, prefix: true
       
     has_many :notification_delivery_events,
       class_name: 'MatchEvents::NotificationDelivery',

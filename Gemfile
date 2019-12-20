@@ -128,4 +128,5 @@ group :test do
   gem 'minitest-reporters'
   gem 'rspec-mocks'
   gem 'shoulda'
+  gem 'rails-controller-testing'
 end
