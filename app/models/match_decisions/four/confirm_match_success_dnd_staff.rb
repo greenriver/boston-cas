@@ -15,6 +15,7 @@ module MatchDecisions::Four
         confirmed: 'Confirmed',
         rejected: 'Rejected',
         canceled: 'Canceled', # added to support cancellations caused by other match success
+        back: 'Pending',
       }
     end
 
@@ -28,6 +29,7 @@ module MatchDecisions::Four
       when :confirmed then "#{_('DND')} confirms match success"
       when :rejected then "Match rejected by #{_('DND')}"
       when :canceled then 'Match canceled'
+      when :back then backup_status_label
       end
     end
 

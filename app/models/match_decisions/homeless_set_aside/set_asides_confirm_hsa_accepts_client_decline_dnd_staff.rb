@@ -14,6 +14,7 @@ module MatchDecisions::HomelessSetAside
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
+        back: 'Pending',
        }
     end
 
@@ -28,6 +29,7 @@ module MatchDecisions::HomelessSetAside
       when :decline_overridden_returned then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
