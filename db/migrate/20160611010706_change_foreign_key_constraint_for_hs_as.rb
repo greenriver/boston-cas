@@ -1,4 +1,4 @@
-class ChangeForeignKeyConstraintForHsAs < ActiveRecord::Migration
+class ChangeForeignKeyConstraintForHsAs < ActiveRecord::Migration[4.2]
   def up
     remove_foreign_key :sub_programs, :contacts
     remove_column :sub_programs, :contact_id

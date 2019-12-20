@@ -1,4 +1,4 @@
-class AddDedicatedColumnsForNotWorkingWithClientReasonAssociation < ActiveRecord::Migration
+class AddDedicatedColumnsForNotWorkingWithClientReasonAssociation < ActiveRecord::Migration[4.2]
   def change
     change_table :match_decisions do |t|
       t.remove :match_decision_reason_id

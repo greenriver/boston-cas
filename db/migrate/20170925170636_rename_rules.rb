@@ -1,4 +1,4 @@
-class RenameRules < ActiveRecord::Migration
+class RenameRules < ActiveRecord::Migration[4.2]
   def up
     rule = Rules::OneEightyDaysHomeless&.first
     rule.update(name: '180 homeless days') if rule.present?

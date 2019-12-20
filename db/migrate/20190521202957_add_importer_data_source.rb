@@ -1,4 +1,4 @@
-class AddImporterDataSource < ActiveRecord::Migration
+class AddImporterDataSource < ActiveRecord::Migration[4.2]
   def up
     DataSource.create(name: 'Imported Clients', db_identifier: 'Imported')
 

@@ -1,4 +1,4 @@
-class AddDaysHomelessVerification < ActiveRecord::Migration
+class AddDaysHomelessVerification < ActiveRecord::Migration[4.2]
   def change
     add_column :non_hmis_clients, :date_days_homeless_verified, :date
     add_column :non_hmis_clients, :who_verified_days_homeless, :string

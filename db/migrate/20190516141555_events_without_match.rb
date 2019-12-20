@@ -1,4 +1,4 @@
-class EventsWithoutMatch < ActiveRecord::Migration
+class EventsWithoutMatch < ActiveRecord::Migration[4.2]
   def up
     add_column :match_events, :client_id, :integer
 

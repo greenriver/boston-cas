@@ -1,4 +1,4 @@
-class CreateDomesticViolenceSurvivors < ActiveRecord::Migration
+class CreateDomesticViolenceSurvivors < ActiveRecord::Migration[4.2]
   def change
     create_table :domestic_violence_survivors do |t|
       t.integer :numeric

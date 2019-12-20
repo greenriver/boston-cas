@@ -1,4 +1,4 @@
-class AddUnitLevelRuleSupports < ActiveRecord::Migration
+class AddUnitLevelRuleSupports < ActiveRecord::Migration[4.2]
   def change
     add_column :project_clients, :requires_ground_floor, :boolean, default: false
     add_column :project_clients, :requires_wheelchair_accessibility, :boolean, default: false

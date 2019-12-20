@@ -1,4 +1,4 @@
-class CreateFileTags < ActiveRecord::Migration
+class CreateFileTags < ActiveRecord::Migration[4.2]
   def change
     create_table :file_tags do |t|
       t.references :sub_program, null: false

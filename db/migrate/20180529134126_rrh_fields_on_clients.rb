@@ -1,4 +1,4 @@
-class RrhFieldsOnClients < ActiveRecord::Migration
+class RrhFieldsOnClients < ActiveRecord::Migration[4.2]
   def change
     add_column :project_clients, :ssvf_eligible, :boolean, null: false, default: false
     add_column :project_clients, :rrh_desired, :boolean, null: false, default: false

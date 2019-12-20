@@ -1,4 +1,4 @@
-class RestoreIncorrectlyPreEmptedMatches < ActiveRecord::Migration
+class RestoreIncorrectlyPreEmptedMatches < ActiveRecord::Migration[4.2]
   def change
     available_decisions = MatchRoutes::Base.all_routes.flat_map{|r| r.match_steps_for_reporting.keys }
     ClientOpportunityMatch.successful.find_each do |match|

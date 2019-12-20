@@ -1,4 +1,4 @@
-class AddContactSouceIdToContacts < ActiveRecord::Migration
+class AddContactSouceIdToContacts < ActiveRecord::Migration[4.2]
   def change
     add_column :data_sources, :db_itentifier, :string
 

@@ -1,4 +1,4 @@
-class AddContactTypes < ActiveRecord::Migration
+class AddContactTypes < ActiveRecord::Migration[4.2]
   def change
     add_column :client_contacts, :dnd_staff, :boolean, null: false, default: false
     add_column :client_contacts, :housing_subsidy_admin, :boolean, null: false, default: false

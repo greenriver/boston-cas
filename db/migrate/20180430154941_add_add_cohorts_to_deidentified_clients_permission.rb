@@ -1,4 +1,4 @@
-class AddAddCohortsToDeidentifiedClientsPermission < ActiveRecord::Migration
+class AddAddCohortsToDeidentifiedClientsPermission < ActiveRecord::Migration[4.2]
   def up
     Role.ensure_permissions_exist
   end

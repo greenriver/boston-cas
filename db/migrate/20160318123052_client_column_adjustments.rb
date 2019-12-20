@@ -1,4 +1,4 @@
-class ClientColumnAdjustments < ActiveRecord::Migration
+class ClientColumnAdjustments < ActiveRecord::Migration[4.2]
   def change
     add_column :clients, :clientguid, :uuid
     add_column :clients, :deleted_at, :datetime

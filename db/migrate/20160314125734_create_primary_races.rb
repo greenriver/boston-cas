@@ -1,4 +1,4 @@
-class CreatePrimaryRaces < ActiveRecord::Migration
+class CreatePrimaryRaces < ActiveRecord::Migration[4.2]
   def change
     create_table :primary_races do |t|
       t.integer :numeric

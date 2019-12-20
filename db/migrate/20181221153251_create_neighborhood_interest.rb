@@ -1,4 +1,4 @@
-class CreateNeighborhoodInterest < ActiveRecord::Migration
+class CreateNeighborhoodInterest < ActiveRecord::Migration[4.2]
   def change
     create_table :neighborhood_interests do |t|
       t.references :client

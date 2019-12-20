@@ -1,4 +1,4 @@
-class AddColumnsToClient < ActiveRecord::Migration
+class AddColumnsToClient < ActiveRecord::Migration[4.2]
   def change
     [
       :us_citizen,

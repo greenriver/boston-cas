@@ -1,4 +1,4 @@
-class CreateRejectedMatches < ActiveRecord::Migration
+class CreateRejectedMatches < ActiveRecord::Migration[4.2]
   def change
     create_table :rejected_matches do |t|
       t.references :client, index: true, null: false

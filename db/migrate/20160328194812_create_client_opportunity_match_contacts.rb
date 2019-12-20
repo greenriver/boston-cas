@@ -1,4 +1,4 @@
-class CreateClientOpportunityMatchContacts < ActiveRecord::Migration
+class CreateClientOpportunityMatchContacts < ActiveRecord::Migration[4.2]
   def change
     create_table :client_opportunity_match_contacts do |t|
       t.references :match, index: true, null: false

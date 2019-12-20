@@ -1,4 +1,4 @@
-class MoveDecisionColumnsToDedicatedTable < ActiveRecord::Migration
+class MoveDecisionColumnsToDedicatedTable < ActiveRecord::Migration[4.2]
   def change
     remove_column :client_opportunity_matches, :match_recommendation_dnd_staff_status
     remove_column :client_opportunity_matches, :match_recommendation_dnd_staff_contact_id

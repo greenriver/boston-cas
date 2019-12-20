@@ -1,4 +1,4 @@
-class CreateDischargeStatuses < ActiveRecord::Migration
+class CreateDischargeStatuses < ActiveRecord::Migration[4.2]
   def change
     create_table :discharge_statuses do |t|
       t.integer :numeric

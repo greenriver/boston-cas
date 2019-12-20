@@ -1,4 +1,4 @@
-class CleanupOpportunities < ActiveRecord::Migration
+class CleanupOpportunities < ActiveRecord::Migration[4.2]
   def change
     add_column :opportunities, :success, :boolean, default: false
     remove_column :opportunities, :building_id

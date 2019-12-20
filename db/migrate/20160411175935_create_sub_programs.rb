@@ -1,4 +1,4 @@
-class CreateSubPrograms < ActiveRecord::Migration
+class CreateSubPrograms < ActiveRecord::Migration[4.2]
   def change
     create_table :sub_programs do |t|
       t.string :program_type

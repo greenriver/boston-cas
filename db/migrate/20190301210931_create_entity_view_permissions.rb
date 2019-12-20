@@ -1,4 +1,4 @@
-class CreateEntityViewPermissions < ActiveRecord::Migration
+class CreateEntityViewPermissions < ActiveRecord::Migration[4.2]
   def change
     create_table :entity_view_permissions do |t|
       t.references :user, index: true

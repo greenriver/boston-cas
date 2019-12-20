@@ -1,4 +1,4 @@
-class AddDmhEligiblePermission < ActiveRecord::Migration
+class AddDmhEligiblePermission < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:roles, :can_view_dmh_eligibility)
       add_column :roles, :can_view_dmh_eligibility, :boolean, null: false, default: false

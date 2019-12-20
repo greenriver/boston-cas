@@ -1,4 +1,4 @@
-class CreateSocialSecurityNumberQualityCodes < ActiveRecord::Migration
+class CreateSocialSecurityNumberQualityCodes < ActiveRecord::Migration[4.2]
   def change
     create_table :social_security_number_quality_codes do |t|
       t.integer :numeric

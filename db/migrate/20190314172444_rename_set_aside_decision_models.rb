@@ -1,4 +1,4 @@
-class RenameSetAsideDecisionModels < ActiveRecord::Migration
+class RenameSetAsideDecisionModels < ActiveRecord::Migration[4.2]
   def up
     {
       'MatchDecisions::HomelessSetAside::HsaAcknowledgesReceipt' => 'MatchDecisions::HomelessSetAside::SetAsidesHsaAcknowledgesReceipt',

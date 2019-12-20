@@ -1,4 +1,4 @@
-class ChangeRuleSchemaForMvp < ActiveRecord::Migration
+class ChangeRuleSchemaForMvp < ActiveRecord::Migration[4.2]
   def change
     drop_rule_sources
     drop_rulesets

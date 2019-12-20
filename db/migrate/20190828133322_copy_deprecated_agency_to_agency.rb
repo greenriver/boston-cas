@@ -1,4 +1,4 @@
-class CopyDeprecatedAgencyToAgency < ActiveRecord::Migration
+class CopyDeprecatedAgencyToAgency < ActiveRecord::Migration[4.2]
   def up
     User.where.not(deprecated_agency: nil).each do |user|
       if user.deprecated_agency.present?

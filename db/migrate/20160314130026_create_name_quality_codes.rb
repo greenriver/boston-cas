@@ -1,4 +1,4 @@
-class CreateNameQualityCodes < ActiveRecord::Migration
+class CreateNameQualityCodes < ActiveRecord::Migration[4.2]
   def change
     create_table :name_quality_codes do |t|
       t.integer :numeric

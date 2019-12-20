@@ -1,4 +1,4 @@
-class AddDefaultsToBooleanColumnsInClients < ActiveRecord::Migration
+class AddDefaultsToBooleanColumnsInClients < ActiveRecord::Migration[4.2]
   def change
     change_column :clients, :veteran, :boolean, default: false
     Client.where(veteran: nil).update_all(veteran: false)

@@ -1,4 +1,4 @@
-class AddUniverseStateToPreviousMatches < ActiveRecord::Migration
+class AddUniverseStateToPreviousMatches < ActiveRecord::Migration[4.2]
   def up
     ClientOpportunityMatch.where(universe_state: nil).each do |match|
       universe_state = {

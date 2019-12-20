@@ -1,4 +1,4 @@
-class AddVeteranEtcToDeidentifiedClients < ActiveRecord::Migration
+class AddVeteranEtcToDeidentifiedClients < ActiveRecord::Migration[4.2]
   def change
     add_column :deidentified_clients, :veteran, :boolean, default: false, null: false
     add_column :deidentified_clients, :rrh_desired, :boolean, default: false, null: false

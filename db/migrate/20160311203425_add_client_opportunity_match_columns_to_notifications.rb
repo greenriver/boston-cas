@@ -1,4 +1,4 @@
-class AddClientOpportunityMatchColumnsToNotifications < ActiveRecord::Migration
+class AddClientOpportunityMatchColumnsToNotifications < ActiveRecord::Migration[4.2]
   def change
     add_column :notifications, :client_opportunity_match_id, :int
     add_column :notifications, :response, :string

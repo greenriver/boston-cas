@@ -1,4 +1,4 @@
-class RenameAssylee < ActiveRecord::Migration
+class RenameAssylee < ActiveRecord::Migration[4.2]
   class ::Rules::Assylee < Rule
   end
   def up

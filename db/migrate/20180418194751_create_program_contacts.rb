@@ -1,4 +1,4 @@
-class CreateProgramContacts < ActiveRecord::Migration
+class CreateProgramContacts < ActiveRecord::Migration[4.2]
   def change
     create_table :program_contacts do |t|
       t.references :program, null: false, index: true

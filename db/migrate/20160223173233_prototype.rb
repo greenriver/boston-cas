@@ -1,4 +1,4 @@
-class Prototype < ActiveRecord::Migration
+class Prototype < ActiveRecord::Migration[4.2]
   def change
 
     create_table :contacts do |t|

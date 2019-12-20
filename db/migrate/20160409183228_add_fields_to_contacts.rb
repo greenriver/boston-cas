@@ -1,4 +1,4 @@
-class AddFieldsToContacts < ActiveRecord::Migration
+class AddFieldsToContacts < ActiveRecord::Migration[4.2]
   def change
     add_column :contacts, :role_id, :integer
     add_column :contacts, :role_in_organization, :string

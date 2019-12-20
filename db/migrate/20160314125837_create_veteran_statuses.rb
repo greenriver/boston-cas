@@ -1,4 +1,4 @@
-class CreateVeteranStatuses < ActiveRecord::Migration
+class CreateVeteranStatuses < ActiveRecord::Migration[4.2]
   def change
     create_table :veteran_statuses do |t|
       t.integer :numeric

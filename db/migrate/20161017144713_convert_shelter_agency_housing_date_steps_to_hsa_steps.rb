@@ -1,4 +1,4 @@
-class ConvertShelterAgencyHousingDateStepsToHsaSteps < ActiveRecord::Migration
+class ConvertShelterAgencyHousingDateStepsToHsaSteps < ActiveRecord::Migration[4.2]
   def up
     shelter_agency_pending_decisions = MatchDecisions::Base.with_deleted.where(type: 'MatchDecisions::RecordClientHousedDateShelterAgency', status: 'pending')
     shelter_agency_pending_decisions.each do |d|

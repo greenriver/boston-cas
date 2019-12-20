@@ -1,4 +1,4 @@
-class CreateDisablingConditions < ActiveRecord::Migration
+class CreateDisablingConditions < ActiveRecord::Migration[4.2]
   def change
     create_table :disabling_conditions do |t|
       t.integer :numeric

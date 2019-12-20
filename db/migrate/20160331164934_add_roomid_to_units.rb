@@ -1,4 +1,4 @@
-class AddRoomidToUnits < ActiveRecord::Migration
+class AddRoomidToUnits < ActiveRecord::Migration[4.2]
   def change
      create_table :units do |t|
       t.integer :roomid

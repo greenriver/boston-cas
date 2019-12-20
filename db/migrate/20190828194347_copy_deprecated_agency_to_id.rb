@@ -1,4 +1,4 @@
-class CopyDeprecatedAgencyToId < ActiveRecord::Migration
+class CopyDeprecatedAgencyToId < ActiveRecord::Migration[4.2]
   def up
     NonHmisClient.where.not(deprecated_agency: nil).find_each do |client|
       if client.deprecated_agency.present?

@@ -1,4 +1,4 @@
-class CreateDecisionReasons < ActiveRecord::Migration
+class CreateDecisionReasons < ActiveRecord::Migration[4.2]
   def change
     create_table :match_decision_reasons do |t|
       t.string :name, null: false

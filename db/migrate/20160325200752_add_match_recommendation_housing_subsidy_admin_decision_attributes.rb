@@ -1,4 +1,4 @@
-class AddMatchRecommendationHousingSubsidyAdminDecisionAttributes < ActiveRecord::Migration
+class AddMatchRecommendationHousingSubsidyAdminDecisionAttributes < ActiveRecord::Migration[4.2]
   def change
     add_column :client_opportunity_matches, :match_recommendation_housing_subsidy_admin_status, :string
     add_column :client_opportunity_matches, :match_recommendation_housing_subsidy_admin_contact_id, :integer

@@ -1,4 +1,4 @@
-class AddPermissionToUploadDeidentifiedClients < ActiveRecord::Migration
+class AddPermissionToUploadDeidentifiedClients < ActiveRecord::Migration[4.2]
   def up
     Role.ensure_permissions_exist
   end

@@ -1,4 +1,4 @@
-class ChangeContactsStructure < ActiveRecord::Migration
+class ChangeContactsStructure < ActiveRecord::Migration[4.2]
   def change
     remove_column :contacts, :organization_name
 

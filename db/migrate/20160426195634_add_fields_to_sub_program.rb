@@ -1,4 +1,4 @@
-class AddFieldsToSubProgram < ActiveRecord::Migration
+class AddFieldsToSubProgram < ActiveRecord::Migration[4.2]
   def change
     add_column :sub_programs, :housed, :integer
     add_column :sub_programs, :in_progress, :integer

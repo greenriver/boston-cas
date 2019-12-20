@@ -1,4 +1,4 @@
-class AddMatchPrioritization < ActiveRecord::Migration
+class AddMatchPrioritization < ActiveRecord::Migration[4.2]
   def change
     create_table :match_prioritizations do |t|
       t.string :type, null: false

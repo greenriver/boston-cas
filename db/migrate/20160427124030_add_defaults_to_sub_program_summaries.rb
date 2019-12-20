@@ -1,4 +1,4 @@
-class AddDefaultsToSubProgramSummaries < ActiveRecord::Migration
+class AddDefaultsToSubProgramSummaries < ActiveRecord::Migration[4.2]
   def up
     change_column_default :sub_programs, :matched, 0
     change_column_default :sub_programs, :in_progress, 0

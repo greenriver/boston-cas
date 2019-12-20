@@ -1,4 +1,4 @@
-class ConvertClientFieldsToBoolean < ActiveRecord::Migration
+class ConvertClientFieldsToBoolean < ActiveRecord::Migration[4.2]
   def change
     remove_column :clients, :hiv_aids, :integer
     remove_column :clients, :chronic_health_problem, :integer

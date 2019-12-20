@@ -1,4 +1,4 @@
-class CreateMatchProgressUpdates < ActiveRecord::Migration
+class CreateMatchProgressUpdates < ActiveRecord::Migration[4.2]
   def change
     create_table :match_progress_updates do |t|
       t.string :type, index: true, null: false

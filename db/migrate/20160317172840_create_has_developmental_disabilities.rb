@@ -1,4 +1,4 @@
-class CreateHasDevelopmentalDisabilities < ActiveRecord::Migration
+class CreateHasDevelopmentalDisabilities < ActiveRecord::Migration[4.2]
   def change
     create_table :has_developmental_disabilities do |t|
       t.integer :numeric

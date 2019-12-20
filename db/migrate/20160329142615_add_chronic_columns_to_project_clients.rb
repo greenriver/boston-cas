@@ -1,4 +1,4 @@
-class AddChronicColumnsToProjectClients < ActiveRecord::Migration
+class AddChronicColumnsToProjectClients < ActiveRecord::Migration[4.2]
   def change
     add_column :project_clients, :calculated_bed_nights_in_last_three_years, :integer
     add_column :project_clients, :calculated_episodes_in_last_three_years, :integer

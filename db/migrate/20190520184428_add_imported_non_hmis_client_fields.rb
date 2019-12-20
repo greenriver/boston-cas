@@ -1,4 +1,4 @@
-class AddImportedNonHmisClientFields < ActiveRecord::Migration
+class AddImportedNonHmisClientFields < ActiveRecord::Migration[4.2]
   def change
     add_column :non_hmis_clients, :imported_timestamp, :datetime
     # screener email to ensure applicant has a contact manager - ignored

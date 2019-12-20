@@ -1,4 +1,4 @@
-class AddConfidentialToClient < ActiveRecord::Migration
+class AddConfidentialToClient < ActiveRecord::Migration[4.2]
   def change
     add_column :clients, :confidential, :boolean, null: false, default: false
     Role.ensure_permissions_exist

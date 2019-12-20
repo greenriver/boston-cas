@@ -1,4 +1,4 @@
-class ConvertDeidentifiedToNonHmisClients < ActiveRecord::Migration
+class ConvertDeidentifiedToNonHmisClients < ActiveRecord::Migration[4.2]
   def up
     if NonHmisClient.any?
       NonHmisClient.all.each do | client |

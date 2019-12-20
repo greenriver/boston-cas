@@ -1,4 +1,4 @@
-class AddRandomTieBreakerToClient < ActiveRecord::Migration
+class AddRandomTieBreakerToClient < ActiveRecord::Migration[4.2]
   def up
     add_column :clients, :tie_breaker, :float
 

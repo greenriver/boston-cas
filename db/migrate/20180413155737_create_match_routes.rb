@@ -1,4 +1,4 @@
-class CreateMatchRoutes < ActiveRecord::Migration
+class CreateMatchRoutes < ActiveRecord::Migration[4.2]
   def change
     create_table :match_routes do |t|
       t.string :type, null: false

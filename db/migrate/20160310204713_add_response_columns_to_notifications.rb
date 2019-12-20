@@ -1,4 +1,4 @@
-class AddResponseColumnsToNotifications < ActiveRecord::Migration
+class AddResponseColumnsToNotifications < ActiveRecord::Migration[4.2]
   def change
     add_column :notifications, :response_by, :integer
     add_column :notifications, :response_action, :string

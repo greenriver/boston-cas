@@ -1,4 +1,4 @@
-class AddDeidenifiedClientsTable < ActiveRecord::Migration
+class AddDeidenifiedClientsTable < ActiveRecord::Migration[4.2]
   def change
     create_table :deidentified_clients do |t|
       t.string :client_identifier

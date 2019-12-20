@@ -1,4 +1,4 @@
-class AddContactFieldsToProjectClients < ActiveRecord::Migration
+class AddContactFieldsToProjectClients < ActiveRecord::Migration[4.2]
   def change
     add_column :project_clients, :homephone, :string
     add_column :project_clients, :cellphone, :string

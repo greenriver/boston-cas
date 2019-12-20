@@ -1,4 +1,4 @@
-class CreateDeidentifiedClientsXlsx < ActiveRecord::Migration
+class CreateDeidentifiedClientsXlsx < ActiveRecord::Migration[4.2]
   def change
     create_table :deidentified_clients_xlsxes do |t|
       t.string :filename

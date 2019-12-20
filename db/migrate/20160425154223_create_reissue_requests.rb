@@ -1,4 +1,4 @@
-class CreateReissueRequests < ActiveRecord::Migration
+class CreateReissueRequests < ActiveRecord::Migration[4.2]
   def change
     create_table :reissue_requests do |t|
       t.references :notification, index: true, foreign_key: true

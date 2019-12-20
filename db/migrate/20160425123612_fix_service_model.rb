@@ -1,4 +1,4 @@
-class FixServiceModel < ActiveRecord::Migration
+class FixServiceModel < ActiveRecord::Migration[4.2]
   def change
     remove_column :services, :contact_id, :integer
     remove_column :services, :project_id, :integer

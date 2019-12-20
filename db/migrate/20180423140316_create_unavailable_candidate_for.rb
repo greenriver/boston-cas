@@ -1,4 +1,4 @@
-class CreateUnavailableCandidateFor < ActiveRecord::Migration
+class CreateUnavailableCandidateFor < ActiveRecord::Migration[4.2]
   def change
     create_table :unavailable_as_candidate_fors do |t|
       t.references :client, null: false, index: true

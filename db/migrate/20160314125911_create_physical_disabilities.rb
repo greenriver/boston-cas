@@ -1,4 +1,4 @@
-class CreatePhysicalDisabilities < ActiveRecord::Migration
+class CreatePhysicalDisabilities < ActiveRecord::Migration[4.2]
   def change
     create_table :physical_disabilities do |t|
       t.integer :numeric

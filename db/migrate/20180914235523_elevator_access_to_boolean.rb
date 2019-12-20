@@ -1,4 +1,4 @@
-class ElevatorAccessToBoolean < ActiveRecord::Migration
+class ElevatorAccessToBoolean < ActiveRecord::Migration[4.2]
   def change
     remove_column :project_clients, :requires_elevator_access, :integer, default: 1
     remove_column :clients, :requires_elevator_access, :integer, default: 1

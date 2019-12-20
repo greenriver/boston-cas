@@ -1,4 +1,4 @@
-class AddDeveloperRole < ActiveRecord::Migration
+class AddDeveloperRole < ActiveRecord::Migration[4.2]
   def up 
     unless ActiveRecord::Base.connection.column_exists?(:roles, :can_become_other_users)
       add_column :roles, :can_become_other_users, :boolean, default: false

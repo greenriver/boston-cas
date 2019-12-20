@@ -1,4 +1,4 @@
-class CreateStalledReasons < ActiveRecord::Migration
+class CreateStalledReasons < ActiveRecord::Migration[4.2]
   def change
     create_table :stalled_responses do |t|
       t.boolean :client_engaging, default: true, null: false

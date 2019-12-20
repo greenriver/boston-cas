@@ -1,4 +1,4 @@
-class RemoveUnusedProjectClientAndClientFields < ActiveRecord::Migration
+class RemoveUnusedProjectClientAndClientFields < ActiveRecord::Migration[4.2]
   # These columns were added early on, and are better seen in the warehouse
   def change
     remove_column :clients, :income_information_date, :date

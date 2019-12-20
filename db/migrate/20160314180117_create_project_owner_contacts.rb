@@ -1,4 +1,4 @@
-class CreateProjectOwnerContacts < ActiveRecord::Migration
+class CreateProjectOwnerContacts < ActiveRecord::Migration[4.2]
   def change
     create_table :project_owner_contacts do |t|
       t.references :project_owner, index: true, null: false

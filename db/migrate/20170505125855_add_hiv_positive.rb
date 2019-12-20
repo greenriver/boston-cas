@@ -1,4 +1,4 @@
-class AddHivPositive < ActiveRecord::Migration
+class AddHivPositive < ActiveRecord::Migration[4.2]
   def up
     add_column :project_clients, :hiv_positive, :boolean, default: false, null: false
     add_column :project_clients, :housing_release_status, :string

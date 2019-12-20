@@ -1,4 +1,4 @@
-class CreateVouchers < ActiveRecord::Migration
+class CreateVouchers < ActiveRecord::Migration[4.2]
   def change
     create_table :vouchers do |t|
       t.boolean :available

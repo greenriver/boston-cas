@@ -1,4 +1,4 @@
-class CreateRulesets < ActiveRecord::Migration
+class CreateRulesets < ActiveRecord::Migration[4.2]
   def change
     create_table :rulesets do |t|
       t.string :name, null: false

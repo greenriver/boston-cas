@@ -1,4 +1,4 @@
-class AddUnitIdToOpportunities < ActiveRecord::Migration
+class AddUnitIdToOpportunities < ActiveRecord::Migration[4.2]
   def change
     add_reference :opportunities, :unit, index: true
 

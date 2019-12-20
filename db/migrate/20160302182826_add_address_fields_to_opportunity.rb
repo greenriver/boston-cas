@@ -1,4 +1,4 @@
-class AddAddressFieldsToOpportunity < ActiveRecord::Migration
+class AddAddressFieldsToOpportunity < ActiveRecord::Migration[4.2]
   def change
 
     add_column :opportunities, :address, :string

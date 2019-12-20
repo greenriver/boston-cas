@@ -1,4 +1,4 @@
-class MarkCanceledMatchesAsCanceled < ActiveRecord::Migration
+class MarkCanceledMatchesAsCanceled < ActiveRecord::Migration[4.2]
   def up
     ClientOpportunityMatch.joins(:decisions).
       where(closed: true, closed_reason: 'rejected').

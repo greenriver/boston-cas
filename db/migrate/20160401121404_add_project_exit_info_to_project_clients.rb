@@ -1,4 +1,4 @@
-class AddProjectExitInfoToProjectClients < ActiveRecord::Migration
+class AddProjectExitInfoToProjectClients < ActiveRecord::Migration[4.2]
   def change
     add_column :project_clients, :project_exit_destination, :string
     add_column :project_clients, :project_exit_destination_specific, :string

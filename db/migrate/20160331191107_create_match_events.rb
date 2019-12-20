@@ -1,4 +1,4 @@
-class CreateMatchEvents < ActiveRecord::Migration
+class CreateMatchEvents < ActiveRecord::Migration[4.2]
   def change
     create_table :match_events do |t|
       t.string :type

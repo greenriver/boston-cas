@@ -1,4 +1,4 @@
-class AddVaAndHuesEligibility < ActiveRecord::Migration
+class AddVaAndHuesEligibility < ActiveRecord::Migration[4.2]
   def up
     add_column :project_clients, :va_eligible, :boolean, null: false, default: false
     add_column :clients, :va_eligible, :boolean, null: false, default: false

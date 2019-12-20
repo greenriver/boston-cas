@@ -1,4 +1,4 @@
-class RewriteOpportunities < ActiveRecord::Migration
+class RewriteOpportunities < ActiveRecord::Migration[4.2]
   def change
       rename_column :opportunities, :opportunity_type, :type # voucher or housing
       add_column :opportunities, :geo_code, :string

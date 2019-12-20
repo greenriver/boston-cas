@@ -1,4 +1,4 @@
-class MoveAddressFromUnitToBuilding < ActiveRecord::Migration
+class MoveAddressFromUnitToBuilding < ActiveRecord::Migration[4.2]
   def change
     remove_column :units, :address, :string
     remove_column :units, :city, :string

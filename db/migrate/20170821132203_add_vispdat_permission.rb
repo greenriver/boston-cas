@@ -1,4 +1,4 @@
-class AddVispdatPermission < ActiveRecord::Migration
+class AddVispdatPermission < ActiveRecord::Migration[4.2]
   def up
     Role.ensure_permissions_exist
   end

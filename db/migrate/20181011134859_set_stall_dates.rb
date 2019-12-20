@@ -1,4 +1,4 @@
-class SetStallDates < ActiveRecord::Migration
+class SetStallDates < ActiveRecord::Migration[4.2]
   def up
     # Set the stall_date on any match that is currently on the three stall-able steps
     match_ids = Set.new

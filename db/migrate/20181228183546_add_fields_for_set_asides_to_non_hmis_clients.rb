@@ -1,4 +1,4 @@
-class AddFieldsForSetAsidesToNonHmisClients < ActiveRecord::Migration
+class AddFieldsForSetAsidesToNonHmisClients < ActiveRecord::Migration[4.2]
   def change
     add_column :non_hmis_clients, :income_total_monthly, :float
     add_column :non_hmis_clients, :disabling_condition, :boolean, default: false
