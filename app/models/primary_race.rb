@@ -4,5 +4,5 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class PrimaryRace < ActiveRecord::Base
+class PrimaryRace < ApplicationRecord
 end

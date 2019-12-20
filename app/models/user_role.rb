@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class UserRole < ActiveRecord::Base
+class UserRole < ApplicationRecord
 
   belongs_to :user, inverse_of: :user_roles
   belongs_to :role, inverse_of: :user_roles

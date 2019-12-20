@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class OpportunityProperty < ActiveRecord::Base
+class OpportunityProperty < ApplicationRecord
 
   belongs_to :opportunity
   

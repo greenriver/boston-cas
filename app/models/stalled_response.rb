@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class StalledResponse < ActiveRecord::Base
+class StalledResponse < ApplicationRecord
   include ActionView::Helpers
   include ActionView::Context
 

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class EntityViewPermission < ActiveRecord::Base
+class EntityViewPermission < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :entity, polymorphic: true

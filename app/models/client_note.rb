@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ClientNote < ActiveRecord::Base
+class ClientNote < ApplicationRecord
   belongs_to :client, required: true
   belongs_to :user, required: true
   validates :note, presence: true

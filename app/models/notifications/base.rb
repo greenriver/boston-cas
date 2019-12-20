@@ -5,7 +5,7 @@
 ###
 
 module Notifications
-  class Base < ActiveRecord::Base
+  class Base < ApplicationRecord
     self.table_name = 'notifications'
 
     has_paper_trail

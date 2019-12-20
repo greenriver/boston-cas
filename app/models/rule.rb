@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Rule < ActiveRecord::Base
+class Rule < ApplicationRecord
   self.table_name = 'rules'
   include MatchArchive
 

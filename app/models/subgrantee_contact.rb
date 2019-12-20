@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class SubgranteeContact < ActiveRecord::Base
+class SubgranteeContact < ApplicationRecord
 
   belongs_to :subgrantee, required: true, inverse_of: :subgrantee_contacts
   belongs_to :contact, required: true, inverse_of: :subgrantee_contacts

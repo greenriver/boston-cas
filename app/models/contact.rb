@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Contact < ActiveRecord::Base
+class Contact < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 

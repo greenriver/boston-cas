@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Program < ActiveRecord::Base
+class Program < ApplicationRecord
 
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices

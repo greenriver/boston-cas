@@ -5,7 +5,7 @@
 ###
 
 module MatchPrioritization
-  class Base < ActiveRecord::Base
+  class Base < ApplicationRecord
     self.table_name = :match_prioritizations
 
     has_many :match_route, class_name: MatchRoutes::Base.name, foreign_key: :match_prioritization_id, primary_key: :id

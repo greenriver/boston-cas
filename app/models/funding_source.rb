@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class FundingSource < ActiveRecord::Base
+class FundingSource < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include InheritsRequirementsFromServicesOnly

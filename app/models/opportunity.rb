@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Opportunity < ActiveRecord::Base
+class Opportunity < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 

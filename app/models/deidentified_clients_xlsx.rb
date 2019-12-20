@@ -1,4 +1,4 @@
-class DeidentifiedClientsXlsx < ActiveRecord::Base
+class DeidentifiedClientsXlsx < ApplicationRecord
 
   mount_uploader :file, DeidentifiedClientsXlsxFileUploader
   attr_reader :added, :touched, :problems, :clients

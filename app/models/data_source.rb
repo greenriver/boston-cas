@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class DataSource < ActiveRecord::Base
+class DataSource < ApplicationRecord
 
   belongs_to :building
   has_many :building_clients

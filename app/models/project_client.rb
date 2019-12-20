@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ProjectClient < ActiveRecord::Base
+class ProjectClient < ApplicationRecord
 
   has_one :client, required: false, primary_key: :client_id, foreign_key: :id
 

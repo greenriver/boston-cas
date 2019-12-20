@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Config < ActiveRecord::Base
+class Config < ApplicationRecord
   after_save :invalidate_cache
   before_create :set_defaults
   serialize :non_hmis_fields, Array

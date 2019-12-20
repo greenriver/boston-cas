@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class BaseJob < ActiveJob::Base
+class BaseJob < ApplicationJob
   STARTING_PATH = File.realpath(FileUtils.pwd)
   include NotifierConfig
 

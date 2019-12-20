@@ -34,7 +34,7 @@ class MatchListBaseController < ApplicationController
       column = 'clients.vispdat_priority_score'
     end
     sort = "#{column} #{sort_direction}"
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
       sort = sort + ' NULLS LAST'
     end
     

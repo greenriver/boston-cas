@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ProjectProgram < ActiveRecord::Base
+class ProjectProgram < ApplicationRecord
 
   belongs_to :building, required: false
 

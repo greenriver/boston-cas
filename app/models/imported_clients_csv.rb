@@ -1,4 +1,4 @@
-class ImportedClientsCsv < ActiveRecord::Base
+class ImportedClientsCsv < ApplicationRecord
 
   mount_uploader :file, ImportedClientsCsvFileUploader
 

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class BuildingContact < ActiveRecord::Base
+class BuildingContact < ApplicationRecord
 
   belongs_to :building, required: true, inverse_of: :building_contacts
   belongs_to :contact, required: true, inverse_of: :building_contacts

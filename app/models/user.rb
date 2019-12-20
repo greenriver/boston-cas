@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include HasRequirements
   include Rails.application.routes.url_helpers
   has_paper_trail

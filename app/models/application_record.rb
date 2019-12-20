@@ -4,6 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class VeteranStatus < ApplicationRecord
-  has_many :clients, primary_key: :numeric, foreign_key: :veteran_status_id
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
 end

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Client < ActiveRecord::Base
+class Client < ApplicationRecord
   before_create :assign_tie_breaker
 
   include SubjectForMatches
@@ -256,7 +256,7 @@ class Client < ActiveRecord::Base
     update = Arel::UpdateManager.new(c_t.engine)
     update.table(c_t)
     update.set([[c_t[:tie_breaker], Arel.sql('random()')]]).where(c_t[:tie_breaker].eq(nil))
-    result = ActiveRecord::Base.connection.execute(update.to_sql)
+    result = ApplicationRecord.connection.execute(update.to_sql)
     log "Updated #{result.cmd_tuples} clients with missing tie_breakers"
   end
 

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ReissueNotification < ActiveRecord::Base
+class ReissueNotification < ApplicationRecord
   self.table_name = 'reissue_requests'
   belongs_to :notification, class_name: 'Notifications::Base'
 

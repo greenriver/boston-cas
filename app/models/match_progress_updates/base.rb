@@ -5,7 +5,7 @@
 ###
 
 module MatchProgressUpdates
-  class Base < ::ActiveRecord::Base
+  class Base < ::ApplicationRecord
     self.table_name = 'match_progress_updates'
     has_paper_trail
     acts_as_paranoid

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ClientOpportunityMatch < ActiveRecord::Base
+class ClientOpportunityMatch < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include ClientOpportunityMatches::HasDecisions

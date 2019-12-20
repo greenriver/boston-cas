@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class StalledMatchRequest < ::ActiveRecord::Base
+class StalledMatchRequest < ::ApplicationRecord
   belongs_to :match,
       class_name: ClientOpportunityMatch.name,
       inverse_of: :stalled_match_requests

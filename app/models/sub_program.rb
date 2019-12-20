@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class SubProgram < ActiveRecord::Base
+class SubProgram < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
   include Matching::HasOrInheritsRequirements

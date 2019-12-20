@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ClientContact < ActiveRecord::Base
+class ClientContact < ApplicationRecord
 
   belongs_to :client, required: true, inverse_of: :client_contacts
   belongs_to :contact, required: true, inverse_of: :client_contacts

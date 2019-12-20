@@ -104,7 +104,7 @@ class ClientsController < ApplicationController
       end.first[:order]
     end
 
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
       sort_string += ' NULLS LAST'
     end
     return sort_string

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ProgramContact < ActiveRecord::Base
+class ProgramContact < ApplicationRecord
   belongs_to :program, required: :true, inverse_of: :program_contacts
   belongs_to :contact, required: :true, inverse_of: :program_contacts
 end

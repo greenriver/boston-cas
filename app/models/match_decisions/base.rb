@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions
-  class Base < ActiveRecord::Base
+  class Base < ApplicationRecord
     # MatchDecision objects represent individual decision points
     # in the flow map for a given match.  e.g. DND initial approval,
     # or shelter agency approval

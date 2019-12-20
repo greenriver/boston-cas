@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Voucher < ActiveRecord::Base
+class Voucher < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include MatchArchive

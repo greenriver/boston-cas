@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class FundingSourceService < ActiveRecord::Base
+class FundingSourceService < ApplicationRecord
   belongs_to :funding_source, required: :true, inverse_of: :funding_source_services
   belongs_to :service, required: :true, inverse_of: :funding_source_services
 end

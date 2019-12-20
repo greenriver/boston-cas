@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisionReasons
-  class Base < ActiveRecord::Base
+  class Base < ApplicationRecord
     # Pick-list reasons associated with a particular match decision
     # Reasons are currently split up by actor type
     # + special other option and shelter agency

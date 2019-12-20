@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class NonHmisClient < ActiveRecord::Base
+class NonHmisClient < ApplicationRecord
   has_one :project_client, -> do
     where(data_source_id: DataSource.non_hmis.select(:id))
   end, foreign_key: :id_in_data_source, required: false

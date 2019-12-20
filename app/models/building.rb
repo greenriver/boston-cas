@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Building < ActiveRecord::Base
+class Building < ApplicationRecord
   include InheritsRequirementsFromServicesOnly
   include HasRequirements
   include ManagesServices

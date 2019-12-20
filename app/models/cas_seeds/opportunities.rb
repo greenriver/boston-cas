@@ -8,7 +8,7 @@ module CasSeeds
   class Opportunities
     
     def run!
-      ActiveRecord::Base.cache do
+      ApplicationRecord.cache do
         # flag some vouchers as available
         voucher_ids = Voucher.pluck(:id).shuffle[0..5]
         vouchers = Voucher.where(id: voucher_ids)

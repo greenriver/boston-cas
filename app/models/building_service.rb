@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class BuildingService < ActiveRecord::Base
+class BuildingService < ApplicationRecord
   belongs_to :building, required: :true, inverse_of: :building_services
   belongs_to :service, required: :true, inverse_of: :building_services
 end

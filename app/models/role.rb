@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   has_many :user_roles, dependent: :destroy, inverse_of: :role
   has_many :users, through: :user_roles
   validates :name, presence: true
@@ -113,7 +113,7 @@ class Role < ActiveRecord::Base
 
   def self.ensure_permissions_exist
     Role.permissions.each do |permission|
-      unless ActiveRecord::Base.connection.column_exists?(:roles, permission)
+      unless ApplicationRecord.connection.column_exists?(:roles, permission)
         ActiveRecord::Migration.add_column :roles, permission, :boolean, default: false
       end
     end

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Agency < ActiveRecord::Base
+class Agency < ApplicationRecord
   has_many :users, dependent: :nullify
 
   scope :text_search, -> (text) do

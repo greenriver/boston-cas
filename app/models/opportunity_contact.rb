@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class OpportunityContact < ActiveRecord::Base
+class OpportunityContact < ApplicationRecord
 
   belongs_to :opportunity, required: true, inverse_of: :opportunity_contacts
   belongs_to :contact, required: true, inverse_of: :opportunity_contacts

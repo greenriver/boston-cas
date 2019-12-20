@@ -5,7 +5,7 @@
 ###
 
 module MatchEvents
-  class Base < ::ActiveRecord::Base
+  class Base < ::ApplicationRecord
     # match events represent anything that happens in the lifecyle of a match
     # e.g.
     # match generation by the CAS

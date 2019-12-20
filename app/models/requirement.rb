@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Requirement < ActiveRecord::Base
+class Requirement < ApplicationRecord
   include MatchArchive
   belongs_to :rule
   belongs_to :requirer, polymorphic: true

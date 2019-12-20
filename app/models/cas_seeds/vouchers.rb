@@ -16,7 +16,7 @@ module CasSeeds
       count = 0
       voucher_count = 0
       Rails.logger.info "Funding Sources in CSV may not match exactly, make sure you update them prior to import"
-      ActiveRecord::Base.transaction do
+      ApplicationRecord.transaction do
         csv.each do |row|
           unless row["Program Name"].nil?
 
