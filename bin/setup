@@ -18,6 +18,9 @@ chdir APP_ROOT do
   system! 'gem install bundler --conservative'
   system('bundle check') || system!('bundle install')
 
+  # Install JavaScript dependencies if using Yarn
+  # system('bin/yarn')
+
   ymls = [
     "secrets.yml",
     "letsencrypt_plugin.yml"
@@ -37,7 +40,6 @@ chdir APP_ROOT do
     puts "\n== Creating config/letsencrypt_plugin.yml =="
     system "cp config/letsencrypt_plugin.yml.sample config/letsencrypt_plugin.yml"
   end
-
   # puts "\n== Copying sample files =="
   # unless File.exist?('config/database.yml')
   #   cp 'config/database.yml.sample', 'config/database.yml'
