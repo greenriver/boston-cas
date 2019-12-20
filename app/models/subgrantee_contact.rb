@@ -6,8 +6,8 @@
 
 class SubgranteeContact < ApplicationRecord
 
-  belongs_to :subgrantee, required: true, inverse_of: :subgrantee_contacts
-  belongs_to :contact, required: true, inverse_of: :subgrantee_contacts
+  belongs_to :subgrantee, inverse_of: :subgrantee_contacts
+  belongs_to :contact, inverse_of: :subgrantee_contacts
 
   include ContactJoinModel
 

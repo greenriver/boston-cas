@@ -5,6 +5,6 @@
 ###
 
 class BuildingService < ApplicationRecord
-  belongs_to :building, required: :true, inverse_of: :building_services
-  belongs_to :service, required: :true, inverse_of: :building_services
+  belongs_to :building, inverse_of: :building_services
+  belongs_to :service, inverse_of: :building_services
 end

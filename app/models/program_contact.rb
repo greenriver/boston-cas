@@ -5,6 +5,6 @@
 ###
 
 class ProgramContact < ApplicationRecord
-  belongs_to :program, required: :true, inverse_of: :program_contacts
-  belongs_to :contact, required: :true, inverse_of: :program_contacts
+  belongs_to :program, inverse_of: :program_contacts
+  belongs_to :contact, inverse_of: :program_contacts
 end

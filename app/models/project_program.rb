@@ -6,6 +6,6 @@
 
 class ProjectProgram < ApplicationRecord
 
-  belongs_to :building, required: false
+  belongs_to :building, optional: true
 
 end

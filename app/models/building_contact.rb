@@ -6,8 +6,8 @@
 
 class BuildingContact < ApplicationRecord
 
-  belongs_to :building, required: true, inverse_of: :building_contacts
-  belongs_to :contact, required: true, inverse_of: :building_contacts
+  belongs_to :building, inverse_of: :building_contacts
+  belongs_to :contact, inverse_of: :building_contacts
 
   include ContactJoinModel
 

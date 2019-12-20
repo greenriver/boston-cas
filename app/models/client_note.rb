@@ -5,8 +5,8 @@
 ###
 
 class ClientNote < ApplicationRecord
-  belongs_to :client, required: true
-  belongs_to :user, required: true
+  belongs_to :client
+  belongs_to :user
   validates :note, presence: true
 
   acts_as_paranoid

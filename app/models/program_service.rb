@@ -5,6 +5,6 @@
 ###
 
 class ProgramService < ApplicationRecord
-  belongs_to :program, required: :true, inverse_of: :program_services
-  belongs_to :service, required: :true, inverse_of: :program_services
+  belongs_to :program, inverse_of: :program_services
+  belongs_to :service, inverse_of: :program_services
 end

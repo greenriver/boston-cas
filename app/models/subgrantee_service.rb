@@ -5,6 +5,6 @@
 ###
 
 class SubgranteeService < ApplicationRecord
-  belongs_to :subgrantee, required: :true, inverse_of: :subgrantee_services
-  belongs_to :service, required: :true, inverse_of: :subgrantee_services
+  belongs_to :subgrantee, inverse_of: :subgrantee_services
+  belongs_to :service, inverse_of: :subgrantee_services
 end

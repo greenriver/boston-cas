@@ -6,8 +6,8 @@
 
 class OpportunityContact < ApplicationRecord
 
-  belongs_to :opportunity, required: true, inverse_of: :opportunity_contacts
-  belongs_to :contact, required: true, inverse_of: :opportunity_contacts
+  belongs_to :opportunity, inverse_of: :opportunity_contacts
+  belongs_to :contact, inverse_of: :opportunity_contacts
 
   include ContactJoinModel
 

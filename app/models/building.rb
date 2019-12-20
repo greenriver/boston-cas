@@ -14,7 +14,7 @@ class Building < ApplicationRecord
 
   has_paper_trail
 
-  belongs_to :subgrantee, required: false
+  belongs_to :subgrantee, optional: true
   belongs_to :data_source
   has_many :building_clients
   has_many :building_contacts, dependent: :destroy, inverse_of: :building

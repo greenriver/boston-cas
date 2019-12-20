@@ -8,7 +8,7 @@ class Contact < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
-  belongs_to :user, required: false
+  belongs_to :user, optional: true
   delegate :can_view_all_clients?, :can_edit_match_contacts?, :can_view_all_matches?, :can_reject_matches?, :can_approve_matches?, :can_reject_matches?, :can_act_on_behalf_of_match_contacts?, to: :user, allow_nil: true, prefix: true
 
   has_many :client_opportunity_matches
