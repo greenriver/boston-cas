@@ -14,9 +14,10 @@ class SubProgramsController < ApplicationController
 
   def new
     program = Program.find(params[:program_id])
-    @subprogram = SubProgram.new({program_type: 'Project-Based', program: program})
-
+    program_type = program.match_route.default_program_type
+    @subprogram = SubProgram.new({program_type: program_type, program: program})
   end
+
   def edit
     @available_file_tags = FileTag.available_tags
   end
