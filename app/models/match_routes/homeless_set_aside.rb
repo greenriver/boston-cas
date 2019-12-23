@@ -44,5 +44,9 @@ module MatchRoutes
     def initial_contacts_for_match
       :housing_subsidy_admin_contacts
     end
+
+    def default_program_type
+      'Set-Aside'
+    end
   end
 end
