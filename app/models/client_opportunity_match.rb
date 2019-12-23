@@ -89,7 +89,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
   scope :stalled, -> do
-    active.where(arel_table[:stall_date].lteq(Date.today))
+    active.where(arel_table[:stall_date].lteq(Date.current))
   end
   scope :stalled_notifications_unsent, -> do
     stalled.where(stall_contacts_notified: nil)
@@ -337,6 +337,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
     return nil if closed?
     # FIXME, should look for next decision on route based on route #match_steps
     @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
+  end
+
+  def clear_current_decision_cache!
+    @current_decision = nil
   end
 
   def add_default_contacts!

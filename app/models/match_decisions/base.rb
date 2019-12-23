@@ -221,6 +221,7 @@ module MatchDecisions
     end
 
     def run_status_callback! **dependencies
+      match.clear_current_decision_cache!
       status_callbacks.new(self, dependencies).public_send status
     end
 
