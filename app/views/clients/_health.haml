@@ -50,3 +50,6 @@
           = "Verified on #{disability_verified_on}"
         - else
           Not Verified
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label Pregnant
+      %span.c-detailed-list__value= boolean_icon @client.pregnancy_status
