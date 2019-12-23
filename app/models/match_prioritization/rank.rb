@@ -13,7 +13,9 @@ module MatchPrioritization
 
     def self.prioritization_for_clients(scope, match_route:)
       tag_id = match_route.tag_id
-      scope.where("tags ->> '#{tag_id}' is not null").order("tags->>'#{tag_id}' asc NULLS LAST")
+      scope.
+        where(Arel.sql("tags ->> '#{tag_id}' IS NOT NULL")).
+        order(Arel.sql("tags ->>'#{tag_id}' ASC NULLS LAST"))
     end
 
     def self.client_prioritization_value_method
