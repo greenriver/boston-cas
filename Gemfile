@@ -115,7 +115,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
   gem 'foreman'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 4.0.0.beta3'
   gem 'factory_bot_rails'
   gem 'guard-rspec', require: false
   gem 'timecop'
