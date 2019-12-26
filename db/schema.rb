@@ -10,1297 +10,1299 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191216204509) do
+ActiveRecord::Schema.define(version: 2019_12_23_145558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "agencies", force: :cascade do |t|
-    t.string   "name"
+  create_table "agencies", id: :serial, force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "building_contacts", force: :cascade do |t|
-    t.integer  "building_id", null: false
-    t.integer  "contact_id",  null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  create_table "building_contacts", id: :serial, force: :cascade do |t|
+    t.integer "building_id", null: false
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["building_id"], name: "index_building_contacts_on_building_id", using: :btree
-    t.index ["contact_id"], name: "index_building_contacts_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_building_contacts_on_deleted_at", using: :btree
+    t.index ["building_id"], name: "index_building_contacts_on_building_id"
+    t.index ["contact_id"], name: "index_building_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_building_contacts_on_deleted_at"
   end
 
-  create_table "building_services", force: :cascade do |t|
-    t.integer  "building_id"
-    t.integer  "service_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  create_table "building_services", id: :serial, force: :cascade do |t|
+    t.integer "building_id"
+    t.integer "service_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["building_id"], name: "index_building_services_on_building_id", using: :btree
-    t.index ["deleted_at"], name: "index_building_services_on_deleted_at", using: :btree
-    t.index ["service_id"], name: "index_building_services_on_service_id", using: :btree
+    t.index ["building_id"], name: "index_building_services_on_building_id"
+    t.index ["deleted_at"], name: "index_building_services_on_deleted_at"
+    t.index ["service_id"], name: "index_building_services_on_service_id"
   end
 
-  create_table "buildings", force: :cascade do |t|
-    t.string   "name"
-    t.string   "building_type"
-    t.integer  "subgrantee_id"
-    t.integer  "id_in_data_source"
-    t.integer  "federal_program_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip_code"
-    t.string   "geo_code"
-    t.index ["id_in_data_source"], name: "index_buildings_on_id_in_data_source", using: :btree
-    t.index ["subgrantee_id"], name: "index_buildings_on_subgrantee_id", using: :btree
+  create_table "buildings", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "building_type"
+    t.integer "subgrantee_id"
+    t.integer "id_in_data_source"
+    t.integer "federal_program_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
+    t.string "address"
+    t.string "city"
+    t.string "state"
+    t.string "zip_code"
+    t.string "geo_code"
+    t.index ["id_in_data_source"], name: "index_buildings_on_id_in_data_source"
+    t.index ["subgrantee_id"], name: "index_buildings_on_subgrantee_id"
   end
 
-  create_table "client_contacts", force: :cascade do |t|
-    t.integer  "client_id",                             null: false
-    t.integer  "contact_id",                            null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+  create_table "client_contacts", id: :serial, force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.boolean  "shelter_agency",        default: false, null: false
-    t.boolean  "regular",               default: false, null: false
-    t.boolean  "dnd_staff",             default: false, null: false
-    t.boolean  "housing_subsidy_admin", default: false, null: false
-    t.boolean  "ssp",                   default: false, null: false
-    t.boolean  "hsp",                   default: false, null: false
-    t.boolean  "do",                    default: false, null: false
-    t.index ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
-    t.index ["contact_id"], name: "index_client_contacts_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_client_contacts_on_deleted_at", using: :btree
+    t.boolean "shelter_agency", default: false, null: false
+    t.boolean "regular", default: false, null: false
+    t.boolean "dnd_staff", default: false, null: false
+    t.boolean "housing_subsidy_admin", default: false, null: false
+    t.boolean "ssp", default: false, null: false
+    t.boolean "hsp", default: false, null: false
+    t.boolean "do", default: false, null: false
+    t.index ["client_id"], name: "index_client_contacts_on_client_id"
+    t.index ["contact_id"], name: "index_client_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_client_contacts_on_deleted_at"
   end
 
-  create_table "client_notes", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "client_id",  null: false
-    t.string   "note"
+  create_table "client_notes", id: :serial, force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "client_id", null: false
+    t.string "note"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "client_opportunity_match_contacts", force: :cascade do |t|
-    t.integer  "match_id",                              null: false
-    t.integer  "contact_id",                            null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+  create_table "client_opportunity_match_contacts", id: :serial, force: :cascade do |t|
+    t.integer "match_id", null: false
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.boolean  "dnd_staff",             default: false, null: false
-    t.boolean  "housing_subsidy_admin", default: false, null: false
-    t.boolean  "client",                default: false, null: false
-    t.boolean  "housing_search_worker", default: false, null: false
-    t.boolean  "shelter_agency",        default: false, null: false
-    t.boolean  "ssp",                   default: false, null: false
-    t.boolean  "hsp",                   default: false, null: false
-    t.boolean  "do",                    default: false, null: false
-    t.index ["contact_id"], name: "index_client_opportunity_match_contacts_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_client_opportunity_match_contacts_on_deleted_at", using: :btree
-    t.index ["match_id"], name: "index_client_opportunity_match_contacts_on_match_id", using: :btree
+    t.boolean "dnd_staff", default: false, null: false
+    t.boolean "housing_subsidy_admin", default: false, null: false
+    t.boolean "client", default: false, null: false
+    t.boolean "housing_search_worker", default: false, null: false
+    t.boolean "shelter_agency", default: false, null: false
+    t.boolean "ssp", default: false, null: false
+    t.boolean "hsp", default: false, null: false
+    t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_client_opportunity_match_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_client_opportunity_match_contacts_on_deleted_at"
+    t.index ["match_id"], name: "index_client_opportunity_match_contacts_on_match_id"
   end
 
-  create_table "client_opportunity_matches", force: :cascade do |t|
-    t.integer  "score"
-    t.integer  "client_id",                                null: false
-    t.integer  "opportunity_id",                           null: false
-    t.integer  "contact_id"
+  create_table "client_opportunity_matches", id: :serial, force: :cascade do |t|
+    t.integer "score"
+    t.integer "client_id", null: false
+    t.integer "opportunity_id", null: false
+    t.integer "contact_id"
     t.datetime "proposed_at"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.boolean  "selected"
-    t.boolean  "active",                   default: false, null: false
-    t.boolean  "closed",                   default: false, null: false
-    t.string   "closed_reason"
-    t.json     "universe_state"
-    t.integer  "custom_expiration_length"
-    t.date     "shelter_expiration"
-    t.date     "stall_date"
+    t.boolean "selected"
+    t.boolean "active", default: false, null: false
+    t.boolean "closed", default: false, null: false
+    t.string "closed_reason"
+    t.json "universe_state"
+    t.integer "custom_expiration_length"
+    t.date "shelter_expiration"
+    t.date "stall_date"
     t.datetime "stall_contacts_notified"
     t.datetime "dnd_notified"
-    t.integer  "match_route_id"
-    t.index ["active"], name: "index_client_opportunity_matches_on_active", using: :btree
-    t.index ["client_id"], name: "index_client_opportunity_matches_on_client_id", using: :btree
-    t.index ["closed"], name: "index_client_opportunity_matches_on_closed", using: :btree
-    t.index ["closed_reason"], name: "index_client_opportunity_matches_on_closed_reason", using: :btree
-    t.index ["contact_id"], name: "index_client_opportunity_matches_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_client_opportunity_matches_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
-    t.index ["opportunity_id"], name: "index_client_opportunity_matches_on_opportunity_id", using: :btree
+    t.integer "match_route_id"
+    t.index ["active"], name: "index_client_opportunity_matches_on_active"
+    t.index ["client_id"], name: "index_client_opportunity_matches_on_client_id"
+    t.index ["closed"], name: "index_client_opportunity_matches_on_closed"
+    t.index ["closed_reason"], name: "index_client_opportunity_matches_on_closed_reason"
+    t.index ["contact_id"], name: "index_client_opportunity_matches_on_contact_id"
+    t.index ["deleted_at"], name: "index_client_opportunity_matches_on_deleted_at", where: "(deleted_at IS NULL)"
+    t.index ["opportunity_id"], name: "index_client_opportunity_matches_on_opportunity_id"
   end
 
-  create_table "clients", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "middle_name"
-    t.string   "last_name"
-    t.string   "name_suffix"
-    t.string   "name_quality",                                limit: 4
-    t.string   "ssn",                                         limit: 9
-    t.date     "date_of_birth"
-    t.string   "gender_other",                                limit: 50
-    t.boolean  "veteran",                                                default: false
-    t.boolean  "chronic_homeless",                                       default: false
-    t.datetime "created_at",                                                             null: false
-    t.datetime "updated_at",                                                             null: false
+  create_table "clients", id: :serial, force: :cascade do |t|
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.string "name_suffix"
+    t.string "name_quality", limit: 4
+    t.string "ssn", limit: 9
+    t.date "date_of_birth"
+    t.string "gender_other", limit: 50
+    t.boolean "veteran", default: false
+    t.boolean "chronic_homeless", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.integer  "merged_into"
-    t.integer  "split_from"
-    t.integer  "ssn_quality"
-    t.integer  "date_of_birth_quality"
-    t.integer  "race_id"
-    t.integer  "ethnicity_id"
-    t.integer  "gender_id"
-    t.integer  "veteran_status_id"
-    t.integer  "developmental_disability"
-    t.integer  "domestic_violence"
-    t.date     "calculated_first_homeless_night"
-    t.boolean  "available",                                              default: true,  null: false
-    t.string   "homephone"
-    t.string   "cellphone"
-    t.string   "workphone"
-    t.string   "pager"
-    t.string   "email"
-    t.boolean  "hiv_aids",                                               default: false
-    t.boolean  "chronic_health_problem",                                 default: false
-    t.boolean  "mental_health_problem",                                  default: false
-    t.boolean  "substance_abuse_problem",                                default: false
-    t.boolean  "physical_disability",                                    default: false
-    t.boolean  "disabling_condition",                                    default: false
+    t.integer "merged_into"
+    t.integer "split_from"
+    t.integer "ssn_quality"
+    t.integer "date_of_birth_quality"
+    t.integer "race_id"
+    t.integer "ethnicity_id"
+    t.integer "gender_id"
+    t.integer "veteran_status_id"
+    t.integer "developmental_disability"
+    t.integer "domestic_violence"
+    t.date "calculated_first_homeless_night"
+    t.boolean "available", default: true, null: false
+    t.string "homephone"
+    t.string "cellphone"
+    t.string "workphone"
+    t.string "pager"
+    t.string "email"
+    t.boolean "hiv_aids", default: false
+    t.boolean "chronic_health_problem", default: false
+    t.boolean "mental_health_problem", default: false
+    t.boolean "substance_abuse_problem", default: false
+    t.boolean "physical_disability", default: false
+    t.boolean "disabling_condition", default: false
     t.datetime "release_of_information"
-    t.date     "prevent_matching_until"
-    t.boolean  "dmh_eligible",                                           default: false, null: false
-    t.boolean  "va_eligible",                                            default: false, null: false
-    t.boolean  "hues_eligible",                                          default: false, null: false
+    t.date "prevent_matching_until"
+    t.boolean "dmh_eligible", default: false, null: false
+    t.boolean "va_eligible", default: false, null: false
+    t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
     t.datetime "housing_assistance_network_released_on"
-    t.boolean  "sync_with_cas",                                          default: false, null: false
-    t.float    "income_total_monthly"
+    t.boolean "sync_with_cas", default: false, null: false
+    t.float "income_total_monthly"
     t.datetime "income_total_monthly_last_collected"
-    t.boolean  "confidential",                                           default: false, null: false
-    t.boolean  "hiv_positive",                                           default: false, null: false
-    t.string   "housing_release_status"
-    t.integer  "vispdat_score"
-    t.boolean  "ineligible_immigrant",                                   default: false, null: false
-    t.boolean  "family_member",                                          default: false, null: false
-    t.boolean  "child_in_household",                                     default: false, null: false
-    t.boolean  "us_citizen",                                             default: false, null: false
-    t.boolean  "asylee",                                                 default: false, null: false
-    t.boolean  "lifetime_sex_offender",                                  default: false, null: false
-    t.boolean  "meth_production_conviction",                             default: false, null: false
-    t.integer  "days_homeless"
-    t.boolean  "ha_eligible",                                            default: false, null: false
-    t.integer  "days_homeless_in_last_three_years"
-    t.integer  "vispdat_priority_score",                                 default: 0
-    t.integer  "vispdat_length_homeless_in_days",                        default: 0,     null: false
-    t.boolean  "cspech_eligible",                                        default: false
-    t.date     "calculated_last_homeless_night"
-    t.string   "alternate_names"
-    t.boolean  "congregate_housing",                                     default: false
-    t.boolean  "sober_housing",                                          default: false
-    t.jsonb    "enrolled_project_ids"
-    t.jsonb    "active_cohort_ids"
-    t.string   "client_identifier"
-    t.integer  "assessment_score",                                       default: 0,     null: false
-    t.boolean  "ssvf_eligible",                                          default: false, null: false
-    t.boolean  "rrh_desired",                                            default: false, null: false
-    t.boolean  "youth_rrh_desired",                                      default: false, null: false
-    t.string   "rrh_assessment_contact_info"
+    t.boolean "confidential", default: false, null: false
+    t.boolean "hiv_positive", default: false, null: false
+    t.string "housing_release_status"
+    t.integer "vispdat_score"
+    t.boolean "ineligible_immigrant", default: false, null: false
+    t.boolean "family_member", default: false, null: false
+    t.boolean "child_in_household", default: false, null: false
+    t.boolean "us_citizen", default: false, null: false
+    t.boolean "asylee", default: false, null: false
+    t.boolean "lifetime_sex_offender", default: false, null: false
+    t.boolean "meth_production_conviction", default: false, null: false
+    t.integer "days_homeless"
+    t.boolean "ha_eligible", default: false, null: false
+    t.integer "days_homeless_in_last_three_years"
+    t.integer "vispdat_priority_score", default: 0
+    t.integer "vispdat_length_homeless_in_days", default: 0, null: false
+    t.boolean "cspech_eligible", default: false
+    t.date "calculated_last_homeless_night"
+    t.string "alternate_names"
+    t.boolean "congregate_housing", default: false
+    t.boolean "sober_housing", default: false
+    t.jsonb "enrolled_project_ids"
+    t.jsonb "active_cohort_ids"
+    t.string "client_identifier"
+    t.integer "assessment_score", default: 0, null: false
+    t.boolean "ssvf_eligible", default: false, null: false
+    t.boolean "rrh_desired", default: false, null: false
+    t.boolean "youth_rrh_desired", default: false, null: false
+    t.string "rrh_assessment_contact_info"
     t.datetime "rrh_assessment_collected_at"
-    t.boolean  "enrolled_in_th",                                         default: false, null: false
-    t.boolean  "enrolled_in_es",                                         default: false, null: false
-    t.boolean  "enrolled_in_sh",                                         default: false, null: false
-    t.boolean  "enrolled_in_so",                                         default: false, null: false
-    t.integer  "days_literally_homeless_in_last_three_years",            default: 0
-    t.boolean  "requires_wheelchair_accessibility",                      default: false
-    t.integer  "required_number_of_bedrooms",                            default: 1
-    t.integer  "required_minimum_occupancy",                             default: 1
-    t.boolean  "requires_elevator_access",                               default: false
-    t.jsonb    "neighborhood_interests",                                 default: [],    null: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
-    t.float    "tie_breaker"
-    t.boolean  "interested_in_set_asides",                               default: false
-    t.jsonb    "tags"
-    t.string   "case_manager_contact_info"
-    t.boolean  "vash_eligible"
-    t.index ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
+    t.boolean "enrolled_in_th", default: false, null: false
+    t.boolean "enrolled_in_es", default: false, null: false
+    t.boolean "enrolled_in_sh", default: false, null: false
+    t.boolean "enrolled_in_so", default: false, null: false
+    t.integer "days_literally_homeless_in_last_three_years", default: 0
+    t.boolean "requires_wheelchair_accessibility", default: false
+    t.integer "required_number_of_bedrooms", default: 1
+    t.integer "required_minimum_occupancy", default: 1
+    t.boolean "requires_elevator_access", default: false
+    t.jsonb "neighborhood_interests", default: [], null: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
+    t.float "tie_breaker"
+    t.boolean "interested_in_set_asides", default: false
+    t.jsonb "tags"
+    t.string "case_manager_contact_info"
+    t.boolean "vash_eligible"
+    t.boolean "pregnancy_status", default: false
+    t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
-  create_table "configs", force: :cascade do |t|
-    t.integer "dnd_interval",                                                            null: false
-    t.string  "warehouse_url",                                                           null: false
-    t.boolean "require_cori_release",           default: true
-    t.integer "ami",                            default: 66600,                          null: false
-    t.string  "vispdat_prioritization_scheme",  default: "length_of_time"
-    t.text    "non_hmis_fields"
-    t.integer "unavailable_for_length",         default: 0
-    t.string  "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
-    t.string  "identified_client_assessment",   default: "IdentifiedClientAssessment"
+  create_table "configs", id: :serial, force: :cascade do |t|
+    t.integer "dnd_interval", null: false
+    t.string "warehouse_url", null: false
+    t.boolean "require_cori_release", default: true
+    t.integer "ami", default: 66600, null: false
+    t.string "vispdat_prioritization_scheme", default: "length_of_time"
+    t.text "non_hmis_fields"
+    t.integer "unavailable_for_length", default: 0
+    t.string "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
+    t.string "identified_client_assessment", default: "IdentifiedClientAssessment"
   end
 
-  create_table "contacts", force: :cascade do |t|
-    t.string   "email"
-    t.string   "phone"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.integer  "user_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+  create_table "contacts", id: :serial, force: :cascade do |t|
+    t.string "email"
+    t.string "phone"
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.string   "role"
-    t.integer  "id_in_data_source"
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
-    t.integer  "role_id"
-    t.string   "role_in_organization"
-    t.string   "cell_phone"
-    t.string   "middle_name"
-    t.index ["deleted_at"], name: "index_contacts_on_deleted_at", using: :btree
-    t.index ["user_id"], name: "index_contacts_on_user_id", using: :btree
+    t.string "role"
+    t.integer "id_in_data_source"
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
+    t.integer "role_id"
+    t.string "role_in_organization"
+    t.string "cell_phone"
+    t.string "middle_name"
+    t.index ["deleted_at"], name: "index_contacts_on_deleted_at"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
-  create_table "data_sources", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "db_identifier"
-    t.string   "client_url"
+  create_table "data_sources", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "db_identifier"
+    t.string "client_url"
   end
 
-  create_table "date_of_birth_quality_codes", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "date_of_birth_quality_codes", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "deidentified_clients_xlsxes", force: :cascade do |t|
-    t.string   "filename"
-    t.integer  "user_id"
-    t.string   "content_type"
-    t.binary   "content"
+  create_table "deidentified_clients_xlsxes", id: :serial, force: :cascade do |t|
+    t.string "filename"
+    t.integer "user_id"
+    t.string "content_type"
+    t.binary "content"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
+  create_table "delayed_jobs", id: :serial, force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
+    t.string "locked_by"
+    t.string "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "disabling_conditions", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "disabling_conditions", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "discharge_statuses", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "discharge_statuses", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "domestic_violence_survivors", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "domestic_violence_survivors", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "entity_view_permissions", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "entity_id",   null: false
-    t.string   "entity_type", null: false
-    t.boolean  "editable"
+  create_table "entity_view_permissions", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "entity_id", null: false
+    t.string "entity_type", null: false
+    t.boolean "editable"
     t.datetime "deleted_at"
-    t.index ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id", using: :btree
-    t.index ["user_id"], name: "index_entity_view_permissions_on_user_id", using: :btree
+    t.index ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id"
+    t.index ["user_id"], name: "index_entity_view_permissions_on_user_id"
   end
 
-  create_table "ethnicities", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "ethnicities", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "file_tags", force: :cascade do |t|
+  create_table "file_tags", id: :serial, force: :cascade do |t|
     t.integer "sub_program_id", null: false
-    t.string  "name"
+    t.string "name"
     t.integer "tag_id"
   end
 
-  create_table "funding_source_services", force: :cascade do |t|
-    t.integer  "funding_source_id"
-    t.integer  "service_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+  create_table "funding_source_services", id: :serial, force: :cascade do |t|
+    t.integer "funding_source_id"
+    t.integer "service_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_funding_source_services_on_deleted_at", using: :btree
-    t.index ["funding_source_id"], name: "index_funding_source_services_on_funding_source_id", using: :btree
-    t.index ["service_id"], name: "index_funding_source_services_on_service_id", using: :btree
+    t.index ["deleted_at"], name: "index_funding_source_services_on_deleted_at"
+    t.index ["funding_source_id"], name: "index_funding_source_services_on_funding_source_id"
+    t.index ["service_id"], name: "index_funding_source_services_on_service_id"
   end
 
-  create_table "funding_sources", force: :cascade do |t|
-    t.string   "name"
-    t.string   "abbreviation"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "id_in_data_source"
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
+  create_table "funding_sources", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "abbreviation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "id_in_data_source"
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
     t.datetime "deleted_at"
   end
 
-  create_table "genders", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "genders", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "has_developmental_disabilities", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "has_developmental_disabilities", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "has_hivaids", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "has_hivaids", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "has_mental_health_problems", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "has_mental_health_problems", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "imported_clients_csvs", force: :cascade do |t|
-    t.string   "filename"
-    t.integer  "user_id"
-    t.string   "content_type"
-    t.string   "content"
+  create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
+    t.string "filename"
+    t.integer "user_id"
+    t.string "content_type"
+    t.string "content"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "letsencrypt_plugin_challenges", force: :cascade do |t|
-    t.text     "response"
+  create_table "letsencrypt_plugin_challenges", id: :serial, force: :cascade do |t|
+    t.text "response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "letsencrypt_plugin_settings", force: :cascade do |t|
-    t.text     "private_key"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  create_table "letsencrypt_plugin_settings", id: :serial, force: :cascade do |t|
+    t.text "private_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "login_activities", force: :cascade do |t|
-    t.string   "scope"
-    t.string   "strategy"
-    t.string   "identity"
-    t.boolean  "success"
-    t.string   "failure_reason"
-    t.integer  "user_id"
-    t.string   "user_type"
-    t.string   "context"
-    t.string   "ip"
-    t.text     "user_agent"
-    t.text     "referrer"
-    t.string   "city"
-    t.string   "region"
-    t.string   "country"
+  create_table "login_activities", id: :serial, force: :cascade do |t|
+    t.string "scope"
+    t.string "strategy"
+    t.string "identity"
+    t.boolean "success"
+    t.string "failure_reason"
+    t.integer "user_id"
+    t.string "user_type"
+    t.string "context"
+    t.string "ip"
+    t.text "user_agent"
+    t.text "referrer"
+    t.string "city"
+    t.string "region"
+    t.string "country"
     t.datetime "created_at"
-    t.index ["identity"], name: "index_login_activities_on_identity", using: :btree
-    t.index ["ip"], name: "index_login_activities_on_ip", using: :btree
+    t.index ["identity"], name: "index_login_activities_on_identity"
+    t.index ["ip"], name: "index_login_activities_on_ip"
   end
 
-  create_table "match_decision_reasons", force: :cascade do |t|
-    t.string   "name",                      null: false
-    t.string   "type",                      null: false
+  create_table "match_decision_reasons", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "type", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active",     default: true, null: false
-    t.index ["type"], name: "index_match_decision_reasons_on_type", using: :btree
+    t.boolean "active", default: true, null: false
+    t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
-  create_table "match_decisions", force: :cascade do |t|
-    t.integer  "match_id"
-    t.string   "type"
-    t.string   "status"
-    t.integer  "contact_id"
+  create_table "match_decisions", id: :serial, force: :cascade do |t|
+    t.integer "match_id"
+    t.string "type"
+    t.string "status"
+    t.integer "contact_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "client_last_seen_date"
     t.datetime "criminal_hearing_date"
     t.datetime "client_move_in_date"
-    t.integer  "decline_reason_id"
-    t.text     "decline_reason_other_explanation"
-    t.integer  "not_working_with_client_reason_id"
-    t.text     "not_working_with_client_reason_other_explanation"
-    t.boolean  "client_spoken_with_services_agency",               default: false
-    t.boolean  "cori_release_form_submitted",                      default: false
+    t.integer "decline_reason_id"
+    t.text "decline_reason_other_explanation"
+    t.integer "not_working_with_client_reason_id"
+    t.text "not_working_with_client_reason_other_explanation"
+    t.boolean "client_spoken_with_services_agency", default: false
+    t.boolean "cori_release_form_submitted", default: false
     t.datetime "deleted_at"
-    t.integer  "administrative_cancel_reason_id"
-    t.string   "administrative_cancel_reason_other_explanation"
-    t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id", using: :btree
-    t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id", using: :btree
-    t.index ["match_id"], name: "index_match_decisions_on_match_id", using: :btree
-    t.index ["not_working_with_client_reason_id"], name: "index_match_decisions_on_not_working_with_client_reason_id", using: :btree
+    t.integer "administrative_cancel_reason_id"
+    t.string "administrative_cancel_reason_other_explanation"
+    t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
+    t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
+    t.index ["match_id"], name: "index_match_decisions_on_match_id"
+    t.index ["not_working_with_client_reason_id"], name: "index_match_decisions_on_not_working_with_client_reason_id"
   end
 
-  create_table "match_events", force: :cascade do |t|
-    t.string   "type"
-    t.integer  "match_id"
-    t.integer  "notification_id"
-    t.integer  "decision_id"
-    t.integer  "contact_id"
-    t.string   "action"
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.text     "note"
+  create_table "match_events", id: :serial, force: :cascade do |t|
+    t.string "type"
+    t.integer "match_id"
+    t.integer "notification_id"
+    t.integer "decision_id"
+    t.integer "contact_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "note"
     t.datetime "deleted_at"
-    t.integer  "not_working_with_client_reason_id"
-    t.date     "client_last_seen_date"
-    t.boolean  "admin_note",                        default: false, null: false
-    t.integer  "client_id"
-    t.index ["decision_id"], name: "index_match_events_on_decision_id", using: :btree
-    t.index ["match_id"], name: "index_match_events_on_match_id", using: :btree
-    t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id", using: :btree
-    t.index ["notification_id"], name: "index_match_events_on_notification_id", using: :btree
+    t.integer "not_working_with_client_reason_id"
+    t.date "client_last_seen_date"
+    t.boolean "admin_note", default: false, null: false
+    t.integer "client_id"
+    t.index ["decision_id"], name: "index_match_events_on_decision_id"
+    t.index ["match_id"], name: "index_match_events_on_match_id"
+    t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id"
+    t.index ["notification_id"], name: "index_match_events_on_notification_id"
   end
 
-  create_table "match_prioritizations", force: :cascade do |t|
-    t.string   "type",                      null: false
-    t.boolean  "active",     default: true, null: false
-    t.integer  "weight",     default: 10,   null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+  create_table "match_prioritizations", id: :serial, force: :cascade do |t|
+    t.string "type", null: false
+    t.boolean "active", default: true, null: false
+    t.integer "weight", default: 10, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "match_progress_updates", force: :cascade do |t|
-    t.string   "type",                null: false
-    t.integer  "match_id",            null: false
-    t.integer  "notification_id"
-    t.integer  "contact_id",          null: false
-    t.integer  "decision_id"
-    t.integer  "notification_number"
+  create_table "match_progress_updates", id: :serial, force: :cascade do |t|
+    t.string "type", null: false
+    t.integer "match_id", null: false
+    t.integer "notification_id"
+    t.integer "contact_id", null: false
+    t.integer "decision_id"
+    t.integer "notification_number"
     t.datetime "requested_at"
     t.datetime "submitted_at"
     t.datetime "dnd_notified_at"
-    t.string   "response"
-    t.text     "note"
+    t.string "response"
+    t.text "note"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.date     "client_last_seen"
-    t.index ["contact_id"], name: "index_match_progress_updates_on_contact_id", using: :btree
-    t.index ["decision_id"], name: "index_match_progress_updates_on_decision_id", using: :btree
-    t.index ["match_id"], name: "index_match_progress_updates_on_match_id", using: :btree
-    t.index ["notification_id"], name: "index_match_progress_updates_on_notification_id", using: :btree
-    t.index ["type"], name: "index_match_progress_updates_on_type", using: :btree
+    t.date "client_last_seen"
+    t.index ["contact_id"], name: "index_match_progress_updates_on_contact_id"
+    t.index ["decision_id"], name: "index_match_progress_updates_on_decision_id"
+    t.index ["match_id"], name: "index_match_progress_updates_on_match_id"
+    t.index ["notification_id"], name: "index_match_progress_updates_on_notification_id"
+    t.index ["type"], name: "index_match_progress_updates_on_type"
   end
 
-  create_table "match_routes", force: :cascade do |t|
-    t.string   "type",                                                                null: false
-    t.boolean  "active",                                              default: true,  null: false
-    t.integer  "weight",                                              default: 10,    null: false
-    t.boolean  "contacts_editable_by_hsa",                            default: false, null: false
-    t.datetime "created_at",                                                          null: false
-    t.datetime "updated_at",                                                          null: false
-    t.integer  "stalled_interval",                                    default: 7,     null: false
-    t.integer  "match_prioritization_id",                             default: 5,     null: false
-    t.boolean  "should_cancel_other_matches",                         default: true,  null: false
-    t.boolean  "should_activate_match",                               default: true,  null: false
-    t.boolean  "should_prevent_multiple_matches_per_client",          default: true,  null: false
-    t.boolean  "allow_multiple_active_matches",                       default: false, null: false
-    t.boolean  "default_shelter_agency_contacts_from_project_client", default: false, null: false
-    t.integer  "tag_id"
-    t.boolean  "show_default_contact_types",                          default: true
-    t.boolean  "send_notifications",                                  default: true
-    t.string   "housing_type"
-    t.index ["tag_id"], name: "index_match_routes_on_tag_id", using: :btree
+  create_table "match_routes", id: :serial, force: :cascade do |t|
+    t.string "type", null: false
+    t.boolean "active", default: true, null: false
+    t.integer "weight", default: 10, null: false
+    t.boolean "contacts_editable_by_hsa", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "stalled_interval", default: 7, null: false
+    t.integer "match_prioritization_id", default: 5, null: false
+    t.boolean "should_cancel_other_matches", default: true, null: false
+    t.boolean "should_activate_match", default: true, null: false
+    t.boolean "should_prevent_multiple_matches_per_client", default: true, null: false
+    t.boolean "allow_multiple_active_matches", default: false, null: false
+    t.boolean "default_shelter_agency_contacts_from_project_client", default: false, null: false
+    t.integer "tag_id"
+    t.boolean "show_default_contact_types", default: true
+    t.boolean "send_notifications", default: true
+    t.string "housing_type"
+    t.index ["tag_id"], name: "index_match_routes_on_tag_id"
   end
 
-  create_table "messages", force: :cascade do |t|
-    t.string   "from",                       null: false
-    t.string   "subject",                    null: false
-    t.text     "body",                       null: false
-    t.boolean  "html",       default: false, null: false
+  create_table "messages", id: :serial, force: :cascade do |t|
+    t.string "from", null: false
+    t.string "subject", null: false
+    t.text "body", null: false
+    t.boolean "html", default: false, null: false
     t.datetime "seen_at"
     t.datetime "sent_at"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "contact_id",                 null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "contact_id", null: false
   end
 
-  create_table "name_quality_codes", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "name_quality_codes", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "neighborhood_interests", force: :cascade do |t|
-    t.integer  "client_id"
-    t.integer  "neighborhood_id"
+  create_table "neighborhood_interests", id: :serial, force: :cascade do |t|
+    t.integer "client_id"
+    t.integer "neighborhood_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "neighborhoods", force: :cascade do |t|
-    t.string   "name"
+  create_table "neighborhoods", id: :serial, force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "non_hmis_assessments", force: :cascade do |t|
-    t.integer  "non_hmis_client_id"
-    t.string   "type"
-    t.integer  "assessment_score"
-    t.integer  "days_homeless_in_the_last_three_years"
-    t.boolean  "veteran",                                  default: false, null: false
-    t.boolean  "rrh_desired",                              default: false, null: false
-    t.boolean  "youth_rrh_desired",                        default: false, null: false
-    t.text     "rrh_assessment_contact_info"
-    t.boolean  "income_maximization_assistance_requested", default: false, null: false
-    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
-    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
-    t.integer  "required_number_of_bedrooms"
-    t.integer  "required_minimum_occupancy"
-    t.boolean  "requires_elevator_access",                 default: false, null: false
-    t.boolean  "family_member",                            default: false, null: false
-    t.integer  "calculated_chronic_homelessness"
-    t.json     "neighborhood_interests",                   default: [],    null: false
-    t.float    "income_total_monthly"
-    t.boolean  "disabling_condition",                      default: false, null: false
-    t.boolean  "physical_disability",                      default: false, null: false
-    t.boolean  "developmental_disability",                 default: false, null: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
-    t.boolean  "domestic_violence",                        default: false, null: false
-    t.boolean  "interested_in_set_asides",                 default: false, null: false
-    t.string   "set_asides_housing_status"
-    t.boolean  "set_asides_resident"
-    t.string   "shelter_name"
-    t.date     "entry_date"
-    t.string   "case_manager_contact_info"
-    t.string   "phone_number"
-    t.boolean  "have_tenant_voucher"
-    t.string   "children_info"
-    t.boolean  "studio_ok"
-    t.boolean  "one_br_ok"
-    t.boolean  "sro_ok"
-    t.boolean  "fifty_five_plus"
-    t.boolean  "sixty_two_plus"
-    t.string   "voucher_agency"
-    t.boolean  "interested_in_disabled_housing"
-    t.boolean  "chronic_health_condition"
-    t.boolean  "mental_health_problem"
-    t.boolean  "substance_abuse_problem"
-    t.integer  "vispdat_score"
-    t.integer  "vispdat_priority_score"
+  create_table "non_hmis_assessments", id: :serial, force: :cascade do |t|
+    t.integer "non_hmis_client_id"
+    t.string "type"
+    t.integer "assessment_score"
+    t.integer "days_homeless_in_the_last_three_years"
+    t.boolean "veteran", default: false, null: false
+    t.boolean "rrh_desired", default: false, null: false
+    t.boolean "youth_rrh_desired", default: false, null: false
+    t.text "rrh_assessment_contact_info"
+    t.boolean "income_maximization_assistance_requested", default: false, null: false
+    t.boolean "pending_subsidized_housing_placement", default: false, null: false
+    t.boolean "requires_wheelchair_accessibility", default: false, null: false
+    t.integer "required_number_of_bedrooms"
+    t.integer "required_minimum_occupancy"
+    t.boolean "requires_elevator_access", default: false, null: false
+    t.boolean "family_member", default: false, null: false
+    t.integer "calculated_chronic_homelessness"
+    t.json "neighborhood_interests", default: [], null: false
+    t.float "income_total_monthly"
+    t.boolean "disabling_condition", default: false, null: false
+    t.boolean "physical_disability", default: false, null: false
+    t.boolean "developmental_disability", default: false, null: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
+    t.boolean "domestic_violence", default: false, null: false
+    t.boolean "interested_in_set_asides", default: false, null: false
+    t.string "set_asides_housing_status"
+    t.boolean "set_asides_resident"
+    t.string "shelter_name"
+    t.date "entry_date"
+    t.string "case_manager_contact_info"
+    t.string "phone_number"
+    t.boolean "have_tenant_voucher"
+    t.string "children_info"
+    t.boolean "studio_ok"
+    t.boolean "one_br_ok"
+    t.boolean "sro_ok"
+    t.boolean "fifty_five_plus"
+    t.boolean "sixty_two_plus"
+    t.string "voucher_agency"
+    t.boolean "interested_in_disabled_housing"
+    t.boolean "chronic_health_condition"
+    t.boolean "mental_health_problem"
+    t.boolean "substance_abuse_problem"
+    t.integer "vispdat_score"
+    t.integer "vispdat_priority_score"
     t.datetime "imported_timestamp"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "ssvf_eligible",                            default: false
-    t.boolean  "veteran_rrh_desired",                      default: false
-    t.boolean  "rrh_th_desired",                           default: false
-    t.boolean  "dv_rrh_desired",                           default: false
-    t.integer  "income_total_annual",                      default: 0
-    t.boolean  "other_accessibility",                      default: false
-    t.boolean  "disabled_housing",                         default: false
-    t.boolean  "actively_homeless",                        default: false, null: false
+    t.boolean "ssvf_eligible", default: false
+    t.boolean "veteran_rrh_desired", default: false
+    t.boolean "rrh_th_desired", default: false
+    t.boolean "dv_rrh_desired", default: false
+    t.integer "income_total_annual", default: 0
+    t.boolean "other_accessibility", default: false
+    t.boolean "disabled_housing", default: false
+    t.boolean "actively_homeless", default: false, null: false
   end
 
-  create_table "non_hmis_clients", force: :cascade do |t|
-    t.string   "client_identifier"
-    t.integer  "assessment_score"
-    t.string   "agency"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.jsonb    "active_cohort_ids"
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+  create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
+    t.string "client_identifier"
+    t.integer "assessment_score"
+    t.string "agency"
+    t.string "first_name"
+    t.string "last_name"
+    t.jsonb "active_cohort_ids"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.boolean  "identified"
-    t.date     "date_of_birth"
-    t.string   "ssn"
-    t.integer  "days_homeless_in_the_last_three_years"
-    t.boolean  "veteran",                                  default: false, null: false
-    t.boolean  "rrh_desired",                              default: false, null: false
-    t.boolean  "youth_rrh_desired",                        default: false, null: false
-    t.text     "rrh_assessment_contact_info"
-    t.boolean  "income_maximization_assistance_requested", default: false, null: false
-    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
-    t.boolean  "full_release_on_file",                     default: false, null: false
-    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
-    t.integer  "required_number_of_bedrooms",              default: 1
-    t.integer  "required_minimum_occupancy",               default: 1
-    t.boolean  "requires_elevator_access",                 default: false, null: false
-    t.boolean  "family_member",                            default: false, null: false
-    t.string   "middle_name"
-    t.integer  "calculated_chronic_homelessness"
-    t.integer  "gender"
-    t.string   "type"
-    t.boolean  "available",                                default: true,  null: false
-    t.json     "neighborhood_interests",                   default: []
-    t.float    "income_total_monthly"
-    t.boolean  "disabling_condition",                      default: false
-    t.boolean  "physical_disability",                      default: false
-    t.boolean  "developmental_disability",                 default: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
-    t.boolean  "domestic_violence",                        default: false, null: false
-    t.boolean  "interested_in_set_asides",                 default: false
-    t.jsonb    "tags"
+    t.boolean "identified"
+    t.date "date_of_birth"
+    t.string "ssn"
+    t.integer "days_homeless_in_the_last_three_years"
+    t.boolean "veteran", default: false, null: false
+    t.boolean "rrh_desired", default: false, null: false
+    t.boolean "youth_rrh_desired", default: false, null: false
+    t.text "rrh_assessment_contact_info"
+    t.boolean "income_maximization_assistance_requested", default: false, null: false
+    t.boolean "pending_subsidized_housing_placement", default: false, null: false
+    t.boolean "full_release_on_file", default: false, null: false
+    t.boolean "requires_wheelchair_accessibility", default: false, null: false
+    t.integer "required_number_of_bedrooms", default: 1
+    t.integer "required_minimum_occupancy", default: 1
+    t.boolean "requires_elevator_access", default: false, null: false
+    t.boolean "family_member", default: false, null: false
+    t.string "middle_name"
+    t.integer "calculated_chronic_homelessness"
+    t.integer "gender"
+    t.string "type"
+    t.boolean "available", default: true, null: false
+    t.json "neighborhood_interests", default: []
+    t.float "income_total_monthly"
+    t.boolean "disabling_condition", default: false
+    t.boolean "physical_disability", default: false
+    t.boolean "developmental_disability", default: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
+    t.boolean "domestic_violence", default: false, null: false
+    t.boolean "interested_in_set_asides", default: false
+    t.jsonb "tags"
     t.datetime "imported_timestamp"
-    t.string   "set_asides_housing_status"
-    t.boolean  "set_asides_resident"
-    t.string   "shelter_name"
-    t.date     "entry_date"
-    t.string   "case_manager_contact_info"
-    t.string   "phone_number"
-    t.string   "email"
-    t.boolean  "have_tenant_voucher"
-    t.string   "children_info"
-    t.boolean  "studio_ok"
-    t.boolean  "one_br_ok"
-    t.boolean  "sro_ok"
-    t.boolean  "fifty_five_plus"
-    t.boolean  "sixty_two_plus"
-    t.integer  "warehouse_client_id"
-    t.string   "voucher_agency"
-    t.boolean  "interested_in_disabled_housing"
-    t.boolean  "chronic_health_condition"
-    t.boolean  "mental_health_problem"
-    t.boolean  "substance_abuse_problem"
-    t.integer  "agency_id"
-    t.integer  "contact_id"
-    t.integer  "vispdat_score",                            default: 0
-    t.integer  "vispdat_priority_score",                   default: 0
-    t.boolean  "actively_homeless",                        default: false, null: false
-    t.boolean  "limited_release_on_file",                  default: false, null: false
-    t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
+    t.string "set_asides_housing_status"
+    t.boolean "set_asides_resident"
+    t.string "shelter_name"
+    t.date "entry_date"
+    t.string "case_manager_contact_info"
+    t.string "phone_number"
+    t.string "email"
+    t.boolean "have_tenant_voucher"
+    t.string "children_info"
+    t.boolean "studio_ok"
+    t.boolean "one_br_ok"
+    t.boolean "sro_ok"
+    t.boolean "fifty_five_plus"
+    t.boolean "sixty_two_plus"
+    t.integer "warehouse_client_id"
+    t.string "voucher_agency"
+    t.boolean "interested_in_disabled_housing"
+    t.boolean "chronic_health_condition"
+    t.boolean "mental_health_problem"
+    t.boolean "substance_abuse_problem"
+    t.integer "agency_id"
+    t.integer "contact_id"
+    t.integer "vispdat_score", default: 0
+    t.integer "vispdat_priority_score", default: 0
+    t.boolean "actively_homeless", default: false, null: false
+    t.boolean "limited_release_on_file", default: false, null: false
+    t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
-  create_table "notifications", force: :cascade do |t|
-    t.string   "type"
-    t.string   "code"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "client_opportunity_match_id"
-    t.integer  "recipient_id"
+  create_table "notifications", id: :serial, force: :cascade do |t|
+    t.string "type"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "client_opportunity_match_id"
+    t.integer "recipient_id"
     t.datetime "expires_at"
-    t.boolean  "include_content",             default: true
+    t.boolean "include_content", default: true
   end
 
-  create_table "opportunities", force: :cascade do |t|
-    t.string   "name"
-    t.boolean  "available",           default: false, null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+  create_table "opportunities", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.boolean "available", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.integer  "unit_id"
-    t.float    "matchability"
-    t.boolean  "available_candidate", default: true
-    t.integer  "voucher_id"
-    t.boolean  "success",             default: false
-    t.index ["deleted_at"], name: "index_opportunities_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
-    t.index ["unit_id"], name: "index_opportunities_on_unit_id", using: :btree
-    t.index ["voucher_id"], name: "index_opportunities_on_voucher_id", using: :btree
+    t.integer "unit_id"
+    t.float "matchability"
+    t.boolean "available_candidate", default: true
+    t.integer "voucher_id"
+    t.boolean "success", default: false
+    t.index ["deleted_at"], name: "index_opportunities_on_deleted_at", where: "(deleted_at IS NULL)"
+    t.index ["unit_id"], name: "index_opportunities_on_unit_id"
+    t.index ["voucher_id"], name: "index_opportunities_on_voucher_id"
   end
 
-  create_table "opportunity_contacts", force: :cascade do |t|
-    t.integer  "opportunity_id",                        null: false
-    t.integer  "contact_id",                            null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+  create_table "opportunity_contacts", id: :serial, force: :cascade do |t|
+    t.integer "opportunity_id", null: false
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.boolean  "housing_subsidy_admin", default: false, null: false
-    t.index ["contact_id"], name: "index_opportunity_contacts_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at", using: :btree
-    t.index ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id", using: :btree
+    t.boolean "housing_subsidy_admin", default: false, null: false
+    t.index ["contact_id"], name: "index_opportunity_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at"
+    t.index ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id"
   end
 
-  create_table "opportunity_properties", force: :cascade do |t|
-    t.integer  "opportunity_id", null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id", using: :btree
+  create_table "opportunity_properties", id: :serial, force: :cascade do |t|
+    t.integer "opportunity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id"
   end
 
-  create_table "physical_disabilities", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "physical_disabilities", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "primary_races", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "primary_races", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "program_contacts", force: :cascade do |t|
-    t.integer  "program_id",                            null: false
-    t.integer  "contact_id",                            null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.datetime "deleted_at"
-    t.boolean  "dnd_staff",             default: false, null: false
-    t.boolean  "housing_subsidy_admin", default: false, null: false
-    t.boolean  "client",                default: false, null: false
-    t.boolean  "housing_search_worker", default: false, null: false
-    t.boolean  "shelter_agency",        default: false, null: false
-    t.boolean  "ssp",                   default: false, null: false
-    t.boolean  "hsp",                   default: false, null: false
-    t.boolean  "do",                    default: false, null: false
-    t.index ["contact_id"], name: "index_program_contacts_on_contact_id", using: :btree
-    t.index ["program_id"], name: "index_program_contacts_on_program_id", using: :btree
-  end
-
-  create_table "program_services", force: :cascade do |t|
-    t.integer  "program_id"
-    t.integer  "service_id"
+  create_table "program_contacts", id: :serial, force: :cascade do |t|
+    t.integer "program_id", null: false
+    t.integer "contact_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_program_services_on_deleted_at", using: :btree
-    t.index ["program_id"], name: "index_program_services_on_program_id", using: :btree
-    t.index ["service_id"], name: "index_program_services_on_service_id", using: :btree
+    t.boolean "dnd_staff", default: false, null: false
+    t.boolean "housing_subsidy_admin", default: false, null: false
+    t.boolean "client", default: false, null: false
+    t.boolean "housing_search_worker", default: false, null: false
+    t.boolean "shelter_agency", default: false, null: false
+    t.boolean "ssp", default: false, null: false
+    t.boolean "hsp", default: false, null: false
+    t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_program_contacts_on_contact_id"
+    t.index ["program_id"], name: "index_program_contacts_on_program_id"
   end
 
-  create_table "programs", force: :cascade do |t|
-    t.string   "name"
-    t.string   "contract_start_date"
-    t.integer  "funding_source_id"
-    t.integer  "subgrantee_id"
-    t.integer  "contact_id"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+  create_table "program_services", id: :serial, force: :cascade do |t|
+    t.integer "program_id"
+    t.integer "service_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.boolean  "confidential",        default: false, null: false
-    t.integer  "match_route_id",      default: 1
-    t.text     "description"
-    t.index ["contact_id"], name: "index_programs_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_programs_on_deleted_at", using: :btree
-    t.index ["funding_source_id"], name: "index_programs_on_funding_source_id", using: :btree
-    t.index ["subgrantee_id"], name: "index_programs_on_subgrantee_id", using: :btree
+    t.index ["deleted_at"], name: "index_program_services_on_deleted_at"
+    t.index ["program_id"], name: "index_program_services_on_program_id"
+    t.index ["service_id"], name: "index_program_services_on_service_id"
   end
 
-  create_table "project_clients", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "ssn"
-    t.date     "date_of_birth"
-    t.string   "veteran_status"
-    t.string   "substance_abuse_problem"
-    t.date     "entry_date"
-    t.date     "exit_date"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.uuid     "clientguid"
-    t.string   "middle_name"
-    t.integer  "ssn_quality_code"
-    t.integer  "dob_quality_code"
-    t.string   "primary_race"
-    t.string   "secondary_race"
-    t.integer  "gender"
-    t.integer  "ethnicity"
-    t.integer  "disabling_condition"
-    t.integer  "hud_chronic_homelessness"
-    t.integer  "calculated_chronic_homelessness"
-    t.integer  "chronic_health_condition"
-    t.integer  "physical_disability"
-    t.integer  "hivaids_status"
-    t.integer  "mental_health_problem"
-    t.integer  "domestic_violence"
-    t.integer  "discharge_type"
-    t.integer  "developmental_disability"
-    t.boolean  "us_citizen",                                  default: false, null: false
-    t.boolean  "asylee",                                      default: false, null: false
-    t.boolean  "lifetime_sex_offender",                       default: false, null: false
-    t.boolean  "meth_production_conviction",                  default: false, null: false
-    t.integer  "id_in_data_source"
-    t.date     "calculated_first_homeless_night"
-    t.date     "calculated_last_homeless_night"
+  create_table "programs", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "contract_start_date"
+    t.integer "funding_source_id"
+    t.integer "subgrantee_id"
+    t.integer "contact_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.boolean "confidential", default: false, null: false
+    t.integer "match_route_id", default: 1
+    t.text "description"
+    t.index ["contact_id"], name: "index_programs_on_contact_id"
+    t.index ["deleted_at"], name: "index_programs_on_deleted_at"
+    t.index ["funding_source_id"], name: "index_programs_on_funding_source_id"
+    t.index ["subgrantee_id"], name: "index_programs_on_subgrantee_id"
+  end
+
+  create_table "project_clients", id: :serial, force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "ssn"
+    t.date "date_of_birth"
+    t.string "veteran_status"
+    t.string "substance_abuse_problem"
+    t.date "entry_date"
+    t.date "exit_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "clientguid"
+    t.string "middle_name"
+    t.integer "ssn_quality_code"
+    t.integer "dob_quality_code"
+    t.string "primary_race"
+    t.string "secondary_race"
+    t.integer "gender"
+    t.integer "ethnicity"
+    t.integer "disabling_condition"
+    t.integer "hud_chronic_homelessness"
+    t.integer "calculated_chronic_homelessness"
+    t.integer "chronic_health_condition"
+    t.integer "physical_disability"
+    t.integer "hivaids_status"
+    t.integer "mental_health_problem"
+    t.integer "domestic_violence"
+    t.integer "discharge_type"
+    t.integer "developmental_disability"
+    t.boolean "us_citizen", default: false, null: false
+    t.boolean "asylee", default: false, null: false
+    t.boolean "lifetime_sex_offender", default: false, null: false
+    t.boolean "meth_production_conviction", default: false, null: false
+    t.integer "id_in_data_source"
+    t.date "calculated_first_homeless_night"
+    t.date "calculated_last_homeless_night"
     t.datetime "source_last_changed"
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
-    t.integer  "client_id"
-    t.string   "homephone"
-    t.string   "cellphone"
-    t.string   "workphone"
-    t.string   "pager"
-    t.string   "email"
-    t.boolean  "dmh_eligible",                                default: false, null: false
-    t.boolean  "va_eligible",                                 default: false, null: false
-    t.boolean  "hues_eligible",                               default: false, null: false
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
+    t.integer "client_id"
+    t.string "homephone"
+    t.string "cellphone"
+    t.string "workphone"
+    t.string "pager"
+    t.string "email"
+    t.boolean "dmh_eligible", default: false, null: false
+    t.boolean "va_eligible", default: false, null: false
+    t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
     t.datetime "housing_assistance_network_released_on"
-    t.boolean  "sync_with_cas",                               default: false, null: false
-    t.float    "income_total_monthly"
+    t.boolean "sync_with_cas", default: false, null: false
+    t.float "income_total_monthly"
     t.datetime "income_total_monthly_last_collected"
-    t.boolean  "hiv_positive",                                default: false, null: false
-    t.string   "housing_release_status"
-    t.boolean  "needs_update",                                default: false, null: false
-    t.integer  "vispdat_score"
-    t.boolean  "ineligible_immigrant",                        default: false, null: false
-    t.boolean  "family_member",                               default: false, null: false
-    t.boolean  "child_in_household",                          default: false, null: false
-    t.integer  "days_homeless"
-    t.boolean  "ha_eligible",                                 default: false, null: false
-    t.integer  "days_homeless_in_last_three_years"
-    t.integer  "vispdat_length_homeless_in_days",             default: 0,     null: false
-    t.boolean  "cspech_eligible",                             default: false
-    t.string   "alternate_names"
-    t.boolean  "congregate_housing",                          default: false
-    t.boolean  "sober_housing",                               default: false
-    t.jsonb    "enrolled_project_ids"
-    t.jsonb    "active_cohort_ids"
-    t.string   "client_identifier"
-    t.integer  "vispdat_priority_score",                      default: 0
-    t.integer  "assessment_score",                            default: 0,     null: false
-    t.boolean  "ssvf_eligible",                               default: false, null: false
-    t.boolean  "rrh_desired",                                 default: false, null: false
-    t.boolean  "youth_rrh_desired",                           default: false, null: false
-    t.string   "rrh_assessment_contact_info"
+    t.boolean "hiv_positive", default: false, null: false
+    t.string "housing_release_status"
+    t.boolean "needs_update", default: false, null: false
+    t.integer "vispdat_score"
+    t.boolean "ineligible_immigrant", default: false, null: false
+    t.boolean "family_member", default: false, null: false
+    t.boolean "child_in_household", default: false, null: false
+    t.integer "days_homeless"
+    t.boolean "ha_eligible", default: false, null: false
+    t.integer "days_homeless_in_last_three_years"
+    t.integer "vispdat_length_homeless_in_days", default: 0, null: false
+    t.boolean "cspech_eligible", default: false
+    t.string "alternate_names"
+    t.boolean "congregate_housing", default: false
+    t.boolean "sober_housing", default: false
+    t.jsonb "enrolled_project_ids"
+    t.jsonb "active_cohort_ids"
+    t.string "client_identifier"
+    t.integer "vispdat_priority_score", default: 0
+    t.integer "assessment_score", default: 0, null: false
+    t.boolean "ssvf_eligible", default: false, null: false
+    t.boolean "rrh_desired", default: false, null: false
+    t.boolean "youth_rrh_desired", default: false, null: false
+    t.string "rrh_assessment_contact_info"
     t.datetime "rrh_assessment_collected_at"
-    t.boolean  "enrolled_in_th",                              default: false, null: false
-    t.boolean  "enrolled_in_es",                              default: false, null: false
-    t.boolean  "enrolled_in_sh",                              default: false, null: false
-    t.boolean  "enrolled_in_so",                              default: false, null: false
-    t.integer  "days_literally_homeless_in_last_three_years", default: 0
-    t.boolean  "requires_wheelchair_accessibility",           default: false
-    t.integer  "required_number_of_bedrooms",                 default: 1
-    t.integer  "required_minimum_occupancy",                  default: 1
-    t.boolean  "requires_elevator_access",                    default: false
-    t.jsonb    "neighborhood_interests",                      default: [],    null: false
-    t.date     "date_days_homeless_verified"
-    t.string   "who_verified_days_homeless"
-    t.boolean  "interested_in_set_asides",                    default: false
-    t.jsonb    "default_shelter_agency_contacts"
-    t.jsonb    "tags"
-    t.string   "case_manager_contact_info"
-    t.string   "non_hmis_client_identifier"
-    t.boolean  "vash_eligible"
-    t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness", using: :btree
-    t.index ["client_id"], name: "index_project_clients_on_client_id", using: :btree
-    t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth", using: :btree
-    t.index ["source_last_changed"], name: "index_project_clients_on_source_last_changed", using: :btree
+    t.boolean "enrolled_in_th", default: false, null: false
+    t.boolean "enrolled_in_es", default: false, null: false
+    t.boolean "enrolled_in_sh", default: false, null: false
+    t.boolean "enrolled_in_so", default: false, null: false
+    t.integer "days_literally_homeless_in_last_three_years", default: 0
+    t.boolean "requires_wheelchair_accessibility", default: false
+    t.integer "required_number_of_bedrooms", default: 1
+    t.integer "required_minimum_occupancy", default: 1
+    t.boolean "requires_elevator_access", default: false
+    t.jsonb "neighborhood_interests", default: [], null: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
+    t.boolean "interested_in_set_asides", default: false
+    t.jsonb "default_shelter_agency_contacts"
+    t.jsonb "tags"
+    t.string "case_manager_contact_info"
+    t.string "non_hmis_client_identifier"
+    t.boolean "vash_eligible"
+    t.boolean "pregnancy_status", default: false
+    t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
+    t.index ["client_id"], name: "index_project_clients_on_client_id"
+    t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
+    t.index ["source_last_changed"], name: "index_project_clients_on_source_last_changed"
   end
 
-  create_table "project_programs", force: :cascade do |t|
-    t.string   "id_in_data_source"
-    t.string   "program_name"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
+  create_table "project_programs", id: :serial, force: :cascade do |t|
+    t.string "id_in_data_source"
+    t.string "program_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
   end
 
-  create_table "reissue_requests", force: :cascade do |t|
-    t.integer  "notification_id"
-    t.integer  "reissued_by"
+  create_table "reissue_requests", id: :serial, force: :cascade do |t|
+    t.integer "notification_id"
+    t.integer "reissued_by"
     t.datetime "reissued_at"
     t.datetime "deleted_at"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "request_sent_at"
-    t.index ["deleted_at"], name: "index_reissue_requests_on_deleted_at", using: :btree
-    t.index ["notification_id"], name: "index_reissue_requests_on_notification_id", using: :btree
-    t.index ["reissued_by"], name: "index_reissue_requests_on_reissued_by", using: :btree
+    t.index ["deleted_at"], name: "index_reissue_requests_on_deleted_at"
+    t.index ["notification_id"], name: "index_reissue_requests_on_notification_id"
+    t.index ["reissued_by"], name: "index_reissue_requests_on_reissued_by"
   end
 
-  create_table "rejected_matches", force: :cascade do |t|
-    t.integer  "client_id",      null: false
-    t.integer  "opportunity_id", null: false
+  create_table "rejected_matches", id: :serial, force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.integer "opportunity_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["client_id"], name: "index_rejected_matches_on_client_id", using: :btree
-    t.index ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id", using: :btree
+    t.index ["client_id"], name: "index_rejected_matches_on_client_id"
+    t.index ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id"
   end
 
-  create_table "requirements", force: :cascade do |t|
-    t.integer  "rule_id"
-    t.integer  "requirer_id"
-    t.string   "requirer_type"
-    t.boolean  "positive"
+  create_table "requirements", id: :serial, force: :cascade do |t|
+    t.integer "rule_id"
+    t.integer "requirer_id"
+    t.string "requirer_type"
+    t.boolean "positive"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "variable"
-    t.index ["deleted_at"], name: "index_requirements_on_deleted_at", using: :btree
-    t.index ["requirer_type", "requirer_id"], name: "index_requirements_on_requirer_type_and_requirer_id", using: :btree
-    t.index ["rule_id"], name: "index_requirements_on_rule_id", using: :btree
+    t.string "variable"
+    t.index ["deleted_at"], name: "index_requirements_on_deleted_at"
+    t.index ["requirer_type", "requirer_id"], name: "index_requirements_on_requirer_type_and_requirer_id"
+    t.index ["rule_id"], name: "index_requirements_on_rule_id"
   end
 
-  create_table "roles", force: :cascade do |t|
-    t.string   "name",                                                    null: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.boolean  "can_view_all_clients",                    default: false
-    t.boolean  "can_edit_all_clients",                    default: false
-    t.boolean  "can_participate_in_matches",              default: false
-    t.boolean  "can_view_all_matches",                    default: false
-    t.boolean  "can_view_own_closed_matches",             default: false
-    t.boolean  "can_see_alternate_matches",               default: false
-    t.boolean  "can_edit_match_contacts",                 default: false
-    t.boolean  "can_approve_matches",                     default: false
-    t.boolean  "can_reject_matches",                      default: false
-    t.boolean  "can_act_on_behalf_of_match_contacts",     default: false
-    t.boolean  "can_view_reports",                        default: false
-    t.boolean  "can_edit_roles",                          default: false
-    t.boolean  "can_edit_users",                          default: false
-    t.boolean  "can_view_full_ssn",                       default: false
-    t.boolean  "can_view_full_dob",                       default: false
-    t.boolean  "can_view_dmh_eligibility",                default: false
-    t.boolean  "can_view_va_eligibility",                 default: false
-    t.boolean  "can_view_hues_eligibility",               default: false
-    t.boolean  "can_view_hiv_positive_eligibility",       default: false
-    t.boolean  "can_view_client_confidentiality",         default: false
-    t.boolean  "can_view_buildings",                      default: false
-    t.boolean  "can_edit_buildings",                      default: false
-    t.boolean  "can_view_funding_sources",                default: false
-    t.boolean  "can_edit_funding_sources",                default: false
-    t.boolean  "can_view_subgrantees",                    default: false
-    t.boolean  "can_edit_subgrantees",                    default: false
-    t.boolean  "can_view_vouchers",                       default: false
-    t.boolean  "can_edit_vouchers",                       default: false
-    t.boolean  "can_view_programs",                       default: false
-    t.boolean  "can_edit_programs",                       default: false
-    t.boolean  "can_view_opportunities",                  default: false
-    t.boolean  "can_edit_opportunities",                  default: false
-    t.boolean  "can_reissue_notifications",               default: false
-    t.boolean  "can_view_units",                          default: false
-    t.boolean  "can_edit_units",                          default: false
-    t.boolean  "can_add_vacancies",                       default: false
-    t.boolean  "can_view_contacts",                       default: false
-    t.boolean  "can_edit_contacts",                       default: false
-    t.boolean  "can_view_rule_list",                      default: false
-    t.boolean  "can_edit_rule_list",                      default: false
-    t.boolean  "can_view_available_services",             default: false
-    t.boolean  "can_edit_available_services",             default: false
-    t.boolean  "can_assign_services",                     default: false
-    t.boolean  "can_assign_requirements",                 default: false
-    t.boolean  "can_become_other_users",                  default: false
-    t.boolean  "can_edit_translations",                   default: false
-    t.boolean  "can_view_vspdats",                        default: false
-    t.boolean  "can_manage_config",                       default: false
-    t.boolean  "can_create_overall_note",                 default: false
-    t.boolean  "can_delete_client_notes",                 default: false
-    t.boolean  "can_enter_deidentified_clients",          default: false
-    t.boolean  "can_manage_deidentified_clients",         default: false
-    t.boolean  "can_add_cohorts_to_deidentified_clients", default: false
-    t.boolean  "can_enter_identified_clients",            default: false
-    t.boolean  "can_manage_identified_clients",           default: false
-    t.boolean  "can_add_cohorts_to_identified_clients",   default: false
-    t.boolean  "can_manage_neighborhoods",                default: false
-    t.boolean  "can_view_assigned_programs",              default: false
-    t.boolean  "can_edit_assigned_programs",              default: false
-    t.boolean  "can_export_deidentified_clients",         default: false
-    t.boolean  "can_export_identified_clients",           default: false
-    t.boolean  "can_manage_tags",                         default: false
-    t.boolean  "can_manage_imported_clients",             default: false
-    t.boolean  "can_edit_clients_based_on_rules",         default: false
-    t.boolean  "can_send_notes_via_email",                default: false
-    t.boolean  "can_upload_deidentified_clients",         default: false
-    t.boolean  "can_delete_matches",                      default: false
-    t.boolean  "can_reopen_matches",                      default: false
-    t.index ["name"], name: "index_roles_on_name", using: :btree
+  create_table "roles", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "can_view_all_clients", default: false
+    t.boolean "can_edit_all_clients", default: false
+    t.boolean "can_participate_in_matches", default: false
+    t.boolean "can_view_all_matches", default: false
+    t.boolean "can_view_own_closed_matches", default: false
+    t.boolean "can_see_alternate_matches", default: false
+    t.boolean "can_edit_match_contacts", default: false
+    t.boolean "can_approve_matches", default: false
+    t.boolean "can_reject_matches", default: false
+    t.boolean "can_act_on_behalf_of_match_contacts", default: false
+    t.boolean "can_view_reports", default: false
+    t.boolean "can_edit_roles", default: false
+    t.boolean "can_edit_users", default: false
+    t.boolean "can_view_full_ssn", default: false
+    t.boolean "can_view_full_dob", default: false
+    t.boolean "can_view_dmh_eligibility", default: false
+    t.boolean "can_view_va_eligibility", default: false
+    t.boolean "can_view_hues_eligibility", default: false
+    t.boolean "can_view_hiv_positive_eligibility", default: false
+    t.boolean "can_view_client_confidentiality", default: false
+    t.boolean "can_view_buildings", default: false
+    t.boolean "can_edit_buildings", default: false
+    t.boolean "can_view_funding_sources", default: false
+    t.boolean "can_edit_funding_sources", default: false
+    t.boolean "can_view_subgrantees", default: false
+    t.boolean "can_edit_subgrantees", default: false
+    t.boolean "can_view_vouchers", default: false
+    t.boolean "can_edit_vouchers", default: false
+    t.boolean "can_view_programs", default: false
+    t.boolean "can_edit_programs", default: false
+    t.boolean "can_view_opportunities", default: false
+    t.boolean "can_edit_opportunities", default: false
+    t.boolean "can_reissue_notifications", default: false
+    t.boolean "can_view_units", default: false
+    t.boolean "can_edit_units", default: false
+    t.boolean "can_add_vacancies", default: false
+    t.boolean "can_view_contacts", default: false
+    t.boolean "can_edit_contacts", default: false
+    t.boolean "can_view_rule_list", default: false
+    t.boolean "can_edit_rule_list", default: false
+    t.boolean "can_view_available_services", default: false
+    t.boolean "can_edit_available_services", default: false
+    t.boolean "can_assign_services", default: false
+    t.boolean "can_assign_requirements", default: false
+    t.boolean "can_become_other_users", default: false
+    t.boolean "can_edit_translations", default: false
+    t.boolean "can_view_vspdats", default: false
+    t.boolean "can_manage_config", default: false
+    t.boolean "can_create_overall_note", default: false
+    t.boolean "can_delete_client_notes", default: false
+    t.boolean "can_enter_deidentified_clients", default: false
+    t.boolean "can_manage_deidentified_clients", default: false
+    t.boolean "can_add_cohorts_to_deidentified_clients", default: false
+    t.boolean "can_enter_identified_clients", default: false
+    t.boolean "can_manage_identified_clients", default: false
+    t.boolean "can_add_cohorts_to_identified_clients", default: false
+    t.boolean "can_manage_neighborhoods", default: false
+    t.boolean "can_view_assigned_programs", default: false
+    t.boolean "can_edit_assigned_programs", default: false
+    t.boolean "can_export_deidentified_clients", default: false
+    t.boolean "can_export_identified_clients", default: false
+    t.boolean "can_manage_tags", default: false
+    t.boolean "can_manage_imported_clients", default: false
+    t.boolean "can_edit_clients_based_on_rules", default: false
+    t.boolean "can_send_notes_via_email", default: false
+    t.boolean "can_upload_deidentified_clients", default: false
+    t.boolean "can_delete_matches", default: false
+    t.boolean "can_reopen_matches", default: false
+    t.index ["name"], name: "index_roles_on_name"
   end
 
-  create_table "rules", force: :cascade do |t|
-    t.string   "name",       null: false
+  create_table "rules", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.string   "type"
-    t.string   "verb"
-    t.index ["deleted_at"], name: "index_rules_on_deleted_at", using: :btree
+    t.string "type"
+    t.string "verb"
+    t.index ["deleted_at"], name: "index_rules_on_deleted_at"
   end
 
-  create_table "secondary_races", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "secondary_races", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "service_rules", force: :cascade do |t|
-    t.integer  "rule_id"
-    t.integer  "service_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_service_rules_on_deleted_at", using: :btree
-    t.index ["rule_id"], name: "index_service_rules_on_rule_id", using: :btree
-    t.index ["service_id"], name: "index_service_rules_on_service_id", using: :btree
-  end
-
-  create_table "services", force: :cascade do |t|
-    t.string   "name",       null: false
+  create_table "service_rules", id: :serial, force: :cascade do |t|
+    t.integer "rule_id"
+    t.integer "service_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_service_rules_on_deleted_at"
+    t.index ["rule_id"], name: "index_service_rules_on_rule_id"
+    t.index ["service_id"], name: "index_service_rules_on_service_id"
   end
 
-  create_table "sessions", force: :cascade do |t|
-    t.string   "session_id", null: false
-    t.text     "data"
+  create_table "services", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+  end
+
+  create_table "sessions", id: :serial, force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
-    t.index ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "social_security_number_quality_codes", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "social_security_number_quality_codes", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "stalled_responses", force: :cascade do |t|
-    t.boolean "client_engaging", default: true,  null: false
-    t.string  "reason",                          null: false
-    t.string  "decision_type",                   null: false
-    t.boolean "requires_note",   default: false, null: false
-    t.boolean "active",          default: true,  null: false
-    t.integer "weight",          default: 0,     null: false
+  create_table "stalled_responses", id: :serial, force: :cascade do |t|
+    t.boolean "client_engaging", default: true, null: false
+    t.string "reason", null: false
+    t.string "decision_type", null: false
+    t.boolean "requires_note", default: false, null: false
+    t.boolean "active", default: true, null: false
+    t.integer "weight", default: 0, null: false
   end
 
-  create_table "sub_programs", force: :cascade do |t|
-    t.string   "program_type"
-    t.integer  "program_id"
-    t.integer  "building_id"
-    t.integer  "subgrantee_id"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.datetime "deleted_at"
-    t.integer  "matched",                       default: 0
-    t.integer  "in_progress",                   default: 0
-    t.integer  "vacancies",                     default: 0
-    t.string   "name"
-    t.integer  "sub_contractor_id"
-    t.integer  "hsa_id"
-    t.integer  "voucher_count",                 default: 0
-    t.boolean  "confidential",                  default: false, null: false
-    t.text     "eligibility_requirement_notes"
-    t.boolean  "closed",                        default: false
-    t.index ["building_id"], name: "index_sub_programs_on_building_id", using: :btree
-    t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at", using: :btree
-    t.index ["program_id"], name: "index_sub_programs_on_program_id", using: :btree
-    t.index ["subgrantee_id"], name: "index_sub_programs_on_subgrantee_id", using: :btree
-  end
-
-  create_table "subgrantee_contacts", force: :cascade do |t|
-    t.integer  "subgrantee_id", null: false
-    t.integer  "contact_id",    null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.datetime "deleted_at"
-    t.index ["contact_id"], name: "index_subgrantee_contacts_on_contact_id", using: :btree
-    t.index ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at", using: :btree
-    t.index ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id", using: :btree
-  end
-
-  create_table "subgrantee_services", force: :cascade do |t|
-    t.integer  "subgrantee_id"
-    t.integer  "service_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_subgrantee_services_on_deleted_at", using: :btree
-    t.index ["service_id"], name: "index_subgrantee_services_on_service_id", using: :btree
-    t.index ["subgrantee_id"], name: "index_subgrantee_services_on_subgrantee_id", using: :btree
-  end
-
-  create_table "subgrantees", force: :cascade do |t|
-    t.string   "name"
-    t.string   "abbreviation"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "id_in_data_source"
-    t.integer  "disabled"
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
-    t.datetime "deleted_at"
-  end
-
-  create_table "tags", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "deleted_at"
-    t.boolean  "rrh_assessment_trigger", default: false, null: false
-  end
-
-  create_table "translation_keys", force: :cascade do |t|
-    t.string   "key",        default: "", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["key"], name: "index_translation_keys_on_key", using: :btree
-  end
-
-  create_table "translation_texts", force: :cascade do |t|
-    t.text     "text"
-    t.string   "locale"
-    t.integer  "translation_key_id", null: false
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.index ["translation_key_id"], name: "index_translation_texts_on_translation_key_id", using: :btree
-  end
-
-  create_table "unavailable_as_candidate_fors", force: :cascade do |t|
-    t.integer  "client_id",                                        null: false
-    t.string   "match_route_type",                                 null: false
-    t.datetime "created_at",       default: '2019-11-22 18:08:17', null: false
-    t.datetime "updated_at",       default: '2019-11-22 18:08:17', null: false
-    t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id", using: :btree
-    t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type", using: :btree
-  end
-
-  create_table "units", force: :cascade do |t|
-    t.integer  "id_in_data_source"
-    t.string   "name"
-    t.boolean  "available"
-    t.string   "target_population_a"
-    t.string   "target_population_b"
-    t.boolean  "mc_kinney_vento"
-    t.integer  "chronic"
-    t.integer  "veteran"
-    t.integer  "adult_only"
-    t.integer  "family"
-    t.integer  "child_only"
-    t.integer  "building_id",                                null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.datetime "deleted_at"
-    t.integer  "data_source_id"
-    t.string   "data_source_id_column_name"
-    t.boolean  "elevator_accessible",        default: false, null: false
-    t.index ["building_id"], name: "index_units_on_building_id", using: :btree
-    t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)", using: :btree
-    t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source", using: :btree
-  end
-
-  create_table "user_roles", force: :cascade do |t|
-    t.integer  "role_id"
-    t.integer  "user_id"
+  create_table "sub_programs", id: :serial, force: :cascade do |t|
+    t.string "program_type"
+    t.integer "program_id"
+    t.integer "building_id"
+    t.integer "subgrantee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["role_id"], name: "index_user_roles_on_role_id", using: :btree
-    t.index ["user_id"], name: "index_user_roles_on_user_id", using: :btree
+    t.datetime "deleted_at"
+    t.integer "matched", default: 0
+    t.integer "in_progress", default: 0
+    t.integer "vacancies", default: 0
+    t.string "name"
+    t.integer "sub_contractor_id"
+    t.integer "hsa_id"
+    t.integer "voucher_count", default: 0
+    t.boolean "confidential", default: false, null: false
+    t.text "eligibility_requirement_notes"
+    t.boolean "closed", default: false
+    t.index ["building_id"], name: "index_sub_programs_on_building_id"
+    t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at"
+    t.index ["program_id"], name: "index_sub_programs_on_program_id"
+    t.index ["subgrantee_id"], name: "index_sub_programs_on_subgrantee_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                                              null: false
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.string   "encrypted_password",           default: "",          null: false
-    t.string   "reset_password_token"
+  create_table "subgrantee_contacts", id: :serial, force: :cascade do |t|
+    t.integer "subgrantee_id", null: false
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["contact_id"], name: "index_subgrantee_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at"
+    t.index ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id"
+  end
+
+  create_table "subgrantee_services", id: :serial, force: :cascade do |t|
+    t.integer "subgrantee_id"
+    t.integer "service_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_subgrantee_services_on_deleted_at"
+    t.index ["service_id"], name: "index_subgrantee_services_on_service_id"
+    t.index ["subgrantee_id"], name: "index_subgrantee_services_on_subgrantee_id"
+  end
+
+  create_table "subgrantees", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "abbreviation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "id_in_data_source"
+    t.integer "disabled"
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
+    t.datetime "deleted_at"
+  end
+
+  create_table "tags", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+    t.boolean "rrh_assessment_trigger", default: false, null: false
+  end
+
+  create_table "translation_keys", id: :serial, force: :cascade do |t|
+    t.string "key", default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["key"], name: "index_translation_keys_on_key"
+  end
+
+  create_table "translation_texts", id: :serial, force: :cascade do |t|
+    t.text "text"
+    t.string "locale"
+    t.integer "translation_key_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["translation_key_id"], name: "index_translation_texts_on_translation_key_id"
+  end
+
+  create_table "unavailable_as_candidate_fors", id: :serial, force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.string "match_route_type", null: false
+    t.datetime "created_at", default: "2019-11-22 18:08:17", null: false
+    t.datetime "updated_at", default: "2019-11-22 18:08:17", null: false
+    t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
+    t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
+  end
+
+  create_table "units", id: :serial, force: :cascade do |t|
+    t.integer "id_in_data_source"
+    t.string "name"
+    t.boolean "available"
+    t.string "target_population_a"
+    t.string "target_population_b"
+    t.boolean "mc_kinney_vento"
+    t.integer "chronic"
+    t.integer "veteran"
+    t.integer "adult_only"
+    t.integer "family"
+    t.integer "child_only"
+    t.integer "building_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.integer "data_source_id"
+    t.string "data_source_id_column_name"
+    t.boolean "elevator_accessible", default: false, null: false
+    t.index ["building_id"], name: "index_units_on_building_id"
+    t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)"
+    t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source"
+  end
+
+  create_table "user_roles", id: :serial, force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                default: 0,           null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
-    t.string   "confirmation_token"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",              default: 0,           null: false
-    t.string   "unlock_token"
+    t.string "unconfirmed_email"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
     t.datetime "locked_at"
-    t.string   "invitation_token"
+    t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
-    t.integer  "invitation_limit"
-    t.integer  "invited_by_id"
-    t.string   "invited_by_type"
-    t.integer  "invitations_count",            default: 0
-    t.boolean  "receive_initial_notification", default: false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email_schedule",               default: "immediate", null: false
-    t.boolean  "active",                       default: true,        null: false
-    t.string   "deprecated_agency"
-    t.integer  "agency_id"
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-    t.index ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
-    t.index ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+    t.integer "invitation_limit"
+    t.integer "invited_by_id"
+    t.string "invited_by_type"
+    t.integer "invitations_count", default: 0
+    t.boolean "receive_initial_notification", default: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email_schedule", default: "immediate", null: false
+    t.boolean "active", default: true, null: false
+    t.string "deprecated_agency"
+    t.integer "agency_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invitations_count"], name: "index_users_on_invitations_count"
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  create_table "versions", force: :cascade do |t|
-    t.string   "item_type",         null: false
-    t.integer  "item_id",           null: false
-    t.string   "event",             null: false
-    t.string   "whodunnit"
-    t.text     "object"
+  create_table "versions", id: :serial, force: :cascade do |t|
+    t.string "item_type", null: false
+    t.integer "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
     t.datetime "created_at"
-    t.integer  "user_id"
-    t.string   "session_id"
-    t.string   "request_id"
-    t.string   "notification_code"
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+    t.integer "user_id"
+    t.string "session_id"
+    t.string "request_id"
+    t.string "notification_code"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  create_table "veteran_statuses", force: :cascade do |t|
-    t.integer  "numeric"
-    t.string   "text"
+  create_table "veteran_statuses", id: :serial, force: :cascade do |t|
+    t.integer "numeric"
+    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "vouchers", force: :cascade do |t|
-    t.boolean  "available"
-    t.date     "date_available"
-    t.integer  "sub_program_id"
-    t.integer  "unit_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+  create_table "vouchers", id: :serial, force: :cascade do |t|
+    t.boolean "available"
+    t.date "date_available"
+    t.integer "sub_program_id"
+    t.integer "unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.integer  "user_id"
-    t.index ["deleted_at"], name: "index_vouchers_on_deleted_at", using: :btree
-    t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id", using: :btree
-    t.index ["unit_id"], name: "index_vouchers_on_unit_id", using: :btree
+    t.integer "user_id"
+    t.index ["deleted_at"], name: "index_vouchers_on_deleted_at"
+    t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id"
+    t.index ["unit_id"], name: "index_vouchers_on_unit_id"
   end
 
   add_foreign_key "opportunities", "vouchers"

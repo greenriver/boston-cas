@@ -193,6 +193,7 @@ module Cas
         :tags,
         :case_manager_contact_info,
         :vash_eligible,
+        :pregnancy_status,
       ]
     end
 

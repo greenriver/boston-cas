@@ -319,5 +319,13 @@ FactoryBot.define do
     name { "Interested in set-asides" }
     verb { "be" }
   end
+  factory :vash_eligible, class: "Rules::VashEligible" do
+    name { "VASH Eligibile" }
+    verb { "be" }
+  end
+  factory :pregnant, class: "Rules::Pregnant" do
+    name { "Pregnant" }
+    verb { "be" }
+  end
 end
 
