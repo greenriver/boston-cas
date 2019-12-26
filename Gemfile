@@ -3,8 +3,8 @@ source "https://rubygems.org"
 
 gem "pg", '~> 0.20.0'
 gem 'activerecord-import'
-gem 'composite_primary_keys', '~> 11.0'
-gem "rails", '~> 5.2.4.1'
+gem 'composite_primary_keys', '~> 12.0'
+gem "rails", '~>6.0.2.1'
 gem 'bootsnap'
 gem 'bcrypt'
 gem 'with_advisory_lock'
