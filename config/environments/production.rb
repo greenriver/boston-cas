@@ -112,7 +112,7 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
-  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours, raise_errors: false, ssl: cache_ssl, namespace: :cas }
+  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, raise_errors: false, ssl: cache_ssl, namespace: :cas)
 
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = deliver_method

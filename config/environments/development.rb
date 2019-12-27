@@ -69,8 +69,13 @@ Rails.application.configure do
   config.sandbox_email_mode = true
 
   config.force_ssl = false
-  config.cache_store = :redis_store, Rails.application.config_for(:cache_store), { expires_in: 8.hours }
+  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours)
 
   # do gzip compressing in dev mode to simulate nginx config in production
   config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
+
+  # Disable hostname checking for puma-dev
+  Rails.application.configure do
+    config.hosts.clear
+  end
 end

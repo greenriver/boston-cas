@@ -38,7 +38,7 @@ gem 'mini_magick'
 
 # No attachment to unicorn here-- probably want to go with passenger or puma
 gem 'unicorn-rails'
-gem 'redis-rails'
+gem 'redis'
 
 gem "lograge"
 gem 'activerecord-session_store'

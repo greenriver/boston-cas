@@ -20,11 +20,27 @@ default: &default
   sslrootcert: /etc/ssl/certs/rds-combined-ca-bundle.pem
   <% end %>
 
-<%= ENV['RAILS_ENV'] %>:
+development:
   <<: *default
   database: <%= ENV['DATABASE_APP_DB'] %>
 
-<%= "#{ENV['RAILS_ENV']}_warehouse" %>:
+staging:
+  <<: *default
+  database: <%= ENV['DATABASE_APP_DB'] %>
+
+production:
+  <<: *default
+  database: <%= ENV['DATABASE_APP_DB'] %>
+
+development_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+
+staging_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+
+production_warehouse:
   <<: *default
   database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
 
