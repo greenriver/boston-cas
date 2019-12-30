@@ -170,7 +170,7 @@ module MatchProgressUpdates
             contact_id: contact_id
           )
         end
-        NotificationsMailer.progress_update_requested(notifications.map(&:id)).deliver_later
+        NotificationsMailer.with(notification_ids: notifications.map(&:id)).progress_update_requested.deliver_later
         notifications.each(&:record_delivery_event!)
       end
       # make note on all matches that a notification was sent
@@ -202,7 +202,7 @@ module MatchProgressUpdates
             contact_id: contact_id
           )
         end
-        NotificationsMailer.dnd_progress_update_late(notifications.map(&:id)).deliver_later
+        NotificationsMailer.with(notification_ids: notifications.map(&:id)).dnd_progress_update_late.deliver_later
         notifications.each(&:record_delivery_event!)
       end
       # make note on all matches that a notification was sent

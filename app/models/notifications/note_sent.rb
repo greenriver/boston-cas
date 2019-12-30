@@ -14,7 +14,7 @@ module Notifications
 
     # override deliver so we can pass along the note
     def deliver
-      NotificationsMailer.note_sent(self, note).deliver_later
+      NotificationsMailer.with(notification: self, note: note).note_sent.deliver_later
       record_delivery_event!
     end
 

@@ -43,7 +43,7 @@ module Notifications
 
     class DeliverJob < ActiveJob::Base
       def perform(notification)
-        NotificationsMailer.send(notification.notification_type, notification).deliver_now
+        NotificationsMailer.with(notification: notification).send(notification.notification_type).deliver_now
         notification.record_delivery_event!
       end
     end

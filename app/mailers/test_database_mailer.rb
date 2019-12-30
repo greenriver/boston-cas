@@ -4,12 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-# bundle exec rails runner 'TestDatabaseMailer.ping("somebody@greenriver.com").deliver_now'
+# bundle exec rails runner 'TestDatabaseMailer.with(email: "somebody@greenriver.com").ping.deliver_now'
 
 class TestDatabaseMailer < DatabaseMailer
   default from: 'noreply@greenriver.com'
 
-  def ping(email)
+  def ping
+    email = params[:email]
     mail({
       to: [email],
       subject: 'test'

@@ -8,7 +8,7 @@
 
 # Don't force requests from old versions of IE to be UTF-8 encoded.
 # Rails.application.config.action_view.default_enforce_utf8 = false
-gi
+
 # Embed purpose and expiry metadata inside signed and encrypted
 # cookies for increased security.
 #

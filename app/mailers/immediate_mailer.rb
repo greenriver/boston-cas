@@ -6,8 +6,9 @@
 
 class ImmediateMailer < ApplicationMailer
 
-  def immediate message, to
-    @message = message
+  def immediate
+    to = params[:to]
+    @message = params[:message]
     mail to: to, subject: "#{prefix} #{@message.subject}"
   end
 
