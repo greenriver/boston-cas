@@ -50,6 +50,7 @@ gem 'html2haml'
 gem 'devise', '~> 4'
 gem 'devise_invitable'
 gem 'devise-pwned_password'
+gem 'pretender'
 
 gem 'authtrail' # for logging login attempts
 gem 'maxminddb' # for local geocoding of login attempts
