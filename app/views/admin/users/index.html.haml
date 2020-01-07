@@ -45,10 +45,10 @@
                 %th Roles
                 %th Status
                 %th Matches
+                %th Edit
                 - if can_become_other_users?
-                  %th
-                %th
-                %th
+                  %th Become
+                %th De-activate
             %tbody
               - @users.each do |user|
                 %tr
@@ -65,16 +65,16 @@
                   %td.text-center
                     - matches = user.contact.try(:client_opportunity_match_contacts) || []
                     = matches.size
-                  - if can_become_other_users?
-                    %td
-                      - if @available_for_becoming.include?(user.id)
-                        = link_to admin_user_become_path(user_id: user.id) do
-                          %span.icon-enter
-                          Become
                   %td
                     = link_to action: :edit, id: user do
                       %span.icon-pencil
                       Edit
+                  - if can_become_other_users?
+                    %td
+                      - if user.impersonateable_by?(true_user)
+                        = link_to impersonate_admin_user_path(true_user, become_id: user.id), method: :post do
+                          %span.icon-enter
+                          Become
                   %td
                     = link_to admin_user_path(user),  method: :delete, data: {confirm: "Would you really like to de-activate the account? #{user.name} will no longer be able to login."}, class: 'btn btn-link d-flex' do
                       %span.icon-cross

@@ -10,8 +10,9 @@ module Admin
     # route collision with Devise
 
     before_action :authenticate_user!
-    before_action :require_can_edit_users!
-    before_action :set_user, only: [:edit, :confirm, :update, :destroy]
+    before_action :require_can_edit_users!, except: [:stop_impersonating]
+    before_action :set_user, only: [:edit, :confirm, :update, :destroy, :impersonate]
+    before_action :require_can_become_other_users!, only: [:impersonate]
     before_action :set_editable_programs, only: [:edit, :confirm, :update]
 
     helper_method :sort_column, :sort_direction
@@ -28,9 +29,6 @@ module Admin
       @users = @users
         .order(sort_column => sort_direction)
         .page(params[:page]).per(25)
-      if current_user.can_become_other_users?
-        @available_for_becoming = User.non_admin.pluck(:id)
-      end
       @inactive_users = User.inactive
     end
 
@@ -55,6 +53,17 @@ module Admin
       if ! adding_admin?
         update
       end
+    end
+
+    def impersonate
+      become = User.find(params[:become_id].to_i)
+      impersonate_user(become)
+      redirect_to root_path
+    end
+
+    def stop_impersonating
+      stop_impersonating_user
+      redirect_to root_path
     end
 
     def update
