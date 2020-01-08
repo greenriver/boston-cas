@@ -2,6 +2,4 @@
 = render 'match_details', match: match
 = render 'tab_navigation', match: match
 
-%p= paginate @matches
-= render 'matches/list', matches: @matches, match_type: 'closed'
-%p= paginate @matches
+= render 'matches/list', opportunities: @opportunities, match_type: 'closed'

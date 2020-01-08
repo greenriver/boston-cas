@@ -74,3 +74,4 @@ TaggedWith,Specified tag,have
 RequireInterestInNeighborhood,At least one Neighborhood preference,have
 VispdatScoreFourOrLess,VI-SPDAT score of 4 or less,have
 VashEligible,VASH Eligible,be
+Pregnant,Pregnant,be

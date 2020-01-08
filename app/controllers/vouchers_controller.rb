@@ -84,6 +84,7 @@ class VouchersController < ApplicationController
         @vouchers.each do |voucher|
           # check this before we save the voucher
           changed_to_available = voucher.changing_to_available?
+          voucher.made_available_at = Time.current if changed_to_available
           save_success = voucher.save
           if save_success && voucher.available?
             voucher.create_opportunity!(available: true, available_candidate: true) if voucher.opportunity.blank?
