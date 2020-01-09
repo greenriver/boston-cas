@@ -19,8 +19,6 @@ gem 'coffee-rails'
 gem 'execjs'
 gem 'sprockets-es6'
 
-gem 'letsencrypt_plugin'
-
 gem 'validates_email_format_of'
 
 gem "simple_form"
