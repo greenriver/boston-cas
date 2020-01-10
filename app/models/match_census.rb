@@ -9,10 +9,11 @@ class MatchCensus < ActiveRecord::Base
   belongs_to :match, class_name: 'ClientOpportunityMatch', required: false
 
   def self.populate!
-    # Add all opportunities that have not been ma
+    # Add all opportunities that do not have active matches
     Opportunity.with_voucher.available_candidate.distinct.find_each do |opp|
       populate_from_opportunity!(opp)
     end
+    # Add all opportunities with active matches
     Opportunity.with_voucher.joins(:active_matches).distinct.find_each do |opp|
       populate_from_opportunity!(opp)
     end
@@ -23,6 +24,8 @@ class MatchCensus < ActiveRecord::Base
       # Clear any existing data for this opportunity on this day, and rebuild
       where(opportunity_id: opp.id, date: Date.current).delete_all
       clients_for_route = Client.available_for_matching(opp.match_route)
+
+      # IDs of prioritized clients who match this opportunity, prioritized by route configuration
       available_client_ids = opp.matching_clients(clients_for_route).pluck(:id)
       sub_program = opp.sub_program
       program = sub_program.program
