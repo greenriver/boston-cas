@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -11,7 +11,7 @@ module Warehouse
 
 
     def self.backfill
-      self.transaction do 
+      self.transaction do
         ::Client.available.each do |client|
           if client.project_client.data_source_id == 1
             create!(

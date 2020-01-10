@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -79,7 +79,7 @@ class Matching::Engine
         client: client,
         match_route: opportunity.match_route,
         universe_state: universe_state)
-      
+
       if client_priority == 1
         if opportunity.match_route.should_activate_match
           match.activate!

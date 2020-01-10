@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -11,7 +11,7 @@ module ControllerAuthorization
   # This builds useful methods in the form:
   # require_permission!
   # such as require_can_edit_users!
-  # It then checks the appropriate permission against the current user throwing up 
+  # It then checks the appropriate permission against the current user throwing up
   # an alert if access is blocked
   Role.permissions.each do |permission|
     define_method("require_#{permission}!") do

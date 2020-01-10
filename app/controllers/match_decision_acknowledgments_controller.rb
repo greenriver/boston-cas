@@ -1,12 +1,12 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
 class MatchDecisionAcknowledgmentsController < ApplicationController
   include HasMatchAccessContext
-  
+
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
   before_action :find_match!
@@ -32,13 +32,13 @@ class MatchDecisionAcknowledgmentsController < ApplicationController
     def find_match!
       @match = match_scope.find params[:match_id]
     end
-    
+
     def find_decision!
       @decision = @match.decision_from_param params[:decision_id]
     end
-    
+
     def authorize_decision!
       # TODO ensure that the current contact can authorize this decision
     end
-    
+
 end

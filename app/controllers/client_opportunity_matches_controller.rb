@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -8,7 +8,7 @@ class ClientOpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_match, only: [:show]
   before_action :require_can_view_all_matches!
-  
+
   helper_method :sort_column, :sort_direction
 
   def index
@@ -26,7 +26,7 @@ class ClientOpportunityMatchesController < ApplicationController
 
     # opportunity filter
     if params[:opportunity_id].present? && (@opportunity = Opportunity.find(params[:opportunity_id].to_i))
-      @matches = @matches.where(opportunity_id: @opportunity.id) 
+      @matches = @matches.where(opportunity_id: @opportunity.id)
     end
 
     # sort / paginate
@@ -46,7 +46,7 @@ class ClientOpportunityMatchesController < ApplicationController
   def create
     client = Client.order('RANDOM()').first
     opportunity = Opportunity.where(available: true).order('RANDOM()').first
-    
+
     match = ClientOpportunityMatch.create!(
       score: Faker::Number.between(25, 100),
       client: client,
@@ -68,7 +68,7 @@ class ClientOpportunityMatchesController < ApplicationController
   def set_match
     @match = match_scope.find(params[:id])
   end
-  
+
   def authorization_record
     @match
   end

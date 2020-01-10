@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -8,7 +8,7 @@
 # from services, so the common code is here
 module InheritsRequirementsFromServices
   extend ActiveSupport::Concern
-  
+
   def inherited_service_requirements_by_source
     {}.tap do |result|
       services.each do |service|
