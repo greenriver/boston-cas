@@ -56,11 +56,11 @@ class Voucher < ApplicationRecord
 
     unit_matches = Unit.where(
       Unit.arel_table[:id].eq arel_table[:unit_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     sub_program_matches = SubProgram.where(
       SubProgram.arel_table[:id].eq arel_table[:sub_program_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     query = "%#{text}%"
     where(

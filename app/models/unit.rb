@@ -44,7 +44,7 @@ class Unit < ApplicationRecord
 
     building_matches = Building.where(
       Building.arel_table[:id].eq arel_table[:building_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     query = "%#{text}%"
     where(

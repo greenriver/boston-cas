@@ -54,7 +54,7 @@
     $('select').select2();
 
     $('.program-type').on('change', 'input', function() {
-      var have_buildings = #{SubProgram.have_buildings};
+      var have_buildings = "#{SubProgram.have_buildings}";
       $('div.building').hide();
       if($.inArray(this.value, have_buildings) != -1) {
         $(this).parent().siblings('.building').show();

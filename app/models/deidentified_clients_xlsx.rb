@@ -7,7 +7,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     parse_xlsx if ! @xlsx
 
     # Assume data is on default sheet, and header starts at A1
-    @xlsx.row(1) == self.class.file_header
+    @xlsx.row(1).map(&:strip).map(&:downcase) == self.class.file_header.map(&:strip).map(&:downcase)
   end
 
   def import(agency, force_update: false)
@@ -179,6 +179,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       'Client\'s last residential zip code ',
       'VI-SPDAT Score'
     ].freeze
+
   end
 
   private def file_attributes

@@ -106,15 +106,15 @@ class SubProgram < ApplicationRecord
 
     program_matches = Program.where(
       Program.arel_table[:id].eq arel_table[:program_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     building_matches = Building.where(
       Building.arel_table[:id].eq arel_table[:building_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     subgrantee_matches = Subgrantee.where(
       Subgrantee.arel_table[:id].eq arel_table[:subgrantee_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     query = "%#{text}%"
     where(

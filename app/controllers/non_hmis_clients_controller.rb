@@ -27,15 +27,15 @@ class NonHmisClientsController < ApplicationController
 
     # filter
     if clean_agency.present?
-      @non_hmis_clients = @non_hmis_clients.where(agency: clean_agency)
+      @non_hmis_clients = @non_hmis_clients.where(agency: Agency.where(name: clean_agency))
     end
     if clean_cohort.present?
       @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', clean_cohort)
     end
-    if clean_available.present?
+    unless clean_available.nil?
       @non_hmis_clients = @non_hmis_clients.where(available: clean_available)
     end
-    if clean_family_member.present?
+    unless clean_family_member.nil?
       @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member)
     end
     respond_to do |format|

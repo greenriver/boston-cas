@@ -14,13 +14,13 @@
 /////////////////////
 // Vendor libs
 ////////////////////
-//= require jquery
+//= require jquery3
 //= require popper
 //= require bootstrap
 //= require moment
 //= require jquery_ujs
 //= require handlebars.runtime
-//= require select2-full
+//= require select2
 //= require bootstrap-datepicker
 //= require bootstrap-datetimepicker
 //= require jquery.periodicalupdater

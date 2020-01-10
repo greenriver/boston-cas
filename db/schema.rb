@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_08_155100) do
+ActiveRecord::Schema.define(version: 2020_01_10_174939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(version: 2020_01_08_155100) do
     t.binary "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text "file"
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
@@ -408,6 +409,7 @@ ActiveRecord::Schema.define(version: 2020_01_08_155100) do
     t.string "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text "file"
   end
 
   create_table "letsencrypt_plugin_challenges", id: :serial, force: :cascade do |t|

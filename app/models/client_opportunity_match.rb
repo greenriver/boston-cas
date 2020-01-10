@@ -299,16 +299,16 @@ class ClientOpportunityMatch < ApplicationRecord
 
     client_matches = Client.where(
       Client.arel_table[:id].eq arel_table[:client_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     opp_matches = Opportunity.where(
       Opportunity.arel_table[:id].eq arel_table[:opportunity_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
 
     contact_matches = ClientOpportunityMatchContact.where(
       ClientOpportunityMatchContact.arel_table[:match_id].eq(arel_table[:id])
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     where(
       client_matches.

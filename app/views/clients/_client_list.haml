@@ -37,11 +37,11 @@
                   .badge.badge-success= @matches[client.id]
               %td
                 = link_to client_path(client) do
-                  = client.last_name
+                  = client.last_name || 'Uknown'
                   = client_data_quality client, :name
               %td
                 = link_to client_path(client) do
-                  = client.first_name
+                  = client.first_name || 'Uknown'
                   = client_data_quality client, :name
               %td
                 = client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))

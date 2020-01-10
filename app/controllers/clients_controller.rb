@@ -66,7 +66,11 @@ class ClientsController < ApplicationController
       if @client.parked?
         @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true)
       end
-      redirect_to client_path(@client), notice: "Client updated"
+      if request.xhr?
+        head :ok
+      else
+        redirect_to client_path(@client), notice: "Client updated"
+      end
     else
       render :show, {flash: {error: 'Unable update client.'}}
     end

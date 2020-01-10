@@ -65,11 +65,11 @@ class Opportunity < ApplicationRecord
 
     unit_matches = Unit.where(
       Unit.arel_table[:id].eq arel_table[:unit_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     voucher_matches = Voucher.where(
       Voucher.arel_table[:id].eq arel_table[:voucher_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     where(
       unit_matches

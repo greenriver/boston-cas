@@ -36,7 +36,7 @@ module Warehouse
     # Utility method to generate sql for an attribute name
     private def attribute_to_sql(klass, attribute_name)
       arel_table = klass.arel_table
-      connection = arel_table.engine.connection
+      connection = klass.connection
       table_name = connection.quote_table_name(arel_table.name)
       column_name = connection.quote_column_name(attribute_name)
       "#{table_name}.#{column_name}"
@@ -108,8 +108,11 @@ module Warehouse
           client.client_opportunity_matches.each do |match|
             sub_program = match.sub_program
             next unless sub_program.present?
-            program = sub_program.program
+
             match_route = match.match_route
+            next unless match_route.present?
+
+            program = sub_program.program
             previous_updated_at = nil
             match_started_decision = match.send(match_route.initial_decision)
             match_started_at = if match_started_decision&.started?

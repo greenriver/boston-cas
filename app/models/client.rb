@@ -252,12 +252,8 @@ class Client < ApplicationRecord
   end
 
   def self.add_missing_tie_breakers
-    c_t = Client.arel_table
-    update = Arel::UpdateManager.new(c_t.engine)
-    update.table(c_t)
-    update.set([[c_t[:tie_breaker], Arel.sql('random()')]]).where(c_t[:tie_breaker].eq(nil))
-    result = ApplicationRecord.connection.execute(update.to_sql)
-    log "Updated #{result.cmd_tuples} clients with missing tie_breakers"
+    result = Client.where(tie_breaker: nil).update_all(Arel.sql('tie_breaker = random()'))
+    log "Updated #{result} clients with missing tie_breakers"
   end
 
   def self.ready_to_match match_route:

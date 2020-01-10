@@ -53,7 +53,6 @@ gem 'authtrail' # for logging login attempts
 gem 'maxminddb' # for local geocoding of login attempts
 
 gem 'handlebars_assets'
-gem 'select2-rails', git: 'https://github.com/greenriver/select2-rails.git'
 gem 'fuzzy_match'
 gem 'attribute_normalizer'
 gem 'momentjs-rails', '>= 2.9.0'

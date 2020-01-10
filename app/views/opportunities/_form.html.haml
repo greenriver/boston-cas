@@ -4,28 +4,28 @@
     = f.input :program, required: true, label: "Choose a #{Program.model_name.human}", as: :select, collection: @programs.map { |program| ["#{program.program.name} - #{program.name} – #{program.program_type_label}", program.id] }, wrapper_html: {class: 'jSubProgram'}
     = f.input :building, required: true, label: "Choose a #{Building.model_name.human}", as: :select, collection: @buildings.map { |b| ["#{b.name} - #{b.address}", b.id] }, wrapper_html: {class: 'jBuilding'}
     = f.input :units, required: true, label: "How many vacancies would you like to create?", as: :integer, input_html: {maxlength: 3, size: 4}
-    
+
   .form-actions
     = f.button :submit
 
 = content_for :page_js do
   :javascript
-    $('select').select2();
-
-    var program_types_with_buildings = #{SubProgram.types.map{|m| m[:label] if m[:building]}.compact.to_json}
-
-    $('.jSubProgram').on('change', 'select', function (e) {
-      selected = $(this).find('option:selected').text();
-      var show = false;
-      $('.jBuilding').hide();
-      $.each(program_types_with_buildings, function(i) {
-        if(selected && selected.includes(program_types_with_buildings[i])) {
-          show = true;
-          return;
+    $(document).ready(function() {
+      $('select').select2();
+      var program_types_with_buildings = #{raw SubProgram.types.map{|m| m[:label] if m[:building]}.compact}
+      $('.jSubProgram').on('change', 'select', function (e) {
+        selected = $(this).find('option:selected').text();
+        var show = false;
+        $('.jBuilding').hide();
+        $.each(program_types_with_buildings, function(i) {
+          if(selected && selected.includes(program_types_with_buildings[i])) {
+            show = true;
+            return;
+          }
+        });
+        if(show) {
+          $('.jBuilding').show();
         }
       });
-      if(show) {
-        $('.jBuilding').show();
-      }
+      $('.jSubProgram select').trigger('change')
     });
-    $('.jSubProgram select').trigger('change')

@@ -22,14 +22,6 @@ class ImportedClientsCsvFileUploader < CarrierWave::Uploader::Base
     text/plain
   ))
 
-  MANIPULATEABLE = IceNine.deep_freeze(
-    [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-    ]
-  )
-
   # normal content_type handling uses this
   # this is mostly to provide user feedback if they send
   # a content_type value with the upload

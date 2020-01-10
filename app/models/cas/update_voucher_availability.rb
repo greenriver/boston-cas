@@ -10,7 +10,7 @@ module Cas
     def run!
       vouchers = Voucher.where.not(date_available: nil).where(available: false)
       vouchers.each do |v|
-        if v.opportunity.blank? && v.date_available <= Date.today
+        if v.opportunity.blank? && v.date_available <= Date.current
           begin
             v.update! available: true, date_available: nil
           rescue ActiveRecord::RecordInvalid => e
@@ -21,6 +21,6 @@ module Cas
     end
 
     private
-    
+
   end
 end

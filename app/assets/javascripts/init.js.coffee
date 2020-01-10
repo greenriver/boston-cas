@@ -9,3 +9,6 @@ App.init = ->
 # TODO may also need to do on pjax_modal change
 $ ->
   App.init()
+  $('.datepicker.enable-on-load, .date_picker.enable-on-load')
+    .prop('disabled', false)
+    .datepicker()

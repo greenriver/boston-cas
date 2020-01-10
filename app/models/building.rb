@@ -64,7 +64,7 @@ class Building < ApplicationRecord
 
     subgrantee_matches = Subgrantee.where(
       Subgrantee.arel_table[:id].eq arel_table[:subgrantee_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     query = "%#{text}%"
     where(

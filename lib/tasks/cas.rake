@@ -10,6 +10,7 @@ namespace :cas do
     Client.ensure_availability
     Cas::UpdateVoucherAvailability.new.run!
     UnavailableAsCandidateFor.cleanup_expired!
+    Matching::RunEngineJob.perform_later
   end
 
   desc "Add/Update Clients with chronically homeless"

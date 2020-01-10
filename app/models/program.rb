@@ -117,7 +117,7 @@ class Program < ApplicationRecord
 
     funding_source_matches = FundingSource.where(
       FundingSource.arel_table[:id].eq arel_table[:funding_source_id]
-    ).text_search(text).exists
+    ).text_search(text).arel.exists
 
     query = "%#{text}%"
     where(

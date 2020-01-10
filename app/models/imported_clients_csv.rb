@@ -2,6 +2,7 @@ class ImportedClientsCsv < ApplicationRecord
 
   mount_uploader :file, ImportedClientsCsvFileUploader
 
+
   FORM_TIMESTAMP = 0 # A
   USER_EMAIL = 1 # B
   # HOUSEHOLD_ACKNOWLEDGEMENT = 2 # C - not in use
