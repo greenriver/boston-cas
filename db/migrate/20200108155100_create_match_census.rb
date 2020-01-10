@@ -1,4 +1,4 @@
-class CreateMatchCensus < ActiveRecord::Migration
+class CreateMatchCensus < ActiveRecord::Migration[4.2]
   def change
     create_table :match_census do |t|
       t.date :date, null: false, index: true
