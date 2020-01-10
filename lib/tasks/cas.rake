@@ -54,4 +54,9 @@ namespace :cas do
     Client.add_missing_tie_breakers
   end
 
+  desc "Populate Match Census"
+  task populate_match_census: [:environment, "log:info_to_stdout"] do
+    MatchCensus.populate!
+  end
+
 end
