@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  mount LetsencryptPlugin::Engine, at: '/'
-
   devise_for :users, controllers: { invitations: 'users/invitations', sessions: 'users/sessions'}
   devise_scope :user do
     match 'active' => 'users/sessions#active', via: :get
