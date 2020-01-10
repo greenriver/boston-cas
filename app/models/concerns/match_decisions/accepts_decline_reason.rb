@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -34,7 +34,7 @@ module MatchDecisions
 
       result.merge! params.require(:decision).permit(:decline_reason_other_explanation)
       return result
-    end    
+    end
 
     private def validate_decline_reason
       if status == "declined" && decline_reason_blank?
@@ -63,7 +63,7 @@ module MatchDecisions
         reason
       end
     end
-    
+
 
   end
 end

@@ -1,12 +1,12 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
 module CasSeeds
   class OpportunityHousingSubsidyAdminContact
-    
+
     def run!
       first_name = Faker::Name.first_name
       last_name = Faker::Name.last_name
@@ -17,19 +17,19 @@ module CasSeeds
         contact.last_name = last_name
         contact.phone = '(555) 555-5555'
       end
-      
+
       opportunity_ids_to_exclude = OpportunityContact
         .housing_subsidy_admin
         .where(contact_id: universal_contact.id)
         .pluck('DISTINCT opportunity_id')
-      
+
       opportunities = Opportunity.where.not id: opportunity_ids_to_exclude
       Rails.logger.info "Adding housing subsidy admin contact to #{opportunities.count} opportunities"
-      
+
       opportunities.find_each do |opportunity|
         opportunity.housing_subsidy_admin_contacts << universal_contact
       end
     end
-    
+
   end
 end

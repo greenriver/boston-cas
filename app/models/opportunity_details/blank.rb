@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -11,15 +11,15 @@ module OpportunityDetails
     def initialize opportunity
       @opportunity = opportunity
     end
-    
+
     def unit_name
       ''
     end
-    
+
     def building_name
       ''
     end
-    
+
     def program_name
       ''
     end
@@ -27,11 +27,11 @@ module OpportunityDetails
     def sub_program_name
       ''
     end
-    
+
     def subgrantee_name
       ''
     end
-    
+
     def organizations
       ''
     end
@@ -47,10 +47,10 @@ module OpportunityDetails
     def services
       []
     end
-    
+
     def rules_with_source
       []
     end
-    
+
   end
 end
