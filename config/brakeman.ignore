@@ -10,10 +10,41 @@
       "line": 3,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Building.model_name.human.pluralize",
-      "render_path": [{"type":"template","name":"buildings/new","line":1,"file":"app/views/buildings/new.html.haml","rendered":{"name":"buildings/_breadcrumbs","file":"app/views/buildings/_breadcrumbs.haml"}}],
+      "render_path": [
+        {
+          "type": "template",
+          "name": "buildings/new",
+          "line": 1,
+          "file": "app/views/buildings/new.html.haml",
+          "rendered": {
+            "name": "buildings/_breadcrumbs",
+            "file": "app/views/buildings/_breadcrumbs.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "buildings/_breadcrumbs"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "14479edfc627829b7aa9d806225d5d6c306809c64ef16fc92cec383927370ba7",
+      "check_name": "MassAssignment",
+      "message": "Parameters should be whitelisted for mass assignment",
+      "file": "app/helpers/application_helper.rb",
+      "line": 88,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ApplicationHelper",
+        "method": "sort_as_link"
       },
       "user_input": null,
       "confidence": "Medium",
@@ -26,7 +57,7 @@
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
       "file": "app/controllers/contacts_controller.rb",
-      "line": 82,
+      "line": 106,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:contact).permit(:first_name, :middle_name, :last_name, :email, :phone, :cell_phone, :role)",
       "render_path": null,
@@ -46,7 +77,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/active_matches_controller.rb",
-      "line": 77,
+      "line": 100,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "(match_scope.text_search(params[:q]).where(:id => visible_match_ids) or match_scope).stalled_notifications_sent.where(:last_decision => ({ :type => params[:current_step] })).joins(:match_route).where(:match_routes => ({ :type => params[:current_route] })).references(:client).includes(:client).joins(\"CROSS JOIN LATERAL (#{MatchDecisions::Base.where(\"match_id = client_opportunity_matches.id\").where.not(:status => nil).order(:created_at => :desc).limit(1).to_sql}) last_decision\").order((\"#{(((\"last_decision.updated_at\" or \"clients.first_name\") or \"clients.last_name\") or \"clients.calculated_first_homeless_night\")} #{sort_direction}\" + \" NULLS LAST\"))",
       "render_path": null,
@@ -69,7 +100,19 @@
       "line": 3,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Building.model_name.human.pluralize",
-      "render_path": [{"type":"controller","class":"BuildingsController","method":"edit","line":55,"file":"app/controllers/buildings_controller.rb","rendered":{"name":"buildings/edit","file":"app/views/buildings/edit.html.haml"}}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BuildingsController",
+          "method": "edit",
+          "line": 65,
+          "file": "app/controllers/buildings_controller.rb",
+          "rendered": {
+            "name": "buildings/edit",
+            "file": "app/views/buildings/edit.html.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "buildings/edit"
@@ -88,7 +131,19 @@
       "line": 7,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "simple_format(current_user.messages.find(params.require(:id)).body_html).gsub(URI.regexp([\"http\", \"https\"]), \"<a href=\\\"\\\\0\\\">\\\\0</a>\")",
-      "render_path": [{"type":"controller","class":"MessagesController","method":"show","line":27,"file":"app/controllers/messages_controller.rb","rendered":{"name":"messages/show","file":"app/views/messages/show.html.haml"}}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "MessagesController",
+          "method": "show",
+          "line": 33,
+          "file": "app/controllers/messages_controller.rb",
+          "rendered": {
+            "name": "messages/show",
+            "file": "app/views/messages/show.html.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "messages/show"
@@ -104,7 +159,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/closed_matches_controller.rb",
-      "line": 66,
+      "line": 72,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "(match_scope.text_search(params[:q]).where(:id => visible_match_ids) or match_scope).public_send(params[:current_step]).joins(:match_route).where(:match_routes => ({ :type => params[:current_route] })).references(:client).includes(:client).joins(\"CROSS JOIN LATERAL (#{MatchDecisions::Base.where(\"match_id = client_opportunity_matches.id\").where.not(:status => nil).order(:created_at => :desc).limit(1).to_sql}) last_decision\").order((\"#{(((\"clients.days_homeless\" or \"clients.first_name\") or \"clients.last_name\") or \"clients.calculated_first_homeless_night\")} #{sort_direction}\" + \" NULLS LAST\"))",
       "render_path": null,
@@ -124,7 +179,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/match_list_base_controller.rb",
-      "line": 38,
+      "line": 44,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "(match_scope.text_search(params[:q]) or match_scope).references(:client).includes(:client).order((\"#{\"clients.calculated_first_homeless_night\"} #{sort_direction}\" + \" NULLS LAST\"))",
       "render_path": null,
@@ -138,13 +193,33 @@
       "note": ""
     },
     {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "6570b35f65dd8da1e96f7171d484ea7c55cd0e3267f3f30d0b60d1aeb4ab3cef",
+      "check_name": "MassAssignment",
+      "message": "Parameters should be whitelisted for mass assignment",
+      "file": "app/helpers/application_helper.rb",
+      "line": 68,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ApplicationHelper",
+        "method": "manual_sort_link"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Dangerous Send",
       "warning_code": 23,
       "fingerprint": "734ae3c6bd5ea7d58b379ebe1243dd599b89a4aa82b7fa9d42a4bad5555063c9",
       "check_name": "Send",
       "message": "User controlled method execution",
       "file": "app/controllers/closed_matches_controller.rb",
-      "line": 54,
+      "line": 60,
       "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
       "code": "(match_scope.text_search(params[:q]).where(:id => visible_match_ids) or match_scope).public_send(params[:current_step])",
       "render_path": null,
@@ -158,25 +233,6 @@
       "note": ""
     },
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "b2b367e1061a76e3d4bb5e4b632c8c3695b371af74b50e02b2985295bbaf0889",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/sub_programs/_form.html.haml",
-      "line": 52,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "SubProgram.have_buildings",
-      "render_path": [{"type":"controller","class":"SubProgramsController","method":"create","line":27,"file":"app/controllers/sub_programs_controller.rb","rendered":{"name":"sub_programs/new","file":"app/views/sub_programs/new.html.haml"}},{"type":"template","name":"sub_programs/new","line":5,"file":"app/views/sub_programs/new.html.haml","rendered":{"name":"sub_programs/_form","file":"app/views/sub_programs/_form.html.haml"}}],
-      "location": {
-        "type": "template",
-        "template": "sub_programs/_form"
-      },
-      "user_input": null,
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
@@ -186,7 +242,29 @@
       "line": 21,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => match_scope.find(params[:match_id]).decision_from_param(params[:id]), {})",
-      "render_path": [{"type":"controller","class":"MatchDecisionsController","method":"show","line":23,"file":"app/controllers/match_decisions_controller.rb","rendered":{"name":"matches/show","file":"app/views/matches/show.haml"}},{"type":"template","name":"matches/show","line":1,"file":"app/views/matches/show.haml","rendered":{"name":"matches/_show","file":"app/views/matches/_show.haml"}}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "MatchDecisionsController",
+          "method": "show",
+          "line": 30,
+          "file": "app/controllers/match_decisions_controller.rb",
+          "rendered": {
+            "name": "matches/show",
+            "file": "app/views/matches/show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/show",
+          "line": 1,
+          "file": "app/views/matches/show.haml",
+          "rendered": {
+            "name": "matches/_show",
+            "file": "app/views/matches/_show.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "matches/_show"
@@ -202,7 +280,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/buildings_controller.rb",
-      "line": 29,
+      "line": 39,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "(building_scope.text_search(params[:q]) or building_scope).includes(:subgrantee).references(:subgrantee).order(\"#{(\"buildings.#{sort_column}\" or \"subgrantees.name\")} #{sort_direction}\")",
       "render_path": null,
@@ -222,7 +300,7 @@
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/admin/translation_keys_controller.rb",
-      "line": 47,
+      "line": 53,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(TranslationKey.find(params[:id].to_i))",
       "render_path": null,
@@ -242,7 +320,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/tagged_with.rb",
-      "line": 21,
+      "line": 27,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where((\"tags ->>'#{requirement.variable.to_s}' is not null\" or \"not(tags ->>'#{requirement.variable.to_s}' is not null) OR tags is null\"))",
       "render_path": null,
@@ -265,7 +343,19 @@
       "line": 13,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => PaperTrail::Version.preload(:item).order(:created_at => :desc).page(params[:page]).per(25), {})",
-      "render_path": [{"type":"controller","class":"Admin::VersionsController","method":"index","line":7,"file":"app/controllers/admin/versions_controller.rb","rendered":{"name":"admin/versions/index","file":"app/views/admin/versions/index.haml"}}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::VersionsController",
+          "method": "index",
+          "line": 13,
+          "file": "app/controllers/admin/versions_controller.rb",
+          "rendered": {
+            "name": "admin/versions/index",
+            "file": "app/views/admin/versions/index.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "admin/versions/index"
@@ -277,20 +367,42 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
-      "fingerprint": "d9ecf38c31f426f5f1971d9d83bf8f4c559d5431ecbe39bc4c56136c24e85814",
+      "fingerprint": "dc147405c1e02b10df380712ac9e324cc78eeb5d0623656d4918a18652961b99",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
-      "file": "app/views/programs/_form.html.haml",
-      "line": 48,
+      "file": "app/views/opportunities/_form.html.haml",
+      "line": 15,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "SubProgram.have_buildings",
-      "render_path": [{"type":"controller","class":"ProgramsController","method":"create","line":63,"file":"app/controllers/programs_controller.rb","rendered":{"name":"programs/new","file":"app/views/programs/new.html.haml"}},{"type":"template","name":"programs/new","line":6,"file":"app/views/programs/new.html.haml","rendered":{"name":"programs/_form","file":"app/views/programs/_form.html.haml"}}],
+      "code": "SubProgram.types.map do\n m[:label] if m[:building]\n end.compact",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "OpportunitiesController",
+          "method": "create",
+          "line": 95,
+          "file": "app/controllers/opportunities_controller.rb",
+          "rendered": {
+            "name": "opportunities/new",
+            "file": "app/views/opportunities/new.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "opportunities/new",
+          "line": 3,
+          "file": "app/views/opportunities/new.html.haml",
+          "rendered": {
+            "name": "opportunities/_form",
+            "file": "app/views/opportunities/_form.html.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
-        "template": "programs/_form"
+        "template": "opportunities/_form"
       },
-      "user_input": null,
-      "confidence": "Medium",
+      "user_input": "SubProgram.types.map",
+      "confidence": "Weak",
       "note": ""
     },
     {
@@ -303,7 +415,19 @@
       "line": 5,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Building.model_name.human",
-      "render_path": [{"type":"controller","class":"BuildingsController","method":"edit","line":55,"file":"app/controllers/buildings_controller.rb","rendered":{"name":"buildings/edit","file":"app/views/buildings/edit.html.haml"}}],
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "BuildingsController",
+          "method": "edit",
+          "line": 65,
+          "file": "app/controllers/buildings_controller.rb",
+          "rendered": {
+            "name": "buildings/edit",
+            "file": "app/views/buildings/edit.html.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "buildings/edit"
@@ -313,6 +437,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-04-08 20:07:49 -0400",
-  "brakeman_version": "4.5.0"
+  "updated": "2020-01-10 15:12:59 -0500",
+  "brakeman_version": "4.7.2"
 }
