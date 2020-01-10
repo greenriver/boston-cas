@@ -20,6 +20,7 @@
 # Learn more: http://github.com/javan/whenever
 every 1.day, at: '5:00 am' do
   rake "cas:daily"
+  rake "cas:populate_match_census"
 end
 
 every 1.day, at: '4:00 am' do

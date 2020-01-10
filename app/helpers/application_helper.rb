@@ -48,6 +48,10 @@ module ApplicationHelper
     #dob.try(:strftime, '%m/%d/%Y')
   end
 
+  def impersonating?
+    current_user != true_user
+  end
+
   # returns the class associated with the current sort order of a column
   def current_sort_order(columns)
     columns[sort_column] = sort_direction
@@ -142,7 +146,7 @@ module ApplicationHelper
   def branch_info
     branch_name = `git rev-parse --abbrev-ref HEAD`
     content_tag :div, :class => "navbar-text" do
-      content_tag :span, branch_name, :class => "badge badge-warning"
+      content_tag :span, branch_name, :class => "badge badge-warning p-2"
     end
   end
 
