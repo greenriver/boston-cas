@@ -1,4 +1,4 @@
-class ForceConfigUpdate < ActiveRecord::Migration
+class ForceConfigUpdate < ActiveRecord::Migration[4.2]
   def change
     Config.invalidate_cache
   end
