@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  mount LetsencryptPlugin::Engine, at: '/'
-
   devise_for :users, controllers: { invitations: 'users/invitations', sessions: 'users/sessions'}
   devise_scope :user do
     match 'active' => 'users/sessions#active', via: :get
@@ -140,10 +138,13 @@ Rails.application.routes.draw do
     resources :users, except: [:show, :new, :create] do
       resource :resend_invitation, only: :create
       resource :recreate_invitation, only: :create
-      resource :become, only: [:show]
       patch :reactivate, on: :member
       member do
         post :confirm
+        post :impersonate
+      end
+      collection do
+        post :stop_impersonating
       end
     end
     resources :agencies

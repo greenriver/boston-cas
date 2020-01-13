@@ -119,6 +119,12 @@ class User < ActiveRecord::Base
     return admin_translation_keys_path if can_edit_translations?
   end
 
+  def impersonateable_by?(user)
+    return false unless user.present?
+
+    user != self
+  end
+
   # allow admins to remain logged in for longer than the default
   # https://github.com/plataformatec/devise/wiki/How-To:-Add-timeout_in-value-dynamically
   def timeout_in

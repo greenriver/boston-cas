@@ -95,6 +95,22 @@ namespace :deploy do
       end
     end
   end
+
+  ##########################################################
+  # Bootstrap database structure the first time you deploy #
+  ##########################################################
+  if ENV['FIRST_DEPLOY']=='true'
+    before :migrating, :load_schema do
+      on roles(:db)  do
+        within release_path do
+          execute :rake, "db:schema:conditional_load RAILS_ENV=#{fetch(:rails_env)}"
+        end
+      end
+    end
+  end
+  ##############################################################
+  # END Bootstrap database structure the first time you deploy #
+  ##############################################################
 end
 
 after 'deploy:migrating', :check_for_bootability do

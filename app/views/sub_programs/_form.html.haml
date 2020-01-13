@@ -18,7 +18,7 @@
             .form-group.radio_buttons.program-type
               = f.label :program_type, required: true do
                 %abbr{'data-original-title' => 'required'}*
-                Project, Tenant, or Sponsor-Based?
+                Program Type?
               - SubProgram.types.each do |t|
                 .radio
                   = f.label :program_type, for: "sub_program_program_type_#{t[:value].downcase}" do
