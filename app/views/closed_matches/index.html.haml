@@ -26,12 +26,12 @@
     = render 'show_confidential_names'
 .row
   .col-sm-4
-    %p= page_entries_info @matches
+    %p= page_entries_info @opportunities
   .col-sm-4
     %p.client__current-sort-filter
       Currently sorted by:
       %strong= sort_options.select{|m| m[:column] == @column && m[:direction] == @direction}.first.try(:[], :title)
 
-%p= paginate @matches, params: {sort: @column, direction: @direction}
-= render 'matches/list', matches: @matches, match_type: 'closed'
-%p= paginate @matches, params: {sort: @column, direction: @direction}
+%p= paginate @opportunities, params: {sort: @column, direction: @direction}
+= render 'matches/list', opportunities: @opportunities, match_type: 'closed'
+%p= paginate @opportunities, params: {sort: @column, direction: @direction}

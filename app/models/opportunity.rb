@@ -7,6 +7,7 @@
 class Opportunity < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
+  extend OrderAsSpecified
 
   include SubjectForMatches # loads methods and relationships
   include HasRequirements
@@ -75,6 +76,11 @@ class Opportunity < ApplicationRecord
       unit_matches
       .or(voucher_matches)
     )
+  end
+
+  def self.match_text_search(text)
+    return none unless text.present?
+    where(id: ClientOpportunityMatch.text_search(text).select(:opportunity_id)).distinct
   end
 
   def self.available_as_candidate
