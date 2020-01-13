@@ -129,9 +129,9 @@ class NonHmisClient < ApplicationRecord
 
     # current_assessment fields
     project_client.assessment_score = current_assessment&.assessment_score || 0
-    project_client.days_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years
-    project_client.days_literally_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years
-    project_client.days_homeless = current_assessment&.days_homeless_in_the_last_three_years
+    project_client.days_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_literally_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless = current_assessment&.days_homeless_in_the_last_three_years || 0
     project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
     project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
 
@@ -141,7 +141,7 @@ class NonHmisClient < ApplicationRecord
       project_client.calculated_last_homeless_night = nil
     end
 
-    project_client.cellphone =  current_assessment&.phone_number
+    project_client.cellphone = current_assessment&.phone_number
     project_client.case_manager_contact_info = current_assessment&.case_manager_contact_info
 
     project_client.veteran_status = 1 if current_assessment&.veteran
@@ -150,11 +150,11 @@ class NonHmisClient < ApplicationRecord
     project_client.rrh_assessment_contact_info = current_assessment&.rrh_assessment_contact_info
     project_client.required_number_of_bedrooms = current_assessment&.required_number_of_bedrooms || 1
     project_client.required_minimum_occupancy = current_assessment&.required_minimum_occupancy || 1
-    project_client.requires_wheelchair_accessibility = current_assessment&.requires_wheelchair_accessibility  || false
+    project_client.requires_wheelchair_accessibility = current_assessment&.requires_wheelchair_accessibility || false
     project_client.requires_elevator_access = current_assessment&.requires_elevator_access || false
     project_client.family_member = current_assessment&.family_member || false
 
-    project_client.calculated_chronic_homelessness = current_assessment&.calculated_chronic_homelessness
+    project_client.calculated_chronic_homelessness = current_assessment&.calculated_chronic_homelessness || false
     project_client.neighborhood_interests = current_assessment&.neighborhood_interests || []
     project_client.interested_in_set_asides = current_assessment&.interested_in_set_asides || false
 
