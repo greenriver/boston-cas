@@ -71,26 +71,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "2c98df82d656dfd221246e4693432d51d584fb126cfcfe14519343c1d0755711",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/active_matches_controller.rb",
-      "line": 100,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "(match_scope.text_search(params[:q]).where(:id => visible_match_ids) or match_scope).stalled_notifications_sent.where(:last_decision => ({ :type => params[:current_step] })).joins(:match_route).where(:match_routes => ({ :type => params[:current_route] })).references(:client).includes(:client).joins(\"CROSS JOIN LATERAL (#{MatchDecisions::Base.where(\"match_id = client_opportunity_matches.id\").where.not(:status => nil).order(:created_at => :desc).limit(1).to_sql}) last_decision\").order((\"#{(((\"last_decision.updated_at\" or \"clients.first_name\") or \"clients.last_name\") or \"clients.calculated_first_homeless_night\")} #{sort_direction}\" + \" NULLS LAST\"))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ActiveMatchesController",
-        "method": "index"
-      },
-      "user_input": "sort_direction",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "2e1764ddad634fa7dcac89359aadfb0828231c0bf4a74679101e10fd8d77bfdb",
@@ -153,46 +133,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "51946eead64ab2cf6eed52c26c361fa0755c1bd961f94102b1f18b6b18a71908",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/closed_matches_controller.rb",
-      "line": 72,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "(match_scope.text_search(params[:q]).where(:id => visible_match_ids) or match_scope).public_send(params[:current_step]).joins(:match_route).where(:match_routes => ({ :type => params[:current_route] })).references(:client).includes(:client).joins(\"CROSS JOIN LATERAL (#{MatchDecisions::Base.where(\"match_id = client_opportunity_matches.id\").where.not(:status => nil).order(:created_at => :desc).limit(1).to_sql}) last_decision\").order((\"#{(((\"clients.days_homeless\" or \"clients.first_name\") or \"clients.last_name\") or \"clients.calculated_first_homeless_night\")} #{sort_direction}\" + \" NULLS LAST\"))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ClosedMatchesController",
-        "method": "index"
-      },
-      "user_input": "sort_direction",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "5a277cd76dc3bf105f9f99aa3f0efed2f1e0a5f6a40a861be17b6573f988908e",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/match_list_base_controller.rb",
-      "line": 44,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "(match_scope.text_search(params[:q]) or match_scope).references(:client).includes(:client).order((\"#{\"clients.calculated_first_homeless_night\"} #{sort_direction}\" + \" NULLS LAST\"))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "MatchListBaseController",
-        "method": "index"
-      },
-      "user_input": "sort_direction",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "Mass Assignment",
       "warning_code": 70,
       "fingerprint": "6570b35f65dd8da1e96f7171d484ea7c55cd0e3267f3f30d0b60d1aeb4ab3cef",
@@ -210,26 +150,6 @@
       },
       "user_input": null,
       "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Dangerous Send",
-      "warning_code": 23,
-      "fingerprint": "734ae3c6bd5ea7d58b379ebe1243dd599b89a4aa82b7fa9d42a4bad5555063c9",
-      "check_name": "Send",
-      "message": "User controlled method execution",
-      "file": "app/controllers/closed_matches_controller.rb",
-      "line": 60,
-      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
-      "code": "(match_scope.text_search(params[:q]).where(:id => visible_match_ids) or match_scope).public_send(params[:current_step])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ClosedMatchesController",
-        "method": "index"
-      },
-      "user_input": "params[:current_step]",
-      "confidence": "High",
       "note": ""
     },
     {
@@ -437,6 +357,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-01-10 15:12:59 -0500",
+  "updated": "2020-01-13 08:55:52 -0500",
   "brakeman_version": "4.7.2"
 }
