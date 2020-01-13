@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -8,13 +8,13 @@ class ContactsController < ApplicationController
   # Note there is a chance this could turn into an abstract base controller
   # for the things that need to manage their contacts e.g. buildings, clients,
   # etc.
-  
+
   before_action :authenticate_user!
   before_action :require_can_view_contacts!
   before_action :require_can_edit_contacts!, only: [:update, :destroy, :create, :move_matches, :update_matches]
   before_action :set_contact, only: [:edit, :update, :destroy, :move_matches, :update_matches]
   helper_method :sort_column, :sort_direction
-  
+
   def index
      # search
     @contacts = if params[:q].present?
@@ -29,11 +29,11 @@ class ContactsController < ApplicationController
       .order(sort_column => sort_direction)
       .page(params[:page]).per(25)
   end
-  
+
   def new
     @contact = contact_scope.new
   end
-  
+
   def create
     @contact = contact_scope.new contact_params
     if @contact.save
@@ -43,10 +43,10 @@ class ContactsController < ApplicationController
       render :new
     end
   end
-  
+
   def edit
   end
-  
+
   def update
     if @contact.update contact_params
       @contact.user.update(first_name: @contact.first_name, last_name: @contact.last_name) if @contact.user.present?
@@ -57,7 +57,7 @@ class ContactsController < ApplicationController
       render :new
     end
   end
-  
+
   def destroy
     @contact.destroy
     flash[:notice] = 'Contact deleted'
@@ -81,7 +81,7 @@ class ContactsController < ApplicationController
       redirect_to action: :move_matches
     end
   end
-  
+
   private
     def contact_source
       Contact
@@ -90,11 +90,11 @@ class ContactsController < ApplicationController
     def contact_scope
       Contact.all
     end
-    
+
     def set_contact
       @contact = contact_scope.find params[:id]
     end
-    
+
     def contact_params
       params.require(:contact).permit(
         :first_name,
@@ -124,5 +124,5 @@ class ContactsController < ApplicationController
     def query_string
       "%#{@query}%"
     end
-  
+
 end

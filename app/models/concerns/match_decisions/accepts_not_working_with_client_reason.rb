@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -29,7 +29,7 @@ module MatchDecisions
 
       result.merge! params.require(:decision).permit(:not_working_with_client_reason_other_explanation)
       return result
-    end    
+    end
 
     private def validate_not_working_with_client_reason
       if not_working_with_client_reason&.other? && not_working_with_client_reason_other_explanation.blank?
@@ -46,7 +46,7 @@ module MatchDecisions
         "Not working with client: #{not_working_with_client_reason.name}"
       end
     end
-    
+
 
   end
 end

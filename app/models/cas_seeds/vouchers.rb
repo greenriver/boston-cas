@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -37,14 +37,14 @@ module CasSeeds
               services = Service.where(name: row["Services"].split(/\s*,\s*/))
               # puts services.inspect
             end
- 
+
             p = Program.where(name: row["Program Name"]).first_or_create do |p|
               p.name = row["Program Name"]
               p.funding_source = f
             end
             p.services = services
             # puts p.inspect
-            # SubPrograms that are Project-Based need a building.  We don't yet have a 
+            # SubPrograms that are Project-Based need a building.  We don't yet have a
             # mechanism to set that from the spreadsheet, so we picked a default
             building = nil
             vouchers = []
@@ -59,22 +59,22 @@ module CasSeeds
                 voucher_count += 1
                 units << Unit.create(name: i + 1, available: true, building: building)
               end
-            else 
+            else
               row["# of Vouchers if not project-based"].to_i.times do
                 vouchers << Voucher.new
                 voucher_count += 1
               end
-            end            
-            
+            end
+
             sp = SubProgram.create(name: row["Subprograms"], program: p, program_type: row["Project, Tenant, or Sponsor based?"], building: building, vouchers: vouchers, service_provider: s, sub_contractor: sc, housing_subsidy_administrator: hsa)
             count += 1
 
           end
         end
       end
-      Rails.logger.info "Added #{count} sub-programs with #{voucher_count} vouchers" 
-      
+      Rails.logger.info "Added #{count} sub-programs with #{voucher_count} vouchers"
+
     end
-    
+
   end
 end

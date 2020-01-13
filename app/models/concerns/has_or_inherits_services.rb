@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -20,11 +20,11 @@ module HasOrInheritsServices
         end
       me.direct_services + me.inherited_services(ancestors)
     end
-  
+
     def direct_services
       self.class.associations_for_direct_services.map {|_| send(_)}.flatten
     end
-  
+
     def inherited_services(ancestors)
       ancestry = ancestors + [[self.class, id]]
       self.class.associations_adding_services.map do |association|
@@ -35,7 +35,7 @@ module HasOrInheritsServices
         end.flatten
       end.flatten
     end
-    
+
     def services_for_archive
       services_with_inherited.map{|r| r.prepare_for_archive}
     end
@@ -43,18 +43,18 @@ module HasOrInheritsServices
     def self.eager_load_services_with_inherited
       eager_load(*associations_for_services_with_inherited)
     end
-  
+
     def self.associations_for_services_with_inherited(ancestors_calls = [])
       inherited = associations_for_inherited_services(ancestors_calls)
       associations_for_direct_services + (inherited.empty? ? [] : [inherited])
     end
-  
+
     def self.associations_for_inherited_services(ancestors_calls)
       Hash[associations_adding_services.map do |association|
         [association, associations_for_association_with_services(association, ancestors_calls)]
       end.select {|association, children| children}]
     end
-  
+
     def self.associations_for_association_with_services(association, ancestors_calls)
       method = :associations_for_services_with_inherited
       if association_class(association).respond_to? method
@@ -65,11 +65,11 @@ module HasOrInheritsServices
     rescue ClassMethodLoopException => e
       nil
     end
-  
+
     def self.associations_for_direct_services
       reflect_on_association(:services) ? [:services] : []
     end
-  
+
     def self.associations_adding_services
       []
     end

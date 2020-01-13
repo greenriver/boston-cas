@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -17,7 +17,7 @@ class Subgrantee < ApplicationRecord
 
   has_many :subgrantee_contacts, dependent: :destroy, inverse_of: :subgrantee
   has_many :contacts, through: :subgrantee_contacts
-  
+
   has_many :subgrantee_services, inverse_of: :subgrantee
   has_many :services, through: :subgrantee_services
 

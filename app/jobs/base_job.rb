@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -16,7 +16,7 @@ class BaseJob < ApplicationJob
       if job.respond_to? :job_id
         unlock_job!(job.job_id)
       end
-      
+
       # Exit, ignoring signal handlers which would prevent the process from dying
       exit!(0)
     end
@@ -35,7 +35,7 @@ class BaseJob < ApplicationJob
       msg = "Started dir is `#{STARTING_PATH}`\nCurrent dir is `#{expected_path}`\nExiting in order to let systemd restart me in the correct directory."
       notify_on_restart(msg)
       unlock_job!(job.id)
-      
+
       # Exit, ignoring signal handlers which would prevent the process from dying
       exit!(0)
     end
@@ -79,7 +79,7 @@ class BaseJob < ApplicationJob
       msg = "Restarting stale delayed job: #{job_object.locked_by}"
       notify_on_restart(msg)
 
-      job_object.update_attributes(locked_by: nil, locked_at: nil) 
+      job_object.update_attributes(locked_by: nil, locked_at: nil)
     end
   end
 end
