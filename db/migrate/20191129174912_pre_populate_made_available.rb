@@ -1,4 +1,4 @@
-class PrePopulateMadeAvailable < ActiveRecord::Migration
+class PrePopulateMadeAvailable < ActiveRecord::Migration[4.2]
   def up
     Voucher.where(made_available_at: nil).find_each do |voucher|
       if voucher.available?

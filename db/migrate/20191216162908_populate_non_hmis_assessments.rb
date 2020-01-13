@@ -1,4 +1,4 @@
-class PopulateNonHmisAssessments < ActiveRecord::Migration
+class PopulateNonHmisAssessments < ActiveRecord::Migration[4.2]
   def up
     NonHmisClient.with_deleted.each do |client|
       assessment = client.client_assessments.build

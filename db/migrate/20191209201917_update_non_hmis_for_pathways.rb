@@ -1,4 +1,4 @@
-class UpdateNonHmisForPathways < ActiveRecord::Migration
+class UpdateNonHmisForPathways < ActiveRecord::Migration[4.2]
   def change
     # This is on client
     remove_column :non_hmis_assessments, :full_release_on_file

@@ -191,7 +191,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def clean_assessment_params dirty_params
-    assessment_params = dirty_params.dig(:client_assessments_attributes, '0')
+    assessment_params = dirty_params.dig(:client_assessments_attributes, 0)
     return dirty_params unless assessment_params.present?
 
     assessment_params[:type] = assessment_type

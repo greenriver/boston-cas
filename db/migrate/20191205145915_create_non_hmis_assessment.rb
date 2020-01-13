@@ -1,4 +1,4 @@
-class CreateNonHmisAssessment < ActiveRecord::Migration
+class CreateNonHmisAssessment < ActiveRecord::Migration[4.2]
   def change
     create_table :non_hmis_assessments do |t|
       t.belongs_to :non_hmis_client
