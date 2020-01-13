@@ -70,8 +70,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :ssn,
         :full_release_on_file,
         :available,
-        :active_cohort_ids => [],
-        :client_assessments_attributes => [
+        active_cohort_ids: [],
+        client_assessments_attributes: [
           :id,
           :type,
           :assessment_score,
@@ -99,7 +99,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :interested_in_set_asides,
           :youth_rrh_aggregate,
           :dv_rrh_aggregate,
-          :neighborhood_interests => [],
+          neighborhood_interests: [],
         ]
       ).merge(identified: true)
     end

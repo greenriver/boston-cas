@@ -93,8 +93,8 @@ class DeidentifiedClientsController < NonHmisClientsController
         :agency_id,
         :contact_id,
         :available,
-        :active_cohort_ids => [],
-        :client_assessments_attributes => [
+        active_cohort_ids: [],
+        client_assessments_attributes: [
           :id,
           :type,
           :assessment_score,
@@ -124,7 +124,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :requires_elevator_access,
           :youth_rrh_aggregate,
           :dv_rrh_aggregate,
-          :neighborhood_interests => [],
+          neighborhood_interests: [],
         ]
       ).merge(identified: false)
     end

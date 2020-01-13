@@ -128,45 +128,45 @@ class NonHmisClient < ActiveRecord::Base
     project_client.sync_with_cas = self.available
 
     # current_assessment fields
-    project_client.assessment_score = current_assessment.assessment_score || 0
-    project_client.days_homeless_in_last_three_years = current_assessment.days_homeless_in_the_last_three_years
-    project_client.days_literally_homeless_in_last_three_years = current_assessment.days_homeless_in_the_last_three_years
-    project_client.days_homeless = current_assessment.days_homeless_in_the_last_three_years
-    project_client.date_days_homeless_verified = current_assessment.date_days_homeless_verified
-    project_client.who_verified_days_homeless = current_assessment.who_verified_days_homeless
+    project_client.assessment_score = current_assessment&.assessment_score || 0
+    project_client.days_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_literally_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
+    project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
 
-    if current_assessment.actively_homeless
+    if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current
     else
       project_client.calculated_last_homeless_night = nil
     end
 
-    project_client.cellphone =  current_assessment.phone_number
-    project_client.case_manager_contact_info = current_assessment.case_manager_contact_info
+    project_client.cellphone = current_assessment&.phone_number
+    project_client.case_manager_contact_info = current_assessment&.case_manager_contact_info
 
-    project_client.veteran_status = 1 if current_assessment.veteran
-    project_client.rrh_desired = current_assessment.rrh_desired
-    project_client.youth_rrh_desired = current_assessment.youth_rrh_desired
-    project_client.rrh_assessment_contact_info = current_assessment.rrh_assessment_contact_info
-    project_client.required_number_of_bedrooms = current_assessment.required_number_of_bedrooms
-    project_client.required_minimum_occupancy = current_assessment.required_minimum_occupancy
-    project_client.requires_wheelchair_accessibility = current_assessment.requires_wheelchair_accessibility
-    project_client.requires_elevator_access = current_assessment.requires_elevator_access
-    project_client.family_member = current_assessment.family_member
+    project_client.veteran_status = 1 if current_assessment&.veteran
+    project_client.rrh_desired = current_assessment&.rrh_desired || false
+    project_client.youth_rrh_desired = current_assessment&.youth_rrh_desired || false
+    project_client.rrh_assessment_contact_info = current_assessment&.rrh_assessment_contact_info
+    project_client.required_number_of_bedrooms = current_assessment&.required_number_of_bedrooms || 1
+    project_client.required_minimum_occupancy = current_assessment&.required_minimum_occupancy || 1
+    project_client.requires_wheelchair_accessibility = current_assessment&.requires_wheelchair_accessibility || false
+    project_client.requires_elevator_access = current_assessment&.requires_elevator_access || false
+    project_client.family_member = current_assessment&.family_member || false
 
-    project_client.calculated_chronic_homelessness = current_assessment.calculated_chronic_homelessness
-    project_client.neighborhood_interests = current_assessment.neighborhood_interests
-    project_client.interested_in_set_asides = current_assessment.interested_in_set_asides
+    project_client.calculated_chronic_homelessness = current_assessment&.calculated_chronic_homelessness || false
+    project_client.neighborhood_interests = current_assessment&.neighborhood_interests || []
+    project_client.interested_in_set_asides = current_assessment&.interested_in_set_asides || false
 
-    project_client.income_total_monthly = current_assessment.income_total_monthly
-    project_client.disabling_condition = if current_assessment.disabling_condition then 1 else nil end
-    project_client.physical_disability = if current_assessment.physical_disability then 1 else nil end
-    project_client.developmental_disability = if current_assessment.developmental_disability then 1 else nil end
-    project_client.domestic_violence = 1 if current_assessment.domestic_violence
+    project_client.income_total_monthly = current_assessment&.income_total_monthly
+    project_client.disabling_condition = if current_assessment&.disabling_condition then 1 else nil end
+    project_client.physical_disability = if current_assessment&.physical_disability then 1 else nil end
+    project_client.developmental_disability = if current_assessment&.developmental_disability then 1 else nil end
+    project_client.domestic_violence = 1 if current_assessment&.domestic_violence
 
-    project_client.chronic_health_condition = if current_assessment.chronic_health_condition then 1 else nil end
-    project_client.mental_health_problem = if current_assessment.mental_health_problem then 1 else nil end
-    project_client.substance_abuse_problem = if current_assessment.substance_abuse_problem then "Yes" else "No" end
+    project_client.chronic_health_condition = if current_assessment&.chronic_health_condition then 1 else nil end
+    project_client.mental_health_problem = if current_assessment&.mental_health_problem then 1 else nil end
+    project_client.substance_abuse_problem = if current_assessment&.substance_abuse_problem then "Yes" else "No" end
 
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
