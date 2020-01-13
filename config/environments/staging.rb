@@ -1,7 +1,7 @@
 require 'yaml'
 Rails.application.configure do
   deliver_method = ENV['MAIL_DELIVERY_METHOD'].to_sym
-  slack_config = Rails.application.config_for(:exception_notifier)['slack']
+  slack_config = Rails.application.config_for(:exception_notifier)[:slack]
 
   config.cache_classes = true
   config.eager_load = true
@@ -36,11 +36,11 @@ Rails.application.configure do
   if slack_config.present?
     config.middleware.use(ExceptionNotification::Rack,
       :slack => {
-        :webhook_url => slack_config['webhook_url'],
-        :channel => slack_config['channel'],
+        :webhook_url => slack_config[:webhook_url],
+        :channel => slack_config[:channel],
         :additional_parameters => {
           :mrkdwn => true,
-          :icon_url => slack_config['icon_url']
+          :icon_url => slack_config[:icon_url]
         }
       }
     )
