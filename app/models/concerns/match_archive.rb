@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -7,7 +7,7 @@
 # Methods used to save the state of the universe during match creation
 module MatchArchive
   # This module serves as a record of what is needed to get a model to work with the requirement manager
-  
+
   extend ActiveSupport::Concern
 
   def prepare_for_archive

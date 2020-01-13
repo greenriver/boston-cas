@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -9,14 +9,14 @@ module UpdateableAttributes
   # updating attributes
   #
   # the including object must implement #save
-  
+
   def assign_attributes attrs = {}
     attrs.each { |attr, value| send "#{attr}=", value }
   end
-  
+
   def update attrs = {}
     assign_attributes attrs
     save
   end
-  
+
 end

@@ -1,13 +1,13 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
 module MatchDecisions::ProviderOnly
   class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-    def to_partial_path 
-      'match_decisions/confirm_hsa_accepts_client_decline_dnd_staff' 
+    def to_partial_path
+      'match_decisions/confirm_hsa_accepts_client_decline_dnd_staff'
     end
     def statuses
       {

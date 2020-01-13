@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -20,7 +20,7 @@ module Matching::HasOrInheritsRequirements
         end
       me.direct_requirements + me.inherited_requirements(ancestors)
     end
-  
+
     def requirements_for_archive
       requirements_with_inherited.map{|r| r.prepare_for_archive}
     end
@@ -28,7 +28,7 @@ module Matching::HasOrInheritsRequirements
     def direct_requirements
       self.class.associations_for_direct_requirements.map {|_| send(_)}.flatten
     end
-  
+
     def inherited_requirements(ancestors)
       ancestry = ancestors + [[self.class, id]]
       self.class.associations_adding_requirements.map do |association|
@@ -55,7 +55,7 @@ module Matching::HasOrInheritsRequirements
         r['rule_id']
       end
 
-      initial_requirements = begin 
+      initial_requirements = begin
         universe_state.try(:[], "requirements").map do |r|
           r.slice('rule_id', 'positive')
         end.sort_by do |r|
@@ -67,22 +67,22 @@ module Matching::HasOrInheritsRequirements
 
       current_requirements - initial_requirements
     end
-    
+
     def self.eager_load_requirements_with_inherited
       eager_load(*associations_for_requirements_with_inherited)
     end
-  
+
     def self.associations_for_requirements_with_inherited(ancestors_calls = [])
       inherited = associations_for_inherited_requirements(ancestors_calls)
       associations_for_direct_requirements + (inherited.empty? ? [] : [inherited])
     end
-  
+
     def self.associations_for_inherited_requirements(ancestors_calls)
       Hash[associations_adding_requirements.map do |association|
         [association, associations_for_association_with_requirements(association, ancestors_calls)]
       end.select {|association, children| children}]
     end
-  
+
     def self.associations_for_association_with_requirements(association, ancestors_calls)
       method = :associations_for_requirements_with_inherited
       if association_class(association).respond_to? method
@@ -93,11 +93,11 @@ module Matching::HasOrInheritsRequirements
     rescue ClassMethodLoopException => e
       nil
     end
-  
+
     def self.associations_for_direct_requirements
       reflect_on_association(:requirements) ? [:requirements] : []
     end
-  
+
     def self.associations_adding_requirements
       []
     end
