@@ -5,6 +5,8 @@
 ###
 
 class IdentifiedClient < NonHmisClient
+  has_many :client_assessments, class_name: 'IdentifiedClientAssessment', foreign_key: :non_hmis_client_id, dependent: :destroy
+  accepts_nested_attributes_for :client_assessments
 
   # Allow same search rules as Client
   scope :text_search, -> (text) do
@@ -92,35 +94,35 @@ class IdentifiedClient < NonHmisClient
       first_name,
       middle_name,
       last_name,
-      assessment_score,
+      current_assessment.assessment_score,
       agency&.name,
       cohort_names,
       date_of_birth,
       ssn,
-      days_homeless_in_the_last_three_years,
-      veteran,
-      rrh_desired,
-      youth_rrh_desired,
-      rrh_assessment_contact_info,
-      income_maximization_assistance_requested,
-      pending_subsidized_housing_placement,
+      current_assessment.days_homeless_in_the_last_three_years,
+      current_assessment.veteran,
+      current_assessment.rrh_desired,
+      current_assessment.youth_rrh_desired,
+      current_assessment.rrh_assessment_contact_info,
+      current_assessment.income_maximization_assistance_requested,
+      current_assessment.pending_subsidized_housing_placement,
       full_release_on_file,
-      requires_wheelchair_accessibility,
-      required_number_of_bedrooms,
-      required_minimum_occupancy,
-      requires_elevator_access,
-      family_member,
-      calculated_chronic_homelessness,
+      current_assessment.requires_wheelchair_accessibility,
+      current_assessment.required_number_of_bedrooms,
+      current_assessment.required_minimum_occupancy,
+      current_assessment.requires_elevator_access,
+      current_assessment.family_member,
+      current_assessment.calculated_chronic_homelessness,
       gender,
-      date_days_homeless_verified,
-      who_verified_days_homeless,
-      income_total_monthly,
-      disabling_condition,
-      physical_disability,
-      developmental_disability,
-      domestic_violence,
+      current_assessment.date_days_homeless_verified,
+      current_assessment.who_verified_days_homeless,
+      current_assessment.income_total_monthly,
+      current_assessment.disabling_condition,
+      current_assessment.physical_disability,
+      current_assessment.developmental_disability,
+      current_assessment.domestic_violence,
       created_at,
-      updated_at,
+      current_assessment.updated_at,
     ]
   end
 

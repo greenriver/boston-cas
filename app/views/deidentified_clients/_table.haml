@@ -28,9 +28,9 @@
                 = link_to({action: :edit, id: deidentified_client}) do
                   = deidentified_client.client_identifier
               %td= deidentified_client.agency&.name
-              %td= deidentified_client.assessment_score
+              %td= deidentified_client.current_assessment.assessment_score
               %td= simple_format deidentified_client.cohort_names
-              %td= deidentified_client.days_homeless_in_the_last_three_years
+              %td= deidentified_client.current_assessment.days_homeless_in_the_last_three_years
               %td= checkmark deidentified_client.available?
               - if can_manage_deidentified_clients?
                 %td

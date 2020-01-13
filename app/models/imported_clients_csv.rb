@@ -62,13 +62,14 @@ class ImportedClientsCsv < ApplicationRecord
           client.available = false
           client.identified = true
         end
+        assessment = client.current_assessment || client.client_assessments.build
+
         timestamp = convert_to_time(row[FORM_TIMESTAMP])
-        if client.imported_timestamp.nil? || timestamp > client.imported_timestamp
+        if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
           @clients << client
-          @touched += 1 if client.imported_timestamp.present?
-          client.update(
+          @touched += 1 if assessment.imported_timestamp.present?
+          assessment.update_attributes(
             imported_timestamp: timestamp,
-            agency_id: agency&.id,
 
             set_asides_housing_status: row[HOUSING_STATUS],
             domestic_violence: fleeing_domestic_violence?(row),
@@ -93,9 +94,12 @@ class ImportedClientsCsv < ApplicationRecord
             interested_in_disabled_housing: yes_no_to_bool(row[INTERESTED_IN_DISABLED_HOUSING]),
             fifty_five_plus: yes_no_to_bool(row[FIFTY_FIVE]),
             sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
-            date_of_birth: calculate_dob(row),
             veteran: yes_no_to_bool(row[VETERAN]),
             neighborhood_interests: determine_neighborhood_interests(client, row),
+          )
+          client.update(
+            agency_id: agency&.id,
+            date_of_birth: calculate_dob(row),
           )
         end
       end

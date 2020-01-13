@@ -1,0 +1,34 @@
+- if Config.get(:non_hmis_fields).include?('assessment_score')
+  = form.input :assessment_score
+- if Config.get(:non_hmis_fields).include?('vispdat_score')
+  = form.input :vispdat_score
+- if Config.get(:non_hmis_fields).include?('vispdat_priority_score')
+  = form.input :vispdat_priority_score
+= form.input :veteran
+= form.input :domestic_violence, label: 'Domestic violence survivor'
+- if Config.get(:non_hmis_fields).include?('actively_homeless')
+  = form.input :actively_homeless, hint: 'Checking this box will allow the client to match rules that require homeless activity in the past 30 or 90 days.'
+= form.input :days_homeless_in_the_last_three_years
+= form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment'
+= form.input :who_verified_days_homeless
+= form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}
+.jChronicallyHomeless
+  = form.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family')
+= form.input :rrh_desired, label: 'Interested in RRH'
+= form.input :youth_rrh_desired, label: 'Only interested in Youth RRH'
+= form.input :income_total_monthly, label: 'Total monthly income'
+= form.input :income_maximization_assistance_requested
+= form.input :pending_subsidized_housing_placement
+= form.input :rrh_assessment_contact_info, label: 'Case Manager Contact Information', hint: 'Do not include any personal information about the client in this box'
+= form.input :required_number_of_bedrooms, collection: (1..5), include_blank: false, input_html: { class: :select2 }
+= form.input :required_minimum_occupancy, collection: (1..10), include_blank: false, input_html: { class: :select2 }
+= form.input :interested_in_set_asides, input_html: {class: 'jInterestedInSetAsides'}
+.jNeighborhoodInterests
+  = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }
+= form.input :disabling_condition
+= form.input :physical_disability
+= form.input :developmental_disability
+= form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit')
+= form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access')
+
+= render 'deidentified_clients/js'

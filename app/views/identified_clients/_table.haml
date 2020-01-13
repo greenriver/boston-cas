@@ -34,11 +34,11 @@
               %td= Client.age(date: Date.today, dob:identified_client.date_of_birth)
               %td= identified_client.agency&.name
               %td= checkmark identified_client.family_member
-              %td= identified_client.assessment_score
+              %td= identified_client.current_assessment&.assessment_score
 
               %td= simple_format identified_client.cohort_names
 
-              %td= identified_client.days_homeless_in_the_last_three_years
+              %td= identified_client.current_assessment&.days_homeless_in_the_last_three_years
               %td= checkmark(identified_client.available)
               - if can_manage_identified_clients?
                 %td

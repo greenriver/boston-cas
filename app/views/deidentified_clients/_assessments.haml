@@ -1,0 +1,8 @@
+- if @non_hmis_client.non_hmis_assessments.count > 1
+  %a#assessments-dropdown.btn.btn-sm.btn-secondary.dropdown-toggle{aria: {expanded:  'false', haspopup:  'true'}, data: {toggle:  'dropdown'}, href:  '#', role:  'button'}
+    Past Assessments
+  .dropdown-menu{"aria-labelledby" => "assessments-dropdown"}
+    - @non_hmis_client.non_hmis_assessments.each do |assessment|
+      - next if @assessment.id == assessment.id
+      .dropdown-item
+        = link_to assessment.created_at, edit_deidentified_client_path(@non_hmis_client, {assessment_id: assessment})
