@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -10,7 +10,7 @@ class SubgranteesController < ApplicationController
   before_action :require_can_edit_subgrantees!, only: [:update, :destroy, :create]
   before_action :set_subgrantee, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
-  
+
   # GET /hmis/subgrantees
   def index
     # search
@@ -59,7 +59,7 @@ class SubgranteesController < ApplicationController
     def subgrantee_scope
       Subgrantee
     end
-  
+
     def building_scope
       Building
     end
@@ -73,11 +73,11 @@ class SubgranteesController < ApplicationController
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
-    
+
     def set_subgrantee
       @subgrantee = subgrantee_scope.find(params[:id])
     end
-    
+
     def sort_column
       Subgrantee.column_names.include?(params[:sort]) ? params[:sort] : 'id'
     end

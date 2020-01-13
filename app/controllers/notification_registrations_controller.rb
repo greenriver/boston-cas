@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -23,7 +23,7 @@ class NotificationRegistrationsController < Devise::RegistrationsController
     @user.invite!
     flash[:notice] = "Please check your email for login information."
     redirect_to new_notification_session_path(@notification)
-  end 
+  end
 
   private def load_notification!
     @notification = Notifications::Base.find_by code: params[:notification_id]
@@ -47,8 +47,8 @@ class NotificationRegistrationsController < Devise::RegistrationsController
       redirect_to new_notification_session_path(@notification)
     end
   end
-  
-  
-  
+
+
+
 
 end

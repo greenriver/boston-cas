@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -13,7 +13,7 @@ module OpportunityDetails
     def unit_name
       voucher.unit.try :name
     end
-    
+
     def building_name
       voucher.building.try :name
     end
@@ -27,11 +27,11 @@ module OpportunityDetails
       return nil if voucher.building.nil?
       voucher.building.map_link
     end
-    
+
     def program_name
       voucher.sub_program&.program&.name
     end
-    
+
     def sub_program_name
       voucher.sub_program&.name
     end
@@ -43,7 +43,7 @@ module OpportunityDetails
     def subgrantee_name
       voucher.building&.subgrantee&.name
     end
-    
+
     def funding_source_name
       voucher.sub_program&.program&.funding_source&.name
     end
@@ -70,11 +70,11 @@ module OpportunityDetails
       # TODO implement me
       []
     end
-    
+
     def rules_with_source
       # TODO implement me
       []
     end
-    
+
   end
 end

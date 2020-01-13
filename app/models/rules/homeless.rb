@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -12,7 +12,7 @@ class Rules::Homeless < Rule
       raise RuleDatabaseStructureMissing.new("clients.available missing. Cannot check clients against #{self.class}.")
     end
   end
-  
+
   def always_apply?
     true
   end

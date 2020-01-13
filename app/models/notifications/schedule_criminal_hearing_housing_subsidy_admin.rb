@@ -1,18 +1,18 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
 module Notifications
   class ScheduleCriminalHearingHousingSubsidyAdmin < Base
-    
+
     def self.create_for_match! match
       match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
-    
+
     def decision
       match.schedule_criminal_hearing_housing_subsidy_admin_decision
     end
@@ -20,7 +20,7 @@ module Notifications
     def event_label
       "#{_('Housing Subsidy Administrator')} #{_('was sent full details of match for review and scheduling of any necessary criminal background hearings')}"
     end
-    
+
     def allows_registration?
       true
     end
