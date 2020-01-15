@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -35,7 +35,7 @@ class ProgramContactsController < ApplicationController
   helper_method :hsa_can_edit_contacts?
 
   private
-    
+
     def set_program
       @program = program_scope.find params[:program_id].to_i
       @subprogram = sub_program_scope.find params[:sub_program_id].to_i

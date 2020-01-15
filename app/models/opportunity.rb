@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -132,6 +132,7 @@ class Opportunity < ActiveRecord::Base
     (requirement_matches + attribute_matches).all?
   end
 
+  # Return prioritized clients who match this opportunity
   def matching_clients(client_scope=Client.available_for_matching(match_route))
     requirements_with_inherited.each do |requirement|
       client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))

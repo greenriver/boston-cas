@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -117,6 +117,12 @@ class User < ActiveRecord::Base
   def admin_dashboard_landing_path
     return admin_users_path if can_edit_users?
     return admin_translation_keys_path if can_edit_translations?
+  end
+
+  def impersonateable_by?(user)
+    return false unless user.present?
+
+    user != self
   end
 
   # allow admins to remain logged in for longer than the default

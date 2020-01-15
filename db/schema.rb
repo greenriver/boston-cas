@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191223145558) do
+ActiveRecord::Schema.define(version: 20200113152559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,12 @@ ActiveRecord::Schema.define(version: 20191223145558) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "building_contacts", force: :cascade do |t|
@@ -244,13 +250,15 @@ ActiveRecord::Schema.define(version: 20191223145558) do
   add_index "clients", ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
 
   create_table "configs", force: :cascade do |t|
-    t.integer "dnd_interval",                                             null: false
-    t.string  "warehouse_url",                                            null: false
-    t.boolean "require_cori_release",          default: true
-    t.integer "ami",                           default: 66600,            null: false
-    t.string  "vispdat_prioritization_scheme", default: "length_of_time"
+    t.integer "dnd_interval",                                                            null: false
+    t.string  "warehouse_url",                                                           null: false
+    t.boolean "require_cori_release",           default: true
+    t.integer "ami",                            default: 66600,                          null: false
+    t.string  "vispdat_prioritization_scheme",  default: "length_of_time"
     t.text    "non_hmis_fields"
-    t.integer "unavailable_for_length",        default: 0
+    t.integer "unavailable_for_length",         default: 0
+    t.string  "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
+    t.string  "identified_client_assessment",   default: "IdentifiedClientAssessment"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -297,6 +305,7 @@ ActiveRecord::Schema.define(version: 20191223145558) do
     t.binary   "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "file"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -418,6 +427,7 @@ ActiveRecord::Schema.define(version: 20191223145558) do
     t.string   "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "file"
   end
 
   create_table "letsencrypt_plugin_challenges", force: :cascade do |t|
@@ -452,6 +462,21 @@ ActiveRecord::Schema.define(version: 20191223145558) do
 
   add_index "login_activities", ["identity"], name: "index_login_activities_on_identity", using: :btree
   add_index "login_activities", ["ip"], name: "index_login_activities_on_ip", using: :btree
+
+  create_table "match_census", force: :cascade do |t|
+    t.date    "date",                                null: false
+    t.integer "opportunity_id",                      null: false
+    t.integer "match_id"
+    t.string  "program_name"
+    t.string  "sub_program_name"
+    t.jsonb   "prioritized_client_ids", default: [], null: false
+    t.integer "active_client_id"
+    t.jsonb   "requirements",           default: [], null: false
+  end
+
+  add_index "match_census", ["date"], name: "index_match_census_on_date", using: :btree
+  add_index "match_census", ["match_id"], name: "index_match_census_on_match_id", using: :btree
+  add_index "match_census", ["opportunity_id"], name: "index_match_census_on_opportunity_id", using: :btree
 
   create_table "match_decision_reasons", force: :cascade do |t|
     t.string   "name",                      null: false
@@ -597,6 +622,66 @@ ActiveRecord::Schema.define(version: 20191223145558) do
     t.datetime "updated_at"
   end
 
+  create_table "non_hmis_assessments", force: :cascade do |t|
+    t.integer  "non_hmis_client_id"
+    t.string   "type"
+    t.integer  "assessment_score"
+    t.integer  "days_homeless_in_the_last_three_years"
+    t.boolean  "veteran",                                  default: false, null: false
+    t.boolean  "rrh_desired",                              default: false, null: false
+    t.boolean  "youth_rrh_desired",                        default: false, null: false
+    t.text     "rrh_assessment_contact_info"
+    t.boolean  "income_maximization_assistance_requested", default: false, null: false
+    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
+    t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
+    t.integer  "required_number_of_bedrooms"
+    t.integer  "required_minimum_occupancy"
+    t.boolean  "requires_elevator_access",                 default: false, null: false
+    t.boolean  "family_member",                            default: false, null: false
+    t.integer  "calculated_chronic_homelessness"
+    t.json     "neighborhood_interests",                   default: [],    null: false
+    t.float    "income_total_monthly"
+    t.boolean  "disabling_condition",                      default: false, null: false
+    t.boolean  "physical_disability",                      default: false, null: false
+    t.boolean  "developmental_disability",                 default: false, null: false
+    t.date     "date_days_homeless_verified"
+    t.string   "who_verified_days_homeless"
+    t.boolean  "domestic_violence",                        default: false, null: false
+    t.boolean  "interested_in_set_asides",                 default: false, null: false
+    t.string   "set_asides_housing_status"
+    t.boolean  "set_asides_resident"
+    t.string   "shelter_name"
+    t.date     "entry_date"
+    t.string   "case_manager_contact_info"
+    t.string   "phone_number"
+    t.boolean  "have_tenant_voucher"
+    t.string   "children_info"
+    t.boolean  "studio_ok"
+    t.boolean  "one_br_ok"
+    t.boolean  "sro_ok"
+    t.boolean  "fifty_five_plus"
+    t.boolean  "sixty_two_plus"
+    t.string   "voucher_agency"
+    t.boolean  "interested_in_disabled_housing"
+    t.boolean  "chronic_health_condition"
+    t.boolean  "mental_health_problem"
+    t.boolean  "substance_abuse_problem"
+    t.integer  "vispdat_score"
+    t.integer  "vispdat_priority_score"
+    t.datetime "imported_timestamp"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "ssvf_eligible",                            default: false
+    t.boolean  "veteran_rrh_desired",                      default: false
+    t.boolean  "rrh_th_desired",                           default: false
+    t.boolean  "dv_rrh_desired",                           default: false
+    t.integer  "income_total_annual",                      default: 0
+    t.boolean  "other_accessibility",                      default: false
+    t.boolean  "disabled_housing",                         default: false
+    t.boolean  "actively_homeless",                        default: false, null: false
+  end
+
   create_table "non_hmis_clients", force: :cascade do |t|
     t.string   "client_identifier"
     t.integer  "assessment_score"
@@ -630,7 +715,7 @@ ActiveRecord::Schema.define(version: 20191223145558) do
     t.boolean  "available",                                default: true,  null: false
     t.date     "date_days_homeless_verified"
     t.string   "who_verified_days_homeless"
-    t.jsonb    "neighborhood_interests",                   default: [],    null: false
+    t.json     "neighborhood_interests",                   default: []
     t.float    "income_total_monthly"
     t.boolean  "disabling_condition",                      default: false
     t.boolean  "physical_disability",                      default: false
@@ -664,6 +749,7 @@ ActiveRecord::Schema.define(version: 20191223145558) do
     t.integer  "vispdat_score",                            default: 0
     t.integer  "vispdat_priority_score",                   default: 0
     t.boolean  "actively_homeless",                        default: false, null: false
+    t.boolean  "limited_release_on_file",                  default: false, null: false
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree

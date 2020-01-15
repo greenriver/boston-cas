@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   include ControllerAuthorization
   self.responder = ApplicationResponder
   respond_to :html, :js, :json, :csv
+  impersonates :user
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -55,11 +57,20 @@ class ApplicationController < ActionController::Base
 
   def info_for_paper_trail
     {
-      user_id: current_user&.id,
+      user_id: true_user&.id,
       notification_code: params[:notification_id],
       session_id: request.env['rack.session.record']&.session_id,
       request_id: request.uuid
     }
+  end
+
+  # Sets whodunnit
+  def user_for_paper_trail
+    return 'unauthenticated' unless current_user.present?
+    return current_user.id unless true_user.present?
+    return current_user.id if true_user == current_user
+
+    "#{true_user.id} as #{current_user.id}"
   end
 
   def after_sign_in_path_for(resource)

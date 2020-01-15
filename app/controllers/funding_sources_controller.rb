@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -10,7 +10,7 @@ class FundingSourcesController < ApplicationController
   before_action :require_can_view_funding_sources!
   before_action :require_can_edit_funding_sources!, only: [:update, :destroy, :create]
   before_action :find_funding_source, only: [:edit, :update]
-  
+
   def index
     # search
     @funding_sources = if params[:q].present?
@@ -22,14 +22,14 @@ class FundingSourcesController < ApplicationController
     @funding_sources = @funding_sources
       .page(params[:page]).per(25)
   end
-  
+
   def edit
   end
 
   def new
     @funding_source = funding_source_source.new
   end
-  
+
   def create
     @funding_source = funding_source_source.create(funding_source_params)
     respond_with(@funding_source, location: funding_sources_path)
@@ -39,7 +39,7 @@ class FundingSourcesController < ApplicationController
     @funding_source.update funding_source_params
     respond_with(@funding_source, location: funding_sources_path)
   end
-  
+
   private
     def funding_source_scope
       funding_source_source.all
@@ -52,7 +52,7 @@ class FundingSourcesController < ApplicationController
     def funding_source_source
       FundingSource
     end
-    
+
     def funding_source_params
       params.require(:funding_source).permit(
         :name,
@@ -60,6 +60,6 @@ class FundingSourcesController < ApplicationController
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
-    
-    
+
+
 end

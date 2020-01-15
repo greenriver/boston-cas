@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -29,7 +29,7 @@ module Admin
     def update
       @role = role_scope.find params[:id]
       @role.update_attributes role_params
-      if @role.save 
+      if @role.save
         redirect_to({action: :index}, notice: 'Role updated')
       else
         flash[:error] = 'Please review the form problems below'
@@ -39,7 +39,7 @@ module Admin
 
     def create
       @role = Role.new(role_params)
-      if @role.save 
+      if @role.save
         redirect_to({action: :index}, notice: 'Role created')
       else
         flash[:error] = 'Please review the form problems below'
@@ -62,7 +62,7 @@ module Admin
         params.require(:role).
           permit(
             :name,
-            Role.permissions - [:can_become_other_users] # This is restricted
+            Role.permissions
           )
       end
       def sort_column

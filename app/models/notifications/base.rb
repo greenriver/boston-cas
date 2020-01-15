@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -19,7 +19,7 @@ module Notifications
 
     belongs_to :recipient, class_name: 'Contact'
     delegate :name, to: :recipient, allow_blank: true, prefix: true
-      
+
     has_many :notification_delivery_events,
       class_name: 'MatchEvents::NotificationDelivery',
       foreign_key: :notification_id
@@ -32,11 +32,11 @@ module Notifications
     def setup_code
       self.code ||= SecureRandom.urlsafe_base64
     end
-    
+
     def to_param
       code
     end
-    
+
     def deliver
       DeliverJob.perform_later(self) if match.match_route.send_notifications
     end
@@ -48,17 +48,17 @@ module Notifications
       end
     end
     private_constant :DeliverJob
-    
+
     def to_partial_path
       "notifications/#{self.class.to_s.demodulize.underscore}"
     end
-    
+
     def notification_type
       # prefix used for finding relevant information in other objects
       # e.g. mailer, match decisions
       self.class.to_s.demodulize.underscore
     end
-    
+
     def decision
       nil
     end
@@ -67,11 +67,11 @@ module Notifications
       # how should this notification be dislayed when shown in an event timeline?
       raise "abstract method not implemented"
     end
-    
+
     def record_delivery_event!
       notification_delivery_events.create! match: match, contact: recipient
     end
-        
+
     def contacts_editable?
       false
     end

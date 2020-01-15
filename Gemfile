@@ -20,8 +20,6 @@ gem 'coffee-rails'
 gem 'execjs'
 gem 'sprockets-es6'
 
-gem 'letsencrypt_plugin'
-
 gem 'validates_email_format_of'
 
 gem "simple_form"
@@ -51,6 +49,7 @@ gem 'html2haml'
 gem 'devise', '~> 4'
 gem 'devise_invitable'
 gem 'devise-pwned_password'
+gem 'pretender'
 
 gem 'authtrail' # for logging login attempts
 gem 'maxminddb' # for local geocoding of login attempts

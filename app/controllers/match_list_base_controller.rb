@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -80,6 +80,25 @@ class MatchListBaseController < ApplicationController
       'clients.last_name'
     else
       "client_opportunity_matches.#{sort_column}"
+    end
+  end
+
+  protected
+    # This is painful, but we need to prevent leaking of client names
+    # via targeted search
+    def visible_match_ids
+      contact = current_user.contact
+      contact.client_opportunity_match_contacts.map(&:match).map do |m|
+        m.id if m.try(:show_client_info_to?, contact) || false
+      end.compact
+    end
+
+    def match_scope
+      raise 'abstract method'
+    end
+
+    def set_heading
+      raise 'abstract method'
     end
   end
 

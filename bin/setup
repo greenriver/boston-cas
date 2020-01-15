@@ -14,8 +14,7 @@ Dir.chdir APP_ROOT do
   system "bundle check || bundle install"
 
   ymls = [
-    "secrets.yml",
-    "letsencrypt_plugin.yml"
+    "secrets.yml"
   ]
   ymls.each do |file|
     file = File.join('config', file)
@@ -24,17 +23,14 @@ Dir.chdir APP_ROOT do
       FileUtils.cp "#{file}.sample", file
     end
   end
-  unless File.exist?('.env')
-    puts "\n== Creating .env"
-    FileUtils.cp ".env.sample", ".env"
-  end
-  unless File.exist?("config/letsencrypt_plugin.yml")
-    puts "\n== Creating config/letsencrypt_plugin.yml =="
-    system "cp config/letsencrypt_plugin.yml.sample config/letsencrypt_plugin.yml"
+  unless File.exist?('.env.local')
+    puts "\n== Creating .env.local"
+    FileUtils.cp ".env.sample", ".env.local"
   end
 
   puts "\n== Preparing CAS database =="
   system "bin/rake db:create"
+  system 'bundle exec rake db:schema:conditional_load'
   system "bin/rake db:migrate"
 
   puts "\n== Generating Seed Data for CAS Database =="

@@ -1,12 +1,12 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
 module ContactEditPermissions
   extend ActiveSupport::Concern
-  
+
   included do
     def hsa_can_edit_contacts?
       @match.contacts_editable_by_hsa && current_contact.in?(@match.housing_subsidy_admin_contacts)
@@ -16,7 +16,7 @@ module ContactEditPermissions
     def cant_edit_self?
       ! current_contact.user_can_edit_match_contacts? && hsa_can_edit_contacts?
     end
-    helper_method :cant_edit_self?    
+    helper_method :cant_edit_self?
   end
-  
+
 end

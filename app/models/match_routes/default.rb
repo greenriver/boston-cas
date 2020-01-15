@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -14,7 +14,7 @@ module MatchRoutes
     def self.available_sub_types_for_search
       match_steps_for_reporting.keys
     end
-    
+
     def self.match_steps
       {
        'MatchDecisions::MatchRecommendationDndStaff' => 1,
