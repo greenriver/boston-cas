@@ -69,6 +69,7 @@
                   Available
               %td{:class => deleted}= opportunity.voucher&.available_at&.to_date
               %td.text-center
-                = link_to opportunity_matches_path(opportunity) do
-                  .badge.badge-success= opportunity.matching_clients.count
+                - if opportunity.show_alternate_clients_to?(current_user)
+                  = link_to opportunity_matches_path(opportunity) do
+                    .badge.badge-success= opportunity.matching_clients.count
     %p= paginate @opportunities

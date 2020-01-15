@@ -83,25 +83,6 @@ class MatchListBaseController < ApplicationController
     end
   end
 
-  protected
-    # This is painful, but we need to prevent leaking of client names
-    # via targeted search
-    def visible_match_ids
-      contact = current_user.contact
-      contact.client_opportunity_match_contacts.map(&:match).map do |m|
-        m.id if m.try(:show_client_info_to?, contact) || false
-      end.compact
-    end
-
-    def match_scope
-      raise 'abstract method'
-    end
-
-    def set_heading
-      raise 'abstract method'
-    end
-  end
-
   private def sort_matches
     sort = "#{qualified_match_sort_column} #{sort_direction}"
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
