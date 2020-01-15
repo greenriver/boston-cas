@@ -109,7 +109,7 @@ class OpportunityMatchesController < ApplicationController
   private
 
     def require_access_to_opportunity!
-      not_authorized! unless (current_user.can_see_alternate_matches? ||
+      not_authorized! unless (@opportunity.show_alternate_clients_to?(current_user) &&
           @opportunity.visible_by?(current_user))
     end
 

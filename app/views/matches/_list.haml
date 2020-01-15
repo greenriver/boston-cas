@@ -37,7 +37,7 @@
           %dt Available Since:
           %dd= voucher.made_available_at.try(:strftime, I18n.t('date.formats.default')) || 'unknown'
         - if can_reject_matches? || matches.map(&:past_first_step_or_all_steps_visible?).any?
-          - if  match_type != 'opportunity' && can_see_alternate_matches?
+          - if match_type != 'opportunity' && opportunity.show_alternate_clients_to?(current_user)
             = link_to opportunity_matches_path(opportunity) do
               Prioritized Clients
       .col-9.mt-5
