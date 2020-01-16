@@ -61,6 +61,8 @@ class MatchCensus < ActiveRecord::Base
           sub_program_name: sub_program.name,
           prioritized_client_ids: available_client_ids,
           requirements: opp.requirements_for_archive,
+          prioritization_method_used: prioritization_scheme,
+          match_prioritization_id: match_prioritization.id,
         )
       end
     end
