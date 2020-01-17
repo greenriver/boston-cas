@@ -2,7 +2,7 @@
 = simple_form_for @non_hmis_client, url: identified_clients_path do |f|
   = f.error_notification
   .row
-    .col-sm-6
+    .col
       .form-inputs
         = render 'client', form: f
         %hr
