@@ -70,6 +70,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :ssn,
         :full_release_on_file,
         :available,
+        :active_client,
+        :eligible_for_matching,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,

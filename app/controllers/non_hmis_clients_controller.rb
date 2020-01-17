@@ -187,11 +187,13 @@ class NonHmisClientsController < ApplicationController
       dirty_params[:agency_id] = current_user.agency_id
     end
 
+    dirty_params[:available] = dirty_params[:active_client] == '1' && dirty_params[:eligible_for_matching] == '1'
+
     return dirty_params
   end
 
   def clean_assessment_params dirty_params
-    assessment_params = dirty_params.dig(:client_assessments_attributes, 0)
+    assessment_params = dirty_params.dig(:client_assessments_attributes, '0')
     return dirty_params unless assessment_params.present?
 
     assessment_params[:type] = assessment_type
@@ -200,13 +202,15 @@ class NonHmisClientsController < ApplicationController
       assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12
     end
 
-    if assessment_params[:youth_rrh_aggregate].present?
+    if assessment_params.has_key?(:youth_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate] == 'adult' || assessment_params[:youth_rrh_aggregate] == 'both'
       assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate] == 'youth' || assessment_params[:youth_rrh_aggregate] == 'both'
+      assessment_params.extract![:youth_rrh_aggregate]
     end
-    if assessment_params[:dv_rrh_aggregate].present?
+    if assessment_params.has_key?(:dv_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'dv' || assessment_params[:dv_rrh_aggregate] == 'both'
       assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'non-dv' || assessment_params[:dv_rrh_aggregate] == 'both'
+      assessment_params.extract![:dv_rrh_aggregate]
     end
 
     if assessment_params[:neighborhood_interests].present?

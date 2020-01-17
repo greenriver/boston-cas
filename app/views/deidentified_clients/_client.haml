@@ -5,5 +5,5 @@
 = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }
 - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
   = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts"
+= form.input :limited_release_on_file, label: 'Limited Coordinated Access System Release on file'
 = form.input :available, label: 'Available for matching?'
-= form.input :limited_release_on_file
