@@ -18,23 +18,23 @@ $match-progress-bar-step-marker-large-width: $match-progress-bar-step-marker-lar
 $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-width;
 
 
-.match-progress-bar-fixed-width 
+.match-progress-bar-fixed-width
 {
   max-width: 330px;
   min-width: 180px;
 }
 
-.match-progress-bar 
+.match-progress-bar
 {
   width: 90%;
   min-width: 140px;
   list-style: none;
   list-style-image: none;
   height: $match-progress-bar-height;
-  padding: 0; 
+  padding: 0;
 }
 
-.match-progress-bar__step 
+.match-progress-bar__step
 {
   float: left;
   position: relative;
@@ -50,12 +50,12 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
   background-color: $cob-sg-blue-005;
 }
 
-.match-progress-bar__step__name 
+.match-progress-bar__step__name
 {
   display: none;
 }
 
-.match-progress-bar__step__marker 
+.match-progress-bar__step__marker
 {
   z-index: 10;
   position: relative;
@@ -78,15 +78,15 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
   }
   @media (min-width: $screen-md-min) {
     // 992-1200px
-    right: -80%;  
+    right: -80%;
   }
   @media (min-width: $screen-lg-min) {
     // 1200+px
-    right: -90%;  
+    right: -90%;
   }
 }
 
-.match-progress-bar__step__marker .number 
+.match-progress-bar__step__marker .number
 {
   line-height: 1;
   display: none;
@@ -96,12 +96,12 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
 }
 
 //Done steps
-.match-progress-bar__step--done 
+.match-progress-bar__step--done
 {
   background-color: $cob-sg-blue-005;
 }
 
-.match-progress-bar__step--done .match-progress-bar__step__marker 
+.match-progress-bar__step--done .match-progress-bar__step__marker
 {
   background-color: $cob-sg-blue-004;
 }
@@ -117,7 +117,7 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
   color: $cob-sg-blue-004;
   border: 1px solid $cob-sg-blue-004;
   margin-top: $match-progress-bar-step-marker-large-height / -6;
-  margin-bottom: $match-progress-bar-step-marker-large-height / -6;  
+  margin-bottom: $match-progress-bar-step-marker-large-height / -6;
 }
 
 .match-progress-bar__step--active,
@@ -166,4 +166,8 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
   background-color: darken($brand-danger, 15);
   border: 1px solid darken($brand-danger, 15);
   color: white;
+}
+.match-step-status
+{
+  border-bottom: 1px solid lighten($cob-sg-blue-004, 50);
 }

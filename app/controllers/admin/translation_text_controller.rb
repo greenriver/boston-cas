@@ -1,10 +1,10 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-module Admin  
+module Admin
   class TranslationTextController < ApplicationController
     before_action :require_can_edit_translations!
     before_action :find_translation_text
@@ -28,12 +28,12 @@ module Admin
 
     def translation_text_source
       TranslationText
-    end  
-    
+    end
+
     def find_translation_text
       @text = translation_text_source.find(params[:id].to_i)
-    end  
-    
+    end
+
     def text_params
       params.require(:translation_text).permit(:text, :id, :locale)
     end

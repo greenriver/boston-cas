@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem "pg"
 gem 'activerecord-import'
 gem 'composite_primary_keys', '~> 8.0'
+gem 'order_as_specified'
 gem "rails"
 gem 'bcrypt'
 gem 'with_advisory_lock'

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -23,7 +23,9 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def closed
-    @matches = @opportunity.closed_matches.page(params[:page]).per(25)
+    # @matches = @opportunity.closed_matches.page(params[:page]).per(25)
+    @match_state = :closed_matches
+    @opportunities = @opportunity.class.where(id: @opportunity.id)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
   end
@@ -107,7 +109,7 @@ class OpportunityMatchesController < ApplicationController
   private
 
     def require_access_to_opportunity!
-      not_authorized! unless (current_user.can_see_alternate_matches? ||
+      not_authorized! unless (@opportunity.show_alternate_clients_to?(current_user) &&
           @opportunity.visible_by?(current_user))
     end
 

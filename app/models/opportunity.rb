@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 class Opportunity < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
+  extend OrderAsSpecified
 
   include SubjectForMatches # loads methods and relationships
   include HasRequirements
@@ -77,6 +78,11 @@ class Opportunity < ActiveRecord::Base
     )
   end
 
+  def self.match_text_search(text)
+    return none unless text.present?
+    where(id: ClientOpportunityMatch.text_search(text).select(:opportunity_id)).distinct
+  end
+
   def self.available_as_candidate
     where(available_candidate: true)
   end
@@ -95,6 +101,16 @@ class Opportunity < ActiveRecord::Base
 
   def self.associations_adding_services
     [:voucher]
+  end
+
+  def show_alternate_clients_to?(user)
+    return false unless user&.can_see_alternate_matches?
+    return true if user&.receive_initial_notification?
+
+    active_matches.map do |match|
+      route = match.match_route
+      match.send(route.initial_contacts_for_match).where(id: user.contact.id).exists?
+    end.any?
   end
 
   def multiple_active_matches?

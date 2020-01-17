@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -16,7 +16,7 @@ module Notifications::HomelessSetAside
     def event_label
       "#{_('Housing Subsidy Administrator')} reviews match with client"
     end
-    
+
     def show_client_info?
       true
     end
@@ -32,6 +32,6 @@ module Notifications::HomelessSetAside
     def contacts_editable?
       true
     end
-    
+
   end
 end

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -89,7 +89,7 @@ class ClientOpportunityMatch < ActiveRecord::Base
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
   scope :stalled, -> do
-    active.where(arel_table[:stall_date].lteq(Date.today))
+    active.where(arel_table[:stall_date].lteq(Date.current))
   end
   scope :stalled_notifications_unsent, -> do
     stalled.where(stall_contacts_notified: nil)
@@ -185,6 +185,10 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   has_many :note_events,
     class_name: 'MatchEvents::Note',
+    foreign_key: :match_id
+
+  has_many :decision_actions,
+    class_name: MatchEvents::DecisionAction,
     foreign_key: :match_id
 
   # Preserved so that history of old mechanism works
@@ -311,10 +315,12 @@ class ClientOpportunityMatch < ActiveRecord::Base
     ).text_search(text).exists
 
     where(
-      client_matches.
-      or(opp_matches).
-      or(contact_matches).
-      or(arel_table[:id].eq(text))
+      Arel.sql(
+        client_matches.
+        or(opp_matches).
+        or(contact_matches).
+        or(arel_table[:id].eq(text)).to_sql
+      )
     )
   end
 
@@ -328,10 +334,13 @@ class ClientOpportunityMatch < ActiveRecord::Base
 
   # returns the most recent decision
   def current_decision
-    unless closed?
-      # FIXME, should look for next decision on route based on route #match_steps
-      initialized_decisions.order(id: :desc).limit(1).first
-    end
+    return nil if closed?
+    # FIXME, should look for next decision on route based on route #match_steps
+    @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
+  end
+
+  def clear_current_decision_cache!
+    @current_decision = nil
   end
 
   def add_default_contacts!
@@ -752,15 +761,15 @@ class ClientOpportunityMatch < ActiveRecord::Base
       [
         {title: 'Oldest match', column: 'created_at', direction: 'asc'},
         {title: 'Most recent match', column: 'created_at', direction: 'desc'},
-        {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
-        {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
-        {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
-        {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
+        # {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
+        # {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
+        # {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
+        # {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
         {title: 'Recently changed', column: 'last_decision', direction: 'desc'},
-        {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
-        {title: 'Most served', column: 'days_homeless', direction: 'desc'},
-        {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
-        {title: 'Current step', column: 'current_step', direction: 'desc'},
+        # {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
+        # {title: 'Most served', column: 'days_homeless', direction: 'desc'},
+        # {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
+        # {title: 'Current step', column: 'current_step', direction: 'desc'},
         {title: 'Initial Acceptance Expiration Date', column: 'shelter_expiration', direction: 'asc'},
         {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
         {title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc'},

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -46,6 +46,10 @@ module MatchDecisions
     end
     scope :last_updated_before, -> (date) do
       where(arel_table[:updated_at].lteq(date))
+    end
+
+    scope :canceled_other_clients, -> do
+      where(status: :other_clients_canceled)
     end
 
     has_many :decision_action_events,
@@ -217,6 +221,7 @@ module MatchDecisions
     end
 
     def run_status_callback! **dependencies
+      match.clear_current_decision_cache!
       status_callbacks.new(self, dependencies).public_send status
     end
 

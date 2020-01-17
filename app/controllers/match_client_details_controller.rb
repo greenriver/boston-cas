@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -7,7 +7,7 @@
 class MatchClientDetailsController < ApplicationController
   include HasMatchAccessContext
   include PjaxModalController
-  
+
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!
 

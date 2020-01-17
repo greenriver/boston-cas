@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
@@ -101,7 +101,7 @@ class BuildingsController < ApplicationController
     def building_scope
       Building.all
     end
-  
+
     def set_building
       @building = building_scope.find(params[:id])
     end
