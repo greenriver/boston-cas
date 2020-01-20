@@ -32,6 +32,11 @@ $tag-correction: $tag-height / 2;
   &--sm {
     font-size: rem($tag-height - 21);
   }
+  &--xs {
+    font-size: rem($tag-height - 26);
+    height: $tag-height/1.5;
+    width: $tag-height/1.5;
+  }
 }
 
 .c-tag__content {
@@ -102,7 +107,8 @@ $tag-correction: $tag-height / 2;
 $tag-types: (
   success: $brand-success-l,
   warning: $brand-warning-l,
-  danger: $brand-danger-l
+  danger: $brand-danger-l,
+  info: $brand-info,
 );
 
 @each $type, $color in $tag-types {

@@ -1,103 +1,87 @@
-- matches.each do |match|
-  - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
-  - active_in_other_match_class = ''
-  - next if match.client.blank?
-  - if match.client.active_in_match? && match.client.match_for_opportunity(match.opportunity) != match
-    - active_in_other_match_class = 'clients__client-card--flagged'
+- # FIXME: we need to pass this in where ever we call it
+- opportunities.each do |opportunity|
+  - matches = opportunity.send(@match_state)
+  - sub_program = opportunity.sub_program
+  - program = sub_program.program
+  - unit = opportunity.unit
+  - building = unit&.building
+  - voucher = opportunity.voucher
+  - max_updated_at = (opportunity.send(@match_state)&.map(&:updated_at) + opportunity.send(@match_state).map(&:current_decision).compact.map(&:updated_at)).compact.max
+  .clients__client-card.clients__client.c-card
+    .row
+      .col-3
+        %dl.inline
+          %dt Program:
+          %dd
+            = link_to program.name, edit_program_sub_program_program_details_path(program_id: program, sub_program_id: sub_program)
+            %br
+            %em
+              = link_to sub_program.name, edit_program_sub_program_path(program_id: program, id: sub_program)
+            .text-muted
+              = sub_program.program_type_label
 
-  .clients__client-card.clients__client.c-card{data: {id: match.client.id}, class: active_in_other_match_class}
-    .client__details
-      .clients__client-name.h3
-        - if match.client.accessible_by_user? current_user
-          = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
-        - else
-          = match.client_name_for_contact current_contact, hidden: hide_client_name
-      - if match.client.accessible_by_user? current_user
-        %ul.list-unstyled
-          %li
-            %dl.inline
-              %dt First Homeless Night:
-              %dd= match.client.calculated_first_homeless_night.try(:strftime, I18n.t('date.formats.default'))
-          %li
-            %dl.inline
-              %dt Days Homeless:
-              %dd= number_with_delimiter(match.client.days_homeless)
-          %li
-            %dl.inline
-              %dt Days Homeless in Last 3 Years:
-              %dd= number_with_delimiter(match.client.days_homeless_in_last_three_years)
-    .client__details
-      - if MatchRoutes::Base.more_than_one?
-        %ul.list-unstyled
-          %li
-            %dl.inline
-              %dt Match Route:
-              %dd.feature= match.match_route&.title
-      %ul.d-flex.list-unstyled.align-items-center
-        %li
-          %dl
-            %dt Initial Match Date
-            %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
-        %li.ml-6.mr-6
-          = render 'match_list_base/current_step', match: match, size: 'sm'
-        - unless match_type == 'opportunity'
-          %li
-            %dl
-              %dt Last Updated
-              %dd
-                - if match_type == 'active'
-                  = match.current_decision.updated_at.to_date.strftime(I18n.t('date.formats.default'))
+        - if building && unit
+          %dl.inline
+            %dt Unit & Building:
+            %dd
+              = unit.name
+              %br
+              = building.name
+        - if MatchRoutes::Base.more_than_one?
+          %ul.list-unstyled
+            %li
+              %dl.inline
+                %dt Match Route:
+                %dd.feature= opportunity.match_route&.title
+        %dl.inline
+          %dt Available Since:
+          %dd= voucher.made_available_at.try(:strftime, I18n.t('date.formats.default')) || 'unknown'
+        - if can_reject_matches? || matches.map(&:past_first_step_or_all_steps_visible?).any?
+          - if match_type != 'opportunity' && opportunity.show_alternate_clients_to?(current_user)
+            = link_to opportunity_matches_path(opportunity) do
+              Prioritized Clients
+      .col-9.mt-5
+        - matches.each do |match|
+          - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
+          - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
+          - active_in_other_match_class = ''
+          - next if match.client.blank?
+          - if match.active? && match.client.active_in_match? && match.client.match_for_opportunity(match.opportunity) != match
+            - active_in_other_match_class = 'clients__client-card--flagged'
+          .match-step-status.mb-4
+            .row.client__match.mb-4{data: {id: match.client.id}, class: active_in_other_match_class}
+              .col
+                .text-lg-right
+                  %strong.clients__client-name
+                    - if match.client.accessible_by_user? current_user
+                      = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
+                    - else
+                      = match.client_name_for_contact current_contact, hidden: hide_client_name
+              .col
+                %ul.d-flex.list-unstyled.align-items-center.mb-0
+                  %li
+                    %dl
+                      %dt.text-nowrap Initial Match Date
+                      %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+                  %li.ml-6.mr-6
+                    = render 'match_list_base/current_step', match: match, size: 'sm'
+                  - unless match_type == 'opportunity'
+                    %li
+                      %dl
+                        %dt.text-nowrap Last Updated
+                        %dd
+                          - updated_at = match.current_decision&.updated_at
+                          - if match_type == 'active'
+                            = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
+                          - else
+                            = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
+                          - if updated_at == max_updated_at && matches.count > 1
+                            %span.text-success
+                              *
+                = render 'matches/warnings', match: match
+
+              .col.client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
+                - if can_reject_matches? || match&.past_first_step_or_all_steps_visible?
+                  = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
                 - else
-                  = match.updated_at.to_date.strftime(I18n.t('date.formats.default'))
-      %ul.d-flex.list-unstyled
-        %li.mr-6
-          %dl
-            %dt Program
-            %dd
-              - if match.sub_program.editable_by?(current_user)
-                = link_to edit_program_sub_program_program_details_path(match.sub_program.program, match.sub_program) do
-                  = match.opportunity_details.program_name
-              - else
-                = match.opportunity_details.program_name
-
-        %li
-          %dl
-            %dt Sub-Program
-            %dd
-              - if match.sub_program.editable_by?(current_user)
-                = link_to edit_program_sub_program_path(match.sub_program.program, match.sub_program) do
-                  = match.opportunity_details.sub_program_name
-              - else
-                = match.opportunity_details.sub_program_name
-    .client__details.flex-column.d-flex.justify-content-end.align-items-end.ml-auto
-      - if can_reject_matches? || match.past_first_step_or_all_steps_visible?
-        = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
-        - if  match_type != 'opportunity' && can_see_alternate_matches?
-          = link_to opportunity_matches_path(match.opportunity) do
-            Prioritized Clients
-        - if match.shelter_expiration? && match.current_decision&.expires?
-          - if match.shelter_expiration < Date.today
-            .c-tag__wrapper.align-items-center
-              .c-tag--danger.mr-4
-                .c-tag__icon{style: 'font-size: 1.2rem;'}
-                  %i.icon-warning
-              .content
-                This match expired on
-                %strong= "#{match.shelter_expiration}."
-          - else
-            .content
-              This match expires on
-              %strong= "#{match.shelter_expiration}."
-        - decision_stallable = match.current_decision && match.current_decision.stallable?
-        - if decision_stallable && match.stalled?
-          %p.o-section__note
-            %i.icon-warning
-            This match stalled on
-            %strong #{match.stall_date}
-        - elsif decision_stallable && match.stall_date.present?
-          %p.o-section__note
-            %i.icon-info
-            This match will be considered stalled on
-            %strong #{match.stall_date}.
-      - else
-        This match is not currently available.
+                  This match is not currently available.

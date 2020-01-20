@@ -7,7 +7,11 @@ RSpec.describe MatchDecisions::Base, type: :model do
     let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
     let(:route) {
       r = MatchRoutes::Default.first
-      r.update(match_prioritization_id: priority.id, stalled_interval: 30)
+      r.update(
+        match_prioritization_id: priority.id,
+        stalled_interval: 30,
+        should_activate_match: false,
+      )
       r
       }
     let(:program) { create :program, match_route: route }

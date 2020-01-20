@@ -36,6 +36,10 @@ module MatchEvents
 
     belongs_to :not_working_with_client_reason, class_name: 'MatchDecisionReasons::Base'
 
+    scope :canceled_other_clients, -> do
+      where(action: :other_clients_canceled)
+    end
+
     def name
       raise 'Abstract method'
     end
