@@ -6,7 +6,7 @@
 
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
-  before_action :load_client, only: [:edit, :update, :new_assessment, :destroy]
+  before_action :load_client, only: [:show, :edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]

@@ -25,8 +25,7 @@
           - @non_hmis_clients.each do |deidentified_client|
             %tr
               %td
-                = link_to({action: :edit, id: deidentified_client}) do
-                  = deidentified_client.client_identifier
+                = link_to deidentified_client.client_identifier, deidentified_client_path(deidentified_client)
               %td= deidentified_client.agency&.name
               %td= deidentified_client.current_assessment.assessment_score
               %td= simple_format deidentified_client.cohort_names

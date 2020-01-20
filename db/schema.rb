@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200117202108) do
+ActiveRecord::Schema.define(version: 20200120191332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -678,7 +678,10 @@ ActiveRecord::Schema.define(version: 20200117202108) do
     t.boolean  "other_accessibility",                      default: false
     t.boolean  "disabled_housing",                         default: false
     t.boolean  "actively_homeless",                        default: false, null: false
+    t.integer  "user_id"
   end
+
+  add_index "non_hmis_assessments", ["user_id"], name: "index_non_hmis_assessments_on_user_id", using: :btree
 
   create_table "non_hmis_clients", force: :cascade do |t|
     t.string   "client_identifier"
@@ -1373,6 +1376,7 @@ ActiveRecord::Schema.define(version: 20200117202108) do
   add_index "vouchers", ["sub_program_id"], name: "index_vouchers_on_sub_program_id", using: :btree
   add_index "vouchers", ["unit_id"], name: "index_vouchers_on_unit_id", using: :btree
 
+  add_foreign_key "non_hmis_assessments", "users"
   add_foreign_key "opportunities", "vouchers"
   add_foreign_key "programs", "contacts"
   add_foreign_key "programs", "funding_sources"
