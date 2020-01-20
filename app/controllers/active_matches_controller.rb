@@ -32,9 +32,9 @@ class ActiveMatchesController < MatchListBaseController
       map(&:first).
       uniq
 
-    @opportunities = opportunity_scope.where(id: opportunity_ids).
-      order_as_specified(distinct_on: true, id: opportunity_ids).
-      # order("array_position(ARRAY#{opportunity_ids}, opportunities.id)").
+    @opportunities = opportunity_scope.where(id: opportunity_ids)
+    @opportunities = @opportunities.order_as_specified(distinct_on: true, id: opportunity_ids) unless opportunity_ids.empty?
+    @opportunities = @opportunities.
       preload(
         :voucher,
         :match_route,
