@@ -10,11 +10,11 @@ class IdentifiedPathwaysAssessment < IdentifiedClientAssessment
 
   private def populate_aggregates
     if youth_rrh_desired? && rrh_desired?
-      youth_rrh_aggregate = 'both'
+      self.youth_rrh_aggregate = 'both'
     elsif youth_rrh_desired?
-      youth_rrh_aggregate = 'youth'
+      self.youth_rrh_aggregate = 'youth'
     elsif rrh_desired?
-      youth_rrh_aggregate = 'adult'
+      self.youth_rrh_aggregate = 'adult'
     end
 
     if dv_rrh_desired? && rrh_desired?

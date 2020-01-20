@@ -93,7 +93,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :requires_elevator_access,
           :family_member,
           :calculated_chronic_homelessness,
-          :income_total_monthly,
+          :income_total_annual,
           :disabling_condition,
           :physical_disability,
           :developmental_disability,
@@ -101,6 +101,11 @@ class IdentifiedClientsController < NonHmisClientsController
           :interested_in_set_asides,
           :youth_rrh_aggregate,
           :dv_rrh_aggregate,
+          :veteran_rrh_desired,
+          :rrh_th_desired,
+          :sro_ok,
+          :other_accessibility,
+          :disabled_housing,
           neighborhood_interests: [],
         ]
       ).merge(identified: true)
