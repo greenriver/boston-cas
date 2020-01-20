@@ -11,8 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200113152559) do
 
+ActiveRecord::Schema.define(version: 20200116165109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -464,18 +464,22 @@ ActiveRecord::Schema.define(version: 20200113152559) do
   add_index "login_activities", ["ip"], name: "index_login_activities_on_ip", using: :btree
 
   create_table "match_census", force: :cascade do |t|
-    t.date    "date",                                null: false
-    t.integer "opportunity_id",                      null: false
+    t.date    "date",                                            null: false
+    t.integer "opportunity_id",                                  null: false
     t.integer "match_id"
     t.string  "program_name"
     t.string  "sub_program_name"
-    t.jsonb   "prioritized_client_ids", default: [], null: false
+    t.jsonb   "prioritized_client_ids",             default: [], null: false
     t.integer "active_client_id"
-    t.jsonb   "requirements",           default: [], null: false
+    t.jsonb   "requirements",                       default: [], null: false
+    t.integer "match_prioritization_id"
+    t.integer "active_client_prioritization_value"
+    t.string  "prioritization_method_used"
   end
 
   add_index "match_census", ["date"], name: "index_match_census_on_date", using: :btree
   add_index "match_census", ["match_id"], name: "index_match_census_on_match_id", using: :btree
+  add_index "match_census", ["match_prioritization_id"], name: "index_match_census_on_match_prioritization_id", using: :btree
   add_index "match_census", ["opportunity_id"], name: "index_match_census_on_opportunity_id", using: :btree
 
   create_table "match_decision_reasons", force: :cascade do |t|
