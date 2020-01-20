@@ -20,7 +20,7 @@
 = form.input :interested_in_set_asides, label: '6I. Confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units'
 = form.input :income_total_annual, label: '6A. Net income'
 = form.input :sro_ok, label: '6B. If you are a single adult, would you consider living in a single room occupancy (SRO)?'
-= form.input :required_number_of_bedrooms, collection: (2..5), include_blank: false, label: '6C. If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below', input_html: { class: :select2 }
+= form.input :required_number_of_bedrooms, collection: (2..5), include_blank: 'None', label: '6C. If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below', input_html: { class: :select2 }
 %p.control-label
   6D. Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need
 = form.input :requires_wheelchair_accessibility, label: 'Wheelchair accessible unit'
