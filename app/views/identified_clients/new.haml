@@ -2,13 +2,13 @@
 = simple_form_for @non_hmis_client, url: identified_clients_path do |f|
   = f.error_notification
   .row
-    .col-sm-6
+    .col
       .form-inputs
-        = render 'client', form: f
+        = render 'client', form: f, disabled: false
         %hr
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type
-          = render @assessment.model_name.element, form: a
+          = render @assessment.model_name.element, form: a, disabled: false
       .form-actions
         = f.button :submit, "Create Client", class: 'btn btn-primary'
 

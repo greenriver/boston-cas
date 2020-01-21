@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_152559) do
+ActiveRecord::Schema.define(version: 2020_01_20_191332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -453,8 +453,12 @@ ActiveRecord::Schema.define(version: 2020_01_13_152559) do
     t.jsonb "prioritized_client_ids", default: [], null: false
     t.integer "active_client_id"
     t.jsonb "requirements", default: [], null: false
+    t.integer "match_prioritization_id"
+    t.integer "active_client_prioritization_value"
+    t.string "prioritization_method_used"
     t.index ["date"], name: "index_match_census_on_date"
     t.index ["match_id"], name: "index_match_census_on_match_id"
+    t.index ["match_prioritization_id"], name: "index_match_census_on_match_prioritization_id"
     t.index ["opportunity_id"], name: "index_match_census_on_opportunity_id"
   end
 
@@ -602,26 +606,26 @@ ActiveRecord::Schema.define(version: 2020_01_13_152559) do
     t.string "type"
     t.integer "assessment_score"
     t.integer "days_homeless_in_the_last_three_years"
-    t.boolean "veteran", default: false, null: false
-    t.boolean "rrh_desired", default: false, null: false
+    t.boolean "veteran", default: false
+    t.boolean "rrh_desired", default: false
     t.boolean "youth_rrh_desired", default: false, null: false
     t.text "rrh_assessment_contact_info"
     t.boolean "income_maximization_assistance_requested", default: false, null: false
-    t.boolean "pending_subsidized_housing_placement", default: false, null: false
+    t.boolean "pending_subsidized_housing_placement", default: false
     t.boolean "requires_wheelchair_accessibility", default: false, null: false
     t.integer "required_number_of_bedrooms"
     t.integer "required_minimum_occupancy"
     t.boolean "requires_elevator_access", default: false, null: false
     t.boolean "family_member", default: false, null: false
     t.integer "calculated_chronic_homelessness"
-    t.json "neighborhood_interests", default: [], null: false
+    t.json "neighborhood_interests", default: []
     t.float "income_total_monthly"
     t.boolean "disabling_condition", default: false, null: false
     t.boolean "physical_disability", default: false, null: false
     t.boolean "developmental_disability", default: false, null: false
     t.date "date_days_homeless_verified"
     t.string "who_verified_days_homeless"
-    t.boolean "domestic_violence", default: false, null: false
+    t.boolean "domestic_violence", default: false
     t.boolean "interested_in_set_asides", default: false, null: false
     t.string "set_asides_housing_status"
     t.boolean "set_asides_resident"
@@ -655,6 +659,8 @@ ActiveRecord::Schema.define(version: 2020_01_13_152559) do
     t.boolean "other_accessibility", default: false
     t.boolean "disabled_housing", default: false
     t.boolean "actively_homeless", default: false, null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
@@ -725,6 +731,8 @@ ActiveRecord::Schema.define(version: 2020_01_13_152559) do
     t.integer "vispdat_priority_score", default: 0
     t.boolean "actively_homeless", default: false, null: false
     t.boolean "limited_release_on_file", default: false, null: false
+    t.boolean "active_client", default: true, null: false
+    t.boolean "eligible_for_matching", default: true, null: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -1322,6 +1330,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_152559) do
     t.index ["unit_id"], name: "index_vouchers_on_unit_id"
   end
 
+  add_foreign_key "non_hmis_assessments", "users"
   add_foreign_key "opportunities", "vouchers"
   add_foreign_key "programs", "contacts"
   add_foreign_key "programs", "funding_sources"

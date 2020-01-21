@@ -9,4 +9,5 @@ class NonHmisAssessment < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :non_hmis_client
+  belongs_to :user
 end
