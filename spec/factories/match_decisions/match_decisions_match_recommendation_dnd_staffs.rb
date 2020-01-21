@@ -2,44 +2,44 @@ FactoryBot.define do
   factory :match_decisions_match_recommendation_dnd_staff, class: 'MatchDecisions::MatchRecommendationDndStaff' do
     association :match, factory: :client_opportunity_match
     status { :pending  }
-    
-    trait :accepted do 
+
+    trait :accepted do
       status { 'accepted' }
     end
-    
-    trait :declined do 
+
+    trait :declined do
       status { 'declined' }
     end
-    
-    trait :pending do 
+
+    trait :pending do
       status { 'pending' }
     end
-    
-    trait :canceled do 
+
+    trait :canceled do
       status { 'canceled' }
     end
-    
-    trait :parked do 
+
+    trait :parked do
       prevent_matching_until { Date.tomorrow }
     end
-    
+
     trait :shelter_expiration do
       shelter_expiration { Date.tomorrow }
     end
-    
+
     trait :cancel_reason do
       administrative_cancel_reason_id { 21 }
     end
-    
+
     trait :cancel_reason_absent do
       administrative_cancel_reason_id { nil }
     end
-    
+
     trait :decline_reason do
       decline_reason_id { 12 }
     end
-    
-    
+
+
     # type 'MatchDecisions::MatchRecommendationShelterAgency'
     # contact_id 5
     # client_last_seen_date

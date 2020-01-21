@@ -4,8 +4,8 @@ FactoryBot.define do
       name { 'Deidentified Clients' }
       db_identifier { 'Deidentified' }
     end
-    
-    trait :warehouse do 
+
+    trait :warehouse do
       name { 'HMIS Warehouse' }
       db_identifier { 'Warehouse' }
     end

@@ -61,7 +61,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   def assessment_type
-    Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
+    Config.get(:deidentified_client_assessment).presence || 'DeidentifiedClientAssessment'
   end
 
   def client_source

@@ -10,44 +10,44 @@ FactoryBot.define do
     trait :acknowledged do
       status { 'acknowledged' }
     end
-    
-    trait :accepted do 
+
+    trait :accepted do
       status { 'accepted' }
     end
-    
-    trait :declined do 
+
+    trait :declined do
       status { 'declined' }
     end
-    
-    trait :pending do 
+
+    trait :pending do
       status { 'pending' }
     end
-    
-    trait :canceled do 
+
+    trait :canceled do
       status { 'canceled' }
     end
-    
-    trait :parked do 
+
+    trait :parked do
       prevent_matching_until { Date.tomorrow }
     end
-    
+
     trait :shelter_expiration do
       shelter_expiration { Date.tomorrow }
     end
-    
+
     trait :cancel_reason do
       administrative_cancel_reason_id { 21 }
     end
-    
+
     trait :cancel_reason_absent do
       administrative_cancel_reason_id { nil }
     end
-    
+
     trait :decline_reason do
       decline_reason_id { 12 }
     end
-    
-    
+
+
     # type 'MatchDecisions::MatchRecommendationShelterAgency'
     # contact_id 5
     # client_last_seen_date

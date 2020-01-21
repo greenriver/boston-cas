@@ -6,4 +6,7 @@
 
 class DeidentifiedPathwaysAssessment < DeidentifiedClientAssessment
 
+  def default?
+    false
+  end
 end
