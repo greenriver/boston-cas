@@ -48,7 +48,7 @@ class MatchCensus < ActiveRecord::Base
             prioritization_method_used: prioritization_scheme,
             prioritized_client_ids: available_client_ids,
             active_client_id: match.client_id,
-            active_client_prioritization_value: match.client.public_send(prioritization_scheme),
+            active_client_prioritization_value: match.client&.public_send(prioritization_scheme),
             requirements: opp.requirements_for_archive,
 
           )
