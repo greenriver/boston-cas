@@ -16,7 +16,7 @@ RSpec.describe "Expressing neighborhood interests", type: :request do
     end
 
     it "stores multiple values" do
-      post deidentified_clients_path, deidentified_client: { client_assessments_attributes: [ neighborhood_interests: [ "#{cambridge.id}", "#{beacon_hill.id}" ] ] }
+      post deidentified_clients_path, deidentified_client: { client_assessments_attributes: { '0': { neighborhood_interests: [ "#{cambridge.id}", "#{beacon_hill.id}" ] } } }
 
       expect(response).to redirect_to deidentified_clients_url
 
@@ -25,7 +25,7 @@ RSpec.describe "Expressing neighborhood interests", type: :request do
     end
 
     it "converts strings to ints" do
-      post deidentified_clients_path, deidentified_client: { client_assessments_attributes: [ neighborhood_interests: [ "#{cambridge.id}" ] ] }
+      post deidentified_clients_path, deidentified_client: { client_assessments_attributes: { '0': { neighborhood_interests: [ "#{cambridge.id}" ] } } }
 
       expect(response).to redirect_to deidentified_clients_url
 
