@@ -217,6 +217,8 @@ class NonHmisClientsController < ApplicationController
       assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
     end
 
+    assessment_params[:user_id] = current_user.id
+
     return dirty_params
   end
 end
