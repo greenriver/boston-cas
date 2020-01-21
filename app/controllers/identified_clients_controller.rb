@@ -69,6 +69,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :date_of_birth,
         :ssn,
         :full_release_on_file,
+        :limited_release_on_file,
         :available,
         :active_client,
         :eligible_for_matching,

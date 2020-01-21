@@ -6,8 +6,8 @@ FactoryBot.define do
   end
 
   factory :macbeth, class: 'Contact' do
-    first_name 'William'
-    last_name 'Shakespeare'
-    email 'macbeth@scotland.gov.uk'
+    first_name { 'William' }
+    last_name { 'Shakespeare' }
+    email { 'macbeth@scotland.gov.uk' }
   end
 end
