@@ -38,6 +38,11 @@ class MatchCensus < ActiveRecord::Base
       active_matches = opp.active_matches.to_a
       if active_matches.any?
         active_matches.each do |match|
+          prioritization_value = nil
+          if match.client.present?
+            prioritization_value = match.client.public_send(prioritization_scheme)
+          end
+
           create!(
             date: Date.current,
             opportunity_id: opp.id,
@@ -48,7 +53,7 @@ class MatchCensus < ActiveRecord::Base
             prioritization_method_used: prioritization_scheme,
             prioritized_client_ids: available_client_ids,
             active_client_id: match.client_id,
-            active_client_prioritization_value: match.client&.public_send(prioritization_scheme),
+            active_client_prioritization_value: prioritization_value,
             requirements: opp.requirements_for_archive,
 
           )
