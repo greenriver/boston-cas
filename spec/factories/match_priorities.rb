@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :priority_days_homeless, class: 'MatchPrioritization::DaysHomeless' do
     active true
   end

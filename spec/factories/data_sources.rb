@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :data_source do
     trait :deidentified do
       name 'Deidentified Clients'
       db_identifier 'Deidentified'
     end
-    
-    trait :warehouse do 
+
+    trait :warehouse do
       name 'HMIS Warehouse'
       db_identifier 'Warehouse'
     end

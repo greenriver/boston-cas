@@ -32,4 +32,8 @@ class NonHmisAssessment < ActiveRecord::Base
       self.dv_rrh_aggregate = 'non-dv'
     end
   end
+
+  def default?
+    true
+  end
 end

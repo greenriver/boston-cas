@@ -1,8 +1,8 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user, class: 'User' do
     first_name 'User'
     last_name 'One'
-    sequence(:email) {|n| "user_#{n}@example.com" } 
+    sequence(:email) {|n| "user_#{n}@example.com" }
     password Digest::SHA256.hexdigest('abcd1234abcd')
     password_confirmation Digest::SHA256.hexdigest('abcd1234abcd')
     email_schedule 'immediate'

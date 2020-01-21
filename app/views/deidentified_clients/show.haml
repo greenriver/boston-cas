@@ -1,23 +1,26 @@
 = render 'breadcrumbs'
-%h1 Edit #{_('De-identified Client')}
+%h1 #{_('De-identified Client')}
 
 = simple_form_for @non_hmis_client, url: deidentified_client_path(@non_hmis_client.id) do |f|
   = f.error_notification
   .row
     .col
+      .form-actions
+        = link_to edit_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary mb-auto' do
+          Edit
+        - unless @assessment.default?
+          = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-2 mb-auto' do
+            %span.icon-plus
+            Add New Assessment
+        - if @non_hmis_client.non_hmis_assessments.count > 1
+          .ml-auto
+            = render 'assessments'
       .form-inputs
         = render 'client', form: f, disabled: true
         %hr
-        .form-actions
-          = link_to edit_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary mb-auto' do
-            Edit Assessment
-          = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
-            %span.icon-plus
-            Add New Assessment
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type
           = render @assessment.model_name.element, form: a, disabled: true
-        = render 'assessments'
 
 = content_for :page_js do
   :javascript

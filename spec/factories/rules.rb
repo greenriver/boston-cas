@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :female, class: 'Rules::Female' do
     name 'Female'
     verb 'be'

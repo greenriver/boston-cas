@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :male_gender, class: "Gender" do
     numeric 1
     text 'Male'

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   # puts Message.new.attributes
   factory :message do
     from    %w( macbeth@scotland.gov.uk )

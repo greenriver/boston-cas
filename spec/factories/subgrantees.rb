@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :subgrantee, class: 'Subgrantee' do
     name 'Test Subgrantee'
   end

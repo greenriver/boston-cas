@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :neighborhood_cambridge, class: 'Neighborhood' do
     name 'Cambridge'
   end

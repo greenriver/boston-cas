@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :admin_role, class: 'Role' do
     name "admin"
     can_view_all_clients true

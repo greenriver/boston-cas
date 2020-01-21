@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :voucher, class: 'Voucher' do
     available true
     sub_program
