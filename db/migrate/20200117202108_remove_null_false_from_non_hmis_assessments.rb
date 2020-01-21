@@ -1,4 +1,4 @@
-class RemoveNullFalseFromNonHmisAssessments < ActiveRecord::Migration
+class RemoveNullFalseFromNonHmisAssessments < ActiveRecord::Migration[4.2]
   def change
     change_column_null :non_hmis_assessments, :pending_subsidized_housing_placement, true
     change_column_null :non_hmis_assessments, :domestic_violence, true

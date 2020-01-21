@@ -1,4 +1,4 @@
-class AddPrioritizationSchemeToCensus < ActiveRecord::Migration
+class AddPrioritizationSchemeToCensus < ActiveRecord::Migration[4.2]
   def change
     add_reference :match_census, :match_prioritization, index: true
     add_column :match_census, :active_client_prioritization_value, :integer
