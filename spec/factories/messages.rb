@@ -14,7 +14,7 @@ FactoryBot.define do
         And then is heard no more. It is a tale
         Told by an idiot: full of sound and fury,
         Signifying nothing.
-    END
+      END
     }
   end
 end

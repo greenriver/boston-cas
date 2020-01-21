@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :match_decisions_match_recommendation_dnd_staff, class: 'MatchDecisions::MatchRecommendationDndStaff' do
     association :match, factory: :client_opportunity_match
-    status { :pending  }
+    status { :pending }
 
     trait :accepted do
       status { 'accepted' }
