@@ -111,7 +111,7 @@ class Opportunity < ApplicationRecord
       route = match.match_route
       match.send(route.initial_contacts_for_match).where(id: user.contact.id).exists?
     end.any?
-    from_program = sub_program.program.send(route.initial_contacts_for_match).where(id: user.contact.id).exists?
+    from_program = sub_program.program.send(match_route.initial_contacts_for_match).where(id: user.contact.id).exists?
     from_match || from_program
   end
 
