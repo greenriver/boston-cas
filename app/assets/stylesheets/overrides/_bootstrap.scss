@@ -111,3 +111,10 @@
 .datepicker input {
   padding: $input-padding-y $input-padding-x;
 }
+
+[class^="col"]
+{
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}

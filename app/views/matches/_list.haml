@@ -50,14 +50,14 @@
             - active_in_other_match_class = 'clients__client-card--flagged'
           .match-step-status.mb-4
             .row.client__match.mb-4{data: {id: match.client.id}, class: active_in_other_match_class}
-              .col
+              .col-3
                 .text-lg-right
                   %strong.clients__client-name
                     - if match.client.accessible_by_user? current_user
                       = link_to match.client_name_for_contact(current_contact, hidden: hide_client_name), client_path(match.client)
                     - else
                       = match.client_name_for_contact current_contact, hidden: hide_client_name
-              .col
+              .col-9
                 %ul.d-flex.list-unstyled.align-items-center.mb-0
                   %li
                     %dl
