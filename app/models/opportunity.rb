@@ -107,7 +107,9 @@ class Opportunity < ApplicationRecord
     return false unless user&.can_see_alternate_matches?
     return true if user&.receive_initial_notification?
 
-    active_matches.map do |match|
+
+
+    client_opportunity_matches.map do |match|
       route = match.match_route
       match.send(route.initial_contacts_for_match).where(id: user.contact.id).exists?
     end.any?
