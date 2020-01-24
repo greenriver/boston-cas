@@ -133,7 +133,7 @@ module Admin
       end
 
       def user_scope
-        User.active
+        User.active.order(last_name: :asc, first_name: :asc)
       end
 
       def user_params

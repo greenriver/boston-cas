@@ -12,23 +12,18 @@
     %p= page_entries_info @roles, entry_name: 'role account'
 .row
   .col-sm-12
-    .table-responsive
-      %table.table.table-condensed
-        %thead
-          %th Permission:
-          - @roles.each do |role|
-            %th
-              = link_to role.name, action: :edit, id: role
-          %th
-          %th
-        %tbody
-          - Role.permissions.each do |permission|
-            %tr
-              %td
-                =permission.to_s.humanize
-              - @roles.each do |role|
-                %td
-                  =checkmark(role.send(permission))
+    %table.table.table-fixed.table-striped
+      %thead
+        %th Permission:
+        - @roles.each do |role|
+          %th.text-center= link_to role.name, action: :edit, id: role
+      %tbody
+        - Role.permissions.each do |permission|
+          %tr
+            %td
+              =permission.to_s.humanize
+            - @roles.each do |role|
+              %td.text-center=checkmark(role.send(permission))
 
 
     %p= paginate @roles

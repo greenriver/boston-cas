@@ -1,0 +1,8 @@
+table.table-fixed {
+  position: relative;
+}
+.table-fixed th {
+  position: sticky;
+  top: 0;
+  background-color: $white;
+}
