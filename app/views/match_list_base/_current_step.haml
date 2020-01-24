@@ -1,6 +1,6 @@
 - match_route = match.match_route
 - types = match_step_types[match_route.class.name]
-- match_decisions = match.decisions.order(id: :asc).where(type: types&.keys)
+- match_decisions = match.decisions.order(id: :asc).where(type: types&.keys).to_a
 - size ||= 'lg'
 - small_class = 'c-stepped-progress--sm'
 
@@ -8,7 +8,7 @@
   %ol.c-stepped-progress{"step-count" => "#{match_decisions.count}", class: "#{small_class if size == 'sm'} route-#{match_route.class.name.parameterize}"}
     - match_decisions.each do |decision|
       - decision_status = decision.incomplete_active_done?
-      - next_decision = match_decisions.find_by(type: types.keys[types.keys.index(decision.type) + 1])
+      - next_decision = match_decisions.detect{|md| md.type == types.keys[types.keys.index(decision.type) + 1]}
       - final = types[decision.type].to_i == types.length.to_i
       -# if a step is canceled, but the next step has a status
       - if decision_status == :canceled && (next_decision.present? && next_decision.status.present?)

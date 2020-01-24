@@ -39,7 +39,7 @@ class ClosedMatchesController < MatchListBaseController
         :voucher,
         :match_route,
         sub_program: [:program],
-        active_matches:
+        @match_state =>
         [
           :decisions,
           :match_route,
