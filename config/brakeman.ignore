@@ -153,6 +153,47 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b2b367e1061a76e3d4bb5e4b632c8c3695b371af74b50e02b2985295bbaf0889",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/sub_programs/_form.html.haml",
+      "line": 55,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "SubProgram.have_buildings",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "SubProgramsController",
+          "method": "create",
+          "line": 35,
+          "file": "app/controllers/sub_programs_controller.rb",
+          "rendered": {
+            "name": "sub_programs/new",
+            "file": "app/views/sub_programs/new.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "sub_programs/new",
+          "line": 5,
+          "file": "app/views/sub_programs/new.html.haml",
+          "rendered": {
+            "name": "sub_programs/_form",
+            "file": "app/views/sub_programs/_form.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "sub_programs/_form"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
@@ -287,6 +328,47 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
+      "fingerprint": "d9ecf38c31f426f5f1971d9d83bf8f4c559d5431ecbe39bc4c56136c24e85814",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/programs/_form.html.haml",
+      "line": 48,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "SubProgram.have_buildings",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ProgramsController",
+          "method": "create",
+          "line": 75,
+          "file": "app/controllers/programs_controller.rb",
+          "rendered": {
+            "name": "programs/new",
+            "file": "app/views/programs/new.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "programs/new",
+          "line": 6,
+          "file": "app/views/programs/new.html.haml",
+          "rendered": {
+            "name": "programs/_form",
+            "file": "app/views/programs/_form.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "programs/_form"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "dc147405c1e02b10df380712ac9e324cc78eeb5d0623656d4918a18652961b99",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
@@ -357,6 +439,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-01-13 08:55:52 -0500",
+  "updated": "2020-01-24 10:07:21 -0500",
   "brakeman_version": "4.7.2"
 }
