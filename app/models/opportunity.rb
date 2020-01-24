@@ -109,7 +109,7 @@ class Opportunity < ApplicationRecord
 
 
 
-    client_opportunity_matches.map do |match|
+    active_matches.map do |match|
       route = match.match_route
       match.send(route.initial_contacts_for_match).where(id: user.contact.id).exists?
     end.any?
