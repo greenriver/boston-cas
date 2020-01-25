@@ -23,4 +23,8 @@ module ControllerAuthorization
     flash[:alert] =  'Sorry you are not authorized to do that.'
     redirect_to root_path()
   end
+
+  def require_can_see_some_alternate_matches!
+      not_authorized! unless can_see_alternate_matches? || can_see_all_alternate_matches?
+  end
 end

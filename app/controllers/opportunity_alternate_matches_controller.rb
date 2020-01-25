@@ -28,8 +28,4 @@ class OpportunityAlternateMatchesController < MatchListBaseController
       @heading = "Prioritized Clients for Opportunity ##{@opportunity.id}"
     end
 
-    private def require_can_see_some_alternate_matches!
-      can_see_alternate_matches? || can_see_all_alternate_matches?
-    end
-
 end
