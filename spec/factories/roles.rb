@@ -7,6 +7,7 @@ FactoryGirl.define do
     can_view_all_matches true
     can_view_own_closed_matches true
     can_see_alternate_matches true
+    can_see_all_alternate_matches true
     can_edit_match_contacts true
     can_approve_matches true
     can_reject_matches true

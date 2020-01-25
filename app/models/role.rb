@@ -43,6 +43,7 @@ class Role < ActiveRecord::Base
       :can_view_all_matches,
       :can_view_own_closed_matches,
       :can_see_alternate_matches,
+      :can_see_all_alternate_matches,
       :can_edit_match_contacts,
       :can_approve_matches,
       :can_reject_matches,

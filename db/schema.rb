@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200116165109) do
+ActiveRecord::Schema.define(version: 20200125014549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -631,26 +631,26 @@ ActiveRecord::Schema.define(version: 20200116165109) do
     t.string   "type"
     t.integer  "assessment_score"
     t.integer  "days_homeless_in_the_last_three_years"
-    t.boolean  "veteran",                                  default: false, null: false
-    t.boolean  "rrh_desired",                              default: false, null: false
+    t.boolean  "veteran",                                  default: false
+    t.boolean  "rrh_desired",                              default: false
     t.boolean  "youth_rrh_desired",                        default: false, null: false
     t.text     "rrh_assessment_contact_info"
     t.boolean  "income_maximization_assistance_requested", default: false, null: false
-    t.boolean  "pending_subsidized_housing_placement",     default: false, null: false
+    t.boolean  "pending_subsidized_housing_placement",     default: false
     t.boolean  "requires_wheelchair_accessibility",        default: false, null: false
     t.integer  "required_number_of_bedrooms"
     t.integer  "required_minimum_occupancy"
     t.boolean  "requires_elevator_access",                 default: false, null: false
     t.boolean  "family_member",                            default: false, null: false
     t.integer  "calculated_chronic_homelessness"
-    t.json     "neighborhood_interests",                   default: [],    null: false
+    t.json     "neighborhood_interests",                   default: []
     t.float    "income_total_monthly"
     t.boolean  "disabling_condition",                      default: false, null: false
     t.boolean  "physical_disability",                      default: false, null: false
     t.boolean  "developmental_disability",                 default: false, null: false
     t.date     "date_days_homeless_verified"
     t.string   "who_verified_days_homeless"
-    t.boolean  "domestic_violence",                        default: false, null: false
+    t.boolean  "domestic_violence",                        default: false
     t.boolean  "interested_in_set_asides",                 default: false, null: false
     t.string   "set_asides_housing_status"
     t.boolean  "set_asides_resident"
@@ -684,7 +684,10 @@ ActiveRecord::Schema.define(version: 20200116165109) do
     t.boolean  "other_accessibility",                      default: false
     t.boolean  "disabled_housing",                         default: false
     t.boolean  "actively_homeless",                        default: false, null: false
+    t.integer  "user_id"
   end
+
+  add_index "non_hmis_assessments", ["user_id"], name: "index_non_hmis_assessments_on_user_id", using: :btree
 
   create_table "non_hmis_clients", force: :cascade do |t|
     t.string   "client_identifier"
@@ -754,6 +757,8 @@ ActiveRecord::Schema.define(version: 20200116165109) do
     t.integer  "vispdat_priority_score",                   default: 0
     t.boolean  "actively_homeless",                        default: false, null: false
     t.boolean  "limited_release_on_file",                  default: false, null: false
+    t.boolean  "active_client",                            default: true,  null: false
+    t.boolean  "eligible_for_matching",                    default: true,  null: false
   end
 
   add_index "non_hmis_clients", ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at", using: :btree
@@ -1095,6 +1100,7 @@ ActiveRecord::Schema.define(version: 20200116165109) do
     t.boolean  "can_upload_deidentified_clients",         default: false
     t.boolean  "can_delete_matches",                      default: false
     t.boolean  "can_reopen_matches",                      default: false
+    t.boolean  "can_see_all_alternate_matches",           default: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
@@ -1377,6 +1383,7 @@ ActiveRecord::Schema.define(version: 20200116165109) do
   add_index "vouchers", ["sub_program_id"], name: "index_vouchers_on_sub_program_id", using: :btree
   add_index "vouchers", ["unit_id"], name: "index_vouchers_on_unit_id", using: :btree
 
+  add_foreign_key "non_hmis_assessments", "users"
   add_foreign_key "opportunities", "vouchers"
   add_foreign_key "programs", "contacts"
   add_foreign_key "programs", "funding_sources"
