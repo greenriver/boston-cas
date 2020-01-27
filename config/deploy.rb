@@ -10,7 +10,7 @@ set :cron_user, ENV.fetch('CRON_USER') { 'ubuntu'}
 set :whenever_roles, [:cron, :production_cron, :staging_cron]
 set :whenever_command, -> { "bash -l -c 'cd #{fetch(:release_path)} && /usr/share/rvm/bin/rvmsudo ./bin/bundle exec whenever -u #{fetch(:cron_user)} --update-crontab #{fetch(:whenever_identifier)} --set \"environment=#{fetch(:rails_env)}\" '" }
 set :passenger_restart_command, 'sudo passenger-config restart-app --ignore-passenger-not-running --ignore-app-not-running'
-
+set :systemctl_path, ENV.fetch('SYSTEMCTL_PATH') { '/bin/systemctl' }
 # server ENV['HOSTS'], user: ENV['USER'], roles: %w{app db web}
 
 if !ENV['FORCE_SSH_KEY'].nil?
