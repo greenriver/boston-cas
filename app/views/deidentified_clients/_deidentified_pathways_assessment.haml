@@ -1,3 +1,5 @@
+= render 'client', form: f, disabled: false
+%hr
 = form.input :assessment_score, disabled: disabled
 = form.input :days_homeless_in_the_last_three_years, label: '3D. Days homeless in last 3 years', disabled: disabled
 = form.input :family_member, label: '5A. Did the participant list any household members under 18 in the household composition chart?', input_html: {class: 'jFamily'}, disabled: disabled

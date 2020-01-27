@@ -4,11 +4,9 @@
   .row
     .col
       .form-inputs
-        = render 'client', form: f, disabled: false
-        %hr
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type
-          = render @assessment.model_name.element, form: a, disabled: false
+          = render @assessment.model_name.element, f: f, form: a, disabled: false
       .form-actions
         = f.button :submit, "Update Client", class: 'btn btn-primary'
 
