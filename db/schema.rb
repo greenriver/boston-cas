@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_20_191332) do
+ActiveRecord::Schema.define(version: 2020_01_27_144929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1063,6 +1063,7 @@ ActiveRecord::Schema.define(version: 2020_01_20_191332) do
     t.boolean "can_upload_deidentified_clients", default: false
     t.boolean "can_delete_matches", default: false
     t.boolean "can_reopen_matches", default: false
+    t.boolean "can_see_all_alternate_matches", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1211,8 +1212,8 @@ ActiveRecord::Schema.define(version: 2020_01_20_191332) do
   create_table "unavailable_as_candidate_fors", id: :serial, force: :cascade do |t|
     t.integer "client_id", null: false
     t.string "match_route_type", null: false
-    t.datetime "created_at", default: "2019-11-22 19:45:02", null: false
-    t.datetime "updated_at", default: "2019-11-22 19:45:02", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
   end

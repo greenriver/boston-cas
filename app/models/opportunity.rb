@@ -104,6 +104,7 @@ class Opportunity < ApplicationRecord
   end
 
   def show_alternate_clients_to?(user)
+    return true if user&.can_see_all_alternate_matches?
     return false unless user&.can_see_alternate_matches?
     return true if user&.receive_initial_notification?
 

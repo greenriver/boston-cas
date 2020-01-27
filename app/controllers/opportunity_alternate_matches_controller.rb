@@ -6,7 +6,7 @@
 
 class OpportunityAlternateMatchesController < MatchListBaseController
 
-  before_action :require_can_see_alternate_matches!
+  before_action :require_can_see_some_alternate_matches!
   prepend_before_action :find_opportunity!
 
   private
