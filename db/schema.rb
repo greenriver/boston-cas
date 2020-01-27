@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200125014549) do
+ActiveRecord::Schema.define(version: 20200127144929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1256,10 +1256,10 @@ ActiveRecord::Schema.define(version: 20200125014549) do
   add_index "translation_texts", ["translation_key_id"], name: "index_translation_texts_on_translation_key_id", using: :btree
 
   create_table "unavailable_as_candidate_fors", force: :cascade do |t|
-    t.integer  "client_id",                                        null: false
-    t.string   "match_route_type",                                 null: false
-    t.datetime "created_at",       default: '2019-11-22 19:45:02', null: false
-    t.datetime "updated_at",       default: '2019-11-22 19:45:02', null: false
+    t.integer  "client_id",        null: false
+    t.string   "match_route_type", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "unavailable_as_candidate_fors", ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id", using: :btree
