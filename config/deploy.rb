@@ -136,6 +136,17 @@ task :trigger_job_restarts do
 end
 after 'deploy:symlink:release', :trigger_job_restarts
 
+if ENV['RELOAD_NGINX']=='true'
+  task :reload_nginx do
+    on roles(:web) do
+      within release_path do
+        sudo "#{fetch(:systemctl_path)}", "reload", 'nginx'
+      end
+    end
+  end
+  after 'passenger:restart', :reload_nginx
+end
+
 # set this variable on your first deployments to each environment.
 # remove these lines after all servers are deployed.
 # e.g.
