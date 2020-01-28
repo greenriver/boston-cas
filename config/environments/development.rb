@@ -28,15 +28,36 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  if ENV['SMTP_SERVER']
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.default_url_options = { host: ENV['FQDN'], protocol: 'http'}
+    smtp_port = ENV.fetch('SMTP_PORT'){ 587 }
+    config.action_mailer.perform_deliveries = true
+    if ENV['SMTP_USERNAME'] && ENV['SMTP_PASSWORD']
+      config.action_mailer.smtp_settings = {
+        address: ENV['SMTP_SERVER'],
+        port: smtp_port,
+        user_name: ENV['SMTP_USERNAME'],
+        password: ENV['SMTP_PASSWORD'],
+        authentication: :login,
+        enable_starttls_auto: true,
+      }
+    else
+      config.action_mailer.smtp_settings = {
+        address: ENV['SMTP_SERVER'],
+        port: smtp_port,
+      }
+    end
+  else
+    # Don't care if the mailer can't send.
+    config.action_mailer.raise_delivery_errors = false
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-
+    config.action_mailer.delivery_method = ENV.fetch("DEV_MAILER") { :letter_opener }.to_sym
+  end
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.delivery_method = :letter_opener
+  # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
