@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_144239) do
+ActiveRecord::Schema.define(version: 2020_01_29_175121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -660,6 +660,8 @@ ActiveRecord::Schema.define(version: 2020_01_29_144239) do
     t.boolean "disabled_housing", default: false
     t.boolean "actively_homeless", default: false, null: false
     t.integer "user_id"
+    t.boolean "evicted", default: false
+    t.boolean "documented_disability", default: false
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
