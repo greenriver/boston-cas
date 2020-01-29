@@ -110,12 +110,16 @@ class MatchListBaseController < ApplicationController
   end
 
   private def filter_by_step step, scope
-    return scope unless step.present? && MatchDecisions::Base.filter_options.include?(step)
+    return scope unless step.present? && (MatchDecisions::Base.filter_options.include?(step) || ClientOpportunityMatch::CLOSED_REASONS.include?(step))
     if MatchDecisions::Base.stalled_match_filter_options.include?(step)
       # determine delinquent progress updates
       if step == 'Stalled Matches - awaiting response'
         scope = scope.stalled_notifications_sent
       end
+    elsif ClientOpportunityMatch::CLOSED_REASONS.include?(step)
+      # This throws a warning for brakeman, but is actually fine, since
+      # it references the CLOSED_REASONS whitelist
+      scope = scope.public_send(step)
     else
       scope = scope.where(last_decision: {type: step}).select(:opportunity_id)
     end
@@ -124,7 +128,7 @@ class MatchListBaseController < ApplicationController
 
   private def filter_by_route route, scope
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
-    match_source.joins(:match_route).
+    scope.joins(:match_route).
       where(match_routes: {type: route})
   end
 
