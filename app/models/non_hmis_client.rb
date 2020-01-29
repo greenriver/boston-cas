@@ -17,6 +17,7 @@ class NonHmisClient < ApplicationRecord
     NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
   end
 
+  after_initialize :create_assessment_if_missing
 
   belongs_to :agency
   belongs_to :contact
@@ -172,6 +173,68 @@ class NonHmisClient < ApplicationRecord
     project_client.vispdat_priority_score = vispdat_priority_score
 
     project_client.needs_update = true
+  end
+
+  def create_assessment_if_missing
+    return unless persisted?
+    return if client_assessments.exists?
+
+    assessment = client_assessments.build
+    update_assessment_from_client(assessment)
+  end
+
+  def update_assessment_from_client(assessment=current_assessment)
+    assessment.assessment_score = assessment_score
+    assessment.actively_homeless = actively_homeless
+    assessment.days_homeless_in_the_last_three_years = days_homeless_in_the_last_three_years
+    assessment.veteran = veteran
+    assessment.rrh_desired = rrh_desired
+    assessment.youth_rrh_desired = youth_rrh_desired
+    assessment.rrh_assessment_contact_info = rrh_assessment_contact_info
+    assessment.income_maximization_assistance_requested = income_maximization_assistance_requested
+    assessment.pending_subsidized_housing_placement = pending_subsidized_housing_placement
+    assessment.requires_wheelchair_accessibility = requires_wheelchair_accessibility
+    assessment.required_number_of_bedrooms = required_number_of_bedrooms
+    assessment.required_minimum_occupancy = required_minimum_occupancy
+    assessment.requires_elevator_access = requires_elevator_access
+    assessment.family_member = family_member
+    assessment.calculated_chronic_homelessness = calculated_chronic_homelessness
+    assessment.neighborhood_interests = neighborhood_interests
+    assessment.income_total_monthly = income_total_monthly
+    assessment.disabling_condition = disabling_condition
+    assessment.physical_disability = physical_disability
+    assessment.developmental_disability = developmental_disability
+    assessment.date_days_homeless_verified = date_days_homeless_verified
+    assessment.who_verified_days_homeless = who_verified_days_homeless
+    assessment.domestic_violence = domestic_violence
+    assessment.interested_in_set_asides = interested_in_set_asides
+    assessment.set_asides_housing_status = set_asides_housing_status
+    assessment.set_asides_resident = set_asides_resident
+    assessment.shelter_name = shelter_name
+    assessment.entry_date = entry_date
+    assessment.case_manager_contact_info = case_manager_contact_info
+    assessment.phone_number = phone_number
+    assessment.have_tenant_voucher = have_tenant_voucher
+    assessment.children_info = children_info
+    assessment.studio_ok = studio_ok
+    assessment.one_br_ok = one_br_ok
+    assessment.sro_ok = sro_ok
+    assessment.fifty_five_plus = fifty_five_plus
+    assessment.sixty_two_plus = sixty_two_plus
+    assessment.voucher_agency = voucher_agency
+    assessment.interested_in_disabled_housing = interested_in_disabled_housing
+    assessment.chronic_health_condition = chronic_health_condition
+    assessment.mental_health_problem = mental_health_problem
+    assessment.substance_abuse_problem = substance_abuse_problem
+    assessment.vispdat_score = vispdat_score
+    assessment.vispdat_priority_score = vispdat_priority_score
+    assessment.imported_timestamp = imported_timestamp
+
+    assessment.created_at = created_at
+    assessment.updated_at = updated_at
+    assessment.deleted_at = deleted_at
+
+    assessment.save
   end
 
   def annual_income
