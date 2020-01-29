@@ -1,6 +1,6 @@
-= render 'client', form: f, disabled: false
+= render 'client', form: f, disabled: disabled
 %hr
-= form.input :assessment_score, disabled: disabled
+= form.input :assessment_score, disabled: true
 = form.input :days_homeless_in_the_last_three_years, label: '3D. Days homeless in last 3 years', disabled: disabled
 = form.input :family_member, label: '5A. Did the participant list any household members under 18 in the household composition chart?', input_html: {class: 'jFamily'}, disabled: disabled
 = form.input :pending_subsidized_housing_placement, label: '5C. Are you about to move into a housing unit, such as a unit with a Section 8 voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?', disabled: disabled

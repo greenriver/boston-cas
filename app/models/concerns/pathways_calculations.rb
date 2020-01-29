@@ -42,8 +42,10 @@ module PathwaysCalculations
             7
           when (241..269)
             8
-          when (270..Float.INFINITY)
+          when (270..Float::INFINITY)
             15
+          else
+            0
           end
         end
       score += 5 if documented_disability
