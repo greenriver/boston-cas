@@ -24,3 +24,7 @@ docker-compose run --rm shell bin/setup
 ```
 docker-compose run --rm web
 ```
+
+## Accessing the Site
+
+If everything worked as designed your site should now be available at [https://hmis-warehouse.dev.test](https://hmis-warehouse.dev.test).  Any mail that the site sends will be delivered to [MailHog](https://github.com/mailhog/MailHog) which is availble at [https://mail.hmis-warehouse.dev.test](https://mail.hmis-warehouse.dev.test)
