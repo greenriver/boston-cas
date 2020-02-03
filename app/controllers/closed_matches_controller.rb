@@ -52,61 +52,6 @@ class ClosedMatchesController < MatchListBaseController
         ]
       ).
       page(@page).per(@page_size)
-
-    # search
-    # if params[:q].present?
-    #   search_scope = match_scope.text_search(params[:q])
-    #   unless current_user.can_view_all_clients?
-    #     search_scope = search_scope.where(id: visible_match_ids())
-    #   end
-    #   @matches = search_scope
-    # else
-    #   @matches = match_scope
-    # end
-    # # decision subquery
-
-    # @available_routes = MatchRoutes::Base.filterable_routes
-
-    # md = MatchDecisions::Base.where(
-    #   'match_id = client_opportunity_matches.id'
-    # ).where.not(status: nil).order(created_at: :desc).limit(1)
-
-    # @show_vispdat = show_vispdat?
-
-    # @current_step = params[:current_step]
-    # if @current_step.present? && ClientOpportunityMatch::CLOSED_REASONS.include?(@current_step)
-    #   # This throws a warning for brakeman, but is actually fine, since
-    #   # it references the CLOSED_REASONS whitelist
-    #   @matches = @matches.public_send(@current_step)
-    # end
-
-    # @current_route = params[:current_route]
-    # if @current_route.present? && MatchRoutes::Base.filterable_routes.values.include?(@current_route)
-    #   @matches = @matches.joins(:match_route).where(match_routes: {type: @current_route})
-    # end
-
-    # @matches = @matches.
-    #   references(:client).
-    #   includes(:client).
-    #   joins("CROSS JOIN LATERAL (#{md.to_sql}) last_decision").
-    #   order(sort_opportunities()).
-    #   preload(
-    #     :opportunity,
-    #     :decisions,
-    #     :match_route,
-    #     :sub_program,
-    #     :program,
-    #     client: [
-    #       :project_client,
-    #       :active_matches,
-    #     ]
-    #   ).
-    #   page(params[:page]).per(25)
-
-    # @column = sort_column
-    # @direction = sort_direction
-    # @active_filter = @current_step.present? || @current_route.present?
-    # @types = MatchRoutes::Base.match_steps
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!

@@ -1,6 +1,9 @@
 - # FIXME: we need to pass this in where ever we call it
 - opportunities.each do |opportunity|
-  - matches = opportunity.send(@match_state)
+  - if @match_state == :closed_matches
+    - matches = opportunity.send(@match_state).where(id: @matches.select(:id))
+  - else
+    - matches = opportunity.send(@match_state)
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
