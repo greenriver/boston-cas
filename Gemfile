@@ -131,3 +131,9 @@ group :test do
   gem 'shoulda'
   gem 'rails-controller-testing'
 end
+
+group :rake do
+  gem 'gettext_i18n_rails'
+  gem 'fast_gettext'
+  gem 'gettext', '>=3.0.2'
+end

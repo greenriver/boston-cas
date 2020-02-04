@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-06 14:32-0500\n"
-"PO-Revision-Date: 2019-11-06 14:32-0500\n"
+"POT-Creation-Date: 2020-02-04 09:41-0500\n"
+"PO-Revision-Date: 2020-02-04 09:41-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -96,6 +96,12 @@ msgstr ""
 msgid "Default Match Route"
 msgstr ""
 
+msgid "Development Officer"
+msgstr ""
+
+msgid "Development Officer Contacts"
+msgstr ""
+
 msgid "Do not include client details in the note if you include the content in the email."
 msgstr ""
 
@@ -127,6 +133,9 @@ msgid "Housing Search Provider"
 msgstr ""
 
 msgid "Housing Search Providers"
+msgstr ""
+
+msgid "Housing Search Worker"
 msgstr ""
 
 msgid "Housing Subsidy Administrator"
@@ -204,6 +213,9 @@ msgstr ""
 msgid "Should this tag be added to anyone with an assessment score?"
 msgstr ""
 
+msgid "Stabilization Service Provider"
+msgstr ""
+
 msgid "Stabilization Service Providers"
 msgstr ""
 
@@ -258,7 +270,19 @@ msgstr ""
 msgid "full release"
 msgstr ""
 
+msgid "has scheduled criminal background hearing for"
+msgstr ""
+
+msgid "housing subsidy administrator"
+msgstr ""
+
+msgid "indicates there will not be a criminal background hearing"
+msgstr ""
+
 msgid "match shelter agency agreement modal"
+msgstr ""
+
+msgid "researching criminal background and deciding whether to schedule a hearing"
 msgstr ""
 
 msgid "sent notice of criminal background hearing date."
@@ -271,4 +295,7 @@ msgid "they can proceed to determine whether a criminal background hearing is ne
 msgstr ""
 
 msgid "translation"
+msgstr ""
+
+msgid "was sent full details of match for review and scheduling of any necessary criminal background hearings"
 msgstr ""
