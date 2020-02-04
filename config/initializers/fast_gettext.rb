@@ -3,8 +3,8 @@ require "fast_gettext/translation_repository/db"
 FastGettext::TranslationRepository::Db.require_models #load and include default models
 
 FastGettext.add_text_domain(
-  'boston-cas', 
-  :path => 'locale', 
+  'boston-cas',
+  :path => 'locale',
   :type => :db,
   :model => TranslationKey,
   :ignore_fuzzy => true,

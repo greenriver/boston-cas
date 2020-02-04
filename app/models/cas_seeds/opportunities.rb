@@ -13,7 +13,7 @@ module CasSeeds
         voucher_ids = Voucher.pluck(:id).shuffle[0..5]
         vouchers = Voucher.where(id: voucher_ids)
         vouchers.each do |v|
-          v.update_attributes(available: true)
+          v.update(available: true)
           op = Opportunity.create!(voucher: v, available: true)
         end
       end

@@ -11,12 +11,12 @@ namespace :cas_seeds do
     create_match_decision_reasons
     create_admin_user
   }
-  
+
   desc 'create fake opportunities'
   task create_opportunities: [:environment, "log:info_to_stdout"] do
     CasSeeds::Opportunities.new.run!
   end
-  
+
   desc 'create rules'
   task create_rules: [:environment, "log:info_to_stdout"] do
     CasSeeds::Rules.new.run!
@@ -45,9 +45,9 @@ namespace :cas_seeds do
   # TODO: delete this?  I don't think we'll need it anymore
   desc 'ensure all users have contacts'
   task ensure_all_users_have_contacts: [:environment, "log:info_to_stdout"] do
-    
-    user_ids_to_exclude = Contact.pluck('DISTINCT user_id')
-    
+
+    user_ids_to_exclude = Contact.distinct.pluck(:user_id)
+
     users = User.where.not(id: user_ids_to_exclude)
     puts "Creating missing contact records for #{users.count} users."
 
@@ -58,7 +58,7 @@ namespace :cas_seeds do
       user.contact.email = user.email
       user.contact.save
     end
-    
+
   end
 
   desc 'ensure all match routes exist'
@@ -108,7 +108,7 @@ namespace :cas_seeds do
   # task add_regular_contact_to_all_clients: [:environment, "log:info_to_stdout"] do
   #   CasSeeds::ClientRegularContact.new.run!
   # end
-  
+
   # desc 'add a shelter agency contact to all clients'
   # task add_shelter_agency_contact_to_all_clients: [:environment, "log:info_to_stdout"] do
   #   CasSeeds::ClientShelterAgencyContact.new.run!
