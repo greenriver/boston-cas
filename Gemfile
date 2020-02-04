@@ -78,8 +78,8 @@ gem 'daemons'
 gem 'auto-session-timeout'
 
 #Translations
-gem 'gettext_i18n_rails'
-gem 'fast_gettext'
+gem 'gettext_i18n_rails', require: false
+gem 'fast_gettext', require: false
 gem 'gettext', '>=3.0.2', require: false
 gem 'ruby_parser', require: false
 gem 'grosser-pomo'
