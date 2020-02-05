@@ -165,6 +165,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def clean_cohort
+    return nil unless Warehouse::Base.enabled?
     NonHmisClient.possible_cohorts.keys.detect{|m| m.to_i == params[:cohort]&.to_i}.to_s
   end
 

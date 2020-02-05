@@ -1,0 +1,18 @@
+- disabled ||= !disabled.nil?
+- btn_text ||= 'Create'
+- url ||= disabled ? nil : send("#{client_type}_client_path", @non_hmis_client.id)
+
+= simple_form_for @non_hmis_client, url: url do |f|
+  = f.error_notification
+  .row
+    .col
+      - if content_for? :form_actions
+        .form-actions.mb-6
+          = yield :form_actions
+      .form-inputs
+        .row
+          .col-sm-6
+            = render "#{client_type}_clients/client", form: f, disabled: disabled
+      - unless disabled
+        .form-actions
+          = f.button :submit, "#{btn_text} Client", class: 'btn btn-primary'

@@ -1,15 +1,10 @@
-%h1 Edit #{_('De-identified Client')}
-= simple_form_for @non_hmis_client, url: deidentified_client_path(@non_hmis_client.id) do |f|
-  = f.error_notification
-  .row
-    .col
-      .form-inputs
-        = f.simple_fields_for :client_assessments, @assessment do |a|
-          - # view is versioned, so choose view based on model type
-          = render @assessment.model_name.element, f: f, form: a, disabled: false
-      .form-actions
-        = f.button :submit, "Update Client", class: 'btn btn-primary'
+- title = _('De-identified Client')
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+-# Content blocks for layout
+-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-# Layout
+-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= render 'non_hmis_clients/edit_layout',
+  title: "#{title} #{@non_hmis_client.client_identifier}",
+  client_type: 'deidentified'
