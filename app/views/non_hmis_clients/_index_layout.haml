@@ -1,0 +1,23 @@
+- title = _('Non-HMIS Clients')
+- sub_title ||= ''
+- content_for :title, title
+
+.titles.d-flex.align-items-baseline
+  %h1.mr-2= title
+  %h2= sub_title
+- @prompt = "Search #{sub_title || 'Clients'}..."
+.row
+  .col-sm-4
+    = render 'clients/search_form'
+  .col-sm-4.filter-sort__filter.d-flex
+    = render 'filter'
+    = render 'clients/sort', sort_options: sort_options
+    .ml-auto
+      = yield :filter_actions
+= render 'menus/non_hmis_clients'
+.o-pre-table-actions
+  .o-pre-table-actions__group.o-pre-table-actions__primary
+    = yield :add_action
+  .o-pre-table-actions__group.o-pre-table-actions__secondary
+    = yield :data_actions
+= render 'table'

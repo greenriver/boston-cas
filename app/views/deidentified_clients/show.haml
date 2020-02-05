@@ -15,6 +15,7 @@
         - if @non_hmis_client.non_hmis_assessments.count > 1
           .ml-auto
             = render 'assessments'
+      = debug @assessment.model_name.element
       .form-inputs
         = render 'client', form: f, disabled: true
         %hr
