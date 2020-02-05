@@ -1,0 +1,20 @@
+.o-pre-table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: space(4);
+}
+
+.o-pre-table-actions__group {
+  margin-bottom: space(2);
+}
+
+.o-pre-table-actions__group a {
+  margin-right: space(1);
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.o-pre-table-actions__secondary {
+  margin-left: auto;
+}
