@@ -1,8 +1,9 @@
 = render 'breadcrumbs'
-%h1= title
+
+%h1 Update #{title}
 
 = render 'client_form',
   client_type: client_type,
-  disabled: true
+  btn_text: 'Update'
 
 = render 'init_select2'
