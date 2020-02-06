@@ -284,6 +284,9 @@
   min-width: rem($size);
   padding: space(2);
   min-height: $size + 20px;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+
   &::before,
   &::after {
     position: absolute;
@@ -321,9 +324,10 @@
 }
 
 @mixin checkbox-checked() {
-  background: lighten($gray-020, 2%);
+  background: rgba($brand-success-l, .2);
+  border-color: rgba($brand-success-l, .5);
   &::before {
-    background: $brand-success-l;
+    background: $white;
     border-color: $brand-success;
   }
   &::after {
@@ -331,13 +335,13 @@
   }
   &:hover,
   &:focus {
+    background: rgba($brand-success-l, .2);
+    border-color: rgba($brand-success-l, .5);
     &::before {
-      background: rgba($brand-success-l, .5);
-      transform: scale(.95);
+      background: $white;
     }
     &::after {
       color: lighten(desaturate($brand-success, 35%), 10%);
-      transform: scale(.95);
     }
   }
   &:active {
@@ -354,12 +358,9 @@
   &:hover,
   &:focus {
     &::before {
-      transform: scale(.95);
-      background: rgba($brand-success-l, .5);
       border-color: $brand-success;
     }
     &::after {
-      transform: scale(.95);
       color: lighten(desaturate($brand-success, 35%), 10%);
     }
   }

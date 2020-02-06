@@ -1,18 +1,23 @@
 - disabled ||= !disabled.nil?
-- btn_text ||= 'Create'
+- action ||= 'Create'
 - url ||= disabled ? nil : send("#{client_type}_client_path", @non_hmis_client.id)
 
-= simple_form_for @non_hmis_client, url: url do |f|
-  = f.error_notification
-  .row
-    .col
-      - if content_for? :form_actions
-        .form-actions.mb-6
+.c-card.c-card--flush
+  .c-card__content.p-0
+    .o-pre-table-actions
+      %h2.o-pre-table-actions__heading Client Information
+      - if disabled
+        .o-pre-table-actions__group.ml-auto
+          = link_to send("edit_#{client_type}_client_path", @non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
+            Edit Client
           = yield :form_actions
-      .form-inputs
+    .p-4
+      = simple_form_for @non_hmis_client, url: url do |f|
+        = f.error_notification
         .row
-          .col-sm-6
-            = render "#{client_type}_clients/client", form: f, disabled: disabled
-      - unless disabled
-        .form-actions
-          = f.button :submit, "#{btn_text} Client", class: 'btn btn-primary'
+          .col
+            .form-inputs
+              = render "#{client_type}_clients/client", form: f, disabled: disabled
+            - unless disabled
+              .form-actions.mt-4
+                = f.button :submit, "#{action.capitalize} Client", class: 'btn btn-primary ml-auto'

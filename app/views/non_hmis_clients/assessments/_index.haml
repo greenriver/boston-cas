@@ -1,21 +1,21 @@
 %section
-  %h2 Assessments
-  - unless @assessment.default?
-    = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-2 mb-auto' do
-      %span.icon-plus
-      Add New Assessment
-  %table.table
-    %thead
-      %tr
-        %td Date Token
-        %td Score
-    %thead
-      - @non_hmis_client.non_hmis_assessments.each do |assessment|
-        %tr
-          %td
-            = link_to assessment.created_at, send("#{client_type}_client_path", @non_hmis_client, {assessment_id: assessment})
-          %td= assessment.assessment_score
-
-  - @non_hmis_client.non_hmis_assessments.each do |assessment|
-    :javascript
-      console.log(#{assessment.to_json.html_safe})
+  .c-card.c-card--flush
+    .c-card__content.p-0
+      .o-pre-table-actions.o-pre-table-actions--light
+        %h2.o-pre-table-actions__heading Assessments
+        - unless @assessment.default?
+          .o-pre-table-actions__group.ml-auto
+            = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
+              %span.icon-plus
+              Add New Assessment
+      %table.table
+        %thead
+          %tr
+            %td Date Token
+            %td Score
+        %tbody
+          - @non_hmis_client.non_hmis_assessments.each do |assessment|
+            %tr
+              %td
+                = link_to assessment.created_at, send("#{client_type}_client_path", @non_hmis_client, {assessment_id: assessment})
+              %td= assessment.assessment_score

@@ -3,7 +3,6 @@
 %h1 Add New #{title}
 
 = render 'client_form',
-  client_type: client_type,
   url: send("#{client_type}_clients_path")
 
 = render 'init_select2'

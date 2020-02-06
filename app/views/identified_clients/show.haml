@@ -3,16 +3,8 @@
 -# Content blocks for layout
 -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- content_for :form_actions do
-  = link_to edit_identified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary mb-auto' do
-    Edit Client
-  = link_to new_assessment_identified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
-    %span.icon-plus
-    Add New Assessment
-
 -# Layout
 -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 = render 'non_hmis_clients/show_layout',
   title: "#{title}",
-  sub_title: "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}",
-  client_type: 'identified'
+  sub_title: "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}"

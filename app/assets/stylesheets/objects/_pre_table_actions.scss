@@ -1,8 +1,19 @@
 .o-pre-table-actions {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  padding: 0 space(2);
+  padding: 0 .75rem;
   background: lighten($tab-bg, 30%);
+  min-height: 50px;
+}
+
+.o-pre-table-actions--light {
+  background: white;
+  border-bottom: 1px solid $gray-015;
+}
+
+.o-pre-table-actions__heading {
+  margin-bottom: 0;
 }
 
 .o-pre-table-actions__group {

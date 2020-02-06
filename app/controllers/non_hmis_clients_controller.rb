@@ -11,8 +11,6 @@ class NonHmisClientsController < ApplicationController
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]
 
-  helper_method :client_type
-
   def index
 
     # sort
