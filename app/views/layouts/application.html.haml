@@ -11,6 +11,7 @@
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700|Open+Sans+Condensed:700|Montserrat:400,300,500,700|Lora:400,400i', rel: 'stylesheet', type: 'text/css'}
     = stylesheet_link_tag 'application', media: 'all'
     = stylesheet_link_tag 'print', media: 'print'
+    = javascript_include_tag 'application'
 
     = cache('theme', expires_in: 4.hours) do
       - Dir.glob('app/assets/stylesheets/theme/styles/*.scss') do |stylesheet|
@@ -59,7 +60,6 @@
             = _('The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.')
 
     = render 'pjax_modal_frame'
-    = javascript_include_tag 'application'
     = yield :page_js
     - if current_user
       = auto_session_timeout_js(frequency: 60)

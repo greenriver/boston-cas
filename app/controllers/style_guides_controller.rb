@@ -11,4 +11,8 @@ class StyleGuidesController < ApplicationController
     @enable_responsive = true
   end
 
+  def form
+    @form = OpenStruct.new
+  end
+
 end

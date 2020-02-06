@@ -211,6 +211,7 @@ Rails.application.routes.draw do
       get 'typography'
       get 'summary'
       get 'pagination'
+      get 'form'
     end
   end
 
