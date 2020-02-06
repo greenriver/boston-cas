@@ -10,20 +10,7 @@ App.Form.Select2Input = class Select2Input {
       console.debug(`Select2Input could not find id: ${elementId}`)
     } else {
       this.id = elementId
-      $(field).select2({
-        templateResult: function (data) {
-          // If possible, add a span wrapper with the same css-class as the original '<option>' element.
-          if (!data.element) {
-            return data.text
-          }
-          return $('<span></span>').text(data.text).addClass(data.element.className)
-        }
-      });
-      this.registerEvents()
+      $(field).select2(});
     }
-  }
-
-  registerEvents() {
-    return
   }
 }
