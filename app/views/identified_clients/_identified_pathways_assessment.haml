@@ -3,11 +3,16 @@
     .c-question.c-question--without-number
       .c-question__wrapper
         .c-question__input
-          = form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
+          = form.input :assessment_score, disabled: disabled
+    .c-question
+      .c-question__wrapper
+        .c-question__number
+        .c-question__input
+          = form.input :entry_date, label: 'Date Taken', as: :date_picker
     .c-question.c-question--without-number
       .c-question__wrapper
         .c-question__input
-          = form.input :assessment_score, disabled: disabled
+          = form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
 
     .c-question
       .c-question__wrapper

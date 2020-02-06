@@ -20,6 +20,6 @@
   = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
 
 = form.input :limited_release_on_file, as: :pretty_boolean, label: 'Limited Coordinated Access System Release on file', disabled: disabled
-= form.input :full_release_on_file, as: :pretty_boolean, label: 'Full Housing Access Network Release on file', disabled: disabled
-= form.input :active_client, as: :pretty_boolean, disabled: disabled
-= form.input :eligible_for_matching, as: :pretty_boolean, disabled: disabled
+= form.input :set_asides_housing_status, collection: ['Active', 'Inactive', 'Inelible'], input_html: { multiple: true, class: 'select2' }, label: "Status", disabled: disabled
+-# = form.input :active_client, as: :pretty_boolean, disabled: disabled
+-# = form.input :eligible_for_matching, as: :pretty_boolean, disabled: disabled
