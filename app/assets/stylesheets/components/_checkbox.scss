@@ -9,9 +9,6 @@
 .c-checkbox input:checked ~ label,
 .c-checkbox input:not(:checked) ~ label {
   @include checkbox-default;
-  span {
-    margin-top: 5px;
-  }
 }
 
 .c-checkbox input:not(:checked) ~ label {
@@ -49,27 +46,34 @@
   border-radius: 4px;
   margin-bottom: 5px;
   min-height: 50px;
-  &::before,
-  &::after {
-    margin: 0;
-    top: 10px;
-    left: space(2);
+  .c-checkbox__check-container {
+    margin-right: space(2);
   }
-  &::after {
+  .c-checkbox__check-container,
+  .c-checkbox__check-icon {
+    border-radius: 50%;
+  }
+  .c-checkbox__check-icon {
     transform: scale(.65);
     transform-origin: center center;
+    flex: 0 0 auto;
+    height: 30px;
+    width: 30px;
+    &::before {
+      content: '';
+    }
   }
   &:focus,
   &:hover {
-    &::after {
+    .c-checkbox__check-icon {
       transform: scale(.5);
     }
   }
   &:active {
-    &::before {
+    .c-checkbox__check-container {
       transform: scale(1);
     }
-    &::after {
+    .c-checkbox__check-icon {
       transform: scale(.3);
       transform-origin: center center;
     }
@@ -80,15 +84,14 @@
   &:focus,
   &:hover {
     background: lighten($gray-020, 2%);
-    &::after {
+    .c-checkbox__check-icon {
       background: $brand-success-l;
     }
   }
-  &::before {
+  .c-checkbox__check-container {
     background: $white;
   }
-  &::after {
-    content: '';
+  .c-checkbox__check-icon {
     border-radius: 50%;
     background: $gray-020;
     transform: scale(.65);
@@ -96,14 +99,13 @@
 }
 
 .c-checkbox--round input:checked ~ label {
-  &::after {
-    content: '';
+  .c-checkbox__check-icon {
     border-radius: 50%;
     background: $brand-success;
   }
   &:focus,
   &:hover {
-    &::after {
+    .c-checkbox__check-icon {
       transform: scale(.65);
     }
   }

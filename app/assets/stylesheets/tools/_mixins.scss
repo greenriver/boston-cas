@@ -286,36 +286,46 @@
   min-height: $size + 20px;
   border: 1px solid transparent;
   border-radius: $border-radius;
+  background: $white;
 
-  &::before,
-  &::after {
-    position: absolute;
+  .c-checkbox__pre-label {
+    &:empty {
+      display: none;
+    }
+    margin-right: space(2);
+    @include metric;
+  }
+  .c-checkbox__label {
+    margin-top: 5px;
+    max-width: 85ch;
+    font-weight: normal;
+  }
+  .c-checkbox__check-container {
+    position: relative;
     height: rem($size);
     width: rem($size);
-    top: 10px;
-    left: space(2);
-    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: .15s ease-in-out;
-  }
-  &::before {
-    content: '';
-    display: block;
+    margin-right: space(2);
     background: $white;
     border: 2px solid $gray-040;
     color: $gray-025;
     border-radius: $border-radius;
+    flex: 0 0 auto;
   }
-  &::after {
+  .c-checkbox__check-icon {
+    transition: .15s ease-in-out;
     $icon: map-get($icons, checkmark);
     font-family: 'icons';
-    content: $icon;
     color: $gray-020;
-  }
-  span {
-    padding-left: calc(#{rem($size)} + 10px)
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &::before {
+      content: $icon;
+    }
   }
   &:focus,
   &:hover {
@@ -326,29 +336,29 @@
 @mixin checkbox-checked() {
   background: rgba($brand-success-l, .2);
   border-color: rgba($brand-success-l, .5);
-  &::before {
-    background: $white;
+  .c-checkbox__check-container {
+    background: rgba($brand-success-l, .5);
     border-color: $brand-success;
   }
-  &::after {
+  .c-checkbox__check-icon {
     color: darken($brand-success, 10%);
   }
   &:hover,
   &:focus {
     background: rgba($brand-success-l, .2);
     border-color: rgba($brand-success-l, .5);
-    &::before {
-      background: $white;
+    .c-checkbox__check-container {
+      background: rgba($brand-success-l, .5);
     }
-    &::after {
+    .c-checkbox__check-icon {
       color: lighten(desaturate($brand-success, 35%), 10%);
     }
   }
   &:active {
     outline: 0;
     box-shadow: none;
-    &::before,
-    &::after {
+    .c-checkbox__check-container,
+    .c-checkbox__check-icon {
       transform: scale(.75);
     }
   }
@@ -357,19 +367,26 @@
 @mixin checkbox-not-checked() {
   &:hover,
   &:focus {
-    &::before {
+    .c-checkbox__check-container {
       border-color: $brand-success;
     }
-    &::after {
+    .c-checkbox__check-icon {
       color: lighten(desaturate($brand-success, 35%), 10%);
     }
   }
   &:active {
     outline: 0;
     box-shadow: none;
-    &::before,
-    &::after {
+    .c-checkbox__check-container,
+    .c-checkbox__check-icon {
       transform: scale(.75);
     }
   }
+}
+
+@mixin metric {
+  font-weight: 800;
+  font-size: 25px;
+  line-height: 1;
+  min-width: 50px;
 }

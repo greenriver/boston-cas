@@ -1,24 +1,24 @@
 .row
   .col-sm-9
-    = f.input :first_name, disabled: disabled
-    = f.input :middle_name, disabled: disabled
-    = f.input :last_name, disabled: disabled
+    = form.input :first_name, disabled: disabled
+    = form.input :middle_name, disabled: disabled
+    = form.input :last_name, disabled: disabled
     = form.input :assessment_score, disabled: disabled
     = form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
     - if can_edit_all_clients?
       .jAgency
         = f.association :agency, input_html: {class: :select2}, disabled: disabled
-      = f.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
-    = f.input :date_of_birth, as: :date_picker, disabled: disabled
-    = f.input :ssn, label: "SSN", input_html: {maxlength: 9}, disabled: disabled
+      = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+    = form.input :date_of_birth, as: :date_picker, disabled: disabled
+    = form.input :ssn, label: "SSN", input_html: {maxlength: 9}, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('actively_homeless')
       = form.input :actively_homeless, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
     = form.input :days_homeless_in_the_last_three_years, disabled: disabled
     = form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
     = form.input :who_verified_days_homeless, disabled: disabled
-    = f.input :full_release_on_file, label: 'Full Housing Access Network Release on file', disabled: disabled
+    = form.input :full_release_on_file, label: 'Full Housing Access Network Release on file', disabled: disabled
     - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
-      = f.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
+      = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
     = form.input :veteran, disabled: disabled
     = form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
     .jChronicallyHomeless
@@ -39,6 +39,6 @@
     = form.input :developmental_disability, disabled: disabled
     = form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit'), disabled: disabled
     = form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access'), disabled: disabled
-    = f.input :available, label: 'Available for matching?', disabled: disabled
+    = form.input :available, label: 'Available for matching?', disabled: disabled
 
     = render 'deidentified_clients/js'

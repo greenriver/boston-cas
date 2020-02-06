@@ -1,10 +1,11 @@
-.row
-  .col-md-6
-    = simple_form_for @non_hmis_client, url: '' do |f|
-      = f.simple_fields_for :client_assessments, @assessment do |a|
-        - # view is versioned, so choose view based on model type
-        = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: false
+= simple_form_for @non_hmis_client, url: '' do |f|
+  = f.simple_fields_for :client_assessments, @assessment do |a|
+    - # view is versioned, so choose view based on model type
+    .o-questions
+      = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: disabled
 
-      = f.button :submit, "Update Assessment", class: 'btn btn-primary'
-      - if true
-        = link_to 'Delete', '', class: 'btn btn-danger'
+  = f.button :submit, "Update Assessment", class: 'btn btn-primary'
+  - if true
+    = link_to 'Delete', '', class: 'btn btn-danger'
+
+= render 'init_select2'
