@@ -30,6 +30,7 @@
 // App specific code
 //////////////////////////
 //= require namespace
+//= require ./select_two
 //= require_tree ./templates
 //= require pjax-modals
 //= require acknowledge_notification
