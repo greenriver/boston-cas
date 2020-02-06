@@ -23,10 +23,6 @@ class IdentifiedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
-  def assessment_type
-    Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
-  end
-
   def clean_params dirty_params
     dirty_params = clean_client_params(dirty_params)
     dirty_params = clean_assessment_params(dirty_params)

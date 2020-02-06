@@ -184,14 +184,10 @@ Rails.application.routes.draw do
       get :choose_upload
       post :import
     end
-    member do
-      get :new_assessment
-    end
+    resources :assessment, controller: :non_hmis_assessment
   end
   resources :identified_clients do
-    member do
-      get :new_assessment
-    end
+    resources :assessment, controller: :non_hmis_assessment
   end
   resources :imported_clients
   resources :messages, only: [:show, :index] do
