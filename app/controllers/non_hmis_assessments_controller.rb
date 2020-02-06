@@ -1,5 +1,5 @@
 
-class NonHmisAssessmentController < ApplicationController
+class NonHmisAssessmentsController < ApplicationController
   before_action :load_client, only: [:new, :show, :edit, :update, :index]
 
   def new

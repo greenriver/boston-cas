@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-module NonHmisAssessmentHelper
+module NonHmisAssessmentsHelper
 
   def client_type
     @non_hmis_client.type.downcase.gsub('client', '')

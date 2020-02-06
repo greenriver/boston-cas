@@ -184,10 +184,10 @@ Rails.application.routes.draw do
       get :choose_upload
       post :import
     end
-    resources :assessment, controller: :non_hmis_assessment, only: [:new, :index, :create, :update, :destroy]
+    resources :assessments, controller: :non_hmis_assessments, only: [:new, :index, :create, :update, :destroy]
   end
   resources :identified_clients do
-    resources :assessment, controller: :non_hmis_assessment, only: [:new, :index, :create, :update, :destroy]
+    resources :assessments, controller: :non_hmis_assessments, only: [:new, :index, :create, :update, :destroy]
   end
   resources :imported_clients
   resources :messages, only: [:show, :index] do
