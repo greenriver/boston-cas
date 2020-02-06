@@ -10,7 +10,7 @@ App.Form.Select2Input = class Select2Input {
       console.debug(`Select2Input could not find id: ${elementId}`)
     } else {
       this.id = elementId
-      $(field).select2(});
+      $(field).select2();
     }
   }
 }
