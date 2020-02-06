@@ -3,7 +3,7 @@
     = simple_form_for @non_hmis_client, url: '' do |f|
       = f.simple_fields_for :client_assessments, @assessment do |a|
         - # view is versioned, so choose view based on model type
-        = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: true
+        = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: false
 
       = f.button :submit, "Update Assessment", class: 'btn btn-primary'
       - if true

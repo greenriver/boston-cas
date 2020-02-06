@@ -13,5 +13,6 @@
 -# Layout
 -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 = render 'non_hmis_clients/show_layout',
-  title: title,
+  title: "#{title}",
+  sub_title: "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}",
   client_type: 'identified'

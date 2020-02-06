@@ -77,7 +77,7 @@ class NonHmisClientsController < ApplicationController
 
   def new_assessment
     @assessment = build_assessment
-    render :edit
+    render :assessment
   end
 
   def sorter
