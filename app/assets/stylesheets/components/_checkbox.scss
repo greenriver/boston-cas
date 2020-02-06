@@ -1,0 +1,93 @@
+/* .c-checkbox { } */
+
+.c-checkbox input:checked,
+.c-checkbox input:not(:checked) {
+  position: absolute;
+  left: -9999px;
+}
+
+.c-checkbox input:checked ~ label,
+.c-checkbox input:not(:checked) ~ label {
+  @include checkbox-default;
+}
+
+.c-checkbox input:not(:checked) ~ label {
+  @include checkbox-not-checked;
+}
+
+.c-checkbox input:checked ~ label {
+  @include checkbox-checked;
+}
+
+.c-checkbox--round label {
+  &::before {
+    border-radius: 50% !important;
+  }
+}
+
+.c-checkbox--round input:checked ~ label,
+.c-checkbox--round input:not(:checked) ~ label {
+  padding: space(2);
+  border-radius: 4px;
+  margin-bottom: 5px;
+  min-height: 50px;
+  &::before,
+  &::after {
+    margin: 0;
+    top: 10px;
+    left: space(2);
+  }
+  &::after {
+    transform: scale(.65);
+    transform-origin: center center;
+  }
+  &:focus,
+  &:hover {
+    &::after {
+      transform: scale(.5);
+    }
+  }
+  &:active {
+    &::before {
+      transform: scale(1);
+    }
+    &::after {
+      transform: scale(.3);
+      transform-origin: center center;
+    }
+  }
+}
+
+.c-checkbox--round input:not(:checked) ~ label {
+  &:focus,
+  &:hover {
+    background: lighten($gray-020, 2%);
+    &::after {
+      background: $brand-success-l;
+    }
+  }
+  &::before {
+    background: $white;
+  }
+  &::after {
+    content: '';
+    border-radius: 50%;
+    background: $gray-020;
+    transform: scale(.65);
+  }
+}
+
+.c-checkbox--round input:checked ~ label {
+  background: lighten($gray-020, 2%);
+  &::after {
+    content: '';
+    border-radius: 50%;
+    background: $brand-success;
+  }
+  &:focus,
+  &:hover {
+    &::after {
+      transform: scale(.65);
+    }
+  }
+}
