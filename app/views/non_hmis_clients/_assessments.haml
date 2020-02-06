@@ -1,9 +1,9 @@
 %section
   %h2 Assessments
   - unless @assessment.default?
-    = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-2 mb-auto' do
-      %span.icon-plus
-      Add New Assessment
+    -# = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-2 mb-auto' do
+    -#   %span.icon-plus
+    -#   Add New Assessment
   %table.table
     %thead
       %tr

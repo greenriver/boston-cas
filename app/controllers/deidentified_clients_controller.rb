@@ -144,7 +144,6 @@ class DeidentifiedClientsController < NonHmisClientsController
 
     def clean_params dirty_params
       dirty_params = clean_client_params(dirty_params)
-      dirty_params = clean_assessment_params(dirty_params)
 
       return append_client_identifier(dirty_params)
     end
