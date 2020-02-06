@@ -1,8 +1,16 @@
 = render 'breadcrumbs'
-%h1= title
 
-= render 'client_form',
-  client_type: client_type,
-  disabled: true
+- if params[:assessment_id]
+  %h1= "Assessment for #{title}"
+  = render 'assessment_form',
+    client_type: client_type
+- else
+  %h1= title
+  = render 'client_form',
+    client_type: client_type,
+    disabled: true
+
+  = render 'assessments',
+    client_type: client_type
 
 = render 'init_select2'

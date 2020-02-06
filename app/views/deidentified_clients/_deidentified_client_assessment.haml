@@ -1,6 +1,5 @@
 .row
   .col-sm-9
-    = f.input :client_identifier, required: true, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('assessment_score')
       = form.input :assessment_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_score')
@@ -9,10 +8,7 @@
       = form.input :vispdat_priority_score, disabled: disabled
     = form.input :veteran, disabled: disabled
     = form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
-    - if can_edit_all_clients?
-      .jAgency
-        = f.association :agency, input_html: {class: :select2}, disabled: disabled
-    = f.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+    -# = f.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('actively_homeless')
       = form.input :actively_homeless, hint: 'Checking this box will allow the client to match rules that require homeless activity in the past 30 or 90 days.', disabled: disabled
     = form.input :days_homeless_in_the_last_three_years, disabled: disabled
@@ -40,5 +36,5 @@
     = form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit'), disabled: disabled
     = form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access'), disabled: disabled
 
-    = f.input :available, label: 'Available for matching?', disabled: disabled
+    -# = f.input :available, label: 'Available for matching?', disabled: disabled
     = render 'deidentified_clients/js'
