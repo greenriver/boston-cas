@@ -1,11 +1,24 @@
-= simple_form_for @non_hmis_client, url: '' do |f|
-  = f.simple_fields_for :client_assessments, @assessment do |a|
-    - # view is versioned, so choose view based on model type
-    .o-questions
-      = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: disabled
+- action_text = params[:edit] ? 'Update' : ''
+- action_text = 'New' if !@assessment.persisted?
+- disabled ||= !params[:edit].present?
 
-  = f.button :submit, "Update Assessment", class: 'btn btn-primary'
-  - if true
-    = link_to 'Delete', '', class: 'btn btn-danger'
+%section
+  .row
+    .col-md-8
+      - name = client_identified? ? "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}" : @non_hmis_client.client_identifier
+      .d-flex.align-items-center.mb-6
+        %h1.mr-4.mb-0 #{action_text} Assessment for Client #{name}
+        - if disabled && @assessment.persisted?
+          = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary ml-auto'
+      = simple_form_for @non_hmis_client, url: '', defaults: {disabled: disabled} do |f|
+        = f.simple_fields_for :client_assessments, @assessment do |a|
+          - # view is versioned, so choose view based on model type
+          .o-questions
+            = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: disabled
+
+        - if action_text.present?
+          = f.button :submit, "#{action_text} Assessment", class: 'btn btn-primary'
+        - if @assessment.latest_for_client?
+          = link_to 'Delete', '', class: 'btn btn-danger'
 
 = render 'init_select2'

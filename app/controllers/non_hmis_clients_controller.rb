@@ -75,6 +75,11 @@ class NonHmisClientsController < ApplicationController
 
   def new_assessment
     @assessment = build_assessment
+    render :new_assessment
+  end
+
+  def assessment
+    load_assessment
     render :assessment
   end
 

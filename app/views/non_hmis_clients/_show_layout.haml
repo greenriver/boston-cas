@@ -2,13 +2,11 @@
 = render 'breadcrumbs'
 
 - if params[:assessment_id]
-  .d-flex.align-items-baseline
-    %h1.mr-2= "Assessment for #{title}"
-    - if sub_title.present?
-      %h2= sub_title
-  .row
-    .col-md-8
-      = render 'non_hmis_clients/assessments/form', disabled: false
+  -# .d-flex.align-items-baseline
+  -#   %h1.mr-2= "Assessment for #{title}"
+  -#   - if sub_title.present?
+  -#     %h2= sub_title
+  = render 'non_hmis_clients/assessments/form', disabled: false
 - else
   .d-flex.align-items-baseline
     %h1.mr-2= title

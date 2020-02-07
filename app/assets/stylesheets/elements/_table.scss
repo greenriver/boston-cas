@@ -7,3 +7,7 @@ table.table-fixed {
   top: 0;
   background-color: $white;
 }
+
+.table-hover tr {
+  cursor: pointer;
+}
