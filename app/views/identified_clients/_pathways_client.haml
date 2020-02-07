@@ -1,0 +1,46 @@
+%section.mb-6
+  %h3 Demographics
+  .mb-4
+    .row
+      .col-md-10
+        = form.input :first_name, disabled: disabled
+    .row
+      .col-md-10
+        = form.input :middle_name, disabled: disabled
+    .row
+      .col-md-10
+        = form.input :last_name, disabled: disabled
+  .row.mb-4
+    .col-md-6
+      = form.input :date_of_birth, as: :date_picker, disabled: disabled
+      = form.input :ssn, label: "SSN", input_html: {maxlength: 9}, disabled: disabled
+
+  -# = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Domestic violence survivor', disabled: disabled
+  -# - if Config.get(:non_hmis_fields).include?('actively_homeless')
+  = form.input :actively_homeless, as: :pretty_boolean, wrapper: :custom_boolean, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
+
+%section
+  -# Probably need to update with more appropriate title
+  %h3 System Info
+  - if can_edit_all_clients?
+    .jAgency
+      .row
+        .col-md-10
+          = form.association :agency, input_html: {class: :select2}, disabled: disabled
+
+    .row
+      .col-md-10
+        = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+
+  - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
+    .row
+      .col-md-8
+        = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
+
+  = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Limited Coordinated Access System Release on file', disabled: disabled
+
+  .row
+    .col-md-6
+      = form.input :set_asides_housing_status, collection: ['Active', 'Inactive', 'Inelible'], input_html: { class: 'select2' }, label: "Status", disabled: disabled
+  -# = form.input :active_client, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+  -# = form.input :eligible_for_matching, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled

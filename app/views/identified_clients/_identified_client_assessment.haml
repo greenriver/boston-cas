@@ -1,44 +1,44 @@
 .row
   .col-sm-9
-    -# = form.input :first_name, disabled: disabled
-    -# = form.input :middle_name, disabled: disabled
-    -# = form.input :last_name, disabled: disabled
-    = form.input :assessment_score, disabled: disabled
-    -# = form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
-    -# - if can_edit_all_clients?
-    -#   .jAgency
-    -#     = f.association :agency, input_html: {class: :select2}, disabled: disabled
-    -#   = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
-    -# = form.input :date_of_birth, as: :date_picker, disabled: disabled
-    -# = form.input :ssn, label: "SSN", input_html: {maxlength: 9}, disabled: disabled
-    -# - if Config.get(:non_hmis_fields).include?('actively_homeless')
-    -#   = form.input :actively_homeless, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
-    -# = form.input :days_homeless_in_the_last_three_years, disabled: disabled
-    = form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
-    = form.input :who_verified_days_homeless, disabled: disabled
-    -# = form.input :full_release_on_file, label: 'Full Housing Access Network Release on file', disabled: disabled
+    = client_form.input :first_name, disabled: disabled
+    = client_form.input :middle_name, disabled: disabled
+    = client_form.input :last_name, disabled: disabled
+    = client_form.input :assessment_score, disabled: disabled
+    = client_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
+    - if can_edit_all_clients?
+      .jAgency
+        = client_form.association :agency, input_html: {class: :select2}, disabled: disabled
+      = client_form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+    = client_form.input :date_of_birth, as: :date_picker, disabled: disabled
+    = client_form.input :ssn, label: "SSN", input_html: {maxlength: 9}, disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('actively_homeless')
+      = assessment_form.input :actively_homeless, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
+    = assessment_form.input :days_homeless_in_the_last_three_years, disabled: disabled
+    = assessment_form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
+    = assessment_form.input :who_verified_days_homeless, disabled: disabled
+    = client_form.input :full_release_on_file, label: 'Full Housing Access Network Release on file', disabled: disabled
     - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
-      = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
-    = form.input :veteran, disabled: disabled
-    = form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
+      = client_form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
+    = assessment_form.input :veteran, disabled: disabled
+    = assessment_form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
     .jChronicallyHomeless
-      = form.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family'), disabled: disabled
-    = form.input :rrh_desired, label: 'Interested in RRH', disabled: disabled
-    = form.input :youth_rrh_desired, label: 'Only interested in Youth RRH', disabled: disabled
-    = form.input :income_total_monthly, label: 'Total monthly income', disabled: disabled
-    = form.input :income_maximization_assistance_requested, disabled: disabled
-    = form.input :pending_subsidized_housing_placement, disabled: disabled
-    = form.input :rrh_assessment_contact_info, label: 'Client and/or Case Manager Contact Information', hint: 'Do not include any personal information about the client in this box', disabled: disabled
-    = form.input :required_number_of_bedrooms, collection: (1..5), include_blank: false, input_html: { class: :select2 }, disabled: disabled
-    = form.input :required_minimum_occupancy, collection: (1..10), include_blank: false, input_html: { class: :select2 }, disabled: disabled
-    = form.input :interested_in_set_asides, input_html: {class: 'jInterestedInSetAsides'}, disabled: disabled
+      = assessment_form.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family'), disabled: disabled
+    = assessment_form.input :rrh_desired, label: 'Interested in RRH', disabled: disabled
+    = assessment_form.input :youth_rrh_desired, label: 'Only interested in Youth RRH', disabled: disabled
+    = assessment_form.input :income_total_monthly, label: 'Total monthly income', disabled: disabled
+    = assessment_form.input :income_maximization_assistance_requested, disabled: disabled
+    = assessment_form.input :pending_subsidized_housing_placement, disabled: disabled
+    = assessment_form.input :rrh_assessment_contact_info, label: 'Client and/or Case Manager Contact Information', hint: 'Do not include any personal information about the client in this box', disabled: disabled
+    = assessment_form.input :required_number_of_bedrooms, collection: (1..5), include_blank: false, input_html: { class: :select2 }, disabled: disabled
+    = assessment_form.input :required_minimum_occupancy, collection: (1..10), include_blank: false, input_html: { class: :select2 }, disabled: disabled
+    = assessment_form.input :interested_in_set_asides, input_html: {class: 'jInterestedInSetAsides'}, disabled: disabled
     .jNeighborhoodInterests
-      = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, disabled: disabled
-    = form.input :disabling_condition, disabled: disabled
-    = form.input :physical_disability, disabled: disabled
-    = form.input :developmental_disability, disabled: disabled
-    = form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit'), disabled: disabled
-    = form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access'), disabled: disabled
-    -# = form.input :available, label: 'Available for matching?', disabled: disabled
+      = assessment_form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, disabled: disabled
+    = assessment_form.input :disabling_condition, disabled: disabled
+    = assessment_form.input :physical_disability, disabled: disabled
+    = assessment_form.input :developmental_disability, disabled: disabled
+    = assessment_form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit'), disabled: disabled
+    = assessment_form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access'), disabled: disabled
+    = client_form.input :available, label: 'Available for matching?', disabled: disabled
 
     = render 'deidentified_clients/js'

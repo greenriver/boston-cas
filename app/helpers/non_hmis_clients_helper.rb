@@ -14,4 +14,8 @@ module NonHmisClientsHelper
     client_type == 'identified'
   end
 
+  def pathways_enabled?
+    Config.get("#{client_type}_client_assessment").include? 'Pathways'
+  end
+
 end

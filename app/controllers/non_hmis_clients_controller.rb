@@ -70,7 +70,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def show
-    if params[:assessment_id]
+    if params[:assessment_id] && assessment_type&.include?('Pathways')
       render :assessment
     end
   end
@@ -81,7 +81,11 @@ class NonHmisClientsController < ApplicationController
 
   def new_assessment
     @assessment = build_assessment
-    render :new_assessment
+    if assessment_type&.include?('Pathways')
+      render :new_assessment
+    else
+      render :edit
+    end
   end
 
   def assessment
