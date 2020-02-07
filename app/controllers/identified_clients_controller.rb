@@ -68,11 +68,11 @@ class IdentifiedClientsController < NonHmisClientsController
         :middle_name,
         :date_of_birth,
         :ssn,
-        :full_release_on_file,
         :limited_release_on_file,
         :available,
         :active_client,
         :eligible_for_matching,
+        :set_asides_housing_status,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,

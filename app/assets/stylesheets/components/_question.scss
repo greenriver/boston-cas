@@ -3,6 +3,14 @@
   padding: space(2) space(2) space(4) space(2);
 }
 
+.c-question--primary {
+  background: lighten($brand-primary-ll, 5%);
+}
+
+.c-question--secondary {
+  background: lighten($brand-secondary-l, 5%);
+}
+
 .c-question--without-number {
   padding-left: calc(#{space(2)} + #{space(2)} + 50px);
 }

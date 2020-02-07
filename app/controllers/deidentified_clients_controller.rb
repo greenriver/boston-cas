@@ -93,7 +93,8 @@ class DeidentifiedClientsController < NonHmisClientsController
         :agency_id,
         :contact_id,
         :available,
-        :limited_release_on_file,
+        :full_release_on_file,
+        :set_asides_housing_status,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,

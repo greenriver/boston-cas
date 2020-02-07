@@ -1,3 +1,7 @@
+input {
+  min-height: 40px; // Match height of inputs to buttons
+}
+
 .container-fluid {
   padding-right: $container-padding;
   padding-left: $container-padding;

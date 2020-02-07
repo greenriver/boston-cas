@@ -1,5 +1,5 @@
 .table-responsive
-  %table.table.table-condensed
+  %table.table.table-condensed.table-hover
     %thead
       - if client_identified?
         %th Last Name
@@ -16,24 +16,13 @@
     %tbody
       - @non_hmis_clients.each do |non_hmis_client|
         - current_assessment = non_hmis_client.current_assessment
-        %tr
+        - path = client_identified? ? identified_client_path(non_hmis_client) : deidentified_client_path(non_hmis_client)
+        %tr{data: {href: path}}
           - if client_identified?
-            %td
-              - if non_hmis_client.current_assessment.default?
-                = link_to non_hmis_client.last_name, edit_identified_client_path(non_hmis_client)
-              - else
-                = link_to non_hmis_client.last_name, identified_client_path(non_hmis_client)
-            %td
-              - if non_hmis_client.current_assessment.default?
-                = link_to non_hmis_client.first_name, edit_identified_client_path(non_hmis_client)
-              - else
-                = link_to non_hmis_client.first_name, identified_client_path(non_hmis_client)
+            %td= non_hmis_client.last_name
+            %td= non_hmis_client.first_name
           - else
-            %td
-              - if non_hmis_client.current_assessment.default?
-                = link_to non_hmis_client.client_identifier, edit_deidentified_client_path(non_hmis_client)
-              - else
-                = link_to non_hmis_client.client_identifier, deidentified_client_path(non_hmis_client)
+            %td= non_hmis_client.client_identifier
 
           %td= non_hmis_client.agency&.name
 
@@ -51,3 +40,9 @@
                   %span.icon-arrow-right2
 
 %p= paginate @non_hmis_clients
+
+- content_for :page_js do
+  :javascript
+    $('[data-href]').on('click', function() {
+      window.location = $(this).data('href')
+    })

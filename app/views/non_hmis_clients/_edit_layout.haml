@@ -1,6 +1,11 @@
+- sub_title ||= ''
+
 = render 'breadcrumbs'
 
-%h1 Update #{title}
+.title.d-flex.align-items-baseline
+  %h1.mr-2 Update #{client_type.capitalize} Client
+  - if sub_title
+    %h2=sub_title
 
 .row
   .col-md-6

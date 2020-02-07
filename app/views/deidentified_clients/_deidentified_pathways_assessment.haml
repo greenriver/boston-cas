@@ -6,16 +6,16 @@
 - both_dv_label = "Both DV and Non-DV Programs"
 
 %section.o-questions__section
+  .c-question.c-question--primary
+    .c-question__wrapper
+      .c-question__number
+      .c-question__input
+        = form.input :entry_date, label: 'Date Taken', as: :date_picker
   .c-question
     .c-question__wrapper
       .c-question__number
       .c-question__input
         = form.input :assessment_score
-  .c-question
-    .c-question__wrapper
-      .c-question__number
-      .c-question__input
-        = form.input :entry_date, label: 'Date Taken', as: :date_picker
   .c-question
     .c-question__wrapper
       .c-question__number 4D.
@@ -76,9 +76,12 @@
       .c-question__number 6D.
       .c-question__input
         %label Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need
-        = form.input :requires_wheelchair_accessibility, as: :pretty_boolean, label: 'Wheelchair accessible unit'
-        = form.input :requires_elevator_access, as: :pretty_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
-        = form.input :other_accessibility, as: :pretty_boolean, label: 'Other accessibility'
+        .mb-1
+          = form.input :requires_wheelchair_accessibility, as: :pretty_boolean, label: 'Wheelchair accessible unit'
+        .mb-1
+          = form.input :requires_elevator_access, as: :pretty_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
+        .mb-1
+          = form.input :other_accessibility, as: :pretty_boolean, label: 'Other accessibility'
 
   = form.input :disabled_housing, as: :pretty_boolean, pre_label: '6G.', label: 'Are you interested in applying for housing units targeted for persons with disabilities? (The definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)'
 

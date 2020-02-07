@@ -6,4 +6,5 @@
 -# Layout
 -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 = render 'non_hmis_clients/edit_layout',
-  title: "#{title} #{@non_hmis_client.first_name} #{@non_hmis_client.last_name}"
+  title: title,
+  sub_title: "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}"
