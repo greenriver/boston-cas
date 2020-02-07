@@ -10,12 +10,12 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def create
     @non_hmis_client = client_source.create(clean_params(identified_client_params))
-    respond_with(@non_hmis_client, location: identified_clients_path)
+    respond_with(@non_hmis_client, location: identified_client_path(@non_hmis_client))
   end
 
   def update
     @non_hmis_client.update(clean_params(identified_client_params))
-    respond_with(@non_hmis_client, location: identified_clients_path)
+    respond_with(@non_hmis_client, location: identified_client_path(@non_hmis_client))
   end
 
   def destroy
