@@ -9,8 +9,10 @@
         .div
           %h1.mr-4.mb-0 #{action_text} Assessment for Client #{name}
           = render 'non_hmis_clients/assessments/timestamp'
-        - if disabled
-          = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary ml-auto'
+        .ml-auto
+          = link_to 'Back To Client', send("#{client_type}_client_path", @non_hmis_client), class: 'btn btn-secondary'
+          - if disabled
+            = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary'
       = simple_form_for @non_hmis_client, url: client_path, defaults: {disabled: disabled} do |f|
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type

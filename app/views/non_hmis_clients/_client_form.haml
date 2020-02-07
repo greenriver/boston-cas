@@ -11,6 +11,9 @@
           = link_to send("edit_#{client_type}_client_path", @non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
             Edit Client
           = yield :form_actions
+      - else
+        = link_to send("#{client_type}_client_path", @non_hmis_client.id), class: 'btn btn-sm btn-secondary ml-auto' do
+          Cancel
     .p-4
       = simple_form_for @non_hmis_client, url: url do |f|
         = f.error_notification
