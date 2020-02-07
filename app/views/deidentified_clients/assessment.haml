@@ -1,2 +1,4 @@
-= render 'non_hmis_clients/assessments/form',
-  action_text: 'Create'
+- if params[:edit]
+  = render 'non_hmis_clients/assessments/edit'
+- else
+  = render 'non_hmis_clients/assessments/show'

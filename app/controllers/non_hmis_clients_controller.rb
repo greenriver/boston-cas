@@ -69,6 +69,12 @@ class NonHmisClientsController < ApplicationController
     @contact_id = current_user.contact.id
   end
 
+  def show
+    if params[:assessment_id]
+      render :assessment
+    end
+  end
+
   def edit
     @contact_id = @non_hmis_client.contact_id
   end

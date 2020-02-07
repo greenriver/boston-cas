@@ -3,11 +3,10 @@
     .c-card__content.p-0
       .o-pre-table-actions.o-pre-table-actions--light
         %h2.o-pre-table-actions__heading Assessments
-        - unless @assessment.default?
-          .o-pre-table-actions__group.ml-auto
-            = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
-              %span.icon-plus
-              Add New Assessment
+        .o-pre-table-actions__group.ml-auto
+          = link_to new_assessment_deidentified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
+            %span.icon-plus
+            Add New Assessment
       %table.table.table-hover
         %thead
           %tr
