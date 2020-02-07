@@ -6,6 +6,7 @@
 
 class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
   def input(wrapper_options = nil)
+    merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)
     radio_group = template.content_tag(:div) do
       current_value = object.send(attribute_name)
       pre_label = template.content_tag(:span, '', class: 'c-checkbox__pre-label')
@@ -21,7 +22,7 @@ class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
         label_text_el = template.content_tag(:span, label, class: 'c-checkbox__label')
         template.concat(
           template.content_tag(:div, class: 'c-checkbox c-checkbox--round mb-1') do
-            template.radio_button_tag(name, value, checked, wrapper_options.merge(id: id)) +
+            template.radio_button_tag(name, value, checked, merged_input_options.merge(id: id)) +
             template.content_tag(:label, pre_label + check + label_text_el, for: id)
           end
         )

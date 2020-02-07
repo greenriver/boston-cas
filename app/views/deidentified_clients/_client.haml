@@ -14,9 +14,9 @@
     .col-md-8
       = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
 
-= form.input :full_release_on_file, as: :pretty_boolean, label: 'Full HAN Rlease on File', disabled: disabled
+= form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
 
 .row
   .col-md-6
     = form.input :set_asides_housing_status, collection: ['Active', 'Inactive', 'Inelible'], label: "Status", disabled: disabled, input_html: { class: 'select2' }
--# = form.input :available, as: :pretty_boolean, label: 'Available for matching?', disabled: disabled
+-# = form.input :available, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Available for matching?', disabled: disabled

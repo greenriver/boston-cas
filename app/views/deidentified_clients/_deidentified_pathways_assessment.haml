@@ -24,8 +24,8 @@
 
 %section.o-questions__section
   %h2 Household
-  = form.input :family_member, as: :pretty_boolean, pre_label: '5A.', label: 'Did the participant list any household members under 18 in the household composition chart?', input_html: {class: 'jFamily'}
-  = form.input :sro_ok, as: :pretty_boolean, pre_label: '6B.', label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?'
+  = form.input :family_member, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5A.', label: 'Did the participant list any household members under 18 in the household composition chart?', input_html: {class: 'jFamily'}
+  = form.input :sro_ok, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6B.', label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?'
   .c-question
     .c-question__wrapper
       .c-question__number 6A.
@@ -34,7 +34,7 @@
 
 %section.o-questions__section
   %h2 Domestic Violence
-  = form.input :domestic_violence, as: :pretty_boolean, pre_label: '2B.', label: 'Are you currently fleeing or attempting to flee a domestic violence situation? (examples: sexual assault, stalking, domestic violence)'
+  = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '2B.', label: 'Are you currently fleeing or attempting to flee a domestic violence situation? (examples: sexual assault, stalking, domestic violence)'
   .c-question
     .c-question__wrapper
       .c-question__number 9D.
@@ -43,25 +43,25 @@
 
 %section.o-questions__section
   %h2 Housing
-  = form.input :pending_subsidized_housing_placement, as: :pretty_boolean, pre_label: '5C.', label: 'Are you about to move into a housing unit, such as a unit with a Section 8 voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?'
+  = form.input :pending_subsidized_housing_placement, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5C.', label: 'Are you about to move into a housing unit, such as a unit with a Section 8 voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?'
 
 %section.o-questions__section
   %h2 Military Service
-  = form.input :veteran, as: :pretty_boolean, pre_label: '5B.', label: 'Did you serve in active military, naval or air service (regardless of length of service) and have a discharge status of anything other than Dishonorable? NOTE: This DOES include Veterans who only had service time in basic training. This DOES NOT include Veterans who were National Guard and Reserves'
+  = form.input :veteran, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5B.', label: 'Did you serve in active military, naval or air service (regardless of length of service) and have a discharge status of anything other than Dishonorable? NOTE: This DOES include Veterans who only had service time in basic training. This DOES NOT include Veterans who were National Guard and Reserves'
   -# = form.input :ssvf_eligible, collection: { 'Yes' => true, 'No' => false, 'N/A' => nil }, label: '5F. Based on your agency\'s past records and/or SSVF eligibility screen, is the Veteran eligible for SSVF (If you are not SSVF Staff then click N/A)?', input_html: { class: :select2 }
-  = form.input :veteran_rrh_desired, as: :pretty_boolean, pre_label: '5G.', label: 'Veteran Choice: We have Veteran-specific rapid re-housing programs in our community that provide housing search for a unit where the lease is between you and the landlord: financial assistance to pay the upfront sots of the unit; and case management to help sustain your new home. They may have quicker openings. Is there any reason why you cannot work with a Veteran-specific rapid re-housing program?'
+  = form.input :veteran_rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5G.', label: 'Veteran Choice: We have Veteran-specific rapid re-housing programs in our community that provide housing search for a unit where the lease is between you and the landlord: financial assistance to pay the upfront sots of the unit; and case management to help sustain your new home. They may have quicker openings. Is there any reason why you cannot work with a Veteran-specific rapid re-housing program?'
 
 %section.o-questions__section
   %h2 RRH
-  = form.input :rrh_desired, as: :pretty_boolean, pre_label: '9A.', label: 'Would you like to be considered for RRH when they have openings?'
-  = form.input :rrh_th_desired, as: :pretty_boolean, pre_label: '9F.', label: 'Shelter Need While Doing Housing Search (RRH-TH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one was available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.'
+  = form.input :rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9A.', label: 'Would you like to be considered for RRH when they have openings?'
+  = form.input :rrh_th_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9F.', label: 'Shelter Need While Doing Housing Search (RRH-TH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one was available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.'
   .c-question
     .c-question__wrapper
       .c-question__number
       .c-question__input
         = form.label :youth_rrh_aggregate, pre_label: '9C.', label: 'Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:'
         -# = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :radio_buttons, label: false
-        = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :pretty_boolean_group , label: false
+        = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :pretty_boolean_group, wrapper: :custom_boolean , label: false
 
 %section.o-questions__section
   %h2 Housing needs
@@ -77,13 +77,13 @@
       .c-question__input
         %label Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need
         .mb-1
-          = form.input :requires_wheelchair_accessibility, as: :pretty_boolean, label: 'Wheelchair accessible unit'
+          = form.input :requires_wheelchair_accessibility, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Wheelchair accessible unit'
         .mb-1
-          = form.input :requires_elevator_access, as: :pretty_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
+          = form.input :requires_elevator_access, as: :pretty_boolean, wrapper: :custom_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
         .mb-1
-          = form.input :other_accessibility, as: :pretty_boolean, label: 'Other accessibility'
+          = form.input :other_accessibility, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Other accessibility'
 
-  = form.input :disabled_housing, as: :pretty_boolean, pre_label: '6G.', label: 'Are you interested in applying for housing units targeted for persons with disabilities? (The definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)'
+  = form.input :disabled_housing, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6G.', label: 'Are you interested in applying for housing units targeted for persons with disabilities? (The definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)'
 
   .c-question
     .c-question__wrapper
@@ -92,4 +92,4 @@
         = form.label :neighborhood_interests, pre_label: '6H.', label: 'Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.'
         = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, label: false
 
-  = form.input :interested_in_set_asides, as: :pretty_boolean, pre_label: '6I.', label: 'Confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units'
+  = form.input :interested_in_set_asides, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6I.', label: 'Confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units'
