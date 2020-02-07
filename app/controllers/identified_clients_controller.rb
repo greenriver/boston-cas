@@ -71,6 +71,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :limited_release_on_file,
         :full_release_on_file,
         :available,
+        :available_date,
+        :available_reason,
         :active_client,
         :eligible_for_matching,
         :set_asides_housing_status,

@@ -10,7 +10,6 @@ class PrettyBooleanInput < SimpleForm::Inputs::BooleanInput
     checked = object.send(attribute_name)
     name = "#{object_name}[#{attribute_name}]"
     id = name.to_s.parameterize
-    value = checked ? 1 : 0
     pre_label = template.content_tag(:span, '', class: 'c-checkbox__pre-label')
     if options[:pre_label].present?
       pre_label = template.content_tag(:span, options[:pre_label], class: 'c-checkbox__pre-label')
@@ -21,7 +20,8 @@ class PrettyBooleanInput < SimpleForm::Inputs::BooleanInput
     hint_text = template.content_tag(:span, options[:hint], class: 'c-checkbox__hint')
     label_and_hint = template.content_tag(:span, label_text_el + hint_text, class: 'c-checkbox__label')
     template.content_tag :div, class: 'c-checkbox' do
-      template.check_box_tag(name, value, checked, merged_input_options.merge(id: id)) +
+      build_hidden_field_for_checkbox +
+      template.check_box_tag(name, 1, checked, merged_input_options.merge(id: id)) +
       template.content_tag(:label, pre_label + check + label_and_hint, for: id)
     end
   end

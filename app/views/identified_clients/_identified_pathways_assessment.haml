@@ -80,6 +80,7 @@
       .mb-1
         = form.input :requires_elevator_access, as: :pretty_boolean, wrapper: :custom_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
       .mb-1
+        = form.input :other_accessibility, label: 'Other accessibility'
         = form.input :other_accessibility, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Other accessibility'
 
 = form.input :disabled_housing, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6G.', label: 'Are you interested in applying for housing units targeted for persons with disabilities? (The definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)'

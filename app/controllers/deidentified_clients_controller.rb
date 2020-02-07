@@ -93,6 +93,8 @@ class DeidentifiedClientsController < NonHmisClientsController
         :agency_id,
         :contact_id,
         :available,
+        :available_date,
+        :available_reason,
         :full_release_on_file,
         :set_asides_housing_status,
         active_cohort_ids: [],
