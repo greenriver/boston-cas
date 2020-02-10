@@ -5,6 +5,7 @@
 ###
 
 class DeidentifiedPathwaysAssessment < DeidentifiedClientAssessment
+  include PathwaysCalculations
 
   def default?
     false
