@@ -1,27 +1,5 @@
-.c-question
-  .c-question__wrapper
-    .c-question__number
-    .c-question__input
-      = form.input :date_days_homeless_verified, label: 'Date Taken', as: :date_picker
-
--# .c-question.c-question--primary
-  .c-question__wrapper
-    .c-question__number
-    .c-question__input
-      = form.input :entry_date, label: 'Date Taken', as: :date_picker
-
-.c-question
-  .c-question__wrapper
-    .c-question__number
-    .c-question__input
-      = form.input :assessment_score
-
-.c-question
-  .c-question__wrapper
-    .c-question__number 3D.
-    .c-question__input
-      = form.label :days_homeless_in_the_last_three_years, label: 'Days homeless in last 3 years'
-      = form.input :days_homeless_in_the_last_three_years, label: false,  disabled: disabled
+%section.o-questions__section
+  = render 'non_hmis_clients/assessments/common_questions', form: form, disabled: disabled
 
 = form.input :family_member, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5A.', label: 'Did the participant list any household members under 18 in the household composition chart?', input_html: {class: 'jFamily'}
 = form.input :pending_subsidized_housing_placement, pre_label: '5C.', as: :pretty_boolean, wrapper: :custom_boolean, label: 'Are you about to move into a housing unit, such as a unit with a Section 8 voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?'
@@ -29,7 +7,7 @@
 = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '2B.', label: 'Are you currently fleeing or attempting to flee a domestic violence situation? (examples: sexual assault, stalking, domestic violence)'
 
 = form.input :veteran, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5B.', label: 'Did you serve in active military, naval or air service (regardless of length of service) and have a discharge status of anything other than Dishonorable? NOTE: This DOES include Veterans who only had service time in basic training. This DOES NOT include Veterans who were National Guard and Reserves'
--# = form.input :ssvf_eligible, collection: { 'Yes' => true, 'No' => false, 'N/A' => nil }, label: '5F. Based on your agency\'s past records and/or SSVF eligibility screen, is the Veteran eligible for SSVF (If you are not SSVF Staff then click N/A)?', as: :select2
+-# = form.input :ssvf_eligible, collection: { 'Yes' => true, 'No' => false, 'N/A' => nil }, label: '5F. Based on your agency\'s past records and/or SSVF eligibility screen, is the Veteran eligible for SSVF (If you are not SSVF Staff then click N/A)?', input_options: {class: 'select2'}
 = form.input :veteran_rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5G.', label: 'Veteran Choice: We have Veteran-specific rapid re-housing programs in our community that provide housing search for a unit where the lease is between you and the landlord: financial assistance to pay the upfront sots of the unit; and case management to help sustain your new home. They may have quicker openings. Is there any reason why you cannot work with a Veteran-specific rapid re-housing program?'
 
 = form.input :rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9A.', label: 'Would you like to be considered for RRH when they have openings?'
@@ -42,7 +20,7 @@
   .c-question__wrapper
     .c-question__number 9C.
     .c-question__input
-      = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both' }, label: ' Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:', as: :select2
+      = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both' }, label: ' Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:', input_options: {class: 'select2'}
 
 -  dv_label = 'Domestic Violence (DV) - Specific Only: these are agencies who have a focus on populations experiencing violence; they may be able to offer specialized services for survivors in-house, such as support groups, clinical services and legal services.'
 - non_dv_label = 'Non-DV Programs Only: these are agencies that serve people fleeing violence, but may need to link you to outside, specialized agencies for specific services such as DV support groups, clinical services and legal services. The non-DV RRH programs typically have more frequent openings at this time.'
@@ -52,23 +30,31 @@
   .c-question__wrapper
     .c-question__number 9D.
     .c-question__input
-      = form.input :dv_rrh_aggregate, collection: { dv_label => 'dv', non_dv_label => 'non-dv', both_dv_label => 'both' }, pre_label: '9D.', label: 'Survivor Choice (for those currently fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are:', as: :select2
+      = form.input :dv_rrh_aggregate, collection: { dv_label => 'dv', non_dv_label => 'non-dv', both_dv_label => 'both' }, pre_label: '9D.', label: 'Survivor Choice (for those currently fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are:', input_options: {class: 'select2'}
 
 = form.input :interested_in_set_asides, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6I.', label: 'Confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units'
 
 .c-question
   .c-question__wrapper
     .c-question__number 6A.
-    .c-question__input
-      = form.input :income_total_annual, pre_label: '6A.', label: 'Net income'
+    - label = 'Net income'
+    - if disabled
+      = render 'non_hmis_clients/assessments/question_display', value: @assessment.income_total_annual, label: label
+    - else
+      .c-question__input
+        = form.input :income_total_annual, pre_label: '6A.', label: label
 
 = form.input :sro_ok, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6B.', label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?'
 
 .c-question
   .c-question__wrapper
     .c-question__number 6C.
-    .c-question__input
-      = form.input :required_number_of_bedrooms, collection: (2..5), include_blank: 'None', pre_label: '6C.', label: 'If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below', as: :select2
+    - label = 'If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below'
+    - if disabled
+      = render 'non_hmis_clients/assessments/question_display', value: @assessment.required_number_of_bedrooms, label: label
+    - else
+      .c-question__input
+        = form.input :required_number_of_bedrooms, collection: (2..5), include_blank: 'None', pre_label: '6C.', label: label, input_options: {class: 'select2'}, disabled: disabled
 
 .c-question
   .c-question__wrapper
@@ -80,7 +66,6 @@
       .mb-1
         = form.input :requires_elevator_access, as: :pretty_boolean, wrapper: :custom_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
       .mb-1
-        = form.input :other_accessibility, label: 'Other accessibility'
         = form.input :other_accessibility, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Other accessibility'
 
 = form.input :disabled_housing, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6G.', label: 'Are you interested in applying for housing units targeted for persons with disabilities? (The definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)'
@@ -89,4 +74,4 @@
   .c-question__wrapper
     .c-question__number 6H.
     .c-question__input
-      = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, label_html: { class: :control_label }, label: 'Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.'
+      = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_options: {class: 'select2'}, disabled: disabled, label_html: { class: :control_label }, label: 'Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.'

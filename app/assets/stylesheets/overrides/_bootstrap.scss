@@ -79,6 +79,13 @@ input {
   }
 }
 
+input.disabled ~ .input-group-addon,
+input:disabled ~ .input-group-addon {
+  pointer-events: none;
+  background: $input-disabled;
+  color: $gray-050;
+}
+
 .control-label {
   &:empty {
     display: none;

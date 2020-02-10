@@ -27,16 +27,24 @@
   border-color: $input-disabled !important;
   pointer-events: none !important;
   cursor: not-allowed;
-  span {
-    opacity: .98;
-  }
   .c-checkbox__check-container {
-    opacity: .25;
+    opacity: .75;
   }
 }
+
+.c-checkbox input:not(:checked):disabled ~ label,
+.c-checkbox input:not(:checked).disabled ~ label {
+  .c-checkbox__check-icon {
+    display: none;
+  }
+}
+
 .c-checkbox input:disabled:checked ~ label,
 .c-checkbox input.disabled:checked ~ label {
-  background: desaturate(rgba($brand-success-l, .2), 50%) !important;
+  background: rgba($brand-success-l, .2) !important;
+  .c-checkbox__check-icon {
+    display: block;
+  }
 }
 
 .c-checkbox--round label {

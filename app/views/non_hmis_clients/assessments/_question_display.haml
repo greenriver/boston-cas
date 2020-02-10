@@ -1,0 +1,6 @@
+.c-question__display
+  %span.d-block= label
+  - if value.is_a? Array
+    %span.c-metric.c-metric--lg= value.map(&:titleize).join(', ')
+  - else
+    %span.c-metric.c-metric--lg= value || 'N/A'

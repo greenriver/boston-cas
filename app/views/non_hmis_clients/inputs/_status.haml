@@ -1,7 +1,7 @@
 %h3 Status
 .row
   .col-sm-4
-    = f.input :available, collection: [['Active', true], ['Inactive', false], ['Ineligible', false]], label: "Status", disabled: disabled
+    = f.input :available, collection: [['Active', true], ['Inactive', false], ['Ineligible', false]], label: "Status", input_options: {class: 'select2'}, disabled: disabled
   .col-sm-4
     = f.input :available_date, as: :date_picker, label: 'Date', disabled: disabled
   .col-sm-4

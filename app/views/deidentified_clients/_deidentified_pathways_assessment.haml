@@ -6,21 +6,7 @@
 - both_dv_label = "Both DV and Non-DV Programs"
 
 %section.o-questions__section
-  .c-question.c-question--primary
-    .c-question__wrapper
-      .c-question__number
-      .c-question__input
-        = form.input :entry_date, label: 'Date Taken', as: :date_picker
-  .c-question
-    .c-question__wrapper
-      .c-question__number
-      .c-question__input
-        = form.input :assessment_score
-  .c-question
-    .c-question__wrapper
-      .c-question__number 4D.
-      .c-question__input
-        = form.input :days_homeless_in_the_last_three_years, label: 'Days homeless in last 3 years'
+  = render 'non_hmis_clients/assessments/common_questions', form: form, disabled: disabled
 
 %section.o-questions__section
   %h2 Household
@@ -29,8 +15,12 @@
   .c-question
     .c-question__wrapper
       .c-question__number 6A.
-      .c-question__input
-        = form.input :income_total_annual, pre_label: '6A.', label: 'Net income'
+      - label = 'Net income'
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @assessment.income_total_annual, label: label
+      - else
+        .c-question__input
+          = form.input :income_total_annual, pre_label: '6A.', label: label
 
 %section.o-questions__section
   %h2 Domestic Violence
@@ -39,7 +29,7 @@
     .c-question__wrapper
       .c-question__number 9D.
       .c-question__input
-        = form.input :dv_rrh_aggregate, collection: { dv_label => 'dv', non_dv_label => 'non-dv', both_dv_label => 'both' }, pre_label: '9D.', label: 'Survivor Choice (for those currently fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are:', as: :select2
+        = form.input :dv_rrh_aggregate, collection: { dv_label => 'dv', non_dv_label => 'non-dv', both_dv_label => 'both' }, pre_label: '9D.', label: 'Survivor Choice (for those currently fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are:', input_options: {class: 'select2'}
 
 %section.o-questions__section
   %h2 Housing
@@ -48,7 +38,7 @@
 %section.o-questions__section
   %h2 Military Service
   = form.input :veteran, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5B.', label: 'Did you serve in active military, naval or air service (regardless of length of service) and have a discharge status of anything other than Dishonorable? NOTE: This DOES include Veterans who only had service time in basic training. This DOES NOT include Veterans who were National Guard and Reserves'
-  -# = form.input :ssvf_eligible, collection: { 'Yes' => true, 'No' => false, 'N/A' => nil }, label: '5F. Based on your agency\'s past records and/or SSVF eligibility screen, is the Veteran eligible for SSVF (If you are not SSVF Staff then click N/A)?', as: :select2
+  -# = form.input :ssvf_eligible, collection: { 'Yes' => true, 'No' => false, 'N/A' => nil }, label: '5F. Based on your agency\'s past records and/or SSVF eligibility screen, is the Veteran eligible for SSVF (If you are not SSVF Staff then click N/A)?', {class: 'select2'}
   = form.input :veteran_rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5G.', label: 'Veteran Choice: We have Veteran-specific rapid re-housing programs in our community that provide housing search for a unit where the lease is between you and the landlord: financial assistance to pay the upfront sots of the unit; and case management to help sustain your new home. They may have quicker openings. Is there any reason why you cannot work with a Veteran-specific rapid re-housing program?'
 
 %section.o-questions__section
@@ -57,11 +47,15 @@
   = form.input :rrh_th_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9F.', label: 'Shelter Need While Doing Housing Search (RRH-TH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one was available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.'
   .c-question
     .c-question__wrapper
-      .c-question__number
-      .c-question__input
-        = form.label :youth_rrh_aggregate, pre_label: '9C.', label: 'Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:'
-        -# = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :radio_buttons, label: false
-        = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :pretty_boolean_group, wrapper: :custom_boolean , label: false
+      .c-question__number 9C.
+      - label = 'Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:'
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @assessment.youth_rrh_aggregate, label: label
+      - else
+        .c-question__input
+          = form.label :youth_rrh_aggregate, pre_label: '9C.', label: label
+          -# = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :radio_buttons, label: false
+          = form.input :youth_rrh_aggregate, collection: { youth_label => 'youth', adult_label => 'adult', both_label => 'both', 'None' => '' }, as: :pretty_boolean_group, wrapper: :custom_boolean , label: false
 
 %section.o-questions__section
   %h2 Housing needs
@@ -69,7 +63,7 @@
     .c-question__wrapper
       .c-question__number 6C.
       .c-question__input
-        = form.input :required_number_of_bedrooms, collection: (2..5), include_blank: 'None', pre_label: '6C.', label: 'If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below', as: :select2
+        = form.input :required_number_of_bedrooms, collection: (2..5), include_blank: 'None', pre_label: '6C.', label: 'If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below', input_options: {disabled: disabled, class: 'select2'}
 
   .c-question
     .c-question__wrapper

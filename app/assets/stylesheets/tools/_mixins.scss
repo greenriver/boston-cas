@@ -384,9 +384,9 @@
   }
 }
 
-@mixin metric {
+@mixin metric($size: 1) {
+  font-size: 25px * $size;
   font-weight: 800;
-  font-size: 25px;
   line-height: 1;
   min-width: 50px;
 }

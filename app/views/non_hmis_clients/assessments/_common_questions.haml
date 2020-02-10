@@ -1,0 +1,53 @@
+.c-question.c-question--primary
+  .c-question__wrapper
+    .c-question__number
+    - label = 'Date Taken'
+    - if disabled
+      = render 'non_hmis_clients/assessments/question_display', value: @assessment.entry_date, label: label
+    - else
+      .c-question__input
+        = form.input :entry_date, label: label, as: :date_picker
+.c-question
+  .c-question__wrapper
+    .c-question__number
+    - label = 'Assessment Score'
+    - if disabled
+      = render 'non_hmis_clients/assessments/question_display', value: @assessment.assessment_score, label: label
+    - else
+      .c-question__input
+        = form.input :assessment_score, label: label
+.c-question
+  .c-question__wrapper
+    .c-question__number 4D.
+    - label = 'Days homeless in last 3 years'
+    - if disabled
+      = render 'non_hmis_clients/assessments/question_display', value: @assessment.days_homeless_in_the_last_three_years, label: label
+    - else
+      .c-question__input
+        = form.input :days_homeless_in_the_last_three_years, label: label
+
+-# From identified
+-# .c-question
+-#   .c-question__wrapper
+-#     .c-question__number
+-#     .c-question__input
+-#       = form.input :date_days_homeless_verified, label: 'Date Taken', as: :date_picker
+
+-# -# .c-question.c-question--primary
+-#   .c-question__wrapper
+-#     .c-question__number
+-#     .c-question__input
+-#       = form.input :entry_date, label: 'Date Taken', as: :date_picker
+
+-# .c-question
+-#   .c-question__wrapper
+-#     .c-question__number
+-#     .c-question__input
+-#       = form.input :assessment_score
+
+-# .c-question
+-#   .c-question__wrapper
+-#     .c-question__number 3D.
+-#     .c-question__input
+-#       = form.label :days_homeless_in_the_last_three_years, label: 'Days homeless in last 3 years'
+-#       = form.input :days_homeless_in_the_last_three_years, label: false,  disabled: disabled

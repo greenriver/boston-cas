@@ -101,6 +101,7 @@ class DeidentifiedClientsController < NonHmisClientsController
         client_assessments_attributes: [
           :id,
           :type,
+          :entry_date,
           :assessment_score,
           :vispdat_score,
           :vispdat_priority_score,

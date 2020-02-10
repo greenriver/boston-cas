@@ -80,6 +80,7 @@ class IdentifiedClientsController < NonHmisClientsController
         client_assessments_attributes: [
           :id,
           :type,
+          :entry_date,
           :assessment_score,
           :actively_homeless,
           :days_homeless_in_the_last_three_years,

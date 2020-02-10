@@ -52,3 +52,9 @@
 .c-question span:last-of-type {
   font-weight: 600;
 }
+
+.c-question__display {
+  span:first-of-type {
+    max-width: 75ch;
+  }
+}

@@ -2,9 +2,10 @@
 
 %section
   .row
-    .col-md-8
+    .col-md-10
       - name = client_identified? ? "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}" : @non_hmis_client.client_identifier
       - client_path = send("#{client_type}_client_path", @non_hmis_client)
+      - assessment_path = send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment})
       .d-flex.align-items-center.mb-6
         .div
           %h1.mr-4.mb-0 #{action_text} Assessment for Client #{name}
@@ -13,7 +14,9 @@
           = link_to 'Back To Client', send("#{client_type}_client_path", @non_hmis_client), class: 'btn btn-secondary'
           - if disabled
             = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary'
-      = simple_form_for @non_hmis_client, url: client_path, defaults: {disabled: disabled} do |f|
+          - else
+            = link_to 'Cancel', assessment_path, class: 'btn btn-secondary'
+      = simple_form_for @non_hmis_client, url: assessment_path, defaults: {disabled: disabled} do |f|
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type
           .o-questions
