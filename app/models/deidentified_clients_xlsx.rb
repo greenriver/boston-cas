@@ -29,7 +29,8 @@ class DeidentifiedClientsXlsx < ApplicationRecord
           @added +=1 if client.updated_at.nil?
           @touched += 1 if client.updated_at.present?
           client.update(cleaned)
-          client.update_assessment_from_client()
+          assessment = client.current_assessment || client.client_assessments.build
+          client.update_assessment_from_client(assessment)
         end
       end
     end
