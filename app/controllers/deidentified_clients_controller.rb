@@ -10,12 +10,16 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
-    respond_with(@non_hmis_client, location: deidentified_clients_path)
+    if pathways_enabled?
+      respond_with(@non_hmis_client, location: new_assessment_deidentified_client_path(@non_hmis_client.id))
+    else
+      respond_with(@non_hmis_client, location: deidentified_clients_path)
+    end
   end
 
   def update
     @non_hmis_client.update(clean_params(deidentified_client_params))
-    respond_with(@non_hmis_client, location: deidentified_clients_path)
+    respond_with(@non_hmis_client, location: deidentified_client_path)
   end
 
   def destroy
@@ -61,7 +65,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   def assessment_type
-    Config.get(:deidentified_client_assessment).presence || 'DeidentifiedClientAssessment'
+    Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
   end
 
   def client_source
@@ -70,13 +74,13 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   def sort_options
     [
-        {title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', order: 'LOWER(client_identifier) ASC', visible: true},
-        {title: 'Client Identifier Z-A', column: 'client_identifier', direction: 'desc', order: 'LOWER(client_identifier) DESC', visible: true},
-        {title: 'Agency A-Z', column: 'agency', direction: 'asc', order: 'LOWER(agency) ASC', visible: true},
-        {title: 'Agency Z-A', column: 'agency', direction: 'desc', order: 'LOWER(agency) DESC', visible: true},
-        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
-        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-            order: 'days_homeless_in_the_last_three_years DESC', visible: true},
+      {title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', order: 'LOWER(client_identifier) ASC', visible: true},
+      {title: 'Client Identifier Z-A', column: 'client_identifier', direction: 'desc', order: 'LOWER(client_identifier) DESC', visible: true},
+      {title: 'Agency A-Z', column: 'agency', direction: 'asc', order: 'LOWER(agency) ASC', visible: true},
+      {title: 'Agency Z-A', column: 'agency', direction: 'desc', order: 'LOWER(agency) DESC', visible: true},
+      {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
+      {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
+          order: 'days_homeless_in_the_last_three_years DESC', visible: true},
     ]
   end
   helper_method :sort_options
@@ -88,7 +92,7 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   private
     def deidentified_client_params
-      params.require(:deidentified_client).permit(
+      permitted_params = params.require(:deidentified_client).permit(
         :client_identifier,
         :agency_id,
         :contact_id,
@@ -136,7 +140,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :disabled_housing,
           neighborhood_interests: [],
         ]
-      ).merge(identified: false)
+      )
     end
 
     def append_client_identifier dirty_params

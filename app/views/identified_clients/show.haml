@@ -22,8 +22,8 @@
     .row
       .col
         .form-inputs
-          = render 'client', client_form: f, disabled: true
-          %hr
+          -# = render 'client', client_form: f, disabled: true
+          -# %hr
           .form-actions
             = link_to edit_identified_client_path(@non_hmis_client.id), class: 'btn btn-sm btn-secondary mb-auto' do
               Edit Assessment

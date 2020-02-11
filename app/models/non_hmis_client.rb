@@ -178,6 +178,9 @@ class NonHmisClient < ApplicationRecord
   def create_assessment_if_missing
     return unless persisted?
     return if client_assessments.exists?
+    # Do not automatically create assessment if pathways is enabled
+    # user is routed to new form
+    return if Config.get("#{type.tableize.singularize}_assessment").include? 'Pathways'
 
     assessment = client_assessments.build
     update_assessment_from_client(assessment)

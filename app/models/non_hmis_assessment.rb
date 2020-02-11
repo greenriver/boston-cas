@@ -15,10 +15,6 @@ class NonHmisAssessment < ActiveRecord::Base
 
   after_find :populate_aggregates
 
-  def latest_for_client?
-    false
-  end
-
   private def populate_aggregates
     if youth_rrh_desired? && rrh_desired?
       self.youth_rrh_aggregate = 'both'

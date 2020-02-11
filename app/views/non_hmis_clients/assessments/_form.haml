@@ -14,13 +14,11 @@
           = link_to 'Back To Client', send("#{client_type}_client_path", @non_hmis_client), class: 'btn btn-secondary'
           - if disabled
             = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary'
-          - else
-            = link_to 'Cancel', assessment_path, class: 'btn btn-secondary'
       = simple_form_for @non_hmis_client, url: assessment_path, defaults: {disabled: disabled} do |f|
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type
           .o-questions
-            = render "#{client_type}_clients/#{@assessment.model_name.element}", form: a, disabled: disabled
+            = render "#{client_type}_clients/#{@assessment.model_name.element}", client_form: f, assessment_form: a, disabled: disabled
 
         .form__actions.align-items-center
           = render 'non_hmis_clients/assessments/timestamp'
@@ -28,7 +26,7 @@
             - if action_text.present?
               = link_to 'Cancel', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment}), class: 'btn btn-secondary ml-auto'
               = f.button :submit, "#{action_text} Assessment", class: 'btn btn-primary'
-            - if @assessment.latest_for_client?
+            - if latest_assessment_for_client?
               = link_to 'Delete', '', class: 'btn btn-danger'
 
 = render 'init_select2'

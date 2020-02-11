@@ -14,8 +14,16 @@ module NonHmisClientsHelper
     client_type == 'identified'
   end
 
+  def assessment_is_pathways?
+    @assessment.type.include? 'Pathways'
+  end
+
   def pathways_enabled?
     Config.get("#{client_type}_client_assessment").include? 'Pathways'
+  end
+
+  def latest_assessment_for_client?
+    @non_hmis_client.current_assessment == @assessment
   end
 
 end

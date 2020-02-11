@@ -54,7 +54,13 @@
 }
 
 .c-question__display {
+  span {
+    display: block;
+  }
   span:first-of-type {
     max-width: 75ch;
+  }
+  span:last-of-type {
+    margin-top: space(1);
   }
 }

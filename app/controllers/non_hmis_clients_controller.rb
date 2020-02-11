@@ -70,7 +70,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def show
-    if params[:assessment_id] && assessment_type&.include?('Pathways')
+    if params[:assessment_id] && pathways_enabled?
       render :assessment
     end
   end
@@ -81,7 +81,7 @@ class NonHmisClientsController < ApplicationController
 
   def new_assessment
     @assessment = build_assessment
-    if assessment_type&.include?('Pathways')
+    if pathways_enabled?
       render :new_assessment
     else
       render :edit
@@ -114,7 +114,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def build_assessment
-    assessment_type.constantize.new
+    assessment = assessment_type.constantize.new
   end
 
   def load_client
@@ -234,5 +234,9 @@ class NonHmisClientsController < ApplicationController
     assessment_params[:user_id] = current_user.id
 
     return dirty_params
+  end
+
+  private def pathways_enabled?
+    assessment_type&.include?('Pathways')
   end
 end

@@ -25,8 +25,8 @@
             .ml-auto
               = render 'assessments'
         .form-inputs
-          = render 'client', client_form: f, disabled: true
-          %hr
+          -# = render 'client', client_form: f, disabled: true
+          -# %hr
           = f.simple_fields_for :client_assessments, @assessment do |a|
             - # view is versioned, so choose view based on model type
             = render @assessment.model_name.element, client_form: f, assessment_form: a, disabled: true
