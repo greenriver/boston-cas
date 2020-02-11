@@ -33,7 +33,7 @@
     = assessment_form.input :required_minimum_occupancy, collection: (1..10), include_blank: false, input_html: { class: :select2 }, disabled: disabled
     = assessment_form.input :interested_in_set_asides, input_html: {class: 'jInterestedInSetAsides'}, disabled: disabled
     .jNeighborhoodInterests
-      = assessment_form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, disabled: disabled
+      = assessment_form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: [:select2, 'select2--full-width'] }, disabled: disabled
     = assessment_form.input :disabling_condition, disabled: disabled
     = assessment_form.input :physical_disability, disabled: disabled
     = assessment_form.input :developmental_disability, disabled: disabled
