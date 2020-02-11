@@ -77,6 +77,10 @@ class NonHmisClient < ApplicationRecord
     client_opportunity_matches.exists?
   end
 
+  def available_availabilities
+    [['Active', true], ['Inactive', false], ['Ineligible', false]].freeze
+  end
+
   def cohort_names
     return '' unless Warehouse::Base.enabled?
 

@@ -4,8 +4,7 @@
 -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - if pathways_enabled?
-  = render 'non_hmis_clients/show_layout',
-    title: "#{title} #{@non_hmis_client.client_identifier}"
+  = render 'non_hmis_clients/show_layout', title: "#{title}", sub_title: @non_hmis_client.client_identifier
 
 - else
   = render 'breadcrumbs'

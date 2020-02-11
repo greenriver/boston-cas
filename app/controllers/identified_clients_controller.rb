@@ -19,7 +19,7 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def update
     @non_hmis_client.update(clean_params(identified_client_params))
-    
+
     if pathways_enabled?
       respond_with(@non_hmis_client, location: identified_client_path(id: @non_hmis_client.id))
     else
@@ -28,7 +28,11 @@ class IdentifiedClientsController < NonHmisClientsController
   end
 
   def destroy
-    @non_hmis_client.destroy
+    if pathways_enabled? && params[:assessment_id].present?
+      @non_hmis_client.non_hmis_assessments.find(params[:assessment_id].to_i).destroy
+    else
+      @non_hmis_client.destroy
+    end
     respond_with(@non_hmis_client, location: identified_clients_path())
   end
 
@@ -100,6 +104,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :youth_rrh_desired,
           :rrh_assessment_contact_info,
           :income_maximization_assistance_requested,
+          :income_total_monthly,
           :pending_subsidized_housing_placement,
           :requires_wheelchair_accessibility,
           :required_number_of_bedrooms,

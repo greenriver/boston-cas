@@ -1,26 +1,24 @@
-%h3 Status
 .row.mb-4
-  .col-sm-6
+  .col-12
     .c-quesiton
       - label = 'Availability Status'
       - if disabled
-        .mb-4
-          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available, label: label, size: :sm
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_availabilities.to_h.invert[@non_hmis_client.available], label: label, size: :sm
       - else
-        = f.input :available, collection: [['Active', true], ['Inactive', false], ['Ineligible', false]], label: label, input_html: {class: 'select2 select2--full-width'}
-  .col-sm-6
-    .c-quesiton
-      - label = 'Date'
-      - if disabled
-        .mb-4
+        = f.input :available, collection: @non_hmis_client.available_availabilities, label: label, input_html: {class: 'select2 select2--full-width jStatusAvailbleTrigger'}
+- unless @non_hmis_client.available && disabled
+  .row.jStatusUnavailble
+    .col-12.mb-4
+      .c-quesiton
+        - label = 'Date'
+        - if disabled
           = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_date, label: label, size: :sm
-      - else
-        = f.input :available_date, as: :date_picker,  disabled: disabled, label: label
-.row
-  .col-sm-6
-    .c-quesiton
-      - label = 'Reason'
-      - if disabled
-        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_reason, label: label, size: :sm
-      - else
-        = f.input :available_reason, disabled: disabled, label: label
+        - else
+          = f.input :available_date, as: :date_picker,  disabled: disabled, label: label
+    .col-12
+      .c-quesiton
+        - label = 'Reason'
+        - if disabled
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_reason, label: label, size: :sm
+        - else
+          = f.input :available_reason, disabled: disabled, label: label

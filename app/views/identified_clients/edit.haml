@@ -6,9 +6,7 @@
 
   -# Layout
   -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  = render 'non_hmis_clients/edit_layout',
-    title: title,
-    sub_title: "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}"
+  = render 'non_hmis_clients/edit_layout', title: title, sub_title: "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}"
 
 - else
   %h1 Edit #{_('Identified Client')}

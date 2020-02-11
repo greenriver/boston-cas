@@ -41,9 +41,3 @@
                   %span.icon-arrow-right2.ml-2
 
 %p= paginate @non_hmis_clients
-
-- content_for :page_js do
-  :javascript
-    $('[data-href]').on('click', function() {
-      window.location = $(this).data('href')
-    })

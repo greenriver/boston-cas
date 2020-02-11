@@ -27,7 +27,11 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   def destroy
-    @non_hmis_client.destroy
+    if pathways_enabled? && params[:assessment_id].present?
+      @non_hmis_client.non_hmis_assessments.find(params[:assessment_id].to_i).destroy
+    else
+      @non_hmis_client.destroy
+    end
     respond_with(@non_hmis_client, location: deidentified_clients_path())
   end
 
@@ -123,6 +127,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :youth_rrh_desired,
           :rrh_assessment_contact_info,
           :income_maximization_assistance_requested,
+          :income_total_monthly,
           :pending_subsidized_housing_placement,
           :family_member,
           :calculated_chronic_homelessness,
