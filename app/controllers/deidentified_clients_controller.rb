@@ -19,12 +19,16 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   def update
     @non_hmis_client.update(clean_params(deidentified_client_params))
-    respond_with(@non_hmis_client, location: deidentified_client_path)
+    if pathways_enabled?
+      respond_with(@non_hmis_client, location: deidentified_client_path(@non_hmis_client.id))
+    else
+      respond_with(@non_hmis_client, location: deidentified_clients_path)
+    end
   end
 
   def destroy
     @non_hmis_client.destroy
-    respond_with(@non_hmis_client, location: deidentified_clients_path)
+    respond_with(@non_hmis_client, location: deidentified_clients_path())
   end
 
   def choose_upload
@@ -99,6 +103,7 @@ class DeidentifiedClientsController < NonHmisClientsController
         :available,
         :available_date,
         :available_reason,
+        :limited_release_on_file,
         :full_release_on_file,
         :set_asides_housing_status,
         active_cohort_ids: [],

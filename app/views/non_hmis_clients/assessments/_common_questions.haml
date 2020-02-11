@@ -7,15 +7,7 @@
     - else
       .c-question__input
         = form.input :entry_date, label: label, as: :date_picker
-.c-question
-  .c-question__wrapper
-    .c-question__number
-    - label = 'Assessment Score'
-    - if disabled
-      = render 'non_hmis_clients/assessments/question_display', value: @assessment.assessment_score, label: label
-    - else
-      .c-question__input
-        = form.input :assessment_score, label: label
+
 .c-question
   .c-question__wrapper
     .c-question__number 4D.

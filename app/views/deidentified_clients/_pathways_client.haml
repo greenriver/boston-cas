@@ -10,7 +10,7 @@
     .col-md-8
       .c-question.jAgency
         - if disabled
-          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency, label: 'Agency'
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency&.name, label: 'Agency'
         - else
           .c-question__input.jAgency
           = form.association :agency, input_html: {class: 'select2 select2--full-width'}, disabled: disabled
@@ -19,20 +19,12 @@
     .c-question
       - label = "Default #{_('Shelter Agency')} Contact"
       - if disabled
-        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact_id, label: label
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name, label: label
       - else
         = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact select2--full-width' }, disabled: disabled
-- if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
-  .row
-    .col-md-8
-      .c-question
-        - if disabled
-          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_reason, label: label
-        - else
-          = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2 select2--full-width' }, label: "Cohorts", disabled: disabled
 
 .c-question
-  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
+  = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Limited Coordinated Access System Release on file', disabled: disabled
 
 .c-question
   = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled

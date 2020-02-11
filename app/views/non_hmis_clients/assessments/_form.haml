@@ -2,7 +2,7 @@
 
 %section
   .row
-    .col-md-10
+    .col-md-12
       - name = client_identified? ? "#{@non_hmis_client.first_name} #{@non_hmis_client.last_name}" : @non_hmis_client.client_identifier
       - client_path = send("#{client_type}_client_path", @non_hmis_client)
       - assessment_path = send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment})
@@ -11,9 +11,11 @@
           %h1.mr-4.mb-0 #{action_text} Assessment for Client #{name}
           = render 'non_hmis_clients/assessments/timestamp'
         .ml-auto
-          = link_to 'Back To Client', send("#{client_type}_client_path", @non_hmis_client), class: 'btn btn-secondary'
-          - if disabled
-            = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary'
+          = link_to 'Back To Client', send("#{client_type}_client_path", @non_hmis_client), class: 'btn btn-secondary mr-2 mb-2'
+          - if disabled && ! (@assessment.default? && pathways_enabled?)
+            = link_to 'Edit', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment, edit: 1}), class: 'btn btn-primary mb-2'
+  .row
+    .col-md-10
       = simple_form_for @non_hmis_client, url: assessment_path, defaults: {disabled: disabled} do |f|
         = f.simple_fields_for :client_assessments, @assessment do |a|
           - # view is versioned, so choose view based on model type
@@ -27,6 +29,6 @@
               = link_to 'Cancel', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment}), class: 'btn btn-secondary ml-auto'
               = f.button :submit, "#{action_text} Assessment", class: 'btn btn-primary'
             - if latest_assessment_for_client?
-              = link_to 'Delete', '', class: 'btn btn-danger'
+              = link_to 'Delete', polymorphic_path([client_type, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger'
 
 = render 'init_select2'

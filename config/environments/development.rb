@@ -92,6 +92,9 @@ Rails.application.configure do
   config.force_ssl = false
   config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours)
 
+  # Web console from outside of docker
+  config.web_console.whitelisted_ips = ['172.16.0.0/12', '192.168.0.0/16']
+
   # do gzip compressing in dev mode to simulate nginx config in production
   config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
 

@@ -1,5 +1,5 @@
 .table-responsive
-  %table.table.table-condensed.table-hover
+  %table.table.table-condensed
     %thead
       - if client_identified?
         %th Last Name
@@ -19,10 +19,10 @@
         - path = client_identified? ? identified_client_path(non_hmis_client) : deidentified_client_path(non_hmis_client)
         %tr{data: {href: path}}
           - if client_identified?
-            %td= non_hmis_client.last_name
-            %td= non_hmis_client.first_name
+            %td= link_to non_hmis_client.last_name, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
+            %td= link_to non_hmis_client.first_name, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
           - else
-            %td= non_hmis_client.client_identifier
+            %td= link_to non_hmis_client.client_identifier, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
 
           %td= non_hmis_client.agency&.name
 

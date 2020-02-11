@@ -30,7 +30,7 @@
       .c-question__number 9D.
       - label = 'Survivor Choice (for those currently fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are:'
       - if disabled
-        = render 'non_hmis_clients/assessments/question_display', value: @assessment.dv_rrh_aggregate.titleize, label: label
+        = render 'non_hmis_clients/assessments/question_display', value: @assessment.dv_rrh_aggregate&.titleize, label: label
       - else
         .c-question__input
           = assessment_form.input :dv_rrh_aggregate, collection: { dv_label => 'dv', non_dv_label => 'non-dv', both_dv_label => 'both' }, pre_label: '9D.', input_html: {class: 'select2'}, label: label
@@ -54,7 +54,7 @@
       .c-question__number 9C.
       - label = 'Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:'
       - if disabled
-        = render 'non_hmis_clients/assessments/question_display', value: @assessment.youth_rrh_aggregate.titleize, label: label
+        = render 'non_hmis_clients/assessments/question_display', value: @assessment.youth_rrh_aggregate&.titleize, label: label
       - else
         .c-question__input
           = assessment_form.label :youth_rrh_aggregate, pre_label: '9C.', label: label

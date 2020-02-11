@@ -74,4 +74,4 @@
   .c-question__wrapper
     .c-question__number 6H.
     .c-question__input
-      = assessment_form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: {class: 'select2'}, disabled: disabled, label_html: { class: :control_label }, label: 'Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.'
+      = assessment_form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: {class: 'select2', multiple: :multiple}, disabled: disabled, label_html: { class: :control_label }, label: 'Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.'

@@ -28,19 +28,16 @@
       - else
         = form.input :ssn, label: label, input_html: {maxlength: 9}, disabled: disabled
 
-  = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Domestic violence survivor', disabled: disabled
-  = form.input :actively_homeless, as: :pretty_boolean, wrapper: :custom_boolean, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
-
 %section
   -# Probably need to update with more appropriate title
-  %h3 System Info
+  %h3 Agency Information
   - if can_edit_all_clients?
     .jAgency
       .row
         .col-md-10
           - if disabled
             .c-question
-              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency, label: 'Agency'
+              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency.name, label: 'Agency'
           - else
             = form.association :agency, input_html: {class: :select2}, disabled: disabled
 
@@ -49,16 +46,11 @@
         - label = "Default #{_('Shelter Agency')} Contact"
         - if disabled
           .c-question
-            = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency, label: label
+            = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name_with_email, label: label
         - else
           = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
 
-  - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
-    .row
-      .col-md-8
-        = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
-
-  = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Limited Coordinated Access System Release on file', disabled: disabled
+  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
 
   = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
   -# = form.input :active_client, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
