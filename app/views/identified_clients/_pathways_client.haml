@@ -1,7 +1,10 @@
 %section.mb-6
   %h3 Demographics
-  .mb-4
-    .row
+  - if disabled
+    .c-question
+      = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.full_name, label: 'Client Name'
+  - else
+    .row.mb-4
       .col-md-10
         = form.input :first_name, disabled: disabled
     .row
@@ -12,11 +15,20 @@
         = form.input :last_name, disabled: disabled
   .row.mb-4
     .col-md-6
-      = form.input :date_of_birth, as: :date_picker, disabled: disabled
-      = form.input :ssn, label: "SSN", input_html: {maxlength: 9}, disabled: disabled
+      - if disabled
+        .c-question
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.date_of_birth, label: 'Client Name'
+      - else
+        = form.input :date_of_birth, as: :date_picker, disabled: disabled
 
-  -# = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Domestic violence survivor', disabled: disabled
-  -# - if Config.get(:non_hmis_fields).include?('actively_homeless')
+      - label = 'SSN'
+      - if disabled
+        .c-question
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: label
+      - else
+        = form.input :ssn, label: label, input_html: {maxlength: 9}, disabled: disabled
+
+  = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Domestic violence survivor', disabled: disabled
   = form.input :actively_homeless, as: :pretty_boolean, wrapper: :custom_boolean, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
 
 %section
@@ -26,11 +38,20 @@
     .jAgency
       .row
         .col-md-10
-          = form.association :agency, input_html: {class: :select2}, disabled: disabled
+          - if disabled
+            .c-question
+              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency, label: 'Agency'
+          - else
+            = form.association :agency, input_html: {class: :select2}, disabled: disabled
 
     .row
       .col-md-10
-        = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+        - label = "Default #{_('Shelter Agency')} Contact"
+        - if disabled
+          .c-question
+            = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency, label: label
+        - else
+          = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
 
   - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
     .row
@@ -42,3 +63,6 @@
   = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
   -# = form.input :active_client, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
   -# = form.input :eligible_for_matching, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+
+- unless disabled
+  = render 'deidentified_clients/js'

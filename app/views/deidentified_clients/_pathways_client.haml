@@ -1,19 +1,41 @@
 .row
   .col-md-6
-    = form.input :client_identifier, required: true, disabled: disabled
+    .c-question
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.client_identifier, label: 'Client Identifier'
+      - else
+        = form.input :client_identifier, required: true, disabled: disabled
 - if can_edit_all_clients?
   .row
     .col-md-8
-      .jAgency
-        = form.association :agency, input_html: {class: :select2}, disabled: disabled
+      .c-question.jAgency
+        - if disabled
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency, label: 'Agency'
+        - else
+          .c-question__input.jAgency
+          = form.association :agency, input_html: {class: 'select2 select2--full-width'}, disabled: disabled
 .row
   .col-md-8
-    = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+    .c-question
+      - label = "Default #{_('Shelter Agency')} Contact"
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact_id, label: label
+      - else
+        = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact select2--full-width' }, disabled: disabled
 - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
   .row
     .col-md-8
-      = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
+      .c-question
+        - if disabled
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_reason, label: label
+        - else
+          = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2 select2--full-width' }, label: "Cohorts", disabled: disabled
 
-= form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
+.c-question
+  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
 
-= render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
+.c-question
+  = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
+
+- unless disabled
+  = render 'js'

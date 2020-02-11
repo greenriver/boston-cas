@@ -1,8 +1,23 @@
 %h3 Status
 .row
   .col-sm-4
-    = f.input :available, collection: [['Active', true], ['Inactive', false], ['Ineligible', false]], label: "Status", input_options: {class: 'select2'}, disabled: disabled
+    .c-quesiton
+      - label = 'Status'
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available, label: label, size: :sm
+      - else
+        = f.input :available, collection: [['Active', true], ['Inactive', false], ['Ineligible', false]], label: label, input_html: {class: 'select2 select2--full-width'}
   .col-sm-4
-    = f.input :available_date, as: :date_picker, label: 'Date', disabled: disabled
+    .c-quesiton
+      - label = 'Date'
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_date, label: label, size: :sm
+      - else
+        = f.input :available_date, as: :date_picker,  disabled: disabled, label: label
   .col-sm-4
-    = f.input :available_reason, label: 'Reason', disabled: disabled
+    .c-quesiton
+      - label = 'Reason'
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_reason, label: label, size: :sm
+      - else
+        = f.input :available_reason, disabled: disabled, label: label

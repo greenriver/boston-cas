@@ -69,6 +69,10 @@ class NonHmisClient < ApplicationRecord
   end
   alias_method :age_on, :age
 
+  def full_name
+    "#{first_name} #{middle_name} #{last_name}"
+  end
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end
