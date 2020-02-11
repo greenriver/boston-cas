@@ -70,6 +70,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def show
+    @assessments = @non_hmis_client.non_hmis_assessments.order(created_at: :desc)
     if params[:assessment_id] && pathways_enabled?
       render :assessment
     end
