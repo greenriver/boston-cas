@@ -131,7 +131,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   end
 
   def yes_no_to_bool(client, field, val)
-    text = val&.downcase
+    text = val&.downcase&.strip
     if text == 'yes' || text == 'y'
       true
     elsif text == 'no' || text == 'n'
