@@ -37,7 +37,7 @@
         .col-md-10
           - if disabled
             .c-question
-              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency.name, label: 'Agency'
+              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency&.name, label: 'Agency'
           - else
             = form.association :agency, input_html: {class: :select2}, disabled: disabled
 
