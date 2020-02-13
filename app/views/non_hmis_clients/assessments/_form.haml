@@ -24,11 +24,11 @@
 
         .form__actions.align-items-center
           = render 'non_hmis_clients/assessments/timestamp'
-          .ml-auto
+          .ml-auto.d-flex
             - if action_text.present?
               = link_to 'Cancel', send("#{client_type}_client_path", @non_hmis_client, {assessment_id: @assessment}), class: 'btn btn-secondary ml-auto'
-              = f.button :submit, "#{action_text} Assessment", class: 'btn btn-primary'
+              = f.button :submit, "#{action_text} Assessment", class: 'btn btn-primary ml-2'
             - if latest_assessment_for_client?
-              = link_to 'Delete', polymorphic_path([client_type, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger'
+              = link_to 'Delete', polymorphic_path([client_type, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger ml-2'
 
 = render 'init_select2'

@@ -390,3 +390,12 @@
   line-height: 1;
   min-width: 50px;
 }
+
+@mixin ie11-center-fix {
+  &::after{
+    content: '';
+    min-height: inherit;
+    font-size: 0;
+    display: block;
+  }
+}

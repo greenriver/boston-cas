@@ -55,6 +55,8 @@ input {
     margin-right: space(1);
   }
   label {
+    display: flex;
+    align-items: center;
     cursor: pointer;
     font-weight: normal;
   }

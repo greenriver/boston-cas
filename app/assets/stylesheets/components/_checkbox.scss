@@ -68,10 +68,10 @@
   }
   .c-checkbox__check-icon {
     transform: scale(.65);
-    transform-origin: center center;
+    transform-origin: 50% 50%;
     flex: 0 0 auto;
-    height: 30px;
-    width: 30px;
+    height: 100%;
+    width: 100%;
     &::before {
       content: '';
     }

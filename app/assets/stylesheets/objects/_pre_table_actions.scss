@@ -5,6 +5,7 @@
   padding: 0 .75rem;
   background: lighten($tab-bg, 30%);
   min-height: 50px;
+  @include ie11-center-fix;
 }
 
 .o-pre-table-actions--light {
