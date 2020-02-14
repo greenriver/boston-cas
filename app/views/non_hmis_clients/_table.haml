@@ -31,7 +31,10 @@
           %td= current_assessment&.created_at
 
           %td
-            -#  Status
+            - if non_hmis_client.available
+              Available
+            - else
+              Ineligible
 
           - if current_user.can_view_some_clients?
             %td
