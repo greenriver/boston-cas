@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_07_230944) do
+ActiveRecord::Schema.define(version: 2020_02_14_143103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -737,6 +737,7 @@ ActiveRecord::Schema.define(version: 2020_02_07_230944) do
     t.boolean "eligible_for_matching", default: true, null: false
     t.datetime "available_date"
     t.string "available_reason"
+    t.boolean "is_currently_youth", default: false, null: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 

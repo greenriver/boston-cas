@@ -78,7 +78,7 @@ class NonHmisClient < ApplicationRecord
   end
 
   def available_availabilities
-    [['Active', true], ['Inactive', false], ['Ineligible', false]].freeze
+    [['Active', true], ['Ineligible', false]].freeze
   end
 
   def cohort_names
@@ -309,5 +309,22 @@ class NonHmisClient < ApplicationRecord
       vispdat_priority_score: 'VI-SPDAT Priority Score',
       actively_homeless: 'Actively Homeless',
     }
+  end
+
+  def self.available_youth_choices
+    {
+      'Youth-Specific Only: youth specific programs are with agencies who have a focus on young populations; they may be able to offer drop-in spaces for youth, as well as community-building and connections with other youth' => 'youth',
+      'Adult Programs Only: Adult programs serve youth who are 18-24, but may not have built in community space or activities to connect other youth. They can help you find those opportunities. The adult RRH programs typically have more frequent openings at this time.' => 'adult',
+      'Both Adult and Youth-Specific programs' => 'both',
+      'None' => '',
+    }.freeze
+  end
+
+  def self.available_dv_choices
+    {
+      'Domestic Violence (DV) - Specific Only: these are agencies who have a focus on populations experiencing violence; they may be able to offer specialized services for survivors in-house, such as support groups, clinical services and legal services.' => 'dv',
+      'Non-DV Programs Only: these are agencies that serve people fleeing violence, but may need to link you to outside, specialized agencies for specific services such as DV support groups, clinical services and legal services. The non-DV RRH programs typically have more frequent openings at this time.' => 'non-dv',
+      'Both DV and Non-DV Programs' => 'both',
+    }.freeze
   end
 end

@@ -17,7 +17,7 @@
     .col-md-6
       - if disabled
         .c-question
-          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.date_of_birth, label: 'Client Name'
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.date_of_birth, label: 'Date of Birth'
       - else
         = form.input :date_of_birth, as: :date_picker, disabled: disabled
 

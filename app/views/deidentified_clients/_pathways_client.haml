@@ -5,6 +5,13 @@
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.client_identifier, label: 'Client Identifier'
       - else
         = form.input :client_identifier, required: true, disabled: disabled
+    .c-question
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.is_currently_youth, label: 'Is the client between the ages of 18 and 24?'
+      - else
+        = form.input :is_currently_youth, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+
+
 - if can_edit_all_clients?
   .row
     .col-md-8

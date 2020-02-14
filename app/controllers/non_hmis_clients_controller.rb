@@ -12,7 +12,6 @@ class NonHmisClientsController < ApplicationController
   before_action :set_active_filter, only: [:index]
 
   def index
-
     # sort
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
@@ -40,7 +39,7 @@ class NonHmisClientsController < ApplicationController
       format.html do
         # paginate
         @page = params[:page].presence || 1
-        @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
+        @non_hmis_clients = @non_hmis_clients.joins(:agency).reorder(sort_order).page(@page.to_i).per(25)
       end
       format.xlsx do
         download
@@ -99,8 +98,13 @@ class NonHmisClientsController < ApplicationController
     @direction = params[:direction]
 
     if @column.blank?
-      @column = 'days_homeless_in_the_last_three_years'
-      @direction = 'desc'
+      if pathways_enabled?
+        @column = 'assessment_score'
+        @direction = 'desc'
+      else
+        @column = 'days_homeless_in_the_last_three_years'
+        @direction = 'desc'
+      end
       sort_string = "#{@column} #{@direction}"
     else
       sort_string = sort_options.select do |m|
