@@ -187,7 +187,7 @@ class NonHmisClient < ApplicationRecord
     project_client.sro_ok = current_assessment&.sro_ok
     project_client.evicted = current_assessment&.evicted
 
-    project_client.project_client.needs_update = true
+    project_client.needs_update = true
   end
 
   def create_assessment_if_missing
