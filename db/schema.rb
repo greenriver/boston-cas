@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_14_143103) do
+ActiveRecord::Schema.define(version: 2020_02_17_154122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,6 +232,14 @@ ActiveRecord::Schema.define(version: 2020_02_14_143103) do
     t.string "case_manager_contact_info"
     t.boolean "vash_eligible"
     t.boolean "pregnancy_status", default: false
+    t.boolean "income_maximization_assistance_requested", default: false
+    t.boolean "pending_subsidized_housing_placement", default: false
+    t.boolean "pathways_domestic_violence", default: false
+    t.boolean "rrh_th_desired", default: false
+    t.boolean "sro_ok", default: false
+    t.boolean "pathways_other_accessibility", default: false
+    t.boolean "pathways_disabled_housing", default: false
+    t.boolean "evicted", default: false
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -945,6 +953,14 @@ ActiveRecord::Schema.define(version: 2020_02_14_143103) do
     t.string "non_hmis_client_identifier"
     t.boolean "vash_eligible"
     t.boolean "pregnancy_status", default: false
+    t.boolean "income_maximization_assistance_requested", default: false
+    t.boolean "pending_subsidized_housing_placement", default: false
+    t.boolean "pathways_domestic_violence", default: false
+    t.boolean "rrh_th_desired", default: false
+    t.boolean "sro_ok", default: false
+    t.boolean "pathways_other_accessibility", default: false
+    t.boolean "pathways_disabled_housing", default: false
+    t.boolean "evicted", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
