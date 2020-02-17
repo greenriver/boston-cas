@@ -12,7 +12,7 @@
 .c-question
   .c-question__wrapper
     .c-question__number 4D.
-    - label = _('3d. Total # of Boston Homeless Nights')
+    - label = _('3D. Total # of Boston Homeless Nights')
     - if disabled
       = render 'non_hmis_clients/assessments/question_display', value: @assessment.days_homeless_in_the_last_three_years, label: label
     - else
