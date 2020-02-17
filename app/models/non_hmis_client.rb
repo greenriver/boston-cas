@@ -180,7 +180,14 @@ class NonHmisClient < ApplicationRecord
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
 
-    project_client.needs_update = true
+    # Pathways
+    project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
+    project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement
+    project_client.rrh_th_desired = current_assessment&.rrh_th_desired
+    project_client.sro_ok = current_assessment&.sro_ok
+    project_client.evicted = current_assessment&.evicted
+
+    project_client.project_client.needs_update = true
   end
 
   def create_assessment_if_missing
