@@ -12,6 +12,8 @@
       %th Status
       - if current_user.can_view_some_clients?
         %th CAS Client
+      - if can_manage_identified_clients? || can_manage_deidentified_clients?
+        %th
 
     %tbody
       - @non_hmis_clients.each do |non_hmis_client|
@@ -42,5 +44,19 @@
                 = link_to client_path(non_hmis_client.client), class: 'btn btn-secondary btn-sm d-inline-flex align-items-center'  do
                   View CAS Client
                   %span.icon-arrow-right2.ml-2
+          - if non_hmis_client.identified
+            - if can_manage_identified_clients?
+              %td
+                - if !non_hmis_client.involved_in_match?
+                  = link_to identified_client_path(non_hmis_client), method: :delete, data: {confirm: "Would you really like to delete this Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    %span.icon-cross
+                    Delete
+          - else
+            - if can_manage_deidentified_clients?
+              %td
+                - if !non_hmis_client.involved_in_match?
+                  = link_to deidentified_client_path(non_hmis_client), method: :delete, data: {confirm: "Would you really like to delete this Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    %span.icon-cross
+                    Delete
 
 %p= paginate @non_hmis_clients
