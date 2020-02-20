@@ -1,0 +1,21 @@
+- sub_title ||= ''
+= render 'breadcrumbs'
+
+- if params[:assessment_id]
+  -# .d-flex.align-items-baseline
+  -#   %h1.mr-2= "Assessment for #{title}"
+  -#   - if sub_title.present?
+  -#     %h2= sub_title
+  = render 'non_hmis_clients/assessments/form', disabled: false
+- else
+  .d-flex.align-items-baseline
+    %h1.mr-2= title
+    - if sub_title.present?
+      %h2= sub_title
+  %section
+    .row
+      .col-md-6
+        = render 'client_form',
+          disabled: true
+      .col-sm-6
+        = render 'non_hmis_clients/assessments/index'

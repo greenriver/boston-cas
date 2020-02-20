@@ -1,0 +1,60 @@
+%section.mb-6
+  %h3 Demographics
+  - if disabled
+    .c-question
+      = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.full_name, label: 'Client Name'
+  - else
+    .row.mb-4
+      .col-md-10
+        = form.input :first_name, disabled: disabled
+    .row
+      .col-md-10
+        = form.input :middle_name, disabled: disabled
+    .row
+      .col-md-10
+        = form.input :last_name, disabled: disabled
+  .row.mb-4
+    .col-md-6
+      - if disabled
+        .c-question
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.date_of_birth, label: 'Date of Birth'
+      - else
+        = form.input :date_of_birth, as: :date_picker, disabled: disabled
+
+      - label = 'SSN'
+      - if disabled
+        .c-question
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: label
+      - else
+        = form.input :ssn, label: label, input_html: {maxlength: 9}, disabled: disabled
+
+%section
+  -# Probably need to update with more appropriate title
+  %h3 Agency Information
+  - if can_edit_all_clients?
+    .jAgency
+      .row
+        .col-md-10
+          - if disabled
+            .c-question
+              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency&.name, label: 'Agency'
+          - else
+            = form.association :agency, input_html: {class: :select2}, disabled: disabled
+
+    .row
+      .col-md-10
+        - label = "Default #{_('Shelter Agency')} Contact"
+        - if disabled
+          .c-question
+            = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name_with_email, label: label
+        - else
+          = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
+
+  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
+
+  = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
+  -# = form.input :active_client, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+  -# = form.input :eligible_for_matching, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+
+- unless disabled
+  = render 'deidentified_clients/js'

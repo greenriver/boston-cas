@@ -1,3 +1,7 @@
+input {
+  min-height: 40px; // Match height of inputs to buttons
+}
+
 .container-fluid {
   padding-right: $container-padding;
   padding-left: $container-padding;
@@ -51,6 +55,8 @@
     margin-right: space(1);
   }
   label {
+    display: flex;
+    align-items: center;
     cursor: pointer;
     font-weight: normal;
   }
@@ -73,6 +79,13 @@
     background: $brand-primary;
     color: $white;
   }
+}
+
+input.disabled ~ .input-group-addon,
+input:disabled ~ .input-group-addon {
+  pointer-events: none;
+  background: $input-disabled;
+  color: $gray-050;
 }
 
 .control-label {

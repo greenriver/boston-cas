@@ -1,77 +1,79 @@
-Class Name,Rule Name,Verb
-AgeGreaterThanSixteen,Age greater than 16,be
-AgeGreaterThanEightteen,Age greater than 18,be
-AgeGreaterThanTwentyFive,Age greater than 25,be
-AgeGreaterThanFifty,Age greater than 50,be
-AgeGreaterThanFiftyFive,Age greater than 55,be
-AgeGreaterThanSixty,Age greater than 60,be
-AgeGreaterThanSixtyTwo,Age greater than 62,be
-ChronicallyHomeless,Chronically Homeless as defined by HUD,be
-MiAndSaCoMorbid,Co-morbid (MI & SA),be
-PhysicalDisablingCondition,Disabling condition: physical,have
-DomesticViolenceSurvivor,Domestic Violence survivor,be
-Female,Female,be
-AidsOrRelatedDiseases,HIV or AIDS,have
-IncomeLessThanThirtyPercentAmi,Income - Less than 30% Area Median Income (Extremely Low Income),have
-IncomeLessThanFiftyPercentAmi,Income - Less than 50% Area Median Income or less (Very Low Income),have
-IncomeLessThanSixtyPercentAmi,Income - Less than 60% Area Median Income,have
-IncomeLessThanEightyPercentAmi,Income - Less than 80% Area Median Income (Low Income),have
-Income,Income,have
-Homeless,Literally homeless as defined by HUD,be
-Male,Male,be
-MentalHealthEligible,Mental Health Disability,have
-MiSaOrCoMorbid,"MI, SA, or co-morbid",have
-ChronicSubstanceUse,Substance use disorder,have
-Transgender,Transgender,be
-Veteran,Veteran,be
-DmhEligible,DMH Eligible,be
-DevelopmentalDisability,Developmental disability,have
-AgeGreaterThanFortyFive,Age greater than 45,be
-AgeGreaterThanSixtyFive,Age greater than 65,be
-VaEligible,VA Eligible,be
-HuesEligible,HUES Eligible,be
-UsCitizen,U.S Citizen or Permanent Resident,be
-Asylee,"Asylee, Refugee",be
-WillingToLiveInCongregateHousing,Willing to Live in Congregate Housing,be
-AppropriateForSoberSupportiveHousing,Appropriate for Sober Housing,be
-IneligibleImmigrant,"Ineligible Immigrant (Including Undocumented)",be
-LifetimeSexOffender,"Life-Time Sex Offender",be
-MethProductionConviction,Meth Production Conviction,have
-PartOfAFamily,Part of a family,be
-OneEightyDaysHomeless,180 homeless days,have
-OneYearHomeless,365 homeless days,have
-OneEightyDaysHomelessLastThreeYears,180 homeless days in past three years,have
-OneYearHomelessLastThreeYears,365 homeless days in past three years,have
-TwoSeventyDaysHomeless,270 homeless days,have
-TwoSeventyDaysHomelessLastThreeYears,270 homeless days in past three years,have
-ChildInHousehold,Children under age 18 in household,have
-HousingAuthorityEligible,Housing Authority Eligible,be
-DisablingCondition,Disabling Condition,have
-CspechEligible,CSPECH Eligible,be
-SeenInLastThirtyDays,Homeless Service in the past 30 days,have
-SeenInLastNinetyDays,Homeless Service in the past 90 days,have
-VispdatScoreThreeOrLess,VI-SPDAT score of 3 or less,have
-VispdatScoreFourToSeven,VI-SPDAT score of 4 to 7,have
-VispdatScoreEightOrMore,VI-SPDAT score of 8 or more,have
-EnrolledInHmisProject,Enrolled in specified HMIS Project,be
-ActiveInCohort,Active in specified Cohort,be
-EnrolledInTh,Enrolled in TH,be
-EnrolledInSh,Enrolled in SH,be
-EnrolledInSo,Enrolled in SO,be
-EnrolledInEs,Enrolled in ES,be
-InterestedInRrh,Interested in RRH,be
-InterestedInYouthRrh,Interested in Youth RRH,be
-SsvfEligible,Supportive Services for Veterans (SSVF) Eligible,be
-AssessmentScoreGreaterThanZero,Assessment Score greater than zero,have
-Wheelchair,Wheelchair accessible unit,have
-Bedroom,Minimum number of bedrooms,have
-Occupancy,Minimum occupancy,have
-VerifiedDisability,Verified disability,have
-VerifiedDaysHomeless,Verified days homeless,have
-InterestedInNeighborhood,Interested in Neighborhood (or have no preference),be
-InterestedInSetAsides,Interested in set-asides,be
-TaggedWith,Specified tag,have
-RequireInterestInNeighborhood,At least one Neighborhood preference,have
-VispdatScoreFourOrLess,VI-SPDAT score of 4 or less,have
-VashEligible,VASH Eligible,be
-Pregnant,Pregnant,be
+Class Name,Rule Name,Alternate Name,Verb
+AgeGreaterThanSixteen,Age greater than 16,,be
+AgeGreaterThanEightteen,Age greater than 18,,be
+AgeGreaterThanTwentyFive,Age greater than 25,,be
+AgeGreaterThanFifty,Age greater than 50,,be
+AgeGreaterThanFiftyFive,Age greater than 55,,be
+AgeGreaterThanSixty,Age greater than 60,,be
+AgeGreaterThanSixtyTwo,Age greater than 62,,be
+ChronicallyHomeless,Chronically Homeless as defined by HUD,,be
+MiAndSaCoMorbid,Co-morbid (MI & SA),,be
+PhysicalDisablingCondition,Disabling condition: physical,,have
+DomesticViolenceSurvivor,Domestic Violence survivor,,be
+Female,Female,,be
+AidsOrRelatedDiseases,HIV or AIDS,,have
+IncomeLessThanThirtyPercentAmi,Income - Less than 30% Area Median Income (Extremely Low Income),,have
+IncomeLessThanFiftyPercentAmi,Income - Less than 50% Area Median Income or less (Very Low Income),,have
+IncomeLessThanSixtyPercentAmi,Income - Less than 60% Area Median Income,,have
+IncomeLessThanEightyPercentAmi,Income - Less than 80% Area Median Income (Low Income),,have
+Income,Income,,have
+Homeless,Literally homeless as defined by HUD,,be
+Male,Male,,be
+MentalHealthEligible,Mental Health Disability,,have
+MiSaOrCoMorbid,"MI, SA, or co-morbid",,have
+ChronicSubstanceUse,Substance use disorder,,have
+Transgender,Transgender,,be
+Veteran,Veteran,,be
+DmhEligible,DMH Eligible,,be
+DevelopmentalDisability,Developmental disability,,have
+AgeGreaterThanFortyFive,Age greater than 45,,be
+AgeGreaterThanSixtyFive,Age greater than 65,,be
+VaEligible,VA Eligible,,be
+HuesEligible,HUES Eligible,,be
+UsCitizen,U.S Citizen or Permanent Resident,,be
+Asylee,"Asylee, Refugee",,be
+WillingToLiveInCongregateHousing,Willing to Live in Congregate Housing,,be
+AppropriateForSoberSupportiveHousing,Appropriate for Sober Housing,,be
+IneligibleImmigrant,"Ineligible Immigrant (Including Undocumented)",,be
+LifetimeSexOffender,"Life-Time Sex Offender",,be
+MethProductionConviction,Meth Production Conviction,,have
+PartOfAFamily,Part of a family,,be
+OneEightyDaysHomeless,180 homeless days,,have
+OneYearHomeless,365 homeless days,,have
+OneEightyDaysHomelessLastThreeYears,180 homeless days in past three years,,have
+OneYearHomelessLastThreeYears,365 homeless days in past three years,,have
+TwoSeventyDaysHomeless,270 homeless days,,have
+TwoSeventyDaysHomelessLastThreeYears,270 homeless days in past three years,,have
+ChildInHousehold,Children under age 18 in household,,have
+HousingAuthorityEligible,Housing Authority Eligible,,be
+DisablingCondition,Disabling Condition,,have
+CspechEligible,CSPECH Eligible,,be
+SeenInLastThirtyDays,Homeless Service in the past 30 days,,have
+SeenInLastNinetyDays,Homeless Service in the past 90 days,,have
+VispdatScoreThreeOrLess,VI-SPDAT score of 3 or less,,have
+VispdatScoreFourToSeven,VI-SPDAT score of 4 to 7,,have
+VispdatScoreEightOrMore,VI-SPDAT score of 8 or more,,have
+EnrolledInHmisProject,Enrolled in specified HMIS Project,,be
+ActiveInCohort,Active in specified Cohort,,be
+EnrolledInTh,Enrolled in TH,,be
+EnrolledInSh,Enrolled in SH,,be
+EnrolledInSo,Enrolled in SO,,be
+EnrolledInEs,Enrolled in ES,,be
+InterestedInRrh,Interested in RRH,,be
+InterestedInYouthRrh,Interested in Youth RRH,,be
+SsvfEligible,Supportive Services for Veterans (SSVF) Eligible,,be
+AssessmentScoreGreaterThanZero,Assessment Score greater than zero,,have
+Wheelchair,Wheelchair accessible unit,,have
+Bedroom,Minimum number of bedrooms,Fit in bedrooms,have
+Occupancy,Minimum occupancy,,have
+VerifiedDisability,Verified disability,,have
+VerifiedDaysHomeless,Verified days homeless,,have
+InterestedInNeighborhood,Interested in Neighborhood (or have no preference),,be
+InterestedInSetAsides,Interested in set-asides,,be
+TaggedWith,Specified tag,,have
+RequireInterestInNeighborhood,At least one Neighborhood preference,,have
+VispdatScoreFourOrLess,VI-SPDAT score of 4 or less,,have
+VashEligible,VASH Eligible,,be
+Pregnant,Pregnant,,be
+SroOk,Ok wih SRO,,be
+NeverEvicted,Never been evicted,,have

@@ -10,17 +10,36 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def create
     @non_hmis_client = client_source.create(clean_params(identified_client_params))
-    respond_with(@non_hmis_client, location: identified_clients_path)
+    if pathways_enabled?
+      respond_with(@non_hmis_client, location: new_assessment_identified_client_path(id: @non_hmis_client.id))
+    else
+      respond_with(@non_hmis_client, location: identified_clients_path())
+    end
   end
 
   def update
     @non_hmis_client.update(clean_params(identified_client_params))
-    respond_with(@non_hmis_client, location: identified_clients_path)
+    if pathways_enabled?
+
+      # mark the client as available if this is a new assessment
+      @non_hmis_client.update(
+        available: true,
+        available_date: nil,
+        available_reason: nil,
+      ) unless params[:assessment_id].present? || deidentified_client_params[:client_assessments_attributes].blank?
+      respond_with(@non_hmis_client, location: identified_client_path(id: @non_hmis_client.id))
+    else
+      respond_with(@non_hmis_client, location: identified_clients_path())
+    end
   end
 
   def destroy
-    @non_hmis_client.destroy
-    respond_with(@non_hmis_client, location: identified_clients_path)
+    if pathways_enabled? && params[:assessment_id].present?
+      @non_hmis_client.non_hmis_assessments.find(params[:assessment_id].to_i).destroy
+    else
+      @non_hmis_client.destroy
+    end
+    respond_with(@non_hmis_client, location: identified_clients_path())
   end
 
   def assessment_type
@@ -36,15 +55,15 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def sort_options
     [
-        {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
-        {title: 'Last Name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true},
-        {title: 'Age', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true},
-        {title: 'Agency A-Z', column: 'agency', direction: 'asc', order: 'LOWER(agency) ASC', visible: true},
-        {title: 'Agency Z-A', column: 'agency', direction: 'desc', order: 'LOWER(agency) DESC', visible: true},
-        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
-        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-            order: 'days_homeless_in_the_last_three_years DESC', visible: true},
-    ]
+      {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
+      {title: 'Last Name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true},
+      {title: 'Age', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true},
+      {title: 'Agency A-Z', column: 'agencies.name', direction: 'asc', order: 'LOWER(agencies.name) ASC', visible: true},
+      {title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true},
+      {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
+      {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
+          order: 'days_homeless_in_the_last_three_years DESC', visible: true},
+    ].freeze
   end
   helper_method :sort_options
 
@@ -68,15 +87,19 @@ class IdentifiedClientsController < NonHmisClientsController
         :middle_name,
         :date_of_birth,
         :ssn,
-        :full_release_on_file,
         :limited_release_on_file,
+        :full_release_on_file,
         :available,
+        :available_date,
+        :available_reason,
         :active_client,
         :eligible_for_matching,
+        :set_asides_housing_status,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,
           :type,
+          :entry_date,
           :assessment_score,
           :actively_homeless,
           :days_homeless_in_the_last_three_years,
@@ -87,6 +110,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :youth_rrh_desired,
           :rrh_assessment_contact_info,
           :income_maximization_assistance_requested,
+          :income_total_monthly,
           :pending_subsidized_housing_placement,
           :requires_wheelchair_accessibility,
           :required_number_of_bedrooms,
@@ -107,6 +131,8 @@ class IdentifiedClientsController < NonHmisClientsController
           :sro_ok,
           :other_accessibility,
           :disabled_housing,
+          :documented_disability,
+          :evicted,
           neighborhood_interests: [],
         ]
       ).merge(identified: true)

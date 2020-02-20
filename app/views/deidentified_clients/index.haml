@@ -1,15 +1,13 @@
-- title = _('Non-HMIS Clients')
-- content_for :title, title
-.d-flex
-  %h1= content_for :title
-  - @prompt = "Search Clients..."
-.row
-  .col-sm-4
-    = render 'clients/search_form'
-  .col-sm-4.filter-sort__filter.d-flex
-    = render 'filter'
-    = render 'clients/sort', sort_options: sort_options
-  .col-sm-4.text-right
+
+- if pathways_enabled?
+  -# Content blocks for layout
+  -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  - content_for :add_action do
+    = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
+      %span.icon-plus
+      Add a Deidentifed Client
+
+  - content_for :data_actions do
     - if can_upload_deidentified_clients?
       = link_to choose_upload_deidentified_clients_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
         %span.icon-upload2
@@ -18,8 +16,35 @@
       = link_to deidentified_clients_path(format: :xlsx), class: 'btn btn-sm btn-secondary ml-auto' do
         %i.icon-download2
         Download
-  = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
-    %span.icon-plus
-    Add a Deidentifed Client
-= render 'menus/non_hmis_clients'
-= render 'table'
+
+  -# Layout
+  -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  = render 'non_hmis_clients/index_layout'
+
+
+- else
+  - title = _('Non-HMIS Clients')
+  - content_for :title, title
+  .d-flex
+    %h1= content_for :title
+    - @prompt = "Search Clients..."
+  .row
+    .col-sm-4
+      = render 'clients/search_form'
+    .col-sm-4.filter-sort__filter.d-flex
+      = render 'filter'
+      = render 'clients/sort', sort_options: sort_options
+    .col-sm-4.text-right
+      - if can_upload_deidentified_clients?
+        = link_to choose_upload_deidentified_clients_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
+          %span.icon-upload2
+          Upload Excel
+      - if can_export_deidentified_clients?
+        = link_to deidentified_clients_path(format: :xlsx), class: 'btn btn-sm btn-secondary ml-auto' do
+          %i.icon-download2
+          Download
+    = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
+      %span.icon-plus
+      Add a Deidentifed Client
+  = render 'menus/non_hmis_clients'
+  = render 'client_table'

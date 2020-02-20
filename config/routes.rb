@@ -186,11 +186,13 @@ Rails.application.routes.draw do
     end
     member do
       get :new_assessment
+      get :assessment
     end
   end
   resources :identified_clients do
     member do
       get :new_assessment
+      get :assessment
     end
   end
   resources :imported_clients
@@ -211,6 +213,7 @@ Rails.application.routes.draw do
       get 'typography'
       get 'summary'
       get 'pagination'
+      get 'form'
     end
   end
 

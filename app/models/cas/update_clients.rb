@@ -194,6 +194,11 @@ module Cas
         :case_manager_contact_info,
         :vash_eligible,
         :pregnancy_status,
+        :income_maximization_assistance_requested,
+        :pending_subsidized_housing_placement,
+        :rrh_th_desired,
+        :sro_ok,
+        :evicted,
       ]
     end
 
