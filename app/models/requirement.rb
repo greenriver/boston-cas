@@ -25,6 +25,7 @@ class Requirement < ApplicationRecord
   end
 
   delegate :name, :name_with_verb, to: :rule, allow_nil: true, prefix: true
+  delegate :alternate_name, to: :rule, allow_nil: true
 
   def name
     "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{_(rule_name)}"
