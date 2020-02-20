@@ -46,6 +46,47 @@ class SubProgram < ApplicationRecord
     where(closed: true)
   end
 
+  ######################
+  # Contact Associations
+  ######################
+  has_many :sub_program_contacts
+  has_many :contacts, through: :sub_program_contacts
+  has_many :housing_subsidy_admin_contacts,
+    -> { where sub_program_contacts: {housing_subsidy_admin: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+  has_many :dnd_staff_contacts,
+    -> { where sub_program_contacts: {dnd_staff: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+  has_many :client_contacts,
+    -> { where sub_program_contacts: {client: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+  has_many :shelter_agency_contacts,
+    -> { where sub_program_contacts: {shelter_agency: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+  has_many :ssp_contacts,
+    -> { where sub_program_contacts: {ssp: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+  has_many :hsp_contacts,
+    -> { where sub_program_contacts: {hsp: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+  has_many :do_contacts,
+    -> { where sub_program_contacts: {do: true} },
+    class_name: Contact.name,
+    through: :sub_program_contacts,
+    source: :contact
+
   def self.types
     [
       {value: 'Project-Based', label: 'Project-Based', building: true},
@@ -54,6 +95,10 @@ class SubProgram < ApplicationRecord
       {value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true},
       {value: 'Set-Aside', label: 'Set-Aside', building: true}
     ]
+  end
+
+  def default_match_contacts
+    @default_match_contacts ||= SubProgramContacts.new sub_program: self
   end
 
   def name_with_status
