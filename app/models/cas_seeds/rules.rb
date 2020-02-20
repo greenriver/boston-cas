@@ -26,7 +26,7 @@ module CasSeeds
         incoming_rules << "Rules::#{row['Class Name']}"
         rules = Rule.where(type: "Rules::#{row['Class Name']}")
         rule = rules.first_or_create! name: row['Rule Name'], verb: row['Verb']
-        rule.update(name: row['Rule Name'], verb: row['Verb'])
+        rule.update(name: row['Rule Name'], alternate_name: row['Alternate Name'], verb: row['Verb'])
       end
       final_count = Rule.count
       Rails.logger.info "Created #{final_count - initial_count} rules"
