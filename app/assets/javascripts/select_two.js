@@ -10,6 +10,8 @@ App.Form.Select2Input = class Select2Input {
       console.debug(`Select2Input could not find id: ${elementId}`)
     } else {
       this.id = elementId
+      console.log(elementId, field)
+      $(field).attr('disabled')
       $(field).select2();
     }
   }

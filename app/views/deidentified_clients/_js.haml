@@ -27,3 +27,12 @@
     $('.jContact').trigger('change');
     $('.jFamily').trigger('change');
     $('.jInterestedInSetAsides').trigger('change');
+    $('.jStatusAvailbleTrigger').on('change', function(e){
+      if($(this).val() == 'true') {
+        $('.jStatusUnavailble input').val('');
+        $('.jStatusUnavailble').hide();
+       } else {
+         $('.jStatusUnavailble').show();
+      }
+    });
+    $('.jStatusAvailbleTrigger').trigger('change');

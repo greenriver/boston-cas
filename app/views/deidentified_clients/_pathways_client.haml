@@ -1,0 +1,40 @@
+.row
+  .col-md-6
+    .c-question
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.client_identifier, label: 'Client Identifier'
+      - else
+        = form.input :client_identifier, required: true, disabled: disabled
+    .c-question
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.is_currently_youth, label: 'Is the client between the ages of 18 and 24?'
+      - else
+        = form.input :is_currently_youth, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+
+
+- if can_edit_all_clients?
+  .row
+    .col-md-8
+      .c-question.jAgency
+        - if disabled
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency&.name, label: 'Agency'
+        - else
+          .c-question__input.jAgency
+          = form.association :agency, input_html: {class: 'select2 select2--full-width'}, disabled: disabled
+.row
+  .col-md-8
+    .c-question
+      - label = "Default #{_('Shelter Agency')} Contact"
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name, label: label
+      - else
+        = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact select2--full-width' }, disabled: disabled
+
+.c-question
+  = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Limited Coordinated Access System Release on file', disabled: disabled
+
+.c-question
+  = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
+
+- unless disabled
+  = render 'js'

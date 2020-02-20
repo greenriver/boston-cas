@@ -1,0 +1,10 @@
+= render 'breadcrumbs'
+
+%h1 Add New #{title}
+
+.row
+  .col-md-6
+    = render 'client_form',
+      url: send("#{client_type}_clients_path")
+
+= render 'init_select2'

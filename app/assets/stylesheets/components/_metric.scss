@@ -1,0 +1,11 @@
+.c-metric {
+  @include metric;
+}
+
+.c-metric--lg {
+  @include metric($size: 1.5);
+}
+
+.c-metric--lg {
+  @include metric($size: 1);
+}

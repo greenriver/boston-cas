@@ -23,7 +23,9 @@ $btn-padding-y   : $input-btn-padding-y;
 $btn-padding-x-sm: 1.5rem;
 $btn-padding-y-sm: .4rem;
 
+// Inputs
 $input-border-color: $brand-primary-l;
+$input-disabled-bg: $input-disabled;
 
 $primary:       $brand-primary;
 $secondary:     $brand-secondary;
@@ -60,3 +62,7 @@ $pagination-padding-x: 1rem;
 // Pagination
 $pagination-color: $link-color;
 $pagination-active-bg: $brand-primary-d;
+
+// Table
+$table-head-bg: $gray-015;
+$table-hover-bg: lighten($cob-sg-blue-005, 2%);

@@ -10,17 +10,35 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
-    respond_with(@non_hmis_client, location: deidentified_clients_path)
+    if pathways_enabled?
+      respond_with(@non_hmis_client, location: new_assessment_deidentified_client_path(@non_hmis_client.id))
+    else
+      respond_with(@non_hmis_client, location: deidentified_clients_path)
+    end
   end
 
   def update
     @non_hmis_client.update(clean_params(deidentified_client_params))
-    respond_with(@non_hmis_client, location: deidentified_clients_path)
+    if pathways_enabled?
+      # mark the client as available if this is a new assessment
+      @non_hmis_client.update(
+        available: true,
+        available_date: nil,
+        available_reason: nil,
+      ) unless params[:assessment_id].present? || deidentified_client_params[:client_assessments_attributes].blank?
+      respond_with(@non_hmis_client, location: deidentified_client_path(@non_hmis_client.id))
+    else
+      respond_with(@non_hmis_client, location: deidentified_clients_path)
+    end
   end
 
   def destroy
-    @non_hmis_client.destroy
-    respond_with(@non_hmis_client, location: deidentified_clients_path)
+    if pathways_enabled? && params[:assessment_id].present?
+      @non_hmis_client.non_hmis_assessments.find(params[:assessment_id].to_i).destroy
+    else
+      @non_hmis_client.destroy
+    end
+    respond_with(@non_hmis_client, location: deidentified_clients_path())
   end
 
   def choose_upload
@@ -61,7 +79,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   def assessment_type
-    Config.get(:deidentified_client_assessment).presence || 'DeidentifiedClientAssessment'
+    Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
   end
 
   def client_source
@@ -70,14 +88,14 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   def sort_options
     [
-        {title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', order: 'LOWER(client_identifier) ASC', visible: true},
-        {title: 'Client Identifier Z-A', column: 'client_identifier', direction: 'desc', order: 'LOWER(client_identifier) DESC', visible: true},
-        {title: 'Agency A-Z', column: 'agency', direction: 'asc', order: 'LOWER(agency) ASC', visible: true},
-        {title: 'Agency Z-A', column: 'agency', direction: 'desc', order: 'LOWER(agency) DESC', visible: true},
-        {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
-        {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-            order: 'days_homeless_in_the_last_three_years DESC', visible: true},
-    ]
+      {title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', order: 'LOWER(client_identifier) ASC', visible: true},
+      {title: 'Client Identifier Z-A', column: 'client_identifier', direction: 'desc', order: 'LOWER(client_identifier) DESC', visible: true},
+      {title: 'Agency A-Z', column: 'agencies.name', direction: 'asc', order: 'LOWER(agencies.name) ASC', visible: true},
+      {title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true},
+      {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
+      {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
+          order: 'days_homeless_in_the_last_three_years DESC', visible: true},
+      ].freeze
   end
   helper_method :sort_options
 
@@ -88,16 +106,22 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   private
     def deidentified_client_params
-      params.require(:deidentified_client).permit(
+      permitted_params = params.require(:deidentified_client).permit(
         :client_identifier,
         :agency_id,
         :contact_id,
         :available,
+        :available_date,
+        :available_reason,
         :limited_release_on_file,
+        :full_release_on_file,
+        :set_asides_housing_status,
+        :is_currently_youth,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,
           :type,
+          :entry_date,
           :assessment_score,
           :vispdat_score,
           :vispdat_priority_score,
@@ -110,6 +134,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :youth_rrh_desired,
           :rrh_assessment_contact_info,
           :income_maximization_assistance_requested,
+          :income_total_monthly,
           :pending_subsidized_housing_placement,
           :family_member,
           :calculated_chronic_homelessness,
@@ -130,9 +155,11 @@ class DeidentifiedClientsController < NonHmisClientsController
           :sro_ok,
           :other_accessibility,
           :disabled_housing,
+          :documented_disability,
+          :evicted,
           neighborhood_interests: [],
         ]
-      ).merge(identified: false)
+      )
     end
 
     def append_client_identifier dirty_params
