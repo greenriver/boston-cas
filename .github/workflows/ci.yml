@@ -14,6 +14,7 @@ jobs:
       env:
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
       run: |
+        sudo apt-get update
         sudo apt-get install \
           postgresql postgresql-contrib \
           redis-server \
