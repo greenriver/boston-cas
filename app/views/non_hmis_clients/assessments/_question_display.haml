@@ -1,0 +1,16 @@
+- size ||= 'lg'
+.c-question__display
+  %span.d-block= label
+  %span.c-metric{ class: "c-metric--#{size}"}
+    - if value.is_a? Array
+      - if value.any?
+        = value.map(&:titleize).join(', ')
+      - else
+        N/A
+    - elsif value.in?([true, false])
+      = yes_no(value)
+    - else
+      - if value.present?
+        = value
+      - else
+        N/A

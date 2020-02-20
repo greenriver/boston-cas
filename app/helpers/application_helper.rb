@@ -150,4 +150,14 @@ module ApplicationHelper
     end
   end
 
+  # def pretty_check_box key, label, form, attrs
+  #   checked = form.object[key]
+  #   value = form.object[key] ? 1 : 0
+  #   id = key.to_s.parameterize
+  #   content_tag :div, class: 'c-checkbox c-checkbox--round' do
+  #     check_box_tag(key, value, checked, attrs.merge(id: id)) +
+  #     content_tag(:label, content_tag(:span, label), for: id)
+  #   end
+  # end
+
 end

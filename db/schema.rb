@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.boolean "disabling_condition", default: false
     t.datetime "release_of_information"
     t.date "prevent_matching_until"
-    t.boolean "dmh_eligible", default: false, null: false
+    t.boolean "dmh_eligible", default: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
@@ -201,8 +201,8 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.integer "vispdat_priority_score", default: 0
     t.integer "vispdat_length_homeless_in_days", default: 0, null: false
     t.boolean "cspech_eligible", default: false
-    t.date "calculated_last_homeless_night"
     t.string "alternate_names"
+    t.date "calculated_last_homeless_night"
     t.boolean "congregate_housing", default: false
     t.boolean "sober_housing", default: false
     t.jsonb "enrolled_project_ids"
@@ -232,6 +232,14 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.string "case_manager_contact_info"
     t.boolean "vash_eligible"
     t.boolean "pregnancy_status", default: false
+    t.boolean "income_maximization_assistance_requested", default: false
+    t.boolean "pending_subsidized_housing_placement", default: false
+    t.boolean "pathways_domestic_violence", default: false
+    t.boolean "rrh_th_desired", default: false
+    t.boolean "sro_ok", default: false
+    t.boolean "pathways_other_accessibility", default: false
+    t.boolean "pathways_disabled_housing", default: false
+    t.boolean "evicted", default: false
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -668,7 +676,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
     t.string "client_identifier"
     t.integer "assessment_score"
-    t.string "agency"
+    t.string "deprecated_agency"
     t.string "first_name"
     t.string "last_name"
     t.jsonb "active_cohort_ids"
@@ -696,13 +704,13 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.integer "gender"
     t.string "type"
     t.boolean "available", default: true, null: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
     t.json "neighborhood_interests", default: []
     t.float "income_total_monthly"
     t.boolean "disabling_condition", default: false
     t.boolean "physical_disability", default: false
     t.boolean "developmental_disability", default: false
-    t.date "date_days_homeless_verified"
-    t.string "who_verified_days_homeless"
     t.boolean "domestic_violence", default: false, null: false
     t.boolean "interested_in_set_asides", default: false
     t.jsonb "tags"
@@ -735,6 +743,9 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.boolean "limited_release_on_file", default: false, null: false
     t.boolean "active_client", default: true, null: false
     t.boolean "eligible_for_matching", default: true, null: false
+    t.datetime "available_date"
+    t.string "available_reason"
+    t.boolean "is_currently_youth", default: false, null: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -890,7 +901,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.string "workphone"
     t.string "pager"
     t.string "email"
-    t.boolean "dmh_eligible", default: false, null: false
+    t.boolean "dmh_eligible", default: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
@@ -942,6 +953,14 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.string "non_hmis_client_identifier"
     t.boolean "vash_eligible"
     t.boolean "pregnancy_status", default: false
+    t.boolean "income_maximization_assistance_requested", default: false
+    t.boolean "pending_subsidized_housing_placement", default: false
+    t.boolean "pathways_domestic_violence", default: false
+    t.boolean "rrh_th_desired", default: false
+    t.boolean "sro_ok", default: false
+    t.boolean "pathways_other_accessibility", default: false
+    t.boolean "pathways_disabled_housing", default: false
+    t.boolean "evicted", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1001,7 +1020,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.boolean "can_edit_all_clients", default: false
     t.boolean "can_participate_in_matches", default: false
     t.boolean "can_view_all_matches", default: false
-    t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_see_alternate_matches", default: false
     t.boolean "can_edit_match_contacts", default: false
     t.boolean "can_approve_matches", default: false
@@ -1012,11 +1030,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.boolean "can_edit_users", default: false
     t.boolean "can_view_full_ssn", default: false
     t.boolean "can_view_full_dob", default: false
-    t.boolean "can_view_dmh_eligibility", default: false
-    t.boolean "can_view_va_eligibility", default: false
-    t.boolean "can_view_hues_eligibility", default: false
-    t.boolean "can_view_hiv_positive_eligibility", default: false
-    t.boolean "can_view_client_confidentiality", default: false
     t.boolean "can_view_buildings", default: false
     t.boolean "can_edit_buildings", default: false
     t.boolean "can_view_funding_sources", default: false
@@ -1041,15 +1054,21 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.boolean "can_edit_available_services", default: false
     t.boolean "can_assign_services", default: false
     t.boolean "can_assign_requirements", default: false
+    t.boolean "can_view_dmh_eligibility", default: false
+    t.boolean "can_view_va_eligibility", default: false, null: false
+    t.boolean "can_view_hues_eligibility", default: false, null: false
     t.boolean "can_become_other_users", default: false
+    t.boolean "can_view_client_confidentiality", default: false, null: false
+    t.boolean "can_view_hiv_positive_eligibility", default: false
+    t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_edit_translations", default: false
     t.boolean "can_view_vspdats", default: false
     t.boolean "can_manage_config", default: false
     t.boolean "can_create_overall_note", default: false
-    t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_deidentified_clients", default: false
     t.boolean "can_manage_deidentified_clients", default: false
     t.boolean "can_add_cohorts_to_deidentified_clients", default: false
+    t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_identified_clients", default: false
     t.boolean "can_manage_identified_clients", default: false
     t.boolean "can_add_cohorts_to_identified_clients", default: false

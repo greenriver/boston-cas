@@ -1,0 +1,62 @@
+.table-responsive
+  %table.table.table-condensed
+    %thead
+      - if client_identified?
+        %th Last Name
+        %th First Name
+      - else
+        %th Client Identifier
+      %th Agency
+      %th Assessment Score
+      %th Assessment Date
+      %th Status
+      - if current_user.can_view_some_clients?
+        %th CAS Client
+      - if can_manage_identified_clients? || can_manage_deidentified_clients?
+        %th
+
+    %tbody
+      - @non_hmis_clients.each do |non_hmis_client|
+        - current_assessment = non_hmis_client.current_assessment
+        - path = client_identified? ? identified_client_path(non_hmis_client) : deidentified_client_path(non_hmis_client)
+        %tr{data: {href: path}}
+          - if client_identified?
+            %td= link_to non_hmis_client.last_name, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
+            %td= link_to non_hmis_client.first_name, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
+          - else
+            %td= link_to non_hmis_client.client_identifier, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
+
+          %td= non_hmis_client.agency&.name
+
+          %td= current_assessment&.assessment_score
+
+          %td= current_assessment&.created_at
+
+          %td
+            - if non_hmis_client.available
+              Available
+            - else
+              Ineligible
+
+          - if current_user.can_view_some_clients?
+            %td
+              - if non_hmis_client.client
+                = link_to client_path(non_hmis_client.client), class: 'btn btn-secondary btn-sm d-inline-flex align-items-center'  do
+                  View CAS Client
+                  %span.icon-arrow-right2.ml-2
+          - if non_hmis_client.identified
+            - if can_manage_identified_clients?
+              %td
+                - if !non_hmis_client.involved_in_match?
+                  = link_to identified_client_path(non_hmis_client), method: :delete, data: {confirm: "Would you really like to delete this Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    %span.icon-cross
+                    Delete
+          - else
+            - if can_manage_deidentified_clients?
+              %td
+                - if !non_hmis_client.involved_in_match?
+                  = link_to deidentified_client_path(non_hmis_client), method: :delete, data: {confirm: "Would you really like to delete this Non-HMIS client?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
+                    %span.icon-cross
+                    Delete
+
+%p= paginate @non_hmis_clients

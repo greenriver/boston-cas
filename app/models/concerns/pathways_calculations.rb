@@ -16,38 +16,38 @@ module PathwaysCalculations
     end
 
     def calculated_score
-      return nil if ssvf_eligible && veteran_rrh_desired
-      return 65 if ssvf_eligible
+      return 0 if ssvf_eligible
+      return 65 if pending_subsidized_housing_placement
 
       score = 0
-      score += 25 if non_hmis_client.date_of_birth.present? && non_hmis_client.age <= 24
-      score += 15 if domestic_violence
+      score += 25 if (non_hmis_client.date_of_birth.present? && non_hmis_client.age <= 24) || non_hmis_client.is_currently_youth
       score += if domestic_violence
-        0
+        15
+      else
+        case days_homeless_in_the_last_three_years
+        when (30..60)
+          1
+        when (61..90)
+          2
+        when (91..120)
+          3
+        when (121..150)
+          4
+        when (151..180)
+          5
+        when (181..210)
+          6
+        when (211..240)
+          7
+        when (241..269)
+          8
+        when (270..Float::INFINITY)
+          15
         else
-          case days_homeless_in_the_last_three_years
-          when (30..60)
-            1
-          when (61..90)
-            2
-          when (91..120)
-            3
-          when (121..150)
-            4
-          when (151..180)
-            5
-          when (181..210)
-            6
-          when (211..240)
-            7
-          when (241..269)
-            8
-          when (270..Float::INFINITY)
-            15
-          else
-            0
-          end
+          # If you have less than 30 days homeless, you receive 0 total points
+          return 0
         end
+      end
       score += 5 if documented_disability
       score += 1 if evicted
       score += 1 if income_maximization_assistance_requested

@@ -75,3 +75,5 @@ RequireInterestInNeighborhood,At least one Neighborhood preference,,have
 VispdatScoreFourOrLess,VI-SPDAT score of 4 or less,,have
 VashEligible,VASH Eligible,,be
 Pregnant,Pregnant,,be
+SroOk,Ok wih SRO,,be
+NeverEvicted,Never been evicted,,have

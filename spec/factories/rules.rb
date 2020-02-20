@@ -327,5 +327,13 @@ FactoryBot.define do
     name { "Pregnant" }
     verb { "be" }
   end
+  factory :sro_ok, class: "Rules::SroOk" do
+    name { "Ok wih SRO" }
+    verb { "be" }
+  end
+  factory :evicted, class: "Rules::NeverEvicted" do
+    name { "Never been evicted" }
+    verb { "have" }
+  end
 end
 

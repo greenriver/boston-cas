@@ -1,0 +1,15 @@
+- title = _('Non-HMIS Clients')
+- sub_title ||= ''
+- content_for :title, title
+- @prompt = "Search #{sub_title || 'Clients'}..."
+
+.titles.d-flex.align-items-baseline
+  %h1.mr-2= title
+  %h2= sub_title
+
+= render 'menus/non_hmis_clients'
+.mt-4
+  = render 'search_sort'
+.o-block
+  = render 'actions'
+  = render 'table'

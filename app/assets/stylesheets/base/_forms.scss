@@ -78,9 +78,7 @@
   color: $cas-red;
   @include open-sans-medium;
 }
-.input-group > .form-control {
-  height: calc(3rem + 2px);
-}
+
 .form-control:focus
 {
   box-shadow: inset 0 0 0 0.2rem rgba(69, 118, 135, 0.25);
