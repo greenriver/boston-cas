@@ -29,7 +29,8 @@ class DeidentifiedClientsXlsx < ApplicationRecord
           @added +=1 if client.updated_at.nil?
           @touched += 1 if client.updated_at.present?
           client.update(cleaned)
-          client.update_assessment_from_client()
+          assessment = client.current_assessment || client.client_assessments.build
+          client.update_assessment_from_client(assessment)
         end
       end
     end
@@ -130,7 +131,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   end
 
   def yes_no_to_bool(client, field, val)
-    text = val&.downcase
+    text = val&.downcase&.strip
     if text == 'yes' || text == 'y'
       true
     elsif text == 'no' || text == 'n'
