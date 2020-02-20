@@ -36,4 +36,5 @@ class NonHmisAssessment < ActiveRecord::Base
   def default?
     true
   end
+
 end

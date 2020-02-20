@@ -11,10 +11,7 @@ class NonHmisClientsController < ApplicationController
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]
 
-  helper_method :client_type
-
   def index
-
     # sort
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
@@ -42,7 +39,7 @@ class NonHmisClientsController < ApplicationController
       format.html do
         # paginate
         @page = params[:page].presence || 1
-        @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
+        @non_hmis_clients = @non_hmis_clients.joins(:agency).reorder(sort_order).page(@page.to_i).per(25)
       end
       format.xlsx do
         download
@@ -71,13 +68,29 @@ class NonHmisClientsController < ApplicationController
     @contact_id = current_user.contact.id
   end
 
+  def show
+    @assessments = @non_hmis_client.non_hmis_assessments.order(created_at: :desc)
+    if params[:assessment_id] && pathways_enabled?
+      render :assessment
+    end
+  end
+
   def edit
     @contact_id = @non_hmis_client.contact_id
   end
 
   def new_assessment
     @assessment = build_assessment
-    render :edit
+    if pathways_enabled?
+      render :new_assessment
+    else
+      render :edit
+    end
+  end
+
+  def assessment
+    load_assessment
+    render :assessment
   end
 
   def sorter
@@ -85,8 +98,13 @@ class NonHmisClientsController < ApplicationController
     @direction = params[:direction]
 
     if @column.blank?
-      @column = 'days_homeless_in_the_last_three_years'
-      @direction = 'desc'
+      if pathways_enabled?
+        @column = 'assessment_score'
+        @direction = 'desc'
+      else
+        @column = 'days_homeless_in_the_last_three_years'
+        @direction = 'desc'
+      end
       sort_string = "#{@column} #{@direction}"
     else
       sort_string = sort_options.select do |m|
@@ -101,7 +119,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def build_assessment
-    assessment_type.constantize.new
+    assessment = assessment_type.constantize.new
   end
 
   def load_client
@@ -165,6 +183,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def clean_cohort
+    return nil unless Warehouse::Base.enabled?
     NonHmisClient.possible_cohorts.keys.detect{|m| m.to_i == params[:cohort]&.to_i}.to_s
   end
 
@@ -220,5 +239,9 @@ class NonHmisClientsController < ApplicationController
     assessment_params[:user_id] = current_user.id
 
     return dirty_params
+  end
+
+  private def pathways_enabled?
+    assessment_type&.include?('Pathways')
   end
 end

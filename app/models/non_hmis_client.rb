@@ -69,8 +69,16 @@ class NonHmisClient < ApplicationRecord
   end
   alias_method :age_on, :age
 
+  def full_name
+    "#{first_name} #{middle_name} #{last_name}"
+  end
+
   def involved_in_match?
     client_opportunity_matches.exists?
+  end
+
+  def available_availabilities
+    [['Active', true], ['Ineligible', false]].freeze
   end
 
   def cohort_names
@@ -172,12 +180,22 @@ class NonHmisClient < ApplicationRecord
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
 
+    # Pathways
+    project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
+    project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement
+    project_client.rrh_th_desired = current_assessment&.rrh_th_desired
+    project_client.sro_ok = current_assessment&.sro_ok
+    project_client.evicted = current_assessment&.evicted
+
     project_client.needs_update = true
   end
 
   def create_assessment_if_missing
     return unless persisted?
     return if client_assessments.exists?
+    # Do not automatically create assessment if pathways is enabled
+    # user is routed to new form
+    return if Config.get("#{type.tableize.singularize}_assessment").include? 'Pathways'
 
     assessment = client_assessments.build
     update_assessment_from_client(assessment)
@@ -298,5 +316,22 @@ class NonHmisClient < ApplicationRecord
       vispdat_priority_score: 'VI-SPDAT Priority Score',
       actively_homeless: 'Actively Homeless',
     }
+  end
+
+  def self.available_youth_choices
+    {
+      'Youth-Specific Only: youth specific programs are with agencies who have a focus on young populations; they may be able to offer drop-in spaces for youth, as well as community-building and connections with other youth' => 'youth',
+      'Adult Programs Only: Adult programs serve youth who are 18-24, but may not have built in community space or activities to connect other youth. They can help you find those opportunities. The adult RRH programs typically have more frequent openings at this time.' => 'adult',
+      'Both Adult and Youth-Specific programs' => 'both',
+      'None' => '',
+    }.freeze
+  end
+
+  def self.available_dv_choices
+    {
+      'Domestic Violence (DV) - Specific Only: these are agencies who have a focus on populations experiencing violence; they may be able to offer specialized services for survivors in-house, such as support groups, clinical services and legal services.' => 'dv',
+      'Non-DV Programs Only: these are agencies that serve people fleeing violence, but may need to link you to outside, specialized agencies for specific services such as DV support groups, clinical services and legal services. The non-DV RRH programs typically have more frequent openings at this time.' => 'non-dv',
+      'Both DV and Non-DV Programs' => 'both',
+    }.freeze
   end
 end

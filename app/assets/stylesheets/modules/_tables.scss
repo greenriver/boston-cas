@@ -44,3 +44,10 @@ table tr.no-border {
     border: 0;
   }
 }
+
+.table thead td {
+  background: $table-head-bg;
+  font-weight: 800;
+  border-bottom-color: $gray-020;
+  border-bottom-size: 2px;
+}

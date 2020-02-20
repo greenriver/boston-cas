@@ -1,0 +1,67 @@
+.c-question {
+  background: $white;
+  padding: space(2) space(2) space(4) space(2);
+}
+
+.c-question--primary {
+  background: lighten($brand-primary-ll, 5%);
+}
+
+.c-question--secondary {
+  background: lighten($brand-secondary-l, 5%);
+}
+
+.c-question--without-number {
+  padding-left: calc(#{space(2)} + #{space(2)} + 50px);
+}
+
+.c-question .form-group,
+.c-question .form-control,
+.c-question label {
+  width: auto;
+  max-width: 600px;
+}
+
+.c-question__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: space(2);
+}
+
+.c-question__input {
+  select,
+  textarea {
+    min-width: 600px;
+  }
+}
+
+.c-question .form-group {
+  margin-bottom: 0;
+}
+
+.c-question label,
+.c-question .control-label {
+  font-weight: 600;
+}
+
+.c-question__number {
+  // flex: 0 0 auto;
+  @include metric;
+  margin-right: space(4);
+}
+
+.c-question span:last-of-type {
+  font-weight: 600;
+}
+
+.c-question__display {
+  span {
+    display: block;
+  }
+  span:first-of-type {
+    max-width: 75ch;
+  }
+  span:last-of-type {
+    margin-top: space(1);
+  }
+}
