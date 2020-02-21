@@ -36,8 +36,7 @@ gem 'carrierwave-i18n'
 gem 'ruby-filemagic'
 gem 'mini_magick'
 
-# No attachment to unicorn here-- probably want to go with passenger or puma
-gem 'unicorn-rails'
+gem 'puma'
 gem 'redis'
 
 gem "lograge"
@@ -121,6 +120,7 @@ group :development, :test do
   gem 'timecop'
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
+  gem 'listen'
 end
 
 group :test do
