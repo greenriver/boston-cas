@@ -10,6 +10,7 @@ class App.EnhancedSubmitParam
     $(@element).on 'click', (evt) =>
       form = evt.target.form
       $(form).append "<input type=\"hidden\" name=\"#{@name}\" value=\"#{@value}\"></input>"
-      
-$('[data-submit-param-name][data-submit-param-value]').each (_i, element) ->
-  new App.EnhancedSubmitParam element
+
+$ ->
+  $('[data-submit-param-name][data-submit-param-value]').each (_i, element) ->
+    new App.EnhancedSubmitParam element
