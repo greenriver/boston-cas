@@ -170,6 +170,7 @@ Rails.application.routes.draw do
 
   resources :resend_notification, only: [:show]
 
+  resources :reports, only: [:index]
   namespace :reports do
     resources :parked_clients, only: [:index]
   end

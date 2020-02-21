@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_153234) do
+ActiveRecord::Schema.define(version: 2020_02_21_185223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.boolean "disabling_condition", default: false
     t.datetime "release_of_information"
     t.date "prevent_matching_until"
-    t.boolean "dmh_eligible", default: false
+    t.boolean "dmh_eligible", default: false, null: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
@@ -201,8 +201,8 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.integer "vispdat_priority_score", default: 0
     t.integer "vispdat_length_homeless_in_days", default: 0, null: false
     t.boolean "cspech_eligible", default: false
-    t.string "alternate_names"
     t.date "calculated_last_homeless_night"
+    t.string "alternate_names"
     t.boolean "congregate_housing", default: false
     t.boolean "sober_housing", default: false
     t.jsonb "enrolled_project_ids"
@@ -676,7 +676,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
     t.string "client_identifier"
     t.integer "assessment_score"
-    t.string "deprecated_agency"
+    t.string "agency"
     t.string "first_name"
     t.string "last_name"
     t.jsonb "active_cohort_ids"
@@ -704,13 +704,13 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.integer "gender"
     t.string "type"
     t.boolean "available", default: true, null: false
-    t.date "date_days_homeless_verified"
-    t.string "who_verified_days_homeless"
     t.json "neighborhood_interests", default: []
     t.float "income_total_monthly"
     t.boolean "disabling_condition", default: false
     t.boolean "physical_disability", default: false
     t.boolean "developmental_disability", default: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
     t.boolean "domestic_violence", default: false, null: false
     t.boolean "interested_in_set_asides", default: false
     t.jsonb "tags"
@@ -901,7 +901,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.string "workphone"
     t.string "pager"
     t.string "email"
-    t.boolean "dmh_eligible", default: false
+    t.boolean "dmh_eligible", default: false, null: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
@@ -998,6 +998,16 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.index ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id"
   end
 
+  create_table "report_definitions", force: :cascade do |t|
+    t.string "report_group"
+    t.string "url"
+    t.string "name", null: false
+    t.string "description"
+    t.integer "weight", default: 0, null: false
+    t.boolean "enabled", default: true, null: false
+    t.boolean "limitable", default: true
+  end
+
   create_table "requirements", id: :serial, force: :cascade do |t|
     t.integer "rule_id"
     t.integer "requirer_id"
@@ -1020,6 +1030,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.boolean "can_edit_all_clients", default: false
     t.boolean "can_participate_in_matches", default: false
     t.boolean "can_view_all_matches", default: false
+    t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_see_alternate_matches", default: false
     t.boolean "can_edit_match_contacts", default: false
     t.boolean "can_approve_matches", default: false
@@ -1030,6 +1041,11 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.boolean "can_edit_users", default: false
     t.boolean "can_view_full_ssn", default: false
     t.boolean "can_view_full_dob", default: false
+    t.boolean "can_view_dmh_eligibility", default: false
+    t.boolean "can_view_va_eligibility", default: false
+    t.boolean "can_view_hues_eligibility", default: false
+    t.boolean "can_view_hiv_positive_eligibility", default: false
+    t.boolean "can_view_client_confidentiality", default: false
     t.boolean "can_view_buildings", default: false
     t.boolean "can_edit_buildings", default: false
     t.boolean "can_view_funding_sources", default: false
@@ -1054,21 +1070,15 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.boolean "can_edit_available_services", default: false
     t.boolean "can_assign_services", default: false
     t.boolean "can_assign_requirements", default: false
-    t.boolean "can_view_dmh_eligibility", default: false
-    t.boolean "can_view_va_eligibility", default: false, null: false
-    t.boolean "can_view_hues_eligibility", default: false, null: false
     t.boolean "can_become_other_users", default: false
-    t.boolean "can_view_client_confidentiality", default: false, null: false
-    t.boolean "can_view_hiv_positive_eligibility", default: false
-    t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_edit_translations", default: false
     t.boolean "can_view_vspdats", default: false
     t.boolean "can_manage_config", default: false
     t.boolean "can_create_overall_note", default: false
+    t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_deidentified_clients", default: false
     t.boolean "can_manage_deidentified_clients", default: false
     t.boolean "can_add_cohorts_to_deidentified_clients", default: false
-    t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_identified_clients", default: false
     t.boolean "can_manage_identified_clients", default: false
     t.boolean "can_add_cohorts_to_identified_clients", default: false
@@ -1147,6 +1157,24 @@ ActiveRecord::Schema.define(version: 2020_02_20_153234) do
     t.boolean "requires_note", default: false, null: false
     t.boolean "active", default: true, null: false
     t.integer "weight", default: 0, null: false
+  end
+
+  create_table "sub_program_contacts", force: :cascade do |t|
+    t.bigint "sub_program_id", null: false
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.boolean "dnd_staff", default: false, null: false
+    t.boolean "housing_subsidy_admin", default: false, null: false
+    t.boolean "client", default: false, null: false
+    t.boolean "housing_search_worker", default: false, null: false
+    t.boolean "shelter_agency", default: false, null: false
+    t.boolean "ssp", default: false, null: false
+    t.boolean "hsp", default: false, null: false
+    t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_sub_program_contacts_on_contact_id"
+    t.index ["sub_program_id"], name: "index_sub_program_contacts_on_sub_program_id"
   end
 
   create_table "sub_programs", id: :serial, force: :cascade do |t|

@@ -8,6 +8,11 @@
       %li.o-menu__item
         = link_to reports_parked_clients_path, class: 'o-menu__link' do
           Parked Clients
+  -# Reporting items
+  %ul.o-menu__group.list-unstyled
+    %li.o-menu__item
+      = link_to reports_path, class: 'o-menu__link' do
+        Reports
   -# Inventory and HMIS related items
   - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_buildings? || current_user.can_see_non_hmis_clients?
     %ul.o-menu__group.list-unstyled
