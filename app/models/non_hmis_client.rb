@@ -323,7 +323,7 @@ class NonHmisClient < ApplicationRecord
       'Youth-Specific Only: youth specific programs are with agencies who have a focus on young populations; they may be able to offer drop-in spaces for youth, as well as community-building and connections with other youth' => 'youth',
       'Adult Programs Only: Adult programs serve youth who are 18-24, but may not have built in community space or activities to connect other youth. They can help you find those opportunities. The adult RRH programs typically have more frequent openings at this time.' => 'adult',
       'Both Adult and Youth-Specific programs' => 'both',
-      'None' => '',
+      'Not applicable - client is not Youth' => nil,
     }.freeze
   end
 
@@ -332,6 +332,14 @@ class NonHmisClient < ApplicationRecord
       'Domestic Violence (DV) - Specific Only: these are agencies who have a focus on populations experiencing violence; they may be able to offer specialized services for survivors in-house, such as support groups, clinical services and legal services.' => 'dv',
       'Non-DV Programs Only: these are agencies that serve people fleeing violence, but may need to link you to outside, specialized agencies for specific services such as DV support groups, clinical services and legal services. The non-DV RRH programs typically have more frequent openings at this time.' => 'non-dv',
       'Both DV and Non-DV Programs' => 'both',
+      'Not applicable - client is not currently fleeing domestic violence.' => nil,
     }.freeze
+  end
+
+  def self.available_evicted_choices
+    {
+      'Yes or Unsure' => true,
+      'No' => false,
+    }
   end
 end

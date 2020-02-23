@@ -17,6 +17,7 @@ module PathwaysCalculations
 
     def calculated_score
       return 0 if ssvf_eligible
+      return 0 if days_homeless_in_the_last_three_years < 30
       return 65 if pending_subsidized_housing_placement
 
       score = 0
