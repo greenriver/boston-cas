@@ -12,12 +12,12 @@ module MatchDecisions
       validate :validate_decline_reason
     end
 
-    def decline_reasons
+    def decline_reasons(include_other: true)
       @_decline_reasons ||= [].tap do |result|
         decline_reason_scope.each do |reason|
           result << reason
         end
-        result << MatchDecisionReasons::Other.first
+        result << MatchDecisionReasons::Other.first if include_other
       end
     end
 
