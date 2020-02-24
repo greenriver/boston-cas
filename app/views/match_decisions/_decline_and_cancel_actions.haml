@@ -15,7 +15,6 @@
       = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
       = render 'match_decisions/destroy_tab_content', form: form
 
-
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[not_working_with_client_reason_id][]')

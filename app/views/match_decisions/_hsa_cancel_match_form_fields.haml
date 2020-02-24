@@ -4,5 +4,9 @@
 %label Please indicate a reason to #{client_action} this match:
 .cancel-match-fields
   = form.association :administrative_cancel_reason, collection: MatchDecisionReasons::AdministrativeCancel.available_for_provider_only(include_other: include_other), label: '', as: :check_boxes, wrapper_html: {class: 'jCancelReason jButtonStateTriggers'}
-  = form.input :administrative_cancel_reason_other_explanation, as: :text, label: 'List any details related to the cancellation below', hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherCancelReason'}
+  - if include_other
+    = form.input :administrative_cancel_reason_other_explanation, as: :text, label: 'List any details related to the cancellation below', hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherCancelReason'}
 
+= content_for :page_js do
+  :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')

@@ -8,15 +8,24 @@ module MatchDecisionReasons
   class AdministrativeCancel < Base
 
     def self.available(include_other: true)
-      @available ||= active.to_a
-      @available << MatchDecisionReasons::Other.first if include_other
-      @available
+      begin
+        other = MatchDecisionReasons::Other.first
+        # none = OpenStruct.new(name: 'None', id: nil)
+        av = active.to_a
+        av << other
+        # av << none
+        av
+      end
     end
 
     def self.available_for_provider_only(include_other: true)
-      @available ||= active.where(name: provider_only_options).to_a
-      @available << MatchDecisionReasons::Other.first if include_other
-      @available
+      begin
+        other = MatchDecisionReasons::Other.first
+        # none = OpenStruct.new(name: 'None', id: nil)
+        av = active.where(name: provider_only_options).to_a
+        av << other if include_other
+        av
+      end
     end
 
     def self.provider_only_options

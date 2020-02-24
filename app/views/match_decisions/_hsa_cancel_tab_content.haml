@@ -6,3 +6,8 @@
       %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
         %i.icon-minus-circle
         Cancel Match
+
+= content_for :page_js do
+  :javascript
+    new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
+    new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'))
