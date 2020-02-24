@@ -16,7 +16,7 @@ class NonHmisClientsController < ApplicationController
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
-    end.first[:title]
+    end.first&.try(:[], :title)
 
     # construct query
     @q = client_source.ransack(params[:q])
