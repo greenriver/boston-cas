@@ -5,6 +5,7 @@
 ###
 
 class OpportunitiesController < ApplicationController
+  include ArelHelper
   require 'securerandom'
 
   before_action :authenticate_user!
@@ -16,6 +17,9 @@ class OpportunitiesController < ApplicationController
 
   # GET /hmis/opportunities
   def index
+    # routes
+    @routes = MatchRoutes::Base.available
+
     # search
     @opportunities = if params[:q].present?
       opportunity_scope.text_search(params[:q])
@@ -50,7 +54,8 @@ class OpportunitiesController < ApplicationController
 
     @opportunities = @opportunities.joins(:active_matches)
       .group(:id)
-      .having("count(opportunities.id) < #{@max_actives}") unless @max_actives.zero?
+      .having(nf('COUNT', [o_t[:id]]).lt(@max_actives)) unless @max_actives.zero?
+    # "count(opportunities.id) < #{@max_actives}"
 
     # sort / paginate
     @opportunities = @opportunities
