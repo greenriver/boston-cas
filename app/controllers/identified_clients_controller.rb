@@ -27,6 +27,8 @@ class IdentifiedClientsController < NonHmisClientsController
         available_date: nil,
         available_reason: nil,
       ) unless params[:assessment_id].present? || identified_client_params[:client_assessments_attributes].blank?
+   
+      @non_hmis_client.current_assessment&.update_assessment_score!
       respond_with(@non_hmis_client, location: identified_client_path(id: @non_hmis_client.id))
     else
       respond_with(@non_hmis_client, location: identified_clients_path())

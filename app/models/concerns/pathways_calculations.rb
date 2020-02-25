@@ -10,6 +10,10 @@ module PathwaysCalculations
   included do
     before_save :update_assessment_score
 
+    def update_assessment_score!
+      update_assessment_score()
+      save()
+    end
 
     private def update_assessment_score
       self.assessment_score = calculated_score
