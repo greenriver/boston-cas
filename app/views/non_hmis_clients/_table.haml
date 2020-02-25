@@ -28,7 +28,12 @@
 
           %td= non_hmis_client.agency&.name
 
-          %td= current_assessment&.assessment_score
+          %td
+            - if current_assessment&.assessment_score&.zero?
+              0 – Ineligible
+            - else
+              = current_assessment&.assessment_score
+
 
           %td= current_assessment&.created_at
 

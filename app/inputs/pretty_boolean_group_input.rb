@@ -18,7 +18,7 @@ class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
       collection.each_with_index do |(label, value, attrs), index|
         checked = value == current_value
         name = "#{object_name}[#{attribute_name}]"
-        id = name.to_s.parameterize + '_' + value
+        id = name.to_s.parameterize + '_' + value.to_s
         label_text_el = template.content_tag(:span, label, class: 'c-checkbox__label')
         template.concat(
           template.content_tag(:div, class: 'c-checkbox c-checkbox--round mb-1') do

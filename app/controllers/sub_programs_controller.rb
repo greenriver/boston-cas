@@ -117,11 +117,11 @@ class SubProgramsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
 
     def set_program
-      @program = program_scope.find(params[:program_id])
+      @program = program_scope.find_by(id: params[:program_id])
     end
 
     def set_sub_program
-      @subprogram = sub_program_scope.find(params[:id])
+      @subprogram = sub_program_scope.find_by(id: params[:id])
       check_edit_permission!
     end
 

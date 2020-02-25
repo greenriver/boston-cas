@@ -153,11 +153,11 @@ class MatchDecisionsController < ApplicationController
     end
 
     def find_decision!
-      @decision = @match.decision_from_param params[:id]
+      @decision = @match.decision_from_param(params[:id])
     end
 
     def authorize_decision!
-      unless @decision.accessible_by? current_contact
+      unless @decision&.accessible_by?(current_contact)
         flash[:alert] = 'Sorry, you are not authorized to access that.'
         redirect_to access_context.match_path(@match)
       end

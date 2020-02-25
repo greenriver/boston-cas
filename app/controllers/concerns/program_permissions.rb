@@ -15,6 +15,7 @@ module ProgramPermissions
         return Program.visible_by(current_user)
       else
         not_authorized!
+        return Program.none
       end
     end
 
@@ -25,6 +26,7 @@ module ProgramPermissions
         return SubProgram.visible_by(current_user)
       else
         not_authorized!
+        return Program.none
       end
     end
 
