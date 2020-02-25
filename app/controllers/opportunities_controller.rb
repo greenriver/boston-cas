@@ -22,7 +22,8 @@ class OpportunitiesController < ApplicationController
     else
       opportunity_scope
     end
-    # filter with whitelist
+
+    # filter status with whitelist
     @match_status = params[:status] if Opportunity.available_stati.include?(params[:status]) || nil
 
     if @match_status.present?
@@ -43,6 +44,13 @@ class OpportunitiesController < ApplicationController
           where.not(id: successful_matches)
       end
     end
+
+    # filter actives with count
+    @max_actives = params[:max_actives].to_i
+
+    @opportunities = @opportunities.joins(:active_matches)
+      .group(:id)
+      .having("count(opportunities.id) < #{@max_actives}") unless @max_actives.zero?
 
     # sort / paginate
     @opportunities = @opportunities

@@ -26,6 +26,14 @@
             - selected = @match_status == t
             %option{value: t, selected: selected}= t
 
+      .o-filtration__option
+        %label.d-block Fewer Than Active Matches?
+        %select.mb-4{name: :max_actives, style: 'width: 100%;'}
+          %option{value: ''} Unlimited
+          - (1..5).each do |t|
+            - selected = @max_actives == t
+            %option{value: t, selected: selected}= t
+
       .o-filtration__actions.form__actions
         = link_to opportunities_path, class: 'btn btn-light' do
           %i.icon-cross
