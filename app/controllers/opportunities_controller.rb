@@ -57,12 +57,18 @@ class OpportunitiesController < ApplicationController
       .having(nf('COUNT', [o_t[:id]]).lt(@max_actives)) unless @max_actives.zero?
     # "count(opportunities.id) < #{@max_actives}"
 
-    # sort / paginate
-    @opportunities = @opportunities
-      .order(sort_column => sort_direction)
-      .preload(:unit, :voucher)
-      .page(params[:page]).per(25)
+    @opportunity_tabs = {}
+    @routes.each do |route|
+      dashed_route_name = route.title.parameterize.dasherize
 
+      # sort / paginate
+      @opportunity_tabs[dashed_route_name] = @opportunities.
+        joins(:match_route).
+        where(match_routes: {id: route}).
+        order(sort_column => sort_direction).
+        preload(:unit, :voucher).
+        page(params[:page]).per(25)
+      end
   end
 
   # GET /hmis/opportunities/1
