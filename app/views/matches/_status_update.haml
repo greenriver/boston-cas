@@ -45,14 +45,16 @@
 = content_for :page_js do
   :javascript
     $('.jActionToggle input').on('change', function() {
-      var value = $(this).val()
-      var noLongerWorking = 'addClass'
-      var stillWorking = 'removeClass'
+      var value = $(this).val();
+      var noLongerWorking = 'addClass';
+      var stillWorking = 'removeClass';
       if (value == 'jStillWorking') {
-        noLongerWorking = 'removeClass'
-        stillWorking = 'addClass'
-      }
-      $('.jNoLongerWorkingContent')[noLongerWorking]('d-none')
-      $('.jStillWorkingContent')[stillWorking]('d-none')
+        noLongerWorking = 'removeClass';
+        stillWorking = 'addClass';
+      };
+      $('.jNoLongerWorkingContent')[noLongerWorking]('d-none');
+      $('.jStillWorkingContent')[stillWorking]('d-none');
     });
     $('.jActionToggle input[name=working_with_client]:checked').trigger('change');
+    new window.App.SingleOptionCheckboxes( $('form.new_status_update')[0], 'status_update[response][]');
+    new window.App.SingleOptionCheckboxes( $('form.new_status_update')[1], 'status_update[response][]');

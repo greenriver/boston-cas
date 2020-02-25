@@ -27,16 +27,11 @@ module CasSeeds
       'Health and Safety',
     ]
 
-    # TODO: For Provider-Only route, rename HSA_PROVIDER_ONLY_REASONS?
-    HSA_PRIORITY_ONLY_REASONS = [
-      'Household did not respond',
+    HSA_PROVIDER_ONLY_REASONS = [
+      'Household could not be located',
       'Ineligible for Housing Program',
-      'Client is requesting to be removed from consideration for 60 days',
-      'Self-resolved',
-      'Falsification of documents',
+      'Client refused offer',
       'Health and Safety',
-      'Housed',
-      'Other housing opportunity',
     ]
 
     SHELTER_AGENCY_REASONS = [
@@ -74,7 +69,7 @@ module CasSeeds
       create_other_reason!
       create_dnd_reasons!
       create_hsa_reasons!
-      create_hsa_priority_reasons!
+      create_hsa_provider_only_reasons!
       create_shelter_agency_reasons!
       create_shelter_agency_not_working_with_client_reasons!
       create_shelter_agency_not_working_with_client_other_reason!
@@ -98,9 +93,11 @@ module CasSeeds
       end
     end
 
-    private def create_hsa_priority_reasons!
-      HSA_PRIORITY_ONLY_REASONS.each do |reason_name|
-        ::MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.where(name: reason_name).first_or_create!
+    private def create_hsa_provider_only_reasons!
+      ::MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.update_all(active: false)
+      HSA_PROVIDER_ONLY_REASONS.each do |reason_name|
+        reason = ::MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.where(name: reason_name).first_or_create!
+        reason.update(active: true)
       end
     end
 
