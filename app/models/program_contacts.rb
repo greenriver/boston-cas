@@ -4,6 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
+# FIXME Remove, dead code
 class ProgramContacts
   # this class represents the modal for editing all of a program's
   # various contact categories together

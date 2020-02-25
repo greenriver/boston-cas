@@ -18,7 +18,6 @@ class Contact < ApplicationRecord
   has_many :subgrantee_contacts, inverse_of: :contact, dependent: :destroy
   has_many :client_contacts, inverse_of: :contact, dependent: :destroy
   has_many :opportunity_contacts, inverse_of: :contact, dependent: :destroy
-  has_many :program_contacts, inverse_of: :contact, dependent: :destroy
   has_many :sub_program_contacts, inverse_of: :contact, dependent: :destroy
   has_many :client_opportunity_match_contacts, inverse_of: :contact, dependent: :destroy
   has_many :clients, through: :client_contacts
