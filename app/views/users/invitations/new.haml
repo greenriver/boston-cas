@@ -14,7 +14,7 @@
           = contact_fields.input :last_name, required: true
           = contact_fields.input :phone, as: :tel
           = contact_fields.input :email, as: :email, required: true
-        = f.association :agency, input_html: { class: :select2 }
+        = f.association :agency, required: true, input_html: { class: :select2 }
         .row
           .col-md-6
             .form--checkbox-groups
