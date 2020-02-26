@@ -4,6 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
+# FIXME Remove, dead code
 class ProgramContact < ApplicationRecord
   belongs_to :program, inverse_of: :program_contacts
   belongs_to :contact, inverse_of: :program_contacts

@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class ProgramContactsController < ApplicationController
+class SubProgramContactsController < ApplicationController
   include PjaxModalController
   include ProgramPermissions
 
@@ -42,7 +42,7 @@ class ProgramContactsController < ApplicationController
     end
 
     def set_program_contacts
-      @program_contacts = @program.default_match_contacts
+      @program_contacts = @subprogram.default_match_contacts
     end
 
     def program_contacts_params

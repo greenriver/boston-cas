@@ -1,0 +1,14 @@
+= simple_form_for @program_contacts, url: program_sub_program_contacts_path(@program, @subprogram), html: form_html_options.merge(class: 'current-step-form jContactForm'), remote: true do |form|
+  = render 'contact_manager/contact_field', contact_type: :shelter_agency_contacts, input_name: 'program_contacts[shelter_agency_contact_ids][]', object: @program_contacts, form: form
+
+  = render 'contact_manager/contact_field', contact_type: :client_contacts, input_name: 'program_contacts[client_contact_ids][]', object: @program_contacts, form: form
+
+  = render 'contact_manager/contact_field', contact_type: :dnd_staff_contacts, input_name: 'program_contacts[dnd_staff_contact_ids][]', object: @program_contacts, form: form
+
+  = render 'contact_manager/contact_field', contact_type: :housing_subsidy_admin_contacts, input_name: 'program_contacts[housing_subsidy_admin_contact_ids][]', object: @program_contacts, form: form
+
+  = render 'contact_manager/contact_field', contact_type: :ssp_contacts, input_name: 'program_contacts[ssp_contact_ids][]', object: @program_contacts, form: form
+
+  = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'program_contacts[hsp_contact_ids][]', object: @program_contacts, form: form
+
+  = render 'contact_manager/contact_field', contact_type: :do_contacts, input_name: 'program_contacts[do_contact_ids][]', object: @program_contacts, form: form

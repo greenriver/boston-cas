@@ -4,9 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-# FIXME Remove, dead code
-class ProgramContacts
-  # this class represents the modal for editing all of a program's
+class SubProgramContacts
+  # this class represents the modal for editing all of a sub-program's
   # various contact categories together
 
   # Lots of duplication because of the different associations managed.
@@ -15,7 +14,7 @@ class ProgramContacts
   include UpdateableAttributes
   include RelatedDefaultContacts
 
-  attr_accessor :program,
+  attr_accessor :sub_program,
     :shelter_agency_contact_ids,
     :client_contact_ids,
     :dnd_staff_contact_ids,
@@ -24,45 +23,45 @@ class ProgramContacts
     :hsp_contact_ids,
     :do_contact_ids
 
-  delegate :to_param, to: :program
+  delegate :to_param, to: :sub_program
 
   def initialize **attrs
-    raise "must provide program" unless attrs[:program]
+    raise "must provide subprogram" unless attrs[:sub_program]
     super #ActiveModel attribute initializer
-    self.shelter_agency_contacts = program.shelter_agency_contacts
-    self.client_contacts = program.client_contacts
-    self.dnd_staff_contacts = program.dnd_staff_contacts
-    self.housing_subsidy_admin_contacts = program.housing_subsidy_admin_contacts
-    self.ssp_contacts = program.ssp_contacts
-    self.hsp_contacts = program.hsp_contacts
-    self.do_contacts = program.do_contacts
+    self.shelter_agency_contacts = sub_program.shelter_agency_contacts
+    self.client_contacts = sub_program.client_contacts
+    self.dnd_staff_contacts = sub_program.dnd_staff_contacts
+    self.housing_subsidy_admin_contacts = sub_program.housing_subsidy_admin_contacts
+    self.ssp_contacts = sub_program.ssp_contacts
+    self.hsp_contacts = sub_program.hsp_contacts
+    self.do_contacts = sub_program.do_contacts
   end
 
   def save
     if valid?
-      program.class.transaction do
-        ProgramContact.where(program_id: program.id).delete_all
+      sub_program.class.transaction do
+        SubProgramContact.where(sub_program_id: sub_program.id).delete_all
 
         shelter_agency_contact_ids.each do |id|
-          ProgramContact.create(shelter_agency: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(shelter_agency: true, contact_id: id, sub_program_id: sub_program.id)
         end
         client_contact_ids.each do |id|
-          ProgramContact.create(client: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(client: true, contact_id: id, sub_program_id: sub_program.id)
         end
         dnd_staff_contact_ids.each do |id|
-          ProgramContact.create(dnd_staff: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(dnd_staff: true, contact_id: id, sub_program_id: sub_program.id)
         end
         housing_subsidy_admin_contact_ids.each do |id|
-          ProgramContact.create(housing_subsidy_admin: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(housing_subsidy_admin: true, contact_id: id, sub_program_id: sub_program.id)
         end
         ssp_contact_ids.each do |id|
-          ProgramContact.create(ssp: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(ssp: true, contact_id: id, sub_program_id: sub_program.id)
         end
         hsp_contact_ids.each do |id|
-          ProgramContact.create(hsp: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(hsp: true, contact_id: id, sub_program_id: sub_program.id)
         end
         do_contact_ids.each do |id|
-          ProgramContact.create(do: true, contact_id: id, program_id: program.id)
+          SubProgramContact.create(do: true, contact_id: id, sub_program_id: sub_program.id)
         end
 
         return true
