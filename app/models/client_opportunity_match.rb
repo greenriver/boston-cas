@@ -675,7 +675,7 @@ class ClientOpportunityMatch < ApplicationRecord
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
-      program.dnd_staff_contacts.each do |contact|
+      sub_program.dnd_staff_contacts.each do |contact|
         assign_match_role_to_contact :dnd_staff, contact
       end
       client.dnd_staff_contacts.each do |contact|
@@ -687,7 +687,7 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
-      program.housing_subsidy_admin_contacts.each do |contact|
+      sub_program.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
       client.housing_subsidy_admin_contacts.each do |contact|
@@ -707,7 +707,7 @@ class ClientOpportunityMatch < ApplicationRecord
       client.regular_contacts.each do |contact|
         assign_match_role_to_contact :client, contact
       end
-      program.client_contacts.each do |contact|
+      sub_program.client_contacts.each do |contact|
         assign_match_role_to_contact :client, contact
       end
     end
@@ -716,7 +716,7 @@ class ClientOpportunityMatch < ApplicationRecord
       client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
-      program.shelter_agency_contacts.each do |contact|
+      sub_program.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
       if match_route.default_shelter_agency_contacts_from_project_client?
@@ -727,7 +727,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
 
     def add_default_ssp_contacts!
-      program.ssp_contacts.each do |contact|
+      sub_program.ssp_contacts.each do |contact|
         assign_match_role_to_contact :ssp, contact
       end
       client.ssp_contacts.each do |contact|
@@ -736,7 +736,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
 
     def add_default_hsp_contacts!
-      program.hsp_contacts.each do |contact|
+      sub_program.hsp_contacts.each do |contact|
         assign_match_role_to_contact :hsp, contact
       end
       client.hsp_contacts.each do |contact|
@@ -745,7 +745,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
 
     def add_default_do_contacts!
-      program.do_contacts.each do |contact|
+      sub_program.do_contacts.each do |contact|
         assign_match_role_to_contact :do, contact
       end
       client.do_contacts.each do |contact|

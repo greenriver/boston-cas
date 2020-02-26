@@ -1159,6 +1159,24 @@ ActiveRecord::Schema.define(version: 2020_02_21_185223) do
     t.integer "weight", default: 0, null: false
   end
 
+  create_table "sub_program_contacts", force: :cascade do |t|
+    t.bigint "sub_program_id", null: false
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.boolean "dnd_staff", default: false, null: false
+    t.boolean "housing_subsidy_admin", default: false, null: false
+    t.boolean "client", default: false, null: false
+    t.boolean "housing_search_worker", default: false, null: false
+    t.boolean "shelter_agency", default: false, null: false
+    t.boolean "ssp", default: false, null: false
+    t.boolean "hsp", default: false, null: false
+    t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_sub_program_contacts_on_contact_id"
+    t.index ["sub_program_id"], name: "index_sub_program_contacts_on_sub_program_id"
+  end
+
   create_table "sub_programs", id: :serial, force: :cascade do |t|
     t.string "program_type"
     t.integer "program_id"

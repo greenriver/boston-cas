@@ -116,7 +116,7 @@ Rails.application.routes.draw do
         get :close
       end
 
-      resource :contacts, only: [:edit, :update], controller: :program_contacts
+      resource :contacts, only: [:edit, :update], controller: :sub_program_contacts
       resources :vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection
         delete :unavailable, on: :member
