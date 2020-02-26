@@ -20,9 +20,13 @@
   %ul.nav.nav-tabs{role: :tablist}
     - @routes.each do |route|
       - route_name = route.title
+      - tab_label = route_to_html_id(route)
+      - if @active_tab == tab_label
+        - active = 'active'
+      - else
+        - active = ''
       %li.nav-item{role: :presentation}
-        %a{href: "##{route_name.parameterize.dasherize}", role: :tab, data: {toggle: :tab}, aria: {controls: "#{route_name}"}, class: 'nav-link'}
-          #{route_name}
+        = link_to route_name, opportunities_path(filter_params.merge(tab: tab_label)), class: "nav-link #{active}"
 
   .tab-content#reports-tab-content
     = render 'tabs'

@@ -5,7 +5,6 @@
 ###
 
 class OpportunitiesController < ApplicationController
-  include ArelHelper
   require 'securerandom'
 
   before_action :authenticate_user!
@@ -19,6 +18,7 @@ class OpportunitiesController < ApplicationController
   def index
     # routes
     @routes = MatchRoutes::Base.available
+    @active_tab = params[:tab] || route_to_html_id(@routes.first)
 
     # search
     @opportunities = if params[:q].present?
@@ -52,23 +52,22 @@ class OpportunitiesController < ApplicationController
     # filter actives with count
     @max_actives = params[:max_actives].to_i
 
-    @opportunities = @opportunities.joins(:active_matches)
-      .group(:id)
-      .having(nf('COUNT', [o_t[:id]]).lt(@max_actives)) unless @max_actives.zero?
-    # "count(opportunities.id) < #{@max_actives}"
+    unless @max_actives.zero?
+      @active_filter = true
+      @opportunities = @opportunities.joins(:active_matches)
+        .group(:id)
+        .having(nf('COUNT', [o_t[:id]]).lt(@max_actives))
+      # "count(opportunities.id) < #{@max_actives}"
+    end
 
-    @opportunity_tabs = {}
-    @routes.each do |route|
-      dashed_route_name = route.title.parameterize.dasherize
-
-      # sort / paginate
-      @opportunity_tabs[dashed_route_name] = @opportunities.
-        joins(:match_route).
-        where(match_routes: {id: route}).
-        order(sort_column => sort_direction).
-        preload(:unit, :voucher).
-        page(params[:page]).per(25)
-      end
+    # sort / paginate
+    route = route_from_tab(@active_tab)
+    @opportunities = @opportunities.
+      joins(:match_route).
+      where(match_routes: {id: route}).
+      order(sort_column => sort_direction).
+      preload(:unit, :voucher).
+      page(params[:page]).per(25)
   end
 
   # GET /hmis/opportunities/1
@@ -196,6 +195,30 @@ class OpportunitiesController < ApplicationController
         :building,
         :units,
       )
+  end
+
+  def filter_params
+    params.permit(
+      :sort,
+      :direction,
+      :q,
+      :tab,
+      :status,
+      :max_actives,
+    )
+  end
+  helper_method :filter_params
+
+  def route_to_html_id(route)
+    route.title.parameterize.dasherize
+  end
+  helper_method :route_to_html_id
+
+  def route_from_tab(tab_label)
+    @routes ||= MatchRoutes::Base.available
+    @routes.each do |route|
+      return route if route_to_html_id(route) == tab_label
+    end
   end
 
   # TODO: limit to programs you are associated with
