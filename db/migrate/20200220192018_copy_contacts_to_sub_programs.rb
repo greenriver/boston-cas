@@ -1,6 +1,6 @@
 class CopyContactsToSubPrograms < ActiveRecord::Migration[6.0]
   ATTRIBUTES = [
-    :contact,
+    :contact_id,
     :deleted_at,
     :dnd_staff,
     :housing_subsidy_admin,
