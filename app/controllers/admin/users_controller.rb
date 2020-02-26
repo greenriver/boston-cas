@@ -13,7 +13,6 @@ module Admin
     before_action :require_can_edit_users!, except: [:stop_impersonating]
     before_action :set_user, only: [:edit, :confirm, :update, :destroy, :impersonate]
     before_action :require_can_become_other_users!, only: [:impersonate]
-    before_action :set_editable_programs, only: [:edit, :confirm, :update]
 
     helper_method :sort_column, :sort_direction
 
@@ -74,8 +73,7 @@ module Admin
           return
         end
       end
-      requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
-      update_editable_programs(requested_programs)
+
       @user.assign_attributes(user_params)
       if @user.save
         redirect_to({action: :index}, notice: 'User updated')
@@ -100,18 +98,6 @@ module Admin
     end
 
     private
-
-      def update_editable_programs(requested_programs)
-        removed_programs = @editable_programs - requested_programs
-        removed_programs.each do |program_id|
-          EntityViewPermission.where(entity: Program.find(program_id), user: @user).destroy_all
-        end
-
-        added_programs = requested_programs - @editable_programs
-        added_programs.each do |program_id|
-          EntityViewPermission.create(entity: Program.find(program_id), user: @user, editable: true)
-        end
-      end
 
       def adding_admin?
         existing_roles = @user.user_roles
@@ -148,17 +134,6 @@ module Admin
           requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
         )
       end
-
-      def programs_params
-        params.require(:user).permit(
-          editable_programs: [],
-        )
-      end
-
-      def set_editable_programs
-        @editable_programs = Program.editable_by(@user).pluck(:entity_id)
-      end
-
 
       def confirmation_params
         params.require(:user).permit(

@@ -39,11 +39,6 @@ class Users::InvitationsController < Devise::InvitationsController
     user_attrs[:agency_id] = invite_params[:agency_id]
     @user = User.invite!(user_attrs, current_user)
 
-    requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
-    requested_programs.each do |program_id|
-      EntityViewPermission.create(entity: Program.find(program_id), user: @user, editable: true)
-    end
-
     c_t = Contact.arel_table
     contact = Contact.where(email: user_attrs[:email].downcase).first_or_create
     contact.update(first_name: @user.first_name, last_name: @user.last_name)
@@ -84,12 +79,6 @@ class Users::InvitationsController < Devise::InvitationsController
       :agency_id,
       role_ids: [],
       contact_attributes: [:first_name, :last_name, :phone, :email]
-    )
-  end
-
-  private def programs_params
-    params.require(:user).permit(
-        editable_programs: [],
     )
   end
 

@@ -24,6 +24,21 @@ module ControlledVisibility
           evp_t[:editable].eq(true)
       )
     }
+
+    scope :visible_by_agency, -> (agency) {
+      evp_t = EntityViewPermission.arel_table
+      joins(:entity_view_permissions).where(
+        evp_t[:agency_id].eq(agency.id)
+      )
+    }
+
+    scope :editable_by_agency, -> (agency) {
+      evp_t = EntityViewPermission.arel_table
+      joins(:entity_view_permissions).where(
+        evp_t[:agency_id].eq(agency.id),
+        evp_t[:editable].eq(true)
+      )
+    }
   end
 
   def visible_by? user
