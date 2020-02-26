@@ -18,7 +18,7 @@
             %div{ data: {selected_requirements: true} }
             - requirements = form.object.requirements.preload(:rule).order(:created_at)
             - requirements.each do |requirement|
-              - rule_name = requirement.alternate_name if on_unit
+              - rule_name = requirement.rule_alternate_name if on_unit
               - rule_name ||= requirement.rule_name_with_verb
               %div{data: {existing_requirement: true, requirement_id: requirement.id, requirement_rule_id: requirement.rule_id, requirement_rule_name: rule_name, requirement_positive: requirement.positive.to_s, requirement_variable: requirement.variable.to_s, requirement_display_for_variable: requirement.display_for_variable }}
 
