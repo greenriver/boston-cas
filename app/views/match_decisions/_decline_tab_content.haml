@@ -1,5 +1,5 @@
 #decline-client.tab-pane.active{role: :tabpanel, aria: {labelledby:'decline-client'}}
-  = render 'match_decisions/decline_reason', form: form
+  = render 'match_decisions/decline_reason', form: form, include_other: include_other
   - if !action_message.empty?
     %p
       %i.icon-info
