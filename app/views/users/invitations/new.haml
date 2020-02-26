@@ -20,9 +20,6 @@
             .form--checkbox-groups
               %h3 CAS Roles for Access Permissions
               = f.association :roles, as: :check_boxes, label_method: :role_name, collection: Role.available_roles
-          .col-md-6
-            %h3 Program Permissions
-            = f.input :editable_programs, as: :select, label: 'Editable Programs', collection: Program.order(:name), input_html: {multiple: true, class: :select2}
 
       .form-actions
         = f.button :submit, class: 'btn btn-primary'
