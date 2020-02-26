@@ -260,7 +260,11 @@ class OpportunitiesController < ApplicationController
   end
 
   def filter_terms
-    [ :status ]
+    [
+      :status,
+      :max_actives,
+      :tab,
+    ]
   end
   helper_method :filter_terms
 end
