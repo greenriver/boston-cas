@@ -23,7 +23,7 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def closed
-    # @matches = @opportunity.closed_matches.page(params[:page]).per(25)
+    @matches = @opportunity.closed_matches
     @match_state = :closed_matches
     @opportunities = @opportunity.class.where(id: @opportunity.id)
     @sub_program = @opportunity.sub_program

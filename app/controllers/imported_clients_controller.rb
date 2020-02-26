@@ -74,4 +74,8 @@ class ImportedClientsController < NonHmisClientsController
       :file
     )
   end
+
+  def assessment_type
+    Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
+  end
 end

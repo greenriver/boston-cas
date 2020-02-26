@@ -2,10 +2,10 @@
   @include metric;
 }
 
-.c-metric--lg {
-  @include metric($size: 1.5);
+.c-metric--xl {
+  @include metric($size: 1.25);
 }
 
 .c-metric--lg {
-  @include metric($size: 1);
+  @include metric($size: 0.8);
 }

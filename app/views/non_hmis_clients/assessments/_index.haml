@@ -18,7 +18,11 @@
               %tr{data: {href: send("#{client_type}_client_path", @non_hmis_client, {assessment_id: assessment})}}
                 %td
                   = link_to assessment.created_at, polymorphic_path([client_type, 'client'],assessment_id: assessment )
-                %td= assessment.assessment_score
+                %td
+                  - if assessment&.assessment_score&.zero?
+                    0 – Ineligible
+                  - else
+                    = assessment.assessment_score
       - else
         .p-4
           %p.o-text--italic Client currently has no assessments

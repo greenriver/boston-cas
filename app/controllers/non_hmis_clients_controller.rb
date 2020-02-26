@@ -16,7 +16,7 @@ class NonHmisClientsController < ApplicationController
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
-    end.first[:title]
+    end.first&.try(:[], :title)
 
     # construct query
     @q = client_source.ransack(params[:q])
@@ -206,7 +206,7 @@ class NonHmisClientsController < ApplicationController
       dirty_params[:agency_id] = current_user.agency_id
     end
 
-    dirty_params[:available] = dirty_params[:available] == '1'
+    dirty_params[:available] = dirty_params[:available] == '1' || dirty_params[:available] == 'true' if dirty_params[:available].present?
 
     return dirty_params
   end
