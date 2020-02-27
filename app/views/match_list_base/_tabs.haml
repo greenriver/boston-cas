@@ -7,4 +7,4 @@
       - else
         - active = ''
       %li.nav-item{role: :presentation}
-        = link_to route_name, active_matches_path(filter_params.merge(current_route: route_name)), class: "nav-link #{active}"
+        = link_to route_name, filter_params.merge(action: :index, current_route: route_name), class: "nav-link #{active}"

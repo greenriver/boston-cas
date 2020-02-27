@@ -57,35 +57,6 @@ class ActiveMatchesController < MatchListBaseController
       page(@page).per(@page_size)
   end
 
-  # private def opportunity_scope
-  #   opportunity_source.joins(client_opportunity_matches: [:client, :match_route]).
-  #     merge(match_source.accessible_by_user(current_user).active)
-  # end
-
-  private def set_current_route
-    @current_route_name = params[:current_route] || @available_routes.keys.first
-    @current_route = @available_routes[@current_route_name]
-  end
-
-  private def set_available_steps
-    @available_steps ||= MatchDecisions::Base.filter_options.map do |value|
-      route = @current_route.constantize
-      if route.available_sub_types_for_search.include?(value)
-        [
-          value.constantize.new.step_name,
-          value,
-        ]
-      elsif ! value.start_with?('MatchDecisions') # Handle stalled situation that doesn't match a decision name
-        [
-          value.capitalize,
-          value
-        ]
-      else
-        next
-      end
-    end.compact
-  end
-
   private def match_scope
     match_source.accessible_by_user(current_user).active
   end
@@ -102,14 +73,4 @@ class ActiveMatchesController < MatchListBaseController
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
-
-  def filter_params
-    params.permit(
-      :q,
-      :current_route,
-      :sort,
-      :direction,
-    )
-  end
-  helper_method :filter_params
 end
