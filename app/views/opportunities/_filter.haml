@@ -18,6 +18,8 @@
         = hidden_field_tag :direction, params[:direction]
       - if params[:q]
         = hidden_field_tag :q, params[:q]
+      - if params[:tab]
+        = hidden_field_tag :tab, params[:tab]
 
       .o-filtration__option
         %select.mb-4{name: :status, style: 'width: 100%;'}
@@ -26,8 +28,16 @@
             - selected = @match_status == t
             %option{value: t, selected: selected}= t
 
+      .o-filtration__option
+        %label.d-block Fewer Than Active Matches?
+        %select.mb-4{name: :max_actives, style: 'width: 100%;'}
+          %option{value: ''} Unlimited
+          - (1..5).each do |t|
+            - selected = @max_actives == t
+            %option{value: t, selected: selected}= t
+
       .o-filtration__actions.form__actions
-        = link_to opportunities_path, class: 'btn btn-light' do
+        = link_to opportunities_path(tab: @active_tab), class: 'btn btn-light' do
           %i.icon-cross
           Clear
         %button.btn.btn-primary.ml-auto{type: :submit}
