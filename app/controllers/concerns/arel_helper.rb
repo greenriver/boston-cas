@@ -46,4 +46,8 @@ module ArelHelper
   def o_t
     Opportunity.arel_table
   end
+
+  def md_b_t
+    MatchDecisions::Base.arel_table
+  end
 end
