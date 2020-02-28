@@ -113,6 +113,14 @@ namespace :deploy do
   ##############################################################
 end
 
+after :migrating, :regular_seeds do
+  on roles(:db)  do
+    within release_path do
+      execute :rake, "db:seed RAILS_ENV=#{fetch(:rails_env)}"
+    end
+  end
+end
+
 after 'deploy:migrating', :check_for_bootability do
   on roles(:app)  do
     within release_path do
