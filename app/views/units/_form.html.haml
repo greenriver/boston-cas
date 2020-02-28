@@ -13,7 +13,7 @@
     = f.input :elevator_accessible, label: 'Is this unit elevator accessible, or a ground floor unit?', hint: 'If un-checked, matches involving this unit will exclude clients who require a ground floor or elevator accessible unit'
     = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
-    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}"
+    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}", on_unit: true
 
   .form-actions
     = f.button :submit

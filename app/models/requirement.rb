@@ -25,9 +25,14 @@ class Requirement < ApplicationRecord
   end
 
   delegate :name, :name_with_verb, to: :rule, allow_nil: true, prefix: true
+  delegate :alternate_name, to: :rule, allow_nil: true, prefix: true
 
-  def name
-    "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{_(rule_name)}"
+  def name(on_unit: false)
+    if on_unit && rule_alternate_name.present?
+      "#{positive? ? 'Must' : "Can't" } #{_(rule_alternate_name)}"
+    else
+      "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{_(rule_name)}"
+    end
   end
 
   def display_for_variable
