@@ -169,6 +169,13 @@ Rails.application.routes.draw do
 
   resources :resend_notification, only: [:show]
 
+  namespace :dashboards do
+    resources :overviews, only: [:index]
+    resources :delays, only: [:index]
+    resources :vacancies, only: [:index]
+    resources :clients, only: [:index]
+  end
+
   resources :reports, only: [:index]
   namespace :reports do
     resources :parked_clients, only: [:index]

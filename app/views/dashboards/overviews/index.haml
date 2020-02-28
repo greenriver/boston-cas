@@ -1,0 +1,5 @@
+= render 'dashboards/tabs', active: 'overview'
+= simple_form_for :filter, method: :get do |f|
+  = render 'dashboards/report_filter', form: f
+
+  = f.submit 'Update Dashboard', class: 'btn btn-primary'
