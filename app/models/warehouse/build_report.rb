@@ -9,8 +9,9 @@ module Warehouse
     include ArelHelper
 
     def run!
-      return nil unless Warehouse::Base.enabled?
       fill_cas_report_table!
+
+      return nil unless Warehouse::Base.enabled?
       fill_cas_non_hmis_client_history_table!
       fill_cas_vacancy_table!
     end
@@ -80,9 +81,15 @@ module Warehouse
     end
 
     def fill_cas_report_table!
-      Warehouse::CasReport.transaction do
+      transaction_wrapper = if Warehouse::Base.enabled?
+        Warehouse::CasReport
+      else
+        Reporting::Decisions
+      end
+
+      transaction_wrapper.transaction do
         # Replace all CAS data in the warehouse every time
-        Warehouse::CasReport.delete_all
+        Warehouse::CasReport.delete_all if Warehouse::Base.enabled?
         # Replace reporting decisions data
         Reporting::Decisions.delete_all
 
@@ -202,7 +209,7 @@ module Warehouse
           housing_type: match_route.housing_type,
         }
 
-        Warehouse::CasReport.create!(row.merge(clent_contacts: contact_details(match.client_contacts)))
+        Warehouse::CasReport.create!(row.merge(clent_contacts: contact_details(match.client_contacts))) if Warehouse::Base.enabled?
         Reporting::Decisions.create!(row.merge(client_contacts: contact_details(match.client_contacts)))
 
         previous_updated_at = decision.updated_at
