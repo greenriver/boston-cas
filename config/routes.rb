@@ -33,7 +33,6 @@ Rails.application.routes.draw do
   resources :opportunities do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
-    resources :alternate_matches, controller: 'opportunity_alternate_matches', only: :index
     resources :matches, controller: 'opportunity_matches', only: [:index, :create, :update] do
       get :all, on: :collection
       get :closed, on: :collection
