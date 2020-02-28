@@ -6,7 +6,10 @@
 
 class ClosedMatchesController < MatchListBaseController
   before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
-  before_action :set_available_steps, :set_available_routes, :set_sort_options
+  before_action :set_available_routes
+  before_action :set_current_route
+  before_action :set_available_steps
+  before_action :set_sort_options
 
   def index
     @match_state = :closed_matches
@@ -14,7 +17,6 @@ class ClosedMatchesController < MatchListBaseController
     @matches = match_scope
     @current_step = params[:current_step]
     @matches = filter_by_step(@current_step, @matches)
-    @current_route = params[:current_route]
     @matches = filter_by_route(@current_route, @matches)
     @search_string = params[:q]
     @matches = search_matches(@search_string, @matches)
@@ -23,7 +25,7 @@ class ClosedMatchesController < MatchListBaseController
       order(sort_matches())
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @current_step.present? || @current_route.present?
+    @active_filter = @current_step.present?
     @types = MatchRoutes::Base.match_steps
 
     @page_size = 25
