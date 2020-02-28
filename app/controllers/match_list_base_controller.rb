@@ -126,6 +126,30 @@ class MatchListBaseController < ApplicationController
     scope
   end
 
+  private def set_current_route
+    @current_route_name = params[:current_route] || @available_routes.keys.first
+    @current_route = @available_routes[@current_route_name]
+  end
+
+  private def set_available_steps
+    @available_steps ||= MatchDecisions::Base.filter_options.map do |value|
+      route = @current_route.constantize
+      if route.available_sub_types_for_search.include?(value)
+        [
+          value.constantize.new.step_name,
+          value,
+        ]
+      elsif ! value.start_with?('MatchDecisions') # Handle stalled situation that doesn't match a decision name
+        [
+          value.capitalize,
+          value
+        ]
+      else
+        next
+      end
+    end.compact
+  end
+
   private def filter_by_route route, scope
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
     scope.joins(:match_route).
@@ -157,33 +181,6 @@ class MatchListBaseController < ApplicationController
 
   private def set_sort_options
     @sort_options ||= ClientOpportunityMatch.sort_options
-  end
-
-  private def set_available_steps
-    @available_steps ||= MatchDecisions::Base.filter_options.map do |value|
-      if MatchDecisions::Base.available_sub_types_for_search.include?(value)
-        option = [
-          value.constantize.new.step_name,
-          value,
-        ]
-        if MatchRoutes::Base.more_than_one?
-          MatchRoutes::Base.all_routes.each do |route|
-            next unless route.available_sub_types_for_search.include?(value)
-            title = "#{value.constantize.new.step_name} on #{route.new.title}"
-            option = [
-              title,
-              value
-            ]
-          end
-        end
-        option
-      else # Handle stalled situation that doesn't match a decision name
-        [
-          value.capitalize,
-          value
-        ]
-      end
-    end
   end
 
   # This is painful, but we need to prevent leaking of client names
@@ -240,4 +237,15 @@ class MatchListBaseController < ApplicationController
     [ :current_step, :current_route ]
   end
   helper_method :filter_terms
+
+
+  private def filter_params
+    params.permit(
+      :q,
+      :current_route,
+      :sort,
+      :direction,
+    )
+  end
+  helper_method :filter_params
 end

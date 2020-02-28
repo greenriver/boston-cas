@@ -19,6 +19,8 @@
         = hidden_field_tag :direction, params[:direction]
       - if params[:q]
         = hidden_field_tag :q, params[:q]
+      - if params[:current_route]
+        = hidden_field_tag :current_route, params[:current_route]
 
       .o-filtration__option
         %select{name: :current_step, style: 'width: 100%;'}
@@ -28,16 +30,8 @@
             %option{value: value, selected: selected}
               = label
 
-      .o-filtration__option
-        %select{name: :current_route, style: 'width: 100%;'}
-          %option{value: ''} Show all Match Routes
-          - available_routes.each do |label,value|
-            - selected = @current_route == value
-            %option{value: value, selected: selected}
-              = label
-
       .o-filtration__actions.form__actions
-        = link_to({action: :index}, class: 'btn btn-light')do
+        = link_to(filter_params.merge(action: :index), class: 'btn btn-light')do
           %i.icon-cross
           Clear
         %button.btn.btn-primary.ml-auto{type: :submit}

@@ -1,10 +1,13 @@
 - size ||= 'lg'
+- include_blank ||= nil
 .c-question__display
   %span.d-block= label
   %span.c-metric{ class: "c-metric--#{size}"}
     - if value.is_a? Array
       - if value.any?
         = value.map(&:titleize).join(', ')
+      - elsif include_blank.present?
+        = include_blank
       - else
         N/A
     - elsif value.in?([true, false])
@@ -12,5 +15,7 @@
     - else
       - if value.present?
         = value
+      - elsif include_blank.present?
+        = include_blank
       - else
         N/A

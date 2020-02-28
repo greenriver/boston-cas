@@ -16,13 +16,18 @@ class OpportunitiesController < ApplicationController
 
   # GET /hmis/opportunities
   def index
+    # routes
+    @routes = MatchRoutes::Base.available
+    @active_tab = params[:tab] || route_to_html_id(@routes.first)
+
     # search
     @opportunities = if params[:q].present?
       opportunity_scope.text_search(params[:q])
     else
       opportunity_scope
     end
-    # filter with whitelist
+
+    # filter status with whitelist
     @match_status = params[:status] if Opportunity.available_stati.include?(params[:status]) || nil
 
     if @match_status.present?
@@ -44,12 +49,25 @@ class OpportunitiesController < ApplicationController
       end
     end
 
-    # sort / paginate
-    @opportunities = @opportunities
-      .order(sort_column => sort_direction)
-      .preload(:unit, :voucher)
-      .page(params[:page]).per(25)
+    # filter actives with count
+    @max_actives = params[:max_actives].to_i
 
+    unless @max_actives.zero?
+      @active_filter = true
+      @opportunities = @opportunities.joins(:active_matches)
+        .group(:id)
+        .having(nf('COUNT', [o_t[:id]]).lt(@max_actives))
+      # "count(opportunities.id) < #{@max_actives}"
+    end
+
+    # sort / paginate
+    route = route_from_tab(@active_tab)
+    @opportunities = @opportunities.
+      joins(:match_route).
+      where(match_routes: {id: route}).
+      order(sort_column => sort_direction).
+      preload(:unit, :voucher).
+      page(params[:page]).per(25)
   end
 
   # GET /hmis/opportunities/1
@@ -179,6 +197,30 @@ class OpportunitiesController < ApplicationController
       )
   end
 
+  def filter_params
+    params.permit(
+      :sort,
+      :direction,
+      :q,
+      :tab,
+      :status,
+      :max_actives,
+    )
+  end
+  helper_method :filter_params
+
+  def route_to_html_id(route)
+    route.title.parameterize.dasherize
+  end
+  helper_method :route_to_html_id
+
+  def route_from_tab(tab_label)
+    @routes ||= MatchRoutes::Base.available
+    @routes.each do |route|
+      return route if route_to_html_id(route) == tab_label
+    end
+  end
+
   # TODO: limit to programs you are associated with
   private def sub_program_scope
     SubProgram.all
@@ -218,7 +260,11 @@ class OpportunitiesController < ApplicationController
   end
 
   def filter_terms
-    [ :status ]
+    [
+      :status,
+      :max_actives,
+      :tab,
+    ]
   end
   helper_method :filter_terms
 end

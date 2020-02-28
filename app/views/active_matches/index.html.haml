@@ -26,6 +26,7 @@
     = render 'sort', sort_options: @sort_options
     = render 'show_confidential_names'
 
+= render 'tabs', available_routes: @available_routes, current_tab: @current_route_name
 .row
   .col-sm-4
     %p= page_entries_info @opportunities

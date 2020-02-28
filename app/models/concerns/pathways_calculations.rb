@@ -10,6 +10,10 @@ module PathwaysCalculations
   included do
     before_save :update_assessment_score
 
+    def update_assessment_score!
+      update_assessment_score()
+      save()
+    end
 
     private def update_assessment_score
       self.assessment_score = calculated_score
@@ -17,6 +21,7 @@ module PathwaysCalculations
 
     def calculated_score
       return 0 if ssvf_eligible
+      return 0 if !domestic_violence && (days_homeless_in_the_last_three_years.blank? || days_homeless_in_the_last_three_years < 30)
       return 65 if pending_subsidized_housing_placement
 
       score = 0
@@ -44,8 +49,7 @@ module PathwaysCalculations
         when (270..Float::INFINITY)
           15
         else
-          # If you have less than 30 days homeless, you receive 0 total points
-          return 0
+           0
         end
       end
       score += 5 if documented_disability
