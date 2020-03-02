@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_192018) do
+ActiveRecord::Schema.define(version: 2020_03_02_164113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,6 +476,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "active", default: true, null: false
+    t.boolean "ineligible_in_warehouse", default: false, null: false
     t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
@@ -996,6 +997,16 @@ ActiveRecord::Schema.define(version: 2020_02_20_192018) do
     t.datetime "updated_at"
     t.index ["client_id"], name: "index_rejected_matches_on_client_id"
     t.index ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id"
+  end
+
+  create_table "report_definitions", force: :cascade do |t|
+    t.string "report_group"
+    t.string "url"
+    t.string "name", null: false
+    t.string "description"
+    t.integer "weight", default: 0, null: false
+    t.boolean "enabled", default: true, null: false
+    t.boolean "limitable", default: true
   end
 
   create_table "requirements", id: :serial, force: :cascade do |t|
