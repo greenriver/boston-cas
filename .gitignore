@@ -18,6 +18,7 @@ capybara-*.html
 rerun.txt
 pickle-email-*.html
 .irb-history
+.vscode/
 TAGS
 
 config/initializers/secret_token.rb

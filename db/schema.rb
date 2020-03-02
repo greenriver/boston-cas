@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_21_185223) do
+ActiveRecord::Schema.define(version: 2020_03_02_164113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,6 +476,7 @@ ActiveRecord::Schema.define(version: 2020_02_21_185223) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "active", default: true, null: false
+    t.boolean "ineligible_in_warehouse", default: false, null: false
     t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
