@@ -169,6 +169,8 @@ module Warehouse
           end&.contact
         end
 
+        ineligible_in_warehouse = decision&.decline_reason&.ineligible_in_warehouse || false
+
         row = {
           source_data_source: data_source,
           client_id: ds_client_id,
@@ -181,6 +183,7 @@ module Warehouse
           decision_status: decision.label || 'unknown',
           current_step: decision == current_decision,
           decline_reason: explain( decision, :decline_reason ),
+          ineligible_in_warehouse: ineligible_in_warehouse,
           event_contact: event_contact&.name_with_email,
           event_contact_agency: event_contact&.agency&.name,
           not_working_with_client_reason: explain( decision, :not_working_with_client_reason ),
