@@ -1,0 +1,10 @@
+- if available_routes.count > 1
+  %ul.nav.nav-tabs{role: :tablist}
+    - available_routes.each do |route|
+      - route_name = route.first
+      - if current_tab == route_name
+        - active = 'active'
+      - else
+        - active = ''
+      %li.nav-item{role: :presentation}
+        = link_to route_name, filter_params.merge(action: :index, current_route: route_name), class: "nav-link #{active}"
