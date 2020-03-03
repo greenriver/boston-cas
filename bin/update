@@ -23,6 +23,9 @@ chdir APP_ROOT do
   puts "\n== Updating database =="
   system! 'bin/rails db:migrate'
 
+  puts "\n== Generating Seed Data for CAS Database =="
+  system "bin/rake db:seed"
+
   puts "\n== Updating Available Rules =="
   system "bin/rake cas_seeds:create_rules"
 
