@@ -39,7 +39,8 @@ class NonHmisClientsController < ApplicationController
       format.html do
         # paginate
         @page = params[:page].presence || 1
-        @non_hmis_clients = @non_hmis_clients.joins(:agency).reorder(sort_order).page(@page.to_i).per(25)
+        @non_hmis_clients = @non_hmis_clients.joins(:agency) if @column == 'agencies.name'
+        @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
       end
       format.xlsx do
         download
