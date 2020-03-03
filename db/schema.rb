@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_02_164113) do
+ActiveRecord::Schema.define(version: 2020_03_03_195105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -747,6 +747,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_164113) do
     t.datetime "available_date"
     t.string "available_reason"
     t.boolean "is_currently_youth", default: false, null: false
+    t.datetime "assessed_at"
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -1007,6 +1008,47 @@ ActiveRecord::Schema.define(version: 2020_03_02_164113) do
     t.integer "weight", default: 0, null: false
     t.boolean "enabled", default: true, null: false
     t.boolean "limitable", default: true
+  end
+
+  create_table "reporting_decisions", force: :cascade do |t|
+    t.integer "client_id"
+    t.integer "match_id", null: false
+    t.integer "decision_id", null: false
+    t.integer "decision_order", null: false
+    t.string "match_step", null: false
+    t.string "decision_status", null: false
+    t.boolean "current_step", default: false, null: false
+    t.boolean "active_match", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "elapsed_days", null: false
+    t.datetime "client_last_seen_date"
+    t.datetime "criminal_hearing_date"
+    t.string "decline_reason"
+    t.string "not_working_with_client_reason"
+    t.string "administrative_cancel_reason"
+    t.boolean "client_spoken_with_services_agency"
+    t.boolean "cori_release_form_submitted"
+    t.datetime "match_started_at"
+    t.string "program_type"
+    t.json "shelter_agency_contacts"
+    t.json "hsa_contacts"
+    t.json "ssp_contacts"
+    t.json "admin_contacts"
+    t.json "client_contacts"
+    t.json "hsp_contacts"
+    t.string "program_name", null: false
+    t.string "sub_program_name", null: false
+    t.string "terminal_status"
+    t.string "match_route", null: false
+    t.integer "cas_client_id", null: false
+    t.date "client_move_in_date"
+    t.string "source_data_source", null: false
+    t.string "event_contact"
+    t.string "event_contact_agency"
+    t.integer "vacancy_id", null: false
+    t.string "housing_type"
+    t.index ["client_id", "match_id", "decision_id"], name: "index_reporting_decisions_c_m_d", unique: true
   end
 
   create_table "requirements", id: :serial, force: :cascade do |t|

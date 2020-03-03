@@ -17,7 +17,7 @@
             - @assessments.each do |assessment|
               %tr{data: {href: send("#{client_type}_client_path", @non_hmis_client, {assessment_id: assessment})}}
                 %td
-                  = link_to assessment.created_at, polymorphic_path([client_type, 'client'],assessment_id: assessment )
+                  = link_to assessment.updated_at, polymorphic_path([client_type, 'client'], assessment_id: assessment )
                 %td
                   - if assessment&.assessment_score&.zero?
                     0 – Ineligible
