@@ -28,7 +28,7 @@ module Admin
 
     def update
       @role = role_scope.find params[:id]
-      @role.update_attributes role_params
+      @role.update(role_params)
       if @role.save
         redirect_to({action: :index}, notice: 'Role updated')
       else

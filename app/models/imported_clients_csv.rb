@@ -68,7 +68,7 @@ class ImportedClientsCsv < ApplicationRecord
         if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
           @clients << client
           @touched += 1 if assessment.imported_timestamp.present?
-          assessment.update_attributes(
+          assessment.update(
             imported_timestamp: timestamp,
 
             set_asides_housing_status: row[HOUSING_STATUS],

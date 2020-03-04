@@ -9,7 +9,7 @@
 
   - content_for :data_actions do
     - if can_upload_deidentified_clients?
-      = link_to choose_upload_deidentified_clients_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto' do
+      = link_to choose_upload_deidentified_clients_path, class: 'btn btn-sm btn-secondary ml-auto mb-auto mr-2' do
         %span.icon-upload2
         Upload Excel
     - if can_export_deidentified_clients?
