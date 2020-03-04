@@ -1,0 +1,70 @@
+= render 'reports/crumbs_operational'
+= render 'reports/dashboards/tabs', active: 'overview'
+= simple_form_for :filter, method: :get do |f|
+  = render 'reports/dashboards/report_filter', form: f
+
+  = f.submit 'Update Dashboard', class: 'btn btn-primary'
+
+.row
+  .col.text-center
+    %h4= "#{@report.in_progress.count} matches currently in progress"
+
+.row
+  .col-6
+    %h2 Match Results for Selected Timeframe
+    %dl
+    - @report.match_results.each do |label, results|
+      %dt #{label}
+      %dd #{results.count}
+  .col-6
+    %h2 Match Results by Quarter of Match End
+    - @report.match_results_by_quarter.each do |quarter, results|
+      %h4 #{quarter}:
+      %dl
+      - results.each do |label, results|
+        %dt #{label}
+        %dd #{results.count}
+
+.row
+  .col-6
+    .row
+      .col
+        %h2 Pre-empted Reasons
+      .col-6
+        %table.table
+          %thead
+            %th Decline Reason
+            %th Number of matches
+            %th Percent
+          %tbody
+            - @report.preempted_decline_reasons.each do |reason|
+              %tr
+                %td= reason[:label]
+                %td= reason[:count]
+                %td= reason[:percent]
+      .col-6
+        %table.table
+          %thead
+            %th Cancel Reason
+            %th Number of matches
+            %th Percent
+          %tbody
+            - @report.preempted_cancel_reasons.each do |reason|
+              %tr
+                %td= reason[:label]
+                %td= reason[:count]
+                %td= reason[:percent]
+
+  .col-6
+    %h2 Rejected Reasons
+    %table.table
+      %thead
+        %th Decline Reason
+        %th Number of matches
+        %th Percent
+      %tbody
+      - @report.rejected_decline_reasons.each do |reason|
+        %tr
+          %td= reason[:label]
+          %td= reason[:count]
+          %td= reason[:percent]

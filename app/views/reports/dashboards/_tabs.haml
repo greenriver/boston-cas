@@ -1,0 +1,30 @@
+:ruby
+  dashboard_tabs = {
+    'overview' => {
+      title: 'Matches - Overview',
+      path: reports_dashboards_overviews_path,
+    },
+    # 'delays' => {
+    #   title: 'Matches - Time Between Steps',
+    #   path: dashboards_delays_path,
+    # },
+    # 'vacancies' => {
+    #   title: 'Vacancies',
+    #   path: dashboards_vacancies_path,
+    # },
+    # 'clients' => {
+    #   title: 'Clients',
+    #   path: dashboards_clients_path,
+    # },
+  }
+
+%h1 Dashboard
+
+%ul.mb-2.nav.nav-tabs{role: :tablist}
+  - dashboard_tabs.each do |key, tab|
+    - active_class = ''
+    - if active == key
+      - active_class = 'active'
+    %li.nav-item{role: :presentation}
+      - tab_title = tab[:title]
+      = link_to tab_title, tab[:path], role: :tab, aria: {controls: tab_title}, class: "nav-link #{active_class}"

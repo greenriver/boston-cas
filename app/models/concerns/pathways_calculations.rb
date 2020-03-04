@@ -8,17 +8,6 @@ module PathwaysCalculations
   extend ActiveSupport::Concern
 
   included do
-    before_save :update_assessment_score
-
-    def update_assessment_score!
-      update_assessment_score()
-      save()
-    end
-
-    private def update_assessment_score
-      self.assessment_score = calculated_score
-    end
-
     def calculated_score
       return 0 if ssvf_eligible
       return 0 if !domestic_violence && (days_homeless_in_the_last_three_years.blank? || days_homeless_in_the_last_three_years < 30)

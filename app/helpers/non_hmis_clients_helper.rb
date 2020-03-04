@@ -19,7 +19,7 @@ module NonHmisClientsHelper
   end
 
   def pathways_enabled?
-    Config.get("#{client_type}_client_assessment").include? 'Pathways'
+    Config.get("#{client_type}_client_assessment").include? 'Pathways' rescue false
   end
 
   def latest_assessment_for_client?
