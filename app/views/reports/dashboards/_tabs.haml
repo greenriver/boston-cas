@@ -18,8 +18,7 @@
     # },
   }
 
-- content_for :title, dashboard_tabs[active][:title]
-%h1= content_for :title
+%h1 Dashboard
 
 %ul.mb-2.nav.nav-tabs{role: :tablist}
   - dashboard_tabs.each do |key, tab|
