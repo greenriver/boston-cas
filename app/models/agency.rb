@@ -17,4 +17,8 @@ class Agency < ApplicationRecord
   def program_names
     Program.editable_by_agency(self).order(:name).pluck(:name).join(', ')
   end
+
+  def self.available_for_users
+    order(:name)
+  end
 end

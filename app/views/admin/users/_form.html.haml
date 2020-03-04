@@ -6,7 +6,7 @@
       = contact_fields.input :last_name, required: true
       = contact_fields.input :phone, as: :tel
       = contact_fields.input :email, as: :email, required: true
-      = f.input :agency_id, collection: @agencies, label_method: :name, value_method: :id, required: true, input_html: {class: [:select2, :jManualSelect2] }
+      = f.input :agency_id, collection: Agency.available_for_users, label_method: :name, value_method: :id, required: true, input_html: {class: [:select2, :jManualSelect2] }
     .row
       .col-md-6
         .form--checkbox-groups
