@@ -1,3 +1,4 @@
+- include_other = true unless include_other === false
 #decline-client.tab-pane.active{role: :tabpanel, aria: {labelledby:'decline-client'}}
   = render 'match_decisions/decline_reason', form: form, include_other: include_other
   - if !action_message.empty?

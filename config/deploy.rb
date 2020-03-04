@@ -121,6 +121,14 @@ after 'deploy:migrating', :check_for_bootability do
   end
 end
 
+after :check_for_bootability, :regular_seeds do
+  on roles(:db)  do
+    within release_path do
+      execute :rake, "db:seed RAILS_ENV=#{fetch(:rails_env)}"
+    end
+  end
+end
+
 task :echo_options do
   puts "\nDid you run ssh-add before running?\n\n"
   puts "Deploying as: #{fetch(:deploy_user)} on port: #{fetch(:ssh_port)} to location: #{deploy_to}\n\n"

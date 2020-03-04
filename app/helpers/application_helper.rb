@@ -83,9 +83,10 @@ module ApplicationHelper
   def sort_as_link(link_text, column, direction='asc')
     sort_direction = (direction.nil? || direction == 'asc') ? 'asc' : 'desc'
     sort = {'sort' => column, 'direction' => sort_direction}
-    params.merge!(sort)
+    params_copy = params.dup
+    params_copy.merge!(sort)
     # FIXME: un-safe params
-    link_to(link_text, params.permit!, class: :jSort)
+    link_to(link_text, params_copy.permit!, class: :jSort)
   end
 
   def fake_partner
