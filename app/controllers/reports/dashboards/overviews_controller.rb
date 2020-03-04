@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 #
-class Dashboards::OverviewsController < ApplicationController
+class Reports::Dashboards::OverviewsController < ApplicationController
   before_action :require_can_view_reports!
 
   def index
