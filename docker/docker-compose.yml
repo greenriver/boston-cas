@@ -42,6 +42,17 @@ services:
       - db
       - redis
 
+  spec:
+    <<: *backend
+    command: /bin/bash
+    entrypoint: ''
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env.local
+      - .env.test
+
   console:
     <<: *backend
     stdin_open: true
