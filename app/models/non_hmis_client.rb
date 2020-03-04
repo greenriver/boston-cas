@@ -17,7 +17,7 @@ class NonHmisClient < ApplicationRecord
     NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
   end
 
-  after_initialize :create_assessment_if_missing
+  after_initialize :build_assessment_if_missing
 
   belongs_to :agency
   belongs_to :contact
@@ -190,16 +190,21 @@ class NonHmisClient < ApplicationRecord
     project_client.needs_update = true
   end
 
-  def create_assessment_if_missing
+  def build_assessment_if_missing
     return unless persisted?
     return if client_assessments.exists?
+
     # Do not automatically create assessment if pathways is enabled
     # user is routed to new form
-    pathways_assessment = Config.get("#{type.tableize.singularize}_assessment").include? 'Pathways' rescue false
+    assessment_type = "#{type.tableize.singularize}_assessment"
+    pathways_assessment = if Config.column_names.include?(assessment_type)
+      Config.get(assessment_type).include? 'Pathways'
+    else
+      false
+    end
     return if pathways_assessment
 
-    assessment = client_assessments.build
-    update_assessment_from_client(assessment)
+    update_assessment_from_client(client_assessments.build)
   end
 
   def update_assessment_from_client(assessment=current_assessment)
@@ -253,7 +258,7 @@ class NonHmisClient < ApplicationRecord
     assessment.updated_at = updated_at
     assessment.deleted_at = deleted_at
 
-    assessment.save
+    assessment
   end
 
   def annual_income
@@ -262,7 +267,7 @@ class NonHmisClient < ApplicationRecord
     current_assessment.income_total_monthly * 12
   end
 
-  def log message
+  def log(message)
     Rails.logger.info message
   end
 

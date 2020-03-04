@@ -17,23 +17,23 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
-    def update_assessment_score!
-      update_assessment_score()
-      save()
-      non_hmis_client.save()
-    end
+  def update_assessment_score!
+    update_assessment_score()
+    save()
+    non_hmis_client.save()
+  end
 
-    private def update_assessment_score
-      if respond_to? :calculated_score
-        self.assessment_score = calculated_score
-      end
-      if self.non_hmis_client
-        self.non_hmis_client.assign_attributes(
-          assessment_score: self.assessment_score,
-          assessed_at: self.updated_at || Time.current,
-        )
-      end
+  private def update_assessment_score
+    if respond_to? :calculated_score
+      self.assessment_score = calculated_score
     end
+    if self.non_hmis_client
+      self.non_hmis_client.assign_attributes(
+        assessment_score: self.assessment_score,
+        assessed_at: self.updated_at || Time.current,
+      )
+    end
+  end
 
   private def populate_aggregates
     if youth_rrh_desired? && rrh_desired?
