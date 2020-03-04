@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_195105) do
+ActiveRecord::Schema.define(version: 2020_03_04_143851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -343,6 +343,8 @@ ActiveRecord::Schema.define(version: 2020_03_03_195105) do
     t.string "entity_type", null: false
     t.boolean "editable"
     t.datetime "deleted_at"
+    t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_entity_view_permissions_on_agency_id"
     t.index ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id"
     t.index ["user_id"], name: "index_entity_view_permissions_on_user_id"
   end
@@ -1048,6 +1050,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_195105) do
     t.string "event_contact_agency"
     t.integer "vacancy_id", null: false
     t.string "housing_type"
+    t.boolean "ineligible_in_warehouse", default: false, null: false
     t.index ["client_id", "match_id", "decision_id"], name: "index_reporting_decisions_c_m_d", unique: true
   end
 

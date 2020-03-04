@@ -5,6 +5,8 @@
 ###
 
 class ReportsController < ApplicationController
+  before_action :require_can_view_reports!
+
   def index
     @report_definitions = ReportDefinition.enabled.
       ordered.
