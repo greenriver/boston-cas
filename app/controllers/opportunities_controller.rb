@@ -65,7 +65,7 @@ class OpportunitiesController < ApplicationController
       joins(:match_route).
       where(match_routes: {id: route}).
       order(sort_column => sort_direction).
-      preload(:unit, :voucher).
+      preload(unit: [:building], sub_program: [:program], voucher: {sub_program: :program}, active_matches: [ :program, :sub_program, {client: :project_client}]).
       page(params[:page]).per(25)
   end
 
