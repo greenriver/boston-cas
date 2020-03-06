@@ -53,10 +53,11 @@
                     - elsif opportunity.available || opportunity.voucher.available
                       Available
                   %td{:class => deleted}= opportunity.voucher&.available_at&.to_date
-                  %td.text-center
+                  %td
                     - if opportunity.show_alternate_clients_to?(current_user)
-                      = link_to opportunity_matches_path(opportunity) do
-                        .badge.badge-success= opportunity.matching_clients.count
+                      = link_to opportunity_matches_path(opportunity), class: 'btn btn-secondary btn-sm' do
+                        View
+                        %span.icon-arrow-right2.ml-2
         %p= paginate @opportunities
 - else
   No vacancies found.
