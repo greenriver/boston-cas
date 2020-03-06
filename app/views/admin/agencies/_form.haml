@@ -4,7 +4,11 @@
       = f.error_notification
       .form-inputs
         = f.input :name
+        = f.input :editable_programs, as: :select, label: 'Editable Programs', collection: Program.order(:name), selected: @editable_programs, input_html: {multiple: true, class: [:select2, :jManualSelect2]}
 
       .form_actions
       = f.button :submit
-      
+
+= content_for :page_js do
+  :javascript
+    $('.jManualSelect2').select2();

@@ -6,7 +6,7 @@
       = contact_fields.input :last_name, required: true
       = contact_fields.input :phone, as: :tel
       = contact_fields.input :email, as: :email, required: true
-      = f.input :agency_id, collection: @agencies, label_method: :name, value_method: :id, required: false, include_blank: 'Unknown', input_html: {class: [:select2, :jManualSelect2] }
+      = f.input :agency_id, collection: Agency.available_for_users, label_method: :name, value_method: :id, required: true, input_html: {class: [:select2, :jManualSelect2] }
     .row
       .col-md-6
         .form--checkbox-groups
@@ -15,9 +15,6 @@
         .form--checkbox-groups
           %h3 Additional Options
           = f.input :receive_initial_notification
-      .col-md-6
-        %h3 Program Permissions
-        = f.input :editable_programs, as: :select, label: 'Editable Programs', collection: Program.order(:name), selected: @editable_programs, input_html: {multiple: true, class: [:select2, :jManualSelect2]}
     .row
       .col-md-12
         = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Grant access to full client records that meet the following rules", hide_inherited: true

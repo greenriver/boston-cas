@@ -127,6 +127,12 @@ def report_list
         description: 'The currently parked clients.',
         limitable: false,
       },
+      {
+        url: 'reports/dashboards/overviews',
+        name: 'Dashboard',
+        description: 'Match, vacancy, and client dashboards.',
+        limitable: true,
+      }
     ],
   }
 end

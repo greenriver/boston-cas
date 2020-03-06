@@ -4,10 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class EntityViewPermission < ApplicationRecord
-  acts_as_paranoid
-
-  belongs_to :entity, polymorphic: true
-  belongs_to :user
-  belongs_to :agency
+module Reporting
+  def self.table_name_prefix
+    'reporting_'
+  end
 end

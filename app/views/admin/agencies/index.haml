@@ -33,12 +33,16 @@
               %th
                 Name
               %th
+                Programs
+              %th
               %th
           %tbody
             - @agencies.each do |agency|
               %tr
                 %td
                   = agency.name
+                %td
+                  = agency.program_names
                 %td
                   = link_to edit_admin_agency_path(agency), class: ['btn', 'btn-sm', 'btn-secondary'] do
                     %span.icon-pencil
