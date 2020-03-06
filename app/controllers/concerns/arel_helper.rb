@@ -50,4 +50,8 @@ module ArelHelper
   def md_b_t
     MatchDecisions::Base.arel_table
   end
+
+  def v_t
+    Voucher.arel_table
+  end
 end

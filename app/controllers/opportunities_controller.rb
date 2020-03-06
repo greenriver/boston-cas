@@ -34,18 +34,17 @@ class OpportunitiesController < ApplicationController
       @active_filter = true
       case @match_status
       when 'Match in Progress'
-        @opportunities = matches_in_progress
+        @opportunities = matches_in_progress(@opportunities)
       when 'Available in the future'
-        @opportunities = available_in_the_future
+        @opportunities = available_in_the_future(@opportunities)
       when 'Successful'
-        @opportunities = successful_matches
+        @opportunities = successful_matches(@opportunities)
       when 'Available'
         # This is pretty nasty, but available is the negation of various situations
-        vt = Voucher.arel_table
         @opportunities = @opportunities.
-          where.not(id: matches_in_progress).
-          where.not(id: available_in_the_future).
-          where.not(id: successful_matches)
+          where.not(id: matches_in_progress(@opportunities)).
+          where.not(id: available_in_the_future(@opportunities)).
+          where.not(id: successful_matches(@opportunities))
       end
     end
 
@@ -66,7 +65,7 @@ class OpportunitiesController < ApplicationController
       joins(:match_route).
       where(match_routes: {id: route}).
       order(sort_column => sort_direction).
-      preload(:unit, :voucher).
+      preload(unit: [:building], sub_program: [:program], voucher: {sub_program: :program}, active_matches: [ :program, :sub_program, {client: :project_client}]).
       page(params[:page]).per(25)
   end
 
@@ -246,17 +245,16 @@ class OpportunitiesController < ApplicationController
     can_view_opportunities? || can_add_vacancies?
   end
 
-  private def successful_matches
-    @opportunities.joins(:successful_match).distinct
+  private def successful_matches(opportunities)
+    opportunities.joins(:successful_match).distinct
   end
 
-  private def matches_in_progress
-    @opportunities.joins(:active_matches).distinct
+  private def matches_in_progress(opportunities)
+    opportunities.joins(:active_matches).distinct
   end
 
-  private def available_in_the_future
-    vt = Voucher.arel_table
-    @opportunities.joins(:voucher).where(vt[:date_available].gt(Date.today)).distinct
+  private def available_in_the_future(opportunities)
+    opportunities.joins(:voucher).where(v_t[:date_available].gt(Date.today)).distinct
   end
 
   def filter_terms
