@@ -275,6 +275,8 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def client_name_for_contact contact, hidden:
+    return '' unless client.present?
+
     if show_client_info_to?(contact)
       hide_name(name: client.full_name, hidden: hidden)
     else
