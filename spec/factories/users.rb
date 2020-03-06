@@ -7,6 +7,7 @@ FactoryBot.define do
     password_confirmation { Digest::SHA256.hexdigest('abcd1234abcd') }
     email_schedule { 'immediate' }
     confirmed_at { Date.yesterday }
+    agency
     contact
   end
   factory :user_two, class: 'User' do
@@ -17,6 +18,7 @@ FactoryBot.define do
     password_confirmation { Digest::SHA256.hexdigest('abcd1234abcd') }
     email_schedule { 'immediate' }
     confirmed_at { Date.yesterday }
+    agency
     contact
   end
   factory :user_three, class: 'User' do
@@ -27,6 +29,7 @@ FactoryBot.define do
     password_confirmation { Digest::SHA256.hexdigest('abcd1234abcd') }
     email_schedule { 'immediate' }
     confirmed_at { Date.yesterday }
+    agency
     contact
   end
   factory :user_four, class: 'User' do
@@ -37,6 +40,7 @@ FactoryBot.define do
     password_confirmation { Digest::SHA256.hexdigest('abcd1234abcd') }
     email_schedule { 'immediate' }
     confirmed_at { Date.yesterday }
+    agency
     contact
   end
 

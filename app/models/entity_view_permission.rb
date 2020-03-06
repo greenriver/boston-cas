@@ -9,4 +9,5 @@ class EntityViewPermission < ApplicationRecord
 
   belongs_to :entity, polymorphic: true
   belongs_to :user
+  belongs_to :agency
 end

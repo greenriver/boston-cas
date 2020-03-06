@@ -22,6 +22,7 @@ class User < ApplicationRecord
   validates :first_name, presence: true, length: {maximum: 40}
   validates :last_name, presence: true, length: {maximum: 40}
   validates :email_schedule, inclusion: { in: Message::SCHEDULES }, allow_blank: false
+  validates :agency_id, presence: true
 
   scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
   scope :dnd_staff, -> {joins(:roles).where(roles: {can_edit_all_clients: true})}
