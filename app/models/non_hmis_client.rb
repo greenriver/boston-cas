@@ -186,7 +186,7 @@ class NonHmisClient < ApplicationRecord
     project_client.rrh_th_desired = current_assessment&.rrh_th_desired
     project_client.sro_ok = current_assessment&.sro_ok
     project_client.evicted = current_assessment&.evicted
-    project_client.ssvf_eligible = current_assessment&.ssvf_eligible
+    project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false
 
     project_client.needs_update = true
   end
