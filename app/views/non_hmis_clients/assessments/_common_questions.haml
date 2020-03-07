@@ -69,6 +69,8 @@
 .c-question
   = form.input :interested_in_set_asides, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6I.', label: 'Confirm Interest in Signing Up for Homeless Set Aside Units', hint: 'Check the box to confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units.'
 .c-question
+  = form.input :ssvf_eligible, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: 'V.1', label: 'We have Veteran-specific rapid re-housing programs in our community that provide housing search for a unit where the lease is between you and the landlord: financial assistance to pay the upfront sots of the unit; and case management to help sustain your new home. They may have quicker openings. Is there any reason why you cannot work with a Veteran-specific rapid re-housing program?'
+.c-question
   = form.input :rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9A.', label: 'Would you like to be considered for RRH when they have openings?'
 .c-question
   .c-question__wrapper

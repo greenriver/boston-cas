@@ -160,6 +160,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :disabled_housing,
           :documented_disability,
           :evicted,
+          :ssvf_eligible,
           neighborhood_interests: [],
         ]
       )
