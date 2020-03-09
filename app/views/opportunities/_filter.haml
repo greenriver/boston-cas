@@ -29,12 +29,22 @@
             %option{value: t, selected: selected}= t
 
       .o-filtration__option
-        %label.d-block Fewer Than Active Matches?
+        %label.d-block Voucher Type
+        %select.mb-4{name: :program_type, style: 'width: 100%;'}
+          %option{value: ''} All
+          - SubProgram.types.each do |t|
+            - selected = @program_type == t[:value]
+            %option{value: t[:value], selected: selected}= t[:label]
+
+      .o-filtration__option
+        %label.d-block Active Matches
         %select.mb-4{name: :max_actives, style: 'width: 100%;'}
-          %option{value: ''} Unlimited
-          - (1..5).each do |t|
+          %option{value: ''} All Vacancies
+          - selected = @max_actives == 1
+          %option{value: 1, selected: selected} Un-matched Vacancies
+          - (2..4).each do |t|
             - selected = @max_actives == t
-            %option{value: t, selected: selected}= t
+            %option{value: t, selected: selected}= "Fewer than #{t} active matches"
 
       .o-filtration__actions.form__actions
         = link_to opportunities_path(tab: @active_tab), class: 'btn btn-light' do

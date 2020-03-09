@@ -48,16 +48,8 @@ class OpportunitiesController < ApplicationController
       end
     end
 
-    # filter actives with count
-    @max_actives = params[:max_actives].to_i
-
-    unless @max_actives.zero?
-      @active_filter = true
-      @opportunities = @opportunities.joins(:active_matches)
-        .group(:id)
-        .having(nf('COUNT', [o_t[:id]]).lt(@max_actives))
-      # "count(opportunities.id) < #{@max_actives}"
-    end
+    @opportunities = filter_for_max_active_matches(@opportunities)
+    @opportunities = filter_for_program_type(@opportunities)
 
     # sort / paginate
     route = route_from_tab(@active_tab)
@@ -67,6 +59,34 @@ class OpportunitiesController < ApplicationController
       order(sort_column => sort_direction).
       preload(unit: [:building], sub_program: [:program], voucher: {sub_program: :program}, active_matches: [ :program, :sub_program, {client: :project_client}]).
       page(params[:page]).per(25)
+  end
+
+  # filter actives with count
+  private def filter_for_max_active_matches opportunities
+    @max_actives = filter_params[:max_actives].to_i
+    return opportunities if @max_actives.zero?
+
+    @active_filter = true
+    if @max_actives == 1
+      active_ids = opportunities.joins(:active_matches).select(:id)
+      opportunities = opportunities.where.not(id: active_ids)
+    else
+      opportunities = opportunities.joins(:active_matches)
+        .group(:id)
+        .having(nf('COUNT', [o_t[:id]]).lt(@max_actives))
+      # "count(opportunities.id) < #{@max_actives}"
+    end
+    opportunities
+  end
+
+  private def filter_for_program_type opportunities
+    @program_type = SubProgram.types.detect{|m| m[:value] == filter_params[:program_type] }.try(:[], :value)
+    return opportunities unless @program_type.present?
+
+    @active_filter = true
+    opportunities.joins(:sub_program).
+      merge(SubProgram.where(program_type: @program_type))
+
   end
 
   # GET /hmis/opportunities/1
@@ -204,6 +224,7 @@ class OpportunitiesController < ApplicationController
       :tab,
       :status,
       :max_actives,
+      :program_type,
     )
   end
   helper_method :filter_params
