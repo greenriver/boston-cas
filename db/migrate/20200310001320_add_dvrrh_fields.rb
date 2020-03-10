@@ -1,8 +1,8 @@
 class AddDvrrhFields < ActiveRecord::Migration[6.0]
   def change
     # remove some unused pathways columns
-    remove_column :project_clients, :pathways_domestic_violence, :boolean, defaul: false, null: false
-    remove_column :clients, :pathways_domestic_violence, :boolean, defaul: false, null: false
+    remove_column :project_clients, :pathways_domestic_violence, :boolean, default: false, null: false
+    remove_column :clients, :pathways_domestic_violence, :boolean, default: false, null: false
 
     remove_column :project_clients, :pathways_other_accessibility, :boolean, default: false
     remove_column :clients, :pathways_other_accessibility, :boolean, default: false
