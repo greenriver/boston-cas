@@ -129,6 +129,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :interested_in_set_asides,
           :youth_rrh_aggregate,
           :dv_rrh_aggregate,
+          :dv_rrh_desired,
           :veteran_rrh_desired,
           :rrh_th_desired,
           :sro_ok,
