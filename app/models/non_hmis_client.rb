@@ -184,6 +184,7 @@ class NonHmisClient < ApplicationRecord
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
     project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement
     project_client.rrh_th_desired = current_assessment&.rrh_th_desired
+    project_client.dv_rrh_desired = current_assessment&.dv_rrh_desired
     project_client.sro_ok = current_assessment&.sro_ok
     project_client.evicted = current_assessment&.evicted
     project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false

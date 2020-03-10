@@ -143,6 +143,10 @@ FactoryBot.define do
     name { "Interested in Youth RRH" }
     verb { "be" }
   end
+  factory :interested_in_dv_rrh, class: 'Rules::InterestedInDvRrh' do
+    name { "Interested in DV RRH" }
+    verb { "be" }
+  end
   # factory :age_greater_than_eighteen, class: 'Rules::AgeGreaterThanEightteen' do
   #   name { "Age greater than 18" }
   #   verb { "be" }

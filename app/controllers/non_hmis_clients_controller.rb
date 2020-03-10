@@ -228,8 +228,8 @@ class NonHmisClientsController < ApplicationController
       assessment_params.extract![:youth_rrh_aggregate]
     end
     if assessment_params.has_key?(:dv_rrh_aggregate)
-      assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'dv' || assessment_params[:dv_rrh_aggregate] == 'both'
-      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'non-dv' || assessment_params[:dv_rrh_aggregate] == 'both'
+      assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'non-dv' || assessment_params[:dv_rrh_aggregate] == 'both'
+      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'dv' || assessment_params[:dv_rrh_aggregate] == 'both'
       assessment_params.extract![:dv_rrh_aggregate]
     end
 
