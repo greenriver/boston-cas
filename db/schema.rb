@@ -1041,7 +1041,7 @@ ActiveRecord::Schema.define(version: 2020_03_11_145208) do
     t.string "match_route", null: false
     t.integer "cas_client_id", null: false
     t.date "client_move_in_date"
-    t.string "source_data_source", null: false
+    t.string "source_data_source"
     t.string "event_contact"
     t.string "event_contact_agency"
     t.integer "vacancy_id", null: false
