@@ -153,6 +153,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :requires_elevator_access,
           :youth_rrh_aggregate,
           :dv_rrh_aggregate,
+          :dv_rrh_desired,
           :veteran_rrh_desired,
           :rrh_th_desired,
           :sro_ok,

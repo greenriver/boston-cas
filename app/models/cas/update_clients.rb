@@ -178,6 +178,7 @@ module Cas
         :ssvf_eligible,
         :rrh_desired,
         :youth_rrh_desired,
+        :dv_rrh_desired,
         :rrh_assessment_contact_info,
         :rrh_assessment_collected_at,
         :enrolled_in_th,
