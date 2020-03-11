@@ -15,17 +15,20 @@ class Dashboards::Overview
   def in_progress
     @in_progress ||= reporting_scope.
       in_progress.
-      pluck(:id)
+      distinct.
+      pluck(:cas_client_id)
   end
 
   def terminated(start_date: @start_date, end_date: @end_date)
     reporting_scope.
       ended_between(start_date: start_date, end_date: end_date).
-      pluck(:terminal_status, :id)
+      distinct.
+      pluck(:terminal_status, :cas_client_id)
   end
 
   def match_results(start_date: @start_date, end_date: @end_date)
-    terminated(start_date: start_date, end_date: end_date).group_by(&:first)
+    hash = terminated(start_date: start_date, end_date: end_date).group_by(&:first)
+    hash.merge(hash) { |key, ids| ids.map { |key, id| id }}
   end
 
   def match_results_by_quarter

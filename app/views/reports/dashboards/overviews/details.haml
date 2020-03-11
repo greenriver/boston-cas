@@ -1,0 +1,16 @@
+- if @sub_key.present?
+  - title = " #{@sub_key} #{@section.to_s.humanize} (#{@key})".titlecase
+-else
+  - title = " #{@key} #{@section.to_s.humanize}".titlecase
+- content_for :title, title
+= content_for :modal_title, title
+
+%table.table
+  %thead
+    - details_columns.each do |name|
+      %th= name.to_s.humanize
+  %tbody
+    - @clients.each do |client|
+      %tr
+        - details_columns.each do |name|
+          %td= client.send(name)
