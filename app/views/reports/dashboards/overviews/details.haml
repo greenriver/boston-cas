@@ -12,5 +12,14 @@
   %tbody
     - @clients.each do |client|
       %tr
-        - details_columns.each do |name|
-          %td= client.send(name)
+        - if client.accessible_by_user?(current_user)
+          - details_columns.each do |name|
+            - value = client.public_send(name)
+            - if name == :id
+              %td= link_to value, client_path(value)
+            - else
+              %td= value
+        - else
+          %td
+          %td.o-text--italic Name Withheld
+          %td

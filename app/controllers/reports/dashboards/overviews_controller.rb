@@ -15,11 +15,13 @@ class Reports::Dashboards::OverviewsController < ApplicationController
 
   def details
     @section = sections.detect { |name| params[:section].to_sym == name }
-    @key = params[:key]
-    @sub_key = params[:sub_key]
+    data = @report.public_send(@section)
+    return Client.none if data.nil?
 
-    data = @report.send(@section)
+    @key = data.keys.detect { |name| params[:key]== name } if params[:key].present?
+
     ids = if @key.present?
+      @sub_key = data[@key].keys.detect { |name| params[:sub_key] == name } if params[:sub_key].present?
       if @sub_key.present?
         data[@key][@sub_key]
       else
@@ -55,6 +57,7 @@ class Reports::Dashboards::OverviewsController < ApplicationController
 
   def details_columns
     [
+      :id,
       :first_name,
       :last_name,
     ]
