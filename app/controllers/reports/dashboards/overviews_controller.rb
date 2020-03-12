@@ -31,7 +31,10 @@ class Reports::Dashboards::OverviewsController < ApplicationController
       data
     end
 
-    @clients = Client.where(id: ids).select(*details_columns)
+    @total_clients = ids.count
+    @clients = Client.where(id: ids).
+      visible_by(current_user).
+      select(*details_columns)
   end
 
   def sections
