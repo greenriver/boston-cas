@@ -22,13 +22,6 @@
           Remote ID:
           = @client.remote_id
 
-  - if @client.parked?
-    .alert.alert-warning
-      %p
-        %i.icon-warning
-        = "#{@client.name} is currently parked and won't be considered for new matches until #{@client.prevent_matching_until}. "
-        = link_to 'See all parked clients.', reports_parked_clients_path, class: 'ml-2'
-
   = render 'tab_navigation', active: 'show', client_id: @client.id
 
   .row.mt-6

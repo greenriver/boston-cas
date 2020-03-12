@@ -14,6 +14,10 @@ module MatchRoutes
       belongs_to :tag
     end
 
+    scope :active, -> do
+      where(active: true)
+    end
+
     scope :available, -> do
       where(active: true).
         order(weight: :asc)

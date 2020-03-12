@@ -498,7 +498,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def reopen!(contact)
     self.class.transaction do
-      client.make_unavailable_in(match_route: match_route)
+      client.make_unavailable_in(match_route: match_route, expires_at: nil)
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
@@ -508,7 +508,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def activate!
     self.class.transaction do
       update! active: true
-      client.make_unavailable_in(match_route: match_route) if match_route.should_prevent_multiple_matches_per_client
+      client.make_unavailable_in(match_route: match_route, expires_at: nil) if match_route.should_prevent_multiple_matches_per_client
       opportunity.update available_candidate: false
       add_default_contacts!
       self.send(match_route.initial_decision).initialize_decision!
@@ -589,7 +589,7 @@ class ClientOpportunityMatch < ApplicationRecord
         client.make_unavailable_in_all_routes
       else
         # Prevent matching on this route again
-        client.make_unavailable_in match_route: route
+        client.make_unavailable_in(match_route: route)
       end
 
       # Cleanup other matches on the same opportunity

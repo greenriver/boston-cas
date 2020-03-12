@@ -100,12 +100,9 @@ class MatchDecisionsController < ApplicationController
         # If we've been asked to park the client do so.  This will set the match status to canceled
         # Don't run the status callbacks unless we aren't parking as they will
         # re-enable the client for matching
-        if can_reject_matches? && decision_params[:prevent_matching_until].present?
-          if decision_params[:prevent_matching_until].to_date > Date.today
-            client = @match.client
-            client.update(prevent_matching_until: decision_params[:prevent_matching_until].to_date)
-            client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match)
-          end
+        prevent_matching_until = decision_params[:prevent_matching_until]&.to_date
+        if can_reject_matches? && prevent_matching_until.present? && prevent_matching_until > Date.today
+          @match.client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match, expires_at: prevent_matching_until)
         else
           @decision.run_status_callback!
         end

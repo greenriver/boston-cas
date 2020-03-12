@@ -60,12 +60,13 @@ class ClientsController < ApplicationController
   end
 
   def update
-    if @client.update(client_params)
+    opts = client_params
+    opts.delete(:prevent_matching_until) if client_params[:prevent_matching_until].present?
+    if @client.update(opts)
       # If we have a future prevent_matching_until date, remove the client from
       # any current matches
-      if @client.parked?
-        @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true)
-      end
+      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: client_params[:prevent_matching_until].to_date) if client_params[:prevent_matching_until].present?
+
       if request.xhr?
         head :ok
       else
