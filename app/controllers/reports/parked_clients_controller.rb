@@ -17,7 +17,7 @@ module Reports
 
       @clients = clients.
         joins(:unavailable_as_candidate_fors).
-        order('unavailable_as_candidate_fors.expires_at asc').
+        order(uacf_t[:expires_at].asc).
         page(params[:page].to_i).per(25)
     end
 

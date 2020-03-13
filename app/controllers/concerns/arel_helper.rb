@@ -54,4 +54,8 @@ module ArelHelper
   def v_t
     Voucher.arel_table
   end
+
+  def uacf_t
+    UnavailableAsCandidateFor.arel_table
+  end
 end
