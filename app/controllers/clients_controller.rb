@@ -63,7 +63,10 @@ class ClientsController < ApplicationController
     if @client.update(client_params)
       # If we have a future prevent_matching_until date, remove the client from
       # any current matches
-      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: params[:client][:prevent_matching_until].to_date) if params[:client].try(:[], :prevent_matching_until).present? && params[:client][:prevent_matching_until].to_date > Date.current
+      prevent_matching_until = params[:client].try(:[], :prevent_matching_until)
+      should_prevent_matching = prevent_matching_until.present? && prevent_matching_until.to_date > Date.current
+
+      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: prevent_matching_until.to_date) if should_prevent_matching
 
       if request.xhr?
         head :ok
