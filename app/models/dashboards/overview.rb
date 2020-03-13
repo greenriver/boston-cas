@@ -37,6 +37,24 @@ class Dashboards::Overview
     end.to_h
   end
 
+  def total_unsuccessful_matches
+    @total_unsuccessful_matches ||= reporting_scope.unsuccessful.has_a_reason.count
+  end
+
+  def unsuccessful_match_reasons
+    @unsuccessful_match_reasons ||= reporting_scope.
+      unsuccessful.
+      has_a_reason.
+      pluck(:decline_reason, :administrative_cancel_reason, :match_step, :actor_type).
+      map do |(decline, cancel, step_name, actor_type)|
+        {
+          reason: decline || cancel,
+          step_name: step_name,
+          actor_type: actor_type,
+        }
+      end
+  end
+
   def preempted_decline_reasons
     reasons = reporting_scope.
       preempted.
