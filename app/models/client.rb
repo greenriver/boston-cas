@@ -500,7 +500,11 @@ class Client < ApplicationRecord
         'Fully matched'
       end
     else
-      'Not available'
+      if unavailable_on_all_routes?
+        'Not available on any route'
+      else
+        'Not available'
+      end
     end
   end
 
