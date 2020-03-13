@@ -15,23 +15,44 @@ class Dashboards::Overview
   def in_progress
     @in_progress ||= reporting_scope.
       in_progress.
-      pluck(:id)
+      distinct.
+      pluck(:cas_client_id)
   end
 
   def terminated(start_date: @start_date, end_date: @end_date)
     reporting_scope.
       ended_between(start_date: start_date, end_date: end_date).
-      pluck(:terminal_status, :id)
+      distinct.
+      pluck(:terminal_status, :cas_client_id)
   end
 
   def match_results(start_date: @start_date, end_date: @end_date)
-    terminated(start_date: start_date, end_date: end_date).group_by(&:first)
+    hash = terminated(start_date: start_date, end_date: end_date).group_by(&:first)
+    hash.merge(hash) { |key, ids| ids.map { |key, id| id }}
   end
 
   def match_results_by_quarter
     quarters_in_report.map do |quarter, start_date|
       [quarter, match_results(start_date: start_date, end_date: start_date.next_quarter - 1.day)]
     end.to_h
+  end
+
+  def total_unsuccessful_matches
+    @total_unsuccessful_matches ||= reporting_scope.unsuccessful.has_a_reason.count
+  end
+
+  def unsuccessful_match_reasons
+    @unsuccessful_match_reasons ||= reporting_scope.
+      unsuccessful.
+      has_a_reason.
+      pluck(:decline_reason, :administrative_cancel_reason, :match_step, :actor_type).
+      map do |(decline, cancel, step_name, actor_type)|
+        {
+          reason: decline || cancel,
+          step_name: step_name,
+          actor_type: actor_type,
+        }
+      end
   end
 
   def preempted_decline_reasons
