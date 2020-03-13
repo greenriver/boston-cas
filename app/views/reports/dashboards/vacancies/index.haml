@@ -1,0 +1,6 @@
+= render 'reports/crumbs_operational'
+= render 'reports/dashboards/tabs', active: 'vacancies'
+= simple_form_for :filter, method: :get do |f|
+  = render 'reports/dashboards/report_filter', form: f
+
+  = f.submit 'Update Dashboard', class: 'btn btn-primary'

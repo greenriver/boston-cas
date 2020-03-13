@@ -178,6 +178,11 @@ Rails.application.routes.draw do
           get :details
         end
       end
+      resources :vacancies, only: [:index] do
+        collection do
+          get :details
+        end
+      end
       resources :delays, only: [:index]
       resources :vacancies, only: [:index]
       resources :clients, only: [:index]
