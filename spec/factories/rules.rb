@@ -339,5 +339,9 @@ FactoryBot.define do
     name { "Never been evicted" }
     verb { "have" }
   end
+  factory :pathways_eligible, class: "Rules::PathwaysEligible" do
+    name { "a pathways assessment newer than most recent ineligible decline" }
+    verb { "have" }
+  end
 end
 

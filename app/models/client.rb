@@ -508,6 +508,13 @@ class Client < ApplicationRecord
     end
   end
 
+  def last_ineligible_response
+    client_opportunity_matches.closed.
+      joins(decisions: :decline_reason).
+      merge(MatchDecisionReasons::Base.ineligible_in_warehouse).
+      maximum(mdr_t[:updated_at])&.to_date
+  end
+
   def has_enrollments?
     self.enrolled_in_th ||
     self.enrolled_in_sh ||
