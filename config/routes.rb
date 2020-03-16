@@ -20,6 +20,16 @@ Rails.application.routes.draw do
     member { post 'restore' }
   end
 
+  def non_hmis
+    member do
+      get :new_assessment
+      get :assessment
+      namespace :history do
+        get :active
+      end
+    end
+  end
+
   resources :clients, only: [:index, :show, :update] do
     resource :contacts, only: [:edit, :update], controller: :client_contacts, concerns: [:restorable]
     patch :unavailable, on: :member
@@ -190,20 +200,14 @@ Rails.application.routes.draw do
   end
 
   resources :deidentified_clients do
+    non_hmis
     collection do
       get :choose_upload
       post :import
     end
-    member do
-      get :new_assessment
-      get :assessment
-    end
   end
   resources :identified_clients do
-    member do
-      get :new_assessment
-      get :assessment
-    end
+    non_hmis
   end
   resources :imported_clients
   resources :messages, only: [:show, :index] do

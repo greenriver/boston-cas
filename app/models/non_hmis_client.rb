@@ -350,4 +350,24 @@ class NonHmisClient < ApplicationRecord
       'No' => false,
     }
   end
+
+  def self.describe_changes(version, changes)
+    if version.event == 'create'
+      [ 'Created Non-HMIS Client' ]
+    else
+      changes.slice(*whitelist_for_changes_display).map do |name, values|
+        "Changed #{humanize_attribute_name(name)}: from \"#{values.first}\" to \"#{values.last}\"."
+      end
+    end
+  end
+
+  def self.whitelist_for_changes_display
+    [
+      'available',
+    ].freeze
+  end
+
+  def self.humanize_attribute_name(name)
+    name.humanize.titleize
+  end
 end

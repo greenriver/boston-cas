@@ -1,0 +1,20 @@
+- if @non_hmis_client.versions.exists?
+  %table.table
+    %thead
+      %tr
+        %th Change
+        %th Initiated By
+        %th On
+        %th Details
+    %tbody
+      - @non_hmis_client.versions.find_each do |v|
+        - changes = describe_changes_to(v).compact
+        - next unless changes.present?
+        %tr
+          %td= v.event.titlecase
+          %td= name_of_whodunnit(v)
+          %td= v.created_at
+          %td
+            - changes.each do |change|
+              = change
+              %br
