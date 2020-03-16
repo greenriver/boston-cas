@@ -173,7 +173,11 @@ Rails.application.routes.draw do
   namespace :reports do
     resources :parked_clients, only: [:index]
     namespace :dashboards do
-      resources :overviews, only: [:index]
+      resources :overviews, only: [:index] do
+        collection do
+          get :details
+        end
+      end
       resources :delays, only: [:index]
       resources :vacancies, only: [:index]
       resources :clients, only: [:index]
