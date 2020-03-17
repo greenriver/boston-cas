@@ -13,7 +13,7 @@
     - if sub_title.present?
       %h2= sub_title
     - if can_manage_deidentified_clients? || can_manage_identified_clients?
-      = link_to active_history_deidentified_client_path, class: 'btn btn-secondary ml-auto' do
+      = link_to polymorphic_path([:active, :history, client_type, :client]), class: 'btn btn-secondary ml-auto' do
         %i.icon-settings_backup_restore
         History
   %section

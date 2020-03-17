@@ -356,14 +356,41 @@ class NonHmisClient < ApplicationRecord
       [ 'Created Non-HMIS Client' ]
     else
       changes.slice(*whitelist_for_changes_display).map do |name, values|
-        "Changed #{humanize_attribute_name(name)}: from \"#{values.first}\" to \"#{values.last}\"."
+        case name
+        when 'available'
+          describe_available(values)
+        when 'available_date'
+          describe_available_date(values)
+        when 'available_reason'
+          describe_available_reason(values)
+        else
+          "Changed #{humanize_attribute_name(name)}: from \"#{values.first}\" to \"#{values.last}\"."
+        end
       end
     end
+  end
+
+  def self.describe_available(values)
+    if values.last
+      'Marked Client Available'
+    else
+      'Marked Client Ineligible'
+    end
+  end
+
+  def self.describe_available_date(values)
+    "Ineligible on: #{values.last.to_date}" if values.last.present?
+  end
+
+  def self.describe_available_reason(values)
+    "Ineligible because: #{values.last}" if values.last.present?
   end
 
   def self.whitelist_for_changes_display
     [
       'available',
+      'available_date',
+      'available_reason',
     ].freeze
   end
 
