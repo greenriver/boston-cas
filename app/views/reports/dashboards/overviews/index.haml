@@ -27,46 +27,54 @@
         %dt #{label}
         %dd= link_to "#{results.count}", details_reports_dashboards_overviews_path(details_params.merge(section: :match_results_by_quarter, key: "#{quarter}", sub_key: "#{label}")), data: {loads_in_pjax_modal: true}
 
+%h2 Unsuccessful Match Reasons
 .row
-  .col-6
-    .row
-      .col
-        %h2 Pre-empted Reasons
-      .col-6
-        %table.table
-          %thead
-            %th Decline Reason
-            %th Number of matches
-            %th Percent
-          %tbody
-            - @report.preempted_decline_reasons.each do |reason|
-              %tr
-                %td= reason[:label]
-                %td= reason[:count]
-                %td= reason[:percent]
-      .col-6
-        %table.table
-          %thead
-            %th Cancel Reason
-            %th Number of matches
-            %th Percent
-          %tbody
-            - @report.preempted_cancel_reasons.each do |reason|
-              %tr
-                %td= reason[:label]
-                %td= reason[:count]
-                %td= reason[:percent]
-
-  .col-6
-    %h2 Rejected Reasons
+  .col-4
     %table.table
       %thead
-        %th Decline Reason
-        %th Number of matches
-        %th Percent
+        %th Reason
+        %th Number of Matches
+        %th Percentage
       %tbody
-      - @report.rejected_decline_reasons.each do |reason|
-        %tr
-          %td= reason[:label]
-          %td= reason[:count]
-          %td= reason[:percent]
+        - @report.unsuccessful_match_reasons.group_by { |r| r[:reason] }.sort_by{|k,v| v.count}.reverse.each do |reason, matches|
+          %tr
+            %td= reason
+            - count = matches.count
+            %td= count
+            %td= count * 100 / @report.total_unsuccessful_matches
+  .col-4
+    %table.table
+      %thead
+        %th Actor Type
+        %th Reasons
+        %th Number of Matches
+        %th Percentage
+      %tbody
+        - @report.unsuccessful_match_reasons.group_by { |r| r[:actor_type] }.sort_by{|k,v| v.count}.reverse.each do |actor_type, matches|
+          %tr
+            %td= actor_type
+            %td
+              %ul.list-unstyled
+                - matches.group_by { |r| r[:reason] }.keys.each do |reason|
+                  %li= reason
+            - count = matches.count
+            %td= count
+            %td= count * 100 / @report.total_unsuccessful_matches
+  .col-4
+    %table.table
+      %thead
+        %th Step Name
+        %th Reasons
+        %th Number of Matches
+        %th Percentage
+      %tbody
+        - @report.unsuccessful_match_reasons.group_by { |r| r[:step_name] }.sort_by{|k,v| v.count}.reverse.each do |actor_type, matches|
+          %tr
+            %td= actor_type
+            %td
+              %ul.list-unstyled
+                - matches.group_by { |r| r[:reason] }.keys.each do |reason|
+                  %li= reason
+            - count = matches.count
+            %td= count
+            %td= count * 100 / @report.total_unsuccessful_matches

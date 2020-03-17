@@ -30,6 +30,16 @@ class Reporting::Decisions < ApplicationRecord
     where(terminal_status: 'Success')
   end
 
+  scope :unsuccessful, -> do
+    where(terminal_status: ['Pre-empted', 'Rejected'])
+  end
+
+  # This filters the decisions to ones with a reason field, but does not otherwise narrow the scope
+  scope :has_a_reason, -> do
+    where.not(decline_reason: nil).
+      or(where.not(administrative_cancel_reason: nil))
+  end
+
   scope :preempted, -> do
     where(terminal_status: 'Pre-empted')
   end

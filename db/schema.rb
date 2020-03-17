@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_10_001320) do
+ActiveRecord::Schema.define(version: 2020_03_12_172917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1041,12 +1041,13 @@ ActiveRecord::Schema.define(version: 2020_03_10_001320) do
     t.string "match_route", null: false
     t.integer "cas_client_id", null: false
     t.date "client_move_in_date"
-    t.string "source_data_source", null: false
+    t.string "source_data_source"
     t.string "event_contact"
     t.string "event_contact_agency"
     t.integer "vacancy_id", null: false
     t.string "housing_type"
     t.boolean "ineligible_in_warehouse", default: false, null: false
+    t.string "actor_type"
     t.index ["client_id", "match_id", "decision_id"], name: "index_reporting_decisions_c_m_d", unique: true
   end
 
@@ -1306,6 +1307,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_001320) do
     t.string "match_route_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "expires_at"
     t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
   end
