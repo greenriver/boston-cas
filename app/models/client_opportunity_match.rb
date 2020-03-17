@@ -341,6 +341,10 @@ class ClientOpportunityMatch < ApplicationRecord
     @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
   end
 
+  def declined_decision
+    @declined_decision ||= initialized_decisions.where.not(decline_reason_id: nil)&.first
+  end
+
   def clear_current_decision_cache!
     @current_decision = nil
   end
