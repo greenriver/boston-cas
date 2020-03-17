@@ -61,11 +61,7 @@ module ArelHelper
       UnavailableAsCandidateFor.arel_table
     end
 
-    def md_t
-      MatchDecisions::Base.arel_table
-    end
-
-    def mdr_t
+    def mdr_b_t
       MatchDecisionReasons::Base.arel_table
     end
   end
@@ -90,11 +86,7 @@ module ArelHelper
     UnavailableAsCandidateFor.arel_table
   end
 
-  def md_t
-    MatchDecisions::Base.arel_table
-  end
-
-  def mdr_t
+  def mdr_b_t
     MatchDecisionReasons::Base.arel_table
   end
 end

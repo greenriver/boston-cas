@@ -38,7 +38,7 @@ class Rules::PathwaysEligible < Rule
     # assessment
   private def ineligible_ids(requirement)
     Client.joins(client_opportunity_matches: [{decisions: :decline_reason}]).
-      where(md_t[:updated_at].gt(c_t[:rrh_assessment_collected_at])).
+      where(md_b_t[:updated_at].gt(c_t[:rrh_assessment_collected_at])).
       merge(
         ClientOpportunityMatch.closed.
         on_route(route(requirement.variable))
