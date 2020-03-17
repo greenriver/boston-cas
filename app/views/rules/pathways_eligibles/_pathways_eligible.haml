@@ -1,0 +1,3 @@
+- rule = pathways_eligible
+%h4 Route
+= select_tag(:variable, options_from_collection_for_select(rule.available_routes, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_routes.to_h.to_json})

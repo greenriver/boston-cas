@@ -1,6 +1,6 @@
 %tr
   %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
-  %td.history--event-name      
+  %td.history--event-name
     = event.name
     - if event.show_note?(current_contact)
       .history--event-note

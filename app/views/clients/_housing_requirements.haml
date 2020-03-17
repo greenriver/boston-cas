@@ -53,4 +53,9 @@
       %li
         %span.c-detailed-list__label Contact info for maximizing income
         .mt-2.ml-8.o-text--normal= simple_format @client.rrh_assessment_contact_info
+    - if @client.last_ineligible_response.present?
+      - response = @client.last_ineligible_response
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Previously Marked Ineligible for Pathways
+        %span.c-detailed-list__value= response ? response : boolean_icon(false)
 

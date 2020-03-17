@@ -96,13 +96,13 @@ class Client < ApplicationRecord
     end
   end
 
-  scope :parked, -> { where(['prevent_matching_until > ?', Date.today]) }
-  scope :not_parked, -> do
-    where(['prevent_matching_until is null or prevent_matching_until < ?', Date.today])
+  scope :parked, -> do
+    joins(:unavailable_as_candidate_fors)
   end
+
   scope :available_for_matching, -> (match_route)  do
     # anyone who hasn't been matched fully, isn't parked
-    available_clients = available.available_as_candidate(match_route).not_parked
+    available_clients = available.available_as_candidate(match_route)
     # and unless allowed by the route, isn't active in another match
     if match_route.should_prevent_multiple_matches_per_client
       available_clients.where.not(
@@ -344,15 +344,6 @@ class Client < ApplicationRecord
     client_opportunity_matches.active.where(opportunity: opportunity).first
   end
 
-  # def active_in_match
-  #   client_opportunity_matches.active.first
-  # end
-
-  # Deprecated, moved to SubjectForMatches
-  # def active_matches
-  #   client_opportunity_matches.active
-  # end
-
   # NOTE: this uses any? instead of exists? so that data can pre pre-loaded in batches
   def active_in_match?
     active_matches.any?
@@ -374,19 +365,28 @@ class Client < ApplicationRecord
     UnavailableAsCandidateFor.where(client_id: id).destroy_all
   end
 
-  def make_unavailable_in match_route:
-    route_name = MatchRoutes::Base.route_name_from_route(match_route)
-    unavailable_as_candidate_fors.create!(match_route_type: route_name)
+  private def default_unavailable_expiration_date
+    days = Config.get(:unavailable_for_length)
+    return nil unless days.present? && days.positive?
+
+    Date.current + days.days
   end
 
-  def make_unavailable_in_all_routes
+  def make_unavailable_in(match_route:, expires_at: default_unavailable_expiration_date)
+    route_name = MatchRoutes::Base.route_name_from_route(match_route)
+
+    un = unavailable_as_candidate_fors.where(match_route_type: route_name).first_or_create
+    un.update(expires_at: expires_at)
+  end
+
+  def make_unavailable_in_all_routes(expires_at: default_unavailable_expiration_date)
     MatchRoutes::Base.all_routes.each do |route|
-      make_unavailable_in match_route: route
+      make_unavailable_in(match_route: route, expires_at: expires_at)
     end
   end
 
   # cancel_specific must be a match object
-  def unavailable(permanent:false, contact_id:nil, cancel_all:false, cancel_specific:false)
+  def unavailable(permanent: false, contact_id: nil, cancel_all: false, cancel_specific: false, expires_at: default_unavailable_expiration_date)
     Client.transaction do
       update(available: false) if permanent
 
@@ -403,6 +403,9 @@ class Client < ApplicationRecord
         end
         # Delete any non-active open matches
         client_opportunity_matches.open.each(&:delete)
+        # Prevent any new matches for this client
+        # This will re-queue the client once the date is passed
+        make_unavailable_in_all_routes(expires_at: expires_at)
       end
 
       if cancel_specific
@@ -419,11 +422,8 @@ class Client < ApplicationRecord
         opportunity.update(available_candidate: true)
         # Delete any non-active open matches
         client_opportunity_matches.on_route(route).proposed.each(&:delete)
+        make_unavailable_in(match_route: route, expires_at: expires_at)
       end
-
-      # Prevent any new matches for this client
-      # This will re-queue the client once the date is passed
-      make_unavailable_in_all_routes
     end
     Matching::RunEngineJob.perform_later
   end
@@ -479,16 +479,15 @@ class Client < ApplicationRecord
     return states
   end
 
-  def parked?
-    prevent_matching_until.present? && prevent_matching_until > Date.today
+  def unavailable_on_all_routes?
+    ufs = unavailable_as_candidate_fors.distinct.pluck(:match_route_type)
+    routes = MatchRoutes::Base.active.distinct.pluck(:type)
+    (routes - ufs).count.zero?
   end
 
   def is_available_for_matching?
-    if parked?
-      return false
-    else
-      return available
-    end
+    return false if unavailable_on_all_routes?
+    available
   end
 
   def available_text
@@ -501,12 +500,19 @@ class Client < ApplicationRecord
         'Fully matched'
       end
     else
-      if parked?
-        "Parked until #{prevent_matching_until}"
+      if unavailable_on_all_routes?
+        'Not available on any route'
       else
         'Not available'
       end
     end
+  end
+
+  def last_ineligible_response
+    client_opportunity_matches.closed.
+      joins(decisions: :decline_reason).
+      merge(MatchDecisionReasons::Base.ineligible_in_warehouse).
+      maximum(mdr_b_t[:updated_at])&.to_date
   end
 
   def has_enrollments?

@@ -1,4 +1,3 @@
-- # FIXME: we need to pass this in where ever we call it
 - opportunities.each do |opportunity|
   - if @match_state == :closed_matches
     - matches = opportunity.send(@match_state).where(id: @matches.select(:id))

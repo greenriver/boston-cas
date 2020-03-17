@@ -39,7 +39,6 @@ FactoryBot.define do
       decline_reason_id { 12 }
     end
 
-
     # type 'MatchDecisions::MatchRecommendationShelterAgency'
     # contact_id 5
     # client_last_seen_date

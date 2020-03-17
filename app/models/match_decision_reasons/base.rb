@@ -17,7 +17,13 @@ module MatchDecisionReasons
 
     self.table_name = 'match_decision_reasons'
 
+    has_many :decisions, class_name: 'MatchDecisions::Base', foreign_key: :decline_reason_id
+
     scope :active, -> { where(active: true) }
+
+    scope :ineligible_in_warehouse, -> do
+      where(ineligible_in_warehouse: true)
+    end
 
     validates :name, presence: true
 

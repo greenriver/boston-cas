@@ -41,6 +41,33 @@ module ArelHelper
     end
 
     # Shortcuts for arel tables
+    def c_t
+      Client.arel_table
+    end
+
+    def o_t
+      Opportunity.arel_table
+    end
+
+    def md_b_t
+      MatchDecisions::Base.arel_table
+    end
+
+    def v_t
+      Voucher.arel_table
+    end
+
+    def uacf_t
+      UnavailableAsCandidateFor.arel_table
+    end
+
+    def mdr_b_t
+      MatchDecisionReasons::Base.arel_table
+    end
+  end
+
+  def c_t
+    Client.arel_table
   end
 
   def o_t
@@ -53,5 +80,13 @@ module ArelHelper
 
   def v_t
     Voucher.arel_table
+  end
+
+  def uacf_t
+    UnavailableAsCandidateFor.arel_table
+  end
+
+  def mdr_b_t
+    MatchDecisionReasons::Base.arel_table
   end
 end
