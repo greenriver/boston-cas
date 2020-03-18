@@ -16,6 +16,17 @@
 
       = f.submit 'Update Dashboard', class: 'btn btn-primary'
 
+.row
+  .col-12.text-center
+    %h2 Time Between Match Steps
+  .col-12.text-center
+    %h3= @report.average
+
+%dl
+  - @report.time_between_steps.each do |bucket, ids|
+    %dt= bucket
+    %dd= link_to ids.count, details_reports_dashboards_time_between_steps_path(details_params.merge(bucket: bucket)), data: {loads_in_pjax_modal: true}
+
 = content_for :page_js do
   :javascript
     $(document).ready(function() {
@@ -34,5 +45,4 @@
           $('.jToStep').html(data);
         });
       });
-      $('.jMatchRoute').trigger('change');
     });

@@ -1,0 +1,16 @@
+- title = "Matches with time between steps #{params[:bucket]}".titleize
+- content_for :title, title
+= content_for :modal_title, title
+
+%p= "#{pluralize(@total_matches, 'match')} total, #{pluralize(@total_matches - @matches.size, 'match')} withheld"
+
+%table.table
+  %thead
+    %th Id
+    %th Client Name
+  %tbody
+    - @matches.each do |match|
+      %tr
+        %td= link_to match.id, match_path(match)
+        - contact = current_user.contact
+        %td= match.client_name_for_contact contact, hidden: match.confidential?

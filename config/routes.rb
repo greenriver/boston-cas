@@ -185,6 +185,7 @@ Rails.application.routes.draw do
       end
       resources :time_between_steps, only: [:index] do
         collection do
+          get :details
           get :step_name_options
         end
       end

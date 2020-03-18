@@ -5,10 +5,20 @@
 ###
 #
 class Reports::Dashboards::TimeBetweenStepsController < ApplicationController
+  include PjaxModalController
+
   before_action :require_can_view_reports!
-  before_action :set_report, only: [:index]
+  before_action :set_report, except: [:step_name_options]
 
   def index
+  end
+
+
+  def details
+    ids = @report.time_between_steps[params[:bucket]]
+    @total_matches = ids.size
+    @matches = ClientOpportunityMatch.where(id: ids).
+      visible_by(current_user)
   end
 
   def step_name_options
@@ -23,8 +33,21 @@ class Reports::Dashboards::TimeBetweenStepsController < ApplicationController
     render layout: false
   end
 
+  def details_params
+    {
+      filter:
+        {
+          start_date: @start_date,
+          end_date: @end_date,
+          match_route: @match_route_id,
+          program_types: @program_types,
+        }
+    }
+  end
+  helper_method :details_params
+
   def step_names(match_route_id)
-    match_steps = MatchRoutes::Base.find(match_route_id).class.match_steps
+    match_steps = MatchRoutes::Base.find(match_route_id).class.match_steps_for_reporting
     match_steps.map { |match_step, order| [match_step.constantize.new.step_name, order] }.to_h
   end
 
@@ -36,9 +59,16 @@ class Reports::Dashboards::TimeBetweenStepsController < ApplicationController
     @program_types = params.dig(:filter, :program_types)&.reject { |type| type.blank? } || []
     @step_names = step_names(@match_route_id.to_i)
     keys = @step_names.keys
-    @from_step = @step_names[keys.first]
-    @to_step = @step_names[keys.last]
+    @from_step = params.dig(:filter, :from_step)&.to_i || @step_names[keys.first]
+    @to_step = params.dig(:filter, :to_step)&.to_i || @step_names[keys.last]
 
-    # TODO @report =
+    @report = Dashboards::TimeBetweenSteps.new(
+      start_date: @start_date,
+      end_date: @end_date,
+      match_route_name: @match_route_name,
+      program_types: @program_types,
+      from_step: @from_step,
+      to_step: @to_step,
+    )
   end
 end
