@@ -5,7 +5,7 @@
 ###
 
 class Rules::RequireInterestInNeighborhood < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:neighborhood_interests.to_s)
       if requirement.positive
         where = 'not(neighborhood_interests = \'[]\')'

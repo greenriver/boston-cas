@@ -5,7 +5,7 @@
 ###
 
 class Rules::GroundFloor < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:requires_elevator_access.to_s)
       scope.where(requires_elevator_access: requirement.positive)
     else

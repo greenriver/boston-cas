@@ -5,7 +5,7 @@
 ###
 
 class Rules::VispdatScoreEightOrMore < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     c_t = Client.arel_table
     if Client.column_names.include?(:vispdat_score.to_s)
       if requirement.positive

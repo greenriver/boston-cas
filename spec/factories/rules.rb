@@ -343,5 +343,9 @@ FactoryBot.define do
     name { "a pathways assessment newer than most recent ineligible decline" }
     verb { "have" }
   end
+  factory :rank_below, class: "Rules::RankBelow" do
+    name { "Rank Higher (closer to #1) than" }
+    verb { "have" }
+  end
 end
 

@@ -5,7 +5,7 @@
 ###
 
 class Rules::InterestedInYouthRrh < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:youth_rrh_desired.to_s)
       scope.where(youth_rrh_desired: requirement.positive)
     else

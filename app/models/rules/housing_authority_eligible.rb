@@ -5,7 +5,7 @@
 ###
 
 class Rules::HousingAuthorityEligible < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:ha_eligible.to_s)
       scope.where(ha_eligible: requirement.positive)
     else

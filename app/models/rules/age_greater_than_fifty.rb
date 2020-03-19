@@ -5,7 +5,7 @@
 ###
 
 class Rules::AgeGreaterThanFifty < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:date_of_birth.to_s)
       years_ago = Date.today - 50.years
       if requirement.positive

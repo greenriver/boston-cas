@@ -5,7 +5,7 @@
 ###
 
 class Rules::WillingToLiveInCongregateHousing < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:congregate_housing.to_s)
       if requirement.positive
         scope.where(congregate_housing: true)

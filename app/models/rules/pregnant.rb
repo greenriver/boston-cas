@@ -5,7 +5,7 @@
 ###
 
 class Rules::Pregnant < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:pregnancy_status.to_s)
       scope.where(pregnancy_status: requirement.positive)
     else

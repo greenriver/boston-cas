@@ -5,7 +5,7 @@
 ###
 
 class Rules::DmhEligible < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:dmh_eligible.to_s)
       scope.where(dmh_eligible: requirement.positive)
     else

@@ -11,18 +11,18 @@ RSpec.describe Rules::PathwaysEligible, type: :model do
     let!(:hsa_decline_reason) { create :hsa_decline_reason, ineligible_in_warehouse: true }
     let!(:roy_match) { create :unsuccessful_client_opportunity_match, client: roy }
 
-    let!(:positive) { create :requirement, rule: rule, positive: true, variable: MatchRoutes::ProviderOnly.first.id }
-    let!(:negative) { create :requirement, rule: rule, positive: false, variable: MatchRoutes::ProviderOnly.first.id }
+    let!(:positive) { create :requirement, rule: rule, positive: true }
+    let!(:negative) { create :requirement, rule: rule, positive: false }
 
-    let(:clients_that_fit) { positive.clients_that_fit(Client.all) }
-    let(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
+    let(:clients_that_fit) { positive.clients_that_fit(Client.all, bob_match.opportunity) }
+    let(:clients_that_dont_fit) { negative.clients_that_fit(Client.all, roy_match.opportunity) }
 
     context 'when assessment happened before decline' do
       before :each do
         roy_match.program.update(match_route_id: MatchRoutes::ProviderOnly.first.id)
+        bob_match.program.update(match_route_id: MatchRoutes::ProviderOnly.first.id)
         decision = roy.client_opportunity_matches.first.hsa_accepts_client_decision
         decision.update(decline_reason_id: hsa_decline_reason.id, status: :declined)
-
       end
 
       context 'when positive' do

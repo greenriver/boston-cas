@@ -5,7 +5,7 @@
 ###
 
 class Rules::LifetimeSexOffender < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:lifetime_sex_offender.to_s)
       scope.where(lifetime_sex_offender: requirement.positive)
     else

@@ -24,7 +24,7 @@ class Rules::EnrolledInHmisProject < Rule
     available_projects.to_h.try(:[], value.to_i) || value
   end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:enrolled_project_ids.to_s)
       if requirement.positive
         where = 'enrolled_project_ids @> ?'

@@ -5,7 +5,7 @@
 ###
 
 class Rules::PartOfAFamily < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:family_member.to_s)
       scope.where(family_member: requirement.positive)
     else

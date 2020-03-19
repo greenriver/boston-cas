@@ -5,7 +5,7 @@
 ###
 
 class Rules::NeverEvicted < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:evicted.to_s)
       scope.where.not(evicted: requirement.positive)
     else

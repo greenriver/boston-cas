@@ -8,9 +8,14 @@ module SubjectForMatches
   extend ActiveSupport::Concern
 
   class_methods do
-    def matching_requirements(requirements)
+    def matching_requirements(requirements, co_candidate:)
       requirements.reduce(self) do |scope, requirement|
         requirement.clients_that_fit(scope)
+        if co_candidate.class.name == 'Opportunity'
+          requirement.clients_that_fit(scope, co_candidate)
+        else
+          requirement.clients_that_fit(scope)
+        end
       end
     end
 
@@ -23,7 +28,7 @@ module SubjectForMatches
     end
 
     def matching_co_candidate(co_candidate)
-      matching_requirements(co_candidate.requirements_with_inherited).
+      matching_requirements(co_candidate.requirements_with_inherited, co_candidate: co_candidate).
         not_rejected_for(co_candidate)
     end
 

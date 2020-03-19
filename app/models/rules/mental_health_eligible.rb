@@ -5,7 +5,7 @@
 ###
 
 class Rules::MentalHealthEligible < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:mental_health_problem.to_s)
       scope.where(mental_health_problem: requirement.positive)
     else
