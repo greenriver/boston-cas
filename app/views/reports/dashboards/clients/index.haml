@@ -41,7 +41,7 @@
     %dl
       - average_days_to_success.each do |key, value|
         %dt= key
-        %dd= value
+        %dd= link_to value, matches_details_reports_dashboards_clients_path(details_params.merge(section: :average_days_to_success, by: :gender, key: key)), data: {loads_in_pjax_modal: true}
 
 .row
   - average_matches_to_success = @report.average_matches_to_success(by: :gender)
@@ -54,7 +54,7 @@
     %dl
       - average_matches_to_success.each do |key, value|
         %dt= key
-        %dd= value
+        %dd= link_to value, matches_details_reports_dashboards_clients_path(details_params.merge(section: :average_matches_to_success, by: :gender, key: key)), data: {loads_in_pjax_modal: true}
 
 = content_for :page_js do
   :javascript

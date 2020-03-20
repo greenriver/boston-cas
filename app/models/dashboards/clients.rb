@@ -64,6 +64,17 @@ class Dashboards::Clients
     averages
   end
 
+  def matches_for_clients(by:, bucket:)
+    client_ids = successful_clients(by: by)[bucket].map { |client| client.id }
+    Reporting::Decisions.
+      joins(:client).
+      terminated.
+      where(
+        cas_client_id: client_ids,
+        current_step: true,
+      )
+  end
+
   def client_scope
     Client.
       joins(:reporting_decisions).

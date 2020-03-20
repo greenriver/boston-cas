@@ -192,6 +192,7 @@ Rails.application.routes.draw do
       resources :clients, only: [:index] do
         collection do
           get :client_details
+          get :matches_details
         end
       end
     end
