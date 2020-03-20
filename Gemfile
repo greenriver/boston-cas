@@ -1,12 +1,12 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
+gem "rails", '~>6.0.2.2'
 gem "pg", '~> 0.20.0'
 gem 'activerecord-import'
 
 gem 'composite_primary_keys', '~> 12.0'
 gem 'order_as_specified'
-gem "rails", '~>6.0.2.1'
 gem 'bootsnap'
 gem 'bcrypt'
 gem 'with_advisory_lock'
