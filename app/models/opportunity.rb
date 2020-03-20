@@ -219,4 +219,8 @@ class Opportunity < ApplicationRecord
     end
     SubProgram.all.each(&:update_summary!)
   end
+
+  def clients_that_fit(requirement, scope)
+    requirement.clients_that_fit(scope, self)
+  end
 end

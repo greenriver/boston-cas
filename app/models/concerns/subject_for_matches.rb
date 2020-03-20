@@ -10,12 +10,7 @@ module SubjectForMatches
   class_methods do
     def matching_requirements(requirements, co_candidate:)
       requirements.reduce(self) do |scope, requirement|
-        requirement.clients_that_fit(scope)
-        if co_candidate.class.name == 'Opportunity'
-          requirement.clients_that_fit(scope, co_candidate)
-        else
-          requirement.clients_that_fit(scope)
-        end
+        co_candidate.clients_that_fit(requirement, scope)
       end
     end
 

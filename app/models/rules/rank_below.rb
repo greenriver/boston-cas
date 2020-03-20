@@ -21,7 +21,6 @@ class Rules::RankBelow < Rule
     return scope unless opportunity
 
     if Client.column_names.include?(:tags.to_s)
-      # FIXME, how do we determine the route...
       tag_id = opportunity.match_route.tag_id
       return scope unless tag_id
 

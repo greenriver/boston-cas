@@ -8,7 +8,6 @@ RSpec.describe Rules::RankBelow, type: :model do
     let!(:bob_match) { create :successful_client_opportunity_match, client: bob }
 
     let!(:roy) { create :client, first_name: 'Roy', tags: {1 => 11} }
-    let!(:hsa_decline_reason) { create :hsa_decline_reason, ineligible_in_warehouse: true }
     let!(:roy_match) { create :unsuccessful_client_opportunity_match, client: roy }
 
     let!(:positive) { create :requirement, rule: rule, positive: true, variable: 10 }
