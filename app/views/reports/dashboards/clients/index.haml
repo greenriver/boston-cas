@@ -1,0 +1,61 @@
+= render 'reports/crumbs_operational'
+= render 'reports/dashboards/tabs', active: 'clients'
+
+.c-card
+  .c-card__content
+    = simple_form_for :filter, method: :get do |f|
+      .row
+        .col-3
+          = f.input :start_date, as: :date_picker, input_html: { value: @start_date }
+        .col-3
+          = f.input :end_date, as: :date_picker, input_html: { value: @end_date }
+        .col-3
+          = f.input :match_route, collection: MatchRoutes::Base.available, selected: @match_route_id, include_blank: false, input_html: { class: 'select2 jMatchRoute' }
+
+      %hr
+
+      = f.submit 'Update Dashboard', class: 'btn btn-primary'
+
+.row
+  .col-6
+    %h2.text-center Clients who received matches
+    %dl
+      - @report.matched_clients(by: :gender).each do |group, values|
+        %dt= group
+        %dd= values.count
+  .col-6
+    %h2.text-center Clients who sucessfully completed matches
+    %dl
+      - @report.successful_clients(by: :gender).each do |group, values|
+        %dt= group
+        %dd= values.count
+
+.row
+  - average_days_to_success = @report.average_days_to_success(by: :gender)
+  .col-12
+    %h2.text-center Average time to client successfully completing a match
+    %h3.text-center= "#{average_days_to_success.values.sum / average_days_to_success.size} days"
+
+.row
+  .col-12
+    %dl
+      - average_days_to_success.each do |key, value|
+        %dt= key
+        %dd= value
+
+.row
+  - average_matches_to_success = @report.average_matches_to_success(by: :gender)
+  .col-12
+    %h2.text-center Average matches to client successfully completing a match
+    %h3.text-center= "#{average_matches_to_success.values.sum / average_days_to_success.size} matches"
+
+.row
+  .col-12
+    %dl
+      - average_matches_to_success.each do |key, value|
+        %dt= key
+        %dd= value
+
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

@@ -189,7 +189,11 @@ Rails.application.routes.draw do
           get :step_name_options
         end
       end
-      resources :clients, only: [:index]
+      resources :clients, only: [:index] do
+        collection do
+          get :details
+        end
+      end
     end
   end
 
