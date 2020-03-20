@@ -20,7 +20,9 @@
   .col-12.text-center
     %h2 Time Between Match Steps
   .col-12.text-center
-    %h3= @report.average
+    %h3
+      Average Time
+      = pluralize(@report.average, 'day')
 
 %dl
   - @report.time_between_steps.each do |bucket, ids|

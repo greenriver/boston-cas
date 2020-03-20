@@ -15,7 +15,7 @@ class Dashboards::TimeBetweenSteps < Dashboards::Base
 
   def average
     sums = reporting_scope
-    sums.values.sum / Float(sums.size)
+    (sums.values.sum / Float(sums.size)).round
   end
 
   def time_between_steps
