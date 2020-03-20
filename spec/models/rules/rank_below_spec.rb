@@ -23,7 +23,6 @@ RSpec.describe Rules::RankBelow, type: :model do
       roy_match.program.update(match_route_id: route.id)
       bob_match.program.update(match_route_id: route.id)
       decision = roy.client_opportunity_matches.first.hsa_accepts_client_decision
-      decision.update(decline_reason_id: hsa_decline_reason.id, status: :declined)
     end
 
     context 'when positive' do
