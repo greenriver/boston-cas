@@ -13,8 +13,49 @@ class Reports::Dashboards::ClientsController < ApplicationController
   def index
   end
 
-  def details
+  def client_details
+    @section = client_details_sections.detect { |name| params[:section].to_sym == name }
+    data = @report.public_send(@section, {by: :gender})
+    return Client.none if data.nil?
+
+    @key = data.keys.detect { |name| params[:key]== name } if params[:key].present?
+    return Client.none if @key.nil?
+
+    ids = data[@key].map { |client| client.id }
+    @total_clients = ids.size
+    @clients = Client.where(id: ids).
+      visible_by(current_user).
+      select(*client_details_columns)
   end
+
+  def client_details_sections
+    [
+      :matched_clients,
+      :successful_clients,
+    ]
+  end
+
+  def client_details_columns
+    [
+      :id,
+      :first_name,
+      :last_name,
+    ]
+  end
+  helper_method :client_details_columns
+
+  def details_params
+    {
+      filter:
+        {
+          start_date: @start_date,
+          end_date: @end_date,
+          match_route: @match_route_id,
+          program_types: @program_types,
+        }
+    }
+  end
+  helper_method :details_params
 
   def set_report
     @start_date = params.dig(:filter, :start_date)&.to_date || Date.current.last_year

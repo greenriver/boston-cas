@@ -191,7 +191,7 @@ Rails.application.routes.draw do
       end
       resources :clients, only: [:index] do
         collection do
-          get :details
+          get :client_details
         end
       end
     end

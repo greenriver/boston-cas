@@ -1,0 +1,19 @@
+- title = " #{@key} #{@section.to_s.humanize}".titlecase
+- content_for :title, title
+= content_for :modal_title, title
+
+%p= "#{pluralize(@total_clients, 'client')} total, #{pluralize(@total_clients - @clients.size, 'name')} withheld"
+
+%table.table
+  %thead
+    - client_details_columns.each do |name|
+      %th= name.to_s.humanize
+  %tbody
+    - @clients.each do |client|
+      %tr
+        - client_details_columns.each do |name|
+          - value = client.public_send(name)
+          - if name == :id
+            %td= link_to value, client_path(value)
+          - else
+            %td= value
