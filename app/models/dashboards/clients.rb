@@ -31,10 +31,11 @@ class Dashboards::Clients
   def average_days_to_success(by:)
     averages = {}
     successful_clients(by: by).each do |bucket, clients|
-      clients.each do |client|
+      total = clients.sum do |client|
         decision = client.reporting_decisions.find_by(current_step: true)
-        averages[bucket] = ((decision.updated_at.to_date - decision.match_started_at.to_date).to_i / Float(clients.count)).round(1)
+        (decision.updated_at.to_date - decision.match_started_at.to_date).to_i
       end
+      averages[bucket] = (total / Float(clients.count)).round(1)
     end
     averages
   end
