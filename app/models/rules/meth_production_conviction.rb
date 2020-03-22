@@ -5,7 +5,7 @@
 ###
 
 class Rules::MethProductionConviction < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:meth_production_conviction.to_s)
       scope.where(meth_production_conviction: requirement.positive)
     else

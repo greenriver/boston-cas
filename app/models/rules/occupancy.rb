@@ -28,7 +28,7 @@ class Rules::Occupancy < Rule
     available_occupancy.to_h.try(:[], value.to_i) || value
   end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:required_minimum_occupancy.to_s)
       a_t = Client.arel_table
       if requirement.positive

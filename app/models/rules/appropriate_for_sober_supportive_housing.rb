@@ -5,7 +5,7 @@
 ###
 
 class Rules::AppropriateForSoberSupportiveHousing < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:sober_housing.to_s)
       if requirement.positive
         scope.where(sober_housing: true)

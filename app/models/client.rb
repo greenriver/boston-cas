@@ -479,6 +479,10 @@ class Client < ApplicationRecord
     return states
   end
 
+  def clients_that_fit(requirement, scope)
+    requirement.clients_that_fit(scope)
+  end
+
   def unavailable_on_all_routes?
     ufs = unavailable_as_candidate_fors.distinct.pluck(:match_route_type)
     routes = MatchRoutes::Base.active.distinct.pluck(:type)

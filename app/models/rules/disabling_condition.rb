@@ -5,7 +5,7 @@
 ###
 
 class Rules::DisablingCondition < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:disabling_condition.to_s)
       scope.where(disabling_condition: requirement.positive)
     else

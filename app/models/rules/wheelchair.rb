@@ -5,7 +5,7 @@
 ###
 
 class Rules::Wheelchair < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:requires_wheelchair_accessibility.to_s)
       scope.where(requires_wheelchair_accessibility: requirement.positive)
     else

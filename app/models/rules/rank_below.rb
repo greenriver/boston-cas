@@ -4,27 +4,31 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
 ###
 
-class Rules::TaggedWith < Rule
+class Rules::RankBelow < Rule
   def variable_requirement?
     true
   end
 
-  def available_tags
-    Tag.all.map{|tag| [tag.id, tag.name] }
+  def available_ranks
+    (1..500)
   end
 
   def display_for_variable value
-    Tag.find(value)&.name
+    value.to_i
   end
 
   def clients_that_fit(scope, requirement, opportunity)
+    return scope unless opportunity
+
     if Client.column_names.include?(:tags.to_s)
+      tag_id = opportunity.match_route.tag_id
+      return scope unless tag_id
+
       if requirement.positive
-        where = "tags ->>'#{requirement.variable.to_s}' is not null"
+        scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int < #{requirement.variable}"))
       else
-        where = "not(tags ->>'#{requirement.variable.to_s}' is not null) OR tags is null"
+        scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int >= #{requirement.variable}"))
       end
-      scope.where(where)
     else
       raise RuleDatabaseStructureMissing.new("clients.tags missing. Cannot check clients against #{self.class}.")
     end

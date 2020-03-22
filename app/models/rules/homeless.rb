@@ -5,7 +5,7 @@
 ###
 
 class Rules::Homeless < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:available.to_s)
       scope.where(available: requirement.positive)
     else

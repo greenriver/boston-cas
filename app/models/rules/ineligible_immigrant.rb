@@ -5,7 +5,7 @@
 ###
 
 class Rules::IneligibleImmigrant < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:ineligible_immigrant.to_s)
       scope.where(ineligible_immigrant: requirement.positive)
     else

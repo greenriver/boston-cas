@@ -5,7 +5,7 @@
 ###
 
 class Rules::UsCitizen < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:us_citizen.to_s)
       scope.where(us_citizen: requirement.positive)
     else

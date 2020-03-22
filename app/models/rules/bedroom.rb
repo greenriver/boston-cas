@@ -23,7 +23,7 @@ class Rules::Bedroom < Rule
     available_number_of_bedrooms.to_h.try(:[], value.to_i) || value
   end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:required_number_of_bedrooms.to_s)
       a_t = Client.arel_table
       if requirement.positive

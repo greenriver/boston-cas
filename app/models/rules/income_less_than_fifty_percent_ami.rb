@@ -5,7 +5,7 @@
 ###
 
 class Rules::IncomeLessThanFiftyPercentAmi < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:income_total_monthly.to_s)
       c_t = Client.arel_table
       ami = Config.get(:ami)

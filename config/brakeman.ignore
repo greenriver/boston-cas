@@ -37,7 +37,7 @@
       "check_name": "MassAssignment",
       "message": "Parameters should be whitelisted for mass assignment",
       "file": "app/helpers/application_helper.rb",
-      "line": 88,
+      "line": 89,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.permit!",
       "render_path": null,
@@ -194,6 +194,26 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "b7920757d198477832d7b4a533f3c99f7f36f505bfd96d7753ce1a425257521e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/rank_below.rb",
+      "line": 31,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"(tags->>'#{opportunity.match_route.tag_id.to_i}')::int >= #{requirement.variable}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::RankBelow",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
@@ -326,6 +346,26 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "d6f3f673367d9e9b29eba62d1d43dd67da605087bc1e49c60b2f10efedd919cf",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/rank_below.rb",
+      "line": 29,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"(tags->>'#{opportunity.match_route.tag_id.to_i}')::int < #{requirement.variable}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::RankBelow",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "d9ecf38c31f426f5f1971d9d83bf8f4c559d5431ecbe39bc4c56136c24e85814",
@@ -381,7 +421,7 @@
           "type": "controller",
           "class": "OpportunitiesController",
           "method": "create",
-          "line": 95,
+          "line": 132,
           "file": "app/controllers/opportunities_controller.rb",
           "rendered": {
             "name": "opportunities/new",
@@ -439,6 +479,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-01-24 10:07:21 -0500",
-  "brakeman_version": "4.7.2"
+  "updated": "2020-03-19 18:44:17 +0000",
+  "brakeman_version": "4.8.0"
 }

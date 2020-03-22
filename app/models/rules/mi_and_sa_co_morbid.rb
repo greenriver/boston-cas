@@ -5,7 +5,7 @@
 ###
 
 class Rules::MiAndSaCoMorbid < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:mental_health_problem.to_s) && Client.column_names.include?(:substance_abuse_problem.to_s)
       if requirement.positive
         scope.where(mental_health_problem: true, substance_abuse_problem: true)

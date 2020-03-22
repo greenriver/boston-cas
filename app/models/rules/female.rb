@@ -5,7 +5,7 @@
 ###
 
 class Rules::Female < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:gender_id.to_s)
       female = Gender.where(numeric: [0,2]).pluck(:numeric)
       if requirement.positive

@@ -16,7 +16,7 @@ class Rule < ApplicationRecord
 
   def always_apply?; false; end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity=nil)
     raise "You need to define clients_that_fit on your Rule subclass #{self.class}."
   end
 

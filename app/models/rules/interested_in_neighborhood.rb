@@ -17,7 +17,7 @@ class Rules::InterestedInNeighborhood < Rule
     available_neighborhoods.to_h.try(:[], value.to_i) || value
   end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:neighborhood_interests.to_s)
       if requirement.positive
         where = 'neighborhood_interests @> ? OR neighborhood_interests = \'[]\''

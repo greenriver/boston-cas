@@ -12,8 +12,8 @@ class Requirement < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
-  def clients_that_fit(scope)
-    rule.clients_that_fit(scope, self)
+  def clients_that_fit(scope, opportunity=nil)
+    rule.clients_that_fit(scope, self, opportunity)
   end
 
   def compatible_with(requirements)
