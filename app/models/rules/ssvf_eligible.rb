@@ -5,7 +5,7 @@
 ###
 
 class Rules::SsvfEligible < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:ssvf_eligible.to_s)
       scope.where(ssvf_eligible: requirement.positive)
     else

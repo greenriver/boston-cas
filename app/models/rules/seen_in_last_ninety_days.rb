@@ -5,7 +5,7 @@
 ###
 
 class Rules::SeenInLastNinetyDays < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     c_t = Client.arel_table
     if last_seen = c_t[:calculated_last_homeless_night]
       if requirement.positive

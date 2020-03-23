@@ -5,7 +5,7 @@
 ###
 
 class Rules::VashEligible < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:vash_eligible.to_s)
       scope.where(vash_eligible: requirement.positive)
     else

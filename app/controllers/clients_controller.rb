@@ -63,9 +63,11 @@ class ClientsController < ApplicationController
     if @client.update(client_params)
       # If we have a future prevent_matching_until date, remove the client from
       # any current matches
-      if @client.parked?
-        @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true)
-      end
+      prevent_matching_until = params[:client].try(:[], :prevent_matching_until)
+      should_prevent_matching = prevent_matching_until.present? && prevent_matching_until.to_date > Date.current
+
+      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: prevent_matching_until.to_date) if should_prevent_matching
+
       if request.xhr?
         head :ok
       else
@@ -117,15 +119,21 @@ class ClientsController < ApplicationController
   def client_scope
     Client.accessible_by_user(current_user)
   end
-  # Use callbacks to share common setup or constraints between actions.
+
   def set_client
     @client = client_scope.find(params[:id])
   end
 
-  # Only allow a trusted parameter "white list" through.
   def client_params
     params.require(:client).
-      permit(:source, :release_of_information, :prevent_matching_until, :dmh_eligible, :va_eligible, :hues_eligible, :confidential)
+      permit(
+        :source,
+        :release_of_information,
+        :dmh_eligible,
+        :va_eligible,
+        :hues_eligible,
+        :confidential,
+      )
   end
 
   def sort_column

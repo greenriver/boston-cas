@@ -5,7 +5,7 @@
 ###
 
 class Rules::Veteran < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:veteran.to_s)
       scope.where(veteran: requirement.positive)
     else

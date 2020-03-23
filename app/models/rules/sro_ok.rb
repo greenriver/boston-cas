@@ -5,7 +5,7 @@
 ###
 
 class Rules::SroOk < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:sro_ok.to_s)
       scope.where(sro_ok: requirement.positive)
     else

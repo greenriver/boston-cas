@@ -5,7 +5,7 @@
 ###
 
 class Rules::Asylee < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:asylee.to_s)
       scope.where(asylee: requirement.positive)
     else

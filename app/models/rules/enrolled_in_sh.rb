@@ -5,7 +5,7 @@
 ###
 
 class Rules::EnrolledInSh < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:enrolled_in_sh.to_s)
       scope.where(enrolled_in_sh: requirement.positive)
     else

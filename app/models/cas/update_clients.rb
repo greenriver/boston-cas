@@ -206,7 +206,7 @@ module Cas
     # Find anyone who should be marked as available_candidate, but for whatever reason isn't marked as such
     def fix_incorrect_available_candidate_clients
       MatchRoutes::Base.all_routes.each do |route|
-        clients = Client.available.not_parked.unavailable_in(route)
+        clients = Client.available.unavailable_in(route)
         clients.each do |c|
           if c.client_opportunity_matches.on_route(route).active.none? && c.client_opportunity_matches.success.none?
             if c.client_opportunity_matches.on_route(route).count < Client.max_candidate_matches

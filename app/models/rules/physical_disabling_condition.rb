@@ -5,7 +5,7 @@
 ###
 
 class Rules::PhysicalDisablingCondition < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:physical_disability.to_s)
       scope.where(physical_disability: requirement.positive)
     else

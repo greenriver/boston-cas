@@ -22,7 +22,7 @@ class Rules::ActiveInCohort < Rule
     available_cohorts.to_h.try(:[], value.to_i) || value
   end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:active_cohort_ids.to_s)
       if requirement.positive
         where = 'active_cohort_ids @> ?'

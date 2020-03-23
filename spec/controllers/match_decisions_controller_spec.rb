@@ -41,10 +41,10 @@ RSpec.describe MatchDecisionsController, type: :controller do
           end
         end
 
-        it 'client has been made unavailable' do
+        it 'client has been made unavailable on route' do
           aggregate_failures 'checking counts' do
             expect(flash[:error]).not_to be_present
-            expect(match.client.available_as_candidate_for_any_route?).to eq(false)
+            expect(Client.unavailable_in(match.match_route).pluck(:id).include?(match.client.id)).to eq(true)
           end
         end
 

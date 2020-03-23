@@ -5,7 +5,7 @@
 ###
 
 class Rules::InterestedInSetAsides < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:interested_in_set_asides.to_s)
       scope.where(interested_in_set_asides: requirement.positive)
     else

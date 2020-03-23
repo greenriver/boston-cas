@@ -23,6 +23,7 @@ class UnavailableAsCandidateFor < ApplicationRecord
     {
       'Indefinite' => 0,
       '30 days' => 30,
+      '60 days' => 60,
       '90 days' => 90,
       '180 days' => 180,
       '365 days' => 365,
@@ -38,8 +39,8 @@ class UnavailableAsCandidateFor < ApplicationRecord
   end
 
   def self.cleanup_expired!
-    return if expiration_length == 0
-    where(arel_table[:created_at].lt(expiration_length.days.ago)).destroy_all
+    where.not(expires_at: nil).
+    where(arel_table[:expires_at].lt(Date.current)).destroy_all
   end
 
 end

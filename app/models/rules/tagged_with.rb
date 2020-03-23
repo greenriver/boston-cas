@@ -17,7 +17,7 @@ class Rules::TaggedWith < Rule
     Tag.find(value)&.name
   end
 
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:tags.to_s)
       if requirement.positive
         where = "tags ->>'#{requirement.variable.to_s}' is not null"

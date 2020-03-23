@@ -5,7 +5,7 @@
 ###
 
 class Rules::VerifiedDisability < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:disability_verified_on.to_s)
       if requirement.positive
         scope.where.not(disability_verified_on: nil)

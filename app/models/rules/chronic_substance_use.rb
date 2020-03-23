@@ -5,7 +5,7 @@
 ###
 
 class Rules::ChronicSubstanceUse < Rule
-  def clients_that_fit(scope, requirement)
+  def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:substance_abuse_problem.to_s)
       scope.where(substance_abuse_problem: requirement.positive)
     else
