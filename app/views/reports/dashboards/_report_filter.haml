@@ -4,7 +4,7 @@
   .col-3
     = form.input :end_date, as: :date_picker, input_html: { value: @end_date }
   .col-3
-    = form.input :match_route, collection: MatchRoutes::Base.available, selected: @match_route_id, include_blank: false, input_html: { class: :select2 }
+    = form.input :match_route, collection: MatchRoutes::Base.available, selected: @match_route_id, include_blank: false, input_html: { class: 'select2 jMatchRoute' }
   .col-3
     = form.input :program_types, collection: SubProgram.types, label_method: ->(type) { type[:label] }, value_method: ->(type) { type[:value] }, selected: @program_types, input_html: { multiple: true, class: :select2 }
 
