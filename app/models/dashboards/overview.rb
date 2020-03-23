@@ -27,7 +27,8 @@ class Dashboards::Overview < Dashboards::Base
 
   def match_results_by_quarter
     quarters_in_report.map do |quarter, start_date|
-      [quarter, match_results(start_date: start_date, end_date: start_date.next_quarter - 1.day)]
+      range = start_date.all_quarter
+      [quarter, match_results(start_date: range.first, end_date: range.last)]
     end.to_h
   end
 

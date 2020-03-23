@@ -62,6 +62,13 @@ class Reports::Dashboards::TimeBetweenStepsController < ApplicationController
     @from_step = params.dig(:filter, :from_step)&.to_i || @step_names[keys.first]
     @to_step = params.dig(:filter, :to_step)&.to_i || @step_names[keys.last]
 
+    # Move from step back one if it is the last step
+    @from_step -= 1 if @from_step == @step_names[keys.last]
+    # Move the to step forward to the from step if it is before
+    @to_step = @from_step if @to_step < @from_step
+    # Move the to step forward one if it is the same as the last step
+    @to_step += 1 if @to_step == @from_step
+
     @report = Dashboards::TimeBetweenSteps.new(
       start_date: @start_date,
       end_date: @end_date,

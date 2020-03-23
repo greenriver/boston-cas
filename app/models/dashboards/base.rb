@@ -15,12 +15,8 @@ class Dashboards::Base
 
   def quarters_in_report
     # Find first quarter in year that is also in reporting period
-    quarter = @start_date.beginning_of_year
-    q_num = 0
-    until (quarter..quarter.next_quarter).cover?(@start_date)
-      quarter = quarter.next_quarter
-      q_num += 1
-    end
+    quarter = @start_date.beginning_of_quarter
+    q_num = quarter_number(@start_date) # zero-based
 
     # Enumerate quarters that are in the reporting period
     quarters = {}
@@ -32,5 +28,11 @@ class Dashboards::Base
       q_num += 1
     end
     quarters
+  end
+
+  private def quarter_number(date)
+    quarter = date.beginning_of_quarter
+    start_month = date.month
+    (start_month / 3.0).ceil - 1
   end
 end

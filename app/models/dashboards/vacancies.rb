@@ -38,9 +38,7 @@ class Dashboards::Vacancies < Dashboards::Base
 
   def vacancies_filled(start_date:, end_date:)
     hash = reporting_scope.
-      merge(Reporting::Decisions.success).
-      merge(Reporting::Decisions.current_step).
-      merge(Reporting::Decisions.ended_between(start_date: start_date, end_date: end_date)).
+      merge(Reporting::Decisions.success.current_step.ended_between(start_date: start_date, end_date: end_date)).
       distinct.
       pluck(r_d_t[:program_type], :cas_client_id, :created_at, r_d_t[:updated_at], r_d_t[:client_move_in_date]).group_by(&:first)
     hash.merge(hash) do |_key, ids|
@@ -56,7 +54,8 @@ class Dashboards::Vacancies < Dashboards::Base
 
   def vacancies_filled_by_quarter
     @vacancies_filled_by_quarter ||= quarters_in_report.map do |quarter, start_date|
-      [quarter, vacancies_filled(start_date: start_date, end_date: start_date.next_quarter - 1.day)]
+      range = start_date.all_quarter
+      [quarter, vacancies_filled(start_date: range.first, end_date: range.last)]
     end.to_h
   end
 
