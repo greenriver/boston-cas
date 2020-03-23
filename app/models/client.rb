@@ -72,6 +72,8 @@ class Client < ApplicationRecord
 
   has_many :unavailable_as_candidate_fors
 
+  has_many :reporting_decisions, class_name: 'Reporting::Decisions', foreign_key: :cas_client_id
+
   validates :ssn, length: {maximum: 9}
 
   scope :visible_by, -> (user) do
