@@ -31,7 +31,7 @@ RSpec.describe MatchDecisionsController, type: :controller do
       end
       describe 'after parking' do
         before(:each) do
-          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_hsa_housing_date, :canceled, :parked, administrative_cancel_reason_id: [24], prevent_matching_until: Date.today + 2.days) }
+          patch :update, params: { match_id: match.id, id: 'match_recommendation_dnd_staff', decision: attributes_for(:match_decisions_match_recommendation_hsa_housing_date, :canceled, :parked, administrative_cancel_reason_id: [24], prevent_matching_until: Date.current + 2.days) }
         end
         it 'client has one active match' do
           aggregate_failures 'checking counts' do

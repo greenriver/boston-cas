@@ -7,7 +7,7 @@
 class Rules::AgeGreaterThanSixtyTwo < Rule
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:date_of_birth.to_s)
-      years_ago = Date.today - 62.years
+      years_ago = Date.current - 62.years
       if requirement.positive
         scope.where(c_t[:date_of_birth].lteq(years_ago))
       else

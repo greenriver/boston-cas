@@ -275,7 +275,7 @@ class OpportunitiesController < ApplicationController
   end
 
   private def available_in_the_future(opportunities)
-    opportunities.joins(:voucher).where(v_t[:date_available].gt(Date.today)).distinct
+    opportunities.joins(:voucher).where(v_t[:date_available].gt(Date.current)).distinct
   end
 
   def filter_terms

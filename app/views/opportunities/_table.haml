@@ -47,7 +47,7 @@
                       = render 'multiple_matches', opportunity: opportunity
                     - elsif opportunity.successful_match.present?
                       Successful
-                    - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.today
+                    - elsif opportunity.voucher.date_available && opportunity.voucher.date_available > Date.current
                       Available:
                       = date_format(opportunity.voucher.date_available)
                     - elsif opportunity.available || opportunity.voucher.available

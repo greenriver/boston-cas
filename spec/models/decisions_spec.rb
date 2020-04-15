@@ -68,13 +68,13 @@ RSpec.describe MatchDecisions::Base, type: :model do
           expect(the_match.stall_date.present?).to be true
         end
         it 'the match gains a future stall date' do
-          expect(the_match.stall_date).to be > Date.today
+          expect(the_match.stall_date).to be > Date.current
         end
         it 'the match should not be stalled' do
           expect(the_match.stalled?).to be false
         end
         it 'when time passes, the match becomes stalled' do
-          Timecop.travel(Date.today + stalled_interval + 1) do
+          Timecop.travel(Date.current + stalled_interval + 1) do
             expect(the_match.stalled?).to be true
           end
         end

@@ -97,7 +97,7 @@ class User < ApplicationRecord
   def invitation_status
     if invitation_accepted_at.present? || invitation_sent_at.blank?
       :active
-    elsif invitation_due_at > Time.now
+    elsif invitation_due_at > Time.current
       :pending_confirmation
     else
       :invitation_expired

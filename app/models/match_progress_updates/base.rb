@@ -175,7 +175,7 @@ module MatchProgressUpdates
       end
       # make note on all matches that a notification was sent
       match_ids = contacts.values.map(&:to_a).flatten.uniq
-      ClientOpportunityMatch.where(id: match_ids).update_all(stall_contacts_notified: Time.now)
+      ClientOpportunityMatch.where(id: match_ids).update_all(stall_contacts_notified: Time.current)
     end
 
     def self.dnd_contacts_for_late_stalled_matches
@@ -207,7 +207,7 @@ module MatchProgressUpdates
       end
       # make note on all matches that a notification was sent
       match_ids = contacts.values.map(&:to_a).flatten.uniq
-      ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.now)
+      ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.current)
     end
   end
 end

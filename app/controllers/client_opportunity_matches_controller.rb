@@ -51,7 +51,7 @@ class ClientOpportunityMatchesController < ApplicationController
       score: Faker::Number.between(25, 100),
       client: client,
       opportunity: opportunity,
-      proposed_at: Date.today
+      proposed_at: Date.current
     )
     match.add_default_contacts!
     match.match_recommendation_dnd_staff_decision.initialize_decision!

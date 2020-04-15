@@ -4,7 +4,7 @@ RSpec.describe Rules::VerifiedDisability, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :verified_disability }
 
-    let!(:bob) { create :client, first_name: 'Bob', disability_verified_on: Date.today }
+    let!(:bob) { create :client, first_name: 'Bob', disability_verified_on: Date.current }
     let!(:roy) { create :client, first_name: 'Roy', disability_verified_on: nil }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
