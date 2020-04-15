@@ -16,4 +16,8 @@ class DataSource < ApplicationRecord
     where(db_identifier: 'Deidentified')
   end
 
+  scope :hmis, -> do
+    where.not(db_identifier: 'Deidentified')
+  end
+
 end

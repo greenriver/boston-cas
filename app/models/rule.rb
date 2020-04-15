@@ -7,6 +7,7 @@
 class Rule < ApplicationRecord
   self.table_name = 'rules'
   include MatchArchive
+  include ArelHelper
 
   has_many :requirements
   has_many :services, through: :building_services

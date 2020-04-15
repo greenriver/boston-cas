@@ -45,6 +45,10 @@ module ArelHelper
       Client.arel_table
     end
 
+    def pc_t
+      ProjectClient.arel_table
+    end
+
     def o_t
       Opportunity.arel_table
     end
@@ -68,6 +72,10 @@ module ArelHelper
 
   def c_t
     Client.arel_table
+  end
+
+  def pc_t
+    ProjectClient.arel_table
   end
 
   def o_t
