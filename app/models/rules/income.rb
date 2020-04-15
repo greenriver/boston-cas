@@ -7,7 +7,6 @@
 class Rules::Income < Rule
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:income_total_monthly.to_s)
-      c_t = Client.arel_table
       if requirement.positive
         where = c_t[:income_total_monthly].gt(0)
       else

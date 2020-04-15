@@ -7,23 +7,9 @@
 class Rules::HmisClient < Rule
   def clients_that_fit(scope, requirement, opportunity)
     if requirement.positive
-      scope.joins(:project_client).
-        where(
-          pc_t[:data_source_id].in(
-            Arel.sql(
-              DataSource.hmis.select(:id).to_sql
-            )
-          )
-        )
+      scope.where(id: ProjectClient.from_hmis.select(:client_id))
     else
-      scope.joins(:project_client).
-        where(
-          pc_t[:data_source_id].in(
-            Arel.sql(
-              DataSource.non_hmis.select(:id).to_sql
-            )
-          )
-        )
+      scope.where(id: ProjectClient.from_non_hmis.select(:client_id))
     end
   end
 end

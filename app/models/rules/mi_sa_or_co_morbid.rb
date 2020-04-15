@@ -6,7 +6,6 @@
 
 class Rules::MiSaOrCoMorbid < Rule
   def clients_that_fit(scope, requirement, opportunity)
-    c_t = Client.arel_table
     if Client.column_names.include?(:mental_health_problem.to_s) && Client.column_names.include?(:substance_abuse_problem.to_s)
       if requirement.positive
         scope.where(c_t[:mental_health_problem].eq(true).or(c_t[:substance_abuse_problem].eq(true)))

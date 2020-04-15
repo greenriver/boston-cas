@@ -25,11 +25,10 @@ class Rules::Bedroom < Rule
 
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:required_number_of_bedrooms.to_s)
-      a_t = Client.arel_table
       if requirement.positive
-        scope.where(a_t[:required_number_of_bedrooms].lteq(requirement.variable))
+        scope.where(c_t[:required_number_of_bedrooms].lteq(requirement.variable))
       else
-        scope.where(a_t[:required_number_of_bedrooms].gt(requirement.variable))
+        scope.where(c_t[:required_number_of_bedrooms].gt(requirement.variable))
       end
     else
       raise RuleDatabaseStructureMissing.new("clients.required_number_of_bedrooms missing. Cannot check clients against #{self.class}.")

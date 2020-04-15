@@ -6,7 +6,6 @@
 
 class Rules::VispdatScoreEightOrMore < Rule
   def clients_that_fit(scope, requirement, opportunity)
-    c_t = Client.arel_table
     if Client.column_names.include?(:vispdat_score.to_s)
       if requirement.positive
         where = c_t[:vispdat_score].gteq(8)
