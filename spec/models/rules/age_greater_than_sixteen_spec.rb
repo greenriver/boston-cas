@@ -5,9 +5,9 @@ RSpec.describe Rules::AgeGreaterThanSixteen, type: :model do
 
     let!(:rule) { create :sixteen_plus }
 
-    let!(:bob) { create :client, first_name: 'Bob', date_of_birth: Date.today - 15.years }
-    let!(:roy) { create :client, first_name: 'Roy',  date_of_birth: Date.today - 16.years }
-    let!(:mary) { create :client, first_name: 'Mary',  date_of_birth: Date.today - 17.years }
+    let!(:bob) { create :client, first_name: 'Bob', date_of_birth: Date.current - 15.years }
+    let!(:roy) { create :client, first_name: 'Roy',  date_of_birth: Date.current - 16.years }
+    let!(:mary) { create :client, first_name: 'Mary',  date_of_birth: Date.current - 17.years }
     let!(:sue) { create :client, first_name: 'Sue', date_of_birth: nil  }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }

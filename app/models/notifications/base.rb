@@ -80,7 +80,7 @@ module Notifications
     end
 
     def expired?
-      expires_at.in_time_zone <= Time.now.in_time_zone
+      expires_at.in_time_zone <= Time.current.in_time_zone
     end
 
     # override in base class

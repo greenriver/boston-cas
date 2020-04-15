@@ -27,7 +27,7 @@ namespace :fake_client_opportunity_matches do
           recipient: ['DND','HSA','Shelter Agency','HSW','Client','Housing Owner','CORI'].sample,
           response: ['Sent','Accepted','Declined','Expired'].sample,
           client_opportunity_match_id: n,
-          updated_at: Faker::Date.between(29.days.ago, Date.today)
+          updated_at: Faker::Date.between(29.days.ago, Date.current)
         )
       end
     end

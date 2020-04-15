@@ -1,11 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe Rules::VerifiedDisability, type: :model do
+RSpec.describe Rules::NonHmisClient, type: :model do
   describe 'clients_that_fit' do
-    let!(:rule) { create :verified_disability }
+    let!(:rule) { create :non_hmis_client }
+    let!(:hmis_project_client) { create :hmis_project_client }
+    let!(:non_hmis_project_client) { create :non_hmis_project_client }
 
-    let!(:bob) { create :client, first_name: 'Bob', disability_verified_on: Date.current }
-    let!(:roy) { create :client, first_name: 'Roy', disability_verified_on: nil }
+    let!(:bob) { create :client, first_name: 'Bob', project_client: non_hmis_project_client }
+    let!(:roy) { create :client, first_name: 'Roy', project_client: hmis_project_client }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }

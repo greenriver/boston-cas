@@ -104,7 +104,7 @@ module MatchDecisions
 
     def set_stall_date
       stall_on = if stallable? && stalled_after > 0
-        Date.today + stalled_after
+        Date.current + stalled_after
       else
         nil
       end

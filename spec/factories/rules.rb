@@ -347,5 +347,13 @@ FactoryBot.define do
     name { "Rank Higher (closer to #1) than" }
     verb { "have" }
   end
+  factory :hmis_client, class: 'Rules::HmisClient' do
+    name { "HMIS Client" }
+    verb { "be" }
+  end
+  factory :non_hmis_client, class: 'Rules::NonHmisClient' do
+    name { "Non-HMIS Client" }
+    verb { "be" }
+  end
 end
 
