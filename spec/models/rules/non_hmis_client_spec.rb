@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Rules::NonHmisClient, type: :model do
   describe 'clients_that_fit' do
-    let!(:rule) { create :hmis_client }
+    let!(:rule) { create :non_hmis_client }
     let!(:hmis_project_client) { create :hmis_project_client }
     let!(:non_hmis_project_client) { create :non_hmis_project_client }
 
