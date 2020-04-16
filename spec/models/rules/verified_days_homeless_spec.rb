@@ -4,7 +4,7 @@ RSpec.describe Rules::VerifiedDaysHomeless, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :verified_days_homeless }
 
-    let!(:bob) { create :client, first_name: 'Bob', date_days_homeless_verified: Date.today }
+    let!(:bob) { create :client, first_name: 'Bob', date_days_homeless_verified: Date.current }
     let!(:roy) { create :client, first_name: 'Roy', date_days_homeless_verified: nil }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }

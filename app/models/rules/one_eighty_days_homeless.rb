@@ -6,7 +6,6 @@
 
 class Rules::OneEightyDaysHomeless < Rule
   def clients_that_fit(scope, requirement, opportunity)
-    c_t = Client.arel_table
     if Client.column_names.include?(:days_homeless.to_s)
       if requirement.positive
         where = c_t[:days_homeless].gteq(180)

@@ -86,8 +86,8 @@ namespace :cas_seeds do
       user.first_name = "Sample"
       user.last_name = "Admin"
       user.password = user.password_confirmation = initial_password
-      user.confirmed_at = Time.now
-      user.invitation_accepted_at = Time.now
+      user.confirmed_at = Time.current
+      user.invitation_accepted_at = Time.current
       user.receive_initial_notification = true
       user.save!
       admin_role = Role.find_by(name: :admin)

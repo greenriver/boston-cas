@@ -61,7 +61,7 @@ class NonHmisClient < ApplicationRecord
     return age
   end
 
-  def age date=Date.today
+  def age date=Date.current
     return unless date_of_birth.present?
     date = date.to_date
     dob = date_of_birth.to_date

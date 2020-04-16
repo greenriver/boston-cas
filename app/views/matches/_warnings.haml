@@ -1,6 +1,6 @@
 .mt-0.mb-4
   - if match.shelter_expiration? && match.current_decision&.expires?
-    - if match.shelter_expiration < Date.today
+    - if match.shelter_expiration < Date.current
       .c-tag__wrapper.align-items-center
         .c-tag--danger.mr-4
           .c-tag__icon.c-tag__icon--xs

@@ -14,6 +14,14 @@ class ProjectClient < ApplicationRecord
     joins(:data_source).merge(DataSource.where(id: data_source.id))
   end
 
+  scope :from_hmis, -> do
+    joins(:data_source).merge(DataSource.hmis)
+  end
+
+  scope :from_non_hmis, -> do
+    joins(:data_source).merge(DataSource.non_hmis)
+  end
+
   scope :available, -> do
     where(sync_with_cas: true)
   end

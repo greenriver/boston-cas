@@ -13,7 +13,7 @@ module MatchShow
       contact_id: current_contact.id,
       notification_id: params[:notification_id]&.to_i,
       decision_id: @decision&.id,
-      submitted_at: Time.now,
+      submitted_at: Time.current,
     )
   end
 

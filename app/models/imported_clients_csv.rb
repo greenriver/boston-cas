@@ -204,8 +204,8 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def calculate_dob(row)
-    return Date.new(Date.today.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
-    return Date.new(Date.today.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
+    return Date.new(Date.current.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
+    return Date.new(Date.current.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
     return nil
   end
 

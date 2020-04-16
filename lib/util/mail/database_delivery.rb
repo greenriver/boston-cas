@@ -1,7 +1,7 @@
 # munged out of https://gist.github.com/d11wtq/1176236
 module Mail
   class DatabaseDelivery
-    
+
     def initialize(parameters)
       @parameters = {}.merge(parameters)
     end
@@ -26,7 +26,7 @@ module Mail
         user = contact.user
         if user.blank? || user.continuous_email_delivery?
           ::ImmediateMailer.with(message: message, to: contact.email).immediate.deliver_now
-          message.update(sent_at: Time.now, seen_at: Time.now)
+          message.update(sent_at: Time.current, seen_at: Time.current)
         end
       end
     end
