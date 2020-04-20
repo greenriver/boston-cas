@@ -1,6 +1,6 @@
 require 'yaml'
 Rails.application.configure do
-  deliver_method = ENV['MAIL_DELIVERY_METHOD'].to_sym
+  deliver_method = ENV.fetch('MAIL_DELIVERY_METHOD') { 'smtp' }.to_sym
   slack_config = Rails.application.config_for(:exception_notifier)[:slack]
 
   config.cache_classes = true

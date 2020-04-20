@@ -2,7 +2,11 @@ Delayed::Worker.destroy_failed_jobs = false
 Delayed::Worker.sleep_delay = 5
 Delayed::Worker.max_attempts = 3
 Delayed::Worker.max_run_time = 15.minutes
-Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
+if ENV['RAILS_LOG_TO_STDOUT'] == 'true'
+  Delayed::Worker.logger = Logger.new(STDOUT)
+else
+  Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
+end
 
 # Monkey patch so Delayed::Worker knows where it started
 # Delayed::Worker::Deployment.deployed_to
