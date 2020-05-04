@@ -42,6 +42,7 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-secretsmanager', '~> 1'
 gem 'aws-sdk-cloudwatchevents', '~> 1'
 gem 'aws-sdk-ecs', '~> 1'
+gem 'aws-sdk-iam', '~> 1'
 
 gem 'puma'
 gem 'redis'

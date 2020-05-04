@@ -92,6 +92,9 @@ GEM
     aws-sdk-ecs (1.60.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
+    aws-sdk-iam (1.36.0)
+      aws-sdk-core (~> 3, >= 3.71.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.30.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
@@ -532,6 +535,7 @@ DEPENDENCIES
   autoprefixer-rails
   aws-sdk-cloudwatchevents (~> 1)
   aws-sdk-ecs (~> 1)
+  aws-sdk-iam (~> 1)
   aws-sdk-s3 (~> 1)
   aws-sdk-secretsmanager (~> 1)
   babel-transpiler
