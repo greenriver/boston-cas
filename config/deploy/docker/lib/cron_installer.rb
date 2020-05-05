@@ -3,6 +3,7 @@
 require_relative 'scheduled_task'
 require 'aws-sdk-iam'
 require 'aws-sdk-ecs'
+require 'time'
 
 # Run from rails root
 
@@ -48,9 +49,11 @@ class CronInstaller
 
     raise "No families found for #{target_group_name}" if families == []
 
-    family = families.find { |x| x.match(/migrate|worker|command|runner/) }
+    family = families.find { |x| x.match(/cron-worker/) }
 
     raise "No family found for #{target_group_name} that looks like a worker" if family.nil?
+
+    puts "[INFO] Using #{family}"
 
     task_definition = ecs.list_task_definitions(
       status: 'ACTIVE',
@@ -60,6 +63,8 @@ class CronInstaller
     ).task_definition_arns.first
 
     raise "No task definition found" if task_definition.nil?
+
+    puts "[INFO] Using #{task_definition}"
 
     @task_definition_arn = task_definition
   end
@@ -85,7 +90,22 @@ class CronInstaller
       day_of_week = '?'
     end
 
-    "cron(#{minute}, #{hour}, #{day_of_month}, #{month}, #{day_of_week}, #{year})"
+    # This isn't strictly correct, but hopefully good enough
+    utc_hour =
+      if !hour.include?('*')
+        #ENV["TZ"] ||= "US/Eastern"
+        hour.split(',').map do |h|
+          #Time.parse("#{h}:00").to_datetime.utc.hour
+          ((h.to_i + 4)%24).to_s
+        end.join(',')
+      else
+        hour
+      end
+
+    "cron(#{minute}, #{utc_hour}, #{day_of_month}, #{month}, #{day_of_week}, #{year})".tap do |expression|
+      puts "[INFO] cron expression is #{expression}"
+    end
+
   end
 
   def get_command(line)
