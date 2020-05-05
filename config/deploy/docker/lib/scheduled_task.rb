@@ -85,10 +85,14 @@ class ScheduledTask
 
   def add_target!
     input = {
-      container_overrides: [
+      "containerOverrides" => [
         {
-          name: name,
-          command: command,
+          # This is the name of the container in the task definition.
+          # It needs to match or this doesn't work
+          # FIXME: pull from task definition. maybe we should just always call
+          # it 'app'
+          "name" => "#{target_group_name}-cron-worker",
+          "command" => command,
         },
       ]
     }.to_json
