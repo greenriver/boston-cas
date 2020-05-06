@@ -410,6 +410,25 @@ class RollOut
 
     five_minutes = 5 * 60
 
+    placement_strategy = [
+      {
+        "field": "instanceId",
+        "type": "spread"
+      },
+      {
+        "field": "attribute:ecs.availability-zone",
+        "type": "spread"
+      },
+      {
+        "type": "random"
+      },
+    ]
+
+    placement_constraints = []
+    #placement_constraints = [
+    #  { type: 'distinctInstance' },
+    #]
+
     if service_exists
       puts "[INFO] Updating #{name} to #{task_definition.split(/:/).last}: #{desired_count} containers"
       payload = {
@@ -417,6 +436,8 @@ class RollOut
         service: name,
         desired_count: desired_count,
         task_definition: task_definition,
+        placement_constraints: placement_constraints,
+        placement_strategy: placement_strategy,
         deployment_configuration: {
           maximum_percent: maximum_percent,
           minimum_healthy_percent: minimum_healthy_percent,
@@ -440,22 +461,8 @@ class RollOut
           minimum_healthy_percent: minimum_healthy_percent,
         },
         launch_type: 'EC2',
-        #placement_constraints:  [
-        #  { type: 'distinctInstance' },
-        #],
-        placement_strategy: [
-          {
-            "field": "instanceId",
-            "type": "spread"
-          },
-          {
-            "field": "attribute:ecs.availability-zone",
-            "type": "spread"
-          },
-          {
-            "type": "random"
-          },
-        ],
+        placement_constraints: placement_constraints,
+        placement_strategy: placement_strategy,
         load_balancers: load_balancers,
       }
 
