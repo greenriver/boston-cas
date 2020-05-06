@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_172917) do
+ActiveRecord::Schema.define(version: 2020_05_06_200723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.boolean "sro_ok", default: false
     t.boolean "evicted", default: false
     t.boolean "dv_rrh_desired", default: false
+    t.boolean "health_prioritized", default: false
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -961,6 +962,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.boolean "sro_ok", default: false
     t.boolean "evicted", default: false
     t.boolean "dv_rrh_desired", default: false
+    t.boolean "health_prioritized", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1400,6 +1402,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.string "session_id"
     t.string "request_id"
     t.string "notification_code"
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
