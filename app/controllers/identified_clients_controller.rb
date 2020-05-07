@@ -138,6 +138,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :documented_disability,
           :evicted,
           :ssvf_eligible,
+          :health_prioritized,
           neighborhood_interests: [],
         ]
       ).merge(identified: true)

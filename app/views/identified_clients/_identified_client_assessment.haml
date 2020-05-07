@@ -5,6 +5,12 @@
     = client_form.input :last_name, disabled: disabled
     = client_form.input :assessment_score, disabled: disabled
     = client_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('vispdat_score')
+      = assessment_form.input :vispdat_score, disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('vispdat_priority_score')
+      = assessment_form.input :vispdat_priority_score, disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('health_prioritized')
+      = assessment_form.input :health_prioritized, disabled: disabled
     - if can_edit_all_clients?
       .jAgency
         = client_form.association :agency, input_html: {class: :select2}, disabled: disabled

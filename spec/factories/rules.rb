@@ -355,5 +355,9 @@ FactoryBot.define do
     name { "Non-HMIS Client" }
     verb { "be" }
   end
+  factory :health_prioritized, class: "Rules::HealthPrioritized" do
+    name { "Prioritized for Health" }
+    verb { "be" }
+  end
 end
 

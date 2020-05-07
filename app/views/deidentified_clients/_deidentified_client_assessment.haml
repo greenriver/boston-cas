@@ -7,6 +7,8 @@
       = assessment_form.input :vispdat_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_priority_score')
       = assessment_form.input :vispdat_priority_score, disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('health_prioritized')
+      = assessment_form.input :health_prioritized, disabled: disabled
     = assessment_form.input :veteran, disabled: disabled
     = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
     - if can_edit_all_clients?

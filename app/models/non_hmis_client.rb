@@ -179,6 +179,7 @@ class NonHmisClient < ApplicationRecord
 
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
+    project_client.health_prioritized = health_prioritized
 
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
@@ -254,6 +255,7 @@ class NonHmisClient < ApplicationRecord
     assessment.substance_abuse_problem = substance_abuse_problem
     assessment.vispdat_score = vispdat_score
     assessment.vispdat_priority_score = vispdat_priority_score
+    assessment.health_prioritized = health_prioritized
     assessment.imported_timestamp = imported_timestamp
 
     assessment.created_at = created_at
@@ -323,6 +325,7 @@ class NonHmisClient < ApplicationRecord
       vispdat_score: 'VI-SPDAT Score',
       vispdat_priority_score: 'VI-SPDAT Priority Score',
       actively_homeless: 'Actively Homeless',
+      health_prioritized: 'Prioritized for Health'
     }
   end
 

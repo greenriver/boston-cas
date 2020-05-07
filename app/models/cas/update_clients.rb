@@ -200,6 +200,7 @@ module Cas
         :rrh_th_desired,
         :sro_ok,
         :evicted,
+        :health_prioritized,
       ]
     end
 
