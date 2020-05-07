@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_06_200723) do
+ActiveRecord::Schema.define(version: 2020_05_07_121847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -672,6 +672,7 @@ ActiveRecord::Schema.define(version: 2020_05_06_200723) do
     t.integer "user_id"
     t.boolean "evicted", default: false
     t.boolean "documented_disability", default: false
+    t.boolean "health_prioritized", default: false
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -749,6 +750,7 @@ ActiveRecord::Schema.define(version: 2020_05_06_200723) do
     t.string "available_reason"
     t.boolean "is_currently_youth", default: false, null: false
     t.datetime "assessed_at"
+    t.boolean "health_prioritized", default: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
