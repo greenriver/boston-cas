@@ -1,5 +1,4 @@
 namespace :cas_seeds do
-
   # The tasks in this file are to seed the CAS db with fake data for development.
 
   desc 'Run all cas seed tasks'
