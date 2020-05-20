@@ -1,15 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe Rules::SeenInLastThirtyDays, type: :model do
+RSpec.describe Rules::SeenInLastFortyFiveDays, type: :model do
+  let!(:rule) { create :seen_in_last_forty_five_days }
 
-  let!(:last_seen_rule) { create :last_seen }
+  let!(:bob) { create :client, first_name: 'Bob', calculated_last_homeless_night: 46.days.ago.to_date }
+  let!(:roy) { create :client, first_name: 'Roy', calculated_last_homeless_night: 44.days.ago.to_date }
+  let!(:sue) { create :client, first_name: 'Sue', calculated_last_homeless_night: 45.days.ago }
 
-  let!(:bob) { create :client, first_name: 'Bob', calculated_last_homeless_night: 6.months.ago }
-  let!(:roy) { create :client, first_name: 'Roy', calculated_last_homeless_night: 15.days.ago }
-  let!(:sue) { create :client, first_name: 'Sue', calculated_last_homeless_night: 30.days.ago }
-
-  let!(:positive) { create :requirement, rule: last_seen_rule, positive: true }
-  let!(:negative) { create :requirement, rule: last_seen_rule, positive: false }
+  let!(:positive) { create :requirement, rule: rule, positive: true }
+  let!(:negative) { create :requirement, rule: rule, positive: false }
 
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
   let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
