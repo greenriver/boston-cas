@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-04 09:41-0500\n"
-"PO-Revision-Date: 2020-02-04 09:41-0500\n"
+"POT-Creation-Date: 2020-05-28 18:37+0000\n"
+"PO-Revision-Date: 2020-05-28 18:37+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,10 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+msgid "3D. Total # of Boston Homeless Nights"
+msgstr ""
+
 msgid "A criminal background hearing is not necessary"
 msgstr ""
 
 msgid "Added to assessed clients"
+msgstr ""
+
+msgid "Any neighborhood"
 msgstr ""
 
 msgid "Asylee, Refugee"
@@ -45,6 +51,9 @@ msgstr ""
 msgid "CAS"
 msgstr ""
 
+msgid "CAS Reports"
+msgstr ""
+
 msgid "CSPECH Eligible"
 msgstr ""
 
@@ -52,6 +61,9 @@ msgid "Cannot read uploaded file, is it an XLSX?"
 msgstr ""
 
 msgid "Case Workers"
+msgstr ""
+
+msgid "Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live."
 msgstr ""
 
 msgid "Children under age 18 in household"
@@ -156,7 +168,7 @@ msgstr ""
 msgid "Identified Clients"
 msgstr ""
 
-msgid "Imported Clients"
+msgid "Imported"
 msgstr ""
 
 msgid "Ineligible Immigrant (Including Undocumented)"
@@ -177,6 +189,9 @@ msgstr ""
 msgid "Meth Production Conviction"
 msgstr ""
 
+msgid "Neighborhoods you are willing to live in."
+msgstr ""
+
 msgid "No criminal background hearing was requested."
 msgstr ""
 
@@ -193,6 +208,9 @@ msgid "Qualified Opportunities"
 msgstr ""
 
 msgid "Release of information"
+msgstr ""
+
+msgid "Remember to check housing availablility"
 msgstr ""
 
 msgid "Requires ground floor unit or elevator access"
