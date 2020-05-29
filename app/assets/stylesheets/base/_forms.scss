@@ -105,3 +105,16 @@
 .input__width-80 {
   width: 80px;
 }
+.mini-login-form
+{
+  max-width: 20em;
+  input.form-control
+  {
+    height: calc(1em + 1rem + 2px);
+    min-height: calc(1rem + 2px);
+    font-size: 0.8rem;
+  }
+  .btn {
+    height: calc(1em + 1rem + 2px);
+  }
+}
