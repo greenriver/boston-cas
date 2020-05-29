@@ -27,11 +27,11 @@ class RollOut
 
   DEFAULT_SOFT_WEB_RAM_MB = 1800
 
-  DEFAULT_SOFT_DJ_RAM_MB = ->(target_group_name) { target_group_name.match?(/staging/) ? 2000 : 6000 }
+  DEFAULT_SOFT_DJ_RAM_MB = ->(target_group_name) { target_group_name.match?(/staging/) ? 1500 : 4000 }
 
   DEFAULT_SOFT_RAM_MB = 1800
 
-  RAM_OVERCOMMIT_MULTIPLIER = 1.6
+  RAM_OVERCOMMIT_MULTIPLIER = ->(target_group_name) { target_group_name.match?(/staging/) ? 5 : 3 }
 
   DEFAULT_CPU_SHARES = 256
 
@@ -58,6 +58,9 @@ class RollOut
       { "name" => "AWS_REGION", "value" => ENV.fetch('AWS_REGION') { 'us-east-1' } },
       { "name" => "SECRET_ARN", "value" => secrets_arn },
       { "name" => "CLUSTER_NAME", "value" => self.cluster },
+      # { "name" => "RAILS_MAX_THREADS", "value" => '5' },
+      # { "name" => "WEB_CONCURRENCY", "value" =>  '2' },
+      # { "name" => "PUMA_PERSISTENT_TIMEOUT", "value" =>  '70' },
     ]
   end
 
@@ -178,6 +181,8 @@ class RollOut
   end
 
   def deploy_web!
+    _make_cloudwatch_group!
+
     name = target_group_name + '-web'
 
     soft_mem_limit_mb = (web_options['soft_mem_limit_mb'] || DEFAULT_SOFT_WEB_RAM_MB).to_i
@@ -278,6 +283,8 @@ class RollOut
     # Increase this to limit number of containers on a box if there are cpu capacity issues.
     cpu_shares ||= DEFAULT_CPU_SHARES
 
+    memory_multiplier = RAM_OVERCOMMIT_MULTIPLIER.call(target_group_name)
+
     self.log_prefix = name.split(/ecs/).last.sub(/^-/, '') +
       '/' +
       Time.now.strftime("%Y-%m-%d:%H-%M%Z").gsub(/:/, '_')
@@ -296,7 +303,7 @@ class RollOut
       cpu: cpu_shares,
 
       # Hard limit
-      memory: ( soft_mem_limit_mb * RAM_OVERCOMMIT_MULTIPLIER ).to_i,
+      memory: ( soft_mem_limit_mb * memory_multiplier ).to_i,
 
       # Soft limit
       memory_reservation: soft_mem_limit_mb,
@@ -331,16 +338,19 @@ class RollOut
     # distinct Instance is problematic if you have limited resources or a desired count of 1
     # placement_contraints << { type: 'distinctInstance' },
 
-    # non-web containers should not be spot instances
-    if !name.match?(/web/)
+    # only web and staging containers can live on spot instances
+    # all others are flagged as non-spot
+    if name.match?(/web/)
+      puts "[INFO][CONST] Not constraining #{name}"
+    elsif name.match?(/staging/)
+      puts "[INFO][CONST] Not constraining #{name}"
+    else
       puts "[INFO][CONST] Constraining #{name} to non-spot-instances"
 
       placement_constraints << {
         type: 'memberOf',
         expression: "attribute:instance-lifecycle == #{NOT_SPOT}",
       }
-    else
-      puts "[INFO][CONST] Not constraining #{name}"
     end
 
     results = ecs.register_task_definition({
