@@ -1,27 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Rules::SeenInLastNinetyDays, type: :model do
+  let!(:rule) { create :seen_in_last_ninety_days }
 
-  let!(:last_seen_rule) { create :last_seen_90 }
+  let!(:bob) { create :client, first_name: 'Bob', calculated_last_homeless_night: 6.months.ago }
+  let!(:roy) { create :client, first_name: 'Roy', calculated_last_homeless_night: 15.days.ago }
+  let!(:sue) { create :client, first_name: 'Sue', calculated_last_homeless_night: 90.days.ago }
 
-  let!(:bob) { 
-    client = create :client, first_name: 'Bob', calculated_last_homeless_night: 6.months.ago
-  }
-  let!(:roy) {
-    client = create :client, first_name: 'Roy', calculated_last_homeless_night: 15.days.ago
-  }
-  let!(:sue) {
-    client = create :client, first_name: 'Sue', calculated_last_homeless_night: 90.days.ago
-  }
-  let!(:positive) { create :requirement, rule: last_seen_rule, positive: true }
-  let!(:negative) { create :requirement, rule: last_seen_rule, positive: false }
+  let!(:positive) { create :requirement, rule: rule, positive: true }
+  let!(:negative) { create :requirement, rule: rule, positive: false }
+
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
   let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 
-
-  
   describe 'clients_that_fit' do
-
     context 'when positive' do
       it 'matches 2' do
         expect( clients_that_fit.count ).to eq 2

@@ -359,5 +359,17 @@ FactoryBot.define do
     name { "Prioritized for Health" }
     verb { "be" }
   end
+  factory :seen_in_last_forty_five_days, class: "Rules::SeenInLastFortyFiveDays" do
+    name { "Homeless Service in the past 45 days" }
+    verb { "have" }
+  end
+  factory :seen_in_last_sixty_days, class: "Rules::SeenInLastSixtyDays" do
+    name { "Homeless Service in the past 60 days" }
+    verb { "have" }
+  end
+  factory :seen_in_last_ninety_days, class: "Rules::SeenInLastNinetyDays" do
+    name { "Homeless Service in the past 90 days" }
+    verb { "have" }
+  end
 end
 
