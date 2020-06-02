@@ -49,6 +49,14 @@ class RollOut
     self.dj_options          = dj_options
     self.web_options         = web_options
 
+    if target_group_name.match?(/production/)
+      self.rails_env = 'production'
+    elsif target_group_name.match?(/staging/)
+      self.rails_env = 'staging'
+    else
+      raise "Cannot figure out environment from target_group_name!"
+    end
+
     self.default_environment = [
       { "name" => "ECS", "value" => "true" },
       { "name" => "LOG_LEVEL", "value" => "info" },
@@ -58,6 +66,7 @@ class RollOut
       { "name" => "AWS_REGION", "value" => ENV.fetch('AWS_REGION') { 'us-east-1' } },
       { "name" => "SECRET_ARN", "value" => secrets_arn },
       { "name" => "CLUSTER_NAME", "value" => self.cluster },
+      { "name" => "RAILS_ENV", "value" => rails_env },
       # { "name" => "RAILS_MAX_THREADS", "value" => '5' },
       # { "name" => "WEB_CONCURRENCY", "value" =>  '2' },
       # { "name" => "PUMA_PERSISTENT_TIMEOUT", "value" =>  '70' },
@@ -515,6 +524,10 @@ class RollOut
         "field": "instanceId",
         "type": "spread"
       },
+      {
+        "type": "random"
+      },
+
     ]
 
     if service_exists
