@@ -8,19 +8,20 @@ require 'aws-sdk-ec2'
 class RollOut
   attr_accessor :aws_profile
   attr_accessor :cluster
+  attr_accessor :default_environment
   attr_accessor :dj_options
-  attr_accessor :web_options
+  attr_accessor :execution_role
   attr_accessor :image_base
+  attr_accessor :log_prefix
+  attr_accessor :log_stream_name
+  attr_accessor :rails_env
   attr_accessor :secrets_arn
   attr_accessor :service_exists
   attr_accessor :target_group_arn
   attr_accessor :target_group_name
   attr_accessor :task_definition
   attr_accessor :task_role
-  attr_accessor :execution_role
-  attr_accessor :default_environment
-  attr_accessor :log_prefix
-  attr_accessor :log_stream_name
+  attr_accessor :web_options
 
   # FIXME: cpu shares as parameter
   # FIXME: log level as parameter
