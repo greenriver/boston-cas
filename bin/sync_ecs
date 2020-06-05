@@ -2,3 +2,4 @@ echo Syncing up with warehouse by just rsyncing
 
 rsync --progress -a ../hmis-warehouse/config/deploy/docker/ ./config/deploy/docker/ --delete
 rsync --progress -a ../hmis-warehouse/.github/workflows/ecs.yml .github/workflows/ecs.yml
+rsync --progress -a ../hmis-warehouse/bin/containers ./bin/ --delete
