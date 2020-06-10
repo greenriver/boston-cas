@@ -163,6 +163,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :evicted,
           :ssvf_eligible,
           :health_prioritized,
+          :hiv_aids,
           neighborhood_interests: [],
         ]
       )
