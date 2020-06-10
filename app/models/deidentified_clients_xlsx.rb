@@ -162,15 +162,15 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
   def self.file_header
     [
-      'Shelter Location', # NEW
-      'Referral Date', # NEW
+      'Shelter Location',
+      'Referral Date',
       'Home-base ID',
       'Date First became Homeless',
       'Occurrences of Homelessness in Last Three Years',
       'Cumulative Months Homeless in Last Three Years',
       'Family of at least one Adult and one child',
-      'Permanent Supportive Housing Eligible', # Was 'Disabling Condition*'
-      'Minimum Bedroom Size', # NEW
+      'Permanent Supportive Housing Eligible',
+      'Minimum Bedroom Size',
       'Veteran Status',
       'HOPWA Eligible',
       'VI-SPDAT Score',
@@ -192,27 +192,5 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       :hiv_aids,
       :vispdat_score,
     ]
-    # [
-    #   :updated_at,
-    #   :entry_date,
-    #   :exit_date, # not in model
-    #   :client_identifier,
-    #   :date_first_homeless, # not in model
-    #   :occurrences_of_homelessness, # not in model
-    #   :days_homeless_in_the_last_three_years,
-    #   :family_member,
-    #   :date_of_birth,
-    #   :veteran,
-    #   :disabling_condition,
-    #   :physical_disability,
-    #   :developmental_disability,
-    #   :chronic_health_condition,
-    #   :mental_health_problem,
-    #   :substance_abuse_problem,
-    #   :hopwa, # not in model
-    #   :last_zip, # not in model
-    #   :vispdat_score,
-    # ]
   end
-
 end
