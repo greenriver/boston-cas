@@ -1,6 +1,7 @@
 class DeidentifiedClientsXlsx < ApplicationRecord
 
   mount_uploader :file, DeidentifiedClientsXlsxFileUploader
+  attr_accessor :update_availability
   attr_reader :added, :touched, :problems, :clients
 
   def valid_header?
@@ -10,10 +11,13 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     @xlsx.row(1).map(&:strip).map(&:downcase) == self.class.file_header.map(&:strip).map(&:downcase)
   end
 
-  def import(agency, force_update: false)
+  def import(agency, force_update: false, update_availability: false)
     @added = 0
     @touched = 0
     @clients = []
+    @update_availability = update_availability
+
+    DeidentifiedClient.update_all(available: false) if @update_availability
 
     if valid_header?
       @xlsx.each_with_index do |raw, index|
@@ -25,14 +29,14 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         cleaned = clean_row(client, row) rescue next
         cleaned[:agency_id] = agency&.id
         cleaned[:identified] = false # mark as de-identified client
-        if force_update || client.updated_at.nil? || cleaned[:updated_at] > client.updated_at.to_date
-          @added +=1 if client.updated_at.nil?
-          @touched += 1 if client.updated_at.present?
-          client.update(cleaned)
-          assessment = client.current_assessment || client.client_assessments.build
-          assessment = client.update_assessment_from_client(assessment)
-          assessment.save
-        end
+        cleaned[:available] = true if @update_availability
+
+        @added +=1 if client.updated_at.nil?
+        @touched += 1 if client.updated_at.present?
+        client.update(cleaned)
+        assessment = client.current_assessment || client.client_assessments.build
+        assessment = client.update_assessment_from_client(assessment)
+        assessment.save
       end
     end
   end
