@@ -56,6 +56,7 @@ class DeidentifiedClientsController < NonHmisClientsController
     end
 
     file = import_params[:file]
+    update_availability = import_params[:update_availability]
     begin
       @upload = DeidentifiedClientsXlsx.create(
         filename: file.original_filename,
@@ -77,7 +78,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       return
     end
 
-    @upload.import(current_user.agency)
+    @upload.import(current_user.agency, update_availability: update_availability)
   end
 
   def assessment_type
@@ -163,6 +164,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :evicted,
           :ssvf_eligible,
           :health_prioritized,
+          :hiv_aids,
           neighborhood_interests: [],
         ]
       )
@@ -184,7 +186,8 @@ class DeidentifiedClientsController < NonHmisClientsController
 
     def import_params
       params.require(:deidentified_clients_xlsx).permit(
-        :file
+        :file,
+        :update_availability,
       )
     end
 

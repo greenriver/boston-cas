@@ -12,5 +12,6 @@
   = f.error_notification
   .form-inputs
     = f.input :file, as: :file, label: false
+    = f.input :update_availability, as: :boolean, label: 'Update client availability', hint: 'Make only the clients that appear in the selected file available'
   .form-actions
     = f.button :submit, value: 'Upload Excel'

@@ -1,6 +1,7 @@
 class DeidentifiedClientsXlsx < ApplicationRecord
 
   mount_uploader :file, DeidentifiedClientsXlsxFileUploader
+  attr_accessor :update_availability
   attr_reader :added, :touched, :problems, :clients
 
   def valid_header?
@@ -10,10 +11,13 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     @xlsx.row(1).map(&:strip).map(&:downcase) == self.class.file_header.map(&:strip).map(&:downcase)
   end
 
-  def import(agency, force_update: false)
+  def import(agency, force_update: false, update_availability: false)
     @added = 0
     @touched = 0
     @clients = []
+    @update_availability = update_availability
+
+    DeidentifiedClient.update_all(available: false) if @update_availability
 
     if valid_header?
       @xlsx.each_with_index do |raw, index|
@@ -25,14 +29,14 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         cleaned = clean_row(client, row) rescue next
         cleaned[:agency_id] = agency&.id
         cleaned[:identified] = false # mark as de-identified client
-        if force_update || client.updated_at.nil? || cleaned[:updated_at] > client.updated_at.to_date
-          @added +=1 if client.updated_at.nil?
-          @touched += 1 if client.updated_at.present?
-          client.update(cleaned)
-          assessment = client.current_assessment || client.client_assessments.build
-          assessment = client.update_assessment_from_client(assessment)
-          assessment.save
-        end
+        cleaned[:available] = true if @update_availability
+
+        @added +=1 if client.updated_at.nil?
+        @touched += 1 if client.updated_at.present?
+        client.update(cleaned)
+        assessment = client.current_assessment || client.client_assessments.build
+        assessment = client.update_assessment_from_client(assessment)
+        assessment.save
       end
     end
   end
@@ -45,31 +49,26 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   def clean_row(client, row)
     result = row.dup
 
-    result[:updated_at] = parse_date(client, 'Information collected at', row[:updated_at])
-    check_date(client, result[:updated_at])
-    result[:entry_date] = parse_date(client, 'Date entered program', row[:entry_date])
-    result.delete(:exit_date)
+    result.delete(:shelter_location)
+    result.delete(:referral_date)
+    # :client_identifier
     result.delete(:date_first_homeless)
     result.delete(:occurrences_of_homelessness)
     result[:days_homeless_in_the_last_three_years] = convert_to_days(client, row[:days_homeless_in_the_last_three_years])
     result[:family_member] = yes_no_to_bool(client, :family_member, row[:family_member])
-    result[:date_of_birth] = parse_date(client, 'Date of birth (client)', row[:date_of_birth])
-    result[:veteran] = yes_no_to_bool(client, :veteran, row[:veteran])
     result[:disabling_condition] = yes_no_to_bool(client, :disabling_condition, row[:disabling_condition])
-    result[:developmental_disability] = yes_no_to_bool(client, :developmental_disability, row[:developmental_disability])
-    result[:physical_disability] = yes_no_to_bool(client, :physical_disability, row[:physical_disability])
-    result[:chronic_health_condition] = yes_no_to_bool(client, :chronic_health_condition, row[:chronic_health_condition])
-    result[:mental_health_problem] = yes_no_to_bool(client, :mental_health_problem, row[:mental_health_problem])
-    result[:substance_abuse_problem] = yes_no_to_bool(client, :substance_abuse_problem, row[:substance_abuse_problem])
-    result[:hopwa] = yes_no_to_bool(client, :hopwa, row[:hopwa])
+    # "Permanent Supportive Housing Eligible" is a proxy for "Disabling Condition" and at least 365 days homeless.
+    if result[:disabling_condition] && result[:days_homeless_in_the_last_three_years] < 365
+      result[:days_homeless_in_the_last_three_years] = 365
+    end
+    result[:required_number_of_bedrooms] = convert_to_number(client, :required_number_of_bedrooms, row[:required_number_of_bedrooms])
+    result[:veteran] = yes_no_to_bool(client, :veteran, row[:veteran])
+    result[:hiv_aids] = yes_no_to_bool(client, :hiv_aids, row[:hiv_aids])
     result[:vispdat_score] = convert_to_score(client, :vispdat_score, row[:vispdat_score])
     result[:vispdat_priority_score] = ProjectClient.calculate_vispdat_priority_score(
       vispdat_score: result[:vispdat_score],
       days_homeless: result[:days_homeless_in_the_last_three_years],
-      veteran_status: result[:veteran]
-    )
-    result.delete(:hopwa)
-    result.delete(:last_zip)
+      veteran_status: result[:veteran])
 
     result[:last_name] = "Anonymous - #{row[:client_identifier]}"
     result[:first_name] = "Anonymous - #{row[:client_identifier]}"
@@ -112,7 +111,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         when /week/
           duration = count.weeks
           half_duration = 1.weeks / 2 if half
-        when /month/
+        when /month|mth/
           duration = count.months
           half_duration = 1.months / 2 if half
         when /year/
@@ -152,6 +151,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       raise 'unexpected value'
     end
   end
+  alias_method :convert_to_number, :convert_to_score
 
   private def parse_xlsx
     StringIO.open(content) do |stream|
@@ -162,51 +162,35 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
   def self.file_header
     [
-      'Date Information Collected',
-      'Date Entered Program',
-      'Date Exit Program',
-      'Homebase ID',
+      'Shelter Location',
+      'Referral Date',
+      'Home-base ID',
       'Date First became Homeless',
       'Occurrences of Homelessness in Last Three Years',
       'Cumulative Months Homeless in Last Three Years',
-      'Family of at least One Adult and Once Child',
-      'Date of Birth (Client)',
+      'Family of at least one Adult and one child',
+      'Permanent Supportive Housing Eligible',
+      'Minimum Bedroom Size',
       'Veteran Status',
-      'Disabling Condition* ',
-      'Physical Disabilty ',
-      'Developmental Disability',
-      'Chronic Health Condition',
-      'Mental Health Problem',
-      'Substance Abuse Disorder',
-      'HOPWA',
-      'Client\'s last residential zip code ',
-      'VI-SPDAT Score'
+      'HOPWA Eligible',
+      'VI-SPDAT Score',
     ].freeze
-
   end
 
   private def file_attributes
     [
-      :updated_at,
-      :entry_date,
-      :exit_date, # not in model
+      :shelter_location, # not in model
+      :referral_date, # not in model
       :client_identifier,
       :date_first_homeless, # not in model
       :occurrences_of_homelessness, # not in model
       :days_homeless_in_the_last_three_years,
       :family_member,
-      :date_of_birth,
-      :veteran,
       :disabling_condition,
-      :physical_disability,
-      :developmental_disability,
-      :chronic_health_condition,
-      :mental_health_problem,
-      :substance_abuse_problem,
-      :hopwa, # not in model
-      :last_zip, # not in model
+      :required_number_of_bedrooms,
+      :veteran,
+      :hiv_aids,
       :vispdat_score,
     ]
   end
-
 end
