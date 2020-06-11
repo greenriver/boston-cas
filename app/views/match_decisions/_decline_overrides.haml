@@ -1,6 +1,6 @@
 %p
   %strong Reason Provided:
-  = @match.declined_decision.decline_reason_name
+  = @match.declined_decision&.decline_reason_name
 .form-actions.form-actions--stacked
   %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'decline_overridden'}, disabled: (!@decision.editable?)}
     %i.icon-checkmark
