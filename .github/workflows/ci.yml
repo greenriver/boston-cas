@@ -22,6 +22,7 @@ jobs:
           - 5432:5432
         # Provide the password for postgres
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
         options: >-
@@ -51,11 +52,11 @@ jobs:
 
         # echo Restarting postgres
         # sudo systemctl restart postgresql
-        netstat -an
+        # netstat -an
 
-        sudo -upostgres createuser -h postgres -p 5432 --echo --superuser $USER #give the runner
-        createdb -p 5432 --echo
-        createdb -p 5432 $DATABASE_WAREHOUSE_DB_TEST
+        # sudo -upostgres createuser -h postgres -p 5432 --echo --superuser $USER #give the runner
+        # createdb -p 5432 --echo
+        # createdb -p 5432 $DATABASE_WAREHOUSE_DB_TEST
 
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2'
@@ -79,8 +80,10 @@ jobs:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
         DATABASE_DB_TEST: boston_cas_test
+        DATABASE_USER: postgres
+        DATABASE_PASS: postgres
         DEFAULT_FROM: greenriver.testing@mailinator.com
-        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+        DATABASE_WAREHOUSE_DB_TEST: cas_test
         HOSTNAME: openpath.host
         PORT: 80
       run: |
@@ -90,8 +93,10 @@ jobs:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
         DATABASE_DB_TEST: boston_cas_test
+        DATABASE_USER: postgres
+        DATABASE_PASS: postgres
         DEFAULT_FROM: greenriver.testing@mailinator.com
-        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+        DATABASE_WAREHOUSE_DB_TEST: cas_test
         HOSTNAME: openpath.host
         PORT: 80
       run: |
