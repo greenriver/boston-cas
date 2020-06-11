@@ -40,6 +40,8 @@ jobs:
       env:
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
       run: |
+        pg_isready -h postgres
+
         sudo apt-get update
 
         sudo apt-get install \
