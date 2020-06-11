@@ -4,20 +4,6 @@ on: pull_request
 jobs:
   build:
     runs-on: ubuntu-18.04
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby 2.6
@@ -29,13 +15,25 @@ jobs:
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
       run: |
         sudo apt-get update
+
+        sudo apt-get remove postgresql-10 postgresql-12
+
         sudo apt-get install \
+          postgresql-11 postgresql-contrib \
           redis-server \
           libmagic-dev \
           libpq-dev
-        sudo -upostgres createuser -h postgres --echo --superuser $USER #give the runner
-        createdb -h postgres --echo
-        createdb -h postgres $DATABASE_WAREHOUSE_DB_TEST
+
+        echo Updating the postgresql port which is needed if multiple versions installed
+        sudo sed -i.bak -e 's/5433/5432/' /etc/postgresql/11/main/postgresql.conf
+
+        echo Restarting postgres
+        sudo systemctl restart postgresql
+
+        sudo -upostgres createuser --echo --superuser $USER #give the runner
+        createdb --echo
+        createdb $DATABASE_WAREHOUSE_DB_TEST
+
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2'
     - name: 'Install gems'
@@ -57,7 +55,6 @@ jobs:
       env:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
-        DATABASE_HOST: postgres
         DATABASE_DB_TEST: boston_cas_test
         DEFAULT_FROM: greenriver.testing@mailinator.com
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
@@ -69,7 +66,6 @@ jobs:
       env:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
-        DATABASE_HOST: postgres
         DATABASE_DB_TEST: boston_cas_test
         DEFAULT_FROM: greenriver.testing@mailinator.com
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
