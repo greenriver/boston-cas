@@ -24,7 +24,7 @@ jobs:
           redis-server \
           libmagic-dev \
           libpq-dev
-        sudo -upostgres createuser --echo --superuser $USER #give the runner
+        sudo -hpostgres -upostgres createuser --echo --superuser $USER #give the runner
         createdb --echo
         createdb $DATABASE_WAREHOUSE_DB_TEST
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
@@ -48,6 +48,7 @@ jobs:
       env:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
+        DATABASE_HOST: postgres
         DATABASE_DB_TEST: boston_cas_test
         DEFAULT_FROM: greenriver.testing@mailinator.com
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
@@ -59,6 +60,7 @@ jobs:
       env:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
+        DATABASE_HOST: postgres
         DATABASE_DB_TEST: boston_cas_test
         DEFAULT_FROM: greenriver.testing@mailinator.com
         DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
