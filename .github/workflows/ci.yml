@@ -52,7 +52,7 @@ jobs:
         # echo Restarting postgres
         # sudo systemctl restart postgresql
 
-        sudo -upostgres createuser -p 5432 --echo --superuser $USER #give the runner
+        sudo -upostgres createuser -h postgres -p 5432 --echo --superuser $USER #give the runner
         createdb -p 5432 --echo
         createdb -p 5432 $DATABASE_WAREHOUSE_DB_TEST
 
