@@ -5,9 +5,16 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     services:
+      # Label used to access the service container
       postgres:
-        image:  postgres
-        ports: ["5432:5432"]
+        # Docker Hub image
+        image: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v1
@@ -24,9 +31,9 @@ jobs:
           redis-server \
           libmagic-dev \
           libpq-dev
-        sudo -hpostgres -upostgres createuser --echo --superuser $USER #give the runner
-        createdb --echo
-        createdb $DATABASE_WAREHOUSE_DB_TEST
+        sudo -upostgres createuser -h postgres --echo --superuser $USER #give the runner
+        createdb -h postgres --echo
+        createdb -h postgres $DATABASE_WAREHOUSE_DB_TEST
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2'
     - name: 'Install gems'
