@@ -5,10 +5,11 @@ on:
     branches:
       - '*'
       - '**/*'
-  pull_request:
-    branches:
-      - '*'
-      - '**/*'
+  # NOTE: you don't need to build all PRs if you are also building all branches
+  # pull_request:
+  #   branches:
+  #     - '*'
+  #     - '**/*'
 jobs:
   build:
     runs-on: ubuntu-18.04
