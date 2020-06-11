@@ -180,6 +180,7 @@ class NonHmisClient < ApplicationRecord
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
     project_client.health_prioritized = health_prioritized
+    project_client.hiv_positive = hiv_aids
 
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
@@ -325,7 +326,8 @@ class NonHmisClient < ApplicationRecord
       vispdat_score: 'VI-SPDAT Score',
       vispdat_priority_score: 'VI-SPDAT Priority Score',
       actively_homeless: 'Actively Homeless',
-      health_prioritized: 'Prioritized for Health'
+      health_prioritized: 'Prioritized for Health',
+      hiv_aids: 'HOPWA Eligible',
     }
   end
 
