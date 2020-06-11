@@ -80,6 +80,7 @@ jobs:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
         DATABASE_DB_TEST: boston_cas_test
+        DATABASE_HOST: localhost
         DATABASE_USER: postgres
         DATABASE_PASS: postgres
         DEFAULT_FROM: greenriver.testing@mailinator.com
@@ -93,6 +94,7 @@ jobs:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
         DATABASE_DB_TEST: boston_cas_test
+        DATABASE_HOST: localhost
         DATABASE_USER: postgres
         DATABASE_PASS: postgres
         DEFAULT_FROM: greenriver.testing@mailinator.com
