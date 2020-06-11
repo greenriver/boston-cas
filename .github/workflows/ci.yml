@@ -13,23 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        ports:
-          - 5432:5432
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby 2.6
@@ -42,21 +25,23 @@ jobs:
       run: |
         sudo apt-get update
 
+        sudo apt-get remove postgresql-10 postgresql-12
+
         sudo apt-get install \
+          postgresql-11 postgresql-contrib \
           redis-server \
           libmagic-dev \
           libpq-dev
 
-        # echo Updating the postgresql port which is needed if multiple versions installed
-        # sudo sed -i.bak -e 's/5433/5432/' /etc/postgresql/11/main/postgresql.conf
+        echo Updating the postgresql port which is needed if multiple versions installed
+        sudo sed -i.bak -e 's/5433/5432/' /etc/postgresql/11/main/postgresql.conf
 
-        # echo Restarting postgres
-        # sudo systemctl restart postgresql
-        # netstat -an
+        echo Restarting postgres
+        sudo systemctl restart postgresql
 
-        # sudo -upostgres createuser -h postgres -p 5432 --echo --superuser $USER #give the runner
-        # createdb -p 5432 --echo
-        # createdb -p 5432 $DATABASE_WAREHOUSE_DB_TEST
+        sudo -upostgres createuser --echo --superuser $USER #give the runner
+        createdb --echo
+        createdb $DATABASE_WAREHOUSE_DB_TEST
 
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2'
@@ -80,11 +65,8 @@ jobs:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
         DATABASE_DB_TEST: boston_cas_test
-        DATABASE_HOST: localhost
-        DATABASE_USER: postgres
-        DATABASE_PASS: postgres
         DEFAULT_FROM: greenriver.testing@mailinator.com
-        DATABASE_WAREHOUSE_DB_TEST: cas_test
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
         HOSTNAME: openpath.host
         PORT: 80
       run: |
@@ -94,11 +76,8 @@ jobs:
         RAILS_ENV: test
         DATABASE_ADAPTER: postgresql
         DATABASE_DB_TEST: boston_cas_test
-        DATABASE_HOST: localhost
-        DATABASE_USER: postgres
-        DATABASE_PASS: postgres
         DEFAULT_FROM: greenriver.testing@mailinator.com
-        DATABASE_WAREHOUSE_DB_TEST: cas_test
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
         HOSTNAME: openpath.host
         PORT: 80
       run: |
