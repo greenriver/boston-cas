@@ -43,7 +43,7 @@ end
 before 'passenger:restart',  :group_writable_and_owned_by_ubuntu
 after 'deploy:log_revision', :group_writable_and_owned_by_ubuntu
 
-# Default branch is :master
+# Default branch is :production
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name

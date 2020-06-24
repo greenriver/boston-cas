@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 # This is used to determine whether or not a client is available to match a

@@ -5,7 +5,7 @@ The Boston Coordinated Access System (CAS) project was initiated by the City of 
 
 The CAS matches vacancies to permanent supportive housing units to clients using a customizable rule-based system. Once a match is proposed by the system using these rules, the system verifies eligibility and coordinates communication around the housing opportunity between the client, Department of Neighborhood Development staff, Shelter Agencies and Housing providers.
 
-See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/master/docs/Flow%20Map%20Vouchers.pdf) for a flow map that describes the process from voucher availability to person housed.
+See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/production/docs/Flow%20Map%20Vouchers.pdf) for a flow map that describes the process from voucher availability to person housed.
 
 ```
 Copyright © 2016 Green River Data Analysis, LLC
@@ -21,7 +21,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ```
 
-A copy of the license is available in [LICENSE.md](https://github.com/greenriver/boston-cas/blob/master/LICENSE.md)
+A copy of the license is available in [LICENSE.md](https://github.com/greenriver/boston-cas/blob/production/LICENSE.md)
 
 ## Vision
 
@@ -43,9 +43,9 @@ We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to
 
 ## Screen Shots
 ##### A Match in Progress
-![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/match-detail.png)
+![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/production/docs/screenshots/match-detail.png)
 ##### Editing Program Roles
-![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/master/docs/screenshots/rules-editing.png)
+![Image of a match in progress](https://github.com/greenriver/boston-cas/blob/production/docs/screenshots/rules-editing.png)
 
 ## Third-party Service Dependencies
 
