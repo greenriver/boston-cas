@@ -4,13 +4,24 @@ wb = xlsx_package.workbook
   wb.add_worksheet(name: sub_program_name[0..30]) do |sheet|
     steps = step_names(sub_program_id)
 
+    step_counter = sheet.styles.add_style(sz: 12, bg_color: '4287f5', alignment: {horizontal: :center}, border: Axlsx::STYLE_THIN_BORDER)
     row = ['', ''] + ((2..steps.count).map { |i| ["Step #{i}", ''] }).flatten
-    sheet.add_row(row)
+    sheet.add_row(row, style: step_counter)
 
+    title = sheet.styles.add_style(sz: 12, b: true, alignment: {horizontal: :center}, border: Axlsx::STYLE_THIN_BORDER)
     row = ['Client', 'Most-recent action (note added or step advanced)'] +
       ((2..steps.count).map {|i| ['Action Taken On', steps[i]]}).flatten
-    sheet.add_row(row)
+    sheet.add_row(row, style: title)
+    (2..steps.count).each do |i|
+      col = ((i-1)*2)
+      letter = (65 + col).chr
+      sheet.merge_cells("#{letter}1:#{letter.succ}1")
+    end
 
+    row_style = sheet.styles.add_style(bg_color: 'ededed', border: Axlsx::STYLE_THIN_BORDER)
+    row_style_date = sheet.styles.add_style(bg_color: 'ededed', num_fmt: 14, border: Axlsx::STYLE_THIN_BORDER)
+    alternate = sheet.styles.add_style(bg_color: 'ffffff', border: Axlsx::STYLE_THIN_BORDER)
+    alternate_date = sheet.styles.add_style(bg_color: 'ffffff', num_fmt: 14, border: Axlsx::STYLE_THIN_BORDER)
     actions = actions(sub_program_id)
     clients(sub_program_id).each do |id, name|
       client_actions = actions[id]
@@ -18,17 +29,24 @@ wb = xlsx_package.workbook
         name,
         client_actions&.values&.map{ |actions| actions.map(&:first) }&.flatten&.max
       ]
+      row_formatting = [row_style, row_style_date]
+      (2..steps.count).each do
+        row_formatting << row_style_date
+        row_formatting << row_style
+      end
       client_height = client_actions&.values&.map{ |actions| actions.count }&.max || 0
       client_height.times do |height|
-        events = (2..steps.count).map do |column|
+          events = (2..steps.count).map do |column|
           event = client_actions[column].try(:[], height)
           [
             event&.first || '',
             event&.last || '',
           ]
         end.flatten
-        sheet.add_row(row_template + events)
+        sheet.add_row(row_template + events, style: row_formatting)
       end
+      row_style, alternate = alternate, row_style
+      row_style_date, alternate_date = alternate_date, row_style_date
     end
   end
 end
