@@ -1,0 +1,31 @@
+wb = xlsx_package.workbook
+
+@included_sub_programs.each do |sub_program_id, sub_program_name|
+  wb.add_worksheet(name: sub_program_name[0..30]) do |sheet|
+    sub_program = sub_programs[sub_program_id]
+    steps = step_names(sub_program)
+
+    row = ['', ''] + ((2..steps.count).map { |i| ["Step #{i}", ''] }).flatten
+    sheet.add_row(row)
+
+    row = ['Client', 'Most-recent action (note added or step advanced)'] +
+      ((2..steps.count).map {|i| ['Action Taken On', steps[i]]}).flatten
+    sheet.add_row(row)
+
+    actions = actions(sub_program)
+    clients(sub_program).each do |id, name|
+      client_actions = actions[id]
+      row_template = [
+        name,
+        client_actions&.values&.map{ |actions| actions.map(&:first) }&.flatten&.max
+      ]
+      client_height = client_actions&.values&.map{ |actions| actions.count }&.max
+      client_height.times do |height|
+        row = row_template.dup + (2..steps.count).map do |column|
+          client_actions[column][height] || ''
+        end
+        sheet.add_row(row)
+      end
+    end
+  end
+end

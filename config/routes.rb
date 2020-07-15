@@ -182,6 +182,7 @@ Rails.application.routes.draw do
       resources :vacancies, only: [:index]
       resources :clients, only: [:index]
     end
+    resources :match_progress, only: [:index]
   end
 
   namespace :system_status do

@@ -132,7 +132,13 @@ def report_list
         name: 'Dashboard',
         description: 'Match, vacancy, and client dashboards.',
         limitable: true,
-      }
+      },
+      {
+        url: 'reports/match_progress',
+        name: 'Match Progress',
+        description: 'CAS match progress tracking report',
+        limitable: true,
+      },
     ],
   }
 end
