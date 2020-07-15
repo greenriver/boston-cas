@@ -68,6 +68,18 @@ module ArelHelper
     def mdr_b_t
       MatchDecisionReasons::Base.arel_table
     end
+
+    def p_t
+      Program.arel_table
+    end
+
+    def sp_t
+      SubProgram.arel_table
+    end
+
+    def com_t
+      ClientOpportunityMatch.arel_table
+    end
   end
 
   def c_t
@@ -96,5 +108,17 @@ module ArelHelper
 
   def mdr_b_t
     MatchDecisionReasons::Base.arel_table
+  end
+
+  def p_t
+    Program.arel_table
+  end
+
+  def sp_t
+    SubProgram.arel_table
+  end
+
+  def com_t
+    ClientOpportunityMatch.arel_table
   end
 end

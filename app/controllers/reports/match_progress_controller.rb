@@ -16,54 +16,87 @@ module Reports
         format.xlsx do
           @included_sub_programs = sub_program_list.invert.slice(*report_params[:sub_programs])
           filename = 'CAS Match Progress.xlsx'
-          headers['Content-Disposition'] = "attachment; filename=#{filename}"
+          render xlsx: 'index.xlsx', filename: filename
         end
       end
     end
 
-    def actions(sub_program)
-      # {client_id => {decision_order => [[date, text], ...]}}
-      {}
+    def actions(sub_program_id)
+      # {match_id => {decision_order => [[date, text], ...]}}
+      matches = ClientOpportunityMatch.
+        joins(:opportunity).
+        merge(Opportunity.joins(:voucher).
+          merge(Voucher.where(sub_program_id: sub_program_id)))
+
+      matches.map do |match|
+        [
+          match.id,
+          begin
+            decision_order = 1
+            steps = {}
+            match.events.order(:updated_at).where(type: ['MatchEvents::DecisionAction', 'MatchEvents::Note']).each do |event|
+              steps[decision_order] ||= []
+              case event.type
+              when 'MatchEvents::DecisionAction'
+                steps[decision_order] << [event.updated_at.to_date, "Note: #{event.note}"] if event.note.present?
+                case event.action
+                when 'back'
+                  steps[decision_order] << [event.updated_at.to_date, "Step rewound"]
+                  decision_order -= 1
+                when 'accepted'
+                  steps[decision_order] << [event.updated_at.to_date, "Step completed"]
+                  decision_order += 1
+                end
+              when 'MatchEvents::Note'
+                steps[decision_order] << [event.updated_at.to_date, "Note: #{event.note}"]
+              end
+            end
+            steps
+          end
+        ]
+      end.to_h
     end
     helper_method :actions
 
-    def clients(sub_program)
-      report_source.
-        for_sub_program(program_name: sub_program.first, sub_program_name: sub_program.last).
-        joins(:client).
-        distinct.
-        order(:LastName, :FirstName).
-        pluck(:match_id, :FirstName, :LastName).
+    def clients(sub_program_id)
+      Client.
+        visible_by(current_user).
+        joins(client_opportunity_matches: :opportunity).
+        merge(Opportunity.joins(:voucher).
+          merge(Voucher.where(sub_program_id: sub_program_id))).
+        order(:last_name, :first_name).
+        pluck(com_t[:id], :first_name, :last_name).
         map do |id, first_name, last_name|
-        [id, "#{last_name}, #{first_name}"]
-      end.to_h
+          [id, "#{last_name}, #{first_name}"]
+        end.to_h
     end
     helper_method :clients
 
-    def step_names(sub_program)
-      report_source.
-        for_sub_program(program_name: sub_program.first, sub_program_name: sub_program.last).
-        order(decision_order: :asc).
-        distinct.
-        pluck(:decision_order, :match_step).
-        to_h
+    def step_names(sub_program_id)
+      route = SubProgram.
+        find(sub_program_id).
+        match_route
+
+      steps = route.class.match_steps.invert
+      steps.values.map { |class_name| class_name.constantize.new.step_name }
     end
     helper_method :step_names
 
     def sub_programs
-      @sub_programs ||= report_source.
-        order(:program_name, :sub_program_name).
-        distinct.
-        pluck(:program_name, :sub_program_name)
+      @sub_programs ||= SubProgram.
+        joins(:program).
+        preload(:program).
+        pluck(p_t[:name], sp_t[:name], :id).
+        sort
     end
     helper_method :sub_programs
 
     def sub_program_list
       @sub_program_list ||= begin
-        sub_programs.map.with_index do |name, index|
+        sub_programs.map do |project_name, sub_project_name, id|
           [
-            name.join('|'),
-            index,
+            [project_name, sub_project_name].join('|'),
+            id,
           ]
         end.to_h
       end
