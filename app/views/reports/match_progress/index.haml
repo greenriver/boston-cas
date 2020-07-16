@@ -1,0 +1,8 @@
+- title = 'CAS Match Progress'
+- content_for :title, title
+
+%h1= title
+= render 'reports/crumbs_operational'
+
+= simple_form_for :match_progress, method: :get, url: reports_match_progress_index_path(format: :xlsx) do |f|
+  = render 'filter', f: f
