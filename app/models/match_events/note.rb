@@ -31,5 +31,12 @@ module MatchEvents
       note.present? && (! admin_note || match.can_create_administrative_note?(current_contact))
     end
 
+    def include_in_tracking_sheet?
+      true
+    end
+
+    def tracking_events
+      [[date, "Note: #{note}"]]
+    end
   end
 end

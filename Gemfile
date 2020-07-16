@@ -94,6 +94,8 @@ gem 'grosser-pomo'
 # gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
 # gem 'axlsx_rails'
 # gem 'spreadsheet', require: false
+gem 'caxlsx'
+gem 'caxlsx_rails'
 gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 gem 'roo'
