@@ -209,5 +209,27 @@ module MatchProgressUpdates
       match_ids = contacts.values.map(&:to_a).flatten.uniq
       ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.current)
     end
+
+    def include_in_tracking_sheet?
+      true
+    end
+
+    def tracking_events
+      event_note = []
+      event_note << "Client last seen: #{client_last_seen}" if client_last_seen.present?
+      event_note << response if response.present?
+      event_note << "Note: #{note}" if note.present?
+
+      [[created_at.to_date, event_note.join('; ')]]
+    end
+
+    def include_tracking_event?
+      tracking_events.present?
+    end
+
+    def next_step_number(step_number)
+      step_number # default to staying the same
+    end
+
   end
 end

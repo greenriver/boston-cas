@@ -28,12 +28,12 @@ module MatchEvents
 
     def tracking_events
       events = []
-      events << [updated_at.to_date, "Note: #{note}"] if note.present?
+      events << [date, "Note: #{note}"] if note.present?
       case action
       when 'back'
-        events << [updated_at.to_date, 'Step rewound']
+        events << [date, 'Step rewound']
       when 'accepted'
-        events << [updated_at.to_date, 'Step completed']
+        events << [date, 'Step completed']
       end
       events
     end

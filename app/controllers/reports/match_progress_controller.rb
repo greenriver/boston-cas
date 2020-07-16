@@ -39,7 +39,10 @@ module Reports
     private def step_events(match)
       step_number = 1
       steps = {}
-      match.events.order(:updated_at).each do |event|
+      status_history = match.status_updates.complete.preload(:notification, :contact).to_a
+      events = match.events.to_a
+      all_events = (events + status_history).sort_by(&:created_at)
+      all_events.each do |event|
         if event.include_in_tracking_sheet?
           steps[step_number] ||= []
           steps[step_number].push(*event.tracking_events) if event.include_tracking_event?

@@ -36,7 +36,7 @@ module MatchEvents
     end
 
     def tracking_events
-      [updated_at.to_date, "Note: #{note}"]
+      [[date, "Note: #{note}"]]
     end
   end
 end
