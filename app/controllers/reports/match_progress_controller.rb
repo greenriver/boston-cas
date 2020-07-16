@@ -24,46 +24,36 @@ module Reports
     def actions(sub_program_id)
       # {match_id => {decision_order => [[date, text], ...]}}
       matches = ClientOpportunityMatch.
-        joins(:opportunity).
-        merge(Opportunity.joins(:voucher).
-          merge(Voucher.where(sub_program_id: sub_program_id)))
+        joins(opportunity: :voucher).
+        merge(Voucher.where(sub_program_id: sub_program_id))
 
       matches.map do |match|
         [
           match.id,
-          begin
-            decision_order = 1
-            steps = {}
-            match.events.order(:updated_at).where(type: ['MatchEvents::DecisionAction', 'MatchEvents::Note']).each do |event|
-              steps[decision_order] ||= []
-              case event.type
-              when 'MatchEvents::DecisionAction'
-                steps[decision_order] << [event.updated_at.to_date, "Note: #{event.note}"] if event.note.present?
-                case event.action
-                when 'back'
-                  steps[decision_order] << [event.updated_at.to_date, "Step rewound"]
-                  decision_order -= 1
-                when 'accepted'
-                  steps[decision_order] << [event.updated_at.to_date, "Step completed"]
-                  decision_order += 1
-                end
-              when 'MatchEvents::Note'
-                steps[decision_order] << [event.updated_at.to_date, "Note: #{event.note}"]
-              end
-            end
-            steps
-          end
+          step_events(match),
         ]
       end.to_h
     end
     helper_method :actions
 
+    private def step_events(match)
+      step_number = 1
+      steps = {}
+      match.events.order(:updated_at).each do |event|
+        if event.include_in_tracking_sheet?
+          steps[step_number] ||= []
+          steps[step_number].push(*event.tracking_events) if event.include_tracking_event?
+          step_number = event.next_step_number(step_number)
+        end
+      end
+      steps
+    end
+
     def clients(sub_program_id)
       Client.
         visible_by(current_user).
-        joins(client_opportunity_matches: :opportunity).
-        merge(Opportunity.joins(:voucher).
-          merge(Voucher.where(sub_program_id: sub_program_id))).
+        joins(client_opportunity_matches: {opportunity: :voucher}).
+        merge(Voucher.where(sub_program_id: sub_program_id)).
         order(:last_name, :first_name).
         pluck(com_t[:id], :first_name, :last_name).
         map do |id, first_name, last_name|
@@ -103,7 +93,7 @@ module Reports
     end
     helper_method :sub_program_list
 
-    def report_params
+    private def report_params
       opts = params.require(:match_progress).
         permit(
           sub_programs: [],
@@ -112,7 +102,7 @@ module Reports
       opts
     end
 
-    def report_source
+    private def report_source
       Warehouse::CasReport
     end
   end
