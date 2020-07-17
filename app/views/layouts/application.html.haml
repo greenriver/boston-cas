@@ -13,7 +13,7 @@
     = stylesheet_link_tag 'print', media: 'print'
     = javascript_include_tag 'application'
 
-    = cache('theme', expires_in: 4.hours) do
+    = cache('theme', expires_in: 1.minutes) do
       - Dir.glob('app/assets/stylesheets/theme/styles/*.scss') do |stylesheet|
         - theme_styles = "theme/styles/#{File.basename(stylesheet, '.scss')}"
         = stylesheet_link_tag(theme_styles, media: 'all')
