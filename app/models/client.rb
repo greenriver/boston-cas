@@ -356,9 +356,11 @@ class Client < ApplicationRecord
     ).any?
   end
 
-  def make_available_in match_route:
+  def make_available_in(match_route:, unless_parked: false)
     route_name = MatchRoutes::Base.route_name_from_route(match_route)
-    UnavailableAsCandidateFor.where(client_id: id, match_route_type: route_name).destroy_all
+    unavailable_fors = UnavailableAsCandidateFor.where(client_id: id, match_route_type: route_name)
+    unavailable_fors = unavailable_fors.not_parked if unless_parked
+    unavailable_fors.destroy_all
   end
 
   def make_available_in_all_routes
@@ -372,16 +374,16 @@ class Client < ApplicationRecord
     Date.current + days.days
   end
 
-  def make_unavailable_in(match_route:, expires_at: default_unavailable_expiration_date)
+  def make_unavailable_in(match_route:, expires_at: default_unavailable_expiration_date, parking: false)
     route_name = MatchRoutes::Base.route_name_from_route(match_route)
 
     un = unavailable_as_candidate_fors.where(match_route_type: route_name).first_or_create
-    un.update(expires_at: expires_at)
+    un.update(expires_at: expires_at, parked: parking)
   end
 
-  def make_unavailable_in_all_routes(expires_at: default_unavailable_expiration_date)
+  def make_unavailable_in_all_routes(expires_at: default_unavailable_expiration_date, parking: false)
     MatchRoutes::Base.all_routes.each do |route|
-      make_unavailable_in(match_route: route, expires_at: expires_at)
+      make_unavailable_in(match_route: route, expires_at: expires_at, parking: parking)
     end
   end
 
@@ -405,7 +407,7 @@ class Client < ApplicationRecord
         client_opportunity_matches.open.each(&:delete)
         # Prevent any new matches for this client
         # This will re-queue the client once the date is passed
-        make_unavailable_in_all_routes(expires_at: expires_at)
+        make_unavailable_in_all_routes(expires_at: expires_at, parking: true)
       end
 
       if cancel_specific
@@ -422,7 +424,7 @@ class Client < ApplicationRecord
         opportunity.update(available_candidate: true)
         # Delete any non-active open matches
         client_opportunity_matches.on_route(route).proposed.each(&:delete)
-        make_unavailable_in(match_route: route, expires_at: expires_at)
+        make_unavailable_in(match_route: route, expires_at: expires_at, parking: true)
       end
     end
     Matching::RunEngineJob.perform_later

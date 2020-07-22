@@ -17,6 +17,10 @@ class UnavailableAsCandidateFor < ApplicationRecord
     where(match_route_type: route_name)
   end
 
+  scope :not_parked, -> do
+    where(parked: false)
+  end
+
   validates_presence_of :match_route_type
 
   def self.available_expiration_lengths

@@ -211,7 +211,7 @@ module Cas
         clients.each do |c|
           if c.client_opportunity_matches.on_route(route).active.none? && c.client_opportunity_matches.success.none?
             if c.client_opportunity_matches.on_route(route).count < Client.max_candidate_matches
-              c.make_available_in(match_route: route)
+              c.make_available_in(match_route: route, unless_parked: true)
             end
           end
         end
