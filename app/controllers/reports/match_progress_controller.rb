@@ -24,6 +24,7 @@ module Reports
     def actions(sub_program_id)
       # {match_id => {decision_order => [[date, text], ...]}}
       matches = ClientOpportunityMatch.
+        active.
         joins(opportunity: :voucher).
         merge(Voucher.where(sub_program_id: sub_program_id))
 
@@ -56,6 +57,7 @@ module Reports
       Client.
         visible_by(current_user).
         joins(client_opportunity_matches: {opportunity: :voucher}).
+        merge(ClientOpportunityMatch.active).
         merge(Voucher.where(sub_program_id: sub_program_id)).
         order(:last_name, :first_name).
         pluck(com_t[:id], :first_name, :last_name).
@@ -103,10 +105,6 @@ module Reports
         )
       opts[:sub_programs] = opts[:sub_programs].reject(&:blank?).map(&:to_i)
       opts
-    end
-
-    private def report_source
-      Warehouse::CasReport
     end
   end
 end
