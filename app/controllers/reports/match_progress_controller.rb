@@ -11,6 +11,11 @@ module Reports
     before_action :authenticate_user!
 
     def index
+      if params.dig(:match_progress).present? && sub_programs_chosen.blank?
+        flash[:error] = 'Program is required'
+        redirect_to(action: :index)
+        return
+      end
       respond_to do |format|
         format.html {}
         format.xlsx do
@@ -24,6 +29,7 @@ module Reports
     def actions(sub_program_id)
       # {match_id => {decision_order => [[date, text], ...]}}
       matches = ClientOpportunityMatch.
+        active.
         joins(opportunity: :voucher).
         merge(Voucher.where(sub_program_id: sub_program_id))
 
@@ -56,6 +62,7 @@ module Reports
       Client.
         visible_by(current_user).
         joins(client_opportunity_matches: {opportunity: :voucher}).
+        merge(ClientOpportunityMatch.active).
         merge(Voucher.where(sub_program_id: sub_program_id)).
         order(:last_name, :first_name).
         pluck(com_t[:id], :first_name, :last_name).
@@ -69,6 +76,7 @@ module Reports
       route = SubProgram.
         find(sub_program_id).
         match_route
+      return [] unless route
 
       steps = route.class.match_steps.invert
       steps.values.map { |class_name| class_name.constantize.new.step_name }
@@ -96,6 +104,10 @@ module Reports
     end
     helper_method :sub_program_list
 
+    private def sub_programs_chosen
+      params.dig(:match_progress, :sub_programs).select(&:presence)
+    end
+
     private def report_params
       opts = params.require(:match_progress).
         permit(
@@ -103,10 +115,6 @@ module Reports
         )
       opts[:sub_programs] = opts[:sub_programs].reject(&:blank?).map(&:to_i)
       opts
-    end
-
-    private def report_source
-      Warehouse::CasReport
     end
   end
 end
