@@ -11,6 +11,11 @@ module Reports
     before_action :authenticate_user!
 
     def index
+      if params.dig(:match_progress).present? && sub_programs_chosen.blank?
+        flash[:error] = 'Program is required'
+        redirect_to(action: :index)
+        return
+      end
       respond_to do |format|
         format.html {}
         format.xlsx do
@@ -71,6 +76,7 @@ module Reports
       route = SubProgram.
         find(sub_program_id).
         match_route
+      return [] unless route
 
       steps = route.class.match_steps.invert
       steps.values.map { |class_name| class_name.constantize.new.step_name }
@@ -97,6 +103,10 @@ module Reports
       end
     end
     helper_method :sub_program_list
+
+    private def sub_programs_chosen
+      params.dig(:match_progress, :sub_programs).select(&:presence)
+    end
 
     private def report_params
       opts = params.require(:match_progress).
