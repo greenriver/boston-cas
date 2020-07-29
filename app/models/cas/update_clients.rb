@@ -25,11 +25,8 @@ module Cas
 
             ProjectClient.update_all(needs_update: false)
           end
-          fix_incorrect_available_candidate_clients()
           # Data has changed, see if we have any new matches
           Matching::RunEngineJob.perform_later
-        else
-          fix_incorrect_available_candidate_clients()
         end
       end
     end
@@ -202,20 +199,6 @@ module Cas
         :evicted,
         :health_prioritized,
       ]
-    end
-
-    # Find anyone who should be marked as available_candidate, but for whatever reason isn't marked as such
-    def fix_incorrect_available_candidate_clients
-      MatchRoutes::Base.all_routes.each do |route|
-        clients = Client.available.unavailable_in(route)
-        clients.each do |c|
-          if c.client_opportunity_matches.on_route(route).active.none? && c.client_opportunity_matches.success.none?
-            if c.client_opportunity_matches.on_route(route).count < Client.max_candidate_matches
-              c.make_available_in(match_route: route)
-            end
-          end
-        end
-      end
     end
 
     def needs_update?
