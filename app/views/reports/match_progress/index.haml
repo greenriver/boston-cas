@@ -4,5 +4,7 @@
 %h1= title
 = render 'reports/crumbs_operational'
 
+%p Download a spreadsheet of currently active matches for the chosen programs.  The download includes all steps and actions taken.
+
 = simple_form_for :match_progress, method: :get, url: reports_match_progress_index_path(format: :xlsx) do |f|
   = render 'filter', f: f
