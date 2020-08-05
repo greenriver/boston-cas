@@ -52,3 +52,38 @@
     flex: 1 1 auto;
   }
 }
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered,
+.select2-container--default .select2-search--inline .select2-search__field {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered li {
+  margin-top: rem(2px);
+  margin-bottom: rem(2px);
+}
+
+.select2-select-all {
+  margin-left: auto;
+  cursor: pointer;
+  color: $link-color;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: space(4);
+  white-space: nowrap;
+  &:hover {
+    color: $link-hover-color;
+    cursor: pointer;
+  }
+  // Fix for IE11 bug with align-center in container with
+  // min-height
+  &::after {
+    display: block;
+    content: '';
+    min-height: inherit;
+    font-size: 0;
+  }
+}
