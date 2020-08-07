@@ -1,22 +1,56 @@
-//= require namespace
-//= require select2
-
-App.Form = App.Form || {}
+window.App.Form = window.App.Form || {}
 
 App.Form.Select2Input = class Select2Input {
-  constructor(elementId) {
-    const field = document.getElementById(elementId)
+  constructor(element, options={}) {
+    let field = null
+    if (typeof(element) === 'string') {
+      field = document.getElementById(element)
+    } else {
+      field = element
+    }
     if (!field) {
-      console.debug(`Select2Input could not find id: ${elementId}`)
+      console.debug(`Select2Input could not find element: ${element}`)
     } else {
       this.$select = $(field)
-      console.log(this.$select.find('option:first').attr('selected', true))
       this.$select2Container = this.$select.next('.select2-container')
-      this.$select.select2()
-      // Add ability to select all/none if the select2 is multiselect
+
+      // Add options based on use-case
+      // CoCs get special functionality
+      if (field.classList.contains('select2-id-when-selected')) {
+        options.templateSelection = (selected) => {
+          if (!selected.id) {
+            return selected.text
+          }
+          // use the parenthetical text to keep the select smaller
+          const matched = selected.text.match(/\((.+?)\)/)
+          if (matched && !matched.length == 2) {
+            return selected.text
+          } else if (matched && matched.length) {
+            return matched[1]
+          }
+        }
+      }
+
+      if (field.classList.contains('select2-parenthetical-when-selected')) {
+        options.templateSelection = (selected) => {
+          if (!selected.id) {
+            return selected.text
+          }
+          // use the code to keep the select smaller
+          return selected.id
+        }
+      }
+
+      // Init!
+      this.$select.select2(options)
+
+      // Add select all functionality if has `multiple` attribute
       if (field.hasAttribute('multiple')) {
         this.initToggleSelectAll()
       }
+
+      // Parenthetical
+      $(".select2-search__field").attr('aria-label', 'Search')
     }
   }
 
@@ -42,7 +76,7 @@ App.Form.Select2Input = class Select2Input {
 
   toggleSelectAll(isManualChange=false) {
     if (!isManualChange) {
-      this.$select.find('option').prop("selected", !this.allItemsAreSelected)
+      this.$select.find('option').prop('selected', !this.allItemsAreSelected)
       this.allItemsAreSelected = !this.allItemsAreSelected
     } else {
       if (this.someItemsSelected() || this.allItemsSelected()) {
@@ -56,11 +90,9 @@ App.Form.Select2Input = class Select2Input {
 
     // Update DOM element to reflect selections
     const $selectAllLink = this.$formGroup.find('.select2-select-all')
-    let classAction = 'removeClass'
     // this.$select2Container[classAction]('all-selected')
     let html = this.selectAllHtml()
     if (this.allItemsSelected() || this.numberOfSelectedItems()) {
-      classAction = 'addClass'
       html = this.selectAllHtml()
     }
     $selectAllLink.html(html)
