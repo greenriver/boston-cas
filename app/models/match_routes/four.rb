@@ -46,6 +46,10 @@ module MatchRoutes
       :four_match_recommendation_dnd_staff_decision
     end
 
+    def success_decision
+      :four_confirm_match_success_dnd_staff_decision
+    end
+
     def initial_contacts_for_match
       :dnd_staff_contacts
     end

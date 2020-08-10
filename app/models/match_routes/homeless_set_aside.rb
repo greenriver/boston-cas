@@ -41,6 +41,10 @@ module MatchRoutes
       :set_asides_hsa_accepts_client_decision
     end
 
+    def success_decision
+      :set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator_decision
+    end
+
     def initial_contacts_for_match
       :housing_subsidy_admin_contacts
     end
