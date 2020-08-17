@@ -11,7 +11,7 @@
             =link_to edit_match_note_path(match, event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
               %span.icon-pencil
               Edit Note
-  %td.history--contact-name= event.contact_name
+  %td.history--contact-name= event&.contact_name || 'Contact Missing'
   - if can_reissue_notifications?
     %td.history--resend-notification
       - if event.notification.present? && event.notification.decision == @match.current_decision

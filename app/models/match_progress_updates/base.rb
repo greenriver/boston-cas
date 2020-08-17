@@ -26,7 +26,7 @@ module MatchProgressUpdates
 
     belongs_to :contact,
       inverse_of: :status_updates
-    delegate :name, to: :contact, prefix: true
+    delegate :name, to: :contact, allow_nil: :true, prefix: true
 
     belongs_to :decision,
       class_name: MatchDecisions::Base.name
