@@ -432,6 +432,10 @@ class ClientOpportunityMatch < ApplicationRecord
     closed? && closed_reason == 'success'
   end
 
+  def success_time
+    send(match_route.success_decision).updated_at
+  end
+
   def current_step_name
     current_decision.step_name if active?
   end

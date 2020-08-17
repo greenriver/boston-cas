@@ -18,7 +18,7 @@ module Warehouse
         warehouse_client_id = match.client.project_client.id_in_data_source
         cas_client_id = match.client.id
         match_id = match.id
-        housed_on = match.confirm_match_success_dnd_staff_decision.updated_at
+        housed_on = match.success_time
 
         cas_housed = Warehouse::CasHoused.create(
           client_id: warehouse_client_id,
