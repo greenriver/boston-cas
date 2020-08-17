@@ -51,6 +51,10 @@
           %h4 Select 2
           = f.input :select2, as: :select2, collection: ['Choice 1', 'Choice 2']
 
+          %h4 Select 2 with select all/none
+          = f.input :select2_all_none, as: :select2, collection: ['Choice 3', 'Choice 4', 'Choice 5'], input_html: { multiple: true }, hint: 'Hint goes here. Really long hint. It\'s so long, it keeps going, and going, and going, and going.'
+          = f.input :select2_all_none2, as: :select2, collection: ['Choice 3', 'Choice 4', 'Choice 5'], input_html: { multiple: true }, label: 'No Hint'
+
           %h4 Password
           = f.input :password, as: :password, required: true, **validate_html
 
