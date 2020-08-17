@@ -65,8 +65,15 @@
   margin-bottom: rem(2px);
 }
 
+.form--label-hint-wrapper
+{
+  display: flex;
+  align-content: space-between;
+}
+
 .select2-select-all {
   margin-left: auto;
+  min-width: 7em;
   cursor: pointer;
   color: $link-color;
   display: flex;

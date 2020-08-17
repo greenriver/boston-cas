@@ -109,16 +109,17 @@ App.Form.Select2Input = class Select2Input {
     const hasItemsSelectedOnInit = this.numberOfSelectedItems()
     this.$formGroup = this.$select.closest('.form-group')
     this.$formGroup.addClass('select2-wrapper')
-    const $label = this.$formGroup.find('> label')
-    const $labelWrapper = $("<div class='select2__label-wrapper'></div>")
+    const $label = this.$formGroup.find(' .form--label-hint-wrapper')
+    const $labelWrapper = $("<div class='select2__label-wrapper ml-auto mt-auto mb-2'></div>")
     // Add select all/none link to select2 input
     $labelWrapper.append($(`
       <div class="select2-select-all j-select2-select-all">
         ${this.selectAllHtml()}
       </div>
     `))
-    $label.prependTo($labelWrapper)
-    this.$formGroup.prepend($labelWrapper)
+    // $label.append($labelWrapper)
+    $label.append($labelWrapper)
+    // this.$formGroup.prepend($labelWrapper)
 
     // Init events on select2
     // Trigger toggle on manual update: 'select2:select select2:unselect
