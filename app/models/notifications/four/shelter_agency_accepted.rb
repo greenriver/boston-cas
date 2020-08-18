@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Four
-  class ShelterAgencyAccepted < ::MatchDecisions::Base
+  class ShelterAgencyAccepted < ::Notifications::Base
 
     def self.create_for_match! match
       match.dnd_staff_contacts.each do |contact|
