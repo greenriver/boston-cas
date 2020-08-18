@@ -41,6 +41,10 @@ module MatchRoutes
       :hsa_acknowledges_receipt_decision
     end
 
+    def success_decision
+      :hsa_accepts_client_decision
+    end
+
     def initial_contacts_for_match
       :housing_subsidy_admin_contacts
     end

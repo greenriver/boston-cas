@@ -74,6 +74,10 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def success_decision
+      raise NotImplementedError
+    end
+
     def initial_contacts_for_match
       raise NotImplementedError
     end
