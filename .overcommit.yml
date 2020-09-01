@@ -32,7 +32,6 @@ PreCommit:
   #   required_executable: 'npm'
   #   command: ['npm', 'run', 'coffeelint']
 
-
   TrailingWhitespace:
     enabled: false
     exclude:
