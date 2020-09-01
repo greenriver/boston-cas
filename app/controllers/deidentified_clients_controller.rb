@@ -165,6 +165,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :ssvf_eligible,
           :health_prioritized,
           :hiv_aids,
+          :is_currently_youth,
           neighborhood_interests: [],
         ]
       )

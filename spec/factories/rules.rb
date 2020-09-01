@@ -371,5 +371,9 @@ FactoryBot.define do
     name { "Homeless Service in the past 90 days" }
     verb { "have" }
   end
+  factory :is_currently_youth, class: 'Rules::Youth' do
+    name { "Youth or marked as youth" }
+    verb { "be" }
+  end
 end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_10_140958) do
+ActiveRecord::Schema.define(version: 2020_09_01_131100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,6 +239,7 @@ ActiveRecord::Schema.define(version: 2020_06_10_140958) do
     t.boolean "evicted", default: false
     t.boolean "dv_rrh_desired", default: false
     t.boolean "health_prioritized", default: false
+    t.boolean "is_currently_youth", default: false, null: false
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -674,6 +675,7 @@ ActiveRecord::Schema.define(version: 2020_06_10_140958) do
     t.boolean "documented_disability", default: false
     t.boolean "health_prioritized", default: false
     t.boolean "hiv_aids", default: false
+    t.boolean "is_currently_youth", default: false, null: false
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -967,6 +969,7 @@ ActiveRecord::Schema.define(version: 2020_06_10_140958) do
     t.boolean "evicted", default: false
     t.boolean "dv_rrh_desired", default: false
     t.boolean "health_prioritized", default: false
+    t.boolean "is_currently_youth", default: false, null: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

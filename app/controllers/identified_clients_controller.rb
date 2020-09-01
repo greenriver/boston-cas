@@ -98,6 +98,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :active_client,
         :eligible_for_matching,
         :set_asides_housing_status,
+        :is_currently_youth,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,
@@ -139,6 +140,7 @@ class IdentifiedClientsController < NonHmisClientsController
           :evicted,
           :ssvf_eligible,
           :health_prioritized,
+          :is_currently_youth,
           neighborhood_interests: [],
         ]
       ).merge(identified: true)
