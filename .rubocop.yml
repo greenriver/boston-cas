@@ -5,7 +5,7 @@ AllCops:
     # - '**/config.ru'
     # - 'lib/tasks/**/*'
     # - 'app/**/*'
-    - 'spec/**/*.rb'
+    # - 'spec/**/*.rb'
 
   Exclude:
     - 'db/**/*'
@@ -185,3 +185,12 @@ Style/HashTransformValues:
 
 Style/SlicingWithRange:
   Enabled: true
+
+Lint/MixedRegexpCaptureTypes:
+  Enabled: false
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: false
+
+Style/RedundantRegexpEscape:
+  Enabled: false
