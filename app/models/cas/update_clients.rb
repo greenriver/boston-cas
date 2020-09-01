@@ -198,6 +198,7 @@ module Cas
         :sro_ok,
         :evicted,
         :health_prioritized,
+        :is_currently_youth,
       ]
     end
 

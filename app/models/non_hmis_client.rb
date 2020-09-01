@@ -181,6 +181,7 @@ class NonHmisClient < ApplicationRecord
     project_client.vispdat_priority_score = vispdat_priority_score
     project_client.health_prioritized = health_prioritized
     project_client.hiv_positive = hiv_aids
+    project_client.is_currently_youth = current_assessment&.is_currently_youth || false
 
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
