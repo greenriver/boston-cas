@@ -11,9 +11,11 @@ AllCops:
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
-    - 'bin/{rails,rake}'
+    - 'bin/**/*'
     - 'app/assets/**/*'
     - 'bin/db_prep'
+
+  NewCops: enable
 
 # We don't care about method length, since we check method cyclomatic
 # complexity.

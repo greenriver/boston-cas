@@ -131,6 +131,10 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
   gem 'listen'
+
+  gem 'overcommit'
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do
