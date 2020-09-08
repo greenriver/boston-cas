@@ -10,6 +10,7 @@ module Availability
   extend ActiveSupport::Concern
   included do
 
+    # TODO: Disabled in the nightly processing, remove?
     def self.ensure_availability
       self.available.each(&:ensure_availability)
     end
