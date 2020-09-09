@@ -23,7 +23,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       @xlsx.each_with_index do |raw, index|
         next if skip?(raw, index)
 
-        row = Hash[file_attributes.zip(raw)]
+        row = Hash[file_attributes.keys.zip(raw)]
         client = DeidentifiedClient.where(client_identifier: row[:client_identifier]).first_or_initialize
         @clients << client
         cleaned = clean_row(client, row) rescue next
@@ -57,6 +57,8 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     result[:days_homeless_in_the_last_three_years] = convert_to_days(client, row[:days_homeless_in_the_last_three_years])
     result[:family_member] = yes_no_to_bool(client, :family_member, row[:family_member])
     result[:disabling_condition] = yes_no_to_bool(client, :disabling_condition, row[:disabling_condition])
+    result[:is_currently_youth] = yes_no_to_bool(client, :is_currently_youth, row[:is_currently_youth])
+    result[:older_than_65] = yes_no_to_bool(client, :older_than_65, row[:older_than_65])
     # "Permanent Supportive Housing Eligible" is a proxy for "Disabling Condition" and at least 365 days homeless.
     if result[:disabling_condition] && result[:days_homeless_in_the_last_three_years] < 365
       result[:days_homeless_in_the_last_three_years] = 365
@@ -161,36 +163,29 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   end
 
   def self.file_header
-    [
-      'Shelter Location',
-      'Referral Date',
-      'Home-base ID',
-      'Date First became Homeless',
-      'Occurrences of Homelessness in Last Three Years',
-      'Cumulative Months Homeless in Last Three Years',
-      'Family of at least one Adult and one child',
-      'Permanent Supportive Housing Eligible',
-      'Minimum Bedroom Size',
-      'Veteran Status',
-      'HOPWA Eligible',
-      'VI-SPDAT Score',
-    ].freeze
+    file_attributes.values
   end
 
-  private def file_attributes
-    [
-      :shelter_location, # not in model
-      :referral_date, # not in model
-      :client_identifier,
-      :date_first_homeless, # not in model
-      :occurrences_of_homelessness, # not in model
-      :days_homeless_in_the_last_three_years,
-      :family_member,
-      :disabling_condition,
-      :required_number_of_bedrooms,
-      :veteran,
-      :hiv_aids,
-      :vispdat_score,
-    ]
+  def file_attributes
+    self.class.file_attributes
+  end
+
+  def self.file_attributes
+    {
+      shelter_location: 'Shelter Location', # not in model
+      referral_date: 'Referral Date', # not in model
+      client_identifier: 'Home-base ID',
+      date_first_homeless: 'Date First became Homeless', # not in model
+      occurrences_of_homelessness: 'Occurrences of Homelessness in Last Three Years', # not in model
+      days_homeless_in_the_last_three_years: 'Cumulative Months Homeless in Last Three Years',
+      family_member: 'Family of at least one Adult and one child',
+      older_than_65: 'Age greater than 65 years of age',
+      is_currently_youth: 'Age less than 24 years of age',
+      disabling_condition: 'Permanent Supportive Housing Eligible',
+      required_number_of_bedrooms: 'Minimum Bedroom Size',
+      veteran: 'Veteran Status',
+      hiv_aids: 'HOPWA Eligible',
+      vispdat_score: 'VI-SPDAT Score',
+    }.freeze
   end
 end
