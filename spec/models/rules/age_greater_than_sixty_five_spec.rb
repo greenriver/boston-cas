@@ -18,7 +18,7 @@ RSpec.describe Rules::AgeGreaterThanSixtyFive, type: :model do
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 
     context 'when positive' do
-      it 'matches 2' do
+      it 'matches all clients 65 or older (3)' do
         expect(clients_that_fit.count).to eq(3)
       end
       it 'does not contain Bob (64 y.o.)' do
