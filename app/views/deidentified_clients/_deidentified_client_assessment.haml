@@ -39,6 +39,7 @@
     .jNeighborhoodInterests
       = assessment_form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: [:select2, 'select2--full-width'] }, disabled: disabled
     = assessment_form.input :is_currently_youth, disabled: disabled, label: 'Age between 18 and 24', hint: 'Please note, this will not automatically update if the client ages out of the range.'
+    = assessment_form.input :older_than_65, disabled: disabled, label: 'Age greater than 65'
     = assessment_form.input :disabling_condition, disabled: disabled
     = assessment_form.input :physical_disability, disabled: disabled
     = assessment_form.input :developmental_disability, disabled: disabled
