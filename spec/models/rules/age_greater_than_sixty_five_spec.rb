@@ -6,9 +6,10 @@ RSpec.describe Rules::AgeGreaterThanSixtyFive, type: :model do
     let!(:rule) { create :age_greater_than_sixty_five }
 
     let!(:bob) { create :client, first_name: 'Bob', date_of_birth: Date.current - 64.years }
-    let!(:roy) { create :client, first_name: 'Roy',  date_of_birth: Date.current - 65.years }
-    let!(:mary) { create :client, first_name: 'Mary',  date_of_birth: Date.current - 66.years }
-    let!(:sue) { create :client, first_name: 'Sue', date_of_birth: nil  }
+    let!(:roy) { create :client, first_name: 'Roy', date_of_birth: Date.current - 65.years }
+    let!(:mary) { create :client, first_name: 'Mary', date_of_birth: Date.current - 66.years }
+    let!(:sue) { create :client, first_name: 'Sue', date_of_birth: nil }
+    let!(:jack) { create :client, first_name: 'Jack', date_of_birth: nil, older_than_65: true }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
@@ -17,8 +18,8 @@ RSpec.describe Rules::AgeGreaterThanSixtyFive, type: :model do
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 
     context 'when positive' do
-      it 'matches 2' do
-        expect(clients_that_fit.count).to eq(2)
+      it 'matches all clients 65 or older (3)' do
+        expect(clients_that_fit.count).to eq(3)
       end
       it 'does not contain Bob (64 y.o.)' do
         expect(clients_that_fit.ids).to_not include bob.id
@@ -28,6 +29,9 @@ RSpec.describe Rules::AgeGreaterThanSixtyFive, type: :model do
       end
       it 'contains Mary (66 y.o.)' do
         expect(clients_that_fit.ids).to include mary.id
+      end
+      it 'contains Jack (manually included)' do
+        expect(clients_that_fit.ids).to include jack.id
       end
       it 'does not contain Sue (no Birthday)' do
         expect(clients_that_fit.ids).to_not include sue.id
@@ -49,6 +53,9 @@ RSpec.describe Rules::AgeGreaterThanSixtyFive, type: :model do
       end
       it 'does not contain Sue (no Birthday)' do
         expect(clients_that_dont_fit.ids).to_not include sue.id
+      end
+      it 'does not contain Jack (no Birthday)' do
+        expect(clients_that_dont_fit.ids).to_not include jack.id
       end
     end
   end

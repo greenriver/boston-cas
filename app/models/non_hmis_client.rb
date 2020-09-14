@@ -182,7 +182,7 @@ class NonHmisClient < ApplicationRecord
     project_client.health_prioritized = health_prioritized
     project_client.hiv_positive = hiv_aids
     project_client.is_currently_youth = current_assessment&.is_currently_youth || false
-
+    project_client.older_than_65 = current_assessment&.older_than_65
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
     project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement
@@ -259,6 +259,8 @@ class NonHmisClient < ApplicationRecord
     assessment.vispdat_priority_score = vispdat_priority_score
     assessment.health_prioritized = health_prioritized
     assessment.imported_timestamp = imported_timestamp
+    assessment.is_currently_youth = is_currently_youth
+    assessment.older_than_65 = older_than_65
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at

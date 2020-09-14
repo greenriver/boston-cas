@@ -199,6 +199,7 @@ module Cas
         :evicted,
         :health_prioritized,
         :is_currently_youth,
+        :older_than_65,
       ]
     end
 

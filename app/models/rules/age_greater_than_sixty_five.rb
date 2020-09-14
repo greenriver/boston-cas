@@ -9,7 +9,7 @@ class Rules::AgeGreaterThanSixtyFive < Rule
     if Client.column_names.include?(:date_of_birth.to_s)
       years_ago = Date.current - 65.years
       if requirement.positive
-        scope.where(c_t[:date_of_birth].lteq(years_ago))
+        scope.where(c_t[:date_of_birth].lteq(years_ago).or(c_t[:older_than_65].eq(true)))
       else
         scope.where(c_t[:date_of_birth].gt(years_ago))
       end
