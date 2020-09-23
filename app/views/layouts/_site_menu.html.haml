@@ -76,6 +76,9 @@
   - if can_edit_users? || can_edit_translations?
     = render 'menus/admin_dashboard'
 
+  - if help_link || can_edit_help?
+    = render 'menus/help'
+
   %ul.o-menu__group.no-border.list-unstyled
     %li.o-menu__item
       = link_to edit_account_path, class: 'o-menu__link' do

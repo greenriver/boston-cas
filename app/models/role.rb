@@ -31,6 +31,7 @@ class Role < ApplicationRecord
       :can_manage_config,
       :can_manage_neighborhoods,
       :can_manage_tags,
+      :can_edit_help,
     ]
   end
 
@@ -105,6 +106,7 @@ class Role < ApplicationRecord
       :can_upload_deidentified_clients,
       :can_delete_matches,
       :can_reopen_matches,
+      :can_edit_help,
     ]
   end
 

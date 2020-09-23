@@ -215,6 +215,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :help
+
   unless Rails.env.production?
     resource 'style_guide', only: :none do
       get 'dnd_match_review'

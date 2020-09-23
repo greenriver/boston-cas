@@ -53,6 +53,7 @@ FactoryBot.define do
     can_delete_client_notes { true }
     can_enter_deidentified_clients { true }
     can_manage_deidentified_clients { true }
+    can_edit_help { true }
   end
 
   factory :shelter_role, class: 'Role' do
