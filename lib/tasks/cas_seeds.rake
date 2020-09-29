@@ -74,24 +74,32 @@ namespace :cas_seeds do
   task create_admin_user: [:environment, "log:info_to_stdout"] do
     # Add a user.  This should not be added in production
     unless Rails.env =~ /production|staging|test/
-      email = 'noreply@example.com'
+      email = 'test-noreply@example.com'
       if User.find_by(email: email).present?
         puts "A user with the email address #{email} already exists.  You can use the forgot my password option to set a password."
         return
       end
-      initial_password = Faker::Internet.password(12)
-      user = User.new
-      user.email = email
-      user.first_name = "Sample"
-      user.last_name = "Admin"
-      user.password = user.password_confirmation = initial_password
-      user.confirmed_at = Time.current
-      user.invitation_accepted_at = Time.current
-      user.receive_initial_notification = true
-      user.save!
-      admin_role = Role.find_by(name: :admin)
-      user.roles << admin_role
-      puts "Created initial admin email:#{user.email}  password:#{user.password}"
+      User.transaction do
+        agency = Agency.where(name: 'Green River').first_or_create
+
+        initial_password = Faker::Internet.password(min_length: 12)
+        user = User.new
+        user.email = email
+        user.agency = agency
+        user.first_name = 'Sample'
+        user.last_name = 'Admin'
+        user.password = user.password_confirmation = initial_password
+        user.confirmed_at = Time.current
+        user.invitation_accepted_at = Time.current
+        user.receive_initial_notification = true
+        user.save!
+        admin_role = Role.where(name: :admin).first_or_create do |role|
+          permissions = role.attributes.select { |a| a.starts_with?('can') }.transform_values { |v| true }
+          role.update(permissions)
+        end
+        user.roles << admin_role
+        puts "Created initial admin email:#{user.email}  password:#{user.password}"
+      end
     end
   end
 
