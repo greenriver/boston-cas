@@ -51,6 +51,7 @@ gem "lograge"
 gem 'activerecord-session_store'
 gem 'paranoia', '~> 2.0'
 gem 'paper_trail'
+gem 'validate_url'
 
 gem 'html2haml'
 gem 'devise', '~> 4'

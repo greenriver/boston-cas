@@ -528,6 +528,9 @@ GEM
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.7.0)
+    validate_url (1.0.12)
+      activemodel (>= 3.0.0)
+      public_suffix
     validates_email_format_of (1.6.3)
       i18n
     virtus (1.0.5)
@@ -653,6 +656,7 @@ DEPENDENCIES
   test-unit (~> 3.0)
   timecop
   uglifier
+  validate_url
   validates_email_format_of
   virtus
   web-console

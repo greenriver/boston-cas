@@ -94,7 +94,7 @@ namespace :cas_seeds do
         user.receive_initial_notification = true
         user.save!
         admin_role = Role.where(name: :admin).first_or_create do |role|
-          permissions = attributes.select { |a| a.starts_with?('can') }.transform_values { |v| true }
+          permissions = role.attributes.select { |a| a.starts_with?('can') }.transform_values { |v| true }
           role.update(permissions)
         end
         user.roles << admin_role

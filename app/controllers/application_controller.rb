@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   #before_action :_basic_auth, if: -> { Rails.env.staging? }
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!
+  before_action :possibly_reset_fast_gettext_cache
   # Allow devise login links to pass along a destination
   after_action :store_current_location, :unless => :devise_controller?
 
@@ -110,6 +111,15 @@ class ApplicationController < ActionController::Base
     default_locale = 'en'
     params[:locale] || session[:locale] || default_locale
   end
+
+  cattr_accessor :refresh_translations_after
+  def possibly_reset_fast_gettext_cache
+    return unless refresh_translations_after.blank? || Time.current > refresh_translations_after
+
+    FastGettext.cache.reload!
+    ApplicationController.refresh_translations_after = Time.current + 4.hours
+  end
+
 
   # don't extend the user's session if its an ajax request.
   def skip_timeout
