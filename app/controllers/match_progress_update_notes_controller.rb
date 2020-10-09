@@ -6,7 +6,7 @@
 
 class MatchProgressUpdateNotesController < ApplicationController
   include HasMatchAccessContext
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!

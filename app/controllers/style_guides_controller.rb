@@ -5,7 +5,7 @@
 ###
 
 class StyleGuidesController < ApplicationController
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   def dnd_match_review
     @enable_responsive = true

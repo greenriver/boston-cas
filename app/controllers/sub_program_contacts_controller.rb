@@ -5,7 +5,7 @@
 ###
 
 class SubProgramContactsController < ApplicationController
-  include PjaxModalController
+  include AjaxModalRails::Controller
   include ProgramPermissions
 
   before_action :set_program

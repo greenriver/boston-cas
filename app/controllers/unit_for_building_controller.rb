@@ -7,7 +7,7 @@
 class UnitForBuildingController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_add_vacancies!
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   def new
     @buildings = building_scope
