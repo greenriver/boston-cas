@@ -23,6 +23,7 @@ class window.AjaxModal
 
   _registerLinks: ->
     $('body').on 'click', @linkTriggersSelector, (e) =>
+      console.log "Loading in modal"
       e.preventDefault()
       @reset()
       @open()
@@ -34,6 +35,7 @@ class window.AjaxModal
           'X-AJAX-MODAL': true
         },
         complete: (xhr, status) =>
+          console.log "XHR Complete"
           @loading.hide()
           @content.html xhr.responseText
           @open
@@ -69,6 +71,7 @@ class window.AjaxModal
       history.replaceState({}, 'Modal', @initialPath);
 
   open: ->
+    @modal # for some reason next line fails if selector hasn't been pre-initialized
     @modal.modal 'show'
 
   close: -> 
