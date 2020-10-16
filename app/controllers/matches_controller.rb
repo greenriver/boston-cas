@@ -8,7 +8,7 @@ class MatchesController < ApplicationController
   include HasMatchAccessContext
   include Decisions
   include MatchShow
-  include PjaxModalController
+  include AjaxModalRails::Controller
   include MatchBuildingAndUnit
 
   skip_before_action :authenticate_user!

@@ -125,8 +125,8 @@ module ApplicationHelper
     @current_contact || current_user.try(:contact)
   end
 
-  def pjax_request?
-    request.env['HTTP_X_PJAX'].present?
+  def ajax_modal_request?
+    request.env[AjaxModalRails::Controller::HEADER].present?
   end
 
   def human_locale(locale)

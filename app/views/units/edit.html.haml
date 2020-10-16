@@ -2,7 +2,7 @@
 = content_for :modal_title do
   Edit Unit:
   = @unit.name
-- if pjax_request?
+- if ajax_modal_request?
   .row
     .col-sm-12
       = render 'form'

@@ -5,7 +5,7 @@
 ###
 
 class MatchContactsController < ApplicationController
-  include PjaxModalController
+  include AjaxModalRails::Controller
   include HasMatchAccessContext
   include ContactEditPermissions
 

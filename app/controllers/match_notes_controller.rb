@@ -14,7 +14,7 @@ class MatchNotesController < ApplicationController
   before_action :authorize_add_note!, :build_match_note, only: [:new, :create]
   before_action :set_match_note!, :authorize_note_editable!, only: [:edit, :update, :destroy]
 
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   def new
   end

@@ -10,7 +10,7 @@ class UnitsController < ApplicationController
   before_action :require_can_edit_units!, only: [:update, :destroy, :create]
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   # GET /hmis/units
   def index
@@ -69,7 +69,7 @@ class UnitsController < ApplicationController
         # might also include this unit
         #op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
-      if ! pjax_request?
+      if ! ajax_modal_request?
         redirect_to building_path(@unit.building)
       end
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> was successfully updated."
