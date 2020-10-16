@@ -7,7 +7,7 @@ class window.AjaxModal
     @linkTriggersSelector = '[data-loads-in-ajax-modal], [data-loads-in-pjax-modal]'
     @formTriggersSelector = '[data-submits-to-ajax-modal], [data-submits-to-pjax-modal]'
     @closeSelector = '[data-ajax-modal-close], [data-pjax-modal-close], [pjax-modal-close]'
-    @initialPath = window.location.pathname
+    @initialPath = window.location.toString()
     @loading = @modal.find("[data-ajax-modal-loading]")
     @title = @modal.find("[data-ajax-modal-title]")
     @content = @modal.find("[data-ajax-modal-content]")
@@ -23,9 +23,7 @@ class window.AjaxModal
 
   _registerLinks: ->
     $('body').on 'click', @linkTriggersSelector, (e) =>
-      console.log "Loading in modal"
       e.preventDefault()
-      @reset()
       @open()
       history.replaceState({}, 'Modal', $(e.target).attr("href"))
       $.ajax
@@ -35,7 +33,6 @@ class window.AjaxModal
           'X-AJAX-MODAL': true
         },
         complete: (xhr, status) =>
-          console.log "XHR Complete"
           @loading.hide()
           @content.html xhr.responseText
           @open
@@ -60,7 +57,6 @@ class window.AjaxModal
           @open
       return false
 
-      
   # maybe don't need this for bootstrap
   _registerClose: ->
     @modal.on 'click', @closeSelector, =>
@@ -68,24 +64,24 @@ class window.AjaxModal
 
   _registerOnHide: ->
     @modal.on "hide.bs.modal", =>
+      @reset()
       history.replaceState({}, 'Modal', @initialPath);
 
   open: ->
-    @modal # for some reason next line fails if selector hasn't been pre-initialized
     @modal.modal 'show'
 
-  close: -> 
-    @modal.modal('hide')
+  close: ->
     @reset()
+    @modal.modal('hide')
 
   closeModal: ->
     @close()
 
   reset: ->
-    @title.html("")
-    @content.html("")
-    @footer.html("")
-    @loading.show()
+    $("[data-ajax-modal-title]").html("Loading")
+    $("[data-ajax-modal-body]").html("")
+    $("[data-ajax-modal-footer]").html("")
+    $("[data-ajax-modal-loading]").show()
 
   closeAndReload: ->
     @close

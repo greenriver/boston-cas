@@ -17,6 +17,9 @@
   &:focus {
     text-decoration: none;
   }
+  [class^="icon-"] {
+    color: $brand-danger !important;
+  }
 }
 
 .c-contact-list__details span {

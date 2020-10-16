@@ -129,6 +129,10 @@ module ApplicationHelper
     request.env[AjaxModalRails::Controller::HEADER].present?
   end
 
+  def modal_size
+    ''
+  end
+
   def human_locale(locale)
     translations = {
       en: 'Text adjustments'

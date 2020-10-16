@@ -66,6 +66,10 @@ $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 // Links
 $link-color: #A46B32;
 
+// Modals
+$modal-header-bg: $gray-015;
+$modal-border: $gray-025;
+$modal-content-bg: lighten($gray-015, 3%);
 
 // Tabs
 $tab-bg: #88A6C9; // Primary in HMIS
