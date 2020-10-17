@@ -59,7 +59,7 @@
           %p
             = _('The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.')
 
-    = render 'pjax_modal_frame'
+    = render 'layouts/ajax_modal_frame'
     = yield :page_js
     - if current_user
       = auto_session_timeout_js(frequency: 60)

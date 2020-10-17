@@ -5,7 +5,7 @@
 ###
 
 class ClientContactsController < ApplicationController
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   before_action :set_client
   before_action :set_client_contacts
