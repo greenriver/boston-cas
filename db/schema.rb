@@ -700,8 +700,6 @@ ActiveRecord::Schema.define(version: 2020_10_18_124843) do
     t.integer "household_size"
     t.string "hoh_age"
     t.string "current_living_situation"
-    t.string "ssn"
-    t.boolean "ssn_refused", default: false
     t.string "pending_housing_placement_type"
     t.string "pending_housing_placement_type_other"
     t.integer "maximum_possible_monthly_rent"
@@ -710,12 +708,13 @@ ActiveRecord::Schema.define(version: 2020_10_18_124843) do
     t.string "no_rrh_desired_reason"
     t.string "no_rrh_desired_reason_other"
     t.jsonb "provider_agency_preference"
+    t.string "accessibility_other"
     t.string "hiv_housing"
     t.jsonb "affordable_housing"
-    t.string "high_covid_risk"
+    t.jsonb "high_covid_risk"
     t.jsonb "service_need_indicators"
     t.integer "medical_care_last_six_months"
-    t.string "intensive_needs"
+    t.jsonb "intensive_needs"
     t.string "intensive_needs_other"
     t.jsonb "background_check_issues"
     t.integer "additional_homeless_nights"
@@ -801,6 +800,7 @@ ActiveRecord::Schema.define(version: 2020_10_18_124843) do
     t.boolean "health_prioritized", default: false
     t.boolean "hiv_aids", default: false
     t.boolean "older_than_65"
+    t.boolean "ssn_refused", default: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 

@@ -20,7 +20,6 @@ class IdentifiedClientsController < NonHmisClientsController
   def update
     @non_hmis_client.update(clean_params(identified_client_params))
     if pathways_enabled?
-
       # mark the client as available if this is a new assessment
       @non_hmis_client.update(
         available: true,
@@ -99,6 +98,7 @@ class IdentifiedClientsController < NonHmisClientsController
         :eligible_for_matching,
         :set_asides_housing_status,
         :is_currently_youth,
+        :ssn_refused,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,
@@ -141,8 +141,42 @@ class IdentifiedClientsController < NonHmisClientsController
           :ssvf_eligible,
           :health_prioritized,
           :is_currently_youth,
-          neighborhood_interests: [],
-        ]
+          :rrh_desired,
+          :case_manager_contact_info,
+          :shelter_name,
+          :phone_number,
+          :email_addresses,
+          :mailing_address,
+          :day_locations,
+          :night_locations,
+          :other_contact,
+          :household_size,
+          :hoh_age,
+          :current_living_situation,
+          :pending_housing_placement_type,
+          :pending_housing_placement_type_other,
+          :maximum_possible_monthly_rent,
+          :possible_housing_situation,
+          :possible_housing_situation_other,
+          :no_rrh_desired_reason,
+          :no_rrh_desired_reason_other,
+          :accessibility_other,
+          :hiv_housing,
+          :medical_care_last_six_months,
+          :intensive_needs_other,
+          :additional_homeless_nights,
+          :homeless_night_range,
+          :notes,
+          {
+            neighborhood_interests: [],
+            provider_agency_preference: [],
+            affordable_housing: [],
+            high_covid_risk: [],
+            service_need_indicators: [],
+            intensive_needs: [],
+            background_check_issues: [],
+          },
+        ],
       ).merge(identified: true)
     end
 

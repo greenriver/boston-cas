@@ -11,4 +11,7 @@ class Neighborhood < ApplicationRecord
     where(arel_table[:name].lower.matches("%#{text.downcase}%"))
   end
 
+  def self.for_select
+    Neighborhood.order(:name).pluck(:name, :id).to_h
+  end
 end

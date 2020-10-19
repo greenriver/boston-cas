@@ -8,7 +8,7 @@ class NonHmisAssessment < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate
+  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :total_days_homeless_in_the_last_three_years
 
   belongs_to :non_hmis_client
   belongs_to :user
