@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_22_223813) do
+ActiveRecord::Schema.define(version: 2020_10_18_124843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,30 +137,6 @@ ActiveRecord::Schema.define(version: 2020_09_22_223813) do
     t.index ["opportunity_id"], name: "index_client_opportunity_matches_on_opportunity_id"
   end
 
-  create_table "client_service_history", id: false, force: :cascade do |t|
-    t.integer "unduplicated_client_id"
-    t.date "date"
-    t.date "first_date_in_program"
-    t.date "last_date_in_program"
-    t.string "program_group_id"
-    t.integer "program_type"
-    t.integer "program_id"
-    t.integer "age"
-    t.decimal "income"
-    t.integer "income_type"
-    t.integer "income_source_code"
-    t.integer "destination"
-    t.string "head_of_household_id"
-    t.string "household_id"
-    t.string "database_id"
-    t.string "program_name"
-    t.integer "program_tracking_method"
-    t.string "record_type"
-    t.integer "dc_id"
-    t.integer "housing_status_at_entry"
-    t.integer "housing_status_at_exit"
-  end
-
   create_table "clients", id: :serial, force: :cascade do |t|
     t.string "first_name"
     t.string "middle_name"
@@ -266,13 +242,6 @@ ActiveRecord::Schema.define(version: 2020_09_22_223813) do
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
-  end
-
-  create_table "clients_unduplicated", id: :serial, force: :cascade do |t|
-    t.string "client_unique_id", null: false
-    t.integer "unduplicated_client_id", null: false
-    t.integer "dc_id"
-    t.index ["unduplicated_client_id"], name: "unduplicated_clients_unduplicated_client_id"
   end
 
   create_table "configs", id: :serial, force: :cascade do |t|
@@ -723,6 +692,35 @@ ActiveRecord::Schema.define(version: 2020_09_22_223813) do
     t.boolean "hiv_aids", default: false
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
+    t.string "email_addresses"
+    t.string "mailing_address"
+    t.text "day_locations"
+    t.text "night_locations"
+    t.text "other_contact"
+    t.integer "household_size"
+    t.string "hoh_age"
+    t.string "current_living_situation"
+    t.string "ssn"
+    t.boolean "ssn_refused", default: false
+    t.string "pending_housing_placement_type"
+    t.string "pending_housing_placement_type_other"
+    t.integer "maximum_possible_monthly_rent"
+    t.string "possible_housing_situation"
+    t.string "possible_housing_situation_other"
+    t.string "no_rrh_desired_reason"
+    t.string "no_rrh_desired_reason_other"
+    t.jsonb "provider_agency_preference"
+    t.string "hiv_housing"
+    t.jsonb "affordable_housing"
+    t.string "high_covid_risk"
+    t.jsonb "service_need_indicators"
+    t.integer "medical_care_last_six_months"
+    t.string "intensive_needs"
+    t.string "intensive_needs_other"
+    t.jsonb "background_check_issues"
+    t.integer "additional_homeless_nights"
+    t.string "homeless_night_range"
+    t.text "notes"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -1066,24 +1064,6 @@ ActiveRecord::Schema.define(version: 2020_09_22_223813) do
     t.boolean "limitable", default: true
   end
 
-  create_table "report_results", id: :serial, force: :cascade do |t|
-    t.integer "report_id"
-    t.integer "import_id"
-    t.float "percent_complete"
-    t.json "results"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["report_id"], name: "index_report_results_on_report_id"
-  end
-
-  create_table "report_results_summaries", id: :serial, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "type", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "weight", default: 0, null: false
-  end
-
   create_table "reporting_decisions", force: :cascade do |t|
     t.integer "client_id"
     t.integer "match_id", null: false
@@ -1125,16 +1105,6 @@ ActiveRecord::Schema.define(version: 2020_09_22_223813) do
     t.boolean "ineligible_in_warehouse", default: false, null: false
     t.string "actor_type"
     t.index ["client_id", "match_id", "decision_id"], name: "index_reporting_decisions_c_m_d", unique: true
-  end
-
-  create_table "reports", id: :serial, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "type", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "weight", default: 0, null: false
-    t.integer "report_results_summary_id"
-    t.index ["report_results_summary_id"], name: "index_reports_on_report_results_summary_id"
   end
 
   create_table "requirements", id: :serial, force: :cascade do |t|
@@ -1520,7 +1490,6 @@ ActiveRecord::Schema.define(version: 2020_09_22_223813) do
   add_foreign_key "programs", "subgrantees"
   add_foreign_key "reissue_requests", "notifications"
   add_foreign_key "reissue_requests", "users", column: "reissued_by"
-  add_foreign_key "reports", "report_results_summaries"
   add_foreign_key "sub_programs", "buildings"
   add_foreign_key "sub_programs", "programs"
   add_foreign_key "sub_programs", "subgrantees"
