@@ -14,7 +14,7 @@ module CovidPathwaysCalculations
       score = 0
       score += 20 if documented_disability == 'Yes'
       score += 20 if high_covid_risk.present?
-      score += 20 if service_need_indicators.present?
+      score += 12 if service_need_indicators.present?
 
       case homeless_night_range
       when 'Fleeing Domestic Violence (no range needed)', '365+ Boston homeless nights in the last three years'
