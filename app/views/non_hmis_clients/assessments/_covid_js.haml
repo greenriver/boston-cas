@@ -1,0 +1,42 @@
+= content_for :page_js do
+  :javascript
+    // Youth
+    $('input[name="identified_client[client_assessments_attributes][0][hoh_age]"]').on('change', function(e) {
+      if($('input[name="identified_client[client_assessments_attributes][0][hoh_age]"]:checked').val() == '18-24') {
+        $('.c-question[data-number="5C"]').removeClass('d-none');
+      } else {
+        $('.c-question[data-number="5C"]').addClass('d-none');
+      }
+    });
+    $('input[name="identified_client[client_assessments_attributes][0][hoh_age]"]').trigger('change');
+
+    // DV
+    $('input[name="identified_client[client_assessments_attributes][0][current_living_situation]"]').on('change', function(e) {
+      if($('input[name="identified_client[client_assessments_attributes][0][current_living_situation]"]:checked').val().startsWith('Fleeing')) {
+        $('.c-question[data-number="5D"]').removeClass('d-none');
+      } else {
+        $('.c-question[data-number="5D"]').addClass('d-none');
+      }
+    });
+    $('input[name="identified_client[client_assessments_attributes][0][current_living_situation]"]').trigger('change');
+
+    // Pending move-in
+    $('input[name="identified_client[client_assessments_attributes][0][pending_subsidized_housing_placement]"]').on('change', function(e) {
+      console.log($(this));
+      if($('input[name="identified_client[client_assessments_attributes][0][pending_subsidized_housing_placement]"]').is(':checked')) {
+        $('.c-question[data-number="3E"]').removeClass('d-none');
+      } else {
+        $('.c-question[data-number="3E"]').addClass('d-none');
+      }
+    });
+    $('input[name="identified_client[client_assessments_attributes][0][pending_subsidized_housing_placement]"]').trigger('change');
+
+    // RRH
+    $('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]').on('change', function(e) {
+      if($('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]:checked').val() == 'false') {
+        $('.c-question[data-number="5B"]').removeClass('d-none');
+      } else {
+        $('.c-question[data-number="5B"]').addClass('d-none');
+      }
+    });
+    $('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]').trigger('change');

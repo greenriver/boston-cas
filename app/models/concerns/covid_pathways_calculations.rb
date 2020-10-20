@@ -52,41 +52,41 @@ module CovidPathwaysCalculations
         },
         phone_number: {
           label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call',
-          number: '2A.',
+          number: '2A',
         },
         email_addresses: {
           label: 'List any working email addresses you use',
-          number: '2B.',
+          number: '2B',
         },
         shelter_name: {
           label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
-          number: '2C.',
+          number: '2C',
         },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
-          number: '2D.',
+          number: '2D',
           as: :text,
         },
         mailing_address: {
           label: 'What is your mailing address?',
-          number: '2E.',
+          number: '2E',
           as: :text,
         },
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
-          number: '2F.',
+          number: '2F',
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
-          number: '2G.',
+          number: '2G',
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
-          number: '2H.',
+          number: '2H',
         },
         household_section: {
           label: 'Household Composition',
-          number: '3A.',
+          number: '3A',
           questions: {
             household_size: {
               label: 'How many people are in the household? ',
@@ -113,22 +113,22 @@ module CovidPathwaysCalculations
         },
         veteran: {
           label: 'Did you serve in the military or do you have Veteran status?',
-          number: '3B.',
+          number: '3B',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
         pending_subsidized_housing_placement: {
           label: 'Are you about to move into a housing unit or have a voucher where you need help searching for a unit? Examples may be you have a voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?',
-          number: '3D.',
+          number: '3D',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
         housing_placement_section: {
           label: 'What type of unit are you moving into?',
-          number: '3E.',
+          number: '3E',
           questions: {
             pending_housing_placement_type: {
-              label: 'What type of unit are you moving into?',
+              label: '',
               collection: {
                 _('I have a voucher to find a unit (Section 8, Housing Choice Voucher, CAS, MRVP, other)') => 'I have a voucher to find a unit (Section 8, Housing Choice Voucher, CAS, MRVP, other)',
                 _('Public Housing unit') => 'Public Housing unit',
@@ -142,21 +142,21 @@ module CovidPathwaysCalculations
         },
         income_total_annual: {
           label: 'What is your total household’s estimated gross (before taxes are taken out) annual income? We ask because some of these units have income requirements. You may figure out monthly and multiply it by 12.',
-          number: '4A.',
+          number: '4A',
         },
         income_maximization_assistance_requested: {
           label: 'We have income maximization services we can offer to people who sign up for these housing opportunities and are waiting for an offer. These services include staff who are trained in resources and ways to increase your income by budgeting, applying for all benefits you may need and/or linking to employment opportunities. Are you interested in using this service while you wait for housing?',
-          number: '4B.',
+          number: '4B',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
         maximum_possible_monthly_rent: {
           label: 'What is the maximum you would or could pay for rent each month? (This is optional to pair you with potential housing opportunities; you may respond that you do not know',
-          number: '4C.',
+          number: '4C',
         },
         possible_housing_situation_section: {
           label: 'Would you be interested in sharing housing with roommates? Some of the benefits of sharing housing are you have more money between roommates to live in more expensive neighborhoods and you can share costs like rent and utilities so you have more money in your monthly budget.',
-          number: '4D.',
+          number: '4D',
           questions: {
             possible_housing_situation: {
               collection: {
@@ -169,13 +169,13 @@ module CovidPathwaysCalculations
             },
             possible_housing_situation_other: {
               label: 'Other Housing Situation',
-              number: '4D1.',
+              number: '4D',
             },
           },
         },
         rrh_desired: {
           label: 'Would you like to be considered for RRH when they have openings?',
-          number: '5A.',
+          number: '5A',
           collection: {
             'Yes' => true,
             'No' => false,
@@ -184,7 +184,7 @@ module CovidPathwaysCalculations
         },
         no_rrh_desired_section: {
           label: 'If you are not interested, what is the reason you are not interested?',
-          number: '5B.',
+          number: '5B',
           questions: {
             no_rrh_desired_reason: {
               collection: {
@@ -203,19 +203,19 @@ module CovidPathwaysCalculations
         },
         youth_rrh_aggregate: {
           label: 'Youth Choice (for heads of household who are 24 yrs. or younger)  Would you like to be considered for housing programs that are',
-          number: '5C.',
+          number: '5C',
           collection: NonHmisClient.available_youth_choices,
           as: :pretty_boolean_group,
         },
         dv_rrh_aggregate: {
           label: 'Survivor Choice (for those fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are',
-          number: '5D.',
+          number: '5D',
           collection: NonHmisClient.available_dv_choices,
           as: :pretty_boolean_group,
         },
         provider_agency_preference: {
           label: 'Provider Agency Preference: We cannot always match people with their preferred agency due to program capacity, we do ask if you have a preferred RRH agency to work with in case we are able to. Which agency(ies) would you prefer to work with (you may pick more than one)',
-          number: '5E.',
+          number: '5E',
           collection: {
             _('RRH staff at 112 Southampton Street Shelter') => 'RRH staff at 112 Southampton Street Shelter',
             _('RRH staff at Woods Mullen Shelter') => 'RRH staff at Woods Mullen Shelter',
@@ -231,13 +231,13 @@ module CovidPathwaysCalculations
         },
         rrh_th_desired: {
           label: 'Shelter Need While Doing Housing Search (RRH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one were available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.',
-          number: '5F.',
+          number: '5F',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
         sro_ok: {
           label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)? Keep in mind smaller bedroom units may have more frequent openings',
-          number: '6A.',
+          number: '6A',
           collection: {
             'Yes' => true,
             'No' => false,
@@ -247,7 +247,7 @@ module CovidPathwaysCalculations
         },
         required_number_of_bedrooms: {
           label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below.',
-          number: '6B.',
+          number: '6B',
           collection: {
             '2' => 2,
             '3' => 3,
@@ -259,41 +259,41 @@ module CovidPathwaysCalculations
         },
         disability_section: {
           label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.)',
-          number: '6C.',
+          number: '6C',
           questions: {
             requires_wheelchair_accessibility: {
               label: 'Wheelchair accessible unit',
-              number: '6C.',
+              number: '6C',
               as: :pretty_boolean,
               wrapper: :custom_boolean,
             },
             requires_elevator_access: {
               label: 'First floor/elevator (little to no stairs to your unit)',
-              number: '6C.',
+              number: '6C',
               as: :pretty_boolean,
               wrapper: :custom_boolean,
             },
             accessibility_other: {
               label: 'Other accessibility',
-              number: '6C.',
+              number: '6C',
             },
           },
         },
         disabled_housing: {
           label: 'Are you interested in applying for housing units targeted for persons with disabilities? (You may have to provide documentation of a disability to qualify for these housing units.)',
-          number: '6D.',
+          number: '6D',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
         hiv_housing: {
           label: 'Are you interested in applying for housing units targeted for persons with an HIV+ diagnosis? (You may have to provide documentation of a HIV to qualify for these housing units.)',
-          number: '6E.',
+          number: '6E',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
         affordable_housing: {
           label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
-          number: '6F.',
+          number: '6F',
           collection: {
             _('Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)',
             _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.',
@@ -303,14 +303,14 @@ module CovidPathwaysCalculations
         },
         neighborhood_interests: {
           label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
-          number: '7A.',
+          number: '7A',
           collection: Neighborhood.for_select,
           as: :select_2,
           input_html: { multiple: true },
         },
         documented_disability: {
           label: 'Disabling Condition: Have you ever been diagnosed by a licensed professional as having a disabling condition that is expected to be permanent and impede your ability to work? You do not need to disclose the condition.',
-          number: '8A.',
+          number: '8A',
           collection: {
             'Yes' => true,
             'No' => false,
@@ -320,7 +320,7 @@ module CovidPathwaysCalculations
         },
         high_covid_risk: {
           label: 'COVID High Risk: We are collecting information on who may be high risk of severe illness due to COVID in case there are future outbreaks. Do you have any of the following conditions (check all that apply)?',
-          number: '8B.',
+          number: '8B',
           collection: {
             '65+ years old' => '65+ years old',
             'Cancer' => 'Cancer',
@@ -337,7 +337,7 @@ module CovidPathwaysCalculations
         },
         service_need_indicators: {
           label: 'Service Need Indicators: Now we’ll ask you if you have experienced any conditions so we can figure out if we have housing options with services to meet these needs. Check all that apply',
-          number: '8C.',
+          number: '8C',
           collection: {
             'Short term memory loss' => 'Short term memory loss',
             'A medical provider has said you have experienced a traumatic head or brain injury' => 'A medical provider has said you have experienced a traumatic head or brain injury',
@@ -353,13 +353,13 @@ module CovidPathwaysCalculations
         },
         medical_care_last_six_months: {
           label: 'In the past 6 months, about how many times have you used emergency or inpatient medical or psychiatric care? This would include emergency room visits, staying overnight in a hospital or detox facility. (For the assessor): If you have knowledge of a participant’s admissions from medical records or care you provide, you may fill in this number.',
-          number: '8D.',
+          number: '8D',
           collection: (1..10).to_a,
           as: :select_2,
         },
         intensive_needs_section: {
           label: '(For the assessor): If you observe another indicator that the participant needs very intensive, frequent, in-home supportive services once they are housed, complete the field below. This field should only be used sparingly to identify people with the highest needs. Examples may include: frequent bars/terminations from shelters; severe cold weather injuries (hypothermia, amputation, etc.); history of hoarding; recent overdose; severe medical fragility; etc.',
-          number: '8E.',
+          number: '8E',
           questions: {
             intensive_needs: {
               collection: {
@@ -374,13 +374,13 @@ module CovidPathwaysCalculations
             },
             intensive_needs_other: {
               label: 'Other intenisve needs',
-              number: '8E.',
+              number: '8E',
             },
           },
         },
         background_check_issues: {
           label: 'Some housing programs do background checks to decide admissions into their units. We are asking people what factors may be in their backgrounds so we can shape our services to overcome these barriers. Have you experienced any of the following (check all that apply)?',
-          number: '8F.',
+          number: '8F',
           collection: {
             'Evicted by a landlord - non-payment of rent' => 'Evicted by a landlord - non-payment of rent',
             'Evicted by a landlord - lease violations' => 'Evicted by a landlord - lease violations',
@@ -394,21 +394,21 @@ module CovidPathwaysCalculations
         },
         days_homeless_in_the_last_three_years: {
           label: 'Warehouse Record- Length of Time Homeless: Check the participant’s record in the Warehouse; how many Boston homeless nights in the last three years does the participant have?',
-          number: '9A.',
+          number: '9A',
         },
         additional_homeless_nights: {
           label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history on the next page and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. You may skip this step and the form on the next page if you do not have any additional Boston homeless nights to add',
-          number: '9B.',
+          number: '9B',
         },
         total_days_homeless_in_the_last_three_years: {
           label: 'Total # of Boston homeless nights: Warehouse + added Boston homeless nights (input into CAS assessment)',
           hint: 'Auto calculated',
-          number: '9C.',
+          number: '9C',
           disabled: true,
         },
         homeless_night_range: {
           label: 'Select the range the participant’s Boston homeless nights fall into',
-          number: '9D.',
+          number: '9D',
           collection: {
             'Fleeing Domestic Violence (no range needed)' => 'Fleeing Domestic Violence (no range needed)',
             '30-60 Boston homeless nights in the last three years' => '30-60 Boston homeless nights in the last three years',
@@ -426,7 +426,7 @@ module CovidPathwaysCalculations
         },
         notes: {
           label: 'Additional notes',
-          number: '10A.',
+          number: '10A',
         },
       }
     end

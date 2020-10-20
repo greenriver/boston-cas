@@ -1,5 +1,5 @@
 - @assessment.class.form_fields.each do |field_name, options|
-  .c-question
+  .c-question{data: { number: options[:number] }}
     .c-question__wrapper
       - if options[:questions].present?
         .c-question__number= options[:number]
@@ -42,3 +42,5 @@
               = form.input(field_name, {}.merge(options))
             - else
               = form.input(field_name, { pre_label: options[:number] }.merge(options))
+
+= render 'non_hmis_clients/assessments/covid_js'
