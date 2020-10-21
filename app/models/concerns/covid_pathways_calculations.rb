@@ -12,9 +12,10 @@ module CovidPathwaysCalculations
       return 70 if pending_subsidized_housing_placement
 
       score = 0
-      score += 20 if documented_disability == 'Yes'
-      score += 20 if high_covid_risk.present?
-      score += 12 if service_need_indicators.present?
+      score += 20 if documented_disability
+      score += 20 if high_covid_risk.reject(&:blank?).any?(&:present?)
+      needs = Array.wrap(medical_care_last_six_months).reject(&:blank?) + Array.wrap(service_need_indicators)&.reject(&:blank?) + Array.wrap(intensive_needs).reject(&:blank?)
+      score += 12 if needs.any?(&:present?) || intensive_needs_other.present?
 
       case homeless_night_range
       when 'Fleeing Domestic Violence (no range needed)', '365+ Boston homeless nights in the last three years'
@@ -151,7 +152,8 @@ module CovidPathwaysCalculations
           wrapper: :custom_boolean,
         },
         maximum_possible_monthly_rent: {
-          label: 'What is the maximum you would or could pay for rent each month? (This is optional to pair you with potential housing opportunities; you may respond that you do not know',
+          label: 'What is the maximum you would or could pay for rent each month? ',
+          hint: '(This is optional to pair you with potential housing opportunities; you may respond that you do not know)',
           number: '4C',
         },
         possible_housing_situation_section: {
@@ -176,11 +178,8 @@ module CovidPathwaysCalculations
         rrh_desired: {
           label: 'Would you like to be considered for RRH when they have openings?',
           number: '5A',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-          },
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
         },
         no_rrh_desired_section: {
           label: 'If you are not interested, what is the reason you are not interested?',
@@ -258,7 +257,7 @@ module CovidPathwaysCalculations
           as: :pretty_boolean_group,
         },
         disability_section: {
-          label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.)',
+          label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.',
           number: '6C',
           questions: {
             requires_wheelchair_accessibility: {
@@ -373,7 +372,7 @@ module CovidPathwaysCalculations
               input_html: { multiple: true },
             },
             intensive_needs_other: {
-              label: 'Other intenisve needs',
+              label: 'Other intensive needs',
               number: '8E',
             },
           },

@@ -12,7 +12,8 @@
 
     // DV
     $('input[name="identified_client[client_assessments_attributes][0][current_living_situation]"]').on('change', function(e) {
-      if($('input[name="identified_client[client_assessments_attributes][0][current_living_situation]"]:checked').val().startsWith('Fleeing')) {
+      value = $('input[name="identified_client[client_assessments_attributes][0][current_living_situation]"]:checked').val();
+      if(value !== undefined && value.startsWith('Fleeing')) {
         $('.c-question[data-number="5D"]').removeClass('d-none');
       } else {
         $('.c-question[data-number="5D"]').addClass('d-none');
@@ -22,7 +23,6 @@
 
     // Pending move-in
     $('input[name="identified_client[client_assessments_attributes][0][pending_subsidized_housing_placement]"]').on('change', function(e) {
-      console.log($(this));
       if($('input[name="identified_client[client_assessments_attributes][0][pending_subsidized_housing_placement]"]').is(':checked')) {
         $('.c-question[data-number="3E"]').removeClass('d-none');
       } else {
@@ -33,10 +33,25 @@
 
     // RRH
     $('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]').on('change', function(e) {
-      if($('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]:checked').val() == 'false') {
-        $('.c-question[data-number="5B"]').removeClass('d-none');
-      } else {
+      if($('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]').is(':checked')) {
         $('.c-question[data-number="5B"]').addClass('d-none');
+      } else {
+        $('.c-question[data-number="5B"]').removeClass('d-none');
       }
     });
     $('input[name="identified_client[client_assessments_attributes][0][rrh_desired]"]').trigger('change');
+
+    // Days Homeless
+    var warehouse_selector = 'input[name="identified_client[client_assessments_attributes][0][days_homeless_in_the_last_three_years]"]'
+    var extra_selector = 'input[name="identified_client[client_assessments_attributes][0][additional_homeless_nights]"]'
+    var total_selector = 'input[name="identified_client[client_assessments_attributes][0][total_days_homeless_in_the_last_three_years]"]'
+    $(warehouse_selector).on('keyup', function(e) {
+      var warehouse_days = parseInt($(warehouse_selector).val() || 0);
+      var extra_days = parseInt($(extra_selector).val() || 0);
+      $(total_selector).val(warehouse_days + extra_days);
+    });
+    $(extra_selector).on('keyup', function(e) {
+      var warehouse_days = parseInt($(warehouse_selector).val() || 0);
+      var extra_days = parseInt($(extra_selector).val() || 0);
+      $(total_selector).val(warehouse_days + extra_days);
+    });

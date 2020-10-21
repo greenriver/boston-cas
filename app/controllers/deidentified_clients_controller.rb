@@ -121,6 +121,9 @@ class DeidentifiedClientsController < NonHmisClientsController
         :full_release_on_file,
         :set_asides_housing_status,
         :is_currently_youth,
+        :assessment_score,
+        :vispdat_score,
+        :vispdat_priority_score,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,

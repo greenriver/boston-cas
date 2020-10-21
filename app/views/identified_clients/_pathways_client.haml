@@ -17,13 +17,13 @@
       = form.input :date_of_birth, as: :date_picker, disabled: disabled
 
     - label = 'Social Security Number'
-    - hint = 'We only use this for matching purposes'
+    - hint = 'We only use this for matching purposes.  Numbers only, no hyphens.'
     - if disabled
       .c-question
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: label, hint: hint
     - else
       = form.input :ssn, label: label, input_html: { maxlength: 9, style: 'width: 10em;' }, hint: hint, disabled: disabled
-    - label = 'Client is uncomfortable shariring their SSN.'
+    - label = 'Client is uncomfortable sharing their SSN.'
     - if disabled
       .c-question
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn_refused, label: label
