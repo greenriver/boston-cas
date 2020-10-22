@@ -52,7 +52,7 @@
         - else
           = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
 
-  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
+  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Release on File', disabled: disabled
 
   = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
   -# = form.input :active_client, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
