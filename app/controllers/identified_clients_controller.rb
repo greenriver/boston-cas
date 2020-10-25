@@ -89,6 +89,8 @@ class IdentifiedClientsController < NonHmisClientsController
         :middle_name,
         :date_of_birth,
         :ssn,
+        :race,
+        :ethnicity,
         :limited_release_on_file,
         :full_release_on_file,
         :available,

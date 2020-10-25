@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_18_124843) do
+ActiveRecord::Schema.define(version: 2020_10_25_185542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -801,6 +801,8 @@ ActiveRecord::Schema.define(version: 2020_10_18_124843) do
     t.boolean "hiv_aids", default: false
     t.boolean "older_than_65"
     t.boolean "ssn_refused", default: false
+    t.integer "race"
+    t.integer "ethnicity"
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 

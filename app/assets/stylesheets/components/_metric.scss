@@ -9,3 +9,11 @@
 .c-metric--lg {
   @include metric($size: 0.8);
 }
+
+.c-metric--md {
+  @include metric($size: 0.6);
+}
+
+.c-metric--sm {
+  @include metric($size: 0.5);
+}

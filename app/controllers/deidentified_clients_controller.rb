@@ -114,6 +114,8 @@ class DeidentifiedClientsController < NonHmisClientsController
         :client_identifier,
         :agency_id,
         :contact_id,
+        :race,
+        :ethnicity,
         :available,
         :available_date,
         :available_reason,

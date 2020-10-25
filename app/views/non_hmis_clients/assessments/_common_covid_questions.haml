@@ -28,7 +28,7 @@
         - else
           .c-question__input
             = form.label field_name, { pre_label: options[:number] }.merge(options)
-            = form.input field_name, collection: options[:collection], label: false, as: :pretty_boolean_group, wrapper: :custom_boolean
+            = form.input field_name, collection: options[:collection], label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, input_html: options[:input_html]
       - else
         .c-question__number= options[:number]
         - if disabled

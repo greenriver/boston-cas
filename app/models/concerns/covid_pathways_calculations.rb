@@ -13,7 +13,7 @@ module CovidPathwaysCalculations
 
       score = 0
       score += 20 if documented_disability
-      score += 20 if high_covid_risk.reject(&:blank?).any?(&:present?)
+      score += 20 if health_prioritized
       needs = Array.wrap(medical_care_last_six_months).reject(&:blank?) + Array.wrap(service_need_indicators)&.reject(&:blank?) + Array.wrap(intensive_needs).reject(&:blank?)
       score += 12 if needs.any?(&:present?) || intensive_needs_other.present?
 
@@ -304,7 +304,8 @@ module CovidPathwaysCalculations
           label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
           number: '7A',
           collection: Neighborhood.for_select,
-          as: :select_2,
+          # as: :check_boxes,
+          as: :pretty_boolean_group,
           input_html: { multiple: true },
         },
         documented_disability: {
@@ -317,22 +318,24 @@ module CovidPathwaysCalculations
           },
           as: :pretty_boolean_group,
         },
-        high_covid_risk: {
-          label: 'COVID High Risk: We are collecting information on who may be high risk of severe illness due to COVID in case there are future outbreaks. Do you have any of the following conditions (check all that apply)?',
+        health_prioritized: {
+          label: 'COVID High Risk: We are collecting information on who may be high risk of severe illness due to COVID in case there are future outbreaks. Do you have any of the following conditions?<br />
+          65+ years old<br />
+          Cancer<br />
+          Chronic kidney disease<br />
+          COPD (chronic obstructive pulmonary disease)<br />
+          Weakened immune system due to an organ transplant<br />
+          Body mass index of 30 or higher<br />
+          Serious heart condition (heart failure, coronary artery disease, cardiomyopathies)<br />
+          Sickle cell disease<br />
+          Type 2 diabetes
+          '.html_safe,
           number: '8B',
           collection: {
-            '65+ years old' => '65+ years old',
-            'Cancer' => 'Cancer',
-            'Chronic kidney disease' => 'Chronic kidney disease',
-            'COPD (chronic obstructive pulmonary disease)' => 'COPD (chronic obstructive pulmonary disease)',
-            'Weakened immune system due to an organ transplant' => 'Weakened immune system due to an organ transplant',
-            'Body mass index of 30 or higher' => 'Body mass index of 30 or higher',
-            'Serious heart condition (heart failure, coronary artery disease, cardiomyopathies)' => 'Serious heart condition (heart failure, coronary artery disease, cardiomyopathies)',
-            'Sickle cell disease' => 'Sickle cell disease',
-            'Type 2 diabetes' => 'Type 2 diabetes',
+            'Yes' => true,
+            'No' => false,
           },
-          as: :select_2,
-          input_html: { multiple: true },
+          as: :pretty_boolean_group,
         },
         service_need_indicators: {
           label: 'Service Need Indicators: Now we’ll ask you if you have experienced any conditions so we can figure out if we have housing options with services to meet these needs. Check all that apply',
