@@ -7,6 +7,10 @@
 class DeidentifiedPathwaysAssessment < DeidentifiedClientAssessment
   include PathwaysCalculations
 
+  def title
+    'Pathways'
+  end
+
   def default?
     false
   end

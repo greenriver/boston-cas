@@ -17,6 +17,10 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
+  def title
+    'Non-HMIS Assessment'
+  end
+
   def update_assessment_score!
     update_assessment_score()
     save()

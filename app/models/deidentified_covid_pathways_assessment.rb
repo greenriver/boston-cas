@@ -7,6 +7,10 @@
 class DeidentifiedCovidPathwaysAssessment < DeidentifiedClientAssessment
   include CovidPathwaysCalculations
 
+  def title
+    'COVID Pathways'
+  end
+
   def default?
     false
   end

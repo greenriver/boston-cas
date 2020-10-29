@@ -36,7 +36,10 @@
                 = current_assessment&.assessment_score
 
 
-          %td= non_hmis_client&.assessed_at
+          %td
+            = non_hmis_client&.assessed_at
+            .mt-2
+              %em= current_assessment.title
 
           %td
             - if non_hmis_client.available
