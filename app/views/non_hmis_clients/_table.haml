@@ -7,7 +7,8 @@
       - else
         %th Client Identifier
       %th Agency
-      %th Assessment Score
+      - if can_manage_identified_clients? || Config.get(:identified_client_assessment) != 'IdentifiedCovidPathwaysAssessment'
+        %th Assessment Score
       %th Assessment Date
       %th Status
       - if current_user.can_view_some_clients?
@@ -27,15 +28,15 @@
             %td= link_to non_hmis_client.client_identifier, polymorphic_path([client_type, 'client'], id: non_hmis_client.id)
 
           %td= non_hmis_client.agency&.name
+          - if can_manage_identified_clients? || Config.get(:identified_client_assessment) != 'IdentifiedCovidPathwaysAssessment'
+            %td
+              - if current_assessment&.assessment_score&.zero?
+                0 – Ineligible
+              - else
+                = current_assessment&.assessment_score
 
-          %td
-            - if current_assessment&.assessment_score&.zero?
-              0 – Ineligible
-            - else
-              = current_assessment&.assessment_score
 
-
-          %td= current_assessment&.updated_at
+          %td= non_hmis_client&.assessed_at
 
           %td
             - if non_hmis_client.available

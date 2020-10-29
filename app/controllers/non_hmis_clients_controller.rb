@@ -100,8 +100,13 @@ class NonHmisClientsController < ApplicationController
 
     if @column.blank?
       if pathways_enabled?
-        @column = 'assessment_score'
-        @direction = 'desc'
+        if can_manage_identified_clients?
+          @column = 'assessment_score'
+          @direction = 'desc'
+        else
+          @column = 'assessed_at'
+          @direction = 'asc'
+        end
       else
         @column = 'days_homeless_in_the_last_three_years'
         @direction = 'desc'
