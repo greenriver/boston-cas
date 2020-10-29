@@ -14,13 +14,13 @@
       = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn_refused, label: ssn_refused_label
     - if @non_hmis_client.gender
       .c-question
-        = render 'non_hmis_clients/assessments/question_display', value: Gender.find(@non_hmis_client.gender)&.text, label: 'Gender'
+        = render 'non_hmis_clients/assessments/question_display', value: Gender.find_by(numeric: @non_hmis_client.gender)&.text, label: 'Gender'
     - if @non_hmis_client.race
       .c-question
-        = render 'non_hmis_clients/assessments/question_display', value: Race.find(@non_hmis_client.race)&.text, label: 'Race'
+        = render 'non_hmis_clients/assessments/question_display', value: Race.find_by(numeric: @non_hmis_client.race)&.text, label: 'Race'
     - if @non_hmis_client.ethnicity
       .c-question
-        = render 'non_hmis_clients/assessments/question_display', value: Ethnicity.find(@non_hmis_client.ethnicity)&.text, label: 'Ethnicity'
+        = render 'non_hmis_clients/assessments/question_display', value: Ethnicity.find_by(numeric: @non_hmis_client.ethnicity)&.text, label: 'Ethnicity'
   - else
     = form.input :first_name, disabled: disabled
     = form.input :middle_name, disabled: disabled
@@ -28,9 +28,9 @@
     = form.input :date_of_birth, as: :date_picker, disabled: disabled
     = form.input :ssn, label: ssn_label, input_html: { maxlength: 9, style: 'width: 10em;' }, hint: ssn_hint, disabled: disabled
     = form.input :ssn_refused, label: ssn_refused_label, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
-    = form.input :gender, collection: Gender.all, as: :select_2, label_method: :text, disabled: disabled
-    = form.input :race, collection: Race.all, as: :select_2, label_method: :text, disabled: disabled
-    = form.input :ethnicity, collection: Ethnicity.all, as: :select_2, label_method: :text, disabled: disabled
+    = form.input :gender, collection: Gender.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
+    = form.input :race, collection: Race.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
+    = form.input :ethnicity, collection: Ethnicity.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
 %section
   -# Probably need to update with more appropriate title
   %h3 Agency Information
