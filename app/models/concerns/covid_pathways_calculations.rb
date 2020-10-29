@@ -104,19 +104,20 @@ module CovidPathwaysCalculations
             current_living_situation: {
               label: 'What is your current living situation?',
               collection: {
-                _('Sleeping in shelter in the City of Boston') => 'Sleeping in shelter in the City of Boston',
-                _('Sleeping outside/place not meant for human habitation within the City of Boston') => 'Sleeping outside/place not meant for human habitation within the City of Boston',
-                _('Fleeing violence and staying in an unsafe or temporary location within the City of Boston') => 'Fleeing violence and staying in an unsafe or temporary location within the City of Boston',
+                _('Emergency shelter in the City of Boston') => 'Emergency shelter in the City of Boston',
+                _('Outside/place not meant for human habitation within the City of Boston') => 'Outside/place not meant for human habitation within the City of Boston',
+                _('Transitional housing program in the City of Boston') => 'Transitional housing program in the City of Boston',
+                _('Currently fleeing violence while in your own home or doubled up with others and a Boston resident.') => 'Currently fleeing violence while in your own home or doubled up with others and a Boston resident.',
               },
               as: :pretty_boolean_group,
             },
           },
         },
-        veteran: {
+        veteran_status: {
           label: 'Did you serve in the military or do you have Veteran status?',
           number: '3B',
-          as: :pretty_boolean,
-          wrapper: :custom_boolean,
+          as: :pretty_boolean_group,
+          collection: VeteranStatus.pluck(:text).map { |t| [t, t] }.to_h,
         },
         pending_subsidized_housing_placement: {
           label: 'Are you about to move into a housing unit or have a voucher where you need help searching for a unit? Examples may be you have a voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?',
@@ -229,7 +230,7 @@ module CovidPathwaysCalculations
           input_html: { multiple: true },
         },
         rrh_th_desired: {
-          label: 'Shelter Need While Doing Housing Search (RRH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one were available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.',
+          label: 'Need For Shelter While Doing Housing Search (RRH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one were available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.',
           number: '5F',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
@@ -245,9 +246,11 @@ module CovidPathwaysCalculations
           as: :pretty_boolean_group,
         },
         required_number_of_bedrooms: {
-          label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below.',
+          label: 'If you need a bedroom size larger than an SRO select the size below you would move into.',
           number: '6B',
           collection: {
+            'Studio' => -1,
+            '1' => 1,
             '2' => 2,
             '3' => 3,
             '4' => 4,
@@ -297,11 +300,12 @@ module CovidPathwaysCalculations
             _('Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)',
             _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.',
           },
-          as: :select_2,
+          as: :pretty_boolean_group,
           input_html: { multiple: true },
         },
         neighborhood_interests: {
           label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
+          include_blank:  'Any Neighborhood / All Neighborhoods',
           number: '7A',
           collection: Neighborhood.for_select,
           # as: :check_boxes,
@@ -356,7 +360,18 @@ module CovidPathwaysCalculations
         medical_care_last_six_months: {
           label: 'In the past 6 months, about how many times have you used emergency or inpatient medical or psychiatric care? This would include emergency room visits, staying overnight in a hospital or detox facility. (For the assessor): If you have knowledge of a participant’s admissions from medical records or care you provide, you may fill in this number.',
           number: '8D',
-          collection: (1..10).to_a,
+          collection: {
+            '1' => 1,
+            '2' => 2,
+            '3' => 3,
+            '4' => 4,
+            '5' => 5,
+            '6' => 6,
+            '7' => 7,
+            '8' => 8,
+            '9' => 9,
+            '10+' => 10,
+          },
           as: :select_2,
         },
         intensive_needs_section: {
@@ -365,10 +380,10 @@ module CovidPathwaysCalculations
           questions: {
             intensive_needs: {
               collection: {
-                'Frequent shelter bars/terminations' => 'Frequent shelter bars/terminations',
-                'Severe cold weather injuries' => 'Severe cold weather injuries',
+                '2+ shelter bars or terminations in the last year' => '2+ shelter bars or terminations in the last year',
+                'Experienced cold weather injuries (hypothermia, amputations, etc) in the last year' => 'Experienced cold weather injuries (hypothermia, amputations, etc) in the last year',
                 'History of hoarding' => 'History of hoarding',
-                'Recent overdose' => 'Recent overdose',
+                'Drug overdose in the last year' => 'Drug overdose in the last year',
                 'Severe medical fragility' => 'Severe medical fragility',
               },
               as: :select_2,
@@ -399,7 +414,7 @@ module CovidPathwaysCalculations
           number: '9A',
         },
         additional_homeless_nights: {
-          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history on the next page and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. You may skip this step and the form on the next page if you do not have any additional Boston homeless nights to add',
+          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history on the next page and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. For additional days added, please have a "Documenting Current Boston Homelessness" form completed and ready to submit upon referral. You may skip this step and the form if you do not have any additional Boston homeless nights to add.',
           number: '9B',
         },
         total_days_homeless_in_the_last_three_years: {
@@ -427,7 +442,7 @@ module CovidPathwaysCalculations
           as: :pretty_boolean_group,
         },
         notes: {
-          label: 'Additional notes',
+          label: 'Optional notes for assessor to communicate any specific information to housing programs.',
           number: '10A',
         },
       }

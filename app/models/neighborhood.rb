@@ -12,6 +12,10 @@ class Neighborhood < ApplicationRecord
   end
 
   def self.for_select
-    Neighborhood.order(:name).pluck(:name, :id).to_h
+    options = {
+      'Any Neighborhood / All Neighborhoods' => nil,
+    }
+    options.merge(Neighborhood.order(:name).pluck(:name, :id).to_h)
+
   end
 end

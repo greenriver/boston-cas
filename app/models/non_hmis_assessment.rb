@@ -23,6 +23,10 @@ class NonHmisAssessment < ActiveRecord::Base
     non_hmis_client.save()
   end
 
+  def total_days_homeless_in_the_last_three_years
+    (days_homeless_in_the_last_three_years || 0) + (additional_homeless_nights || 0)
+  end
+
   private def update_assessment_score
     if respond_to? :calculated_score
       self.assessment_score = calculated_score

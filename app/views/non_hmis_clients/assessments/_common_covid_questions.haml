@@ -1,16 +1,24 @@
 - @assessment.class.form_fields.each do |field_name, options|
+  - display_options = options
   .c-question{data: { number: options[:number] }}
     .c-question__wrapper
       - if options[:questions].present?
         .c-question__number= options[:number]
         .c-question__input
           - if disabled
-            = render 'non_hmis_clients/assessments/question_display', label: options[:label], value: ''
+            - display_options[:value] = ''
+            - display_options[:hide_value] = true
+            = render 'non_hmis_clients/assessments/question_display', locals: display_options
             - options[:questions].each do |sub_field_name, sub_options|
+              - display_options = sub_options
               - val = @assessment[sub_field_name]
-              - if val.is_a?(Array)
-                - val = sub_options[:collection].invert.values_at(*val)
-              = render 'non_hmis_clients/assessments/question_display', label: sub_options[:label], value: val
+              - if options[:collection].present?
+                - if val.is_a?(Array)
+                  - val = options[:collection].invert.values_at(*val)
+                - else
+                  - val = options[:collection].invert[val]
+              - display_options[:value] = val
+              = render 'non_hmis_clients/assessments/question_display', locals: display_options
           - else
             %label= options[:label]
             - options[:questions].each do |sub_field_name, sub_options|
@@ -21,10 +29,14 @@
       - elsif options[:as] == :pretty_boolean_group
         .c-question__number= options[:number]
         - if disabled
-          - val = @assessment[field_name]
-          - if val.is_a?(Array)
-            - val = options[:collection].invert.values_at(*val)
-          = render 'non_hmis_clients/assessments/question_display', label: options[:label], value: val
+          - val = @assessment.public_send(field_name)
+          - if options[:collection].present?
+            - if val.is_a?(Array)
+              - val = options[:collection].invert.values_at(*val)
+            - else
+              - val = options[:collection].invert[val]
+          - display_options[:value] = val
+          = render 'non_hmis_clients/assessments/question_display', locals: display_options
         - else
           .c-question__input
             = form.label field_name, { pre_label: options[:number] }.merge(options)
@@ -32,10 +44,14 @@
       - else
         .c-question__number= options[:number]
         - if disabled
-          - val = @assessment[field_name]
-          - if val.is_a?(Array)
-            - val = options[:collection].invert.values_at(*val)
-          = render 'non_hmis_clients/assessments/question_display', label: options[:label], value: val
+          - val = @assessment.public_send(field_name)
+          - if options[:collection].present?
+            - if val.is_a?(Array)
+              - val = options[:collection].invert.values_at(*val)
+            - else
+              - val = options[:collection].invert[val]
+          - display_options[:value] = val
+          = render 'non_hmis_clients/assessments/question_display', locals: display_options
         - else
           .c-question__input
             - if options[:as] == :pretty_boolean

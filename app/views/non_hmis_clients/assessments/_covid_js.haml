@@ -45,12 +45,12 @@
     var warehouse_selector = 'input[name*="[0][days_homeless_in_the_last_three_years]"]'
     var extra_selector = 'input[name*="[0][additional_homeless_nights]"]'
     var total_selector = 'input[name*="[0][total_days_homeless_in_the_last_three_years]"]'
-    $(warehouse_selector).on('keyup', function(e) {
+    $(warehouse_selector).on('keyup, change', function(e) {
       var warehouse_days = parseInt($(warehouse_selector).val() || 0);
       var extra_days = parseInt($(extra_selector).val() || 0);
       $(total_selector).val(warehouse_days + extra_days);
     });
-    $(extra_selector).on('keyup', function(e) {
+    $(extra_selector).on('keyup, change', function(e) {
       var warehouse_days = parseInt($(warehouse_selector).val() || 0);
       var extra_days = parseInt($(extra_selector).val() || 0);
       $(total_selector).val(warehouse_days + extra_days);
