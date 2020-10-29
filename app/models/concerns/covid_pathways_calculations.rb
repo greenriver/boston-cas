@@ -290,8 +290,11 @@ module CovidPathwaysCalculations
         hiv_housing: {
           label: 'Are you interested in applying for housing units targeted for persons with an HIV+ diagnosis? (You may have to provide documentation of a HIV to qualify for these housing units.)',
           number: '6E',
-          as: :pretty_boolean,
-          wrapper: :custom_boolean,
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => 'Yes',
+            'No' => 'No',
+          }
         },
         affordable_housing: {
           label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
