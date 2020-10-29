@@ -18,7 +18,7 @@ class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
       collection.each_with_index do |(label, value, attrs), index|
         name = "#{object_name}[#{attribute_name}]"
         if input_html_options[:multiple]
-          checked = value.in?(current_value)
+          checked = current_value && value.in?(current_value)
           name += '[]'
           tag_name = :check_box_tag
         else
