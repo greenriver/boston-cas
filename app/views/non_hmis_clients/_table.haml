@@ -39,7 +39,7 @@
           %td
             = non_hmis_client&.assessed_at
             .mt-2
-              %em= current_assessment.title
+              %em= current_assessment&.title
 
           %td
             - if non_hmis_client.available
