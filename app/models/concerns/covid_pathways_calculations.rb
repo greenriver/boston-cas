@@ -404,10 +404,9 @@ module CovidPathwaysCalculations
           collection: {
             'Evicted by a landlord - non-payment of rent' => 'Evicted by a landlord - non-payment of rent',
             'Evicted by a landlord - lease violations' => 'Evicted by a landlord - lease violations',
-            'Owe a housing program past rent if yes, specify which housing program (free text) and how much in back rent- free text' => 'Owe a housing program past rent if yes, specify which housing program (free text) and how much in back rent- free text',
-            'Convicted of a drug-related crime if yes, specify year of most recent conviction' => 'Convicted of a drug-related crime if yes, specify year of most recent conviction',
-            'Convicted of a violent crime if yes, specify year of most recent conviction- free text or drop down of last 20 years' => 'Convicted of a violent crime if yes, specify year of most recent conviction- free text or drop down of last 20 years',
-            'Registered Sex Offender if yes, specify level- 1, 2, 3, do not know' => 'Registered Sex Offender if yes, specify level- 1, 2, 3, do not know',
+            'Owe a housing program past rent' => 'Owe a housing program past rent',
+            'Convicted of a violent crime' => 'Convicted of a violent crime',
+            'Registered Sex Offender' => 'Registered Sex Offender',
           },
           as: :select_2,
           input_html: { multiple: true },
