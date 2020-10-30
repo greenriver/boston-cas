@@ -413,7 +413,7 @@ module CovidPathwaysCalculations
           number: '9A',
         },
         additional_homeless_nights: {
-          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history on the next page and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. For additional days added, please have a "Documenting Current Boston Homelessness" form completed and ready to submit upon referral. You may skip this step and the form if you do not have any additional Boston homeless nights to add.',
+          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. For additional days added, please have a "Documenting Current Boston Homelessness" form completed and ready to submit upon referral. You may skip this step and the form if you do not have any additional Boston homeless nights to add.',
           number: '9B',
         },
         total_days_homeless_in_the_last_three_years: {
