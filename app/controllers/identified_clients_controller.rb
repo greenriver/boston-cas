@@ -6,7 +6,7 @@
 
 class IdentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_identified_clients!
-  before_action :require_can_manage_identified_clients!, only: [:edit, :update, :destroy]
+  before_action :require_can_manage_identified_clients!, only: [:destroy]
 
   def create
     @non_hmis_client = client_source.create(clean_params(identified_client_params))
