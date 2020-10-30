@@ -13,9 +13,10 @@
     // DV
     $('input[name*="[0][current_living_situation]"]').on('change', function(e) {
       value = $('input[name*="[0][current_living_situation]"]:checked').val();
-      if(value !== undefined && value.startsWith('Fleeing')) {
+      if(value !== undefined && value.startsWith('Currently fleeing')) {
         $('.c-question[data-number="5D"]').removeClass('d-none');
       } else {
+        $('.c-question[data-number="5D"] input[type="radio"]').prop('checked', false);
         $('.c-question[data-number="5D"]').addClass('d-none');
       }
     });
@@ -35,8 +36,10 @@
     $('input[name*="[0][rrh_desired]"]').on('change', function(e) {
       if($('input[name*="[0][rrh_desired]"]').is(':checked')) {
         $('.c-question[data-number="5B"]').addClass('d-none');
+        $('.c-question[data-number="5B"] input[type="radio"]').prop('checked', false);
       } else {
         $('.c-question[data-number="5B"]').removeClass('d-none');
+        $('.c-question[data-number="5C"] input[type="radio"]').prop('checked', false);
       }
     });
     $('input[name*="[0][rrh_desired]"]').trigger('change');

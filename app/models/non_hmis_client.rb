@@ -343,7 +343,7 @@ class NonHmisClient < ApplicationRecord
       'Youth-Specific Only: youth specific programs are with agencies who have a focus on young populations; they may be able to offer drop-in spaces for youth, as well as community-building and connections with other youth' => 'youth',
       'Adult Programs Only: Adult programs serve youth who are 18-24, but may not have built in community space or activities to connect other youth. They can help you find those opportunities. The adult RRH programs typically have more frequent openings at this time.' => 'adult',
       'Both Adult and Youth-Specific programs' => 'both',
-      'Not applicable - client is not Youth' => nil,
+      'Not applicable - client is not Youth' => 'no',
     }.freeze
   end
 
