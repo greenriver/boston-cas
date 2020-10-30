@@ -29,7 +29,7 @@
       = render 'filter'
       = render 'clients/sort', sort_options: sort_options
     .col-sm-2.text-right
-      - if can_export_deidentified_clients?
+      - if can_export_identified_clients?
         = link_to identified_clients_path(format: :xlsx), class: 'btn btn-sm btn-secondary ml-auto' do
           %i.icon-download2
           Download

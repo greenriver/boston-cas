@@ -9,6 +9,7 @@ class DeidentifiedClientAssessment < NonHmisAssessment
     {
       'Default Assessment' => 'DeidentifiedClientAssessment',
       'Pathways Assessment' => 'DeidentifiedPathwaysAssessment',
+      'COVID Pathways Assessment' => 'DeidentifiedCovidPathwaysAssessment',
     }
   end
 end

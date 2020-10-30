@@ -31,8 +31,9 @@
 .c-question__input {
   select,
   textarea {
-    min-width: 600px;
+    min-width: 100%;
   }
+  max-width: 85%;
 }
 
 .c-question .form-group {
@@ -55,6 +56,7 @@
 }
 
 .c-question__display {
+  max-width: 85%;
   span {
     display: block;
   }
