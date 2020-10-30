@@ -1,33 +1,36 @@
 %section.mb-6
   %h3 Demographics
+  - ssn_label = 'Social Security Number'
+  - ssn_hint = 'We only use this for matching purposes.  Numbers only, no hyphens.'
+  - ssn_refused_label = 'Client is uncomfortable sharing their SSN.'
   - if disabled
     .c-question
       = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.full_name, label: 'Client Name'
+    .c-question
+      = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.date_of_birth, label: 'Date of Birth'
+    .c-question
+      = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: ssn_label, hint: ssn_hint
+    .c-question
+      = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn_refused, label: ssn_refused_label
+    - if @non_hmis_client.gender
+      .c-question
+        = render 'non_hmis_clients/assessments/question_display', value: Gender.find_by(numeric: @non_hmis_client.gender)&.text, label: 'Gender'
+    - if @non_hmis_client.race
+      .c-question
+        = render 'non_hmis_clients/assessments/question_display', value: Race.find_by(numeric: @non_hmis_client.race)&.text, label: 'Race'
+    - if @non_hmis_client.ethnicity
+      .c-question
+        = render 'non_hmis_clients/assessments/question_display', value: Ethnicity.find_by(numeric: @non_hmis_client.ethnicity)&.text, label: 'Ethnicity'
   - else
-    .row.mb-4
-      .col-md-10
-        = form.input :first_name, disabled: disabled
-    .row
-      .col-md-10
-        = form.input :middle_name, disabled: disabled
-    .row
-      .col-md-10
-        = form.input :last_name, disabled: disabled
-  .row.mb-4
-    .col-md-6
-      - if disabled
-        .c-question
-          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.date_of_birth, label: 'Date of Birth'
-      - else
-        = form.input :date_of_birth, as: :date_picker, disabled: disabled
-
-      - label = 'SSN'
-      - if disabled
-        .c-question
-          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: label
-      - else
-        = form.input :ssn, label: label, input_html: {maxlength: 9}, disabled: disabled
-
+    = form.input :first_name, disabled: disabled
+    = form.input :middle_name, disabled: disabled
+    = form.input :last_name, disabled: disabled
+    = form.input :date_of_birth, as: :date_picker, disabled: disabled
+    = form.input :ssn, label: ssn_label, input_html: { maxlength: 9, style: 'width: 10em;' }, hint: ssn_hint, disabled: disabled
+    = form.input :ssn_refused, label: ssn_refused_label, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
+    = form.input :gender, collection: Gender.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
+    = form.input :race, collection: Race.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
+    = form.input :ethnicity, collection: Ethnicity.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
 %section
   -# Probably need to update with more appropriate title
   %h3 Agency Information
@@ -50,7 +53,7 @@
         - else
           = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
 
-  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Rlease on File', disabled: disabled
+  = form.input :full_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Full HAN Release on File', disabled: disabled
 
   = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled
   -# = form.input :active_client, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
