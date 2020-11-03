@@ -1,0 +1,50 @@
+= render 'reports/crumbs_operational'
+= render 'reports/dashboards/tabs', active: 'delays'
+
+.c-card
+  .c-card__content
+    = simple_form_for :filter, method: :get do |f|
+      = render 'reports/dashboards/report_filter', form: f
+
+      .row
+        .col-3
+          = f.input :from_step, collection: @step_names, selected: @from_step, include_blank: false, input_html: { class: 'select2 jFromStep' }
+        .col-3
+          = f.input :to_step, collection: @step_names, selected: @to_step, include_blank: false, input_html: { class: 'select2 jToStep' }
+
+      %hr
+
+      = f.submit 'Update Dashboard', class: 'btn btn-primary'
+
+.row
+  .col-12.text-center
+    %h2 Time Between Match Steps
+  .col-12.text-center
+    %h3
+      Average Time
+      = pluralize(@report.average, 'day')
+
+%dl
+  - @report.time_between_steps.each do |bucket, ids|
+    %dt= bucket
+    %dd= link_to ids.count, details_reports_dashboards_time_between_steps_path(details_params.merge(bucket: bucket)), data: {loads_in_pjax_modal: true}
+
+= content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      $('.jMatchRoute').on('change', function(e){
+        var match_route = $('.jMatchRoute').val();
+        $.get('#{step_name_options_reports_dashboards_time_between_steps_path()}', {
+          match_route: match_route,
+          group: 'from'
+        }, function(data){
+          $('.jFromStep').html(data);
+        });
+        $.get('#{step_name_options_reports_dashboards_time_between_steps_path()}', {
+          match_route: match_route,
+          group: 'to'
+        }, function(data){
+          $('.jToStep').html(data);
+        });
+      });
+    });

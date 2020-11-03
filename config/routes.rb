@@ -178,9 +178,23 @@ Rails.application.routes.draw do
           get :details
         end
       end
-      resources :delays, only: [:index]
-      resources :vacancies, only: [:index]
-      resources :clients, only: [:index]
+      resources :vacancies, only: [:index] do
+        collection do
+          get :details
+        end
+      end
+      resources :time_between_steps, only: [:index] do
+        collection do
+          get :details
+          get :step_name_options
+        end
+      end
+      resources :clients, only: [:index] do
+        collection do
+          get :client_details
+          get :matches_details
+        end
+      end
     end
     resources :match_progress, only: [:index]
   end

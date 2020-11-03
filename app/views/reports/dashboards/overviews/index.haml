@@ -1,9 +1,14 @@
 = render 'reports/crumbs_operational'
 = render 'reports/dashboards/tabs', active: 'overview'
-= simple_form_for :filter, method: :get do |f|
-  = render 'reports/dashboards/report_filter', form: f
 
-  = f.submit 'Update Dashboard', class: 'btn btn-primary'
+.c-card
+  .c-card__content
+    = simple_form_for :filter, method: :get do |f|
+      = render 'reports/dashboards/report_filter', form: f
+
+      %hr
+
+      = f.submit 'Update Dashboard', class: 'btn btn-primary'
 
 .row
   .col.text-center

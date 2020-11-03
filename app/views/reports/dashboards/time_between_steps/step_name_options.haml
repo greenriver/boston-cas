@@ -1,0 +1,5 @@
+- @step_names.each do |name, id|
+  - if id == @selected
+    %option{value: id, selected: :selected}= name
+  - else
+    %option{value: id}= name

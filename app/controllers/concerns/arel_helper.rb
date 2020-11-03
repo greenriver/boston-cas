@@ -53,6 +53,10 @@ module ArelHelper
       Opportunity.arel_table
     end
 
+    def r_d_t
+      Reporting::Decisions.arel_table
+    end
+
     def md_b_t
       MatchDecisions::Base.arel_table
     end
@@ -92,6 +96,10 @@ module ArelHelper
 
   def o_t
     Opportunity.arel_table
+  end
+
+  def r_d_t
+    Reporting::Decisions.arel_table
   end
 
   def md_b_t
