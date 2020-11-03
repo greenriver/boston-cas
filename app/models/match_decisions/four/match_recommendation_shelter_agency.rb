@@ -88,6 +88,7 @@ module MatchDecisions::Four
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::MatchRecommendationClient
         m << Notifications::Four::MatchRecommendationShelterAgency
+        m << Notifications::Four::MatchRecommendationHousingSubsidyAdmin
       end
     end
 
