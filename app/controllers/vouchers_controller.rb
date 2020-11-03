@@ -57,7 +57,7 @@ class VouchersController < ApplicationController
           end
         end
         opportunity.update(available: false, available_candidate: false)
-        @voucher.update(available: false)
+        @voucher.update(available: false, date_available: nil)
       end
       @subprogram.update_summary!
     else

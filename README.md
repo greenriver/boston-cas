@@ -57,7 +57,7 @@ We've developed locally on OSX using [homebrew](http://brew.sh/) and deployed to
 
 ### Developer Prerequisites
 
-If you are unfamilar with contributing to open source projects on github you may first want to read some of the guides at:  https://guides.github.com/
+If you are unfamiliar with contributing to open source projects on github you may first want to read some of the guides at:  https://guides.github.com/
 
 There is a simple script to setup a development environment in `bin/setup`. To make it run smoothly you should have:
 

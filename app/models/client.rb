@@ -75,9 +75,9 @@ class Client < ApplicationRecord
   validates :ssn, length: {maximum: 9}
 
   scope :visible_by, -> (user) do
-    if user.can_view_all_clients? || user.can_edit_all_clients?
+    if user&.can_view_all_clients? || user&.can_edit_all_clients?
       current_scope || all
-    elsif user.can_edit_clients_based_on_rules? && user.requirements.exists?
+    elsif user&.can_edit_clients_based_on_rules? && user&.requirements.exists?
       client_scope = current_scope || all
       user.requirements.each do |requirement|
         client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))

@@ -153,7 +153,11 @@ class NonHmisClient < ApplicationRecord
     project_client.cellphone = current_assessment&.phone_number
     project_client.case_manager_contact_info = current_assessment&.case_manager_contact_info
 
-    project_client.veteran_status = 1 if current_assessment&.veteran
+    if current_assessment&.veteran_status.present?
+      project_client.veteran_status = 1 if current_assessment&.veteran_status == 'Yes'
+    else
+      project_client.veteran_status = 1 if current_assessment&.veteran
+    end
     project_client.rrh_desired = current_assessment&.rrh_desired || false
     project_client.youth_rrh_desired = current_assessment&.youth_rrh_desired || false
     project_client.rrh_assessment_contact_info = current_assessment&.rrh_assessment_contact_info

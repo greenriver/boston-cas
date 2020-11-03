@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-class DeidentifiedPathwaysAssessment < DeidentifiedClientAssessment
-  include PathwaysCalculations
+class DeidentifiedCovidPathwaysAssessment < DeidentifiedClientAssessment
+  include CovidPathwaysCalculations
 
   def title
-    'Pathways'
+    'COVID Pathways'
   end
 
   def default?
