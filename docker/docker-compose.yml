@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 
 x-app: &app
   image: cas:0.0.2
