@@ -5,7 +5,7 @@
 ###
 #
 class Reports::Dashboards::TimeBetweenStepsController < ApplicationController
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   before_action :require_can_view_reports!
   before_action :set_report, except: [:step_name_options]
