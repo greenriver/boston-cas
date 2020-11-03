@@ -40,6 +40,8 @@ class Opportunity < ApplicationRecord
 
   has_one :match_route, through: :sub_program
 
+  has_many :reporting_decisions, class_name: 'Reporting::Decisions', foreign_key: :vacancy_id
+
   attr_accessor :program, :building, :units
 
   scope :with_voucher, -> do

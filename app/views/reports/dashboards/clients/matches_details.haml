@@ -1,0 +1,17 @@
+- title = "Associated Matches For #{@key} Clients"
+- content_for :title, title
+= content_for :modal_title, title
+
+%table.table
+  %thead
+    - matches_details_columns.keys.each do |label|
+      %th= label
+  %tbody
+    - @matches.each do |match|
+      %tr
+        - matches_details_columns.values.each do |key|
+          - value = match[key]
+          - if key == :match_id
+            %td= link_to value, match_path(value)
+          - else
+            %td= value

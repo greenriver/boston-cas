@@ -5,13 +5,19 @@
 ###
 
 class Reporting::Decisions < ApplicationRecord
+  belongs_to :client, foreign_key: :cas_client_id
+
   scope :started_between, -> (start_date:, end_date:) do
     where(match_started_at: (start_date..end_date))
   end
 
   scope :ended_between, -> (start_date:, end_date:) do
     terminated.
-    where(updated_at: (start_date..end_date))
+    where(updated_at: (start_date..end_date + 1.day))
+  end
+
+  scope :current_step, -> do
+    where(current_step: true)
   end
 
   scope :in_progress, -> do
@@ -20,6 +26,10 @@ class Reporting::Decisions < ApplicationRecord
 
   scope :terminated, -> do
     where.not(terminal_status: 'In Progress')
+  end
+
+  scope :success, -> do
+    where(terminal_status: 'Success')
   end
 
   scope :unsuccessful, -> do

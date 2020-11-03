@@ -1,0 +1,46 @@
+= render 'reports/crumbs_operational'
+= render 'reports/dashboards/tabs', active: 'vacancies'
+
+.c-card
+  .c-card__content
+    = simple_form_for :filter, method: :get do |f|
+      = render 'reports/dashboards/report_filter', form: f
+
+      %hr
+
+      = f.submit 'Update Dashboard', class: 'btn btn-primary'
+
+.row
+  .col.text-center
+    %h4
+      = link_to "#{@report.in_progress.count}",  details_reports_dashboards_vacancies_path(details_params.merge(section: :in_progress)), data: {loads_in_pjax_modal: true}
+      vacancies currently being matched
+
+.row
+  .col-6
+    %h2 Vacancy Results for Selected Timeframe
+    %dl
+    - @report.vacancy_results.each do |label, results|
+      %dt #{label}
+      %dd= link_to "#{results.count}", details_reports_dashboards_vacancies_path(details_params.merge(section: :vacancy_results, key: "#{label}")), data: {loads_in_pjax_modal: true}
+  .col-6
+    %h2 Vacancies Filled Per Quarter
+    - @report.vacancies_filled_by_quarter.each do |quarter, results|
+      %h4 #{quarter}:
+      %dl
+      - results.each do |label, results|
+        %dt #{label}
+        %dd= link_to "#{results.count}", details_reports_dashboards_vacancies_path(details_params.merge(section: :vacancies_filled_by_quarter, key: "#{quarter}", sub_key: "#{label}")), data: {loads_in_pjax_modal: true}
+
+.row
+  .col.text-center
+    %h4= "#{@report.average_days} average time to fill vacancy"
+
+.row
+  .col
+    - @report.vacancies_filled_by_quarter.each do |quarter, results|
+      %h4 #{quarter}:
+      %dl
+      - results.each do |label, results|
+        %dt #{label}
+        %dd= results.map { |result| result[:days_to_success] }.sum / results.count
