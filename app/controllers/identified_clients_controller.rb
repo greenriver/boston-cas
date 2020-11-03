@@ -150,7 +150,6 @@ class IdentifiedClientsController < NonHmisClientsController
           :ssvf_eligible,
           :health_prioritized,
           :is_currently_youth,
-          :rrh_desired,
           :case_manager_contact_info,
           :shelter_name,
           :phone_number,

@@ -173,7 +173,6 @@ class DeidentifiedClientsController < NonHmisClientsController
           :health_prioritized,
           :hiv_aids,
           :is_currently_youth,
-          :rrh_desired,
           :case_manager_contact_info,
           :shelter_name,
           :phone_number,
