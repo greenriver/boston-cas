@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchEvents
@@ -69,5 +69,20 @@ module MatchEvents
       false
     end
 
+    def include_in_tracking_sheet?
+      false
+    end
+
+    def tracking_events
+      []
+    end
+
+    def include_tracking_event?
+      tracking_events.present?
+    end
+
+    def next_step_number(step_number)
+      step_number # default to staying the same
+    end
   end
 end

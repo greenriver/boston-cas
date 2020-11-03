@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchRoutes
@@ -41,6 +41,10 @@ module MatchRoutes
 
     def initial_decision
       :match_recommendation_dnd_staff_decision
+    end
+
+    def success_decision
+      :confirm_match_success_dnd_staff_decision
     end
 
     def initial_contacts_for_match

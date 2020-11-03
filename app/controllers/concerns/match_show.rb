@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchShow
@@ -13,7 +13,7 @@ module MatchShow
       contact_id: current_contact.id,
       notification_id: params[:notification_id]&.to_i,
       decision_id: @decision&.id,
-      submitted_at: Time.now,
+      submitted_at: Time.current,
     )
   end
 

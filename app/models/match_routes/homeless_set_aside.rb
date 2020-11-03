@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchRoutes
@@ -39,6 +39,10 @@ module MatchRoutes
 
     def initial_decision
       :set_asides_hsa_accepts_client_decision
+    end
+
+    def success_decision
+      :set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator_decision
     end
 
     def initial_contacts_for_match

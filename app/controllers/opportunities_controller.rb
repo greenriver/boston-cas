@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class OpportunitiesController < ApplicationController
@@ -275,7 +275,7 @@ class OpportunitiesController < ApplicationController
   end
 
   private def available_in_the_future(opportunities)
-    opportunities.joins(:voucher).where(v_t[:date_available].gt(Date.today)).distinct
+    opportunities.joins(:voucher).where(v_t[:date_available].gt(Date.current)).distinct
   end
 
   def filter_terms

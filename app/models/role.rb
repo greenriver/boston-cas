@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Role < ApplicationRecord
@@ -31,6 +31,7 @@ class Role < ApplicationRecord
       :can_manage_config,
       :can_manage_neighborhoods,
       :can_manage_tags,
+      :can_edit_help,
     ]
   end
 
@@ -105,6 +106,7 @@ class Role < ApplicationRecord
       :can_upload_deidentified_clients,
       :can_delete_matches,
       :can_reopen_matches,
+      :can_edit_help,
     ]
   end
 

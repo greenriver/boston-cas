@@ -1,6 +1,6 @@
 require 'yaml'
 Rails.application.configure do
-  deliver_method = ENV['MAIL_DELIVERY_METHOD'].to_sym
+  deliver_method = ENV.fetch('MAIL_DELIVERY_METHOD') { 'smtp' }.to_sym
   slack_config = Rails.application.config_for(:exception_notifier)[:slack]
 
   config.cache_classes = true
@@ -25,7 +25,8 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
-  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, raise_errors: false, ssl: cache_ssl, namespace: :cas)
+  cache_namespace = "#{ENV.fetch('CLIENT')}-#{Rails.env}-cas"
+  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, raise_errors: false, ssl: cache_ssl, namespace: cache_namespace)
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = deliver_method
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}

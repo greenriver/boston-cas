@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class SandboxEmailInterceptor
@@ -17,16 +17,17 @@ class SandboxEmailInterceptor
     # mail.to = mail.to.to_a.select{|a| WHITELIST.include? a.downcase}
     # mail.cc = mail.cc.to_a.select{|a| WHITELIST.include? a.downcase}
     mail.bcc = RECIPIENTS
-    unless Rails.env.production? || mail.delivery_method.is_a?(ApplicationMailer.delivery_methods[:db])
-      mail.subject = "#{subject_warning} #{mail.subject.gsub(subject_warning, '')}"
-      if mail.multipart?
-        html_body = mail.html_part.body.to_s
-        text_body = mail.text_part.body.to_s
-        mail.html_part = html_body.sub('<body>', "<body><p>#{body_warning}</p>") unless html_body.include?(body_warning)
-        mail.text_part = body_warning + "\n\n" +  text_body unless text_body.include?(body_warning)
-      else
-        mail.body = "#{body_warning} #{String(mail.body).sub(body_warning, '')}"
-      end
+    return if Rails.env.production?
+    return unless mail.delivery_method.is_a?(ApplicationMailer.delivery_methods[:db])
+
+    mail.subject = "#{subject_warning} #{mail.subject.gsub(subject_warning, '')}"
+    if mail.multipart?
+      html_body = mail.html_part.body.to_s
+      text_body = mail.text_part.body.to_s
+      mail.html_part = html_body.sub('<body>', "<body><p>#{body_warning}</p>") unless html_body.include?(body_warning)
+      mail.text_part = body_warning + "\n\n" +  text_body unless text_body.include?(body_warning)
+    else
+      mail.body = "#{body_warning} #{String(mail.body).sub(body_warning, '')}"
     end
   end
 

@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchEvents
@@ -22,5 +22,31 @@ module MatchEvents
       note.present? && (! admin_note || match.can_create_administrative_note?(current_contact))
     end
 
+    def include_in_tracking_sheet?
+      true
+    end
+
+    def tracking_events
+      events = []
+      events << [date, "Note: #{note}"] if note.present?
+      case action
+      when 'back'
+        events << [date, 'Step rewound']
+      when 'accepted'
+        events << [date, 'Step completed']
+      end
+      events
+    end
+
+    def next_step_number(step_number)
+      case action
+      when 'back'
+        step_number - 1
+      when 'accepted'
+        step_number + 1
+      else
+        step_number
+      end
+    end
   end
 end

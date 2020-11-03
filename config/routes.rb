@@ -196,11 +196,13 @@ Rails.application.routes.draw do
         end
       end
     end
+    resources :match_progress, only: [:index]
   end
 
   namespace :system_status do
     get :operational
     get :cache_status
+    get :details
   end
 
   resources :deidentified_clients do
@@ -226,6 +228,8 @@ Rails.application.routes.draw do
       post :seen
     end
   end
+
+  resources :help
 
   unless Rails.env.production?
     resource 'style_guide', only: :none do

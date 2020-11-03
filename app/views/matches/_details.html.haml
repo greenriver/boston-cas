@@ -19,6 +19,10 @@
     .alert.alert-warning
       %p This match is part of a Multiple Match for a single vacancy. Please be advised that other clients have also been matched to this vacancy and the first client to successfully complete the CAS process with the #{_('HSA')} will be offered the unit.
 
+  - if @decision.is_a?(MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin)
+    - if 'Remember to check housing availablility' != _('Remember to check housing availablility')
+      .alert.alert-warning
+        = simple_format(_('Remember to check housing availablility'), {style: 'display: block;'})
   .c-card.c-card--flush
     -# These label/value pairs can all be displayed conditionally if present
     .c-card__content

@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchDecisions
@@ -47,6 +47,28 @@ module MatchDecisions
       end
     end
 
-
+    def decline_reason_name
+      if not_working_with_client_reason.present?
+        if not_working_with_client_reason.other?
+          "Other (#{not_working_with_client_reason_other_explanation})"
+        else
+          reason = not_working_with_client_reason.name
+          if not_working_with_client_reason_other_explanation.present?
+            reason += ". Note: #{not_working_with_client_reason_other_explanation}"
+          end
+          reason
+        end
+      elsif decline_reason.blank?
+        "none given"
+      elsif decline_reason.other?
+        "Other (#{decline_reason_other_explanation})"
+      else
+        reason = decline_reason.name
+        if decline_reason_other_explanation.present?
+          reason += ". Note: #{decline_reason_other_explanation}"
+        end
+        reason
+      end
+    end
   end
 end

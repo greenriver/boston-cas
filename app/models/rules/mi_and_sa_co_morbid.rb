@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Rules::MiAndSaCoMorbid < Rule
@@ -10,7 +10,6 @@ class Rules::MiAndSaCoMorbid < Rule
       if requirement.positive
         scope.where(mental_health_problem: true, substance_abuse_problem: true)
       else
-        c_t = Client.arel_table
         scope.where(c_t[:mental_health_problem].eq(false).or(c_t[:substance_abuse_problem].eq(false)))
       end
     else

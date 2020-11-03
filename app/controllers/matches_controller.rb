@@ -1,14 +1,14 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class MatchesController < ApplicationController
   include HasMatchAccessContext
   include Decisions
   include MatchShow
-  include PjaxModalController
+  include AjaxModalRails::Controller
   include MatchBuildingAndUnit
 
   skip_before_action :authenticate_user!

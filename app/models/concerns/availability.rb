@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 # Tools for ensuring client availability
@@ -10,6 +10,7 @@ module Availability
   extend ActiveSupport::Concern
   included do
 
+    # TODO: Disabled in the nightly processing, remove?
     def self.ensure_availability
       self.available.each(&:ensure_availability)
     end

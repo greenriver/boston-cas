@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchDecisions::Four
@@ -75,6 +75,7 @@ module MatchDecisions::Four
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Four::MatchRecommendationHsa
+        m << Notifications::Four::ShelterAgencyAccepted
       end
     end
 

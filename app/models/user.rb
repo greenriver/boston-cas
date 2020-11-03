@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class User < ApplicationRecord
@@ -97,7 +97,7 @@ class User < ApplicationRecord
   def invitation_status
     if invitation_accepted_at.present? || invitation_sent_at.blank?
       :active
-    elsif invitation_due_at > Time.now
+    elsif invitation_due_at > Time.current
       :pending_confirmation
     else
       :invitation_expired

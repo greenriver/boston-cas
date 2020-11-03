@@ -1,12 +1,12 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class DeidentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_deidentified_clients!
-  before_action :require_can_manage_deidentified_clients!, only: [:edit, :update, :destroy]
+  before_action :require_can_manage_deidentified_clients!, only: [:destroy]
 
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
@@ -56,6 +56,7 @@ class DeidentifiedClientsController < NonHmisClientsController
     end
 
     file = import_params[:file]
+    update_availability = import_params[:update_availability]
     begin
       @upload = DeidentifiedClientsXlsx.create(
         filename: file.original_filename,
@@ -77,7 +78,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       return
     end
 
-    @upload.import(current_user.agency)
+    @upload.import(current_user.agency, update_availability: update_availability)
   end
 
   def assessment_type
@@ -113,6 +114,9 @@ class DeidentifiedClientsController < NonHmisClientsController
         :client_identifier,
         :agency_id,
         :contact_id,
+        :race,
+        :ethnicity,
+        :gender,
         :available,
         :available_date,
         :available_reason,
@@ -120,6 +124,9 @@ class DeidentifiedClientsController < NonHmisClientsController
         :full_release_on_file,
         :set_asides_housing_status,
         :is_currently_youth,
+        :assessment_score,
+        :vispdat_score,
+        :vispdat_priority_score,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,
@@ -129,6 +136,7 @@ class DeidentifiedClientsController < NonHmisClientsController
           :vispdat_score,
           :vispdat_priority_score,
           :veteran,
+          :veteran_status,
           :actively_homeless,
           :days_homeless_in_the_last_three_years,
           :date_days_homeless_verified,
@@ -162,8 +170,44 @@ class DeidentifiedClientsController < NonHmisClientsController
           :documented_disability,
           :evicted,
           :ssvf_eligible,
-          neighborhood_interests: [],
-        ]
+          :health_prioritized,
+          :hiv_aids,
+          :is_currently_youth,
+          :case_manager_contact_info,
+          :shelter_name,
+          :phone_number,
+          :email_addresses,
+          :mailing_address,
+          :day_locations,
+          :night_locations,
+          :other_contact,
+          :household_size,
+          :hoh_age,
+          :current_living_situation,
+          :pending_housing_placement_type,
+          :pending_housing_placement_type_other,
+          :maximum_possible_monthly_rent,
+          :possible_housing_situation,
+          :possible_housing_situation_other,
+          :no_rrh_desired_reason,
+          :no_rrh_desired_reason_other,
+          :accessibility_other,
+          :hiv_housing,
+          :medical_care_last_six_months,
+          :intensive_needs_other,
+          :additional_homeless_nights,
+          :homeless_night_range,
+          :notes,
+          {
+            neighborhood_interests: [],
+            provider_agency_preference: [],
+            affordable_housing: [],
+            high_covid_risk: [],
+            service_need_indicators: [],
+            intensive_needs: [],
+            background_check_issues: [],
+          },
+        ],
       )
     end
 
@@ -183,7 +227,8 @@ class DeidentifiedClientsController < NonHmisClientsController
 
     def import_params
       params.require(:deidentified_clients_xlsx).permit(
-        :file
+        :file,
+        :update_availability,
       )
     end
 

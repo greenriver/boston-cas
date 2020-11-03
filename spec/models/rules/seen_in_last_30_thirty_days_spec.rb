@@ -4,24 +4,17 @@ RSpec.describe Rules::SeenInLastThirtyDays, type: :model do
 
   let!(:last_seen_rule) { create :last_seen }
 
-  let!(:bob) { 
-    client = create :client, first_name: 'Bob', calculated_last_homeless_night: 6.months.ago
-  }
-  let!(:roy) {
-    client = create :client, first_name: 'Roy', calculated_last_homeless_night: 15.days.ago
-  }
-  let!(:sue) {
-    client = create :client, first_name: 'Sue', calculated_last_homeless_night: 30.days.ago
-  }
+  let!(:bob) { create :client, first_name: 'Bob', calculated_last_homeless_night: 6.months.ago }
+  let!(:roy) { create :client, first_name: 'Roy', calculated_last_homeless_night: 15.days.ago }
+  let!(:sue) { create :client, first_name: 'Sue', calculated_last_homeless_night: 30.days.ago }
+
   let!(:positive) { create :requirement, rule: last_seen_rule, positive: true }
   let!(:negative) { create :requirement, rule: last_seen_rule, positive: false }
+
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
   let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
 
-
-  
   describe 'clients_that_fit' do
-
     context 'when positive' do
       it 'matches 2' do
         expect( clients_that_fit.count ).to eq 2

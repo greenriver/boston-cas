@@ -6,10 +6,12 @@ def hud_codes
     8 => 'Client doesn’t know',
     9 => 'Client refused'
   }.each do |id, name|
-    NameQualityCode.where(numeric: id, text: name).first_or_create! do |r|
+    item = NameQualityCode.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.2 Social Security Number
   {
@@ -19,10 +21,12 @@ def hud_codes
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    SocialSecurityNumberQualityCode.where(numeric: id, text: name).first_or_create! do |r|
+    item = SocialSecurityNumberQualityCode.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.3 Date of Birth
   {
@@ -32,26 +36,30 @@ def hud_codes
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    DateOfBirthQualityCode.where(numeric: id, text: name).first_or_create! do |r|
+    item = DateOfBirthQualityCode.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.6 Gender
   {
     0 => 'Female',
     1 => 'Male',
-    2 => 'Transgender male to female',
-    3 => 'Transgender female to male',
-    4 => 'Doesn’t identify as male, female, or transgender',
+    2 => 'Trans Female (MTF or Male to Female)',
+    3 => 'Trans Male (FTM or Female to Male)',
+    4 => 'Gender non-conforming (i.e. not exclusively male or female)',
     8 => 'Client doesn’t know',
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    Gender.where(numeric: id, text: name).first_or_create! do |r|
+    item = Gender.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.4 Race
   {
@@ -64,12 +72,15 @@ def hud_codes
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    Race.where(numeric: id, text: name).first_or_create! do |r|
+    item = Race.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.5 Ethnicity
+  Ethnicity.where(text: 'Other (Non-Hispanic/Latino)').delete_all
   {
     0 => 'Non-Hispanic/Non-Latino',
     1 => 'Hispanic/Latino',
@@ -77,10 +88,12 @@ def hud_codes
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    Ethnicity.where(numeric: id, text: name).first_or_create! do |r|
+    item = Ethnicity.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # 3.7 VeteranStatus
   {
@@ -90,10 +103,12 @@ def hud_codes
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    VeteranStatus.where(numeric: id, text: name).first_or_create! do |r|
+    item = VeteranStatus.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
   # 3.8 DisablingCondition
   {
@@ -103,10 +118,12 @@ def hud_codes
     9 => 'Client refused',
     99 => 'Data not collected'
   }.each do |id, name|
-    DisablingCondition.where(numeric: id, text: name).first_or_create! do |r|
+    item = DisablingCondition.where(numeric: id).first_or_create! do |r|
       r.numeric = id
       r.text = name
     end
+    item.text = name
+    item.save
   end
 
   [
@@ -132,7 +149,13 @@ def report_list
         name: 'Dashboard',
         description: 'Match, vacancy, and client dashboards.',
         limitable: true,
-      }
+      },
+      {
+        url: 'reports/match_progress',
+        name: 'Match Progress',
+        description: 'CAS match progress tracking report',
+        limitable: true,
+      },
     ],
   }
 end

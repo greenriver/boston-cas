@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module ApplicationHelper
@@ -125,8 +125,12 @@ module ApplicationHelper
     @current_contact || current_user.try(:contact)
   end
 
-  def pjax_request?
-    request.env['HTTP_X_PJAX'].present?
+  def ajax_modal_request?
+    request.env[AjaxModalRails::Controller::HEADER].present?
+  end
+
+  def modal_size
+    ''
   end
 
   def human_locale(locale)
@@ -149,6 +153,25 @@ module ApplicationHelper
     content_tag :div, :class => "navbar-text" do
       content_tag :span, branch_name, :class => "badge badge-warning p-2"
     end
+  end
+
+  def help_link
+    @help_link ||= begin
+      return nil unless help_for_path
+
+      if help_for_path.external?
+        link_to 'Help', help_for_path.external_url, class: 'o-menu__link', target: :_blank
+      else
+        link_to 'Help', help_path(help_for_path), class: 'o-menu__link', data: { loads_in_pjax_modal: true }
+      end
+    end
+  end
+
+  def help_for_path
+    @help_for_path ||= Help.select(:id, :external_url, :location).for_path(
+      controller_path: controller_path,
+      action_name: action_name,
+    )
   end
 
   # def pretty_check_box key, label, form, attrs

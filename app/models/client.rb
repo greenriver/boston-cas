@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Client < ApplicationRecord
@@ -77,9 +77,9 @@ class Client < ApplicationRecord
   validates :ssn, length: {maximum: 9}
 
   scope :visible_by, -> (user) do
-    if user.can_view_all_clients? || user.can_edit_all_clients?
+    if user&.can_view_all_clients? || user&.can_edit_all_clients?
       current_scope || all
-    elsif user.can_edit_clients_based_on_rules? && user.requirements.exists?
+    elsif user&.can_edit_clients_based_on_rules? && user&.requirements.exists?
       client_scope = current_scope || all
       user.requirements.each do |requirement|
         client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
@@ -315,7 +315,7 @@ class Client < ApplicationRecord
     return age
   end
 
-  def age date=Date.today
+  def age date=Date.current
     return unless date_of_birth.present?
     date = date.to_date
     dob = date_of_birth.to_date

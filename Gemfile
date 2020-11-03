@@ -1,7 +1,7 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "rails", '~>6.0.2.2'
+gem "rails", '~>6.0.3'
 gem "pg", '~> 0.20.0'
 gem 'activerecord-import'
 
@@ -36,6 +36,14 @@ gem 'carrierwave-i18n'
 gem 'ruby-filemagic'
 gem 'mini_magick'
 
+# Needed when docker images boot to get assets (s3) and environment payload (secretsmanager)
+# ecs/cloudwatchenvents needed to add cron (scheduled tasks)
+gem 'aws-sdk-s3', '~> 1'
+gem 'aws-sdk-secretsmanager', '~> 1'
+gem 'aws-sdk-cloudwatchevents', '~> 1'
+gem 'aws-sdk-ecs', '~> 1'
+gem 'aws-sdk-iam', '~> 1'
+
 gem 'puma'
 gem 'redis'
 
@@ -43,6 +51,7 @@ gem "lograge"
 gem 'activerecord-session_store'
 gem 'paranoia', '~> 2.0'
 gem 'paper_trail'
+gem 'validate_url'
 
 gem 'html2haml'
 gem 'devise', '~> 4'
@@ -86,6 +95,8 @@ gem 'grosser-pomo'
 # gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
 # gem 'axlsx_rails'
 # gem 'spreadsheet', require: false
+gem 'caxlsx'
+gem 'caxlsx_rails'
 gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 gem 'roo'
@@ -121,6 +132,10 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
   gem 'listen'
+
+  gem 'overcommit'
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do
@@ -137,3 +152,5 @@ group :rake do
   gem 'fast_gettext'
   gem 'gettext', '>=3.0.2'
 end
+
+gem "ajax_modal_rails", "~> 1.0"

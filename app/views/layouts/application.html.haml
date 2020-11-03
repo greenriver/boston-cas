@@ -13,7 +13,7 @@
     = stylesheet_link_tag 'print', media: 'print'
     = javascript_include_tag 'application'
 
-    = cache('theme', expires_in: 4.hours) do
+    = cache('theme', expires_in: 1.minutes) do
       - Dir.glob('app/assets/stylesheets/theme/styles/*.scss') do |stylesheet|
         - theme_styles = "theme/styles/#{File.basename(stylesheet, '.scss')}"
         = stylesheet_link_tag(theme_styles, media: 'all')
@@ -59,7 +59,7 @@
           %p
             = _('The Boston Coordinated Access System is operated by the Department of Neighborhood Development as the lead agency of the Boston Continuum of Care.')
 
-    = render 'pjax_modal_frame'
+    = render 'layouts/ajax_modal_frame'
     = yield :page_js
     - if current_user
       = auto_session_timeout_js(frequency: 60)

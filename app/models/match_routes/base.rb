@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchRoutes
@@ -71,6 +71,10 @@ module MatchRoutes
     end
 
     def initial_decision
+      raise NotImplementedError
+    end
+
+    def success_decision
       raise NotImplementedError
     end
 

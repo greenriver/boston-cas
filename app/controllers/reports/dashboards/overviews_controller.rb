@@ -1,11 +1,11 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 #
 class Reports::Dashboards::OverviewsController < ApplicationController
-  include PjaxModalController
+  include AjaxModalRails::Controller
 
   before_action :require_can_view_reports!
   before_action :set_report

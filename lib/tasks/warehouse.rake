@@ -6,8 +6,9 @@ namespace :warehouse do
   end
 
   desc "Flag CAS housed clients in the warehouse"
-  task flag_housed: [:environment, "log:info_to_stdout"] do
-    Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
+  task :flag_housed, [:clear] => [:environment, "log:info_to_stdout"] do |_, args|
+    clear = args[:clear] == 'clear'
+    Warehouse::FlagHoused.new.run!(clear) if Warehouse::Base.enabled?
   end
 
 end

@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class ProjectClient < ApplicationRecord
@@ -12,6 +12,14 @@ class ProjectClient < ApplicationRecord
 
   scope :in_data_source, -> (data_source) do
     joins(:data_source).merge(DataSource.where(id: data_source.id))
+  end
+
+  scope :from_hmis, -> do
+    joins(:data_source).merge(DataSource.hmis)
+  end
+
+  scope :from_non_hmis, -> do
+    joins(:data_source).merge(DataSource.non_hmis)
   end
 
   scope :available, -> do

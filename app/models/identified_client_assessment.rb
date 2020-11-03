@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2019 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class IdentifiedClientAssessment < NonHmisAssessment
@@ -9,6 +9,7 @@ class IdentifiedClientAssessment < NonHmisAssessment
     {
       'Default Assessment' => 'IdentifiedClientAssessment',
       'Pathways Assessment' => 'IdentifiedPathwaysAssessment',
+      'COVID Pathways Assessment' => 'IdentifiedCovidPathwaysAssessment',
     }
   end
 end

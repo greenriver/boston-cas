@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2019 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/hmis-warehouse/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
@@ -16,13 +16,22 @@ class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
       check =
         template.content_tag(:span, template.content_tag(:span, '', class: 'c-checkbox__check-icon'), class: 'c-checkbox__check-container')
       collection.each_with_index do |(label, value, attrs), index|
-        checked = value == current_value
         name = "#{object_name}[#{attribute_name}]"
+        if input_html_options[:multiple]
+          checked = current_value && value.in?(current_value)
+          name += '[]'
+          tag_name = :check_box_tag
+        else
+          checked = value == current_value
+          tag_name = :radio_button_tag
+        end
         id = name.to_s.parameterize + '_' + value.to_s
         label_text_el = template.content_tag(:span, label, class: 'c-checkbox__label')
+        checkbox_classes = ['c-checkbox', 'mb-1']
+        checkbox_classes << 'c-checkbox--round' unless input_html_options[:multiple]
         template.concat(
-          template.content_tag(:div, class: 'c-checkbox c-checkbox--round mb-1') do
-            template.radio_button_tag(name, value, checked, merged_input_options.merge(id: id)) +
+          template.content_tag(:div, class: checkbox_classes) do
+            template.send(tag_name, name, value, checked, merged_input_options.merge(id: id)) +
             template.content_tag(:label, pre_label + check + label_text_el, for: id)
           end
         )

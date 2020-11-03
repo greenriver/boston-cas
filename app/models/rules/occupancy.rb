@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Rules::Occupancy < Rule
@@ -30,11 +30,10 @@ class Rules::Occupancy < Rule
 
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:required_minimum_occupancy.to_s)
-      a_t = Client.arel_table
       if requirement.positive
-        scope.where(a_t[:required_minimum_occupancy].lteq(requirement.variable))
+        scope.where(c_t[:required_minimum_occupancy].lteq(requirement.variable))
       else
-        scope.where(a_t[:required_minimum_occupancy].gt(requirement.variable))
+        scope.where(c_t[:required_minimum_occupancy].gt(requirement.variable))
       end
     else
       raise RuleDatabaseStructureMissing.new("clients.required_minimum_occupancy missing. Cannot check clients against #{self.class}.")

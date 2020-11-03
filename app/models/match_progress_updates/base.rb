@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchProgressUpdates
@@ -26,7 +26,7 @@ module MatchProgressUpdates
 
     belongs_to :contact,
       inverse_of: :status_updates
-    delegate :name, to: :contact, prefix: true
+    delegate :name, to: :contact, allow_nil: :true, prefix: true
 
     belongs_to :decision,
       class_name: MatchDecisions::Base.name
@@ -175,7 +175,7 @@ module MatchProgressUpdates
       end
       # make note on all matches that a notification was sent
       match_ids = contacts.values.map(&:to_a).flatten.uniq
-      ClientOpportunityMatch.where(id: match_ids).update_all(stall_contacts_notified: Time.now)
+      ClientOpportunityMatch.where(id: match_ids).update_all(stall_contacts_notified: Time.current)
     end
 
     def self.dnd_contacts_for_late_stalled_matches
@@ -207,7 +207,29 @@ module MatchProgressUpdates
       end
       # make note on all matches that a notification was sent
       match_ids = contacts.values.map(&:to_a).flatten.uniq
-      ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.now)
+      ClientOpportunityMatch.where(id: match_ids).update_all(dnd_notified: Time.current)
     end
+
+    def include_in_tracking_sheet?
+      true
+    end
+
+    def tracking_events
+      event_note = []
+      event_note << "Client last seen: #{client_last_seen}" if client_last_seen.present?
+      event_note << response if response.present?
+      event_note << "Note: #{note}" if note.present?
+
+      [[created_at.to_date, event_note.join('; ')]]
+    end
+
+    def include_tracking_event?
+      tracking_events.present?
+    end
+
+    def next_step_number(step_number)
+      step_number # default to staying the same
+    end
+
   end
 end

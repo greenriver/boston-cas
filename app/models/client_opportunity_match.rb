@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class ClientOpportunityMatch < ApplicationRecord
@@ -343,6 +343,8 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def declined_decision
     @declined_decision ||= initialized_decisions.where.not(decline_reason_id: nil)&.first
+    @declined_decision ||= initialized_decisions.where(status: :declined)&.last
+    @declined_decision
   end
 
   def clear_current_decision_cache!
@@ -430,6 +432,10 @@ class ClientOpportunityMatch < ApplicationRecord
     closed? && closed_reason == 'success'
   end
 
+  def success_time
+    send(match_route.success_decision).updated_at
+  end
+
   def current_step_name
     current_decision.step_name if active?
   end
@@ -506,6 +512,9 @@ class ClientOpportunityMatch < ApplicationRecord
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
+      # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
+      # so clean that up...
+      Warehouse::CasHoused.where(match_id: id).destroy_all
     end
   end
 

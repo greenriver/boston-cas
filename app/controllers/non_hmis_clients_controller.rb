@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 require 'xlsxtream'
@@ -100,8 +100,13 @@ class NonHmisClientsController < ApplicationController
 
     if @column.blank?
       if pathways_enabled?
-        @column = 'assessment_score'
-        @direction = 'desc'
+        if can_manage_identified_clients?
+          @column = 'assessment_score'
+          @direction = 'desc'
+        else
+          @column = 'assessed_at'
+          @direction = 'asc'
+        end
       else
         @column = 'days_homeless_in_the_last_three_years'
         @direction = 'desc'
@@ -223,13 +228,13 @@ class NonHmisClientsController < ApplicationController
     end
 
     if assessment_params.has_key?(:youth_rrh_aggregate)
-      assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate] == 'adult' || assessment_params[:youth_rrh_aggregate] == 'both'
-      assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate] == 'youth' || assessment_params[:youth_rrh_aggregate] == 'both'
+      assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['adult', 'both'])
+      assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['youth', 'both'])
       assessment_params.extract![:youth_rrh_aggregate]
     end
     if assessment_params.has_key?(:dv_rrh_aggregate)
-      assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'non-dv' || assessment_params[:dv_rrh_aggregate] == 'both'
-      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate] == 'dv' || assessment_params[:dv_rrh_aggregate] == 'both'
+      assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['non-dv', 'both'])
+      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
       assessment_params.extract![:dv_rrh_aggregate]
     end
 

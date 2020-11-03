@@ -347,5 +347,33 @@ FactoryBot.define do
     name { "Rank Higher (closer to #1) than" }
     verb { "have" }
   end
+  factory :hmis_client, class: 'Rules::HmisClient' do
+    name { "HMIS Client" }
+    verb { "be" }
+  end
+  factory :non_hmis_client, class: 'Rules::NonHmisClient' do
+    name { "Non-HMIS Client" }
+    verb { "be" }
+  end
+  factory :health_prioritized, class: "Rules::HealthPrioritized" do
+    name { "Prioritized for Health" }
+    verb { "be" }
+  end
+  factory :seen_in_last_forty_five_days, class: "Rules::SeenInLastFortyFiveDays" do
+    name { "Homeless Service in the past 45 days" }
+    verb { "have" }
+  end
+  factory :seen_in_last_sixty_days, class: "Rules::SeenInLastSixtyDays" do
+    name { "Homeless Service in the past 60 days" }
+    verb { "have" }
+  end
+  factory :seen_in_last_ninety_days, class: "Rules::SeenInLastNinetyDays" do
+    name { "Homeless Service in the past 90 days" }
+    verb { "have" }
+  end
+  factory :is_currently_youth, class: 'Rules::Youth' do
+    name { "Youth or marked as youth" }
+    verb { "be" }
+  end
 end
 

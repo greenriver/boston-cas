@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchDecisions
@@ -121,7 +121,7 @@ module MatchDecisions
       def accepted
         # Only update the client's release_of_information attribute if we just set it
         if @decision.release_of_information == '1'
-          match.client.update_attribute(:release_of_information, Time.now)
+          match.client.update_attribute(:release_of_information, Time.current)
         end
         @decision.next_step.initialize_decision!
       end

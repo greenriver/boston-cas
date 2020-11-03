@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class VouchersController < ApplicationController
@@ -57,7 +57,7 @@ class VouchersController < ApplicationController
           end
         end
         opportunity.update(available: false, available_candidate: false)
-        @voucher.update(available: false)
+        @voucher.update(available: false, date_available: nil)
       end
       @subprogram.update_summary!
     else

@@ -45,9 +45,16 @@
       %span.c-detailed-list__value= boolean_icon @client.interested_in_set_asides
 
     - if @client.non_hmis?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Manually Flagged as Youth
+        %span.c-detailed-list__value= boolean_icon @client.is_currently_youth
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Manually Flagged as Over 65
+        %span.c-detailed-list__value= boolean_icon @client.older_than_65
       %li
         %span.c-detailed-list__label Client and/or Case Manager Contact Information
-        .mt-2.ml-8.o-text--normal= simple_format @client.rrh_assessment_contact_info
+        - contact_info = @client.rrh_assessment_contact_info.presence || 'None on file'
+        .mt-2.ml-8.o-text--normal= simple_format contact_info
 
     - elsif @client.has_full_housing_release?
       %li
@@ -58,4 +65,3 @@
       %li.c-detailed-list__item
         %span.c-detailed-list__label Previously Marked Ineligible for Pathways
         %span.c-detailed-list__value= response ? response : boolean_icon(false)
-

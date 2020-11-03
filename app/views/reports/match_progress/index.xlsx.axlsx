@@ -1,0 +1,60 @@
+wb = xlsx_package.workbook
+
+@included_sub_programs.each do |sub_program_id, sub_program_name|
+  wb.add_worksheet(name: sub_program_name[0..30]) do |sheet|
+    steps = step_names(sub_program_id)
+    shown_steps = (2..steps.count - 1)
+
+    step_counter = sheet.styles.add_style(sz: 12, bg_color: '4287f5', alignment: {horizontal: :center}, border: Axlsx::STYLE_THIN_BORDER)
+    row = ['', ''] + (shown_steps.map { |i| ["Step #{i}", ''] }).flatten
+    sheet.add_row(row, style: step_counter)
+
+    shown_steps.each do |i|
+      col = ((i - 1) * 2)
+      letter = (65 + col).chr
+      sheet.merge_cells("#{letter}1:#{letter.succ}1")
+    end
+
+    column_width = 25
+    widths = [:auto, column_width] + (shown_steps.map { [column_width, column_width] }).flatten
+
+    title = sheet.styles.add_style(sz: 12, b: true, alignment: {horizontal: :center, wrap_text: true}, border: Axlsx::STYLE_THIN_BORDER)
+    row = ['Client', 'Most-recent action (note added or step advanced)'] +
+      (shown_steps.map {|i| ['Action Taken On', steps[i]]}).flatten
+    row << 'Match ID'
+
+    sheet.add_row(row, style: title, widths: widths)
+
+    row_style = sheet.styles.add_style(bg_color: 'ededed', alignment: {wrap_text: true}, border: Axlsx::STYLE_THIN_BORDER)
+    row_style_date = sheet.styles.add_style(bg_color: 'ededed', alignment: {wrap_text: true}, num_fmt: 14, border: Axlsx::STYLE_THIN_BORDER)
+    alternate = sheet.styles.add_style(bg_color: 'ffffff', alignment: {wrap_text: true}, border: Axlsx::STYLE_THIN_BORDER)
+    alternate_date = sheet.styles.add_style(bg_color: 'ffffff', alignment: {wrap_text: true}, num_fmt: 14, border: Axlsx::STYLE_THIN_BORDER)
+    actions = actions(sub_program_id)
+    clients(sub_program_id).each do |id, name|
+      client_actions = actions[id]
+      row_template = [
+        name,
+        client_actions&.values&.map{ |actions| actions.map(&:first) }&.flatten&.max
+      ]
+      row_formatting = [row_style, row_style_date]
+      shown_steps.each do
+        row_formatting << row_style_date
+        row_formatting << row_style
+      end
+      row_formatting << row_style
+      client_height = client_actions&.values&.map{ |actions| actions.count }&.max || 0
+      client_height.times do |height|
+          events = shown_steps.map do |column|
+          event = client_actions[column].try(:[], height)
+          [
+            event&.first || '',
+            event&.last || '',
+          ]
+        end.flatten
+        sheet.add_row(row_template + events + [id], style: row_formatting, widths: widths)
+      end
+      row_style, alternate = alternate, row_style
+      row_style_date, alternate_date = alternate_date, row_style_date
+    end
+  end
+end

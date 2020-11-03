@@ -1,14 +1,14 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Rules::Transgender < Rule
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:gender_id.to_s)
       gender_arel = Gender.arel_table
-      transgender = Gender.where(gender_arel[:text].matches('Transgender%')).distinct.pluck(:numeric)
+      transgender = Gender.where(gender_arel[:text].matches('Trans%')).distinct.pluck(:numeric)
       if requirement.positive
         scope.where(gender_id: transgender)
       else

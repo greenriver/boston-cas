@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_172917) do
+ActiveRecord::Schema.define(version: 2020_10_29_132201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,9 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.boolean "sro_ok", default: false
     t.boolean "evicted", default: false
     t.boolean "dv_rrh_desired", default: false
+    t.boolean "health_prioritized", default: false
+    t.boolean "is_currently_youth", default: false, null: false
+    t.boolean "older_than_65"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -408,6 +411,20 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "helps", force: :cascade do |t|
+    t.string "controller_path", null: false
+    t.string "action_name", null: false
+    t.string "external_url"
+    t.string "title", null: false
+    t.text "content", null: false
+    t.string "location", default: "internal", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["controller_path", "action_name"], name: "index_helps_on_controller_path_and_action_name", unique: true
+    t.index ["created_at"], name: "index_helps_on_created_at"
+    t.index ["updated_at"], name: "index_helps_on_updated_at"
   end
 
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
@@ -671,6 +688,39 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.integer "user_id"
     t.boolean "evicted", default: false
     t.boolean "documented_disability", default: false
+    t.boolean "health_prioritized", default: false
+    t.boolean "hiv_aids", default: false
+    t.boolean "is_currently_youth", default: false, null: false
+    t.boolean "older_than_65"
+    t.string "email_addresses"
+    t.string "mailing_address"
+    t.text "day_locations"
+    t.text "night_locations"
+    t.text "other_contact"
+    t.integer "household_size"
+    t.string "hoh_age"
+    t.string "current_living_situation"
+    t.string "pending_housing_placement_type"
+    t.string "pending_housing_placement_type_other"
+    t.integer "maximum_possible_monthly_rent"
+    t.string "possible_housing_situation"
+    t.string "possible_housing_situation_other"
+    t.string "no_rrh_desired_reason"
+    t.string "no_rrh_desired_reason_other"
+    t.jsonb "provider_agency_preference"
+    t.string "accessibility_other"
+    t.string "hiv_housing"
+    t.jsonb "affordable_housing"
+    t.jsonb "high_covid_risk"
+    t.jsonb "service_need_indicators"
+    t.integer "medical_care_last_six_months"
+    t.jsonb "intensive_needs"
+    t.string "intensive_needs_other"
+    t.jsonb "background_check_issues"
+    t.integer "additional_homeless_nights"
+    t.string "homeless_night_range"
+    t.text "notes"
+    t.string "veteran_status"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -748,6 +798,12 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.string "available_reason"
     t.boolean "is_currently_youth", default: false, null: false
     t.datetime "assessed_at"
+    t.boolean "health_prioritized", default: false
+    t.boolean "hiv_aids", default: false
+    t.boolean "older_than_65"
+    t.boolean "ssn_refused", default: false
+    t.integer "race"
+    t.integer "ethnicity"
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -961,6 +1017,9 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.boolean "sro_ok", default: false
     t.boolean "evicted", default: false
     t.boolean "dv_rrh_desired", default: false
+    t.boolean "health_prioritized", default: false
+    t.boolean "is_currently_youth", default: false, null: false
+    t.boolean "older_than_65"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1138,6 +1197,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.boolean "can_delete_matches", default: false
     t.boolean "can_reopen_matches", default: false
     t.boolean "can_see_all_alternate_matches", default: false
+    t.boolean "can_edit_help", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1400,6 +1460,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_172917) do
     t.string "session_id"
     t.string "request_id"
     t.string "notification_code"
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

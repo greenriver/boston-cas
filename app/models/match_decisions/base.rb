@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchDecisions
@@ -104,7 +104,7 @@ module MatchDecisions
 
     def set_stall_date
       stall_on = if stallable? && stalled_after > 0
-        Date.today + stalled_after
+        Date.current + stalled_after
       else
         nil
       end

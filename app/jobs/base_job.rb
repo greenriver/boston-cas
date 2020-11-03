@@ -1,24 +1,26 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class BaseJob < ApplicationJob
   STARTING_PATH = File.realpath(FileUtils.pwd)
   include NotifierConfig
 
-  # When called through Active::Job, uses this hook
-  before_perform do |job|
-    if STARTING_PATH != expected_path || ! File.exists?('config/exception_notifier.yml')
-      msg = "Started dir is `#{STARTING_PATH}`\nCurrent dir is `#{expected_path}`\nExiting in order to let systemd restart me in the correct directory."
-      notify_on_restart(msg)
-      if job.respond_to? :job_id
-        unlock_job!(job.job_id)
-      end
+  if ENV['ECS'] != 'true'
+    # When called through Active::Job, uses this hook
+    before_perform do |job|
+      if STARTING_PATH != expected_path || ! File.exists?('config/exception_notifier.yml')
+        msg = "Started dir is `#{STARTING_PATH}`\nCurrent dir is `#{expected_path}`\nExiting in order to let systemd restart me in the correct directory."
+        notify_on_restart(msg)
+        if job.respond_to? :job_id
+          unlock_job!(job.job_id)
+        end
 
-      # Exit, ignoring signal handlers which would prevent the process from dying
-      exit!(0)
+        # Exit, ignoring signal handlers which would prevent the process from dying
+        exit!(0)
+      end
     end
   end
   # when queued with perform_later (active job, this gets used)
@@ -27,17 +29,19 @@ class BaseJob < ApplicationJob
     notify_on_exception(e)
   end
 
-  # When called through Delayed::Job, uses this hook
-  def before job
-    if STARTING_PATH != expected_path || ! File.exists?('config/exception_notifier.yml')
-      job = self unless job.respond_to? :locked_by
+  if ENV['ECS'] != 'true'
+    # When called through Delayed::Job, uses this hook
+    def before job
+      if STARTING_PATH != expected_path || ! File.exists?('config/exception_notifier.yml')
+        job = self unless job.respond_to? :locked_by
 
-      msg = "Started dir is `#{STARTING_PATH}`\nCurrent dir is `#{expected_path}`\nExiting in order to let systemd restart me in the correct directory."
-      notify_on_restart(msg)
-      unlock_job!(job.id)
+        msg = "Started dir is `#{STARTING_PATH}`\nCurrent dir is `#{expected_path}`\nExiting in order to let systemd restart me in the correct directory."
+        notify_on_restart(msg)
+        unlock_job!(job.id)
 
-      # Exit, ignoring signal handlers which would prevent the process from dying
-      exit!(0)
+        # Exit, ignoring signal handlers which would prevent the process from dying
+        exit!(0)
+      end
     end
   end
   # when queued with Delayed::Job.enqueue TestJob.new (this gets used)

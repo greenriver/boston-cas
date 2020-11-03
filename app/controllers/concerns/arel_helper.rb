@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/hmis-warehouse/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 # provides less verbose versions of stuff that's useful for working with arel
@@ -45,6 +45,10 @@ module ArelHelper
       Client.arel_table
     end
 
+    def pc_t
+      ProjectClient.arel_table
+    end
+
     def o_t
       Opportunity.arel_table
     end
@@ -68,10 +72,26 @@ module ArelHelper
     def mdr_b_t
       MatchDecisionReasons::Base.arel_table
     end
+
+    def p_t
+      Program.arel_table
+    end
+
+    def sp_t
+      SubProgram.arel_table
+    end
+
+    def com_t
+      ClientOpportunityMatch.arel_table
+    end
   end
 
   def c_t
     Client.arel_table
+  end
+
+  def pc_t
+    ProjectClient.arel_table
   end
 
   def o_t
@@ -96,5 +116,17 @@ module ArelHelper
 
   def mdr_b_t
     MatchDecisionReasons::Base.arel_table
+  end
+
+  def p_t
+    Program.arel_table
+  end
+
+  def sp_t
+    SubProgram.arel_table
+  end
+
+  def com_t
+    ClientOpportunityMatch.arel_table
   end
 end

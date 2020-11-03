@@ -1,9 +1,9 @@
 - if can_reject_matches?
   .d-flex.align-items-center
-    - if @match.shelter_expiration? 
-      - if @match.shelter_expiration >= Date.today
+    - if @match.shelter_expiration?
+      - if @match.shelter_expiration >= Date.current
         .expiration_date
-          This match expires on 
+          This match expires on
           %strong= "#{@match.shelter_expiration}."
       - else
         .expiration_date.c-tag__wrapper.align-items-center
@@ -11,12 +11,12 @@
             .c-tag__icon{style: 'font-size: 1.2rem;'}
               %i.icon-warning
           .content
-            This match expired on 
+            This match expired on
             %strong= "#{@match.shelter_expiration}."
       .expiration_update_link
         %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
           Update Expiration Date
-    - else 
+    - else
       This match currently has no expiration date.
       %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
         Add Expiration Date
@@ -27,9 +27,9 @@
         = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
     = form.submit 'Update Expiration Date', class: 'btn btn-light mb-6', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
 
-- else 
+- else
   - if @match.shelter_expiration?
-    - if @match.shelter_expiration >= Date.today
+    - if @match.shelter_expiration >= Date.current
       %p
         This match will expire if the client has not expressed interest in the match before
         %strong= "#{@match.shelter_expiration}."

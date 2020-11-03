@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module Notifications
@@ -80,7 +80,7 @@ module Notifications
     end
 
     def expired?
-      expires_at.in_time_zone <= Time.now.in_time_zone
+      expires_at.in_time_zone <= Time.current.in_time_zone
     end
 
     # override in base class

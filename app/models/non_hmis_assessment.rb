@@ -1,14 +1,14 @@
 ###
 # Copyright 2016 - 2019 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class NonHmisAssessment < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate
+  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :total_days_homeless_in_the_last_three_years
 
   belongs_to :non_hmis_client
   belongs_to :user
@@ -17,10 +17,18 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
+  def title
+    'Non-HMIS Assessment'
+  end
+
   def update_assessment_score!
     update_assessment_score()
     save()
     non_hmis_client.save()
+  end
+
+  def total_days_homeless_in_the_last_three_years
+    (days_homeless_in_the_last_three_years || 0) + (additional_homeless_nights || 0)
   end
 
   private def update_assessment_score

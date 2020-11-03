@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class NonHmisClient < ApplicationRecord
@@ -61,7 +61,7 @@ class NonHmisClient < ApplicationRecord
     return age
   end
 
-  def age date=Date.today
+  def age date=Date.current
     return unless date_of_birth.present?
     date = date.to_date
     dob = date_of_birth.to_date
@@ -153,7 +153,11 @@ class NonHmisClient < ApplicationRecord
     project_client.cellphone = current_assessment&.phone_number
     project_client.case_manager_contact_info = current_assessment&.case_manager_contact_info
 
-    project_client.veteran_status = 1 if current_assessment&.veteran
+    if current_assessment&.veteran_status.present?
+      project_client.veteran_status = 1 if current_assessment&.veteran_status == 'Yes'
+    else
+      project_client.veteran_status = 1 if current_assessment&.veteran
+    end
     project_client.rrh_desired = current_assessment&.rrh_desired || false
     project_client.youth_rrh_desired = current_assessment&.youth_rrh_desired || false
     project_client.rrh_assessment_contact_info = current_assessment&.rrh_assessment_contact_info
@@ -179,7 +183,10 @@ class NonHmisClient < ApplicationRecord
 
     project_client.vispdat_score = vispdat_score
     project_client.vispdat_priority_score = vispdat_priority_score
-
+    project_client.health_prioritized = health_prioritized
+    project_client.hiv_positive = hiv_aids
+    project_client.is_currently_youth = current_assessment&.is_currently_youth || false
+    project_client.older_than_65 = current_assessment&.older_than_65
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
     project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement
@@ -254,7 +261,10 @@ class NonHmisClient < ApplicationRecord
     assessment.substance_abuse_problem = substance_abuse_problem
     assessment.vispdat_score = vispdat_score
     assessment.vispdat_priority_score = vispdat_priority_score
+    assessment.health_prioritized = health_prioritized
     assessment.imported_timestamp = imported_timestamp
+    assessment.is_currently_youth = is_currently_youth
+    assessment.older_than_65 = older_than_65
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at
@@ -323,6 +333,8 @@ class NonHmisClient < ApplicationRecord
       vispdat_score: 'VI-SPDAT Score',
       vispdat_priority_score: 'VI-SPDAT Priority Score',
       actively_homeless: 'Actively Homeless',
+      health_prioritized: 'Prioritized for Health',
+      hiv_aids: 'HOPWA Eligible',
     }
   end
 
@@ -331,7 +343,7 @@ class NonHmisClient < ApplicationRecord
       'Youth-Specific Only: youth specific programs are with agencies who have a focus on young populations; they may be able to offer drop-in spaces for youth, as well as community-building and connections with other youth' => 'youth',
       'Adult Programs Only: Adult programs serve youth who are 18-24, but may not have built in community space or activities to connect other youth. They can help you find those opportunities. The adult RRH programs typically have more frequent openings at this time.' => 'adult',
       'Both Adult and Youth-Specific programs' => 'both',
-      'Not applicable - client is not Youth' => nil,
+      'Not applicable - client is not Youth' => 'no',
     }.freeze
   end
 

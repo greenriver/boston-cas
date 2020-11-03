@@ -1,20 +1,24 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module Warehouse
   class FlagHoused
-    def run!
+    def run!(clear=false)
       processed = Warehouse::CasHoused.all
-      housed_in_cas = ClientOpportunityMatch.should_alert_warehouse
-      to_add = housed_in_cas.where.not(id: processed.pluck(:match_id))
+      to_add = ClientOpportunityMatch.should_alert_warehouse
+      if clear
+        Warehouse::CasHoused.destroy_all
+      else
+        to_add = to_add.where.not(id: processed.pluck(:match_id))
+      end
       to_add.each do |match|
         warehouse_client_id = match.client.project_client.id_in_data_source
         cas_client_id = match.client.id
         match_id = match.id
-        housed_on = match.confirm_match_success_dnd_staff_decision.updated_at
+        housed_on = match.success_time
 
         cas_housed = Warehouse::CasHoused.create(
           client_id: warehouse_client_id,

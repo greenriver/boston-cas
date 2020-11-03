@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class DataSource < ApplicationRecord
@@ -14,6 +14,10 @@ class DataSource < ApplicationRecord
 
   scope :non_hmis, -> do
     where(db_identifier: 'Deidentified')
+  end
+
+  scope :hmis, -> do
+    where.not(db_identifier: 'Deidentified')
   end
 
 end

@@ -32,7 +32,7 @@
 //= require namespace
 //= require ./select_two
 //= require_tree ./templates
-//= require pjax-modals
+//= require ajax_modal_rails
 //= require acknowledge_notification
 //= require_tree ./requirement_manager
 //= require_tree ./service_manager

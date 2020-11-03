@@ -1,12 +1,12 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class IdentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_identified_clients!
-  before_action :require_can_manage_identified_clients!, only: [:edit, :update, :destroy]
+  before_action :require_can_manage_identified_clients!, only: [:destroy]
 
   def create
     @non_hmis_client = client_source.create(clean_params(identified_client_params))
@@ -20,7 +20,6 @@ class IdentifiedClientsController < NonHmisClientsController
   def update
     @non_hmis_client.update(clean_params(identified_client_params))
     if pathways_enabled?
-
       # mark the client as available if this is a new assessment
       @non_hmis_client.update(
         available: true,
@@ -90,6 +89,9 @@ class IdentifiedClientsController < NonHmisClientsController
         :middle_name,
         :date_of_birth,
         :ssn,
+        :race,
+        :ethnicity,
+        :gender,
         :limited_release_on_file,
         :full_release_on_file,
         :available,
@@ -98,17 +100,25 @@ class IdentifiedClientsController < NonHmisClientsController
         :active_client,
         :eligible_for_matching,
         :set_asides_housing_status,
+        :is_currently_youth,
+        :ssn_refused,
+        :assessment_score,
+        :vispdat_score,
+        :vispdat_priority_score,
         active_cohort_ids: [],
         client_assessments_attributes: [
           :id,
           :type,
           :entry_date,
           :assessment_score,
+          :vispdat_score,
+          :vispdat_priority_score,
           :actively_homeless,
           :days_homeless_in_the_last_three_years,
           :date_days_homeless_verified,
           :who_verified_days_homeless,
           :veteran,
+          :veteran_status,
           :rrh_desired,
           :youth_rrh_desired,
           :rrh_assessment_contact_info,
@@ -138,8 +148,43 @@ class IdentifiedClientsController < NonHmisClientsController
           :documented_disability,
           :evicted,
           :ssvf_eligible,
-          neighborhood_interests: [],
-        ]
+          :health_prioritized,
+          :is_currently_youth,
+          :case_manager_contact_info,
+          :shelter_name,
+          :phone_number,
+          :email_addresses,
+          :mailing_address,
+          :day_locations,
+          :night_locations,
+          :other_contact,
+          :household_size,
+          :hoh_age,
+          :current_living_situation,
+          :pending_housing_placement_type,
+          :pending_housing_placement_type_other,
+          :maximum_possible_monthly_rent,
+          :possible_housing_situation,
+          :possible_housing_situation_other,
+          :no_rrh_desired_reason,
+          :no_rrh_desired_reason_other,
+          :accessibility_other,
+          :hiv_housing,
+          :medical_care_last_six_months,
+          :intensive_needs_other,
+          :additional_homeless_nights,
+          :homeless_night_range,
+          :notes,
+          {
+            neighborhood_interests: [],
+            provider_agency_preference: [],
+            affordable_housing: [],
+            high_covid_risk: [],
+            service_need_indicators: [],
+            intensive_needs: [],
+            background_check_issues: [],
+          },
+        ],
       ).merge(identified: true)
     end
 

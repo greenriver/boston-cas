@@ -12,9 +12,9 @@
               %p This sub-program belongs to a confidential program.  Client names will be hidden when shown in lists of matches by default.
             - else
               = f.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
-            = f.association :housing_subsidy_administrator, label: "#{_('Housing Subsidy Administrator')}", input_html: select2_input_html
-            = f.association :service_provider, label: 'Service Provider', input_html: select2_input_html
-            = f.association :sub_contractor, label: 'Sub-Contractor', input_html: select2_input_html
+            = f.association :housing_subsidy_administrator, label: "#{_('Housing Subsidy Administrator')}", as: :select2
+            = f.association :service_provider, label: 'Service Provider', as: :select2
+            = f.association :sub_contractor, label: 'Sub-Contractor', as: :select2
             .form-group.radio_buttons.program-type
               = f.label :program_type, required: true do
                 %abbr{'data-original-title' => 'required'}*
@@ -25,9 +25,9 @@
                     = f.radio_button :program_type, t[:value]
                     = t[:label]
                   - if t[:building]
-                    = building = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01'}, input_html: {class: 'jBuilding'}.merge(select2_input_html)
+                    = f.association :building, label: "#{Building.model_name.human} Name", wrapper_html: {class: 'building form-group__indented-01 jBuilding'}, input_html: select2_input_html
             = f.input :voucher_count, label: 'Total Vouchers', hint: 'This value is only used in displaying a total count of available vouchers, and does not affect availability', input_html: {style: 'width: 8em;'}
-            = f.association :file_tags, collection: FileTag.available_tags, selected: @subprogram.file_tags.map(&:tag_id), label: 'Files types from the warehouse to display on matches that involve this sub-program', hint: "These files will be linked from any match involving a client with a #{_('full release')} on file.", input_html: select2_input_html
+            = f.association :file_tags, collection: FileTag.available_tags, selected: @subprogram.file_tags.map(&:tag_id), label: 'Files types from the warehouse to display on matches that involve this sub-program', hint: "These files will be linked from any match involving a client with a #{_('full release')} on file.", as: :select2, input_html: { multiple: :multiple }
 
         .col-sm-6.text-right.mb-4
           - if @subprogram.persisted? && can_edit_programs? && @subprogram.vouchers.available.empty? && ! @subprogram.closed?
@@ -53,10 +53,11 @@
   :javascript
     $('.program-type').on('change', 'input', function() {
       var have_buildings = #{raw SubProgram.have_buildings};
-      console.log(have_buildings);
       $('div.building').hide();
       if($.inArray(this.value, have_buildings) != -1) {
-        $(this).parent().siblings('.building').show();
+        var building = $(this).parent().siblings('.building');
+        building.show();
+        building.find('select').select2();
       }
     });
 
@@ -65,11 +66,10 @@
       $('.jRuleWarning').removeClass('hidden');
     });
     // Keep all buildings in sync
-    $('.jBuilding').on('change', function(e){
+    $('.jBuilding select').on('change', function(e){
       var v = this.value;
-      $('.jBuilding').not(this).each(function(d) {
+      $('.jBuilding select').not(this).each(function(d) {
         this.value = v;
         $(this).trigger('change.select2');
       });
     });
-    $('select').select2();

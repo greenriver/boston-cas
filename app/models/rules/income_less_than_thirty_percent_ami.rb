@@ -1,13 +1,12 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Rules::IncomeLessThanThirtyPercentAmi < Rule
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:income_total_monthly.to_s)
-      c_t = Client.arel_table
       ami = Config.get(:ami)
       ami_partial = (ami * 0.3) / 12 #30% AMI
       if requirement.positive

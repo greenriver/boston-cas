@@ -1,12 +1,11 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 class Rules::SeenInLastNinetyDays < Rule
   def clients_that_fit(scope, requirement, opportunity)
-    c_t = Client.arel_table
     if last_seen = c_t[:calculated_last_homeless_night]
       if requirement.positive
         where = c_t[:calculated_last_homeless_night].gteq( 90.days.ago )

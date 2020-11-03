@@ -1,7 +1,7 @@
 ###
 # Copyright 2016 - 2020 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
 module MatchDecisions::Four
@@ -88,6 +88,7 @@ module MatchDecisions::Four
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::MatchRecommendationClient
         m << Notifications::Four::MatchRecommendationShelterAgency
+        m << Notifications::Four::MatchRecommendationHousingSubsidyAdmin
       end
     end
 
@@ -125,7 +126,7 @@ module MatchDecisions::Four
       def accepted
         # Only update the client's release_of_information attribute if we just set it
         if @decision.release_of_information == '1'
-          match.client.update_attribute(:release_of_information, Time.now)
+          match.client.update_attribute(:release_of_information, Time.current)
         end
         @decision.next_step.initialize_decision!
       end
