@@ -334,7 +334,7 @@ module MatchDecisions
 
     def canceled_status_label
       if administrative_cancel_reason_other_explanation.present?
-        "Match canceled administratively: #{administrative_cancel_reason.name} (#{administrative_cancel_reason_other_explanation})"
+        "Match canceled administratively: #{administrative_cancel_reason&.name} (#{administrative_cancel_reason_other_explanation})"
       elsif administrative_cancel_reason.present?
         "Match canceled administratively: #{administrative_cancel_reason.name}"
       else
