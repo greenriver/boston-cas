@@ -427,7 +427,7 @@ module CovidPathwaysCalculations
           number: '9D',
           collection: {
             'Fleeing Domestic Violence (no range needed)' => 'Fleeing Domestic Violence (no range needed)',
-            '30-60 Boston homeless nights in the last three years' => '30-60 Boston homeless nights in the last three years',
+            '0-60 Boston homeless nights in the last three years' => '0-60 Boston homeless nights in the last three years',
             '61-90 Boston homeless nights in the last three years' => '61-90 Boston homeless nights in the last three years',
             '91-120 Boston homeless nights in the last three years' => '91-120 Boston homeless nights in the last three years',
             '121-150 Boston homeless nights in the last three years' => '121-150 Boston homeless nights in the last three years',

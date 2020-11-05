@@ -66,7 +66,7 @@ class IdentifiedClient < NonHmisClient
         "Agency",
         "Assessment Score",
         "Assessment Date",
-      ]
+      ] + Config.get(:identified_client_assessment).constantize.form_field_labels
     else
       [
         "id",
@@ -116,9 +116,9 @@ class IdentifiedClient < NonHmisClient
         date_of_birth,
         ssn,
         agency&.name,
-        current_assessment.assessment_score,
-        current_assessment.updated_at,
-      ]
+        current_assessment&.assessment_score,
+        current_assessment&.updated_at,
+      ] + (current_assessment&.form_field_values || [])
     else
       [
         id,
