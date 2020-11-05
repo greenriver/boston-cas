@@ -5,6 +5,8 @@
 ###
 
 class NonHmisAssessment < ActiveRecord::Base
+  include ApplicationHelper
+
   has_paper_trail
   acts_as_paranoid
 
@@ -65,4 +67,54 @@ class NonHmisAssessment < ActiveRecord::Base
     true
   end
 
+  def self.form_field_labels
+    return [] unless self.respond_to?(:form_fields)
+
+    [].tap do |labels|
+      form_fields.map do |_, field|
+        # If there are sub-questions, there will not be answers at this level
+        if ! field[:questions]
+          labels << field[:label]
+        else
+          field[:questions].each do |_, f|
+            labels << f[:label]
+          end
+        end
+      end
+    end
+  end
+
+  def form_field_values
+    return [] unless self.class.respond_to?(:form_fields)
+
+    [].tap do |values|
+      self.class.form_fields.map do |name, field|
+        # If there are sub-questions, there will not be answers at this level
+        if ! field[:questions]
+          val = send(name)
+          values << if val.is_a?(Array)
+            field[:collection].invert.values_at(*val).to_sentence
+          elsif val.in?([true, false])
+            yes_no(val)
+          else
+            val
+          end
+        else
+          field[:questions].each do |sub_name, f|
+            val = send(sub_name)
+            values << if val.is_a?(Array)
+              val = val.select(&:present?)
+              next unless val.present?
+
+              f[:collection].invert.values_at(*val).to_sentence
+            elsif val.in?([true, false])
+              yes_no(val)
+            else
+              val
+            end
+          end
+        end
+      end
+    end
+  end
 end

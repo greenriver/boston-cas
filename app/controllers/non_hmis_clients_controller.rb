@@ -53,14 +53,26 @@ class NonHmisClientsController < ApplicationController
     xlsx = Xlsxtream::Workbook.new(io)
     xlsx.write_worksheet client_type do |sheet|
       sheet << client_source.new.download_headers
-      @non_hmis_clients.each do |client|
+      seen = Set.new
+      download_clients.each do |client|
+        next if seen.include?(client.id)
+
         sheet << client.download_data
+        seen << client.id
       end
     end
     xlsx.close
-    send_data io.string,
+    send_data(
+      io.string,
       filename: "#{client_type}.xlsx",
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+  end
+
+  private def download_clients
+    return @non_hmis_clients.order(updated_at: :desc) unless pathways_enabled?
+
+    @non_hmis_clients.joins(:non_hmis_assessments).merge(NonHmisAssessment.where(type: assessment_type).order(entry_date: :desc))
   end
 
   def new
