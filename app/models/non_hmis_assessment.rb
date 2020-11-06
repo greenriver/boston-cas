@@ -93,7 +93,7 @@ class NonHmisAssessment < ActiveRecord::Base
         if ! field[:questions]
           val = send(name)
           values << if val.is_a?(Array)
-            val = val.reject(&:blank?)
+            val = val.select(&:present?)
             field[:collection].invert.values_at(*val).to_sentence
           elsif field[:collection].present?
             field[:collection].invert[val]
@@ -107,9 +107,9 @@ class NonHmisAssessment < ActiveRecord::Base
             val = send(sub_name)
             values << if val.is_a?(Array)
               val = val.select(&:present?)
-              next unless val.present?
-
-              f[:collection].invert.values_at(*val).to_sentence
+              f[:collection].invert.values_at(*val).to_sentence if val.present?
+            elsif field[:collection].present?
+              field[:collection].invert[val]
             elsif val.in?([true, false])
               yes_no(val)
             else
