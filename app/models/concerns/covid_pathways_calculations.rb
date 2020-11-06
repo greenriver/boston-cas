@@ -130,7 +130,7 @@ module CovidPathwaysCalculations
           number: '3E',
           questions: {
             pending_housing_placement_type: {
-              label: '',
+              label: 'Unit type',
               collection: {
                 _('I have a voucher to find a unit (Section 8, Housing Choice Voucher, CAS, MRVP, other)') => 'I have a voucher to find a unit (Section 8, Housing Choice Voucher, CAS, MRVP, other)',
                 _('Public Housing unit') => 'Public Housing unit',
@@ -162,6 +162,7 @@ module CovidPathwaysCalculations
           number: '4D',
           questions: {
             possible_housing_situation: {
+              label: 'Sharing housing',
               collection: {
                 _('Yes') => 'Yes',
                 _('No, I want my own home') => 'No, I want my own home',
@@ -187,6 +188,7 @@ module CovidPathwaysCalculations
           number: '5B',
           questions: {
             no_rrh_desired_reason: {
+              label: 'RRH interest',
               collection: {
                 _('I have too little income and do not think I can increase it') => 'I have too little income and do not think I can increase it',
                 _('I want to wait for subsidized housing') => 'I want to wait for subsidized housing',
@@ -379,6 +381,7 @@ module CovidPathwaysCalculations
           number: '8E',
           questions: {
             intensive_needs: {
+              label: 'Intensive Needs',
               collection: {
                 '2+ shelter bars or terminations in the last year' => '2+ shelter bars or terminations in the last year',
                 'Experienced cold weather injuries (hypothermia, amputations, etc) in the last year' => 'Experienced cold weather injuries (hypothermia, amputations, etc) in the last year',
@@ -386,12 +389,10 @@ module CovidPathwaysCalculations
                 'Drug overdose in the last year' => 'Drug overdose in the last year',
                 'Severe medical fragility' => 'Severe medical fragility',
               },
-              as: :select_2,
-              input_html: { multiple: true },
+              as: :pretty_checkboxes_group,
             },
             intensive_needs_other: {
               label: 'Other intensive needs',
-              number: '8E',
             },
           },
         },

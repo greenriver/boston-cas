@@ -68,17 +68,17 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def self.form_field_labels
-    return [] unless self.respond_to?(:form_fields)
+    return [] unless respond_to?(:form_fields)
 
     [].tap do |labels|
-      form_fields.map do |_, field|
+      form_fields.each do |_, field|
         # If there are sub-questions, there will not be answers at this level
-        if ! field[:questions]
-          labels << field[:label]
-        else
+        if field[:questions]
           field[:questions].each do |_, f|
             labels << f[:label]
           end
+        else
+          labels << field[:label]
         end
       end
     end
@@ -88,7 +88,7 @@ class NonHmisAssessment < ActiveRecord::Base
     return [] unless self.class.respond_to?(:form_fields)
 
     [].tap do |values|
-      self.class.form_fields.map do |name, field|
+      self.class.form_fields.each do |name, field|
         # If there are sub-questions, there will not be answers at this level
         if ! field[:questions]
           val = send(name)
