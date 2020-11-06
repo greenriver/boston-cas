@@ -93,7 +93,10 @@ class NonHmisAssessment < ActiveRecord::Base
         if ! field[:questions]
           val = send(name)
           values << if val.is_a?(Array)
+            val = val.reject(&:blank?)
             field[:collection].invert.values_at(*val).to_sentence
+          elsif field[:collection].present?
+            field[:collection].invert[val]
           elsif val.in?([true, false])
             yes_no(val)
           else
