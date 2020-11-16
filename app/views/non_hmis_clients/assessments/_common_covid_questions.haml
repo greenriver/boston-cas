@@ -23,7 +23,7 @@
             %label= options[:label]
             - options[:questions].each do |sub_field_name, sub_options|
               .mb-1
-                - if sub_options[:label] && sub_options[:as].present?
+                - if sub_options[:label] && sub_options[:as].present? && sub_options[:as] != :pretty_checkboxes_group
                   = form.label sub_field_name, { label: sub_options[:label] }
                 = form.input(sub_field_name, {}.merge(sub_options))
       - elsif options[:as] == :pretty_boolean_group
