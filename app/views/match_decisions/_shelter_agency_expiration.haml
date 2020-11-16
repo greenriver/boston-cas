@@ -25,7 +25,7 @@
     .form-row
       .col-md-6
         = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
-    = form.submit 'Update Expiration Date', class: 'btn btn-light mb-6', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
+    = form.submit 'Save Expiration Date', class: 'btn btn-light mb-6', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
 
 - else
   - if @match.shelter_expiration?
