@@ -528,6 +528,13 @@ class Client < ApplicationRecord
     self.enrolled_in_es
   end
 
+  def client_match_attributes
+    neighborhoods = Neighborhood.where(id: neighborhood_interests).pluck(:name)&.to_sentence.presence || 'Any'
+    {
+      'Neighborhood Preference' => neighborhoods,
+    }
+  end
+
   def self.sort_options(show_vispdat: false, show_assessment: false)
     [
       {title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},

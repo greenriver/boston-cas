@@ -86,6 +86,10 @@ module MatchDecisions::ProviderOnly
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
+    def show_client_match_attributes?
+      true
+    end
+
     private def decline_reason_scope
       MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
@@ -126,4 +130,3 @@ module MatchDecisions::ProviderOnly
   end
 
 end
-

@@ -204,6 +204,8 @@ class ClientOpportunityMatch < ApplicationRecord
     }
   end
 
+  delegate :show_client_match_attributes?, to: :current_decision
+
   def confidential?
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
   end

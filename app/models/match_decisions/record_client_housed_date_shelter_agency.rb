@@ -75,6 +75,10 @@ module MatchDecisions
       contact.in?(match.shelter_agency_contacts)
     end
 
+    def show_client_match_attributes?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end

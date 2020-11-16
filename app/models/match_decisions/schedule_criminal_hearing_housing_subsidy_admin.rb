@@ -91,6 +91,10 @@ module MatchDecisions
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
+    def show_client_match_attributes?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -128,4 +132,3 @@ module MatchDecisions
 
   end
 end
-
