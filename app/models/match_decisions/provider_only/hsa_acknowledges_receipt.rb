@@ -18,7 +18,7 @@ module MatchDecisions::ProviderOnly
 
     def label_for_status status
       case status.to_sym
-      when :pending then "New Match Awaiting Acknowledgment by #{_('HSA')}"
+      when :pending, :expiration_update then "New Match Awaiting Acknowledgment by #{_('HSA')}"
       when :acknowledged then "Match acknowledged by #{_('HSA')}.  In review"
       when :canceled then canceled_status_label
       end
@@ -43,10 +43,15 @@ module MatchDecisions::ProviderOnly
     def statuses
       {
         pending: 'Pending',
+        expiration_update: 'Pending',
         acknowledged: 'Acknowledged',
         canceled: 'Canceled',
         destroy: 'Destroy',
       }
+    end
+
+    def expires?
+      true
     end
 
     def editable?
@@ -88,8 +93,17 @@ module MatchDecisions::ProviderOnly
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
+
+      def expiration_update
+      end
     end
     private_constant :StatusCallbacks
+
+    def whitelist_params_for_update params
+      super.merge params.require(:decision).permit(
+        :shelter_expiration,
+      )
+    end
 
     private def save_will_accept?
       saved_status == 'pending' && status == 'acknowledged'
