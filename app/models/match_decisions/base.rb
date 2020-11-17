@@ -158,6 +158,10 @@ module MatchDecisions
       raise 'Not implemented'
     end
 
+    def show_client_match_attributes?
+      false
+    end
+
     ######################
     # Decision Lifecycle
     ######################

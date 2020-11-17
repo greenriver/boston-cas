@@ -1,0 +1,4 @@
+- if match.show_client_match_attributes?
+  - match.client.client_match_attributes.each do |label, value|
+    %h3.detail-box--label= label
+    .detail-box--value= value

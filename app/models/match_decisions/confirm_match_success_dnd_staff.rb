@@ -73,6 +73,10 @@ module MatchDecisions
       end
     end
 
+    def show_client_match_attributes?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -91,4 +95,3 @@ module MatchDecisions
   end
 
 end
-

@@ -30,6 +30,14 @@
             %option{value: value, selected: selected}
               = label
 
+      .o-filtration__option
+        %select{name: :current_program, style: 'width: 100%;'}
+          %option{value: ''} Filter by Program
+          - available_programs.each do |program|
+            - selected = @current_program.to_i == program.id
+            %option{value: program.id, selected: selected}
+              = program.name
+
       .o-filtration__actions.form__actions
         = link_to(filter_params.merge(action: :index), class: 'btn btn-light')do
           %i.icon-cross
