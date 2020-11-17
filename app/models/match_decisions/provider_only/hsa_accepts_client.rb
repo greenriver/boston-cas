@@ -22,7 +22,7 @@ module MatchDecisions::ProviderOnly
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} reviewing match"
+      when :pending, :expiration_update then "#{_('Housing Subsidy Administrator')} reviewing match"
       when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
       when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
@@ -54,11 +54,16 @@ module MatchDecisions::ProviderOnly
     def statuses
       {
         pending: 'Pending',
+        expiration_update: 'Pending',
         accepted: 'Accepted',
         declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
       }
+    end
+
+    def expires?
+      true
     end
 
     def editable?
@@ -86,6 +91,10 @@ module MatchDecisions::ProviderOnly
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
+    def show_client_match_attributes?
+      true
+    end
+
     private def decline_reason_scope
       MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
@@ -107,6 +116,9 @@ module MatchDecisions::ProviderOnly
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
+
+      def expiration_update
+      end
     end
     private_constant :StatusCallbacks
 
@@ -114,6 +126,7 @@ module MatchDecisions::ProviderOnly
       super.merge params.require(:decision).permit(
         :building_id,
         :unit_id,
+        :shelter_expiration,
       )
     end
 
@@ -126,4 +139,3 @@ module MatchDecisions::ProviderOnly
   end
 
 end
-

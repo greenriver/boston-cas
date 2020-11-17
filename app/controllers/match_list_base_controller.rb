@@ -150,10 +150,30 @@ class MatchListBaseController < ApplicationController
     end.compact
   end
 
+  def available_programs
+    @available_programs = begin
+      if @current_route.blank?
+        Program.visible_by(current_user)
+      else
+        route = MatchRoutes::Base.find_by(type: @current_route)
+        Program.visible_by(current_user).on_route(route)
+      end
+    end
+  end
+  helper_method :available_programs
+
   private def filter_by_route route, scope
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
+
     scope.joins(:match_route).
       where(match_routes: {type: route})
+  end
+
+  private def filter_by_program program, scope
+    return scope unless program.present? && program.in?(available_programs.pluck(:id).map(&:to_s))
+
+    scope.joins(:program).
+      merge(Program.where(id: program))
   end
 
   private def decision_sub_query

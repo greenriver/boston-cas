@@ -1,5 +1,5 @@
 - if can_reject_matches?
-  .d-flex.align-items-center
+  .d-flex.align-items-center.mb-2
     - if @match.shelter_expiration?
       - if @match.shelter_expiration >= Date.current
         .expiration_date
@@ -25,7 +25,7 @@
     .form-row
       .col-md-6
         = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {value: @match.shelter_expiration}
-    = form.submit 'Update Expiration Date', class: 'btn btn-light mb-6', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
+    = form.submit 'Save Expiration Date', class: 'btn btn-light mb-6', data: {submit_param_name: 'decision[status]', submit_param_value: 'expiration_update'}
 
 - else
   - if @match.shelter_expiration?

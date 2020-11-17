@@ -204,6 +204,8 @@ class ClientOpportunityMatch < ApplicationRecord
     }
   end
 
+  delegate :show_client_match_attributes?, to: :current_decision
+
   def confidential?
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
   end
@@ -785,7 +787,7 @@ class ClientOpportunityMatch < ApplicationRecord
         # {title: 'Most served', column: 'days_homeless', direction: 'desc'},
         # {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
         # {title: 'Current step', column: 'current_step', direction: 'desc'},
-        {title: 'Initial Acceptance Expiration Date', column: 'shelter_expiration', direction: 'asc'},
+        {title: 'Expiration Date', column: 'shelter_expiration', direction: 'asc'},
         {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
         {title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc'},
       ]

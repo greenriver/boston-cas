@@ -72,6 +72,10 @@ module MatchDecisions
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
+    def show_client_match_attributes?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -101,4 +105,3 @@ module MatchDecisions
   end
 
 end
-
