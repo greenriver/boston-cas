@@ -11,6 +11,8 @@ module ControlledVisibility
     has_many :entity_view_permissions, as: :entity
 
     scope :visible_by, -> (user) {
+      return current_scope if user.can_view_programs?
+
       evp_t = EntityViewPermission.arel_table
       joins(:entity_view_permissions).where(
           evp_t[:agency_id].eq(user.agency_id)
