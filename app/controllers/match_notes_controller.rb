@@ -24,6 +24,11 @@ class MatchNotesController < ApplicationController
     mn_params.delete(:admin_note) unless @match.can_create_administrative_note?(current_contact)
     @match_note.assign_attributes mn_params
     @match_note.contact = current_contact
+    if @match_note.include_content &&  mn_params[:contact_ids].delete_if(&:blank?).empty?
+      @match_note.errors.add(:contact_ids, 'You must include contacts if you are sending the note via email')
+      render :new
+      return
+    end
     if @match_note.save
       if @match.can_create_administrative_note?(current_contact) || current_user.can_send_notes_via_email?
         contact_ids = mn_params[:contact_ids].delete_if(&:blank?) if mn_params[:contact_ids].present?
@@ -63,56 +68,54 @@ class MatchNotesController < ApplicationController
     redirect_to success_path
   end
 
-  private
+  ################################
+  ## New / Create Setup
+  ################################
 
-    ################################
-    ## New / Create Setup
-    ################################
+  private def set_match!
+    @match = match_scope.find params[:match_id]
+  end
 
-    def set_match!
-      @match = match_scope.find params[:match_id]
-    end
+  private def authorize_add_note!
+    not_authorized unless @match.can_create_overall_note?(current_contact)
+  end
 
-    def authorize_add_note!
-      not_authorized unless @match.can_create_overall_note?(current_contact)
-    end
+  ################################
+  ## Edit / Update / Destroy Setup
+  ################################
 
-    ################################
-    ## Edit / Update / Destroy Setup
-    ################################
+  private def set_match_note!
+    @match_note = MatchEvents::Base
+      .where(match_id: @match.id)
+      .find params[:id]
+  end
 
-    def set_match_note!
-      @match_note = MatchEvents::Base
-        .where(match_id: @match.id)
-        .find params[:id]
-    end
+  private def authorize_note_editable!
+    not_authorized! unless @match_note.note_editable_by? current_contact
+  end
 
-    def authorize_note_editable!
-      not_authorized! unless @match_note.note_editable_by? current_contact
-    end
+  private def build_match_note
+    @match_note = @match.note_events.build(include_content: @match.match_route.send_notes_by_default)
+  end
 
-    def build_match_note
-      @match_note = @match.note_events.build
-    end
+  ################################
+  ## Additional Utilities
+  ################################
 
-    ################################
-    ## Additional Utilities
-    ################################
+  private def success_path
+    # TODO detect if we came from a specific decision and
+    # go there instead
+    access_context.match_path(@match)
+  end
 
-    def success_path
-      # TODO detect if we came from a specific decision and
-      # go there instead
-      access_context.match_path(@match)
-    end
-
-    def match_note_params
-      params.require(:match_note).
-        permit(
-          :note,
-          :admin_note,
-          :include_content,
-          contact_ids: []
-        )
-    end
+  private def match_note_params
+    params.require(:match_note).
+      permit(
+        :note,
+        :admin_note,
+        :include_content,
+        contact_ids: []
+      )
+  end
 
 end
