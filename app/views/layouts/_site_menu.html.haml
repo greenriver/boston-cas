@@ -1,13 +1,17 @@
 .o-menu.js-menu.off-canvas
   -# Match related items
   %ul.o-menu__group.list-unstyled
-    %li.o-menu__item
-      = link_to active_matches_path, class: 'o-menu__link' do
-        Matches in Progress
-    - if Client.accessible_by_user(current_user).parked.any?
+    - available_routes = MatchRoutes::Base.filterable_routes
+    - if available_routes.count > 1
+      %li.o-menu__item.o-menu__header Matches in Progress
+      - available_routes.each do |route|
+        - route_name = route.first
+        %li.o-menu__item
+          = link_to route_name, active_matches_path(current_route: route_name), class: 'o-menu__link'
+    - else
       %li.o-menu__item
-        = link_to reports_parked_clients_path, class: 'o-menu__link' do
-          Parked Clients
+        = link_to active_matches_path, class: 'o-menu__link' do
+          Matches in Progress
   -# Reporting items
   - if can_view_reports?
     %ul.o-menu__group.list-unstyled
@@ -21,6 +25,10 @@
         %li.o-menu__item
           = link_to clients_path, class: 'o-menu__link' do
             All Clients
+      - if Client.accessible_by_user(current_user).parked.any?
+        %li.o-menu__item
+          = link_to reports_parked_clients_path, class: 'o-menu__link' do
+            Parked Clients
       - if current_user.can_see_non_hmis_clients?
         %li.o-menu__item
           - if can_enter_deidentified_clients? || can_manage_deidentified_clients?

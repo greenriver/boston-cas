@@ -28,6 +28,13 @@
   border-bottom: 1px solid rgba($white, .25);
 }
 
+.o-menu__header {
+  font-weight: bold;
+  color: white;
+  margin-bottom: space(2);
+  display: block;
+}
+
 .o-menu__link {
   @include header-menu-link;
   display: block;
