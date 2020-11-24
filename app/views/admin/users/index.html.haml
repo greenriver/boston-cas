@@ -35,7 +35,7 @@
     .row
       .col-sm-12
         .table-responsive
-          %table.table.table-condensed
+          %table.table.table-striped
             %thead
               %tr
                 - titles.each do | k, title |
@@ -45,10 +45,8 @@
                 %th Roles
                 %th Status
                 %th Matches
-                %th Edit
-                - if can_become_other_users?
-                  %th Become
-                %th De-activate
+                %th Actions
+
             %tbody
               - @users.each do |user|
                 %tr
@@ -66,19 +64,21 @@
                     - matches = user.contact.try(:client_opportunity_match_contacts) || []
                     = matches.size
                   %td
-                    = link_to action: :edit, id: user do
-                      %span.icon-pencil
-                      Edit
-                  - if can_become_other_users?
-                    %td
-                      - if user.impersonateable_by?(true_user)
-                        = link_to impersonate_admin_user_path(true_user, become_id: user.id), method: :post do
-                          %span.icon-enter
+                    .w-100
+                      = link_to(edit_admin_user_path(id: user), class: 'btn btn-sm btn-secondary mb-2 text-nowrap') do
+                        %i.icon-pencil
+                        Edit
+
+                    - if can_become_other_users? && user.impersonateable_by?(true_user)
+                      .w-100
+                        = link_to impersonate_admin_user_path(true_user, become_id: user.id), method: :post, class: 'btn btn-sm btn-secondary mb-2' do
+                          %i.icon-enter
                           Become
-                  %td
-                    = link_to admin_user_path(user),  method: :delete, data: {confirm: "Would you really like to de-activate the account? #{user.name} will no longer be able to login."}, class: 'btn btn-link d-flex' do
-                      %span.icon-cross
-                      De-Activate
+                    - if user.valid?
+                      .w-100
+                        = link_to admin_user_path(user),  method: :delete, data: {confirm: "Would you really like to de-activate the account? #{user.name} will no longer be able to login."}, class: 'btn btn-sm btn-danger mb-2 text-nowrap' do
+                          %i.icon-cross
+                          De-Activate
 
         %p= paginate @users, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
   .tab-pane#inactive
