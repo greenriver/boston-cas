@@ -24,7 +24,8 @@ class MatchNotesController < ApplicationController
     mn_params.delete(:admin_note) unless @match.can_create_administrative_note?(current_contact)
     @match_note.assign_attributes mn_params
     @match_note.contact = current_contact
-    if @match_note.include_content &&  mn_params[:contact_ids].delete_if(&:blank?).empty?
+
+    if match_note_params[:include_content] == '1' && mn_params[:contact_ids].delete_if(&:blank?).empty?
       @match_note.errors.add(:contact_ids, 'You must include contacts if you are sending the note via email')
       render :new
       return
