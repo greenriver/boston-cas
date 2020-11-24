@@ -28,7 +28,7 @@ class ActiveMatchesController < MatchListBaseController
       order(sort_matches())
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @current_step.present?
+    @active_filter = @current_step.present? || @current_program.present?
     @types = MatchRoutes::Base.match_steps
 
     @page_size = 25

@@ -16,8 +16,10 @@ class ClosedMatchesController < MatchListBaseController
     @show_vispdat = show_vispdat?
     @matches = match_scope
     @current_step = params[:current_step]
+    @current_program = params[:current_program]
     @matches = filter_by_step(@current_step, @matches)
     @matches = filter_by_route(@current_route, @matches)
+    @matches = filter_by_program(@current_program, @matches)
     @search_string = params[:q]
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
@@ -25,7 +27,7 @@ class ClosedMatchesController < MatchListBaseController
       order(sort_matches())
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @current_step.present?
+    @active_filter = @current_step.present? || @current_program.present?
     @types = MatchRoutes::Base.match_steps
 
     @page_size = 25

@@ -33,6 +33,14 @@
     %p.client__current-sort-filter
       Currently sorted by:
       %strong= sort_options.select{|m| m[:column] == @column && m[:direction] == @direction}.first.try(:[], :title)
+  .col-sm-4
+    - if @current_step.present? || @current_program.present?
+      - step_name = if @current_step.present? then ClientOpportunityMatch.closed_filter_options.to_h.invert[@current_step] else nil end
+      - program_name = if @current_program.present? then @available_programs.index_by(&:id)[@current_program.to_i]&.name else nil end
+      - limits = [step_name, program_name].compact
+      %p.client__current-sort-filter
+        Limited to:
+        %strong= limits.join(' at ')
 
 %p= paginate @opportunities, params: {sort: @column, direction: @direction}
 = render 'matches/list', opportunities: @opportunities, match_type: 'closed'
