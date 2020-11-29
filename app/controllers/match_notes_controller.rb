@@ -27,7 +27,8 @@ class MatchNotesController < ApplicationController
 
     if match_note_params[:include_content] == '1' && mn_params[:contact_ids].delete_if(&:blank?).empty?
       @match_note.errors.add(:contact_ids, 'You must include contacts if you are sending the note via email')
-      render :new
+
+      render(:new)
       return
     end
     if @match_note.save
@@ -36,13 +37,19 @@ class MatchNotesController < ApplicationController
         if contact_ids.present?
           contact_ids.each do |contact_id|
             include_content = match_note_params[:include_content]
-            notification = Notifications::NoteSent.create_for_match! match_id: @match.id, contact_id: contact_id.to_i, note: @match_note.note, include_content: include_content
+            Notifications::NoteSent.create_for_match!(
+              match_id: @match.id,
+              contact_id: contact_id.to_i,
+              note: @match_note.note,
+              include_content: include_content,
+            )
           end
         end
       end
-      redirect_to success_path
+      redirect_to(success_path)
+      return
     else
-      render :new
+      render(:new)
     end
   end
 
