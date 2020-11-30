@@ -20,8 +20,6 @@ module MatchEvents
       'match_events/match_event'
     end
 
-    validates_presence_of :note, message: 'A note is required'
-
     belongs_to :match, class_name: 'ClientOpportunityMatch', inverse_of: :events
 
     belongs_to :notification, class_name: 'Notifications::Base'
