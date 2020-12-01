@@ -1,0 +1,19 @@
+- data = if request.xhr?.present? then { 'submits-to-ajax-modal' => true } else {} end
+.note-form
+  = simple_form_for @match_note, url: match_notes_path(@match, match_note_referrer_params), as: :match_note, data: data do |form|
+    = form.input :note, as: :text, input_html: {rows: 4}, label: false
+    - if @match.can_create_administrative_note?(access_context.current_contact)
+      = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
+    - if @match.can_create_administrative_note?(access_context.current_contact) || current_user.can_send_notes_via_email?
+      = form.input :include_content, as: :boolean, label: 'Include note content in email?', hint: _('Do not include client details in the note if you include the content in the email.')
+      = form.input :contact_ids, as: :select2, collection: @match.contacts, label: 'Send note to contacts?', hint: 'If any contacts are selected, this note will be sent directly to them via email.', input_html: {multiple: :multiple, style: 'width: 100%'}
+    .d-flex
+      .mr-auto
+        - if ajax_modal_request?
+          %button.btn.btn-secondary.pull-right(aria-label="Close" data-ajax-modal-close type="button")
+            Cancel
+        - else
+          = link_to match_path(@match), class: 'btn btn-secondary' do
+            Cancel
+      .ml-4
+        = form.submit "Save", class: 'btn btn-success'

@@ -7,9 +7,8 @@
 module MatchEvents
   class Note < Base
     # Overall Match Notes are implemented as events
-    validates :note, presence: true
-    attr_accessor :contact_ids
-    attr_accessor :include_content
+    validates_presence_of :note, message: 'A note is required'
+    attr_accessor :contact_ids, :include_content
 
     def name
       if admin_note

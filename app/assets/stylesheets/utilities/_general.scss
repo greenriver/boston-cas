@@ -5,3 +5,12 @@
 .pointer-events--none {
   pointer-events: none !important;
 }
+
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.no-data {
+  padding: space(3);
+  margin: 0;
+}
