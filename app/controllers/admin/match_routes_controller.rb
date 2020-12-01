@@ -41,6 +41,7 @@ module Admin
         :send_notifications,
         :stalled_interval,
         :housing_type,
+        :send_notes_by_default,
       )
     end
 
