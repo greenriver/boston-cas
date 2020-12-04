@@ -213,12 +213,14 @@ Rails.application.routes.draw do
     member do
       get :new_assessment
       get :assessment
+      get :current_assessment_limited
     end
   end
   resources :identified_clients do
     member do
       get :new_assessment
       get :assessment
+      get :current_assessment_limited
     end
   end
   resources :imported_clients

@@ -1,0 +1,9 @@
+- content_for :modal_title, 'Assessment'
+= simple_form_for @non_hmis_client, url: '', defaults: {disabled: true} do |f|
+  = f.simple_fields_for :client_assessments, @assessment do |a|
+    - # view is versioned, so choose view based on model type
+    .o-questions
+      = render "#{client_type}_clients/#{@assessment.model_name.element}", client_form: f, assessment_form: a, disabled: true, limited: true
+
+  .form__actions.align-items-center
+    = render 'non_hmis_clients/assessments/timestamp'

@@ -6,10 +6,13 @@
 
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
+  include AjaxModalRails::Controller
+  include MatchShow
   before_action :load_client, only: [:show, :edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]
+  before_action :find_match, only: [:current_assessment_limited]
 
   def index
     # sort
@@ -67,6 +70,12 @@ class NonHmisClientsController < ApplicationController
       filename: "#{client_type}.xlsx",
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     )
+  end
+
+  def current_assessment_limited
+    @modal_size = :lg
+    @assessment = NonHmisAssessment.where(type: assessment_type).find(params[:id].to_i)
+    @non_hmis_client = @assessment.non_hmis_client
   end
 
   private def download_clients
@@ -261,5 +270,9 @@ class NonHmisClientsController < ApplicationController
 
   private def pathways_enabled?
     assessment_type&.include?('Pathways')
+  end
+
+  private def find_match
+    @match = ClientOpportunityMatch.find(params[:match_id].to_i)
   end
 end

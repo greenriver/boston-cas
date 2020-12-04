@@ -1,2 +1,3 @@
+- limited = if defined?(limited) then limited else false end
 %section.o-questions__section
-  = render 'non_hmis_clients/assessments/common_covid_questions', form: assessment_form, disabled: disabled
+  = render 'non_hmis_clients/assessments/common_covid_questions', form: assessment_form, disabled: disabled, limited: limited

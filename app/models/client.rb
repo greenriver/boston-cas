@@ -295,6 +295,10 @@ class Client < ApplicationRecord
     NonHmisClient.joins(:client).merge(Client.where(id: id)).exists?
   end
 
+  def non_hmis_client
+    NonHmisClient.joins(:client).merge(Client.where(id: id))&.first
+  end
+
   def merged_with_name
     c = Client.find(merged_into)
     c.full_name
