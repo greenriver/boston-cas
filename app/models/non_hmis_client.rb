@@ -17,6 +17,13 @@ class NonHmisClient < ApplicationRecord
     NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
   end
 
+  def current_covid_assessment
+    NonHmisAssessment.where(
+      non_hmis_client_id: id,
+      type: ['IdentifiedCovidPathwaysAssessment', 'DeidentifiedCovidPathwaysAssessment'],
+    ).order(created_at: :desc).first
+  end
+
   after_initialize :build_assessment_if_missing
 
   belongs_to :agency

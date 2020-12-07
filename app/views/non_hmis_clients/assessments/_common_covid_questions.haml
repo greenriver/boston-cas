@@ -1,5 +1,5 @@
 - @assessment.class.form_fields.each do |field_name, options|
-  - display_options = options
+  - display_options = options.merge(limited: limited)
   .c-question{data: { number: options[:number] }}
     .c-question__wrapper
       - if options[:questions].present?

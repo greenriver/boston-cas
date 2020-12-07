@@ -42,12 +42,26 @@ class ProjectClient < ApplicationRecord
     where(needs_update: true)
   end
 
+  def non_hmis_client
+    NonHmisClient.where(id: self.id_in_data_source)
+  end
+
   def is_deidentified?
-    NonHmisClient.where(id: self.id_in_data_source, identified: false).exists?
+    return false unless self.data_source_id.in?(DataSource.non_hmis.pluck(:id))
+
+    NonHmisClient.where(
+      id: self.id_in_data_source,
+      identified: false,
+    ).exists?
   end
 
   def is_identified?
-    NonHmisClient.where(id: self.id_in_data_source, identified: true).exists?
+    return false unless self.data_source_id.in?(DataSource.non_hmis.pluck(:id))
+
+    NonHmisClient.where(
+      id: self.id_in_data_source,
+      identified: true,
+    ).exists?
   end
 
   # Availability is now determined solely based on the manually set sync_with_cas

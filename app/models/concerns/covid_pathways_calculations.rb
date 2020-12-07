@@ -296,7 +296,8 @@ module CovidPathwaysCalculations
           collection: {
             'Yes' => 'Yes',
             'No' => 'No',
-          }
+          },
+          confidential: true,
         },
         affordable_housing: {
           label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
