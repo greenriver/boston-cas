@@ -21,11 +21,11 @@
         Age:
         = match.client&.age || 'unknown'
   .mt-1
-    - if user_signed_in? && warehouse_id = match.client&.remote_id # show if you are logged in
-      %br
-      = link_to @client&.data_source_path, target: '_blank' do
-        Remote ID:
-        = warehouse_id
+    - remote_id = match.client&.remote_id
+    - if user_signed_in? && remote_id # show if you are logged in
+      - if @client.remote_client_visible_to?(current_user)
+        %br
+        = link_to "Remote ID: #{remote_id}", @client&.data_source_path, target: '_blank'
     - if can_view_all_clients? # only show to admins
       %br
       = link_to @client, target: '_blank' do

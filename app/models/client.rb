@@ -446,6 +446,13 @@ class Client < ApplicationRecord
    @remote_data_source ||= DataSource.find(remote_data_source_id) rescue false
   end
 
+  def remote_client_visible_to?(user)
+    return true unless project_client.is_deidentified? || project_client.is_identified?
+    return true if NonHmisClient.visible_to(user).where(id: remote_id).exists?
+
+    false
+  end
+
   # Link to the warehouse or other authoritative data source
   # urls should be placed in `data_sources.client_url` and can include :client_id: which will
   # be replaced with Client.remote_id
