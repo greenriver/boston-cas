@@ -129,4 +129,12 @@ class DeidentifiedClient < NonHmisClient
   def client_scope
     DeidentifiedClient.all
   end
+
+  private def fix_first_name
+    "Anonymous - #{client_identifier}"
+  end
+
+  private def fix_last_name
+    "Anonymous - #{client_identifier}"
+  end
 end
