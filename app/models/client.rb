@@ -295,6 +295,10 @@ class Client < ApplicationRecord
     NonHmisClient.joins(:client).merge(Client.where(id: id)).exists?
   end
 
+  def non_hmis_client
+    NonHmisClient.joins(:client).merge(Client.where(id: id))&.first
+  end
+
   def merged_with_name
     c = Client.find(merged_into)
     c.full_name
@@ -440,6 +444,13 @@ class Client < ApplicationRecord
 
   def remote_data_source
    @remote_data_source ||= DataSource.find(remote_data_source_id) rescue false
+  end
+
+  def remote_client_visible_to?(user)
+    return true unless project_client.is_deidentified? || project_client.is_identified?
+    return true if NonHmisClient.visible_to(user).where(id: remote_id).exists?
+
+    false
   end
 
   # Link to the warehouse or other authoritative data source

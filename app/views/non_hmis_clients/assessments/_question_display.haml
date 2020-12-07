@@ -4,24 +4,30 @@
 - label ||= locals[:label]
 - value ||= locals[:value]
 - hide_value = locals[:hide_value] || false
-.c-question__display
-  %span.d-block= label
-  - unless hide_value
-    %span.c-metric{ class: "c-metric--#{size}"}
-      - if value.is_a? Array
-        - if value.reject(&:blank?).any?
-          - value.reject(&:blank?).map(&:to_s).map(&:titleize).each do |val|
-            .mb-4= val
-        - elsif include_blank.present?
-          .mb-4= include_blank
+
+- # Don't show any confidential answers if the display is limited
+- if locals[:limited] && locals[:confidential]
+  .c-question__display
+    %span.d-block Confidential Question [Redacted]
+- else
+  .c-question__display
+    %span.d-block= label
+    - unless hide_value
+      %span.c-metric{ class: "c-metric--#{size}"}
+        - if value.is_a? Array
+          - if value.reject(&:blank?).any?
+            - value.reject(&:blank?).map(&:to_s).map(&:titleize).each do |val|
+              .mb-4= val
+          - elsif include_blank.present?
+            .mb-4= include_blank
+          - else
+            .mb-4 N/A
+        - elsif value.in?([true, false])
+          = yes_no(value)
         - else
-          .mb-4 N/A
-      - elsif value.in?([true, false])
-        = yes_no(value)
-      - else
-        - if value.present?
-          .mb-4= value
-        - elsif include_blank.present?
-          .mb-4= include_blank
-        - else
-          .mb-4 N/A
+          - if value.present?
+            .mb-4= value
+          - elsif include_blank.present?
+            .mb-4= include_blank
+          - else
+            .mb-4 N/A

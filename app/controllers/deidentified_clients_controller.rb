@@ -5,7 +5,9 @@
 ###
 
 class DeidentifiedClientsController < NonHmisClientsController
-  before_action :require_can_enter_deidentified_clients!
+  include HasMatchAccessContext
+  before_action :require_can_enter_deidentified_clients!, except: [:current_assessment_limited]
+  before_action :require_match_access_context!, only: [:current_assessment_limited]
   before_action :require_can_manage_deidentified_clients!, only: [:destroy]
 
   def create
@@ -108,131 +110,130 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
   helper_method :filter_terms
 
-  private
-    def deidentified_client_params
-      permitted_params = params.require(:deidentified_client).permit(
-        :client_identifier,
-        :agency_id,
-        :contact_id,
-        :race,
-        :ethnicity,
-        :gender,
-        :available,
-        :available_date,
-        :available_reason,
-        :limited_release_on_file,
-        :full_release_on_file,
-        :set_asides_housing_status,
-        :is_currently_youth,
+  private def deidentified_client_params
+    permitted_params = params.require(:deidentified_client).permit(
+      :client_identifier,
+      :agency_id,
+      :contact_id,
+      :race,
+      :ethnicity,
+      :gender,
+      :available,
+      :available_date,
+      :available_reason,
+      :limited_release_on_file,
+      :full_release_on_file,
+      :set_asides_housing_status,
+      :is_currently_youth,
+      :assessment_score,
+      :vispdat_score,
+      :vispdat_priority_score,
+      active_cohort_ids: [],
+      client_assessments_attributes: [
+        :id,
+        :type,
+        :entry_date,
         :assessment_score,
         :vispdat_score,
         :vispdat_priority_score,
-        active_cohort_ids: [],
-        client_assessments_attributes: [
-          :id,
-          :type,
-          :entry_date,
-          :assessment_score,
-          :vispdat_score,
-          :vispdat_priority_score,
-          :veteran,
-          :veteran_status,
-          :actively_homeless,
-          :days_homeless_in_the_last_three_years,
-          :date_days_homeless_verified,
-          :who_verified_days_homeless,
-          :rrh_desired,
-          :youth_rrh_desired,
-          :rrh_assessment_contact_info,
-          :income_maximization_assistance_requested,
-          :income_total_monthly,
-          :pending_subsidized_housing_placement,
-          :family_member,
-          :calculated_chronic_homelessness,
-          :income_total_annual,
-          :disabling_condition,
-          :physical_disability,
-          :developmental_disability,
-          :domestic_violence,
-          :interested_in_set_asides,
-          :required_number_of_bedrooms,
-          :required_minimum_occupancy,
-          :requires_wheelchair_accessibility,
-          :requires_elevator_access,
-          :youth_rrh_aggregate,
-          :dv_rrh_aggregate,
-          :dv_rrh_desired,
-          :veteran_rrh_desired,
-          :rrh_th_desired,
-          :sro_ok,
-          :other_accessibility,
-          :disabled_housing,
-          :documented_disability,
-          :evicted,
-          :ssvf_eligible,
-          :health_prioritized,
-          :hiv_aids,
-          :is_currently_youth,
-          :case_manager_contact_info,
-          :shelter_name,
-          :phone_number,
-          :email_addresses,
-          :mailing_address,
-          :day_locations,
-          :night_locations,
-          :other_contact,
-          :household_size,
-          :hoh_age,
-          :current_living_situation,
-          :pending_housing_placement_type,
-          :pending_housing_placement_type_other,
-          :maximum_possible_monthly_rent,
-          :possible_housing_situation,
-          :possible_housing_situation_other,
-          :no_rrh_desired_reason,
-          :no_rrh_desired_reason_other,
-          :accessibility_other,
-          :hiv_housing,
-          :medical_care_last_six_months,
-          :intensive_needs_other,
-          :additional_homeless_nights,
-          :homeless_night_range,
-          :notes,
-          {
-            neighborhood_interests: [],
-            provider_agency_preference: [],
-            affordable_housing: [],
-            high_covid_risk: [],
-            service_need_indicators: [],
-            intensive_needs: [],
-            background_check_issues: [],
-          },
-        ],
-      )
-    end
+        :veteran,
+        :veteran_status,
+        :actively_homeless,
+        :days_homeless_in_the_last_three_years,
+        :date_days_homeless_verified,
+        :who_verified_days_homeless,
+        :rrh_desired,
+        :youth_rrh_desired,
+        :rrh_assessment_contact_info,
+        :income_maximization_assistance_requested,
+        :income_total_monthly,
+        :pending_subsidized_housing_placement,
+        :family_member,
+        :calculated_chronic_homelessness,
+        :income_total_annual,
+        :disabling_condition,
+        :physical_disability,
+        :developmental_disability,
+        :domestic_violence,
+        :interested_in_set_asides,
+        :required_number_of_bedrooms,
+        :required_minimum_occupancy,
+        :requires_wheelchair_accessibility,
+        :requires_elevator_access,
+        :youth_rrh_aggregate,
+        :dv_rrh_aggregate,
+        :dv_rrh_desired,
+        :veteran_rrh_desired,
+        :rrh_th_desired,
+        :sro_ok,
+        :other_accessibility,
+        :disabled_housing,
+        :documented_disability,
+        :evicted,
+        :ssvf_eligible,
+        :health_prioritized,
+        :hiv_aids,
+        :is_currently_youth,
+        :case_manager_contact_info,
+        :shelter_name,
+        :phone_number,
+        :email_addresses,
+        :mailing_address,
+        :day_locations,
+        :night_locations,
+        :other_contact,
+        :household_size,
+        :hoh_age,
+        :current_living_situation,
+        :pending_housing_placement_type,
+        :pending_housing_placement_type_other,
+        :maximum_possible_monthly_rent,
+        :possible_housing_situation,
+        :possible_housing_situation_other,
+        :no_rrh_desired_reason,
+        :no_rrh_desired_reason_other,
+        :accessibility_other,
+        :hiv_housing,
+        :medical_care_last_six_months,
+        :intensive_needs_other,
+        :additional_homeless_nights,
+        :homeless_night_range,
+        :notes,
+        {
+          neighborhood_interests: [],
+          provider_agency_preference: [],
+          affordable_housing: [],
+          high_covid_risk: [],
+          service_need_indicators: [],
+          intensive_needs: [],
+          background_check_issues: [],
+        },
+      ],
+    )
+  end
 
-    def append_client_identifier dirty_params
-      dirty_params[:last_name] = "Anonymous - #{dirty_params[:client_identifier]}"
-      dirty_params[:first_name] = "Anonymous - #{dirty_params[:client_identifier]}"
+  private def append_client_identifier dirty_params
+    dirty_params[:last_name] = "Anonymous - #{dirty_params[:client_identifier]}"
+    dirty_params[:first_name] = "Anonymous - #{dirty_params[:client_identifier]}"
 
-      return dirty_params
-    end
+    return dirty_params
+  end
 
-    def clean_params dirty_params
-      dirty_params = clean_client_params(dirty_params)
-      dirty_params = clean_assessment_params(dirty_params)
+  private def clean_params dirty_params
+    dirty_params = clean_client_params(dirty_params)
+    dirty_params = clean_assessment_params(dirty_params)
 
-      return append_client_identifier(dirty_params)
-    end
+    return append_client_identifier(dirty_params)
+  end
 
-    def import_params
-      params.require(:deidentified_clients_xlsx).permit(
-        :file,
-        :update_availability,
-      )
-    end
+  private def import_params
+    params.require(:deidentified_clients_xlsx).permit(
+      :file,
+      :update_availability,
+    )
+  end
 
-    def client_type
-      _('De-Identified Clients')
-    end
+  private def client_type
+    _('De-Identified Clients')
+  end
 end
