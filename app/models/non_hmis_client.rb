@@ -121,8 +121,8 @@ class NonHmisClient < ApplicationRecord
 
   def set_project_client_fields project_client
     # NonHmisClient fields
-    project_client.first_name = first_name
-    project_client.last_name = last_name
+    project_client.first_name = fix_first_name
+    project_client.last_name = fix_last_name
     project_client.non_hmis_client_identifier = client_identifier
     project_client.active_cohort_ids = active_cohort_ids
     project_client.date_of_birth = date_of_birth
@@ -197,6 +197,14 @@ class NonHmisClient < ApplicationRecord
     project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false
 
     project_client.needs_update = true
+  end
+
+  private def fix_first_name
+    first_name
+  end
+
+  private def fix_last_name
+    last_name
   end
 
   def build_assessment_if_missing
