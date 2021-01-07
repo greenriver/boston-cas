@@ -14,6 +14,7 @@ gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 
 gem "haml-rails"
 gem 'autoprefixer-rails'
+#updating this to 4.5.3 causes a weird missing variable bug
 gem 'bootstrap', '~> 4.3.1'
 gem "jquery-rails"
 gem 'coffee-rails'
