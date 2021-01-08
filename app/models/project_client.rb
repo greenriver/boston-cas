@@ -89,7 +89,7 @@ class ProjectClient < ApplicationRecord
     end&.compact || []
   end
 
-  def self.calculate_vispdat_priority_score(vispdat_score:, days_homeless:, veteran_status:, family_status: false, youth_status: false)
+  def self.calculate_vispdat_priority_score(vispdat_score:, days_homeless:, veteran_status:, family_status:, youth_status:)
     return nil unless vispdat_score.present?
 
     if Config.get(:vispdat_prioritization_scheme) == 'veteran_status'
