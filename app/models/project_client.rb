@@ -89,13 +89,18 @@ class ProjectClient < ApplicationRecord
     end&.compact || []
   end
 
-  def self.calculate_vispdat_priority_score(vispdat_score:, days_homeless:, veteran_status:)
+  def self.calculate_vispdat_priority_score(vispdat_score:, days_homeless:, veteran_status:, family_status:, youth_status:)
     return nil unless vispdat_score.present?
+
     if Config.get(:vispdat_prioritization_scheme) == 'veteran_status'
       prioritization_bump = 0
-      if veteran_status
-        prioritization_bump = 100
-      end
+      prioritization_bump += 100 if veteran_status
+      vispdat_score + prioritization_bump
+    elsif Config.get(:vispdat_prioritization_scheme) == 'vets_family_youth'
+      prioritization_bump = 0
+      prioritization_bump += 100 if veteran_status
+      prioritization_bump += 50 if family_status
+      prioritization_bump += 25 if youth_status
       vispdat_score + prioritization_bump
     else # Default Config.get(:vispdat_prioritization_scheme) == 'length_of_time'
       vispdat_prioritized_days_score = if days_homeless >= 1095
@@ -113,8 +118,9 @@ class ProjectClient < ApplicationRecord
 
   def self.vispdat_prioritization_schemes
     {
-      'Veteran Status' => 'veteran_status',
+      'Veteran Status (100)' => 'veteran_status',
       'Length of Time' => 'length_of_time',
+      'Vets (100), family (50), youth (25)' => 'vets_family_youth',
     }
   end
 end

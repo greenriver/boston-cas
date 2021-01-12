@@ -70,7 +70,10 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     result[:vispdat_priority_score] = ProjectClient.calculate_vispdat_priority_score(
       vispdat_score: result[:vispdat_score],
       days_homeless: result[:days_homeless_in_the_last_three_years],
-      veteran_status: result[:veteran])
+      veteran_status: result[:veteran],
+      family_status: result[:family_member],
+      youth_status: result[:is_currently_youth],
+    )
 
     result[:last_name] = "Anonymous - #{row[:client_identifier]}"
     result[:first_name] = "Anonymous - #{row[:client_identifier]}"
