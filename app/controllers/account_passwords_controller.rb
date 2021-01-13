@@ -13,7 +13,6 @@ class AccountPasswordsController < ApplicationController
   end
 
   def update
-    debugger
     if @user.update_with_password(account_params)
       flash[:notice] = "Password was changed."
       bypass_sign_in(@user)
