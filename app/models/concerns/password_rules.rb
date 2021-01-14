@@ -12,7 +12,7 @@ module PasswordRules
     @password_rules ||= begin
       rules = []
       # rules += password_expiration_rules
-      # rules += password_length_rules
+      rules += password_length_rules
       # rules += complexity_rules
       # rules += password_reuse_rules
       rules += password_pwned_rules
