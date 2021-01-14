@@ -20,15 +20,15 @@ module PasswordRules
     end
   end
 
-  # private def password_length_rules
-  #   [
-  #     "Passwords must be at least #{minimum_password_length} characters in length",
-  #   ]
-  # end
+  private def password_length_rules
+    [
+      "Passwords must be at least #{minimum_password_length} characters in length",
+    ]
+  end
 
-  # private def minimum_password_length
-  #   Devise.password_length.first
-  # end
+  private def minimum_password_length
+    Devise.password_length.first
+  end
 
   # private def password_expiration_rules
   #   # if false, passwords don't expire

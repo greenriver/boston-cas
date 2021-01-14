@@ -21,7 +21,8 @@ class User < ApplicationRecord
          :lockable,
          :timeoutable,
          :confirmable,
-         :pwned_password
+         :pwned_password,
+         password_length: 10..128,
   #has_secure_password # not needed with devise
 
   attr_accessor :editable_programs
