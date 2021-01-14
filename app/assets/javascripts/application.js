@@ -42,5 +42,7 @@
 //= require site_menu
 //= require single_option_checkboxes
 //= require section_toggle
+//= require list_search
+//= require role_table
 
 //= require init

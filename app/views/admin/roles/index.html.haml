@@ -1,29 +1,88 @@
 = render 'menus/admin_tabs'
 - content_for(:title, t('.title'))
-.row
-  .col-sm-8
-    %h1= t '.title'
-  .col-sm-4
-    = link_to new_admin_role_path, class: 'btn btn-primary pull-right margin-bottom-02' do
-      %span.icon-plus
-      Add a role
-.row.table-utilities
-  .col-sm-8
-    %p= page_entries_info @roles, entry_name: 'role account'
-.row
-  .col-sm-12
-    %table.table.table-fixed.table-striped
-      %thead
-        %th Permission:
+%h1= t '.title'
+.table-responsive.j-table.c-save-table{data: {objects: @roles.map(&:id).to_json.html_safe}}
+  .c-save-table__submit-container.j-table__submit-container
+    .c-save-table__submit-container-error-text
+    = hidden_field_tag :authenticity_token, form_authenticity_token, class: 'j-authenticity-token'
+    = link_to 'Cancel', '', class: 'btn btn-link j-table__cancel'
+    %button.j-table__submit-changes.c-save-table__submit-changes.btn.btn-primary{type: 'button'} Save changes
+  %table.table.c-table.c-table--striped.j-table__table
+    %thead
+      %tr.c-table__header.c-table__header--primary
+        %th.c-table__cell--border-r-primary.v-align-middle{colspan:1, style: 'min-width: 400px'}
+          .d-flex.align-items-center.flex-wrap
+            %span.c-table__header-title Permissions
+
+        %th{colspan:@roles.length}
+          %div.d-flex.align-items-center.flex-wrap.justify-content-between
+            .d-flex.flex-column.mr-4
+              %span.c-table__header-title.mr-4.mb-0 Roles
+              .c-table__icon-key
+                Displaying
+                = pluralize(@roles.count, 'role')
+            = link_to new_admin_role_path, class: 'btn btn-secondary btn-sm d-block mt-2 mb-2' do
+              %span.icon-plus
+              Add a role
+      %tr.c-table__header.c-table__header--secondary
+        %th.c-table__cell--border-r-primary{colspan:1}
+          -# .mb-2
+          -#   %select.j-table__search.form-control.w-100.select2{multiple: true, placeholder: 'Select permission categories'}
+          -#     -# %option.disabled{disabled: true} Select cateories
+          -#     - Role.permission_categories.each do |cat|
+          -#       %option{value: cat}= cat
+          %input.form-control.j-table__search.w-100{placeholder: 'Search permissions'}
         - @roles.each do |role|
-          %th.text-center= link_to role.name, action: :edit, id: role
-      %tbody
-        - Role.permissions.each do |permission|
-          %tr
-            %td
-              =permission.to_s.humanize
-            - @roles.each do |role|
-              %td.text-center=checkmark(role.send(permission))
+          %th.c-table__cell--border-r-secondary.c-table__header-title.text-center.j-table__object{data:{role: role.id}}
+            = link_to role.name, action: :edit, id: role
+
+    %tbody
+      - Role.permissions.each do |permission|
+        %tr.j-table__row{'data-title' => permission.to_s.humanize}
+          %td.c-table__cell--border-r-primary{colspan:1}
+            .c-table__cell-title.d-flex.align-items-center.flex-wrap
+              %span.mr-1
+                = permission.to_s.humanize
+          - @roles.each do |role|
+            - permitted = role.send(permission)
+            %td.c-table__cell--border-r-secondary.text-center.v-align-middle.c-table__cell-icon.j-table__input{data:{role: role.id}, class: (permitted ? 'c-table__cell-icon--active' : 'c-table__cell-icon--inactive')}
+              .form-check.text-center
+                - id = permission.to_s
+                - name = "role[#{id}]"
+                - id += "_#{role.id}"
+                %input{name: name, type: 'hidden', value: 0}
+                .c-checkbox.d-flex.align-items-center.justify-content-center
+                  %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
+                  %label{for: id}
+
+- content_for :page_js do
+  :javascript
+    new App.RoleTable()
+
+-# .row
+-#   .col-sm-8
+-#     %h1= t '.title'
+-#   .col-sm-4
+-#     = link_to new_admin_role_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+-#       %span.icon-plus
+-#       Add a role
+-# .row.table-utilities
+-#   .col-sm-8
+-#     %p= page_entries_info @roles, entry_name: 'role account'
+-# .row
+-#   .col-sm-12
+-#     %table.table.table-fixed.table-striped
+-#       %thead
+-#         %th Permission:
+-#         - @roles.each do |role|
+-#           %th.text-center= link_to role.name, action: :edit, id: role
+-#       %tbody
+-#         - Role.permissions.each do |permission|
+-#           %tr
+-#             %td
+-#               =permission.to_s.humanize
+-#             - @roles.each do |role|
+-#               %td.text-center=checkmark(role.send(permission))
 
 
-    %p= paginate @roles
+-#     %p= paginate @roles

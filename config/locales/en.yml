@@ -96,6 +96,9 @@ en:
       index:
         title: 'Manage User Accounts'
         search_prompt: 'Search user accounts...'
+    roles:
+      index:
+        title: 'Manage Roles and Permissions'
   vouchers:
     index:
       title: 'Vouchers'
