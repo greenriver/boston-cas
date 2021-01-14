@@ -210,10 +210,11 @@ class ClientOpportunityMatch < ApplicationRecord
     program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
   end
 
-  def self.accessible_by_user user
+  def self.accessible_by_user(user)
     return none unless user
     # admins & DND see everything
     return all if user.can_view_all_matches?
+
     # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
     contact = user.contact
     contact_subquery = ClientOpportunityMatchContact
