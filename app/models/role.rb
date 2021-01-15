@@ -108,6 +108,7 @@ class Role < ApplicationRecord
       :can_delete_matches,
       :can_reopen_matches,
       :can_edit_help,
+      :can_audit_users,
     ]
   end
 

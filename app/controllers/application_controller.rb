@@ -8,6 +8,7 @@ require "application_responder"
 
 class ApplicationController < ActionController::Base
   include ControllerAuthorization
+  include ActivityLogger
   include ArelHelper
   self.responder = ApplicationResponder
   respond_to :html, :js, :json, :csv
@@ -22,6 +23,9 @@ class ApplicationController < ActionController::Base
   helper_method :locale
   before_action :set_gettext_locale
   before_action :set_hostname
+
+  before_action :compose_activity, except: [:poll, :active, :rollup, :image] # , only: [:show, :index, :merge, :unmerge, :edit, :update, :destroy, :create, :new]
+  after_action :log_activity, except: [:poll, :active, :rollup, :image] # , only: [:show, :index, :merge, :unmerge, :edit, :destroy, :create, :new]
 
   #before_action :_basic_auth, if: -> { Rails.env.staging? }
   before_action :set_paper_trail_whodunnit
