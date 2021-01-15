@@ -32,6 +32,7 @@ class Role < ApplicationRecord
       :can_manage_neighborhoods,
       :can_manage_tags,
       :can_edit_help,
+      :can_audit_users,
     ]
   end
 

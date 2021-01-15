@@ -69,6 +69,11 @@
                         %i.icon-pencil
                         Edit
 
+                    .w-100
+                      = link_to admin_user_audit_path(user), class: 'btn btn-sm btn-secondary mb-2' do
+                        %i.icon-eye{data: {toggle: :tooltip, title: 'Audit'}}
+                        Audit
+
                     - if can_become_other_users? && user.impersonateable_by?(true_user)
                       .w-100
                         = link_to impersonate_admin_user_path(true_user, become_id: user.id), method: :post, class: 'btn btn-sm btn-secondary mb-2' do

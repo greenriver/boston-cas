@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_204349) do
+ActiveRecord::Schema.define(version: 2021_01_15_142722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1199,6 +1199,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_204349) do
     t.boolean "can_reopen_matches", default: false
     t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_help", default: false
+    t.boolean "can_audit_users", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
