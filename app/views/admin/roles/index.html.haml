@@ -46,16 +46,16 @@
                 - id = permission.to_s
                 - name = "role[#{id}]"
                 - id += "_#{role.id}"
-                .c-checkbox.d-flex.align-items-center.justify-content-center
-                  %input{name: name, type: 'hidden', value: 0}
-                  %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
-                  %label{for: id}
-                    %span.c-checkbox__check-container
-                      %span.c-checkbox__check-icon
-                -# %input{name: name, type: 'hidden', value: 0}
-                -# .c-checkbox
+                -# .c-checkbox.d-flex.align-items-center.justify-content-center
+                -#   %input{name: name, type: 'hidden', value: 0}
                 -#   %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
                 -#   %label{for: id}
+                -#     %span.c-checkbox__check-container
+                -#       %span.c-checkbox__check-icon
+                %input{name: name, type: 'hidden', value: 0}
+                .c-checkbox.d-flex.align-items-center.justify-content-center
+                  %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
+                  %label{for: id}
 
 - content_for :page_js do
   :javascript
