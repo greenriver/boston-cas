@@ -7,13 +7,22 @@
 class User < ApplicationRecord
   include HasRequirements
   include Rails.application.routes.url_helpers
+  include PasswordRules
   has_paper_trail
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         :lockable, :timeoutable, :confirmable, :pwned_password
+  devise :invitable,
+         :database_authenticatable,
+         :recoverable,
+         :rememberable,
+         :trackable,
+         :validatable,
+         :lockable,
+         :timeoutable,
+         :confirmable,
+         :pwned_password,
+         password_length: 10..128
   #has_secure_password # not needed with devise
 
   attr_accessor :editable_programs
