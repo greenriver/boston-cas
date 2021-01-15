@@ -26,11 +26,7 @@
               Add a role
       %tr.c-table__header.c-table__header--secondary
         %th.c-table__cell--border-r-primary{colspan:1}
-          -# .mb-2
-          -#   %select.j-table__search.form-control.w-100.select2{multiple: true, placeholder: 'Select permission categories'}
-          -#     -# %option.disabled{disabled: true} Select cateories
-          -#     - Role.permission_categories.each do |cat|
-          -#       %option{value: cat}= cat
+          .mb-2
           %input.form-control.j-table__search.w-100{placeholder: 'Search permissions'}
         - @roles.each do |role|
           %th.c-table__cell--border-r-secondary.c-table__header-title.text-center.j-table__object{data:{role: role.id}}
@@ -50,10 +46,16 @@
                 - id = permission.to_s
                 - name = "role[#{id}]"
                 - id += "_#{role.id}"
-                %input{name: name, type: 'hidden', value: 0}
                 .c-checkbox.d-flex.align-items-center.justify-content-center
+                  %input{name: name, type: 'hidden', value: 0}
                   %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
                   %label{for: id}
+                    %span.c-checkbox__check-container
+                      %span.c-checkbox__check-icon
+                -# %input{name: name, type: 'hidden', value: 0}
+                -# .c-checkbox
+                -#   %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
+                -#   %label{for: id}
 
 - content_for :page_js do
   :javascript
