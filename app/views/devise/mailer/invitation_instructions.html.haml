@@ -6,7 +6,7 @@
   #{_('City of Boston')} Coordinated Access System.  Please follow the link below to finish
   setting up your account:
   %br
-  = link_to accept_invitation_url(@resource, invitation_token: @token), accept_invitation_url(@resource, invitation_token: @token)
+  = link_to 'Setup Account', accept_invitation_url(@resource, invitation_token: @token)
 
 %p.content
   If the link doesn't work, you can copy and paste
