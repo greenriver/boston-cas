@@ -25,6 +25,7 @@
 //= require bootstrap-datetimepicker
 //= require jquery.periodicalupdater
 //= require jquery.updater
+//= require DataTables/datatables.min
 
 //////////////////////////
 // App specific code
