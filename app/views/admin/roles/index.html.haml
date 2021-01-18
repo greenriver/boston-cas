@@ -46,12 +46,6 @@
                 - id = permission.to_s
                 - name = "role[#{id}]"
                 - id += "_#{role.id}"
-                -# .c-checkbox.d-flex.align-items-center.justify-content-center
-                -#   %input{name: name, type: 'hidden', value: 0}
-                -#   %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
-                -#   %label{for: id}
-                -#     %span.c-checkbox__check-container
-                -#       %span.c-checkbox__check-icon
                 %input{name: name, type: 'hidden', value: 0}
                 .c-checkbox.d-flex.align-items-center.justify-content-center
                   %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
@@ -60,31 +54,3 @@
 - content_for :page_js do
   :javascript
     new App.RoleTable()
-
--# .row
--#   .col-sm-8
--#     %h1= t '.title'
--#   .col-sm-4
--#     = link_to new_admin_role_path, class: 'btn btn-primary pull-right margin-bottom-02' do
--#       %span.icon-plus
--#       Add a role
--# .row.table-utilities
--#   .col-sm-8
--#     %p= page_entries_info @roles, entry_name: 'role account'
--# .row
--#   .col-sm-12
--#     %table.table.table-fixed.table-striped
--#       %thead
--#         %th Permission:
--#         - @roles.each do |role|
--#           %th.text-center= link_to role.name, action: :edit, id: role
--#       %tbody
--#         - Role.permissions.each do |permission|
--#           %tr
--#             %td
--#               =permission.to_s.humanize
--#             - @roles.each do |role|
--#               %td.text-center=checkmark(role.send(permission))
-
-
--#     %p= paginate @roles
