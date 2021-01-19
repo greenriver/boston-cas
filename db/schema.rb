@@ -10,35 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_200902) do
+ActiveRecord::Schema.define(version: 2020_11_24_204349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "activity_logs", force: :cascade do |t|
-    t.string "item_model"
-    t.integer "item_id"
-    t.string "title"
-    t.integer "user_id", null: false
-    t.string "controller_name", null: false
-    t.string "action_name", null: false
-    t.string "method"
-    t.string "path"
-    t.string "ip_address", null: false
-    t.string "session_hash"
-    t.text "referrer"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["controller_name"], name: "index_activity_logs_on_controller_name"
-    t.index ["created_at", "item_model", "user_id"], name: "index_activity_logs_on_created_at_and_item_model_and_user_id"
-    t.index ["created_at"], name: "activity_logs_created_at_idx", using: :brin
-    t.index ["created_at"], name: "created_at_idx", using: :brin
-    t.index ["item_model", "user_id", "created_at"], name: "index_activity_logs_on_item_model_and_user_id_and_created_at"
-    t.index ["item_model", "user_id"], name: "index_activity_logs_on_item_model_and_user_id"
-    t.index ["item_model"], name: "index_activity_logs_on_item_model"
-    t.index ["user_id", "item_model", "created_at"], name: "index_activity_logs_on_user_id_and_item_model_and_created_at"
-    t.index ["user_id"], name: "index_activity_logs_on_user_id"
-  end
 
   create_table "agencies", id: :serial, force: :cascade do |t|
     t.string "name"
@@ -1224,7 +1199,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_200902) do
     t.boolean "can_reopen_matches", default: false
     t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_help", default: false
-    t.boolean "can_audit_users", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1488,8 +1462,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_200902) do
     t.string "request_id"
     t.string "notification_code"
     t.text "object_changes"
-    t.integer "referenced_user_id"
-    t.string "referenced_entity_name"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
