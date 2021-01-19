@@ -146,6 +146,30 @@ class User < ApplicationRecord
     true
   end
 
+  def self.describe_changes(version, changes)
+    changes.slice(*whitelist_for_changes_display).map do |name, values|
+      "Changed #{humanize_attribute_name(name)}: from \"#{values.first}\" to \"#{values.last}\"."
+    end
+  end
+
+  def self.humanize_attribute_name(name)
+    name.humanize.titleize
+  end
+
+  def self.whitelist_for_changes_display
+    [
+      'first_name',
+      'last_name',
+      'email',
+      'phone',
+      'agency',
+      'receive_file_upload_notifications',
+      'notify_of_vispdat_completed',
+      'notify_on_anomaly_identified',
+      'receive_account_request_notifications',
+    ].freeze
+  end
+
   def can_see_non_hmis_clients?
     can_enter_deidentified_clients? || can_manage_deidentified_clients? || can_enter_identified_clients? || can_manage_identified_clients? ||
       can_manage_imported_clients?

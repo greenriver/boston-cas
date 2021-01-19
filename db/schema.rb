@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_15_175051) do
+ActiveRecord::Schema.define(version: 2021_01_19_200902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1488,6 +1488,8 @@ ActiveRecord::Schema.define(version: 2021_01_15_175051) do
     t.string "request_id"
     t.string "notification_code"
     t.text "object_changes"
+    t.integer "referenced_user_id"
+    t.string "referenced_entity_name"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
