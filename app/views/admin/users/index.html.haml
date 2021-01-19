@@ -69,16 +69,18 @@
                         %i.icon-pencil
                         Edit
 
-                    .w-100
-                      = link_to admin_user_audit_path(user), class: 'btn btn-sm btn-secondary mb-2' do
-                        %i.icon-eye{data: {toggle: :tooltip, title: 'Audit'}}
-                        Audit
+                    - if can_audit_users?
+                      .w-100
+                        = link_to admin_user_audit_path(user), class: 'btn btn-sm btn-secondary mb-2' do
+                          %i.icon-eye{data: {toggle: :tooltip, title: 'Audit'}}
+                          Audit
 
                     - if can_become_other_users? && user.impersonateable_by?(true_user)
                       .w-100
                         = link_to impersonate_admin_user_path(true_user, become_id: user.id), method: :post, class: 'btn btn-sm btn-secondary mb-2' do
                           %i.icon-enter
                           Become
+                          
                     - if user.valid?
                       .w-100
                         = link_to admin_user_path(user),  method: :delete, data: {confirm: "Would you really like to de-activate the account? #{user.name} will no longer be able to login."}, class: 'btn btn-sm btn-danger mb-2 text-nowrap' do

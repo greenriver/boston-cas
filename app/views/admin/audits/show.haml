@@ -11,7 +11,6 @@
       %tr
         %th Action
         %th Item
-        %th Item Type
         %th Date
         %th IP Address
     %tbody
@@ -24,10 +23,6 @@
               = i.action_name
 
           %td= link_to title, i.path
-          %td
-            - tooltip = "Class: #{i.item_model}"
-            %span.action{data: {toggle: :tooltip, title: tooltip}}
-              = i.clean_object_name
           %td= i.created_at
           %td= i.ip_address
 %p= paginate @activity_log
