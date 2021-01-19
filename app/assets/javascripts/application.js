@@ -25,6 +25,7 @@
 //= require bootstrap-datetimepicker
 //= require jquery.periodicalupdater
 //= require jquery.updater
+//= require DataTables/datatables.min
 
 //////////////////////////
 // App specific code
@@ -42,5 +43,7 @@
 //= require site_menu
 //= require single_option_checkboxes
 //= require section_toggle
+//= require list_search
+//= require role_table
 
 //= require init

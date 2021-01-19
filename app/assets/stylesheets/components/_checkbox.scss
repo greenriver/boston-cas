@@ -1,3 +1,35 @@
+.c-checkbox input:checked,
+.c-checkbox input:not(:checked) {
+  position: absolute;
+  left: -9999px;
+}
+
+.c-checkbox input:checked + label,
+.c-checkbox input:not(:checked) + label {
+  @include checkbox-default;
+}
+
+.c-checkbox input:not(:checked) + label {
+  @include checkbox-not-checked;
+}
+
+.c-checkbox input:checked + label {
+  @include checkbox-checked;
+}
+
+.c-checkbox input.dirty:checked + label {
+  @include checkbox-checked-dirty;
+}
+.c-checkbox input.dirty:not(:checked) + label {
+  @include checkbox-not-checked-dirty;
+}
+
+.c-checkbox--round {
+  &::before {
+    border-radius: 50%;
+  }
+}
+
 /* .c-checkbox { } */
 
 .c-checkbox input:checked,

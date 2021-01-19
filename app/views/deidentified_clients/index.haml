@@ -5,7 +5,7 @@
   - content_for :add_action do
     = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
       %span.icon-plus
-      Add a Deidentifed Client
+      Add a Deidentified Client
 
   - content_for :data_actions do
     - if can_upload_deidentified_clients?
@@ -45,6 +45,6 @@
           Download
     = link_to new_deidentified_client_path, class: 'btn btn-sm btn-primary ml-auto mb-auto' do
       %span.icon-plus
-      Add a Deidentifed Client
+      Add a Deidentified Client
   = render 'menus/non_hmis_clients'
   = render 'client_table'

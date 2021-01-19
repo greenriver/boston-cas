@@ -1,0 +1,26 @@
+.d-none--empty {
+  &:empty {
+    display: none;
+  }
+}
+
+.inline {
+  display: inline !important;
+}
+
+.hidden,
+.hide {
+  display: none;
+}
+
+.d-sm-none {
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}
+
+.none-found {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.4rem;
+}

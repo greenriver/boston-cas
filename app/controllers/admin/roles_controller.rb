@@ -7,15 +7,13 @@
 module Admin
   class RolesController < ApplicationController
     before_action :require_can_edit_roles!
-    helper_method :sort_column, :sort_direction
+    before_action :set_role, only: [:edit, :update, :destroy]
+
     require 'active_support'
     require 'active_support/core_ext/string/inflections'
 
     def index
-      # sort / paginate
-      @roles = role_scope
-        .order(sort_column => sort_direction)
-        .page(params[:page]).per(25)
+      @roles = role_scope.order(name: :asc)
     end
 
     def new
@@ -23,55 +21,49 @@ module Admin
     end
 
     def edit
-      @role = role_scope.find params[:id]
+      @users = User.joins(:roles).merge(Role.where(id: @role.id))
     end
 
     def update
-      @role = role_scope.find params[:id]
       @role.update(role_params)
-      if @role.save
-        redirect_to({action: :index}, notice: 'Role updated')
-      else
-        flash[:error] = 'Please review the form problems below'
-        render :edit
+      respond_to do |format|
+        format.html do
+          respond_with(@role, location: admin_roles_path)
+        end
+        format.json do
+          render(json: nil, status: :ok) if @role.errors.none?
+          return
+        end
       end
     end
 
     def create
-      @role = Role.new(role_params)
-      if @role.save
-        redirect_to({action: :index}, notice: 'Role created')
-      else
-        flash[:error] = 'Please review the form problems below'
-        render :edit
-      end
+      @role = Role.create(role_params)
+      respond_with(@role, location: admin_roles_path)
     end
 
     def destroy
-      @role = role_scope.find params[:id]
       @role.destroy
       redirect_to({action: :index}, notice: 'Role deleted')
     end
 
     private
-      def role_scope
-        Role.all
-      end
+      
+    def set_role
+      @role = role_scope.find(params[:id].to_i)
+    end
 
-      def role_params
-        params.require(:role).
-          permit(
-            :name,
-            Role.permissions
-          )
-      end
-      def sort_column
-        role_scope.column_names.include?(params[:sort]) ? params[:sort] : 'name'
-      end
+    def role_scope
+      Role.all
+    end
 
-      def sort_direction
-        %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-      end
+    def role_params
+      params.require(:role).
+        permit(
+          :name,
+          Role.permissions
+        )
+    end
   end
 
 end
