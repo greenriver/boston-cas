@@ -77,6 +77,3 @@ app/views/root/_homepage_content.haml
 
 # Ignore docker certificates
 docker/nginx-proxy/certs
-
-# Ignore vendor cache
-vendor/cache
