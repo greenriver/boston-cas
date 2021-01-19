@@ -1,3 +1,8 @@
+# NOTE: If you see this error
+# I18n::InvalidLocale: :en is not a valid locale
+# that probably means your database isn't fully set up, and you may
+# need to comment out all Gettext gems in the Gemfile
+# and remove this initializer temporarily 
 # db access is cached <-> only first lookup hits the db
 def database_exists?
   ActiveRecord::Base.connection
