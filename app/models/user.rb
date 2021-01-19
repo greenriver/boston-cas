@@ -15,7 +15,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :lockable, :timeoutable, :confirmable, :pwned_password
   #has_secure_password # not needed with devise
-
+  # Connect users to login attempts
+  has_many :login_activities, as: :user
+  
   attr_accessor :editable_programs
 
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
