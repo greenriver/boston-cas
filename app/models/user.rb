@@ -24,7 +24,9 @@ class User < ApplicationRecord
          :pwned_password,
          password_length: 10..128
   #has_secure_password # not needed with devise
-
+  # Connect users to login attempts
+  has_many :login_activities, as: :user
+  
   attr_accessor :editable_programs
 
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
@@ -151,6 +153,30 @@ class User < ApplicationRecord
   # TODO make this depend on some attribute(s) configurable by the user and/or admins
   def in_app_messages?
     true
+  end
+
+  def self.describe_changes(version, changes)
+    changes.slice(*whitelist_for_changes_display).map do |name, values|
+      "Changed #{humanize_attribute_name(name)}: from \"#{values.first}\" to \"#{values.last}\"."
+    end
+  end
+
+  def self.humanize_attribute_name(name)
+    name.humanize.titleize
+  end
+
+  def self.whitelist_for_changes_display
+    [
+      'first_name',
+      'last_name',
+      'email',
+      'phone',
+      'agency',
+      'receive_file_upload_notifications',
+      'notify_of_vispdat_completed',
+      'notify_on_anomaly_identified',
+      'receive_account_request_notifications',
+    ].freeze
   end
 
   def can_see_non_hmis_clients?
