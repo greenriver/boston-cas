@@ -166,7 +166,9 @@ Rails.application.routes.draw do
   resources :neighborhoods
   resources :tags
 
-  resource :account, only: [:edit, :update]
+  resource :account, only: [:edit, :update] do
+    get :locations, on: :member
+  end
   resource :account_email, only: [:edit, :update]
   resource :account_password, only: [:edit, :update]
 
