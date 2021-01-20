@@ -31,7 +31,7 @@
         = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact select2--full-width' }, disabled: disabled
 
 .c-question
-  = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Limited Coordinated Access System Release on file'#, disabled: disabled
+  = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Limited Coordinated Access System Release on file', disabled: disabled
 
 .c-question
   = render 'non_hmis_clients/inputs/status', f: form, disabled: disabled

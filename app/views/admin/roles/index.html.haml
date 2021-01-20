@@ -47,7 +47,7 @@
                 - name = "role[#{id}]"
                 - id += "_#{role.id}"
                 %input{name: name, type: 'hidden', value: 0}
-                .c-nonform-checkbox.d-flex.align-items-center.justify-content-center
+                .c-role_permission-checkbox.d-flex.align-items-center.justify-content-center
                   %input{id: id, name:name, type: 'checkbox', value: 1, checked: permitted}
                   %label{for: id}
 

@@ -402,7 +402,7 @@
 
 // checkbox mixins from hmis
 
-@mixin nonform-checkbox-default($size: 30px, $round: false) {
+@mixin role_permission-checkbox-default($size: 30px, $round: false) {
   $border-radius: 5px;
   @if ($round == true) { $border-radius: 50%; }
   display: flex;
@@ -449,7 +449,7 @@
   }
 }
 
-@mixin nonform-checkbox-checked() {
+@mixin role_permission-checkbox-checked() {
   &::before {
     background: $brand-success-l;
     border-color: $brand-success;
@@ -478,7 +478,7 @@
   }
 }
 
-@mixin nonform-checkbox-not-checked() {
+@mixin role_permission-checkbox-not-checked() {
   &:hover,
   &:focus {
     &::before {
@@ -501,7 +501,7 @@
   }
 }
 
-@mixin nonform-checkbox-checked-dirty() {
+@mixin role_permission-checkbox-checked-dirty() {
   &::before {
     background: $brand-warning-l;
     border-color: $brand-warning;
@@ -520,7 +520,7 @@
   }
 }
 
-@mixin nonform-checkbox-not-checked-dirty() {
+@mixin role_permission-checkbox-not-checked-dirty() {
   &::before {
     border: 2px solid $brand-warning;
   }

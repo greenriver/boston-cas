@@ -1,30 +1,30 @@
-.c-nonform-checkbox input:checked,
-.c-nonform-checkbox input:not(:checked) {
+.c-role_permission-checkbox input:checked,
+.c-role_permission-checkbox input:not(:checked) {
   position: absolute;
   left: -9999px;
 }
 
-.c-nonform-checkbox input:checked + label,
-.c-nonform-checkbox input:not(:checked) + label {
-  @include nonform-checkbox-default;
+.c-role_permission-checkbox input:checked + label,
+.c-role_permission-checkbox input:not(:checked) + label {
+  @include role_permission-checkbox-default;
 }
 
-.c-nonform-checkbox input:not(:checked) + label {
-  @include nonform-checkbox-not-checked;
+.c-role_permission-checkbox input:not(:checked) + label {
+  @include role_permission-checkbox-not-checked;
 }
 
-.c-nonform-checkbox input:checked + label {
-  @include nonform-checkbox-checked;
+.c-role_permission-checkbox input:checked + label {
+  @include role_permission-checkbox-checked;
 }
 
-.c-nonform-checkbox input.dirty:checked + label {
-  @include nonform-checkbox-checked-dirty;
+.c-role_permission-checkbox input.dirty:checked + label {
+  @include role_permission-checkbox-checked-dirty;
 }
-.c-nonform-checkbox input.dirty:not(:checked) + label {
-  @include nonform-checkbox-not-checked-dirty;
+.c-role_permission-checkbox input.dirty:not(:checked) + label {
+  @include role_permission-checkbox-not-checked-dirty;
 }
 
-.c-nonform-checkbox--round {
+.c-role_permission-checkbox--round {
   &::before {
     border-radius: 50%;
   }
