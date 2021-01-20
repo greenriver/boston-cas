@@ -270,6 +270,22 @@
   }
 }
 
+@mixin metric($size: 1) {
+  font-size: 25px * $size;
+  font-weight: 800;
+  line-height: 1;
+  min-width: 50px;
+}
+
+@mixin ie11-center-fix {
+  &::after{
+    content: '';
+    min-height: inherit;
+    font-size: 0;
+    display: block;
+  }
+}
+
 @mixin checkbox-default($size: 30px, $round: false) {
   $border-radius: 5px;
   @if ($round == true) { $border-radius: 50%; }
@@ -384,25 +400,9 @@
   }
 }
 
-@mixin metric($size: 1) {
-  font-size: 25px * $size;
-  font-weight: 800;
-  line-height: 1;
-  min-width: 50px;
-}
-
-@mixin ie11-center-fix {
-  &::after{
-    content: '';
-    min-height: inherit;
-    font-size: 0;
-    display: block;
-  }
-}
-
 // checkbox mixins from hmis
 
-@mixin checkbox-default($size: 30px, $round: false) {
+@mixin role_permission-checkbox-default($size: 30px, $round: false) {
   $border-radius: 5px;
   @if ($round == true) { $border-radius: 50%; }
   display: flex;
@@ -449,7 +449,7 @@
   }
 }
 
-@mixin checkbox-checked() {
+@mixin role_permission-checkbox-checked() {
   &::before {
     background: $brand-success-l;
     border-color: $brand-success;
@@ -478,7 +478,7 @@
   }
 }
 
-@mixin checkbox-not-checked() {
+@mixin role_permission-checkbox-not-checked() {
   &:hover,
   &:focus {
     &::before {
@@ -501,7 +501,7 @@
   }
 }
 
-@mixin checkbox-checked-dirty() {
+@mixin role_permission-checkbox-checked-dirty() {
   &::before {
     background: $brand-warning-l;
     border-color: $brand-warning;
@@ -520,7 +520,7 @@
   }
 }
 
-@mixin checkbox-not-checked-dirty() {
+@mixin role_permission-checkbox-not-checked-dirty() {
   &::before {
     border: 2px solid $brand-warning;
   }
