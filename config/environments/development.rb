@@ -102,7 +102,5 @@ Rails.application.configure do
   config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
 
   # Disable hostname checking for puma-dev
-  Rails.application.configure do
-    config.hosts.clear
-  end
+  config.hosts.clear
 end
