@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_201534) do
+ActiveRecord::Schema.define(version: 2021_01_22_132325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1225,6 +1225,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_201534) do
     t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_help", default: false
     t.boolean "can_audit_users", default: false
+    t.boolean "can_view_all_covid_pathways", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 

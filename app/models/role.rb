@@ -99,6 +99,7 @@ class Role < ApplicationRecord
       :can_enter_identified_clients,
       :can_manage_identified_clients,
       :can_export_identified_clients,
+      :can_view_all_covid_pathways,
       :can_add_cohorts_to_identified_clients,
       :can_manage_neighborhoods,
       :can_manage_tags,

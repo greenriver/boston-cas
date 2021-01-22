@@ -36,22 +36,34 @@ class IdentifiedClient < NonHmisClient
           .or(search_alternate_name(last))
       # Explicitly search for a PersonalID
     elsif social
-      where = sa[:ssn].eq(text.gsub('-',''))
+      where = sa[:ssn].eq(text.gsub('-', ''))
     elsif date
       (month, day, year) = text.split('/')
       where = sa[:date_of_birth].eq("#{year}-#{month}-#{day}")
     else
       query = "%#{text}%"
-      where = search_first_name(text)
-          .or(search_last_name(text))
-          .or(sa[:ssn].matches(query))
-          .or(search_alternate_name(text))
+      where = search_first_name(text).
+        or(search_last_name(text)).
+        or(sa[:ssn].matches(query)).
+        or(search_alternate_name(text))
     end
     where(where)
   end
 
-   def pathways_enabled?
-    Config.get('identified_client_assessment').include? 'Pathways'
+  def editable_by?(user)
+    return true if user.can_edit_all_clients?
+    # You can only edit clients at your agency
+    return true if user.agency_id == agency_id &&
+      (
+        user.can_manage_identified_clients? ||
+        user.can_enter_identified_clients?
+      )
+
+    false
+  end
+
+  def pathways_enabled?
+    Config.get('identified_client_assessment').include?('Pathways')
   end
 
   def download_headers

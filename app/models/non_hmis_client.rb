@@ -36,13 +36,15 @@ class NonHmisClient < ApplicationRecord
     where(available: true)
   end
 
-  scope :visible_to, -> (user) do
+  scope :visible_to, ->(user) do
     if user.can_edit_all_clients?
       all
+    elsif user.can_view_all_covid_pathways?
+      where(id: NonHmisAssessment.select(:non_hmis_client_id))
     else
       where(
         arel_table[:agency_id].eq(nil).
-        or(arel_table[:agency_id].eq(user.agency.id))
+        or(arel_table[:agency_id].eq(user.agency.id)),
       )
     end
   end
@@ -59,6 +61,10 @@ class NonHmisClient < ApplicationRecord
     joins(:non_hmis_assessments).
       where(family_member: status).
       distinct
+  end
+
+  scope :covid_pathways, -> do
+    where(type: ['IdentifiedCovidPathwaysAssessment', 'DeidentifiedCovidPathwaysAssessment'])
   end
 
   def self.age date:, dob:
