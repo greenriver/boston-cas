@@ -19,6 +19,17 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
+  scope :covid_pathways, -> do
+    where(type: covid_assessment_types)
+  end
+
+  def self.covid_assessment_types
+    [
+      'IdentifiedCovidPathwaysAssessment',
+      'DeidentifiedCovidPathwaysAssessment',
+    ]
+  end
+
   def title
     'Non-HMIS Assessment'
   end

@@ -7,10 +7,11 @@
     .o-pre-table-actions.o-pre-table-actions--light
       %h2.o-pre-table-actions__heading Client Information
       - if disabled
-        .o-pre-table-actions__group.ml-auto
-          = link_to send("edit_#{client_type}_client_path", @non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
-            Edit Client
-          = yield :form_actions
+        - if @non_hmis_client.editable_by?(current_user)
+          .o-pre-table-actions__group.ml-auto
+            = link_to send("edit_#{client_type}_client_path", @non_hmis_client.id), class: 'btn btn-sm btn-secondary' do
+              Edit Client
+            = yield :form_actions
       - else
         - path = @non_hmis_client.persisted? ? send("#{client_type}_client_path", @non_hmis_client.id) : send("#{client_type}_clients_path")
         = link_to path, class: 'btn btn-sm btn-secondary ml-auto' do

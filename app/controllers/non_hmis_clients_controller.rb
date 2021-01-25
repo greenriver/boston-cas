@@ -9,6 +9,7 @@ class NonHmisClientsController < ApplicationController
   include AjaxModalRails::Controller
   include MatchShow
   before_action :load_client, only: [:show, :edit, :update, :new_assessment, :destroy]
+  before_action :require_can_edit_this_client!, only: [:edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index]
@@ -26,18 +27,14 @@ class NonHmisClientsController < ApplicationController
     @non_hmis_clients = @q.result(distinct: false)
 
     # filter
-    if clean_agency.present?
-      @non_hmis_clients = @non_hmis_clients.where(agency: Agency.where(name: clean_agency))
-    end
-    if clean_cohort.present?
-      @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', clean_cohort)
-    end
-    unless clean_available.nil?
-      @non_hmis_clients = @non_hmis_clients.where(available: clean_available)
-    end
-    unless clean_family_member.nil?
-      @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member)
-    end
+    @non_hmis_clients = @non_hmis_clients.where(agency: Agency.where(name: clean_agency)) if clean_agency.present?
+
+    @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', clean_cohort) if clean_cohort.present?
+
+    @non_hmis_clients = @non_hmis_clients.where(available: clean_available) unless clean_available.nil?
+
+    @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member) unless clean_family_member.nil?
+
     respond_to do |format|
       format.html do
         # paginate
@@ -139,30 +136,27 @@ class NonHmisClientsController < ApplicationController
       end.first[:order]
     end
 
-    if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
-      sort_string += ' NULLS LAST'
-    end
-    return sort_string
+    sort_string += ' NULLS LAST' if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
+
+    sort_string
   end
 
   def build_assessment
-    assessment = assessment_type.constantize.new
+    assessment_type.constantize.new
   end
 
   def load_client
-    begin
-      @non_hmis_client = client_source.find params[:id].to_i
-      @assessment = load_assessment || @non_hmis_client.current_assessment
-    rescue
-      client = NonHmisClient.find params[:id].to_i
-      case client.type
-      when 'DeidentifiedClient'
-        redirect_to polymorphic_path([action_name, :deidentified_client], id: params[:id])
-      when 'IdentifiedClient'
-        redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
-      when 'ImportedClient'
-        redirect_to polymorphic_path([action_name, :imported_client], id: params[:id])
-      end
+    @non_hmis_client = client_source.find(params[:id].to_i)
+    @assessment = load_assessment || @non_hmis_client.current_assessment
+  rescue Exception
+    client = NonHmisClient.find params[:id].to_i
+    case client.type
+    when 'DeidentifiedClient'
+      redirect_to polymorphic_path([action_name, :deidentified_client], id: params[:id])
+    when 'IdentifiedClient'
+      redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
+    when 'ImportedClient'
+      redirect_to polymorphic_path([action_name, :imported_client], id: params[:id])
     end
   end
 
@@ -193,24 +187,24 @@ class NonHmisClientsController < ApplicationController
   end
 
   def agency_id_for_contact(contact_id)
-    if contact_id.present?
-      contact = Contact.find(contact_id.to_i)
-      return contact.user&.agency_id
-    else
-      return nil
-    end
+    return unless contact_id.present?
+
+    contact = Contact.find(contact_id.to_i)
+    contact.user&.agency_id
   end
 
   def set_active_filter
-    @active_filter = filter_terms.map{|k| params[k].present?}.any?
+    @active_filter = filter_terms.map { |k| params[k].present? }.any?
   end
 
   def clean_agency
-    NonHmisClient.possible_agencies.detect{|m| m.downcase == params[:agency]&.downcase}
+    NonHmisClient.possible_agencies.
+      detect { |m| m.downcase == params[:agency]&.downcase }
   end
 
   def clean_cohort
     return nil unless Warehouse::Base.enabled?
+
     NonHmisClient.possible_cohorts.keys.detect{|m| m.to_i == params[:cohort]&.to_i}.to_s
   end
 
@@ -238,7 +232,7 @@ class NonHmisClientsController < ApplicationController
     return dirty_params
   end
 
-  def clean_assessment_params dirty_params
+  def clean_assessment_params(dirty_params)
     assessment_params = dirty_params.dig(:client_assessments_attributes, '0')
     return dirty_params unless assessment_params.present?
 
@@ -253,6 +247,7 @@ class NonHmisClientsController < ApplicationController
       assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['youth', 'both'])
       assessment_params.extract![:youth_rrh_aggregate]
     end
+
     if assessment_params.has_key?(:dv_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['non-dv', 'both'])
       assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
@@ -265,7 +260,7 @@ class NonHmisClientsController < ApplicationController
 
     assessment_params[:user_id] = current_user.id
 
-    return dirty_params
+    dirty_params
   end
 
   private def pathways_enabled?
@@ -273,6 +268,12 @@ class NonHmisClientsController < ApplicationController
   end
 
   private def find_match
+    return if can_view_all_covid_pathways?
+
     @match = ClientOpportunityMatch.find(params[:match_id].to_i)
+  end
+
+  private def require_can_edit_this_client!
+    not_authorized! unless @non_hmis_client.editable_by?(current_user)
   end
 end

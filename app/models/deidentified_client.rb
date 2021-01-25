@@ -10,14 +10,22 @@ class DeidentifiedClient < NonHmisClient
   accepts_nested_attributes_for :client_assessments
 
   # Search only the client identifier
-  scope :text_search, -> (text) do
+  scope :text_search, ->(text) do
     return none unless text.present?
+
     text.strip!
     where(search_alternate_name(text))
   end
 
   def pathways_enabled?
-    Config.get('deidentified_client_assessment').include? 'Pathways'
+    Config.get('deidentified_client_assessment').include?('Pathways')
+  end
+
+  def editable_by?(user)
+    return true if user.can_manage_deidentified_clients?
+    return true if user.can_enter_deidentified_clients? && user.agency_id == agency_id
+
+    false
   end
 
   def download_headers
