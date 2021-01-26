@@ -1,4 +1,5 @@
 require 'yaml'
+require "active_support/core_ext/integer/time"
 Rails.application.configure do
   deliver_method = ENV.fetch('MAIL_DELIVERY_METHOD') { 'smtp' }.to_sym
   slack_config = Rails.application.config_for(:exception_notifier)[:slack]
@@ -21,6 +22,12 @@ Rails.application.configure do
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
+
+  # Log disallowed deprecations.
+  config.active_support.disallowed_deprecation = :log
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
 
   config.action_mailer.perform_caching = false
 
