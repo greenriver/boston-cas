@@ -139,6 +139,9 @@ Rails.application.routes.draw do
     resources :users, except: [:show, :new, :create] do
       resource :resend_invitation, only: :create
       resource :recreate_invitation, only: :create
+      resource :audit, only: :show
+      resource :edit_history, only: :show
+      resource :locations, only: :show
       patch :reactivate, on: :member
       member do
         post :confirm
@@ -163,7 +166,9 @@ Rails.application.routes.draw do
   resources :neighborhoods
   resources :tags
 
-  resource :account, only: [:edit, :update]
+  resource :account, only: [:edit, :update] do
+    get :locations, on: :member
+  end
   resource :account_email, only: [:edit, :update]
   resource :account_password, only: [:edit, :update]
 
