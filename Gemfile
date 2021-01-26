@@ -1,11 +1,12 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "rails", '~>6.0.3'
-gem "pg", '~> 0.20.0'
+gem "rails", '~>6.1.1'
+gem "pg"
 gem 'activerecord-import'
 
-gem 'composite_primary_keys', '~> 12.0'
+# PR at https://github.com/composite-primary-keys/composite_primary_keys/pull/531
+gem 'composite_primary_keys', git: 'https://github.com/codeodor/composite_primary_keys.git', branch: 'ar6.1'
 gem 'order_as_specified'
 gem 'bootsnap'
 gem 'bcrypt'
