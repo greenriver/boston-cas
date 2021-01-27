@@ -92,6 +92,7 @@ class ApplicationController < ActionController::Base
   def store_current_location
     return unless request.get?
     return if request.xhr? # don't store ajax calls
+
     store_location_for(:user, request.url)
   end
 
