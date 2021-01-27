@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2020 Green River Data Analysis, LLC
+# Copyright 2016 - 2021 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -26,7 +26,7 @@ class User < ApplicationRecord
   #has_secure_password # not needed with devise
   # Connect users to login attempts
   has_many :login_activities, as: :user
-  
+
   attr_accessor :editable_programs
 
   validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
