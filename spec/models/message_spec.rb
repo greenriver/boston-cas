@@ -7,7 +7,6 @@ RSpec.describe Message, type: :model do
   describe 'When no user is connected to a contact' do
     describe 'Sending a message with deliver_now' do
       it 'creates a message' do 
-        debugger
         expect do
           TestDatabaseMailer.with(email: contact.email).ping.deliver_now
         end.to change{Message.count}.by(1)
