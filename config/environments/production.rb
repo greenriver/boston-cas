@@ -2,7 +2,7 @@ require 'yaml'
 require "active_support/core_ext/integer/time"
 Rails.application.configure do
   deliver_method = ENV.fetch('MAIL_DELIVERY_METHOD') { 'smtp' }.to_sym
-  slack_config = Rails.application.config_for(:exception_notifier).fetch(:slack, nil)
+  slack_config = Rails.application.config_for(:exception_notifier)&.fetch(:slack, nil)
 
   config.cache_classes = true
   config.eager_load = true
