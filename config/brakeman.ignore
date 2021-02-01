@@ -71,6 +71,26 @@
       "note": ""
     },
     {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "272bd9135442f395012a87ac47a02fe2dcaa8bf8f7db7b78b079036a4279e439",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/ecs_tools.rb",
+      "line": 25,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "system(\"ssh #{\"ecs0.openpath.host\"} 'docker commit #{`ssh #{\"ecs0.openpath.host\"} \"docker ps -a -n 10\"`.split(/\\n/).grep(/#{IMAGE}/).first.split(/\\s/).first} shell'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EcsTools",
+        "method": "shell"
+      },
+      "user_input": "`ssh #{\"ecs0.openpath.host\"} \"docker ps -a -n 10\"`.split(/\\n/).grep(/#{IMAGE}/).first.split(/\\s/).first",
+      "confidence": "Medium",
+      "note": "deployment code takes no outside inputs"
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "2e1764ddad634fa7dcac89359aadfb0828231c0bf4a74679101e10fd8d77bfdb",
@@ -133,6 +153,26 @@
       "note": ""
     },
     {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "615f7900b129c22f4d71c443ead85e0694fc30435dfdc15e52ec03a94d2a3057",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/ecs_tools.rb",
+      "line": 38,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "exec(\"awslogs get #{group} ALL --watch\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EcsTools",
+        "method": "logs"
+      },
+      "user_input": "group",
+      "confidence": "Medium",
+      "note": "deployment code takes no outside inputs"
+    },
+    {
       "warning_type": "Mass Assignment",
       "warning_code": 70,
       "fingerprint": "6570b35f65dd8da1e96f7171d484ea7c55cd0e3267f3f30d0b60d1aeb4ab3cef",
@@ -151,6 +191,86 @@
       "user_input": null,
       "confidence": "Medium",
       "note": ""
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "6939d235d9f32e7a2694b926a5cf73222ec7b924323cb268a68c11d2a20ea082",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 315,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`docker image ls -f 'reference=#{repo_name}' | grep #{_ruby_version}--pre-cache`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_pre_cache_image_exists?"
+      },
+      "user_input": "repo_name",
+      "confidence": "Medium",
+      "note": "deployment code takes no outside inputs"
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "6cfd47b3522f879e176ed00c1639c8431e26cf5798564e7ba8e89633bdda9f61",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 150,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_check_that_you_pushed_to_remote!"
+      },
+      "user_input": "`git rev-parse --abbrev-ref HEAD`.chomp",
+      "confidence": "Medium",
+      "note": "deployment code takes no outside inputs"
+    },
+    {
+      "warning_type": "HTTP Verb Confusion",
+      "warning_code": 118,
+      "fingerprint": "7452bf4ee658fb4a4704831cce06d767e0d9310795eb7f6c3b71cd3be36cca5c",
+      "check_name": "VerbConfusion",
+      "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
+      "file": "app/controllers/application_controller.rb",
+      "line": 93,
+      "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
+      "code": "return unless request.get?",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ApplicationController",
+        "method": "store_current_location"
+      },
+      "user_input": "request.get?",
+      "confidence": "Weak",
+      "note": "I think we can ignore this since it has been working"
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "afb39717e433c0f281415f74557735acd21b0970bcf69d294dd987a63f2ee6eb",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 149,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git ls-remote origin | grep #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_check_that_you_pushed_to_remote!"
+      },
+      "user_input": "`git rev-parse --abbrev-ref HEAD`.chomp",
+      "confidence": "Medium",
+      "note": "deployment code takes no outside inputs"
     },
     {
       "warning_type": "Cross-Site Scripting",
@@ -194,6 +314,26 @@
       "note": ""
     },
     {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "b2e9f8410ba6ed5963253a0daa5e634213118de8263268da7799b1a3440965fb",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 144,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_set_revision!"
+      },
+      "user_input": "_assets_path",
+      "confidence": "Medium",
+      "note": "deployment code takes no outside inputs"
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "b7920757d198477832d7b4a533f3c99f7f36f505bfd96d7753ce1a425257521e",
@@ -220,7 +360,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called with model attribute",
       "file": "app/models/deidentified_client.rb",
-      "line": 33,
+      "line": 41,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:deidentified_client_assessment).constantize",
       "render_path": null,
@@ -372,7 +512,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called with model attribute",
       "file": "app/models/identified_client.rb",
-      "line": 72,
+      "line": 84,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:identified_client_assessment).constantize",
       "render_path": null,
@@ -519,6 +659,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-11-05 12:20:32 -0500",
-  "brakeman_version": "4.10.0"
+  "updated": "2021-02-01 20:10:36 +0000",
+  "brakeman_version": "5.0.0"
 }
