@@ -12,8 +12,9 @@
             = contact.name
             %br
             = mail_to contact.email, nil, target: '_blank'
-            - if contact.phone.present? && contact.phone.strip.length > 1
+            - phone = contact.phone_for_display
+            - if phone.present? && phone.strip.length > 1
               %br
-              = contact.phone
+              = phone
         - if !match.send(contact_type).any?
           %p.c-detail-group__no-result No contacts

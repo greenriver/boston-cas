@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2020 Green River Data Analysis, LLC
+# Copyright 2016 - 2021 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -92,6 +92,7 @@ class ApplicationController < ActionController::Base
   def store_current_location
     return unless request.get?
     return if request.xhr? # don't store ajax calls
+
     store_location_for(:user, request.url)
   end
 
