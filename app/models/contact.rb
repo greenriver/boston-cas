@@ -88,4 +88,7 @@ class Contact < ApplicationRecord
     choices[input_name] || input_name
   end
 
+  def phone_for_display
+    phone.presence || cell_phone
+  end
 end
