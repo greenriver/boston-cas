@@ -54,11 +54,11 @@ class Voucher < ApplicationRecord
   def self.confirmation_text
     # NOTE: this must match the string below, but because of the translation
     # engine's fickleness seems to need to be kept separate.
-    'Please confirm you intend to make vouchers active'
+    'Translate this to add voucher confirmation'
   end
 
   def self.translated_confirmation_text
-    _('Please confirm you intend to make vouchers active')
+    _('Translate this to add voucher confirmation')
   end
 
   def self.text_search(text)
