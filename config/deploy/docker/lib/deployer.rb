@@ -12,13 +12,13 @@ class Deployer
   attr_accessor :repo_name
   attr_accessor :registry_id
 
-  ROOT_PATH      = File.realpath(File.join(__dir__, '..',  '..', '..', '..'))
+  ROOT_PATH   = File.realpath(File.join(__dir__, '..',  '..', '..', '..'))
 
-  ASSETS_PATH    = File.join(ROOT_PATH, 'config', 'deploy', 'docker', 'assets')
-  AWS_PROFILE    = ENV.fetch('AWS_PROFILE')
-  TEST_HOST      = 'deploy.warehouse.dev.test'
-  TEST_PORT      = 9999
-  WAIT_TIME      = 2
+  ASSETS_PATH = File.join(ROOT_PATH, 'config', 'deploy', 'docker', 'assets')
+  AWS_PROFILE = ENV.fetch('AWS_PROFILE')
+  TEST_HOST   = 'deploy.warehouse.dev.test'
+  TEST_PORT   = 9999
+  WAIT_TIME   = 2
 
   attr_accessor :image_tag
 
@@ -209,20 +209,30 @@ class Deployer
   end
 
   def _check_secrets!
+    if secrets_arn.nil?
+      puts "Please specify a secrets arn in your secret.deploy.values.yml file"
+      exit
+    end
+
     secretsmanager.describe_secret(secret_id: secrets_arn)
   rescue Aws::SecretsManager::Errors::ResourceNotFoundException
     puts "Cannot find #{secrets_arn}. Aborting"
     exit
   end
 
+  def _ruby_version
+    @_ruby_version ||= File.read('.ruby-version').chomp
+  end
+
   def _set_image_tag!
     if variant == 'pre-cache'
-      self.image_tag = 'latest--pre-cache'
+      #self.image_tag = "latest--pre-cache"
+      self.image_tag = "#{_ruby_version}--pre-cache"
     elsif ENV['IMAGE_TAG']
       self.image_tag = ENV['IMAGE_TAG'] + "--#{variant}"
     else
       version = `git rev-parse --short=9 HEAD`.chomp
-      self.image_tag = "#{version}--#{variant}"
+      self.image_tag = "githash-#{version}--#{variant}"
     end
 
     # puts "Setting image tag to #{image_tag}"
@@ -261,7 +271,7 @@ class Deployer
   end
 
   def debug?
-    ENV['DEBUG']=='true'
+    ENV['DEBUG'] == 'true'
   end
 
   def _push_image!
@@ -302,7 +312,7 @@ class Deployer
   end
 
   def _pre_cache_image_exists?
-    result = `docker image ls -f 'reference=#{repo_name}' | grep latest--pre-cache`
+    result = `docker image ls -f 'reference=#{repo_name}' | grep #{_ruby_version}--pre-cache`
 
     !result.match?(/^\s*$/)
   end
@@ -321,7 +331,7 @@ class Deployer
 
   def _run(c, alt_msg: nil)
     cmd = c.gsub(/\n/, ' ').squeeze(' ')
-    puts "Running #{alt_msg||cmd}"
+    puts "Running #{alt_msg || cmd}"
 
     system(cmd)
 

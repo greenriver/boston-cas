@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'yaml'
 
 class CommandArgs
@@ -6,7 +7,7 @@ class CommandArgs
   def initialize
     path = Pathname.new(__FILE__).join('..', '..', 'assets', 'secret.deploy.values.yml')
     config = YAML.load_file(path)
-    defaults = config['_global_defaults']||{}
+    defaults = config['_global_defaults'] || {}
     config.each_key do |key|
       config.delete(key) if key.match?(/^_/)
     end
@@ -30,5 +31,9 @@ class CommandArgs
 
   def self.cluster
     ENV.fetch('AWS_CLUSTER') { ENV.fetch('AWS_PROFILE') }
+  end
+
+  def cluster
+    CommandArgs.cluster
   end
 end

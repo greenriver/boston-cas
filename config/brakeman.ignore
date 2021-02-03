@@ -77,7 +77,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/ecs_tools.rb",
-      "line": 24,
+      "line": 25,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "system(\"ssh #{\"ecs0.openpath.host\"} 'docker commit #{`ssh #{\"ecs0.openpath.host\"} \"docker ps -a -n 10\"`.split(/\\n/).grep(/#{IMAGE}/).first.split(/\\s/).first} shell'\")",
       "render_path": null,
@@ -159,7 +159,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/ecs_tools.rb",
-      "line": 37,
+      "line": 38,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "exec(\"awslogs get #{group} ALL --watch\")",
       "render_path": null,
@@ -189,6 +189,26 @@
         "method": "manual_sort_link"
       },
       "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "6939d235d9f32e7a2694b926a5cf73222ec7b924323cb268a68c11d2a20ea082",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 315,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`docker image ls -f 'reference=#{repo_name}' | grep #{_ruby_version}--pre-cache`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_pre_cache_image_exists?"
+      },
+      "user_input": "repo_name",
       "confidence": "Medium",
       "note": ""
     },
@@ -350,26 +370,6 @@
         "method": "download_headers"
       },
       "user_input": "Config.get(:deidentified_client_assessment)",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "ba41ee00ac46e7c01186583a87e147f1219d1e2514fdce036bab39280ae325fb",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 305,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`docker image ls -f 'reference=#{repo_name}' | grep latest--pre-cache`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Deployer",
-        "method": "_pre_cache_image_exists?"
-      },
-      "user_input": "repo_name",
       "confidence": "Medium",
       "note": ""
     },
@@ -659,6 +659,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-01-27 09:26:21 -0500",
+  "updated": "2021-02-02 19:30:40 +0000",
   "brakeman_version": "5.0.0"
 }

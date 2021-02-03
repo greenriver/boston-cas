@@ -51,6 +51,16 @@ class Voucher < ApplicationRecord
     [unit] + unit.building.units_for_vouchers.to_a
   end
 
+  def self.confirmation_text
+    # NOTE: this must match the string below, but because of the translation
+    # engine's fickleness seems to need to be kept separate.
+    'Translate this to add voucher confirmation'
+  end
+
+  def self.translated_confirmation_text
+    _('Translate this to add voucher confirmation')
+  end
+
   def self.text_search(text)
     return none unless text.present?
 
