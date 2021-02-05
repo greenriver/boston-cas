@@ -67,7 +67,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   has_one :current_decision
 
-  has_one :referral_event
+  has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}

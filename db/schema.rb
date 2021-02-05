@@ -365,8 +365,8 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
 
   create_table "entity_view_permissions", id: :serial, force: :cascade do |t|
     t.integer "user_id"
-    t.integer "entity_id", null: false
     t.string "entity_type", null: false
+    t.integer "entity_id", null: false
     t.boolean "editable"
     t.datetime "deleted_at"
     t.bigint "agency_id"
@@ -480,8 +480,8 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
     t.string "identity"
     t.boolean "success"
     t.string "failure_reason"
-    t.integer "user_id"
     t.string "user_type"
+    t.integer "user_id"
     t.string "context"
     t.string "ip"
     t.text "user_agent"
@@ -754,7 +754,7 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
     t.string "client_identifier"
     t.integer "assessment_score"
-    t.string "agency"
+    t.string "deprecated_agency"
     t.string "first_name"
     t.string "last_name"
     t.jsonb "active_cohort_ids"
@@ -1139,8 +1139,8 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
 
   create_table "requirements", id: :serial, force: :cascade do |t|
     t.integer "rule_id"
-    t.integer "requirer_id"
     t.string "requirer_type"
+    t.integer "requirer_id"
     t.boolean "positive"
     t.datetime "deleted_at"
     t.datetime "created_at"
@@ -1157,10 +1157,12 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
     t.datetime "updated_at", null: false
     t.boolean "can_view_all_clients", default: false
     t.boolean "can_edit_all_clients", default: false
+    t.boolean "can_edit_clients_based_on_rules", default: false
     t.boolean "can_participate_in_matches", default: false
     t.boolean "can_view_all_matches", default: false
     t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_see_alternate_matches", default: false
+    t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_match_contacts", default: false
     t.boolean "can_approve_matches", default: false
     t.boolean "can_reject_matches", default: false
@@ -1184,7 +1186,9 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
     t.boolean "can_view_vouchers", default: false
     t.boolean "can_edit_vouchers", default: false
     t.boolean "can_view_programs", default: false
+    t.boolean "can_view_assigned_programs", default: false
     t.boolean "can_edit_programs", default: false
+    t.boolean "can_edit_assigned_programs", default: false
     t.boolean "can_view_opportunities", default: false
     t.boolean "can_edit_opportunities", default: false
     t.boolean "can_reissue_notifications", default: false
@@ -1207,25 +1211,21 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
     t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_deidentified_clients", default: false
     t.boolean "can_manage_deidentified_clients", default: false
+    t.boolean "can_export_deidentified_clients", default: false
     t.boolean "can_add_cohorts_to_deidentified_clients", default: false
     t.boolean "can_enter_identified_clients", default: false
     t.boolean "can_manage_identified_clients", default: false
+    t.boolean "can_export_identified_clients", default: false
+    t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_add_cohorts_to_identified_clients", default: false
     t.boolean "can_manage_neighborhoods", default: false
-    t.boolean "can_view_assigned_programs", default: false
-    t.boolean "can_edit_assigned_programs", default: false
-    t.boolean "can_export_deidentified_clients", default: false
-    t.boolean "can_export_identified_clients", default: false
     t.boolean "can_manage_tags", default: false
     t.boolean "can_manage_imported_clients", default: false
-    t.boolean "can_edit_clients_based_on_rules", default: false
     t.boolean "can_send_notes_via_email", default: false
     t.boolean "can_upload_deidentified_clients", default: false
     t.boolean "can_delete_matches", default: false
     t.boolean "can_reopen_matches", default: false
-    t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_help", default: false
-    t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_audit_users", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
@@ -1460,8 +1460,8 @@ ActiveRecord::Schema.define(version: 2021_02_05_142520) do
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer "invitation_limit"
-    t.integer "invited_by_id"
     t.string "invited_by_type"
+    t.integer "invited_by_id"
     t.integer "invitations_count", default: 0
     t.boolean "receive_initial_notification", default: false
     t.string "first_name"
