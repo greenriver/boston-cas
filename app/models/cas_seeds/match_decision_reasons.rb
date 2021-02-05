@@ -7,63 +7,66 @@
 module CasSeeds
   class MatchDecisionReasons
 
+    CLIENT_REJECTED = 2
+    PROVIDER_REJECTED = 3
+
     DND_REASONS = [
-      "Client won't be eligible for services",
-      "Client won't be eligible for housing type",
-      "Client won't be eligible based on funding source",
-      "Client has another housing option",
-    ]
+      ["Client won't be eligible for services", nil],
+      ["Client won't be eligible for housing type", nil],
+      ["Client won't be eligible based on funding source", nil],
+      ['Client has another housing option', nil],
+    ].freeze
 
     HSA_REASONS = [
-      "CORI",
-      "SORI",
-      "Immigration status",
-      'Household did not respond after initial acceptance of match',
-      'Ineligible for Housing Program',
-      'Client refused offer',
-      'Self-resolved',
-      'Falsification of documents',
-      'Additional screening criteria imposed by third parties',
-      'Health and Safety',
-    ]
+      ['CORI', nil],
+      ['SORI', nil],
+      ['Immigration status', nil],
+      ['Household did not respond after initial acceptance of match', nil],
+      ['Ineligible for Housing Program', nil],
+      ['Client refused offer', nil],
+      ['Self-resolved', nil],
+      ['Falsification of documents', nil],
+      ['Additional screening criteria imposed by third parties', nil],
+      ['Health and Safety', nil],
+    ].freeze
 
     HSA_PROVIDER_ONLY_REASONS = [
-      'Household could not be located',
-      'Ineligible for Housing Program',
-      'Client refused offer',
-      'Health and Safety',
-    ]
+      ['Household could not be located', nil],
+      ['Ineligible for Housing Program', nil],
+      ['Client refused offer', nil],
+      ['Health and Safety', nil],
+    ].freeze
 
     SHELTER_AGENCY_REASONS = [
-      "Does not agree to services",
-      "Unwilling to live in that neighborhood",
-      "Unwilling to live in SRO",
-      "Does not want housing at this time",
-      "Unsafe environment for this person",
-      "Client has another housing option",
-    ]
+      ['Does not agree to services', nil],
+      ['Unwilling to live in that neighborhood', nil],
+      ['Unwilling to live in SRO', nil],
+      ['Does not want housing at this time', nil],
+      ['Unsafe environment for this person', nil],
+      ['Client has another housing option', nil],
+    ].freeze
 
     SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS = [
-      "Barred from working with agency",
-      "Hospitalized",
-      "Don’t know / disappeared",
-      "Incarcerated",
-    ]
+      ['Barred from working with agency', nil],
+      ['Hospitalized', nil],
+      ['Don’t know / disappeared', nil],
+      ['Incarcerated', nil],
+    ].freeze
 
     ADMINISTRATIVE_CANCEL_REASONS = [
-      'Match expired',
-      'Client has declined match',
-      'Client has disengaged',
-      'Client has disappeared',
-      'SSP CORI',
-      'HSP CORI',
-      'Incarcerated',
-      'Vacancy should not have been entered',
-      'Client received another housing opportunity',
-      'Client no longer eligible for match',
-      'Client deceased',
-      'Vacancy filled by other client'
-    ]
+      ['Match expired', nil],
+      ['Client has declined match', nil],
+      ['Client has disengaged', nil],
+      ['Client has disappeared', nil],
+      ['SSP CORI', nil],
+      ['HSP CORI', nil],
+      ['Incarcerated', nil],
+      ['Vacancy should not have been entered', nil],
+      ['Client received another housing opportunity', nil],
+      ['Client no longer eligible for match', nil],
+      ['Client deceased', nil],
+      ['Vacancy filled by other client', nil],
+    ].freeze
 
     def run!
       create_other_reason!
@@ -77,49 +80,56 @@ module CasSeeds
     end
 
     private def create_other_reason!
-      ::MatchDecisionReasons::Other.all.first_or_create! name: "Other"
+      reason = ::MatchDecisionReasons::Other.all.first_or_create! name: 'Other'
+      reason.update(referral_result: nil)
     end
 
 
     private def create_dnd_reasons!
-      DND_REASONS.each do |reason_name|
-        ::MatchDecisionReasons::DndStaffDecline.where(name: reason_name).first_or_create!
+      DND_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::DndStaffDecline.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
       end
     end
 
     private def create_hsa_reasons!
-      HSA_REASONS.each do |reason_name|
-        ::MatchDecisionReasons::HousingSubsidyAdminDecline.where(name: reason_name).first_or_create!
+      HSA_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::HousingSubsidyAdminDecline.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
       end
     end
 
     private def create_hsa_provider_only_reasons!
       ::MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.update_all(active: false)
-      HSA_PROVIDER_ONLY_REASONS.each do |reason_name|
+      HSA_PROVIDER_ONLY_REASONS.each do |reason_name, referral_result|
         reason = ::MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.where(name: reason_name).first_or_create!
-        reason.update(active: true)
+        reason.update(active: true, referral_result: referral_result)
       end
     end
 
     private def create_shelter_agency_reasons!
-      SHELTER_AGENCY_REASONS.each do |reason_name|
-        ::MatchDecisionReasons::ShelterAgencyDecline.where(name: reason_name).first_or_create!
+      SHELTER_AGENCY_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::ShelterAgencyDecline.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
       end
     end
 
     private def create_shelter_agency_not_working_with_client_reasons!
-      SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS.each do |reason_name|
-        ::MatchDecisionReasons::ShelterAgencyNotWorkingWithClient.where(name: reason_name).first_or_create!
+      SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::ShelterAgencyNotWorkingWithClient.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
       end
     end
 
     private def create_shelter_agency_not_working_with_client_other_reason!
-      ::MatchDecisionReasons::ShelterAgencyNotWorkingWithClientOther.all.first_or_create! name: 'Other'
+      reason = ::MatchDecisionReasons::ShelterAgencyNotWorkingWithClientOther.all.first_or_create! name: 'Other'
+      reason.update(referral_result: nil)
     end
 
     private def create_admin_cancel_reasons!
-      ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name|
-        ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name).first_or_create!
+      ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
       end
     end
 
