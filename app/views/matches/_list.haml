@@ -76,10 +76,7 @@
                           - if match_type == 'active'
                             = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
                           - else
-                            = updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
-                          - if updated_at == max_updated_at && matches.count > 1
-                            %span.text-success
-                              *
+                            = max_updated_at&.to_date&.strftime(I18n.t('date.formats.default'))
                 = render 'matches/warnings', match: match
 
               .col.client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
