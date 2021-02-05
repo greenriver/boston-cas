@@ -521,7 +521,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # so clean that up...
       Warehouse::CasHoused.where(match_id: id).destroy_all
 
-      referral_event&.clear
+      referral_event&.clear if Warehouse::Base.enabled?
     end
   end
 
@@ -535,7 +535,7 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all if ! match_route.should_activate_match
 
-      create_referral_event
+      create_referral_event if Warehouse::Base.enabled?
     end
   end
 
@@ -558,7 +558,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
 
-      referral_event&.rejected
+      referral_event&.rejected if Warehouse::Base.enabled?
     end
   end
 
@@ -573,7 +573,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
 
-      referral_event&.rejected
+      referral_event&.rejected if Warehouse::Base.enabled?
     end
   end
 
@@ -589,7 +589,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
 
-      referral_event&.rejected
+      referral_event&.rejected if Warehouse::Base.enabled?
     end
   end
 
@@ -651,7 +651,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
 
-      referral_event&.success
+      referral_event&.success if Warehouse::Base.enabled?
     end
   end
 
