@@ -787,6 +787,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
 
   def create_referral_event
+    return unless Warehouse::Base.enabled?
     return if referral_event.present?
     return unless project_client.from_hmis?
 
