@@ -90,6 +90,7 @@ class ProgramsController < ApplicationController
           :funding_source_id,
           :confidential,
           :match_route_id,
+          warehouse_project_ids: [],
           sub_programs_attributes: [
             :id,
             :name,
