@@ -110,7 +110,6 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'puma'
 
   gem 'rack-mini-profiler', require: false
   gem 'test-unit', '~> 3.0', require: false
@@ -149,10 +148,10 @@ group :test do
   gem 'rails-controller-testing'
 end
 
-group :rake do
-  gem 'gettext_i18n_rails'
-  gem 'fast_gettext'
-  gem 'gettext', '>=3.0.2'
-end
+# group :rake do
+#   gem 'gettext_i18n_rails'
+#   gem 'fast_gettext'
+#   gem 'gettext', '>=3.0.2'
+# end
 
 gem "ajax_modal_rails", "~> 1.0"
