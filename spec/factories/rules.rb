@@ -99,6 +99,10 @@ FactoryBot.define do
     name { 'Assessment Score greater than zero' }
     verb { 'have' }
   end
+  factory :assessment_score_greater_than_specified, class: 'Rules::AssessmentScoreGreaterThanSpecified' do
+    name { 'Assessment Score greater than specified' }
+    verb { 'have' }
+  end
   factory :requires_ground_floor_unit, class: 'Rules::GroundFloor' do
     name { 'Ground floor unit' }
     verb { 'have' }
@@ -376,4 +380,3 @@ FactoryBot.define do
     verb { "be" }
   end
 end
-
