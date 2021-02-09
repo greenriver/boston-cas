@@ -82,7 +82,7 @@ module MatchDecisions::Four
       end
 
       def confirmed
-        Notifications::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
+        Notifications::MatchSuccessConfirmed.create_for_match! match
         match.succeeded!
       end
 
