@@ -102,6 +102,8 @@ gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 gem 'roo'
 
+gem 'browser'
+
 group :development do
   # gem 'spring'
   gem 'capistrano'
