@@ -14,9 +14,8 @@ gem 'with_advisory_lock'
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'
-# updating this to 4.5.3 causes a weird missing variable bug
 gem 'babel-transpiler'
-gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap', '~> 4.3.1' # updating this to 4.5.3 causes a weird missing variable bug
 gem 'coffee-rails'
 gem 'execjs'
 gem 'jquery-rails'
