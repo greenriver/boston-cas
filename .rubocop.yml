@@ -27,12 +27,17 @@ Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be a Fixnum or
   # a Float.
   Max: 175
+  Exclude:
+    - 'app/models/exporters/tableau'
 Metrics/CyclomaticComplexity:
   Max: 50
-
+  Exclude:
+    - 'lib/util/hud.rb'
+    - 'app/models/exporters/tableau'
 Metrics/PerceivedComplexity:
   Max: 50
-
+  Exclude:
+    - 'app/models/exporters/tableau'
 # Trailing commas make for clearer diffs because the last line won't appear
 # to have been changed, as it would if it lacked a comma and had one added.
 Style/TrailingCommaInArguments:
@@ -41,6 +46,12 @@ Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
 
 # Cop supports --auto-correct.
 # Configuration parameters: PreferredDelimiters.
@@ -55,10 +66,8 @@ Style/AndOr:
   Enabled: true
 
 Style/ClassAndModuleChildren:
-  Exclude:
-    - 'app/models/concerns/**/*'
-    - 'app/controllers/**/*'
-    - 'app/jobs/**/*'
+  Enabled:
+    false
 
 Style/ConditionalAssignment:
   Enabled: false
@@ -83,6 +92,14 @@ Style/CommentedKeyword:
 
 Naming/VariableNumber:
   Enabled: false
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - as
+    - id
+    - by
+    - io
+    - to
 
 Style/MixinUsage:
   Enabled: false
@@ -114,6 +131,9 @@ Layout/MultilineOperationIndentation:
 Style/AccessModifierDeclarations:
   Enabled: false
 
+Style/RedundantReturn:
+  Enabled: false
+
 Metrics/ModuleLength:
   Enabled: false
 
@@ -123,6 +143,10 @@ Layout/ParameterAlignment:
 
 Style/RegexpLiteral:
   EnforcedStyle: slashes
+
+Lint/UnusedMethodArgument:
+  Exclude:
+    - 'lib/rds_sql_server/hmis_sql_server.rb'
 
 Style/DoubleNegation:
   Enabled: false
@@ -154,45 +178,65 @@ Style/AsciiComments:
 Style/OneLineConditional:
   Enabled: false
 
-# After 1.0 this will just be
-# AllCops:
-#   NewCops: enable
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
-
-Style/ExponentialNotation:
-  Enabled: true
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Style/SlicingWithRange:
-  Enabled: true
-
-Lint/MixedRegexpCaptureTypes:
+Style/StringConcatenation:
   Enabled: false
 
+Bundler/OrderedGems:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  Enabled: false
+
+Style/CaseLikeIf:
+  Enabled: false
+
+Style/CommentAnnotation:
+  Enabled: false
+
+# side-step ruby 2.7.2 upgrade issues
+Layout/BeginEndAlignment:
+  Enabled: false
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
+Lint/EmptyConditionalBody:
+  Enabled: false
+Lint/FloatComparison:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Lint/StructNewOverride:
+  Enabled: false
+Lint/UselessMethodDefinition:
+  Enabled: false
+Style/AccessorGrouping:
+  Enabled: false
+Style/CombinableLoops:
+  Enabled: false
+Style/HashEachMethods:
+  Enabled: false
+Style/HashLikeCase:
+  Enabled: false
+Style/HashTransformKeys:
+  Enabled: false
+Style/HashTransformValues:
+  Enabled: false
+Style/KeywordParametersOrder:
+  Enabled: false
+Style/MethodDefParentheses:
+  Enabled: false
+Style/RedundantAssignment:
+  Enabled: false
+Style/RedundantFetchBlock:
+  Enabled: false
 Style/RedundantRegexpCharacterClass:
   Enabled: false
-
 Style/RedundantRegexpEscape:
+  Enabled: false
+Style/RedundantSelfAssignment:
+  Enabled: false
+Style/SingleArgumentDig:
+  Enabled: false
+Style/SoleNestedConditional:
+  Enabled: false
+Style/ExplicitBlockArgument:
   Enabled: false
