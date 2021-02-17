@@ -27,17 +27,10 @@ Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be a Fixnum or
   # a Float.
   Max: 175
-  Exclude:
-    - 'app/models/exporters/tableau'
 Metrics/CyclomaticComplexity:
   Max: 50
-  Exclude:
-    - 'lib/util/hud.rb'
-    - 'app/models/exporters/tableau'
 Metrics/PerceivedComplexity:
   Max: 50
-  Exclude:
-    - 'app/models/exporters/tableau'
 # Trailing commas make for clearer diffs because the last line won't appear
 # to have been changed, as it would if it lacked a comma and had one added.
 Style/TrailingCommaInArguments:
@@ -143,10 +136,6 @@ Layout/ParameterAlignment:
 
 Style/RegexpLiteral:
   EnforcedStyle: slashes
-
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'lib/rds_sql_server/hmis_sql_server.rb'
 
 Style/DoubleNegation:
   Enabled: false
