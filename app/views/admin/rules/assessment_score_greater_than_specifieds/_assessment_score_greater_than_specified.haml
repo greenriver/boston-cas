@@ -1,0 +1,4 @@
+- rule = assessment_score_greater_than_specified
+%h4 Score
+= select_tag(:variable, options_from_collection_for_select(rule.available_scores, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_scores.to_h.to_json})
+= render 'rules/assessment_score_greater_than_specifieds/assessment_score_greater_than_specified', assessment_score_greater_than_specified: assessment_score_greater_than_specified
