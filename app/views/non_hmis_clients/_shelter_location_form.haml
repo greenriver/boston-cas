@@ -1,0 +1,29 @@
+- if @non_hmis_client.persisted?
+  - url = send("shelter_location_#{client_type}_client_path", @non_hmis_client.id)
+
+  .c-card.c-card--flush
+    .c-card__content.p-0
+      .o-pre-table-actions.o-pre-table-actions--light
+        %h2.o-pre-table-actions__heading Client Location
+      .p-4
+        = simple_form_for @non_hmis_client, as: :non_hmis_client, url: url do |f|
+          = f.error_notification
+          .row
+            .col
+              .form-inputs
+                = f.input :shelter_name, label: 'Last Shelter', as: :select_2, collection: @shelter_names, input_html: { class: 'select2', data: {tags: true} }
+              .form-actions.mt-4
+                = f.button :submit, "Add Location", class: 'btn btn-primary ml-auto'
+      - if @non_hmis_client.shelter_histories.exists?
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Location
+              %th Added On
+              %th Added By
+          %tbody
+            - @non_hmis_client.shelter_histories.order(created_at: :desc).preload(:user).each do |location|
+              %tr
+                %td= location.shelter_name
+                %td= location.created_at&.to_date
+                %td= location.user&.name
