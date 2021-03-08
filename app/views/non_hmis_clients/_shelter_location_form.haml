@@ -1,5 +1,5 @@
 - if @non_hmis_client.persisted?
-  - url = send("shelter_location_#{client_type}_client_path", @non_hmis_client.id)
+  - url = polymorphic_path(['shelter_location', client_type, 'client'], id: @non_hmis_client.id)
 
   .c-card.c-card--flush
     .c-card__content.p-0
