@@ -19,7 +19,7 @@ module MatchAccessContexts
     end
 
     def acknowledge_shelter_agency_notification?
-      current_contact.in? controller.match.shelter_agency_contacts
+      controller.match.acknowledge_shelter_agency_notification?(current_contact)
     end
 
     def contacts_editable?
