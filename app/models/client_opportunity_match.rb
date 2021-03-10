@@ -173,6 +173,11 @@ class ClientOpportunityMatch < ApplicationRecord
     through: :client_opportunity_match_contacts,
     source: :contact
 
+  has_many :hsa_or_shelter_agency_contacts, -> do
+    where(client_opportunity_match_contacts: {housing_subsidy_admin: true}).
+    or(where(client_opportunity_match_contacts: {shelter_agency: true}))
+  end, class_name: 'Contact', through: :client_opportunity_match_contacts, source: :contact
+
   has_many :events,
     class_name: 'MatchEvents::Base',
     foreign_key: :match_id,
@@ -678,120 +683,117 @@ class ClientOpportunityMatch < ApplicationRecord
       where.not(id: id)
   end
 
-  private
 
-    def assign_match_role_to_contact role, contact
-      join_model = client_opportunity_match_contacts.detect do |match_contact|
-        match_contact.contact_id == contact.id
-      end
-      join_model ||= client_opportunity_match_contacts.build contact: contact
-      join_model.send("#{role}=", true)
-      join_model.save
+  private def assign_match_role_to_contact role, contact
+    join_model = client_opportunity_match_contacts.detect do |match_contact|
+      match_contact.contact_id == contact.id
     end
+    join_model ||= client_opportunity_match_contacts.build contact: contact
+    join_model.send("#{role}=", true)
+    join_model.save
+  end
 
-    def add_default_dnd_staff_contacts!
+  private def add_default_dnd_staff_contacts!
+    Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
+      assign_match_role_to_contact :dnd_staff, contact
+    end
+    sub_program.dnd_staff_contacts.each do |contact|
+      assign_match_role_to_contact :dnd_staff, contact
+    end
+    client.dnd_staff_contacts.each do |contact|
+      assign_match_role_to_contact :dnd_staff, contact
+    end
+  end
+
+  private def add_default_housing_subsidy_admin_contacts!
+    opportunity.housing_subsidy_admin_contacts.each do |contact|
+      assign_match_role_to_contact :housing_subsidy_admin, contact
+    end
+    sub_program.housing_subsidy_admin_contacts.each do |contact|
+      assign_match_role_to_contact :housing_subsidy_admin, contact
+    end
+    client.housing_subsidy_admin_contacts.each do |contact|
+      assign_match_role_to_contact :housing_subsidy_admin, contact
+    end
+    # If for some reason we forgot to setup the default HSA contacts
+    # put the people who usually receive initial notifications in that role
+    if contacts_editable_by_hsa && housing_subsidy_admin_contacts.blank?
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
-        assign_match_role_to_contact :dnd_staff, contact
-      end
-      sub_program.dnd_staff_contacts.each do |contact|
-        assign_match_role_to_contact :dnd_staff, contact
-      end
-      client.dnd_staff_contacts.each do |contact|
-        assign_match_role_to_contact :dnd_staff, contact
-      end
-    end
-
-    def add_default_housing_subsidy_admin_contacts!
-      opportunity.housing_subsidy_admin_contacts.each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
-      sub_program.housing_subsidy_admin_contacts.each do |contact|
-        assign_match_role_to_contact :housing_subsidy_admin, contact
-      end
-      client.housing_subsidy_admin_contacts.each do |contact|
-        assign_match_role_to_contact :housing_subsidy_admin, contact
-      end
-      # If for some reason we forgot to setup the default HSA contacts
-      # put the people who usually receive initial notifications in that role
-      if contacts_editable_by_hsa && housing_subsidy_admin_contacts.blank?
-        Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
-          assign_match_role_to_contact :housing_subsidy_admin, contact
-        end
-      end
-
     end
+  end
 
-    def add_default_client_contacts!
-      client.regular_contacts.each do |contact|
-        assign_match_role_to_contact :client, contact
-      end
-      sub_program.client_contacts.each do |contact|
-        assign_match_role_to_contact :client, contact
-      end
+  private def add_default_client_contacts!
+    client.regular_contacts.each do |contact|
+      assign_match_role_to_contact :client, contact
     end
+    sub_program.client_contacts.each do |contact|
+      assign_match_role_to_contact :client, contact
+    end
+  end
 
-    def add_default_shelter_agency_contacts!
-      client.shelter_agency_contacts.each do |contact|
+  private def add_default_shelter_agency_contacts!
+    client.shelter_agency_contacts.each do |contact|
+      assign_match_role_to_contact :shelter_agency, contact
+    end
+    sub_program.shelter_agency_contacts.each do |contact|
+      assign_match_role_to_contact :shelter_agency, contact
+    end
+    if match_route.default_shelter_agency_contacts_from_project_client?
+      client.project_client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
-      sub_program.shelter_agency_contacts.each do |contact|
-        assign_match_role_to_contact :shelter_agency, contact
-      end
-      if match_route.default_shelter_agency_contacts_from_project_client?
-        client.project_client.shelter_agency_contacts.each do |contact|
-          assign_match_role_to_contact :shelter_agency, contact
-        end
-      end
     end
+  end
 
-    def add_default_ssp_contacts!
-      sub_program.ssp_contacts.each do |contact|
-        assign_match_role_to_contact :ssp, contact
-      end
-      client.ssp_contacts.each do |contact|
-        assign_match_role_to_contact :ssp, contact
-      end
+  private def add_default_ssp_contacts!
+    sub_program.ssp_contacts.each do |contact|
+      assign_match_role_to_contact :ssp, contact
     end
-
-    def add_default_hsp_contacts!
-      sub_program.hsp_contacts.each do |contact|
-        assign_match_role_to_contact :hsp, contact
-      end
-      client.hsp_contacts.each do |contact|
-        assign_match_role_to_contact :hsp, contact
-      end
+    client.ssp_contacts.each do |contact|
+      assign_match_role_to_contact :ssp, contact
     end
+  end
 
-    def add_default_do_contacts!
-      sub_program.do_contacts.each do |contact|
-        assign_match_role_to_contact :do, contact
-      end
-      client.do_contacts.each do |contact|
-        assign_match_role_to_contact :do, contact
-      end
+  private def add_default_hsp_contacts!
+    sub_program.hsp_contacts.each do |contact|
+      assign_match_role_to_contact :hsp, contact
     end
-
-    def self.prioritized_by_client(match_route, scope)
-      match_route.match_prioritization.prioritization_for_clients(scope)
+    client.hsp_contacts.each do |contact|
+      assign_match_role_to_contact :hsp, contact
     end
+  end
 
-    def self.sort_options
-      [
-        {title: 'Oldest match', column: 'created_at', direction: 'asc'},
-        {title: 'Most recent match', column: 'created_at', direction: 'desc'},
-        # {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
-        # {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
-        # {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
-        # {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
-        {title: 'Recently changed', column: 'last_decision', direction: 'desc'},
-        # {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
-        # {title: 'Most served', column: 'days_homeless', direction: 'desc'},
-        # {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
-        # {title: 'Current step', column: 'current_step', direction: 'desc'},
-        {title: 'Expiration Date', column: 'shelter_expiration', direction: 'asc'},
-        {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
-        {title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc'},
-      ]
+  private def add_default_do_contacts!
+    sub_program.do_contacts.each do |contact|
+      assign_match_role_to_contact :do, contact
     end
+    client.do_contacts.each do |contact|
+      assign_match_role_to_contact :do, contact
+    end
+  end
 
+  def self.prioritized_by_client(match_route, scope)
+    match_route.match_prioritization.prioritization_for_clients(scope)
+  end
+
+  def self.sort_options
+    [
+      {title: 'Oldest match', column: 'created_at', direction: 'asc'},
+      {title: 'Most recent match', column: 'created_at', direction: 'desc'},
+      # {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
+      # {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
+      # {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
+      # {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
+      {title: 'Recently changed', column: 'last_decision', direction: 'desc'},
+      # {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
+      # {title: 'Most served', column: 'days_homeless', direction: 'desc'},
+      # {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
+      # {title: 'Current step', column: 'current_step', direction: 'desc'},
+      {title: 'Expiration Date', column: 'shelter_expiration', direction: 'asc'},
+      {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
+      {title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc'},
+    ]
+  end
 end

@@ -18,10 +18,6 @@ module MatchAccessContexts
       user.contact
     end
 
-    def acknowledge_shelter_agency_notification?
-      current_contact.in? controller.match.shelter_agency_contacts
-    end
-
     def contacts_editable?
       user.can_edit_match_contacts? || hsa_can_edit_contacts?
     end
