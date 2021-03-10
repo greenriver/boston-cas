@@ -10,8 +10,8 @@ class NonHmisClient < ApplicationRecord
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
-
   has_many :non_hmis_assessments
+  has_many :shelter_histories
 
   def current_assessment
     NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
