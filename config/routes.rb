@@ -219,6 +219,7 @@ Rails.application.routes.draw do
       get :new_assessment
       get :assessment
       get :current_assessment_limited
+      patch :shelter_location
     end
   end
   resources :identified_clients do
@@ -226,6 +227,7 @@ Rails.application.routes.draw do
       get :new_assessment
       get :assessment
       get :current_assessment_limited
+      patch :shelter_location
     end
   end
   resources :imported_clients

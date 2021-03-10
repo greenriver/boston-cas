@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_22_132325) do
+ActiveRecord::Schema.define(version: 2021_03_04_141837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1272,6 +1272,16 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.datetime "updated_at"
     t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
+  create_table "shelter_histories", force: :cascade do |t|
+    t.bigint "non_hmis_client_id", null: false
+    t.bigint "user_id", null: false
+    t.string "shelter_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["non_hmis_client_id"], name: "index_shelter_histories_on_non_hmis_client_id"
+    t.index ["user_id"], name: "index_shelter_histories_on_user_id"
   end
 
   create_table "social_security_number_quality_codes", id: :serial, force: :cascade do |t|
