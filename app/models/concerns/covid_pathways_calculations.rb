@@ -62,6 +62,9 @@ module CovidPathwaysCalculations
         shelter_name: {
           label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
           number: '2C',
+          as: :select_2,
+          collection: ShelterHistory.shelter_locations,
+          input_html: { data: {tags: true }},
         },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',

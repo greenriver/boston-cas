@@ -9,6 +9,6 @@ class ShelterHistory < ApplicationRecord
   belongs_to :user
 
   def self.shelter_locations
-    distinct.where.not(shelter_name: nil).order(:shelter_name).pluck(:shelter_name).select(&:present?)
+    distinct.where.not(shelter_name: nil).order(:shelter_name).pluck(:shelter_name).select(&:present?).map(&:strip).uniq
   end
 end
