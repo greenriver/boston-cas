@@ -770,7 +770,6 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def acknowledge_shelter_agency_notification?(contact)
-    binding.pry
     acceptable_contacts = match_route.
       contacts_that_can_acknowledge_shelter_agency_notification.
       flat_map { |contact_type| send(contact_type) }

@@ -140,7 +140,7 @@ module MatchRoutes
       'Project-Based'
     end
 
-    def self.contacts_that_can_acknowledge_shelter_agency_notification
+    def contacts_that_can_acknowledge_shelter_agency_notification
       [:shelter_agency_contacts]
     end
 

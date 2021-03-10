@@ -54,7 +54,7 @@ module MatchRoutes
       :dnd_staff_contacts
     end
 
-    def self.contacts_that_can_acknowledge_shelter_agency_notification
+    def contacts_that_can_acknowledge_shelter_agency_notification
       [
         :shelter_agency_contacts,
         :housing_subsidy_admin_contacts,

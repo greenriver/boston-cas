@@ -47,7 +47,7 @@ module MatchDecisions::Four
     end
 
     def actor_type
-      _('Shelter Agency')
+      [_('Shelter Agency'), 'or', _('HSA')].join(' ')
     end
 
     def expires?
@@ -95,7 +95,7 @@ module MatchDecisions::Four
 
     def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.shelter_agency_contacts)
+      contact.in?(match.shelter_agency_contacts + match.housing_subsidy_admin_contacts)
     end
 
     def to_param
