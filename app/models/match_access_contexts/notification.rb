@@ -22,10 +22,6 @@ module MatchAccessContexts
       @notification.contacts_editable?
     end
 
-    def acknowledge_shelter_agency_notification?
-      true
-    end
-
     def match_scope
       return ClientOpportunityMatch.none unless notification.present?
 

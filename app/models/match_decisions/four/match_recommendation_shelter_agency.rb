@@ -55,7 +55,7 @@ module MatchDecisions::Four
     end
 
     def contact_actor_type
-      nil
+      :hsa_or_shelter_agency_contacts
     end
 
     def statuses
@@ -94,8 +94,7 @@ module MatchDecisions::Four
     end
 
     def accessible_by?(contact)
-      contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.shelter_agency_contacts + match.housing_subsidy_admin_contacts)
+      contact.user_can_act_on_behalf_of_match_contacts? || match.send(contact_actor_type).include?(contact)
     end
 
     def to_param

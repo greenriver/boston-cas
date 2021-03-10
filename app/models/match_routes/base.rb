@@ -140,10 +140,6 @@ module MatchRoutes
       'Project-Based'
     end
 
-    def contacts_that_can_acknowledge_shelter_agency_notification
-      [:shelter_agency_contacts]
-    end
-
     private def has_tag_if_prioritization_requires_it
       if tag_id.blank? && match_prioritization&.requires_tag?
 

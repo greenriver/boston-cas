@@ -173,6 +173,11 @@ class ClientOpportunityMatch < ApplicationRecord
     through: :client_opportunity_match_contacts,
     source: :contact
 
+  has_many :hsa_or_shelter_agency_contacts, -> do
+    where(client_opportunity_match_contacts: {housing_subsidy_admin: true}).
+    or(where(client_opportunity_match_contacts: {shelter_agency: true}))
+  end, class_name: 'Contact', through: :client_opportunity_match_contacts, source: :contact
+
   has_many :events,
     class_name: 'MatchEvents::Base',
     foreign_key: :match_id,
@@ -767,13 +772,6 @@ class ClientOpportunityMatch < ApplicationRecord
     client.do_contacts.each do |contact|
       assign_match_role_to_contact :do, contact
     end
-  end
-
-  def acknowledge_shelter_agency_notification?(contact)
-    acceptable_contacts = match_route.
-      contacts_that_can_acknowledge_shelter_agency_notification.
-      flat_map { |contact_type| send(contact_type) }
-    contact.in?(acceptable_contacts)
   end
 
   def self.prioritized_by_client(match_route, scope)

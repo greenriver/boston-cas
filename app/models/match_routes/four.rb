@@ -29,17 +29,17 @@ module MatchRoutes
 
     def self.match_steps_for_reporting
       {
-       'MatchDecisions::Four::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::Four::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::Four::ConfirmShelterAgencyDeclineDndStaff' => 3,
-       'MatchDecisions::Four::MatchRecommendationHsa' => 4,
-       'MatchDecisions::Four::ConfirmHsaInitialDeclineDndStaff' => 5,
-       'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin' => 6,
-       'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin' => 7,
-       'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff' => 8,
-       'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator' => 9,
-       'MatchDecisions::Four::ConfirmMatchSuccessDndStaff' => 10,
-       }
+        'MatchDecisions::Four::MatchRecommendationDndStaff' => 1,
+        'MatchDecisions::Four::MatchRecommendationShelterAgency' => 2,
+        'MatchDecisions::Four::ConfirmShelterAgencyDeclineDndStaff' => 3,
+        'MatchDecisions::Four::MatchRecommendationHsa' => 4,
+        'MatchDecisions::Four::ConfirmHsaInitialDeclineDndStaff' => 5,
+        'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin' => 6,
+        'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin' => 7,
+        'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff' => 8,
+        'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator' => 9,
+        'MatchDecisions::Four::ConfirmMatchSuccessDndStaff' => 10,
+      }
     end
 
     def initial_decision
@@ -52,13 +52,6 @@ module MatchRoutes
 
     def initial_contacts_for_match
       :dnd_staff_contacts
-    end
-
-    def contacts_that_can_acknowledge_shelter_agency_notification
-      [
-        :shelter_agency_contacts,
-        :housing_subsidy_admin_contacts,
-      ]
     end
   end
 end
