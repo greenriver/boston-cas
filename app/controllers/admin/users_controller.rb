@@ -18,17 +18,18 @@ module Admin
 
     def index
       # search
-      @users = if params[:q].present?
-        user_scope.text_search(params[:q])
+      if params[:q].present?
+        @users = user_scope.text_search(params[:q])
+        @inactive_users = User.inactive.text_search(params[:q])
       else
-        user_scope
+        @users = user_scope
+        @inactive_users = User.inactive
       end
 
       # sort / paginate
       @users = @users
         .order(sort_column => sort_direction)
         .page(params[:page]).per(25)
-      @inactive_users = User.inactive
     end
 
     def edit
