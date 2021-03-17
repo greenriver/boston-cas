@@ -44,10 +44,6 @@ module MatchDecisions::Four
       _('HSA')
     end
 
-    def expires?
-      true
-    end
-
     def contact_actor_type
       :housing_subsidy_admin_contacts
     end
