@@ -92,7 +92,7 @@ module MatchDecisions::Four
       end
 
       def canceled
-        Notifications::MatchCanceled.create_for_match! match
+        Notifications::Four::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end
