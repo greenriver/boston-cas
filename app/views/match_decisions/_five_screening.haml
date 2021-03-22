@@ -1,0 +1,30 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?), ( 'o-choose__choice--100' unless can_reject_matches?)]}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm.mr-4
+              %h3 Continue Match
+          .o-choose__content
+            .form-group.jSelections
+              .radio
+                %label
+                  = form.radio_button :status, :mitigation_not_required, checked: true
+                  = _('Mitigation is not required')
+              .radio
+                %label
+                  = form.radio_button :status, :mitigation_required, disabled: ! @decision.editable?, class: ''
+                  = _('Mitigation required')
+            -# TODO: Mitigation check boxes
+            .form-actions
+              %button{class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
+                %i.icon-checkmark
+                Continue Match
+
+        - if can_reject_matches?
+          = render 'match_decisions/cancel_actions', form: form
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

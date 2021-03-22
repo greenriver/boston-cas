@@ -1,0 +1,59 @@
+###
+# Copyright 2016 - 2021 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+module MatchRoutes
+  class Five < Base
+    def title
+      _('Match Route Five')
+    end
+
+    def self.available_sub_types_for_search
+      match_steps_for_reporting.keys
+    end
+
+    def self.match_steps
+      {
+        # Client Agrees, Application Submitted, Screening in Progress, Mitigation, Pending Approval,  Lease Up
+        'MatchDecisions::Five::FiveClientAgrees' => 1,
+        'MatchDecisions::Five::FiveApplicationSubmission' => 2,
+        'MatchDecisions::Five::FiveScreening' => 3,
+        'MatchDecisions::Five::FiveMitigation' => 4,
+        'MatchDecisions::Five::FiveApproval' => 5,
+        'MatchDecisions::Five::FiveLeaseUp' => 6,
+      }
+    end
+
+    def self.match_steps_for_reporting
+      {
+        'MatchDecisions::Five::FiveClientAgrees' => 1,
+        'MatchDecisions::Five::FiveApplicationSubmission' => 2,
+        'MatchDecisions::Five::FiveScreening' => 3,
+        'MatchDecisions::Five::FiveMitigation' => 4,
+        'MatchDecisions::Five::FiveApproval' => 5,
+        'MatchDecisions::Five::FiveLeaseUp' => 6,
+      }
+    end
+
+    def initial_decision
+      :five_client_agrees_decision
+    end
+
+    def success_decision
+      :five_lease_up_decision
+    end
+
+    def initial_contacts_for_match
+      :housing_subsidy_admin_contacts
+    end
+
+    def required_contact_types
+      [
+        'housing_subsidy_admin',
+        'shelter_agency',
+      ]
+    end
+  end
+end

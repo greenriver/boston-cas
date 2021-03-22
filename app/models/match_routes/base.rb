@@ -37,6 +37,7 @@ module MatchRoutes
         MatchRoutes::ProviderOnly,
         MatchRoutes::HomelessSetAside,
         MatchRoutes::Four,
+        MatchRoutes::Five,
       ]
     end
 

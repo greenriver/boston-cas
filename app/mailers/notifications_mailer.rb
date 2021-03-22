@@ -343,7 +343,48 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: 'Match Success Confirmed')
   end
+
   # end Match Route Four
+
+  # Match Route Five
+
+  def client_agrees
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
+  end
+
+  def submit_application
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match ready for review')
+  end
+
+  def screening
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match is ready for client screening')
+  end
+
+  def mitigation
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match requires mitigation')
+  end
+
+  def approval
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match is awaiting approval')
+  end
+
+  def lease_up
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match is awaiting lease-up')
+  end
+
+  # end Match Route Five
 
   # Progress Updates
   def progress_update_requested

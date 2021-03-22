@@ -65,6 +65,14 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :four_record_client_housed_date_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator', notification_class_name: 'Notifications::Four::HousingSubsidyAdminDecisionClient'
   has_decision :four_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Four::ConfirmMatchSuccessDndStaff'
 
+  # Match Route Five
+  has_decision :five_client_agrees, decision_class_name: 'MatchDecisions::Five::FiveClientAgrees', notification_class_name: 'Notifications::Five::ClientAgrees'
+  has_decision :five_application_submission, decision_class_name: 'MatchDecisions::Five::FiveApplicationSubmission', notification_class_name: 'Notifications::Five::ApplicationSubmission'
+  has_decision :five_screening, decision_class_name: 'MatchDecisions::Five::FiveScreening', notification_class_name: 'Notifications::Five::Screening'
+  has_decision :five_mitigation, decision_class_name: 'MatchDecisions::Five::FiveMitigation', notification_class_name: 'Notifications::Five::Mitigation'
+  has_decision :five_approval, decision_class_name: 'MatchDecisions::Five::FiveApproval', notification_class_name: 'Notifications::Five::Approval'
+  has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
+
   has_one :current_decision
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
