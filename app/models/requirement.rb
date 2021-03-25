@@ -41,4 +41,7 @@ class Requirement < ApplicationRecord
     end
   end
 
+  def apply_to_match(match)
+    rule.apply_to_match(match)
+  end
 end

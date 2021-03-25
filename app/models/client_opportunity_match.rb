@@ -540,6 +540,7 @@ class ClientOpportunityMatch < ApplicationRecord
       client.make_unavailable_in(match_route: match_route, expires_at: nil) if match_route.should_prevent_multiple_matches_per_client
       opportunity.update available_candidate: false
       add_default_contacts!
+      requirements_with_inherited.each { |req| req.apply_to_match(self) }
       self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all if ! match_route.should_activate_match
