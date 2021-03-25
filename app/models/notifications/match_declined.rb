@@ -4,15 +4,18 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-module Notifications::Four
-  class MatchCanceled < Notifications::MatchCanceled
-    # Send to all contacts
+module Notifications
+  class MatchDeclined < Base
     def self.create_for_match! match
       contacts = match.contacts
 
       contacts.each do |contact|
         create! match: match, recipient: contact
       end
+    end
+
+    def event_label
+      'Contacts notified, match declined'
     end
   end
 end

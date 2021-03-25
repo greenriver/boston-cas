@@ -5,10 +5,10 @@
 ###
 
 module Notifications::Four
-  class MatchCanceled < Notifications::MatchCanceled
-    # Send to all contacts
+  class MatchDeclined < Notifications::MatchDeclined
     def self.create_for_match! match
-      contacts = match.contacts
+      # DND will receive confirmation step, so they don't need the notification
+      contacts = match.contacts - match.dnd_staff_contacts
 
       contacts.each do |contact|
         create! match: match, recipient: contact

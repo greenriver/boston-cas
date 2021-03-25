@@ -343,6 +343,18 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: 'Match Success Confirmed')
   end
+
+  def match_rejected
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Rejected")
+  end
+
+  def match_declined
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Declined")
+  end
   # end Match Route Four
 
   # Progress Updates
