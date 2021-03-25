@@ -7,7 +7,7 @@
 class Rules::HoldsVoucher < Rule
   def clients_that_fit(scope, requirement, opportunity)
     # Only mobile vouchers can match
-    returns false if SubProgram.have_buildings.contains?(opportunity.voucher.sub_program.program_type)
+    returns false if SubProgram.have_buildings.include?(opportunity.voucher.sub_program.program_type)
 
     if Client.column_names.include?(:holds_voucher_on.to_s)
       if requirement.positive
