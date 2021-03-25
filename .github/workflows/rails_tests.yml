@@ -31,7 +31,8 @@ jobs:
           postgresql-11 postgresql-contrib \
           redis-server \
           libmagic-dev \
-          libpq-dev
+          libpq-dev \
+          shared-mime-info
 
         echo Updating the postgresql port which is needed if multiple versions installed
         sudo sed -i.bak -e 's/5433/5432/' /etc/postgresql/11/main/postgresql.conf
