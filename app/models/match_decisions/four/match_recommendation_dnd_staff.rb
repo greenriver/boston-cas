@@ -100,6 +100,7 @@ module MatchDecisions::Four
       end
 
       def declined
+        Notifications::Four::MatchRejected.create_for_match! match
         match.rejected!
       end
 

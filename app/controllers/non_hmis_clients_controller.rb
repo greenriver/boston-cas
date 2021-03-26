@@ -234,7 +234,7 @@ class NonHmisClientsController < ApplicationController
     [true, false].detect{|m| m.to_s == params[:family_member]}
   end
 
-  def clean_client_params dirty_params
+  def clean_client_params(dirty_params)
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
 

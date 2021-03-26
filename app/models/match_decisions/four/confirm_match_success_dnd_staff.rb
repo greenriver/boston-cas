@@ -82,11 +82,12 @@ module MatchDecisions::Four
       end
 
       def confirmed
-        Notifications::MatchSuccessConfirmed.create_for_match! match
+        Notifications::Four::MatchSuccessConfirmed.create_for_match! match
         match.succeeded!
       end
 
       def rejected
+        Notifications::Four::MatchRejected.create_for_match! match
         match.rejected!
       end
     end

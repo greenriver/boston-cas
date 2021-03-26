@@ -16,13 +16,15 @@
 
 %ul.nav.nav-tabs
   %li.nav-item
-    %a.nav-link.active{href: '#active', role: "presentation", data: {toggle: :tab}}
+    - active_selected = 'active' unless params[:q].present? && @users.empty?
+    %a.nav-link{class: active_selected, href: '#active', role: "presentation", data: {toggle: :tab}}
       Active Accounts
   %li.nav-item
-    %a.nav-link{href: '#inactive', role: "presentation", data: {toggle: :tab}}
+    - inactive_selected = 'active' if active_selected.blank?
+    %a.nav-link{class: inactive_selected, href: '#inactive', role: "presentation", data: {toggle: :tab}}
       Inactive Accounts
 .tab-content
-  .tab-pane.active#active
+  .tab-pane#active{class: active_selected}
     .row.table-utilities
       .col-sm-8
         %p= page_entries_info @users, entry_name: 'user account'
@@ -88,7 +90,7 @@
                           De-Activate
 
         %p= paginate @users, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
-  .tab-pane#inactive
+  .tab-pane#inactive{class: inactive_selected}
     .table-responsive
       %table.table.table-condensed
         %thead

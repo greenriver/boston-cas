@@ -91,11 +91,12 @@ module MatchDecisions::Four
       end
 
       def decline_confirmed
+        Notifications::Four::MatchRejected.create_for_match! match
         match.rejected!
       end
 
       def canceled
-        Notifications::MatchCanceled.create_for_match! match
+        Notifications::Four::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end
