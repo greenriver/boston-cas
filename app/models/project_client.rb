@@ -19,7 +19,7 @@ class ProjectClient < ApplicationRecord
   end
 
   def from_hmis?
-    from_hmis.where(id: id).exists?
+    self.class.from_hmis.where(id: id).exists?
   end
 
   scope :from_non_hmis, -> do

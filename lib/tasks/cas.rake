@@ -60,4 +60,9 @@ namespace :cas do
     MatchCensus.populate!
   end
 
+  desc "Sync CE referral events"
+  task sync_referral_events: [:environment, "log:info_to_stdout"] do
+    Warehouse::ReferralEvent.sync!
+  end
+
 end

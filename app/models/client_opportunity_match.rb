@@ -28,6 +28,7 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate :contacts_editable_by_hsa, to: :match_route
   has_one :sub_program, through: :opportunity
   has_one :program, through: :sub_program
+  has_one :project_client, through: :client
 
   has_many :notifications, class_name: 'Notifications::Base'
 
@@ -535,7 +536,7 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all if ! match_route.should_activate_match
 
-      create_referral_event if Warehouse::Base.enabled?
+      init_referral_event if Warehouse::Base.enabled?
     end
   end
 
@@ -651,7 +652,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
 
-      referral_event&.success if Warehouse::Base.enabled?
+      referral_event&.accepted if Warehouse::Base.enabled?
     end
   end
 
@@ -690,6 +691,20 @@ class ClientOpportunityMatch < ApplicationRecord
     ClientOpportunityMatch.active.
       where(client_id: client_id, opportunity_id: opportunity_id).
       where.not(id: id)
+  end
+
+
+  def init_referral_event
+    return unless Warehouse::Base.enabled?
+    return referral_event if referral_event.present?
+    return unless project_client.from_hmis?
+
+    create_referral_event(
+      cas_client_id: client.id,
+      hmis_client_id: project_client.id_in_data_source,
+      program_id: program.id,
+      referral_date: match_created_event.date,
+    )
   end
 
   private
@@ -784,20 +799,6 @@ class ClientOpportunityMatch < ApplicationRecord
         assign_match_role_to_contact :do, contact
       end
     end
-
-
-  def create_referral_event
-    return unless Warehouse::Base.enabled?
-    return if referral_event.present?
-    return unless project_client.from_hmis?
-
-    referral_event.create(
-      cas_client_id: client.id,
-      hmis_client_id: project_client.id_in_data_source,
-      program_id: program.id,
-      referral_date: match_created_event.date,
-    )
-  end
 
     def self.prioritized_by_client(match_route, scope)
       match_route.match_prioritization.prioritization_for_clients(scope)
