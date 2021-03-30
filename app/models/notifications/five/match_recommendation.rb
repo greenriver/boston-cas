@@ -5,19 +5,23 @@
 ###
 
 module Notifications::Five
-  class Approval < Notifications::Base
+  class MatchRecommendation < Notifications::Base
     def self.create_for_match! match
-      match.shelter_agency_contacts.each do |contact|
+      match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.five_approval_decision
+      match.five_match_recommentation_decision
     end
 
     def event_label
-      "Awaiting #{_('Route Five Shelter Agency')} approval"
+      "#{_('Route Five HSA')} notified of new match"
+    end
+
+    def contacts_editable?
+      true
     end
   end
 end

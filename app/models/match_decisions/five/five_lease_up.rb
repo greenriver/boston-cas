@@ -14,7 +14,7 @@ module MatchDecisions::Five
     validate :client_move_in_date_present_if_status_complete
 
     def step_name
-      _('Lease Up')
+      _('Move In')
     end
 
     def actor_type
@@ -31,12 +31,12 @@ module MatchDecisions::Five
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Five::Approval
+        m << Notifications::Five::LeaseUp
       end
     end
 
     def permitted_params
-      super + [:shelter_expiration]
+      super + [:client_move_in_date]
     end
 
     def statuses
@@ -51,8 +51,8 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "Awaiting #{_('Route Five Shelter Agency')} Lease Up"
-      when :expiration_update then "Awaiting #{_('Route Five Shelter Agency')} Lease Up"
+      when :pending then "Awaiting Move In"
+      when :expiration_update then "Awaiting Move In"
       when :completed then "Match completed by #{_('Route Five Shelter Agency')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
 
       when :canceled then canceled_status_label

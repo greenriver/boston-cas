@@ -31,7 +31,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + [:shelter_expiration]
+      super + []
     end
 
     def statuses

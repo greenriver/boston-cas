@@ -16,6 +16,10 @@ module MatchDecisions::Five
       _('Route Five Shelter Agency')
     end
 
+    def expires?
+      true
+    end
+
     def contact_actor_type
       :shelter_agency_contacts
     end
@@ -31,7 +35,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + [:shelter_expiration]
+      super + [:application_date]
     end
 
     def statuses

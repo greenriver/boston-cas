@@ -16,23 +16,22 @@ module MatchRoutes
 
     def self.match_steps
       {
-        # Client Agrees, Application Submitted, Screening in Progress, Mitigation, Pending Approval,  Lease Up
-        'MatchDecisions::Five::FiveClientAgrees' => 1,
-        'MatchDecisions::Five::FiveApplicationSubmission' => 2,
-        'MatchDecisions::Five::FiveScreening' => 3,
-        'MatchDecisions::Five::FiveMitigation' => 4,
-        'MatchDecisions::Five::FiveApproval' => 5,
+        'MatchDecisions::Five::FiveMatchRecommendation' => 1,
+        'MatchDecisions::Five::FiveClientAgrees' => 2,
+        'MatchDecisions::Five::FiveApplicationSubmission' => 3,
+        'MatchDecisions::Five::FiveScreening' => 4,
+        'MatchDecisions::Five::FiveMitigation' => 5,
         'MatchDecisions::Five::FiveLeaseUp' => 6,
       }
     end
 
     def self.match_steps_for_reporting
       {
-        'MatchDecisions::Five::FiveClientAgrees' => 1,
-        'MatchDecisions::Five::FiveApplicationSubmission' => 2,
-        'MatchDecisions::Five::FiveScreening' => 3,
-        'MatchDecisions::Five::FiveMitigation' => 4,
-        'MatchDecisions::Five::FiveApproval' => 5,
+        'MatchDecisions::Five::FiveMatchRecommendation' => 1,
+        'MatchDecisions::Five::FiveClientAgrees' => 2,
+        'MatchDecisions::Five::FiveApplicationSubmission' => 3,
+        'MatchDecisions::Five::FiveScreening' => 4,
+        'MatchDecisions::Five::FiveMitigation' => 5,
         'MatchDecisions::Five::FiveLeaseUp' => 6,
       }
     end

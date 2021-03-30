@@ -5,19 +5,23 @@
 ###
 
 module MatchDecisions::Five
-  class FiveClientAgrees < ::MatchDecisions::Base
+  class FiveMatchRecommendation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
+    validate :cant_accept_if_match_closed
+    validate :cant_accept_if_related_active_match
+    validate :ensure_required_contacts_present_on_accept
+
     def step_name
-      _('Client Agrees To Match')
+      "#{_('Route Five HSA')} Initial Review"
     end
 
     def actor_type
-      _('Route Five Shelter Agency')
+      _('Route Five HSA')
     end
 
     def contact_actor_type
-      :shelter_agency_contacts
+      :housing_subsidy_admin_contacts
     end
 
     def show_client_match_attributes?
@@ -26,12 +30,12 @@ module MatchDecisions::Five
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Five::ClientAgrees
+        m << Notifications::Five::MatchRecommendation
       end
     end
 
     def permitted_params
-      super + []
+      super + [:prevent_matching_until, :shelter_expiration]
     end
 
     def statuses
@@ -45,9 +49,9 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "New Match Awaiting #{_('Route Five Shelter Agency')} Review"
-      when :accepted then "New Match Accepted by #{_('Route Five HSA')} on Behalf of the Client"
-      when :declined then "New Match Declined by #{_('Route Five HSA')} on Behalf of the Client.  Reason: #{decline_reason_name}"
+      when :pending then "New Match Awaiting #{_('Route Five HSA')} Review"
+      when :accepted then "New Match Accepted by #{_('Route Five HSA')}"
+      when :declined then "New Match Declined by #{_('Route Five HSA')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
@@ -90,11 +94,29 @@ module MatchDecisions::Five
     end
 
     private def decline_reason_scope
-      MatchDecisionReasons::ShelterAgencyDecline.all
+      MatchDecisionReasons::HousingSubsidyAdminDecline.all
     end
 
     private def save_will_accept?
       saved_status == 'pending' && status == 'accepted'
+    end
+
+    private def cant_accept_if_match_closed
+      errors.add :status, "This match has already been closed." if save_will_accept? && match.closed
+    end
+
+    private def cant_accept_if_related_active_match
+      if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
+      then errors.add :status, "There is already another active match for this opportunity"
+      end
+    end
+
+    private def ensure_required_contacts_present_on_accept
+      missing_contacts = []
+      missing_contacts << "a #{_('Route Five Shelter Agency')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
+      missing_contacts << "a #{_('Route Five HSA')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
   end
 end
