@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_154221) do
+ActiveRecord::Schema.define(version: 2021_04_01_175418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -570,6 +570,16 @@ ActiveRecord::Schema.define(version: 2021_03_24_154221) do
     t.index ["notification_id"], name: "index_match_events_on_notification_id"
   end
 
+  create_table "match_mitigation_reasons", force: :cascade do |t|
+    t.bigint "client_opportunity_match_id"
+    t.bigint "mitigation_reason_id"
+    t.boolean "addressed", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_opportunity_match_id"], name: "index_match_mitigation_reasons_on_client_opportunity_match_id"
+    t.index ["mitigation_reason_id"], name: "index_match_mitigation_reasons_on_mitigation_reason_id"
+  end
+
   create_table "match_prioritizations", id: :serial, force: :cascade do |t|
     t.string "type", null: false
     t.boolean "active", default: true, null: false
@@ -633,6 +643,13 @@ ActiveRecord::Schema.define(version: 2021_03_24_154221) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "contact_id", null: false
+  end
+
+  create_table "mitigation_reasons", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "name_quality_codes", id: :serial, force: :cascade do |t|

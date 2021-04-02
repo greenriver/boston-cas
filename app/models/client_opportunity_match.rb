@@ -31,6 +31,9 @@ class ClientOpportunityMatch < ApplicationRecord
 
   has_many :notifications, class_name: 'Notifications::Base'
 
+  has_many :match_mitigation_reasons
+  has_many :mitigation_reasons, through: :match_mitigation_reasons
+
   # Default Match Route
   has_decision :match_recommendation_dnd_staff
   has_decision :match_recommendation_shelter_agency

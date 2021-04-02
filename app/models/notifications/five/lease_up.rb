@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Five
-  class Mitigation < Notifications::Base
+  class LeaseUp < Notifications::Base
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact

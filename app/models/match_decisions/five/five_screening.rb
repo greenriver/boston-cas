@@ -8,6 +8,8 @@ module MatchDecisions::Five
   class FiveScreening < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
+    attr_accessor :required_mitigations
+
     def step_name
       _('Client Screening')
     end
@@ -31,7 +33,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + []
+      super + [required_mitigations: []]
     end
 
     def statuses
@@ -72,6 +74,8 @@ module MatchDecisions::Five
       end
 
       def mitigation_required
+        mitigation_ids = @decision.required_mitigations.select{ |str| str.present? }.map(&:to_i)
+        match.mitigation_reasons = MitigationReason.where(id: mitigation_ids)
         @decision.next_step.initialize_decision!
       end
 

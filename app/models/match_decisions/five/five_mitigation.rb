@@ -8,6 +8,8 @@ module MatchDecisions::Five
   class FiveMitigation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
+    attr_accessor :mitigations
+
     def step_name
       _('Mitigation')
     end
@@ -31,7 +33,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + []
+      super + [mitigations: []]
     end
 
     def statuses
@@ -70,16 +72,26 @@ module MatchDecisions::Five
       end
 
       def accepted
+        record_mitigations
         @decision.next_step.initialize_decision!
       end
 
       def declined
+        record_mitigations
         match.rejected!
       end
 
       def canceled
+        record_mitigations
         Notifications::Five::MatchCanceled.create_for_match! match
         match.canceled!
+      end
+
+      def record_mitigations
+        return unless @decision.mitigations.present?
+
+        mitigation_ids = @decision.mitigations.select{ |str| str.present? }.map(&:to_i)
+        match.match_mitigation_reasons.where(id: mitigation_ids).update(addressed: true)
       end
     end
     private_constant :StatusCallbacks
