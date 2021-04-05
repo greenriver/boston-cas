@@ -79,6 +79,10 @@ module MatchDecisions
       true
     end
 
+    def holds_voucher?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
         match.client.update(holds_voucher_on: Date.current) unless match.opportunity.sub_program.has_buildings?

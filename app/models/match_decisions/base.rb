@@ -209,6 +209,10 @@ module MatchDecisions
       # override in subclass, return an array of notifications appropriate to resend for the current step
     end
 
+    def holds_voucher?
+      false
+    end
+
     ######################
     # Status Handling
     ######################

@@ -25,9 +25,9 @@ class Rules::HoldsVoucher < Rule
     # Don't try and copy contacts unless the client holds a voucher
     return unless match.client.holds_voucher_on.present?
 
+    # Find the first active match that holds a voucher
     source_match = match.client.active_matches.detect do |candidate|
-      # FIXME find the appropriate source match
-      false
+      candidate.current_decision.holds_voucher?
     end
     return unless source_match.present?
 
