@@ -8,6 +8,8 @@ module MatchDecisions::Five
   class FiveApplicationSubmission < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
+    validate :application_date_present_if_status_complete
+
     def step_name
       _('Submit Client Application')
     end
@@ -35,7 +37,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + [:application_date]
+      super + [:application_date, :prevent_matching_until]
     end
 
     def statuses
@@ -51,10 +53,10 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "New Match Awaiting #{_('Route Five Shelter Agency')} Review"
-      when :expiration_update then "New Match Awaiting #{_('Route Five Shelter Agency')} Review"
+      when :pending then "Match Awaiting Application Submission"
+      when :expiration_update then "Match Awaiting Application Submission"
       when :accepted then "Client Application Submitted by #{_('Route Five Shelter Agency')}"
-      when :declined then "New Match Declined by #{_('Route Five Shelter Agency')}.  Reason: #{decline_reason_name}"
+      when :declined then "Match Declined by #{_('Route Five Shelter Agency')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -75,10 +77,6 @@ module MatchDecisions::Five
 
       def accepted
         @decision.next_step.initialize_decision!
-
-        if match.client.remote_id.present? && Warehouse::Base.enabled?
-          Warehouse::Client.find_by(id: match.client.remote_id)&.queue_history_pdf_generation
-        end
       end
 
       def declined
@@ -106,6 +104,12 @@ module MatchDecisions::Five
 
     private def decline_reason_scope
       MatchDecisionReasons::ShelterAgencyDecline.all
+    end
+
+    private def application_date_present_if_status_complete
+      if status == 'completed' && application_date.blank?
+        errors.add :application_date, 'must be filled in'
+      end
     end
   end
 end

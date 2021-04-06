@@ -8,9 +8,6 @@ module MatchDecisions::Five
   class FiveLeaseUp < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
-    attr_accessor :building_id
-    attr_accessor :unit_id
-
     validate :client_move_in_date_present_if_status_complete
 
     def step_name
@@ -36,7 +33,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + [:client_move_in_date]
+      super + [:client_move_in_date, :prevent_matching_until]
     end
 
     def statuses
@@ -102,8 +99,6 @@ module MatchDecisions::Five
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
-        :building_id,
-        :unit_id,
         :client_move_in_date,
       )
     end

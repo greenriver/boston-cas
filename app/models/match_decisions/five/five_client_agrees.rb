@@ -31,7 +31,7 @@ module MatchDecisions::Five
     end
 
     def permitted_params
-      super + []
+      super + [:prevent_matching_until]
     end
 
     def statuses
@@ -40,14 +40,15 @@ module MatchDecisions::Five
         accepted: 'Accepted',
         declined: 'Decline',
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
 
     def label_for_status status
       case status.to_sym
-      when :pending then "New Match Awaiting #{_('Route Five Shelter Agency')} Review"
-      when :accepted then "New Match Accepted by #{_('Route Five HSA')} on Behalf of the Client"
-      when :declined then "New Match Declined by #{_('Route Five HSA')} on Behalf of the Client.  Reason: #{decline_reason_name}"
+      when :pending then "Match Awaiting #{_('Route Five Shelter Agency')} Review"
+      when :accepted then "Match Accepted by #{_('Route Five HSA')} on Behalf of the Client"
+      when :declined then "Match Declined by #{_('Route Five HSA')} on Behalf of the Client.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
