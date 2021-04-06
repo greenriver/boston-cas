@@ -37,7 +37,7 @@ module MatchRoutes
     end
 
     def initial_decision
-      :five_client_agrees_decision
+      :five_match_recommendation_decision
     end
 
     def success_decision

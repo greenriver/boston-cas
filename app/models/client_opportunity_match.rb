@@ -696,7 +696,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
 
-  private def assign_match_role_to_contact role, contact
+  def assign_match_role_to_contact role, contact
     join_model = client_opportunity_match_contacts.detect do |match_contact|
       match_contact.contact_id == contact.id
     end

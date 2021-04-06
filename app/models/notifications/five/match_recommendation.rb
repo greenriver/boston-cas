@@ -13,7 +13,7 @@ module Notifications::Five
     end
 
     def decision
-      match.five_match_recommentation_decision
+      match.five_match_recommendation_decision
     end
 
     def event_label

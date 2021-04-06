@@ -98,8 +98,13 @@ module MatchDecisions
       true
     end
 
+    def holds_voucher?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
+        match.client.update(holds_voucher_on: Date.current) unless match.opportunity.sub_program.has_buildings?
       end
 
       def other_clients_canceled
@@ -107,10 +112,12 @@ module MatchDecisions
       end
 
       def completed
+        match.client.update(holds_voucher_on: nil)
         @decision.next_step.initialize_decision!
       end
 
       def canceled
+        match.client.update(holds_voucher_on: nil)
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end

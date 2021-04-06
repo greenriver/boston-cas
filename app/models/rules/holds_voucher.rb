@@ -26,8 +26,8 @@ class Rules::HoldsVoucher < Rule
     return unless match.client.holds_voucher_on.present?
 
     # Find the first active match that holds a voucher
-    source_match = match.client.active_matches.detect do |candidate|
-      candidate.current_decision.holds_voucher?
+    source_match = match.client.client_opportunity_matches.active.detect do |candidate|
+      candidate.current_decision.present? && candidate.current_decision.holds_voucher?
     end
     return unless source_match.present?
 
