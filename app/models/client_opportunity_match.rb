@@ -455,6 +455,8 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def can_create_overall_note? contact
+    return false if stalled? && contact.in?(public_send(current_decision.contact_actor_type))
+
     can_create_administrative_note?(contact) || contact&.user&.can_create_overall_note?
   end
 
