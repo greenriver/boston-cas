@@ -21,6 +21,7 @@
 //= require jquery_ujs
 //= require handlebars.runtime
 //= require select2
+//= require remote_select_load
 //= require bootstrap-datepicker
 //= require bootstrap-datetimepicker
 //= require jquery.periodicalupdater
@@ -31,6 +32,7 @@
 // App specific code
 //////////////////////////
 //= require namespace
+//= require select_2
 //= require ./select_two
 //= require_tree ./templates
 //= require ajax_modal_rails

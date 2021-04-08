@@ -1,0 +1,29 @@
+- if @unit.persisted?
+  .row
+    .col-lg-12
+      .c-card.c-card--flush
+        %h3 Attributes
+        .c-card__content
+          - if @unit.unit_attributes.exists?
+            %table.table
+              %thead
+                %tr
+                  %th Attribute
+                  %th Value
+                  %th
+                  %th
+              %tbody
+                - @unit.unit_attributes.each do |attribute|
+                  - next unless attribute.persisted?
+                  %tr
+                    %td= attribute.name
+                    %td= attribute.value
+                    %td.text-right
+                      = link_to edit_unit_unit_attribute_path(@unit, attribute), class: 'btn btn-sm', data: {loads_in_pjax_modal: true} do
+                        %i.icon-pencil
+                        Edit
+                    %td.text-right
+                      = link_to unit_unit_attribute_path(@unit, attribute), method: :delete, data: {confirm: "Would you really like to remove this attribute?"}, class: 'btn btn-sm btn-danger' do
+                        %i.icon-cross
+                        Remove
+          .text-right= link_to "Add Attribute", new_unit_unit_attribute_path(@unit), class: 'btn btn-secondary', data: {loads_in_pjax_modal: true}
