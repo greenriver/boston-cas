@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "#{_('Route Five Shelter Agency')} notified of new match"
+      "#{_('Route Five Shelter Agency')} requested to submit housing application"
     end
   end
 end

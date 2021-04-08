@@ -44,5 +44,15 @@ class Rules::HoldsVoucher < Rule
     source_match.client_contacts.each do |contact|
       match.assign_match_role_to_contact(:client, contact)
     end
+
+    source_match.ssp_contacts.each do |contact|
+      match.assign_match_role_to_contact(:ssp, contact)
+    end
+    source_match.hsp_contacts.each do |contact|
+      match.assign_match_role_to_contact(:hsp, contact)
+    end
+    source_match.do_contacts.each do |contact|
+      match.assign_match_role_to_contact(:do, contact)
+    end
   end
 end
