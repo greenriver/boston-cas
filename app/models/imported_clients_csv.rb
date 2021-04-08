@@ -3,15 +3,12 @@ class ImportedClientsCsv < ApplicationRecord
 
   FORM_TIMESTAMP = 0 # A
   USER_EMAIL = 1 # B
-  # HOUSEHOLD_ACKNOWLEDGEMENT = 2 # C - not in use
   HOUSING_STATUS = 2 # D
   DAYS_HOMELESS = 3 # E
-  # HOMELESS_CERTIFICATION = 5 # F - not in use
   SHELTER_NAME = 4 # G
   ENTRY_DATE = 5 # H
   CASE_MANAGER_NAME = 6 # I
   CASE_MANAGER_PHONE = 7 # J
-  # ADDITIONAL_ACKNOWLEDGEMENT = 10 # K - not in use
   HOH_FIRST_NAME = 8 # L
   HOH_LAST_NAME = 9 # M
   HOH_PHONE = 10 # N
