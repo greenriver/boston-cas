@@ -44,84 +44,82 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def import(agency)
-    if check_header
-      CSV.parse(content, headers: true) do |row|
-        first_name = row[HOH_FIRST_NAME]
-        last_name = row[HOH_LAST_NAME]
-        email = row[HOH_EMAIL]
+    return false unless check_header
 
-        client = ImportedClient.where(
-          first_name: first_name,
-          last_name: last_name,
-          email: email
-        ).first_or_initialize do |client|
-          @added += 1
-          client.interested_in_set_asides = true
-          client.available = false
-          client.identified = true
-        end
-        assessment = client.current_assessment || client.client_assessments.build
+    CSV.parse(content, headers: true) do |row|
+      first_name = row[HOH_FIRST_NAME]
+      last_name = row[HOH_LAST_NAME]
+      email = row[HOH_EMAIL]
 
-        timestamp = convert_to_time(row[FORM_TIMESTAMP])
-        if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
-          @clients << client
-          @touched += 1 if assessment.imported_timestamp.present?
-          assessment.update(
-            imported_timestamp: timestamp,
-
-            set_asides_housing_status: row[HOUSING_STATUS],
-            domestic_violence: fleeing_domestic_violence?(row),
-            set_asides_resident: resident?(row),
-            days_homeless_in_the_last_three_years: days_homeless(row),
-            shelter_name: row[SHELTER_NAME],
-            entry_date: convert_to_date(row[ENTRY_DATE]),
-            case_manager_contact_info: case_manager(client, row),
-            phone_number: row[HOH_PHONE],
-            income_total_monthly: monthly_income(row),
-            have_tenant_voucher: yes_no_to_bool(row[VOUCHER]),
-            voucher_agency: row[VOUCHER_AGENCY],
-            children_info: row[CHILDREN],
-            family_member: family?(row),
-            studio_ok: studio_ok?(row),
-            one_br_ok: yes_no_to_bool(row[FAMILY_ONE_BR]),
-            sro_ok: yes_no_to_bool(row[SRO]),
-            required_number_of_bedrooms: bedrooms(row),
-            requires_wheelchair_accessibility: wheelchair_accessible?(row),
-            requires_elevator_access: elevator_access?(row),
-            disabling_condition: disability?(row),
-            interested_in_disabled_housing: yes_no_to_bool(row[INTERESTED_IN_DISABLED_HOUSING]),
-            fifty_five_plus: yes_no_to_bool(row[FIFTY_FIVE]),
-            sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
-            veteran: yes_no_to_bool(row[VETERAN]),
-            neighborhood_interests: determine_neighborhood_interests(client, row),
-          )
-          client.update(
-            agency_id: agency&.id,
-            date_of_birth: calculate_dob(row),
-            shelter_name: row[SHELTER_NAME],
-          )
-        end
+      client = ImportedClient.where(
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+      ).first_or_initialize do |c|
+        @added += 1
+        c.interested_in_set_asides = true # import is currently for set-asides, mark everyone as interested
+        c.available = false
+        c.identified = true
       end
-      return true
-    else
-      return false
+      assessment = client.current_assessment || client.client_assessments.build
+
+      timestamp = convert_to_time(row[FORM_TIMESTAMP])
+      if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
+        @clients << client
+        @touched += 1 if assessment.imported_timestamp.present?
+        assessment.update(
+          imported_timestamp: timestamp,
+
+          set_asides_housing_status: row[HOUSING_STATUS],
+          domestic_violence: fleeing_domestic_violence?(row),
+          set_asides_resident: resident?(row),
+          days_homeless_in_the_last_three_years: days_homeless(row),
+          shelter_name: row[SHELTER_NAME],
+          entry_date: convert_to_date(row[ENTRY_DATE]),
+          case_manager_contact_info: case_manager(client, row),
+          phone_number: row[HOH_PHONE],
+          income_total_monthly: monthly_income(row),
+          have_tenant_voucher: yes_no_to_bool(row[VOUCHER]),
+          voucher_agency: row[VOUCHER_AGENCY],
+          children_info: row[CHILDREN],
+          family_member: family?(row),
+          studio_ok: studio_ok?(row),
+          one_br_ok: yes_no_to_bool(row[FAMILY_ONE_BR]),
+          sro_ok: yes_no_to_bool(row[SRO]),
+          required_number_of_bedrooms: bedrooms(row),
+          requires_wheelchair_accessibility: wheelchair_accessible?(row),
+          requires_elevator_access: elevator_access?(row),
+          disabling_condition: disability?(row),
+          interested_in_disabled_housing: yes_no_to_bool(row[INTERESTED_IN_DISABLED_HOUSING]),
+          fifty_five_plus: yes_no_to_bool(row[FIFTY_FIVE]),
+          sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
+          veteran: yes_no_to_bool(row[VETERAN]),
+          neighborhood_interests: determine_neighborhood_interests(client, row),
+        )
+        client.update(
+          agency_id: agency&.id,
+          date_of_birth: calculate_dob(row),
+          shelter_name: row[SHELTER_NAME],
+        )
+      end
     end
+    true
   end
 
   def convert_to_time(str)
-    begin
-      DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
-    rescue
-      DateTime.parse(str)
-    end
+    return unless str
+
+    DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
+  rescue ArgumentError
+    DateTime.parse(str)
   end
 
   def convert_to_date(str)
-    begin
-      Date.strptime(str, '%m/%d/%Y')
-    rescue
-      Date.parse(str)
-    end
+    return unless str
+
+    Date.strptime(str, '%m/%d/%Y')
+  rescue ArgumentError
+    Date.parse(str)
   end
 
   def fleeing_domestic_violence?(row)
@@ -134,14 +132,16 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def days_homeless(row)
-    Integer(row[DAYS_HOMELESS]) rescue nil
+    Integer(row[DAYS_HOMELESS])
+    rescue ArgumentError, TypeError
+      nil
   end
 
   def case_manager(client, row)
     info = []
     name = row[CASE_MANAGER_NAME]
     if name.present?
-    info << name
+      info << name
     else
       client.errors.add(:case_manager_contact_info, 'case manager name can\'t be blank')
     end
@@ -161,11 +161,13 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def monthly_income(row)
-    Float(row[ANNUAL_INCOME]) / 12 rescue nil
+    Float(row[ANNUAL_INCOME]) / 12
+  rescue ArgumentError, TypeError
+    nil
   end
 
   def yes_no_to_bool(val)
-    val == "Yes"
+    val == 'Yes'
   end
 
   def family?(row)
@@ -180,11 +182,9 @@ class ImportedClientsCsv < ApplicationRecord
     return nil unless row[BEDROOMS].present?
 
     bedrooms = row[BEDROOMS].gsub(/bedroom/, '').to_i
-    if bedrooms > 1
-      bedrooms
-    else
-      nil
-    end
+    return bedrooms if bedrooms > 1
+
+    nil
   end
 
   def wheelchair_accessible?(row)
