@@ -12,10 +12,6 @@ module MatchDecisions::Five
       _('Client Agrees To Match')
     end
 
-    def actor_type
-      _('Route Five Shelter Agency')
-    end
-
     def contact_actor_type
       :shelter_agency_contacts
     end
@@ -46,9 +42,9 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "Match Awaiting #{_('Route Five Shelter Agency')} Review"
-      when :accepted then "Match Accepted by #{_('Route Five HSA')} on Behalf of the Client"
-      when :declined then "Match Declined by #{_('Route Five HSA')} on Behalf of the Client.  Reason: #{decline_reason_name}"
+      when :pending then "Match Awaiting #{actor_type} Review"
+      when :accepted then "Match Accepted by #{actor_type} on Behalf of the Client"
+      when :declined then "Match Declined by #{actor_type} on Behalf of the Client.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end

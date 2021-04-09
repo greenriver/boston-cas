@@ -105,6 +105,29 @@ module MatchRoutes
       ['Stalled Matches - awaiting response']
     end
 
+    def actor_type
+      match_route.contact_label_for(contact_actor_type)
+    end
+
+    def contact_label_for(contact_type)
+      case contact_type
+      when :dnd_staff_contacts
+        _('DND')
+      when :housing_subsidy_admin_contacts
+        _('Housing Subsidy Administrator')
+      when :client_contacts
+        _('Client')
+      when :shelter_agency_contacts
+        _('Shelter Agency')
+      when :ssp_contacts
+        _('Stabilization Service Provider')
+      when :hsp_contacts
+        _('Housing Search Provider')
+      when :do_contacts
+        _('Development Officer')
+      end
+    end
+
     def self.max_matches_per_client
       6
     end

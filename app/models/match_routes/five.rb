@@ -54,5 +54,19 @@ module MatchRoutes
         'shelter_agency',
       ]
     end
+
+
+    def contact_label_for(contact_type)
+      case contact_type
+      when :dnd_staff_contacts
+        _('Route Five DND Contact')
+      when :housing_subsidy_admin_contacts
+        _('Route Five HSA')
+      when :shelter_agency_contacts
+        _('Route Five Shelter Agency')
+      else
+        super(contact_type)
+      end
+    end
   end
 end

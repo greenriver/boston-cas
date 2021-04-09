@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "#{_('Route Five HSA')} notified of new match"
+      "#{match.match_route.contact_label_for(:housing_subsidy_admin_contacts)} notified of new match"
     end
 
     def contacts_editable?

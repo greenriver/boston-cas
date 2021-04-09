@@ -392,23 +392,19 @@ class ClientOpportunityMatch < ApplicationRecord
     contacts_with_info = {}
     match_contacts.input_names.each do |input_name|
       if match_contacts.send(input_name).count > 0
-        contacts_with_info[input_name] = match_contacts.label_for input_name
+        contacts_with_info[input_name] = match_route.contact_label_for(input_name)
       end
     end
     contacts_with_info
   end
 
-  def self.default_contact_titles
-    {
-      shelter_agency_contacts: "#{_('Shelter Agency')} Contacts",
-      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrators')}",
-      ssp_contacts: "#{_('Stabilization Service Providers')}",
-      hsp_contacts: "#{_('Housing Search Providers')}",
-    }
-  end
-
   def default_contact_titles
-    self.class.default_contact_titles
+    {
+      shelter_agency_contacts: "#{match_route.contact_label_for(:shelter_agency_contacts)} Contacts",
+      housing_subsidy_admin_contacts: match_route.contact_label_for(:housing_subsidy_admin_contacts).pluralize,
+      ssp_contacts: match_route.contact_label_for(:ssp_contacts).pluralize,
+      hsp_contacts: match_route.contact_label_for(:hsp_contacts).pluralize,
+    }
   end
 
   def overall_status

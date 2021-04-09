@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "#{_('Route Five Shelter Agency')} performing mitigation"
+      "#{match.match_route.contact_label_for(:shelter_agency_contacts)} performing mitigation"
     end
   end
 end

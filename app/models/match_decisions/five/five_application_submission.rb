@@ -14,10 +14,6 @@ module MatchDecisions::Five
       _('Submit Client Application')
     end
 
-    def actor_type
-      _('Route Five Shelter Agency')
-    end
-
     def expires?
       true
     end
@@ -55,8 +51,8 @@ module MatchDecisions::Five
       case status.to_sym
       when :pending then "Match Awaiting Application Submission"
       when :expiration_update then "Match Awaiting Application Submission"
-      when :accepted then "Client Application Submitted by #{_('Route Five Shelter Agency')}"
-      when :declined then "Match Declined by #{_('Route Five Shelter Agency')}.  Reason: #{decline_reason_name}"
+      when :accepted then "Client Application Submitted by #{actor_type}"
+      when :declined then "Match Declined by #{actor_type}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end

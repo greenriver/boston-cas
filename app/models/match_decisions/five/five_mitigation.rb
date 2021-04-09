@@ -14,10 +14,6 @@ module MatchDecisions::Five
       _('Mitigation')
     end
 
-    def actor_type
-      _('Route Five Shelter Agency')
-    end
-
     def contact_actor_type
       :shelter_agency_contacts
     end
@@ -49,10 +45,10 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Route Five Shelter Agency')} Mitigation"
-      when :expiration_update then "#{_('Route Five Shelter Agency')} Mitigation"
-      when :accepted then "Mitigation completed by #{_('Route Five Shelter Agency')}."
-      when :declined then "Match Declined by #{_('Route Five Shelter Agency')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{actor_type} Mitigation"
+      when :expiration_update then "#{actor_type} Mitigation"
+      when :accepted then "Mitigation completed by #{actor_type}."
+      when :declined then "Match Declined by #{actor_type}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end

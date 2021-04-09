@@ -1,4 +1,7 @@
-- label = object.label_for(contact_type)
+- match_label ||= nil
+- if match.present?
+  - match_label = "#{match.match_route.contact_label_for(contact_type)} Contacts"
+- label = match_label || object.label_for(contact_type)
 - contacts_type = object.contact_type_for(contact_type)
 - available_contacts_method = object.available_contacts_method_for(contact_type)
 - selected_contacts_method = object.selected_contacts_method_for(contact_type)

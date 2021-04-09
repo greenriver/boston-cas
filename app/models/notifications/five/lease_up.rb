@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "Awaiting #{_('Route Five Shelter Agency')} Lease Up"
+      "Awaiting #{match.match_route.contact_label_for(:shelter_agency_contacts)} Lease Up"
     end
   end
 end

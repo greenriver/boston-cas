@@ -13,11 +13,7 @@ module MatchDecisions::Five
     validate :ensure_required_contacts_present_on_accept
 
     def step_name
-      "#{_('Route Five HSA')} Initial Review"
-    end
-
-    def actor_type
-      _('Route Five HSA')
+      "#{actor_type} Initial Review"
     end
 
     def contact_actor_type
@@ -49,9 +45,9 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "New Match Awaiting #{_('Route Five HSA')} Review"
-      when :accepted then "New Match Accepted by #{_('Route Five HSA')}"
-      when :declined then "New Match Declined by #{_('Route Five HSA')}.  Reason: #{decline_reason_name}"
+      when :pending then "New Match Awaiting #{actor_type} Review"
+      when :accepted then "New Match Accepted by #{actor_type}"
+      when :declined then "New Match Declined by #{actor_type}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
@@ -113,8 +109,8 @@ module MatchDecisions::Five
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{_('Route Five Shelter Agency')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
-      missing_contacts << "a #{_('Route Five HSA')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{match_route.contact_label_for(:shelter_agency_contacts)} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
+      missing_contacts << "a #{match_route.contact_label_for(:housing_subsidy_admin_contacts)} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

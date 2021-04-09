@@ -14,10 +14,6 @@ module MatchDecisions::Five
       _('Move In')
     end
 
-    def actor_type
-      _('Route Five Shelter Agency')
-    end
-
     def contact_actor_type
       :shelter_agency_contacts
     end
@@ -50,7 +46,7 @@ module MatchDecisions::Five
       case status.to_sym
       when :pending then "Awaiting Move In"
       when :expiration_update then "Awaiting Move In"
-      when :completed then "Match completed by #{_('Route Five Shelter Agency')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "Match completed by #{actor_type}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label
