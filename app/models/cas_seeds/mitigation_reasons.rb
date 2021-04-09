@@ -9,6 +9,8 @@ module CasSeeds
 
     def run!
       [
+        'Failed background check',
+        'Failed credit check',
       ].each do |s|
         MitigationReason.where(name: s).first_or_create(name: s)
       end
