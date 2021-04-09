@@ -8,9 +8,6 @@ module Warehouse
   class ReferralEvent < Base
     self.table_name = :cas_referral_events
 
-    belongs_to :client, foreign_key: :cas_client_id, inverse_of: :referral_events
-    belongs_to :client_opportunity_match, inverse_of: :referral_event
-    
     CLIENT_ACCEPTED = 1
 
     def accepted
@@ -28,6 +25,11 @@ module Warehouse
 
     def clear
       update(referral_result: nil, referral_result_date: nil)
+    end
+
+    # belongs_to doesn't work because the match and event are in different databases
+    def client_opportunity_match
+      @client_opportinity_match ||= ClientOpportunityMatch.find(client_opportunity_match_id)
     end
 
     def self.sync!
