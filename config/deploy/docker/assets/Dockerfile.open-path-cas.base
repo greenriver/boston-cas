@@ -69,7 +69,7 @@ RUN mkdir -p app/assets/stylesheets/theme/styles && \
   rm .env && \
   mkdir tmp/pids
 
-COPY REVISION ./
+COPY config/deploy/docker/assets/REVISION ./
 
 COPY config/deploy/docker/assets/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
