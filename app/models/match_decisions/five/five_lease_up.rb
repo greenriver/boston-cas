@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Five
-  class FiveLeaseUp < ::MatchDecisions::Base
+  class FiveLeaseUp < Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :client_move_in_date_present_if_status_complete

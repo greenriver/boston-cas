@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Five
-  class FiveScreening < ::MatchDecisions::Base
+  class FiveScreening < Base
     include MatchDecisions::AcceptsDeclineReason
 
     attr_accessor :required_mitigations

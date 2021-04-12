@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Five
-  class FiveMatchRecommendation < ::MatchDecisions::Base
+  class FiveMatchRecommendation < Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed

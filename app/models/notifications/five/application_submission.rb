@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Five
-  class ApplicationSubmission < Notifications::Base
+  class ApplicationSubmission < Base
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "#{match.match_route.contact_label_for(:shelter_agency_contacts)} requested to submit housing application"
+      "#{match_route.contact_label_for(:shelter_agency_contacts)} requested to submit housing application"
     end
   end
 end

@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Five
-  class FiveClientAgrees < ::MatchDecisions::Base
+  class FiveClientAgrees < Base
     include MatchDecisions::AcceptsDeclineReason
 
     def step_name

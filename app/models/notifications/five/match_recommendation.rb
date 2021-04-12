@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Five
-  class MatchRecommendation < Notifications::Base
+  class MatchRecommendation < Base
     def self.create_for_match! match
       match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "#{match.match_route.contact_label_for(:housing_subsidy_admin_contacts)} notified of new match"
+      "#{match_route.contact_label_for(:housing_subsidy_admin_contacts)} notified of new match"
     end
 
     def contacts_editable?

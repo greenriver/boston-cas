@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Five
-  class FiveMitigation < ::MatchDecisions::Base
+  class FiveMitigation < Base
     include MatchDecisions::AcceptsDeclineReason
 
     attr_accessor :mitigations

@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Five
-  class ClientAgrees < Notifications::Base
+  class ClientAgrees < Base
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -17,7 +17,7 @@ module Notifications::Five
     end
 
     def event_label
-      "#{match.match_route.contact_label_for(:shelter_agency_contacts)} requested to confirm client accepts match"
+      "#{match_route.contact_label_for(:shelter_agency_contacts)} requested to confirm client accepts match"
     end
   end
 end

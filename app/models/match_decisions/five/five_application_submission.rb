@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Five
-  class FiveApplicationSubmission < ::MatchDecisions::Base
+  class FiveApplicationSubmission < Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :application_date_present_if_status_complete
