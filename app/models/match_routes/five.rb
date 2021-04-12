@@ -71,7 +71,6 @@ module MatchRoutes
       when :do_contacts
         _('Route Five Development Officer')
       end
-      end
     end
   end
 end
