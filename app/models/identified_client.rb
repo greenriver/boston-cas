@@ -66,6 +66,10 @@ class IdentifiedClient < NonHmisClient
     Config.get('identified_client_assessment').include?('Pathways')
   end
 
+  def assessment_type
+    Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
+  end
+
   def download_headers
     if pathways_enabled?
       [

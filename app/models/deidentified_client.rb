@@ -21,6 +21,10 @@ class DeidentifiedClient < NonHmisClient
     Config.get('deidentified_client_assessment').include?('Pathways')
   end
 
+  def assessment_type
+    Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
+  end
+
   def editable_by?(user)
     return true if user.can_manage_deidentified_clients?
     return true if user.can_enter_deidentified_clients? && user.agency_id == agency_id

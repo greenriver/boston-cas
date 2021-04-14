@@ -1,0 +1,122 @@
+.c-question.c-question--primary
+  .c-question__wrapper
+    .c-question__number
+    - label = 'Date of Assessment'
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @assessment.entry_date, label: label
+    - else
+      .c-question__input
+        = form.input :entry_date, label: label, as: :date_picker
+.c-question
+  = form.input :domestic_violence, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '2B.', label: 'Are you currently fleeing or attempting to flee a domestic violence situation?', hint: 'Examples: sexual assault, stalking, domestic violence'
+.c-question
+  .c-question__wrapper
+    .c-question__number 4D.
+    - label = _('3D. Total # of Boston Homeless Nights')
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @assessment.days_homeless_in_the_last_three_years, label: label
+    - else
+      .c-question__input
+        = form.input :days_homeless_in_the_last_three_years, label: label
+.c-question
+  = form.input :veteran, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5B.', label: 'Did you serve in active military, naval or air service (regardless of length of service) and have a discharge status of anything other than dishonorable?', hint: 'This DOES include Veterans who only had service time in basic training. This does NOT include Veterans who were national guard and reserve).'
+.c-question
+  = form.input :pending_subsidized_housing_placement, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '5C.', label: 'Are you about to move into a housing unit, such as a unit with a Section 8 voucher, or an offer of a public housing unit where your rent will be calculated at about 30-40% of your income?'
+.c-question
+  .c-question__wrapper
+    .c-question__number 6A.
+    - label = 'What is your total household’s estimated gross annual income?'
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: number_to_currency(@assessment.income_total_annual), label: label
+    - else
+      .c-question__input
+        = form.input :income_total_annual, pre_label: '6A.', label: label, hint: 'We ask because some of these units have income requirements.'
+.c-question
+  = form.input :sro_ok, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6B.', label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?'
+.c-question
+  .c-question__wrapper
+    .c-question__number 6C.
+    - label = 'If you need a bedroom size larger than a SRO, studio or 1 bedroom, select the size below'
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @assessment.required_number_of_bedrooms, label: label
+    - else
+      .c-question__input
+        = form.input :required_number_of_bedrooms, collection: (2..5), include_blank: 'None', pre_label: '6C.', input_html: {disabled: disabled, class: 'select2'}
+.c-question
+  .c-question__wrapper
+    .c-question__number 6D.
+    .c-question__input
+      %label Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need
+      .mb-1
+        = form.input :requires_wheelchair_accessibility, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Wheelchair accessible unit'
+      .mb-1
+        = form.input :requires_elevator_access, as: :pretty_boolean, wrapper: :custom_boolean, label: 'First floor/elevator (little to no stairs to your unit)'
+      .mb-1
+        = form.input :other_accessibility, as: :pretty_boolean, wrapper: :custom_boolean, label: 'Other accessibility'
+.c-question
+  = form.input :disabled_housing, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6G.', label: 'Are you interested in applying for housing units targeted for persons with disabilities?', hint: 'The definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units. '
+.c-question
+  .c-question__wrapper
+    .c-question__number 6H.
+    - label = _('Neighborhoods you are willing to live in.')
+    - blank_label = _('Any neighborhood')
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @neighborhoods.select{|k,_| k.in?(@assessment.neighborhood_interests)}&.map(&:last), label: label, include_blank: blank_label
+    - else
+      .c-question__input
+        = form.label :neighborhood_interests, pre_label: '6H.', label: _('Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.')
+        = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, label: false, include_blank: blank_label
+.c-question
+  = form.input :interested_in_set_asides, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6I.', label: 'Confirm Interest in Signing Up for Homeless Set Aside Units', hint: 'Check the box to confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units.'
+.c-question
+  = form.input :ssvf_eligible, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: 'V.1', label: 'We have Veteran-specific rapid re-housing programs in our community that provide housing search for a unit where the lease is between you and the landlord: financial assistance to pay the upfront sots of the unit; and case management to help sustain your new home. They may have quicker openings. Is there any reason why you cannot work with a Veteran-specific rapid re-housing program?'
+.c-question
+  = form.input :rrh_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9A.', label: 'Would you like to be considered for RRH when they have openings?'
+.c-question
+  .c-question__wrapper
+    .c-question__number 9C.
+    - label = 'Youth Choice (for Heads of Household who are 24 years of age and younger): Would you like to be considered for housing programs that are:'
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @non_hmis_client.class.available_youth_choices.invert[@assessment.youth_rrh_aggregate], label: label
+    - else
+      .c-question__input
+        = form.label :youth_rrh_aggregate, pre_label: '9C.', label: label
+        = form.input :youth_rrh_aggregate, collection: @non_hmis_client.class.available_youth_choices, as: :pretty_boolean_group, wrapper: :custom_boolean , label: false
+
+.c-question
+  .c-question__wrapper
+    .c-question__number 9D.
+    - label = 'Survivor Choice (for those currently fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are:'
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @non_hmis_client.class.available_dv_choices.invert[@assessment.dv_rrh_aggregate], label: label
+    - else
+      .c-question__input
+        = form.label :dv_rrh_aggregate, pre_label: '9D.', label: label
+        = form.input :dv_rrh_aggregate, collection: @non_hmis_client.class.available_dv_choices, label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, include_blank: 'Not applicable - client is not Youth'
+.c-question
+  = form.input :rrh_th_desired, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '9F.', label: 'Shelter Need While Doing Housing Search (RRH-TH): Openings are very limited and rare, but some of the rapid re-housing programs are able to offer a stable shelter option to use while you search for housing. Would you be interested in a shelter option if one was available? You may deny the shelter option if you are no longer interested at the time of rapid re-housing referral.'
+.c-question
+  = form.input :documented_disability, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '10A.', label: 'Have you ever been diagnosed by a licensed professional as having a disabling condition? You do not need to disclose the condition.'
+.c-question
+  .c-question__wrapper
+    .c-question__number 10B.
+    - label = 'Have you ever been evicted from subsidized housing, or had a subsidized mobile voucher (like Section 8) terminated by a housing authority?'
+    - if disabled
+      = render 'non_hmis_assessments/question_display', value: @non_hmis_client.class.available_evicted_choices.invert[@assessment.evicted], label: label
+    - else
+      .c-question__input
+        = form.label :evicted, pre_label: '10B.', label: label
+        = form.input :evicted, collection: @non_hmis_client.class.available_evicted_choices, label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, hint: 'Subsidized housing is where your rent was calculated at about 30-40% of your income and managed by a housing authority or property management company.'
+
+.c-question
+  = form.input :income_maximization_assistance_requested, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '10C.', label: 'Rapid Re-Housing is a combination of services that include housing search and placement as well as case management and services designed to assist you in increasing your income, both employment and benefits, so you can afford market-rate housing. By stating that you are interested in Rapid Re-Housing, we will make all of these services available to you.  Are you interested in adding these services to your RRH enrollment?'
+
+
+
+
+
+
+
+
+
+

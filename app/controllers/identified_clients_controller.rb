@@ -13,7 +13,7 @@ class IdentifiedClientsController < NonHmisClientsController
   def create
     @non_hmis_client = client_source.create(clean_params(identified_client_params))
     if pathways_enabled?
-      respond_with(@non_hmis_client, location: new_assessment_identified_client_path(id: @non_hmis_client.id))
+      respond_with(@non_hmis_client, location: non_hmis_assessment_path(id: @non_hmis_client.id))
     else
       respond_with(@non_hmis_client, location: identified_clients_path())
     end

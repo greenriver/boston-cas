@@ -211,6 +211,7 @@ Rails.application.routes.draw do
   end
 
   resources :deidentified_clients do
+    resources :non_hmis_assessments
     collection do
       get :choose_upload
       post :import
@@ -223,6 +224,7 @@ Rails.application.routes.draw do
     end
   end
   resources :identified_clients do
+    resources :non_hmis_assessments
     member do
       get :new_assessment
       get :assessment
