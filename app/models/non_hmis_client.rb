@@ -55,6 +55,16 @@ class NonHmisClient < ApplicationRecord
     end
   end
 
+  scope :editable_by, -> (user) do
+    if user.can_edit_all_clients?
+      all
+    else
+      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
+
+      where(agency_id: user.agency.id)
+    end
+  end
+
   scope :identified, -> do
     where(identified: true)
   end

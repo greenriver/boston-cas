@@ -31,9 +31,12 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   def edit
+    redirect_to :show and return unless @assessment.editable_by?(current_user)
   end
 
   def update
+    redirect_to :show and return unless @assessment.editable_by?(current_user)
+
     if @assessment.update(@assessment.assessment_params(params))
       redirect_to @non_hmis_client
     else
@@ -42,7 +45,11 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   def destroy
-    flash[:notice] = 'Assessment successfully deleted.' if @assessment.destroy
+    if @assessment.editable_by?(current_user)
+      flash[:notice] = 'Assessment successfully deleted.' if @assessment.destroy
+    else
+      flash[:error] = 'You cannot delete the assessment.'
+    end
 
     redirect_to @non_hmis_client
   end
@@ -52,14 +59,12 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def set_client
-    # FIXME permissions
     client_id = (params[:identified_client_id] || params[:deidentified_client_id]).to_i
     @non_hmis_client = NonHmisClient.visible_to(current_user).find(client_id)
   end
 
   private def set_assessment
-    # FIXME permissions
-    @assessment = NonHmisAssessment.find(params[:id].to_i)
+    @assessment = NonHmisAssessment.visible_by(current_user).find(params[:id].to_i)
   end
 
   private def set_neighborhoods

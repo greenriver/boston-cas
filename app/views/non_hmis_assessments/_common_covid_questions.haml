@@ -8,7 +8,7 @@
           - if disabled
             - display_options[:value] = ''
             - display_options[:hide_value] = true
-            = render 'assessmentshmis_assessmentsquestion_display', locals: display_options
+            = render 'non_hmis_assessments/question_display', locals: display_options
             - options[:questions].each do |sub_field_name, sub_options|
               - display_options = sub_options
               - val = @assessment[sub_field_name]

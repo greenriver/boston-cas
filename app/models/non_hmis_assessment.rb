@@ -23,6 +23,18 @@ class NonHmisAssessment < ActiveRecord::Base
     where(type: covid_assessment_types)
   end
 
+  scope :visible_by, ->(user) do
+    where(non_hmis_client_id: NonHmisClient.visible_to(user).select(:id))
+  end
+
+  scope :editable_by, ->(user) do
+    where(non_hmis_client: NonHmisClient.editable_by(user).select(:id))
+  end
+
+  def editable_by?(user)
+    self.class.editable_by(user).where(id: id).exists?
+  end
+
   def self.covid_assessment_types
     [
       'IdentifiedCovidPathwaysAssessment',
