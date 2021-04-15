@@ -18,36 +18,36 @@ module CasSeeds
     ].freeze
 
     HSA_REASONS = [
-      ['CORI', nil],
-      ['SORI', nil],
+      ['CORI', PROVIDER_REJECTED],
+      ['SORI', PROVIDER_REJECTED],
       ['Immigration status', nil],
-      ['Household did not respond after initial acceptance of match', nil],
+      ['Household did not respond after initial acceptance of match', CLIENT_REJECTED],
       ['Ineligible for Housing Program', nil],
-      ['Client refused offer', nil],
+      ['Client refused offer', CLIENT_REJECTED],
       ['Self-resolved', nil],
       ['Falsification of documents', nil],
-      ['Additional screening criteria imposed by third parties', nil],
+      ['Additional screening criteria imposed by third parties', PROVIDER_REJECTED],
       ['Health and Safety', nil],
     ].freeze
 
     HSA_PROVIDER_ONLY_REASONS = [
       ['Household could not be located', nil],
       ['Ineligible for Housing Program', nil],
-      ['Client refused offer', nil],
+      ['Client refused offer', CLIENT_REJECTED],
       ['Health and Safety', nil],
     ].freeze
 
     SHELTER_AGENCY_REASONS = [
-      ['Does not agree to services', nil],
-      ['Unwilling to live in that neighborhood', nil],
-      ['Unwilling to live in SRO', nil],
-      ['Does not want housing at this time', nil],
-      ['Unsafe environment for this person', nil],
+      ['Does not agree to services', CLIENT_REJECTED],
+      ['Unwilling to live in that neighborhood', CLIENT_REJECTED],
+      ['Unwilling to live in SRO', CLIENT_REJECTED],
+      ['Does not want housing at this time', CLIENT_REJECTED],
+      ['Unsafe environment for this person', CLIENT_REJECTED],
       ['Client has another housing option', nil],
     ].freeze
 
     SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS = [
-      ['Barred from working with agency', nil],
+      ['Barred from working with agency', PROVIDER_REJECTED],
       ['Hospitalized', nil],
       ['Don’t know / disappeared', nil],
       ['Incarcerated', nil],
@@ -55,11 +55,11 @@ module CasSeeds
 
     ADMINISTRATIVE_CANCEL_REASONS = [
       ['Match expired', nil],
-      ['Client has declined match', nil],
-      ['Client has disengaged', nil],
-      ['Client has disappeared', nil],
-      ['SSP CORI', nil],
-      ['HSP CORI', nil],
+      ['Client has declined match', CLIENT_REJECTED],
+      ['Client has disengaged', CLIENT_REJECTED],
+      ['Client has disappeared', CLIENT_REJECTED],
+      ['SSP CORI', PROVIDER_REJECTED],
+      ['HSP CORI', PROVIDER_REJECTED],
       ['Incarcerated', nil],
       ['Vacancy should not have been entered', nil],
       ['Client received another housing opportunity', nil],
