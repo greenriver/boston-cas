@@ -72,7 +72,15 @@ jobs:
 
           gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
           gem install bundler -v '< 2'
+
       - uses: actions/checkout@v2
+
+      - name: Use Node.js 10
+       uses: actions/setup-node@v2-beta
+       with:
+         node-version: '10'
+         check-latest: true
+
       - name: 'Install gems'
         run: |
           bundle install --jobs 4 --retry 3
