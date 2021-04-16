@@ -87,6 +87,9 @@ jobs:
           RAILS_ENV: test
           DATABASE_ADAPTER: postgresql
           DATABASE_DB_TEST: boston_cas_test
+          DATABASE_HOST: postgres
+          DATABASE_PASS: postgres
+          DATABASE_USER: postgres
           DEFAULT_FROM: greenriver.testing@mailinator.com
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           HOSTNAME: openpath.host
@@ -97,6 +100,9 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_ADAPTER: postgresql
+          DATABASE_HOST: postgres
+          DATABASE_PASS: postgres
+          DATABASE_USER: postgres
           DATABASE_DB_TEST: boston_cas_test
           DEFAULT_FROM: greenriver.testing@mailinator.com
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
