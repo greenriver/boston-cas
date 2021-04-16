@@ -47,19 +47,25 @@ jobs:
         run: |
           apt-get update
           apt-get install -y \
-            libmagic-dev \
-            libpq-dev
             build-essential \
             curl \
+            freetds-bin \
+            freetds-dev \
             git \
+            icu-devtools \
+            imagemagick \
             libc6-dev \
             libcurl4-openssl-dev \
             libgeos-dev \
             libicu-dev \
+            libmagic-dev \
+            libpq-dev \
             libproj-dev \
+            postgis \
             postgresql-client \
             python \
-            unzip
+            unzip \
+            wkhtmltopdf
 
           echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass
