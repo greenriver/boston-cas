@@ -40,7 +40,7 @@ jobs:
           - 6379:6379
 
     steps:
-      - name: Set up dependancies
+      - name: Set up dependencies
         env:
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           DATABASE_DB_TEST: boston_cas_test
@@ -73,34 +73,34 @@ jobs:
           gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
           gem install bundler -v '< 2'
       - uses: actions/checkout@v2
-    - name: 'Install gems'
-      run: |
-        bundle install --jobs 4 --retry 3
-    - name: 'App setup'
-      run: |
-        cp config/secrets.yml.sample config/secrets.yml
-        mkdir app/assets/stylesheets/theme/styles
-        touch app/assets/stylesheets/theme/styles/_variables.scss
-        cp .rspec.travis .rspec
-    - name: Prepare test db
-      env:
-        RAILS_ENV: test
-        DATABASE_ADAPTER: postgresql
-        DATABASE_DB_TEST: boston_cas_test
-        DEFAULT_FROM: greenriver.testing@mailinator.com
-        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
-        HOSTNAME: openpath.host
-        PORT: 80
-      run: |
-        bundle exec rake db:drop db:create db:schema:load
-    - name: Run tests
-      env:
-        RAILS_ENV: test
-        DATABASE_ADAPTER: postgresql
-        DATABASE_DB_TEST: boston_cas_test
-        DEFAULT_FROM: greenriver.testing@mailinator.com
-        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
-        HOSTNAME: openpath.host
-        PORT: 80
-      run: |
-        bundle exec rspec
+      - name: 'Install gems'
+        run: |
+          bundle install --jobs 4 --retry 3
+      - name: 'App setup'
+        run: |
+          cp config/secrets.yml.sample config/secrets.yml
+          mkdir app/assets/stylesheets/theme/styles
+          touch app/assets/stylesheets/theme/styles/_variables.scss
+          cp .rspec.travis .rspec
+      - name: Prepare test db
+        env:
+          RAILS_ENV: test
+          DATABASE_ADAPTER: postgresql
+          DATABASE_DB_TEST: boston_cas_test
+          DEFAULT_FROM: greenriver.testing@mailinator.com
+          DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+          HOSTNAME: openpath.host
+          PORT: 80
+        run: |
+          bundle exec rake db:drop db:create db:schema:load
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+          DATABASE_ADAPTER: postgresql
+          DATABASE_DB_TEST: boston_cas_test
+          DEFAULT_FROM: greenriver.testing@mailinator.com
+          DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+          HOSTNAME: openpath.host
+          PORT: 80
+        run: |
+          bundle exec rspec

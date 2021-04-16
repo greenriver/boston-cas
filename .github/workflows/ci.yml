@@ -40,7 +40,7 @@ jobs:
           - 6379:6379
 
     steps:
-      - name: Set up dependancies
+      - name: Set up dependencies
         env:
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           DATABASE_DB_TEST: boston_cas_test
