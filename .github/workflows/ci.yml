@@ -49,6 +49,17 @@ jobs:
           apt-get install -y \
             libmagic-dev \
             libpq-dev
+            build-essential \
+            curl \
+            git \
+            libc6-dev \
+            libcurl4-openssl-dev \
+            libgeos-dev \
+            libicu-dev \
+            libproj-dev \
+            postgresql-client \
+            python \
+            unzip
 
           echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass
