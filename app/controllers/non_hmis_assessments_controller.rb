@@ -55,7 +55,7 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def build_assessment
-    @non_hmis_client.assessment_type.constantize.new
+    @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id)
   end
 
   private def set_client

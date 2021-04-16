@@ -28,11 +28,11 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   scope :editable_by, ->(user) do
-    where(non_hmis_client: NonHmisClient.editable_by(user).select(:id))
+    where(agency_id: user.agency_id)
   end
 
   def editable_by?(user)
-    self.class.editable_by(user).where(id: id).exists?
+    agency_id == user.agency_id
   end
 
   def self.covid_assessment_types
