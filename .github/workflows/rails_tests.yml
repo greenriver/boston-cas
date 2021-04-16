@@ -105,7 +105,7 @@ jobs:
           PORT: 80
         run: |
           bundle exec rake db:drop db:create db:schema:load
-          createdb -h $DATABASE_HOST $DATABASE_WAREHOUSE_DB_TEST
+          createdb -h $DATABASE_HOST -U $DATABASE_USER $DATABASE_WAREHOUSE_DB_TEST
       - name: Run tests
         env:
           RAILS_ENV: test
