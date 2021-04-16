@@ -19,12 +19,12 @@ jobs:
     # Service containers to run with job
     services:
       postgres:
-        image: kartoza/postgis:12.1
+        image: postgres/13-alpine
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASS: postgres
-          POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore
+          POSTGRES_MULTIPLE_EXTENSIONS: hstore
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -46,12 +46,7 @@ jobs:
           DATABASE_DB_TEST: boston_cas_test
         run: |
           sudo apt-get update
-
-          sudo apt-get remove postgresql-10 postgresql-11 postgresql-13
-
           sudo apt-get install \
-            postgresql-12 postgresql-contrib \
-            redis-server \
             libmagic-dev \
             libpq-dev
 
