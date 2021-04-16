@@ -98,6 +98,7 @@ jobs:
           DATABASE_HOST: postgres
           DATABASE_PASS: postgres
           DATABASE_USER: postgres
+          PGPASSWORD: postgres
           DEFAULT_FROM: greenriver.testing@mailinator.com
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           HOSTNAME: openpath.host
