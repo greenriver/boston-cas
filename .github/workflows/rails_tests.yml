@@ -12,39 +12,50 @@ on:
   #     - '**/*'
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
+    # Docker Hub image that the job executes in
+    container: ruby:2.7.2-slim-buster
+
+    # Service containers to run with job
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASS: postgres
+          POSTGRES_MULTIPLE_EXTENSIONS: hstore
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Ruby 2.6
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 2.6.x
-    - name: Set up dependancies
-      env:
-        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
-      run: |
-        sudo apt-get update
+      - name: Set up dependancies
+        env:
+          DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+          DATABASE_DB_TEST: boston_cas_test
+        run: |
+          apt-get update
+          apt-get install -y \
+            libmagic-dev \
+            libpq-dev
 
-        sudo apt-get remove postgresql-10 postgresql-12 postgresql-13
+          echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
+          chmod 600 ~/.pgpass
 
-        sudo apt-get install \
-          postgresql-11 postgresql-contrib \
-          redis-server \
-          libmagic-dev \
-          libpq-dev
-
-        echo Updating the postgresql port which is needed if multiple versions installed
-        sudo sed -i.bak -e 's/5433/5432/' /etc/postgresql/11/main/postgresql.conf
-
-        echo Restarting postgres
-        sudo systemctl restart postgresql
-
-        sudo -upostgres createuser --echo --superuser $USER #give the runner
-        createdb --echo
-        createdb $DATABASE_WAREHOUSE_DB_TEST
-
-        gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
-        gem install bundler -v '< 2'
+          gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+          gem install bundler -v '< 2'
+      - uses: actions/checkout@v2
     - name: 'Install gems'
       run: |
         bundle install --jobs 4 --retry 3

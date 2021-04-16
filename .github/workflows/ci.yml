@@ -45,8 +45,8 @@ jobs:
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           DATABASE_DB_TEST: boston_cas_test
         run: |
-          sudo apt-get update
-          sudo apt-get install \
+          apt-get update
+          apt-get install -y \
             libmagic-dev \
             libpq-dev
 
