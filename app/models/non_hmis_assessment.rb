@@ -31,10 +31,6 @@ class NonHmisAssessment < ActiveRecord::Base
     where(agency_id: user.agency_id)
   end
 
-  def editable_by?(user)
-    agency_id == user.agency_id
-  end
-
   def self.covid_assessment_types
     [
       'IdentifiedCovidPathwaysAssessment',

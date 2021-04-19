@@ -61,7 +61,11 @@ class NonHmisClient < ApplicationRecord
     else
       return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
 
-      where(agency_id: user.agency.id)
+      if pathways_enabled?
+        all
+      else
+        where(agency_id: user.agency.id)
+      end
     end
   end
 
@@ -96,6 +100,14 @@ class NonHmisClient < ApplicationRecord
 
   def full_name
     "#{first_name} #{middle_name} #{last_name}"
+  end
+
+  def self.pathways_enabled?
+    assessment_type.include?('Pathways')
+  end
+
+  def pathways_enabled?
+    self.class.pathways_enabled?
   end
 
   def involved_in_match?

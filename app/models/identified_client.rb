@@ -51,22 +51,18 @@ class IdentifiedClient < NonHmisClient
   end
 
   def editable_by?(user)
-    return true if user.can_edit_all_clients?
-    # You can only edit clients at your agency
-    return true if user.agency_id == agency_id &&
-      (
-        user.can_manage_identified_clients? ||
-        user.can_enter_identified_clients?
-      )
+    return true if user.can_manage_identified_clients?
+    return true if pathways_enabled? && user.can_enter_identified_clients?
+    return user.agency_id == agency_id if user.can_enter_identified_clients?
 
     false
   end
 
-  def pathways_enabled?
-    Config.get('identified_client_assessment').include?('Pathways')
+  def assessment_type
+    self.class.assessment_type
   end
 
-  def assessment_type
+  def self.assessment_type
     Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
   end
 

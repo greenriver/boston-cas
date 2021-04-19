@@ -7,6 +7,7 @@
 class NonHmisAssessmentsController < ApplicationController
   before_action :set_client
   before_action :set_assessment, only: [:show, :edit, :update, :destroy]
+  before_action :require_can_edit_assessment!, only: [:edit, :update, :destroy]
   before_action :set_neighborhoods
 
   def index
@@ -31,12 +32,9 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   def edit
-    redirect_to :show and return unless @assessment.editable_by?(current_user)
   end
 
   def update
-    redirect_to :show and return unless @assessment.editable_by?(current_user)
-
     if @assessment.update(@assessment.assessment_params(params))
       redirect_to @non_hmis_client
     else
@@ -45,17 +43,18 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   def destroy
-    if @assessment.editable_by?(current_user)
-      flash[:notice] = 'Assessment successfully deleted.' if @assessment.destroy
-    else
-      flash[:error] = 'You cannot delete the assessment.'
-    end
+    @assessment.destroy
+    flash[:notice] = 'Assessment successfully deleted.'
 
     redirect_to @non_hmis_client
   end
 
+  private def require_can_edit_assessment!
+    not_authorized! unless @assessment.editable_by?(current_user)
+  end
+
   private def build_assessment
-    @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id)
+    @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id, non_hmis_client_id: @non_hmis_client.id)
   end
 
   private def set_client
