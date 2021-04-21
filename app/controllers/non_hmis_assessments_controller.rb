@@ -20,7 +20,7 @@ class NonHmisAssessmentsController < ApplicationController
 
   def create
     @assessment = build_assessment
-    @assessment.update(@assessment.assessment_params(params))
+    @assessment.update(clean_assessment_params(@assessment.assessment_params(params)))
     if @assessment.save
       redirect_to @non_hmis_client
     else
@@ -35,7 +35,7 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   def update
-    if @assessment.update(@assessment.assessment_params(params))
+    if @assessment.update(clean_assessment_params(@assessment.assessment_params(params)))
       redirect_to @non_hmis_client
     else
       render :edit
@@ -47,6 +47,32 @@ class NonHmisAssessmentsController < ApplicationController
     flash[:notice] = 'Assessment successfully deleted.'
 
     redirect_to @non_hmis_client
+  end
+
+  private def clean_assessment_params(assessment_params)
+    if assessment_params[:income_total_annual].present?
+      assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12
+    end
+
+    if assessment_params.has_key?(:youth_rrh_aggregate)
+      assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['adult', 'both'])
+      assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['youth', 'both'])
+      assessment_params.extract![:youth_rrh_aggregate]
+    end
+
+    if assessment_params.has_key?(:dv_rrh_aggregate)
+      assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['non-dv', 'both'])
+      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
+      assessment_params.extract![:dv_rrh_aggregate]
+    end
+
+    if assessment_params[:neighborhood_interests].present?
+      assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
+    end
+
+    assessment_params[:user_id] = current_user.id
+
+    assessment_params
   end
 
   private def require_can_edit_assessment!
