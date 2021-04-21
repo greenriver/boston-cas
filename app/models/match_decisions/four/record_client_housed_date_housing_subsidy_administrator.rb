@@ -89,8 +89,8 @@ module MatchDecisions::Four
     end
 
     def accessible_by? contact
-      contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+      contact&.user_can_act_on_behalf_of_match_contacts? ||
+      contact&.in?(match.housing_subsidy_admin_contacts)
     end
 
     def to_param
