@@ -21,6 +21,4 @@
         .form-actions
           = f.button :submit, "Create Client", class: 'btn btn-primary'
 
-  = content_for :page_js do
-    :javascript
-      $('.select2').select2();
+  = render 'init_select2'

@@ -37,6 +37,5 @@
                 - if can_manage_deidentified_clients?
                   = link_to 'Delete', assessment_path, method: :delete, class: 'btn btn-danger ml-2', data: {confirm: 'Are you sure you want to delete this assessment?'}
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2()
+= render 'non_hmis_clients/assessments/covid_js'
+= render 'init_select2'

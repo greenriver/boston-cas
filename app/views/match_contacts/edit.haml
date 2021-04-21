@@ -6,10 +6,10 @@
     = @match_contacts.errors.full_messages.join ","
 
 = render "form"
+= render 'init_select2'
 
 = content_for :page_js do
   :javascript
-    $('.select2').select2();
     $('body').off('change', '.jContactField');
     $('body').on('change', '.jContactField', function(e){
       var $input = $(this);
@@ -18,7 +18,7 @@
       var input_name = $input.data('input-name');
       var html = '<input type="hidden" name="' + input_name + '" value="' + val + '" />'
       $input.after(html);
-      
+
       $input.closest('form').trigger('submit');
     });
     $('body').off('click', '.jContactDelete');
