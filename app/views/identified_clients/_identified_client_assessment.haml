@@ -3,8 +3,8 @@
     = client_form.input :first_name, disabled: disabled
     = client_form.input :middle_name, disabled: disabled
     = client_form.input :last_name, disabled: disabled
-    = client_form.input :assessment_score, disabled: disabled
-    = client_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
+    = assessment_form.input :assessment_score, disabled: disabled
+    = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_score')
       = assessment_form.input :vispdat_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_priority_score')

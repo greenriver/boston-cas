@@ -2,7 +2,7 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      - if @decision.status.to_s == 'pending' && access_context.acknowledge_shelter_agency_notification?
+      - if @decision.status.to_s == 'pending' && @decision.present?
         %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
         %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)}
           %i.icon-checkmark

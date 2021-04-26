@@ -86,3 +86,4 @@ HmisClient,HMIS Client,,be
 NonHmisClient,Non-HMIS Client,,be
 HealthPrioritized,Prioritized for Health,,be
 Youth,Youth or marked as youth,,be
+AssessmentScoreGreaterThanSpecified,Assessment Score greater than specified score,,have

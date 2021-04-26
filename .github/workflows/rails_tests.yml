@@ -1,0 +1,78 @@
+name: Rails Tests
+
+on:
+  push:
+    branches:
+      - '*'
+      - '**/*'
+  # NOTE: you don't need to build all PRs if you are also building all branches
+  # pull_request:
+  #   branches:
+  #     - '*'
+  #     - '**/*'
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.x
+    - name: Set up dependancies
+      env:
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+      run: |
+        sudo apt-get update
+
+        sudo apt-get remove postgresql-10 postgresql-12 postgresql-13
+
+        sudo apt-get install \
+          postgresql-11 postgresql-contrib \
+          redis-server \
+          libmagic-dev \
+          libpq-dev
+
+        echo Updating the postgresql port which is needed if multiple versions installed
+        sudo sed -i.bak -e 's/5433/5432/' /etc/postgresql/11/main/postgresql.conf
+
+        echo Restarting postgres
+        sudo systemctl restart postgresql
+
+        sudo -upostgres createuser --echo --superuser $USER #give the runner
+        createdb --echo
+        createdb $DATABASE_WAREHOUSE_DB_TEST
+
+        gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+        gem install bundler -v '< 2'
+    - name: 'Install gems'
+      run: |
+        bundle install --jobs 4 --retry 3
+    - name: 'App setup'
+      run: |
+        cp config/secrets.yml.sample config/secrets.yml
+        mkdir app/assets/stylesheets/theme/styles
+        touch app/assets/stylesheets/theme/styles/_variables.scss
+        cp .rspec.travis .rspec
+    - name: Prepare test db
+      env:
+        RAILS_ENV: test
+        DATABASE_ADAPTER: postgresql
+        DATABASE_DB_TEST: boston_cas_test
+        DEFAULT_FROM: greenriver.testing@mailinator.com
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+        HOSTNAME: openpath.host
+        PORT: 80
+      run: |
+        bundle exec rake db:drop db:create db:schema:load
+    - name: Run tests
+      env:
+        RAILS_ENV: test
+        DATABASE_ADAPTER: postgresql
+        DATABASE_DB_TEST: boston_cas_test
+        DEFAULT_FROM: greenriver.testing@mailinator.com
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+        HOSTNAME: openpath.host
+        PORT: 80
+      run: |
+        bundle exec rspec

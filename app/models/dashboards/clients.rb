@@ -17,7 +17,7 @@ class Dashboards::Clients
     @matched_clients ||= {}
     @matched_clients[by] ||= client_scope.
       distinct.
-      group_by { |client| client.public_send(by).text }
+      group_by { |client| client.public_send(by)&.text }
   end
 
   def successful_clients(by:)
@@ -25,7 +25,7 @@ class Dashboards::Clients
     @successful_clients[by] ||= client_scope.
       merge(Reporting::Decisions.success).
       distinct.
-      group_by { |client| client.public_send(by).text }
+      group_by { |client| client.public_send(by)&.text }
   end
 
   def average_days_to_success(by:)
@@ -53,7 +53,7 @@ class Dashboards::Clients
 
     client_demographics = Client.
       where(id: number_of_matches.keys).
-      group_by { |client| client.public_send(by).text }
+      group_by { |client| client.public_send(by)&.text }
 
     averages = {}
     client_demographics.each do |bucket, clients|

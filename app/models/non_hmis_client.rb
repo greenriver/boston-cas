@@ -10,8 +10,8 @@ class NonHmisClient < ApplicationRecord
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
-
   has_many :non_hmis_assessments
+  has_many :shelter_histories
 
   def current_assessment
     NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
@@ -129,12 +129,12 @@ class NonHmisClient < ApplicationRecord
     Warehouse::Cohort.active.visible_in_cas.pluck(:id, :name).to_h
   end
 
-  def populate_project_client project_client
-    set_project_client_fields project_client
+  def populate_project_client(project_client)
+    set_project_client_fields(project_client)
     project_client.save
   end
 
-  def set_project_client_fields project_client
+  def set_project_client_fields(project_client)
     # NonHmisClient fields
     project_client.first_name = fix_first_name
     project_client.last_name = fix_last_name
@@ -195,11 +195,10 @@ class NonHmisClient < ApplicationRecord
     project_client.chronic_health_condition = if current_assessment&.chronic_health_condition then 1 else nil end
     project_client.mental_health_problem = if current_assessment&.mental_health_problem then 1 else nil end
     project_client.substance_abuse_problem = if current_assessment&.substance_abuse_problem then "Yes" else "No" end
-
-    project_client.vispdat_score = vispdat_score
-    project_client.vispdat_priority_score = vispdat_priority_score
-    project_client.health_prioritized = health_prioritized
-    project_client.hiv_positive = hiv_aids
+    project_client.vispdat_score = current_assessment&.vispdat_score
+    project_client.vispdat_priority_score = current_assessment&.vispdat_priority_score
+    project_client.health_prioritized = current_assessment&.health_prioritized
+    project_client.hiv_positive = current_assessment&.hiv_aids || hiv_aids
     project_client.is_currently_youth = current_assessment&.is_currently_youth || false
     project_client.older_than_65 = current_assessment&.older_than_65
     # Pathways
@@ -239,7 +238,7 @@ class NonHmisClient < ApplicationRecord
     update_assessment_from_client(client_assessments.build)
   end
 
-  def update_assessment_from_client(assessment=current_assessment)
+  def update_assessment_from_client(assessment = current_assessment)
     assessment.assessment_score = assessment_score
     assessment.actively_homeless = actively_homeless
     assessment.days_homeless_in_the_last_three_years = days_homeless_in_the_last_three_years

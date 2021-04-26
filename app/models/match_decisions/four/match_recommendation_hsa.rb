@@ -44,10 +44,6 @@ module MatchDecisions::Four
       _('HSA')
     end
 
-    def expires?
-      true
-    end
-
     def contact_actor_type
       :housing_subsidy_admin_contacts
     end
@@ -84,8 +80,8 @@ module MatchDecisions::Four
     end
 
     def accessible_by? contact
-      contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+      contact&.user_can_act_on_behalf_of_match_contacts? ||
+      contact&.in?(match.housing_subsidy_admin_contacts)
     end
 
     def to_param
@@ -113,11 +109,12 @@ module MatchDecisions::Four
       end
 
       def declined
+        Notifications::Four::MatchDeclined.create_for_match! match
         match.four_confirm_hsa_initial_decline_dnd_staff_decision.initialize_decision!
       end
 
       def canceled
-        Notifications::MatchCanceled.create_for_match! match
+        Notifications::Four::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end

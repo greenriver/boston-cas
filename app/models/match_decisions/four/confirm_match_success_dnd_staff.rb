@@ -64,7 +64,7 @@ module MatchDecisions::Four
     end
 
     def accessible_by? contact
-      contact.user_can_reject_matches? || contact.user_can_approve_matches?
+      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
     end
 
     def to_param
@@ -82,11 +82,12 @@ module MatchDecisions::Four
       end
 
       def confirmed
-        Notifications::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
+        Notifications::Four::MatchSuccessConfirmed.create_for_match! match
         match.succeeded!
       end
 
       def rejected
+        Notifications::Four::MatchRejected.create_for_match! match
         match.rejected!
       end
     end

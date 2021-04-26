@@ -8,7 +8,7 @@ require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   include AjaxModalRails::Controller
   include MatchShow
-  before_action :load_client, only: [:show, :edit, :update, :new_assessment, :destroy]
+  before_action :load_client, only: [:show, :edit, :update, :new_assessment, :destroy, :shelter_location]
   before_action :require_can_edit_this_client!, only: [:edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
@@ -88,6 +88,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   def show
+    @shelter_names = ShelterHistory.shelter_locations
     @assessments = @non_hmis_client.non_hmis_assessments.order(created_at: :desc)
     if params[:assessment_id] && pathways_enabled?
       render :assessment
@@ -96,6 +97,23 @@ class NonHmisClientsController < ApplicationController
 
   def edit
     @contact_id = @non_hmis_client.contact_id
+  end
+
+  def shelter_location
+    if shelter_location_params[:shelter_name].present?
+      @non_hmis_client.update(shelter_location_params)
+      @non_hmis_client.current_assessment&.update(shelter_location_params)
+      @non_hmis_client.shelter_histories.create(shelter_location_params.merge(user_id: current_user.id))
+    end
+    respond_with(@non_hmis_client, location: path_for_non_hmis_client)
+  end
+
+  private def add_shelter_history(opts)
+    shelter_opts = opts.slice('shelter_name')
+    return unless shelter_opts[:shelter_name].present?
+
+    @non_hmis_client.assign_attributes(shelter_opts)
+    @non_hmis_client.shelter_histories.create({ shelter_name: @non_hmis_client.shelter_name, user_id: current_user.id }) if @non_hmis_client.attribute_changed?(:shelter_name)
   end
 
   def new_assessment
@@ -216,7 +234,7 @@ class NonHmisClientsController < ApplicationController
     [true, false].detect{|m| m.to_s == params[:family_member]}
   end
 
-  def clean_client_params dirty_params
+  def clean_client_params(dirty_params)
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
 
@@ -228,6 +246,7 @@ class NonHmisClientsController < ApplicationController
     end
 
     dirty_params[:available] = dirty_params[:available] == '1' || dirty_params[:available] == 'true' if dirty_params[:available].present?
+    dirty_params[:shelter_name] = dirty_params.dig(:client_assessments_attributes, '0', :shelter_name)
 
     return dirty_params
   end
@@ -275,5 +294,11 @@ class NonHmisClientsController < ApplicationController
 
   private def require_can_edit_this_client!
     not_authorized! unless @non_hmis_client.editable_by?(current_user)
+  end
+
+  private def shelter_location_params
+    params.require(:non_hmis_client).permit(
+      :shelter_name,
+    )
   end
 end

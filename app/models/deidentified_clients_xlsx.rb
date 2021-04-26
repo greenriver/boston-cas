@@ -1,11 +1,10 @@
 class DeidentifiedClientsXlsx < ApplicationRecord
-
   mount_uploader :file, DeidentifiedClientsXlsxFileUploader
   attr_accessor :update_availability
   attr_reader :added, :touched, :problems, :clients
 
   def valid_header?
-    parse_xlsx if ! @xlsx
+    parse_xlsx unless @xlsx
 
     # Assume data is on default sheet, and header starts at A1
     @xlsx.row(1).map(&:strip).map(&:downcase) == self.class.file_header.map(&:strip).map(&:downcase)
@@ -26,12 +25,16 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         row = Hash[file_attributes.keys.zip(raw)]
         client = DeidentifiedClient.where(client_identifier: row[:client_identifier]).first_or_initialize
         @clients << client
-        cleaned = clean_row(client, row) rescue next
+        cleaned = begin
+          clean_row(client, row)
+        rescue StandardError
+          next
+        end
         cleaned[:agency_id] = agency&.id
         cleaned[:identified] = false # mark as de-identified client
         cleaned[:available] = true if @update_availability
 
-        @added +=1 if client.updated_at.nil?
+        @added += 1 if client.updated_at.nil?
         @touched += 1 if client.updated_at.present?
         client.update(cleaned)
         assessment = client.current_assessment || client.client_assessments.build
@@ -60,9 +63,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     result[:is_currently_youth] = yes_no_to_bool(client, :is_currently_youth, row[:is_currently_youth])
     result[:older_than_65] = yes_no_to_bool(client, :older_than_65, row[:older_than_65])
     # "Permanent Supportive Housing Eligible" is a proxy for "Disabling Condition" and at least 365 days homeless.
-    if result[:disabling_condition] && result[:days_homeless_in_the_last_three_years] < 365
-      result[:days_homeless_in_the_last_three_years] = 365
-    end
+    result[:days_homeless_in_the_last_three_years] = 365 if result[:disabling_condition] && result[:days_homeless_in_the_last_three_years] < 365
     result[:required_number_of_bedrooms] = convert_to_number(client, :required_number_of_bedrooms, row[:required_number_of_bedrooms])
     result[:veteran] = yes_no_to_bool(client, :veteran, row[:veteran])
     result[:hiv_aids] = yes_no_to_bool(client, :hiv_aids, row[:hiv_aids])
@@ -74,6 +75,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       family_status: result[:family_member],
       youth_status: result[:is_currently_youth],
     )
+    result[:health_prioritized] = yes_no_to_bool(client, :health_prioritized, row[:health_prioritized])
 
     result[:last_name] = "Anonymous - #{row[:client_identifier]}"
     result[:first_name] = "Anonymous - #{row[:client_identifier]}"
@@ -87,60 +89,60 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     return Date.parse(date) if Date.is_a?(String)
 
     client.errors.add(column, "'#{date}' cannot be parsed as a date")
-    raise "invalid date"
+    raise 'invalid date'
   end
 
   def check_date(client, date)
-    begin
-      if date < Date.parse('2000-01-01') || date > Date.parse('2999-12-31')
-        client.errors.add('Information collected at', "'#{date}' is out of expected range")
-        raise "date out of range"
-      end
-    rescue
-      client.errors.add('Information collected at', "'#{date}' cannot be parsed as a date")
-      raise "invalid date"
+    if date < Date.parse('2000-01-01') || date > Date.parse('2999-12-31')
+      client.errors.add('Information collected at', "'#{date}' is out of expected range")
+      raise 'date out of range'
     end
+  rescue StandardError
+    client.errors.add('Information collected at', "'#{date}' cannot be parsed as a date")
+    raise 'invalid date'
   end
 
-  SECONDS_IN_DAY = 86400
+  SECONDS_IN_DAY = 86_400
   DAYS_IN_THREE_YEARS = 1095
 
   def convert_to_days(client, raw)
-    begin
-      duration_text = raw.downcase.squish rescue raw.to_s
-      more_than = duration_text.include?('more than')
-      count = duration_text.scan(/[0-9]+/).first.to_i
-      half = duration_text.include?('1/2')
-      half_duration = 0
-      case duration_text
-        when /week/
-          duration = count.weeks
-          half_duration = 1.weeks / 2 if half
-        when /month|mth/
-          duration = count.months
-          half_duration = 1.months / 2 if half
-        when /year/
-          duration = count.years
-          half_duration = 1.years / 2 if half
-        else # if no unit, assume months because that is what is in the column header
-          duration = count.months
-          half_duration = 1.months / 2 if half
-      end
-      days = ( duration + half_duration ) / SECONDS_IN_DAY
-      # Capped at 3 years
-      [days, DAYS_IN_THREE_YEARS].min
-    rescue
-      client.errors.add('Cumulative months homeless in last three years', "Unable to parse '#{raw}' as a duration")
-      raise 'unable to parse days'
+    duration_text = begin
+      raw.downcase.squish
+    rescue StandardError
+      raw.to_s
     end
+    more_than = duration_text.include?('more than')
+    count = duration_text.scan(/[0-9]+/).first.to_i
+    half = duration_text.include?('1/2')
+    half_duration = 0
+    case duration_text
+    when /week/
+      duration = count.weeks
+      half_duration = 1.weeks / 2 if half
+    when /month|mth/
+      duration = count.months
+      half_duration = 1.months / 2 if half
+    when /year/
+      duration = count.years
+      half_duration = 1.years / 2 if half
+    else # if no unit, assume months because that is what is in the column header
+      duration = count.months
+      half_duration = 1.months / 2 if half
+    end
+    days = (duration + half_duration) / SECONDS_IN_DAY
+    # Capped at 3 years
+    [days, DAYS_IN_THREE_YEARS].min
+  rescue StandardError
+    client.errors.add('Cumulative months homeless in last three years', "Unable to parse '#{raw}' as a duration")
+    raise 'unable to parse days'
   end
 
   def yes_no_to_bool(client, field, val)
     text = val&.downcase&.strip
-    if text == 'yes' || text == 'y'
+    if ['yes', 'y'].include?(text)
       true
-    elsif text == 'no' || text == 'n'
-      return false
+    elsif ['no', 'n'].include?(text)
+      false
     else
       client.errors.add(field, "Unexpected value '#{val}'")
       raise 'unexpected value'
@@ -149,20 +151,20 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
   def convert_to_score(client, field, val)
     return 0 if val.blank?
+
     begin
       Integer(val)
-    rescue
+    rescue StandardError
       client.errors.add(field, "Unexpected value '#{val}'")
       raise 'unexpected value'
     end
   end
-  alias_method :convert_to_number, :convert_to_score
+  alias convert_to_number convert_to_score
 
   private def parse_xlsx
     StringIO.open(content) do |stream|
       @xlsx = Roo::Excelx.new(stream)
     end
-
   end
 
   def self.file_header
@@ -189,6 +191,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       veteran: 'Veteran Status',
       hiv_aids: 'HOPWA Eligible',
       vispdat_score: 'VI-SPDAT Score',
+      health_prioritized: 'Prioritized for Health',
     }.freeze
   end
 end

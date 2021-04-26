@@ -6,6 +6,13 @@
 
 module Notifications::Four
   class MatchCanceled < Notifications::MatchCanceled
+    # Send to all contacts
+    def self.create_for_match! match
+      contacts = match.contacts
 
+      contacts.each do |contact|
+        create! match: match, recipient: contact
+      end
+    end
   end
 end
