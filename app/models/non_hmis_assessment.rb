@@ -42,6 +42,12 @@ class NonHmisAssessment < ActiveRecord::Base
     'Non-HMIS Assessment'
   end
 
+  def hide_confidential?(user)
+    return false if agency_id.blank?
+
+    user.agency_id != agency_id
+  end
+
   def update_assessment_score!
     update_assessment_score()
     save()
