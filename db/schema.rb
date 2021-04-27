@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_04_141837) do
+ActiveRecord::Schema.define(version: 2021_04_16_133245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(version: 2021_03_04_141837) do
     t.boolean "health_prioritized", default: false
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
+    t.date "holds_voucher_on"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -541,6 +542,7 @@ ActiveRecord::Schema.define(version: 2021_03_04_141837) do
     t.datetime "deleted_at"
     t.integer "administrative_cancel_reason_id"
     t.string "administrative_cancel_reason_other_explanation"
+    t.date "application_date"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
@@ -566,6 +568,16 @@ ActiveRecord::Schema.define(version: 2021_03_04_141837) do
     t.index ["match_id"], name: "index_match_events_on_match_id"
     t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id"
     t.index ["notification_id"], name: "index_match_events_on_notification_id"
+  end
+
+  create_table "match_mitigation_reasons", force: :cascade do |t|
+    t.bigint "client_opportunity_match_id"
+    t.bigint "mitigation_reason_id"
+    t.boolean "addressed", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_opportunity_match_id"], name: "index_match_mitigation_reasons_on_client_opportunity_match_id"
+    t.index ["mitigation_reason_id"], name: "index_match_mitigation_reasons_on_mitigation_reason_id"
   end
 
   create_table "match_prioritizations", id: :serial, force: :cascade do |t|
@@ -631,6 +643,13 @@ ActiveRecord::Schema.define(version: 2021_03_04_141837) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "contact_id", null: false
+  end
+
+  create_table "mitigation_reasons", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "name_quality_codes", id: :serial, force: :cascade do |t|
@@ -747,6 +766,8 @@ ActiveRecord::Schema.define(version: 2021_03_04_141837) do
     t.string "homeless_night_range"
     t.text "notes"
     t.string "veteran_status"
+    t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
