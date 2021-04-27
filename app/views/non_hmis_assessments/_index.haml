@@ -18,7 +18,7 @@
           %thead
             %tr
               %th Date Taken
-              - if can_manage_identified_clients? || Config.get(:identified_client_assessment) != 'IdentifiedCovidPathwaysAssessment'
+              - if @non_hmis_client.can_see_assessment_score?(current_user)
                 %th Score
               %th Agency
           %tbody
@@ -34,7 +34,7 @@
                     - url = polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
                 %tr{data: {href: url}}
                   %td= link_to_if assessment.viewable_by?(current_user), assessment.updated_at, url
-                  - if can_manage_identified_clients? || Config.get(:identified_client_assessment) != 'IdentifiedCovidPathwaysAssessment'
+                  - if @non_hmis_client.can_see_assessment_score?(current_user)
                     %td
                       - if assessment&.assessment_score&.zero?
                         0 – Ineligible

@@ -58,6 +58,10 @@ class IdentifiedClient < NonHmisClient
     false
   end
 
+  def can_see_assessment_score?(user)
+    can_manage_identified_clients? || Config.get(:identified_client_assessment) != 'IdentifiedCovidPathwaysAssessment'
+  end
+
   def assessment_type
     self.class.assessment_type
   end
