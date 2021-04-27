@@ -311,9 +311,16 @@ module CovidPathwaysCalculations
           },
           as: :pretty_checkboxes_group,
         },
+        interested_in_set_asides: {
+          label: 'Confirm Interest in Signing Up for Homeless Set Aside Units',
+          number: '6I.',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          hint: 'Check the box to confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units.',
+        },
         neighborhood_interests: {
           label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
-          include_blank:  'Any Neighborhood / All Neighborhoods',
+          include_blank: 'Any Neighborhood / All Neighborhoods',
           number: '7A',
           collection: Neighborhood.for_select,
           as: :pretty_checkboxes_group,

@@ -17,9 +17,10 @@
         %table.table
           %thead
             %tr
-              %td Date Taken
+              %th Date Taken
               - if can_manage_identified_clients? || Config.get(:identified_client_assessment) != 'IdentifiedCovidPathwaysAssessment'
-                %td Score
+                %th Score
+              %th Agency
           %tbody
             - @assessments.each do |assessment|
               - # If we can edit this client, show all assessments
@@ -39,6 +40,7 @@
                         0 – Ineligible
                       - else
                         = assessment.assessment_score
+                  %td= assessment.agency&.name
                 - # If we can't, just show COVID Pathways assessments because those are
                 - # the only assessments that provide sanitized read-only views
               - else
@@ -51,6 +53,7 @@
                       0 – Ineligible
                     - else
                       = assessment.assessment_score
+                  %td= assessment.agency&.name
       - else
         .p-4
           %p.o-text--italic Client currently has no assessments

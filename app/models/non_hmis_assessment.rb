@@ -14,6 +14,7 @@ class NonHmisAssessment < ActiveRecord::Base
 
   belongs_to :non_hmis_client
   belongs_to :user
+  belongs_to :agency, optional: true
 
   after_find :populate_aggregates
 

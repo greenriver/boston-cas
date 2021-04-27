@@ -7,6 +7,7 @@
 class NonHmisAssessmentsController < ApplicationController
   before_action :set_client
   before_action :set_assessment, only: [:show, :edit, :update, :destroy]
+  before_action :require_can_see_assessment!, only: [:show]
   before_action :require_can_edit_assessment!, only: [:edit, :update, :destroy]
   before_action :set_neighborhoods
 
@@ -21,6 +22,7 @@ class NonHmisAssessmentsController < ApplicationController
   def create
     @assessment = build_assessment
     @assessment.update(clean_assessment_params(@assessment.assessment_params(params)))
+    @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
     if @assessment.save
       redirect_to @non_hmis_client
     else
@@ -36,6 +38,7 @@ class NonHmisAssessmentsController < ApplicationController
 
   def update
     if @assessment.update(clean_assessment_params(@assessment.assessment_params(params)))
+      @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
       redirect_to @non_hmis_client
     else
       render :edit
@@ -77,6 +80,10 @@ class NonHmisAssessmentsController < ApplicationController
 
   private def require_can_edit_assessment!
     not_authorized! unless @assessment.editable_by?(current_user)
+  end
+
+  private def require_can_see_assessment!
+    not_authorized! unless @assessment.viewable_by?(current_user)
   end
 
   private def build_assessment
