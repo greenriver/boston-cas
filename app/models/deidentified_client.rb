@@ -34,7 +34,7 @@ class DeidentifiedClient < NonHmisClient
   end
 
   def can_see_assessment_score?(user)
-    can_manage_deidentified_clients? || Config.get(:deidentified_client_assessment) != 'DeidentifiedCovidPathwaysAssessment'
+    user.can_manage_deidentified_clients? || Config.get(:deidentified_client_assessment) != 'DeidentifiedCovidPathwaysAssessment'
   end
 
   def download_headers
