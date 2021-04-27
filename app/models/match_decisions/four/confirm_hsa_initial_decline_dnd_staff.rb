@@ -81,7 +81,7 @@ module MatchDecisions::Four
       end
 
       def decline_overridden
-        match.four_record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!
+        match.four_schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
       end
 
       def decline_overridden_returned
