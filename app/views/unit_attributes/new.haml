@@ -7,10 +7,8 @@
 
   =f.button :submit
 
+= render 'init_select2'
 = content_for :page_js do
-  :javascript
-    $('.select2').select2();
-
     $(document).ready(function() {
       $('.jType').on('change', function(e) {
         var attribute_name = $(this).val();
