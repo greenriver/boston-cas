@@ -9,6 +9,7 @@
 
 = render 'init_select2'
 = content_for :page_js do
+  :javascript
     $(document).ready(function() {
       $('.jType').on('change', function(e) {
         var attribute_name = $(this).val();

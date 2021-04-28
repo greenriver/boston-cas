@@ -32,7 +32,6 @@
 // App specific code
 //////////////////////////
 //= require namespace
-//= require select_2
 //= require ./select_two
 //= require_tree ./templates
 //= require ajax_modal_rails
