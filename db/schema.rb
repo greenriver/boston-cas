@@ -1431,6 +1431,16 @@ ActiveRecord::Schema.define(version: 2021_04_16_133245) do
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
   end
 
+  create_table "unit_attributes", force: :cascade do |t|
+    t.bigint "unit_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["unit_id"], name: "index_unit_attributes_on_unit_id"
+  end
+
   create_table "units", id: :serial, force: :cascade do |t|
     t.integer "id_in_data_source"
     t.string "name"

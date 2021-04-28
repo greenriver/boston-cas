@@ -1,5 +1,6 @@
 #= require namespace
 App.init = ->
+  App.remoteSelectLoad.init()
   $('abbr').tooltip();
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();

@@ -20,6 +20,7 @@ class Unit < ApplicationRecord
   has_many :opportunities, through: :vouchers
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
+  has_many :unit_attributes, dependent: :destroy
 
   delegate :active_matches, to: :active_voucher
   delegate :program, to: :active_voucher
