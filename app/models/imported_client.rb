@@ -11,6 +11,12 @@ class ImportedClient < NonHmisClient
   validates :last_name, presence: true
   validates :email, presence: true
 
+  def editable_by?(user)
+    return true if user.can_manage_imported_clients?
+
+    false
+  end
+
   def populate_project_client project_client
     set_project_client_fields project_client
 
