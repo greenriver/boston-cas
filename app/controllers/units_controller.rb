@@ -36,7 +36,6 @@ class UnitsController < ApplicationController
   def new
     @unit = Unit.new
     set_building
-
   end
 
   # GET /hmis/units/1/edit
