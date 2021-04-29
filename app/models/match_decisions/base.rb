@@ -274,7 +274,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation]
+      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation, :disable_opportunity]
     end
 
     def whitelist_params_for_update params
