@@ -7,6 +7,7 @@
   - if include_other
     = form.input :administrative_cancel_reason_other_explanation, as: :text, label: 'List any details related to the cancellation below', hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherCancelReason'}
 
+  = form.input :disable_opportunity, as: :boolean, label: 'Do not allow other matches for this vacancy'
 = content_for :page_js do
   :javascript
     new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
