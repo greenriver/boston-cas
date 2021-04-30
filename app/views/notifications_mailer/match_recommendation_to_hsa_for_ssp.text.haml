@@ -1,11 +1,9 @@
 Hello #{@contact.full_name},
 \
-The CAS has generated a new match recommendation.
+= "CAS has notified the #{_('Housing Subsidy Administrator')} of a housing recommendation."
 \
-This match has not yet been reviewed by the #{_('HSA')}:
+View details here:
 #{notification_match_url @notification, @match}
-\
-= render 'client_details'
 \
 = render 'location_details'
 \
