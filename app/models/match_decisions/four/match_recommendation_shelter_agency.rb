@@ -86,6 +86,7 @@ module MatchDecisions::Four
         m << Notifications::MatchRecommendationClient
         m << Notifications::Four::MatchRecommendationShelterAgency
         m << Notifications::Four::MatchRecommendationHousingSubsidyAdmin
+        m << Notifications::Four::MatchRecommendationSsp
       end
     end
 
