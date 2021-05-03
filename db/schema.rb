@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_201139) do
+ActiveRecord::Schema.define(version: 2021_04_28_205931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -543,6 +543,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_201139) do
     t.integer "administrative_cancel_reason_id"
     t.string "administrative_cancel_reason_other_explanation"
     t.date "application_date"
+    t.boolean "disable_opportunity", default: false
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
@@ -766,6 +767,8 @@ ActiveRecord::Schema.define(version: 2021_04_06_201139) do
     t.string "homeless_night_range"
     t.text "notes"
     t.string "veteran_status"
+    t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -1427,6 +1430,16 @@ ActiveRecord::Schema.define(version: 2021_04_06_201139) do
     t.datetime "expires_at"
     t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
+  end
+
+  create_table "unit_attributes", force: :cascade do |t|
+    t.bigint "unit_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["unit_id"], name: "index_unit_attributes_on_unit_id"
   end
 
   create_table "units", id: :serial, force: :cascade do |t|

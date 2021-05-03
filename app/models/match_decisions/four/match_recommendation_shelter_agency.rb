@@ -86,6 +86,7 @@ module MatchDecisions::Four
         m << Notifications::MatchRecommendationClient
         m << Notifications::Four::MatchRecommendationShelterAgency
         m << Notifications::Four::MatchRecommendationHousingSubsidyAdmin
+        m << Notifications::Four::MatchRecommendationSsp
       end
     end
 
@@ -94,7 +95,7 @@ module MatchDecisions::Four
     end
 
     def accessible_by?(contact)
-      contact.user_can_act_on_behalf_of_match_contacts? || match.send(contact_actor_type).include?(contact)
+      contact&.user_can_act_on_behalf_of_match_contacts? || match&.send(contact_actor_type).include?(contact)
     end
 
     def to_param

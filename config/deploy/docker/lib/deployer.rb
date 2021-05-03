@@ -15,7 +15,6 @@ class Deployer
   ROOT_PATH   = File.realpath(File.join(__dir__, '..',  '..', '..', '..'))
 
   ASSETS_PATH = File.join(ROOT_PATH, 'config', 'deploy', 'docker', 'assets')
-  AWS_PROFILE = ENV.fetch('AWS_PROFILE')
   TEST_HOST   = 'deploy.warehouse.dev.test'
   TEST_PORT   = 9999
   WAIT_TIME   = 2
@@ -226,7 +225,6 @@ class Deployer
 
   def _set_image_tag!
     if variant == 'pre-cache'
-      #self.image_tag = "latest--pre-cache"
       self.image_tag = "#{_ruby_version}--pre-cache"
     elsif ENV['IMAGE_TAG']
       self.image_tag = ENV['IMAGE_TAG'] + "--#{variant}"
@@ -366,7 +364,7 @@ class Deployer
     end.target_group_arn
   end
 
-  define_method(:elbv2) { Aws::ElasticLoadBalancingV2::Client.new(profile: AWS_PROFILE) }
-  define_method(:ecr) { Aws::ECR::Client.new(profile: AWS_PROFILE) }
-  define_method(:secretsmanager) { Aws::SecretsManager::Client.new(profile: AWS_PROFILE) }
+  define_method(:elbv2) { Aws::ElasticLoadBalancingV2::Client.new }
+  define_method(:ecr) { Aws::ECR::Client.new }
+  define_method(:secretsmanager) { Aws::SecretsManager::Client.new }
 end
