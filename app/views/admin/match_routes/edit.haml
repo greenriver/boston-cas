@@ -19,6 +19,4 @@
   = f.button :submit, value: "Update #{@route.title}"
 
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+= render 'init_select2'

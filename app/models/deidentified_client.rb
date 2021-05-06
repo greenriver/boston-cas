@@ -17,15 +17,24 @@ class DeidentifiedClient < NonHmisClient
     where(search_alternate_name(text))
   end
 
-  def pathways_enabled?
-    Config.get('deidentified_client_assessment').include?('Pathways')
+  def assessment_type
+    self.class.assessment_type
+  end
+
+  def self.assessment_type
+    Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
   end
 
   def editable_by?(user)
     return true if user.can_manage_deidentified_clients?
-    return true if user.can_enter_deidentified_clients? && user.agency_id == agency_id
+    return true if pathways_enabled? && user.can_enter_deidentified_clients?
+    return user.agency_id == agency_id if user.can_enter_deidentified_clients?
 
     false
+  end
+
+  def can_see_assessment_score?(user)
+    user.can_manage_deidentified_clients? || Config.get(:deidentified_client_assessment) != 'DeidentifiedCovidPathwaysAssessment'
   end
 
   def download_headers

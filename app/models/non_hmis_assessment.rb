@@ -14,6 +14,7 @@ class NonHmisAssessment < ActiveRecord::Base
 
   belongs_to :non_hmis_client
   belongs_to :user
+  belongs_to :agency, optional: true
 
   after_find :populate_aggregates
 
@@ -21,6 +22,14 @@ class NonHmisAssessment < ActiveRecord::Base
 
   scope :covid_pathways, -> do
     where(type: covid_assessment_types)
+  end
+
+  scope :visible_by, ->(user) do
+    where(non_hmis_client_id: NonHmisClient.visible_to(user).select(:id))
+  end
+
+  scope :editable_by, ->(user) do
+    where(agency_id: user.agency_id)
   end
 
   def self.covid_assessment_types
@@ -32,6 +41,12 @@ class NonHmisAssessment < ActiveRecord::Base
 
   def title
     'Non-HMIS Assessment'
+  end
+
+  def hide_confidential?(user)
+    return false if agency_id.blank?
+
+    user.agency_id != agency_id
   end
 
   def update_assessment_score!
