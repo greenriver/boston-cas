@@ -311,9 +311,16 @@ module CovidPathwaysCalculations
           },
           as: :pretty_checkboxes_group,
         },
+        interested_in_set_asides: {
+          label: 'Client would like to be added to the homeless set aside interest list',
+          number: '6I.',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          hint: 'Client is aware that signing up is not an actual application to a housing development, that they will only be notified of openings in neighborhoods they have selected when they near the top of the interest list, and that being eligible and even referred to a homeless set aside unit does not guarantee an offer of housing.',
+        },
         neighborhood_interests: {
           label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
-          include_blank:  'Any Neighborhood / All Neighborhoods',
+          include_blank: 'Any Neighborhood / All Neighborhoods',
           number: '7A',
           collection: Neighborhood.for_select,
           as: :pretty_checkboxes_group,

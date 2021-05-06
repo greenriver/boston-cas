@@ -31,9 +31,9 @@
             - if latest_assessment_for_client?
               - if @non_hmis_client.identified
                 - if can_manage_identified_clients?
-                  = link_to 'Delete', polymorphic_path([client_type, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger ml-2'
+                  = link_to 'Delete', polymorphic_path([client_type.to_sym, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger ml-2'
               - else
                 - if can_manage_deidentified_clients?
-                  = link_to 'Delete', polymorphic_path([client_type, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger ml-2', data: {confirm: 'Are you sure you want to delete this assessment?'}
+                  = link_to 'Delete', polymorphic_path([client_type.to_sym, :client], assessment_id: @assessment), method: :delete, class: 'btn btn-danger ml-2', data: {confirm: 'Are you sure you want to delete this assessment?'}
 
 = render 'init_select2'
