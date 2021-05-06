@@ -1,6 +1,6 @@
+= render 'init_select2'
 = content_for :page_js do
   :javascript
-    $('.select2').select2();
     $('.jContact').on('change', function(e){
       var contact_id = $('.jContact').val();
       if(contact_id == ""){

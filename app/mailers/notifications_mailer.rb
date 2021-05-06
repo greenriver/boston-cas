@@ -326,6 +326,12 @@ class NotificationsMailer < DatabaseMailer
     mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
   end
 
+  def match_recommendation_to_hsa_for_ssp
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match ready for review")
+  end
+
   def housing_subsidy_administrator_accepted
     notification = params[:notification]
     setup_instance_variables notification

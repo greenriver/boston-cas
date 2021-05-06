@@ -51,6 +51,47 @@
       "note": ""
     },
     {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 24,
+      "fingerprint": "15dafe767dd3ee8f4ad2d10f3e833ed4d4b3763f74ecea893a8d8e5a6e3504ad",
+      "check_name": "UnsafeReflection",
+      "message": "Unsafe reflection method `constantize` called with model attribute",
+      "file": "app/views/non_hmis_assessments/_index.haml",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
+      "code": "NonHmisClient.visible_to(current_user).find((params[:identified_client_id] or params[:deidentified_client_id]).to_i).assessment_type.constantize",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "NonHmisAssessmentsController",
+          "method": "index",
+          "line": 16,
+          "file": "app/controllers/non_hmis_assessments_controller.rb",
+          "rendered": {
+            "name": "non_hmis_assessments/index",
+            "file": "app/views/non_hmis_assessments/index.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "non_hmis_assessments/index",
+          "line": 1,
+          "file": "app/views/non_hmis_assessments/index.haml",
+          "rendered": {
+            "name": "non_hmis_assessments/_index",
+            "file": "app/views/non_hmis_assessments/_index.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "non_hmis_assessments/_index"
+      },
+      "user_input": "NonHmisClient.visible_to(current_user).find((params[:identified_client_id] or params[:deidentified_client_id]).to_i)",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "1704737ade48b7c920a1075f57912daac35bbd54af90535fd6d3b615e47d014e",
@@ -199,7 +240,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 315,
+      "line": 313,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`docker image ls -f 'reference=#{repo_name}' | grep #{_ruby_version}--pre-cache`",
       "render_path": null,
@@ -219,7 +260,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 150,
+      "line": 149,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -259,7 +300,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 149,
+      "line": 148,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -320,7 +361,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 144,
+      "line": 143,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -360,7 +401,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called with model attribute",
       "file": "app/models/deidentified_client.rb",
-      "line": 41,
+      "line": 46,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:deidentified_client_assessment).constantize",
       "render_path": null,
@@ -659,6 +700,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-02-02 19:30:40 +0000",
+  "updated": "2021-04-27 09:32:14 -0400",
   "brakeman_version": "5.0.0"
 }

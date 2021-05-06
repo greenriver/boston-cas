@@ -108,7 +108,11 @@ Rails.application.routes.draw do
       post :update_matches
     end
   end
-  resources :units, except: :show, concerns: [:restorable]
+  resources :units, except: :show, concerns: [:restorable] do
+    resources :unit_attributes do
+      post :values, on: :collection
+    end
+  end
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
       member do
@@ -211,6 +215,7 @@ Rails.application.routes.draw do
   end
 
   resources :deidentified_clients do
+    resources :non_hmis_assessments
     collection do
       get :choose_upload
       post :import
@@ -223,6 +228,7 @@ Rails.application.routes.draw do
     end
   end
   resources :identified_clients do
+    resources :non_hmis_assessments
     member do
       get :new_assessment
       get :assessment
