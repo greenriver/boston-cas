@@ -32,6 +32,4 @@
             - # view is versioned, so choose view based on model type
             = render @assessment.model_name.element, client_form: f, assessment_form: a, disabled: true
 
-  = content_for :page_js do
-    :javascript
-      $('.select2').select2();
+  = render 'init_select2'

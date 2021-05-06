@@ -60,6 +60,4 @@
         %dt= key
         %dd= link_to value, matches_details_reports_dashboards_clients_path(details_params.merge(section: :average_matches_to_success, by: :gender, key: key)), data: {loads_in_pjax_modal: true}
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+= render 'init_select2'

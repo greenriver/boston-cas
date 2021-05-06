@@ -8,6 +8,4 @@
   .col-3
     = form.input :program_types, collection: SubProgram.types, label_method: ->(type) { type[:label] }, value_method: ->(type) { type[:value] }, selected: @program_types, input_html: { multiple: true, class: :select2 }
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+= render 'init_select2'
