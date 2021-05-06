@@ -170,11 +170,11 @@ class NonHmisClientsController < ApplicationController
     client = NonHmisClient.find params[:id].to_i
     case client.type
     when 'DeidentifiedClient'
-      redirect_to polymorphic_path([action_name, :deidentified_client], id: params[:id])
+      redirect_to polymorphic_path([action_name.to_sym, :deidentified_client], id: params[:id])
     when 'IdentifiedClient'
-      redirect_to polymorphic_path([action_name, :identified_client], id: params[:id])
+      redirect_to polymorphic_path([action_name.to_sym, :identified_client], id: params[:id])
     when 'ImportedClient'
-      redirect_to polymorphic_path([action_name, :imported_client], id: params[:id])
+      redirect_to polymorphic_path([action_name.to_sym, :imported_client], id: params[:id])
     end
   end
 
