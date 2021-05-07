@@ -299,10 +299,23 @@ module MatchDecisions
       match_route.class.match_steps[self.class.name]
     end
 
+    def reporting_step_number
+      match_route.class.match_steps_for_reporting[self.class.name]
+    end
+
     def previous_step
-      return unless step_number.present?
-      previous_step_name = match_route.class.match_steps.invert[step_number - 1]
-      match.decisions.find_by(type: previous_step_name)
+      step_index = reporting_step_number
+      return nil if step_index == 1 # We are already at the first step
+
+      # Look back, skipping steps we didn't run on the way forward
+      loop do
+        step_index -= 1
+        step_name = match_route.class.match_steps_for_reporting.invert[step_index]
+        step = match.decisions.find_by(type: step_name)
+        return step if step.nil? || step.status.present?
+      end
+
+      nil
     end
 
     def next_step
