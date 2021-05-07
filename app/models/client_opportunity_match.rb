@@ -26,6 +26,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   delegate :contacts_editable_by_hsa, to: :match_route
+  delegate :has_buildings?, to: :sub_program
   has_one :sub_program, through: :opportunity
   has_one :program, through: :sub_program
 

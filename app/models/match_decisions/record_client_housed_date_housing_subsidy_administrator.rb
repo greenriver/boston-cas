@@ -70,7 +70,9 @@ module MatchDecisions
 
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
-      update status: 'pending'
+      update(status: 'pending')
+      StatusCallbacks.new(self, nil).pending
+
       send_notifications_for_step if send_notifications
     end
 
@@ -99,12 +101,12 @@ module MatchDecisions
     end
 
     def holds_voucher?
-      true
+      ! match.has_buildings?
     end
 
     class StatusCallbacks < StatusCallbacks
       def pending
-        match.client.update(holds_voucher_on: Date.current) unless match.opportunity.sub_program.has_buildings?
+        match.client.update(holds_voucher_on: Date.current) unless match.has_buildings?
       end
 
       def other_clients_canceled
