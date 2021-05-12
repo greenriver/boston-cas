@@ -12,7 +12,7 @@ module MatchPrioritization
     end
 
     def self.prioritization_for_clients(scope, match_route:)
-      scope.order(c_t[:holds_voucher_on].desc)
+      scope.order(c_t[:holds_voucher_on].asc)
     end
 
     def self.client_prioritization_value_method
