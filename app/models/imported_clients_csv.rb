@@ -64,7 +64,6 @@ class ImportedClientsCsv < ApplicationRecord
       if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
         @clients << client
         @touched += 1 if assessment.imported_timestamp.present?
-        binding.pry
         assessment.update(
           imported_timestamp: timestamp,
 
@@ -203,11 +202,10 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def calculate_dob(row)
-    return Date.new(Date.current.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
-    return Date.new(Date.current.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
-
     age = clean_integer(row[AGE])
     return Date.new(Date.current.year - age) if age.present?
+    return Date.new(Date.current.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
+    return Date.new(Date.current.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
 
     nil
   end
