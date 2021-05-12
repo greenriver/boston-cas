@@ -105,7 +105,7 @@ module MatchDecisions::Five
     end
 
     private def decline_reason_scope
-      MatchDecisionReasons::ShelterAgencyDecline.all
+      MatchDecisionReasons::MitigationDecline.all
     end
   end
 end
