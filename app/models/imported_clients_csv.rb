@@ -25,11 +25,11 @@ class ImportedClientsCsv < ApplicationRecord
   VETERAN = 21 # Y
   NEIGHBORHOODS = 22 # Z
   CASE_MANAGER_EMAIL = 23 # AA
-  RESIDENT = 24 # AB
-  BEDROOMS = 25 # AC
-  ANNUAL_INCOME = 26 # AD
-  VOUCHER = 27 # AE
-  VOUCHER_AGENCY = 28 # AF
+  BEDROOMS = 24 # AB
+  ANNUAL_INCOME = 25 # AC
+  VOUCHER = 26 # AD
+  VOUCHER_AGENCY = 27 # AE
+  AGE = 28 # AF
 
   attr_reader :added, :touched, :problems, :clients
 
@@ -69,7 +69,6 @@ class ImportedClientsCsv < ApplicationRecord
 
           set_asides_housing_status: row[HOUSING_STATUS],
           domestic_violence: fleeing_domestic_violence?(row),
-          set_asides_resident: resident?(row),
           days_homeless_in_the_last_three_years: days_homeless(row),
           shelter_name: row[SHELTER_NAME],
           entry_date: convert_to_date(row[ENTRY_DATE]),
@@ -92,6 +91,7 @@ class ImportedClientsCsv < ApplicationRecord
           sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
           veteran: yes_no_to_bool(row[VETERAN]),
           neighborhood_interests: determine_neighborhood_interests(client, row),
+          hoh_age: clean_integer(row[AGE]),
         )
         client.update(
           agency_id: agency&.id,
@@ -101,6 +101,12 @@ class ImportedClientsCsv < ApplicationRecord
       end
     end
     true
+  end
+
+  def clean_integer(str)
+    return nil unless str.to_i.to_s == str
+
+    str.to_i
   end
 
   def convert_to_time(str)
@@ -122,10 +128,6 @@ class ImportedClientsCsv < ApplicationRecord
   def fleeing_domestic_violence?(row)
     status = row[HOUSING_STATUS]
     status.present? && status.include?('OR A.2)')
-  end
-
-  def resident?(row)
-    row[RESIDENT].present?
   end
 
   def days_homeless(row)
@@ -200,6 +202,8 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def calculate_dob(row)
+    age = clean_integer(row[AGE])
+    return Date.new(Date.current.year - age) if age.present?
     return Date.new(Date.current.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
     return Date.new(Date.current.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
 
@@ -232,7 +236,7 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def expected_header
-    "timestamp,email,housing status,days homeless in past 3 years,shelter name,entry date,case manager name,case manager phone,first name,last name,client phone number,client email address,family studio acceptable,children details,family one bedroom acceptable,individual sro acceptable,individual studio acceptable,accessibility needs,interested in disabled housing,55 or older,62 or older,veteran,neighborhoods,case manager email,bedrooms required,annual income,tenant-based voucher,voucher agency\r\n"
+    "timestamp,email,housing status,days homeless in past 3 years,shelter name,entry date,case manager name,case manager phone,first name,last name,client phone number,client email address,family studio acceptable,children details,family one bedroom acceptable,individual sro acceptable,individual studio acceptable,accessibility needs,interested in disabled housing,55 or older,62 or older,veteran,neighborhoods,case manager email,bedrooms required,annual income,tenant-based voucher,voucher agency,hoh age\r\n"
     # NOTE: Prior header, remove after transition is complete
     # "Timestamp,Email Address,I certify that the below mentioned household fits each part of the Boston Homeless Set Aside Preference definition (below) to the best of my knowledge. I understand that as case manager I must obtain documentation of Homeless Status and retain that documentation in a client file to be provided upon request. I certify this by typing my name below.,Household is currently: ,Cumulative number of days in the last three years that the household has met the definition above and is documented according to the documentation requirements below. This number cannot exceed 1096. ,I have obtained documentation according to the documentation requirements described above. I acknowledge that the household has voluntarily shown interest and willingness to participate in the Boston Homeless Set Aside Preference and move to a new apartment. I certify this by typing my name below. ,\"Name of shelter where household resides. If household is unsheltered, living on the street, please state this.\",\"Date household entered above mentioned shelter. If household is unsheltered, living on the street, please enter the date household began living on the street. \",Case manager/shelter provider contact name ,Case manager/shelter provider contact phone number ,I acknowledge the above statement by typing my name below. ,First Name (head of household),Last Name (head of household),Head of household phone number,Head of household email address,\"If you are a family with children, would you consider a studio?\",What is the age and gender of each of the children in the household? (this information may be used by some housing providers to determine the number of bedrooms your household may receive priority for),\"If you are a family with children, would you consider a one bedroom?\",\"If you are an individual, would you consider living in an SRO (single room occupancy)?\",\"If you are an individual, would you consider living in a studio?\",\"Are you seeking any of the following due to a disability?  If yes, you may have to provide documentation of disability - related need.\",\"Are you interested in applying for housing units targeted for persons with disabilities? (the definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)\",Are you 55 years of age or older?,Are you 62 years of age or older?,Are you a veteran?,\"Check off all the Boston neighborhoods you are willing to live in. Since these units are rare, the more neighborhoods you are willing to live in helps your chances of being match to a unit. \",Case manager/shelter provider email address,,\"If you need a bedroom size larger than SRO, studio, or 1 bedroom, please choose a size below. \",What is the estimated annual income for your household next year?,Do you currently have a tenant-based housing choice voucher? ,\"If you have a tenant-based housing choice voucher, what is the administering housing authority/agency?\",Housed?,Notes\r\n"
   end
