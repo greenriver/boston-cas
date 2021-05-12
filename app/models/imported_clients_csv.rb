@@ -25,12 +25,11 @@ class ImportedClientsCsv < ApplicationRecord
   VETERAN = 21 # Y
   NEIGHBORHOODS = 22 # Z
   CASE_MANAGER_EMAIL = 23 # AA
-  RESIDENT = 24 # AB
-  BEDROOMS = 25 # AC
-  ANNUAL_INCOME = 26 # AD
-  VOUCHER = 27 # AE
-  VOUCHER_AGENCY = 28 # AF
-  AGE =29 # AG
+  BEDROOMS = 24 # AB
+  ANNUAL_INCOME = 25 # AC
+  VOUCHER = 26 # AD
+  VOUCHER_AGENCY = 27 # AE
+  AGE = 28 # AF
 
   attr_reader :added, :touched, :problems, :clients
 
@@ -65,12 +64,12 @@ class ImportedClientsCsv < ApplicationRecord
       if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
         @clients << client
         @touched += 1 if assessment.imported_timestamp.present?
+        binding.pry
         assessment.update(
           imported_timestamp: timestamp,
 
           set_asides_housing_status: row[HOUSING_STATUS],
           domestic_violence: fleeing_domestic_violence?(row),
-          set_asides_resident: resident?(row),
           days_homeless_in_the_last_three_years: days_homeless(row),
           shelter_name: row[SHELTER_NAME],
           entry_date: convert_to_date(row[ENTRY_DATE]),
@@ -130,10 +129,6 @@ class ImportedClientsCsv < ApplicationRecord
   def fleeing_domestic_violence?(row)
     status = row[HOUSING_STATUS]
     status.present? && status.include?('OR A.2)')
-  end
-
-  def resident?(row)
-    row[RESIDENT].present?
   end
 
   def days_homeless(row)
@@ -210,6 +205,9 @@ class ImportedClientsCsv < ApplicationRecord
   def calculate_dob(row)
     return Date.new(Date.current.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
     return Date.new(Date.current.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
+
+    age = clean_integer(row[AGE])
+    return Date.new(Date.current.year - age) if age.present?
 
     nil
   end
