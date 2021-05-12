@@ -45,6 +45,7 @@ namespace :deploy do
         execute :rake, 'cas_seeds:ensure_all_match_routes_exist RAILS_ENV=production'
         execute :rake, 'cas_seeds:ensure_all_match_prioritization_schemes_exist RAILS_ENV=production'
         execute :rake, 'cas_seeds:stalled_reasons RAILS_ENV=production'
+        execute :rake, 'cas_seeds:create_mitigation_reasons RAILS_ENV=production'
       end
     end
   end
