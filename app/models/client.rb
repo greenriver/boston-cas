@@ -164,7 +164,7 @@ class Client < ApplicationRecord
     sa = arel_table
     numeric = /[\d-]+/.match(text).try(:[], 0) == text
     date = /\d\d\/\d\d\/\d\d\d\d/.match(text).try(:[], 0) == text
-    social = /\d\d\d-\d\d-\d\d\d\d/.match(text).try(:[], 0) == text
+    social = /\d\d\d-?\d\d-?\d\d\d\d/.match(text).try(:[], 0) == text
     # Explicitly search for only last, first if there's a comma in the search
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
