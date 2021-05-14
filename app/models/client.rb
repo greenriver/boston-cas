@@ -157,6 +157,9 @@ class Client < ApplicationRecord
   scope :search_last_name, -> (name) do
     arel_table[:last_name].lower.matches("#{name.downcase}%")
   end
+  scope :search_last_four, -> (ssn) do
+    arel_table[:ssn].matches("#{ssn}%")
+  end
 
   scope :text_search, -> (text) do
     return none unless text.present?
@@ -165,6 +168,7 @@ class Client < ApplicationRecord
     numeric = /[\d-]+/.match(text).try(:[], 0) == text
     date = /\d\d\/\d\d\/\d\d\d\d/.match(text).try(:[], 0) == text
     social = /\d\d\d-?\d\d-?\d\d\d\d/.match(text).try(:[], 0) == text
+    last_four = /\d{4,4}/.match(text).try(:[], 0) == text
     # Explicitly search for only last, first if there's a comma in the search
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
@@ -186,6 +190,8 @@ class Client < ApplicationRecord
     # Explicitly search for a PersonalID
     elsif social
       where = sa[:ssn].eq(text.gsub('-',''))
+    elsif last_four
+      where = search_last_four(text)
     elsif date
       (month, day, year) = text.split('/')
       where = sa[:date_of_birth].eq("#{year}-#{month}-#{day}")
