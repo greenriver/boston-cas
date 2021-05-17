@@ -126,11 +126,11 @@ class NonHmisClient < ApplicationRecord
 
   # Sorting and Searching
   scope :search_first_name, -> (name) do
-    arel_table[:first_name].lower.matches("%#{name.downcase}%")
+    arel_table[:first_name].lower.matches("#{name.downcase}%")
   end
 
   scope :search_last_name, -> (name) do
-    arel_table[:last_name].lower.matches("%#{name.downcase}%")
+    arel_table[:last_name].lower.matches("#{name.downcase}%")
   end
 
   scope :search_alternate_name, -> (name) do
