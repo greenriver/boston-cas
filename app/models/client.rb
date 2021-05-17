@@ -149,7 +149,7 @@ class Client < ApplicationRecord
   scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
 
   scope :search_alternate_name, -> (name) do
-    arel_table[:alternate_names].lower.matches("#{name.downcase}%")
+    arel_table[:alternate_names].lower.matches("%#{name.downcase}%")
   end
   scope :search_first_name, -> (name) do
     arel_table[:first_name].lower.matches("#{name.downcase}%")
