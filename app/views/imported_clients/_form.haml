@@ -28,10 +28,6 @@
   %p
     = "(#{@non_hmis_client.current_assessment.shelter_name} since #{@non_hmis_client.current_assessment.entry_date})"
 %p
-  %b Resident?
-  %br
-  = yes_no(@non_hmis_client.current_assessment.set_asides_resident)
-%p
   %b Interested in Set-Asides?
   %br
   = yes_no(@non_hmis_client.current_assessment.interested_in_set_asides)
@@ -53,6 +49,8 @@
 - if @non_hmis_client.current_assessment.sixty_two_plus
   %p
     Client is 62+
+- if @non_hmis_client.date_of_birth.present?
+  %p Client is #{@non_hmis_client.age}
 - if @non_hmis_client.current_assessment.disabling_condition
   %p
     Client has disabling condition.
