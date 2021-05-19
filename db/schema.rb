@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_28_205931) do
+ActiveRecord::Schema.define(version: 2021_05_19_175343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,7 +266,6 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.boolean "health_prioritized", default: false
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
-    t.date "holds_voucher_on"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -366,8 +365,8 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
 
   create_table "entity_view_permissions", id: :serial, force: :cascade do |t|
     t.integer "user_id"
-    t.integer "entity_id", null: false
     t.string "entity_type", null: false
+    t.integer "entity_id", null: false
     t.boolean "editable"
     t.datetime "deleted_at"
     t.bigint "agency_id"
@@ -453,6 +452,17 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.index ["updated_at"], name: "index_helps_on_updated_at"
   end
 
+  create_table "housing_attributes", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
+  end
+
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
     t.string "filename"
     t.integer "user_id"
@@ -481,8 +491,8 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.string "identity"
     t.boolean "success"
     t.string "failure_reason"
-    t.integer "user_id"
     t.string "user_type"
+    t.integer "user_id"
     t.string "context"
     t.string "ip"
     t.text "user_agent"
@@ -520,7 +530,6 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "updated_at"
     t.boolean "active", default: true, null: false
     t.boolean "ineligible_in_warehouse", default: false, null: false
-    t.integer "referral_result"
     t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
@@ -543,7 +552,6 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "deleted_at"
     t.integer "administrative_cancel_reason_id"
     t.string "administrative_cancel_reason_other_explanation"
-    t.date "application_date"
     t.boolean "disable_opportunity", default: false
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
@@ -570,16 +578,6 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.index ["match_id"], name: "index_match_events_on_match_id"
     t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id"
     t.index ["notification_id"], name: "index_match_events_on_notification_id"
-  end
-
-  create_table "match_mitigation_reasons", force: :cascade do |t|
-    t.bigint "client_opportunity_match_id"
-    t.bigint "mitigation_reason_id"
-    t.boolean "addressed", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["client_opportunity_match_id"], name: "index_match_mitigation_reasons_on_client_opportunity_match_id"
-    t.index ["mitigation_reason_id"], name: "index_match_mitigation_reasons_on_mitigation_reason_id"
   end
 
   create_table "match_prioritizations", id: :serial, force: :cascade do |t|
@@ -645,13 +643,6 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "contact_id", null: false
-  end
-
-  create_table "mitigation_reasons", force: :cascade do |t|
-    t.string "name"
-    t.boolean "active", default: true
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "name_quality_codes", id: :serial, force: :cascade do |t|
@@ -776,7 +767,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
     t.string "client_identifier"
     t.integer "assessment_score"
-    t.string "agency"
+    t.string "deprecated_agency"
     t.string "first_name"
     t.string "last_name"
     t.jsonb "active_cohort_ids"
@@ -1161,8 +1152,8 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
 
   create_table "requirements", id: :serial, force: :cascade do |t|
     t.integer "rule_id"
-    t.integer "requirer_id"
     t.string "requirer_type"
+    t.integer "requirer_id"
     t.boolean "positive"
     t.datetime "deleted_at"
     t.datetime "created_at"
@@ -1179,10 +1170,12 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "updated_at", null: false
     t.boolean "can_view_all_clients", default: false
     t.boolean "can_edit_all_clients", default: false
+    t.boolean "can_edit_clients_based_on_rules", default: false
     t.boolean "can_participate_in_matches", default: false
     t.boolean "can_view_all_matches", default: false
     t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_see_alternate_matches", default: false
+    t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_match_contacts", default: false
     t.boolean "can_approve_matches", default: false
     t.boolean "can_reject_matches", default: false
@@ -1206,7 +1199,9 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.boolean "can_view_vouchers", default: false
     t.boolean "can_edit_vouchers", default: false
     t.boolean "can_view_programs", default: false
+    t.boolean "can_view_assigned_programs", default: false
     t.boolean "can_edit_programs", default: false
+    t.boolean "can_edit_assigned_programs", default: false
     t.boolean "can_view_opportunities", default: false
     t.boolean "can_edit_opportunities", default: false
     t.boolean "can_reissue_notifications", default: false
@@ -1229,25 +1224,21 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_deidentified_clients", default: false
     t.boolean "can_manage_deidentified_clients", default: false
+    t.boolean "can_export_deidentified_clients", default: false
     t.boolean "can_add_cohorts_to_deidentified_clients", default: false
     t.boolean "can_enter_identified_clients", default: false
     t.boolean "can_manage_identified_clients", default: false
+    t.boolean "can_export_identified_clients", default: false
+    t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_add_cohorts_to_identified_clients", default: false
     t.boolean "can_manage_neighborhoods", default: false
-    t.boolean "can_view_assigned_programs", default: false
-    t.boolean "can_edit_assigned_programs", default: false
-    t.boolean "can_export_deidentified_clients", default: false
-    t.boolean "can_export_identified_clients", default: false
     t.boolean "can_manage_tags", default: false
     t.boolean "can_manage_imported_clients", default: false
-    t.boolean "can_edit_clients_based_on_rules", default: false
     t.boolean "can_send_notes_via_email", default: false
     t.boolean "can_upload_deidentified_clients", default: false
     t.boolean "can_delete_matches", default: false
     t.boolean "can_reopen_matches", default: false
-    t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_help", default: false
-    t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_audit_users", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
@@ -1502,8 +1493,8 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer "invitation_limit"
-    t.integer "invited_by_id"
     t.string "invited_by_type"
+    t.integer "invited_by_id"
     t.integer "invitations_count", default: 0
     t.boolean "receive_initial_notification", default: false
     t.string "first_name"

@@ -1,0 +1,2 @@
+class HousingAttribute < ApplicationRecord
+end
