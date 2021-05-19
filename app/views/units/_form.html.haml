@@ -13,7 +13,10 @@
     = f.input :elevator_accessible, label: 'Is this unit elevator accessible, or a ground floor unit?', hint: 'If un-checked, matches involving this unit will exclude clients who require a ground floor or elevator accessible unit'
     = f.association :building, as: :select2, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
-    = render 'attributes', form: f
+    - if ! @unit.persisted? && @unit&.building&.housing_attributes.present?
+      = render 'housing_attributes/attributes', housing_object: @unit.building, mode: 'read', heading: 'Default Building Attributes', subheading: 'The following attributes will be applied on unit creation'
+    - if @unit.persisted?
+      = render 'housing_attributes/attributes', housing_object: @unit, mode: 'edit'
     = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}", on_unit: true
 
   .form-actions

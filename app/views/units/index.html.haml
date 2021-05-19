@@ -22,29 +22,30 @@
   
 .row
   .col-sm-12  
-    .table-responsive
-      %table.table.table-condensed
-        %thead
-          %tr
-            - titles.each do | k, title |
-              %th
-                = manual_sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th Edit
-        %tbody
-          - @units.each do |unit|
-            - if unit.deleted_at
-              - deleted = "deleted"
+    .c-card.c.card__flush.mb-4
+      .c-card__content.p-0.pb-4
+        %table.table.table-striped
+          %thead
             %tr
-              %td{:class => deleted}= unit.id
-              %td{:class => deleted}= unit.name || '(no name)'
-              %td{:class => deleted}= checkmark unit.available
-              %td= link_to unit.building.name, building_path(unit.building)
-              %td
-                - if ! unit.deleted_at
-                  = link_to 'Edit', edit_unit_path(unit)
-                - else
-                  = link_to 'Restore', restore_unit_path(unit.id), method: :post
+              - titles.each do | k, title |
+                %th
+                  = manual_sort_link(titles[k], k, directions)
+                  %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+              %th Edit
+          %tbody
+            - @units.each do |unit|
+              - if unit.deleted_at
+                - deleted = "deleted"
+              %tr
+                %td{:class => deleted}= unit.id
+                %td{:class => deleted}= unit.name || '(no name)'
+                %td{:class => deleted}= checkmark unit.available
+                %td= link_to unit.building.name, building_path(unit.building)
+                %td
+                  - if ! unit.deleted_at
+                    = link_to 'Edit', edit_unit_path(unit)
+                  - else
+                    = link_to 'Restore', restore_unit_path(unit.id), method: :post
                           
     %p= paginate @units
     

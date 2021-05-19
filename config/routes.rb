@@ -45,6 +45,9 @@ Rails.application.routes.draw do
     get :available_units_for_vouchers, on: :member
     get :units, on: :member
     resources :units, only: :new
+    resources :housing_attributes, module: 'buildings' do
+      post :values, on: :collection
+    end
   end
   resources :subgrantees do
     resources :contacts, except: :show, controller: :subgrantee_contacts, concerns: [:restorable]
@@ -110,6 +113,9 @@ Rails.application.routes.draw do
   end
   resources :units, except: :show, concerns: [:restorable] do
     resources :unit_attributes do
+      post :values, on: :collection
+    end
+    resources :housing_attributes, module: 'units' do
       post :values, on: :collection
     end
   end

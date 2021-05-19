@@ -1,0 +1,46 @@
+-# Partial: presents a table of housing attributes associated with a building or unit
+-#   Arguments:
+-#     housing_object: The particular building or unit object
+-#     mode: current options are 'edit' or 'read'. 'read' is the default
+-#     heading: an optional argument to override the default heading
+-#     subheading: an optional argument to override the empty default subheading
+
+:ruby
+  mode ||= 'read'
+  heading ||= 'Attributes'
+  subheading ||= false
+
+.row
+  .col-lg-12
+    .c-card.c.card__flush.mb-4
+      %h3= heading
+      - if subheading
+        %p subheading
+      .c-card__content.p-0.pb-4
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Attribute
+              %th Value
+              - if mode == 'edit'
+                %th
+                %th
+          %tbody
+            - housing_object.housing_attributes.each do |attribute|
+              %tr
+                %td= attribute.name
+                %td= attribute.value
+                - if mode == 'edit'
+                  %td.text-right
+                    = link_to edit_polymorphic_path([housing_object, attribute]), class: 'btn btn-secondary btn-sm', data: {loads_in_pjax_modal: true} do
+                      %i.icon-pencil
+                      Edit
+                  %td.text-right
+                    = link_to polymorphic_path([housing_object, attribute]), method: :delete, data: {confirm: "Would you really like to remove the '#{attribute.name}: #{attribute.value}' attribute from the #{housing_object.name} #{housing_object.class.to_s}?"}, class: 'btn btn-sm btn-danger' do
+                      %i.icon-cross
+                      Remove
+        - if mode == 'edit'
+          .text-right
+            = link_to new_polymorphic_path([housing_object, HousingAttribute]), class: 'btn btn-secondary mr-4 mt-4', data: {loads_in_pjax_modal: true} do
+              %i.icon-plus
+              Add Attribute
