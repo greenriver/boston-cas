@@ -8,10 +8,6 @@
 
 = simple_form_for @attribute, url:  polymorphic_path([@housingable, @attribute]) do |f|
   = f.input :name, disabled: true
-  = f.input :value, collection: @attribute.existing_values, input_html: { class: :select2, data: { tags: true }}, include_blank: true, hint: 'If you don\'t see the value required, type it in and select it'
+  = f.input :value, collection: @attribute.existing_values, as: :select_2, input_html: {data: { tags: true }}, include_blank: true, hint: 'If you don\'t see the value required, type it in and select it'
 
   = f.button :submit
-
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();

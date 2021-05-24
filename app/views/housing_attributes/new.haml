@@ -7,8 +7,8 @@
   Add Attribute
 
 = simple_form_for @attribute, url:  polymorphic_path([@housingable, :housing_attributes]) do |f|
-  = f.input :name, collection: @attribute.existing_attributes, input_html: { class: 'select2 jType', data: { tags: true }}, include_blank: true, hint: 'If you don\'t see the type required, type it in and select it'
-  = f.input :value, collection: [], input_html: { class: :select2, data: { tags: true, 'collection-path' => polymorphic_path([:values, @housingable, :housing_attributes]) } }, include_blank: true, hint: 'If you don\'t see the value required, type it in and select it'
+  = f.input :name, collection: @attribute.existing_attributes, as: :select_2, input_html: { class: :jType, data: { tags: true }}, include_blank: true, hint: 'If you don\'t see the type required, type it in and select it', placeholder: 'Please chooose'
+  = f.input :value, collection: [], as: :select_2, input_html: { class: :jValue, data: { tags: true, 'collection-path' => polymorphic_path([:values, @housingable, :housing_attributes]) } }, include_blank: true, hint: 'If you don\'t see the value required, type it in and select it', placeholder: 'Please chooose'
 
   = f.button :submit
 
@@ -18,7 +18,7 @@
     $(document).ready(function() {
       $('.jType').on('change', function(e) {
         var attribute_name = $(this).val();
-        var input = $('#housing_attribute_value');
+        var input = $('.jValue');
         [path, query] = input.data('collection-path').split('?');
         input.data('collection-path', path + "?attribute_name=" + attribute_name);
         App.remoteSelectLoad.init();

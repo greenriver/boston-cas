@@ -16,12 +16,11 @@
         = render 'service_manager/form_fields', form: f, heading: "Services Attached to this #{Building.model_name.human}"
 
         = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Building.model_name.human}"
-                
+
       .c-card.c-card--flush.my-8
         %h3 Attributes
         .c-card__content.p-0.pb-4
-          - if @building.housing_attributes.exists?
-            = render 'housing_attributes/attributes', housing_object: @building, mode: 'edit', heading: ''
+          = render 'housing_attributes/attributes', housing_object: @building, mode: 'edit', heading: ''
 
       .form-actions
         = f.button :submit

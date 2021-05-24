@@ -14,13 +14,13 @@ else
   true
 end
 
-FastGettext.default_available_locales = ['en']
-FastGettext.default_text_domain = 'boston-cas'
 if enable_transation_db? && ActiveRecord::Base.connection.table_exists?('translation_keys')
   require 'gettext_i18n_rails'
   require 'fast_gettext'
   require 'gettext'
   require "fast_gettext/translation_repository/db"
+  FastGettext.default_available_locales = ['en']
+  FastGettext.default_text_domain = 'boston-cas'
   FastGettext::TranslationRepository::Db.require_models #load and include default models
 
   FastGettext.add_text_domain(

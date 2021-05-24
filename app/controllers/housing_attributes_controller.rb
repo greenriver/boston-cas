@@ -7,7 +7,7 @@
 class HousingAttributesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_housingable # Must be defined on the child class
-  before_action :set_attribute, only: [:edit, :update, 'destroy']
+  before_action :set_attribute, only: [:edit, :update, :destroy]
 
   include AjaxModalRails::Controller
 
@@ -34,7 +34,7 @@ class HousingAttributesController < ApplicationController
   def destroy
     @attribute.destroy
 
-    flash[:alert] = "Attribute '#{@attribute.name}' removed"
+    flash[:notice] = "Attribute '#{@attribute.name}' removed"
     redirect_to edit_polymorphic_path(@housingable)
   end
 
