@@ -1,3 +1,7 @@
 = content_for :crumbs do
-  = link_to building_path(@unit.building) do
-    &laquo; #{@unit.building.name}
+  -if @unit&.building
+    = link_to building_path(@unit.building) do
+      &laquo; #{@unit.building.name}
+  - else
+    = link_to units_path do
+      &laquo; Units

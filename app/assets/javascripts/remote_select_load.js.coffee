@@ -13,6 +13,7 @@ App.remoteSelectLoad.init = (root) =>
       $select.select2('destroy')
       new App.Form.Select2Input this, { placeholder: loading_placeholder }
     $.post url, data, (data) =>
+      $select.find('option[value!=""]').remove()
       $select.append(data)
       $select.attr('placeholder', original_placeholder)
       if $select.hasClass('select2')
