@@ -15,6 +15,11 @@
   .detail-box--value
     .unit-name
       = link_to_if can_edit_buildings?, match.opportunity_details.unit_name, building_path(match&.opportunity&.unit&.building)
+      - if match.opportunity_details&.unit_attributes.length > 0
+        .unit-attributes.mt-2
+          - match.opportunity_details.unit_attributes.each do |attribute|
+            = "#{attribute.name}: #{attribute.value}"
+            %br
     - if match.opportunity.unit.elevator_accessible
       .elevator-accessible
         This unit is elevator accessible or on the ground floor.

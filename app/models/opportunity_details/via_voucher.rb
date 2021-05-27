@@ -14,6 +14,10 @@ module OpportunityDetails
       voucher.unit.try :name
     end
 
+    def unit_attributes
+      voucher.unit.try :housing_attributes
+    end
+
     def building_name
       voucher.building.try :name
     end
