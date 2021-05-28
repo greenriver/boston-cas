@@ -75,7 +75,7 @@
                 = checkmark client.chronic_homeless
               %td
                 - if client.remote_id.present?
-                  = link_to client.data_source_path, class: ['btn', 'btn-sm', 'btn-secondary'] do
+                  = link_to client_path(client), class: ['btn', 'btn-sm', 'btn-secondary'] do
                     %span.icon-pencil
                     Edit
 

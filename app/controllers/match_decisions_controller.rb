@@ -73,6 +73,11 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = 'Sorry, you must provide a cancel reason to cancel this match.'
       render 'matches/show'
 
+    # If disable opportunity is set and no cancel reason is set
+    elsif decision_params[:disable_opportunity] == '1' && decision_params[:administrative_cancel_reason_id].blank?
+      flash[:error] = 'Sorry, you can only disable a vacancy when cancelling a match'
+      render 'matches/show'
+
     elsif @decision.update(decision_params)
       # If we are expiring the match for shelter agencies
       if can_reject_matches? && decision_params[:shelter_expiration].present?
@@ -105,6 +110,12 @@ class MatchDecisionsController < ApplicationController
           @match.client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match, expires_at: prevent_matching_until)
         else
           @decision.run_status_callback!
+        end
+
+        if decision_params[:disable_opportunity] == '1'
+          voucher = @match.opportunity.voucher
+          voucher.update(available: false) if voucher.present?
+          @match.opportunity.update(available: false)
         end
 
         # Note this was done on-behalf of someone else

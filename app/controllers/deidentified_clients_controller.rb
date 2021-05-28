@@ -13,7 +13,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
     if pathways_enabled?
-      respond_with(@non_hmis_client, location: new_assessment_deidentified_client_path(@non_hmis_client.id))
+      respond_with(@non_hmis_client, location: new_deidentified_client_non_hmis_assessment_path(@non_hmis_client))
     else
       respond_with(@non_hmis_client, location: deidentified_clients_path)
     end

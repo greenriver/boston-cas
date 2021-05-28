@@ -14,6 +14,10 @@ module OpportunityDetails
       unit.name
     end
 
+    def unit_attributes
+      unit.housing_attributes
+    end
+
     def building_name
       unit.building.try :name
     end

@@ -5,16 +5,19 @@
   .form-inputs.margin-top-02
     - if @unit.in_use? && @unit.active_voucher.present? && @unit.active_matches.present?
       - disabled = true
-      %p
+      %p.alert.alert-warning
         This unit is involved in a
         = "#{link_to 'match', match_path(@unit.active_matches.first)}, it's availability cannot be adjusted, nor can it be moved to another site.".html_safe
     %label.margin-bottom-00 Is the Unit Available?
     = f.input :available, disabled: disabled
     = f.input :elevator_accessible, label: 'Is this unit elevator accessible, or a ground floor unit?', hint: 'If un-checked, matches involving this unit will exclude clients who require a ground floor or elevator accessible unit'
-    = f.association :building, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
+    = f.association :building, as: :select2, label_method: :name, disabled: disabled, label: "#{Building.model_name.human}"
     = f.input :name
+    - if ! @unit.persisted? && @unit&.building&.housing_attributes.present?
+      = render 'housing_attributes/attributes', housing_object: @unit.building, mode: 'read', heading: 'Default Building Attributes', subheading: 'The following attributes will be applied on unit creation'
+    - if @unit.persisted?
+      = render 'housing_attributes/attributes', housing_object: @unit, mode: 'edit'
     = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}", on_unit: true
 
   .form-actions
     = f.button :submit
-

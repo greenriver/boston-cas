@@ -55,6 +55,20 @@ class NonHmisClient < ApplicationRecord
     end
   end
 
+  scope :editable_by, -> (user) do
+    if user.can_edit_all_clients?
+      all
+    else
+      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
+
+      if pathways_enabled?
+        all
+      else
+        where(agency_id: user.agency.id)
+      end
+    end
+  end
+
   scope :identified, -> do
     where(identified: true)
   end
@@ -88,6 +102,14 @@ class NonHmisClient < ApplicationRecord
     "#{first_name} #{middle_name} #{last_name}"
   end
 
+  def self.pathways_enabled?
+    assessment_type.include?('Pathways')
+  end
+
+  def pathways_enabled?
+    self.class.pathways_enabled?
+  end
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end
@@ -104,11 +126,11 @@ class NonHmisClient < ApplicationRecord
 
   # Sorting and Searching
   scope :search_first_name, -> (name) do
-    arel_table[:first_name].lower.matches("%#{name.downcase}%")
+    arel_table[:first_name].lower.matches("#{name.downcase}%")
   end
 
   scope :search_last_name, -> (name) do
-    arel_table[:last_name].lower.matches("%#{name.downcase}%")
+    arel_table[:last_name].lower.matches("#{name.downcase}%")
   end
 
   scope :search_alternate_name, -> (name) do

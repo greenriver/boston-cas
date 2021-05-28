@@ -5,6 +5,6 @@ class AddTimestampsToUnavailableFors < ActiveRecord::Migration[4.2]
     end
 
     Config.reset_column_information
-    Config.first.save
+    Config.first.save if Config.first
   end
 end

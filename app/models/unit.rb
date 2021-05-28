@@ -20,6 +20,8 @@ class Unit < ApplicationRecord
   has_many :opportunities, through: :vouchers
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
+  has_many :unit_attributes, dependent: :destroy
+  has_many :housing_attributes, as: :housingable
 
   delegate :active_matches, to: :active_voucher
   delegate :program, to: :active_voucher
@@ -37,6 +39,15 @@ class Unit < ApplicationRecord
 
   def in_use?
     Voucher.exists?(unit_id: id) || Opportunity.exists?(unit_id: id)
+  end
+
+  def apply_default_housing_attributes
+    building.housing_attributes&.each do |a|
+      housing_attributes.create(
+        name: a.name,
+        value: a.value,
+      )
+    end
   end
 
   def self.text_search(text)

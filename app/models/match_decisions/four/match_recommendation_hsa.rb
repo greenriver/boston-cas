@@ -72,6 +72,7 @@ module MatchDecisions::Four
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Four::MatchRecommendationHsa
         m << Notifications::Four::ShelterAgencyAccepted
+        m << Notifications::Four::MatchRecommendationToHsaForSsp
       end
     end
 
