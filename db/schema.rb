@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_28_205931) do
+ActiveRecord::Schema.define(version: 2021_05_24_143842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -452,6 +452,17 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.index ["updated_at"], name: "index_helps_on_updated_at"
   end
 
+  create_table "housing_attributes", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
+  end
+
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
     t.string "filename"
     t.integer "user_id"
@@ -519,6 +530,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "updated_at"
     t.boolean "active", default: true, null: false
     t.boolean "ineligible_in_warehouse", default: false, null: false
+    t.integer "referral_result"
     t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
@@ -748,6 +760,8 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.string "homeless_night_range"
     t.text "notes"
     t.string "veteran_status"
+    t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -1409,16 +1423,6 @@ ActiveRecord::Schema.define(version: 2021_04_28_205931) do
     t.datetime "expires_at"
     t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
-  end
-
-  create_table "unit_attributes", force: :cascade do |t|
-    t.bigint "unit_id"
-    t.string "name"
-    t.string "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["unit_id"], name: "index_unit_attributes_on_unit_id"
   end
 
   create_table "units", id: :serial, force: :cascade do |t|
