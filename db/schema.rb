@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_141030) do
+ActiveRecord::Schema.define(version: 2021_05_24_143842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -451,6 +451,17 @@ ActiveRecord::Schema.define(version: 2021_05_07_141030) do
     t.index ["controller_path", "action_name"], name: "index_helps_on_controller_path_and_action_name", unique: true
     t.index ["created_at"], name: "index_helps_on_created_at"
     t.index ["updated_at"], name: "index_helps_on_updated_at"
+  end
+
+  create_table "housing_attributes", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
   end
 
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
@@ -1430,16 +1441,6 @@ ActiveRecord::Schema.define(version: 2021_05_07_141030) do
     t.datetime "expires_at"
     t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
-  end
-
-  create_table "unit_attributes", force: :cascade do |t|
-    t.bigint "unit_id"
-    t.string "name"
-    t.string "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["unit_id"], name: "index_unit_attributes_on_unit_id"
   end
 
   create_table "units", id: :serial, force: :cascade do |t|

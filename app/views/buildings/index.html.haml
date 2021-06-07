@@ -29,27 +29,29 @@
 
   .row.table-utilities
     .col-sm-12
-      .table-responsive
-        %table.table.table-condensed.table-hover
-          %thead
-            %tr
-              - titles.each do | k, title |
-                %th
-                  = manual_sort_link(titles[k], k, directions)
-                  %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-          %tbody
-            - @buildings.each do |building|
+      .c-card.c.card__flush.mb-4
+        .c-card__content.p-0.pb-4
+          %table.table.table-striped
+            %thead
               %tr
-                %td
-                  = link_to building_path(building) do
-                    = building.id
-                %td
-                  = link_to building_path(building) do
-                    = building.name
-                %td
-                  = building.building_type
-                %td
-                  - if building.subgrantee_id
-                    = link_to subgrantee_path(building.subgrantee_id) do
-                      = building.subgrantee.name
+                - titles.each do | k, title |
+                  %th
+                    = manual_sort_link(titles[k], k, directions)
+                    %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %tbody
+              - @buildings.each do |building|
+                %tr
+                  %td
+                    = link_to building_path(building) do
+                      = building.id
+                  %td
+                    = link_to building_path(building) do
+                      = building.name
+                  %td
+                    = building.building_type
+                  %td
+                    - if building.subgrantee_id
+                      = link_to subgrantee_path(building.subgrantee_id) do
+                        = building.subgrantee.name
+
       %p= paginate @buildings, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}

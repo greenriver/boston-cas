@@ -65,7 +65,8 @@ RSpec.describe Client, type: :model do
   let(:ray_jones) { create :client, first_name: 'Ray', last_name: 'Jones' }
   let(:ray_clark) { create :client, first_name: 'Ray', last_name: 'Clark' }
   let(:ben_chris) { create :client, first_name: 'Ben', last_name: 'Chris', alternate_names: 'Bobby Ray,Lee Jones' }
-  let(:clients) { [bob_smith, joe_smith, ray_jones, ray_clark, ben_chris] }
+  let(:billybob_desmith) { create :client, first_name: 'Billybob', last_name: 'DeSmith' }
+  let(:clients) { [bob_smith, joe_smith, ray_jones, ray_clark, ben_chris, billybob_desmith] }
   let(:match_bob) { Client.where(Client.search_first_name('Bob')) }
   let(:match_ray) { Client.text_search('Ray') }
   describe 'search_first_name' do
@@ -80,7 +81,7 @@ RSpec.describe Client, type: :model do
         expect( match_bob ).to include bob_smith
       end
       it 'does not match Joe Smith' do
-        expect( match_bob ).to_not include joe_smith
+        expect( match_bob ).to_not include joe_smith, billybob_desmith
       end
     end
   end
@@ -102,7 +103,7 @@ RSpec.describe Client, type: :model do
         expect( match_smith ).to include joe_smith
       end
       it 'does not match either Rays' do
-        expect( match_smith ).to_not include ray_jones, ray_clark
+        expect( match_smith ).to_not include ray_jones, ray_clark, billybob_desmith
       end
     end
   end
