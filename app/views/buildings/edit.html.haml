@@ -5,8 +5,8 @@
     = "&laquo; View #{Building.model_name.human}:".html_safe
     =@building.name
 .container
-  %h1 
+  %h1
     = "Edit #{Building.model_name.human}:"
     = @building.name
 
-  = render 'form'
+  = render 'form', mode: 'edit'

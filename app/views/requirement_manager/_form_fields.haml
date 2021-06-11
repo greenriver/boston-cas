@@ -29,13 +29,14 @@
                 %a{href: '#', class: 'btn btn-outline-primary', style: 'border-right: 0; border-radius: .25em 0 0 .25em', data: {new_requirement_positivity_toggle: true, requirement_positive: 'true'}} Must
                 %a{href: '#', class: 'btn btn-outline-primary', style: 'border-radius: 0', data: {new_requirement_positivity_toggle: true, requirement_positive: 'false'}} Can't
                 = select_tag :available_rules, nil, class: 'form-control select2--with-prepends', data: {rule_searcher: true}
-            - form.object.available_rules.each do |rule|
-              - rule_name = rule.alternate_name if on_unit
-              - rule_name ||= rule.name_with_verb
-              %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule_name, variable: rule.variable_requirement?.to_s}}
-              - if rule.variable_requirement?
-                .jVariableRequirment.mb-4{data: {rule_id: rule.id}}
-                  = render rule
+            - if form.object.persisted?
+              - form.object.available_rules.each do |rule|
+                - rule_name = rule.alternate_name if on_unit
+                - rule_name ||= rule.name_with_verb
+                %div{data: {available_rule: true, rule_id: rule.id, rule_name: rule_name, variable: rule.variable_requirement?.to_s}}
+                - if rule.variable_requirement?
+                  .jVariableRequirment.mb-4{data: {rule_id: rule.id}}
+                    = render rule
 
             -# Include jVariableRequirment divs for the existing requirements, otherwise we don't have values if the rule needs to be changed
             - requirements.each do |requirement|
