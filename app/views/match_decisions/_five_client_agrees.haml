@@ -1,0 +1,15 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-choose.o-choose--flush.o-choose--flush-top
+        .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
+          %header
+            .o-choose__title
+              .c-choice-icon.c-choice-icon--confirm.mr-4
+              %h3 Client Agrees to Match
+          .o-choose__content
+            .form-actions
+              %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
+                %i.icon-checkmark
+                Continue Match
+        = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, #{@match.match_route.contact_label_for(:housing_subsidy_admin_contacts)} will be informed of the decision."

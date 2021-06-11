@@ -1,4 +1,7 @@
-- label = object.label_for(contact_type)
+- if defined?(match_route)
+  - label = "#{match_route.contact_label_for(contact_type)} Contacts"
+- else
+  - label = object.label_for(contact_type)
 - contacts_type = object.contact_type_for(contact_type)
 - available_contacts_method = object.available_contacts_method_for(contact_type)
 - selected_contacts_method = object.selected_contacts_method_for(contact_type)

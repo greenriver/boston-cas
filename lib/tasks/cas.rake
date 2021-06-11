@@ -60,4 +60,8 @@ namespace :cas do
     MatchCensus.populate!
   end
 
+  desc "Update clients with voucher status"
+  task add_missing_holds_voucher_on: [:environment, "log:info_to_stdout"] do
+    Client.add_missing_holds_voucher_on
+  end
 end

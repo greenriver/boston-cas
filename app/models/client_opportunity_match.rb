@@ -26,10 +26,14 @@ class ClientOpportunityMatch < ApplicationRecord
 
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   delegate :contacts_editable_by_hsa, to: :match_route
+  delegate :has_buildings?, to: :sub_program
   has_one :sub_program, through: :opportunity
   has_one :program, through: :sub_program
 
   has_many :notifications, class_name: 'Notifications::Base'
+
+  has_many :match_mitigation_reasons
+  has_many :mitigation_reasons, through: :match_mitigation_reasons
 
   # Default Match Route
   has_decision :match_recommendation_dnd_staff
@@ -64,6 +68,14 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :four_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHousingSubsidyAdminDeclineDndStaff'
   has_decision :four_record_client_housed_date_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator', notification_class_name: 'Notifications::Four::HousingSubsidyAdminDecisionClient'
   has_decision :four_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Four::ConfirmMatchSuccessDndStaff'
+
+  # Match Route Five
+  has_decision :five_match_recommendation, decision_class_name: 'MatchDecisions::Five::FiveMatchRecommendation', notification_class_name: 'Notifications::Five::MatchRecommendation'
+  has_decision :five_client_agrees, decision_class_name: 'MatchDecisions::Five::FiveClientAgrees', notification_class_name: 'Notifications::Five::ClientAgrees'
+  has_decision :five_application_submission, decision_class_name: 'MatchDecisions::Five::FiveApplicationSubmission', notification_class_name: 'Notifications::Five::ApplicationSubmission'
+  has_decision :five_screening, decision_class_name: 'MatchDecisions::Five::FiveScreening', notification_class_name: 'Notifications::Five::Screening'
+  has_decision :five_mitigation, decision_class_name: 'MatchDecisions::Five::FiveMitigation', notification_class_name: 'Notifications::Five::Mitigation'
+  has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
 
   has_one :current_decision
 
@@ -381,23 +393,19 @@ class ClientOpportunityMatch < ApplicationRecord
     contacts_with_info = {}
     match_contacts.input_names.each do |input_name|
       if match_contacts.send(input_name).count > 0
-        contacts_with_info[input_name] = match_contacts.label_for input_name
+        contacts_with_info[input_name] = match_route.contact_label_for(input_name)
       end
     end
     contacts_with_info
   end
 
-  def self.default_contact_titles
-    {
-      shelter_agency_contacts: "#{_('Shelter Agency')} Contacts",
-      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrators')}",
-      ssp_contacts: "#{_('Stabilization Service Providers')}",
-      hsp_contacts: "#{_('Housing Search Providers')}",
-    }
-  end
-
   def default_contact_titles
-    self.class.default_contact_titles
+    {
+      shelter_agency_contacts: "#{match_route.contact_label_for(:shelter_agency_contacts)} Contacts",
+      housing_subsidy_admin_contacts: match_route.contact_label_for(:housing_subsidy_admin_contacts).pluralize,
+      ssp_contacts: match_route.contact_label_for(:ssp_contacts).pluralize,
+      hsp_contacts: match_route.contact_label_for(:hsp_contacts).pluralize,
+    }
   end
 
   def overall_status
@@ -534,6 +542,7 @@ class ClientOpportunityMatch < ApplicationRecord
       client.make_unavailable_in(match_route: match_route, expires_at: nil) if match_route.should_prevent_multiple_matches_per_client
       opportunity.update available_candidate: false
       add_default_contacts!
+      requirements_with_inherited.each { |req| req.apply_to_match(self) }
       self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all if ! match_route.should_activate_match
@@ -686,7 +695,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
 
-  private def assign_match_role_to_contact role, contact
+  def assign_match_role_to_contact role, contact
     join_model = client_opportunity_match_contacts.detect do |match_contact|
       match_contact.contact_id == contact.id
     end
