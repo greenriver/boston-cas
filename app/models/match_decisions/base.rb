@@ -88,6 +88,14 @@ module MatchDecisions
       false
     end
 
+    def show_address_field?
+      false
+    end
+
+    def show_referral_source?
+      false
+    end
+
     def stalled_after
       match_route.stalled_interval.days
     end

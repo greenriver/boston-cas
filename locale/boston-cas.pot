@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-12 12:58+0000\n"
-"PO-Revision-Date: 2021-04-12 12:58+0000\n"
+"POT-Creation-Date: 2021-06-11 17:01+0000\n"
+"PO-Revision-Date: 2021-06-11 17:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -25,6 +25,9 @@ msgid "A criminal background hearing is not necessary"
 msgstr ""
 
 msgid "Added to assessed clients"
+msgstr ""
+
+msgid "Address of housing"
 msgstr ""
 
 msgid "Any neighborhood"
@@ -124,6 +127,9 @@ msgid "Development Officer"
 msgstr ""
 
 msgid "Development Officer Contacts"
+msgstr ""
+
+msgid "Did you or this client use external software to help with housing?"
 msgstr ""
 
 msgid "Do not include client details in the note if you include the content in the email."
@@ -315,10 +321,19 @@ msgstr ""
 msgid "Route Five DND Contact"
 msgstr ""
 
+msgid "Route Five Development Officer"
+msgstr ""
+
 msgid "Route Five HSA"
 msgstr ""
 
+msgid "Route Five Housing Search Provider"
+msgstr ""
+
 msgid "Route Five Shelter Agency"
+msgstr ""
+
+msgid "Route Five Stabilization Service Provider"
 msgstr ""
 
 msgid "SSP"
