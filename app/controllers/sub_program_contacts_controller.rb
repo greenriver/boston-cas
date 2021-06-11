@@ -13,6 +13,7 @@ class SubProgramContactsController < ApplicationController
   before_action :check_edit_permission!
 
   def edit
+    @match_route = @program.match_route
   end
 
   def update

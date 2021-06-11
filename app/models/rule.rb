@@ -43,6 +43,8 @@ class Rule < ApplicationRecord
     nil
   end
 
+  def apply_to_match(match)
+  end
 end
 
 class RuleDatabaseStructureMissing < StandardError ; end

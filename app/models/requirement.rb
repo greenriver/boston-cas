@@ -13,6 +13,8 @@ class Requirement < ApplicationRecord
   has_paper_trail
 
   def clients_that_fit(scope, opportunity=nil)
+    return scope unless rule.present?
+
     rule.clients_that_fit(scope, self, opportunity)
   end
 
@@ -31,7 +33,7 @@ class Requirement < ApplicationRecord
     if on_unit && rule_alternate_name.present?
       "#{positive? ? 'Must' : "Can't" } #{_(rule_alternate_name)}"
     else
-      "#{positive? ? 'Must' : "Can't" } #{rule.verb} #{_(rule_name)}"
+      "#{positive? ? 'Must' : "Can't" } #{rule&.verb} #{_(rule_name)}"
     end
   end
 
@@ -41,4 +43,9 @@ class Requirement < ApplicationRecord
     end
   end
 
+  def apply_to_match(match)
+    return nil unless rule.present?
+
+    rule.apply_to_match(match)
+  end
 end

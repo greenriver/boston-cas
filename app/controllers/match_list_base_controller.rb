@@ -128,7 +128,7 @@ class MatchListBaseController < ApplicationController
 
   private def set_current_route
     @current_route_name = params[:current_route] || @available_routes.keys.first
-    @current_route = @available_routes[@current_route_name]
+    @current_route = @available_routes.try(:[], @current_route_name) || @available_routes.values.first
   end
 
   private def set_available_steps
