@@ -30,9 +30,9 @@
     = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
   %p
     = "#{_('DND')} and the #{_('Shelter Agency')} contact will receive notification of the housing date."
-  - if @decision.show_address_field?
+  - if @decision.show_referral_source?
     = form.input :external_software_used, label: _('Did you or this client use external software to help with housing?'), as: :boolean, disabled: !@decision.editable?
-  - if @decision.show_referral_source? && !has_unit?
+  - if @decision.show_address_field? && !has_unit?
     = form.input :address, label: _('Address of housing'), as: :text, disabled: !@decision.editable?
   .form-actions
 
