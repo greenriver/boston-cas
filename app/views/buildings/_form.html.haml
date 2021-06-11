@@ -20,7 +20,7 @@
       .c-card.c-card--flush.my-8
         %h3 Attributes
         .c-card__content.p-0.pb-4
-          = render 'housing_attributes/attributes', housing_object: @building, mode: 'edit', heading: ''
+          = render 'housing_attributes/attributes', housing_object: @building, mode: mode, heading: ''
 
       .form-actions
         = f.button :submit

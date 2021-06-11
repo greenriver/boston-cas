@@ -8,6 +8,7 @@ namespace :cas_seeds do
     create_services
     ensure_all_users_have_contacts
     create_match_decision_reasons
+    create_mitigation_reasons
     create_admin_user
   }
 
@@ -29,6 +30,11 @@ namespace :cas_seeds do
   desc 'create match decision reasons'
   task create_match_decision_reasons: :environment do
     CasSeeds::MatchDecisionReasons.new.run!
+  end
+
+  desc 'create mitigation reasons'
+  task create_mitigation_reasons: [:environment, "log:info_to_stdout"] do
+    CasSeeds::MitigationReasons.new.run!
   end
 
   desc 'import vouchers'
