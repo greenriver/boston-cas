@@ -26,6 +26,9 @@ msgstr ""
 msgid "Added to assessed clients"
 msgstr ""
 
+msgid "Address of housing"
+msgstr ""
+
 msgid "Any neighborhood"
 msgstr ""
 
@@ -123,6 +126,9 @@ msgid "Development Officer"
 msgstr ""
 
 msgid "Development Officer Contacts"
+msgstr ""
+
+msgid "Did you or this client use external software to help with housing?"
 msgstr ""
 
 msgid "Do not include client details in the note if you include the content in the email."
@@ -314,10 +320,19 @@ msgstr ""
 msgid "Route Five DND Contact"
 msgstr ""
 
+msgid "Route Five Development Officer"
+msgstr ""
+
 msgid "Route Five HSA"
 msgstr ""
 
+msgid "Route Five Housing Search Provider"
+msgstr ""
+
 msgid "Route Five Shelter Agency"
+msgstr ""
+
+msgid "Route Five Stabilization Service Provider"
 msgstr ""
 
 msgid "SSP"

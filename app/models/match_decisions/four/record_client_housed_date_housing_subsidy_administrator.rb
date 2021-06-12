@@ -97,6 +97,14 @@ module MatchDecisions::Four
       :four_record_client_housed_date_housing_subsidy_administrator
     end
 
+    def show_address_field?
+      true
+    end
+
+    def show_referral_source?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -116,6 +124,8 @@ module MatchDecisions::Four
       super.merge params.require(:decision).permit(
         :building_id,
         :unit_id,
+        :external_software_used,
+        :address,
       )
     end
 
@@ -123,8 +133,10 @@ module MatchDecisions::Four
       if status == 'completed' && client_move_in_date.blank?
         errors.add :client_move_in_date, 'must be filled in'
       end
+      # addresses are required for externally housed clients
+      if status == 'completed' && match.opportunity.voucher.unit.blank? && external_software_used && address.blank?
+        errors.add :address, 'must be filled in'
+      end
     end
-
   end
-
 end
