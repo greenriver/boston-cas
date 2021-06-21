@@ -557,7 +557,7 @@ class Client < ApplicationRecord
       match = client.client_opportunity_matches.active.detect{|m| m.current_decision&.holds_voucher?}
       next unless match.present?
 
-      client.update(holds_voucher_on: match.current_decision.timestamp.to_date)
+      client.update(holds_voucher_on: match.current_decision.timestamp.to_date, holds_internal_cas_voucher: true)
     end
   end
 
