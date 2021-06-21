@@ -8,18 +8,19 @@ RSpec.describe Rules::EnrolledInHmisProject, type: :model do
 
     let!(:rule) { create :enrolled_in_hmis_project_a }
 
-    let!(:bob) { create :client, first_name: 'Bob', enrolled_project_ids: [ project_a ] }
-    let!(:roy) { create :client, first_name: 'Roy', enrolled_project_ids: [ project_b ] }
-    let!(:mary) { create :client, first_name: 'Mary', enrolled_project_ids: [ project_a, project_b ] }
+    let!(:bob) { create :client, first_name: 'Bob', enrolled_project_ids: [project_a] }
+    let!(:roy) { create :client, first_name: 'Roy', enrolled_project_ids: [project_b] }
+    let!(:mary) { create :client, first_name: 'Mary', enrolled_project_ids: [project_a, project_b] }
     let!(:sue) { create :client, first_name: 'Sue', enrolled_project_ids: nil }
-    let!(:zelda) { create :client, first_name: 'Zelda', enrolled_project_ids: [ "#{project_a}" ] }
+    let!(:zelda) { create :client, first_name: 'Zelda', enrolled_project_ids: ["#{project_a}"] }
 
     let!(:positive) { create :requirement, rule: rule, positive: true, variable: project_a }
     let!(:negative) { create :requirement, rule: rule, positive: false, variable: project_a }
+    let!(:multi_positive) { create :requirement, rule: rule, positive: true, variable: "#{project_a},#{project_b}" }
 
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
-
+    let!(:clients_that_fit_multi) { multi_positive.clients_that_fit(Client.all) }
 
     context 'when positive' do
       it 'matches 2' do
@@ -63,5 +64,25 @@ RSpec.describe Rules::EnrolledInHmisProject, type: :model do
       end
     end
 
+    context 'when multiple' do
+      it 'matches 2' do
+        expect(clients_that_fit_multi.count).to eq(3)
+      end
+      it 'contains Bob' do
+        expect(clients_that_fit_multi.ids).to include bob.id
+      end
+      it 'contains Roy' do
+        expect(clients_that_fit_multi.ids).to include roy.id
+      end
+      it 'contains Mary' do
+        expect(clients_that_fit_multi.ids).to include mary.id
+      end
+      it 'does not contain Sue' do
+        expect(clients_that_fit_multi.ids).to_not include sue.id
+      end
+      it 'does not contain Zelda' do
+        expect(clients_that_fit_multi.ids).to_not include zelda.id
+      end
+    end
   end
 end

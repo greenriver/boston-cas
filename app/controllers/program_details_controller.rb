@@ -16,7 +16,7 @@ class ProgramDetailsController < ApplicationController
   end
 
   def update
-    if @program.update program_params
+    if @program.update(program_params)
       flash[:notice] = 'Program Details saved.'
       redirect_to action: :edit
     else
@@ -24,28 +24,32 @@ class ProgramDetailsController < ApplicationController
     end
   end
 
-  private
-    def set_program
-      @program = program_scope.find_by(id: params[:program_id])
-    end
+  private def set_program
+    @program = program_scope.find_by(id: params[:program_id])
+  end
 
-    def set_subprogram
-      @subprogram = @program.sub_programs.find params[:sub_program_id]
-    end
+  private def set_subprogram
+    @subprogram = @program.sub_programs.find params[:sub_program_id]
+  end
 
-    def program_params
-      params.require(:program).
-        permit(
-          :name,
-          :description,
-          :contract_start_date,
-          :funding_source_id,
-          :confidential,
-          :eligibility_requirement_notes,
-          :match_route_id,
-          service_ids: [],
-          requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-        )
-    end
-
+  private def program_params
+    params.require(:program).
+      permit(
+        :name,
+        :description,
+        :contract_start_date,
+        :funding_source_id,
+        :confidential,
+        :eligibility_requirement_notes,
+        :match_route_id,
+        service_ids: [],
+        requirements_attributes: [
+          :id,
+          :rule_id,
+          :positive,
+          :variable,
+          :_destroy,
+        ],
+      )
+  end
 end
