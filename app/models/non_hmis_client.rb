@@ -263,7 +263,7 @@ class NonHmisClient < ApplicationRecord
   def update_assessment_from_client(assessment = current_assessment)
     assessment.assessment_score = assessment_score
     assessment.actively_homeless = actively_homeless
-    assessment.days_homeless_in_the_last_three_years = days_homeless_in_the_last_three_years
+    assessment.days_homeless_in_the_last_three_years = total_days_homeless_in_the_last_three_years
     assessment.veteran = veteran
     assessment.rrh_desired = rrh_desired
     assessment.youth_rrh_desired = youth_rrh_desired
