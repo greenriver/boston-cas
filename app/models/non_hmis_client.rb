@@ -175,9 +175,9 @@ class NonHmisClient < ApplicationRecord
 
     # current_assessment fields
     project_client.assessment_score = current_assessment&.assessment_score || 0
-    project_client.days_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
-    project_client.days_literally_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
-    project_client.days_homeless = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_literally_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless = current_assessment&.total_days_homeless_in_the_last_three_years || 0
     project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
     project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
 
@@ -263,7 +263,7 @@ class NonHmisClient < ApplicationRecord
   def update_assessment_from_client(assessment = current_assessment)
     assessment.assessment_score = assessment_score
     assessment.actively_homeless = actively_homeless
-    assessment.days_homeless_in_the_last_three_years = total_days_homeless_in_the_last_three_years
+    assessment.days_homeless_in_the_last_three_years = days_homeless_in_the_last_three_years
     assessment.veteran = veteran
     assessment.rrh_desired = rrh_desired
     assessment.youth_rrh_desired = youth_rrh_desired
