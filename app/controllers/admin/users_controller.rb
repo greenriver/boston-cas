@@ -129,6 +129,8 @@ module Admin
           :email,
           :receive_initial_notification,
           :agency_id,
+          :exclude_from_directory,
+          :exclude_phone_from_directory,
           role_ids: [],
           contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role],
           requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]

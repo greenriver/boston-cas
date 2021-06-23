@@ -35,14 +35,23 @@ production:
 development_warehouse:
   <<: *default
   database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+  <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
+  port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
+  <% end %>
 
 staging_warehouse:
   <<: *default
   database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+  <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
+  port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
+  <% end %>
 
 production_warehouse:
   <<: *default
   database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+  <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
+  port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
+  <% end %>
 
 test:
   <<: *default
