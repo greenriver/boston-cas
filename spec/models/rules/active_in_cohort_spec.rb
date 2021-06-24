@@ -7,16 +7,19 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
 
     let!(:rule) { create :active_in_cohort }
 
-    let!(:bob) { create :client, first_name: 'Bob', active_cohort_ids: [ cohort_a ] }
-    let!(:roy) { create :client, first_name: 'Roy', active_cohort_ids: [ cohort_b ] }
-    let!(:mary) { create :client, first_name: 'Mary', active_cohort_ids: [ cohort_a, cohort_b ] }
+    let!(:bob) { create :client, first_name: 'Bob', active_cohort_ids: [cohort_a] }
+    let!(:roy) { create :client, first_name: 'Roy', active_cohort_ids: [cohort_b] }
+    let!(:mary) { create :client, first_name: 'Mary', active_cohort_ids: [cohort_a, cohort_b] }
     let!(:sue) { create :client, first_name: 'Sue', active_cohort_ids: nil }
+    let!(:zelda) { create :client, first_name: 'Zelda', active_cohort_ids: ["#{cohort_a}"] }
 
     let!(:positive) { create :requirement, rule: rule, positive: true, variable: cohort_a }
     let!(:negative) { create :requirement, rule: rule, positive: false, variable: cohort_a }
+    let!(:multi_positive) { create :requirement, rule: rule, positive: true, variable: "#{cohort_a},#{cohort_b}" }
 
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
+    let!(:clients_that_fit_multi) { multi_positive.clients_that_fit(Client.all) }
 
     context 'when positive' do
       it 'matches 2' do
@@ -34,11 +37,14 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
       it 'does not contain Sue' do
         expect(clients_that_fit.ids).to_not include sue.id
       end
+      it 'does not contain Zelda' do
+        expect(clients_that_fit.ids).to_not include zelda.id
+      end
     end
 
     context 'when negative' do
-      it 'matches 2' do
-        expect(clients_that_dont_fit.count).to eq(2)
+      it 'matches 3' do
+        expect(clients_that_dont_fit.count).to eq(3)
       end
       it 'does not contain Bob' do
         expect(clients_that_dont_fit.ids).to_not include bob.id
@@ -52,7 +58,36 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
       it 'contains Sue' do
         expect(clients_that_dont_fit.ids).to include sue.id
       end
+      it 'contains Sue' do
+        expect(clients_that_dont_fit.ids).to include sue.id
+      end
+      it 'contains Zelda' do
+        expect(clients_that_dont_fit.ids).to include zelda.id
+      end
     end
 
+    context 'when multiple' do
+      it 'matches 2' do
+        expect(clients_that_fit_multi.count).to eq(3)
+      end
+      it 'contains Bob' do
+        expect(clients_that_fit_multi.ids).to include bob.id
+      end
+      it 'contains Roy' do
+        expect(clients_that_fit_multi.ids).to include roy.id
+      end
+      it 'contains Mary' do
+        expect(clients_that_fit_multi.ids).to include mary.id
+      end
+      it 'does not contain Sue' do
+        expect(clients_that_fit_multi.ids).to_not include sue.id
+      end
+      it 'does not contain Zelda' do
+        expect(clients_that_fit_multi.ids).to_not include zelda.id
+      end
+      it 'does not contain Zelda' do
+        expect(clients_that_fit_multi.ids).to_not include zelda.id
+      end
+    end
   end
 end
