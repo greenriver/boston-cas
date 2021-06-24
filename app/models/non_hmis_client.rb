@@ -231,6 +231,11 @@ class NonHmisClient < ApplicationRecord
     project_client.sro_ok = current_assessment&.sro_ok
     project_client.evicted = current_assessment&.evicted
     project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false
+    project_client.holds_voucher_on = if current_assessment&.have_tenant_voucher
+      current_assessment&.entry_date
+    else
+      nil
+    end
 
     project_client.needs_update = true
   end
