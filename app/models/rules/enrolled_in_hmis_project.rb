@@ -25,7 +25,7 @@ class Rules::EnrolledInHmisProject < Rule
     available_projects.select { |id, _| id.to_s.in?(value_as_array(value)) }.map(&:last).join(' or ') || value
   end
 
-  def clients_that_fit(scope, requirement, opportunity)
+  def clients_that_fit(scope, requirement, _opportunity)
     if Client.column_names.include?(:enrolled_project_ids.to_s)
       if requirement.positive
         where = 'enrolled_project_ids @> ANY(ARRAY [?]::jsonb[])'
