@@ -85,9 +85,6 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
       it 'does not contain Zelda' do
         expect(clients_that_fit_multi.ids).to_not include zelda.id
       end
-      it 'does not contain Zelda' do
-        expect(clients_that_fit_multi.ids).to_not include zelda.id
-      end
     end
   end
 end
