@@ -175,9 +175,9 @@ class NonHmisClient < ApplicationRecord
 
     # current_assessment fields
     project_client.assessment_score = current_assessment&.assessment_score || 0
-    project_client.days_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
-    project_client.days_literally_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
-    project_client.days_homeless = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_literally_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless = current_assessment&.total_days_homeless_in_the_last_three_years || 0
     project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
     project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
 
