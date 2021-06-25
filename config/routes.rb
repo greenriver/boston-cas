@@ -171,6 +171,7 @@ Rails.application.routes.draw do
       patch :update, on: :collection
     end
     resources :match_routes, only: [:index, :edit, :update]
+    resources :sessions, only: [:index, :destroy]
   end
 
   resources :neighborhoods

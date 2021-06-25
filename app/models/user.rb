@@ -22,6 +22,7 @@ class User < ApplicationRecord
          :timeoutable,
          :confirmable,
          :pwned_password,
+         :session_limitable,
          password_length: 10..128
   #has_secure_password # not needed with devise
   # Connect users to login attempts
@@ -42,6 +43,10 @@ class User < ApplicationRecord
   scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {can_add_vacancies: true})}
   scope :active, -> {where active: true}
   scope :inactive, -> {where active: false}
+  scope :has_recent_activity, -> do
+    where(id: ActivityLog.where(created_at: 30.minutes.ago..Time.current).select(:user_id)).
+      where.not(unique_session_id: nil)
+  end
 
   has_one :contact, inverse_of: :user
 

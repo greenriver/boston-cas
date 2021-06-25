@@ -209,6 +209,8 @@ GEM
     devise-pwned_password (0.1.9)
       devise (~> 4)
       pwned (~> 2.0.0)
+    devise-security (0.16.0)
+      devise (>= 4.3.0, < 5.0)
     devise_invitable (2.0.3)
       actionmailer (>= 5.0)
       devise (>= 4.6)
@@ -610,6 +612,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise (~> 4)
   devise-pwned_password
+  devise-security
   devise_invitable
   dotenv-rails
   exception_notification
