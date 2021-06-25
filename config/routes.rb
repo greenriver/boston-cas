@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     resources :housing_attributes, module: 'buildings' do
       post :values, on: :collection
     end
+    resources :housing_media_links, module: 'buildings'
   end
   resources :subgrantees do
     resources :contacts, except: :show, controller: :subgrantee_contacts, concerns: [:restorable]
@@ -118,6 +119,7 @@ Rails.application.routes.draw do
     resources :housing_attributes, module: 'units' do
       post :values, on: :collection
     end
+    resources :housing_media_links, module: 'units'
   end
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do

@@ -1,0 +1,13 @@
+-# Partial: used polymorphically for building and unit attributes
+-#   Arguments:
+-#     housingable: currently a building or unit object
+-#     link: a HousingMediaLink object
+
+= content_for :modal_title do
+  = _('Add Photo or Video Link')
+
+= simple_form_for @media_link, url:  polymorphic_path([@housingable, :housing_media_links]) do |f|
+  = f.input :url, placeholder: 'Please enter the URL to the photo or video'
+  = f.input :label, placeholder: 'Please enter the text for the photo or video link'
+
+  = f.button :submit

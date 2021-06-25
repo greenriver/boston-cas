@@ -1,0 +1,34 @@
+-# Partial: presents a table of housing attributes associated with a building or unit
+-#   Arguments:
+-#     housing_object: The particular building or unit object
+-#     mode: current options are 'edit' or 'read'. 'read' is the default
+
+:ruby
+  mode ||= 'read'
+  heading ||= _('Photos and Video')
+
+.c-card.c-card--flush.mb-4
+  %h3= heading
+  .c-card__content.p-0.pb-4
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Media Links
+          - if mode == 'edit'
+            %th URL
+            %th
+      %tbody
+        - housing_object.housing_media_links.each do |link|
+          %tr
+            %td= link_to link.label, link.url, target: '_blank'
+            - if mode == 'edit'
+              %td= link.url
+              %td.text-right
+                = link_to polymorphic_path([housing_object, link]), method: :delete, data: {confirm: "Would you really like to remove '#{link.label} from the #{housing_object.name} #{housing_object.class.to_s}?"}, class: 'btn btn-sm btn-danger' do
+                  %i.icon-cross
+                  Remove
+    - if mode == 'edit'
+      .text-right
+        = link_to new_polymorphic_path([housing_object, HousingMediaLink]), class: 'btn btn-secondary mr-4 mt-4', data: {loads_in_pjax_modal: true} do
+          %i.icon-plus
+          = _('Add Photo or Video Link')
