@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_21_204604) do
+ActiveRecord::Schema.define(version: 2021_06_25_185817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -463,6 +463,17 @@ ActiveRecord::Schema.define(version: 2021_06_21_204604) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
+  end
+
+  create_table "housing_media_links", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "label"
+    t.string "url"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_media_links_on_housingable_type_and_id"
   end
 
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
