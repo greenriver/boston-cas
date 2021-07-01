@@ -21,6 +21,7 @@ class Unit < ApplicationRecord
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
   has_many :housing_attributes, as: :housingable
+  has_many :housing_media_links, as: :housingable
 
   delegate :active_matches, to: :active_voucher
   delegate :program, to: :active_voucher

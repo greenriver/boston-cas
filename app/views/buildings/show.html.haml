@@ -74,3 +74,10 @@
       .c-card__content.p-0.pb-4
         - if @building.housing_attributes.exists?
           = render 'housing_attributes/attributes', housing_object: @building, heading: ''
+
+  .row
+    .col-sm-8
+      %h2= _('Photos and Videos')
+      .c-card__content.p-0.pb-4
+        - if @building.housing_media_links.exists?
+          = render 'housing_media_links/links', housing_object: @building, heading: ''
