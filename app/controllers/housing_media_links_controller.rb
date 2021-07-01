@@ -19,8 +19,8 @@ class HousingMediaLinksController < ApplicationController
   end
 
   def create
-    @housingable.housing_media_links.where(media_link_params).first_or_create
-    redirect_to edit_polymorphic_path(@housingable)
+    @media_link = @housingable.housing_media_links.where(media_link_params).first_or_create
+    respond_with @media_link, location: edit_polymorphic_path(@housingable)
   end
 
   def destroy
@@ -40,5 +40,9 @@ class HousingMediaLinksController < ApplicationController
       :label,
       "#{@housingable.class.name.downcase}_id",
     )
+  end
+
+  def flash_interpolation_options
+    { resource_name: 'Media link' }
   end
 end
