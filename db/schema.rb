@@ -1274,6 +1274,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_185817) do
     t.boolean "can_edit_help", default: false
     t.boolean "can_audit_users", default: false
     t.boolean "can_view_all_covid_pathways", default: false
+    t.boolean "can_manage_sessions", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1529,6 +1530,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_185817) do
     t.integer "agency_id"
     t.boolean "exclude_from_directory", default: false
     t.boolean "exclude_phone_from_directory", default: false
+    t.string "unique_session_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
