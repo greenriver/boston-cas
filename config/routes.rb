@@ -113,9 +113,6 @@ Rails.application.routes.draw do
     end
   end
   resources :units, except: :show, concerns: [:restorable] do
-    resources :unit_attributes do
-      post :values, on: :collection
-    end
     resources :housing_attributes, module: 'units' do
       post :values, on: :collection
     end

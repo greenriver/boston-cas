@@ -20,7 +20,6 @@ class Unit < ApplicationRecord
   has_many :opportunities, through: :vouchers
   has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
-  has_many :unit_attributes, dependent: :destroy
   has_many :housing_attributes, as: :housingable
   has_many :housing_media_links, as: :housingable
 
