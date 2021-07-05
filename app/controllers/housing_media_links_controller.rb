@@ -19,8 +19,13 @@ class HousingMediaLinksController < ApplicationController
   end
 
   def create
-    @housingable.housing_media_links.where(media_link_params).first_or_create
-    redirect_to edit_polymorphic_path(@housingable)
+    @media_link = @housingable.housing_media_links.where(media_link_params).first_or_initialize
+    if @media_link.valid?
+      @media_link.save
+      redirect_to edit_polymorphic_path(@housingable)
+    else
+      render :new
+    end
   end
 
   def destroy
