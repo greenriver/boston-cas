@@ -120,14 +120,15 @@ class ApplicationController < ActionController::Base
     params[:locale] || session[:locale] || default_locale
   end
 
-  cattr_accessor :refresh_translations_after
   def possibly_reset_fast_gettext_cache
-    return unless refresh_translations_after.blank? || Time.current > refresh_translations_after
+    key_for_host = "translation-fresh-at-for-#{set_hostname}"
+    last_change = Rails.cache.fetch('translation-fresh-at') { Time.current }
+    last_loaded_for_host = Rails.cache.read(key_for_host)
+    return unless last_loaded_for_host.blank? || last_change > last_loaded_for_host
 
     FastGettext.cache.reload!
-    ApplicationController.refresh_translations_after = Time.current + 4.hours
+    Rails.cache.write(key_for_host, Time.current)
   end
-
 
   # don't extend the user's session if its an ajax request.
   def skip_timeout

@@ -10,8 +10,8 @@ class NonHmisClient < ApplicationRecord
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
-
   has_many :non_hmis_assessments
+  has_many :shelter_histories
 
   def current_assessment
     NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
@@ -55,6 +55,20 @@ class NonHmisClient < ApplicationRecord
     end
   end
 
+  scope :editable_by, -> (user) do
+    if user.can_edit_all_clients?
+      all
+    else
+      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
+
+      if pathways_enabled?
+        all
+      else
+        where(agency_id: user.agency.id)
+      end
+    end
+  end
+
   scope :identified, -> do
     where(identified: true)
   end
@@ -88,6 +102,14 @@ class NonHmisClient < ApplicationRecord
     "#{first_name} #{middle_name} #{last_name}"
   end
 
+  def self.pathways_enabled?
+    assessment_type.include?('Pathways')
+  end
+
+  def pathways_enabled?
+    self.class.pathways_enabled?
+  end
+
   def involved_in_match?
     client_opportunity_matches.exists?
   end
@@ -104,11 +126,11 @@ class NonHmisClient < ApplicationRecord
 
   # Sorting and Searching
   scope :search_first_name, -> (name) do
-    arel_table[:first_name].lower.matches("%#{name.downcase}%")
+    arel_table[:first_name].lower.matches("#{name.downcase}%")
   end
 
   scope :search_last_name, -> (name) do
-    arel_table[:last_name].lower.matches("%#{name.downcase}%")
+    arel_table[:last_name].lower.matches("#{name.downcase}%")
   end
 
   scope :search_alternate_name, -> (name) do
@@ -129,12 +151,12 @@ class NonHmisClient < ApplicationRecord
     Warehouse::Cohort.active.visible_in_cas.pluck(:id, :name).to_h
   end
 
-  def populate_project_client project_client
-    set_project_client_fields project_client
+  def populate_project_client(project_client)
+    set_project_client_fields(project_client)
     project_client.save
   end
 
-  def set_project_client_fields project_client
+  def set_project_client_fields(project_client)
     # NonHmisClient fields
     project_client.first_name = fix_first_name
     project_client.last_name = fix_last_name
@@ -153,9 +175,9 @@ class NonHmisClient < ApplicationRecord
 
     # current_assessment fields
     project_client.assessment_score = current_assessment&.assessment_score || 0
-    project_client.days_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
-    project_client.days_literally_homeless_in_last_three_years = current_assessment&.days_homeless_in_the_last_three_years || 0
-    project_client.days_homeless = current_assessment&.days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_literally_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless = current_assessment&.total_days_homeless_in_the_last_three_years || 0
     project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
     project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
 
@@ -195,11 +217,10 @@ class NonHmisClient < ApplicationRecord
     project_client.chronic_health_condition = if current_assessment&.chronic_health_condition then 1 else nil end
     project_client.mental_health_problem = if current_assessment&.mental_health_problem then 1 else nil end
     project_client.substance_abuse_problem = if current_assessment&.substance_abuse_problem then "Yes" else "No" end
-
-    project_client.vispdat_score = vispdat_score
-    project_client.vispdat_priority_score = vispdat_priority_score
-    project_client.health_prioritized = health_prioritized
-    project_client.hiv_positive = hiv_aids
+    project_client.vispdat_score = current_assessment&.vispdat_score
+    project_client.vispdat_priority_score = current_assessment&.vispdat_priority_score
+    project_client.health_prioritized = current_assessment&.health_prioritized
+    project_client.hiv_positive = current_assessment&.hiv_aids || hiv_aids
     project_client.is_currently_youth = current_assessment&.is_currently_youth || false
     project_client.older_than_65 = current_assessment&.older_than_65
     # Pathways
@@ -210,6 +231,11 @@ class NonHmisClient < ApplicationRecord
     project_client.sro_ok = current_assessment&.sro_ok
     project_client.evicted = current_assessment&.evicted
     project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false
+    project_client.holds_voucher_on = if current_assessment&.have_tenant_voucher
+      current_assessment&.entry_date
+    else
+      nil
+    end
 
     project_client.needs_update = true
   end
@@ -239,7 +265,7 @@ class NonHmisClient < ApplicationRecord
     update_assessment_from_client(client_assessments.build)
   end
 
-  def update_assessment_from_client(assessment=current_assessment)
+  def update_assessment_from_client(assessment = current_assessment)
     assessment.assessment_score = assessment_score
     assessment.actively_homeless = actively_homeless
     assessment.days_homeless_in_the_last_three_years = days_homeless_in_the_last_three_years

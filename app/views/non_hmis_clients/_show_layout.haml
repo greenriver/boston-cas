@@ -15,7 +15,8 @@
   %section
     .row
       .col-md-6
-        = render 'client_form',
-          disabled: true
+        = render 'client_form', disabled: true
+        = render 'shelter_location_form'
       .col-sm-6
-        = render 'non_hmis_clients/assessments/index'
+        = render 'non_hmis_assessments/index'
+

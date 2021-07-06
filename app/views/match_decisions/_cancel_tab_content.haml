@@ -2,6 +2,8 @@
 - if can_reject_matches?
   #cancel-client.tab-pane{role: :tabpanel, aria: {labelledby:'cancel-client'}}
     = render 'match_decisions/cancel_match_form_fields', form: form, include_other: include_other
+
+    = form.input :disable_opportunity, as: :boolean, label: 'Do not allow other matches for this vacancy'
     .form-actions.form-actions--right
       %button{ class: 'btn btn-warning jCancel', data: cancel_data, disabled: !@decision.editable? }
         %i.icon-minus-circle

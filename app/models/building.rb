@@ -26,6 +26,8 @@ class Building < ApplicationRecord
 
   has_many :units, inverse_of: :building
   has_many :opportunities, inverse_of: :building
+  has_many :housing_attributes, as: :housingable
+  has_many :housing_media_links, as: :housingable
 
   validates_presence_of :name
 

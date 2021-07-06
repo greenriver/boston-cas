@@ -88,6 +88,14 @@ module MatchDecisions
       false
     end
 
+    def show_address_field?
+      false
+    end
+
+    def show_referral_source?
+      false
+    end
+
     def stalled_after
       match_route.stalled_interval.days
     end
@@ -209,6 +217,10 @@ module MatchDecisions
       # override in subclass, return an array of notifications appropriate to resend for the current step
     end
 
+    def holds_voucher?
+      false
+    end
+
     ######################
     # Status Handling
     ######################
@@ -274,7 +286,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation]
+      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation, :disable_opportunity]
     end
 
     def whitelist_params_for_update params
@@ -295,10 +307,23 @@ module MatchDecisions
       match_route.class.match_steps[self.class.name]
     end
 
+    def reporting_step_number
+      match_route.class.match_steps_for_reporting[self.class.name]
+    end
+
     def previous_step
-      return unless step_number.present?
-      previous_step_name = match_route.class.match_steps.invert[step_number - 1]
-      match.decisions.find_by(type: previous_step_name)
+      step_index = reporting_step_number
+      return nil if step_index == 1 # We are already at the first step
+
+      # Look back, skipping steps we didn't run on the way forward
+      loop do
+        step_index -= 1
+        step_name = match_route.class.match_steps_for_reporting.invert[step_index]
+        step = match.decisions.find_by(type: step_name)
+        return step if step.nil? || step.status.present?
+      end
+
+      nil
     end
 
     def next_step

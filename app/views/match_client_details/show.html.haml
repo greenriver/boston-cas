@@ -51,6 +51,10 @@
     %br
     Email:
     = @client.email
+    - if @client.holds_voucher_on.present?
+      %br
+      Holds Voucher On
+      = @client.holds_voucher_on
     %br
     - if @client.non_hmis?
       %label Client and/or Case Manager Contact Information

@@ -1,0 +1,8 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = render 'matches/match_contacts_form'
+    = render 'match_decisions/decision_form'    
+    
+= content_for :page_js do
+  :javascript
+    $('.select2').select2();

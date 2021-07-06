@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_22_132325) do
+ActiveRecord::Schema.define(version: 2021_06_25_185817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,6 +266,8 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.boolean "health_prioritized", default: false
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
+    t.date "holds_voucher_on"
+    t.boolean "holds_internal_cas_voucher"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -452,6 +454,28 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.index ["updated_at"], name: "index_helps_on_updated_at"
   end
 
+  create_table "housing_attributes", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
+  end
+
+  create_table "housing_media_links", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "label"
+    t.string "url"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_media_links_on_housingable_type_and_id"
+  end
+
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
     t.string "filename"
     t.integer "user_id"
@@ -541,6 +565,10 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.datetime "deleted_at"
     t.integer "administrative_cancel_reason_id"
     t.string "administrative_cancel_reason_other_explanation"
+    t.date "application_date"
+    t.boolean "disable_opportunity", default: false
+    t.boolean "external_software_used", default: false, null: false
+    t.string "address"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
@@ -566,6 +594,16 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.index ["match_id"], name: "index_match_events_on_match_id"
     t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id"
     t.index ["notification_id"], name: "index_match_events_on_notification_id"
+  end
+
+  create_table "match_mitigation_reasons", force: :cascade do |t|
+    t.bigint "client_opportunity_match_id"
+    t.bigint "mitigation_reason_id"
+    t.boolean "addressed", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_opportunity_match_id"], name: "index_match_mitigation_reasons_on_client_opportunity_match_id"
+    t.index ["mitigation_reason_id"], name: "index_match_mitigation_reasons_on_mitigation_reason_id"
   end
 
   create_table "match_prioritizations", id: :serial, force: :cascade do |t|
@@ -631,6 +669,13 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "contact_id", null: false
+  end
+
+  create_table "mitigation_reasons", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "name_quality_codes", id: :serial, force: :cascade do |t|
@@ -747,6 +792,8 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.string "homeless_night_range"
     t.text "notes"
     t.string "veteran_status"
+    t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
@@ -1046,6 +1093,7 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.boolean "health_prioritized", default: false
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
+    t.date "holds_voucher_on"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1226,6 +1274,7 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.boolean "can_edit_help", default: false
     t.boolean "can_audit_users", default: false
     t.boolean "can_view_all_covid_pathways", default: false
+    t.boolean "can_manage_sessions", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1272,6 +1321,16 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.datetime "updated_at"
     t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
+  create_table "shelter_histories", force: :cascade do |t|
+    t.bigint "non_hmis_client_id", null: false
+    t.bigint "user_id", null: false
+    t.string "shelter_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["non_hmis_client_id"], name: "index_shelter_histories_on_non_hmis_client_id"
+    t.index ["user_id"], name: "index_shelter_histories_on_user_id"
   end
 
   create_table "social_security_number_quality_codes", id: :serial, force: :cascade do |t|
@@ -1469,6 +1528,9 @@ ActiveRecord::Schema.define(version: 2021_01_22_132325) do
     t.boolean "active", default: true, null: false
     t.string "deprecated_agency"
     t.integer "agency_id"
+    t.boolean "exclude_from_directory", default: false
+    t.boolean "exclude_phone_from_directory", default: false
+    t.string "unique_session_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

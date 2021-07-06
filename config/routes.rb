@@ -45,6 +45,10 @@ Rails.application.routes.draw do
     get :available_units_for_vouchers, on: :member
     get :units, on: :member
     resources :units, only: :new
+    resources :housing_attributes, module: 'buildings' do
+      post :values, on: :collection
+    end
+    resources :housing_media_links, module: 'buildings'
   end
   resources :subgrantees do
     resources :contacts, except: :show, controller: :subgrantee_contacts, concerns: [:restorable]
@@ -108,7 +112,12 @@ Rails.application.routes.draw do
       post :update_matches
     end
   end
-  resources :units, except: :show, concerns: [:restorable]
+  resources :units, except: :show, concerns: [:restorable] do
+    resources :housing_attributes, module: 'units' do
+      post :values, on: :collection
+    end
+    resources :housing_media_links, module: 'units'
+  end
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
       member do
@@ -161,6 +170,7 @@ Rails.application.routes.draw do
       patch :update, on: :collection
     end
     resources :match_routes, only: [:index, :edit, :update]
+    resources :sessions, only: [:index, :destroy]
   end
 
   resources :neighborhoods
@@ -211,6 +221,7 @@ Rails.application.routes.draw do
   end
 
   resources :deidentified_clients do
+    resources :non_hmis_assessments
     collection do
       get :choose_upload
       post :import
@@ -219,13 +230,16 @@ Rails.application.routes.draw do
       get :new_assessment
       get :assessment
       get :current_assessment_limited
+      patch :shelter_location
     end
   end
   resources :identified_clients do
+    resources :non_hmis_assessments
     member do
       get :new_assessment
       get :assessment
       get :current_assessment_limited
+      patch :shelter_location
     end
   end
   resources :imported_clients

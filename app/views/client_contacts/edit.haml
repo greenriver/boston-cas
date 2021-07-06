@@ -33,4 +33,5 @@
       $('.jContactHidden[value=' + $(this).data('contact-id') + '][name="' + $(this).data('input-name') + '"]').remove();
       $(this).closest('form').trigger('submit');
     });
-    $('.select2').select2();
+
+= render 'init_select2'

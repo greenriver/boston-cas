@@ -26,6 +26,7 @@ module MatchPrioritization
         MatchPrioritization::AssessmentScore,
         MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
         MatchPrioritization::Rank,
+        MatchPrioritization::HoldsVoucherOn,
       ]
     end
 

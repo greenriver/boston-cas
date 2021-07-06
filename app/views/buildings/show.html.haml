@@ -45,23 +45,39 @@
     titles = {}
     directions.each {| k,v | titles[k] = @building.units.human_attribute_name(k)}
     titles['id'].upcase!
+
   %h2= "#{Building.model_name.human} Units"
-  .table-responsive
-    %table.table.table-condensed
-      %thead
-        %tr
-          - titles.each do | k, title |
-            %th
-              = manual_sort_link(titles[k], k, directions)
-              %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-          %th Match
-      %tbody
-        - @building.units.order(created_at: :asc).each do |u|
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0.pb-4
+      %table.table.table-striped
+        %thead
           %tr
-            %td= link_to u.id, edit_unit_path(u)
-            %td= link_to u.name || '(no name)', edit_unit_path(u)
-            %td=checkmark u.available
-            %td
-              - if false && u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_matches&.present?
-                - match = u.active_match
-                = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?), match_path(match)
+            - titles.each do | k, title |
+              %th
+                = manual_sort_link(titles[k], k, directions)
+                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+            %th Match
+        %tbody
+          - @building.units.order(created_at: :asc).each do |u|
+            %tr
+              %td= link_to u.id, edit_unit_path(u)
+              %td= link_to u.name || '(no name)', edit_unit_path(u)
+              %td=checkmark u.available
+              %td
+                - if false && u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_matches&.present?
+                  - match = u.active_match
+                  = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?), match_path(match)
+
+  .row
+    .col-sm-8
+      %h2= "Default Building Attributes"
+      .c-card__content.p-0.pb-4
+        - if @building.housing_attributes.exists?
+          = render 'housing_attributes/attributes', housing_object: @building, heading: ''
+
+  .row
+    .col-sm-8
+      %h2= _('Photos and Videos')
+      .c-card__content.p-0.pb-4
+        - if @building.housing_media_links.exists?
+          = render 'housing_media_links/links', housing_object: @building, heading: ''

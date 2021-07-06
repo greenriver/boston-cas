@@ -13,13 +13,14 @@ class DeidentifiedClientsController < NonHmisClientsController
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
     if pathways_enabled?
-      respond_with(@non_hmis_client, location: new_assessment_deidentified_client_path(@non_hmis_client.id))
+      respond_with(@non_hmis_client, location: new_deidentified_client_non_hmis_assessment_path(@non_hmis_client))
     else
       respond_with(@non_hmis_client, location: deidentified_clients_path)
     end
   end
 
   def update
+    add_shelter_history(clean_params(deidentified_client_params))
     @non_hmis_client.update(clean_params(deidentified_client_params))
     if pathways_enabled?
       # mark the client as available if this is a new assessment
@@ -30,7 +31,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       ) unless params[:assessment_id].present? || deidentified_client_params[:client_assessments_attributes].blank?
 
       @non_hmis_client.current_assessment&.update_assessment_score!
-      respond_with(@non_hmis_client, location: deidentified_client_path(@non_hmis_client.id))
+      respond_with(@non_hmis_client, location: path_for_non_hmis_client)
     else
       respond_with(@non_hmis_client, location: deidentified_clients_path)
     end
@@ -110,6 +111,10 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
   helper_method :filter_terms
 
+  private def path_for_non_hmis_client
+    deidentified_client_path(id: @non_hmis_client.id)
+  end
+
   private def deidentified_client_params
     permitted_params = params.require(:deidentified_client).permit(
       :client_identifier,
@@ -128,6 +133,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       :assessment_score,
       :vispdat_score,
       :vispdat_priority_score,
+      :shelter_name,
       active_cohort_ids: [],
       client_assessments_attributes: [
         :id,

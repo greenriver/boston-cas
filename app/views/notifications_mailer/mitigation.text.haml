@@ -1,0 +1,14 @@
+Hello #{@contact.full_name},
+\
+CAS match requires mitigation.
+View details here:
+#{notification_match_url @notification, @match}
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

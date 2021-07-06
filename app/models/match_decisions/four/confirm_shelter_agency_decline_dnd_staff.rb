@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class ConfirmShelterAgencyDeclineDndStaff < ::MatchDecisions::Base
-
     def statuses
       {
         pending: 'Pending',
@@ -64,7 +63,7 @@ module MatchDecisions::Four
     end
 
     def accessible_by? contact
-      contact.user_can_reject_matches? || contact.user_can_approve_matches?
+      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
     end
 
     def to_param
@@ -76,7 +75,7 @@ module MatchDecisions::Four
       end
 
       def decline_overridden
-        match.four_schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!
+        match.four_match_recommendation_hsa_decision.initialize_decision!
         # TODO notify shelter agency of decline override
       end
 
@@ -92,7 +91,7 @@ module MatchDecisions::Four
       end
 
       def canceled
-        Notifications::MatchCanceled.create_for_match! match
+        Notifications::Four::MatchCanceled.create_for_match! match
         match.canceled!
       end
     end

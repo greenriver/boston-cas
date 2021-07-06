@@ -1,3 +1,3 @@
 - rule = active_in_cohort
 %h4 Cohort
-= select_tag(:variable, options_from_collection_for_select(rule.available_cohorts, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_cohorts.to_h.to_json})
+= select_tag(:variable, options_from_collection_for_select(rule.available_cohorts, :first, :last), class: 'variable', name: 'variable', multiple: true, id: "variable_#{rule.id}", data: { options: rule.available_cohorts.to_h.to_json })

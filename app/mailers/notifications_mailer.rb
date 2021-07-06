@@ -326,6 +326,12 @@ class NotificationsMailer < DatabaseMailer
     mail(to: @contact.email, subject: "Match ready for review - Requires Your Action")
   end
 
+  def match_recommendation_to_hsa_for_ssp
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match ready for review")
+  end
+
   def housing_subsidy_administrator_accepted
     notification = params[:notification]
     setup_instance_variables notification
@@ -343,7 +349,59 @@ class NotificationsMailer < DatabaseMailer
     setup_instance_variables notification
     mail(to: @contact.email, subject: 'Match Success Confirmed')
   end
+
+  def match_rejected
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Rejected")
+  end
+
+  def match_declined
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match Declined")
+  end
   # end Match Route Four
+
+  # Match Route Five
+
+  def match_recommendation
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
+  end
+
+  def client_agrees
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
+  end
+
+  def submit_application
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match ready for review')
+  end
+
+  def screening
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match is ready for client screening')
+  end
+
+  def mitigation
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match requires mitigation')
+  end
+
+  def lease_up
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: 'Match is awaiting move in')
+  end
+
+  # end Match Route Five
 
   # Progress Updates
   def progress_update_requested
@@ -372,5 +430,4 @@ class NotificationsMailer < DatabaseMailer
     @include_content = notification.include_content
     mail(to: @contact.email, subject: "Note from CAS - Requires Your Action")
   end
-
 end

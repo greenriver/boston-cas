@@ -36,7 +36,6 @@ class UnitsController < ApplicationController
   def new
     @unit = Unit.new
     set_building
-
   end
 
   # GET /hmis/units/1/edit
@@ -53,6 +52,7 @@ class UnitsController < ApplicationController
         # might also include this unit
         # op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
+      @unit.apply_default_housing_attributes
       redirect_to building_path(@unit.building)
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> in <a href=\"#{building_path(@unit.building)}\">#{@unit.building.name}</a> was successfully created."
     else

@@ -34,7 +34,9 @@
   - average_days_to_success = @report.average_days_to_success(by: :gender)
   .col-12
     %h2.text-center Average time to client successfully completing a match
-    %h3.text-center= "#{average_days_to_success.values.sum / average_days_to_success.size} days"
+    %h3.text-center
+      - if average_days_to_success.size.positive?
+        = "#{average_days_to_success.values.sum / average_days_to_success.size} days"
 
 .row
   .col-12
@@ -47,7 +49,9 @@
   - average_matches_to_success = @report.average_matches_to_success(by: :gender)
   .col-12
     %h2.text-center Average matches to client successfully completing a match
-    %h3.text-center= "#{average_matches_to_success.values.sum / average_days_to_success.size} matches"
+    %h3.text-center
+      - if average_days_to_success.size.positive?
+        = "#{average_matches_to_success.values.sum / average_days_to_success.size} matches"
 
 .row
   .col-12
@@ -56,6 +60,4 @@
         %dt= key
         %dd= link_to value, matches_details_reports_dashboards_clients_path(details_params.merge(section: :average_matches_to_success, by: :gender, key: key)), data: {loads_in_pjax_modal: true}
 
-= content_for :page_js do
-  :javascript
-    $('.select2').select2();
+= render 'init_select2'

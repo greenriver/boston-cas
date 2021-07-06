@@ -152,10 +152,13 @@ class Client < ApplicationRecord
     arel_table[:alternate_names].lower.matches("%#{name.downcase}%")
   end
   scope :search_first_name, -> (name) do
-    arel_table[:first_name].lower.matches("%#{name.downcase}%")
+    arel_table[:first_name].lower.matches("#{name.downcase}%")
   end
   scope :search_last_name, -> (name) do
-    arel_table[:last_name].lower.matches("%#{name.downcase}%")
+    arel_table[:last_name].lower.matches("#{name.downcase}%")
+  end
+  scope :search_last_four, -> (last4) do
+    arel_table[:ssn].matches("%#{last4}")
   end
 
   scope :text_search, -> (text) do
@@ -163,8 +166,9 @@ class Client < ApplicationRecord
     text.strip!
     sa = arel_table
     numeric = /[\d-]+/.match(text).try(:[], 0) == text
-    date = /\d\d\/\d\d\/\d\d\d\d/.match(text).try(:[], 0) == text
-    social = /\d\d\d-\d\d-\d\d\d\d/.match(text).try(:[], 0) == text
+    date = /\d\d?\/\d\d?\/\d\d\d\d/.match(text).try(:[], 0) == text
+    social = /\d\d\d-?\d\d-?\d\d\d\d/.match(text).try(:[], 0) == text
+    last_four = /\d{4}/.match(text).try(:[], 0) == text
     # Explicitly search for only last, first if there's a comma in the search
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
@@ -186,6 +190,8 @@ class Client < ApplicationRecord
     # Explicitly search for a PersonalID
     elsif social
       where = sa[:ssn].eq(text.gsub('-',''))
+    elsif last_four
+      where = search_last_four(text)
     elsif date
       (month, day, year) = text.split('/')
       where = sa[:date_of_birth].eq("#{year}-#{month}-#{day}")
@@ -544,6 +550,15 @@ class Client < ApplicationRecord
     {
       'Neighborhood Preference' => neighborhoods,
     }
+  end
+
+  def self.add_missing_holds_voucher_on
+    Client.active_in_match.where(holds_voucher_on: nil).find_each do |client|
+      match = client.client_opportunity_matches.active.detect{|m| m.current_decision&.holds_voucher?}
+      next unless match.present?
+
+      client.update(holds_voucher_on: match.current_decision.timestamp.to_date, holds_internal_cas_voucher: true)
+    end
   end
 
   def self.sort_options(show_vispdat: false, show_assessment: false)

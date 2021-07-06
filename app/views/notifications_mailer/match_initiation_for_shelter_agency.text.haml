@@ -1,8 +1,8 @@
 Hello #{@contact.full_name},
 \
-The CAS has generated a new match recommendation.  
+The CAS has generated a new match recommendation.
 \
-This match has not yet been reviewed by the HSA:
+This match has not yet been reviewed by the #{_('HSA')}:
 #{notification_match_url @notification, @match}
 \
 = render 'client_details'
