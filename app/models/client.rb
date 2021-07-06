@@ -552,15 +552,6 @@ class Client < ApplicationRecord
     }
   end
 
-  def self.add_missing_holds_voucher_on
-    Client.active_in_match.where(holds_voucher_on: nil).find_each do |client|
-      match = client.client_opportunity_matches.active.detect{|m| m.current_decision&.holds_voucher?}
-      next unless match.present?
-
-      client.update(holds_voucher_on: match.current_decision.timestamp.to_date, holds_internal_cas_voucher: true)
-    end
-  end
-
   def self.sort_options(show_vispdat: false, show_assessment: false)
     [
       {title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
