@@ -56,6 +56,7 @@ gem 'validate_url'
 gem 'devise', '~> 4'
 gem 'devise_invitable'
 gem 'devise-pwned_password'
+gem 'devise-security'
 gem 'html2haml'
 gem 'pretender'
 

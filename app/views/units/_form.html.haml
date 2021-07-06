@@ -17,8 +17,8 @@
       = render 'housing_attributes/attributes', housing_object: @unit.building, mode: 'read', heading: 'Default Building Attributes', subheading: 'The following attributes will be applied on unit creation'
     - if @unit.persisted?
       = render 'housing_attributes/attributes', housing_object: @unit, mode: 'edit'
-    = render 'housing_media_links/links', housing_object: @unit, mode: 'edit'
-    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}", on_unit: true
+      = render 'housing_media_links/links', housing_object: @unit, mode: 'edit'
+      = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}", on_unit: true
 
   .form-actions
     = f.button :submit
