@@ -11,6 +11,7 @@ class Rules::ActiveInCohort < Rule
 
   def available_cohorts
     return [] unless Warehouse::Base.enabled?
+
     Warehouse::Cohort.visible_in_cas.active.pluck(:id, :name, :short_name).
       map do |id, name, short_name|
         label = short_name.presence || name
@@ -19,19 +20,24 @@ class Rules::ActiveInCohort < Rule
   end
 
   def display_for_variable value
-    available_cohorts.to_h.try(:[], value.to_i) || value
+    # Note, we need to jump through a few hoops since variable wasn't designed as a json field
+    available_cohorts.select { |id, _| id.to_s.in?(value_as_array(value)) }.map(&:last).join(' or ') || value
   end
 
-  def clients_that_fit(scope, requirement, opportunity)
+  def clients_that_fit(scope, requirement, _opportunity)
     if Client.column_names.include?(:active_cohort_ids.to_s)
       if requirement.positive
-        where = 'active_cohort_ids @> ?'
+        where = 'active_cohort_ids @> ANY(ARRAY [?]::jsonb[])'
       else
-        where = 'not(active_cohort_ids @> ?) OR active_cohort_ids is null'
+        where = 'not(active_cohort_ids @> ANY( ARRAY [?]::jsonb[])) OR active_cohort_ids is null'
       end
-      scope.where(where, requirement.variable.to_s)
+      scope.where(where, value_as_array(requirement.variable))
     else
       raise RuleDatabaseStructureMissing.new("clients.active_cohort_ids missing. Cannot check clients against #{self.class}.")
     end
+  end
+
+  private def value_as_array(value)
+    value.split(',')
   end
 end

@@ -6,9 +6,11 @@
       = "These rules are available to apply (\"must\" or \"can't\") when editing a funding source, sub-grantee, subcontractor, #{Building.model_name.human.downcase}, service, or program."
       %br
       = "For now, if #{_('DND')} needs to change wording or add a rule, please email Green River."
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed.table-hover
+
+.table-responsive
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
         %thead
           %tr
             %th Verb

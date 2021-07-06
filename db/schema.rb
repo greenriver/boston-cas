@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_11_163027) do
+ActiveRecord::Schema.define(version: 2021_06_25_185817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_163027) do
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
     t.date "holds_voucher_on"
+    t.boolean "holds_internal_cas_voucher"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -462,6 +463,17 @@ ActiveRecord::Schema.define(version: 2021_06_11_163027) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
+  end
+
+  create_table "housing_media_links", force: :cascade do |t|
+    t.string "housingable_type"
+    t.bigint "housingable_id"
+    t.string "label"
+    t.string "url"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_media_links_on_housingable_type_and_id"
   end
 
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
@@ -1081,6 +1093,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_163027) do
     t.boolean "health_prioritized", default: false
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
+    t.date "holds_voucher_on"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1261,6 +1274,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_163027) do
     t.boolean "can_edit_help", default: false
     t.boolean "can_audit_users", default: false
     t.boolean "can_view_all_covid_pathways", default: false
+    t.boolean "can_manage_sessions", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1514,6 +1528,9 @@ ActiveRecord::Schema.define(version: 2021_06_11_163027) do
     t.boolean "active", default: true, null: false
     t.string "deprecated_agency"
     t.integer "agency_id"
+    t.boolean "exclude_from_directory", default: false
+    t.boolean "exclude_phone_from_directory", default: false
+    t.string "unique_session_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

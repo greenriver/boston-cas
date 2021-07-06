@@ -73,6 +73,9 @@ class NonHmisAssessmentsController < ApplicationController
       assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
     end
 
+    # Cleanup Vouchers; for now, just check for the word voucher in the response to 3E
+    assessment_params[:have_tenant_voucher] = assessment_params[:pending_housing_placement_type]&.downcase&.include?('voucher')
+
     assessment_params[:user_id] = current_user.id
 
     assessment_params

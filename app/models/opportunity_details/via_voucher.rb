@@ -18,6 +18,10 @@ module OpportunityDetails
       voucher.unit.try :housing_attributes
     end
 
+    def unit_media_links
+      voucher.unit.try :housing_media_links
+    end
+
     def building_name
       voucher.building.try :name
     end
@@ -30,6 +34,10 @@ module OpportunityDetails
     def building_map_link
       return nil if voucher.building.nil?
       voucher.building.map_link
+    end
+
+    def building_media_links
+      voucher.building.try :housing_media_links
     end
 
     def program_name

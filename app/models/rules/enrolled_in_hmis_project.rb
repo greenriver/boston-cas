@@ -21,19 +21,24 @@ class Rules::EnrolledInHmisProject < Rule
   end
 
   def display_for_variable value
-    available_projects.to_h.try(:[], value.to_i) || value
+    # Note, we need to jump through a few hoops since variable wasn't designed as a json field
+    available_projects.select { |id, _| id.to_s.in?(value_as_array(value)) }.map(&:last).join(' or ') || value
   end
 
-  def clients_that_fit(scope, requirement, opportunity)
+  def clients_that_fit(scope, requirement, _opportunity)
     if Client.column_names.include?(:enrolled_project_ids.to_s)
       if requirement.positive
-        where = 'enrolled_project_ids @> ?'
+        where = 'enrolled_project_ids @> ANY(ARRAY [?]::jsonb[])'
       else
-        where = 'not(enrolled_project_ids @> ?) OR enrolled_project_ids is null'
+        where = 'not(enrolled_project_ids @> ANY( ARRAY [?]::jsonb[])) OR enrolled_project_ids is null'
       end
-      scope.where(where, requirement.variable.to_s)
+      scope.where(where, value_as_array(requirement.variable))
     else
       raise RuleDatabaseStructureMissing.new("clients.enrolled_project_ids missing. Cannot check clients against #{self.class}.")
     end
+  end
+
+  private def value_as_array(value)
+    value.split(',')
   end
 end

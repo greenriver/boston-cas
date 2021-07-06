@@ -55,8 +55,8 @@ SeenInLastNinetyDays,Homeless Service in the past 90 days,,have
 VispdatScoreThreeOrLess,VI-SPDAT score of 3 or less,,have
 VispdatScoreFourToSeven,VI-SPDAT score of 4 to 7,,have
 VispdatScoreEightOrMore,VI-SPDAT score of 8 or more,,have
-EnrolledInHmisProject,Enrolled in specified HMIS Project,,be
-ActiveInCohort,Active in specified Cohort,,be
+EnrolledInHmisProject,Enrolled in one of the specified HMIS Projects,,be
+ActiveInCohort,Active in any of the specified Cohorts,,be
 EnrolledInTh,Enrolled in TH,,be
 EnrolledInSh,Enrolled in SH,,be
 EnrolledInSo,Enrolled in SO,,be

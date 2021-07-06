@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     resources :housing_attributes, module: 'buildings' do
       post :values, on: :collection
     end
+    resources :housing_media_links, module: 'buildings'
   end
   resources :subgrantees do
     resources :contacts, except: :show, controller: :subgrantee_contacts, concerns: [:restorable]
@@ -112,12 +113,10 @@ Rails.application.routes.draw do
     end
   end
   resources :units, except: :show, concerns: [:restorable] do
-    resources :unit_attributes do
-      post :values, on: :collection
-    end
     resources :housing_attributes, module: 'units' do
       post :values, on: :collection
     end
+    resources :housing_media_links, module: 'units'
   end
   resources :programs do
     resources :sub_programs, only: [:new, :edit, :create, :update, :destroy] do
@@ -171,6 +170,7 @@ Rails.application.routes.draw do
       patch :update, on: :collection
     end
     resources :match_routes, only: [:index, :edit, :update]
+    resources :sessions, only: [:index, :destroy]
   end
 
   resources :neighborhoods

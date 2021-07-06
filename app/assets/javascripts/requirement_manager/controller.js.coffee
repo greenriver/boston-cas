@@ -53,7 +53,11 @@ class App.RequirementManager.Controller
         variable = $input.val()
         display_for_variable = ''
         if $input.data('options')?
-          display_for_variable = "(#{$input.data('options')[variable]})"
+          if Array.isArray(variable)
+            chosen = variable.map (value) -> "#{$input.data('options')[value]}"
+            display_for_variable = "(#{chosen.join(', ')})"
+          else
+            display_for_variable = "(#{$input.data('options')[variable]})"
 
       requirement = new App.RequirementManager.Requirement
         rule_id: chosen_rule.id
