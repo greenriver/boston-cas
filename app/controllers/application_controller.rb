@@ -31,6 +31,9 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!
   before_action :possibly_reset_fast_gettext_cache
+
+  before_action :prepare_exception_notifier
+
   # Allow devise login links to pass along a destination
   after_action :store_current_location, :unless => :devise_controller?
 
@@ -134,5 +137,13 @@ class ApplicationController < ActionController::Base
 
   def set_hostname
     @op_hostname ||= `hostname` rescue 'test-server'
+  end
+
+  def prepare_exception_notifier
+    browser = Browser.new(request.user_agent)
+    request.env['exception_notifier.exception_data'] = {
+      current_user: current_user,
+      current_user_browser: browser.to_s,
+    }
   end
 end
