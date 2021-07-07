@@ -74,6 +74,8 @@ class Client < ApplicationRecord
 
   has_many :reporting_decisions, class_name: 'Reporting::Decisions', foreign_key: :cas_client_id
 
+  has_many :referral_events, class_name: 'Warehouse::ReferralEvent', inverse_of: :client
+
   validates :ssn, length: {maximum: 9}
 
   scope :visible_by, -> (user) do
@@ -550,15 +552,6 @@ class Client < ApplicationRecord
     {
       'Neighborhood Preference' => neighborhoods,
     }
-  end
-
-  def self.add_missing_holds_voucher_on
-    Client.active_in_match.where(holds_voucher_on: nil).find_each do |client|
-      match = client.client_opportunity_matches.active.detect{|m| m.current_decision&.holds_voucher?}
-      next unless match.present?
-
-      client.update(holds_voucher_on: match.current_decision.timestamp.to_date, holds_internal_cas_voucher: true)
-    end
   end
 
   def self.sort_options(show_vispdat: false, show_assessment: false)

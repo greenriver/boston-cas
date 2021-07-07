@@ -10,6 +10,6 @@ class HousingMediaLink < ApplicationRecord
 
   belongs_to :housingable, polymorphic: true
 
-  validates_presence_of :label
-  validates_presence_of :url
+  validates :label, presence: true
+  validates :url, presence: true, url: true
 end

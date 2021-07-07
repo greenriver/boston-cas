@@ -106,5 +106,12 @@ Rails.application.configure do
     config.hosts.clear
   end
 
+
   I18n.config.available_locales = :en
+
+  # for testing purposes
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  email: {
+    exception_recipients: %w{test-noreply@example.com}
+  }
 end
