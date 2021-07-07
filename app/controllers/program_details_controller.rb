@@ -42,6 +42,7 @@ class ProgramDetailsController < ApplicationController
         :confidential,
         :eligibility_requirement_notes,
         :match_route_id,
+        warehouse_project_ids: [],
         service_ids: [],
         requirements_attributes: [
           :id,

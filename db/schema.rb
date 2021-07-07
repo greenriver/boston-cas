@@ -543,6 +543,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_185817) do
     t.datetime "updated_at"
     t.boolean "active", default: true, null: false
     t.boolean "ineligible_in_warehouse", default: false, null: false
+    t.integer "referral_result"
     t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
