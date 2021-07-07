@@ -128,7 +128,8 @@ GEM
       sassc-rails (>= 2.0.0)
     bootstrap3-datetimepicker-rails (4.17.47)
       momentjs-rails (>= 2.8.1)
-    brakeman (5.0.1)
+    brakeman (5.0.4)
+    browser (5.3.1)
     builder (3.2.4)
     bundler-audit (0.7.0.1)
       bundler (>= 1.2.0, < 3)
@@ -209,6 +210,8 @@ GEM
     devise-pwned_password (0.1.9)
       devise (~> 4)
       pwned (~> 2.0.0)
+    devise-security (0.16.0)
+      devise (>= 4.3.0, < 5.0)
     devise_invitable (2.0.3)
       actionmailer (>= 5.0)
       devise (>= 4.6)
@@ -592,6 +595,7 @@ DEPENDENCIES
   bootstrap (~> 4.3.1)
   bootstrap3-datetimepicker-rails (~> 4.17.42)
   brakeman
+  browser
   bundler-audit
   capistrano
   capistrano-bundler
@@ -610,6 +614,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise (~> 4)
   devise-pwned_password
+  devise-security
   devise_invitable
   dotenv-rails
   exception_notification

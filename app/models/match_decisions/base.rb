@@ -88,6 +88,14 @@ module MatchDecisions
       false
     end
 
+    def show_address_field?
+      false
+    end
+
+    def show_referral_source?
+      false
+    end
+
     def stalled_after
       match_route.stalled_interval.days
     end
@@ -207,6 +215,10 @@ module MatchDecisions
 
     def notifications_for_this_step
       # override in subclass, return an array of notifications appropriate to resend for the current step
+    end
+
+    def holds_voucher?
+      false
     end
 
     ######################

@@ -32,6 +32,10 @@ module OpportunityDetails
       voucher.building.map_link
     end
 
+    def building_media_links
+      unit.building.try :housing_media_links
+    end
+
     def program_name
       sub_program&.program&.name
     end

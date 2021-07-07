@@ -56,6 +56,7 @@ gem 'validate_url'
 gem 'devise', '~> 4'
 gem 'devise_invitable'
 gem 'devise-pwned_password'
+gem 'devise-security'
 gem 'html2haml'
 gem 'pretender'
 
@@ -100,6 +101,8 @@ gem 'caxlsx_rails'
 gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 gem 'roo'
+
+gem 'browser'
 
 group :development do
   # gem 'spring'

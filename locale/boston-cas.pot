@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-03 19:31+0000\n"
-"PO-Revision-Date: 2021-02-03 19:31+0000\n"
+"POT-Creation-Date: 2021-06-11 17:01+0000\n"
+"PO-Revision-Date: 2021-06-11 17:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -25,6 +25,9 @@ msgid "A criminal background hearing is not necessary"
 msgstr ""
 
 msgid "Added to assessed clients"
+msgstr ""
+
+msgid "Address of housing"
 msgstr ""
 
 msgid "Any neighborhood"
@@ -75,7 +78,16 @@ msgstr ""
 msgid "City of Boston"
 msgstr ""
 
+msgid "Client"
+msgstr ""
+
+msgid "Client Agrees To Match"
+msgstr ""
+
 msgid "Client Agrees to Match"
+msgstr ""
+
+msgid "Client Screening"
 msgstr ""
 
 msgid "Client sent notice of criminal background hearing date."
@@ -115,6 +127,9 @@ msgid "Development Officer"
 msgstr ""
 
 msgid "Development Officer Contacts"
+msgstr ""
+
+msgid "Did you or this client use external software to help with housing?"
 msgstr ""
 
 msgid "Do not include client details in the note if you include the content in the email."
@@ -204,6 +219,9 @@ msgstr ""
 msgid "Limited CAS Release"
 msgstr ""
 
+msgid "Match Route Five"
+msgstr ""
+
 msgid "Match Route Four"
 msgstr ""
 
@@ -213,10 +231,25 @@ msgstr ""
 msgid "Meth Production Conviction"
 msgstr ""
 
+msgid "Mitigation"
+msgstr ""
+
+msgid "Mitigation is not required"
+msgstr ""
+
+msgid "Mitigation required"
+msgstr ""
+
+msgid "Move In"
+msgstr ""
+
 msgid "Neighborhoods you are willing to live in."
 msgstr ""
 
 msgid "No criminal background hearing was requested."
+msgstr ""
+
+msgid "No mitigation required"
 msgstr ""
 
 msgid "No preference, any agency"
@@ -285,6 +318,24 @@ msgstr ""
 msgid "Requires wheelchair accessible unit"
 msgstr ""
 
+msgid "Route Five DND Contact"
+msgstr ""
+
+msgid "Route Five Development Officer"
+msgstr ""
+
+msgid "Route Five HSA"
+msgstr ""
+
+msgid "Route Five Housing Search Provider"
+msgstr ""
+
+msgid "Route Five Shelter Agency"
+msgstr ""
+
+msgid "Route Five Stabilization Service Provider"
+msgstr ""
+
 msgid "SSP"
 msgstr ""
 
@@ -304,6 +355,9 @@ msgid "Stabilization Service Providers"
 msgstr ""
 
 msgid "Stabilization Services Provider"
+msgstr ""
+
+msgid "Submit Client Application"
 msgstr ""
 
 msgid "Tag"
@@ -361,6 +415,12 @@ msgid "a criminal background hearing has been schedule for"
 msgstr ""
 
 msgid "case worker"
+msgstr ""
+
+msgid "determined mitigation not required"
+msgstr ""
+
+msgid "determined mitigation required"
 msgstr ""
 
 msgid "full release"

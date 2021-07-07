@@ -49,6 +49,7 @@ module Admin
 
     def update
       if @translation_key.update(translation_key_params)
+        Rails.cache.write('translation-fresh-at', Time.current)
         flash[:notice] = 'Saved!'
         redirect_to @translation_key
       else
@@ -60,6 +61,7 @@ module Admin
     def translation_key_source
       TranslationKey
     end
+
     def translation_text_source
       TranslationText
     end

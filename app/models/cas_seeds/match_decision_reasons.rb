@@ -6,7 +6,6 @@
 
 module CasSeeds
   class MatchDecisionReasons
-
     CLIENT_REJECTED = 2
     PROVIDER_REJECTED = 3
 
@@ -77,13 +76,13 @@ module CasSeeds
       create_shelter_agency_not_working_with_client_reasons!
       create_shelter_agency_not_working_with_client_other_reason!
       create_admin_cancel_reasons!
+      create_mitigation_reasons!
     end
 
     private def create_other_reason!
       reason = ::MatchDecisionReasons::Other.all.first_or_create! name: 'Other'
       reason.update(referral_result: nil)
     end
-
 
     private def create_dnd_reasons!
       DND_REASONS.each do |reason_name, referral_result|
@@ -133,5 +132,10 @@ module CasSeeds
       end
     end
 
+    private def create_mitigation_reasons!
+      MITIGATION_REASONS.each do |reason_name|
+        ::MatchDecisionReasons::MitigationDecline.where(name: reason_name).first_or_create!
+      end
+    end
   end
 end

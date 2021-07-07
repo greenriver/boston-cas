@@ -33,6 +33,7 @@ class Role < ApplicationRecord
       :can_manage_tags,
       :can_edit_help,
       :can_audit_users,
+      :can_manage_sessions,
     ]
   end
 
@@ -110,6 +111,7 @@ class Role < ApplicationRecord
       :can_reopen_matches,
       :can_edit_help,
       :can_audit_users,
+      :can_manage_sessions,
     ]
   end
 

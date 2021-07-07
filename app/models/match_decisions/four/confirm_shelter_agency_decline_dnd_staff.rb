@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class ConfirmShelterAgencyDeclineDndStaff < ::MatchDecisions::Base
-
     def statuses
       {
         pending: 'Pending',

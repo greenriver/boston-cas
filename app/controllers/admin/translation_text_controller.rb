@@ -17,6 +17,7 @@ module Admin
         if tp[:text].blank?
           @text.text = nil
           @text.save
+          Rails.cache.write('translation-fresh-at', Time.current)
         end
       rescue Exception => e
         error = true

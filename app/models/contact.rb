@@ -60,11 +60,12 @@ class Contact < ApplicationRecord
     )
   end
 
+  # Used when no more-specific context is available
   def self.label_for(input_name)
     choices = {
       shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
-      client_contacts: "Client Contacts",
-      regular_contacts: "Client Contacts",
+      client_contacts: "#{_('Client')} Contacts",
+      regular_contacts: "#{_('Client')} Contacts",
       dnd_staff_contacts: "#{_('DND')} Staff Contacts",
       housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts",
       ssp_contacts: "#{_('Stabilization Service Provider')}",

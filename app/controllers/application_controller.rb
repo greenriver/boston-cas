@@ -31,6 +31,9 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!
   before_action :possibly_reset_fast_gettext_cache
+
+  before_action :prepare_exception_notifier
+
   # Allow devise login links to pass along a destination
   after_action :store_current_location, :unless => :devise_controller?
 
@@ -117,14 +120,15 @@ class ApplicationController < ActionController::Base
     params[:locale] || session[:locale] || default_locale
   end
 
-  cattr_accessor :refresh_translations_after
   def possibly_reset_fast_gettext_cache
-    return unless refresh_translations_after.blank? || Time.current > refresh_translations_after
+    key_for_host = "translation-fresh-at-for-#{set_hostname}"
+    last_change = Rails.cache.fetch('translation-fresh-at') { Time.current }
+    last_loaded_for_host = Rails.cache.read(key_for_host)
+    return unless last_loaded_for_host.blank? || last_change > last_loaded_for_host
 
     FastGettext.cache.reload!
-    ApplicationController.refresh_translations_after = Time.current + 4.hours
+    Rails.cache.write(key_for_host, Time.current)
   end
-
 
   # don't extend the user's session if its an ajax request.
   def skip_timeout
@@ -133,5 +137,13 @@ class ApplicationController < ActionController::Base
 
   def set_hostname
     @op_hostname ||= `hostname` rescue 'test-server'
+  end
+
+  def prepare_exception_notifier
+    browser = Browser.new(request.user_agent)
+    request.env['exception_notifier.exception_data'] = {
+      current_user: current_user,
+      current_user_browser: browser.to_s,
+    }
   end
 end

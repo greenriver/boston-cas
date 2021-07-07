@@ -15,4 +15,7 @@
   -if can_manage_config?
     %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_match_routes_path))}
       = link_to 'Match Routes', admin_match_routes_path, class: 'nav-link'
+  - if can_manage_sessions?
+    %li.nav-item{role: 'presentation', class: ('active' if controller_name == "sessions")}
+      = link_to 'Sessions', admin_sessions_path, class: 'nav-link'
 
