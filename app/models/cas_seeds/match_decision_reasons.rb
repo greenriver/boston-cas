@@ -45,6 +45,10 @@ module CasSeeds
       ['Client has another housing option', nil],
     ].freeze
 
+    MITIGATION_REASONS = [
+      ['Mitigation failed', nil],
+    ]
+
     SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS = [
       ['Barred from working with agency', PROVIDER_REJECTED],
       ['Hospitalized', nil],
@@ -133,7 +137,7 @@ module CasSeeds
     end
 
     private def create_mitigation_reasons!
-      MITIGATION_REASONS.each do |reason_name|
+      MITIGATION_REASONS.each do |reason_name, _|
         ::MatchDecisionReasons::MitigationDecline.where(name: reason_name).first_or_create!
       end
     end
