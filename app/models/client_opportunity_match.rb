@@ -268,7 +268,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def past_first_step_or_all_steps_visible?
     return true if current_decision.blank?
-    if match_route.class.name.in?([ 'MatchRoutes::Default' ])
+    if match_route.class.name.in?([ 'MatchRoutes::Default', 'MatchRoutes::Four' ])
       current_decision != self.send(match_route.initial_decision)
     else
       true

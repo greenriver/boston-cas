@@ -105,4 +105,6 @@ Rails.application.configure do
   Rails.application.configure do
     config.hosts.clear
   end
+
+  I18n.config.available_locales = :en
 end
