@@ -18,6 +18,10 @@ class ProjectClient < ApplicationRecord
     joins(:data_source).merge(DataSource.hmis)
   end
 
+  def from_hmis?
+    self.class.from_hmis.where(id: id).exists?
+  end
+
   scope :from_non_hmis, -> do
     joins(:data_source).merge(DataSource.non_hmis)
   end
