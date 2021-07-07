@@ -46,7 +46,7 @@
         - matches.each do |match|
           - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
-          - hide_client_name = hide_client_name || ! match.show_client_info_to?(current_contact)
+          - hide_client_name = hide_client_name || ! (can_reject_matches? || match&.past_first_step_or_all_steps_visible?)
           - active_in_other_match_class = ''
           - next if match.client.blank?
           - if match.active? && match.client.active_in_match? && match.client.match_for_opportunity(match.opportunity) != match
