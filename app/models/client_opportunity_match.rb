@@ -12,7 +12,7 @@ class ClientOpportunityMatch < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   def self.model_name
-    @_model_name ||= ActiveModel::Name.new(self, nil, 'match')
+    @model_name ||= ActiveModel::Name.new(self, nil, 'match')
   end
 
   acts_as_paranoid
@@ -406,6 +406,27 @@ class ClientOpportunityMatch < ApplicationRecord
       ssp_contacts: match_route.contact_label_for(:ssp_contacts).pluralize,
       hsp_contacts: match_route.contact_label_for(:hsp_contacts).pluralize,
     }
+  end
+
+  def grouped_contact_list
+    # We are trying to create a data shape this:
+    # {
+    #   'Group 1': {
+    #     1 => 'First',
+    #     2 => 'Second',
+    #   },
+    # }
+    current_contact_titles.map do |input, title|
+      [
+        title,
+        match_contacts.send(input).map do |contact|
+          [
+            contact.id,
+            "#{contact.first_name} #{contact.last_name} | #{contact.email}",
+          ]
+        end.to_h,
+      ]
+    end.to_h
   end
 
   def overall_status
