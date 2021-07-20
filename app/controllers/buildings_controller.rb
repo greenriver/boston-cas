@@ -13,11 +13,11 @@ class BuildingsController < ApplicationController
   before_action :require_can_view_buildings!, except: [:available_units, :available_move_in_units]
   before_action :require_can_add_vacancies!, only: [:available_units]
   before_action :require_can_edit_buildings!, only: [:update, :destroy, :create]
-	before_action :set_building, only: [:show, :edit, :update, :destroy, :available_units, :available_move_in_units, :units]
+  before_action :set_building, only: [:show, :edit, :update, :destroy, :available_units, :available_move_in_units, :units]
   before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
 
-	# GET /hmis/buildings
+  # GET /hmis/buildings
   def index
     # search
     @buildings = if params[:q].present?
@@ -28,17 +28,15 @@ class BuildingsController < ApplicationController
 
     # sort / paginate
     column = "buildings.#{sort_column}"
-    if sort_column == 'subgrantee_id'
-      column = 'subgrantees.name'
-    end
+    column = 'subgrantees.name' if sort_column == 'subgrantee_id'
     sort = "#{column} #{sort_direction}"
 
-    @buildings = @buildings
-      .includes(:subgrantee)
-      .references(:subgrantee)
-      .order(sort)
-      .preload(:subgrantee)
-      .page(params[:page]).per(25)
+    @buildings = @buildings.
+      includes(:subgrantee).
+      references(:subgrantee).
+      order(sort).
+      preload(:subgrantee).
+      page(params[:page]).per(25)
   end
 
   # GET /hmis/buildings/1
@@ -50,24 +48,24 @@ class BuildingsController < ApplicationController
   end
 
   def create
-    if @building = Building.create(building_params)
+    @building = Building.create(building_params)
+    if @building
       flash[:notice] = "#{@building.name} was successfully added."
-      redirect_to buildings_path @building
+      redirect_to building_path(@building)
     else
       render :new
     end
   end
 
-	# Get /hmis/buildings/1/edit
+  # Get /hmis/buildings/1/edit
   def edit
-
   end
 
   # PATCH/PUT /hmis/buildings/1
   def update
     if @building.update(building_params)
-    	flash[:notice] = "#{@building.name} was successfully updated."
-      redirect_to buildings_path @building
+      flash[:notice] = "#{@building.name} was successfully updated."
+      redirect_to building_path(@building)
     else
       render :edit
     end
