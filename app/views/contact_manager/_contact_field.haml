@@ -1,5 +1,5 @@
 - if defined?(match_route)
-  - label = "#{match_route.contact_label_for(contact_type)} Contacts"
+  - label = "#{match_route&.contact_label_for(contact_type)} Contacts"
 - else
   - label = object.label_for(contact_type)
 - contacts_type = object.contact_type_for(contact_type)
