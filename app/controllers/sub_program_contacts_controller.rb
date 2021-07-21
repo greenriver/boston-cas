@@ -17,6 +17,7 @@ class SubProgramContactsController < ApplicationController
   end
 
   def update
+    @match_route = @program.match_route
     saved = @program_contacts.update program_contacts_params
     unless request.xhr?
       if saved
