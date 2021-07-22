@@ -15,19 +15,20 @@ class MatchContacts
   include RelatedDefaultContacts
 
   attr_accessor :match,
-    :shelter_agency_contact_ids,
-    :client_contact_ids,
-    :dnd_staff_contact_ids,
-    :housing_subsidy_admin_contact_ids,
-    :ssp_contact_ids,
-    :hsp_contact_ids,
-    :do_contact_ids
+                :shelter_agency_contact_ids,
+                :client_contact_ids,
+                :dnd_staff_contact_ids,
+                :housing_subsidy_admin_contact_ids,
+                :ssp_contact_ids,
+                :hsp_contact_ids,
+                :do_contact_ids
 
   delegate :to_param, to: :match
 
   def initialize **attrs
-    raise "must provide match" unless attrs[:match]
-    super #ActiveModel attribute initializer
+    raise 'must provide match' unless attrs[:match]
+
+    super # ActiveModel attribute initializer
     self.shelter_agency_contacts = match.shelter_agency_contacts
     self.client_contacts = match.client_contacts
     self.dnd_staff_contacts = match.dnd_staff_contacts
@@ -38,43 +39,43 @@ class MatchContacts
   end
 
   def save
-    if valid?
-      Contact.transaction do
-        ClientOpportunityMatchContact.where(match_id: match.id).delete_all
+    return unless valid?
 
-        shelter_agency_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(shelter_agency: true, contact_id: id, match_id: match.id)
-        end
-        client_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(client: true, contact_id: id, match_id: match.id)
-        end
-        dnd_staff_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(dnd_staff: true, contact_id: id, match_id: match.id)
-        end
-        housing_subsidy_admin_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(housing_subsidy_admin: true, contact_id: id, match_id: match.id)
-        end
-        ssp_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(ssp: true, contact_id: id, match_id: match.id)
-        end
-        hsp_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(hsp: true, contact_id: id, match_id: match.id)
-        end
-        do_contact_ids.each do |id|
-          ClientOpportunityMatchContact.create(do: true, contact_id: id, match_id: match.id)
-        end
+    Contact.transaction do
+      ClientOpportunityMatchContact.where(match_id: match.id).delete_all
 
-        return true
+      shelter_agency_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(shelter_agency: true, contact_id: id, match_id: match.id)
+      end
+      client_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(client: true, contact_id: id, match_id: match.id)
+      end
+      dnd_staff_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(dnd_staff: true, contact_id: id, match_id: match.id)
+      end
+      housing_subsidy_admin_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(housing_subsidy_admin: true, contact_id: id, match_id: match.id)
+      end
+      ssp_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(ssp: true, contact_id: id, match_id: match.id)
+      end
+      hsp_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(hsp: true, contact_id: id, match_id: match.id)
+      end
+      do_contact_ids.each do |id|
+        ClientOpportunityMatchContact.create(do: true, contact_id: id, match_id: match.id)
       end
 
-      match.shelter_agency_contact_ids = shelter_agency_contact_ids.map(&:to_i)
-      match.client_contact_ids = client_contact_ids.map(&:to_i)
-      match.dnd_staff_contact_ids = dnd_staff_contact_ids.map(&:to_i)
-      match.housing_subsidy_admin_contact_ids = housing_subsidy_admin_contact_ids.map(&:to_i).uniq
-      match.ssp_contact_ids = ssp_contact_ids.map(&:to_i)
-      match.hsp_contact_ids = hsp_contact_ids.map(&:to_i)
-      match.do_contact_ids = do_contact_ids.map(&:to_i)
+      return true
     end
+
+    match.shelter_agency_contact_ids = shelter_agency_contact_ids.map(&:to_i)
+    match.client_contact_ids = client_contact_ids.map(&:to_i)
+    match.dnd_staff_contact_ids = dnd_staff_contact_ids.map(&:to_i)
+    match.housing_subsidy_admin_contact_ids = housing_subsidy_admin_contact_ids.map(&:to_i).uniq
+    match.ssp_contact_ids = ssp_contact_ids.map(&:to_i)
+    match.hsp_contact_ids = hsp_contact_ids.map(&:to_i)
+    match.do_contact_ids = do_contact_ids.map(&:to_i)
   end
 
   def available_client_contacts base_scope = Contact.all
@@ -104,6 +105,7 @@ class MatchContacts
       :ssp_contacts,
       :hsp_contacts,
       :do_contacts,
+      :client_contacts,
     ]
   end
 
