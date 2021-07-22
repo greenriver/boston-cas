@@ -8,3 +8,9 @@
     .row
       .col-sm-8
         = f.input :contract_start_date, as: :date_picker, label: 'Contract Start Date', hint: 'This date is only used as a reference and does not affect availability or matches.'
+- if Warehouse::Base.enabled? && current_user.can_manage_config?
+  %section.c-card.c-card--flush
+    %h3
+      Warehouse Projects for HUD Coordinated Entry
+    .c-card__content
+      = f.association :warehouse_projects, collection: Warehouse::Project.options_for_select, as: :grouped_select, group_method: :last, label: 'Associated Projects', input_html: {multiple: true, class: 'select2--full-width'}

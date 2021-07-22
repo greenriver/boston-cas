@@ -29,6 +29,7 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate :has_buildings?, to: :sub_program
   has_one :sub_program, through: :opportunity
   has_one :program, through: :sub_program
+  has_one :project_client, through: :client
 
   has_many :notifications, class_name: 'Notifications::Base'
 
@@ -78,6 +79,8 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
 
   has_one :current_decision
+
+  has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled']
   validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
@@ -268,7 +271,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def past_first_step_or_all_steps_visible?
     return true if current_decision.blank?
-    if match_route.class.name.in?([ 'MatchRoutes::Default' ])
+    if match_route.class.name.in?([ 'MatchRoutes::Default', 'MatchRoutes::Four' ])
       current_decision != self.send(match_route.initial_decision)
     else
       true
@@ -554,6 +557,8 @@ class ClientOpportunityMatch < ApplicationRecord
       # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
       # so clean that up...
       Warehouse::CasHoused.where(match_id: id).destroy_all
+
+      referral_event&.clear if Warehouse::Base.enabled?
     end
   end
 
@@ -567,6 +572,8 @@ class ClientOpportunityMatch < ApplicationRecord
       self.send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all if ! match_route.should_activate_match
+
+      init_referral_event if Warehouse::Base.enabled?
     end
   end
 
@@ -588,6 +595,8 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
+
+      referral_event&.rejected if Warehouse::Base.enabled?
     end
   end
 
@@ -601,6 +610,8 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
+
+      referral_event&.rejected if Warehouse::Base.enabled?
     end
   end
 
@@ -615,6 +626,8 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
+
+      referral_event&.rejected if Warehouse::Base.enabled?
     end
   end
 
@@ -675,6 +688,8 @@ class ClientOpportunityMatch < ApplicationRecord
       end
       # Prevent access to this match by notification after 1 week
       expire_all_notifications()
+
+      referral_event&.accepted if Warehouse::Base.enabled?
     end
   end
 
@@ -715,6 +730,18 @@ class ClientOpportunityMatch < ApplicationRecord
       where.not(id: id)
   end
 
+  def init_referral_event
+    return unless Warehouse::Base.enabled?
+    return referral_event if referral_event.present?
+    return unless project_client.from_hmis?
+
+    create_referral_event(
+      cas_client_id: client.id,
+      hmis_client_id: project_client.id_in_data_source,
+      program_id: program.id,
+      referral_date: match_created_event.date,
+    )
+  end
 
   def assign_match_role_to_contact role, contact
     join_model = client_opportunity_match_contacts.detect do |match_contact|

@@ -27,6 +27,9 @@ class Program < ApplicationRecord
 
   belongs_to :match_route, class_name: MatchRoutes::Base.name
 
+  has_many :programs_to_projects, class_name: 'Warehouse::ProgramsToProjects'
+  has_many :warehouse_projects, class_name: 'Warehouse::Project', through: :programs_to_projects, source: :project
+
   scope :on_route, -> (route) do
     joins(:match_route).merge(MatchRoutes::Base.where(type: route.class.name))
   end
