@@ -83,6 +83,10 @@ class NonHmisClient < ApplicationRecord
       distinct
   end
 
+  scope :warehouse_attached, -> do
+    where.not(warehouse_client_id: nil)
+  end
+
   def self.age date:, dob:
     return unless date.present? && dob.present?
     age = date.year - dob.year
