@@ -255,7 +255,7 @@ class ClientOpportunityMatch < ApplicationRecord
     return past_first_step_or_all_steps_visible? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
     return past_first_step_or_all_steps_visible? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
 
-    client.accessible_by_user?(contact.user)
+    client&.accessible_by_user?(contact.user)
   end
 
   # Get visibility from the associated Program

@@ -6,6 +6,7 @@
 
 module Warehouse
   class Cohort < Base
+    self.inheritance_column = :_disabled
     scope :active, -> do
       where(active_cohort: true, deleted_at: nil)
     end
