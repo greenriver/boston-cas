@@ -526,26 +526,14 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def can_be_reopened?
-    return false if active?
-    return false if would_be_client_multiple_match
-    return false if would_be_opportunity_multiple_match
-
-    true
+    !(active || would_be_client_multiple_match || would_be_opportunity_multiple_match)
   end
 
-  def describe_closed_state
+  def restrictions_on_reopening
     restrictions = []
-    restrictions << 'the client already has an active match on this route' if would_be_client_multiple_match
-    restrictions << 'there is already another active match on&nbsp;' +
-      link_to('this opportunity.', opportunity_matches_path(opportunity)) if would_be_opportunity_multiple_match
-
-    html = 'This match is not active'
-    if restrictions.present?
-      html += ', and cannot be re-opened because ' + restrictions.join(', and ')
-    else
-      html += '.'
-    end
-    html.html_safe
+    restrictions << :client_multiple_match if would_be_client_multiple_match
+    restrictions << :opportunity_multiple_match if would_be_opportunity_multiple_match
+    restrictions
   end
 
   def reopen!(contact)
