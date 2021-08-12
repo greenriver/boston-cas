@@ -15,7 +15,7 @@
             = @match.current_decision.try(:actor_type) || 'N/A'
       = render 'match_list_base/current_step', match: @match
   - else
-    = @match.describe_closed_state
+    = render 'matches/restrictions_on_reopening'
   %div.ml-auto
     - if @match.can_create_overall_note?(access_context.current_contact)
       .btn-label.btn-label__primary
@@ -27,7 +27,7 @@
   .d-flex.mb-5.align-items-end.flex-wrap
     = link_to 'View Alternate Clients Matched to this Opportunity', opportunity_matches_path(@match.opportunity), target: '_blank', class: 'btn btn-light'
 
-    - if can_reopen_matches? && @match.closed?
+    - if can_reopen_matches? && @match.can_be_reopened?
       .ml-auto
         = link_to_if @match.can_be_reopened?, 'Re-open this match', match_reopen_path(@match), class: 'btn btn-outline-danger', data: {confirm: "Are you sure you want to re-open this match?"} do
           %button.btn.btn-outline-dark.disabled Re-open this Match
