@@ -32,6 +32,22 @@ class NonHmisAssessment < ActiveRecord::Base
     where(agency_id: user.agency_id)
   end
 
+  def self.to_class(name)
+    klass_name = known_assessment_types.detect { |m| m == name } || 'IdentifiedClientAssessment'
+    klass_name.constantize
+  end
+
+  def self.known_assessment_types
+    [
+      'IdentifiedClientAssessment',
+      'DeidentifiedClientAssessment',
+      'IdentifiedPathwaysAssessment',
+      'DeidentifiedPathwaysAssessment',
+      'IdentifiedCovidPathwaysAssessment',
+      'DeidentifiedCovidPathwaysAssessment',
+    ].freeze
+  end
+
   def self.covid_assessment_types
     [
       'IdentifiedCovidPathwaysAssessment',
