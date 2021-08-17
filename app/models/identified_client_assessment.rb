@@ -34,6 +34,7 @@ class IdentifiedClientAssessment < NonHmisAssessment
       'First Name',
       'Agency',
       'Assessment Score',
+      'Assessment Date',
       'Cohorts',
       'Days Homeless in the Last 3 Years',
       'Available?',
@@ -47,11 +48,19 @@ class IdentifiedClientAssessment < NonHmisAssessment
     url_helpers = Rails.application.routes.url_helpers
     view_helper = ActionController::Base.helpers
     current_assessment = client.current_assessment
+    assessment_title = view_helper.content_tag(:em, current_assessment&.title)
+    assessment_title = view_helper.content_tag(:div, assessment_title, class: 'mt-2')
+    assessment_date = view_helper.content_tag(:span, client&.assessed_at&.to_date.to_s)
+    assessment_date = view_helper.content_tag(:span) do
+      view_helper.concat(assessment_date)
+      view_helper.concat(assessment_title)
+    end
     row = [
       view_helper.link_to(client.last_name, url_helpers.identified_client_path(id: client.id)),
       view_helper.link_to(client.first_name, url_helpers.identified_client_path(id: client.id)),
       client.agency&.name,
       current_assessment.assessment_score,
+      assessment_date,
       simple_format(client.cohort_names, {}, sanitize: false),
       current_assessment.days_homeless_in_the_last_three_years,
       checkmark(client.available?),
@@ -69,5 +78,10 @@ class IdentifiedClientAssessment < NonHmisAssessment
     row << delete_link if user.can_manage_identified_clients? && ! client.involved_in_match?
 
     row
+  end
+
+  def assessment_params(params)
+    params.require(:identified_client_assessment).
+      permit(non_hmis_assessment_params)
   end
 end

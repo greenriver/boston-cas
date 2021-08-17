@@ -31,10 +31,8 @@ class IdentifiedClientsController < NonHmisClientsController
       ) unless params[:assessment_id].present? || identified_client_params[:client_assessments_attributes].blank?
 
       @non_hmis_client.current_assessment&.update_assessment_score!
-      respond_with(@non_hmis_client, location: path_for_non_hmis_client)
-    else
-      respond_with(@non_hmis_client, location: identified_clients_path())
     end
+    respond_with(@non_hmis_client, location: path_for_non_hmis_client)
   end
 
   def destroy
@@ -52,7 +50,6 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def clean_params dirty_params
     dirty_params = clean_client_params(dirty_params)
-    dirty_params = clean_assessment_params(dirty_params)
 
     return dirty_params
   end

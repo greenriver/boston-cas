@@ -1,6 +1,5 @@
 .row
   .col-sm-9
-    = client_form.input :client_identifier, required: true, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('assessment_score')
       = assessment_form.input :assessment_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_score')
@@ -13,17 +12,12 @@
       = assessment_form.input :hiv_aids, label: 'HOPWA eligible', disabled: disabled
     = assessment_form.input :veteran, disabled: disabled
     = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
-    - if can_edit_all_clients?
-      .jAgency
-        = client_form.association :agency, input_html: {class: :select2}, disabled: disabled
-    = client_form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
+
     - if Config.get(:non_hmis_fields).include?('actively_homeless')
       = assessment_form.input :actively_homeless, hint: 'Checking this box will allow the client to match rules that require homeless activity in the past 30 or 90 days.', disabled: disabled
     = assessment_form.input :days_homeless_in_the_last_three_years, disabled: disabled
     = assessment_form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
     = assessment_form.input :who_verified_days_homeless, disabled: disabled
-    - if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
-      = client_form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
     = assessment_form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
     .jChronicallyHomeless
       = assessment_form.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family'), disabled: disabled
@@ -46,5 +40,4 @@
     = assessment_form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit'), disabled: disabled
     = assessment_form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access'), disabled: disabled
 
-    = client_form.input :available, label: 'Available for matching?', disabled: disabled
     = render 'deidentified_clients/js'
