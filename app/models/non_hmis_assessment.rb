@@ -109,6 +109,10 @@ class NonHmisAssessment < ActiveRecord::Base
     true
   end
 
+  def self.checkmark(boolean)
+    boolean ? '✓': ''
+  end
+
   def non_hmis_assessment_params
     [
       :entry_date,

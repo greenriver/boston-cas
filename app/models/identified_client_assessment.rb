@@ -59,16 +59,18 @@ class IdentifiedClientAssessment < NonHmisAssessment
       view_helper.link_to(client.last_name, url_helpers.identified_client_path(id: client.id)),
       view_helper.link_to(client.first_name, url_helpers.identified_client_path(id: client.id)),
       client.agency&.name,
-      current_assessment.assessment_score,
+      current_assessment&.assessment_score,
       assessment_date,
-      simple_format(client.cohort_names, {}, sanitize: false),
-      current_assessment.days_homeless_in_the_last_three_years,
+      client.cohort_names.split("\n").join('<br />').html_safe,
+      current_assessment&.days_homeless_in_the_last_three_years,
       checkmark(client.available?),
     ]
 
-    client_link = view_helper.link_to(url_helpers.client_path(client.client), class: 'btn btn-secondary btn-sm d-inline-flex align-items-center') do
-      view_helper.concat 'View'
-      view_helper.concat view_helper.content_tag(:span, nil, class: 'icon-arrow-right2 ml-2')
+    client_link = if client.client
+      view_helper.link_to(url_helpers.client_path(client.client), class: 'btn btn-secondary btn-sm d-inline-flex align-items-center') do
+        view_helper.concat 'View'
+        view_helper.concat view_helper.content_tag(:span, nil, class: 'icon-arrow-right2 ml-2')
+      end
     end
     delete_link = view_helper.link_to(url_helpers.identified_client_path(client), method: :delete, data: { confirm: 'Would you really like to delete this Non-HMIS client?' }, class: ['btn', 'btn-sm', 'btn-danger']) do
       view_helper.concat(view_helper.content_tag(:span, nil, class: 'icon-cross'))

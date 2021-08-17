@@ -1,25 +1,3 @@
 - title = _('De-identified Client')
 
-- if pathways_enabled?
-  -# Content blocks for layout
-  -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  -# Layout
-  -# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  = render 'non_hmis_clients/new_layout',
-    title: title
-
-- else
-  %h1 Add a Deidentified Client
-  = simple_form_for @non_hmis_client, url: deidentified_clients_path do |f|
-    = f.error_notification
-    .row
-      .col
-        .form-inputs
-          = f.simple_fields_for :client_assessments, @assessment do |a|
-            - # view is versioned, so choose view based on model type
-            = render @assessment.model_name.element, client_form: f, assessment_form: a, disabled: false
-        .form-actions
-          = f.button :submit, "Create Client", class: 'btn btn-primary'
-
-  = render 'init_select2'
+= render 'non_hmis_clients/new_layout', title: title

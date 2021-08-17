@@ -50,9 +50,11 @@ class IdentifiedPathwaysAssessment < IdentifiedClientAssessment
       view_helper.concat(assessment_date)
       view_helper.concat(assessment_title)
     end
-    client_link = view_helper.link_to(url_helpers.client_path(client.client), class: 'btn btn-secondary btn-sm d-inline-flex align-items-center') do
-      view_helper.concat 'View'
-      view_helper.concat view_helper.content_tag(:span, nil, class: 'icon-arrow-right2 ml-2')
+    client_link = if client.client
+      view_helper.link_to(url_helpers.client_path(client.client), class: 'btn btn-secondary btn-sm d-inline-flex align-items-center') do
+        view_helper.concat 'View'
+        view_helper.concat view_helper.content_tag(:span, nil, class: 'icon-arrow-right2 ml-2')
+      end
     end
     delete_link = view_helper.link_to(url_helpers.identified_client_path(client), method: :delete, data: { confirm: 'Would you really like to delete this Non-HMIS client?' }, class: ['btn', 'btn-sm', 'btn-danger']) do
       view_helper.concat(view_helper.content_tag(:span, nil, class: 'icon-cross'))
