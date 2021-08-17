@@ -1,0 +1,16 @@
+- unless @match.can_be_reopened?
+  %div
+    %h3 This match cannot be reopened
+    - if @match.restrictions_on_reopening.include?(:client_multiple_match)
+      %h4 The current match route does not allow clients to participate in simultaneous active matches.
+      %p To reopen this match, you first need to cancel the following:
+      %ul
+        - @match.client_related_matches.each do |match|
+          %li= link_to "Match #{match.id}", match_path(match.id)
+    - if @match.restrictions_on_reopening.include?(:opportunity_multiple_match)
+      %h4 The current match route does not allow simultaneous active matches on a single opportunity.
+      %p To reopen this match, you first need to cancel the following:
+      %ul
+        - @opportunity.active_matches.each do |match|
+          %li= link_to "Match #{match.id}", match_path(match.id)
+      %p Be sure to check the box to prevent new automatic matches.
