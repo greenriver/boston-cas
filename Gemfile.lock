@@ -72,7 +72,7 @@ GEM
     ajax_modal_rails (1.0.12)
       rails (>= 4)
     ansi (1.5.0)
-    ast (2.4.1)
+    ast (2.4.2)
     attribute_normalizer (1.2.0)
     authtrail (0.2.2)
       activerecord (>= 5)
@@ -368,7 +368,7 @@ GEM
     parallel (1.20.1)
     paranoia (2.4.3)
       activerecord (>= 4.0, < 6.2)
-    parser (3.0.0.0)
+    parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (0.20.0)
     popper_js (1.16.0)
@@ -469,17 +469,20 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.1)
-    rubocop (1.7.0)
+    rubocop (1.19.0)
       parallel (~> 1.10)
-      parser (>= 2.7.1.5)
+      parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
-      rubocop-ast (>= 1.2.0, < 2.0)
+      rubocop-ast (>= 1.9.1, < 2.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (1.4.0)
-      parser (>= 2.7.1.5)
+      unicode-display_width (>= 1.4.0, < 3.0)
+    rubocop-ast (1.10.0)
+      parser (>= 3.0.1.1)
+    rubocop-faker (1.1.0)
+      faker (>= 2.12.0)
+      rubocop (>= 0.82.0)
     rubocop-rails (2.9.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
@@ -540,7 +543,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (1.7.0)
+    unicode-display_width (2.0.0)
     validate_url (1.0.13)
       activemodel (>= 3.0.0)
       public_suffix
@@ -662,6 +665,7 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails (~> 4.0.0.beta3)
   rubocop
+  rubocop-faker
   rubocop-rails
   rubocop-rspec
   ruby-filemagic
