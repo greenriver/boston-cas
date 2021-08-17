@@ -721,13 +721,13 @@ class ClientOpportunityMatch < ApplicationRecord
   def init_referral_event
     return unless Warehouse::Base.enabled?
     return referral_event if referral_event.present?
-    return unless project_client.from_hmis?
+    return unless project_client&.from_hmis?
 
     create_referral_event(
       cas_client_id: client.id,
       hmis_client_id: project_client.id_in_data_source,
       program_id: program.id,
-      referral_date: match_created_event.date,
+      referral_date: match_created_event&.date,
     )
   end
 
