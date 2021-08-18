@@ -20,8 +20,8 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
-  scope :covid_pathways, -> do
-    where(type: covid_assessment_types)
+  scope :limitable_pathways, -> do
+    where(type: limited_assessment_types)
   end
 
   scope :visible_by, ->(user) do
@@ -45,10 +45,12 @@ class NonHmisAssessment < ActiveRecord::Base
       'DeidentifiedPathwaysAssessment',
       'IdentifiedCovidPathwaysAssessment',
       'DeidentifiedCovidPathwaysAssessment',
+      'IdentifiedPathwaysVersionThree',
+      'DeidentifiedPathwaysVersionThree',
     ].freeze
   end
 
-  def self.covid_assessment_types
+  def self.limited_assessment_types
     [
       'IdentifiedCovidPathwaysAssessment',
       'DeidentifiedCovidPathwaysAssessment',
@@ -206,7 +208,11 @@ class NonHmisAssessment < ActiveRecord::Base
     ].freeze
   end
 
-  def self.form_field_labels
+  def requires_assessment_type_choice?
+    false
+  end
+
+  def form_field_labels
     return [] unless respond_to?(:form_fields)
 
     [].tap do |labels|
@@ -224,10 +230,10 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def form_field_values
-    return [] unless self.class.respond_to?(:form_fields)
+    return [] unless respond_to?(:form_fields)
 
     [].tap do |values|
-      self.class.form_fields.each do |name, field|
+      form_fields.each do |name, field|
         # If there are sub-questions, there will not be answers at this level
         if ! field[:questions]
           val = send(name)

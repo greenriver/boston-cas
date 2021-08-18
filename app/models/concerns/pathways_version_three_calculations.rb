@@ -4,10 +4,22 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-module CovidPathwaysCalculations
+module PathwaysVersionThreeCalculations
   extend ActiveSupport::Concern
 
   included do
+    def pathways_title
+      'Pathways 2021'
+    end
+
+    def transfer_title
+      'Transfer Assessment'
+    end
+
+    def requires_assessment_type_choice?
+      true
+    end
+
     def calculated_score
       return 70 if pending_subsidized_housing_placement
 
@@ -45,6 +57,32 @@ module CovidPathwaysCalculations
     end
 
     def form_fields
+      case title
+      when pathways_title
+        pathways_form_fields
+      when transfer_title
+        transfer_form_fields
+      else
+        picker_form_fields
+      end
+    end
+
+    def picker_form_fields
+      {
+        assessment_type: {
+          label: 'Assessment Type',
+          number: '',
+          as: :buttons,
+          collection: [pathways_title, transfer_title],
+        }
+      }
+    end
+
+    def transfer_form_fields
+      []
+    end
+
+    def pathways_form_fields
       {
         entry_date: {
           label: 'Date of Assessment',

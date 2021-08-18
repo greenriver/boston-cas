@@ -1,0 +1,65 @@
+- @assessment.form_fields.each do |field_name, options|
+  - display_options = options.merge(limited: limited)
+  - if options[:as] == :buttons
+    = debug @assessment.assessment_type
+  - else
+    .c-question{data: { number: options[:number] }}
+      .c-question__wrapper
+        - if options[:questions].present?
+          .c-question__number= options[:number]
+          .c-question__input
+            - if disabled
+              - display_options[:value] = ''
+              - display_options[:hide_value] = true
+              = render 'non_hmis_clients/assessments/question_display', locals: display_options
+              - options[:questions].each do |sub_field_name, sub_options|
+                - display_options = sub_options
+                - val = @assessment[sub_field_name]
+                - if options[:collection].present?
+                  - if val.is_a?(Array)
+                    - val = options[:collection].invert.values_at(*val)
+                  - else
+                    - val = options[:collection].invert[val]
+                - display_options[:value] = val
+                = render 'non_hmis_clients/assessments/question_display', locals: display_options
+            - else
+              %label= options[:label]
+              - options[:questions].each do |sub_field_name, sub_options|
+                .mb-1
+                  - if sub_options[:label] && sub_options[:as].present? && sub_options[:as] != :pretty_checkboxes_group
+                    = form.label sub_field_name, { label: sub_options[:label] }
+                  = form.input(sub_field_name, {}.merge(sub_options))
+        - elsif options[:as] == :pretty_boolean_group
+          .c-question__number= options[:number]
+          - if disabled
+            - val = @assessment.public_send(field_name)
+            - if options[:collection].present?
+              - if val.is_a?(Array)
+                - val = options[:collection].invert.values_at(*val)
+              - else
+                - val = options[:collection].invert[val]
+            - display_options[:value] = val
+            = render 'non_hmis_clients/assessments/question_display', locals: display_options
+          - else
+            .c-question__input
+              = form.label field_name, { pre_label: options[:number] }.merge(options)
+              = form.input field_name, collection: options[:collection], label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, input_html: options[:input_html]
+        - else
+          .c-question__number= options[:number]
+          - if disabled
+            - val = @assessment.public_send(field_name)
+            - if options[:collection].present?
+              - if val.is_a?(Array)
+                - val = options[:collection].invert.values_at(*val)
+              - else
+                - val = options[:collection].invert[val]
+            - display_options[:value] = val
+            = render 'non_hmis_clients/assessments/question_display', locals: display_options
+          - else
+            .c-question__input
+              - if options[:as] == :pretty_boolean
+                = form.input(field_name, {}.merge(options))
+              - else
+                = form.input(field_name, { pre_label: options[:number] }.merge(options))
+
+= render 'non_hmis_clients/assessments/pathways_version_three_js'

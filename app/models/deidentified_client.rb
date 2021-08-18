@@ -47,7 +47,7 @@ class DeidentifiedClient < NonHmisClient
         'Agency',
         'Assessment Score',
         'Assessment Date',
-      ] + Config.get(:deidentified_client_assessment).constantize.form_field_labels
+      ] + Config.get(:deidentified_client_assessment).constantize.new.form_field_labels
     else
       [
         'id',

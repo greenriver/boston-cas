@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_185817) do
+ActiveRecord::Schema.define(version: 2021_08_18_003940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -794,6 +794,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_185817) do
     t.text "notes"
     t.string "veteran_status"
     t.bigint "agency_id"
+    t.string "assessment_type"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end

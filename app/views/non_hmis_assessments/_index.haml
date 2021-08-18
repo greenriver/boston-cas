@@ -38,8 +38,8 @@
                 - # If we can't, just show COVID Pathways assessments because those are
                 - # the only assessments that provide sanitized read-only views
               - else
-                - next unless assessment.type.in?(NonHmisAssessment.covid_assessment_types)
-                - url = if assessment.type == 'DeidentifiedCovidPathwaysAssessment' then current_assessment_limited_deidentified_client_path(assessment.id) else current_assessment_limited_identified_client_path(assessment.id) end
+                - next unless assessment.type.in?(NonHmisAssessment.limited_assessment_types)
+                - url = if assessment.type.include?('Deidentified') then current_assessment_limited_deidentified_client_path(assessment.id) else current_assessment_limited_identified_client_path(assessment.id) end
                 %tr
                   %td= link_to assessment.updated_at, url
                   %td
