@@ -17,7 +17,14 @@
           - if disabled && @assessment.editable_by?(current_user)
             = link_to 'Edit', edit_polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: @assessment.id), class: 'btn btn-primary mb-2'
   - if @assessment.requires_assessment_type_choice? && @assessment.assessment_type.blank?
-    %p TODO: add buttons for choosing assessment type here.
+    %p Please choose an assessment type:
+    .d-flex
+      - @assessment.assessment_type_options.each do |assessment_type, opts|
+        %section.c-card.ml-auto.mr-auto
+          .c-card__content
+            .well
+              %h3= link_to(opts[:title], params: {assessment_type: assessment_type})
+              %p= link_to(opts[:description], params: {assessment_type: assessment_type})
   - else
     .row
       .col-md-10

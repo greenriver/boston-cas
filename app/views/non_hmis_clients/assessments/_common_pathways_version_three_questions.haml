@@ -1,7 +1,7 @@
 - @assessment.form_fields.each do |field_name, options|
   - display_options = options.merge(limited: limited)
-  - if options[:as] == :buttons
-    = debug @assessment.assessment_type
+  - if options[:as] == :partial
+    = render options[:partial]
   - else
     .c-question{data: { number: options[:number] }}
       .c-question__wrapper
@@ -43,7 +43,9 @@
           - else
             .c-question__input
               = form.label field_name, { pre_label: options[:number] }.merge(options)
-              = form.input field_name, collection: options[:collection], label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, input_html: options[:input_html]
+              - if options[:hint]
+                %em= options[:hint]
+              = form.input field_name, collection: options[:collection], label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, hint: options[:hint], input_html: options[:input_html]
         - else
           .c-question__number= options[:number]
           - if disabled

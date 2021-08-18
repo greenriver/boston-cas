@@ -7,10 +7,6 @@
 class IdentifiedPathwaysVersionThree < IdentifiedClientAssessment
   include PathwaysVersionThreeCalculations
 
-  def title
-    assessment_type
-  end
-
   def self.client_table_headers(user)
     columns = [
       'Last Name',

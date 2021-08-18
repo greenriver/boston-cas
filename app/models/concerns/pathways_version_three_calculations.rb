@@ -8,12 +8,39 @@ module PathwaysVersionThreeCalculations
   extend ActiveSupport::Concern
 
   included do
+    def title
+      assessment_type_options[assessment_type.to_sym][:title]
+    end
+
+    def pathways_assessment_type
+      :pathways_2021
+    end
+
+    def transfer_assessment_type
+      :transfer_assessment
+    end
+
     def pathways_title
       'Pathways 2021'
     end
 
     def transfer_title
       'Transfer Assessment'
+    end
+
+    def pathways_description
+      _('We want to reach a you when there is a housing program opening for you.')
+    end
+
+    def transfer_description
+      _('Gather information about a rapid re-housing (RRH) participant’s housing stability.')
+    end
+
+    def assessment_type_options
+      {
+        pathways_assessment_type => { title: pathways_title, description: pathways_description },
+        transfer_assessment_type => { title: transfer_title, description: transfer_description },
+      }
     end
 
     def requires_assessment_type_choice?
@@ -68,22 +95,235 @@ module PathwaysVersionThreeCalculations
     end
 
     def picker_form_fields
-      {
-        assessment_type: {
-          label: 'Assessment Type',
-          number: '',
-          as: :buttons,
-          collection: [pathways_title, transfer_title],
-        }
-      }
+      []
     end
 
     def transfer_form_fields
-      []
+      {
+        _transfer_assessment_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/transfer_assessment_preamble',
+        },
+        entry_date: {
+          label: 'Date of Assessment',
+          number: '',
+          as: :date_picker,
+        },
+        _contact_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
+        },
+        phone_number: {
+          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call',
+          number: '2A',
+        },
+        email_addresses: {
+          label: 'List any working email addresses you use',
+          number: '2B',
+        },
+        shelter_name: {
+          label: 'What RRH programs do you currently stay with or work with?',
+          number: '2C',
+          as: :select_2,
+          collection: ShelterHistory.shelter_locations,
+          input_html: { data: { tags: true }},
+        },
+        case_manager_contact_info: {
+          label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
+          number: '2D',
+          as: :text,
+        },
+        mailing_address: {
+          label: 'What is your mailing address?',
+          number: '2E',
+          as: :text,
+        },
+        day_locations: {
+          label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
+          number: '2F',
+          as: :select_2,
+          collection: ShelterHistory.shelter_locations,
+          input_html: { data: { tags: true }},
+        },
+        night_locations: {
+          label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
+          number: '2G',
+          as: :select_2,
+          collection: ShelterHistory.shelter_locations,
+          input_html: { data: { tags: true }},
+        },
+        other_contact: {
+          label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
+          number: '2H',
+        },
+        _household_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/household_preamble',
+        },
+        household_section: {
+          label: 'Household Composition',
+          number: '3A',
+          questions: {
+            household_size: {
+              label: 'How many people are in the household? ',
+            },
+            hoh_age: {
+              label: 'How old is the head of household?',
+              collection: {
+                '18-24' => '18-24',
+                '25-49' => '25-49',
+                '50+' => '50+',
+              },
+              as: :pretty_boolean_group,
+            },
+            current_living_situation: {
+              label: 'What is your current living situation?',
+              collection: {
+                _('Emergency shelter in the City of Boston') => 'Emergency shelter in the City of Boston',
+                _('Outside/place not meant for human habitation within the City of Boston') => 'Outside/place not meant for human habitation within the City of Boston',
+                _('Transitional housing program in the City of Boston') => 'Transitional housing program in the City of Boston',
+                _('Currently fleeing violence while in your own home or doubled up with others and a Boston resident.') => 'Currently fleeing violence while in your own home or doubled up with others and a Boston resident.',
+              },
+              as: :pretty_boolean_group,
+            },
+          },
+        },
+        veteran_status: {
+          label: 'Did you serve in the military or do you have Veteran status?',
+          number: '3B',
+          as: :pretty_boolean_group,
+          collection: VeteranStatus.pluck(:text).map { |t| [t, t] }.to_h,
+        },
+        _housing_preferences_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/housing_preferences_preamble',
+        },
+        income_total_annual: {
+          label: 'What is your total household’s estimated gross (before taxes are taken out) annual income? We ask because some of these units have income requirements. You may figure out monthly and multiply it by 12.',
+          number: '4A',
+        },
+        youth_rrh_aggregate: {
+          label: 'Youth Choice (for heads of household who are 24 yrs. or younger)  Would you like to be considered for housing programs that are',
+          number: '5C',
+          collection: NonHmisClient.available_youth_choices,
+          as: :pretty_boolean_group,
+        },
+        dv_rrh_aggregate: {
+          label: 'Survivor Choice (for those fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are',
+          number: '5D',
+          collection: NonHmisClient.available_dv_choices,
+          as: :pretty_boolean_group,
+        },
+        _unit_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/unit_preamble',
+        },
+        sro_ok: {
+          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)? Keep in mind smaller bedroom units may have more frequent openings',
+          number: '6A',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+            'Not applicable' => nil,
+          },
+          as: :pretty_boolean_group,
+        },
+        required_number_of_bedrooms: {
+          label: 'If you need a bedroom size larger than an SRO select the size below you would move into.',
+          number: '6B',
+          collection: {
+            'Studio' => -1,
+            '1' => 1,
+            '2' => 2,
+            '3' => 3,
+            '4' => 4,
+            '5' => 5,
+            'Not applicable' => nil,
+          },
+          as: :pretty_boolean_group,
+        },
+        disability_section: {
+          label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.',
+          number: '6C',
+          questions: {
+            requires_wheelchair_accessibility: {
+              label: 'Wheelchair accessible unit',
+              number: '6C',
+              as: :pretty_boolean,
+              wrapper: :custom_boolean,
+            },
+            requires_elevator_access: {
+              label: 'First floor/elevator (little to no stairs to your unit)',
+              number: '6C',
+              as: :pretty_boolean,
+              wrapper: :custom_boolean,
+            },
+            accessibility_other: {
+              label: 'Other accessibility',
+              number: '6C',
+            },
+          },
+        },
+        disabled_housing: {
+          label: 'Are you interested in applying for housing units targeted for persons with disabilities? (You may have to provide documentation of a disability to qualify for these housing units.)',
+          number: '6D',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+        },
+        hiv_housing: {
+          label: 'Are you interested in applying for housing units targeted for persons with an HIV+ diagnosis? (You may have to provide documentation of a HIV to qualify for these housing units.)',
+          number: '6E',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => 'Yes',
+            'No' => 'No',
+          },
+          confidential: true,
+        },
+        affordable_housing: {
+          label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
+          number: '6F',
+          collection: {
+            _('Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
+            _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
+          },
+          as: :pretty_checkboxes_group,
+        },
+        _neighborhood_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/neighborhood_preamble',
+        },
+        neighborhood_interests: {
+          label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
+          include_blank: 'Any Neighborhood / All Neighborhoods',
+          number: '7A',
+          collection: Neighborhood.for_select,
+          as: :pretty_checkboxes_group,
+        },
+        _disability_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/disability_preamble',
+        },
+        documented_disability: {
+          label: 'Disabling Condition: Have you ever been diagnosed by a licensed professional as having a disabling condition that is expected to be permanent and impede your ability to work? You do not need to disclose the condition.',
+          number: '8A',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+            'Unsure' => nil,
+          },
+          hint: 'Note to assessor on generating an accurate response: if participant receives any type of disability benefits, you can automatically select “yes”; if you or the participant are unsure, ask them if a medical professional has ever written a letter on their behalf for disabled housing, EAEDC, or other benefits, or if they have ever tried to apply for a disability resource, even if they do not currently receive them- check yes. The assessor may also check yes if a permanent disability is observed.',
+          as: :pretty_boolean_group,
+        },
+      }
     end
 
     def pathways_form_fields
       {
+        _pathways_version_three_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/pathways_version_three_preamble',
+        },
         entry_date: {
           label: 'Date of Assessment',
           number: '',
