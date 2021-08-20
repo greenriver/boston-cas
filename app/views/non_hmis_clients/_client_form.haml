@@ -6,6 +6,10 @@
   .c-card__content.p-0
     .o-pre-table-actions.o-pre-table-actions--light
       %h2.o-pre-table-actions__heading Client Information
+      - if @non_hmis_client.warehouse_client_id
+        = link_to "#{Config.get(:warehouse_url)}/clients/#{@non_hmis_client.warehouse_client_id}", class: 'btn btn-secondary btn-sm ml-auto align-items-center' do
+          Warehouse
+          %span.icon-arrow-right2.ml-2
       - if disabled
         - if @non_hmis_client.editable_by?(current_user)
           .o-pre-table-actions__group.ml-auto

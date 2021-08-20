@@ -1,4 +1,8 @@
 .row.mb-4
+  - unless disabled
+    .col-12
+      .c-quesiton
+        = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false
   .col-12
     .c-quesiton
       - label = 'Availability Status'
