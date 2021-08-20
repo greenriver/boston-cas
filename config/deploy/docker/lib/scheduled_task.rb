@@ -99,14 +99,7 @@ class ScheduledTask
   def add_target!
     input = {
       "containerOverrides" => [
-        {
-          # This is the name of the container in the task definition.
-          # It needs to match or this doesn't work
-          # FIXME: pull from task definition. maybe we should just always call
-          # it 'app'
-          "name" => "#{target_group_name}-cron-worker",
-          "command" => command,
-        },
+        _container_overrides
       ]
     }.to_json
 
@@ -121,7 +114,9 @@ class ScheduledTask
           ecs_parameters: {
             task_definition_arn: task_definition_arn,
             task_count: 1,
-            launch_type: "EC2",
+            # To get the default capacity provider for the cluster, do not set a launch type
+            # https://github.com/aws/containers-roadmap/issues/937
+            # launch_type: "EC2",
           },
         },
       ],
@@ -130,6 +125,27 @@ class ScheduledTask
     cloudwatchevents.put_targets(payload)
 
     puts "... Added target to #{name}"
+  end
+
+  def _container_overrides
+    overrides = {
+      # This is the name of the container in the task definition.
+      # It needs to match or this doesn't work
+      # FIXME: pull from task definition. maybe we should just always call
+      # it 'app'
+      "name" => "#{target_group_name}-cron-worker",
+      "command" => command,
+    }
+
+    resource_adjustments =
+      if command.any? { |token| token == 'jobs:arbitrate_workoff' }
+        print " (Modifying RAM for arbitrate workoff: 800/400) "
+        { 'memory' => 800, 'memoryReservation' => 400 }
+      else
+        {}
+      end
+
+    overrides.merge(resource_adjustments)
   end
 
   def cluster_arn
