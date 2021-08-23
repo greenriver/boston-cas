@@ -7,7 +7,10 @@
       - if @assessment.persisted?
         - assessment_path = polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: @assessment.id)
       - else
-        - assessment_path = polymorphic_path([@non_hmis_client, :non_hmis_assessments])
+        - if @assessment.requires_assessment_type_choice?
+          - assessment_path = polymorphic_path([@non_hmis_client, :non_hmis_assessments], assessment_type: params[:assessment_type])
+        - else
+          - assessment_path = polymorphic_path([@non_hmis_client, :non_hmis_assessments])
       .d-flex.align-items-center.mb-6
         .div
           %h1.mr-4.mb-0 #{action_text} Assessment for Client #{name}

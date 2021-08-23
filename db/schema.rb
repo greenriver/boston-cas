@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_18_003940) do
+ActiveRecord::Schema.define(version: 2021_08_23_134810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -795,6 +795,13 @@ ActiveRecord::Schema.define(version: 2021_08_18_003940) do
     t.string "veteran_status"
     t.bigint "agency_id"
     t.string "assessment_type"
+    t.jsonb "household_members"
+    t.date "financial_assistance_end_date"
+    t.boolean "wait_times_ack", default: false, null: false
+    t.boolean "not_matched_ack", default: false, null: false
+    t.boolean "matched_process_ack", default: false, null: false
+    t.boolean "response_time_ack", default: false, null: false
+    t.boolean "automatic_approval_ack", default: false, null: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end

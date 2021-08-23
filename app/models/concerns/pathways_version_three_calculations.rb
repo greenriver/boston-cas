@@ -176,6 +176,10 @@ module PathwaysVersionThreeCalculations
               },
               as: :pretty_boolean_group,
             },
+            household_details: {
+              as: :partial,
+              partial: 'non_hmis_assessments/pathways_version_three/household_details',
+            },
             current_living_situation: {
               label: 'What is your current living situation?',
               collection: {
@@ -313,6 +317,103 @@ module PathwaysVersionThreeCalculations
             'Unsure' => nil,
           },
           hint: 'Note to assessor on generating an accurate response: if participant receives any type of disability benefits, you can automatically select “yes”; if you or the participant are unsure, ask them if a medical professional has ever written a letter on their behalf for disabled housing, EAEDC, or other benefits, or if they have ever tried to apply for a disability resource, even if they do not currently receive them- check yes. The assessor may also check yes if a permanent disability is observed.',
+          as: :pretty_boolean_group,
+        },
+        background_check_issues: {
+          label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a voucher, but rather to help overcome potential admission barriers.',
+          number: '8B',
+          collection: {
+            'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)' => 'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)',
+            'You have been evicted from a legal tenancy where you were the lease holder.' => 'You have been evicted from a legal tenancy where you were the lease holder.',
+            'Prior to entering shelter or sleeping outside during this episode of homelessness, you came directly from jail, prison or a pre-release program.' => 'Prior to entering shelter or sleeping outside during this episode of homelessness, you came directly from jail, prison or a pre-release program.',
+            'You have been convicted (found guilty of) a violent crime' => 'You have been convicted (found guilty of) a violent crime',
+            'You have been convicted (found guilty of) a drug crime' => 'You have been convicted (found guilty of) a drug crime',
+            'Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.' => 'Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.',
+            'Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing.' => 'Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing.',
+            'None of the above' => 'None of the above',
+          },
+          as: :pretty_checkboxes_group,
+          input_html: { multiple: true },
+        },
+        financial_assistance_end_date: {
+          label: 'What date is the latest date the participant can receive financial assistance through the current rapid re-housing program (i.e. when does their financial assistance end)?',
+          number: '8C',
+          as: :date_picker,
+        },
+        days_homeless_in_the_last_three_years: {
+          label: 'Warehouse Record- Length of Time Homeless: Check the participant’s record in the Warehouse; how many Boston homeless nights in the last three years does the participant have?',
+          number: '9A',
+        },
+        additional_homeless_nights: {
+          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. For additional days added, please have a "Documenting Current Boston Homelessness" form completed and ready to submit upon referral. You may skip this step and the form if you do not have any additional Boston homeless nights to add.',
+          number: '9B',
+        },
+        total_days_homeless_in_the_last_three_years: {
+          label: 'Total # of Boston homeless nights: Warehouse + added Boston homeless nights (input into CAS assessment)',
+          hint: 'Auto calculated',
+          number: '9C',
+          disabled: true,
+        },
+        _housing_stability_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/housing_stability_preamble',
+        },
+        _next_step_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/next_steps_preamble',
+        },
+        wait_times_ack: {
+          label: 'Wait Times',
+          number: '',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          hint: 'Wait times can change from time to time based on how many people are interested, and the openings we have available. We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings.',
+          as: :pretty_boolean_group,
+        },
+        not_matched_ack: {
+          label: 'What should I do to try to find housing if I am not matched with housing opening?',
+          number: '',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+
+          },
+          hint: 'We encourage you to keep thinking about other ways you may be able to prevent returning to homelessness, like moving in with roommates, applying for affordable housing, getting a rep payee or other ways to make housing work. ',
+          as: :pretty_boolean_group,
+        },
+        matched_process_ack: {
+          label: 'Who Will I Hear From If I Am Matched to a housing opening?',
+          number: '',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+
+          },
+          hint: 'You may hear from myself or any other case managers/contacts you listed here today; you may also hear directly from the housing program, so be sure to return calls or emails even if you do not know the agency. They are going to use all of the contact information you provided us to try to connect with you as quickly as possible. If any of your contact information changes, let me know and I can change it in the assessment.',
+          as: :pretty_boolean_group,
+        },
+        response_time_ack: {
+          label: 'How Long Will I Have to Respond to a housing opening I am matched with?',
+          number: '',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+
+          },
+          hint: 'In general, the housing programs will outreach to people who are matched with openings for about two weeks. They will move on to new people who may be interested after two weeks because they have to fill the openings. However, if you are interested after the two weeks, you should still return the call/email/message as you may be able to be matched to another opening at a later date.',
+          as: :pretty_boolean_group,
+        },
+        automatic_approval_ack: {
+          label: 'Am I automatically approved for the housing openings when I’m matched?',
+          number: '',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+
+          },
+          hint: 'No. Today we gathered information to help figure out if you’re eligible and match you to your preferences, but the housing programs will actually verify and document eligibility at the time you are referred. All of the programs have different eligibility criteria- our system will do its best to match you with those that you should be eligible for, but there may be times where you are matched, and are not eligible, and will be offered a new opening when one comes up.',
           as: :pretty_boolean_group,
         },
       }

@@ -198,6 +198,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :studio_ok,
       :substance_abuse_problem,
       :voucher_agency,
+      :assessment_type,
+      :financial_assistance_end_date,
       neighborhood_interests: [],
       provider_agency_preference: [],
       affordable_housing: [],
@@ -205,11 +207,31 @@ class NonHmisAssessment < ActiveRecord::Base
       service_need_indicators: [],
       intensive_needs: [],
       background_check_issues: [],
+      household_members: {},
     ].freeze
   end
 
   def requires_assessment_type_choice?
     false
+  end
+
+  def relationships_to_hoh
+    {
+      2 => 'Child',
+      3 => 'Spouse or partner',
+      4 => 'Other relative',
+      5 => 'Unrelated household member',
+    }
+  end
+
+  def genders
+    {
+      0 => 'Female',
+      1 => 'Male',
+      4 => 'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
+      5 => 'Transgender',
+      6 => 'Questioning',
+    }.freeze
   end
 
   def form_field_labels
