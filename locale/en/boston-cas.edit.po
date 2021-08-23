@@ -23,6 +23,9 @@ msgstr ""
 msgid "A criminal background hearing is not necessary"
 msgstr ""
 
+msgid "Add Photo or Video Link"
+msgstr ""
+
 msgid "Added to assessed clients"
 msgstr ""
 
@@ -144,6 +147,9 @@ msgid "Ending Veteran & Chronic Homelessness in Boston"
 msgstr ""
 
 msgid "Full HAN Release"
+msgstr ""
+
+msgid "Gather information about a rapid re-housing (RRH) participant’s housing stability."
 msgstr ""
 
 msgid "HAN release"
@@ -272,6 +278,9 @@ msgstr ""
 msgid "Part of a family"
 msgstr ""
 
+msgid "Photos and Videos"
+msgstr ""
+
 msgid "Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available."
 msgstr ""
 
@@ -398,7 +407,16 @@ msgstr ""
 msgid "Uploaded file does not have the correct header. Incorrect file?"
 msgstr ""
 
+msgid "Veteran Agency Contact Details"
+msgstr ""
+
 msgid "Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)"
+msgstr ""
+
+msgid "Warehouse ROI Contact Information"
+msgstr ""
+
+msgid "We want to reach a you when there is a housing program opening for you."
 msgstr ""
 
 msgid "When you indicate interest, notification will be sent to the"
