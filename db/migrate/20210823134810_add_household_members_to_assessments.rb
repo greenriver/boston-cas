@@ -7,5 +7,16 @@ class AddHouseholdMembersToAssessments < ActiveRecord::Migration[6.0]
     add_column :non_hmis_assessments, :matched_process_ack, :boolean, null: false, default: false
     add_column :non_hmis_assessments, :response_time_ack, :boolean, null: false, default: false
     add_column :non_hmis_assessments, :automatic_approval_ack, :boolean, null: false, default: false
+    add_column :non_hmis_assessments, :times_moved, :string
+    add_column :non_hmis_assessments, :health_severity, :string
+    add_column :non_hmis_assessments, :ever_experienced_dv, :string
+    add_column :non_hmis_assessments, :eviction_risk, :string
+    add_column :non_hmis_assessments, :need_daily_assistance, :string
+    add_column :non_hmis_assessments, :any_income, :string
+    add_column :non_hmis_assessments, :income_source, :string
+    add_column :non_hmis_assessments, :positive_relationship, :string
+    add_column :non_hmis_assessments, :legal_concerns, :string
+    add_column :non_hmis_assessments, :healthcare_coverage, :string
+    add_column :non_hmis_assessments, :childcare, :string
   end
 end

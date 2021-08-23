@@ -802,6 +802,17 @@ ActiveRecord::Schema.define(version: 2021_08_23_134810) do
     t.boolean "matched_process_ack", default: false, null: false
     t.boolean "response_time_ack", default: false, null: false
     t.boolean "automatic_approval_ack", default: false, null: false
+    t.string "times_moved"
+    t.string "health_severity"
+    t.string "ever_experienced_dv"
+    t.string "eviction_risk"
+    t.string "need_daily_assistance"
+    t.string "any_income"
+    t.string "income_source"
+    t.string "positive_relationship"
+    t.string "legal_concerns"
+    t.string "healthcare_coverage"
+    t.string "childcare"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end

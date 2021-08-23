@@ -358,6 +358,121 @@ module PathwaysVersionThreeCalculations
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/housing_stability_preamble',
         },
+        times_moved: {
+          label: 'How many times have you moved while enrolled in rapid re-housing?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'never' => 'Client has not moved while enrolled',
+            'once' => 'Once',
+            'two or more' => 'Two more times',
+          },
+        },
+        health_severity: {
+          label: 'How serious are your health concerns right now (physical, mental health, substance use)?',
+          hint: 'Or how often have you been in the emergency room (ER) in the last 6 months?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'no health concerns' => 'Client has no serious health concerns',
+            'mile symptoms' => 'Mild symptoms that are only slight impairments to daily functioning, or 1-2 ER visits in the past six months',
+            'moderate symptoms' => 'Moderate symptoms that impact some day-to-day functioning, or 3-5 ER visits in the past six months, or 1 hospitalization in the past 6 months',
+            'severe symptoms' => 'Severe symptoms that impact nearly all day-to-day functioning, or 6-8 ER visits in the past six months, or 2-3 hospitalizations in the past 6 months',
+            'in crisis' => 'Client is in crisis – life is at imminent risk; and/or medical prognosis is less than 1 year, or 9+ ER visits in the past 6 months, or 4+ hospitalizations in the past 6 months',
+          },
+        },
+        ever_experienced_dv: {
+          label: 'Have you or are you currently experiencing domestic violence?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'never' => 'Client has never experienced domestic violence or an on-site assault',
+            'history of dv' => 'History of DV or on-site assaults, though environment is currently safe',
+            'moderately safe' => 'Safety is moderately adequate',
+            'minimally safe' => 'Current level of safety is minimally adequate – ongoing safety planning is needed',
+            'in crisis' => 'In-crisis – life at serious imminent risk due to DV or on-site assaults',
+          },
+        },
+        eviction_risk: {
+          label: 'Are you currently at risk of being evicted by your landlord?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'not at risk' => 'Client is not currently at risk of eviction from their current unit',
+            'verbal threat' => 'Property owner has verbally threatened eviction to either the tenant or the case manager but not taken any formal steps',
+            'notice-to-quit' => 'Client has received a notice-to-quit terminating their tenancy',
+            'court summons' => 'Client has received a court summons & complaint and is facing eviction for non-payment of rent',
+            'eviction for cause' => 'Client has received a court summons & complaint and is facing eviction for cause (e.g. lease violations, criminal activity, etc.)',
+          },
+        },
+        need_daily_assistance: {
+          label: 'Do you ever need assistance with daily activities like eating, bathing/showering, dressing?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'no assistance' => 'Client requires little to no assistance with tasks of daily living',
+            'minimal assistance' => 'Client requires minimal assistance w/some tasks of daily living',
+            'requires assistance minor' => 'Client requires assistance with minor tasks of daily living (eg, brushing teeth, etc)',
+            'requires assistance all' => 'Client requires assistance with nearly all major tasks of daily living (eg, eating, bathing, etc)',
+          },
+        },
+        any_income: {
+          label: 'Do you have any income right now?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'consistent income' => 'Client has a consistent and adequate source of income',
+            'unstable income' => 'Client has an unstable and/or inadequate source of income',
+            'no income' => 'Client has no income',
+          },
+        },
+        income_source: {
+          label: 'What is the source of the income?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'documented income' => 'Client\'s income is fully documented and reportable',
+            'undocumented income' => 'Case manager has observed that client may relying on unreportable income (i.e. under the table work, sex work, etc.) for daily living expenses',
+          },
+        },
+        positive_relationship: {
+          label: 'Do you currently have positive family or friend relationships in your support network?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'consistent support' => 'Client has consistent and adequate support systems in the form of friends and/or family',
+            'some support' => 'Client has some support systems in the form of friends and/or family, though it is not always stable or sufficient',
+            'no support' => 'Client has no support systems and is entirely dependent on staff for support',
+          },
+        },
+        legal_concerns: {
+          label: 'Do you have any active legal concerns, open court cases, or convictions that may come up when we apply for other housing?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'no concerns' => 'Client has no legal concerns',
+            'insignificant concerns' => 'Legal concerns will not significantly impair access to housing',
+            'major concerns' => 'Client has major legal concerns that significantly impair access to housing',
+          },
+        },
+        healthcare_coverage: {
+          label: 'Do you currently have healthcare coverage?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'stable' => 'Client has stable, sufficient healthcare coverage',
+            'unstable' => 'Client has unstable or insufficient healthcare coverage',
+          },
+        },
+        childcare: {
+          label: 'Do you currently have childcare?',
+          number: '',
+          as: :pretty_boolean_group,
+          collection: {
+            'no concerns' => 'Client has no childcare concerns',
+            'unstable' => 'Client has unstable or insufficient access to childcare',
+          },
+        },
         _next_step_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/next_steps_preamble',
