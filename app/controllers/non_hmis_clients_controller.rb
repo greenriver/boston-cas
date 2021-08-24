@@ -149,10 +149,7 @@ class NonHmisClientsController < ApplicationController
     @assessment = load_assessment || @non_hmis_client.current_assessment
   rescue Exception
     client = NonHmisClient.find params[:id].to_i
-    case client.type
-    when 'ImportedClient'
-      redirect_to polymorphic_path([action_name.to_sym, :imported_client], id: params[:id])
-    end
+    redirect_to polymorphic_path([action_name.to_sym, :imported_client], id: params[:id]) if client.type == 'ImportedClient'
   end
 
   def load_assessment
