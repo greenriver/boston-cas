@@ -47,39 +47,242 @@ module PathwaysVersionThreeCalculations
       true
     end
 
+    def unscored?
+      assessment_type == pathways_assessment_type.to_s
+    end
+
+    def score_for(field)
+      value = send(field)
+      options = send("#{field}_options")
+      options[value].try(:[], :score) || 0
+    end
+
+    def collection_for(field)
+      options = send("#{field}_options")
+      options.map do |k, opt|
+        [k, opt[:label]]
+      end.to_h.invert
+    end
+
+    private def times_moved_options
+      {
+        'never' => {
+          label: 'Client has not moved while enrolled',
+          score: 0,
+        },
+        'once' => {
+          label: 'Once',
+          score: 0,
+        },
+        'two or more' => {
+          label: 'Two more times',
+          score: 0,
+        },
+      }
+    end
+
+    private def health_severity_options
+      {
+        'no health concerns' => {
+          label: 'Client has no serious health concerns',
+          score: 0,
+        },
+        'mild symptoms' => {
+          label: 'Mild symptoms that are only slight impairments to daily functioning, or 1-2 ER visits in the past six months',
+          score: 1,
+        },
+        'moderate symptoms' => {
+          label: 'Moderate symptoms that impact some day-to-day functioning, or 3-5 ER visits in the past six months, or 1 hospitalization in the past 6 months',
+          score: 2,
+        },
+        'severe symptoms' => {
+          label: 'Severe symptoms that impact nearly all day-to-day functioning, or 6-8 ER visits in the past six months, or 2-3 hospitalizations in the past 6 months',
+          score: 4,
+        },
+        'in crisis' => {
+          label: 'Client is in crisis – life is at imminent risk; and/or medical prognosis is less than 1 year, or 9+ ER visits in the past 6 months, or 4+ hospitalizations in the past 6 months',
+          score: 6,
+        },
+      }
+    end
+
+    private def ever_experienced_dv_options
+      {
+        'never' => {
+          label: 'Client has never experienced domestic violence or an on-site assault',
+          score: 0,
+        },
+        'history of dv' => {
+          label: 'History of DV or on-site assaults, though environment is currently safe',
+          score: 1,
+        },
+        'moderately safe' => {
+          label: 'Safety is moderately adequate',
+          score: 2,
+        },
+        'minimally safe' => {
+          label: 'Current level of safety is minimally adequate – ongoing safety planning is needed',
+          score: 3,
+        },
+        'in crisis' => {
+          label: 'In-crisis – life at serious imminent risk due to DV or on-site assaults',
+          score: 6,
+        },
+      }
+    end
+
+    private def eviction_risk_options
+      {
+        'not at risk' => {
+          label: 'Client is not currently at risk of eviction from their current unit',
+          score: 0,
+        },
+        'verbal threat' => {
+          label: 'Property owner has verbally threatened eviction to either the tenant or the case manager but not taken any formal steps',
+          score: 1,
+        },
+        'notice-to-quit' => {
+          label: 'Client has received a notice-to-quit terminating their tenancy',
+          score: 2,
+        },
+        'court summons' => {
+          label: 'Client has received a court summons & complaint and is facing eviction for non-payment of rent',
+          score: 4,
+        },
+        'eviction for cause' => {
+          label: 'Client has received a court summons & complaint and is facing eviction for cause (e.g. lease violations, criminal activity, etc.)',
+          score: 6,
+        },
+      }
+    end
+
+    private def need_daily_assistance_options
+      {
+        'no assistance' => {
+          label: 'Client requires little to no assistance with tasks of daily living',
+          score: 0,
+        },
+        'minimal assistance' => {
+          label: 'Client requires minimal assistance w/some tasks of daily living',
+          score: 1,
+        },
+        'requires assistance minor' => {
+          label: 'Client requires assistance with minor tasks of daily living (eg, brushing teeth, etc)',
+          score: 3,
+        },
+        'requires assistance all' => {
+          label: 'Client requires assistance with nearly all major tasks of daily living (eg, eating, bathing, etc)',
+          score: 6,
+        },
+      }
+    end
+
+    private def any_income_options
+      {
+        'consistent income' => {
+          label: 'Client has a consistent and adequate source of income',
+          score: 0,
+        },
+        'unstable income' => {
+          label: 'Client has an unstable and/or inadequate source of income',
+          score: 1,
+        },
+        'no income' => {
+          label: 'Client has no income',
+          score: 2,
+        },
+      }
+    end
+
+    private def income_source_options
+      {
+        'documented income' => {
+          label: 'Client\'s income is fully documented and reportable',
+          score: 0,
+        },
+        'undocumented income' => {
+          label: 'Case manager has observed that client may relying on unreportable income (i.e. under the table work, sex work, etc.) for daily living expenses',
+          score: 2,
+        },
+      }
+    end
+
+    private def positive_relationship_options
+      {
+        'consistent support' => {
+          label: 'Client has consistent and adequate support systems in the form of friends and/or family',
+          score: 0,
+        },
+        'some support' => {
+          label: 'Client has some support systems in the form of friends and/or family, though it is not always stable or sufficient',
+          score: 1,
+        },
+        'no support' => {
+          label: 'Client has no support systems and is entirely dependent on staff for support',
+          score: 2,
+        },
+      }
+    end
+
+    private def legal_concerns_options
+      {
+        'no concerns' => {
+          label: 'Client has no legal concerns',
+          score: 0,
+        },
+        'insignificant concerns' => {
+          label: 'Legal concerns will not significantly impair access to housing',
+          score: 1,
+        },
+        'major concerns' => {
+          label: 'Client has major legal concerns that significantly impair access to housing',
+          score: 2,
+        },
+      }
+    end
+
+    private def healthcare_coverage_options
+      {
+        'stable' => {
+          label: 'Client has stable, sufficient healthcare coverage',
+          score: 0,
+        },
+        'unstable' => {
+          label: 'Client has unstable or insufficient healthcare coverage',
+          score: 1,
+        },
+      }
+    end
+
+    private def childcare_options
+      {
+        'no concerns' => {
+          label: 'Client has no childcare concerns',
+          score: 0,
+        },
+        'unstable' => {
+          label: 'Client has unstable or insufficient access to childcare',
+          score: 1,
+        },
+      }
+    end
+
     def calculated_score
-      return 70 if pending_subsidized_housing_placement
+      return nil if assessment_type == pathways_assessment_type
 
       score = 0
-      score += 20 if documented_disability
-      score += 20 if health_prioritized
-      needs = Array.wrap(medical_care_last_six_months).reject(&:blank?) + Array.wrap(service_need_indicators)&.reject(&:blank?) + Array.wrap(intensive_needs).reject(&:blank?)
-      score += 12 if needs.any?(&:present?) || intensive_needs_other.present?
+      score += score_for(:times_moved)
+      score += score_for(:health_severity)
+      score += score_for(:ever_experienced_dv)
+      score += score_for(:eviction_risk)
+      score += score_for(:need_daily_assistance)
+      score += score_for(:any_income)
+      score += score_for(:income_source)
+      score += score_for(:positive_relationship)
+      score += score_for(:legal_concerns)
+      score += score_for(:healthcare_coverage)
+      score += score_for(:childcare)
 
-      case homeless_night_range
-      when 'Fleeing Domestic Violence (no range needed)', '365+ Boston homeless nights in the last three years'
-        score += 10
-      when '30-60 Boston homeless nights in the last three years'
-        score += 1
-      when '61-90 Boston homeless nights in the last three years'
-        score += 2
-      when '91-120 Boston homeless nights in the last three years'
-        score += 3
-      when '121-150 Boston homeless nights in the last three years'
-        score += 4
-      when '151-180 Boston homeless nights in the last three years'
-        score += 5
-      when '181-210 Boston homeless nights in the last three years'
-        score += 6
-      when '211-240 Boston homeless nights in the last three years'
-        score += 7
-      when '241-269 Boston homeless nights in the last three years'
-        score += 8
-      when '270-364 Boston homeless nights in the last three years'
-        score += 9
-      end
-
-      score = 1 if score.zero?
       score
     end
 
@@ -356,116 +559,68 @@ module PathwaysVersionThreeCalculations
           label: 'How many times have you moved while enrolled in rapid re-housing?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'never' => 'Client has not moved while enrolled',
-            'once' => 'Once',
-            'two or more' => 'Two more times',
-          },
+          collection: collection_for(:times_moved),
         },
         health_severity: {
           label: 'How serious are your health concerns right now (physical, mental health, substance use)?',
           hint: 'Or how often have you been in the emergency room (ER) in the last 6 months?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'no health concerns' => 'Client has no serious health concerns',
-            'mile symptoms' => 'Mild symptoms that are only slight impairments to daily functioning, or 1-2 ER visits in the past six months',
-            'moderate symptoms' => 'Moderate symptoms that impact some day-to-day functioning, or 3-5 ER visits in the past six months, or 1 hospitalization in the past 6 months',
-            'severe symptoms' => 'Severe symptoms that impact nearly all day-to-day functioning, or 6-8 ER visits in the past six months, or 2-3 hospitalizations in the past 6 months',
-            'in crisis' => 'Client is in crisis – life is at imminent risk; and/or medical prognosis is less than 1 year, or 9+ ER visits in the past 6 months, or 4+ hospitalizations in the past 6 months',
-          },
+          collection: collection_for(:health_severity),
         },
         ever_experienced_dv: {
           label: 'Have you or are you currently experiencing domestic violence?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'never' => 'Client has never experienced domestic violence or an on-site assault',
-            'history of dv' => 'History of DV or on-site assaults, though environment is currently safe',
-            'moderately safe' => 'Safety is moderately adequate',
-            'minimally safe' => 'Current level of safety is minimally adequate – ongoing safety planning is needed',
-            'in crisis' => 'In-crisis – life at serious imminent risk due to DV or on-site assaults',
-          },
+          collection: collection_for(:ever_experienced_dv),
         },
         eviction_risk: {
           label: 'Are you currently at risk of being evicted by your landlord?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'not at risk' => 'Client is not currently at risk of eviction from their current unit',
-            'verbal threat' => 'Property owner has verbally threatened eviction to either the tenant or the case manager but not taken any formal steps',
-            'notice-to-quit' => 'Client has received a notice-to-quit terminating their tenancy',
-            'court summons' => 'Client has received a court summons & complaint and is facing eviction for non-payment of rent',
-            'eviction for cause' => 'Client has received a court summons & complaint and is facing eviction for cause (e.g. lease violations, criminal activity, etc.)',
-          },
+          collection: collection_for(:eviction_risk),
         },
         need_daily_assistance: {
           label: 'Do you ever need assistance with daily activities like eating, bathing/showering, dressing?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'no assistance' => 'Client requires little to no assistance with tasks of daily living',
-            'minimal assistance' => 'Client requires minimal assistance w/some tasks of daily living',
-            'requires assistance minor' => 'Client requires assistance with minor tasks of daily living (eg, brushing teeth, etc)',
-            'requires assistance all' => 'Client requires assistance with nearly all major tasks of daily living (eg, eating, bathing, etc)',
-          },
+          collection: collection_for(:need_daily_assistance),
         },
         any_income: {
           label: 'Do you have any income right now?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'consistent income' => 'Client has a consistent and adequate source of income',
-            'unstable income' => 'Client has an unstable and/or inadequate source of income',
-            'no income' => 'Client has no income',
-          },
+          collection: collection_for(:any_income),
         },
         income_source: {
           label: 'What is the source of the income?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'documented income' => 'Client\'s income is fully documented and reportable',
-            'undocumented income' => 'Case manager has observed that client may relying on unreportable income (i.e. under the table work, sex work, etc.) for daily living expenses',
-          },
+          collection: collection_for(:income_source),
         },
         positive_relationship: {
           label: 'Do you currently have positive family or friend relationships in your support network?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'consistent support' => 'Client has consistent and adequate support systems in the form of friends and/or family',
-            'some support' => 'Client has some support systems in the form of friends and/or family, though it is not always stable or sufficient',
-            'no support' => 'Client has no support systems and is entirely dependent on staff for support',
-          },
+          collection: collection_for(:positive_relationship),
         },
         legal_concerns: {
           label: 'Do you have any active legal concerns, open court cases, or convictions that may come up when we apply for other housing?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'no concerns' => 'Client has no legal concerns',
-            'insignificant concerns' => 'Legal concerns will not significantly impair access to housing',
-            'major concerns' => 'Client has major legal concerns that significantly impair access to housing',
-          },
+          collection: collection_for(:legal_concerns),
         },
         healthcare_coverage: {
           label: 'Do you currently have healthcare coverage?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'stable' => 'Client has stable, sufficient healthcare coverage',
-            'unstable' => 'Client has unstable or insufficient healthcare coverage',
-          },
+          collection: collection_for(:healthcare_coverage),
         },
         childcare: {
           label: 'Do you currently have childcare?',
           number: '',
           as: :pretty_boolean_group,
-          collection: {
-            'no concerns' => 'Client has no childcare concerns',
-            'unstable' => 'Client has unstable or insufficient access to childcare',
-          },
+          collection: collection_for(:childcare),
         },
         _next_step_preamble: {
           as: :partial,

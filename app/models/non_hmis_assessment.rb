@@ -200,6 +200,27 @@ class NonHmisAssessment < ActiveRecord::Base
       :voucher_agency,
       :assessment_type,
       :financial_assistance_end_date,
+      :times_moved,
+      :health_severity,
+      :ever_experienced_dv,
+      :eviction_risk,
+      :need_daily_assistance,
+      :any_income,
+      :income_source,
+      :positive_relationship,
+      :legal_concerns,
+      :healthcare_coverage,
+      :childcare,
+      :household_members,
+      :financial_assistance_end_date,
+      :wait_times_ack,
+      :not_matched_ack,
+      :matched_process_ack,
+      :response_time_ack,
+      :automatic_approval_ack,
+      :setting,
+      :outreach_name,
+      :denial_required,
       neighborhood_interests: [],
       provider_agency_preference: [],
       affordable_housing: [],
@@ -212,6 +233,10 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def requires_assessment_type_choice?
+    false
+  end
+
+  def unscored?
     false
   end
 
