@@ -813,6 +813,9 @@ ActiveRecord::Schema.define(version: 2021_08_23_134810) do
     t.string "legal_concerns"
     t.string "healthcare_coverage"
     t.string "childcare"
+    t.string "setting"
+    t.string "outreach_name"
+    t.string "denial_required"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -944,6 +947,16 @@ ActiveRecord::Schema.define(version: 2021_08_23_134810) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id"
+  end
+
+  create_table "outreach_histories", force: :cascade do |t|
+    t.bigint "non_hmis_client_id", null: false
+    t.bigint "user_id", null: false
+    t.string "outreach_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["non_hmis_client_id"], name: "index_outreach_histories_on_non_hmis_client_id"
+    t.index ["user_id"], name: "index_outreach_histories_on_user_id"
   end
 
   create_table "physical_disabilities", id: :serial, force: :cascade do |t|

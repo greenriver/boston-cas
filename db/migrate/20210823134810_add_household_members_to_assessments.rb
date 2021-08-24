@@ -18,5 +18,15 @@ class AddHouseholdMembersToAssessments < ActiveRecord::Migration[6.0]
     add_column :non_hmis_assessments, :legal_concerns, :string
     add_column :non_hmis_assessments, :healthcare_coverage, :string
     add_column :non_hmis_assessments, :childcare, :string
+    add_column :non_hmis_assessments, :setting, :string
+    add_column :non_hmis_assessments, :outreach_name, :string
+    add_column :non_hmis_assessments, :denial_required, :string
+
+    create_table :outreach_histories do |t|
+      t.references :non_hmis_client, null: false
+      t.references :user, null: false
+      t.string :outreach_name
+      t.timestamps
+    end
   end
 end
