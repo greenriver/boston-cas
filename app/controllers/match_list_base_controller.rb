@@ -215,9 +215,7 @@ class MatchListBaseController < ApplicationController
     contact = current_user.contact
     # Notify when a match is nil.
     contact.client_opportunity_match_contacts.each do |contact_match_pair|
-      if contact_match_pair.match.nil?
-        @notifier.ping "The match <id: #{contact_match_pair.match_id}> for the contact/match pair <id: #{contact_match_pair.id}> with user <id: #{current_user.id}> is nil" if @send_notifications
-      end
+      @notifier.ping "The match #{contact_match_pair.match_id} for the contact/match pair #{contact_match_pair.id} with user #{current_user.id} is nil" if contact_match_pair.match.nil? && @send_notifications
     end
     contact.client_opportunity_match_contacts.map(&:match).map do |m|
       m.id if m.try(:show_client_info_to?, contact) || false
