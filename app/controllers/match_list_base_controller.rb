@@ -5,10 +5,16 @@
 ###
 
 class MatchListBaseController < ApplicationController
+  include NotifierConfig
   before_action :authenticate_user!
   before_action :set_heading
   before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
+
+  def initialize
+    setup_notifier('MatchListBaseController')
+    super
+  end
 
   def index
     # search
@@ -207,6 +213,13 @@ class MatchListBaseController < ApplicationController
   # via targeted search
   private def visible_match_ids
     contact = current_user.contact
+    # We are trying to figure out why the match side of a client/match pair is sometimes nil.
+    # We haven't been able to reproduce the problem so we are at least going to try to notify it.
+    contact.client_opportunity_match_contacts.each do |contact_match_pair|
+      if contact_match_pair.match.nil?
+        @notifier.ping "The match for the contact/match pair <id: #{contact_match_pair.id}> with user <id: #{current_user.id}> is nil" if @send_notifications
+      end
+    end
     contact.client_opportunity_match_contacts.map(&:match).map do |m|
       m.id if m.try(:show_client_info_to?, contact) || false
     end.compact
