@@ -213,11 +213,10 @@ class MatchListBaseController < ApplicationController
   # via targeted search
   private def visible_match_ids
     contact = current_user.contact
-    # We are trying to figure out why the match side of a client/match pair is sometimes nil.
-    # We haven't been able to reproduce the problem so we are at least going to try to notify it.
+    # Notify when a match is nil.
     contact.client_opportunity_match_contacts.each do |contact_match_pair|
       if contact_match_pair.match.nil?
-        @notifier.ping "The match for the contact/match pair <id: #{contact_match_pair.id}> with user <id: #{current_user.id}> is nil" if @send_notifications
+        @notifier.ping "The match <id: #{contact_match_pair.match_id}> for the contact/match pair <id: #{contact_match_pair.id}> with user <id: #{current_user.id}> is nil" if @send_notifications
       end
     end
     contact.client_opportunity_match_contacts.map(&:match).map do |m|
