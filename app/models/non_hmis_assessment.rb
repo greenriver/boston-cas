@@ -236,10 +236,6 @@ class NonHmisAssessment < ActiveRecord::Base
     false
   end
 
-  def unscored?
-    false
-  end
-
   def relationships_to_hoh
     {
       2 => 'Child',

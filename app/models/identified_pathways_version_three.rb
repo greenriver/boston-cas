@@ -31,11 +31,8 @@ class IdentifiedPathwaysVersionThree < IdentifiedClientAssessment
       view_helper.link_to(client.first_name, url_helpers.identified_client_path(id: client.id)),
       client.agency&.name,
     ]
-    score = if current_assessment&.assessment_score&.zero?
-      '0 – Ineligible'
-    else
-      current_assessment&.assessment_score
-    end
+    score = current_assessment&.assessment_score
+
     assessment_title = view_helper.content_tag(:em, current_assessment&.title)
     assessment_title = view_helper.content_tag(:div, assessment_title, class: 'mt-2')
     assessment_date = view_helper.content_tag(:span, client&.assessed_at&.to_date.to_s)

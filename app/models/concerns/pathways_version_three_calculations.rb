@@ -47,10 +47,6 @@ module PathwaysVersionThreeCalculations
       true
     end
 
-    def unscored?
-      assessment_type == pathways_assessment_type.to_s
-    end
-
     def score_for(field)
       value = send(field)
       options = send("#{field}_options")
@@ -75,7 +71,7 @@ module PathwaysVersionThreeCalculations
           score: 2,
         },
         'two or more' => {
-          label: 'Two more times',
+          label: 'Two or more times',
           score: 4,
         },
       }
@@ -268,7 +264,7 @@ module PathwaysVersionThreeCalculations
     end
 
     def calculated_score
-      return nil if assessment_type == pathways_assessment_type
+      return total_days_homeless_in_the_last_three_years if assessment_type == pathways_assessment_type.to_s
 
       score = 0
       score += score_for(:times_moved)

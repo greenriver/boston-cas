@@ -132,6 +132,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       :vispdat_score,
       :vispdat_priority_score,
       :shelter_name,
+      :warehouse_client_id,
       active_cohort_ids: [],
       client_assessments_attributes: [
         :id,
