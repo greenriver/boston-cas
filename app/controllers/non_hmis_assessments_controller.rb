@@ -90,7 +90,11 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def build_assessment
-    @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id, non_hmis_client_id: @non_hmis_client.id)
+    assessment = @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id, non_hmis_client_id: @non_hmis_client.id)
+    return assessment unless assessment.requires_assessment_type_choice? && assessment.assessment_type.blank? && params[:assessment_type].present?
+
+    assessment.assessment_type = params[:assessment_type]
+    assessment
   end
 
   private def set_client

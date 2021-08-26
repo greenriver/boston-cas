@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord-import'
 gem 'pg', '~> 0.20.0'
-gem 'rails', '~>6.0.4'
+gem 'rails', '~>6.0.4.1'
 
 gem 'bcrypt'
 gem 'bootsnap'
@@ -140,6 +140,7 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
+  gem 'rubocop-faker', require: false
 end
 
 group :test do

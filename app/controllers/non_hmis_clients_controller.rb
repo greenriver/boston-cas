@@ -83,7 +83,6 @@ class NonHmisClientsController < ApplicationController
 
   def new
     @non_hmis_client = client_source.new(agency_id: current_user.agency&.id)
-    @assessment = build_assessment
     @contact_id = current_user.contact.id
   end
 
@@ -116,20 +115,6 @@ class NonHmisClientsController < ApplicationController
     @non_hmis_client.shelter_histories.create({ shelter_name: @non_hmis_client.shelter_name, user_id: current_user.id }) if @non_hmis_client.attribute_changed?(:shelter_name)
   end
 
-  def new_assessment
-    @assessment = build_assessment
-    if pathways_enabled?
-      render :new_assessment
-    else
-      render :edit
-    end
-  end
-
-  def assessment
-    load_assessment
-    render :assessment
-  end
-
   def sorter
     @column = params[:sort]
     @direction = params[:direction]
@@ -159,23 +144,12 @@ class NonHmisClientsController < ApplicationController
     sort_string
   end
 
-  def build_assessment
-    assessment_type.constantize.new
-  end
-
   def load_client
     @non_hmis_client = client_source.find(params[:id].to_i)
     @assessment = load_assessment || @non_hmis_client.current_assessment
   rescue Exception
     client = NonHmisClient.find params[:id].to_i
-    case client.type
-    when 'DeidentifiedClient'
-      redirect_to polymorphic_path([action_name.to_sym, :deidentified_client], id: params[:id])
-    when 'IdentifiedClient'
-      redirect_to polymorphic_path([action_name.to_sym, :identified_client], id: params[:id])
-    when 'ImportedClient'
-      redirect_to polymorphic_path([action_name.to_sym, :imported_client], id: params[:id])
-    end
+    redirect_to polymorphic_path([action_name.to_sym, :imported_client], id: params[:id]) if client.type == 'ImportedClient'
   end
 
   def load_assessment
@@ -249,37 +223,6 @@ class NonHmisClientsController < ApplicationController
     dirty_params[:shelter_name] = dirty_params.dig(:client_assessments_attributes, '0', :shelter_name)
 
     return dirty_params
-  end
-
-  def clean_assessment_params(dirty_params)
-    assessment_params = dirty_params.dig(:client_assessments_attributes, '0')
-    return dirty_params unless assessment_params.present?
-
-    assessment_params[:type] = assessment_type
-
-    if assessment_params[:income_total_annual].present?
-      assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12
-    end
-
-    if assessment_params.has_key?(:youth_rrh_aggregate)
-      assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['adult', 'both'])
-      assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['youth', 'both'])
-      assessment_params.extract![:youth_rrh_aggregate]
-    end
-
-    if assessment_params.has_key?(:dv_rrh_aggregate)
-      assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['non-dv', 'both'])
-      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
-      assessment_params.extract![:dv_rrh_aggregate]
-    end
-
-    if assessment_params[:neighborhood_interests].present?
-      assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
-    end
-
-    assessment_params[:user_id] = current_user.id
-
-    dirty_params
   end
 
   private def pathways_enabled?

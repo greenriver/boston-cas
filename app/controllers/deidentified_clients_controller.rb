@@ -31,10 +31,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       ) unless params[:assessment_id].present? || deidentified_client_params[:client_assessments_attributes].blank?
 
       @non_hmis_client.current_assessment&.update_assessment_score!
-      respond_with(@non_hmis_client, location: path_for_non_hmis_client)
-    else
-      respond_with(@non_hmis_client, location: deidentified_clients_path)
     end
+    respond_with(@non_hmis_client, location: path_for_non_hmis_client)
   end
 
   def destroy
@@ -134,6 +132,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       :vispdat_score,
       :vispdat_priority_score,
       :shelter_name,
+      :warehouse_client_id,
       active_cohort_ids: [],
       client_assessments_attributes: [
         :id,
@@ -227,7 +226,6 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   private def clean_params dirty_params
     dirty_params = clean_client_params(dirty_params)
-    dirty_params = clean_assessment_params(dirty_params)
 
     return append_client_identifier(dirty_params)
   end
