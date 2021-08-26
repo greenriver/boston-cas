@@ -20,8 +20,8 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
-  scope :covid_pathways, -> do
-    where(type: covid_assessment_types)
+  scope :limitable_pathways, -> do
+    where(type: limited_assessment_types)
   end
 
   scope :visible_by, ->(user) do
@@ -45,10 +45,12 @@ class NonHmisAssessment < ActiveRecord::Base
       'DeidentifiedPathwaysAssessment',
       'IdentifiedCovidPathwaysAssessment',
       'DeidentifiedCovidPathwaysAssessment',
+      'IdentifiedPathwaysVersionThree',
+      'DeidentifiedPathwaysVersionThree',
     ].freeze
   end
 
-  def self.covid_assessment_types
+  def self.limited_assessment_types
     [
       'IdentifiedCovidPathwaysAssessment',
       'DeidentifiedCovidPathwaysAssessment',
@@ -196,6 +198,29 @@ class NonHmisAssessment < ActiveRecord::Base
       :studio_ok,
       :substance_abuse_problem,
       :voucher_agency,
+      :assessment_type,
+      :financial_assistance_end_date,
+      :times_moved,
+      :health_severity,
+      :ever_experienced_dv,
+      :eviction_risk,
+      :need_daily_assistance,
+      :any_income,
+      :income_source,
+      :positive_relationship,
+      :legal_concerns,
+      :healthcare_coverage,
+      :childcare,
+      :household_members,
+      :financial_assistance_end_date,
+      :wait_times_ack,
+      :not_matched_ack,
+      :matched_process_ack,
+      :response_time_ack,
+      :automatic_approval_ack,
+      :setting,
+      :outreach_name,
+      :denial_required,
       neighborhood_interests: [],
       provider_agency_preference: [],
       affordable_housing: [],
@@ -203,10 +228,34 @@ class NonHmisAssessment < ActiveRecord::Base
       service_need_indicators: [],
       intensive_needs: [],
       background_check_issues: [],
+      household_members: {},
     ].freeze
   end
 
-  def self.form_field_labels
+  def requires_assessment_type_choice?
+    false
+  end
+
+  def relationships_to_hoh
+    {
+      2 => 'Child',
+      3 => 'Spouse or partner',
+      4 => 'Other relative',
+      5 => 'Unrelated household member',
+    }
+  end
+
+  def genders
+    {
+      0 => 'Female',
+      1 => 'Male',
+      4 => 'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
+      5 => 'Transgender',
+      6 => 'Questioning',
+    }.freeze
+  end
+
+  def form_field_labels
     return [] unless respond_to?(:form_fields)
 
     [].tap do |labels|
@@ -224,10 +273,10 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def form_field_values
-    return [] unless self.class.respond_to?(:form_fields)
+    return [] unless respond_to?(:form_fields)
 
     [].tap do |values|
-      self.class.form_fields.each do |name, field|
+      form_fields.each do |name, field|
         # If there are sub-questions, there will not be answers at this level
         if ! field[:questions]
           val = send(name)

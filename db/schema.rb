@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_185817) do
+ActiveRecord::Schema.define(version: 2021_08_23_134810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -794,6 +794,28 @@ ActiveRecord::Schema.define(version: 2021_06_25_185817) do
     t.text "notes"
     t.string "veteran_status"
     t.bigint "agency_id"
+    t.string "assessment_type"
+    t.jsonb "household_members"
+    t.date "financial_assistance_end_date"
+    t.boolean "wait_times_ack", default: false, null: false
+    t.boolean "not_matched_ack", default: false, null: false
+    t.boolean "matched_process_ack", default: false, null: false
+    t.boolean "response_time_ack", default: false, null: false
+    t.boolean "automatic_approval_ack", default: false, null: false
+    t.string "times_moved"
+    t.string "health_severity"
+    t.string "ever_experienced_dv"
+    t.string "eviction_risk"
+    t.string "need_daily_assistance"
+    t.string "any_income"
+    t.string "income_source"
+    t.string "positive_relationship"
+    t.string "legal_concerns"
+    t.string "healthcare_coverage"
+    t.string "childcare"
+    t.string "setting"
+    t.string "outreach_name"
+    t.string "denial_required"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -925,6 +947,16 @@ ActiveRecord::Schema.define(version: 2021_06_25_185817) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id"
+  end
+
+  create_table "outreach_histories", force: :cascade do |t|
+    t.bigint "non_hmis_client_id", null: false
+    t.bigint "user_id", null: false
+    t.string "outreach_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["non_hmis_client_id"], name: "index_outreach_histories_on_non_hmis_client_id"
+    t.index ["user_id"], name: "index_outreach_histories_on_user_id"
   end
 
   create_table "physical_disabilities", id: :serial, force: :cascade do |t|
