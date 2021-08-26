@@ -72,11 +72,11 @@ module PathwaysVersionThreeCalculations
         },
         'once' => {
           label: 'Once',
-          score: 0,
+          score: 2,
         },
         'two or more' => {
           label: 'Two more times',
-          score: 0,
+          score: 4,
         },
       }
     end
