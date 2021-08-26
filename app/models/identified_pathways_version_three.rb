@@ -59,6 +59,7 @@ class IdentifiedPathwaysVersionThree < IdentifiedClientAssessment
     row << if client.available then 'Available' else 'Ineligible' end
     row << delete_link if user.can_manage_identified_clients? && ! client.involved_in_match?
     row << client_link if user.can_view_some_clients? && client.client
+
     row
   end
 

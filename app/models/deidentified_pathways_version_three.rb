@@ -57,8 +57,8 @@ class DeidentifiedPathwaysVersionThree < DeidentifiedClientAssessment
     row << assessment_date
     row << current_assessment&.days_homeless_in_the_last_three_years
     row << if client.available then 'Available' else 'Ineligible' end
-    row << client_link if user.can_view_some_clients? && client.client
     row << delete_link if user.can_manage_deidentified_clients? && ! client.involved_in_match?
+    row << client_link if user.can_view_some_clients? && client.client
 
     row
   end
