@@ -6,6 +6,20 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  slack_config = Rails.application.config_for(:exception_notifier)[:slack]
+  if slack_config.present?
+    config.middleware.use(ExceptionNotification::Rack,
+      :slack => {
+        :webhook_url => slack_config[:webhook_url],
+        :channel => slack_config[:channel],
+        :additional_parameters => {
+          :mrkdwn => true,
+          :icon_url => slack_config[:icon_url]
+        }
+      }
+    )
+  end
+
   # Do not eager load code on boot.
   config.eager_load = false
 
