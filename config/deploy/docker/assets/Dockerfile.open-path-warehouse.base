@@ -4,9 +4,11 @@
 ## Stage for the code ##
 ########################
 
-FROM ruby:2.7.2-alpine AS code
+FROM ruby:2.7.4-alpine AS code
 
-RUN mkdir -p /app /app/shape_files/CoC /etc/ssl/certs
+RUN mkdir -p /app /app/shape_files/CoC /etc/ssl/certs \
+  /app/shape_files/CoC /app/shape_files/zip_codes.census.2018 \
+  /app/shape_files/block_groups /app/shape_files/states /app/shape_files/counties
 
 WORKDIR /app
 
@@ -23,6 +25,9 @@ COPY config/deploy/docker/assets/deploy_tasks.open-path-warehouse.sh ./bin/deplo
 COPY shape_files/sync.from.s3 ./shape_files
 COPY shape_files/CoC/make.inserts ./shape_files/CoC
 COPY shape_files/zip_codes.census.2018/make.inserts ./shape_files/zip_codes.census.2018
+COPY shape_files/counties/make.inserts ./shape_files/counties
+COPY shape_files/states/make.inserts ./shape_files/states
+COPY shape_files/block_groups/make.inserts ./shape_files/block_groups
 
 COPY lib ./lib
 COPY config ./config
@@ -52,7 +57,7 @@ ARG BUILDER
 ###########################################
 
 LABEL "app"=open-path-warehouse
-LABEL "ruby-version"=2.7.2
+LABEL "ruby-version"=2.7.4
 
 COPY config/deploy/docker/assets/entrypoint.sh /usr/bin/
 COPY --from=code /app /app/
