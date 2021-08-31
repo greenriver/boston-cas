@@ -29,7 +29,7 @@ module PathwaysVersionThreeCalculations
     end
 
     def pathways_description
-      _('We want to reach a you when there is a housing program opening for you.')
+      _('We want to reach you when there is a housing program opening for you.')
     end
 
     def transfer_description
@@ -159,7 +159,7 @@ module PathwaysVersionThreeCalculations
           score: 0,
         },
         'minimal assistance' => {
-          label: 'Client requires minimal assistance w/some tasks of daily living',
+          label: 'Client requires minimal assistance with some tasks of daily living',
           score: 1,
         },
         'requires assistance minor' => {
@@ -695,7 +695,7 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
         },
         setting: {
-          label: 'Where setting do you currently reside (or sleep in)- select one (required)?',
+          label: 'Which setting do you currently reside (or sleep in)- select one (required)?',
           number: '2C',
           collection: {
             _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
@@ -713,7 +713,7 @@ module PathwaysVersionThreeCalculations
           input_html: { data: { tags: true } },
         },
         outreach_name: {
-          label: 'If you are in unsheltered and working with an outreach program, select which one:',
+          label: 'If you are unsheltered and working with an outreach program, select which one:',
           number: '2E',
           as: :select_2,
           collection: OutreachHistory.outreach_locations,
