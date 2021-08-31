@@ -88,7 +88,7 @@ class NonHmisClientsController < ApplicationController
 
   def show
     @shelter_names = ShelterHistory.shelter_locations
-    @assessments = @non_hmis_client.non_hmis_assessments.order(created_at: :desc)
+    @assessments = @non_hmis_client.non_hmis_assessments.order(entry_date: :desc, created_at: :desc)
     if params[:assessment_id] && pathways_enabled?
       render :assessment
     end
