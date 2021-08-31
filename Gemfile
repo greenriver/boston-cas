@@ -49,6 +49,8 @@ gem 'aws-sdk-ses', '~> 1'
 gem 'aws-sdk-iam', '~> 1'
 gem 'aws-sdk-ecr', '~> 1'
 gem 'aws-sdk-sns', require: false
+gem 'json'
+gem 'amazing_print'
 
 gem 'puma'
 gem 'redis'
