@@ -19,7 +19,7 @@
         = link_to reports_path, class: 'o-menu__link' do
           Reports
   -# Inventory and HMIS related items
-  - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_buildings? || current_user.can_see_non_hmis_clients?
+  - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_assigned_programs? || can_view_buildings? || current_user.can_see_non_hmis_clients?
     %ul.o-menu__group.list-unstyled
       - if current_user.can_view_some_clients?
         %li.o-menu__item
