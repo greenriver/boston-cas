@@ -36,13 +36,19 @@ gem 'carrierwave-i18n'
 gem 'mini_magick'
 gem 'ruby-filemagic'
 
-# Needed when docker images boot to get assets (s3) and environment payload (secretsmanager)
-# ecs/cloudwatchenvents needed to add cron (scheduled tasks)
+# AWS SDK is needed for deployment and within the application
+gem 'aws-sdk-rails'
 gem 'aws-sdk-cloudwatchevents', '~> 1'
 gem 'aws-sdk-ecs', '~> 1'
-gem 'aws-sdk-iam', '~> 1'
+gem 'aws-sdk-ec2', '~> 1'
+gem 'aws-sdk-glacier', '~> 1'
+gem 'aws-sdk-rds', '~> 1'
 gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-secretsmanager', '~> 1'
+gem 'aws-sdk-ses', '~> 1'
+gem 'aws-sdk-iam', '~> 1'
+gem 'aws-sdk-ecr', '~> 1'
+gem 'aws-sdk-sns', require: false
 
 gem 'puma'
 gem 'redis'
