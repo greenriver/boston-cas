@@ -49,6 +49,9 @@ gem 'aws-sdk-ses', '~> 1'
 gem 'aws-sdk-iam', '~> 1'
 gem 'aws-sdk-ecr', '~> 1'
 gem 'aws-sdk-sns', require: false
+gem 'aws-sdk-cloudwatch', require: false
+gem 'aws-sdk-cloudwatchlogs', require: false
+gem 'aws-sdk-elasticloadbalancingv2', require: false
 gem 'json'
 gem 'amazing_print'
 gem 'awesome_print'
