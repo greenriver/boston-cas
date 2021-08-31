@@ -83,6 +83,7 @@ GEM
     auto-session-timeout (0.9.6)
     autoprefixer-rails (10.1.0.0)
       execjs
+    awesome_print (1.9.2)
     aws-eventstream (1.1.1)
     aws-partitions (1.490.0)
     aws-record (2.5.0)
@@ -623,6 +624,7 @@ DEPENDENCIES
   authtrail
   auto-session-timeout
   autoprefixer-rails
+  awesome_print
   aws-sdk-cloudwatchevents (~> 1)
   aws-sdk-ec2 (~> 1)
   aws-sdk-ecr (~> 1)

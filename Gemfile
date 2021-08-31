@@ -51,6 +51,7 @@ gem 'aws-sdk-ecr', '~> 1'
 gem 'aws-sdk-sns', require: false
 gem 'json'
 gem 'amazing_print'
+gem 'awesome_print'
 
 gem 'puma'
 gem 'redis'
