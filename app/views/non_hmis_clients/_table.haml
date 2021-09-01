@@ -1,6 +1,14 @@
 - assessment_list_klass = if client_identified? then Config.get(:identified_client_assessment) else Config.get(:deidentified_client_assessment) end
 - assessment_list_type = NonHmisAssessment.to_class(assessment_list_klass)
 
+.row.table-utilities.px-2
+  .col-sm-6
+    %p.my-1= page_entries_info @non_hmis_clients
+  .col-sm-6.ml-auto.text-right
+    %p.my-1.client__current-sort-filter
+      Currently sorted by:
+      %strong= @sorted_by
+
 .table-responsive
   %table.table.table-condensed
     %thead
