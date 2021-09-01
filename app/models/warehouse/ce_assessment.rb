@@ -33,7 +33,7 @@ module Warehouse
           cas_non_hmis_assessment_id: assessment.id,
           hmis_client_id: assessment.non_hmis_client.warehouse_client_id,
           assessment_date: assessment.entry_date,
-          # assessment_location: NOT YET COLLECTED,
+          assessment_location: 'CAS', # NOTE: this is not collected in any non-HMIS assessments
           assessment_type: 2,
           assessment_level: 2,
           assessment_status: 1,
@@ -51,7 +51,7 @@ module Warehouse
             :cas_non_hmis_assessment_id,
             :hmis_client_id,
             :assessment_date,
-            # :assessment_location,
+            :assessment_location,
             :assessment_type,
             :assessment_level,
             :assessment_status,
