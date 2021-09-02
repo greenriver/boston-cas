@@ -9,8 +9,7 @@ class DeidentifiedPathwaysVersionThree < DeidentifiedClientAssessment
 
   def self.client_table_headers(user)
     columns = [
-      'Last Name',
-      'First Name',
+      'Client Identifier',
       'Agency',
     ]
     columns << 'Assessment Score' if user.can_manage_deidentified_clients?
@@ -27,8 +26,7 @@ class DeidentifiedPathwaysVersionThree < DeidentifiedClientAssessment
     view_helper = ActionController::Base.helpers
     current_assessment = client.current_assessment
     row = [
-      view_helper.link_to(client.last_name, url_helpers.deidentified_client_path(id: client.id)),
-      view_helper.link_to(client.first_name, url_helpers.deidentified_client_path(id: client.id)),
+      view_helper.link_to(client.client_identifier, url_helpers.deidentified_client_path(id: client.id)),
       client.agency&.name,
     ]
     score = current_assessment&.assessment_score
