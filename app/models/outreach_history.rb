@@ -9,6 +9,9 @@ class OutreachHistory < ApplicationRecord
   belongs_to :user
 
   def self.outreach_locations
-    distinct.where.not(outreach_name: nil).order(:outreach_name).pluck(:outreach_name).select(&:present?).map(&:strip).uniq.map { |v| [v, v] }.to_h
+    options = {
+      'Generic Outreach Location' => 'Generic Outreach Location',
+    }
+    options.merge(distinct.where.not(outreach_name: nil).order(:outreach_name).pluck(:outreach_name).select(&:present?).map(&:strip).uniq.map { |v| [v, v] }.to_h)
   end
 end
