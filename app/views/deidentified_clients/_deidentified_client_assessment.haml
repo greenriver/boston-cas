@@ -10,11 +10,10 @@
       = assessment_form.input :health_prioritized, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('hiv_aids')
       = assessment_form.input :hiv_aids, label: 'HOPWA eligible', disabled: disabled
-    = assessment_form.input :veteran, disabled: disabled
-    = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
-
     - if Config.get(:non_hmis_fields).include?('actively_homeless')
       = assessment_form.input :actively_homeless, hint: 'Checking this box will allow the client to match rules that require homeless activity in the past 30 or 90 days.', disabled: disabled
+    = assessment_form.input :veteran, disabled: disabled
+    = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
     = assessment_form.input :days_homeless_in_the_last_three_years, disabled: disabled
     = assessment_form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
     = assessment_form.input :who_verified_days_homeless, disabled: disabled

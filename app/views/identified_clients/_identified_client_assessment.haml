@@ -1,20 +1,22 @@
 .row
   .col-sm-9
-    = assessment_form.input :assessment_score, disabled: disabled
-    = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('assessment_score')
+      = assessment_form.input :assessment_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_score')
       = assessment_form.input :vispdat_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('vispdat_priority_score')
       = assessment_form.input :vispdat_priority_score, disabled: disabled
     - if Config.get(:non_hmis_fields).include?('health_prioritized')
       = assessment_form.input :health_prioritized, disabled: disabled
+    - if Config.get(:non_hmis_fields).include?('hiv_aids')
+      = assessment_form.input :hiv_aids, label: 'HOPWA eligible', disabled: disabled
     - if Config.get(:non_hmis_fields).include?('actively_homeless')
-      = assessment_form.input :actively_homeless, hint: 'Checking this box will set the last homeless contact to today allowing the client to match rules that require homeless activity in the last 30 or 90 days.', disabled: disabled
+      = assessment_form.input :actively_homeless, hint: 'Checking this box will allow the client to match rules that require homeless activity in the past 30 or 90 days.', disabled: disabled
+    = assessment_form.input :veteran, disabled: disabled
+    = assessment_form.input :domestic_violence, label: 'Domestic violence survivor', disabled: disabled
     = assessment_form.input :days_homeless_in_the_last_three_years, disabled: disabled
     = assessment_form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
     = assessment_form.input :who_verified_days_homeless, disabled: disabled
-
-    = assessment_form.input :veteran, disabled: disabled
     = assessment_form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
     .jChronicallyHomeless
       = assessment_form.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family'), disabled: disabled
