@@ -60,12 +60,6 @@ namespace :cas do
     MatchCensus.populate!
   end
 
-  desc "Sync CE data"
-  task sync_ce_data: [:environment, "log:info_to_stdout"] do
-    Warehouse::CeAssessment.sync!
-    Warehouse::ReferralEvent.sync!
-  end
-
   desc "Update clients with voucher status"
   task add_missing_holds_voucher_on: [:environment, "log:info_to_stdout"] do
     Client.add_missing_holds_voucher_on
