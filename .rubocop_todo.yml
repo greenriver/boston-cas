@@ -70,7 +70,6 @@ Layout/CaseIndentation:
 # Cop supports --auto-correct.
 Layout/ClosingHeredocIndentation:
   Exclude:
-    - 'spec/factories/messages.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -900,7 +899,6 @@ Layout/LeadingCommentSpace:
 # Cop supports --auto-correct.
 Layout/MultilineBlockLayout:
   Exclude:
-    - 'spec/factories/messages.rb'
     - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 6
@@ -1261,7 +1259,6 @@ Layout/SpaceInsideParens:
 # Cop supports --auto-correct.
 Layout/SpaceInsidePercentLiteralDelimiters:
   Exclude:
-    - 'spec/factories/messages.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -1749,7 +1746,6 @@ Naming/AccessorMethodName:
 # ForbiddenDelimiters: (?-mix:(^|\s)(EO[A-Z]{1}|END)(\s|$))
 Naming/HeredocDelimiterNaming:
   Exclude:
-    - 'spec/factories/messages.rb'
 
 # Offense count: 15
 # Configuration parameters: EnforcedStyleForLeadingUnderscores.
@@ -1833,7 +1829,6 @@ Style/BlockComments:
 Style/BlockDelimiters:
   Exclude:
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/factories/messages.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/decisions_spec.rb'
@@ -2295,7 +2290,6 @@ Style/PercentLiteralDelimiters:
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
     - 'bin/setup'
-    - 'spec/factories/messages.rb'
 
 # Offense count: 90
 # Cop supports --auto-correct.
