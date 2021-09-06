@@ -12,4 +12,28 @@
   = render 'search_sort'
 .o-block
   = render 'actions'
-  = render 'table'
+
+.row.table-utilities.px-2
+  .col-sm-6
+    %p.my-1= page_entries_info @non_hmis_clients
+    = paginate @non_hmis_clients
+  .col-sm-6
+    %p.my-1.client__current-sort-filter.text-right
+      Currently sorted by:
+      %strong= @sorted_by
+- assessment_list_klass = if client_identified? then Config.get(:identified_client_assessment) else Config.get(:deidentified_client_assessment) end
+- assessment_list_type = NonHmisAssessment.to_class(assessment_list_klass)
+
+.o-block
+  .table-responsive
+    %table.table.table-condensed
+      %thead
+        %tr
+          - assessment_list_type.client_table_headers(current_user).each do |header|
+            %th= header
+      %tbody
+        - @non_hmis_clients.each do |non_hmis_client|
+          %tr
+            - assessment_list_type.client_table_row(non_hmis_client, current_user).each do |value|
+              %td= value
+%p.p-2= paginate @non_hmis_clients

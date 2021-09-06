@@ -1,9 +1,0 @@
-= client_form.input :client_identifier, required: true, disabled: disabled
-- if can_edit_all_clients?
-  .jAgency
-    = client_form.association :agency, input_html: {class: :select2}, disabled: disabled
-= client_form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: "Default #{_('Shelter Agency')} Contact", input_html: {class: 'select2 jContact' }, disabled: disabled
-- if can_add_cohorts_to_deidentified_clients? && Warehouse::Base.enabled?
-  = client_form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: "Cohorts", disabled: disabled
-= client_form.input :limited_release_on_file, label: 'Limited Coordinated Access System Release on file', disabled: disabled
-= client_form.input :available, label: 'Available for matching?', disabled: disabled

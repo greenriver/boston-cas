@@ -20,7 +20,7 @@ class NonHmisClient < ApplicationRecord
   def current_covid_assessment
     NonHmisAssessment.where(
       non_hmis_client_id: id,
-      type: NonHmisAssessment.covid_assessment_types,
+      type: NonHmisAssessment.limited_assessment_types,
     ).order(created_at: :desc).first
   end
 
@@ -40,7 +40,7 @@ class NonHmisClient < ApplicationRecord
     if user.can_edit_all_clients?
       all
     elsif user.can_view_all_covid_pathways?
-      covid_ids = where(id: NonHmisAssessment.covid_pathways.select(:non_hmis_client_id)).pluck(:id)
+      covid_ids = where(id: NonHmisAssessment.limitable_pathways.select(:non_hmis_client_id)).pluck(:id)
       agency_associated_ids = where(
         arel_table[:agency_id].eq(nil).
         or(arel_table[:agency_id].eq(user.agency.id)),

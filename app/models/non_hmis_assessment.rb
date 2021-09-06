@@ -20,8 +20,8 @@ class NonHmisAssessment < ActiveRecord::Base
 
   before_save :update_assessment_score
 
-  scope :covid_pathways, -> do
-    where(type: covid_assessment_types)
+  scope :limitable_pathways, -> do
+    where(type: limited_assessment_types)
   end
 
   scope :visible_by, ->(user) do
@@ -32,7 +32,25 @@ class NonHmisAssessment < ActiveRecord::Base
     where(agency_id: user.agency_id)
   end
 
-  def self.covid_assessment_types
+  def self.to_class(name)
+    klass_name = known_assessment_types.detect { |m| m == name } || 'IdentifiedClientAssessment'
+    klass_name.constantize
+  end
+
+  def self.known_assessment_types
+    [
+      'IdentifiedClientAssessment',
+      'DeidentifiedClientAssessment',
+      'IdentifiedPathwaysAssessment',
+      'DeidentifiedPathwaysAssessment',
+      'IdentifiedCovidPathwaysAssessment',
+      'DeidentifiedCovidPathwaysAssessment',
+      'IdentifiedPathwaysVersionThree',
+      'DeidentifiedPathwaysVersionThree',
+    ].freeze
+  end
+
+  def self.limited_assessment_types
     [
       'IdentifiedCovidPathwaysAssessment',
       'DeidentifiedCovidPathwaysAssessment',
@@ -93,7 +111,151 @@ class NonHmisAssessment < ActiveRecord::Base
     true
   end
 
-  def self.form_field_labels
+  def self.checkmark(boolean)
+    boolean ? '✓': ''
+  end
+
+  def non_hmis_assessment_params
+    [
+      :entry_date,
+      :assessment_score,
+      :vispdat_score,
+      :vispdat_priority_score,
+      :veteran,
+      :veteran_status,
+      :actively_homeless,
+      :days_homeless_in_the_last_three_years,
+      :date_days_homeless_verified,
+      :who_verified_days_homeless,
+      :rrh_desired,
+      :youth_rrh_desired,
+      :rrh_assessment_contact_info,
+      :income_maximization_assistance_requested,
+      :income_total_monthly,
+      :pending_subsidized_housing_placement,
+      :family_member,
+      :calculated_chronic_homelessness,
+      :income_total_annual,
+      :disabling_condition,
+      :physical_disability,
+      :developmental_disability,
+      :domestic_violence,
+      :interested_in_set_asides,
+      :required_number_of_bedrooms,
+      :required_minimum_occupancy,
+      :requires_wheelchair_accessibility,
+      :requires_elevator_access,
+      :youth_rrh_aggregate,
+      :dv_rrh_aggregate,
+      :dv_rrh_desired,
+      :veteran_rrh_desired,
+      :rrh_th_desired,
+      :sro_ok,
+      :other_accessibility,
+      :disabled_housing,
+      :documented_disability,
+      :evicted,
+      :ssvf_eligible,
+      :health_prioritized,
+      :hiv_aids,
+      :is_currently_youth,
+      :case_manager_contact_info,
+      :shelter_name,
+      :phone_number,
+      :email_addresses,
+      :mailing_address,
+      :day_locations,
+      :night_locations,
+      :other_contact,
+      :household_size,
+      :hoh_age,
+      :current_living_situation,
+      :pending_housing_placement_type,
+      :pending_housing_placement_type_other,
+      :maximum_possible_monthly_rent,
+      :possible_housing_situation,
+      :possible_housing_situation_other,
+      :no_rrh_desired_reason,
+      :no_rrh_desired_reason_other,
+      :accessibility_other,
+      :hiv_housing,
+      :medical_care_last_six_months,
+      :intensive_needs_other,
+      :additional_homeless_nights,
+      :homeless_night_range,
+      :notes,
+      :children_info,
+      :chronic_health_condition,
+      :fifty_five_plus,
+      :have_tenant_voucher,
+      :interested_in_disabled_housing,
+      :mental_health_problem,
+      :older_than_65,
+      :one_br_ok,
+      :set_asides_housing_status,
+      :set_asides_resident,
+      :sixty_two_plus,
+      :studio_ok,
+      :substance_abuse_problem,
+      :voucher_agency,
+      :assessment_type,
+      :financial_assistance_end_date,
+      :times_moved,
+      :health_severity,
+      :ever_experienced_dv,
+      :eviction_risk,
+      :need_daily_assistance,
+      :any_income,
+      :income_source,
+      :positive_relationship,
+      :legal_concerns,
+      :healthcare_coverage,
+      :childcare,
+      :household_members,
+      :financial_assistance_end_date,
+      :wait_times_ack,
+      :not_matched_ack,
+      :matched_process_ack,
+      :response_time_ack,
+      :automatic_approval_ack,
+      :outreach_name,
+      denial_required: [],
+      setting: [],
+      neighborhood_interests: [],
+      provider_agency_preference: [],
+      affordable_housing: [],
+      high_covid_risk: [],
+      service_need_indicators: [],
+      intensive_needs: [],
+      background_check_issues: [],
+      household_members: {},
+    ].freeze
+  end
+
+  def requires_assessment_type_choice?
+    false
+  end
+
+  def relationships_to_hoh
+    {
+      2 => 'Child',
+      3 => 'Spouse or partner',
+      4 => 'Other relative',
+      5 => 'Unrelated household member',
+    }
+  end
+
+  def genders
+    {
+      0 => 'Female',
+      1 => 'Male',
+      4 => 'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
+      5 => 'Transgender',
+      6 => 'Questioning',
+    }.freeze
+  end
+
+  def form_field_labels
     return [] unless respond_to?(:form_fields)
 
     [].tap do |labels|
@@ -111,10 +273,10 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def form_field_values
-    return [] unless self.class.respond_to?(:form_fields)
+    return [] unless respond_to?(:form_fields)
 
     [].tap do |values|
-      self.class.form_fields.each do |name, field|
+      form_fields.each do |name, field|
         # If there are sub-questions, there will not be answers at this level
         if ! field[:questions]
           val = send(name)

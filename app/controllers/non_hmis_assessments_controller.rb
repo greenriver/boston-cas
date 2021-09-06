@@ -21,7 +21,8 @@ class NonHmisAssessmentsController < ApplicationController
 
   def create
     @assessment = build_assessment
-    @assessment.update(clean_assessment_params(@assessment.assessment_params(params)))
+    opts = clean_assessment_params(@assessment.assessment_params(params))
+    @assessment.update(opts)
     @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
     if @assessment.save
       redirect_to @non_hmis_client
@@ -37,7 +38,8 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   def update
-    if @assessment.update(clean_assessment_params(@assessment.assessment_params(params)))
+    opts = clean_assessment_params(@assessment.assessment_params(params))
+    if @assessment.update(opts)
       @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
       redirect_to @non_hmis_client
     else
@@ -57,13 +59,13 @@ class NonHmisAssessmentsController < ApplicationController
       assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12
     end
 
-    if assessment_params.has_key?(:youth_rrh_aggregate)
+    if assessment_params.key?(:youth_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['adult', 'both'])
       assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['youth', 'both'])
       assessment_params.extract![:youth_rrh_aggregate]
     end
 
-    if assessment_params.has_key?(:dv_rrh_aggregate)
+    if assessment_params.key?(:dv_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['non-dv', 'both'])
       assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
       assessment_params.extract![:dv_rrh_aggregate]
@@ -78,6 +80,9 @@ class NonHmisAssessmentsController < ApplicationController
 
     assessment_params[:user_id] = current_user.id
 
+    assessment_params[:required_number_of_bedrooms] = nil if assessment_params[:required_number_of_bedrooms] == 'on'
+    assessment_params[:sro_ok] = nil if assessment_params[:sro_ok] == 'on'
+
     assessment_params
   end
 
@@ -90,7 +95,11 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def build_assessment
-    @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id, non_hmis_client_id: @non_hmis_client.id)
+    assessment = @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id, non_hmis_client_id: @non_hmis_client.id)
+    return assessment unless assessment.requires_assessment_type_choice? && assessment.assessment_type.blank? && params[:assessment_type].present?
+
+    assessment.assessment_type = params[:assessment_type]
+    assessment
   end
 
   private def set_client

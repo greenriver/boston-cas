@@ -3,3 +3,4 @@
     Last updated #{@assessment.updated_at} by #{User.find_by(id: @assessment.paper_trail&.originator)&.name}
     - if @assessment.agency
       , collected at #{@assessment.agency&.name}
+

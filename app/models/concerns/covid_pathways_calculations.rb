@@ -44,7 +44,7 @@ module CovidPathwaysCalculations
       score
     end
 
-    def self.form_fields
+    def form_fields
       {
         entry_date: {
           label: 'Date of Assessment',

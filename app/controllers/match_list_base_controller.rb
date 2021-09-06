@@ -5,10 +5,16 @@
 ###
 
 class MatchListBaseController < ApplicationController
+  include NotifierConfig
   before_action :authenticate_user!
   before_action :set_heading
   before_action :set_show_confidential_names
   helper_method :sort_column, :sort_direction
+
+  def initialize
+    setup_notifier('MatchListBaseController')
+    super
+  end
 
   def index
     # search
@@ -207,6 +213,10 @@ class MatchListBaseController < ApplicationController
   # via targeted search
   private def visible_match_ids
     contact = current_user.contact
+    # Notify when a match is nil.
+    contact.client_opportunity_match_contacts.each do |contact_match_pair|
+      @notifier.ping "The match #{contact_match_pair.match_id} for the contact/match pair #{contact_match_pair.id} with user #{current_user.id} is nil" if contact_match_pair.match.nil? && @send_notifications
+    end
     contact.client_opportunity_match_contacts.map(&:match).map do |m|
       m.id if m.try(:show_client_info_to?, contact) || false
     end.compact

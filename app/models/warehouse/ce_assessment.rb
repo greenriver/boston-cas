@@ -21,25 +21,29 @@ module Warehouse
 
     def self.sync!
       warehouse_assessment_ids = pluck(:cas_non_hmis_assessment_id)
-      assessment_ids = involved_assessments.pluck(:id)
+      assessment_ids = involved_assessments.distinct.pluck(:id)
 
       to_remove = warehouse_assessment_ids - assessment_ids
       where(id: to_remove).destroy_all if to_remove.any?
 
       to_add = []
+      added = Set.new
       involved_assessments.find_each do |assessment|
+        next if added.include?(assessment.id)
+
         to_add << {
           cas_client_id: assessment.non_hmis_client.client.id,
           cas_non_hmis_assessment_id: assessment.id,
           hmis_client_id: assessment.non_hmis_client.warehouse_client_id,
           assessment_date: assessment.entry_date,
-          # assessment_location: NOT YET COLLECTED,
+          assessment_location: 'CAS', # NOTE: this is not collected in any non-HMIS assessments
           assessment_type: 2,
           assessment_level: 2,
           assessment_status: 1,
           assessment_created_at: assessment.created_at,
           assessment_updated_at: assessment.updated_at,
         }
+        added << assessment.id
       end
 
       import(
@@ -51,7 +55,7 @@ module Warehouse
             :cas_non_hmis_assessment_id,
             :hmis_client_id,
             :assessment_date,
-            # :assessment_location,
+            :assessment_location,
             :assessment_type,
             :assessment_level,
             :assessment_status,

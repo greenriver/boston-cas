@@ -227,8 +227,6 @@ Rails.application.routes.draw do
       post :import
     end
     member do
-      get :new_assessment
-      get :assessment
       get :current_assessment_limited
       patch :shelter_location
     end
@@ -236,8 +234,6 @@ Rails.application.routes.draw do
   resources :identified_clients do
     resources :non_hmis_assessments
     member do
-      get :new_assessment
-      get :assessment
       get :current_assessment_limited
       patch :shelter_location
     end

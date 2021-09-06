@@ -6,10 +6,7 @@
         %h2.o-pre-table-actions__heading Assessments
         - if @non_hmis_client.editable_by?(current_user)
           .o-pre-table-actions__group.ml-auto
-            - if default_assessment
-              - new_assessment_url = polymorphic_path([:new_assessment, @non_hmis_client])
-            - else
-              - new_assessment_url = new_polymorphic_path([@non_hmis_client, :non_hmis_assessment])
+            - new_assessment_url = new_polymorphic_path([@non_hmis_client, :non_hmis_assessment])
             = link_to new_assessment_url, class: 'btn btn-sm btn-secondary' do
               %span.icon-plus
               Add New Assessment
@@ -18,6 +15,7 @@
           %thead
             %tr
               %th Date Taken
+              %th Last Updated
               - if @non_hmis_client.can_see_assessment_score?(current_user)
                 %th Score
               %th Agency
@@ -25,15 +23,16 @@
             - @assessments.each do |assessment|
               - # If we can edit this client, show all assessments
               - if @non_hmis_client.editable_by?(current_user)
-                - if assessment.default?
-                  - url = polymorphic_path([@non_hmis_client], assessment_id: assessment )
+                - if assessment.editable_by?(current_user)
+                  - url = edit_polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
                 - else
-                  - if assessment.editable_by?(current_user)
-                    - url = edit_polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
-                  - else
-                    - url = polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
+                  - url = polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
                 %tr{data: {href: url}}
-                  %td= link_to_if assessment.viewable_by?(current_user), assessment.updated_at, url
+                  %td
+                    = link_to_if assessment.viewable_by?(current_user), assessment.entry_date.presence || assessment.updated_at.to_date, url
+                    .title
+                      %em= assessment.title
+                  %td= assessment.updated_at
                   - if @non_hmis_client.can_see_assessment_score?(current_user)
                     %td
                       - if assessment&.assessment_score&.zero?
@@ -44,8 +43,8 @@
                 - # If we can't, just show COVID Pathways assessments because those are
                 - # the only assessments that provide sanitized read-only views
               - else
-                - next unless assessment.type.in?(NonHmisAssessment.covid_assessment_types)
-                - url = if assessment.type == 'DeidentifiedCovidPathwaysAssessment' then current_assessment_limited_deidentified_client_path(assessment.id) else current_assessment_limited_identified_client_path(assessment.id) end
+                - next unless assessment.type.in?(NonHmisAssessment.limited_assessment_types)
+                - url = if assessment.type.include?('Deidentified') then current_assessment_limited_deidentified_client_path(assessment.id) else current_assessment_limited_identified_client_path(assessment.id) end
                 %tr
                   %td= link_to assessment.updated_at, url
                   %td

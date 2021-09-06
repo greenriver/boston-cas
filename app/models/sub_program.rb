@@ -146,6 +146,29 @@ class SubProgram < ApplicationRecord
     end
   end
 
+  def self.available_event_types
+    {
+      1 => 'Referral to Prevention Assistance project',
+      2 => 'Problem Solving/Diversion/Rapid Resolution intervention or service',
+      3 => 'Referral to scheduled Coordinated Entry Crisis Needs Assessment',
+      4 => 'Referral to scheduled Coordinated Entry Housing Needs Assessment',
+      5 => 'Referral to Post-placement/ follow-up case management',
+      6 => 'Referral to Street Outreach project or services',
+      7 => 'Referral to Housing Navigation project or services',
+      8 => 'Referral to Non-continuum services: Ineligible for continuum services',
+      9 => 'Referral to Non-continuum services: No availability in continuum services',
+      10 => 'Referral to Emergency Shelter bed opening',
+      11 => 'Referral to Transitional Housing bed/unit opening',
+      12 => 'Referral to Joint TH-RRH project/unit/resource opening',
+      13 => 'Referral to RRH project resource opening',
+      14 => 'Referral to PSH project resource opening',
+      15 => 'Referral to Other PH project resource opening',
+      16 => 'Referral to emergency assistance/flex fund/furniture assistance',
+      17 => 'Referral to Emergency Housing Voucher (EHV)',
+      18 => 'Referral to a Housing Stability Voucher',
+    }.freeze
+  end
+
   def self.text_search(text)
     return none unless text.present?
 
