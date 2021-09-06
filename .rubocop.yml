@@ -1,21 +1,22 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Include:
-    # TODO: as these are cleaned, add them back for overcommit
     - '**/Rakefile'
-    # - '**/config.ru'
-    # - 'lib/tasks/**/*'
-    # - 'app/**/*'
-    # - 'spec/**/*.rb'
+    - 'app/**/*.rb'
+    - 'spec/**/*.rb'
+    - 'drivers/**/*.rb'
+    - 'lib/**/*.rb'
 
   Exclude:
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
-    - 'bin/**/*'
+    - 'bin/{rails,rake,bundle}'
     - 'app/assets/**/*'
     - 'bin/db_prep'
 
-  NewCops: enable
+  NewCops: disable
 
 # We don't care about method length, since we check method cyclomatic
 # complexity.
@@ -136,6 +137,7 @@ Layout/ParameterAlignment:
 
 Style/RegexpLiteral:
   EnforcedStyle: slashes
+  AllowInnerSlashes: true
 
 Style/DoubleNegation:
   Enabled: false
