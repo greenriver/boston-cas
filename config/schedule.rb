@@ -5,30 +5,31 @@
 
 # Example:
 #
-# set :output, "/path/to/my/cron_log.log"
+# set :output, '/path/to/my/cron_log.log'
 #
 # every 2.hours do
-#   command "/usr/bin/some_great_command"
-#   runner "MyModel.some_method"
-#   rake "some:great:rake:task"
+#   command '/usr/bin/some_great_command'
+#   runner 'MyModel.some_method'
+#   rake 'some:great:rake:task'
 # end
 #
 # every 4.days do
-#   runner "AnotherModel.prune_old_records"
+#   runner 'AnotherModel.prune_old_records'
 # end
 
 # Learn more: http://github.com/javan/whenever
 every 1.day, at: '5:00 am' do
-  rake "cas:daily"
-  rake "cas:populate_match_census"
+  rake 'cas:daily'
+  rake 'cas:populate_match_census'
+  rake 'warehouse:sync_ce_data'
 end
 
 every 1.day, at: '4:00 am' do
-  rake "messages:daily"
+  rake 'messages:daily'
 end
 
 every 1.minutes do
-  rake "cas:update_clients"
+  rake 'cas:update_clients'
 end
 
 every 1.day, at: '7:30am' do
@@ -36,5 +37,5 @@ every 1.day, at: '7:30am' do
 end
 
 every 1.hour do
-  rake "cas:add_missing_tie_breakers"
+  rake 'cas:add_missing_tie_breakers'
 end
