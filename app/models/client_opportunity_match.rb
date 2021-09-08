@@ -728,6 +728,7 @@ class ClientOpportunityMatch < ApplicationRecord
       hmis_client_id: project_client.id_in_data_source,
       program_id: program.id,
       referral_date: match_created_event&.date,
+      event: sub_program.event,
     )
   end
 

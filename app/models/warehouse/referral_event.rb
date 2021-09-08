@@ -34,11 +34,13 @@ module Warehouse
 
     def self.sync!
       ClientOpportunityMatch.preload(:sub_program).find_each do |match|
-        next if !match.active? && !match.closed?
+        # Match is in a weird state, abort
+        next if ! match.active? && ! match.closed?
 
         event = match.init_referral_event
         next unless event.present?
 
+        # Match hasn't finished
         next if match.active?
 
         if match.closed_reason == 'success'

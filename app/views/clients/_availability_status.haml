@@ -20,10 +20,9 @@
       - @client.unavailable_as_candidate_fors.each do |uf|
         %li.c-detailed-list__item
           %span.c-detailed-list__label
-            - note = uf.route&.title
+            - note = uf.route&.title || ''
             - if uf.expires_at.present?
               - note += " until #{uf.expires_at.to_date}"
             = note
           - if Client.editable_by(current_user).where(id: @client.id).exists?
-            %span.c-detailed-list__value= link_to 'Make Available', client_unavailable_on_route_path(@client, uf), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: "Are you sure you would like #{@client.name} to be available for matching on the #{uf.route.title}?" }
-
+            %span.c-detailed-list__value= link_to 'Make Available', client_unavailable_on_route_path(@client, uf), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: "Are you sure you would like #{@client.name} to be available for matching on the #{uf.route&.title}?" }
