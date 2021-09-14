@@ -21,8 +21,11 @@
     %p.my-1.client__current-sort-filter.text-right
       Currently sorted by:
       %strong= @sorted_by
-- assessment_list_klass = if client_identified? then Config.get(:identified_client_assessment) else Config.get(:deidentified_client_assessment) end
-- assessment_list_type = NonHmisAssessment.to_class(assessment_list_klass)
+- if client_imported?
+  - assessment_list_type = ImportedClientAssessment
+- else
+  - assessment_list_klass = if client_identified? then Config.get(:identified_client_assessment) else Config.get(:deidentified_client_assessment) end
+  - assessment_list_type = NonHmisAssessment.to_class(assessment_list_klass)
 
 .o-block
   .table-responsive

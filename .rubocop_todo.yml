@@ -613,7 +613,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/helpers/match_access_contexts_helper.rb'
     - 'app/helpers/match_list_base_helper.rb'
     - 'app/helpers/match_notes_helper.rb'
-    - 'app/helpers/non_hmis_clients_helper.rb'
     - 'app/helpers/opportunity_alternate_matches_helper.rb'
     - 'app/helpers/opportunity_matches_helper.rb'
     - 'app/helpers/program_details_helper.rb'
@@ -1278,7 +1277,6 @@ Layout/TrailingEmptyLines:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/jobs/application_job.rb'
     - 'app/models/application_record.rb'
-    - 'app/models/imported_client_assessment.rb'
     - 'app/models/match_decisions/five/base.rb'
     - 'app/models/match_mitigation_reason.rb'
     - 'app/models/mitigation_reason.rb'
@@ -2365,7 +2363,6 @@ Style/RescueModifier:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/helpers/non_hmis_clients_helper.rb'
     - 'app/models/client.rb'
     - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
