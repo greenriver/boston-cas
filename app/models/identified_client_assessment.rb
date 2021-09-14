@@ -74,13 +74,13 @@ class IdentifiedClientAssessment < NonHmisAssessment
       end
     end
     delete_link = if client.involved_in_match?
-      view_helper.link_to(url_helpers.deidentified_client_path(client), method: :delete, data: { confirm: 'Would you really like to delete this Non-HMIS client?' }, class: ['btn', 'btn-sm', 'btn-danger']) do
+      view_helper.link_to(url_helpers.identified_client_path(client), method: :delete, data: { confirm: 'Would you really like to delete this Non-HMIS client?' }, class: ['btn', 'btn-sm', 'btn-danger']) do
         view_helper.concat(view_helper.content_tag(:span, nil, class: 'icon-cross'))
         view_helper.concat(view_helper.content_tag(:span, 'Delete'))
       end
     end
     row << client_link if user.can_view_some_clients?
-    row << delete_link if user.can_manage_deidentified_clients?
+    row << delete_link if user.can_manage_identified_clients?
 
     row
   end
