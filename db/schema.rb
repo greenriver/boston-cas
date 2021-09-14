@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_02_113133) do
+ActiveRecord::Schema.define(version: 2021_09_14_171237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,8 @@ ActiveRecord::Schema.define(version: 2021_09_02_113133) do
     t.integer "unavailable_for_length", default: 0
     t.string "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
     t.string "identified_client_assessment", default: "IdentifiedClientAssessment"
+    t.integer "lock_days", default: 0, null: false
+    t.integer "lock_grace_days", default: 0, null: false
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
@@ -816,6 +818,7 @@ ActiveRecord::Schema.define(version: 2021_09_02_113133) do
     t.string "setting"
     t.string "outreach_name"
     t.string "denial_required"
+    t.date "locked_until"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end

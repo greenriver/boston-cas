@@ -66,6 +66,8 @@
               - if options[:as] == :pretty_boolean
                 = form.input(field_name, {}.merge(options))
               - else
-                = form.input(field_name, { pre_label: options[:number] }.merge(options))
+                - field_locked = @assessment.locked? && @assessment.lockable_fields.include?(field_name)
+                - locked_note = if field_locked then "Locked until #{@assessment.locked_until}" else '' end
+                = form.input(field_name, { pre_label: options[:number], disabled: field_locked, hint: locked_note }.merge(options))
 
 = render 'non_hmis_clients/assessments/pathways_version_three_js'

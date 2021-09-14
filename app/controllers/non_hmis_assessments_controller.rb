@@ -6,9 +6,10 @@
 
 class NonHmisAssessmentsController < ApplicationController
   before_action :set_client
-  before_action :set_assessment, only: [:show, :edit, :update, :destroy]
+  before_action :set_assessment, only: [:show, :edit, :update, :destroy, :unlock]
   before_action :require_can_see_assessment!, only: [:show]
   before_action :require_can_edit_assessment!, only: [:edit, :update, :destroy]
+  before_action :require_can_unlock_assessment!, only: [:unlock]
   before_action :set_neighborhoods
 
   def index
@@ -54,10 +55,13 @@ class NonHmisAssessmentsController < ApplicationController
     redirect_to @non_hmis_client
   end
 
+  def unlock
+    @assessment.update(locked_until: nil)
+    redirect_to @non_hmis_client
+  end
+
   private def clean_assessment_params(assessment_params)
-    if assessment_params[:income_total_annual].present?
-      assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12
-    end
+    assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12 if assessment_params[:income_total_annual].present?
 
     if assessment_params.key?(:youth_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['adult', 'both'])
@@ -71,9 +75,7 @@ class NonHmisAssessmentsController < ApplicationController
       assessment_params.extract![:dv_rrh_aggregate]
     end
 
-    if assessment_params[:neighborhood_interests].present?
-      assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i)
-    end
+    assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i) if assessment_params[:neighborhood_interests].present?
 
     # Cleanup Vouchers; for now, just check for the word voucher in the response to 3E
     assessment_params[:have_tenant_voucher] = assessment_params[:pending_housing_placement_type]&.downcase&.include?('voucher')
@@ -82,6 +84,15 @@ class NonHmisAssessmentsController < ApplicationController
 
     assessment_params[:required_number_of_bedrooms] = nil if assessment_params[:required_number_of_bedrooms] == 'on'
     assessment_params[:sro_ok] = nil if assessment_params[:sro_ok] == 'on'
+
+    # apply locking logic
+    if @assessment.locked?
+      @assessment.lockable_fields.each do |k|
+        assessment_params.delete(k)
+      end
+    else
+      @assessment.lock
+    end
 
     assessment_params
   end
@@ -92,6 +103,10 @@ class NonHmisAssessmentsController < ApplicationController
 
   private def require_can_see_assessment!
     not_authorized! unless @assessment.viewable_by?(current_user)
+  end
+
+  private def require_can_unlock_assessment!
+    not_authorized! unless @assessment.unlockable_by?(current_user)
   end
 
   private def build_assessment

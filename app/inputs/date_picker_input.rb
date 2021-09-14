@@ -9,7 +9,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     set_html_options
     set_value_html_option
 
-    template.content_tag :div, class: 'input-group date datepicker', data: {provide: 'datepicker'} do
+    template.content_tag :div, class: 'input-group date datepicker', data: { provide: 'datepicker', 'date-today-highlight' => true } do
       input = super(wrapper_options)
       input + input_button
     end
@@ -33,6 +33,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def set_value_html_option
     return unless value.present?
+
     input_html_options[:value] ||= I18n.localize(value.to_date, format: display_pattern)
   end
 
@@ -54,9 +55,9 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def date_options_base
     {
-        locale: I18n.locale.to_s,
-        format: picker_pattern,
-        dayViewHeaderFormat: date_view_header_format
+      locale: I18n.locale.to_s,
+      format: picker_pattern,
+      dayViewHeaderFormat: date_view_header_format,
     }
   end
 
@@ -64,5 +65,4 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     custom_options = input_html_options[:data][:date_options] || {}
     date_options_base.merge!(custom_options)
   end
-
 end

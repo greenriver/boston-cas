@@ -43,6 +43,48 @@ module PathwaysVersionThreeCalculations
       }
     end
 
+    def locked?
+      return false if lockable_fields.empty?
+      return false if locked_until.blank?
+      return false if Date.current >= locked_until
+
+      ! in_lock_grace_period?
+    end
+
+    def lockable_fields
+      return [] unless assessment_type == pathways_assessment_type.to_s
+
+      [
+        :days_homeless_in_the_last_three_years,
+        :additional_homeless_nights,
+        :total_days_homeless_in_the_last_three_years,
+      ]
+    end
+
+    def lock
+      return if locked?
+      return if lockable_fields.empty?
+
+      lock_days = Config.get(:lock_days)
+      return if lock_days.zero?
+      return if in_lock_grace_period?
+
+      self.locked_until = Date.current + lock_days.days
+    end
+
+    def in_lock_grace_period?
+      return true if lockable_fields.empty?
+      return false if locked_until.blank?
+
+      lock_days = Config.get(:lock_days)
+      lock_grace_days = Config.get(:lock_grace_days)
+
+      locked_window = lock_days - lock_grace_days
+      return true unless locked_window.positive?
+
+      Date.current < (locked_until - locked_window.days)
+    end
+
     def requires_assessment_type_choice?
       true
     end
