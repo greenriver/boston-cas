@@ -994,7 +994,6 @@ Layout/SpaceAroundOperators:
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/building.rb'
     - 'app/models/client_opportunity_match.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
@@ -1196,7 +1195,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/match_archive.rb'
-    - 'app/models/concerns/pathways_version_three_calculations.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program.rb'
     - 'app/models/rules/pathways_eligible.rb'
@@ -1442,7 +1440,6 @@ Lint/DuplicateMethods:
   Exclude:
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/models/match_decisions/base.rb'
-    - 'app/models/non_hmis_assessment.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1948,7 +1945,6 @@ Style/GuardClause:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program_contacts.rb'
     - 'app/models/requirement.rb'
@@ -2147,7 +2143,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/requirement.rb'
     - 'app/models/role.rb'
@@ -2180,7 +2175,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/models/client_opportunity_match.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_routes/base.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
@@ -2341,7 +2335,6 @@ Style/RedundantSelf:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'app/models/non_hmis_client.rb'
     - 'app/models/project_client.rb'
     - 'app/models/stalled_response.rb'

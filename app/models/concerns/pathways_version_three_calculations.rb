@@ -325,7 +325,7 @@ module PathwaysVersionThreeCalculations
           number: '2C',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true }},
+          input_html: { data: { tags: true } },
         },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
@@ -342,14 +342,14 @@ module PathwaysVersionThreeCalculations
           number: '2F',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true }},
+          input_html: { data: { tags: true } },
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
           number: '2G',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true }},
+          input_html: { data: { tags: true } },
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
@@ -365,6 +365,7 @@ module PathwaysVersionThreeCalculations
           questions: {
             household_size: {
               label: 'How many people are in the household? ',
+              input_html: { class: 'jHouseholdTrigger' },
             },
             hoh_age: {
               label: 'How old is the head of household?',
@@ -695,7 +696,7 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
         },
         setting: {
-          label: 'Which setting do you currently reside (or sleep in)- select one (required)?',
+          label: 'Which setting do you currently reside (or sleep in) - select one (required)?',
           number: '2C',
           collection: {
             _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
@@ -703,7 +704,7 @@ module PathwaysVersionThreeCalculations
             _('Transitional Housing') => 'Transitional Housing',
             _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
-          as: :pretty_checkboxes_group,
+          as: :pretty_boolean_group,
         },
         shelter_name: {
           label: 'If you are in an emergency shelter, select which one (required):',
@@ -759,6 +760,7 @@ module PathwaysVersionThreeCalculations
           questions: {
             household_size: {
               label: 'How many people are in the household? ',
+              input_html: { class: 'jHouseholdTrigger' },
             },
             hoh_age: {
               label: 'How old is the head of household?',
@@ -940,7 +942,7 @@ module PathwaysVersionThreeCalculations
           as: :pretty_checkboxes_group,
         },
         background_check_issues: {
-          label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a voucher, but rather to help overcome potential admission barriers.',
+          label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a housing opportunity, but rather to help overcome potential admission barriers.',
           number: '8B',
           collection: {
             'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)' => 'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)',
