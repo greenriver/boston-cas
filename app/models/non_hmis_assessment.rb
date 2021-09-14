@@ -255,6 +255,22 @@ class NonHmisAssessment < ActiveRecord::Base
     }.freeze
   end
 
+  def lockable_fields
+    []
+  end
+
+  def locked?
+    false
+  end
+
+  # Do nothing, override as necessary
+  def lock
+  end
+
+  def in_lock_grace_period?
+    true
+  end
+
   def form_field_labels
     return [] unless respond_to?(:form_fields)
 

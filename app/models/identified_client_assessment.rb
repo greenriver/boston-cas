@@ -29,6 +29,10 @@ class IdentifiedClientAssessment < NonHmisAssessment
     end
   end
 
+  def unlockable_by?(user)
+    user.can_manage_identified_clients?
+  end
+
   def self.client_table_headers(user)
     columns = [
       'Last Name',
