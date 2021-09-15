@@ -801,7 +801,6 @@ Layout/IndentationConsistency:
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
-    - 'spec/factories/rules.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 1
@@ -863,7 +862,6 @@ Layout/IndentationWidth:
     - 'app/models/stalled_response.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
-    - 'spec/factories/rules.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/decisions_spec.rb'
@@ -2531,7 +2529,6 @@ Style/StringLiterals:
     - 'spec/factories/genders.rb'
     - 'spec/factories/housing_media_links.rb'
     - 'spec/factories/roles.rb'
-    - 'spec/factories/rules.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
