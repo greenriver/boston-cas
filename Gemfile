@@ -71,6 +71,7 @@ gem 'devise-pwned_password'
 gem 'devise-security'
 gem 'html2haml'
 gem 'pretender'
+gem 'redcarpet'
 
 gem 'authtrail' # for logging login attempts
 gem 'maxminddb' # for local geocoding of login attempts

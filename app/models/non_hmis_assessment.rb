@@ -10,7 +10,8 @@ class NonHmisAssessment < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :total_days_homeless_in_the_last_three_years
+  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate
+  attr_writer :total_days_homeless_in_the_last_three_years
 
   belongs_to :non_hmis_client
   belongs_to :user
@@ -68,9 +69,9 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def update_assessment_score!
-    update_assessment_score()
-    save()
-    non_hmis_client.save()
+    update_assessment_score
+    save
+    non_hmis_client.save
   end
 
   def total_days_homeless_in_the_last_three_years
@@ -78,15 +79,14 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   private def update_assessment_score
-    if respond_to? :calculated_score
-      self.assessment_score = calculated_score
-    end
-    if self.non_hmis_client
-      self.non_hmis_client.assign_attributes(
-        assessment_score: self.assessment_score,
-        assessed_at: self.updated_at || Time.current,
-      )
-    end
+    self.assessment_score = calculated_score if respond_to? :calculated_score
+
+    return unless non_hmis_client
+
+    non_hmis_client.assign_attributes(
+      assessment_score: assessment_score,
+      assessed_at: updated_at || Time.current,
+    )
   end
 
   private def populate_aggregates
@@ -112,7 +112,7 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def self.checkmark(boolean)
-    boolean ? '✓': ''
+    boolean ? '✓' : ''
   end
 
   def non_hmis_assessment_params
@@ -219,8 +219,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :response_time_ack,
       :automatic_approval_ack,
       :outreach_name,
+      :setting,
       denial_required: [],
-      setting: [],
       neighborhood_interests: [],
       provider_agency_preference: [],
       affordable_housing: [],
@@ -253,6 +253,22 @@ class NonHmisAssessment < ActiveRecord::Base
       5 => 'Transgender',
       6 => 'Questioning',
     }.freeze
+  end
+
+  def lockable_fields
+    []
+  end
+
+  def locked?
+    false
+  end
+
+  # Do nothing, override as necessary
+  def lock
+  end
+
+  def in_lock_grace_period?
+    true
   end
 
   def form_field_labels
