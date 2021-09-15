@@ -15,6 +15,12 @@ class DeidentifiedPathwaysAssessment < DeidentifiedClientAssessment
     false
   end
 
+  def for_matching
+    {
+      'DeidentifiedPathwaysAssessment' => 'Pathways - Deidentified',
+    }
+  end
+
   def self.client_table_headers(user)
     columns = [
       'Client Identifier',

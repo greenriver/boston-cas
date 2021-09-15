@@ -207,6 +207,7 @@ module Cas
         :health_prioritized,
         :is_currently_youth,
         :older_than_65,
+        :assessment_name,
       ]
     end
 

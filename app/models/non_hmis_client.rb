@@ -178,6 +178,7 @@ class NonHmisClient < ApplicationRecord
     project_client.sync_with_cas = self.available
 
     # current_assessment fields
+    project_client.assessment_name = current_assessment&.assessment_name
     project_client.assessment_score = current_assessment&.assessment_score || 0
     project_client.days_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
     project_client.days_literally_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0

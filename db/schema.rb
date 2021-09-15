@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_171237) do
+ActiveRecord::Schema.define(version: 2021_09_15_154901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -268,6 +268,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_171237) do
     t.boolean "older_than_65"
     t.date "holds_voucher_on"
     t.boolean "holds_internal_cas_voucher"
+    t.string "assessment_name"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -819,6 +820,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_171237) do
     t.string "outreach_name"
     t.string "denial_required"
     t.date "locked_until"
+    t.string "assessment_name"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1130,6 +1132,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_171237) do
     t.boolean "is_currently_youth", default: false, null: false
     t.boolean "older_than_65"
     t.date "holds_voucher_on"
+    t.string "assessment_name"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

@@ -142,7 +142,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/vouchers_controller.rb'
     - 'app/models/activity_log.rb'
-    - 'app/models/cas/update_clients.rb'
     - 'app/models/client.rb'
     - 'app/models/client_contacts.rb'
     - 'app/models/client_opportunity_match.rb'
@@ -153,7 +152,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/match_decisions/base.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/opportunity_details/via_unit.rb'
     - 'app/models/opportunity_details/via_voucher.rb'
@@ -226,7 +224,6 @@ Layout/EmptyLines:
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_routes/five.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/rules/holds_voucher.rb'
     - 'app/models/warehouse/cas_availability.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
@@ -386,7 +383,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/mailers/immediate_mailer.rb'
     - 'app/mailers/notifications_mailer.rb'
     - 'app/models/building_contact.rb'
-    - 'app/models/cas/update_clients.rb'
     - 'app/models/cas/update_voucher_availability.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
@@ -795,7 +791,6 @@ Layout/IndentationConsistency:
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
-    - 'spec/factories/rules.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 1
@@ -857,7 +852,6 @@ Layout/IndentationWidth:
     - 'app/models/stalled_response.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
-    - 'spec/factories/rules.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/decisions_spec.rb'
@@ -903,7 +897,6 @@ Layout/MultilineMethodCallBraceLayout:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/models/dashboards/clients.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'spec/models/client_spec.rb'
 
 # Offense count: 45
@@ -970,7 +963,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
     - 'app/helpers/application_helper.rb'
     - 'app/models/client.rb'
     - 'app/models/message.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/requirement.rb'
     - 'app/models/rule.rb'
@@ -1063,7 +1055,6 @@ Layout/SpaceInLambdaLiteral:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program.rb'
     - 'app/models/project_client.rb'
@@ -1096,7 +1087,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/models/client_opportunity_match.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/user_role.rb'
     - 'app/models/warehouse/build_report.rb'
     - 'lib/util/mail/database_delivery.rb'
@@ -1547,7 +1537,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/match_prioritization/holds_voucher_on.rb'
     - 'app/models/match_prioritization/vispdat_priority_score.rb'
     - 'app/models/match_prioritization/vispdat_score.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/rule.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'
@@ -1663,7 +1652,6 @@ Lint/UselessAssignment:
     - 'app/controllers/sub_programs_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/building.rb'
-    - 'app/models/cas/update_clients.rb'
     - 'app/models/cas_seeds/opportunities.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/client.rb'
@@ -1726,7 +1714,6 @@ Naming/AccessorMethodName:
   Exclude:
     - 'app/controllers/opportunities_controller.rb'
     - 'app/controllers/units_controller.rb'
-    - 'app/models/non_hmis_client.rb'
 
 # Offense count: 1
 # Configuration parameters: ForbiddenDelimiters.
@@ -1748,7 +1735,6 @@ Naming/MemoizedInstanceVariableName:
     - 'app/models/concerns/subject_for_matches.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/matching/engine.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/notifications/base.rb'
     - 'app/models/opportunity.rb'
 
@@ -1796,7 +1782,6 @@ Style/Alias:
     - 'app/models/client.rb'
     - 'app/models/contact.rb'
     - 'app/models/match_decisions/base.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
@@ -1863,7 +1848,6 @@ Style/EmptyElse:
   Exclude:
     - 'app/helpers/admin/users_helper.rb'
     - 'app/models/match_decisions/base.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/opportunity_details.rb'
     - 'app/models/warehouse/build_report.rb'
 
@@ -2063,7 +2047,6 @@ Style/IfInsideElse:
   Exclude:
     - 'app/models/client.rb'
     - 'app/models/client_opportunity_match.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/voucher.rb'
 
 # Offense count: 147
@@ -2096,7 +2079,6 @@ Style/IfUnlessModifier:
     - 'app/mailers/account_mailer.rb'
     - 'app/mailers/application_mailer.rb'
     - 'app/models/building.rb'
-    - 'app/models/cas/update_clients.rb'
     - 'app/models/client.rb'
     - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
@@ -2162,7 +2144,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/sub_programs_controller.rb'
-    - 'app/models/cas/update_clients.rb'
     - 'app/models/client_opportunity_match.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_routes/base.rb'
@@ -2326,7 +2307,6 @@ Style/RedundantSelf:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/project_client.rb'
     - 'app/models/stalled_response.rb'
     - 'app/models/sub_program.rb'
@@ -2482,7 +2462,6 @@ Style/StringLiterals:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/notifications/base.rb'
     - 'app/models/notifications/match_initiation_for_manual_notification.rb'
     - 'app/models/notifications/match_success_confirmed.rb'
@@ -2512,7 +2491,6 @@ Style/StringLiterals:
     - 'spec/factories/genders.rb'
     - 'spec/factories/housing_media_links.rb'
     - 'spec/factories/roles.rb'
-    - 'spec/factories/rules.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
@@ -2595,7 +2573,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/funding_source.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/non_hmis_client.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program.rb'
     - 'app/models/project_client.rb'

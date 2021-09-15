@@ -12,6 +12,26 @@ module PathwaysVersionThreeCalculations
       assessment_type_options[assessment_type.to_sym][:title]
     end
 
+    def for_matching
+      options = case assessment_type.to_sym
+      when :pathways_2021
+        {
+          'PathwaysVersionThreePathways' => pathways_title,
+        }
+      when :transfer_assessment
+        {
+          'PathwaysVersionThreeTransfer' => transfer_title,
+        }
+      end
+      status = if identified? then 'Identified' else 'Deidentified' end
+      options.map do |k, v|
+        [
+          "#{status}#{k}",
+          "#{v} - #{status}",
+        ]
+      end.to_h
+    end
+
     def pathways_assessment_type
       :pathways_2021
     end
