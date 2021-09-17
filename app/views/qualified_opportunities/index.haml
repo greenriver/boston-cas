@@ -7,7 +7,7 @@
     %p
       #{@client.full_name} is already active in at least one match:
       - @client.active_matches.each do |match|
-        %br
+        %p
           = link_to "Match ID: #{match.id}", match_path(match)
 - if @opportunities.any?
   %p #{@client.full_name} meets all requirements for the following vacancies.  These vacancies are either not yet involved in an active match, or the match has not progressed to a stage that would be disruptive if it were canceled, such as #{_("#{_('DND')} Initial Review")}.  Activating a match on a vacancy below will cancel any match involving the vacancy returning the matched client into the pool of available clients. It will not cancel other matches involving #{@client.full_name}.

@@ -31,6 +31,8 @@ module Admin
         :unavailable_for_length,
         :identified_client_assessment,
         :deidentified_client_assessment,
+        :lock_days,
+        :lock_grace_days,
         non_hmis_fields: [],
       )
     end

@@ -45,7 +45,7 @@
               %td= mail_to c.email, nil, target: '_blank'
               %td= c.phone
               %td= c.role
-              - match_count = c.client_opportunity_match_contacts.count
+              - match_count = c.client_opportunity_match_contacts.joins(:match).count
               %td.text-center= link_to_if match_count.positive?, match_count, move_matches_contact_path(c)
               %td
                 = link_to 'Edit', edit_contact_path(c)

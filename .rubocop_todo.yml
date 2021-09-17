@@ -138,7 +138,6 @@ Layout/EmptyLineAfterGuardClause:
   Exclude:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/vouchers_controller.rb'
-    - 'app/inputs/date_picker_input.rb'
     - 'app/models/activity_log.rb'
     - 'app/models/cas/update_clients.rb'
     - 'app/models/client.rb'
@@ -375,7 +374,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/unavailable_on_route_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/inputs/date_picker_input.rb'
     - 'app/jobs/matching/run_engine_job.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/mailers/digest_mailer.rb'
@@ -604,7 +602,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/helpers/match_access_contexts_helper.rb'
     - 'app/helpers/match_list_base_helper.rb'
     - 'app/helpers/match_notes_helper.rb'
-    - 'app/helpers/non_hmis_clients_helper.rb'
     - 'app/helpers/opportunity_alternate_matches_helper.rb'
     - 'app/helpers/opportunity_matches_helper.rb'
     - 'app/helpers/program_details_helper.rb'
@@ -711,7 +708,6 @@ Layout/FirstArrayElementIndentation:
 Layout/FirstHashElementIndentation:
   Exclude:
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/inputs/date_picker_input.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
@@ -979,7 +975,6 @@ Layout/SpaceAroundOperators:
     - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/building.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
@@ -1171,12 +1166,10 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/helpers/application_helper.rb'
-    - 'app/inputs/date_picker_input.rb'
     - 'app/models/client.rb'
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/match_archive.rb'
-    - 'app/models/concerns/pathways_version_three_calculations.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program.rb'
     - 'app/models/rules/pathways_eligible.rb'
@@ -1257,7 +1250,6 @@ Layout/TrailingEmptyLines:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/jobs/application_job.rb'
     - 'app/models/application_record.rb'
-    - 'app/models/imported_client_assessment.rb'
     - 'app/models/match_decisions/five/base.rb'
     - 'app/models/match_mitigation_reason.rb'
     - 'app/models/mitigation_reason.rb'
@@ -1423,7 +1415,6 @@ Lint/DuplicateMethods:
   Exclude:
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/models/match_decisions/base.rb'
-    - 'app/models/non_hmis_assessment.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1926,7 +1917,6 @@ Style/GuardClause:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program_contacts.rb'
     - 'app/models/requirement.rb'
@@ -2069,7 +2059,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/concerns/match_show.rb'
     - 'app/controllers/match_decisions_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
-    - 'app/controllers/non_hmis_assessments_controller.rb'
     - 'app/controllers/non_hmis_clients_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/opportunities_controller.rb'
@@ -2123,7 +2112,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/requirement.rb'
     - 'app/models/role.rb'
@@ -2155,7 +2143,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/models/cas/update_clients.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_routes/base.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
@@ -2310,7 +2297,6 @@ Style/RedundantSelf:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/base.rb'
-    - 'app/models/non_hmis_assessment.rb'
     - 'app/models/non_hmis_client.rb'
     - 'app/models/project_client.rb'
     - 'app/models/stalled_response.rb'
@@ -2332,7 +2318,6 @@ Style/RescueModifier:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/helpers/non_hmis_clients_helper.rb'
     - 'app/models/client.rb'
     - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
@@ -2631,7 +2616,6 @@ Style/TrailingCommaInHashLiteral:
     - 'app/controllers/reports/dashboards/time_between_steps_controller.rb'
     - 'app/controllers/reports/dashboards/vacancies_controller.rb'
     - 'app/helpers/application_helper.rb'
-    - 'app/inputs/date_picker_input.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'

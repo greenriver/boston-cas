@@ -32,7 +32,16 @@
                     = link_to_if assessment.viewable_by?(current_user), assessment.entry_date.presence || assessment.updated_at.to_date, url
                     .title
                       %em= assessment.title
-                  %td= assessment.updated_at
+                  %td
+                    = assessment.updated_at
+                    - if assessment.locked?
+                      .mt-0
+                        %em Locked until: #{assessment.locked_until}
+                      - if assessment.unlockable_by?(current_user)
+                        .mt-0
+                          = link_to polymorphic_path([:unlock, @non_hmis_client, :non_hmis_assessment], id: assessment), class: 'btn btn-sm btn-secondary', method: :patch do
+                            %i.icon-unlocked
+                            Unlock
                   - if @non_hmis_client.can_see_assessment_score?(current_user)
                     %td
                       - if assessment&.assessment_score&.zero?

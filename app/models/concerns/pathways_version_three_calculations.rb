@@ -43,6 +43,48 @@ module PathwaysVersionThreeCalculations
       }
     end
 
+    def locked?
+      return false if lockable_fields.empty?
+      return false if locked_until.blank?
+      return false if Date.current >= locked_until
+
+      ! in_lock_grace_period?
+    end
+
+    def lockable_fields
+      return [] unless assessment_type == pathways_assessment_type.to_s
+
+      [
+        :days_homeless_in_the_last_three_years,
+        :additional_homeless_nights,
+        :total_days_homeless_in_the_last_three_years,
+      ]
+    end
+
+    def lock
+      return if locked?
+      return if lockable_fields.empty?
+
+      lock_days = Config.get(:lock_days)
+      return if lock_days.zero?
+      return if in_lock_grace_period?
+
+      self.locked_until = Date.current + lock_days.days
+    end
+
+    def in_lock_grace_period?
+      return true if lockable_fields.empty?
+      return false if locked_until.blank?
+
+      lock_days = Config.get(:lock_days)
+      lock_grace_days = Config.get(:lock_grace_days)
+
+      locked_window = lock_days - lock_grace_days
+      return true unless locked_window.positive?
+
+      Date.current < (locked_until - locked_window.days)
+    end
+
     def requires_assessment_type_choice?
       true
     end
@@ -325,7 +367,7 @@ module PathwaysVersionThreeCalculations
           number: '2C',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true }},
+          input_html: { data: { tags: true } },
         },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
@@ -342,14 +384,14 @@ module PathwaysVersionThreeCalculations
           number: '2F',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true }},
+          input_html: { data: { tags: true } },
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
           number: '2G',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true }},
+          input_html: { data: { tags: true } },
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
@@ -365,6 +407,7 @@ module PathwaysVersionThreeCalculations
           questions: {
             household_size: {
               label: 'How many people are in the household? ',
+              input_html: { class: 'jHouseholdTrigger' },
             },
             hoh_age: {
               label: 'How old is the head of household?',
@@ -695,7 +738,7 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
         },
         setting: {
-          label: 'Which setting do you currently reside (or sleep in)- select one (required)?',
+          label: 'Which setting do you currently reside (or sleep in) - select one (required)?',
           number: '2C',
           collection: {
             _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
@@ -703,7 +746,7 @@ module PathwaysVersionThreeCalculations
             _('Transitional Housing') => 'Transitional Housing',
             _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
-          as: :pretty_checkboxes_group,
+          as: :pretty_boolean_group,
         },
         shelter_name: {
           label: 'If you are in an emergency shelter, select which one (required):',
@@ -759,6 +802,7 @@ module PathwaysVersionThreeCalculations
           questions: {
             household_size: {
               label: 'How many people are in the household? ',
+              input_html: { class: 'jHouseholdTrigger' },
             },
             hoh_age: {
               label: 'How old is the head of household?',
@@ -931,7 +975,7 @@ module PathwaysVersionThreeCalculations
         },
         denial_required: {
           label: 'There are two circumstances where the housing authorities administering these vouchers are required to deny an applicant. In an effort to be considerate of your time, it is best for us to figure out whether these barriers might come up for you now. Have you experienced any of the following? (Check all that apply)',
-          number: '8F',
+          number: '8B',
           collection: {
             _('Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.') => 'lifetime sex offender in household',
             _('Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing') => 'manufacture or production of methamphetamine in household',
@@ -940,8 +984,8 @@ module PathwaysVersionThreeCalculations
           as: :pretty_checkboxes_group,
         },
         background_check_issues: {
-          label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a voucher, but rather to help overcome potential admission barriers.',
-          number: '8B',
+          label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a housing opportunity, but rather to help overcome potential admission barriers.',
+          number: '8C',
           collection: {
             'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)' => 'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)',
             'You have been evicted from a legal tenancy where you were the lease holder.' => 'You have been evicted from a legal tenancy where you were the lease holder.',
