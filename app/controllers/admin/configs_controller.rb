@@ -10,22 +10,22 @@ module Admin
     before_action :set_config
 
     def index
-
     end
 
     def update
       if @config.update(config_params)
-        redirect_to({action: :index}, notice: 'Configuration updated')
+        redirect_to({ action: :index }, notice: 'Configuration updated')
       else
         render action: :index, error: 'The configuration failed to save.'
       end
     end
 
     private def config_params
-      p = params.require(:config).permit(
+      params.require(:config).permit(
         :dnd_interval,
         :warehouse_url,
         :require_cori_release,
+        :limit_client_names_on_matches,
         :ami,
         :vispdat_prioritization_scheme,
         :unavailable_for_length,
@@ -42,6 +42,5 @@ module Admin
     def config_source
       Config
     end
-
   end
 end

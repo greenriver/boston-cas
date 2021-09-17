@@ -18,6 +18,7 @@
       = f.input :deidentified_client_assessment, collection: DeidentifiedClientAssessment.assessments, include_blank: false, as: :select2
       = f.input :non_hmis_fields, collection: NonHmisClient.optional_field_names.invert, label: 'Fields shown for Non-HMIS clients', as: :select2, input_html: { multiple: true }
       = f.input :unavailable_for_length, collection: UnavailableAsCandidateFor.available_expiration_lengths, label: 'How long should a client be unavailable on a specific route after a successful match?', as: :select2
+      = f.input :limit_client_names_on_matches
   .row
     .col-sm-6
       = f.submit value: 'Save Site Configuration', class: 'btn btn-success'

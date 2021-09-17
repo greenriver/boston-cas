@@ -23,7 +23,6 @@ Layout/ArgumentAlignment:
     - 'app/controllers/concerns/has_match_access_context.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/contact_join_model.rb'
     - 'app/models/match_decisions/base.rb'
@@ -45,7 +44,6 @@ Layout/ArgumentAlignment:
 # SupportedStylesAlignWith: either, start_of_block, start_of_line
 Layout/BlockAlignment:
   Exclude:
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/user.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
@@ -121,7 +119,6 @@ Layout/DotPosition:
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
     - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/related_default_contacts.rb'
     - 'app/models/contact.rb'
@@ -146,7 +143,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/cas/update_clients.rb'
     - 'app/models/client.rb'
     - 'app/models/client_contacts.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/file_tag.rb'
     - 'app/models/funding_source.rb'
@@ -187,7 +183,6 @@ Layout/EmptyLineBetweenDefs:
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/mailers/notifications_mailer.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/dashboards/base.rb'
     - 'app/models/match_decisions/provider_only/confirm_hsa_accepts_client_decline_dnd_staff.rb'
     - 'app/models/match_progress_updates/base.rb'
@@ -214,7 +209,6 @@ Layout/EmptyLines:
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/unavailable_clients_controller.rb'
     - 'app/mailers/notifications_mailer.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/match_decisions/accepts_decline_reason.rb'
     - 'app/models/dashboards/base.rb'
@@ -345,7 +339,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/account_passwords_controller.rb'
     - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/admin/configs_controller.rb'
     - 'app/controllers/admin/recreate_invitations_controller.rb'
     - 'app/controllers/admin/resend_invitations_controller.rb'
     - 'app/controllers/admin/users_controller.rb'
@@ -578,7 +571,6 @@ Layout/EmptyLinesAroundMethodBody:
   Exclude:
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/admin/configs_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
     - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
@@ -589,7 +581,6 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/inputs/pretty_boolean_group_input.rb'
     - 'app/inputs/pretty_boolean_input.rb'
     - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/matching/engine.rb'
@@ -666,7 +657,6 @@ Layout/ExtraSpacing:
     - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/notifier_config.rb'
     - 'app/models/config.rb'
     - 'app/models/imported_client.rb'
@@ -753,7 +743,6 @@ Layout/HashAlignment:
     - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
     - 'lib/util/mail/database_delivery.rb'
@@ -791,7 +780,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/vouchers_controller.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
@@ -848,7 +836,6 @@ Layout/IndentationWidth:
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/vouchers_controller.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/pathways_calculations.rb'
     - 'app/models/help.rb'
@@ -881,7 +868,6 @@ Layout/LeadingCommentSpace:
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/client.rb'
     - 'app/models/client_contacts.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/config.rb'
     - 'app/models/program_contacts.rb'
     - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
@@ -923,7 +909,6 @@ Layout/MultilineMethodCallIndentation:
     - 'app/controllers/rules_controller.rb'
     - 'app/models/activity_log.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/identified_client.rb'
     - 'app/models/match_prioritization/assessment_score.rb'
     - 'app/models/match_prioritization/assessment_score_length_homeless_tie_breaker.rb'
@@ -994,7 +979,6 @@ Layout/SpaceAroundOperators:
     - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/building.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/non_hmis_assessment.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/integration/match_engine_spec.rb'
@@ -1064,7 +1048,6 @@ Layout/SpaceInLambdaLiteral:
     - 'app/models/activity_log.rb'
     - 'app/models/agency.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/identified_client.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_progress_updates/base.rb'
@@ -1102,7 +1085,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/opportunities_controller.rb'
     - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/non_hmis_client.rb'
     - 'app/models/user_role.rb'
     - 'app/models/warehouse/build_report.rb'
@@ -1132,7 +1114,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/controllers/vouchers_controller.rb'
     - 'app/helpers/match_list_base_helper.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/dashboards/clients.rb'
@@ -1171,7 +1152,6 @@ Layout/SpaceInsideBlockBraces:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideHashLiteralBraces:
   Exclude:
-    - 'app/controllers/admin/configs_controller.rb'
     - 'app/controllers/admin/roles_controller.rb'
     - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
@@ -1193,7 +1173,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/helpers/application_helper.rb'
     - 'app/inputs/date_picker_input.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -1664,7 +1643,6 @@ Lint/UselessAccessModifier:
 # Offense count: 69
 Lint/UselessAssignment:
   Exclude:
-    - 'app/controllers/admin/configs_controller.rb'
     - 'app/controllers/admin/translation_text_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
@@ -1772,7 +1750,6 @@ Naming/MethodParameterName:
   Exclude:
     - 'app/jobs/base_job.rb'
     - 'app/models/building.rb'
-    - 'app/models/client_opportunity_match.rb'
 
 # Offense count: 14
 # Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
@@ -1916,7 +1893,6 @@ Style/GuardClause:
     - 'app/models/building.rb'
     - 'app/models/client.rb'
     - 'app/models/client_contacts.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_decisions/accepts_decline_reason.rb'
@@ -2076,7 +2052,6 @@ Style/IdenticalConditionalBranches:
 Style/IfInsideElse:
   Exclude:
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/non_hmis_client.rb'
     - 'app/models/voucher.rb'
 
@@ -2113,7 +2088,6 @@ Style/IfUnlessModifier:
     - 'app/models/building.rb'
     - 'app/models/cas/update_clients.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -2179,7 +2153,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/sub_programs_controller.rb'
     - 'app/models/cas/update_clients.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_routes/base.rb'
     - 'app/models/non_hmis_assessment.rb'
@@ -2205,7 +2178,6 @@ Style/MultilineIfThen:
 Style/MutableConstant:
   Exclude:
     - 'app/models/cas_seeds/match_decision_reasons.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/message.rb'
 
 # Offense count: 14
@@ -2219,7 +2191,6 @@ Style/NegatedIf:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/imported_client.rb'
     - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
@@ -2257,7 +2228,6 @@ Style/NilComparison:
 # Configuration parameters: IncludeSemanticChanges.
 Style/NonNilCheck:
   Exclude:
-    - 'app/models/client_opportunity_match.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -2269,7 +2239,6 @@ Style/NumericPredicate:
     - 'app/controllers/opportunities_controller.rb'
     - 'app/controllers/system_status_controller.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/subject_for_matches.rb'
     - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/match_decisions/base.rb'
@@ -2323,7 +2292,6 @@ Style/RedundantInterpolation:
 # Cop supports --auto-correct.
 Style/RedundantParentheses:
   Exclude:
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/notifications/housing_subsidy_admin_declined_match_hsp.rb'
     - 'app/models/notifications/housing_subsidy_admin_declined_match_ssp.rb'
 
@@ -2334,7 +2302,6 @@ Style/RedundantSelf:
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/client.rb'
     - 'app/models/client_note.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/concerns/availability.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -2608,7 +2575,6 @@ Style/TrailingCommaInArguments:
     - 'app/inputs/pretty_checkboxes_group_input.rb'
     - 'app/models/building.rb'
     - 'app/models/client.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/client_opportunity_match_contact.rb'
     - 'app/models/contact.rb'
     - 'app/models/funding_source.rb'
@@ -2669,7 +2635,6 @@ Style/TrailingCommaInHashLiteral:
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
-    - 'app/models/client_opportunity_match.rb'
     - 'app/models/dashboards/vacancies.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/warehouse/build_report.rb'
