@@ -43,7 +43,7 @@ RSpec.describe Rules::AgeGreaterThanTwenty, type: :model do
       it 'does not contain Roy (Happy Birthday!)' do
         expect(clients_that_dont_fit.ids).to_not include roy.id
       end
-      it 'does not contain Mary (19 y.o)' do
+      it 'does not contain Mary (21 y.o)' do
         expect(clients_that_dont_fit.ids).to_not include mary.id
       end
       it 'does not contain Sue (no Birthday)' do
