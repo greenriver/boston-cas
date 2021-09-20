@@ -58,6 +58,20 @@ class NonHmisAssessment < ActiveRecord::Base
     ]
   end
 
+  def self.known_assessments_for_matching
+    {}.merge(IdentifiedClientAssessment.new.for_matching).
+      merge(DeidentifiedClientAssessment.new.for_matching).
+      merge(IdentifiedPathwaysAssessment.new.for_matching).
+      merge(DeidentifiedPathwaysAssessment.new.for_matching).
+      merge(IdentifiedCovidPathwaysAssessment.new.for_matching).
+      merge(DeidentifiedCovidPathwaysAssessment.new.for_matching).
+      merge(IdentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
+      merge(IdentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
+      merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
+      merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
+      freeze
+  end
+
   def title
     'Non-HMIS Assessment'
   end

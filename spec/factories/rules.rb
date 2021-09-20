@@ -247,6 +247,12 @@ FactoryBot.define do
     name { 'Enrolled in TH' }
     verb { 'be' }
   end
+
+  factory :non_hmis_assessment_type, class: 'Rules::NonHmisAssessmentType' do
+    name { 'Most recent assessment is one of the specified assessments' }
+    verb { 'have' }
+  end
+
   factory :ground_floor, class: 'Rules::GroundFloor' do
     name { 'Ground Floor Access Requirement' }
     verb { 'have' }

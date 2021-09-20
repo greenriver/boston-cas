@@ -14,6 +14,16 @@ class IdentifiedClientAssessment < NonHmisAssessment
     }
   end
 
+  def for_matching
+    {
+      'IdentifiedClientAssessment' => 'Non-HMIS Assessment - Identified',
+    }
+  end
+
+  def identified?
+    true
+  end
+
   def editable_by?(user)
     return true if user.can_manage_identified_clients?
     return false unless user.can_enter_identified_clients?

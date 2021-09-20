@@ -15,6 +15,12 @@ class DeidentifiedCovidPathwaysAssessment < DeidentifiedClientAssessment
     false
   end
 
+  def for_matching
+    {
+      'IdentifiedClientAssessment' => 'Non-HMIS Assessment - Identified',
+    }
+  end
+
   def self.client_table_headers(user)
     columns = [
       'Client Identifier',

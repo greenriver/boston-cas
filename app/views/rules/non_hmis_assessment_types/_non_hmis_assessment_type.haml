@@ -1,0 +1,3 @@
+- rule = non_hmis_assessment_type
+%h4 Assessment Name
+= select_tag(:variable, options_from_collection_for_select(rule.available_assessments, :first, :last), class: 'variable', id: "variable_#{rule.id}", name: 'variable', multiple: true, data: {options: rule.available_assessments.to_h.to_json })

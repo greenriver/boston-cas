@@ -61,6 +61,7 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def clean_assessment_params(assessment_params)
+    assessment_params[:assessment_name] = @assessment.for_matching.keys.first
     assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12 if assessment_params[:income_total_annual].present?
 
     if assessment_params.key?(:youth_rrh_aggregate)
@@ -71,9 +72,17 @@ class NonHmisAssessmentsController < ApplicationController
 
     if assessment_params.key?(:dv_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['non-dv', 'both'])
-      assessment_params[:dv_rrh_desired] = true if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
+      if assessment_params[:dv_rrh_aggregate].in?(['dv', 'both'])
+        assessment_params[:dv_rrh_desired] = true
+        assessment_params[:domestic_violence] = true
+      end
       assessment_params.extract![:dv_rrh_aggregate]
     end
+
+    assessment_params[:domestic_violence] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Actively fleeing DV'
+
+    assessment_params[:enrolled_in_es] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Emergency Shelter'
+    assessment_params[:enrolled_in_so] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Unsheltered'
 
     assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i) if assessment_params[:neighborhood_interests].present?
 
