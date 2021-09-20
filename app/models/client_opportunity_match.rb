@@ -82,10 +82,10 @@ class ClientOpportunityMatch < ApplicationRecord
 
   has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
 
-  CLOSED_REASONS = ['success', 'rejected', 'canceled']
-  validates :closed_reason, inclusion: {in: CLOSED_REASONS, if: :closed_reason}
+  CLOSED_REASONS = ['success', 'rejected', 'canceled'].freeze
+  validates :closed_reason, inclusion: { in: CLOSED_REASONS, if: :closed_reason }
 
-  scope :on_route, -> (route) do
+  scope :on_route, ->(route) do
     joins(:program).merge(Program.on_route(route))
   end
 
@@ -94,12 +94,12 @@ class ClientOpportunityMatch < ApplicationRecord
   ###################
 
   scope :proposed, -> { where active: false, closed: false }
-  scope :candidate, -> { proposed } #alias
-  scope :active, -> { where active: true  }
+  scope :candidate, -> { proposed } # alias
+  scope :active, -> { where active: true }
   scope :closed, -> { where closed: true }
   scope :open, -> { where closed: false }
   scope :successful, -> { where closed: true, closed_reason: 'success' }
-  scope :success, -> {successful} # alias
+  scope :success, -> { successful } # alias
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
@@ -121,12 +121,12 @@ class ClientOpportunityMatch < ApplicationRecord
   scope :hsa_involved, -> do # any match where the HSA has participated, or has been asked to participate
     md_t = MatchDecisions::Base.arel_table
     joins(:decisions).
-    where(
-      md_t[:status].eq('accepted').and(md_t[:type].eq('MatchDecisions::MatchRecommendationShelterAgency')).
-      or(
-        md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff'))
+      where(
+        md_t[:status].eq('accepted').and(md_t[:type].eq('MatchDecisions::MatchRecommendationShelterAgency')).
+        or(
+          md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff')),
+        ),
       )
-    )
   end
   scope :should_alert_warehouse, -> do
     success.joins(:match_route).merge(MatchRoutes::Base.should_cancel_other_matches)
@@ -135,7 +135,6 @@ class ClientOpportunityMatch < ApplicationRecord
   scope :in_process_or_complete, -> do
     where(arel_table[:active].eq(true).or(arel_table[:closed].eq(true)))
   end
-
 
   ######################
   # Contact Associations
@@ -147,87 +146,87 @@ class ClientOpportunityMatch < ApplicationRecord
 
   # filtered by role
   has_many :dnd_staff_contacts,
-    -> { where client_opportunity_match_contacts: {dnd_staff: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { dnd_staff: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :housing_subsidy_admin_contacts,
-    -> { where client_opportunity_match_contacts: {housing_subsidy_admin: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { housing_subsidy_admin: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :client_contacts,
-    -> { where client_opportunity_match_contacts: {client: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { client: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :shelter_agency_contacts,
-    -> { where client_opportunity_match_contacts: {shelter_agency: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { shelter_agency: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :ssp_contacts,
-    -> { where client_opportunity_match_contacts: {ssp: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { ssp: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :hsp_contacts,
-    -> { where client_opportunity_match_contacts: {hsp: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { hsp: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :do_contacts,
-    -> { where client_opportunity_match_contacts: {do: true} },
-    class_name: 'Contact',
-    through: :client_opportunity_match_contacts,
-    source: :contact
+           -> { where client_opportunity_match_contacts: { do: true } },
+           class_name: 'Contact',
+           through: :client_opportunity_match_contacts,
+           source: :contact
 
   has_many :hsa_or_shelter_agency_contacts, -> do
-    where(client_opportunity_match_contacts: {housing_subsidy_admin: true}).
-    or(where(client_opportunity_match_contacts: {shelter_agency: true}))
+    where(client_opportunity_match_contacts: { housing_subsidy_admin: true }).
+      or(where(client_opportunity_match_contacts: { shelter_agency: true }))
   end, class_name: 'Contact', through: :client_opportunity_match_contacts, source: :contact
 
   has_many :events,
-    class_name: 'MatchEvents::Base',
-    foreign_key: :match_id,
-    inverse_of: :match,
-    dependent: :destroy
+           class_name: 'MatchEvents::Base',
+           foreign_key: :match_id,
+           inverse_of: :match,
+           dependent: :destroy
 
   has_one :match_created_event,
-    class_name: 'MatchEvents::Created',
-    foreign_key: :match_id
+          class_name: 'MatchEvents::Created',
+          foreign_key: :match_id
 
   has_many :note_events,
-    class_name: 'MatchEvents::Note',
-    foreign_key: :match_id
+           class_name: 'MatchEvents::Note',
+           foreign_key: :match_id
 
   has_many :decision_actions,
-    class_name: 'MatchEvents::DecisionAction',
-    foreign_key: :match_id
+           class_name: 'MatchEvents::DecisionAction',
+           foreign_key: :match_id
 
   # Preserved so that history of old mechanism works
   has_many :status_updates,
-    class_name: 'MatchProgressUpdates::Base',
-    foreign_key: :match_id
+           class_name: 'MatchProgressUpdates::Base',
+           foreign_key: :match_id
 
   def self.closed_filter_options
     {
       'Success' => 'success',
-      'Rejected/Declined' =>'rejected',
-      'Canceled/Pre-Empted' => 'canceled'
+      'Rejected/Declined' => 'rejected',
+      'Canceled/Pre-Empted' => 'canceled',
     }
   end
 
   delegate(:show_client_match_attributes?, to: :current_decision, allow_nil: true)
 
   def confidential?
-    program&.confidential? || client&.confidential? || sub_program&.confidential? || ! client&.has_full_housing_release?
+    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release? && Config.get(:limit_client_names_on_matches))
   end
 
   def self.accessible_by_user(user)
@@ -237,9 +236,9 @@ class ClientOpportunityMatch < ApplicationRecord
 
     # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
     contact = user.contact
-    contact_subquery = ClientOpportunityMatchContact
-      .where(contact_id: contact.id)
-      .pluck(:match_id)
+    contact_subquery = ClientOpportunityMatchContact.
+      where(contact_id: contact.id).
+      pluck(:match_id)
     visible_subquery = visible_by(user).pluck(:id)
     where(id: contact_subquery + visible_subquery)
   end
@@ -271,18 +270,19 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def past_first_step_or_all_steps_visible?
     return true if current_decision.blank?
-    if match_route.class.name.in?([ 'MatchRoutes::Default', 'MatchRoutes::Four' ])
-      current_decision != self.send(match_route.initial_decision)
+
+    if match_route.class.name.in?(['MatchRoutes::Default', 'MatchRoutes::Four'])
+      current_decision != send(match_route.initial_decision)
     else
       true
     end
   end
 
   def client_info_approved_for_release?
-    if match_route.class.name.in?([ 'MatchRoutes::Default' ])
-      return shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?
+    if match_route.class.name.in?(['MatchRoutes::Default'])
+      shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?
     else
-      client&.has_full_housing_release? || false
+      client&.has_full_housing_release? || ! Config.get(:limit_client_names_on_matches)
     end
   end
 
@@ -292,7 +292,7 @@ class ClientOpportunityMatch < ApplicationRecord
     return true if contact.in?(shelter_agency_contacts)
 
     return true if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa
-    return true if  (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && (shelter_agency_approval_or_dnd_override?)
+    return true if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && shelter_agency_approval_or_dnd_override?
 
     false
   end
@@ -302,12 +302,10 @@ class ClientOpportunityMatch < ApplicationRecord
 
     if show_client_info_to?(contact)
       hide_name(name: client.full_name, hidden: hidden)
+    elsif client&.project_client&.non_hmis_client_identifier.blank?
+      "(name withheld — #{id})"
     else
-      if client&.project_client&.non_hmis_client_identifier.blank?
-        "(name withheld — #{id})"
-      else
-        hide_name(name: client&.project_client&.non_hmis_client_identifier, hidden: hidden)
-      end
+      hide_name(name: client&.project_client&.non_hmis_client_identifier, hidden: hidden)
     end
   end
 
@@ -326,17 +324,12 @@ class ClientOpportunityMatch < ApplicationRecord
   def self.text_search(text)
     return none unless text.present?
 
-    client_matches = Client.where(
-      Client.arel_table[:id].eq arel_table[:client_id]
-    ).text_search(text).arel.exists
+    client_matches = Client.where(Client.arel_table[:id].eq arel_table[:client_id]).text_search(text).arel.exists
 
-    opp_matches = Opportunity.where(
-      Opportunity.arel_table[:id].eq arel_table[:opportunity_id]
-    ).text_search(text).arel.exists
-
+    opp_matches = Opportunity.where(Opportunity.arel_table[:id].eq arel_table[:opportunity_id]).text_search(text).arel.exists
 
     contact_matches = ClientOpportunityMatchContact.where(
-      ClientOpportunityMatchContact.arel_table[:match_id].eq(arel_table[:id])
+      ClientOpportunityMatchContact.arel_table[:match_id].eq(arel_table[:id]),
     ).text_search(text).arel.exists
 
     where(
@@ -344,8 +337,8 @@ class ClientOpportunityMatch < ApplicationRecord
         client_matches.
         or(opp_matches).
         or(contact_matches).
-        or(arel_table[:id].eq(text)).to_sql
-      )
+        or(arel_table[:id].eq(text)).to_sql,
+      ),
     )
   end
 
@@ -360,6 +353,7 @@ class ClientOpportunityMatch < ApplicationRecord
   # returns the most recent decision
   def current_decision
     return nil if closed?
+
     # FIXME, should look for next decision on route based on route #match_steps
     @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
   end
@@ -395,9 +389,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def current_contact_titles
     contacts_with_info = {}
     match_contacts.input_names.each do |input_name|
-      if match_contacts.send(input_name).count > 0
-        contacts_with_info[input_name] = match_route.contact_label_for(input_name)
-      end
+      contacts_with_info[input_name] = match_route.contact_label_for(input_name) if match_contacts.send(input_name).count.positive?
     end
     contacts_with_info
   end
@@ -435,22 +427,21 @@ class ClientOpportunityMatch < ApplicationRecord
   def overall_status
     if active?
       if status_declined?
-        {name: 'Declined', type: 'danger'}
+        { name: 'Declined', type: 'danger' }
       else
-        {name: 'In Progress', type: 'success'}
+        { name: 'In Progress', type: 'success' }
       end
 
     elsif closed?
       case closed_reason
-      when 'success' then {name: 'Success', type: 'success'}
-      when 'rejected' then {name: 'Rejected', type: 'danger'}
-      when 'canceled' then {name: 'Pre-empted', type: 'danger'}
+      when 'success' then { name: 'Success', type: 'success' }
+      when 'rejected' then { name: 'Rejected', type: 'danger' }
+      when 'canceled' then { name: 'Pre-empted', type: 'danger' }
       end
     else
-       {name: 'New', type: 'success'}
+      { name: 'New', type: 'success' }
 
     end
-
   end
 
   def status_declined?
@@ -500,20 +491,19 @@ class ClientOpportunityMatch < ApplicationRecord
     @match_contacts ||= MatchContacts.new match: self
   end
 
-
-  def expire_all_notifications(on: 1.week.from_now.to_date)
+  def expire_all_notifications(on: 1.week.from_now.to_date) # rubocop:disable Naming/MethodParameterName
     notifications.update_all(expires_at: on)
   end
 
   def reset_and_destroy!
     self.class.transaction do
-     client.make_available_in(match_route: match_route)
+      client.make_available_in(match_route: match_route)
       update(active: false)
       opportunity.update! available_candidate: !opportunity.active_matches.exists?
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       expire_all_notifications
       destroy
-   end
+    end
     Matching::RunEngineJob.perform_later
   end
 
@@ -557,9 +547,9 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.update available_candidate: false
       add_default_contacts!
       requirements_with_inherited.each { |req| req.apply_to_match(self) }
-      self.send(match_route.initial_decision).initialize_decision!
+      send(match_route.initial_decision).initialize_decision!
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
-      related_proposed_matches.destroy_all if ! match_route.should_activate_match
+      related_proposed_matches.destroy_all unless match_route.should_activate_match
 
       init_referral_event if Warehouse::Base.enabled?
     end
@@ -582,7 +572,7 @@ class ClientOpportunityMatch < ApplicationRecord
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
-      expire_all_notifications()
+      expire_all_notifications
 
       referral_event&.rejected if Warehouse::Base.enabled?
     end
@@ -597,7 +587,7 @@ class ClientOpportunityMatch < ApplicationRecord
       Matching::RunEngineJob.perform_later
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
-      expire_all_notifications()
+      expire_all_notifications
 
       referral_event&.rejected if Warehouse::Base.enabled?
     end
@@ -613,7 +603,7 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.update! available_candidate: false
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
-      expire_all_notifications()
+      expire_all_notifications
 
       referral_event&.rejected if Warehouse::Base.enabled?
     end
@@ -629,8 +619,8 @@ class ClientOpportunityMatch < ApplicationRecord
         client_related_matches.each do |match|
           if match.current_decision.present?
             MatchEvents::DecisionAction.create(match_id: match.id,
-                decision_id: match.current_decision.id,
-                action: :canceled)
+                                               decision_id: match.current_decision.id,
+                                               action: :canceled)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
             match.poached!
@@ -654,8 +644,8 @@ class ClientOpportunityMatch < ApplicationRecord
         opportunity_related_matches.each do |match|
           if match.active
             MatchEvents::DecisionAction.create(match_id: match.id,
-                decision_id: match.current_decision.id,
-                action: :canceled)
+                                               decision_id: match.current_decision.id,
+                                               action: :canceled)
             opportunity.notify_contacts_opportunity_taken(match)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
@@ -667,15 +657,13 @@ class ClientOpportunityMatch < ApplicationRecord
       end
 
       opportunity.update available: false, available_candidate: false
-      if opportunity.unit != nil
-        opportunity.unit.update available: false
-      end
+      opportunity.unit&.update(available: false)
       if opportunity.voucher.present?
         opportunity.voucher.update available: false, skip_match_locking_validation: true
         opportunity.voucher.sub_program.update_summary!
       end
       # Prevent access to this match by notification after 1 week
-      expire_all_notifications()
+      expire_all_notifications
 
       referral_event&.accepted if Warehouse::Base.enabled?
     end
@@ -684,13 +672,13 @@ class ClientOpportunityMatch < ApplicationRecord
   def cancel_opportunity_related_matches!
     opportunity_related_matches.active.each do |match|
       MatchEvents::DecisionAction.create(match_id: match.id,
-        decision_id: match.current_decision.id,
-        action: :canceled)
+                                         decision_id: match.current_decision.id,
+                                         action: :canceled)
       opportunity.notify_contacts_opportunity_taken(match)
       reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
       match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
       match.poached!
-      end
+    end
   end
 
   def client_related_matches
@@ -765,7 +753,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
     # If for some reason we forgot to setup the default HSA contacts
     # put the people who usually receive initial notifications in that role
-    if contacts_editable_by_hsa && housing_subsidy_admin_contacts.blank?
+    if contacts_editable_by_hsa && housing_subsidy_admin_contacts.blank? # rubocop:disable Style/GuardClause
       Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
         assign_match_role_to_contact :housing_subsidy_admin, contact
       end
@@ -788,7 +776,7 @@ class ClientOpportunityMatch < ApplicationRecord
     sub_program.shelter_agency_contacts.each do |contact|
       assign_match_role_to_contact :shelter_agency, contact
     end
-    if match_route.default_shelter_agency_contacts_from_project_client?
+    if match_route.default_shelter_agency_contacts_from_project_client? # rubocop:disable Style/GuardClause
       client.project_client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
@@ -828,20 +816,20 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def self.sort_options
     [
-      {title: 'Oldest match', column: 'created_at', direction: 'asc'},
-      {title: 'Most recent match', column: 'created_at', direction: 'desc'},
+      { title: 'Oldest match', column: 'created_at', direction: 'asc' },
+      { title: 'Most recent match', column: 'created_at', direction: 'desc' },
       # {title: 'Last name A-Z', column: 'last_name', direction: 'asc'},
       # {title: 'Last name Z-A', column: 'last_name', direction: 'desc'},
       # {title: 'First name A-Z', column: 'first_name', direction: 'asc'},
       # {title: 'First name Z-A', column: 'first_name', direction: 'desc'},
-      {title: 'Recently changed', column: 'last_decision', direction: 'desc'},
+      { title: 'Recently changed', column: 'last_decision', direction: 'desc' },
       # {title: 'Longest standing client', column: 'calculated_first_homeless_night', direction: 'asc'},
       # {title: 'Most served', column: 'days_homeless', direction: 'desc'},
       # {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc'},
       # {title: 'Current step', column: 'current_step', direction: 'desc'},
-      {title: 'Expiration Date', column: 'shelter_expiration', direction: 'asc'},
-      {title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc'},
-      {title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc'},
+      { title: 'Expiration Date', column: 'shelter_expiration', direction: 'asc' },
+      { title: 'VI-SPDAT Score', column: 'vispdat_score', direction: 'desc' },
+      { title: 'Priority Score', column: 'vispdat_priority_score', direction: 'desc' },
     ]
   end
 end

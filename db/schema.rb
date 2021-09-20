@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_154901) do
+ActiveRecord::Schema.define(version: 2021_09_17_180753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -284,6 +284,7 @@ ActiveRecord::Schema.define(version: 2021_09_15_154901) do
     t.string "identified_client_assessment", default: "IdentifiedClientAssessment"
     t.integer "lock_days", default: 0, null: false
     t.integer "lock_grace_days", default: 0, null: false
+    t.boolean "limit_client_names_on_matches", default: true
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|

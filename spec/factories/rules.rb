@@ -19,6 +19,14 @@ FactoryBot.define do
     name { 'Age greater than 18' }
     verb { 'be' }
   end
+  factory :twenty_plus, class: 'Rules::AgeGreaterThanTwenty' do
+    name { 'Age greater than 20' }
+    verb { 'be' }
+  end
+  factory :twenty_one_plus, class: 'Rules::AgeGreaterThanTwentyOne' do
+    name { 'Age greater than 21' }
+    verb { 'be' }
+  end
   factory :twenty_five_plus, class: 'Rules::AgeGreaterThanTwentyFive' do
     name { 'Age greater than 25' }
     verb { 'be' }
@@ -151,10 +159,6 @@ FactoryBot.define do
     name { 'Interested in DV RRH' }
     verb { 'be' }
   end
-  # factory :age_greater_than_eighteen, class: 'Rules::AgeGreaterThanEightteen' do
-  #   name { "Age greater than 18" }
-  #   verb { "be" }
-  # end
   factory :age_greater_than_fifty, class: 'Rules::AgeGreaterThanFifty' do
     name { 'Age greater than 50' }
     verb { 'be' }
@@ -167,10 +171,6 @@ FactoryBot.define do
     name { 'Age greater than 45' }
     verb { 'be' }
   end
-  # factory :age_greater_than_sixteen, class: 'Rules::AgeGreaterThanSixteen' do
-  #   name { "Age greater than 16" }
-  #   verb { "be" }
-  # end
   factory :age_greater_than_sixty, class: 'Rules::AgeGreaterThanSixty' do
     name { 'Age greater than 60' }
     verb { 'be' }
@@ -247,6 +247,7 @@ FactoryBot.define do
     name { 'Enrolled in TH' }
     verb { 'be' }
   end
+
   factory :non_hmis_assessment_type, class: 'Rules::NonHmisAssessmentType' do
     name { 'Most recent assessment is one of the specified assessments' }
     verb { 'have' }

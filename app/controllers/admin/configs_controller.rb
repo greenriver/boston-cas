@@ -25,6 +25,7 @@ module Admin
         :dnd_interval,
         :warehouse_url,
         :require_cori_release,
+        :limit_client_names_on_matches,
         :ami,
         :vispdat_prioritization_scheme,
         :unavailable_for_length,

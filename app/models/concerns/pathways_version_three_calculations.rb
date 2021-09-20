@@ -995,7 +995,7 @@ module PathwaysVersionThreeCalculations
         },
         denial_required: {
           label: 'There are two circumstances where the housing authorities administering these vouchers are required to deny an applicant. In an effort to be considerate of your time, it is best for us to figure out whether these barriers might come up for you now. Have you experienced any of the following? (Check all that apply)',
-          number: '8F',
+          number: '8B',
           collection: {
             _('Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.') => 'lifetime sex offender in household',
             _('Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing') => 'manufacture or production of methamphetamine in household',
@@ -1005,7 +1005,7 @@ module PathwaysVersionThreeCalculations
         },
         background_check_issues: {
           label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a housing opportunity, but rather to help overcome potential admission barriers.',
-          number: '8B',
+          number: '8C',
           collection: {
             'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)' => 'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)',
             'You have been evicted from a legal tenancy where you were the lease holder.' => 'You have been evicted from a legal tenancy where you were the lease holder.',
