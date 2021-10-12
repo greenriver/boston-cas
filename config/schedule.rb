@@ -37,5 +37,5 @@ every 1.day, at: '7:30am' do
 end
 
 every 1.hour do
-  rake 'cas:add_missing_tie_breakers'
+  rake 'cas:hourly'
 end

@@ -68,7 +68,7 @@
                   %td= user.roles_string
                   %td= render 'user_invitation_status', user: user
                   %td.text-center
-                    - matches = user.contact.try(:client_opportunity_match_contacts) || []
+                    - matches = user.contact&.client_opportunity_match_contacts&.joins(:match) || []
                     = matches.size
                   %td
                     .w-100

@@ -11,6 +11,12 @@ class IdentifiedCovidPathwaysAssessment < IdentifiedClientAssessment
     'COVID Pathways'
   end
 
+  def for_matching
+    {
+      'DeidentifiedCovidPathwaysAssessment' => 'COVID Pathways - Deidentified',
+    }
+  end
+
   def self.client_table_headers(user)
     columns = [
       'Last Name',
@@ -24,6 +30,7 @@ class IdentifiedCovidPathwaysAssessment < IdentifiedClientAssessment
     columns << '' if user.can_manage_identified_clients?
     columns
   end
+
 
   def self.client_table_row(client, user)
     url_helpers = Rails.application.routes.url_helpers

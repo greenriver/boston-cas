@@ -221,7 +221,9 @@ Rails.application.routes.draw do
   end
 
   resources :deidentified_clients do
-    resources :non_hmis_assessments
+    resources :non_hmis_assessments do
+      patch :unlock, on: :member
+    end
     collection do
       get :choose_upload
       post :import
@@ -232,7 +234,9 @@ Rails.application.routes.draw do
     end
   end
   resources :identified_clients do
-    resources :non_hmis_assessments
+    resources :non_hmis_assessments do
+      patch :unlock, on: :member
+    end
     member do
       get :current_assessment_limited
       patch :shelter_location

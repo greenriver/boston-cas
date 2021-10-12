@@ -19,7 +19,8 @@
   All youth specific RRH opportunities are being matched through CAS via the Pathways assessment.
 %h4 Veteran RRH:
 %p Veteran specific RRH is available via direct referral through Supportive Services for Veteran Families (SSVF) with no Pathways Assessment required at the following agencies:
-%p= _('Veteran Agency Contact Details')
+- markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true)
+= markdown.render(_('Veteran Agency Contact Details')).html_safe
 
 %h2 Key Introduction Points to Share with the Participant
 %p
@@ -27,8 +28,8 @@
   We'll explore ways you could move out of homelessness quickly, using existing supports, since there is not enough affordable housing for everyone who needs it and the waits can be years long. Pathways will also explore if we have small funds to help you leave homelessness quickly, sign you up for rapid re-housing (RRH) and affordable housing units that are set aside for people experiencing homelessness in Boston.
 
 %p
-  %strong Programs May/May not be accepting referrals right now:
-  Openings depend on if programs are currently full or taking openings, which changes all the time- this is why we don't know exact timeframes. Even if they are full and you are interested, it's worth signing up.
+  %strong Programs may or may not be accepting referrals right now:
+  Openings depend on if programs are currently full or taking referrals, which changes all the time - this is why we don't know exact timeframes. Even if they are full and you are interested, it's worth signing up.
 
 %p
   %strong Right to Refuse Responses:
@@ -66,7 +67,7 @@
   %ol
     %li The destination will have to document the person can stay at least 90 days;
     %li Hotel stays are no longer an eligible use and
-    %li If participants want to move to a sober home, continue to offer rapid re-housing to facilitate the placement if a lease will be offered; if the sober home will not offer a lease, the participant must how they will pay the full sober home fee in their barrier buster application.
+    %li If participants want to move to a sober home, continue to offer rapid re-housing to facilitate the placement if a lease will be offered; if the sober home will not offer a lease, the participant must show how they will pay the full sober home fee in their barrier buster application.
 %h3 Is participant interested in help to leave shelter to move in with natural supports or an immediate option?
 
 %h4 YES:
@@ -141,7 +142,6 @@
     %h2.text-center How do people make RRH work?
     %p Rapid Re-housing (RRH)
     %ul
-      %li How do people with low/no income make RRH work?
       %li Income maximization services & balancing the budget
       %li Negotiating Rent Down
       %li Roomates
@@ -184,13 +184,19 @@
                 Check to see if a Housing Assistance Network (HAN) Release of Information is uploaded into the participant's warehouse record.
                 %ul
                   %li If one IS uploaded, proceed to the next section → Section 2, Language & Safety
-                  %li If one IS NOT uploaded, complete a COVID HAN release. Directions to upload the COVID HAN release into the warehouse are here. If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, check the box in the box on the Non-HMIS Client edit screen indicating that you have a HAN in your file.
+                  %li
+                    If one IS NOT uploaded, complete a COVID HAN release. Directions to upload the COVID HAN release into the warehouse are
+                    %a{ href: 'https://bostoncoc.mailchimpsites.com/', target: :_blank } here.
+                    If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, check the box in the box on the Non-HMIS Client edit screen indicating that you have a HAN in your file.
               %p
                 %strong No
                 %ul
                   %li If the participant chooses not to share information with other provider agencies, staff may sign a Limited CAS release so that the Coordinated Entry lead agency can sign them up for programs, but not share information with any other providers. Check to see if a Limited CAS release is uploaded into the participant's warehouse record.
                   %li If one IS uploaded, proceed to the next section.
-                  %li If one IS NOT uploaded, staff may sign a Limited CAS release. Directions to upload the HAN release into the warehouse are here. If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, check the box in the box on the Non-HMIS Client edit screen indicating that you have a Limited CAS release in your file.
+                  %li
+                    If one IS NOT uploaded, staff may sign a Limited CAS release. Directions to upload the HAN release into the warehouse are
+                    %a{ href: 'https://bostoncoc.mailchimpsites.com/', target: :_blank } here.
+                    If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, check the box in the box on the Non-HMIS Client edit screen indicating that you have a Limited CAS release in your file.
               %p= _('Warehouse ROI Contact Information')
 
 %h1.mt-8 Assessment Questions

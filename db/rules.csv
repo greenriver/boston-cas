@@ -1,6 +1,8 @@
 Class Name,Rule Name,Alternate Name,Verb
 AgeGreaterThanSixteen,Age greater than 16,,be
 AgeGreaterThanEightteen,Age greater than 18,,be
+AgeGreaterThanTwenty,Age greater than 20,,be
+AgeGreaterThanTwentyOne,Age greater than 21,,be
 AgeGreaterThanTwentyFive,Age greater than 25,,be
 AgeGreaterThanFifty,Age greater than 50,,be
 AgeGreaterThanFiftyFive,Age greater than 55,,be
@@ -56,6 +58,7 @@ VispdatScoreThreeOrLess,VI-SPDAT score of 3 or less,,have
 VispdatScoreFourToSeven,VI-SPDAT score of 4 to 7,,have
 VispdatScoreEightOrMore,VI-SPDAT score of 8 or more,,have
 EnrolledInHmisProject,Enrolled in one of the specified HMIS Projects,,be
+NonHmisAssessmentType,Most recent assessment is one of the specified assessments,,have
 ActiveInCohort,Active in any of the specified Cohorts,,be
 EnrolledInTh,Enrolled in TH,,be
 EnrolledInSh,Enrolled in SH,,be

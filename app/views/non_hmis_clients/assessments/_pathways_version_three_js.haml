@@ -59,3 +59,24 @@
       $(total_selector).val(warehouse_days + extra_days);
     });
     $(warehouse_selector).trigger('keyup');
+
+    // Households
+    $('.jHouseholdTrigger').on('change, keyup', function(e){
+      if($(this).val() > 1) {
+        $('.jHouseholdDetails').removeClass('d-none');
+      } else {
+        $('.jHouseholdDetails').addClass('d-none');
+      }
+    });
+    $('.jHouseholdTrigger').trigger('keyup');
+
+    // Deal with "None of the Above"
+    $('input[type=checkbox]').on('change', function(e){
+      var none_of_the_above = $(this).val() == 'None of the above' || $(this).val() == 'none'
+      if(none_of_the_above && $(this).is(':checked')) {
+        console.log($(this).is(':checked'));
+        var neighbors = $(this).closest('.controls').find('input[type=checkbox]').not(this);
+        neighbors.prop('checked', false);
+        console.log(neighbors);
+      }
+    })

@@ -19,6 +19,16 @@ class DeidentifiedClientAssessment < NonHmisAssessment
     }
   end
 
+  def for_matching
+    {
+      'DeidentifiedClientAssessment' => 'Non-HMIS Assessment - Deidentified',
+    }
+  end
+
+  def identified?
+    false
+  end
+
   def editable_by?(user)
     return true if user.can_manage_deidentified_clients?
     return false unless user.can_enter_deidentified_clients?
@@ -32,6 +42,10 @@ class DeidentifiedClientAssessment < NonHmisAssessment
     else
       editable_by?(user)
     end
+  end
+
+  def unlockable_by?(user)
+    user.can_manage_deidentified_clients?
   end
 
   def self.client_table_headers(user)

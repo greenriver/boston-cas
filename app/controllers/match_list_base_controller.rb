@@ -100,7 +100,7 @@ class MatchListBaseController < ApplicationController
     return scope unless params[:q].present?
     search_scope = scope.match_text_search(params[:q])
     unless current_user.can_view_all_clients?
-      search_scope = search_scope.joins(:client_oppotunity_match).
+      search_scope = search_scope.joins(:client_opportunity_match).
         where(id: match_source.where(id: visible_match_ids()).select(:opportunity_id))
     end
     search_scope
@@ -213,11 +213,17 @@ class MatchListBaseController < ApplicationController
   # via targeted search
   private def visible_match_ids
     contact = current_user.contact
+    # This appears to get called when someone browses to /closed_matches
+    # at the same time the engine is running and the contact has been added
+    # to a new match, that is then deleted by the engine as it works through its
+    # process.
+
     # Notify when a match is nil.
-    contact.client_opportunity_match_contacts.each do |contact_match_pair|
-      @notifier.ping "The match #{contact_match_pair.match_id} for the contact/match pair #{contact_match_pair.id} with user #{current_user.id} is nil" if contact_match_pair.match.nil? && @send_notifications
-    end
-    contact.client_opportunity_match_contacts.map(&:match).map do |m|
+    # contact.client_opportunity_match_contacts.each do |contact_match_pair|
+    #   @notifier.ping "The match #{contact_match_pair.match_id} for the contact/match pair #{contact_match_pair.id} with user #{current_user.id} is nil" if contact_match_pair.match.nil? && @send_notifications
+    # end
+
+    contact.client_opportunity_match_contacts.joins(:match).map(&:match).map do |m|
       m.id if m.try(:show_client_info_to?, contact) || false
     end.compact
   end

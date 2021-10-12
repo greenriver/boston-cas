@@ -15,6 +15,12 @@ class IdentifiedPathwaysAssessment < IdentifiedClientAssessment
     false
   end
 
+  def for_matching
+    {
+      'IdentifiedPathwaysAssessment' => 'Pathways - Identified',
+    }
+  end
+
   def self.client_table_headers(user)
     columns = [
       'Last Name',

@@ -289,9 +289,14 @@ class Deployer
   end
 
   def _clean_up_old_local_images!
-    _run(<<~CMD)
-      docker image prune --force -a --filter 'label=app=#{repo_name}' --filter 'until=100h'
-    CMD
+    begin
+      _run(<<~CMD)
+        docker image prune --force -a --filter 'label=app=#{repo_name}' --filter 'until=100h'
+      CMD
+    rescue RuntimeError => e
+      puts "Is Docker running locally?"
+      raise e
+    end
   end
 
   def _image_tags_in_repo
