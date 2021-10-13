@@ -1,0 +1,9 @@
+= simple_form_for @filter, as: :filter, url: reports_housed_addresses_path, method: :get do |f|
+  .row
+    .col-sm-3
+      = f.input :start, as: :date_picker, label: 'Start'
+    .col-sm-3
+      = f.input :end, as: :date_picker, label: 'End'
+  .row
+    .col
+      = f.submit 'Update', class: 'btn btn-primary mt-no-label', data: { disable_with: false }

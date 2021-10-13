@@ -1,0 +1,28 @@
+- title = _('Client Addresses')
+- content_for :title, title
+
+= render 'reports/crumbs_operational'
+%h1.mb-5= title
+
+= render 'filter'
+
+- if @addresses.present?
+  %p= page_entries_info @addresses
+  %p= paginate @addresses
+  %table.table.table-sm
+    %thead
+      %tr
+        - headers.each do |header|
+          %th= header
+    %tbody
+      - @addresses.pluck(columns).each do |row|
+        %tr
+          - row.each do |value|
+            - if !!value == value # Check for boolean
+              %td= value ? 'Y' : 'N'
+            - else
+              %td= value
+
+- else
+  .no-data
+    No clients found.
