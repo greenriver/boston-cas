@@ -19,7 +19,7 @@
         %tr
           - row.each do |value|
             - if !!value == value # Check for boolean
-              %td= value ? 'Y' : 'N'
+              %td= yes_no(value)
             - else
               %td= value
 
