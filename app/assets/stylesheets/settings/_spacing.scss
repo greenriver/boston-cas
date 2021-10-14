@@ -16,3 +16,13 @@ $spaces: 4px 8px 12px 16px 20px 30px 40px 50px 60px 60px 80px 90px 100px;
   $current-space: ( $i: calculate-space($item) );
   $spacers: map-merge($current-space, $spacers);
 }
+
+$label-spacing-adjustment: 13px;
+
+.mt-no-label {
+  margin-top: $label-spacing-adjustment !important;
+}
+
+.pt-no-label {
+  padding-top: $label-spacing-adjustment !important;
+}

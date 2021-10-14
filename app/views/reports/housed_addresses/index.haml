@@ -7,22 +7,24 @@
 = render 'filter'
 
 - if @addresses.present?
-  %p= page_entries_info @addresses
-  %p= paginate @addresses
-  %table.table.table-sm
-    %thead
-      %tr
-        - headers.each do |header|
-          %th= header
-    %tbody
-      - @addresses.pluck(columns).each do |row|
-        %tr
-          - row.each do |value|
-            - if !!value == value # Check for boolean
-              %td= yes_no(value)
-            - else
-              %td= value
-
+  .d-flex
+    %p= page_entries_info @addresses
+    %p= paginate @addresses
+  .c-card.c-card--flush
+    .c-card__content.p-0
+      %table.table.table-striped
+        %thead
+          %tr
+            - headers.each do |header|
+              %th= header
+        %tbody
+          - @addresses.pluck(columns).each do |row|
+            %tr
+              - row.each do |value|
+                - if !!value == value # Check for boolean
+                  %td= yes_no(value)
+                - else
+                  %td= value
 - else
   .no-data
     No clients found.
