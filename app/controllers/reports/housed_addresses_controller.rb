@@ -14,18 +14,35 @@ module Reports
       @filter = filter
       @addresses = addresses(filter.start, filter.end)
 
-      @addresses = @addresses.page(params[:page]).per(25)
+      respond_to do |format|
+        format.html do
+          @addresses = @addresses.page(params[:page]).per(25)
+        end
+        format.xlsx do
+          filename = 'Housed Client Addresses.xlsx'
+          render xlsx: 'index.xlsx', filename: filename
+        end
+      end
     end
 
-    def headers
-      report_schema.keys
+    def header
+      @header ||= report_schema.keys
     end
-    helper_method :headers
+    helper_method :header
+
+    def data
+      @addresses.pluck(columns)
+    end
+    helper_method :data
 
     def columns
-      report_schema.values
+      @columns ||= report_schema.values.map { |descriptor| descriptor[:query] }
     end
-    helper_method :columns
+
+    def column_types
+      @column_types ||= report_schema.values.map { |descriptor| descriptor[:display_type] }
+    end
+    helper_method :column_types
 
     private def filter
       return OpenStruct.new(start: 6.months.ago, end: 1.days.ago) unless params[:filter].present?
@@ -42,13 +59,13 @@ module Reports
 
     private def report_schema
       @report_schema ||= {
-        'Program Name' => p_t[:name],
-        'Sub-Program' => sp_t[:name],
-        'First Name' => c_t[:first_name],
-        'Last Name' => c_t[:last_name],
-        'Housing Address' => md_b_t[:address],
-        'Padmission?' => md_b_t[:external_software_used],
-        'Date Housed' => md_b_t[:client_move_in_date],
+        'Program Name' => { query: p_t[:name], display_type: :text },
+        'Sub-Program' => { query: sp_t[:name], display_type: :text },
+        'First Name' => { query: c_t[:first_name], display_type: :text },
+        'Last Name' => { query: c_t[:last_name], display_type: :text },
+        'Housing Address' => { query: md_b_t[:address], display_type: :address },
+        'Padmission?' => { query: md_b_t[:external_software_used], display_type: :boolean },
+        'Date Housed' => { query: md_b_t[:client_move_in_date], display_type: :text },
       }.freeze
     end
 

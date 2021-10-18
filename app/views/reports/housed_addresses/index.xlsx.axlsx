@@ -1,0 +1,18 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Housed Client Addresses") do |sheet|
+  title = sheet.styles.add_style(sz: 12, b: true, alignment: {horizontal: :center})
+  sheet.add_row(header)
+  data.each do |row|
+    result = []
+    row.each_with_index do |value, index|
+      display_type = column_types[index]
+      case display_type
+      when :boolean
+        result << yes_no(value)
+      else
+        result << value
+      end
+      sheet.add_row(result)
+    end
+  end
+end

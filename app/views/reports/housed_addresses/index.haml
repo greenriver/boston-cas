@@ -4,27 +4,35 @@
 = render 'reports/crumbs_operational'
 %h1.mb-5= title
 
+%p List the recorded addresses for clients with successful matches and move in dates in the specified date range.
+
 = render 'filter'
 
-- if @addresses.present?
-  .d-flex
+- if ! @addresses.present?
+  .d-flex.mb-4
     %p= page_entries_info @addresses
     %p= paginate @addresses
+    .ml-auto
+      = link_to "Download Excel", reports_housed_addresses_path(format: :xlsx), class: 'btn btn-secondary'
   .c-card.c-card--flush
     .c-card__content.p-0
       %table.table.table-striped
         %thead
           %tr
-            - headers.each do |header|
+            - header.each do |header|
               %th= header
         %tbody
-          - @addresses.pluck(columns).each do |row|
+          - data.each do |row|
             %tr
-              - row.each do |value|
-                - if !!value == value # Check for boolean
-                  %td= yes_no(value)
-                - else
-                  %td= value
+              - row.each_with_index do |value, index|
+                - display_type = column_types[index]
+                - case display_type
+                  - when :boolean
+                    %td= yes_no(value)
+                  - when :address
+                    %td= simple_format(address)
+                  - else
+                    %td= value
 - else
   .no-data
     No clients found.
