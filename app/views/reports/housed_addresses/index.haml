@@ -4,11 +4,11 @@
 = render 'reports/crumbs_operational'
 %h1.mb-5= title
 
-%p List the recorded addresses for clients with successful matches and move in dates in the specified date range.
+%p List the recorded addresses for clients in successful matches where the move-in date falls within the specified date range.
 
 = render 'filter'
 
-- if ! @addresses.present?
+- if @addresses.present?
   .d-flex.mb-4
     %p= page_entries_info @addresses
     %p= paginate @addresses
@@ -30,7 +30,7 @@
                   - when :boolean
                     %td= yes_no(value)
                   - when :address
-                    %td= simple_format(address)
+                    %td= simple_format(value)
                   - else
                     %td= value
 - else

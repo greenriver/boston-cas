@@ -159,7 +159,7 @@ def report_list
       {
         url: 'reports/housed_addresses',
         name: 'Housed Client Addresses',
-        description: 'A listing of the address of housed clients.',
+        description: 'Addresses of successfully housed clients.',
         limitable: true,
       },
     ],
