@@ -56,6 +56,7 @@ module Reports
         :end,
       )
     end
+    helper_method :filter_params
 
     private def report_schema
       @report_schema ||= {
@@ -66,14 +67,16 @@ module Reports
         'Housing Address' => { query: md_b_t[:address], display_type: :address },
         _('Did you or this client use external software to help with housing?') => { query: md_b_t[:external_software_used], display_type: :boolean },
         'Date Housed' => { query: md_b_t[:client_move_in_date], display_type: :text },
+        'Match ID' => { query: com_t[:id], display_type: :integer },
       }.freeze
     end
 
     private def addresses(start_date, end_date)
       ClientOpportunityMatch.
         joins(:program, :sub_program, :client, :decisions).
-        where(match_decisions: { client_move_in_date: start_date .. end_date }).
-        where(closed_reason: :success)
+        where(md_b_t[:client_move_in_date].between(start_date .. end_date).and(md_b_t[:client_move_in_date].not_eq(nil))).
+        where(closed_reason: :success).
+        order(md_b_t[:client_move_in_date].desc)
     end
   end
 end

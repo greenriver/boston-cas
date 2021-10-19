@@ -12,7 +12,7 @@ wb.add_worksheet(name: "Housed Client Addresses") do |sheet|
       else
         result << value
       end
-      sheet.add_row(result)
     end
+    sheet.add_row(result)
   end
 end
