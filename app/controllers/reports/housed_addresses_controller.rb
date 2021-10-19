@@ -64,7 +64,7 @@ module Reports
         'First Name' => { query: c_t[:first_name], display_type: :text },
         'Last Name' => { query: c_t[:last_name], display_type: :text },
         'Housing Address' => { query: md_b_t[:address], display_type: :address },
-        'Padmission?' => { query: md_b_t[:external_software_used], display_type: :boolean },
+        _('Did you or this client use external software to help with housing?') => { query: md_b_t[:external_software_used], display_type: :boolean },
         'Date Housed' => { query: md_b_t[:client_move_in_date], display_type: :text },
       }.freeze
     end
