@@ -14,7 +14,7 @@
       = link_to "Download Excel", reports_housed_addresses_path(format: :xlsx, filter: filter_params), class: 'btn btn-secondary'
   .d-flex.mb-4
     %p= page_entries_info @addresses
-    %p= paginate @addresses
+    %p.ml-auto= paginate @addresses
   .c-card.c-card--flush
     .c-card__content.p-0
       %table.table.table-striped
