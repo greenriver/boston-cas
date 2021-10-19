@@ -45,12 +45,18 @@ module Reports
     helper_method :column_types
 
     private def filter
-      return OpenStruct.new(start: 6.months.ago, end: 1.days.ago) unless params[:filter].present?
+      return default_filter unless params[:filter].present?
 
       OpenStruct.new(start: filter_params[:start].to_date, end: filter_params[:end].to_date)
     end
 
+    private def default_filter
+      OpenStruct.new(start: 6.months.ago, end: 1.days.ago)
+    end
+
     private def filter_params
+      return default_filter.to_h unless params[:filter].present?
+
       params.require(:filter).permit(
         :start,
         :end,
