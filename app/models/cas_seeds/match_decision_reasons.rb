@@ -47,7 +47,7 @@ module CasSeeds
 
     MITIGATION_REASONS = [
       ['Mitigation failed', nil],
-    ]
+    ].freeze
 
     SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS = [
       ['Barred from working with agency', PROVIDER_REJECTED],
@@ -69,6 +69,11 @@ module CasSeeds
       ['Client no longer eligible for match', nil],
       ['Client deceased', nil],
       ['Vacancy filled by other client', nil],
+    ].freeze
+
+    LIMITED_ADMINISTRATIVE_CANCEL_REASONS = [
+      ['Match expired – No agency interaction', nil],
+      ['Match expired – Agency interaction', nil],
     ].freeze
 
     def run!
@@ -132,6 +137,11 @@ module CasSeeds
     private def create_admin_cancel_reasons!
       ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name, referral_result|
         reason = ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
+      end
+
+      LIMITED_ADMINISTRATIVE_CANCEL_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::AdministrativeCancel.where(name: reason_name, limited: true).first_or_create!
         reason.update(referral_result: referral_result)
       end
     end

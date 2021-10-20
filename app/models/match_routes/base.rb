@@ -9,10 +9,7 @@ module MatchRoutes
     self.table_name = :match_routes
 
     belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
-
-    if column_names.include?('tag_id')
-      belongs_to :tag
-    end
+    belongs_to :tag if column_names.include?('tag_id')
 
     scope :active, -> do
       where(active: true)
@@ -27,9 +24,7 @@ module MatchRoutes
       where(should_cancel_other_matches: true)
     end
 
-    if column_names.include?('tag_id')
-      validate :has_tag_if_prioritization_requires_it
-    end
+    validate :has_tag_if_prioritization_requires_it if column_names.include?('tag_id')
 
     def self.all_routes
       [
@@ -43,13 +38,10 @@ module MatchRoutes
 
     def self.route_name_from_route route
       # route can be an instance or a class
-      if route.class == Class
-        route_name = route.name
-      elsif MatchRoutes::Base.all_routes.include?(route.class)
-        route_name = route.class.name
-      else
-        raise "Unknown route type passed #{route.inspect}"
-      end
+      return route.name if route.instance_of?(Class)
+      return route.class.name if MatchRoutes::Base.all_routes.include?(route.class)
+
+      raise "Unknown route type passed #{route.inspect}"
     end
 
     def self.more_than_one?
@@ -57,7 +49,7 @@ module MatchRoutes
     end
 
     def self.filterable_routes
-      available.map{|r| [r.title, r.type]}.to_h
+      available.map { |r| [r.title, r.type] }.to_h
     end
 
     def self.ensure_all
@@ -83,6 +75,14 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def removed_admin_reasons
+      nil
+    end
+
+    def additional_admin_reasons
+      nil
+    end
+
     def self.match_steps
       all_routes.map do |route|
         [route.name, route.match_steps]
@@ -90,15 +90,15 @@ module MatchRoutes
     end
 
     def self.match_steps_for_reporting
-      all_routes.map(&:match_steps_for_reporting).flatten().uniq.to_h
+      all_routes.map(&:match_steps_for_reporting).flatten.uniq.to_h
     end
 
     def self.available_sub_types_for_search
-      all_routes.map(&:available_sub_types_for_search).flatten().uniq
+      all_routes.map(&:available_sub_types_for_search).flatten.uniq
     end
 
     def self.filter_options
-      self.available_sub_types_for_search + self.stalled_match_filter_options
+      available_sub_types_for_search + stalled_match_filter_options
     end
 
     def self.stalled_match_filter_options
@@ -160,11 +160,8 @@ module MatchRoutes
       'Project-Based'
     end
 
-    private def has_tag_if_prioritization_requires_it
-      if tag_id.blank? && match_prioritization&.requires_tag?
-
-        errors.add :tag_id, "Chosen prioritization scheme requires a tag be set"
-      end
+    private def has_tag_if_prioritization_requires_it # rubocop:disable  Naming/PredicateName
+      errors.add :tag_id, 'Chosen prioritization scheme requires a tag be set' if tag_id.blank? && match_prioritization&.requires_tag?
     end
   end
 end

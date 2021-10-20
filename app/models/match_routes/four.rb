@@ -6,7 +6,6 @@
 
 module MatchRoutes
   class Four < Base
-
     def title
       _('Match Route Four')
     end
@@ -17,13 +16,13 @@ module MatchRoutes
 
     def self.match_steps
       {
-       'MatchDecisions::Four::MatchRecommendationDndStaff' => 1,
-       'MatchDecisions::Four::MatchRecommendationShelterAgency' => 2,
-       'MatchDecisions::Four::MatchRecommendationHsa' => 3,
-       'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
-       'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin' => 5,
-       'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator' => 6,
-       'MatchDecisions::Four::ConfirmMatchSuccessDndStaff' => 7,
+        'MatchDecisions::Four::MatchRecommendationDndStaff' => 1,
+        'MatchDecisions::Four::MatchRecommendationShelterAgency' => 2,
+        'MatchDecisions::Four::MatchRecommendationHsa' => 3,
+        'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin' => 4,
+        'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin' => 5,
+        'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator' => 6,
+        'MatchDecisions::Four::ConfirmMatchSuccessDndStaff' => 7,
       }
     end
 
@@ -52,6 +51,21 @@ module MatchRoutes
 
     def initial_contacts_for_match
       :dnd_staff_contacts
+    end
+
+    def removed_admin_reasons
+      @removed_admin_reasons ||= [
+        'SSP CORI',
+        'HSP CORI',
+        'Match expired',
+      ].freeze
+    end
+
+    def additional_admin_reasons
+      @additional_admin_reasons ||= [
+        'Match expired – No agency interaction',
+        'Match expired – Agency interaction',
+      ].freeze
     end
   end
 end
