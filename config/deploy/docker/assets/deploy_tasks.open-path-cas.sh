@@ -28,6 +28,9 @@ bundle exec rake cas_seeds:stalled_reasons
 echo bundle exec rake cas_seeds:create_mitigation_reasons
 bundle exec rake cas_seeds:create_mitigation_reasons
 
+echo General seeding
+bundle exec rake db:seed
+
 echo installing cron
 ./bin/cron_installer.rb
 

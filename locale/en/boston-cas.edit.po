@@ -92,6 +92,9 @@ msgstr ""
 msgid "Client"
 msgstr ""
 
+msgid "Client Addresses"
+msgstr ""
+
 msgid "Client Agrees To Match"
 msgstr ""
 
@@ -443,7 +446,7 @@ msgstr ""
 msgid "Warehouse ROI Contact Information"
 msgstr ""
 
-msgid "We want to reach a you when there is a housing program opening for you."
+msgid "We want to reach you when there is a housing program opening for you."
 msgstr ""
 
 msgid "When you indicate interest, notification will be sent to the"
