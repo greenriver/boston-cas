@@ -19,7 +19,8 @@ module MatchDecisionReasons
 
     has_many :decisions, class_name: 'MatchDecisions::Base', foreign_key: :decline_reason_id
 
-    scope :active, -> { where(active: true) }
+    scope :active, -> { where(active: true, limited: false) }
+    scope :limited, -> { where(active: true, limited: true) }
 
     scope :ineligible_in_warehouse, -> do
       where(ineligible_in_warehouse: true)
@@ -34,6 +35,5 @@ module MatchDecisionReasons
     def not_working_with_client?
       false
     end
-
   end
 end

@@ -392,8 +392,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/data_source.rb'
     - 'app/models/match_access_contexts/authenticated_user.rb'
     - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decision_reasons/administrative_cancel.rb'
-    - 'app/models/match_decision_reasons/base.rb'
     - 'app/models/match_decision_reasons/dnd_staff_decline.rb'
     - 'app/models/match_decision_reasons/housing_subsidy_admin_decline.rb'
     - 'app/models/match_decision_reasons/housing_subsidy_admin_priority_decline.rb'
@@ -447,7 +445,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_progress_updates/shelter_agency.rb'
     - 'app/models/match_progress_updates/ssp.rb'
     - 'app/models/match_routes/default.rb'
-    - 'app/models/match_routes/four.rb'
     - 'app/models/match_routes/homeless_set_aside.rb'
     - 'app/models/match_routes/provider_only.rb'
     - 'app/models/matching/engine.rb'
@@ -715,7 +712,6 @@ Layout/FirstHashElementIndentation:
     - 'app/models/match_decisions/homeless_set_aside/set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator.rb'
     - 'app/models/match_decisions/provider_only/confirm_hsa_accepts_client_decline_dnd_staff.rb'
     - 'app/models/match_routes/default.rb'
-    - 'app/models/match_routes/four.rb'
     - 'app/models/match_routes/homeless_set_aside.rb'
     - 'app/models/match_routes/provider_only.rb'
     - 'app/models/sub_program.rb'
@@ -999,7 +995,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/models/imported_clients_csv.rb'
     - 'app/models/match_decisions/five/five_mitigation.rb'
     - 'app/models/match_decisions/five/five_screening.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/rules/assessment_score_greater_than_specified.rb'
     - 'app/models/rules/tagged_with.rb'
@@ -1104,7 +1099,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/models/dashboards/clients.rb'
     - 'app/models/dashboards/overview.rb'
     - 'app/models/imported_clients_csv.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity.rb'
@@ -1494,7 +1488,6 @@ Lint/UnusedMethodArgument:
     - 'app/jobs/base_job.rb'
     - 'app/models/client.rb'
     - 'app/models/deidentified_clients_xlsx.rb'
-    - 'app/models/match_decision_reasons/administrative_cancel.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
@@ -1644,7 +1637,6 @@ Lint/UselessAssignment:
     - 'app/models/identified_client.rb'
     - 'app/models/match_prioritization/base.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/notifications/criminal_hearing_scheduled_dnd_staff.rb'
     - 'app/models/notifications/criminal_hearing_scheduled_housing_subsidy_admin.rb'
@@ -1744,7 +1736,6 @@ Naming/PredicateName:
     - 'app/models/match_events/base.rb'
     - 'app/models/match_events/note.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
 
@@ -1807,7 +1798,6 @@ Style/CaseEquality:
 # IgnoredMethods: ==, equal?, eql?
 Style/ClassEqualityComparison:
   Exclude:
-    - 'app/models/match_routes/base.rb'
 
 # Offense count: 2
 Style/ClassVars:
@@ -1899,7 +1889,6 @@ Style/GuardClause:
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/match_decisions/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/program_contacts.rb'
@@ -2092,7 +2081,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_decisions/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/requirement.rb'
@@ -2123,7 +2111,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/sub_programs_controller.rb'
     - 'app/models/match_decisions/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
@@ -2145,7 +2132,6 @@ Style/MultilineIfThen:
 # SupportedStyles: literals, strict
 Style/MutableConstant:
   Exclude:
-    - 'app/models/cas_seeds/match_decision_reasons.rb'
     - 'app/models/message.rb'
 
 # Offense count: 14
@@ -2241,7 +2227,6 @@ Style/RedundantBegin:
   Exclude:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/reports/match_progress_controller.rb'
-    - 'app/models/match_decision_reasons/administrative_cancel.rb'
     - 'bin/yarn'
 
 # Offense count: 10
@@ -2277,7 +2262,6 @@ Style/RedundantSelf:
     - 'app/models/match_census.rb'
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/project_client.rb'
     - 'app/models/stalled_response.rb'
     - 'app/models/sub_program.rb'
@@ -2431,7 +2415,6 @@ Style/StringLiterals:
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/notifications/base.rb'
     - 'app/models/notifications/match_initiation_for_manual_notification.rb'
