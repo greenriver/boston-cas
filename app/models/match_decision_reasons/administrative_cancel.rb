@@ -12,8 +12,8 @@ module MatchDecisionReasons
       av = active.to_a
       # av << none
       if route.present?
-        av.reject! { |reason| route.removed_admin_reasons.include?(reason.name) }
-        av += limited.where(name: route.additional_admin_reasons).to_a
+        av.reject! { |reason| route.removed_admin_reasons.include?(reason.name) } if route.removed_admin_reasons.any?
+        av += limited.where(name: route.additional_admin_reasons).to_a if route.additional_admin_reasons.any?
       end
       av << other
 

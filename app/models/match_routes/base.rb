@@ -76,11 +76,11 @@ module MatchRoutes
     end
 
     def removed_admin_reasons
-      nil
+      []
     end
 
     def additional_admin_reasons
-      nil
+      []
     end
 
     def self.match_steps
