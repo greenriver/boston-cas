@@ -212,6 +212,7 @@ Rails.application.routes.draw do
       end
     end
     resources :match_progress, only: [:index]
+    resources :housed_addresses, only: [:index]
   end
 
   namespace :system_status do

@@ -156,6 +156,12 @@ def report_list
         description: 'CAS match progress tracking report',
         limitable: true,
       },
+      {
+        url: 'reports/housed_addresses',
+        name: 'Housed Client Addresses',
+        description: 'Addresses of successfully housed clients.',
+        limitable: true,
+      },
     ],
   }
 end
