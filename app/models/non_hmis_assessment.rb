@@ -234,6 +234,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :automatic_approval_ack,
       :outreach_name,
       :setting,
+      :hud_assessment_location,
+      :hud_assessment_type,
       denial_required: [],
       neighborhood_interests: [],
       provider_agency_preference: [],
@@ -267,6 +269,28 @@ class NonHmisAssessment < ActiveRecord::Base
       5 => 'Transgender',
       6 => 'Questioning',
     }.freeze
+  end
+
+  def hud_assessment_types
+    {
+      'Phone' => 1,
+      'Virtual' => 2,
+      'In Person' => 3,
+    }
+  end
+
+  def hud_assessment_locations
+    return [] unless Warehouse::Base.enabled?
+
+    Warehouse::AssessmentAnswerLookup.
+      for_column(:assessment_location).
+      order(response_text: :asc).
+      pluck(:response_text, :response_code).to_h
+  end
+
+  # Override as necessary
+  def hud_assessment_level
+    2 # Housing Needs Assessment
   end
 
   def lockable_fields

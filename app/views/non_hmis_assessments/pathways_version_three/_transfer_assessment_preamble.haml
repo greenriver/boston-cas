@@ -8,14 +8,19 @@
   %li
     Which RRH Clients Can Complete the RRH Transfer Assessment?
     %ul
-      %li Participants must have signed a lease in the RRH program at least six months before completing this assessment
+      %li
+        Participants must have signed a lease in the RRH program at least six
+        %strong (6)
+        months before completing this assessment
 
   %li
     Who can administer the RRH Transfer Assessment?
     %p Rapid Re-housing stabilization staff who:
     %ul
       %li
-        Attended a training on how to administer the assessment in the last year
+        Attended a training on how to administer the
+        %strong RRH Transfer Assessment
+        in the last year
         %br
         and
       %li Actively work with the client on housing stability
@@ -35,7 +40,9 @@
 
   %li
     %strong Filing a Non-Discrimination Complaint:
-    If at any time you would like information on filing a complaint because you believe you are being discriminated against, let me know and I can give you information on how to pursue this. (Note to assessor: Information on the procedure can be found in the Coordinated Entry Policies & Procedures at bostoncoc.mailchimpsites.com)
+    If at any time you would like information on filing a complaint because you believe you are being discriminated against, let me know and I can give you information on how to pursue this. (Note to assessor:
+    = succeed(')') do
+      = link_to 'Full Guidance on Changed Eligibility & Referrals to Boston CoC Housing Options', 'https://bostoncoc.mailchimpsites.com/', target: :_blank
 
 
 %h2 Key Points to Share with the Participant Regarding Confidentiality
@@ -43,6 +50,37 @@
   %strong Right to Refuse Responses AND/OR Share Information:
   We ask you to share information to connect you to housing programs you may be interested in. You may refuse to respond to certain questions, or refuse to have information stored and shared in the database.  Declining to share information will not jeopardize any opportunities for you, but it may be harder to get in contact with you when an opening does come up.
 %p Commitment to Confidentiality: If you decline to share your information, please know we will uphold your confidentiality to keep your information secure, private and safe.
+
+
+.c-question{data: {number: '1A'}}
+  .c-question__wrapper
+    .c-question__number 1A
+    .c-question__input
+      .form-group
+        .controls
+          .form--label-hint-wrapper
+            .form--lable-hint
+              %label.control-label Permission to Share Your Information with Partner Agencies
+              %p To sign you up for housing programs you may be interested in, we would like to ask for your permission to share information with participating agencies who manage these programs so they may contact you when there is an opening. All of the participating agencies have agreed to keep all data confidential and secure. Is this okay with you?
+              %p
+                %strong Yes
+              %p
+                Check to see if a Housing Assistance Network (HAN) Release of Information is uploaded into the participant's warehouse record.
+                %ul
+                  %li If one IS uploaded, proceed to the next section → Section 2, Language & Safety
+                  %li
+                    If one IS NOT uploaded, complete a COVID HAN release and upload to the Warehouse. COVID HAN release can be found
+                    %a{ href: 'https://bostoncoc.mailchimpsites.com/', target: :_blank } here.
+                    If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, check the box in the box on the Non-HMIS Client edit screen indicating that you have a HAN in your file.
+              %p
+                %strong No
+                %ul
+                  %li If the participant chooses not to share information with other provider agencies, staff may sign a Limited CAS release so that the Coordinated Entry lead agency can sign them up for programs, but not share information with any other providers. Check to see if a Limited CAS release is uploaded into the participant's warehouse record.
+                  %li If one IS uploaded, proceed to the next section.
+                  %li
+                    If one IS NOT uploaded, staff may complete a Limited CAS Release and upload to the Warehouse. Limited CAS release can be found
+                    %a{ href: 'https://bostoncoc.mailchimpsites.com/', target: :_blank } here.
+                    If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, check the box in the box on the Non-HMIS Client edit screen indicating that you have a Limited CAS release in your file.
 
 %h1.mt-8 Assessment Questions
 %hr

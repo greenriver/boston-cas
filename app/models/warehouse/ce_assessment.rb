@@ -36,10 +36,10 @@ module Warehouse
           cas_non_hmis_assessment_id: assessment.id,
           hmis_client_id: assessment.non_hmis_client.warehouse_client_id,
           assessment_date: assessment.entry_date,
-          assessment_location: 'CAS', # NOTE: this is not collected in any non-HMIS assessments
-          assessment_type: 2,
-          assessment_level: 2,
-          assessment_status: 1,
+          assessment_location: assessment.hud_assessment_location.presence || 'CAS',
+          assessment_type: assessment.hud_assessment_type.presence || 2,
+          assessment_level: assessment.hud_assessment_level,
+          assessment_status: 1, # Placed on prioritization list
           assessment_created_at: assessment.created_at,
           assessment_updated_at: assessment.updated_at,
         }
