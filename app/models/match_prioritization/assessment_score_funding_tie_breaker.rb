@@ -6,15 +6,14 @@
 
 module MatchPrioritization
   class AssessmentScoreFundingTieBreaker < Base
-
     def self.title
       'Assessment Score with Funding Date Tie Breaker'
     end
 
-    def self.prioritization_for_clients(scope, match_route:)
+    def self.prioritization_for_clients(scope, match_route:) # rubocop:disable Lint/UnusedMethodArgument
       scope.where.not(c_t[:assessment_score].eq(nil)).
-          order(c_t[:assessment_score].desc).
-          order(c_t[:financial_assistance_end_date].desc)
+        order(c_t[:assessment_score].desc).
+        order(c_t[:financial_assistance_end_date].desc)
     end
 
     def self.client_prioritization_value_method

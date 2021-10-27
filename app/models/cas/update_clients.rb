@@ -6,22 +6,18 @@
 
 module Cas
   class UpdateClients
-
     def run!
       return if Client.advisory_lock_exists?('update_clients')
+
       Client.with_advisory_lock('update_clients') do
         if needs_update?
-          to_add = []
-          to_delete = []
-          to_update = []
-
           # add clients for:
           # 1. Any project client with an empty client_id
           # 2. Any project client with a client_id that doesn't have a corresponding client
           ProjectClient.transaction do
-            remove_unused_clients()
-            update_existing_clients()
-            add_missing_clients()
+            remove_unused_clients
+            update_existing_clients
+            add_missing_clients
 
             ProjectClient.update_all(needs_update: false)
           end
@@ -32,7 +28,7 @@ module Cas
     end
 
     def update_existing_clients
-      count = ProjectClient.has_client.update_pending.count
+      # count = ProjectClient.has_client.update_pending.count
       # puts "Updating #{count} clients"
       ProjectClient.has_client.update_pending.each do |project_client|
         client = project_client.client
@@ -49,7 +45,7 @@ module Cas
     end
 
     def add_missing_clients
-      count = ProjectClient.needs_client.count
+      # count = ProjectClient.needs_client.count
       # puts "Adding #{count} clients"
       ProjectClient.needs_client.each do |project_client|
         c = Client.create(attributes_for_client(project_client))
@@ -68,9 +64,7 @@ module Cas
       Client.where(id: clients_to_de_activate).each do |client|
         # remove anyone who never really participated
         # everyone else just gets marked as available false
-        if client.client_opportunity_matches.in_process_or_complete.blank?
-          client.destroy
-        end
+        client.destroy if client.client_opportunity_matches.in_process_or_complete.blank?
       end
     end
 

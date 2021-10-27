@@ -63,7 +63,7 @@ module MatchPrioritization
     end
 
     def self.c_t
-      c_t = Client.arel_table
+      Client.arel_table
     end
 
     def requires_tag?

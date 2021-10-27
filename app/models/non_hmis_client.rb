@@ -55,7 +55,7 @@ class NonHmisClient < ApplicationRecord
     end
   end
 
-  scope :editable_by, -> (user) do
+  scope :editable_by, ->(user) do
     if user.can_edit_all_clients?
       all
     else
@@ -77,7 +77,7 @@ class NonHmisClient < ApplicationRecord
     where(identified: false)
   end
 
-  scope :family_member, -> (status) do
+  scope :family_member, ->(status) do
     joins(:non_hmis_assessments).
       where(family_member: status).
       distinct
@@ -89,18 +89,20 @@ class NonHmisClient < ApplicationRecord
 
   def self.age date:, dob:
     return unless date.present? && dob.present?
+
     age = date.year - dob.year
     age -= 1 if dob > date.years_ago(age)
     return age
   end
 
-  def age date=Date.current
+  def age date = Date.current
     return unless date_of_birth.present?
+
     date = date.to_date
     dob = date_of_birth.to_date
     self.class.age(date: date, dob: dob)
   end
-  alias_method :age_on, :age
+  alias age_on age
 
   def full_name
     "#{first_name} #{middle_name} #{last_name}"
@@ -125,23 +127,23 @@ class NonHmisClient < ApplicationRecord
   def cohort_names
     return '' unless Warehouse::Base.enabled?
 
-    Warehouse::Cohort.active.where(id: self.active_cohort_ids).pluck(:name).join("\n")
+    Warehouse::Cohort.active.where(id: active_cohort_ids).pluck(:name).join("\n")
   end
 
   # Sorting and Searching
-  scope :search_first_name, -> (name) do
+  scope :search_first_name, ->(name) do
     arel_table[:first_name].lower.matches("#{name.downcase}%")
   end
 
-  scope :search_last_name, -> (name) do
+  scope :search_last_name, ->(name) do
     arel_table[:last_name].lower.matches("#{name.downcase}%")
   end
 
-  scope :search_alternate_name, -> (name) do
+  scope :search_alternate_name, ->(name) do
     arel_table[:client_identifier].lower.matches("%#{name.downcase}%")
   end
 
-  def self.ransackable_scopes(auth_object = nil)
+  def self.ransackable_scopes(_auth_object = nil)
     [:text_search]
   end
 
@@ -160,7 +162,7 @@ class NonHmisClient < ApplicationRecord
     project_client.save
   end
 
-  def set_project_client_fields(project_client)
+  def set_project_client_fields(project_client) # rubocop:disable Naming/AccessorMethodName, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
     # NonHmisClient fields
     project_client.first_name = fix_first_name
     project_client.last_name = fix_last_name
@@ -174,8 +176,8 @@ class NonHmisClient < ApplicationRecord
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
     project_client.housing_release_status = _('Limited CAS Release') if limited_release_on_file
     project_client.tags = cas_tags
-    project_client.default_shelter_agency_contacts = [ contact&.email ] if contact_id.present?
-    project_client.sync_with_cas = self.available
+    project_client.default_shelter_agency_contacts = [contact&.email] if contact_id.present?
+    project_client.sync_with_cas = available
 
     # current_assessment fields
     project_client.assessment_name = current_assessment&.assessment_name
@@ -200,8 +202,8 @@ class NonHmisClient < ApplicationRecord
 
     if current_assessment&.veteran_status.present?
       project_client.veteran_status = 1 if current_assessment&.veteran_status == 'Yes'
-    else
-      project_client.veteran_status = 1 if current_assessment&.veteran
+    elsif current_assessment&.veteran
+      project_client.veteran_status = 1
     end
     project_client.rrh_desired = current_assessment&.rrh_desired || false
     project_client.youth_rrh_desired = current_assessment&.youth_rrh_desired || false
@@ -217,14 +219,14 @@ class NonHmisClient < ApplicationRecord
     project_client.interested_in_set_asides = current_assessment&.interested_in_set_asides || false
 
     project_client.income_total_monthly = current_assessment&.income_total_monthly
-    project_client.disabling_condition = if current_assessment&.disabling_condition then 1 else nil end
-    project_client.physical_disability = if current_assessment&.physical_disability then 1 else nil end
-    project_client.developmental_disability = if current_assessment&.developmental_disability then 1 else nil end
+    project_client.disabling_condition = (1 if current_assessment&.disabling_condition)
+    project_client.physical_disability = (1 if current_assessment&.physical_disability)
+    project_client.developmental_disability = (1 if current_assessment&.developmental_disability)
     project_client.domestic_violence = 1 if current_assessment&.domestic_violence
 
-    project_client.chronic_health_condition = if current_assessment&.chronic_health_condition then 1 else nil end
-    project_client.mental_health_problem = if current_assessment&.mental_health_problem then 1 else nil end
-    project_client.substance_abuse_problem = if current_assessment&.substance_abuse_problem then "Yes" else "No" end
+    project_client.chronic_health_condition = (1 if current_assessment&.chronic_health_condition)
+    project_client.mental_health_problem = (1 if current_assessment&.mental_health_problem)
+    project_client.substance_abuse_problem = if current_assessment&.substance_abuse_problem then 'Yes' else 'No' end
     project_client.vispdat_score = current_assessment&.vispdat_score
     project_client.vispdat_priority_score = current_assessment&.vispdat_priority_score
     project_client.health_prioritized = current_assessment&.health_prioritized
@@ -239,11 +241,7 @@ class NonHmisClient < ApplicationRecord
     project_client.sro_ok = current_assessment&.sro_ok
     project_client.evicted = current_assessment&.evicted
     project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false
-    project_client.holds_voucher_on = if current_assessment&.have_tenant_voucher
-      current_assessment&.entry_date
-    else
-      nil
-    end
+    project_client.holds_voucher_on = (current_assessment&.entry_date if current_assessment&.have_tenant_voucher)
 
     project_client.needs_update = true
   end
@@ -351,16 +349,16 @@ class NonHmisClient < ApplicationRecord
   def update_project_clients_from_non_hmis_clients
     # remove unused ProjectClients
     ProjectClient.where(
-      data_source_id: DataSource.non_hmis.select(:id)).
+      data_source_id: DataSource.non_hmis.select(:id),
+    ).
       where.not(id_in_data_source: NonHmisClient.select(:id)).
       delete_all
-
 
     # update or add clients
     client_scope.find_each do |client|
       project_client = ProjectClient.where(
         data_source_id: DataSource.non_hmis.pluck(:id),
-        id_in_data_source: client.id
+        id_in_data_source: client.id,
       ).first_or_initialize
       client.populate_project_client(project_client)
     end
@@ -385,14 +383,14 @@ class NonHmisClient < ApplicationRecord
   end
 
   def self.optional_field_names
-    @field_names ||= {
+    {
       assessment_score: 'Assessment Score',
       vispdat_score: 'VI-SPDAT Score',
       vispdat_priority_score: 'VI-SPDAT Priority Score',
       actively_homeless: 'Actively Homeless',
       health_prioritized: 'Prioritized for Health',
       hiv_aids: 'HOPWA Eligible',
-    }
+    }.freeze
   end
 
   def self.available_youth_choices
