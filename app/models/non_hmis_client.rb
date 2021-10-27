@@ -185,6 +185,9 @@ class NonHmisClient < ApplicationRecord
     project_client.days_homeless = current_assessment&.total_days_homeless_in_the_last_three_years || 0
     project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
     project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
+    project_client.entry_date = current_assessment&.entry_date
+    project_client.rrh_assessment_collected_at = current_assessment&.entry_date
+    project_client.financial_assistance_end_date = current_assessment&.financial_assistance_end_date
 
     if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current

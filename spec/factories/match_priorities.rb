@@ -14,7 +14,13 @@ FactoryBot.define do
   factory :priority_days_homeless_last_three_years, class: 'MatchPrioritization::DaysHomelessLastThreeYears' do
     active { true }
   end
+  factory :priority_days_homeless_last_three_years_assessment_date, class: 'MatchPrioritization::DaysHomelessLastThreeYearsAssessmentDate' do
+    active { true }
+  end
   factory :priority_assessment_score, class: 'MatchPrioritization::AssessmentScore' do
+    active { true }
+  end
+  factory :priority_assessment_score_funding_tie_breaker, class: 'MatchPrioritization::AssessmentScoreFundingTieBreaker' do
     active { true }
   end
   factory :priority_rank, class: 'MatchPrioritization::Rank' do

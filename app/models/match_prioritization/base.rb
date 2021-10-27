@@ -23,8 +23,10 @@ module MatchPrioritization
         MatchPrioritization::DaysHomeless,
         MatchPrioritization::DaysHomelessLastThreeYears,
         MatchPrioritization::DaysHomelessLastThreeYearsRandomTieBreaker,
+        MatchPrioritization::DaysHomelessLastThreeYearsAssessmentDate,
         MatchPrioritization::AssessmentScore,
         MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
+        MatchPrioritization::AssessmentScoreFundingTieBreaker,
         MatchPrioritization::Rank,
         MatchPrioritization::HoldsVoucherOn,
       ]

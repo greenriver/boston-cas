@@ -37,6 +37,7 @@ RSpec.describe Client, type: :model do
         expect( Client.prioritized(route, Client.all) ).to eq Client.order(days_homeless_in_last_three_years: :desc)
       end
     end
+
     context 'when prioritized by DaysHomeless' do
       let(:priority) { create :priority_days_homeless }
       let(:route) { create :default_route, match_prioritization: priority }
@@ -47,6 +48,7 @@ RSpec.describe Client, type: :model do
         expect( Client.prioritized(route, Client.all) ).to eq Client.order(days_homeless: :desc)
       end
     end
+
     context 'when prioritized by AssessmentScore' do
       let(:priority) { create :priority_assessment_score }
       let(:route) { create :default_route, match_prioritization: priority }
@@ -57,8 +59,41 @@ RSpec.describe Client, type: :model do
         expect( Client.prioritized(route, Client.all).pluck(:id, :assessment_score, :days_homeless) ).to eq Client.order(assessment_score: :desc, rrh_assessment_collected_at: :desc).pluck(:id, :assessment_score, :days_homeless)
       end
     end
+
+    context 'when prioritized by AssessmentScore with funding tie breaker' do
+      let(:priority) { create :priority_assessment_score_funding_tie_breaker }
+      let(:route) { create :default_route, match_prioritization: priority }
+      before :each do
+        # set the two top scores to the same thing, make sure we get the client with the latest financial_assistance_end_date
+        # as the highest priority
+        highest_scores = clients.sort_by(&:assessment_score).last(2)
+        top_score = highest_scores.map(&:assessment_score).max
+        # make they don't both have the same day
+        top_date = highest_scores.map(&:financial_assistance_end_date).max
+        highest_scores.each.with_index { |c, i| c.update(assessment_score: top_score, financial_assistance_end_date: top_date - i.days) }
+      end
+      it 'is an ActiveRecord::Relation' do
+        expect(Client.prioritized(route, Client.all)).to be_an ActiveRecord::Relation
+      end
+      it 'orders by assessment_score' do
+        ordered_clients = Client.order(assessment_score: :desc, financial_assistance_end_date: :desc).pluck(:id, :assessment_score, :financial_assistance_end_date)
+        expect(Client.prioritized(route, Client.all).pluck(:id, :assessment_score, :financial_assistance_end_date)).to eq(ordered_clients)
+        expect(Client.prioritized(route, Client.all).first(2).map(&:assessment_score).uniq.count).to eq(1)
+      end
+    end
+
+    context 'when prioritized by DaysHomelessLastThreeYears assessment date tie breaker' do
+      let(:priority) { create :priority_days_homeless_last_three_years_assessment_date }
+      let(:route) { create :default_route, match_prioritization: priority }
+      it 'is an ActiveRecord::Relation' do
+        expect(Client.prioritized(route, Client.all)).to be_an ActiveRecord::Relation
+      end
+      it 'orders by days_homeless_in_last_three_years' do
+        ordered_clients = Client.order(days_homeless_in_last_three_years: :desc, entry_date: :asc, tie_breaker: :asc).pluck(:id, :days_homeless_in_last_three_years, :entry_date, :tie_breaker)
+        expect(Client.prioritized(route, Client.all).pluck(:id, :days_homeless_in_last_three_years, :entry_date, :tie_breaker)).to eq(ordered_clients)
+      end
+    end
   end
-  
 
   let(:bob_smith) { create :client, first_name: 'Bob', last_name: 'Smith' }
   let(:joe_smith) { create :client, first_name: 'Joe', last_name: 'Smith' }
@@ -144,7 +179,7 @@ RSpec.describe Client, type: :model do
     end
   end
 
-  let(:ray_search) do 
+  let(:ray_search) do
     Client.where(
       Client.search_first_name('Ray')
       .or(Client.search_alternate_name('Ray')))

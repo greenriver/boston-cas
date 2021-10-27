@@ -208,6 +208,8 @@ module Cas
         :is_currently_youth,
         :older_than_65,
         :assessment_name,
+        :entry_date,
+        :financial_assistance_end_date,
       ]
     end
 
