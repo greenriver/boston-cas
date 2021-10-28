@@ -501,7 +501,7 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/unit_preamble',
         },
         sro_ok: {
-          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)? ',
+          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?',
           number: '6A',
           collection: {
             'Yes' => true,
