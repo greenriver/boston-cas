@@ -39,7 +39,10 @@ gem 'ruby-filemagic'
 # AWS SDK is needed for deployment and within the application
 gem 'aws-sdk-rails'
 gem 'aws-sdk-cloudwatchevents', '~> 1'
+gem 'aws-sdk-cloudwatchlogs', '~> 1'
+gem 'aws-sdk-cloudwatch', '~> 1'
 gem 'aws-sdk-ecs', '~> 1'
+gem 'aws-sdk-ecr', '~> 1'
 gem 'aws-sdk-ec2', '~> 1'
 gem 'aws-sdk-glacier', '~> 1'
 gem 'aws-sdk-rds', '~> 1'
@@ -54,7 +57,6 @@ gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'aws-sdk-elasticloadbalancingv2', require: false
 gem 'json'
 gem 'amazing_print'
-gem 'awesome_print'
 
 gem 'puma'
 gem 'redis'
