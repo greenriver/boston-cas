@@ -372,7 +372,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/jobs/matching/run_engine_job.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/mailers/digest_mailer.rb'
-    - 'app/mailers/immediate_mailer.rb'
     - 'app/mailers/notifications_mailer.rb'
     - 'app/models/building_contact.rb'
     - 'app/models/cas/update_voucher_availability.rb'
