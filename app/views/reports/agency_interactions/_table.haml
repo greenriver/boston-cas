@@ -1,0 +1,35 @@
+%p= page_entries_info @matches
+%p.ml-auto= paginate @matches
+.overflow-x-scroll
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Client Name
+        %th Match Start Date
+        %th Match Canceled/Declined Date
+        %th= _('Housing Search Providers')
+        %th= _('Shelter Agency Contacts')
+        %th= _('Housing Subsidy Administrators')
+        %th= _('Stabilization Services Provider')
+        %th Program
+        %th Sub-program
+    %tbody
+      - section_id = nil
+      - @matches.each do |row|
+        - decision = row.unsuccessful_decision
+        - reason_id = decision.decline_reason_id || decision.administrative_cancel_reason_id
+        - if section_id != reason_id
+          - section_id = reason_id
+          - section = MatchDecisionReasons::Base.find(section_id)
+          %tr
+            %td.table-dark{colspan:9}= reason_text(section)
+        %tr
+          %td= row.client.name
+          %td= row.match_created_event.created_at
+          %td= decision.updated_at
+          %td= format_contacts(row.hsp_contacts)
+          %td= format_contacts(row.shelter_agency_contacts)
+          %td= format_contacts(row.housing_subsidy_admin_contacts)
+          %td= format_contacts(row.ssp_contacts)
+          %td= row.program.name
+          %td= row.sub_program.name

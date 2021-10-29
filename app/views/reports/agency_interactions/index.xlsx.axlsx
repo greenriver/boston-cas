@@ -1,0 +1,41 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Agency Interactions") do |sheet|
+  title = sheet.styles.add_style(sz: 12, b: true, alignment: {horizontal: :center})
+  sheet.add_row(
+    [
+      'Client Name',
+      'Match Start Date',
+      'Match Canceled/Declined Date',
+       _('Housing Search Providers'),
+       _('Shelter Agency Contacts'),
+       _('Housing Subsidy Administrators'),
+       _('Stabilization Services Provider'),
+      'Program',
+      'Sub-program',
+    ],
+    style: title
+  )
+  section_id = nil
+  @matches.each do |row|
+    decision = row.unsuccessful_decision
+    reason_id = decision.decline_reason_id || decision.administrative_cancel_reason_id
+    if section_id != reason_id
+      section_id = reason_id
+      section_row = MatchDecisionReasons::Base.find(section_id)
+      sheet.add_row([reason_text(section_row)])
+    end
+    sheet.add_row(
+      [
+        row.client.name,
+        row.match_created_event.created_at,
+        decision.updated_at,
+        format_contacts(row.hsp_contacts),
+        format_contacts(row.shelter_agency_contacts),
+        format_contacts(row.housing_subsidy_admin_contacts),
+        format_contacts(row.ssp_contacts),
+        row.program.name,
+        row.sub_program.name,
+      ]
+    )
+  end
+end
