@@ -33,8 +33,9 @@ module Reports
     helper_method :match_decision_reasons_collection
 
     def reason_text(match_decision_reason)
-      kind = _(match_decision_reason.type.demodulize.underscore.humanize)
-      "#{match_decision_reason.name} (#{kind})"
+      text = match_decision_reason.name
+      text << "(#{match_decision_reason.title})" if match_decision_reason.title.present?
+      text
     end
     helper_method :reason_text
 
@@ -48,7 +49,7 @@ module Reports
         candidates = ClientOpportunityMatch.
           unsuccessful.
           where(updated_at: @filter.start..@filter.end).
-          joins(:decisions).
+          joins(:decisions, :client).
           visible_by(current_user)
 
         candidates.where(md_b_t[:decline_reason_id].in(@filter[:reasons])).

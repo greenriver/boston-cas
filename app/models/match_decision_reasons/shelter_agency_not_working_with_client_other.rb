@@ -6,7 +6,6 @@
 
 module MatchDecisionReasons
   class ShelterAgencyNotWorkingWithClientOther < Base
-
     def other?
       true
     end
@@ -15,5 +14,8 @@ module MatchDecisionReasons
       true
     end
 
+    def title
+      "#{_('Shelter Agency')} Not Working with Client Other"
+    end
   end
 end

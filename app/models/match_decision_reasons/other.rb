@@ -6,10 +6,12 @@
 
 module MatchDecisionReasons
   class Other < Base
-
     def other?
       true
     end
 
+    def title
+      ''
+    end
   end
 end

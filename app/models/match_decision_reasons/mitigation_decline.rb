@@ -6,6 +6,8 @@
 
 module MatchDecisionReasons
   class MitigationDecline < Base
-
+    def title
+      'Mitigation Decline'
+    end
   end
 end

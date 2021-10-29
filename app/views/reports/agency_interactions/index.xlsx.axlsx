@@ -1,28 +1,31 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Agency Interactions") do |sheet|
-  title = sheet.styles.add_style(sz: 12, b: true, alignment: {horizontal: :center})
+  title = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
+  decision_style = sheet.styles.add_style(sz: 12, fg_color: 'FFFFFF', bg_color: '000000')
   sheet.add_row(
     [
       'Client Name',
       'Match Start Date',
       'Match Canceled/Declined Date',
-       _('Housing Search Providers'),
-       _('Shelter Agency Contacts'),
-       _('Housing Subsidy Administrators'),
-       _('Stabilization Services Provider'),
+      _('Housing Search Providers'),
+      _('Shelter Agency Contacts'),
+      _('Housing Subsidy Administrators'),
+      _('Stabilization Services Provider'),
       'Program',
       'Sub-program',
     ],
-    style: title
+    style: title,
   )
   section_id = nil
   @matches.each do |row|
+    next unless row.client
+
     decision = row.unsuccessful_decision
     reason_id = decision.decline_reason_id || decision.administrative_cancel_reason_id
     if section_id != reason_id
       section_id = reason_id
       section_row = MatchDecisionReasons::Base.find(section_id)
-      sheet.add_row([reason_text(section_row)])
+      sheet.add_row([reason_text(section_row)], style: decision_style)
     end
     sheet.add_row(
       [
