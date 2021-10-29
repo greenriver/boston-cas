@@ -27,8 +27,8 @@ wb.add_worksheet(name: "Agency Interactions") do |sheet|
     sheet.add_row(
       [
         row.client.name,
-        row.match_created_event.created_at,
-        decision.updated_at,
+        row.match_created_event.created_at.strftime('%m/%d/%Y'),
+        decision.updated_at.strftime('%m/%d/%Y'),
         format_contacts(row.hsp_contacts),
         format_contacts(row.shelter_agency_contacts),
         format_contacts(row.housing_subsidy_admin_contacts),
