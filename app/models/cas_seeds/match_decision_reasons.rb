@@ -74,6 +74,7 @@ module CasSeeds
     LIMITED_ADMINISTRATIVE_CANCEL_REASONS = [
       ['Match expired – No agency interaction', nil],
       ['Match expired – Agency interaction', nil],
+      ['Match stalled - Agency has disengaged', nil],
     ].freeze
 
     def run!

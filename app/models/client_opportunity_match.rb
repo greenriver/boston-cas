@@ -100,6 +100,7 @@ class ClientOpportunityMatch < ApplicationRecord
   scope :open, -> { where closed: false }
   scope :successful, -> { where closed: true, closed_reason: 'success' }
   scope :success, -> { successful } # alias
+  scope :unsuccessful, -> { where(closed: true).where.not(closed_reason: 'success') }
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
@@ -356,6 +357,11 @@ class ClientOpportunityMatch < ApplicationRecord
 
     # FIXME, should look for next decision on route based on route #match_steps
     @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
+  end
+
+  def unsuccessful_decision
+    initialized_decisions.where.not(decline_reason_id: nil)&.first ||
+      initialized_decisions.where.not(administrative_cancel_reason_id: nil)&.first
   end
 
   def declined_decision

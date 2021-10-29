@@ -35,5 +35,9 @@ module MatchDecisionReasons
         'Vacancy filled by other client',
       ]
     end
+
+    def title
+      _('Administrative Cancelation')
+    end
   end
 end
