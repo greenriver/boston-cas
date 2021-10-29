@@ -511,7 +511,7 @@ module PathwaysVersionThreeCalculations
           as: :pretty_boolean_group,
         },
         required_number_of_bedrooms: {
-          label: 'If you need a bedroom size larger than an SRO select the size below you would move into.',
+          label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below you would move into.',
           number: '6B',
           collection: {
             '2' => 2,
@@ -720,7 +720,7 @@ module PathwaysVersionThreeCalculations
         not_matched_ack: {
           label: 'What should I do to try to find housing if I am not matched with housing opening?',
           number: '',
-          hint: 'We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings.  We encourage you to keep thinking about other ways you may be able to move out of homelessness, like with roommates or people you know at the sametime you are applying for affordable housing. If you think of an option, you can always be reassessed to see if we can help with the move in.',
+          hint: 'We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings.  We encourage you to keep thinking about other ways you may be able to move out of homelessness, like with roommates or people you know at the same time you are applying for affordable housing. If you think of an option, you can always be reassessed to see if we can help with the move in.',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
           required: true,
@@ -1032,11 +1032,11 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/pathways_household_history_preamble',
         },
         days_homeless_in_the_last_three_years: {
-          label: 'How many cumulative (total) Boston homeless nights does the participant’s Windows into the Warehouse record show?',
+          label: 'How many cumulative (total) Boston homeless nights does the participant’s Window into the Warehouse record show?',
           number: '9A',
         },
         additional_homeless_nights: {
-          label: 'If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history using the “Documenting Current Boston Homelessness Guidance and Template” form at https://bostoncoc.mailchimpsites.com/ and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. You may skip this step and the form if you do not have any additional Boston homeless nights to add',
+          label: 'If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history using the “Documenting Current Boston Homelessness Guidance and Template” form at https://bostoncoc.mailchimpsites.com/ and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. Keep this in the client’s file at your agency. This documentation may be required by the housing subsidy administrator agency the client is matched to. You may skip this step and the form if you do not have any additional Boston homeless nights to add',
           number: '9B',
         },
         total_days_homeless_in_the_last_three_years: {
