@@ -48,7 +48,8 @@ module Reports
         candidates = ClientOpportunityMatch.
           unsuccessful.
           where(updated_at: @filter.start..@filter.end).
-          joins(:decisions)
+          joins(:decisions).
+          visible_by(current_user)
 
         candidates.where(md_b_t[:decline_reason_id].in(@filter[:reasons])).
           or(candidates.where(md_b_t[:administrative_cancel_reason_id].in(@filter[:reasons]))).
