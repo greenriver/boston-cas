@@ -65,6 +65,7 @@ module MatchRoutes
       @additional_admin_reasons ||= [
         'Match expired – No agency interaction',
         'Match expired – Agency interaction',
+        'Match stalled - Agency has disengaged',
       ].freeze
     end
   end

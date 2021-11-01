@@ -162,6 +162,12 @@ def report_list
         description: 'Addresses of successfully housed clients.',
         limitable: true,
       },
+      {
+        url: 'reports/agency_interactions',
+        name: 'Agency Interactions',
+        description: 'Report of agency interactions with matches.',
+        limitable: true,
+      },
     ],
   }
 end
