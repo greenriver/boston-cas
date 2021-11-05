@@ -54,7 +54,6 @@ gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'aws-sdk-elasticloadbalancingv2', require: false
 gem 'json'
 gem 'amazing_print'
-gem 'awesome_print'
 
 gem 'puma'
 gem 'redis'

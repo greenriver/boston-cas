@@ -6,6 +6,8 @@
 
 module MatchDecisionReasons
   class HousingSubsidyAdminDecline < Base
-
+    def title
+      "#{_('HSA')} Decline"
+    end
   end
 end

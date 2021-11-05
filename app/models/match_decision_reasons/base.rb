@@ -28,6 +28,10 @@ module MatchDecisionReasons
 
     validates :name, presence: true
 
+    def title
+      type.demodulize.underscore.humanize
+    end
+
     def other?
       false
     end

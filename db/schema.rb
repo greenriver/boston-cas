@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_134707) do
+ActiveRecord::Schema.define(version: 2021_10_27_170803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -269,6 +269,8 @@ ActiveRecord::Schema.define(version: 2021_10_27_134707) do
     t.date "holds_voucher_on"
     t.boolean "holds_internal_cas_voucher"
     t.string "assessment_name"
+    t.date "entry_date"
+    t.date "financial_assistance_end_date"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -1137,6 +1139,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_134707) do
     t.boolean "older_than_65"
     t.date "holds_voucher_on"
     t.string "assessment_name"
+    t.date "financial_assistance_end_date"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

@@ -130,7 +130,6 @@ Layout/DotPosition:
     - 'app/models/unit.rb'
     - 'app/models/user.rb'
     - 'app/models/voucher.rb'
-    - 'spec/models/client_spec.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
@@ -283,7 +282,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/factories/users.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/client_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
@@ -392,14 +390,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/data_source.rb'
     - 'app/models/match_access_contexts/authenticated_user.rb'
     - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decision_reasons/dnd_staff_decline.rb'
-    - 'app/models/match_decision_reasons/housing_subsidy_admin_decline.rb'
-    - 'app/models/match_decision_reasons/housing_subsidy_admin_priority_decline.rb'
-    - 'app/models/match_decision_reasons/mitigation_decline.rb'
-    - 'app/models/match_decision_reasons/other.rb'
-    - 'app/models/match_decision_reasons/shelter_agency_decline.rb'
-    - 'app/models/match_decision_reasons/shelter_agency_not_working_with_client.rb'
-    - 'app/models/match_decision_reasons/shelter_agency_not_working_with_client_other.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
@@ -650,7 +640,6 @@ Layout/ExtraSpacing:
     - 'app/models/config.rb'
     - 'app/models/imported_client.rb'
     - 'app/models/stalled_response.rb'
-    - 'spec/factories/clients.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_five_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_spec.rb'
@@ -880,7 +869,6 @@ Layout/MultilineMethodCallBraceLayout:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/models/dashboards/clients.rb'
-    - 'spec/models/client_spec.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
@@ -1112,10 +1100,8 @@ Layout/SpaceInsideBlockBraces:
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
-    - 'spec/factories/clients.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/client_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/rules/female_spec.rb'
@@ -1189,7 +1175,6 @@ Layout/SpaceInsideParens:
     - 'spec/controllers/accounts_controller_spec.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/client_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
@@ -1330,7 +1315,6 @@ Layout/TrailingWhitespace:
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/factories/housing_attributes.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/client_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/rules/female_spec.rb'
@@ -1353,7 +1337,6 @@ Lint/AmbiguousBlockAssociation:
 Lint/AmbiguousOperator:
   Exclude:
     - 'app/controllers/concerns/controller_authorization.rb'
-    - 'spec/models/client_spec.rb'
     - 'spec/models/rules/disability_verified_on_spec.rb'
     - 'spec/models/rules/female_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
@@ -1477,7 +1460,6 @@ Lint/UnusedBlockArgument:
     - 'app/models/dashboards/vacancies.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/warehouse/build_report.rb'
-    - 'spec/factories/clients.rb'
 
 # Offense count: 128
 # Cop supports --auto-correct.
@@ -1634,7 +1616,6 @@ Lint/UselessAssignment:
     - 'app/models/dashboards/clients.rb'
     - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_prioritization/base.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/notifications/criminal_hearing_scheduled_dnd_staff.rb'

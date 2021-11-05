@@ -213,7 +213,6 @@ class NonHmisAssessment < ActiveRecord::Base
       :substance_abuse_problem,
       :voucher_agency,
       :assessment_type,
-      :financial_assistance_end_date,
       :times_moved,
       :health_severity,
       :ever_experienced_dv,

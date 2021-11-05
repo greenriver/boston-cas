@@ -6,6 +6,8 @@
 
 module MatchDecisionReasons
   class ShelterAgencyDecline < Base
-
+    def title
+      "#{_('Shelter Agency')} Decline"
+    end
   end
 end
