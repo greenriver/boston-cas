@@ -13,6 +13,12 @@ class ImportedClientAssessment < NonHmisAssessment
   # validates :income_total_monthly, presence: true, numericality: true
   validates :voucher_agency, presence: true, if: :have_tenant_voucher?
 
+  def for_matching
+    {
+      'IdentifiedClientAssessment' => 'Non-HMIS Assessment - Identified',
+    }
+  end
+
   def self.client_table_headers(user)
     columns = [
       'Last Name',
