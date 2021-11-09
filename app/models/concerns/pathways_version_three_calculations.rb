@@ -419,6 +419,7 @@ module PathwaysVersionThreeCalculations
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
           number: '2D',
           as: :text,
+          hint: 'Please provide email address and full name for each contact listed',
         },
         mailing_address: {
           label: 'Client\'s Mailing Address',
@@ -801,6 +802,7 @@ module PathwaysVersionThreeCalculations
           label: 'Do you have any case managers or agencies we could contact to get ahold of you?',
           number: '2D',
           as: :text,
+          hint: 'Please provide email address and full name for each contact listed',
         },
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
