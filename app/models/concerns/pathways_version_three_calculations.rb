@@ -790,13 +790,15 @@ module PathwaysVersionThreeCalculations
           label: 'List any working email addresses you use',
           number: '2B',
         },
+        shelter_name: {
+          label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
+          number: '2C',
+          as: :select_2,
+          collection: ShelterHistory.shelter_locations,
+          input_html: { data: { tags: true } },
+        },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get ahold of you?',
-          number: '2C',
-          as: :text,
-        },
-        mailing_address: {
-          label: 'Client’s Mailing Address',
           number: '2D',
           as: :text,
         },
