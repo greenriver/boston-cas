@@ -32,6 +32,7 @@
     .row
       .col-md-10
         = simple_form_for @assessment, url: assessment_path, defaults: {disabled: disabled} do |f|
+          = f.error_notification
           .o-questions
             = render "#{@non_hmis_client.type.tableize}/#{@assessment.model_name.element}", client_form: f, assessment_form: f, disabled: disabled, limited: @assessment.hide_confidential?(current_user)
 

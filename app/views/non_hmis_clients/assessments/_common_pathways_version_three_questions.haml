@@ -29,7 +29,7 @@
                   = render sub_options[:partial], locals: display_options, form: form
                 - else
                   .mb-1
-                    - if sub_options[:label] && sub_options[:as].present? && sub_options[:as] != :pretty_checkboxes_group
+                    - if sub_options[:label] && sub_options[:as].present? && sub_options[:as] != :pretty_checkboxes_group && sub_options[:as] != :pretty_boolean
                       = form.label sub_field_name, { label: sub_options[:label] }
                     = form.input(sub_field_name, {}.merge(sub_options))
         - elsif options[:as] == :pretty_boolean_group
