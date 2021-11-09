@@ -14,6 +14,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     b.use :input, class: 'form-control'
+    b.use :hint,  wrap_with: { tag: 'p', class: 'help-block label-helper label-helper--info mt-2' }
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
   end
 
