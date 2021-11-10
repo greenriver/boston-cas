@@ -89,6 +89,7 @@ jobs:
           cp config/secrets.yml.sample config/secrets.yml
           mkdir app/assets/stylesheets/theme/styles
           touch app/assets/stylesheets/theme/styles/_variables.scss
+          bundle exec rake assets:precompile
           cp .rspec.travis .rspec
       - name: Prepare test db
         env:
