@@ -26,7 +26,6 @@ module Reports
 
     def match_decision_reasons_collection
       MatchDecisionReasons::Base.
-        active.
         order(name: :asc).
         map { |reason| [reason_text(reason), reason.id] }
     end
@@ -34,7 +33,7 @@ module Reports
 
     def reason_text(match_decision_reason)
       text = match_decision_reason.name
-      text << "(#{match_decision_reason.title})" if match_decision_reason.title.present?
+      text << " (#{match_decision_reason.title})" if match_decision_reason.title.present?
       text
     end
     helper_method :reason_text
