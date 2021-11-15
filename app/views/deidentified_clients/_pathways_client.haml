@@ -10,7 +10,7 @@
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.is_currently_youth, label: 'Is the client between the ages of 18 and 24?'
       - else
         = form.input :is_currently_youth, as: :pretty_boolean, wrapper: :custom_boolean
-    - if Warehouse::Base.enabled?
+    - if Warehouse::Base.enabled? && ! @non_hmis_client.pathways_enabled?
       .c-question
         - if disabled
           = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.cohort_names.split("\n").join(', '), label: 'Cohorts'
