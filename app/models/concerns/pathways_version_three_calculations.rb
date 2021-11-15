@@ -434,7 +434,7 @@ module PathwaysVersionThreeCalculations
           input_html: { data: { tags: true } },
         },
         phone_number: {
-          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call',
+          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call: empty text box',
           number: '2D',
         },
         email_addresses: {

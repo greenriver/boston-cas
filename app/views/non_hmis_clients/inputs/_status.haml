@@ -1,5 +1,5 @@
 .row.mb-4
-  - unless disabled
+  - if ! disabled && @non_hmis_client.identified?
     .col-12
       .c-quesiton
         = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false

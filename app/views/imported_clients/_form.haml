@@ -89,7 +89,8 @@
 .row
   .col-sm-6
     .form-inputs
-      = f.input :warehouse_client_id, label: 'Warehouse Client ID'
+      - if @non_hmis_client.identified?
+        = f.input :warehouse_client_id, label: 'Warehouse Client ID'
       = f.input :available
     .form-actions
       = f.button :submit, "Update Client", class: 'btn btn-primary'
