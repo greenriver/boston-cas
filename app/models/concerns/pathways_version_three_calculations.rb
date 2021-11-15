@@ -396,53 +396,74 @@ module PathwaysVersionThreeCalculations
           collection: hud_assessment_types,
           required: true,
         },
+        staff_name: {
+          label: 'Name of Staff Completing Assessment',
+          number: '',
+        },
+        staff_email: {
+          label: 'Email Address of Staff Completing Assessment',
+          number: '',
+        },
         _contact_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
         },
-        phone_number: {
-          label: 'Client phone number',
+        setting: {
+          label: 'What setting do you currently reside (or sleep in) - select one (required)?',
           number: '2A',
-        },
-        email_addresses: {
-          label: 'List any working email addresses you use',
-          number: '2B',
+          collection: {
+            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            _('Transitional Housing') => 'Transitional Housing',
+            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+          },
+          as: :pretty_boolean_group,
         },
         shelter_name: {
-          label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
-          number: '2C',
+          label: 'If you are in an emergency shelter, select which one',
+          number: '2B',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
           input_html: { data: { tags: true } },
         },
+        outreach_name: {
+          label: 'If you are in unsheltered and working with an outreach program, select which one',
+          number: '2C',
+          as: :select_2,
+          collection: ShelterHistory.outreach_programs,
+          input_html: { data: { tags: true } },
+        },
+        phone_number: {
+          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call: empty text box',
+          number: '2D',
+        },
+        email_addresses: {
+          label: 'List any working email addresses you use',
+          number: '2E',
+        },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
-          number: '2D',
+          number: '2F',
           as: :text,
           hint: 'Please provide email address and full name for each contact listed',
         },
-        mailing_address: {
-          label: 'Client\'s Mailing Address',
-          number: '2E',
-          as: :text,
-        },
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
-          number: '2F',
+          number: '2G',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
           input_html: { data: { tags: true } },
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
-          number: '2G',
+          number: '2H',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
           input_html: { data: { tags: true } },
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
-          number: '2H',
+          number: '2I',
         },
         _household_preamble: {
           as: :partial,
@@ -779,42 +800,68 @@ module PathwaysVersionThreeCalculations
           collection: hud_assessment_types,
           required: true,
         },
+        staff_name: {
+          label: 'Name of Staff Completing Assessment',
+          number: '',
+        },
+        staff_email: {
+          label: 'Email Address of Staff Completing Assessment',
+          number: '',
+        },
         _contact_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
         },
-        phone_number: {
-          label: 'Client phone number',
+        setting: {
+          label: 'What setting do you currently reside (or sleep in) - select one (required)?',
           number: '2A',
-        },
-        email_addresses: {
-          label: 'List any working email addresses you use',
-          number: '2B',
+          collection: {
+            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            _('Transitional Housing') => 'Transitional Housing',
+            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+          },
+          as: :pretty_boolean_group,
         },
         shelter_name: {
-          label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
-          number: '2C',
+          label: 'If you are in an emergency shelter, select which one',
+          number: '2B',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
           input_html: { data: { tags: true } },
         },
+        outreach_name: {
+          label: 'If you are in unsheltered and working with an outreach program, select which one',
+          number: '2C',
+          as: :select_2,
+          collection: ShelterHistory.outreach_programs,
+          input_html: { data: { tags: true } },
+        },
+        phone_number: {
+          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call: empty text box',
+          number: '2D',
+        },
+        email_addresses: {
+          label: 'List any working email addresses you use',
+          number: '2E',
+        },
         case_manager_contact_info: {
           label: 'Do you have any case managers or agencies we could contact to get ahold of you?',
-          number: '2D',
+          number: '2F',
           as: :text,
           hint: 'Please provide email address and full name for each contact listed',
         },
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
-          number: '2E',
+          number: '2G',
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
-          number: '2F',
+          number: '2H',
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
-          number: '2G',
+          number: '2I',
         },
         _household_preamble: {
           as: :partial,
