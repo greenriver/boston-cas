@@ -4,7 +4,7 @@
       .c-quesiton
         = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false
   .col-12
-    .c-quesiton
+    .c-quesiton.mt-2
       - label = 'Availability Status'
       - if disabled
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_availabilities.to_h.invert[@non_hmis_client.available], label: label, size: :sm

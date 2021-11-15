@@ -23,6 +23,9 @@ msgstr ""
 msgid "A criminal background hearing is not necessary"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
 msgid "Actively fleeing domestic violence in your home or staying with someone else"
 msgstr ""
 
@@ -33,6 +36,12 @@ msgid "Added to assessed clients"
 msgstr ""
 
 msgid "Address of housing"
+msgstr ""
+
+msgid "Administrative Cancelation"
+msgstr ""
+
+msgid "Agency Interactions"
 msgstr ""
 
 msgid "Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing"
@@ -227,6 +236,9 @@ msgstr ""
 msgid "Imported"
 msgstr ""
 
+msgid "Inactive"
+msgstr ""
+
 msgid "Ineligible Immigrant (Including Undocumented)"
 msgstr ""
 
@@ -288,9 +300,6 @@ msgid "Non-HMIS Clients"
 msgstr ""
 
 msgid "None of the above "
-msgstr ""
-
-msgid "Note for Assessor Staff regarding income maximization"
 msgstr ""
 
 msgid "Outside/place not meant for human habitation within the City of Boston"
@@ -386,6 +395,9 @@ msgstr ""
 msgid "Stabilization Services Provider"
 msgstr ""
 
+msgid "Staff Decline"
+msgstr ""
+
 msgid "Submit Client Application"
 msgstr ""
 
@@ -441,9 +453,6 @@ msgid "Voucher: An affordable housing \"ticket\" used to find a home with privat
 msgstr ""
 
 msgid "Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)"
-msgstr ""
-
-msgid "Warehouse ROI Contact Information"
 msgstr ""
 
 msgid "We want to reach you when there is a housing program opening for you."
