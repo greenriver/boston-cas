@@ -73,6 +73,7 @@ class StalledResponse < ApplicationRecord
           steps: [
             'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',  # 3
             'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin', # 4
+            'MatchDecisions::Four::MatchRecommendationHsa', # 4
           ],
           requires_note: true,
         },
@@ -140,6 +141,7 @@ class StalledResponse < ApplicationRecord
             'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin',
             'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
             'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
+            'MatchDecisions::Four::MatchRecommendationHsa',
           ], # 3,4,5,4
           requires_note: true,
           weight: 100,
