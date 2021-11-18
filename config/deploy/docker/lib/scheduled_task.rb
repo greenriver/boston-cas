@@ -135,7 +135,7 @@ class ScheduledTask
     our_cluster.default_capacity_provider_strategy.map(&:to_h)
   end
 
-  def _placement_strategy,
+  def _placement_strategy
     [
       {
         # Distribute across zones first
