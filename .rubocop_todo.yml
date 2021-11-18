@@ -155,7 +155,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/unit.rb'
     - 'app/models/user.rb'
     - 'app/models/voucher.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 4
@@ -886,7 +885,6 @@ Layout/MultilineMethodCallIndentation:
     - 'app/models/reporting/decisions.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
-    - 'app/models/warehouse/build_report.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -980,7 +978,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/models/rules/assessment_score_greater_than_specified.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'lib/util/mail/database_delivery.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
@@ -1046,7 +1043,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/models/user_role.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'lib/util/mail/database_delivery.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/require_interest_in_neighborhood_spec.rb'
@@ -1159,7 +1155,6 @@ Layout/SpaceInsideParens:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'lib/util/mail/database_delivery.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
@@ -1198,7 +1193,6 @@ Layout/SpaceInsidePercentLiteralDelimiters:
 Layout/SpaceInsideStringInterpolation:
   Exclude:
     - 'app/models/requirement.rb'
-    - 'app/models/warehouse/build_report.rb'
 
 # Offense count: 92
 # Cop supports --auto-correct.
@@ -1353,7 +1347,6 @@ Lint/AssignmentInCondition:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'app/models/warehouse/build_report.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1450,7 +1443,6 @@ Lint/UnusedBlockArgument:
     - 'app/models/dashboards/overview.rb'
     - 'app/models/dashboards/vacancies.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/warehouse/build_report.rb'
 
 # Offense count: 128
 # Cop supports --auto-correct.
@@ -1790,7 +1782,6 @@ Style/EmptyElse:
     - 'app/helpers/admin/users_helper.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/opportunity_details.rb'
-    - 'app/models/warehouse/build_report.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -1953,7 +1944,6 @@ Style/GuardClause:
     - 'app/models/sub_program.rb'
     - 'app/models/sub_program_contacts.rb'
     - 'app/models/voucher.rb'
-    - 'app/models/warehouse/build_report.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -2053,7 +2043,6 @@ Style/IfUnlessModifier:
     - 'app/models/requirement.rb'
     - 'app/models/role.rb'
     - 'app/models/voucher.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'bin/setup'
     - 'lib/util/mail/database_delivery.rb'
 
@@ -2122,7 +2111,6 @@ Style/NegatedIf:
 # AllowedMethods: be, be_a, be_an, be_between, be_falsey, be_kind_of, be_instance_of, be_truthy, be_within, eq, eql, end_with, include, match, raise_error, respond_to, start_with
 Style/NestedParenthesizedCalls:
   Exclude:
-    - 'app/models/warehouse/build_report.rb'
     - 'spec/models/match_events/note_spec.rb'
 
 # Offense count: 5
@@ -2443,7 +2431,6 @@ Style/SymbolProc:
     - 'app/models/match_decisions/five/five_screening.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/user.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
 # Offense count: 2
@@ -2501,7 +2488,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/user.rb'
     - 'app/models/user_role.rb'
     - 'app/models/voucher.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'app/models/warehouse/file.rb'
     - 'app/models/warehouse/flag_housed.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
@@ -2544,7 +2530,6 @@ Style/TrailingCommaInHashLiteral:
     - 'app/mailers/test_mailer.rb'
     - 'app/models/dashboards/vacancies.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/warehouse/build_report.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'

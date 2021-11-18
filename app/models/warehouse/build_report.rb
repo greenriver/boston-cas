@@ -12,6 +12,7 @@ module Warehouse
       fill_cas_report_table!
 
       return nil unless Warehouse::Base.enabled?
+
       fill_cas_non_hmis_client_history_table!
       fill_cas_vacancy_table!
     end
@@ -30,7 +31,7 @@ module Warehouse
         vacancy.vacancy_created_at = voucher.created_at
         vacancy.vacancy_made_available_at = voucher.available_at
         vacancy.first_matched_at = ClientOpportunityMatch.joins(:opportunity).
-            where(opportunities: { voucher_id: voucher.id } ).maximum(attribute_to_sql(Opportunity, :created_at))
+          where(opportunities: { voucher_id: voucher.id }).maximum(attribute_to_sql(Opportunity, :created_at))
 
         vacancy.save!
       end
@@ -66,7 +67,7 @@ module Warehouse
             available_on: available_on,
           )
           # See if there's a subsequent date for which we are marked unavailable
-          client_history.unavailable_on = unavailable_ons.detect{ |d| d > available_on }
+          client_history.unavailable_on = unavailable_ons.detect { |d| d > available_on }
           client_history.part_of_a_family = client.family_member
           client_history.age_at_available_on = client.age_on(available_on)
           history << client_history
@@ -74,9 +75,7 @@ module Warehouse
       end
       Warehouse::CasNonHmisClientHistory.transaction do
         Warehouse::CasNonHmisClientHistory.delete_all
-        history.each do |ch|
-          ch.save!
-        end
+        history.each(&:save!)
       end
     end
 
@@ -93,7 +92,7 @@ module Warehouse
         # Replace reporting decisions data
         Reporting::Decisions.delete_all
 
-        report_data = ::Client.joins( :project_client, client_opportunity_matches: :decisions ).preload(
+        report_data = ::Client.joins(:project_client, client_opportunity_matches: :decisions).preload(
           :project_client,
           {
             client_opportunity_matches: [
@@ -109,14 +108,15 @@ module Warehouse
                 :administrative_cancel_reason,
                 decision_action_events: { contact: :agency },
               ],
-              opportunity: [ voucher: :sub_program ],
+              opportunity: [voucher: :sub_program],
             ],
-          }
-        ).where( md_b_t[:status].not_eq nil ).distinct
+          },
+        ).where(md_b_t[:status].not_eq(nil)).distinct
 
         report_data.find_each do |client|
           client_id = client.project_client.id_in_data_source
           next if client_id.blank?
+
           data_source = data_source_name(client.project_client.data_source_id)
           client.client_opportunity_matches.each do |match|
             fill_report_match_rows(client, client_id, data_source, match)
@@ -135,11 +135,7 @@ module Warehouse
       program = sub_program.program
       previous_updated_at = nil
       match_started_decision = match.send(match_route.initial_decision)
-      match_started_at = if match_started_decision&.started?
-        match_started_decision.updated_at
-      else
-        nil
-      end
+      match_started_at = (match_started_decision.updated_at if match_started_decision&.started?)
       # similar to match.current_decision, but more efficient given that we've preloaded all the decisions
       decisions = match.decisions.select do |decision|
         decision.status.present? && match_route.class.match_steps_for_reporting[decision.type].present?
@@ -147,10 +143,8 @@ module Warehouse
       # Debugging
       # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
       current_decision = decisions.last
-      decisions.each_with_index do |decision, idx|
-        if previous_updated_at
-          elapsed_days = ( decision.updated_at.to_date - previous_updated_at.to_date ).to_i
-        end
+      decisions.each_with_index do |decision, _idx|
+        elapsed_days = (decision.updated_at.to_date - previous_updated_at.to_date).to_i if previous_updated_at
         # we want to be able to report on whether or not the HSA requested a CORI check
         # so we'll split that step into two
         step_name = decision.step_name
@@ -182,12 +176,12 @@ module Warehouse
           match_step: step_name,
           decision_status: decision.label || 'unknown',
           current_step: decision == current_decision,
-          decline_reason: explain( decision, :decline_reason ),
+          decline_reason: explain(decision, :decline_reason),
           ineligible_in_warehouse: ineligible_in_warehouse,
           event_contact: event_contact&.name_with_email,
           event_contact_agency: event_contact&.agency&.name,
-          not_working_with_client_reason: explain( decision, :not_working_with_client_reason ),
-          administrative_cancel_reason: explain( decision, :administrative_cancel_reason ),
+          not_working_with_client_reason: explain(decision, :not_working_with_client_reason),
+          administrative_cancel_reason: explain(decision, :administrative_cancel_reason),
           active_match: match.active?,
           created_at: decision.created_at,
           updated_at: decision.updated_at,
@@ -210,7 +204,7 @@ module Warehouse
           terminal_status: match.overall_status[:name],
           match_route: match_route.title,
           housing_type: match_route.housing_type,
-          actor_type: match.current_decision.try(:actor_type) || 'N/A'
+          actor_type: match.current_decision.try(:actor_type) || 'N/A',
         }
 
         Warehouse::CasReport.create!(row.merge(clent_contacts: contact_details(match.client_contacts))) if Warehouse::Base.enabled?
@@ -233,18 +227,17 @@ module Warehouse
         {
           name: contact.name,
           email: contact.email,
+          agency: contact.user&.agency&.name,
         }
       end
     end
 
     def explain(decision, reason)
-      if r = decision.send(reason)
-        explanation = r.name
-        if r.other?
-          explanation = "#{explanation}: #{ decision.send "#{reason}_other_explanation" }"
-        end
-        explanation
-      end
+      return unless (r = decision.send(reason))
+
+      explanation = r.name
+      explanation = "#{explanation}: #{decision.send "#{reason}_other_explanation"}" if r.other?
+      explanation
     end
   end
 end
