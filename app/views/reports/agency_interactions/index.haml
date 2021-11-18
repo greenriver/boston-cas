@@ -1,0 +1,18 @@
+- title = _('Agency Interactions')
+- content_for :title, title
+
+= render 'reports/crumbs_operational'
+%h1.mb-5= title
+
+%p A list of declined or canceled matches in a specified date range.
+
+= render 'filter'
+
+- if @matches.present?
+  .d-flex.mb-4
+    .ml-auto
+      = link_to "Download Excel", reports_agency_interactions_path(format: :xlsx, filter: filter_params), class: 'btn btn-secondary'
+  = render 'table'
+- else
+  .no-data
+    No matches found.

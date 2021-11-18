@@ -61,7 +61,7 @@
     $(warehouse_selector).trigger('keyup');
 
     // Households
-    $('.jHouseholdTrigger').on('change, keyup', function(e){
+    $('.jHouseholdTrigger').on('change keyup input', function(e){
       if($(this).val() > 1) {
         $('.jHouseholdDetails').removeClass('d-none');
       } else {

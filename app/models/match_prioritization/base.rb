@@ -23,8 +23,10 @@ module MatchPrioritization
         MatchPrioritization::DaysHomeless,
         MatchPrioritization::DaysHomelessLastThreeYears,
         MatchPrioritization::DaysHomelessLastThreeYearsRandomTieBreaker,
+        MatchPrioritization::DaysHomelessLastThreeYearsAssessmentDate,
         MatchPrioritization::AssessmentScore,
         MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
+        MatchPrioritization::AssessmentScoreFundingTieBreaker,
         MatchPrioritization::Rank,
         MatchPrioritization::HoldsVoucherOn,
       ]
@@ -61,7 +63,7 @@ module MatchPrioritization
     end
 
     def self.c_t
-      c_t = Client.arel_table
+      Client.arel_table
     end
 
     def requires_tag?

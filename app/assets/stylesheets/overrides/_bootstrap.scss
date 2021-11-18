@@ -110,6 +110,10 @@ input:disabled ~ .input-group-addon {
   }
 }
 
+.input-group.datepicker {
+  width: 18em;
+}
+
 .datepicker {
   padding: 0;
 }

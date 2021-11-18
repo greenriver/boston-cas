@@ -6,6 +6,8 @@
 
 module MatchDecisionReasons
   class DndStaffDecline < Base
-
+    def title
+      "#{_('DND')} #{_('Staff Decline')}"
+    end
   end
 end

@@ -20,6 +20,7 @@ class Deployer
   WAIT_TIME   = 2
 
   attr_accessor :image_tag
+  attr_accessor :image_tag_latest
 
   # The AWS identifier for the payload of secret environment variables
   attr_accessor :secrets_arn
@@ -211,6 +212,48 @@ class Deployer
         _tag_the_image!(authority: 'them')
       end
     end
+
+    _add_latest_tag!
+  end
+
+  def _add_latest_tag!
+    if image_tag_latest.nil?
+      puts "[INFO] Skipping latest tag. No latest tag set (probably this is the pre-cache image)."
+      return
+    end
+
+    getparams = {
+      repository_name: repo_name,
+      image_ids: [
+        {image_tag: image_tag},
+        {image_tag: image_tag_latest}
+      ]
+    }
+    images = ecr.batch_get_image(getparams).images
+
+    if images.count == 2 && images[0].image_id.image_digest == images[1].image_id.image_digest
+      puts "[INFO] Skipping latest tag. This image has already been pushed with a latest tag for this environment."
+      return
+    elsif images.count > 2
+      raise "More than two images found during latest-* check, something is wrong."
+      return
+    elsif images.count < 1
+      raise "No images matching tag #{image_tag} found during latest-* check, something is wrong."
+    end
+
+    image = images.find { |image| image.image_id.image_tag == image_tag }
+    manifest = image.image_manifest
+
+    if manifest.nil?
+      raise "No manifest matching tag #{image_tag} found during latest-* check, something is wrong."
+    end
+
+    putparams = {
+      repository_name: repo_name,
+      image_tag: image_tag_latest,
+      image_manifest: manifest
+    }
+    ecr.put_image(putparams)
   end
 
   def _check_secrets!
@@ -234,9 +277,11 @@ class Deployer
       self.image_tag = "#{_ruby_version}--pre-cache"
     elsif ENV['IMAGE_TAG']
       self.image_tag = ENV['IMAGE_TAG'] + "--#{variant}"
+      self.image_tag_latest = "latest-" + ENV['IMAGE_TAG'] + "--#{variant}"
     else
       version = `git rev-parse --short=9 HEAD`.chomp
       self.image_tag = "githash-#{version}--#{variant}"
+      self.image_tag_latest = "latest-#{target_group_name}--#{variant}"
     end
 
     # puts "Setting image tag to #{image_tag}"
