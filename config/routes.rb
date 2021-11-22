@@ -169,7 +169,9 @@ Rails.application.routes.draw do
     resources :configs, only: [:index] do
       patch :update, on: :collection
     end
-    resources :match_routes, only: [:index, :edit, :update]
+    resources :match_routes, only: [:index, :edit, :update] do
+      resources :weighting_rules, on: :member
+    end
     resources :sessions, only: [:index, :destroy]
   end
 
