@@ -128,14 +128,12 @@ Layout/DotPosition:
     - 'app/models/sub_program.rb'
     - 'app/models/unit.rb'
     - 'app/models/user.rb'
-    - 'app/models/voucher.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterGuardClause:
   Exclude:
     - 'app/controllers/match_list_base_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/activity_log.rb'
     - 'app/models/client.rb'
     - 'app/models/client_contacts.rb'
@@ -154,7 +152,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/tag.rb'
     - 'app/models/unit.rb'
     - 'app/models/user.rb'
-    - 'app/models/voucher.rb'
     - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 4
@@ -184,7 +181,6 @@ Layout/EmptyLineBetweenDefs:
     - 'app/models/program.rb'
     - 'app/models/rules/holds_voucher.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/voucher.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
@@ -247,7 +243,6 @@ Layout/EmptyLinesAroundAccessModifier:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/program.rb'
     - 'app/models/sub_program.rb'
 
@@ -533,7 +528,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/subgrantee_contact.rb'
     - 'app/models/tag.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
-    - 'app/models/voucher.rb'
     - 'app/models/warehouse/available_file_tag.rb'
     - 'app/models/warehouse/cas_housed.rb'
     - 'app/models/warehouse/cas_vacancy.rb'
@@ -749,7 +743,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
@@ -803,7 +796,6 @@ Layout/IndentationWidth:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/client.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/pathways_calculations.rb'
@@ -899,7 +891,6 @@ Layout/SpaceAfterComma:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/models/client.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -967,7 +958,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/controllers/opportunities_controller.rb'
     - 'app/controllers/successful_vouchers_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/client.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -1019,7 +1009,6 @@ Layout/SpaceInLambdaLiteral:
     - 'app/models/sub_program.rb'
     - 'app/models/tag.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
-    - 'app/models/voucher.rb'
     - 'app/models/warehouse/client.rb'
     - 'app/models/warehouse/file.rb'
 
@@ -1066,7 +1055,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/controllers/opportunities_controller.rb'
     - 'app/controllers/successful_vouchers_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/helpers/match_list_base_helper.rb'
     - 'app/models/client.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
@@ -1084,7 +1072,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/models/sub_program.rb'
     - 'app/models/unit.rb'
     - 'app/models/user.rb'
-    - 'app/models/voucher.rb'
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
@@ -1220,7 +1207,6 @@ Layout/TrailingEmptyLines:
     - 'spec/factories/tags.rb'
     - 'spec/models/decisions_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
-    - 'spec/models/matching/engine_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
@@ -1435,7 +1421,6 @@ Lint/UnusedBlockArgument:
   Exclude:
     - 'app/controllers/opportunities_controller.rb'
     - 'app/controllers/opportunity_matches_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/inputs/pretty_boolean_group_input.rb'
     - 'app/models/activity_log.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
@@ -1564,7 +1549,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/rules/youth.rb'
     - 'app/models/user.rb'
     - 'app/models/user_role.rb'
-    - 'app/models/voucher.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
@@ -1610,7 +1594,6 @@ Lint/UselessAssignment:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'app/models/voucher.rb'
     - 'app/models/warehouse/flag_housed.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
@@ -1738,7 +1721,6 @@ Style/BlockDelimiters:
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/decisions_spec.rb'
-    - 'spec/models/matching/engine_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
@@ -1943,7 +1925,6 @@ Style/GuardClause:
     - 'app/models/rules/youth.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/sub_program_contacts.rb'
-    - 'app/models/voucher.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -1966,7 +1947,6 @@ Style/IdenticalConditionalBranches:
   Exclude:
     - 'app/controllers/match_decisions_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1974,7 +1954,6 @@ Style/IdenticalConditionalBranches:
 Style/IfInsideElse:
   Exclude:
     - 'app/models/client.rb'
-    - 'app/models/voucher.rb'
 
 # Offense count: 147
 # Cop supports --auto-correct.
@@ -1998,7 +1977,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/sub_programs_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/inputs/base_input.rb'
     - 'app/inputs/pretty_boolean_group_input.rb'
     - 'app/jobs/base_job.rb'
@@ -2042,7 +2020,6 @@ Style/IfUnlessModifier:
     - 'app/models/opportunity.rb'
     - 'app/models/requirement.rb'
     - 'app/models/role.rb'
-    - 'app/models/voucher.rb'
     - 'bin/setup'
     - 'lib/util/mail/database_delivery.rb'
 
@@ -2053,7 +2030,6 @@ Style/InverseMethods:
   Exclude:
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/opportunity_matches_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
 
 # Offense count: 23
 # Cop supports --auto-correct.
@@ -2120,7 +2096,6 @@ Style/NestedParenthesizedCalls:
 Style/Next:
   Exclude:
     - 'app/controllers/reports/match_progress_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/warehouse/cas_availability.rb'
 
@@ -2260,7 +2235,6 @@ Style/RescueStandardError:
 # AllowedMethods: present?, blank?, presence, try, try!
 Style/SafeNavigation:
   Exclude:
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/models/match_decisions/base.rb'
 
 # Offense count: 1
@@ -2345,7 +2319,6 @@ Style/StringLiterals:
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
-    - 'app/controllers/vouchers_controller.rb'
     - 'app/helpers/admin/users_helper.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
@@ -2378,7 +2351,6 @@ Style/StringLiterals:
     - 'app/models/race.rb'
     - 'app/models/service.rb'
     - 'app/models/sub_program_contacts.rb'
-    - 'app/models/voucher.rb'
     - 'bin/deploy'
     - 'bin/guard'
     - 'bin/rspec'
@@ -2400,7 +2372,6 @@ Style/StringLiterals:
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
-    - 'spec/models/matching/engine_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/rails_helper.rb'
@@ -2487,7 +2458,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/unit.rb'
     - 'app/models/user.rb'
     - 'app/models/user_role.rb'
-    - 'app/models/voucher.rb'
     - 'app/models/warehouse/file.rb'
     - 'app/models/warehouse/flag_housed.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'

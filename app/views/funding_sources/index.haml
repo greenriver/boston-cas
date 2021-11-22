@@ -11,12 +11,14 @@
     = render 'search_form'
 
 .table-responsive
-  %table.table.table-condensed.table-hover
-    - @funding_sources.each do |funding_source|
-      %tr
-        %td= funding_source.name
-        %td
-          = link_to edit_funding_source_path(funding_source) do
-            %span.icon-pencil
-            Edit Rules / Services
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
+        - @funding_sources.each do |funding_source|
+          %tr
+            %td= funding_source.name
+            %td
+              = link_to edit_funding_source_path(funding_source), class: 'btn btn-sm btn-secondary' do
+                %span.icon-pencil
+                Edit Rules / Services
 %p= paginate @funding_sources

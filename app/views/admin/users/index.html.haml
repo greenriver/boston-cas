@@ -34,10 +34,10 @@
           titles = {}
           directions.each {| k,v | titles[k] = @users.human_attribute_name(k)}
           titles['last_name'] = 'Name'
-    .row
-      .col-sm-12
-        .table-responsive
-          %table.table.table-striped
+    .table-responsive
+      .c-card.c.card__flush.mb-4
+        .c-card__content.p-0
+          %table.table.table-striped.mb-0
             %thead
               %tr
                 - titles.each do | k, title |
@@ -97,21 +97,23 @@
         %p= paginate @users, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
   .tab-pane#inactive{class: inactive_selected}
     .table-responsive
-      %table.table.table-condensed
-        %thead
-          %tr
-            - titles.each do | k, title |
-              %th
-                = manual_sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th
-        %tbody
-          - @inactive_users.each do |user|
-            %tr
-              %td= user.name
-              %td
-                = user.email
-              %td
-                = simple_form_for(user, url: reactivate_admin_user_path(user)) do |f|
-                  = f.button :button, data: { confirm: 'When re-activating an account, the password will be set to something random and an email will be sent to the address on file with a link to pick a new password.' }, class: 'btn btn-primary' do
-                    Re-activate
+      .c-card.c.card__flush.mb-4
+        .c-card__content.p-0
+          %table.table.table-striped.mb-0
+            %thead
+              %tr
+                - titles.each do | k, title |
+                  %th
+                    = manual_sort_link(titles[k], k, directions)
+                    %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+                %th
+            %tbody
+              - @inactive_users.each do |user|
+                %tr
+                  %td= user.name
+                  %td
+                    = user.email
+                  %td
+                    = simple_form_for(user, url: reactivate_admin_user_path(user)) do |f|
+                      = f.button :button, data: { confirm: 'When re-activating an account, the password will be set to something random and an email will be sent to the address on file with a link to pick a new password.' }, class: 'btn btn-primary' do
+                        Re-activate
