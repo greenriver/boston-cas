@@ -159,6 +159,8 @@ class VouchersController < ApplicationController
   end
 
   private def requirement_params
+    return {} unless params[:voucher].present?
+
     params.require(:voucher).
       permit(
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],

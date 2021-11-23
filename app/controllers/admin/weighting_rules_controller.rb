@@ -42,6 +42,8 @@ module Admin
     end
 
     private def rule_params
+      return {} unless params[:weighting_rule].present?
+
       params.require(:weighting_rule).
         permit(
           requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
