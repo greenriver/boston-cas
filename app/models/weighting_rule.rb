@@ -30,9 +30,21 @@ class WeightingRule < ApplicationRecord
     for_route(route_id).update_all(applied_to: 0)
   end
 
+  def self.requirements_and_increment!(route)
+    return unless route.weighting_rules.present?
+
+    rule = next_for(route.id)
+    rule.increment!
+    rule.requirements.map(&:dup)
+  end
+
   def increment!
     self.applied_to += 1
     save
+  end
+
+  def reset_similar_counts!
+    self.class.reset_for(route_id)
   end
 
   def inherited_requirements_by_source

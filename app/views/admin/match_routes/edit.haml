@@ -28,12 +28,38 @@
       .c-card__header
         %h2 Weighting
       .c-card__content
-        .mb-4
+        .mb-4.text-right
           = link_to new_admin_match_route_weighting_rule_path(@route), class: 'btn btn-primary' do
             %i.icon-plus
             Add Weighting Rule
         - if @route.weighting_rules.any?
-          = @route.weighting_rules.count
+          .table-responsive
+            .c-card.c.card__flush.mb-4
+              .c-card__content.p-0
+                %table.table.table-striped.mb-0
+                  %thead
+                    %tr
+                      %th Rules
+                      %th{ data: { toggle: :tooltip, title: 'Rules with a lower weight will be applied next.' }} Relative Weight
+                      %th
+                  %tbody
+                    - @route.weighting_rules.each do |rule|
+                      %tr
+                        %td
+                          - if rule.requirements.any?
+                            - rule.requirements.each do |r|
+                              .mb-2
+                                = link_to(edit_admin_match_route_weighting_rule_path(@route, rule)) do
+                                  = r.name
+                                  - if r.variable.present?
+                                    = r.display_for_variable
+                          - else
+                            = link_to(edit_admin_match_route_weighting_rule_path(@route, rule)) do
+                              None
+                        %td= rule.applied_to
+                        %td
+                          = link_to(admin_match_route_weighting_rule_path(@route, rule), method: :delete, class: 'btn btn-sm btn-icon-only btn-danger', data: { confirm: 'Are you sure you want to remove this rule?' }) do
+                            %i.icon-cross
         - else
           %p Weighting rules allow you to attach requiremnts to each voucher created on this route.  If you have more than one weighting rule on the route, rules will be applied to balance out the use of each rule over time.
 

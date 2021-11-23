@@ -21,17 +21,16 @@ module Admin
     def edit
     end
 
-    # def create
-    #   @weighting_rule = @route.weighting_rules.create(rule_params)
-    #   respond_with(@weighting_rule)
-    # end
-
     def update
       @weighting_rule.update(rule_params)
+      @weighting_rule.reset_similar_counts!
       respond_with(@weighting_rule, location: edit_admin_match_route_path(@route))
     end
 
     def destroy
+      @weighting_rule.reset_similar_counts!
+      @weighting_rule.destroy
+      respond_with(@weighting_rule, location: edit_admin_match_route_path(@route))
     end
 
     def load_match_route
