@@ -12,32 +12,34 @@
 - if @opportunities.any?
   %p #{@client.full_name} meets all requirements for the following vacancies.  These vacancies are either not yet involved in an active match, or the match has not progressed to a stage that would be disruptive if it were canceled, such as #{_("#{_('DND')} Initial Review")}.  Activating a match on a vacancy below will cancel any match involving the vacancy returning the matched client into the pool of available clients. It will not cancel other matches involving #{@client.full_name}.
 
-  %table.table.table-condensed
-    %thead
-      %tr
-        %th Program
-        %th Sub Program
-        - if MatchRoutes::Base.more_than_one?
-          %th Match Route
-        %th Requirements
-        %th Vacancy
-        %th Activate Match?
-    %tbody
-      - @opportunities.each do |opportunity|
-        %tr
-          %td= opportunity.sub_program.program.name
-          %td= opportunity.sub_program.name
-          %td= opportunity.match_route&.title
-          %td
-            - opportunity.requirements_with_inherited.each do |r|
-              = r.name
-              - if r.variable.present?
-                = r.display_for_variable
-              %em.detail-box--requirement-source
-                = "(#{r.requirer.name})"
-              %br
-          %td= link_to opportunity.id, opportunity_matches_path(opportunity)
-          %th= link_to 'Activate!', client_qualified_opportunity_path(@client, opportunity), class: 'btn btn-sm btn-secondary', method: :patch
-
+  .table-responsive
+    .c-card.c.card__flush.mb-4
+      .c-card__content.p-0
+        %table.table.table-striped.mb-0
+          %thead
+            %tr
+              %th Program
+              %th Sub Program
+              - if MatchRoutes::Base.more_than_one?
+                %th Match Route
+              %th Requirements
+              %th Vacancy
+              %th Activate Match?
+          %tbody
+            - @opportunities.each do |opportunity|
+              %tr
+                %td= opportunity.sub_program.program.name
+                %td= opportunity.sub_program.name
+                %td= opportunity.match_route&.title
+                %td
+                  - opportunity.requirements_with_inherited.each do |r|
+                    = r.name
+                    - if r.variable.present?
+                      = r.display_for_variable
+                    %em.detail-box--requirement-source
+                      = "(#{r.requirer.name})"
+                    %br
+                %td= link_to opportunity.id, opportunity_matches_path(opportunity)
+                %th= link_to 'Activate!', client_qualified_opportunity_path(@client, opportunity), class: 'btn btn-sm btn-secondary', method: :patch
 - else
   %p #{@client.full_name} is not eligible for any available opportunities

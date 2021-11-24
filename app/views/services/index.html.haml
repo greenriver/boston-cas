@@ -9,22 +9,24 @@
         Add a service
 
 .table-responsive
-  %table.table.table-condensed.table-hover.table__full-width
-    %thead
-      %tr
-        %th Service Name
-        %th Edit
-        %th Delete
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
+        %thead
+          %tr
+            %th Service Name
+            %th Edit
+            %th Delete
 
-    %tbody
-      - @services.each do |service|
-        %tr
-          %td= service.name
-          %td
-            = link_to edit_service_path(service) do
-              %span.icon-pencil
-              Edit
-          %td
-            = link_to service, :method => :delete, data: {confirm: "Are you sure you'd like to delete this service: #{service.name}?" } do
-              %span.icon-cross
-              Delete
+        %tbody
+          - @services.each do |service|
+            %tr
+              %td= service.name
+              %td
+                = link_to edit_service_path(service), class: 'btn btn-sm btn-secondary' do
+                  %span.icon-pencil
+                  Edit
+              %td
+                = link_to service, method: :delete, class: 'btn btn-sm btn-danger', data: {confirm: "Are you sure you'd like to delete this service: #{service.name}?" } do
+                  %span.icon-cross
+                  Delete

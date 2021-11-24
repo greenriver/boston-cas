@@ -10,6 +10,7 @@ module MatchRoutes
 
     belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
     belongs_to :tag if column_names.include?('tag_id')
+    has_many :weighting_rules, inverse_of: :route, foreign_key: :route_id
 
     scope :active, -> do
       where(active: true)

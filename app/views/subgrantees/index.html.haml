@@ -7,8 +7,8 @@
       = link_to new_subgrantee_path, class: 'btn btn-primary pull-right margin-bottom-02' do
         %span.icon-plus
         Add a Sub-Grantee
-    
-  
+
+
 - @prompt = t '.search_prompt'
 .row
   .col-sm-6
@@ -22,11 +22,11 @@
       titles = {}
       directions.each {| k,v | titles[k] = @subgrantees.human_attribute_name(k)}
       titles['id'].upcase!
-  
-.row
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed.table-hover
+
+.table-responsive
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
         %thead
           %tr
             - titles.each do | k, title |
@@ -44,6 +44,8 @@
                 = link_to subgrantee_path(s) do
                   = s.name
               %td
-                = link_to 'Edit', edit_subgrantee_path(s)
+                = link_to edit_subgrantee_path(s), class: 'btn btn-sm btn-secondary' do
+                  %i.icon-pencil
+                  Edit
 
-    %p= paginate @subgrantees, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+%p= paginate @subgrantees, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}

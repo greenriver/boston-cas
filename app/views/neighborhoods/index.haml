@@ -19,10 +19,10 @@
     .col-sm-8
       %p= page_entries_info @neighborhoods
 
-  .row.table-utilities
-    .col-sm-12
-      .table-responsive
-        %table.table.table-condensed
+  .table-responsive
+    .c-card.c.card__flush.mb-4
+      .c-card__content.p-0
+        %table.table.table-striped.mb-0
           %thead
             %tr
               %th
@@ -42,4 +42,4 @@
                   = link_to neighborhood_path(neighborhood),  method: :delete, data: {confirm: "Would you really like to delete the neighborhood #{neighborhood.name}?"}, class: ['btn', 'btn-sm', 'btn-danger'] do
                     %span.icon-cross
                     Delete
-      %p= paginate @neighborhoods
+  %p= paginate @neighborhoods

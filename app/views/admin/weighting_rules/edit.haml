@@ -1,0 +1,6 @@
+- title = "Weighting Rule for #{@route.title}"
+- content_for :title, title
+%h1= title
+= simple_form_for(@weighting_rule, url: admin_match_route_weighting_rule_path(@route, id: @weighting_rule.id)) do |f|
+  = render 'form', f: f
+  = f.submit value: 'Save Weighting Rule', class: 'btn btn-primary'

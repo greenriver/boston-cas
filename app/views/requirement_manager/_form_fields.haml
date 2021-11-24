@@ -9,9 +9,8 @@
       .c-card__content
         - if help_text.present?
           %p.margin-bottom-02= help_text
-        .mb-6
-          - unless hide_inherited
-            = render 'requirement_manager/inherited_rules', inheritee: form.object
+        - unless hide_inherited
+          .mb-6= render 'requirement_manager/inherited_rules', inheritee: form.object
         - if can_assign_requirements?
           .mb-6
             %label= selected_requirements_heading
