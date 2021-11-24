@@ -429,16 +429,10 @@ module PathwaysVersionThreeCalculations
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
           number: '2F',
-          as: :select_2,
-          collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true } },
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
           number: '2G',
-          as: :select_2,
-          collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true } },
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
