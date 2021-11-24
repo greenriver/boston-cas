@@ -24,7 +24,10 @@ class VouchersController < ApplicationController
   def create
     new_vouchers = []
     vouchers_to_create = voucher_params[:add_vouchers].to_i.times do
-      new_vouchers << Voucher.create(sub_program: @subprogram, creator: @current_user)
+      options = { sub_program: @subprogram, creator: @current_user }
+      options[:requirements] = WeightingRule.requirements_and_increment!(@subprogram.match_route)
+
+      new_vouchers << Voucher.create(options)
     end
     if vouchers_to_create == new_vouchers.length
       flash[:notice] = "#{vouchers_to_create} vouchers added"
@@ -156,6 +159,8 @@ class VouchersController < ApplicationController
   end
 
   private def requirement_params
+    return {} unless params[:voucher].present?
+
     params.require(:voucher).
       permit(
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],

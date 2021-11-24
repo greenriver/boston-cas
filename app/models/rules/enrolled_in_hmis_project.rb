@@ -11,7 +11,7 @@ class Rules::EnrolledInHmisProject < Rule
 
   def available_projects
     @available_projects ||= if Warehouse::Base.enabled?
-      Warehouse::Project.joins(:organization).map do |project|
+      Warehouse::Project.joins(:organization).preload(:organization).map do |project|
         label = "#{project.ProjectName} << #{project.organization.OrganizationName}"
         [project.id, label]
       end
@@ -26,16 +26,14 @@ class Rules::EnrolledInHmisProject < Rule
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
-    if Client.column_names.include?(:enrolled_project_ids.to_s)
-      if requirement.positive
-        where = 'enrolled_project_ids @> ANY(ARRAY [?]::jsonb[])'
-      else
-        where = 'not(enrolled_project_ids @> ANY( ARRAY [?]::jsonb[])) OR enrolled_project_ids is null'
-      end
-      scope.where(where, value_as_array(requirement.variable))
+    raise RuleDatabaseStructureMissing.new("clients.enrolled_project_ids missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:enrolled_project_ids.to_s)
+
+    if requirement.positive
+      where = 'enrolled_project_ids @> ANY(ARRAY [?]::jsonb[])'
     else
-      raise RuleDatabaseStructureMissing.new("clients.enrolled_project_ids missing. Cannot check clients against #{self.class}.")
+      where = 'not(enrolled_project_ids @> ANY( ARRAY [?]::jsonb[])) OR enrolled_project_ids is null'
     end
+    scope.where(where, value_as_array(requirement.variable))
   end
 
   private def value_as_array(value)

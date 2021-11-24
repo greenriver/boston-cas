@@ -28,7 +28,7 @@ class OpportunitiesController < ApplicationController
     end
 
     # filter status with whitelist
-    @match_status = params[:status] if Opportunity.available_stati.include?(params[:status]) || nil
+    @match_status = (params[:status] if Opportunity.available_stati.include?(params[:status]))
 
     if @match_status.present?
       @active_filter = true
@@ -55,9 +55,9 @@ class OpportunitiesController < ApplicationController
     route = route_from_tab(@active_tab)
     @opportunities = @opportunities.
       joins(:match_route).
-      where(match_routes: {id: route}).
+      where(match_routes: { id: route }).
       order(sort_column => sort_direction).
-      preload(unit: [:building], sub_program: [:program], voucher: {sub_program: :program}, active_matches: [ :program, :sub_program, {client: :project_client}]).
+      preload(unit: [:building], sub_program: [:program], voucher: { sub_program: :program }, active_matches: [:program, :sub_program, { client: :project_client }]).
       page(params[:page]).per(25)
   end
 
@@ -71,22 +71,21 @@ class OpportunitiesController < ApplicationController
       active_ids = opportunities.joins(:active_matches).select(:id)
       opportunities = opportunities.where.not(id: active_ids)
     else
-      opportunities = opportunities.joins(:active_matches)
-        .group(:id)
-        .having(nf('COUNT', [o_t[:id]]).lt(@max_actives))
+      opportunities = opportunities.joins(:active_matches).
+        group(:id).
+        having(nf('COUNT', [o_t[:id]]).lt(@max_actives))
       # "count(opportunities.id) < #{@max_actives}"
     end
     opportunities
   end
 
   private def filter_for_program_type opportunities
-    @program_type = SubProgram.types.detect{|m| m[:value] == filter_params[:program_type] }.try(:[], :value)
+    @program_type = SubProgram.types.detect { |m| m[:value] == filter_params[:program_type] }.try(:[], :value)
     return opportunities unless @program_type.present?
 
     @active_filter = true
     opportunities.joins(:sub_program).
       merge(SubProgram.where(program_type: @program_type))
-
   end
 
   # GET /hmis/opportunities/1
@@ -97,7 +96,7 @@ class OpportunitiesController < ApplicationController
   # Using this to bulk create units and associated vouchers
   def new
     @opportunity = Opportunity.new
-    @programs = sub_program_scope.sort_by{|m| [m.program.name, m.name]}
+    @programs = sub_program_scope.sort_by { |m| [m.program.name, m.name] }
     @buildings = building_scope
   end
 
@@ -119,32 +118,30 @@ class OpportunitiesController < ApplicationController
       if params[:opportunity][:building].blank?
         @opportunity.errors[:building] = 'Required'
       else
-         building = Building.find(opportunity_params[:building].to_i)
+        building = Building.find(opportunity_params[:building].to_i)
       end
     end
-    if params[:opportunity][:units].blank? || ! params[:opportunity][:units] =~ /\A\d+\z/
-      @opportunity.errors[:units] = 'Required, and must be a number'
-    end
+    @opportunity.errors[:units] = 'Required, and must be a number' if params[:opportunity][:units].blank? || ! params[:opportunity][:units] =~ /\A\d+\z/
 
     if @opportunity.errors.present?
       @programs = sub_program_scope
       @buildings = building_scope
       render :new
     else
-      units = []
+
       vouchers = []
-      opportunity_params[:units].to_i.times do |x|
-        if sub_program.has_buildings?
-          unit = Unit.create(building: building, name: SecureRandom.hex, available: true)
-        end
-        voucher = Voucher.new(sub_program: sub_program, available: true, creator: @current_user)
+      opportunity_params[:units].to_i.times do
+        unit = Unit.create(building: building, name: SecureRandom.hex, available: true) if sub_program.has_buildings?
+        options = { sub_program: sub_program, available: true, creator: @current_user }
+        options[:requirements] = WeightingRule.requirements_and_increment!(sub_program.match_route)
+        voucher = Voucher.new(options)
         voucher.unit = unit
         voucher.save!
         voucher.create_opportunity(available: true, available_candidate: true)
 
         vouchers << voucher
       end
-      if vouchers.count > 0
+      if vouchers.count&.positive?
         flash[:notice] = "Created #{vouchers.count} new #{Opportunity.model_name.human(count: vouchers.count)}"
         Matching::RunEngineJob.perform_later
         sub_program.update_summary!
@@ -164,7 +161,7 @@ class OpportunitiesController < ApplicationController
     if @opportunity.update(opportunity_params)
       redirect_to opportunity_path(@opportunity), notice: "Opportunity <strong>#{@opportunity[:id]}</strong> was successfully updated."
     else
-      render :edit, {flash: {error: 'Unable to update opportunity <strong>#{@opportunity[:name]}</strong>.'}}
+      render :edit, { flash: { error: "Unable to update opportunity <strong>#{@opportunity[:name]}</strong>." } }
     end
   end
 
@@ -173,7 +170,7 @@ class OpportunitiesController < ApplicationController
     if @opportunity.destroy
       redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> was successfully deleted."
     else
-      render :edit, {flash: { error: 'Unable to delete opportunity <strong>#{@opportunity[:name]}</strong>.'}}
+      render :edit, { flash: { error: "Unable to delete opportunity <strong>#{@opportunity[:name]}</strong>." } }
     end
   end
 
@@ -183,19 +180,18 @@ class OpportunitiesController < ApplicationController
       @opportunity = Opportunity.find(params[:opportunity_id])
       redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> successfully restored."
     else
-      render :edit, {:flash => { :error => 'Unable to restore opportunity.'}}
+      render :edit, { flash: { error: 'Unable to restore opportunity.' } }
     end
   end
 
-  def get_opportunity
+  def get_opportunity # rubocop:disable Naming/AccessorMethodName
     @opportunity = Opportunity.find(params[:id])
   end
-
 
   private def opportunity_scope
     Opportunity.where(success: false, available: true).
       joins(:voucher).
-      where(vouchers: {available: true})
+      where(vouchers: { available: true })
   end
   # Use callbacks to share common setup or constraints between actions.
   private def set_opportunity
@@ -204,8 +200,8 @@ class OpportunitiesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   private def opportunity_params
-    params.require(:opportunity)
-      .permit(
+    params.require(:opportunity).
+      permit(
         :available,
         :unit,
         :voucher,
@@ -256,7 +252,7 @@ class OpportunitiesController < ApplicationController
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
   private def query_string

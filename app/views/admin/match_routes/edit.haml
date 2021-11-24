@@ -1,22 +1,67 @@
 - title = "Edit #{@route.title}"
 - content_for :title, title
 %h1= content_for :title
-= simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
-  = f.input :active
-  = f.input :housing_type, collection: @route.housing_types, include_blank: 'None', input_html: { class: :select2 }
-  = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
-  = f.input :send_notifications, label: 'Send emails to contacts'
-  = f.input :should_activate_match, label: 'Activate highest priority match automatically'
-  = f.input :allow_multiple_active_matches, label: 'Allow multiple active matches on single opportunity'
-  = f.input :should_cancel_other_matches, label: 'Cancel other matches on success'
-  = f.input :should_prevent_multiple_matches_per_client, label: 'Prevent multiple active matches per client on route'
-  = f.input :default_shelter_agency_contacts_from_project_client, label: 'Attempt to add default shelter agency contacts from client record'
-  = f.input :show_default_contact_types, label: 'Show the default contact types on a match'
-  = f.input :send_notes_by_default, label: 'Include note content by default'
-  = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false, input_html: { class: :select2 }
-  = f.input :stalled_interval, collection: @route.stall_intervals, label: "Days until a match is considered stalled", input_html: { class: :select2 }
-  = f.association :tag, include_blank: 'Optional Tag', input_html: { class: :select2 }, hint: 'Assigning a tag is required if the route is prioritized by rank.'
-  = f.button :submit, value: "Update #{@route.title}"
+.row
+  .col-md-6
+    .c-card
+      .c-card__header
+        %h2 Route Details
+      .c-card__content
+        = simple_form_for @route, as: :match_route, url: admin_match_route_path(@route) do |f|
+          = f.input :active
+          = f.input :housing_type, collection: @route.housing_types, include_blank: 'None', input_html: { class: :select2 }
+          = f.input :contacts_editable_by_hsa, label: 'HSA can edit HSA contacts'
+          = f.input :send_notifications, label: 'Send emails to contacts'
+          = f.input :should_activate_match, label: 'Activate highest priority match automatically'
+          = f.input :allow_multiple_active_matches, label: 'Allow multiple active matches on single opportunity'
+          = f.input :should_cancel_other_matches, label: 'Cancel other matches on success'
+          = f.input :should_prevent_multiple_matches_per_client, label: 'Prevent multiple active matches per client on route'
+          = f.input :default_shelter_agency_contacts_from_project_client, label: 'Attempt to add default shelter agency contacts from client record'
+          = f.input :show_default_contact_types, label: 'Show the default contact types on a match'
+          = f.input :send_notes_by_default, label: 'Include note content by default'
+          = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false, input_html: { class: :select2 }
+          = f.input :stalled_interval, collection: @route.stall_intervals, label: "Days until a match is considered stalled", input_html: { class: :select2 }
+          = f.association :tag, include_blank: 'Optional Tag', input_html: { class: :select2 }, hint: 'Assigning a tag is required if the route is prioritized by rank.'
+          = f.button :submit, value: "Update #{@route.title}"
+  .col-md-6
+    .c-card
+      .c-card__header
+        %h2 Weighting
+      .c-card__content
+        .mb-4.text-right
+          = link_to new_admin_match_route_weighting_rule_path(@route), class: 'btn btn-primary' do
+            %i.icon-plus
+            Add Weighting Rule
+        - if @route.weighting_rules.any?
+          .table-responsive
+            .c-card.c.card__flush.mb-4
+              .c-card__content.p-0
+                %table.table.table-striped.mb-0
+                  %thead
+                    %tr
+                      %th Rules
+                      %th{ data: { toggle: :tooltip, title: 'Rules with a lower weight will be applied next.' }} Relative Weight
+                      %th
+                  %tbody
+                    - @route.weighting_rules.each do |rule|
+                      %tr
+                        %td
+                          - if rule.requirements.any?
+                            - rule.requirements.each do |r|
+                              .mb-2
+                                = link_to(edit_admin_match_route_weighting_rule_path(@route, rule)) do
+                                  = r.name
+                                  - if r.variable.present?
+                                    = r.display_for_variable
+                          - else
+                            = link_to(edit_admin_match_route_weighting_rule_path(@route, rule)) do
+                              None
+                        %td= rule.applied_to
+                        %td
+                          = link_to(admin_match_route_weighting_rule_path(@route, rule), method: :delete, class: 'btn btn-sm btn-icon-only btn-danger', data: { confirm: 'Are you sure you want to remove this rule?' }) do
+                            %i.icon-cross
+        - else
+          %p Weighting rules allow you to attach requiremnts to each voucher created on this route.  If you have more than one weighting rule on the route, rules will be applied to balance out the use of each rule over time.
 
 
 = render 'init_select2'
