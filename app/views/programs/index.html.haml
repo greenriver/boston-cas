@@ -27,10 +27,10 @@
       titles['program_id'] = 'Program'
       titles['building_id'] = "#{Building.model_name.human}"
       titles['name'] = 'Sub-Program'
-.row
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed
+.table-responsive
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
         %thead
           %tr
             - titles.each do | k, title |
@@ -78,4 +78,4 @@
               %td{:class => deleted}
                 = sp.matched
 
-    %p= paginate @programs, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
+%p= paginate @programs, params: {sort: directions.compact.keys.first, direction: directions.compact.values.first}
