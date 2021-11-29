@@ -1,11 +1,11 @@
 .row.mb-4
   - unless disabled
     .col-12
-      .c-quesiton
+      .c-question
         = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false
   .col-12
-    .c-quesiton
-      - label = 'Availability Status'
+    .c-question
+      - label = 'Active Status'
       - if disabled
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_availabilities.to_h.invert[@non_hmis_client.available], label: label, size: :sm
       - else
@@ -13,14 +13,14 @@
 - unless @non_hmis_client.available && disabled
   .row.jStatusUnavailble
     .col-12.mb-4
-      .c-quesiton
+      .c-question
         - label = 'Date'
         - if disabled
           = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_date, label: label, size: :sm
         - else
           = f.input :available_date, as: :date_picker,  disabled: disabled, label: label
     .col-12
-      .c-quesiton
+      .c-question
         - label = 'Reason'
         - if disabled
           = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.available_reason, label: label, size: :sm
