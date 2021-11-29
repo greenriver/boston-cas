@@ -396,6 +396,17 @@ module PathwaysVersionThreeCalculations
           collection: hud_assessment_types,
           required: true,
         },
+        setting: {
+          label: 'Current living situation - select one (required)?',
+          number: '',
+          collection: {
+            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            _('Transitional Housing') => 'Transitional Housing',
+            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+          },
+          as: :pretty_boolean_group,
+        },
         _contact_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
@@ -772,6 +783,17 @@ module PathwaysVersionThreeCalculations
           as: :select_2,
           collection: hud_assessment_types,
           required: true,
+        },
+        setting: {
+          label: 'Current living situation - select one (required)?',
+          number: '',
+          collection: {
+            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            _('Transitional Housing') => 'Transitional Housing',
+            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+          },
+          as: :pretty_boolean_group,
         },
         _contact_preamble: {
           as: :partial,

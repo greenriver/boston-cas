@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_22_204003) do
+ActiveRecord::Schema.define(version: 2021_11_29_191957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -829,6 +829,8 @@ ActiveRecord::Schema.define(version: 2021_11_22_204003) do
     t.integer "hud_assessment_type"
     t.string "staff_name"
     t.string "staff_email"
+    t.boolean "enrolled_in_es", default: false, null: false
+    t.boolean "enrolled_in_so", default: false, null: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1323,6 +1325,7 @@ ActiveRecord::Schema.define(version: 2021_11_22_204003) do
     t.boolean "can_audit_users", default: false
     t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_manage_sessions", default: false
+    t.boolean "can_edit_voucher_rules", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 

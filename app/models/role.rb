@@ -9,7 +9,7 @@ class Role < ApplicationRecord
   has_many :users, through: :user_roles
   validates :name, presence: true
 
-  scope :all_except_developer, -> {where.not(name: 'developer')}
+  scope :all_except_developer, -> { where.not(name: 'developer') }
 
   def role_name
     name.to_s.humanize.gsub('Dnd', 'DND').gsub('Hsa', 'HSA')
@@ -73,6 +73,7 @@ class Role < ApplicationRecord
       :can_view_assigned_programs,
       :can_edit_programs,
       :can_edit_assigned_programs,
+      :can_edit_voucher_rules,
       :can_view_opportunities,
       :can_edit_opportunities,
       :can_reissue_notifications,
@@ -121,9 +122,7 @@ class Role < ApplicationRecord
 
   def self.ensure_permissions_exist
     Role.permissions.each do |permission|
-      unless ApplicationRecord.connection.column_exists?(:roles, permission)
-        ActiveRecord::Migration.add_column :roles, permission, :boolean, default: false
-      end
+      ActiveRecord::Migration.add_column(:roles, permission, :boolean, default: false) unless ApplicationRecord.connection.column_exists?(:roles, permission)
     end
   end
 end

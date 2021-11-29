@@ -1059,7 +1059,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/opportunity_contact.rb'
-    - 'app/models/role.rb'
     - 'app/models/rules/assessment_score_greater_than_specified.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
@@ -2003,7 +2002,6 @@ Style/IfUnlessModifier:
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/requirement.rb'
-    - 'app/models/role.rb'
     - 'bin/setup'
     - 'lib/util/mail/database_delivery.rb'
 

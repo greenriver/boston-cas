@@ -64,6 +64,18 @@ class NonHmisAssessmentsController < ApplicationController
     assessment_params[:assessment_name] = @assessment.for_matching.keys.first
     assessment_params[:income_total_monthly] = assessment_params[:income_total_annual].to_i / 12 if assessment_params[:income_total_annual].present?
 
+    # START current living situation
+    # NOTE, this needs to happen before dv_rrh_aggregate since we only allow one of these currently, and that also affects domestic_violence
+    if @non_hmis_client.pathways_enabled?
+      assessment_params[:domestic_violence] = false
+      assessment_params[:enrolled_in_es] = false
+      assessment_params[:enrolled_in_so] = false
+    end
+    assessment_params[:domestic_violence] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Actively fleeing DV'
+    assessment_params[:enrolled_in_es] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Emergency Shelter'
+    assessment_params[:enrolled_in_so] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Unsheltered'
+    # END current living situation
+
     if assessment_params.key?(:youth_rrh_aggregate)
       assessment_params[:rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['adult', 'both'])
       assessment_params[:youth_rrh_desired] = true if assessment_params[:youth_rrh_aggregate].in?(['youth', 'both'])
@@ -78,11 +90,6 @@ class NonHmisAssessmentsController < ApplicationController
       end
       assessment_params.extract![:dv_rrh_aggregate]
     end
-
-    assessment_params[:domestic_violence] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Actively fleeing DV'
-
-    assessment_params[:enrolled_in_es] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Emergency Shelter'
-    assessment_params[:enrolled_in_so] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Unsheltered'
 
     assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i) if assessment_params[:neighborhood_interests].present?
 

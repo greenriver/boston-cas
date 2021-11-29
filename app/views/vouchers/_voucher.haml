@@ -40,12 +40,13 @@
             %span.ml-4.icon-info{data:{ toggle: :tooltip, placement: :top, title: creation_info.html_safe, html: :true}}
         .detail-box-value
           = v.input :date_available, disabled: disabled, as: :date_picker, value: voucher.date_available, label: 'Date voucher or unit becomes available'
-        .rules
-          - requirement_count = voucher.requirements.count
-          = link_to edit_program_sub_program_voucher_path(@program, @subprogram, voucher), class: 'btn btn-sm btn-secondary', data: { loads_in_ajax_modal: true } do
-            Voucher Rules
-            - if requirement_count.positive?
-              .badge.badge-info.ml-4.p-2= requirement_count
+        - if can_edit_voucher_rules?
+          .rules
+            - requirement_count = voucher.requirements.count
+            = link_to edit_program_sub_program_voucher_path(@program, @subprogram, voucher), class: 'btn btn-sm btn-secondary', data: { loads_in_ajax_modal: true } do
+              Voucher Rules
+              - if requirement_count.positive?
+                .badge.badge-info.ml-4.p-2= requirement_count
 
       .col-sm-4.c-detail-group.c-detail-group--stacked.c-detail-group
         %h3.detail-box--label Status

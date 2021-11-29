@@ -222,7 +222,7 @@ class NonHmisClient < ApplicationRecord
     project_client.disabling_condition = (1 if current_assessment&.disabling_condition)
     project_client.physical_disability = (1 if current_assessment&.physical_disability)
     project_client.developmental_disability = (1 if current_assessment&.developmental_disability)
-    project_client.domestic_violence = 1 if current_assessment&.domestic_violence
+    project_client.domestic_violence = 1 if current_assessment&.domestic_violence || identified == false
 
     project_client.chronic_health_condition = (1 if current_assessment&.chronic_health_condition)
     project_client.mental_health_problem = (1 if current_assessment&.mental_health_problem)
@@ -243,6 +243,8 @@ class NonHmisClient < ApplicationRecord
     project_client.ssvf_eligible = current_assessment&.ssvf_eligible || false
     project_client.holds_voucher_on = nil # reset to nil
     project_client.holds_voucher_on = current_assessment&.entry_date if current_assessment&.have_tenant_voucher
+    project_client.enrolled_in_es = current_assessment&.enrolled_in_es || false
+    project_client.enrolled_in_so = current_assessment&.enrolled_in_so || false
     project_client.needs_update = true
   end
 

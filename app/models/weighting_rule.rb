@@ -58,4 +58,8 @@ class WeightingRule < ApplicationRecord
   def requirements_description
     requirements.map(&:name).compact.join ', '
   end
+
+  def name
+    'Match Route Weighting Rule'
+  end
 end
