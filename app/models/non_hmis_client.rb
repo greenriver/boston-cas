@@ -121,7 +121,7 @@ class NonHmisClient < ApplicationRecord
   end
 
   def available_availabilities
-    [['Active', true], ['Ineligible', false]].freeze
+    [['Active', true], ['Inactive', false]].freeze
   end
 
   def cohort_names
