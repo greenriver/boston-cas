@@ -385,4 +385,8 @@ FactoryBot.define do
     name { 'Youth or marked as youth' }
     verb { 'be' }
   end
+  factory :assessment_completed_within, class: 'Rules::AssessmentCompletedWithin' do
+    name { 'Assessment Completed within specified range' }
+    verb { 'have' }
+  end
 end

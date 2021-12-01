@@ -10,7 +10,7 @@ class Rules::AssessmentScoreGreaterThanSpecified < Rule
   end
 
   def available_scores
-    @available_scores ||= Array.new(20) { |i| (i + 1) * 5 }.map{|i| [i, i] }
+    @available_scores ||= Array.new(20) { |i| (i + 1) * 5 }.map { |i| [i, i] }
   end
 
   def display_for_variable(value)
@@ -18,15 +18,13 @@ class Rules::AssessmentScoreGreaterThanSpecified < Rule
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
-    if Client.column_names.include?(:enrolled_project_ids.to_s)
-      if requirement.positive
-        where = c_t[:assessment_score].gt(requirement.variable.to_i)
-      else
-        where = c_t[:assessment_score].lteq(requirement.variable.to_i)
-      end
-      scope.where(where)
+    raise RuleDatabaseStructureMissing.new("clients.assessment_score missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:assessment_score.to_s)
+
+    if requirement.positive
+      where = c_t[:assessment_score].gt(requirement.variable.to_i)
     else
-      raise RuleDatabaseStructureMissing.new('clients.assessment_score missing. Cannot check clients against #{self.class}.')
+      where = c_t[:assessment_score].lteq(requirement.variable.to_i)
     end
+    scope.where(where)
   end
 end

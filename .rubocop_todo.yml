@@ -960,7 +960,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/models/match_decisions/five/five_mitigation.rb'
     - 'app/models/match_decisions/five/five_screening.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/rules/assessment_score_greater_than_specified.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
     - 'lib/util/mail/database_delivery.rb'
@@ -1059,7 +1058,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity.rb'
     - 'app/models/opportunity_contact.rb'
-    - 'app/models/rules/assessment_score_greater_than_specified.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/unit.rb'
@@ -1348,7 +1346,6 @@ Lint/DuplicateMethods:
 Lint/InterpolationCheck:
   Exclude:
     - 'app/controllers/units_controller.rb'
-    - 'app/models/rules/assessment_score_greater_than_specified.rb'
 
 # Offense count: 2
 Lint/LiteralAsCondition:
@@ -1833,7 +1830,6 @@ Style/GuardClause:
     - 'app/models/rules/age_greater_than_twenty_five.rb'
     - 'app/models/rules/aids_or_related_diseases.rb'
     - 'app/models/rules/appropriate_for_sober_supportive_housing.rb'
-    - 'app/models/rules/assessment_score_greater_than_specified.rb'
     - 'app/models/rules/assessment_score_greater_than_zero.rb'
     - 'app/models/rules/asylee.rb'
     - 'app/models/rules/bedroom.rb'
