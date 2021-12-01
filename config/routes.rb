@@ -125,7 +125,7 @@ Rails.application.routes.draw do
       end
 
       resource :contacts, only: [:edit, :update], controller: :sub_program_contacts
-      resources :vouchers, only: [:index, :create, :update, :destroy] do
+      resources :vouchers, only: [:index, :edit, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection
         delete :unavailable, on: :member
       end
@@ -169,7 +169,9 @@ Rails.application.routes.draw do
     resources :configs, only: [:index] do
       patch :update, on: :collection
     end
-    resources :match_routes, only: [:index, :edit, :update]
+    resources :match_routes, only: [:index, :edit, :update] do
+      resources :weighting_rules, on: :member, except: [:create]
+    end
     resources :sessions, only: [:index, :destroy]
   end
 

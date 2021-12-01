@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_170803) do
+ActiveRecord::Schema.define(version: 2021_11_29_191957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -827,6 +827,10 @@ ActiveRecord::Schema.define(version: 2021_10_27_170803) do
     t.string "assessment_name"
     t.integer "hud_assessment_location"
     t.integer "hud_assessment_type"
+    t.string "staff_name"
+    t.string "staff_email"
+    t.boolean "enrolled_in_es", default: false, null: false
+    t.boolean "enrolled_in_so", default: false, null: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1321,6 +1325,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_170803) do
     t.boolean "can_audit_users", default: false
     t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_manage_sessions", default: false
+    t.boolean "can_edit_voucher_rules", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
@@ -1624,6 +1629,17 @@ ActiveRecord::Schema.define(version: 2021_10_27_170803) do
     t.index ["deleted_at"], name: "index_vouchers_on_deleted_at"
     t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id"
     t.index ["unit_id"], name: "index_vouchers_on_unit_id"
+  end
+
+  create_table "weighting_rules", force: :cascade do |t|
+    t.bigint "route_id"
+    t.bigint "requirement_id"
+    t.integer "applied_to", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["requirement_id"], name: "index_weighting_rules_on_requirement_id"
+    t.index ["route_id"], name: "index_weighting_rules_on_route_id"
   end
 
   add_foreign_key "non_hmis_assessments", "users"

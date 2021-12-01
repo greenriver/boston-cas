@@ -8,6 +8,8 @@ module PathwaysVersionThreeCalculations
   extend ActiveSupport::Concern
 
   included do
+    validates_presence_of :wait_times_ack, :not_matched_ack, :matched_process_ack, :response_time_ack, :automatic_approval_ack, :entry_date, :hud_assessment_location, :hud_assessment_type, on: :create
+
     def title
       assessment_type_options[assessment_type.to_sym][:title]
     end
@@ -30,6 +32,15 @@ module PathwaysVersionThreeCalculations
           "#{v} - #{status}",
         ]
       end.to_h
+    end
+
+    def hud_assessment_level
+      case assessment_type.to_sym
+      when :pathways_2021
+        2 # Housing Needs Assessment
+      when :transfer_assessment
+        1 # Crisis Needs Assessment
+      end
     end
 
     def pathways_assessment_type
@@ -259,7 +270,7 @@ module PathwaysVersionThreeCalculations
           score: 0,
         },
         'undocumented income' => {
-          label: 'Case manager has observed that client may relying on unreportable income (i.e. under the table work, sex work, etc.) for daily living expenses',
+          label: 'Case manager has observed that client may be relying on unreportable income (i.e. under the table work, sex work, etc.) for daily living expenses',
           score: 2,
         },
       }
@@ -369,13 +380,39 @@ module PathwaysVersionThreeCalculations
           label: 'Date of Assessment',
           number: '',
           as: :date_picker,
+          required: true,
+        },
+        hud_assessment_location: {
+          label: 'Assessment Location',
+          number: '',
+          as: :select_2,
+          collection: hud_assessment_locations,
+          required: true,
+        },
+        hud_assessment_type: {
+          label: 'Assessment Type',
+          number: '',
+          as: :select_2,
+          collection: hud_assessment_types,
+          required: true,
+        },
+        setting: {
+          label: 'Current living situation - select one (required)?',
+          number: '',
+          collection: {
+            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            _('Transitional Housing') => 'Transitional Housing',
+            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+          },
+          as: :pretty_boolean_group,
         },
         _contact_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
         },
         phone_number: {
-          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call',
+          label: 'Client phone number',
           number: '2A',
         },
         email_addresses: {
@@ -383,7 +420,7 @@ module PathwaysVersionThreeCalculations
           number: '2B',
         },
         shelter_name: {
-          label: 'What RRH programs do you currently stay with or work with?',
+          label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
           number: '2C',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
@@ -393,25 +430,20 @@ module PathwaysVersionThreeCalculations
           label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
           number: '2D',
           as: :text,
+          hint: 'Please provide email address and full name for each contact listed',
         },
         mailing_address: {
-          label: 'What is your mailing address?',
+          label: 'Client\'s Mailing Address',
           number: '2E',
           as: :text,
         },
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
           number: '2F',
-          as: :select_2,
-          collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true } },
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
           number: '2G',
-          as: :select_2,
-          collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true } },
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
@@ -475,7 +507,7 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/unit_preamble',
         },
         sro_ok: {
-          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)? Keep in mind smaller bedroom units may have more frequent openings',
+          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?',
           number: '6A',
           collection: {
             'Yes' => true,
@@ -485,11 +517,9 @@ module PathwaysVersionThreeCalculations
           as: :pretty_boolean_group,
         },
         required_number_of_bedrooms: {
-          label: 'If you need a bedroom size larger than an SRO select the size below you would move into.',
+          label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below you would move into.',
           number: '6B',
           collection: {
-            'Studio' => -1,
-            '1' => 1,
             '2' => 2,
             '3' => 3,
             '4' => 4,
@@ -566,7 +596,7 @@ module PathwaysVersionThreeCalculations
           collection: {
             'Yes' => true,
             'No' => false,
-            'Unsure' => nil,
+            'Unknown' => nil,
           },
           hint: 'Note to assessor on generating an accurate response: if participant receives any type of disability benefits, you can automatically select "yes"; if you or the participant are unsure, ask them if a medical professional has ever written a letter on their behalf for disabled housing, EAEDC, or other benefits, or if they have ever tried to apply for a disability resource, even if they do not currently receive them- check yes. The assessor may also check yes if a permanent disability is observed.',
           as: :pretty_boolean_group,
@@ -588,7 +618,7 @@ module PathwaysVersionThreeCalculations
           input_html: { multiple: true },
         },
         financial_assistance_end_date: {
-          label: 'What date is the latest date the participant can receive financial assistance through the current rapid re-housing program (i.e. when does their financial assistance end)?',
+          label: 'Latest Date Eligible for Financial Assistance',
           number: '8C',
           as: :date_picker,
         },
@@ -597,15 +627,15 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/transfer_household_history_preamble',
         },
         days_homeless_in_the_last_three_years: {
-          label: 'Warehouse Record- Length of Time Homeless: Check the participant’s record in the Warehouse; how many Boston homeless nights did the participant have immediately before their rapid re-housing lease up date- this is a three year look back period from the date of lease up? ',
+          label: 'Check the participant’s record in the Warehouse; how many Boston homeless nights did the participant have immediately before their rapid re-housing lease update?',
           number: '9A',
         },
         additional_homeless_nights: {
-          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history found at bostoncoc.mailchimpsites.comn and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. You may skip this step if you do not have any additional Boston homeless nights to add.',
+          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history found at bostoncoc.mailchimpsites.com and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. Keep this in the client’s file at your agency. This documentation may be required by the housing subsidy administrator agency the client is matched to. You may skip this step if you do not have any additional Boston homeless nights to add.',
           number: '9B',
         },
         total_days_homeless_in_the_last_three_years: {
-          label: 'Total # of Boston homeless nights 3 years before their RRH lease up date: Warehouse + added Boston homeless nights (input into CAS assessment)',
+          label: 'Total # of Boston Homeless Nights: (9a+9b)',
           hint: 'Auto calculated',
           number: '9C',
           disabled: true,
@@ -617,68 +647,68 @@ module PathwaysVersionThreeCalculations
         times_moved: {
           label: 'How many times have you moved while enrolled in rapid re-housing?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:times_moved),
         },
         health_severity: {
           label: 'How serious are your health concerns right now (physical, mental health, substance use)?',
           hint: 'Or how often have you been in the emergency room (ER) in the last 6 months?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:health_severity),
         },
         ever_experienced_dv: {
           label: 'Have you or are you currently experiencing domestic violence?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:ever_experienced_dv),
         },
         eviction_risk: {
           label: 'Are you currently at risk of being evicted by your landlord?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:eviction_risk),
         },
         need_daily_assistance: {
           label: 'Do you ever need assistance with daily activities like eating, bathing/showering, dressing?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:need_daily_assistance),
         },
         any_income: {
           label: 'Do you have any income right now?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:any_income),
         },
         income_source: {
           label: 'What is the source of the income?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:income_source),
         },
         positive_relationship: {
           label: 'Do you currently have positive family or friend relationships in your support network?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:positive_relationship),
         },
         legal_concerns: {
           label: 'Do you have any active legal concerns, open court cases, or convictions that may come up when we apply for other housing?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:legal_concerns),
         },
         healthcare_coverage: {
           label: 'Do you currently have healthcare coverage?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:healthcare_coverage),
         },
         childcare: {
           label: 'Do you currently have childcare?',
           number: '',
-          as: :pretty_boolean_group,
+          as: :select_2,
           collection: collection_for(:childcare),
         },
         _next_step_preamble: {
@@ -688,56 +718,42 @@ module PathwaysVersionThreeCalculations
         wait_times_ack: {
           label: 'Wait Times',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-          },
-          hint: 'Wait times can change from time to time based on how many people are interested, and the openings we have available. We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings.',
-          as: :pretty_boolean_group,
+          hint: 'Wait times can change from time to time based on how many people are interested, and the openings we have available.  We also have a few priority populations we have to serve first if there are limited openings - these are young people, those who have been homeless the longest and people in an unsafe situation.',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         not_matched_ack: {
           label: 'What should I do to try to find housing if I am not matched with housing opening?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
-          hint: 'We encourage you to keep thinking about other ways you may be able to prevent returning to homelessness, like moving in with roommates, applying for affordable housing, getting a rep payee or other ways to make housing work. ',
-          as: :pretty_boolean_group,
+          hint: 'We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings.  We encourage you to keep thinking about other ways you may be able to move out of homelessness, like with roommates or people you know at the same time you are applying for affordable housing. If you think of an option, you can always be reassessed to see if we can help with the move in.',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         matched_process_ack: {
           label: 'Who Will I Hear From If I Am Matched to a housing opening?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
           hint: 'You may hear from me or any other case managers/contacts you listed here today; you may also hear directly from the housing program, so be sure to return calls or emails even if you do not know the agency. They are going to use all of the contact information you provided us to try to connect with you as quickly as possible. If any of your contact information changes, let me know and I can change it in the assessment.',
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         response_time_ack: {
           label: 'How Long Will I Have to Respond to a housing opening I am matched with?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
           hint: 'In general, the housing programs will outreach to people who are matched with openings for about two weeks. They will move on to new people who may be interested after two weeks because they have to fill the openings. However, if you are interested after the two weeks, you should still return the call/email/message as you may be able to be matched to another opening at a later date.',
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         automatic_approval_ack: {
           label: 'Am I automatically approved for the housing openings when I’m matched?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
           hint: 'No. Today we gathered information to help figure out if you’re eligible and match you to your preferences, but the housing programs will actually verify and document eligibility at the time you are referred. All of the programs have different eligibility criteria- our system will do its best to match you with those that you should be eligible for, but there may be times where you are matched, and are not eligible, and will be offered a new opening when one comes up.',
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
       }
     end
@@ -752,14 +768,25 @@ module PathwaysVersionThreeCalculations
           label: 'Date of Assessment',
           number: '',
           as: :date_picker,
+          required: true,
         },
-        _contact_preamble: {
-          as: :partial,
-          partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
+        hud_assessment_location: {
+          label: 'Assessment Location',
+          number: '',
+          as: :select_2,
+          collection: hud_assessment_locations,
+          required: true,
+        },
+        hud_assessment_type: {
+          label: 'Assessment Type',
+          number: '',
+          as: :select_2,
+          collection: hud_assessment_types,
+          required: true,
         },
         setting: {
-          label: 'Which setting do you currently reside (or sleep in) - select one (required)?',
-          number: '2C',
+          label: 'Current living situation - select one (required)?',
+          number: '',
           collection: {
             _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
             _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
@@ -768,49 +795,42 @@ module PathwaysVersionThreeCalculations
           },
           as: :pretty_boolean_group,
         },
+        _contact_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/contact_preamble',
+        },
+        phone_number: {
+          label: 'Client phone number',
+          number: '2A',
+        },
+        email_addresses: {
+          label: 'List any working email addresses you use',
+          number: '2B',
+        },
         shelter_name: {
-          label: 'If you are in an emergency shelter, select which one (required):',
-          number: '2D',
+          label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
+          number: '2C',
           as: :select_2,
           collection: ShelterHistory.shelter_locations,
           input_html: { data: { tags: true } },
         },
-        outreach_name: {
-          label: 'If you are unsheltered and working with an outreach program, select which one:',
-          number: '2E',
-          as: :select_2,
-          collection: OutreachHistory.outreach_locations,
-          input_html: { data: { tags: true } },
-        },
-        phone_number: {
-          label: 'List any working phone number(s), or the phone of a voicemail service or friend/family member we could call',
-          number: '2F',
-        },
-        email_addresses: {
-          label: 'List any working email addresses you use',
-          number: '2G',
-        },
         case_manager_contact_info: {
-          label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
-          number: '2H',
+          label: 'Do you have any case managers or agencies we could contact to get ahold of you?',
+          number: '2D',
           as: :text,
-        },
-        mailing_address: {
-          label: 'What is your mailing address?',
-          number: '2I',
-          as: :text,
+          hint: 'Please provide email address and full name for each contact listed',
         },
         day_locations: {
           label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
-          number: '2J',
+          number: '2E',
         },
         night_locations: {
           label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
-          number: '2K',
+          number: '2F',
         },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
-          number: '2L',
+          number: '2G',
         },
         _household_preamble: {
           as: :partial,
@@ -856,7 +876,7 @@ module PathwaysVersionThreeCalculations
         income_maximization_assistance_requested: {
           label: 'We have income maximization services we can offer to people who sign up for these housing opportunities and are waiting for an offer. These services include staff who are trained in resources and ways to increase your income by budgeting, applying for all benefits you may need and/or linking to employment opportunities. Are you interested in using this service while you wait for housing?',
           number: '4B',
-          hint: _('Note for Assessor Staff regarding income maximization'),
+          # hint: _('Note for Assessor Staff regarding income maximization'),
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
@@ -879,18 +899,30 @@ module PathwaysVersionThreeCalculations
               },
               as: :pretty_boolean_group,
             },
-            possible_housing_situation_other: {
-              label: 'Other Housing Situation',
-              number: '4D',
-            },
+            # possible_housing_situation_other: {
+            #   label: 'Other Housing Situation',
+            #   number: '4D',
+            # },
           },
+        },
+        youth_rrh_aggregate: {
+          label: 'Youth Choice (for heads of household who are 24 yrs. or younger)  Would you like to be considered for housing programs that are',
+          number: '5C',
+          collection: NonHmisClient.available_youth_choices,
+          as: :pretty_boolean_group,
+        },
+        dv_rrh_aggregate: {
+          label: 'Survivor Choice (for those fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are',
+          number: '5D',
+          collection: NonHmisClient.available_dv_choices,
+          as: :pretty_boolean_group,
         },
         _unit_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/unit_preamble',
         },
         sro_ok: {
-          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)? Keep in mind smaller bedroom units may have more frequent openings',
+          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?',
           number: '6A',
           collection: {
             'Yes' => true,
@@ -900,11 +932,9 @@ module PathwaysVersionThreeCalculations
           as: :pretty_boolean_group,
         },
         required_number_of_bedrooms: {
-          label: 'If you need a bedroom size larger than an SRO select the size below you would move into.',
+          label: '​​If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below',
           number: '6B',
           collection: {
-            'Studio' => -1,
-            '1' => 1,
             '2' => 2,
             '3' => 3,
             '4' => 4,
@@ -989,7 +1019,7 @@ module PathwaysVersionThreeCalculations
           collection: {
             'Yes' => true,
             'No' => false,
-            'Unsure' => nil,
+            'Unknown' => nil,
           },
           as: :pretty_boolean_group,
         },
@@ -997,8 +1027,8 @@ module PathwaysVersionThreeCalculations
           label: 'There are two circumstances where the housing authorities administering these vouchers are required to deny an applicant. In an effort to be considerate of your time, it is best for us to figure out whether these barriers might come up for you now. Have you experienced any of the following? (Check all that apply)',
           number: '8B',
           collection: {
-            _('Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.') => 'lifetime sex offender in household',
             _('Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing') => 'manufacture or production of methamphetamine in household',
+            _('Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.') => 'lifetime sex offender in household',
             _('None of the above ') => 'none',
           },
           as: :pretty_checkboxes_group,
@@ -1012,8 +1042,6 @@ module PathwaysVersionThreeCalculations
             'Prior to entering shelter or sleeping outside during this episode of homelessness, you came directly from jail, prison or a pre-release program.' => 'Prior to entering shelter or sleeping outside during this episode of homelessness, you came directly from jail, prison or a pre-release program.',
             'You have been convicted (found guilty of) a violent crime' => 'You have been convicted (found guilty of) a violent crime',
             'You have been convicted (found guilty of) a drug crime' => 'You have been convicted (found guilty of) a drug crime',
-            'Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.' => 'Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.',
-            'Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing.' => 'Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing.',
             'None of the above' => 'None of the above',
           },
           as: :pretty_checkboxes_group,
@@ -1024,15 +1052,15 @@ module PathwaysVersionThreeCalculations
           partial: 'non_hmis_assessments/pathways_version_three/pathways_household_history_preamble',
         },
         days_homeless_in_the_last_three_years: {
-          label: 'Warehouse Record- Length of Time Homeless: Check the participant’s record in the Warehouse; how many Boston homeless nights in the last three years does the participant have?',
+          label: 'How many cumulative (total) Boston homeless nights does the participant’s Window into the Warehouse record show?',
           number: '9A',
         },
         additional_homeless_nights: {
-          label: 'If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history using the “Documenting Current Boston Homelessness Guidance and Template” form at https://bostoncoc.mailchimpsites.com/ and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. You may skip this step and the form if you do not have any additional Boston homeless nights to add',
+          label: 'If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history using the “Documenting Current Boston Homelessness Guidance and Template” form at https://bostoncoc.mailchimpsites.com/ and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. Keep this in the client’s file at your agency. This documentation may be required by the housing subsidy administrator agency the client is matched to. You may skip this step and the form if you do not have any additional Boston homeless nights to add',
           number: '9B',
         },
         total_days_homeless_in_the_last_three_years: {
-          label: 'Total # of Boston homeless nights: Warehouse + added Boston homeless nights (input into CAS assessment)',
+          label: 'Total # of Boston Homeless Nights: (9a+9b)',
           hint: 'Auto calculated',
           number: '9C',
           disabled: true,
@@ -1044,56 +1072,42 @@ module PathwaysVersionThreeCalculations
         wait_times_ack: {
           label: 'Wait Times',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-          },
-          hint: 'Wait times can change from time to time based on how many people are interested, and the openings we have available. We also have a few priority populations we have to serve first if there are limited openings - these are young people, those who have been homeless the longest and people in an unsafe situation. We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings.',
-          as: :pretty_boolean_group,
+          hint: 'Wait times can change from time to time based on how many people are interested, and the openings we have available. We also have a few priority populations we have to serve first if there are limited openings - these are young people, those who have been homeless the longest and people in an unsafe situation.',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         not_matched_ack: {
           label: 'What should I do to try to find housing if I am not matched with housing opening?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
-          hint: 'We encourage you to keep thinking about other ways you may be able to move out of homelessness, like with roommates or people you know at the same time you are applying for affordable housing. If you think of an option, you can always be reassessed to see if we can help with the move in.',
-          as: :pretty_boolean_group,
+          hint: 'We encourage you to think about ways we can help you move in with friends, family, return to safe living situations, or other options since these programs may not always have openings. We encourage you to keep thinking about other ways you may be able to move out of homelessness, like with roommates or people you know at the same time you are applying for affordable housing. If you think of an option, you can always be reassessed to see if we can help with the move in.',
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         matched_process_ack: {
           label: 'Who Will I Hear From If I Am Matched to a housing opening?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
           hint: 'You may hear from me or any other case managers/contacts you listed here today; you may also hear directly from the housing program, so be sure to return calls or emails even if you do not know the agency. They are going to use all of the contact information you provided us to try to connect with you as quickly as possible. If any of your contact information changes, let me know and I can change it in the assessment.  ',
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         response_time_ack: {
           label: 'How Long Will I Have to Respond to a housing opening I am matched with?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
           hint: 'In general, the housing programs will outreach to people who are matched with openings for about two weeks. They will move on to new people who may be interested after two weeks because they have to fill the openings. However, if you are interested after the two weeks, you should still return the call/email/message as you may be able to be matched to another opening at a later date.',
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         automatic_approval_ack: {
           label: 'Am I automatically approved for the housing openings when I’m matched?',
           number: '',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-
-          },
           hint: 'No. Today we gathered information to help figure out if you’re eligible and match you to your preferences, but the housing programs will actually verify and document eligibility at the time you are referred. All of the programs have different eligibility criteria- our system will do its best to match you with those that you should be eligible for, but there may be times where you are matched, and are not eligible, and will be offered a new opening when one comes up.',
-          as: :pretty_boolean_group,
+          as: :pretty_boolean,
+          wrapper: :custom_boolean,
+          required: true,
         },
         notes: {
           label: 'Optional Background Notes from Assessor Staff',

@@ -7,9 +7,10 @@
 class Voucher < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
+  include HasRequirements
   include MatchArchive
 
-  scope :available, -> {where available: true}
+  scope :available, -> { where available: true }
   belongs_to :sub_program
   belongs_to :unit
   belongs_to :creator, class_name: 'User', optional: true, inverse_of: :vouchers, foreign_key: :user_id
@@ -37,17 +38,21 @@ class Voucher < ApplicationRecord
   # If a unit has been assigned, make sure the building matches the unit.
   def building
     return sub_program.building unless unit.present?
+
     unit.building
   end
+
   # Default the units available to the voucher to the sub-program building.
   # If a unit has already been assigned, scope it to the associated building
   def units
     return sub_program.building.available_units_for_vouchers unless unit.present?
+
     [unit] + unit.building.available_units_for_vouchers.to_a
   end
 
   def units_including_unavailable
     return sub_program.building.units_for_vouchers unless unit.present?
+
     [unit] + unit.building.units_for_vouchers.to_a
   end
 
@@ -61,22 +66,21 @@ class Voucher < ApplicationRecord
     _('Translate this to add voucher confirmation')
   end
 
+  def name
+    'Voucher'
+  end
+
   def self.text_search(text)
     return none unless text.present?
 
-    unit_matches = Unit.where(
-      Unit.arel_table[:id].eq arel_table[:unit_id]
-    ).text_search(text).arel.exists
+    unit_matches = Unit.where(Unit.arel_table[:id].eq arel_table[:unit_id]).
+      text_search(text).arel.exists
 
-    sub_program_matches = SubProgram.where(
-      SubProgram.arel_table[:id].eq arel_table[:sub_program_id]
-    ).text_search(text).arel.exists
+    sub_program_matches = SubProgram.where(SubProgram.arel_table[:id].eq arel_table[:sub_program_id]).
+      text_search(text).arel.exists
 
-    query = "%#{text}%"
-    where(
-      unit_matches
-      .or(sub_program_matches)
-    )
+    # query = "%#{text}%"
+    where(unit_matches.or(sub_program_matches))
   end
 
   def self.associations_adding_requirements
@@ -87,15 +91,25 @@ class Voucher < ApplicationRecord
     [:unit, :sub_program]
   end
 
+  def inherited_requirements_by_source
+    {}
+  end
+
+  def self.preload_for_inherited_requirements
+    all
+  end
+
+  def requirements_description
+    requirements.map(&:name).compact.join ', '
+  end
+
   def available_at
     cursor = self
 
     while cursor
       if cursor.available
         previous = cursor.paper_trail.previous_version
-        if previous.nil? || ! previous.available
-          return cursor.updated_at
-        end
+        return cursor.updated_at if previous.nil? || ! previous.available
       end
       cursor = cursor.paper_trail.previous_version
     end
@@ -113,17 +127,18 @@ class Voucher < ApplicationRecord
 
   # Searching by client name
 
-  def self.ransackable_scopes(auth_object = nil)
+  def self.ransackable_scopes(_auth_object = nil)
     [:client_search]
   end
 
-  scope :client_search, -> (text) do
+  scope :client_search, ->(text) do
     return none unless text.present?
+
     text.strip!
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
-    else
-      first, last = text.split(' ').map(&:strip) if text.include?(' ')
+    elsif text.include?(' ')
+      first, last = text.split(' ').map(&:strip)
     end
 
     if first.present? && last.present?
@@ -141,24 +156,22 @@ class Voucher < ApplicationRecord
   end
 
   private def cant_update_when_active_or_successful_match
-    if status_match.present?
-      condition = status_match.successful? ? 'successful match' : 'match in progress'
-      if available_changed? || unit_id_changed? || date_available_changed?
-        errors.add :base, "Voucher #{id} is locked while there is a #{condition}"
-      end
-    end
+    return unless status_match.present?
+    return unless available_changed? || unit_id_changed? || date_available_changed?
+
+    condition = status_match.successful? ? 'successful match' : 'match in progress'
+    errors.add :base, "Voucher #{id} is locked while there is a #{condition}"
   end
 
   private def cant_have_unit_in_use
-    if unit.try(:in_use?) && unit_id_changed?
-      errors.add :unit_id, "Unit in use"
-    end
+    return unless unit.try(:in_use?) && unit_id_changed?
+
+    errors.add :unit_id, 'Unit in use'
   end
 
   private def requires_unit_if_avaiable
-    if changing_to_available? && unit_id.blank? && sub_program.has_buildings?
-      errors.add :unit_id, "Unit required to make the voucher available"
-    end
-  end
+    return unless changing_to_available? && unit_id.blank? && sub_program.has_buildings?
 
+    errors.add :unit_id, 'Unit required to make the voucher available'
+  end
 end

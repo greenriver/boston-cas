@@ -3,10 +3,10 @@
     .row.table-utilities
       .col-sm-8
         %p= page_entries_info @opportunities, entry_name: 'vacancy'
-    .row
-      .col-sm-12
-        .table-responsive
-          %table.table.table-condensed.table-striped
+    .table-responsive
+      .c-card.c.card__flush.mb-4
+        .c-card__content.p-0
+          %table.table.table-striped.mb-0
             %thead
               %tr
                 %th Program
@@ -58,6 +58,6 @@
                       = link_to opportunity_matches_path(opportunity), class: 'btn btn-secondary btn-sm' do
                         View
                         %span.icon-arrow-right2.ml-2
-        %p= paginate @opportunities
+    %p= paginate @opportunities
 - else
   No vacancies found.

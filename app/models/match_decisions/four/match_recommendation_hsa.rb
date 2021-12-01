@@ -58,6 +58,19 @@ module MatchDecisions::Four
       }
     end
 
+    def stallable?
+      true
+    end
+
+    def stalled_contact_types
+      @stalled_contact_types ||= [
+        :shelter_agency_contacts,
+        :housing_subsidy_admin_contacts,
+        :ssp_contacts,
+        :hsp_contacts,
+      ]
+    end
+
     def editable?
       super && saved_status !~ /accepted|declined/
     end
