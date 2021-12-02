@@ -247,6 +247,18 @@ FactoryBot.define do
     name { 'Enrolled in TH' }
     verb { 'be' }
   end
+  factory :enrolled_in_rrh, class: 'Rules::EnrolledInRrh' do
+    name { 'Enrolled in Rapid Re-Housing' }
+    verb { 'be' }
+  end
+  factory :enrolled_in_psh, class: 'Rules::EnrolledInPsh' do
+    name { 'Enrolled in PSH (Permanent Supportive Housing)' }
+    verb { 'be' }
+  end
+  factory :enrolled_in_ph, class: 'Rules::EnrolledInPh' do
+    name { 'Enrolled in PH (PH – Housing Only or Housing with Services (no disability required for entry)' }
+    verb { 'be' }
+  end
 
   factory :non_hmis_assessment_type, class: 'Rules::NonHmisAssessmentType' do
     name { 'Most recent assessment is one of the specified assessments' }
