@@ -104,6 +104,24 @@
     background-color: #FF4136;
   }
 }
+.client__service_type_rrh {
+  /* border-bottom: 1px solid #FF4136; */
+  .service-type__program-type {
+    background-color: #00b750;
+  }
+}
+.client__service_type_psh {
+  /* border-bottom: 1px solid #FF4136; */
+  .service-type__program-type {
+    background-color: #85144b;
+  }
+}
+.client__service_type_ph {
+  /* border-bottom: 1px solid #FF4136; */
+  .service-type__program-type {
+    background-color: #ce0ea3;
+  }
+}
 .client--match-active
 {
   border-left: 4px solid $brand-success;
