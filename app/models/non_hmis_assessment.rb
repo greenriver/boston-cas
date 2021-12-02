@@ -332,6 +332,8 @@ class NonHmisAssessment < ActiveRecord::Base
       form_fields.each do |name, field|
         # If there are sub-questions, there will not be answers at this level
         if ! field[:questions]
+          next if field[:as] == :partial
+
           val = send(name)
           values << if val.is_a?(Array)
             val = val.select(&:present?)
@@ -345,6 +347,8 @@ class NonHmisAssessment < ActiveRecord::Base
           end
         else
           field[:questions].each do |sub_name, f|
+            next if f[:as] == :partial
+
             val = send(sub_name)
             values << if val.is_a?(Array)
               val = val.select(&:present?)
