@@ -168,6 +168,12 @@ def report_list
         description: 'Report of agency interactions with matches.',
         limitable: true,
       },
+      {
+        url: 'reports/client_referrals',
+        name: 'External Referrals',
+        description: 'Export referral list and optionally generate referrals for HUD reporting in the warehouse.',
+        limitable: false,
+      },
     ],
   }
 end

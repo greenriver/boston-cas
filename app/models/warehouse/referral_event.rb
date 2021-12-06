@@ -66,6 +66,7 @@ module Warehouse
           end
         end
       end
+      # TODO: add direct referrals
     end
   end
 end
