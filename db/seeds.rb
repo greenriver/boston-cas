@@ -169,7 +169,7 @@ def report_list
         limitable: true,
       },
       {
-        url: 'reports/client_referrals',
+        url: 'reports/external_referrals',
         name: 'External Referrals',
         description: 'Export referral list and optionally generate referrals for HUD reporting in the warehouse.',
         limitable: false,

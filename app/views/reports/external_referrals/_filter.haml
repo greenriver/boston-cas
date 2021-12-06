@@ -1,0 +1,12 @@
+.c-card.c-card--flush.mb-4
+  .c-card__content
+    = simple_form_for @filter, as: :filter, url: reports_external_referrals_path, method: :get do |f|
+      .row
+        .col-sm-3
+          = f.input :start, as: :date_picker, label: 'Start'
+        .col-sm-3
+          = f.input :end, as: :date_picker, label: 'End'
+        .col-sm-4
+          = f.input :assessment_types, as: :select_2, collection: NonHmisAssessment.known_assessments_for_matching.invert, input_html: {multiple: true}
+        .col-sm-2.mt-no-label
+          = f.submit 'Update', class: 'btn btn-primary mt-no-label', data: { disable_with: false }
