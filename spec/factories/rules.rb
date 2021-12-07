@@ -235,6 +235,10 @@ FactoryBot.define do
     name { 'Enrolled in HMIS Project' }
     verb { 'be' }
   end
+  factory :enrolled_in_hmis_project_type, class: 'Rules::EnrolledInHmisProjectType' do
+    name { 'Enrolled in HMIS Project Type' }
+    verb { 'be' }
+  end
   factory :enrolled_in_sh, class: 'Rules::EnrolledInSh' do
     name { 'Enrolled in SH' }
     verb { 'be' }
@@ -284,6 +288,14 @@ FactoryBot.define do
   factory :lifetime_sex_offender, class: 'Rules::LifetimeSexOffender' do
     name { 'A Lifetime Sex Offender' }
     verb { 'be' }
+  end
+  factory :majority_sheltered, class: 'Rules::MajoritySheltered' do
+    name { 'Majority of homeless nights sheltered' }
+    verb { 'have' }
+  end
+  factory :majority_unsheltered, class: 'Rules::MajorityUnsheltered' do
+    name { 'Majority of homeless nights unsheltered' }
+    verb { 'have' }
   end
   factory :meth_production_conviction, class: 'Rules::MethProductionConviction' do
     name { 'Meth Production Conviction' }

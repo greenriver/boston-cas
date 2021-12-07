@@ -95,3 +95,6 @@ Youth,Youth or marked as youth,,be
 AssessmentScoreGreaterThanSpecified,Assessment Score greater than specified score,,have
 HoldsVoucher,A mobile voucher,,have
 AssessmentCompletedWithin,Assessment Completed within specified range,,have
+EnrolledInHmisProjectType,Enrolled in one of the specified HMIS Project Types,,be
+MajorityUnsheltered,Majority of homeless nights unsheltered,,have
+MajoritySheltered,Majority of homeless nights sheltered,,have
