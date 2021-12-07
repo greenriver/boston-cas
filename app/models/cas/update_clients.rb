@@ -204,6 +204,7 @@ module Cas
         :assessment_name,
         :entry_date,
         :financial_assistance_end_date,
+        :address,
       ]
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_29_191957) do
+ActiveRecord::Schema.define(version: 2021_12_06_205159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -271,6 +271,10 @@ ActiveRecord::Schema.define(version: 2021_11_29_191957) do
     t.string "assessment_name"
     t.date "entry_date"
     t.date "financial_assistance_end_date"
+    t.boolean "enrolled_in_rrh", default: false
+    t.boolean "enrolled_in_psh", default: false
+    t.boolean "enrolled_in_ph", default: false
+    t.string "address"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -388,6 +392,19 @@ ActiveRecord::Schema.define(version: 2021_11_29_191957) do
     t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "external_referrals", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "user_id", null: false
+    t.date "referred_on", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["client_id"], name: "index_external_referrals_on_client_id"
+    t.index ["created_at"], name: "index_external_referrals_on_created_at"
+    t.index ["updated_at"], name: "index_external_referrals_on_updated_at"
+    t.index ["user_id"], name: "index_external_referrals_on_user_id"
   end
 
   create_table "file_tags", id: :serial, force: :cascade do |t|
@@ -1144,6 +1161,10 @@ ActiveRecord::Schema.define(version: 2021_11_29_191957) do
     t.date "holds_voucher_on"
     t.string "assessment_name"
     t.date "financial_assistance_end_date"
+    t.boolean "enrolled_in_rrh", default: false
+    t.boolean "enrolled_in_psh", default: false
+    t.boolean "enrolled_in_ph", default: false
+    t.string "address"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

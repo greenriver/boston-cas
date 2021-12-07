@@ -14,7 +14,7 @@ class NonHmisClient < ApplicationRecord
   has_many :shelter_histories
 
   def current_assessment
-    NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
+    NonHmisAssessment.where(non_hmis_client_id: id).order(entry_date: :desc).first
   end
 
   def current_covid_assessment
@@ -172,7 +172,8 @@ class NonHmisClient < ApplicationRecord
     project_client.ssn = ssn
     project_client.middle_name = middle_name
     project_client.gender = gender
-    project_client.email = email
+    project_client.email = email.presence || current_assessment&.email_addresses
+    project_client.address = current_assessment&.mailing_address
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
     project_client.housing_release_status = _('Limited CAS Release') if limited_release_on_file
     project_client.tags = cas_tags

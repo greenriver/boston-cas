@@ -1,0 +1,9 @@
+= render 'reports/crumbs_operational'
+
+%h1 External Referrals
+= render 'filter'
+
+- if @clients.to_a.any?
+  = render 'table'
+- else
+  %p No assessments completed in the chosen range.
