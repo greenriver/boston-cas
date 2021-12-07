@@ -63,6 +63,7 @@ gem 'lograge'
 gem 'paper_trail'
 gem 'paranoia', '~> 2.0'
 gem 'validate_url'
+gem 'StreetAddress', require: false
 
 gem 'devise', '~> 4'
 gem 'devise_invitable'

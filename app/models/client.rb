@@ -75,6 +75,7 @@ class Client < ApplicationRecord
   has_many :reporting_decisions, class_name: 'Reporting::Decisions', foreign_key: :cas_client_id
 
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent', inverse_of: :client
+  has_many :external_referrals, inverse_of: :client
 
   validates :ssn, length: {maximum: 9}
 

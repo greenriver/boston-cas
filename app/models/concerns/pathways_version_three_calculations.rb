@@ -11,6 +11,8 @@ module PathwaysVersionThreeCalculations
     validates_presence_of :wait_times_ack, :not_matched_ack, :matched_process_ack, :response_time_ack, :automatic_approval_ack, :entry_date, :hud_assessment_location, :hud_assessment_type, on: :create
 
     def title
+      return pathways_title if assessment_type.blank?
+
       assessment_type_options[assessment_type.to_sym][:title]
     end
 

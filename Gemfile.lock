@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    StreetAddress (1.0.6)
     actioncable (6.0.4.1)
       actionpack (= 6.0.4.1)
       nio4r (~> 2.0)
@@ -627,6 +628,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  StreetAddress
   active_record_query_trace
   activerecord-import
   activerecord-session_store
