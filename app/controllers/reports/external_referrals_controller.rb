@@ -9,8 +9,6 @@ module Reports
     before_action :filter
 
     # TODO
-    # add this as a report
-    # Export selected clients
     # Optionally add Referral Event
     def index
       @clients = client_scope.preload(:external_referrals, :active_matches)
@@ -21,7 +19,6 @@ module Reports
       @clients = client_scope.preload(:external_referrals, :active_matches)
       ids = params[:referrals][:clients].select { |_, v| v == '1' }.keys.map(&:to_i)
       @clients = @clients.where(id: ids) if ids.any?
-
       index_response
     end
 
@@ -50,7 +47,7 @@ module Reports
     private def default_filter
       OpenStruct.new(
         start: 1.months.ago,
-        end: 1.days.ago,
+        end: Date.current,
       )
     end
 
