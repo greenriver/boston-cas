@@ -208,6 +208,7 @@ module Cas
         :entry_date,
         :financial_assistance_end_date,
         :address,
+        :tie_breaker_date,
       ]
     end
 
