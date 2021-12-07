@@ -7,7 +7,7 @@
       %h2.o-pre-table-actions__heading.mt-2 Client Information
       .d-flex.o-pre-table-actions__group.ml-auto
         - if disabled
-          - if @non_hmis_client.warehouse_client_id
+          - if @non_hmis_client.warehouse_client_id && @non_hmis_client.identified?
             .mr-auto
               = link_to "#{Config.get(:warehouse_url)}/clients/#{@non_hmis_client.warehouse_client_id}", class: 'btn btn-sm btn-secondary mr-2' do
                 Warehouse Client
