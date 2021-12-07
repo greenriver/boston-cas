@@ -1,8 +1,9 @@
 .row.mb-4
   - unless disabled
-    .col-12
-      .c-question
-        = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false
+    - if @non_hmis_client.identified?
+      .col-12
+        .c-question
+          = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false
   .col-12
     .c-question
       - label = 'Active Status'
