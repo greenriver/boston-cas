@@ -235,6 +235,10 @@ FactoryBot.define do
     name { 'Enrolled in HMIS Project' }
     verb { 'be' }
   end
+  factory :enrolled_in_hmis_project_type, class: 'Rules::EnrolledInHmisProjectType' do
+    name { 'Enrolled in HMIS Project Type' }
+    verb { 'be' }
+  end
   factory :enrolled_in_sh, class: 'Rules::EnrolledInSh' do
     name { 'Enrolled in SH' }
     verb { 'be' }
