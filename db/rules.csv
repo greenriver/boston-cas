@@ -64,6 +64,9 @@ EnrolledInTh,Enrolled in TH,,be
 EnrolledInSh,Enrolled in SH,,be
 EnrolledInSo,Enrolled in SO,,be
 EnrolledInEs,Enrolled in ES,,be
+EnrolledInRrh,Enrolled in Rapid Re-Housing,,be
+EnrolledInPsh,Enrolled in PSH (Permanent Supportive Housing),,be
+EnrolledInPh,Enrolled in PH (PH – Housing Only or Housing with Services (no disability required for entry),,be
 InterestedInRrh,Interested in RRH,,be
 InterestedInYouthRrh,Interested in Youth RRH,,be
 InterestedInDvRrh,Interested in DV RRH,,be
@@ -91,3 +94,7 @@ HealthPrioritized,Prioritized for Health,,be
 Youth,Youth or marked as youth,,be
 AssessmentScoreGreaterThanSpecified,Assessment Score greater than specified score,,have
 HoldsVoucher,A mobile voucher,,have
+AssessmentCompletedWithin,Assessment Completed within specified range,,have
+EnrolledInHmisProjectType,Enrolled in one of the specified HMIS Project Types,,be
+MajorityUnsheltered,Majority of homeless nights unsheltered,,have
+MajoritySheltered,Majority of homeless nights sheltered,,have

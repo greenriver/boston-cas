@@ -17,5 +17,14 @@
         - if @client.enrolled_in_th
           .client__service_type_th
             .service-type__program-type TH
+        - if @client.enrolled_in_rrh
+          .client__service_type_rrh
+            .service-type__program-type RRH
+        - if @client.enrolled_in_psh
+          .client__service_type_psh
+            .service-type__program-type PSH
+        - if @client.enrolled_in_ph
+          .client__service_type_ph
+            .service-type__program-type PH
   - else
     %p.font-no-data None
