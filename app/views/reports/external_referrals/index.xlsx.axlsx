@@ -73,7 +73,7 @@ wb.add_worksheet(name: 'CAS External Referrals') do |sheet|
         client.cellphone,
         client.date_of_birth,
         address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
-        'nil',
+        '',
         address&.city,
         address&.state,
         address&.postal_code,

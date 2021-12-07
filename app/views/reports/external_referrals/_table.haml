@@ -2,25 +2,28 @@
   .d-flex
     = f.button :submit, value: 'Download Excel', class: 'btn btn-secondary mb-4 ml-auto'
 
-  %table.table.table-striped
-    %thead
-      %tr
-        %th Name or Identifier
-        %th #{_('Full HAN Release')}?
-        %th Last Referral Date
-        %th Assessment Date
-        %th Assessment Score
-        %th
-          Add Referral?
-          %br
-          %input#jReferral.jCheckAll{type: :checkbox}= '&nbsp;'.html_safe
-    %tbody
-      - @clients.each do |client|
-        %tr
-          %td= client.full_name
-          %td= yes_no(client.has_full_housing_release?)
-          %td= client.external_referrals&.max_by(&:referred_on)
-          %td= client.rrh_assessment_collected_at&.to_date
-          %td= client.assessment_score
-          %td
-            = f.input "[clients][#{client.id}]", as: :boolean, label: false, input_html: {class: 'jReferral'}
+  .table-responsive
+    .c-card.c.card__flush.mb-4.p-0
+      .c-card__content.p-0
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Name or Identifier
+              %th #{_('Full HAN Release')}?
+              %th Last Referral Date
+              %th Assessment Date
+              %th Assessment Score
+              %th
+                Add Referral?
+                %br
+                %input#jReferral.jCheckAll{type: :checkbox}= '&nbsp;'.html_safe
+          %tbody
+            - @clients.each do |client|
+              %tr
+                %td= client.full_name
+                %td= yes_no(client.has_full_housing_release?)
+                %td= client.external_referrals&.max_by(&:referred_on)&.referred_on
+                %td= client.rrh_assessment_collected_at&.to_date
+                %td= client.assessment_score
+                %td
+                  = f.input "[clients][#{client.id}]", as: :boolean, label: false, input_html: {class: 'jReferral'}
