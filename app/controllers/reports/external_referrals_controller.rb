@@ -8,8 +8,6 @@ module Reports
     before_action :authenticate_user!
     before_action :filter
 
-    # TODO
-    # Optionally add Referral Event
     def index
       @clients = client_scope.preload(:external_referrals, :active_matches)
       index_response
@@ -59,8 +57,6 @@ module Reports
       OpenStruct.new(
         start: 1.months.ago,
         end: Date.current,
-        persisted?: true,
-        available_rules: Rule.order(:name),
       )
     end
 
