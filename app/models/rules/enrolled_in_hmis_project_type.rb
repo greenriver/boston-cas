@@ -41,8 +41,10 @@ class Rules::EnrolledInHmisProjectType < Rule
 
     a_t = Client.arel_table
     clauses = value_as_array(requirement.variable).map do |project_type|
+      next if type_columns[project_type.to_sym].blank?
+
       a_t[type_columns[project_type.to_sym]].eq(requirement.positive).to_sql
-    end
+    end.compact
 
     type_clauses = if requirement.positive
       clauses.join(' or ')
