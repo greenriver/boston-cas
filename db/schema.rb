@@ -274,7 +274,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_133821) do
     t.boolean "enrolled_in_rrh", default: false
     t.boolean "enrolled_in_psh", default: false
     t.boolean "enrolled_in_ph", default: false
-    t.boolean "majority_sheltered", default: false
+    t.boolean "majority_sheltered"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -1149,7 +1149,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_133821) do
     t.boolean "enrolled_in_rrh", default: false
     t.boolean "enrolled_in_psh", default: false
     t.boolean "enrolled_in_ph", default: false
-    t.boolean "majority_sheltered", default: false
+    t.boolean "majority_sheltered"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

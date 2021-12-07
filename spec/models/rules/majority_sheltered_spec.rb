@@ -6,6 +6,7 @@ RSpec.describe Rules::MajoritySheltered, type: :model do
 
     let!(:bob) { create :client, first_name: 'Bob', majority_sheltered: true }
     let!(:roy) { create :client, first_name: 'Roy', majority_sheltered: false }
+    let!(:sue) { create :client, first_name: 'Sue', majority_sheltered: nil }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
@@ -23,6 +24,9 @@ RSpec.describe Rules::MajoritySheltered, type: :model do
       it 'does not contain Roy' do
         expect(clients_that_fit.ids).to_not include roy.id
       end
+      it 'does not contain Sue' do
+        expect(clients_that_fit.ids).to_not include sue.id
+      end
     end
 
     context 'when negative' do
@@ -34,6 +38,9 @@ RSpec.describe Rules::MajoritySheltered, type: :model do
       end
       it 'contains Roy' do
         expect(clients_that_dont_fit.ids).to include roy.id
+      end
+      it 'does not contain Sue' do
+        expect(clients_that_fit.ids).to_not include sue.id
       end
     end
   end
