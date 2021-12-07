@@ -52,20 +52,7 @@ class Rules::EnrolledInHmisProjectType < Rule
       clauses.join(' and ')
     end
 
-    scope.where(type_clauses)
-  end
-
-  private def clause(column_name, positive)
-
-    if positive
-      return Client.where(column_name => true) if scope.nil?
-
-      scope.or(scope.where(column_name => true))
-    else
-      return Client.where(column_name => false) if scope.nil?
-
-      scope.where(column_name => false)
-    end
+    scope.where(Arel.sql(type_clauses))
   end
 
   private def value_as_array(value)
