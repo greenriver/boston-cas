@@ -289,6 +289,14 @@ FactoryBot.define do
     name { 'A Lifetime Sex Offender' }
     verb { 'be' }
   end
+  factory :majority_sheltered, class: 'Rules::MajoritySheltered' do
+    name { 'Majority of homeless nights sheltered' }
+    verb { 'have' }
+  end
+  factory :majority_unsheltered, class: 'Rules::MajorityUnsheltered' do
+    name { 'Majority of homeless nights unsheltered' }
+    verb { 'have' }
+  end
   factory :meth_production_conviction, class: 'Rules::MethProductionConviction' do
     name { 'Meth Production Conviction' }
     verb { 'have' }
