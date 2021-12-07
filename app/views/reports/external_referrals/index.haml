@@ -3,4 +3,7 @@
 %h1 External Referrals
 = render 'filter'
 
-= debug @clients.count
+- if @clients.to_a.any?
+  = render 'table'
+- else
+  %p No assessments completed in the chosen range.

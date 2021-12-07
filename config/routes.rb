@@ -216,7 +216,11 @@ Rails.application.routes.draw do
     resources :match_progress, only: [:index]
     resources :housed_addresses, only: [:index]
     resources :agency_interactions, only: [:index]
-    resources :external_referrals, only: [:index]
+    resources :external_referrals, only: [:index] do
+      collection do
+        post :refer
+      end
+    end
   end
 
   namespace :system_status do

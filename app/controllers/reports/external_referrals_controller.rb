@@ -13,7 +13,26 @@ module Reports
     # Export selected clients
     # Optionally add Referral Event
     def index
-      @clients = client_scope.preload(:external_referrals)
+      @clients = client_scope.preload(:external_referrals, :active_matches)
+      index_response
+    end
+
+    def refer
+      @clients = client_scope.preload(:external_referrals, :active_matches)
+      ids = params[:referrals][:clients].select { |_, v| v == '1' }.keys.map(&:to_i)
+      @clients = @clients.where(id: ids) if ids.any?
+
+      index_response
+    end
+
+    private def index_response
+      respond_to do |format|
+        format.html {}
+        format.xlsx do
+          filename = 'CAS External Referrals.xlsx'
+          render xlsx: 'index.xlsx', filename: filename
+        end
+      end
     end
 
     private def filter
@@ -30,7 +49,7 @@ module Reports
 
     private def default_filter
       OpenStruct.new(
-        start: 6.months.ago,
+        start: 1.months.ago,
         end: 1.days.ago,
       )
     end
@@ -53,7 +72,7 @@ module Reports
       @client_scope.where(
         rrh_assessment_collected_at: filter.start .. filter.end,
         assessment_name: filter.assessment_types,
-      )
+      ).order(assessment_score: :desc)
     end
   end
 end
