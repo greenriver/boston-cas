@@ -7,8 +7,13 @@
 module Warehouse
   class ReferralEvent < Base
     self.table_name = :cas_referral_events
+    include ArelHelper
 
     CLIENT_ACCEPTED = 1
+
+    scope :external_referrals, -> do
+      where(client_opportunity_match_id: nil)
+    end
 
     def accepted
       update(referral_result: CLIENT_ACCEPTED, referral_result_date: client_opportunity_match.success_time.to_date)
@@ -33,6 +38,11 @@ module Warehouse
     end
 
     def self.sync!
+      sync_match_referrals!
+      sync_external_referrals!
+    end
+
+    def self.sync_match_referrals!
       ClientOpportunityMatch.preload(:sub_program).find_each do |match|
         # Match is in a weird state, abort
         next if ! match.active? && ! match.closed?
@@ -66,7 +76,35 @@ module Warehouse
           end
         end
       end
-      # TODO: add direct referrals
+    end
+
+    # NOTE: this currently assumes Warehouse::ReferralEvents with no client_opportunity_match_id are external referrals
+    def self.sync_external_referrals!
+      transaction do
+        external_referrals.delete_all
+        hmis_client_id_lookup = ProjectClient.from_hmis.pluck(:client_id, :id_in_data_source).to_h
+
+        hmis_client_id_lookup.merge!(
+          NonHmisClient.joins(:project_client).
+            where.not(warehouse_client_id: nil).
+            pluck(pc_t[:client_id], :warehouse_client_id).
+            to_h,
+        )
+        batch = []
+        ExternalReferral.preload(:client).find_each do |er|
+          hmis_client_id = hmis_client_id_lookup[er.client_id]
+          # Skip anyone who's CAS only since we won't be able to connect the event to an enrollment later
+          next unless hmis_client_id
+
+          batch << {
+            cas_client_id: er.client_id,
+            hmis_client_id: hmis_client_id,
+            referral_date: er.referred_on,
+            event: 17, # NOTE: for now, these are all referral to EHV
+          }
+        end
+        import(batch)
+      end
     end
   end
 end

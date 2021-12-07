@@ -59,6 +59,8 @@ module Reports
       OpenStruct.new(
         start: 1.months.ago,
         end: Date.current,
+        persisted?: true,
+        available_rules: Rule.order(:name),
       )
     end
 

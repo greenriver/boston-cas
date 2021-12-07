@@ -1,6 +1,6 @@
 = simple_form_for :referrals, as: :referrals, url: refer_reports_external_referrals_path({ filter: filter_params, format: :xlsx }) do |f|
   .d-flex
-    = f.button :submit, value: 'Download Excel', class: 'btn btn-secondary mb-4 ml-auto'
+    = f.button :submit, value: 'Download Excel', class: 'btn btn-secondary mb-4 ml-auto', data: { disable_with: false }
 
   .table-responsive
     .c-card.c.card__flush.mb-4.p-0
