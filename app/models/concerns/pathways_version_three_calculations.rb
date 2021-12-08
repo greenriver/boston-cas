@@ -628,18 +628,30 @@ module PathwaysVersionThreeCalculations
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/transfer_household_history_preamble',
         },
-        days_homeless_in_the_last_three_years: {
-          label: 'Check the participant’s record in the Warehouse; how many Boston homeless nights did the participant have immediately before their rapid re-housing lease update?',
+        homeless_nights_sheltered: {
+          label: 'How many sheltered Boston homeless nights does the participant\'s Window into the Warehouse record show?',
           number: '9A',
         },
-        additional_homeless_nights: {
-          label: 'Adding Boston homeless nights: If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history found at bostoncoc.mailchimpsites.com and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. Keep this in the client’s file at your agency. This documentation may be required by the housing subsidy administrator agency the client is matched to. You may skip this step if you do not have any additional Boston homeless nights to add.',
+        homeless_nights_unsheltered: {
+          label: 'How many unsheltered Boston homeless nights does the participant\'s Window into the Warehouse record show?',
           number: '9B',
         },
-        total_days_homeless_in_the_last_three_years: {
-          label: 'Total # of Boston Homeless Nights: (9a+9b)',
-          hint: 'Auto calculated',
+        _additional_homeless_nights_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/additional_homeless_nights_preamble',
+        },
+        additional_homeless_nights_sheltered: {
+          label: 'Sheltered Boston homeless nights you are adding to their length of time homeless in the warehouse.',
           number: '9C',
+        },
+        additional_homeless_nights_unsheltered: {
+          label: 'Unsheltered Boston homeless nights you are adding to their length of time homeless in the warehouse.',
+          number: '9D',
+        },
+        total_days_homeless_in_the_last_three_years: {
+          label: 'Total # of Boston Homeless Nights: (9a+9b+9c+9d)',
+          hint: 'Auto calculated',
+          number: '9E',
           disabled: true,
         },
         _housing_stability_preamble: {
@@ -1053,18 +1065,30 @@ module PathwaysVersionThreeCalculations
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/pathways_household_history_preamble',
         },
-        days_homeless_in_the_last_three_years: {
-          label: 'How many cumulative (total) Boston homeless nights does the participant’s Window into the Warehouse record show?',
+        homeless_nights_sheltered: {
+          label: 'How many sheltered Boston homeless nights does the participant\'s Window into the Warehouse record show?',
           number: '9A',
         },
-        additional_homeless_nights: {
-          label: 'If you believe the participant has more Boston homeless nights to add to their record (unsheltered stays in Boston; and/or shelters who do not input into the Warehouse), complete the three year history using the “Documenting Current Boston Homelessness Guidance and Template” form at https://bostoncoc.mailchimpsites.com/ and specify the number of Boston homeless nights you are adding to their length of time homeless in the warehouse. Keep this in the client’s file at your agency. This documentation may be required by the housing subsidy administrator agency the client is matched to. You may skip this step and the form if you do not have any additional Boston homeless nights to add',
+        homeless_nights_unsheltered: {
+          label: 'How many unsheltered Boston homeless nights does the participant\'s Window into the Warehouse record show?',
           number: '9B',
         },
-        total_days_homeless_in_the_last_three_years: {
-          label: 'Total # of Boston Homeless Nights: (9a+9b)',
-          hint: 'Auto calculated',
+        _additional_homeless_nights_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_three/additional_homeless_nights_preamble',
+        },
+        additional_homeless_nights_sheltered: {
+          label: 'Sheltered Boston homeless nights you are adding to their length of time homeless in the warehouse.',
           number: '9C',
+        },
+        additional_homeless_nights_unsheltered: {
+          label: 'Unsheltered Boston homeless nights you are adding to their length of time homeless in the warehouse.',
+          number: '9D',
+        },
+        total_days_homeless_in_the_last_three_years: {
+          label: 'Total # of Boston Homeless Nights: (9a+9b+9c+9d)',
+          hint: 'Auto calculated',
+          number: '9E',
           disabled: true,
         },
         _pathways_next_steps_preamble: {

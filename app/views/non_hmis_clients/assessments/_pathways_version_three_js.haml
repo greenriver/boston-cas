@@ -11,54 +11,35 @@
     $('input[name*="[hoh_age]"]').trigger('change');
 
     // DV
-    $('input[name*="[current_living_situation]"]').on('change', function(e) {
-      value = $('input[name*="[current_living_situation]"]:checked').val();
-      if(value !== undefined && value.startsWith('Currently fleeing')) {
+    $('input[name*="[setting]"]').on('change', function(e) {
+      value = $('input[name*="[setting]"]:checked').val();
+      if(value !== undefined && value.startsWith('Actively fleeing')) {
         $('.c-question[data-number="5D"]').removeClass('d-none');
       } else {
         $('.c-question[data-number="5D"] input[type="radio"]').prop('checked', false);
         $('.c-question[data-number="5D"]').addClass('d-none');
       }
     });
-    $('input[name*="[current_living_situation]"]').trigger('change');
-
-    // Pending move-in
-    $('input[name*="[pending_subsidized_housing_placement]"]').on('change', function(e) {
-      if($('input[name*="[pending_subsidized_housing_placement]"]').is(':checked')) {
-        $('.c-question[data-number="3E"]').removeClass('d-none');
-      } else {
-        $('.c-question[data-number="3E"]').addClass('d-none');
-      }
-    });
-    $('input[name*="[pending_subsidized_housing_placement]"]').trigger('change');
-
-    // RRH
-    $('input[name*="[rrh_desired]"]').on('change', function(e) {
-      if($('input[name*="[rrh_desired]"]').is(':checked')) {
-        $('.c-question[data-number="5B"]').addClass('d-none');
-        $('.c-question[data-number="5B"] input[type="radio"]').prop('checked', false);
-      } else {
-        $('.c-question[data-number="5B"]').removeClass('d-none');
-        $('.c-question[data-number="5C"] input[type="radio"]').prop('checked', false);
-      }
-    });
-    $('input[name*="[rrh_desired]"]').trigger('change');
+    $('input[name*="[setting]"]').trigger('change');
 
     // Days Homeless
-    var warehouse_selector = 'input[name*="[days_homeless_in_the_last_three_years]"]'
-    var extra_selector = 'input[name*="[additional_homeless_nights]"]'
+    var warehouse_sheltered_selector = 'input[name*="[homeless_nights_sheltered]"]';
+    var warehouse_unsheltered_selector = 'input[name*="[homeless_nights_unsheltered]"]';
+    var extra_sheltered_selector = 'input[name*="[additional_homeless_nights_sheltered]"]';
+    var extra_unsheltered_selector = 'input[name*="[additional_homeless_nights_unsheltered]"]';
     var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]'
-    $(warehouse_selector).on('keyup, change', function(e) {
-      var warehouse_days = parseInt($(warehouse_selector).val() || 0);
-      var extra_days = parseInt($(extra_selector).val() || 0);
+    $(
+      warehouse_sheltered_selector + ',' +
+      warehouse_unsheltered_selector + ',' +
+      extra_sheltered_selector + ',' +
+      extra_unsheltered_selector
+    ).on('keyup, change', function(e) {
+      var warehouse_days = parseInt($(warehouse_sheltered_selector).val() || 0) + parseInt($(warehouse_unsheltered_selector).val() || 0);
+      var extra_days = parseInt($(extra_sheltered_selector).val() || 0) + parseInt($(extra_unsheltered_selector).val() || 0);
       $(total_selector).val(warehouse_days + extra_days);
     });
-    $(extra_selector).on('keyup, change', function(e) {
-      var warehouse_days = parseInt($(warehouse_selector).val() || 0);
-      var extra_days = parseInt($(extra_selector).val() || 0);
-      $(total_selector).val(warehouse_days + extra_days);
-    });
-    $(warehouse_selector).trigger('keyup');
+
+    $(warehouse_sheltered_selector).trigger('change');
 
     // Households
     $('.jHouseholdTrigger').on('change keyup input', function(e){
@@ -74,9 +55,9 @@
     $('input[type=checkbox]').on('change', function(e){
       var none_of_the_above = $(this).val() == 'None of the above' || $(this).val() == 'none'
       if(none_of_the_above && $(this).is(':checked')) {
-        console.log($(this).is(':checked'));
+        // console.log($(this).is(':checked'));
         var neighbors = $(this).closest('.controls').find('input[type=checkbox]').not(this);
         neighbors.prop('checked', false);
-        console.log(neighbors);
+        // console.log(neighbors);
       }
     })
