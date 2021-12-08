@@ -103,6 +103,10 @@ class NonHmisAssessment < ActiveRecord::Base
     )
   end
 
+  def tie_breaker_date
+    nil # default, override when appropriate
+  end
+
   private def populate_aggregates
     if youth_rrh_desired? && rrh_desired?
       self.youth_rrh_aggregate = 'both'
