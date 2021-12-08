@@ -31,7 +31,7 @@ module ProgramPermissions
     end
 
     private def check_edit_permission!
-      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram.editable_by?(current_user))
+      not_authorized! unless can_edit_programs? || (can_edit_assigned_programs? && @subprogram&.editable_by?(current_user))
     end
 
   end

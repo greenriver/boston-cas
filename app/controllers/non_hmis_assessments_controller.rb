@@ -114,15 +114,15 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def require_can_edit_assessment!
-    not_authorized! unless @assessment.editable_by?(current_user)
+    not_authorized! unless @assessment&.editable_by?(current_user)
   end
 
   private def require_can_see_assessment!
-    not_authorized! unless @assessment.viewable_by?(current_user)
+    not_authorized! unless @assessment&.viewable_by?(current_user)
   end
 
   private def require_can_unlock_assessment!
-    not_authorized! unless @assessment.unlockable_by?(current_user)
+    not_authorized! unless @assessment&.unlockable_by?(current_user)
   end
 
   private def build_assessment
