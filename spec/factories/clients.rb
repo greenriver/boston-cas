@@ -15,7 +15,7 @@ FactoryBot.define do
     sequence(:days_homeless_in_last_three_years) { |_n| Faker::Number.between(from: 0, to: 1000) }
     sequence(:rrh_assessment_collected_at) { |_n| Faker::Date.between(from: 1.years.ago, to: Date.yesterday) }
     sequence(:entry_date) { |_n| Faker::Date.between(from: 1.years.ago, to: Date.yesterday) }
-    sequence(:financial_assistance_end_date) { |_n| Faker::Date.between(from: 1.years.ago, to: Date.yesterday) }
+    sequence(:tie_breaker_date) { |_n| Faker::Date.between(from: 1.years.ago, to: Date.yesterday) }
 
     disability_verified_on { nil }
   end

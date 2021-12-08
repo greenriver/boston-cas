@@ -45,6 +45,15 @@ module PathwaysVersionThreeCalculations
       end
     end
 
+    def tie_breaker_date
+      case assessment_type.to_sym
+      when :pathways_2021
+        entry_date
+      when :transfer_assessment
+        financial_assistance_end_date
+      end
+    end
+
     def pathways_assessment_type
       :pathways_2021
     end

@@ -63,20 +63,20 @@ RSpec.describe Client, type: :model do
       let(:priority) { create :priority_assessment_score_funding_tie_breaker }
       let(:route) { create :default_route, match_prioritization: priority }
       before :each do
-        # set the two top scores to the same thing, make sure we get the client with the earliest financial_assistance_end_date (closest to running out of funding)
+        # set the two top scores to the same thing, make sure we get the client with the earliest tie_breaker_date (closest to running out of funding)
         # as the highest priority
         highest_scores = clients.sort_by(&:assessment_score).last(2)
         top_score = highest_scores.map(&:assessment_score).max
         # make they don't both have the same day
-        top_date = highest_scores.map(&:financial_assistance_end_date).min
-        highest_scores.each.with_index { |c, i| c.update(assessment_score: top_score, financial_assistance_end_date: top_date - i.days) }
+        top_date = highest_scores.map(&:tie_breaker_date).min
+        highest_scores.each.with_index { |c, i| c.update(assessment_score: top_score, tie_breaker_date: top_date - i.days) }
       end
       it 'is an ActiveRecord::Relation' do
         expect(Client.prioritized(route, Client.all)).to be_an ActiveRecord::Relation
       end
       it 'orders by assessment_score' do
-        ordered_clients = Client.order(assessment_score: :desc, financial_assistance_end_date: :asc).pluck(:id, :assessment_score, :financial_assistance_end_date)
-        expect(Client.prioritized(route, Client.all).pluck(:id, :assessment_score, :financial_assistance_end_date)).to eq(ordered_clients)
+        ordered_clients = Client.order(assessment_score: :desc, tie_breaker_date: :asc).pluck(:id, :assessment_score, :tie_breaker_date)
+        expect(Client.prioritized(route, Client.all).pluck(:id, :assessment_score, :tie_breaker_date)).to eq(ordered_clients)
         expect(Client.prioritized(route, Client.all).first(2).map(&:assessment_score).uniq.count).to eq(1)
       end
     end

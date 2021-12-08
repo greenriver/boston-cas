@@ -276,6 +276,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_123707) do
     t.boolean "enrolled_in_ph", default: false
     t.string "address"
     t.boolean "majority_sheltered"
+    t.date "tie_breaker_date"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -1171,6 +1172,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_123707) do
     t.boolean "enrolled_in_ph", default: false
     t.string "address"
     t.boolean "majority_sheltered"
+    t.date "tie_breaker_date"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
