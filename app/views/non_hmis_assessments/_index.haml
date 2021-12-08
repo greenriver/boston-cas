@@ -22,8 +22,8 @@
           %tbody
             - @assessments.each do |assessment|
               - # If we can edit this client, show all assessments
-              - if @non_hmis_client.editable_by?(current_user)
-                - if assessment.editable_by?(current_user)
+              - if @non_hmis_client&.editable_by?(current_user)
+                - if assessment&.editable_by?(current_user)
                   - url = edit_polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
                 - else
                   - url = polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: assessment)
@@ -65,7 +65,7 @@
       - else
         .p-4
           %p.o-text--italic Client currently has no assessments
-          - if @non_hmis_client.editable_by?(current_user)
+          - if @non_hmis_client&.editable_by?(current_user)
             = link_to new_assessment_url, class: 'btn btn-sm btn-secondary' do
               %span.icon-plus
               Add New Assessment

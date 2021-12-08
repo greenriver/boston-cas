@@ -17,7 +17,7 @@
           = render 'non_hmis_assessments/timestamp'
         .ml-auto
           = link_to 'Back To Client', client_path, class: 'btn btn-secondary mr-2 mb-2'
-          - if disabled && @assessment.editable_by?(current_user)
+          - if disabled && @assessment&.editable_by?(current_user)
             = link_to 'Edit', edit_polymorphic_path([@non_hmis_client, :non_hmis_assessment], id: @assessment.id), class: 'btn btn-primary mb-2'
   - if @assessment.requires_assessment_type_choice? && @assessment.assessment_type.blank?
     %p Please choose an assessment type:

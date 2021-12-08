@@ -90,6 +90,10 @@ module PathwaysVersionThreeCalculations
       [
         :days_homeless_in_the_last_three_years,
         :additional_homeless_nights,
+        :additional_homeless_nights_sheltered,
+        :homeless_nights_sheltered,
+        :additional_homeless_nights_unsheltered,
+        :homeless_nights_unsheltered,
         :total_days_homeless_in_the_last_three_years,
       ]
     end
