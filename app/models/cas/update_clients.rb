@@ -209,6 +209,7 @@ module Cas
         :financial_assistance_end_date,
         :address,
         :tie_breaker_date,
+        :majority_sheltered,
       ]
     end
 

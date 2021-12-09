@@ -72,6 +72,10 @@ class NonHmisAssessment < ActiveRecord::Base
       freeze
   end
 
+  def self.title_from_type_for_matching(type_for_matching)
+    known_assessments_for_matching[type_for_matching]
+  end
+
   def title
     'Non-HMIS Assessment'
   end
