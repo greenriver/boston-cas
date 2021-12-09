@@ -468,8 +468,12 @@ class Client < ApplicationRecord
   # Default URL will use the warehouse setting from the site config
   def data_source_path
    if remote_data_source_id && remote_id
-     url = DataSource.where(id: remote_data_source_id).pluck(:client_url).first || Config.get(:warehouse_url) + "/clients/#{remote_id}"
-     return url.gsub(':client_id:', remote_id.to_s) if url
+    # FIXME: if client....identified? change url
+    internal_url = DataSource.where(id: remote_data_source_id).pluck(:client_url).first
+    # Make sure links work for identified clients as well
+    internal_url = internal_url.gsub('deidentified', 'identified') unless internal_url.blank? || project_client.is_deidentified?
+    url = internal_url || Config.get(:warehouse_url) + "/clients/#{remote_id}"
+    return url.gsub(':client_id:', remote_id.to_s) if url
    end
   end
 

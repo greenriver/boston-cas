@@ -10,7 +10,7 @@
     %li.c-detailed-list__item
       - collected = @client.rrh_assessment_collected_at
       %span.c-detailed-list__label Assessment Collected
-      %span.c-detailed-list__value= collected ? collected : boolean_icon(false)
+      %span.c-detailed-list__value= collected&.to_date ? collected : boolean_icon(false)
     %li.c-detailed-list__item
       %span.c-detailed-list__label Assessment Score
       %span.c-detailed-list__value= @client.assessment_score
