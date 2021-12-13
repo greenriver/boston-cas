@@ -1,6 +1,41 @@
 require 'street_address'
-wb = xlsx_package.workbook
-wb.add_worksheet(name: 'CAS External Referrals') do |sheet|
+def clients(sheet, rows)
+  rows.each.with_index do |client, i|
+    contacts = client.project_client.shelter_agency_contacts
+    primary_contact = contacts&.first
+    secondary_contact = contacts&.second
+    address = StreetAddress::US.parse(client.address)
+    sheet.add_row(
+      [
+        client.first_name,
+        client.last_name,
+        client.middle_name,
+        client.email,
+        client.cellphone,
+        client.date_of_birth,
+        address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
+        '',
+        address&.city,
+        address&.state,
+        address&.postal_code,
+        primary_contact&.first_name,
+        primary_contact&.last_name,
+        primary_contact&.first_name,
+        primary_contact&.user&.agency&.name,
+        primary_contact&.email,
+        primary_contact&.phone,
+        secondary_contact&.first_name,
+        secondary_contact&.last_name,
+        secondary_contact&.email,
+        secondary_contact&.phone,
+        client.id,
+        i + 1,
+      ],
+    )
+  end
+end
+
+def header(sheet)
   title = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
   sheet.add_row(
     [
@@ -59,37 +94,22 @@ wb.add_worksheet(name: 'CAS External Referrals') do |sheet|
     ],
     style: title,
   )
-  @clients.each.with_index do |client, i|
-    contacts = client.project_client.shelter_agency_contacts
-    primary_contact = contacts&.first
-    secondary_contact = contacts&.second
-    address = StreetAddress::US.parse(client.address)
-    sheet.add_row(
-      [
-        client.first_name,
-        client.last_name,
-        client.middle_name,
-        client.email,
-        client.cellphone,
-        client.date_of_birth,
-        address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
-        '',
-        address&.city,
-        address&.state,
-        address&.postal_code,
-        primary_contact&.first_name,
-        primary_contact&.last_name,
-        primary_contact&.first_name,
-        primary_contact&.user&.agency&.name,
-        primary_contact&.email,
-        primary_contact&.phone,
-        secondary_contact&.first_name,
-        secondary_contact&.last_name,
-        secondary_contact&.email,
-        secondary_contact&.phone,
-        client.id,
-        i + 1,
-      ],
-    )
-  end
+end
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: 'CAS External Referrals') do |sheet|
+  header(sheet)
+  clients(sheet, @clients)
+end
+wb.add_worksheet(name: 'Sheltered') do |sheet|
+  header(sheet)
+  clients(sheet, @sheltered)
+end
+wb.add_worksheet(name: 'Unsheltered') do |sheet|
+  header(sheet)
+  clients(sheet, @unsheltered)
+end
+wb.add_worksheet(name: 'DV') do |sheet|
+  header(sheet)
+  clients(sheet, @dv)
 end

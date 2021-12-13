@@ -35,6 +35,10 @@ module Reports
       respond_to do |format|
         format.html {}
         format.xlsx do
+          @dv = @clients.select(&:domestic_violence)
+          @sheltered = @clients.select(&:majority_sheltered)
+          @unsheltered = @clients.reject(&:majority_sheltered)
+
           filename = 'CAS External Referrals.xlsx'
           render xlsx: 'index.xlsx', filename: filename
         end

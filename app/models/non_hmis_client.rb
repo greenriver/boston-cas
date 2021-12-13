@@ -252,8 +252,8 @@ class NonHmisClient < ApplicationRecord
     if current_assessment&.homeless_nights_sheltered.present? && current_assessment&.homeless_nights_unsheltered.present? && current_assessment&.additional_homeless_nights_sheltered.present? && current_assessment&.additional_homeless_nights_unsheltered.present?
       sheltered = current_assessment.homeless_nights_sheltered + current_assessment.additional_homeless_nights_sheltered
       unsheltered = current_assessment.homeless_nights_unsheltered + current_assessment.additional_homeless_nights_unsheltered
-      # Leave majority_sheltered nil if the two sets of dates are equal
-      project_client.majority_sheltered = sheltered > unsheltered if sheltered != unsheltered
+      # Count equivalent counts as sheltered
+      project_client.majority_sheltered = sheltered >= unsheltered
     end
     project_client.needs_update = true
   end
