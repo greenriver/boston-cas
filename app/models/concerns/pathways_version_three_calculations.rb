@@ -8,7 +8,7 @@ module PathwaysVersionThreeCalculations
   extend ActiveSupport::Concern
 
   included do
-    validates_presence_of :wait_times_ack, :not_matched_ack, :matched_process_ack, :response_time_ack, :automatic_approval_ack, :entry_date, :hud_assessment_location, :hud_assessment_type, :setting, on: :create
+    validates_presence_of :wait_times_ack, :not_matched_ack, :matched_process_ack, :response_time_ack, :automatic_approval_ack, :entry_date, :hud_assessment_location, :hud_assessment_type, :setting, on: [:create, :update]
 
     def title
       return pathways_title if assessment_type.blank?
