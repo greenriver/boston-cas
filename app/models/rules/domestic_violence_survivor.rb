@@ -5,11 +5,10 @@
 ###
 
 class Rules::DomesticViolenceSurvivor < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:domestic_violence.to_s)
-      scope.where(domestic_violence: requirement.positive)
-    else
-      raise RuleDatabaseStructureMissing.new("clients.domestic_violence missing. Cannot check clients against #{self.class}.")
-    end
+  def clients_that_fit(scope, requirement, _opportunity)
+    raise RuleDatabaseStructureMissing.new("clients.domestic_violence missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:domestic_violence.to_s)
+
+    value = if requirement.positive then 1 else 0 end
+    scope.where(domestic_violence: value)
   end
 end

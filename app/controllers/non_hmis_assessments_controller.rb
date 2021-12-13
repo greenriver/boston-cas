@@ -67,11 +67,11 @@ class NonHmisAssessmentsController < ApplicationController
     # START current living situation
     # NOTE, this needs to happen before dv_rrh_aggregate since we only allow one of these currently, and that also affects domestic_violence
     if @non_hmis_client.pathways_enabled?
-      assessment_params[:domestic_violence] = false
+      assessment_params[:domestic_violence] = 0
       assessment_params[:enrolled_in_es] = false
       assessment_params[:enrolled_in_so] = false
     end
-    assessment_params[:domestic_violence] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Actively fleeing DV'
+    assessment_params[:domestic_violence] = 1 if assessment_params.key?(:setting) && assessment_params[:setting] == 'Actively fleeing DV'
     assessment_params[:enrolled_in_es] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Emergency Shelter'
     assessment_params[:enrolled_in_so] = true if assessment_params.key?(:setting) && assessment_params[:setting] == 'Unsheltered'
     # END current living situation
