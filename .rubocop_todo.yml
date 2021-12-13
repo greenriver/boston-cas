@@ -1192,7 +1192,6 @@ Layout/TrailingEmptyLines:
     - 'spec/models/rules/developmental_disability_spec.rb'
     - 'spec/models/rules/disabling_condition_spec.rb'
     - 'spec/models/rules/dmh_eligible_spec.rb'
-    - 'spec/models/rules/domestic_violence_survivor_spec.rb'
     - 'spec/models/rules/elevator_spec.rb'
     - 'spec/models/rules/enrolled_in_es_spec.rb'
     - 'spec/models/rules/enrolled_in_sh_spec.rb'

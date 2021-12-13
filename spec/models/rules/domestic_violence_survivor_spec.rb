@@ -4,8 +4,8 @@ RSpec.describe Rules::DomesticViolenceSurvivor, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :domestic_violence_survivor }
 
-    let!(:bob) { create :client, first_name: 'Bob', domestic_violence: true }
-    let!(:roy) { create :client, first_name: 'Roy', domestic_violence: false }
+    let!(:bob) { create :client, first_name: 'Bob', domestic_violence: 1 }
+    let!(:roy) { create :client, first_name: 'Roy', domestic_violence: 0 }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }

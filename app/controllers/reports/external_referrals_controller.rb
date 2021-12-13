@@ -36,7 +36,7 @@ module Reports
         format.html {}
         format.xlsx do
           @clients = @clients.preload(:external_referrals, :active_matches, :project_client).to_a
-          @dv = @clients.select(&:domestic_violence)
+          @dv = @clients.select { |c| c.domestic_violence == 1 }
           @sheltered = @clients.select(&:majority_sheltered)
           @unsheltered = @clients.reject(&:majority_sheltered)
 
