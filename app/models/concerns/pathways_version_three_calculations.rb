@@ -8,7 +8,7 @@ module PathwaysVersionThreeCalculations
   extend ActiveSupport::Concern
 
   included do
-    validates_presence_of :wait_times_ack, :not_matched_ack, :matched_process_ack, :response_time_ack, :automatic_approval_ack, :entry_date, :hud_assessment_location, :hud_assessment_type, on: :create
+    validates_presence_of :wait_times_ack, :not_matched_ack, :matched_process_ack, :response_time_ack, :automatic_approval_ack, :entry_date, :hud_assessment_location, :hud_assessment_type, :setting, on: :create
 
     def title
       return pathways_title if assessment_type.blank?
@@ -421,6 +421,7 @@ module PathwaysVersionThreeCalculations
             _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
           as: :pretty_boolean_group,
+          required: true,
         },
         _contact_preamble: {
           as: :partial,
