@@ -60,9 +60,11 @@
         .mt-2.ml-8.o-text--normal= simple_format contact_info
 
     - elsif @client.has_full_housing_release?
-      %li
-        %span.c-detailed-list__label Contact info for maximizing income
-        .mt-2.ml-8.o-text--normal= simple_format @client.rrh_assessment_contact_info
+      - contact_info = @client.rrh_assessment_contact_info
+      - if contact_info.present?
+        %li
+          %span.c-detailed-list__label Case Manager Contact Information
+          .mt-2.ml-8.o-text--normal= simple_format contact_info
     - if @client.last_ineligible_response.present?
       - response = @client.last_ineligible_response
       %li.c-detailed-list__item

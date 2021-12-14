@@ -14,7 +14,7 @@ class NonHmisClient < ApplicationRecord
   has_many :shelter_histories
 
   def current_assessment
-    NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first
+    NonHmisAssessment.where(non_hmis_client_id: id).order(entry_date: :desc).first
   end
 
   def current_covid_assessment
@@ -172,7 +172,8 @@ class NonHmisClient < ApplicationRecord
     project_client.ssn = ssn
     project_client.middle_name = middle_name
     project_client.gender = gender
-    project_client.email = email
+    project_client.email = email.presence || current_assessment&.email_addresses
+    project_client.address = current_assessment&.mailing_address
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
     project_client.housing_release_status = _('Limited CAS Release') if limited_release_on_file
     project_client.tags = cas_tags
@@ -190,6 +191,7 @@ class NonHmisClient < ApplicationRecord
     project_client.entry_date = current_assessment&.entry_date
     project_client.rrh_assessment_collected_at = current_assessment&.entry_date
     project_client.financial_assistance_end_date = current_assessment&.financial_assistance_end_date
+    project_client.tie_breaker_date = current_assessment&.tie_breaker_date
 
     if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current
@@ -245,6 +247,14 @@ class NonHmisClient < ApplicationRecord
     project_client.holds_voucher_on = current_assessment&.entry_date if current_assessment&.have_tenant_voucher
     project_client.enrolled_in_es = current_assessment&.enrolled_in_es || false
     project_client.enrolled_in_so = current_assessment&.enrolled_in_so || false
+    # if we have breakdowns of sheltered vs unsheltered we can set majority_sheltered
+    # otherwise, just leave it as nil
+    if current_assessment&.homeless_nights_sheltered.present? && current_assessment&.homeless_nights_unsheltered.present? && current_assessment&.additional_homeless_nights_sheltered.present? && current_assessment&.additional_homeless_nights_unsheltered.present?
+      sheltered = current_assessment.homeless_nights_sheltered + current_assessment.additional_homeless_nights_sheltered
+      unsheltered = current_assessment.homeless_nights_unsheltered + current_assessment.additional_homeless_nights_unsheltered
+      # Count equivalent counts as sheltered
+      project_client.majority_sheltered = sheltered >= unsheltered
+    end
     project_client.needs_update = true
   end
 

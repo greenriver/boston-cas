@@ -183,6 +183,9 @@ module Cas
         :enrolled_in_sh,
         :enrolled_in_so,
         :enrolled_in_es,
+        :enrolled_in_rrh,
+        :enrolled_in_psh,
+        :enrolled_in_ph,
         :requires_wheelchair_accessibility,
         :required_number_of_bedrooms,
         :required_minimum_occupancy,
@@ -204,6 +207,9 @@ module Cas
         :assessment_name,
         :entry_date,
         :financial_assistance_end_date,
+        :address,
+        :tie_breaker_date,
+        :majority_sheltered,
       ]
     end
 

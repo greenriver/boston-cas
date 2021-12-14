@@ -1,0 +1,16 @@
+.c-card.c-card--flush.mb-4
+  .c-card__content
+    = simple_form_for @filter, as: :filter, url: reports_external_referrals_path, method: :get do |f|
+      .row
+        .col-sm-12
+          %p Choose assessment types and range for when those assessments were collected.  You'll be presented with a list of matching clients.  You can download that list, review the download and then mark everyone as having been referred to an external entity for an EHV (Event 17.)
+      .row
+        .col-sm-3
+          = f.input :start, as: :date_picker, label: 'Start'
+        .col-sm-3
+          = f.input :end, as: :date_picker, label: 'End'
+        .col-sm-6
+          = f.input :assessment_types, as: :select_2, collection: NonHmisAssessment.known_assessments_for_matching.invert, input_html: {multiple: true}
+      .d-flex
+        .ml-auto
+          = f.submit 'Update', class: 'btn btn-primary mt-no-label', data: { disable_with: false }

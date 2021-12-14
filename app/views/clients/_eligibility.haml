@@ -1,4 +1,4 @@
-.col-md-6.c-card__content-group
+.col-md-12.c-card__content-group
   .c-card__content-group-heading
     .c-card__content-group-icon.icon-award
     %h5 Eligibility
@@ -19,3 +19,20 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label= _('CSPECH Eligible')
       %span.c-detailed-list__value= boolean_icon (@client.cspech_eligible)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Latest Date Eligible for Financial Assistance')
+      %span.c-detailed-list__value= @client.financial_assistance_end_date
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Majority Sheltered')
+      %span.c-detailed-list__value
+        - if @client.majority_sheltered.nil?
+          Unknown
+        - else
+          = boolean_icon (@client.majority_sheltered)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Majority Unsheltered')
+      %span.c-detailed-list__value
+        - if @client.majority_sheltered.nil?
+          Unknown
+        - else
+          = boolean_icon(! @client.majority_sheltered)

@@ -72,6 +72,10 @@ class NonHmisAssessment < ActiveRecord::Base
       freeze
   end
 
+  def self.title_from_type_for_matching(type_for_matching)
+    known_assessments_for_matching[type_for_matching]
+  end
+
   def title
     'Non-HMIS Assessment'
   end
@@ -89,7 +93,12 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def total_days_homeless_in_the_last_three_years
-    (days_homeless_in_the_last_three_years || 0) + (additional_homeless_nights || 0)
+    (days_homeless_in_the_last_three_years || 0) +
+    (additional_homeless_nights || 0) +
+    (additional_homeless_nights_sheltered || 0) +
+    (homeless_nights_sheltered || 0) +
+    (additional_homeless_nights_unsheltered || 0) +
+    (homeless_nights_unsheltered || 0)
   end
 
   private def update_assessment_score
@@ -101,6 +110,10 @@ class NonHmisAssessment < ActiveRecord::Base
       assessment_score: assessment_score,
       assessed_at: updated_at || Time.current,
     )
+  end
+
+  def tie_breaker_date
+    nil # default, override when appropriate
   end
 
   private def populate_aggregates
@@ -197,6 +210,10 @@ class NonHmisAssessment < ActiveRecord::Base
       :intensive_needs_other,
       :additional_homeless_nights,
       :homeless_night_range,
+      :homeless_nights_sheltered,
+      :homeless_nights_unsheltered,
+      :additional_homeless_nights_sheltered,
+      :additional_homeless_nights_unsheltered,
       :notes,
       :children_info,
       :chronic_health_condition,
@@ -332,6 +349,8 @@ class NonHmisAssessment < ActiveRecord::Base
       form_fields.each do |name, field|
         # If there are sub-questions, there will not be answers at this level
         if ! field[:questions]
+          next if field[:as] == :partial
+
           val = send(name)
           values << if val.is_a?(Array)
             val = val.select(&:present?)
@@ -345,6 +364,8 @@ class NonHmisAssessment < ActiveRecord::Base
           end
         else
           field[:questions].each do |sub_name, f|
+            next if f[:as] == :partial
+
             val = send(sub_name)
             values << if val.is_a?(Array)
               val = val.select(&:present?)

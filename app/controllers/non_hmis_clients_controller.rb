@@ -236,7 +236,7 @@ class NonHmisClientsController < ApplicationController
   end
 
   private def require_can_edit_this_client!
-    not_authorized! unless @non_hmis_client.editable_by?(current_user)
+    not_authorized! unless @non_hmis_client&.editable_by?(current_user)
   end
 
   private def shelter_location_params

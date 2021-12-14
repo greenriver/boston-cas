@@ -14,6 +14,8 @@ module Admin
     end
 
     def new
+      # NOTE: this will create a rule regardless of if you add requirements
+      # because the requirements editor requires the rule to be persisted
       @weighting_rule = @route.weighting_rules.create
       redirect_to edit_admin_match_route_weighting_rule_path(@route, @weighting_rule)
     end

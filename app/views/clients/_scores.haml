@@ -1,12 +1,16 @@
-.col-md-6.c-card__content-group
+.col-md-12.c-card__content-group
   .c-card__content-group-heading
     .c-card__content-group-icon.icon-star
     %h5 Scores
   %ul.c-detailed-list<
     %li.c-detailed-list__item
+      %span.c-detailed-list__label Assessment
+      - assessment_name = NonHmisAssessment.title_from_type_for_matching(@client.assessment_name)
+      %span.c-detailed-list__value= assessment_name
+    %li.c-detailed-list__item
       - collected = @client.rrh_assessment_collected_at
       %span.c-detailed-list__label Assessment Collected
-      %span.c-detailed-list__value= collected ? collected : boolean_icon(false)
+      %span.c-detailed-list__value= collected&.to_date ? collected : boolean_icon(false)
     %li.c-detailed-list__item
       %span.c-detailed-list__label Assessment Score
       %span.c-detailed-list__value= @client.assessment_score

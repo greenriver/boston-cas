@@ -1,0 +1,115 @@
+require 'street_address'
+def clients(sheet, rows)
+  rows.each.with_index do |client, i|
+    contacts = client.project_client.shelter_agency_contacts
+    primary_contact = contacts&.first
+    secondary_contact = contacts&.second
+    address = StreetAddress::US.parse(client.address)
+    sheet.add_row(
+      [
+        client.first_name,
+        client.last_name,
+        client.middle_name,
+        client.email,
+        client.cellphone,
+        client.date_of_birth,
+        address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
+        '',
+        address&.city,
+        address&.state,
+        address&.postal_code,
+        primary_contact&.first_name,
+        primary_contact&.last_name,
+        primary_contact&.first_name,
+        primary_contact&.user&.agency&.name,
+        primary_contact&.email,
+        primary_contact&.phone,
+        secondary_contact&.first_name,
+        secondary_contact&.last_name,
+        secondary_contact&.email,
+        secondary_contact&.phone,
+        client.id,
+        i + 1,
+      ],
+    )
+  end
+end
+
+def header(sheet)
+  title = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
+  sheet.add_row(
+    [
+      'Head of Household Identifying Information',
+      '',
+      '',
+      '',
+      '',
+      '',
+      'Head of Household Address Where Currently Residing',
+      '',
+      '',
+      '',
+      '',
+      'Primary Service Provider',
+      '',
+      '',
+      '',
+      '',
+      'Additional Person Providing Assistance (Optional)',
+      '',
+      '',
+      '',
+    ],
+    style: title,
+  )
+  sheet.merge_cells('A1:F1')
+  sheet.merge_cells('G1:K1')
+  sheet.merge_cells('L1:P1')
+  sheet.merge_cells('Q1:T1')
+  sheet.add_row(
+    [
+      'First Name',
+      'Last Name',
+      'Middle Name',
+      'Email',
+      'Phone',
+      'Date of Birth',
+      'Line 1',
+      'Line 2',
+      'City',
+      'State',
+      'ZIP Code',
+      'Caseworker First Name',
+      'Caseworker Last Name',
+      'Service Provider',
+      'Organization Name',
+      'Caseworker Email',
+      'Caseworker Phone',
+      'First Name',
+      'Last Name',
+      'Email',
+      'Phone',
+      'CAS Client ID',
+      'Rank',
+    ],
+    style: title,
+  )
+end
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: 'CAS External Referrals') do |sheet|
+  header(sheet)
+  clients(sheet, @clients)
+end
+wb.add_worksheet(name: 'Sheltered') do |sheet|
+  header(sheet)
+  clients(sheet, @sheltered)
+end
+wb.add_worksheet(name: 'Unsheltered') do |sheet|
+  header(sheet)
+  clients(sheet, @unsheltered)
+end
+wb.add_worksheet(name: 'DV') do |sheet|
+  header(sheet)
+  clients(sheet, @dv)
+end

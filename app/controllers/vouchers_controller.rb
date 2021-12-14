@@ -26,7 +26,8 @@ class VouchersController < ApplicationController
     new_vouchers = []
     vouchers_to_create = voucher_params[:add_vouchers].to_i.times do
       options = { sub_program: @subprogram, creator: @current_user }
-      options[:requirements] = WeightingRule.requirements_and_increment!(@subprogram.match_route)
+      requirements = WeightingRule.requirements_and_increment!(@subprogram.match_route)
+      options[:requirements] = requirements if requirements.present?
 
       new_vouchers << Voucher.create(options)
     end
