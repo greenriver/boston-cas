@@ -14,7 +14,7 @@ class NonHmisClient < ApplicationRecord
   has_many :shelter_histories
 
   def current_assessment
-    NonHmisAssessment.where(non_hmis_client_id: id).order(entry_date: :desc).first
+    @current_assessment ||= NonHmisAssessment.where(non_hmis_client_id: id).order(entry_date: :desc).first
   end
 
   def current_covid_assessment
