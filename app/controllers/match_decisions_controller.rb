@@ -81,7 +81,7 @@ class MatchDecisionsController < ApplicationController
     elsif @decision.update(decision_params)
       # Wrapped in a transaction to prevent the match match engine (which runs in parallel) from seeing
       # partial updates
-      self.class.transaction do
+      @decision.class.transaction do
         # If we are expiring the match for shelter agencies
         if can_reject_matches? && decision_params[:shelter_expiration].present?
           old_expiration = @match.shelter_expiration
