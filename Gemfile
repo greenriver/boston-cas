@@ -29,6 +29,7 @@ gem 'virtus'
 gem 'kaminari'
 gem 'ransack'
 gem 'responders'
+gem 'memoist', require: false
 
 # File processing
 gem 'carrierwave'
@@ -64,6 +65,8 @@ gem 'paper_trail'
 gem 'paranoia', '~> 2.0'
 gem 'validate_url'
 gem 'StreetAddress', require: false
+gem 'marginalia'
+gem 'active_record_distinct_on'
 
 gem 'devise', '~> 4'
 gem 'devise_invitable'

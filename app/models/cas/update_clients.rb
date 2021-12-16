@@ -30,27 +30,51 @@ module Cas
     def update_existing_clients
       # count = ProjectClient.has_client.update_pending.count
       # puts "Updating #{count} clients"
-      ProjectClient.has_client.update_pending.each do |project_client|
-        client = project_client.client
-        attrs = attributes_for_client(project_client)
-        # Ignore merged clients
-        attrs.delete(:available) if client.merged_into.present?
-        # Special case for holds voucher on, because sometimes these come from matches and should not
-        # be overridden
-        client.holds_voucher_on = project_client.holds_voucher_on unless client.holds_internal_cas_voucher
-        client.update(attrs)
-        # make note of our new connection in project_clients
-        project_client.update(client_id: client.id)
+      ProjectClient.has_client.update_pending.preload(:client).find_in_batches do |batch|
+        clients = []
+        batch.each do |project_client|
+          client = project_client.client
+          attrs = attributes_for_client(project_client)
+          # Ignore merged clients
+          attrs.delete(:available) if client.merged_into.present?
+          # Special case for holds voucher on, because sometimes these come from matches and should not
+          # be overridden
+          client.holds_voucher_on = project_client.holds_voucher_on unless client.holds_internal_cas_voucher
+          client.assign_attributes(attrs)
+          clients << client
+        end
+        Client.import(
+          clients,
+          on_duplicate_key_update: {
+            conflict_target: [:id],
+            columns: (Client.column_names - ['id']).map(&:to_sym),
+          },
+        )
       end
     end
 
     def add_missing_clients
       # count = ProjectClient.needs_client.count
       # puts "Adding #{count} clients"
-      ProjectClient.needs_client.each do |project_client|
-        c = Client.create(attributes_for_client(project_client))
+      ProjectClient.needs_client.find_in_batches do |batch|
+        clients = []
+        batch.each do |project_client|
+          clients << Client.new(attributes_for_client(project_client))
+        end
+        result = Client.import(clients)
+        raise "Failed to import #{clients.count} clients" if result.failed_instances.any?
+
         # make note of our new connection in project_clients
-        project_client.update(client_id: c.id)
+        project_clients = batch.map.with_index do |project_client, i|
+          project_client.assign_attributes(client_id: result.ids[i])
+        end
+        ProjectClient.import(
+          project_clients,
+          on_duplicate_key_update: {
+            conflict_target: [:id],
+            columns: [:client_id],
+          },
+        )
       end
     end
 
@@ -61,7 +85,7 @@ module Cas
       clients_to_de_activate = clients - project_client_client_ids
       # puts "Deactivating or deleting #{clients_to_de_activate.count}"
       Client.where(id: clients_to_de_activate).update_all(available: false)
-      Client.where(id: clients_to_de_activate).each do |client|
+      Client.where(id: clients_to_de_activate).find_each do |client|
         # remove anyone who never really participated
         # everyone else just gets marked as available false
         client.destroy if client.client_opportunity_matches.in_process_or_complete.blank?

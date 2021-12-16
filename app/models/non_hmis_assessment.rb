@@ -6,6 +6,7 @@
 
 class NonHmisAssessment < ActiveRecord::Base
   include ApplicationHelper
+  include ArelHelper
 
   has_paper_trail
   acts_as_paranoid

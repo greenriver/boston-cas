@@ -617,7 +617,6 @@ Layout/ExtraSpacing:
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/concerns/notifier_config.rb'
     - 'app/models/config.rb'
-    - 'app/models/imported_client.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_five_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_spec.rb'
@@ -1928,7 +1927,6 @@ Style/IfUnlessModifier:
     - 'app/models/concerns/match_decisions/accepts_decline_reason.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/imported_client.rb'
     - 'app/models/match_census.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/base.rb'
@@ -2013,7 +2011,6 @@ Style/NegatedIf:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/imported_client.rb'
     - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
 

@@ -40,6 +40,44 @@ module ArelHelper
       Arel::Nodes::NamedFunction.new name, args.map { |v| qt v }, aka
     end
 
+    # Example
+    # Returns most-recently started enrollment that matches the scope (open in 2020) for each client
+    # GrdaWarehouse::ServiceHistoryEnrollment.entry.
+    #  one_for_column(
+    #   :first_date_in_program,
+    #   source_arel_table: she_t,
+    #   group_on: :client_id,
+    #   scope: GrdaWarehouse::ServiceHistoryEnrollment.entry.open_between(
+    #     start_date: '2020-01-01'.to_date,
+    #     end_date: '2020-12-31'.to_date,
+    #   ),
+    # )
+    # NOTE: group_on must all be in the same table
+    def one_for_column(column, source_arel_table:, group_on:, direction: :desc, scope: nil)
+      most_recent = source_arel_table.alias("most_recent_#{source_arel_table.name}_#{SecureRandom.alphanumeric}".downcase)
+
+      if scope
+        source = scope.arel
+        group_table = scope.arel_table
+      else
+        source = source_arel_table.project(source_arel_table[:id])
+        group_table = source_arel_table
+      end
+
+      direction = :desc unless direction.in?([:asc, :desc])
+      group_columns = Array.wrap(group_on).map { |c| group_table[c] }
+
+      max_by_group = source.distinct_on(group_columns).
+        order(*group_columns, source_arel_table[column].send(direction))
+
+      join = source_arel_table.create_join(
+        max_by_group.as(most_recent.name),
+        source_arel_table.create_on(source_arel_table[:id].eq(most_recent[:id])),
+      )
+
+      joins(join)
+    end
+
     # Shortcuts for arel tables
     def c_t
       Client.arel_table

@@ -1,11 +1,10 @@
 class ImportedClient < NonHmisClient
-  has_one :project_client, ->  do
+  has_one :project_client, -> do
     where(
       data_source_id: DataSource.where(db_identifier: ImportedClient.ds_identifier).select(:id),
     )
   end, foreign_key: :id_in_data_source, required: false
   has_many :client_assessments, class_name: 'ImportedClientAssessment', foreign_key: :non_hmis_client_id, dependent: :destroy
-  has_one :current_assessment, -> { order(created_at: :desc) }, class_name: 'ImportedClientAssessment', foreign_key: :non_hmis_client_id
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -17,16 +16,25 @@ class ImportedClient < NonHmisClient
     false
   end
 
-  def populate_project_client project_client
-    set_project_client_fields project_client
+  def current_assessment
+    @current_assessment ||= NonHmisAssessment.where(non_hmis_client_id: id).order(created_at: :desc).first || client_assessments.build
+  end
 
-    if warehouse_client_id.present?
-      if ! warehouse_assessment?
-        project_client.save
-      end
-    else
-      project_client.save
-    end
+  def self.current_assessments_for(client_ids)
+    NonHmisAssessment.one_for_column(
+      :created_at,
+      source_arel_table: NonHmisAssessment.arel_table,
+      group_on: :non_hmis_client_id,
+      scope: NonHmisAssessment.where(non_hmis_client_id: client_ids),
+    ).index_by(&:non_hmis_client_id)
+  end
+
+  def populate_project_client(project_client)
+    project_client = set_project_client_fields(project_client)
+    return project_client unless warehouse_client_id.present?
+    return project_client unless warehouse_assessment?
+
+    nil
   end
 
   def warehouse_assessment?
