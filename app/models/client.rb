@@ -552,6 +552,23 @@ class Client < ApplicationRecord
     self.enrolled_in_es
   end
 
+  def structured_rrh_assessment_contact_info
+    return nil unless rrh_assessment_contact_info.present?
+    return OpenStruct.new(first_name: rrh_assessment_contact_info) unless rrh_assessment_contact_info.match?('^Email:')
+
+    (first_name, last_name) = rrh_assessment_contact_info.match('^.+')&.to_s&.split(' ')
+    phone = rrh_assessment_contact_info.match('^Phone:(.+)').try(:[], 1)&.strip
+    email = rrh_assessment_contact_info.match('^Email:(.+)').try(:[], 1)&.strip
+    address = /^Address:(.+)/m.match(rrh_assessment_contact_info).try(:[], 1)&.strip
+    OpenStruct.new(
+      first_name: first_name,
+      last_name: last_name,
+      phone: phone,
+      email: email,
+      address: address,
+    )
+  end
+
   def client_match_attributes
     neighborhoods = Neighborhood.where(id: neighborhood_interests).pluck(:name)&.to_sentence.presence || 'Any'
     {
