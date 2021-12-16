@@ -10,7 +10,7 @@ class NonHmisClient < ApplicationRecord
   after_initialize :build_assessment_if_missing
 
   has_one :project_client, -> do
-    where(data_source_id: NonHmisClient.data_source.select(:id))
+    where(data_source_id: NonHmisClient.data_source.id)
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
