@@ -67,7 +67,9 @@ module Cas
         # make note of our new connection in project_clients
         project_clients = batch.map.with_index do |project_client, i|
           project_client.assign_attributes(client_id: result.ids[i])
+          project_client
         end
+
         ProjectClient.import(
           project_clients,
           on_duplicate_key_update: {
