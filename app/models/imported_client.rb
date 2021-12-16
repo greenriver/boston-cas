@@ -23,7 +23,7 @@ class ImportedClient < NonHmisClient
   def self.current_assessments_for(client_ids)
     a_t = NonHmisAssessment.arel_table
     NonHmisAssessment.one_for_column(
-      order_clause: a_t[:updated_at].desc,
+      order_clause: a_t[:created_at].desc,
       source_arel_table: NonHmisAssessment.arel_table,
       group_on: :non_hmis_client_id,
       scope: NonHmisAssessment.where(non_hmis_client_id: client_ids),
