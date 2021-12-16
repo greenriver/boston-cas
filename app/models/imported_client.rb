@@ -21,8 +21,9 @@ class ImportedClient < NonHmisClient
   end
 
   def self.current_assessments_for(client_ids)
+    a_t = NonHmisAssessment.arel_table
     NonHmisAssessment.one_for_column(
-      :created_at,
+      order_clause: a_t[:updated_at].desc,
       source_arel_table: NonHmisAssessment.arel_table,
       group_on: :non_hmis_client_id,
       scope: NonHmisAssessment.where(non_hmis_client_id: client_ids),

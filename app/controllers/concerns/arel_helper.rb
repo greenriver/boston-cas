@@ -41,16 +41,12 @@ module ArelHelper
     end
 
     # Example
-    # Returns most-recently started enrollment that matches the scope (open in 2020) for each client
-    # GrdaWarehouse::ServiceHistoryEnrollment.entry.
-    #  one_for_column(
-    #   :first_date_in_program,
-    #   source_arel_table: she_t,
-    #   group_on: :client_id,
-    #   scope: GrdaWarehouse::ServiceHistoryEnrollment.entry.open_between(
-    #     start_date: '2020-01-01'.to_date,
-    #     end_date: '2020-12-31'.to_date,
-    #   ),
+    # Returns most-recently created non-HMIS assessment for each non-HMIS client
+    # NonHmisAssessment.one_for_column(
+    #   order_clause: NonHmisAssessment.arel_table[:created_at].desc,
+    #   source_arel_table: NonHmisAssessment.arel_table,
+    #   group_on: :non_hmis_client_id,
+    #   scope: NonHmisAssessment.where(non_hmis_client_id: client_ids),
     # )
     # NOTE: group_on must all be in the same table
     def one_for_column(order_clause:, source_arel_table:, group_on:, scope: nil)
