@@ -61,7 +61,7 @@ module Cas
         batch.each do |project_client|
           clients << Client.new(attributes_for_client(project_client))
         end
-        result = Client.import(clients)
+        result = Client.import(clients, all_or_none: true)
         raise "Failed to import #{clients.count} clients" if result.failed_instances.any?
 
         # make note of our new connection in project_clients
