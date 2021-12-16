@@ -91,7 +91,13 @@ class NonHmisClient < ApplicationRecord
   end
 
   def current_assessment
-    @current_assessment ||= NonHmisAssessment.where(non_hmis_client_id: id).order(entry_date: :desc).first || client_assessments.build
+    @current_assessment ||= begin
+      a_t = NonHmisAssessment.arel_table
+      sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST ' + a_t[:updated_at].desc.to_sql)
+      NonHmisAssessment.where(non_hmis_client_id: id).
+        order(sort_string).first ||
+        client_assessments.build
+    end
   end
 
   def current_covid_assessment
