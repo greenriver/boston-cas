@@ -78,6 +78,8 @@ class NonHmisClient < ApplicationRecord
     where.not(warehouse_client_id: nil)
   end
 
+  # NOTE: RuboCop would like us to use attr_writer, but it doesn't seem to set @current_assessment
+  # correctly, so we'll do it manually so it can interact with current_assessment correctly.
   def current_assessment=(assessment) # rubocop:disable Style/TrivialAccessors
     @current_assessment = assessment
   end
@@ -357,6 +359,10 @@ class NonHmisClient < ApplicationRecord
     Rails.logger.info message
   end
 
+  # Memoize assessment_tags at the class, they don't change often
+  # This is the syntax for class method memoization, it is equivalent to
+  # @@assessment_tags, but comes with an api
+  # you can bust the cache with assessment_tags(true)
   class << self
     extend Memoist
     def assessment_tags
