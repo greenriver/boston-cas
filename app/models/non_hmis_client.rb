@@ -10,7 +10,7 @@ class NonHmisClient < ApplicationRecord
   after_initialize :build_assessment_if_missing
 
   has_one :project_client, -> do
-    where(data_source_id: DataSource.non_hmis.select(:id))
+    where(data_source_id: data_source.select(:id))
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
@@ -76,6 +76,12 @@ class NonHmisClient < ApplicationRecord
 
   scope :warehouse_attached, -> do
     where.not(warehouse_client_id: nil)
+  end
+
+  def self.data_source
+    return DataSource.non_hmis.first if Rails.env.test? # in the test environment this data source id drifts
+
+    @data_source ||= DataSource.non_hmis.first
   end
 
   # NOTE: RuboCop would like us to use attr_writer, but it doesn't seem to set @current_assessment
@@ -171,6 +177,8 @@ class NonHmisClient < ApplicationRecord
 
   private def set_project_client_fields(project_client) # rubocop:disable Naming/AccessorMethodName, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
     # NonHmisClient fields
+    project_client.data_source_id = self.class.data_source.id
+    project_client.id_in_data_source = id
     project_client.first_name = fix_first_name
     project_client.last_name = fix_last_name
     project_client.non_hmis_client_identifier = client_identifier
@@ -390,7 +398,7 @@ class NonHmisClient < ApplicationRecord
 
   def self.project_clients_for(client_ids)
     ProjectClient.where(
-      data_source_id: DataSource.non_hmis.pluck(:id),
+      data_source_id: data_source.id,
       id_in_data_source: client_ids,
     ).index_by(&:id_in_data_source)
   end
@@ -401,9 +409,7 @@ class NonHmisClient < ApplicationRecord
     # make sure we have a recent set of assessment tags (cache bust)
     self.class.assessment_tags(true)
     # remove unused ProjectClients
-    ProjectClient.where(
-      data_source_id: DataSource.non_hmis.select(:id),
-    ).
+    ProjectClient.where(data_source_id: self.class.data_source.id).
       where.not(id_in_data_source: NonHmisClient.select(:id)).
       delete_all
     # update or add clients
@@ -419,7 +425,7 @@ class NonHmisClient < ApplicationRecord
         project_clients.values,
         on_duplicate_key_update: {
           conflict_target: [:id],
-          columns: (ProjectClient.column_names - ['id']).map(&:to_sym),
+          columns: ProjectClient.column_names.map(&:to_sym),
         },
       )
     end
