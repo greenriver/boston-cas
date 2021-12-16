@@ -425,6 +425,7 @@ class NonHmisClient < ApplicationRecord
     end
 
     log "Updated #{client_scope.count} ProjectClients from #{self.class.name}"
+  ensure
     NonHmisClient.skip_build_assessment_if_missing = false
   end
 
