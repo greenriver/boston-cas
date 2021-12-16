@@ -53,7 +53,7 @@ module ArelHelper
     #   ),
     # )
     # NOTE: group_on must all be in the same table
-    def one_for_column(column, source_arel_table:, group_on:, direction: :desc, scope: nil)
+    def one_for_column(order_clause:, source_arel_table:, group_on:, scope: nil)
       most_recent = source_arel_table.alias("most_recent_#{source_arel_table.name}_#{SecureRandom.alphanumeric}".downcase)
 
       if scope
@@ -64,11 +64,9 @@ module ArelHelper
         group_table = source_arel_table
       end
 
-      direction = :desc unless direction.in?([:asc, :desc])
       group_columns = Array.wrap(group_on).map { |c| group_table[c] }
-
       max_by_group = source.distinct_on(group_columns).
-        order(*group_columns, source_arel_table[column].send(direction))
+        order(*group_columns, order_clause)
 
       join = source_arel_table.create_join(
         max_by_group.as(most_recent.name),
