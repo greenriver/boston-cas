@@ -4,27 +4,18 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+require 'memoist'
 class NonHmisClient < ApplicationRecord
+  class_attribute :skip_build_assessment_if_missing
+  after_initialize :build_assessment_if_missing
+
   has_one :project_client, -> do
-    where(data_source_id: DataSource.non_hmis.select(:id))
+    where(data_source_id: NonHmisClient.data_source.id)
   end, foreign_key: :id_in_data_source, required: false
   has_one :client, through: :project_client, required: false
   has_many :client_opportunity_matches, through: :client
   has_many :non_hmis_assessments
   has_many :shelter_histories
-
-  def current_assessment
-    @current_assessment ||= NonHmisAssessment.where(non_hmis_client_id: id).order(entry_date: :desc).first
-  end
-
-  def current_covid_assessment
-    NonHmisAssessment.where(
-      non_hmis_client_id: id,
-      type: NonHmisAssessment.limited_assessment_types,
-    ).order(created_at: :desc).first
-  end
-
-  after_initialize :build_assessment_if_missing
 
   belongs_to :agency
   belongs_to :contact
@@ -85,6 +76,35 @@ class NonHmisClient < ApplicationRecord
 
   scope :warehouse_attached, -> do
     where.not(warehouse_client_id: nil)
+  end
+
+  def self.data_source
+    return DataSource.non_hmis.first if Rails.env.test? # in the test environment this data source id drifts
+
+    @data_source ||= DataSource.non_hmis.first
+  end
+
+  # NOTE: RuboCop would like us to use attr_writer, but it doesn't seem to set @current_assessment
+  # correctly, so we'll do it manually so it can interact with current_assessment correctly.
+  def current_assessment=(assessment) # rubocop:disable Style/TrivialAccessors
+    @current_assessment = assessment
+  end
+
+  def current_assessment
+    @current_assessment ||= begin
+      a_t = NonHmisAssessment.arel_table
+      sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST, ' + a_t[:updated_at].desc.to_sql)
+      NonHmisAssessment.where(non_hmis_client_id: id).
+        order(sort_string).first ||
+        client_assessments.build
+    end
+  end
+
+  def current_covid_assessment
+    NonHmisAssessment.where(
+      non_hmis_client_id: id,
+      type: NonHmisAssessment.limited_assessment_types,
+    ).order(created_at: :desc).first
   end
 
   def self.age date:, dob:
@@ -159,11 +179,12 @@ class NonHmisClient < ApplicationRecord
 
   def populate_project_client(project_client)
     set_project_client_fields(project_client)
-    project_client.save
   end
 
-  def set_project_client_fields(project_client) # rubocop:disable Naming/AccessorMethodName, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
+  private def set_project_client_fields(project_client) # rubocop:disable Naming/AccessorMethodName, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
     # NonHmisClient fields
+    project_client.data_source_id = self.class.data_source.id
+    project_client.id_in_data_source = id
     project_client.first_name = fix_first_name
     project_client.last_name = fix_last_name
     project_client.non_hmis_client_identifier = client_identifier
@@ -256,6 +277,7 @@ class NonHmisClient < ApplicationRecord
       project_client.majority_sheltered = sheltered >= unsheltered
     end
     project_client.needs_update = true
+    project_client
   end
 
   private def fix_first_name
@@ -267,6 +289,7 @@ class NonHmisClient < ApplicationRecord
   end
 
   def build_assessment_if_missing
+    return if self.class.skip_build_assessment_if_missing?
     return unless persisted?
     return if client_assessments.exists?
 
@@ -350,32 +373,74 @@ class NonHmisClient < ApplicationRecord
     Rails.logger.info message
   end
 
-  def cas_tags
+  # Memoize assessment_tags at the class, they don't change often
+  # This is the syntax for class method memoization, it is equivalent to
+  # @@assessment_tags, but comes with an api
+  # you can bust the cache with assessment_tags(true)
+  class << self
+    extend Memoist
+    def assessment_tags
+      Tag.where(rrh_assessment_trigger: true)
+    end
+    memoize :assessment_tags
+  end
+
+  private def cas_tags
     @cas_tags = {}
-    Tag.where(rrh_assessment_trigger: true).each do |tag|
+    self.class.assessment_tags.each do |tag|
       @cas_tags[tag.id] = assessment_score if assessment_score.present?
     end
     return @cas_tags
   end
 
-  def update_project_clients_from_non_hmis_clients
-    # remove unused ProjectClients
+  def self.current_assessments_for(client_ids)
+    a_t = NonHmisAssessment.arel_table
+    sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST, ' + a_t[:updated_at].desc.to_sql)
+    NonHmisAssessment.one_for_column(
+      order_clause: sort_string,
+      source_arel_table: NonHmisAssessment.arel_table,
+      group_on: :non_hmis_client_id,
+      scope: NonHmisAssessment.where(non_hmis_client_id: client_ids),
+    ).index_by(&:non_hmis_client_id)
+  end
+
+  def self.project_clients_for(client_ids)
     ProjectClient.where(
-      data_source_id: DataSource.non_hmis.select(:id),
-    ).
+      data_source_id: data_source.id,
+      id_in_data_source: client_ids,
+    ).index_by(&:id_in_data_source)
+  end
+
+  def update_project_clients_from_non_hmis_clients
+    # prevent unneeded after_initialize hook from running queries
+    NonHmisClient.skip_build_assessment_if_missing = true
+    # make sure we have a recent set of assessment tags (cache bust)
+    self.class.assessment_tags(true)
+    # remove unused ProjectClients
+    ProjectClient.where(data_source_id: self.class.data_source.id).
       where.not(id_in_data_source: NonHmisClient.select(:id)).
       delete_all
-
     # update or add clients
-    client_scope.find_each do |client|
-      project_client = ProjectClient.where(
-        data_source_id: DataSource.non_hmis.pluck(:id),
-        id_in_data_source: client.id,
-      ).first_or_initialize
-      client.populate_project_client(project_client)
+    client_scope.preload(:contact).find_in_batches do |batch|
+      project_clients = self.class.project_clients_for(batch.map(&:id))
+      assessments = self.class.current_assessments_for(batch.map(&:id))
+      batch.each do |client|
+        project_client = project_clients[client.id] || ProjectClient.new
+        client.current_assessment = assessments[client.id]
+        project_clients[client.id] = client.populate_project_client(project_client)
+      end
+      ProjectClient.import(
+        project_clients.values,
+        on_duplicate_key_update: {
+          conflict_target: [:id],
+          columns: ProjectClient.column_names.map(&:to_sym),
+        },
+      )
     end
 
     log "Updated #{client_scope.count} ProjectClients from #{self.class.name}"
+  ensure
+    NonHmisClient.skip_build_assessment_if_missing = false
   end
 
   def client_scope

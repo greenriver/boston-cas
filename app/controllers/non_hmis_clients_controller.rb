@@ -88,7 +88,9 @@ class NonHmisClientsController < ApplicationController
 
   def show
     @shelter_names = ShelterHistory.shelter_locations
-    @assessments = @non_hmis_client.non_hmis_assessments.order(entry_date: :desc, created_at: :desc)
+    a_t = NonHmisAssessment.arel_table
+    sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST, ' + a_t[:updated_at].desc.to_sql)
+    @assessments = @non_hmis_client.non_hmis_assessments.order(sort_string)
     if params[:assessment_id] && pathways_enabled?
       render :assessment
     end

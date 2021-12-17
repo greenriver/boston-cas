@@ -40,6 +40,38 @@ module ArelHelper
       Arel::Nodes::NamedFunction.new name, args.map { |v| qt v }, aka
     end
 
+    # Example
+    # Returns most-recently created non-HMIS assessment for each non-HMIS client
+    # NonHmisAssessment.one_for_column(
+    #   order_clause: NonHmisAssessment.arel_table[:created_at].desc,
+    #   source_arel_table: NonHmisAssessment.arel_table,
+    #   group_on: :non_hmis_client_id,
+    #   scope: NonHmisAssessment.where(non_hmis_client_id: client_ids),
+    # )
+    # NOTE: group_on must all be in the same table
+    def one_for_column(order_clause:, source_arel_table:, group_on:, scope: nil)
+      most_recent = source_arel_table.alias("most_recent_#{source_arel_table.name}_#{SecureRandom.alphanumeric}".downcase)
+
+      if scope
+        source = scope.arel
+        group_table = scope.arel_table
+      else
+        source = source_arel_table.project(source_arel_table[:id])
+        group_table = source_arel_table
+      end
+
+      group_columns = Array.wrap(group_on).map { |c| group_table[c] }
+      max_by_group = source.distinct_on(group_columns).
+        order(*group_columns, order_clause)
+
+      join = source_arel_table.create_join(
+        max_by_group.as(most_recent.name),
+        source_arel_table.create_on(source_arel_table[:id].eq(most_recent[:id])),
+      )
+
+      joins(join)
+    end
+
     # Shortcuts for arel tables
     def c_t
       Client.arel_table

@@ -38,6 +38,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record_distinct_on (1.0.0)
+      activerecord (>= 5.2, < 6.2)
     active_record_query_trace (1.8)
     activejob (6.0.4.3)
       activesupport (= 6.0.4.3)
@@ -375,7 +377,11 @@ GEM
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
+    marginalia (1.11.1)
+      actionpack (>= 5.2)
+      activerecord (>= 5.2)
     maxminddb (0.1.22)
+    memoist (0.16.2)
     method_source (1.0.0)
     mimemagic (0.4.3)
       nokogiri (~> 1)
@@ -629,6 +635,7 @@ PLATFORMS
 
 DEPENDENCIES
   StreetAddress
+  active_record_distinct_on
   active_record_query_trace
   activerecord-import
   activerecord-session_store
@@ -703,7 +710,9 @@ DEPENDENCIES
   letter_opener
   listen
   lograge
+  marginalia
   maxminddb
+  memoist
   mini_magick
   minitest-reporters
   momentjs-rails (>= 2.9.0)
