@@ -84,7 +84,7 @@ module Reports
         rrh_assessment_collected_at: filter.start .. filter.end,
         assessment_name: filter.assessment_types,
       ).where.not(last_name: ['Test', 'Fake']). # Specifically requested to avoid sending test clients externally
-        order(assessment_score: :desc)
+        order(assessment_score: :desc, tie_breaker_date: :asc)
     end
   end
 end
