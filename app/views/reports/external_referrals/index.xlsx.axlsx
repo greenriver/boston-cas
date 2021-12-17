@@ -44,6 +44,8 @@ def clients(sheet, rows)
         secondary_contact&.phone,
         client.id,
         i + 1,
+        client.assessment_score,
+        client.tie_breaker_date,
       ],
     )
   end
@@ -70,6 +72,8 @@ def header(sheet)
       '',
       '',
       'Additional Person Providing Assistance (Optional)',
+      '',
+      '',
       '',
       '',
       '',
@@ -105,6 +109,8 @@ def header(sheet)
       'Phone',
       'CAS Client ID',
       'Rank',
+      'Assessment Score',
+      'Tie Breaker Date',
     ],
     style: title,
   )
