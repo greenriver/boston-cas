@@ -1,7 +1,7 @@
 - if MatchRoutes::Base.more_than_one?
   %h3.detail-box--label Match Route
   .detail-box--value
-    = @program.match_route.title
+    = @program.match_route&.title
 %h3.detail-box--label Funding Source
 .detail-box--value
   = if @program.funding_source.present? then @program.funding_source.name else 'None' end

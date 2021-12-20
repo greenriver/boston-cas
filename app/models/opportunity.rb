@@ -63,6 +63,10 @@ class Opportunity < ApplicationRecord
     joins(sub_program: :program).merge(SubProgram.on_route(route))
   end
 
+  scope :with_unit, -> do
+    where.not(unit_id: nil)
+  end
+
   def self.text_search(text)
     return none unless text.present?
 

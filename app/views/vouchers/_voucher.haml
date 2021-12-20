@@ -25,7 +25,7 @@
             .vouchers--building.mb-4
               = v.input_field :building_id, collection: Building.all, selected: default_building_id, disabled: disabled, class: 'has-dependent'
             .vouchers--unit
-              = v.association :unit, collection: voucher.units_including_unavailable, disabled: (disabled || disabled_units), input_html: {data: {dependent: true, url: '/buildings/:id/units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}, class: "sub_program_vouchers_attributes_#{v.index}_building_id jUnit", style: "width: 100%;"}, label: false
+              = v.association :unit, collection: voucher.units_including_unavailable, disabled: (disabled || disabled_units - [voucher.unit_id].compact), input_html: {data: {dependent: true, url: '/buildings/:id/units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}, class: "sub_program_vouchers_attributes_#{v.index}_building_id jUnit", style: "width: 100%;"}, label: false
               = link_to 'Add', new_program_sub_program_unit_for_building_path(@program, @subprogram, building_id: voucher.building.try(:id)), data: {loads_in_ajax_modal: true}, class: 'jAddUnit btn btn-sm btn-secondary'
               = link_to 'Edit', edit_program_sub_program_unit_for_building_path(program_id: @program.id, sub_program_id: @subprogram.id, id: 1), data: {loads_in_ajax_modal: true}, class: 'jEditUnit btn btn-sm btn-secondary'
         - else

@@ -11,6 +11,12 @@ class Voucher < ApplicationRecord
   include MatchArchive
 
   scope :available, -> { where available: true }
+  scope :with_unit, -> do
+    where.not(unit_id: nil)
+  end
+  scope :on_open_match, -> do
+    joins(:client_opportunity_matches).merge(ClientOpportunityMatch.open)
+  end
   belongs_to :sub_program
   belongs_to :unit
   belongs_to :creator, class_name: 'User', optional: true, inverse_of: :vouchers, foreign_key: :user_id
@@ -51,9 +57,9 @@ class Voucher < ApplicationRecord
   end
 
   def units_including_unavailable
-    return sub_program.building.units_for_vouchers unless unit.present?
+    return sub_program.building.units unless unit.present?
 
-    [unit] + unit.building.units_for_vouchers.to_a
+    unit.building.units.to_a
   end
 
   def self.confirmation_text

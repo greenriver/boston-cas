@@ -385,7 +385,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def contact_titles
-    if match_route.show_default_contact_types
+    if match_route&.show_default_contact_types
       default_contact_titles
     else
       current_contact_titles
@@ -395,7 +395,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def current_contact_titles
     contacts_with_info = {}
     match_contacts.input_names.each do |input_name|
-      contacts_with_info[input_name] = match_route.contact_label_for(input_name) if match_contacts.send(input_name).count.positive?
+      contacts_with_info[input_name] = match_route&.contact_label_for(input_name) if match_contacts.send(input_name).count.positive?
     end
     contacts_with_info
   end
