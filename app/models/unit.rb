@@ -42,9 +42,7 @@ class Unit < ApplicationRecord
     # AND (the voucher has never been involved in a match
     #   OR the match is open)
     voucher_never_used = Voucher.where(unit_id: id).where.not(id: Opportunity.select(:voucher_id)).exists?
-    voucher_on_open_match = Voucher.joins(:client_opportunity_matches).
-      merge(ClientOpportunityMatch.open).
-      exists?(unit_id: id)
+    voucher_on_open_match = Voucher.on_open_match.exists?(unit_id: id)
     voucher_never_used || voucher_on_open_match
   end
 
