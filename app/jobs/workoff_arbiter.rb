@@ -33,9 +33,7 @@ class WorkoffArbiter
   # dynamodb and make it different for each installation.
   MAX_WORKOFF_WORKERS = 6
 
-  # This is the abstraction that provides EC2 instances as needed to run the
-  # workoff job
-  SPOT_CAPACITY_PROVIDER_NAME = 'spot-capacity-provider'.freeze
+  NOTIFICATION_THRESHOLD = 2
 
   def initialize
     self.class.include NotifierConfig
@@ -44,7 +42,7 @@ class WorkoffArbiter
   end
 
   def needs_worker?
-    metric > CUTOFF && _current_worker_count < MAX_WORKOFF_WORKERS
+    _work_pending? && _current_worker_count < MAX_WORKOFF_WORKERS
   end
 
   def add_worker!
@@ -53,8 +51,7 @@ class WorkoffArbiter
       task_definition: _task_definition,
       capacity_provider_strategy: [
         {
-          capacity_provider: ENV.fetch('WORKOFF_CAPACITY_PROVIDER') { SPOT_CAPACITY_PROVIDER_NAME },
-
+          capacity_provider: _on_demand_capacity_provider_name,
           weight: 1,
           base: 1,
         },
@@ -62,13 +59,14 @@ class WorkoffArbiter
     }
 
     ecs.run_task(payload)
-    @notifier.ping("Added a workoff worker. Metric was #{metric.round} (#{_dj_scope.pluck(:id).count} jobs enqueued) with #{_current_worker_count} workers right now (this might include the just-created one).")
+    job_count = _dj_scope.pluck(:id).count
+    @notifier.ping("Added a workoff worker. Metric was #{metric.round} (#{job_count} jobs enqueued) with #{_current_worker_count} workers right now (this might include the just-created one).") if job_count > NOTIFICATION_THRESHOLD
   end
 
   private
 
-  def _queue_length
-    _dj_scope.except(:select).count
+  def _work_pending?
+    _dj_scope.any?
   end
 
   def _current_worker_count
@@ -94,6 +92,7 @@ class WorkoffArbiter
 
       # { -5 => 1, ... }
       raw_priorities.zip(normalized_priorities).to_h.tap do |p|
+        p.default = 0.5
         Rails.logger.debug "Queue attributes: #{Delayed::Worker.queue_attributes}"
         Rails.logger.debug "Normalized priority values (lower priority values are more important.): #{p.inspect}"
       end
@@ -119,14 +118,36 @@ class WorkoffArbiter
   end
 
   # Get all non-failed, non-running jobs
+  # nightly-processing jobs have no queue as of this writing.
   def _dj_scope
     Delayed::Job.
       select('created_at, priority, queue').
-      where(failed_at: nil, locked_at: nil, locked_by: nil)
+      where(failed_at: nil, locked_at: nil, locked_by: nil).
+      where("queue != 'mailers' OR queue IS NULL") # never boot a workoff worker just for mail
   end
 
   def _task_family
     _task_definition.split(/\//).last.split(/:/).first
+  end
+
+  def _default_capacity_provider_strategy
+    cluster_name = ENV.fetch('CLUSTER_NAME')
+    our_cluster = ecs.describe_clusters(clusters: [cluster_name]).clusters.first
+    our_cluster.default_capacity_provider_strategy.map(&:to_h)
+  end
+
+  # Abstraction that lets the cluster provision more/less EC2 instances based
+  # on the requirements of the containers we want to run
+  def _capacity_providers
+    @_capacity_providers ||= ecs.describe_clusters(clusters: [ENV.fetch('CLUSTER_NAME')]).clusters.first.capacity_providers
+  end
+
+  def _spot_capacity_provider_name
+    _capacity_providers.find { |cp| cp.match(/spt-v2/) }
+  end
+
+  def _on_demand_capacity_provider_name
+    _capacity_providers.find { |cp| cp.match(/ondemand-v2/) }
   end
 
   def _task_definition
