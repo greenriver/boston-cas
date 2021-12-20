@@ -83,7 +83,8 @@ module Reports
       @client_scope.where(
         rrh_assessment_collected_at: filter.start .. filter.end,
         assessment_name: filter.assessment_types,
-      ).order(assessment_score: :desc)
+      ).where.not(last_name: ['Test', 'Fake']). # Specifically requested to avoid sending test clients externally
+        order(assessment_score: :desc, tie_breaker_date: :asc)
     end
   end
 end

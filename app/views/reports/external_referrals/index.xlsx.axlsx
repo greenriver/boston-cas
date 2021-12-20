@@ -4,6 +4,20 @@ def clients(sheet, rows)
     contacts = client.project_client.shelter_agency_contacts
     primary_contact = contacts&.first
     secondary_contact = contacts&.second
+    primary_contact.email = primary_contact&.user&.email if primary_contact
+    secondary_contact.email = secondary_contact&.user&.email if secondary_contact
+    # Attempt to find a useful contact for the client, the format of these is not conducive to the report
+    if primary_contact
+      secondary_contact ||= client.structured_rrh_assessment_contact_info
+    else
+      primary_contact = client.structured_rrh_assessment_contact_info
+    end
+    if primary_contact
+      secondary_contact ||= OpenStruct.new(first_name: client.case_manager_contact_info)
+    else
+      primary_contact = OpenStruct.new(first_name: client.case_manager_contact_info)
+    end
+
     address = StreetAddress::US.parse(client.address)
     sheet.add_row(
       [
@@ -30,6 +44,8 @@ def clients(sheet, rows)
         secondary_contact&.phone,
         client.id,
         i + 1,
+        client.assessment_score,
+        client.tie_breaker_date,
       ],
     )
   end
@@ -56,6 +72,8 @@ def header(sheet)
       '',
       '',
       'Additional Person Providing Assistance (Optional)',
+      '',
+      '',
       '',
       '',
       '',
@@ -91,6 +109,8 @@ def header(sheet)
       'Phone',
       'CAS Client ID',
       'Rank',
+      'Assessment Score',
+      'Tie Breaker Date',
     ],
     style: title,
   )
