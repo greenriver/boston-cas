@@ -37,15 +37,24 @@ class Building < ApplicationRecord
 
   # available units that aren't also currently in use
   def available_units_for_vouchers
-    available_units.where.not(id: Voucher.where.not(unit_id: nil).select(:unit_id)).where.not(id: Opportunity.where.not(unit_id: nil).select(:unit_id))
+    units_for_vouchers.where.not(id: unavailable_units_for_vouchers_ids)
   end
 
   def units_for_vouchers
-    units.where.not(id: Voucher.where.not(unit_id: nil).select(:unit_id)).where.not(id: Opportunity.where.not(unit_id: nil).select(:unit_id))
+    # Include unit where there is no voucher using it
+    # OR the voucher is not attached to an open match
+    units_with_no_voucher = units.where.not(id: Voucher.with_unit.select(:unit_id))
+    units_not_on_open_matches = units.where.not(id: Voucher.with_unit.on_open_match.select(:unit_id))
+    units.where(id: units_with_no_voucher.select(:id)).or(units.where(id: units_not_on_open_matches.select(:id)))
   end
 
   def unavailable_units_for_vouchers_ids
-    units_for_vouchers.where(available: false).pluck(:id)
+    # Any unit that is marked unavailable
+    # and any unit already on a voucher on an open match
+    # add any unit on a voucher with no match
+    unavailable_ids = units.where(available: false).pluck(:id)
+    unavailable_ids += units.where(id: Voucher.with_unit.on_open_match.select(:unit_id)).pluck(:id)
+    unavailable_ids + Voucher.with_unit.where.not(id: Opportunity.joins(:client_opportunity_matches).select(:voucher_id)).pluck(:unit_id)
   end
 
   def fake_opportunites(n)
