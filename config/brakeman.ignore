@@ -51,6 +51,26 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "1520725d58b857728b8b8cbc947c87b269af85744feea8305f8bd65051d1c5a4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/challenge.rb",
+      "line": 36,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable.downcase}\\\"'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::Challenge",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable.downcase",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "15dafe767dd3ee8f4ad2d10f3e833ed4d4b3763f74ecea893a8d8e5a6e3504ad",
@@ -159,6 +179,26 @@
         "template": "buildings/edit"
       },
       "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "476688743b3e844ac105a19ff57d5843ea881e028f5d0ba6d2a7438436dc19f7",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/challenge.rb",
+      "line": 38,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"not(#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable.downcase}\\\"')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::Challenge",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable.downcase",
       "confidence": "Medium",
       "note": ""
     },
@@ -475,26 +515,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "ba8e1d6b9f8eb10c2d7e56548cca96dbb9e476924f23979b4e92eff0d4ca151a",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/challenge.rb",
-      "line": 36,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable}\\\"'\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Rules::Challenge",
-        "method": "clients_that_fit"
-      },
-      "user_input": "requirement.variable",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
@@ -778,28 +798,8 @@
       "user_input": null,
       "confidence": "Medium",
       "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "e659116cae81b62a164ab4df2b45e664eab3bcd077ea5d77c2b69345065cd774",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/challenge.rb",
-      "line": 38,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"not(#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable}\\\"')\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Rules::Challenge",
-        "method": "clients_that_fit"
-      },
-      "user_input": "requirement.variable",
-      "confidence": "Medium",
-      "note": ""
     }
   ],
-  "updated": "2021-12-23 16:21:55 +0000",
+  "updated": "2021-12-23 20:55:41 +0000",
   "brakeman_version": "5.0.4"
 }
