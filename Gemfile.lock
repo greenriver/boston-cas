@@ -40,6 +40,10 @@ GEM
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
     active_record_distinct_on (1.0.0)
       activerecord (>= 5.2, < 6.2)
+    active_record_extended (2.0.3)
+      activerecord (>= 5.1, < 6.2)
+      ar_outer_joins (~> 0.2)
+      pg (< 3.0)
     active_record_query_trace (1.8)
     activejob (6.0.4.3)
       activesupport (= 6.0.4.3)
@@ -76,6 +80,8 @@ GEM
       rails (>= 4)
     amazing_print (1.2.2)
     ansi (1.5.0)
+    ar_outer_joins (0.2.0)
+      activerecord (>= 3.2)
     ast (2.4.2)
     attribute_normalizer (1.2.0)
     authtrail (0.2.2)
@@ -636,6 +642,7 @@ PLATFORMS
 DEPENDENCIES
   StreetAddress
   active_record_distinct_on
+  active_record_extended
   active_record_query_trace
   activerecord-import
   activerecord-session_store

@@ -12,5 +12,21 @@
       %span.c-detailed-list__value= boolean_icon (@client.child_in_household)
 
     %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Youth in foster care')
+      %span.c-detailed-list__value= boolean_icon (@client.foster_care)
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Current open case')
+      %span.c-detailed-list__value= boolean_icon (@client.open_case)
+
+    %li.c-detailed-list__item
       %span.c-detailed-list__label Total Monthly Income
       %span.c-detailed-list__value= number_to_currency(@client.income_total_monthly)
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Strengths')
+      %span.c-detailed-list__value= @client.strengths&.join(', ')
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Challenges for housing placment')
+      %span.c-detailed-list__value= @client.challenges&.join(', ')

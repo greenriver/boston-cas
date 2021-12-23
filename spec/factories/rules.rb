@@ -413,4 +413,24 @@ FactoryBot.define do
     name { 'Assessment Completed within specified range' }
     verb { 'have' }
   end
+  factory :open_case, class: 'Rules::OpenCase' do
+    name { 'Current open case' }
+    verb { 'have' }
+  end
+  factory :foster_youth, class: 'Rules::FosterYouth' do
+    name { 'Youth in foster care' }
+    verb { 'be' }
+  end
+  factory :housing_for_formerly_homeless, class: 'Rules::HousingForFormerlyHomeless' do
+    name { 'Preference of living in a community with formerly homeless' }
+    verb { 'have' }
+  end
+  factory :strength, class: 'Rules::Strength' do
+    name { 'Strengths' }
+    verb { 'have' }
+  end
+  factory :challenge, class: 'Rules::Challenge' do
+    name { 'Challenges for housing placement' }
+    verb { 'have' }
+  end
 end

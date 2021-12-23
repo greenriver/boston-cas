@@ -67,6 +67,7 @@ gem 'validate_url'
 gem 'StreetAddress', require: false
 gem 'marginalia'
 gem 'active_record_distinct_on'
+gem 'active_record_extended'
 
 gem 'devise', '~> 4'
 gem 'devise_invitable'
