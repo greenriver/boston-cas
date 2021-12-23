@@ -17,11 +17,11 @@ class Rules::Strength < Rule
       'No Disabling Conditions',
       'Good Credit',
       'Recent Positive Rental History',
-    ].map { |v| [v, v] }
+    ].map { |v| [v.downcase, v] }
   end
 
   def display_for_variable value
-    value
+    available_strengths.to_h[value] || value
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

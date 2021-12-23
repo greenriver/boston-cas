@@ -25,8 +25,8 @@
 
     %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Strengths')
-      %span.c-detailed-list__value= @client.strengths&.join(', ')
+      %span.c-detailed-list__value= @client.strengths&.join(', ')&.titleize
 
     %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Challenges for housing placment')
-      %span.c-detailed-list__value= @client.challenges&.join(', ')
+      %span.c-detailed-list__value= @client.challenges&.join(', ')&.titleize

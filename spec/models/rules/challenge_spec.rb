@@ -4,14 +4,14 @@ RSpec.describe Rules::Challenge, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :strength }
 
-    let!(:bob) { create :client, first_name: 'Bob', strengths: ['No rental history'] }
-    let!(:roy) { create :client, first_name: 'Roy', strengths: ['Bad Credit'] }
-    let!(:mary) { create :client, first_name: 'Mary', strengths: ['No rental history', 'Bad Credit'] }
+    let!(:bob) { create :client, first_name: 'Bob', strengths: ['no rental history'] }
+    let!(:roy) { create :client, first_name: 'Roy', strengths: ['bad credit'] }
+    let!(:mary) { create :client, first_name: 'Mary', strengths: ['no rental history', 'bad credit'] }
     let!(:sue) { create :client, first_name: 'Sue', strengths: [] }
-    let!(:zelda) { create :client, first_name: 'Zelda', strengths: ['Employable Skills'] }
+    let!(:zelda) { create :client, first_name: 'Zelda', strengths: ['employable skills'] }
 
-    let!(:positive) { create :requirement, rule: rule, positive: true, variable: 'No rental history' }
-    let!(:negative) { create :requirement, rule: rule, positive: false, variable: 'No rental history' }
+    let!(:positive) { create :requirement, rule: rule, positive: true, variable: 'no rental history' }
+    let!(:negative) { create :requirement, rule: rule, positive: false, variable: 'no rental history' }
 
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_do_not_fit) { negative.clients_that_fit(Client.all) }

@@ -20,11 +20,11 @@ class Rules::Challenge < Rule
       'Felony Conviction /Criminal History',
       'Sex Offender',
       'Meth production conviction',
-    ].map { |v| [v, v] }
+    ].map { |v| [v.downcase, v] }
   end
 
   def display_for_variable value
-    value
+    available_strengths.to_h[value] || value
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
@@ -33,9 +33,9 @@ class Rules::Challenge < Rule
 
     connection = self.class.connection
     where = if requirement.positive
-      Arel.sql("#{connection.quote_column_name(column)} @> '\"#{requirement.variable}\"'")
+      Arel.sql("#{connection.quote_column_name(column)} @> '\"#{requirement.variable.downcase}\"'")
     else
-      Arel.sql("not(#{connection.quote_column_name(column)} @> '\"#{requirement.variable}\"')")
+      Arel.sql("not(#{connection.quote_column_name(column)} @> '\"#{requirement.variable.downcase}\"')")
     end
     scope.where(where).
       or(scope.where(Arel.sql("#{connection.quote_column_name(column)} = '[]'"))).
