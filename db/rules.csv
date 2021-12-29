@@ -98,3 +98,8 @@ AssessmentCompletedWithin,Assessment Completed within specified range,,have
 EnrolledInHmisProjectType,Enrolled in one of the specified HMIS Project Types,,be
 MajorityUnsheltered,Majority of homeless nights unsheltered,,have
 MajoritySheltered,Majority of homeless nights sheltered,,have
+OpenCase,Current open case,,have
+FosterYouth,Youth in foster care,,be
+HousingForFormerlyHomeless,Preference of living in a community with formerly homeless,,have
+Strength,Strengths,,have
+Challenge,Challenges for housing placement,,have
