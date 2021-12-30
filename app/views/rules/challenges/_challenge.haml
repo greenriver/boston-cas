@@ -1,0 +1,3 @@
+- rule = challenge
+%h4= _('Challenges for housing placment')
+= select_tag(:variable, options_from_collection_for_select(rule.available_challenges, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_challenges.to_h.to_json})

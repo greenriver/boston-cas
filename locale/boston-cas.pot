@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-19 00:09+0000\n"
-"PO-Revision-Date: 2021-10-19 00:09+0000\n"
+"POT-Creation-Date: 2021-12-23 14:42+0000\n"
+"PO-Revision-Date: 2021-12-23 14:42+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -34,6 +34,12 @@ msgid "Added to assessed clients"
 msgstr ""
 
 msgid "Address of housing"
+msgstr ""
+
+msgid "Administrative Cancelation"
+msgstr ""
+
+msgid "Agency Interactions"
 msgstr ""
 
 msgid "Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing"
@@ -76,6 +82,9 @@ msgid "Cannot read uploaded file, is it an XLSX?"
 msgstr ""
 
 msgid "Case Workers"
+msgstr ""
+
+msgid "Challenges for housing placment"
 msgstr ""
 
 msgid "Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live."
@@ -234,10 +243,19 @@ msgstr ""
 msgid "I’m undecided but may reconsider"
 msgstr ""
 
+msgid "Latest Date Eligible for Financial Assistance"
+msgstr ""
+
 msgid "Life-Time Sex Offender"
 msgstr ""
 
 msgid "Limited CAS Release"
+msgstr ""
+
+msgid "Majority Sheltered"
+msgstr ""
+
+msgid "Majority Unsheltered"
 msgstr ""
 
 msgid "Match Route Five"
@@ -289,9 +307,6 @@ msgid "Non-HMIS Clients"
 msgstr ""
 
 msgid "None of the above "
-msgstr ""
-
-msgid "Note for Assessor Staff regarding income maximization"
 msgstr ""
 
 msgid "Outside/place not meant for human habitation within the City of Boston"
@@ -387,6 +402,12 @@ msgstr ""
 msgid "Stabilization Services Provider"
 msgstr ""
 
+msgid "Staff Decline"
+msgstr ""
+
+msgid "Strengths"
+msgstr ""
+
 msgid "Submit Client Application"
 msgstr ""
 
@@ -444,9 +465,6 @@ msgstr ""
 msgid "Voucher: An affordable housing “ticket” used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)"
 msgstr ""
 
-msgid "Warehouse ROI Contact Information"
-msgstr ""
-
 msgid "We want to reach you when there is a housing program opening for you."
 msgstr ""
 
@@ -457,6 +475,9 @@ msgid "Yes"
 msgstr ""
 
 msgid "You must attach a file in the form."
+msgstr ""
+
+msgid "Youth in foster care"
 msgstr ""
 
 msgid "a criminal background hearing has been schedule for"

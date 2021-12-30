@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_123707) do
+ActiveRecord::Schema.define(version: 2021_12_22_184513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,11 @@ ActiveRecord::Schema.define(version: 2021_12_08_123707) do
     t.string "address"
     t.boolean "majority_sheltered"
     t.date "tie_breaker_date"
+    t.jsonb "strengths", default: []
+    t.jsonb "challenges", default: []
+    t.boolean "foster_care", default: false
+    t.boolean "open_case", default: false
+    t.boolean "housing_for_formerly_homeless", default: false
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -1173,6 +1178,11 @@ ActiveRecord::Schema.define(version: 2021_12_08_123707) do
     t.string "address"
     t.boolean "majority_sheltered"
     t.date "tie_breaker_date"
+    t.jsonb "strengths", default: []
+    t.jsonb "challenges", default: []
+    t.boolean "foster_care", default: false
+    t.boolean "open_case", default: false
+    t.boolean "housing_for_formerly_homeless", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

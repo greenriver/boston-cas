@@ -236,6 +236,11 @@ module Cas
         :address,
         :tie_breaker_date,
         :majority_sheltered,
+        :strengths,
+        :challenges,
+        :foster_care,
+        :open_case,
+        :housing_for_formerly_homeless,
       ]
     end
 

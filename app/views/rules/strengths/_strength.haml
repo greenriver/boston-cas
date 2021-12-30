@@ -1,0 +1,3 @@
+- rule = strength
+%h4 Strengths
+= select_tag(:variable, options_from_collection_for_select(rule.available_strengths, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_strengths.to_h.to_json})

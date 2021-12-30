@@ -51,6 +51,26 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "1520725d58b857728b8b8cbc947c87b269af85744feea8305f8bd65051d1c5a4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/challenge.rb",
+      "line": 36,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable.downcase}\\\"'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::Challenge",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable.downcase",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "15dafe767dd3ee8f4ad2d10f3e833ed4d4b3763f74ecea893a8d8e5a6e3504ad",
@@ -163,6 +183,26 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "476688743b3e844ac105a19ff57d5843ea881e028f5d0ba6d2a7438436dc19f7",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/challenge.rb",
+      "line": 38,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"not(#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable.downcase}\\\"')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::Challenge",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable.downcase",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "50b6526d2855834552716cadcb7d87a71e755a9982a18a0f4a570048d2765096",
@@ -240,7 +280,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 319,
+      "line": 376,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`docker image ls -f 'reference=#{repo_name}' | grep #{_ruby_version}--pre-cache`",
       "render_path": null,
@@ -260,7 +300,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 155,
+      "line": 157,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -296,6 +336,46 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "8ce2d87286eb83eecf47607cb2d5a2789fdae3039e681714b44b99e2eb6cc26e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/strength.rb",
+      "line": 33,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"#{self.class.connection.quote_column_name(:strengths)} @> '\\\"#{requirement.variable}\\\"'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::Strength",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "a6aa0af63b71b6840c3bca2420af631c54c7683ef1b28aad37fd6a5e27874c88",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/strength.rb",
+      "line": 35,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"not(#{self.class.connection.quote_column_name(:strengths)} @> '\\\"#{requirement.variable}\\\"')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::Strength",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "ad1bb4adf79d4a567639003e74a6aac5536fd094bba0639025daa5b05565a76a",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -320,7 +400,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 154,
+      "line": 156,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -381,7 +461,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 149,
+      "line": 151,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -662,7 +742,7 @@
           "type": "controller",
           "class": "OpportunitiesController",
           "method": "create",
-          "line": 132,
+          "line": 129,
           "file": "app/controllers/opportunities_controller.rb",
           "rendered": {
             "name": "opportunities/new",
@@ -720,6 +800,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-09-15 13:51:43 -0400",
+  "updated": "2021-12-23 20:55:41 +0000",
   "brakeman_version": "5.0.4"
 }
