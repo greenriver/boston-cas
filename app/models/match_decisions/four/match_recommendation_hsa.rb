@@ -113,7 +113,6 @@ module MatchDecisions::Four
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
-
     class StatusCallbacks < StatusCallbacks
       def pending
       end
