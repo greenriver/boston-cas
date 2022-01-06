@@ -1,0 +1,6 @@
+- # @match.current_decision returns nil for closed matches
+- decision = @match&.initialized_decisions&.order(id: :desc)&.limit(1)&.first
+- reason = decision&.administrative_cancel_reason
+- if reason.present? && !reason.other?
+  Cancel Reason: #{reason.name}
+- binding.pry
