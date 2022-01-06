@@ -69,6 +69,14 @@ services:
       - redis
       - mailhog
 
+  dj:
+    <<: *backend
+    command: ./bin/rake jobs:work
+    entrypoint: ''
+    depends_on:
+      - db
+      - redis
+
   web:
     <<: *backend
     stdin_open: true

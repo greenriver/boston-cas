@@ -1,7 +1,7 @@
 # Based on https://github.com/ledermann/docker-rails/blob/develop/Dockerfile
 ARG RUBY_VERSION
 # NOTE FROM clears all ARGs
-FROM ruby:$RUBY_VERSION-slim-buster
+FROM ruby:$RUBY_VERSION-alpine
 
 ARG PG_MAJOR
 ARG NODE_MAJOR
@@ -15,53 +15,25 @@ ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 
 LABEL maintainer="elliot@greenriver.com"
 
-RUN apt-get update -qq \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-    build-essential \
-    curl \
-    gnupg2
-
-# Add PostgreSQL to sources list
-RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt/ `awk -F= '$1=="VERSION_CODENAME" { print $2 ;}' /etc/os-release`-pgdg main" $PG_MAJOR > /etc/apt/sources.list.d/pgdg.list
-
-# Add NodeJS to sources list
-RUN curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
-
-# Add Yarn to the sources list
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-  && echo 'deb http://dl.yarnpkg.com/debian/ stable main' > /etc/apt/sources.list.d/yarn.list
-
-# Set up the Chrome PPA
-RUN curl -sS https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-list.list
-
-RUN apt-get update -qq \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-    postgresql-client-$PG_MAJOR \
-    libpq-dev \
-    curl \
-    less \
-    git \
-    imagemagick \
-    tzdata \
-    unzip \
-    yarn \
-    zip \
-    $ADDITIONAL_PACKAGES \
-  && apt-get clean \
-  && rm -rf /var/cache/apt/archives/* \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  && truncate -s 0 /var/log/*log
-
-# Install Chrome WebDriver
-RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
-    mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
-    curl -sS -o /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
-    unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION && \
-    rm /tmp/chromedriver_linux64.zip && \
-    chmod +x /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver && \
-    ln -fs /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver /usr/local/bin/chromedriver
+RUN apk add --no-cache \
+  nodejs yarn npm \
+  tzdata \
+  git \
+  bash \
+  freetds-dev \
+  openssh ctags zsh \
+  icu icu-dev \
+  curl libcurl curl-dev \
+  imagemagick \
+  libmagic file-dev file \
+  build-base libxml2-dev libxslt-dev postgresql-dev \
+  wkhtmltopdf libgcc libstdc++ libx11 glib libxrender libxext libintl \
+  ttf-dejavu ttf-droid ttf-freefont ttf-liberation \
+  chromium nss freetype freetype-dev harfbuzz ca-certificates \
+  lftp postgresql tmux postgis geos geos-dev proj proj-dev proj-util zip expect \
+  shared-mime-info \
+  vim less \
+  && ln -s libproj.so.21.1.2 /usr/lib/libproj.so.20
 
 RUN mkdir /app
 WORKDIR /app
