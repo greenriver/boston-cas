@@ -33,6 +33,12 @@ class Contact < ApplicationRecord
 
   validates_presence_of :first_name, :last_name, :email
 
+  scope :active_contacts, -> do
+    # The list of contacts associated with an active login user
+    # If non-user contacts should be available, use an outer join?
+    joins(:user).merge(User.active)
+  end
+
   def full_name
     [first_name, last_name].compact.join " "
   end
