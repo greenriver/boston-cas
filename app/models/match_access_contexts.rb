@@ -12,11 +12,12 @@ module MatchAccessContexts
   # logic that is dependent on the way the match is being accessed
 
   def self.build controller
-    if controller.params[:notification_id].present? then
-      Notification.new(controller)
-    else
+    # Commenting this logic out disables the notification code access control
+    # if controller.params[:notification_id].present? then
+    #   Notification.new(controller)
+    # else
       AuthenticatedUser.new(controller)
-    end
+    # end
   end
 
 end
