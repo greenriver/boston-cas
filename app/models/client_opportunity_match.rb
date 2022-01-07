@@ -159,7 +159,7 @@ class ClientOpportunityMatch < ApplicationRecord
            source: :contact
 
   has_many :client_contacts,
-           -> { where(client_opportunity_match_contacts: { client: true }) }, # don't limit client contacts to active users
+           -> { active_contacts.where(client_opportunity_match_contacts: { client: true }) }, # remove active_contact to not limit client contacts to active users
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
