@@ -147,50 +147,50 @@ class ClientOpportunityMatch < ApplicationRecord
 
   # filtered by role
   has_many :dnd_staff_contacts,
-           -> { where client_opportunity_match_contacts: { dnd_staff: true } },
+           -> { active_contacts.where(client_opportunity_match_contacts: { dnd_staff: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :housing_subsidy_admin_contacts,
-           -> { where client_opportunity_match_contacts: { housing_subsidy_admin: true } },
+           -> { active_contacts.where(client_opportunity_match_contacts: { housing_subsidy_admin: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :client_contacts,
-           -> { where client_opportunity_match_contacts: { client: true } },
+           -> { where(client_opportunity_match_contacts: { client: true }) }, # don't limit client contacts to active users
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :shelter_agency_contacts,
-           -> { where client_opportunity_match_contacts: { shelter_agency: true } },
+           -> { active_contacts.where(client_opportunity_match_contacts: { shelter_agency: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :ssp_contacts,
-           -> { where client_opportunity_match_contacts: { ssp: true } },
+           -> { active_contacts.where(client_opportunity_match_contacts: { ssp: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :hsp_contacts,
-           -> { where client_opportunity_match_contacts: { hsp: true } },
+           -> { active_contacts.where(client_opportunity_match_contacts: { hsp: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :do_contacts,
-           -> { where client_opportunity_match_contacts: { do: true } },
+           -> { active_contacts.where(client_opportunity_match_contacts: { do: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :hsa_or_shelter_agency_contacts, -> do
-    where(client_opportunity_match_contacts: { housing_subsidy_admin: true }).
-      or(where(client_opportunity_match_contacts: { shelter_agency: true }))
+    active_contacts.where(client_opportunity_match_contacts: { housing_subsidy_admin: true }).
+      or(active_contacts.where(client_opportunity_match_contacts: { shelter_agency: true }))
   end, class_name: 'Contact', through: :client_opportunity_match_contacts, source: :contact
 
   has_many :events,

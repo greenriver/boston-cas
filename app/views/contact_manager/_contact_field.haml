@@ -5,6 +5,7 @@
 - contacts_type = object.contact_type_for(contact_type)
 - available_contacts_method = object.available_contacts_method_for(contact_type)
 - selected_contacts_method = object.selected_contacts_method_for(contact_type)
+- contact_ids_with_active_users = Contact.active_contacts.pluck(:id)
 
 - editable = current_user&.can_edit_match_contacts? || current_contact&.user_can_edit_match_contacts? || (hsa_can_edit_contacts? && contacts_type == 'housing_subsidy_admin')
 
@@ -17,6 +18,8 @@
         .c-contact-list__details
           = "#{contact.name} | "
           = contact.email
+          - unless contact_ids_with_active_users.include?(contact.id)
+            %i.icon-warning{data: {toggle: :tooltip, title: 'No associated active user, will not receive emails.'}}
         -# Don't allow removal of self if you can't edit all contacts
         - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
           = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
