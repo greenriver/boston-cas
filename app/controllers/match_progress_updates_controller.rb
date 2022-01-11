@@ -25,11 +25,8 @@ class MatchProgressUpdatesController < ApplicationController
     else
       flash[:error] = "Unable to save your response"
     end
-    if params[:notification_id]
-      respond_with(@update, location: match_path(@match, notification_id: params[:notification_id]))
-    else
-      respond_with(@update, location: match_path(@match))
-    end
+
+    respond_with(@update, location: match_path(@match))
   end
 
   def progress_params
