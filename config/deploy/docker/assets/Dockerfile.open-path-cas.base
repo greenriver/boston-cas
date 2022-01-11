@@ -56,7 +56,7 @@ COPY lib ./lib
 COPY config ./config
 COPY spec ./spec
 COPY db ./db
-COPY --chown app:app app ./app
+COPY --chown=app:app app ./app
 COPY vendor ./vendor
 COPY locale ./locale
 
@@ -67,6 +67,7 @@ RUN mkdir -p app/assets/stylesheets/theme/styles && \
   rm -rf tmp/* && \
   rm .env && \
   mkdir tmp/pids
+RUN chown -R app:app tmp
 
 COPY config/deploy/docker/assets/REVISION ./
 
