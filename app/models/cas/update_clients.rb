@@ -241,6 +241,12 @@ module Cas
         :foster_care,
         :open_case,
         :housing_for_formerly_homeless,
+        :drug_test,
+        :heavy_drug_use,
+        :sober,
+        :willing_case_management,
+        :employed_three_months,
+        :living_wage,
       ]
     end
 
