@@ -56,7 +56,7 @@ COPY lib ./lib
 COPY config ./config
 COPY spec ./spec
 COPY db ./db
-COPY app ./app
+COPY --chown app:app app ./app
 COPY vendor ./vendor
 COPY locale ./locale
 
@@ -72,4 +72,7 @@ COPY config/deploy/docker/assets/REVISION ./
 
 COPY config/deploy/docker/assets/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
+
+USER app
+
 ENTRYPOINT ["entrypoint.sh"]
