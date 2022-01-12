@@ -128,7 +128,11 @@ class Voucher < ApplicationRecord
   end
 
   def can_be_destroyed?
-    ! client_opportunity_matches.exists?
+    ! client_opportunity_matches.in_process_or_complete.exists?
+  end
+
+  def active_matches?
+    client_opportunity_matches.active.exists?
   end
 
   # Searching by client name
