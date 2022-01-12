@@ -120,6 +120,7 @@ class VouchersController < ApplicationController
 
   def destroy
     if @voucher.can_be_destroyed?
+      @voucher.client_opportunity_matches.proposed.destroy_all
       @voucher.destroy
       flash[:alert] = 'Voucher removed.'
     else
