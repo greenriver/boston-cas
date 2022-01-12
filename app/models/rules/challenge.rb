@@ -24,21 +24,24 @@ class Rules::Challenge < Rule
   end
 
   def display_for_variable value
-    available_strengths.to_h[value] || value
+    available_challenges.to_h[value] || value
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
     column = :challenges
     raise RuleDatabaseStructureMissing.new("clients.#{column} missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(column.to_s)
 
-    connection = self.class.connection
-    where = if requirement.positive
-      Arel.sql("#{connection.quote_column_name(column)} @> '\"#{requirement.variable.downcase}\"'")
+    if requirement.positive
+      # Any match? (must have at least one)
+      where = 'challenges ?| ARRAY [:variable]'
     else
-      Arel.sql("not(#{connection.quote_column_name(column)} @> '\"#{requirement.variable.downcase}\"')")
+      # none match (can't have any)
+      where = 'not(challenges ?| ARRAY [:variable]) OR challenges is null'
     end
-    scope.where(where).
-      or(scope.where(Arel.sql("#{connection.quote_column_name(column)} = '[]'"))).
-      or(scope.where(column => nil))
+    scope.where(where, variable: value_as_array(requirement.variable))
+  end
+
+  private def value_as_array(value)
+    value.split(',')
   end
 end

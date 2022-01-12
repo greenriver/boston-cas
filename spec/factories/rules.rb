@@ -433,4 +433,28 @@ FactoryBot.define do
     name { 'Challenges for housing placement' }
     verb { 'have' }
   end
+  factory :drug_test, class: 'Rules::DrugTest' do
+    name { 'Able to pass a drug test' }
+    verb { 'be' }
+  end
+  factory :heavy_drug_use, class: 'Rules::HeavyDrugUse' do
+    name { 'History of heavy drug use' }
+    verb { 'have' }
+  end
+  factory :sober, class: 'Rules::Sober' do
+    name { 'Clean/sober for at least one year' }
+    verb { 'be' }
+  end
+  factory :willing_case_management, class: 'Rules::WillingCaseManagement' do
+    name { 'Willing to engage with housing case management' }
+    verb { 'be' }
+  end
+  factory :employed_three_months, class: 'Rules::EmployedThreeMonths' do
+    name { 'Employed for 3 or more months' }
+    verb { 'be' }
+  end
+  factory :living_wage, class: 'Rules::LivingWage' do
+    name { 'Earning a living wage ($13 or more)' }
+    verb { 'be' }
+  end
 end
