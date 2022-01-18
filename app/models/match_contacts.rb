@@ -78,7 +78,7 @@ class MatchContacts
     match.do_contact_ids = do_contact_ids.map(&:to_i)
   end
 
-  def available_client_contacts base_scope = Contact.all
+  def available_client_contacts base_scope = Contact.active_contacts
     base_scope.where.not(id: client_contact_ids)
   end
 

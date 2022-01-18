@@ -15,19 +15,20 @@ class SubProgramContacts
   include RelatedDefaultContacts
 
   attr_accessor :sub_program,
-    :shelter_agency_contact_ids,
-    :client_contact_ids,
-    :dnd_staff_contact_ids,
-    :housing_subsidy_admin_contact_ids,
-    :ssp_contact_ids,
-    :hsp_contact_ids,
-    :do_contact_ids
+                :shelter_agency_contact_ids,
+                :client_contact_ids,
+                :dnd_staff_contact_ids,
+                :housing_subsidy_admin_contact_ids,
+                :ssp_contact_ids,
+                :hsp_contact_ids,
+                :do_contact_ids
 
   delegate :to_param, to: :sub_program
 
-  def initialize **attrs
-    raise "must provide subprogram" unless attrs[:sub_program]
-    super #ActiveModel attribute initializer
+  def initialize(**attrs)
+    raise 'must provide subprogram' unless attrs[:sub_program]
+
+    super # ActiveModel attribute initializer
     self.shelter_agency_contacts = sub_program.shelter_agency_contacts
     self.client_contacts = sub_program.client_contacts
     self.dnd_staff_contacts = sub_program.dnd_staff_contacts
@@ -38,38 +39,38 @@ class SubProgramContacts
   end
 
   def save
-    if valid?
-      sub_program.class.transaction do
-        SubProgramContact.where(sub_program_id: sub_program.id).delete_all
+    return unless valid?
 
-        shelter_agency_contact_ids.each do |id|
-          SubProgramContact.create(shelter_agency: true, contact_id: id, sub_program_id: sub_program.id)
-        end
-        client_contact_ids.each do |id|
-          SubProgramContact.create(client: true, contact_id: id, sub_program_id: sub_program.id)
-        end
-        dnd_staff_contact_ids.each do |id|
-          SubProgramContact.create(dnd_staff: true, contact_id: id, sub_program_id: sub_program.id)
-        end
-        housing_subsidy_admin_contact_ids.each do |id|
-          SubProgramContact.create(housing_subsidy_admin: true, contact_id: id, sub_program_id: sub_program.id)
-        end
-        ssp_contact_ids.each do |id|
-          SubProgramContact.create(ssp: true, contact_id: id, sub_program_id: sub_program.id)
-        end
-        hsp_contact_ids.each do |id|
-          SubProgramContact.create(hsp: true, contact_id: id, sub_program_id: sub_program.id)
-        end
-        do_contact_ids.each do |id|
-          SubProgramContact.create(do: true, contact_id: id, sub_program_id: sub_program.id)
-        end
+    sub_program.class.transaction do
+      SubProgramContact.where(sub_program_id: sub_program.id).delete_all
 
-        return true
+      shelter_agency_contact_ids.each do |id|
+        SubProgramContact.create(shelter_agency: true, contact_id: id, sub_program_id: sub_program.id)
       end
+      client_contact_ids.each do |id|
+        SubProgramContact.create(client: true, contact_id: id, sub_program_id: sub_program.id)
+      end
+      dnd_staff_contact_ids.each do |id|
+        SubProgramContact.create(dnd_staff: true, contact_id: id, sub_program_id: sub_program.id)
+      end
+      housing_subsidy_admin_contact_ids.each do |id|
+        SubProgramContact.create(housing_subsidy_admin: true, contact_id: id, sub_program_id: sub_program.id)
+      end
+      ssp_contact_ids.each do |id|
+        SubProgramContact.create(ssp: true, contact_id: id, sub_program_id: sub_program.id)
+      end
+      hsp_contact_ids.each do |id|
+        SubProgramContact.create(hsp: true, contact_id: id, sub_program_id: sub_program.id)
+      end
+      do_contact_ids.each do |id|
+        SubProgramContact.create(do: true, contact_id: id, sub_program_id: sub_program.id)
+      end
+
+      return true
     end
   end
 
-  def available_client_contacts base_scope = Contact.all
+  def available_client_contacts base_scope = Contact.active_contacts
     base_scope.where.not(id: client_contact_ids)
   end
 
@@ -106,5 +107,4 @@ class SubProgramContacts
     }
     @selected_contacts_methods[input_name] || input_name
   end
-
 end
