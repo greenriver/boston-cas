@@ -15,11 +15,14 @@
     - object.send(selected_contacts_method)&.each do |contact|
       .selected-contact.c-contact-list__contact.margin-0
         %input{type: :hidden, name: input_name, value: contact.id, class: :jContactHidden}
-        .c-contact-list__details
+        - data = {}
+        - data = {toggle: :tooltip, title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
+        .c-contact-list__details.d-flex
           = "#{contact.name} | "
           = contact.email
           - unless contact_ids_with_active_users.include?(contact.id)
-            %i.icon-warning{data: {toggle: :tooltip, title: 'No associated active user, will not receive emails.'}}
+            .ml-4{data: data}
+              %i.icon-warning
         -# Don't allow removal of self if you can't edit all contacts
         - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
           = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
@@ -34,3 +37,6 @@
           %span= contact.name
           %span= contact.email
           %span= contact.phone
+= content_for :page_js do
+  :javascript
+    $('[data-toggle="tooltip"]').tooltip();
