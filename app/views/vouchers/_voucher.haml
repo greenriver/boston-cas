@@ -77,11 +77,16 @@
                 - next unless match.active?
                 .client-name
                   = match.client_name_for_contact current_contact, hidden: match.confidential? && ! show_confidential_names?
-        %h3.detail-box--label.mt-4 Alternate Clients
-        .detail-box-value
-          - if voucher.opportunity.present?
-            = link_to opportunity_matches_path(voucher.opportunity) do
-              Prioritized Clients
+        - if (! voucher.can_be_destroyed? && ! voucher.active_matches?) || voucher.opportunity.present?
+          %h3.detail-box--label.mt-4 Alternate Clients
+          .detail-box-value
+            - if ! voucher.can_be_destroyed? && ! voucher.active_matches?
+              = link_to closed_opportunity_matches_path(voucher.opportunity) do
+                Closed Matches
+
+            - elsif voucher.opportunity.present?
+              = link_to opportunity_matches_path(voucher.opportunity) do
+                Prioritized Clients
     .detail-box-value.d-flex.flex-wrap.justify-content-end.align-items-end
       - if voucher.can_be_destroyed?
         = link_to program_sub_program_voucher_path(id: voucher.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-sm' do

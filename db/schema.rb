@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_22_184513) do
+ActiveRecord::Schema.define(version: 2022_01_11_202913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -282,6 +282,12 @@ ActiveRecord::Schema.define(version: 2021_12_22_184513) do
     t.boolean "foster_care", default: false
     t.boolean "open_case", default: false
     t.boolean "housing_for_formerly_homeless", default: false
+    t.boolean "drug_test", default: false
+    t.boolean "heavy_drug_use", default: false
+    t.boolean "sober", default: false
+    t.boolean "willing_case_management", default: false
+    t.boolean "employed_three_months", default: false
+    t.boolean "living_wage", default: false
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
   end
 
@@ -1183,6 +1189,12 @@ ActiveRecord::Schema.define(version: 2021_12_22_184513) do
     t.boolean "foster_care", default: false
     t.boolean "open_case", default: false
     t.boolean "housing_for_formerly_homeless", default: false
+    t.boolean "drug_test", default: false
+    t.boolean "heavy_drug_use", default: false
+    t.boolean "sober", default: false
+    t.boolean "willing_case_management", default: false
+    t.boolean "employed_three_months", default: false
+    t.boolean "living_wage", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
