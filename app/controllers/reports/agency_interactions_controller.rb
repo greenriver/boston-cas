@@ -47,8 +47,7 @@ module Reports
       @matches ||= begin
         candidates = ClientOpportunityMatch.
           joins(:client, events: :decision).
-          where(me_b_t[:created_at].between(@filter.start..@filter.end)).
-          where(me_b_t[:action].in(['declined', 'canceled'])).
+          merge(MatchEvents::Base.between(@filter.start..@filter.end).declined_or_canceled).
           visible_by(current_user)
 
         candidates.where(md_b_t[:decline_reason_id].in(@filter[:reasons])).

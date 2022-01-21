@@ -34,6 +34,14 @@ module MatchEvents
       where(action: :other_clients_canceled)
     end
 
+    scope :declined_or_canceled, -> do
+      where(action: ['declined', 'canceled'])
+    end
+
+    scope :between, ->(range) do
+      where(created_at: range)
+    end
+
     def name
       raise 'Abstract method'
     end
@@ -55,11 +63,11 @@ module MatchEvents
       save
     end
 
-    def is_editable?
+    def is_editable? # rubocop:disable Naming/PredicateName
       false
     end
 
-    def show_note?(current_contact)
+    def show_note?(_current_contact)
       false
     end
 
