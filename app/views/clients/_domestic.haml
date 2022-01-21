@@ -30,3 +30,13 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Challenges for housing placment')
       %span.c-detailed-list__value= @client.challenges&.join(', ')&.titleize
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Willing to engage with housing case management')
+      %span.c-detailed-list__value= boolean_icon @client.willing_case_management
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Employed for 3 or more months')
+      %span.c-detailed-list__value= boolean_icon @client.employed_three_months
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Earning a living wage ($13 or more)')
+      %span.c-detailed-list__value= boolean_icon @client.living_wage

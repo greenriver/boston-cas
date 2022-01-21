@@ -56,3 +56,13 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label Health Prioritized
       %span.c-detailed-list__value= boolean_icon @client.health_prioritized
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Can pass a drug test')
+      %span.c-detailed-list__value= boolean_icon @client.drug_test
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('History of heavy drug use')
+      %span.c-detailed-list__value= boolean_icon @client.heavy_drug_use
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Clean/sober for at least one year')
+      %span.c-detailed-list__value= boolean_icon @client.sober

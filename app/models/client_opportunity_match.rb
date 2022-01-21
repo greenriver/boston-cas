@@ -147,43 +147,43 @@ class ClientOpportunityMatch < ApplicationRecord
 
   # filtered by role
   has_many :dnd_staff_contacts,
-           -> { where client_opportunity_match_contacts: { dnd_staff: true } },
+           -> { where(client_opportunity_match_contacts: { dnd_staff: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :housing_subsidy_admin_contacts,
-           -> { where client_opportunity_match_contacts: { housing_subsidy_admin: true } },
+           -> { where(client_opportunity_match_contacts: { housing_subsidy_admin: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :client_contacts,
-           -> { where client_opportunity_match_contacts: { client: true } },
+           -> { where(client_opportunity_match_contacts: { client: true }) }, # remove active_contact to not limit client contacts to active users
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :shelter_agency_contacts,
-           -> { where client_opportunity_match_contacts: { shelter_agency: true } },
+           -> { where(client_opportunity_match_contacts: { shelter_agency: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :ssp_contacts,
-           -> { where client_opportunity_match_contacts: { ssp: true } },
+           -> { where(client_opportunity_match_contacts: { ssp: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :hsp_contacts,
-           -> { where client_opportunity_match_contacts: { hsp: true } },
+           -> { where(client_opportunity_match_contacts: { hsp: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :do_contacts,
-           -> { where client_opportunity_match_contacts: { do: true } },
+           -> { where(client_opportunity_match_contacts: { do: true }) },
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
