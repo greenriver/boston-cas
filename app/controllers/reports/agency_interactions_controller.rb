@@ -46,9 +46,9 @@ module Reports
     private def matches
       @matches ||= begin
         candidates = ClientOpportunityMatch.
-          unsuccessful.
-          where(updated_at: @filter.start..@filter.end).
-          joins(:decisions, :client).
+          joins(:client, events: :decision).
+          where(me_b_t[:created_at].between(@filter.start..@filter.end)).
+          where(me_b_t[:action].in(['declined', 'canceled'])).
           visible_by(current_user)
 
         candidates.where(md_b_t[:decline_reason_id].in(@filter[:reasons])).

@@ -93,6 +93,10 @@ module ArelHelper
       MatchDecisions::Base.arel_table
     end
 
+    def me_b_t
+      MatchEvents::Base.arel_table
+    end
+
     def v_t
       Voucher.arel_table
     end
@@ -136,6 +140,10 @@ module ArelHelper
 
   def md_b_t
     MatchDecisions::Base.arel_table
+  end
+
+  def me_b_t
+    MatchEvents::Base.arel_table
   end
 
   def v_t
