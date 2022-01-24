@@ -1,7 +1,7 @@
 wb = xlsx_package.workbook
 
 @included_sub_programs.each.with_index do |(sub_program_id, sub_program_name), i|
-  wb.add_worksheet(name: "#{sub_program_name[0..29].gsub(/['\*\/\\\?\[\]\:]/, '-')}#{i}") do |sheet|
+  wb.add_worksheet(name: "#{sub_program_name[0..(30 - i)].gsub(/['\*\/\\\?\[\]\:]/, '-')}#{i}") do |sheet|
     steps = step_names(sub_program_id)
     shown_steps = (2..steps.count - 1)
 
