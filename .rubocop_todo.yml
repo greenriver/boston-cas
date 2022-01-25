@@ -75,7 +75,6 @@ Layout/ClosingParenthesisIndentation:
 # Cop supports --auto-correct.
 Layout/CommentIndentation:
   Exclude:
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/services_controller.rb'
     - 'app/models/rules/pathways_eligible.rb'
 
@@ -98,7 +97,6 @@ Layout/DotPosition:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
@@ -213,7 +211,6 @@ Layout/EmptyLines:
 Layout/EmptyLinesAroundAccessModifier:
   Exclude:
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
@@ -312,7 +309,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -690,7 +686,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -737,7 +732,6 @@ Layout/IndentationWidth:
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -1028,7 +1022,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/match_show.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
@@ -2163,7 +2156,6 @@ Style/StringLiterals:
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/decisions.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
