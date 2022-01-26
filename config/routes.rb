@@ -106,7 +106,7 @@ Rails.application.routes.draw do
 
   end
 
-  resources :contacts, except: [:show, :edit, :update, :create, :destroy] do
+  resources :contacts, only: [:index] do
     member do
       get :move_matches
       post :update_matches

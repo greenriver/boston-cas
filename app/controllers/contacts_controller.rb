@@ -60,18 +60,6 @@ class ContactsController < ApplicationController
     @contact = contact_scope.find params[:id]
   end
 
-  private def contact_params
-    params.require(:contact).permit(
-      :first_name,
-      :middle_name,
-      :last_name,
-      :email,
-      :phone,
-      :cell_phone,
-      :role,
-    )
-  end
-
   private def update_matches_params
     params.require(:move_contacts).permit(
       :destination,
