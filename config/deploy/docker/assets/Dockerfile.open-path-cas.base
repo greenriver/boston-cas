@@ -67,7 +67,11 @@ RUN mkdir -p app/assets/stylesheets/theme/styles && \
   rm -rf tmp/* && \
   rm .env && \
   mkdir tmp/pids
+
 RUN chown -R app:app tmp
+RUN touch /etc/timezone
+RUN ln -sf /app/etc-localtime /etc/localtime
+RUN chown app:app /etc/timezone
 
 COPY config/deploy/docker/assets/REVISION ./
 
