@@ -859,7 +859,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
     - 'app/controllers/reports/parked_clients_controller.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/models/message.rb'
-    - 'app/models/requirement.rb'
     - 'app/models/rule.rb'
     - 'app/models/warehouse/flag_housed.rb'
 
@@ -1100,7 +1099,6 @@ Layout/SpaceInsidePercentLiteralDelimiters:
 # SupportedStyles: space, no_space
 Layout/SpaceInsideStringInterpolation:
   Exclude:
-    - 'app/models/requirement.rb'
 
 # Offense count: 92
 # Cop supports --auto-correct.
@@ -1235,7 +1233,6 @@ Lint/AssignmentInCondition:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/tags_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/requirement.rb'
     - 'app/models/rules/aids_or_related_diseases.rb'
     - 'app/models/rules/seen_in_last_forty_five_days.rb'
     - 'app/models/rules/seen_in_last_ninety_days.rb'
@@ -1715,7 +1712,6 @@ Style/GuardClause:
     - 'app/models/match_decisions/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/requirement.rb'
     - 'app/models/rules/active_in_cohort.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'
@@ -1884,7 +1880,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/requirement.rb'
     - 'bin/setup'
     - 'lib/util/mail/database_delivery.rb'
 
