@@ -56,7 +56,7 @@ COPY lib ./lib
 COPY config ./config
 COPY spec ./spec
 COPY db ./db
-COPY --chown=app:app app ./app
+COPY app ./app
 COPY vendor ./vendor
 COPY locale ./locale
 
@@ -79,6 +79,8 @@ COPY config/deploy/docker/assets/REVISION ./
 
 COPY config/deploy/docker/assets/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
+
+RUN chown -R app:app /app
 
 USER app
 
