@@ -1,9 +1,9 @@
 .o-choose__choice
   %header.jMatchHeader
     %ul.o-choose__nav.nav.jMatchActionNav
-      = render 'match_decisions/reject_tab'
+      = render 'match_decisions/reject_tab', active_tab: 'active'
       = render 'match_decisions/backup_tab'
   .o-choose__content
     .tab-content
-      = render 'match_decisions/reject_tab_content', form: form
+      = render 'match_decisions/reject_tab_content', form: form, active_tab: 'active'
       = render 'match_decisions/backup_tab_content', form: form
