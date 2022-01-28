@@ -3,11 +3,15 @@
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       - if @decision.status.to_s == 'pending' && @decision.present?
-        %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
-        %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)}
-          %i.icon-checkmark
-          Acknowledge Receipt of Match Details
-
+        .o-choose.o-choose--flush.o-choose--flush-top
+          .o-choose__choice{class: [( 'o-choose__choice--100' unless can_reject_matches?)] }
+            .o-choose__content
+              %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
+              %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)}
+                %i.icon-checkmark
+                Acknowledge Receipt of Match Details
+          - if can_reject_matches?
+            = render 'match_decisions/cancel_actions', form: form
 
       - else
         .o-pre-choose
