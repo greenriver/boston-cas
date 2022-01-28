@@ -1,9 +1,9 @@
+- active_tab = '' unless defined?(active_tab)
 - if can_reject_matches?
-  #reject.tab-pane.active{role: :tabpanel, aria: {labelledby:'reject'}}
+  #reject.tab-pane{role: :tabpanel, aria: {labelledby:'reject'}, class: [active_tab]}
     .o-choose__content
       %p Rejecting the match will close it and return the client and voucher/unit to the available pool for future matching.
       .form-actions.form-actions--right
         %button{class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'rejected'}, disabled: !(@decision.editable?)}
           %i.icon-cross
           Reject Match
-

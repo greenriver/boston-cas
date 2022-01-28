@@ -99,7 +99,7 @@ Style/MixinUsage:
   Enabled: false
 
 Layout/DotPosition:
-  EnforcedStyle: trailing
+  Enabled: false
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented

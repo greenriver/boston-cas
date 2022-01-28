@@ -75,7 +75,6 @@ Layout/ClosingParenthesisIndentation:
 # Cop supports --auto-correct.
 Layout/CommentIndentation:
   Exclude:
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/services_controller.rb'
     - 'app/models/rules/pathways_eligible.rb'
 
@@ -98,7 +97,6 @@ Layout/DotPosition:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
@@ -213,7 +211,6 @@ Layout/EmptyLines:
 Layout/EmptyLinesAroundAccessModifier:
   Exclude:
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
@@ -312,7 +309,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -690,7 +686,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -737,7 +732,6 @@ Layout/IndentationWidth:
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -865,7 +859,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
     - 'app/controllers/reports/parked_clients_controller.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/models/message.rb'
-    - 'app/models/requirement.rb'
     - 'app/models/rule.rb'
     - 'app/models/warehouse/flag_housed.rb'
 
@@ -1028,7 +1021,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/match_show.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
@@ -1107,7 +1099,6 @@ Layout/SpaceInsidePercentLiteralDelimiters:
 # SupportedStyles: space, no_space
 Layout/SpaceInsideStringInterpolation:
   Exclude:
-    - 'app/models/requirement.rb'
 
 # Offense count: 92
 # Cop supports --auto-correct.
@@ -1242,7 +1233,6 @@ Lint/AssignmentInCondition:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/tags_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/requirement.rb'
     - 'app/models/rules/aids_or_related_diseases.rb'
     - 'app/models/rules/seen_in_last_forty_five_days.rb'
     - 'app/models/rules/seen_in_last_ninety_days.rb'
@@ -1722,7 +1712,6 @@ Style/GuardClause:
     - 'app/models/match_decisions/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/requirement.rb'
     - 'app/models/rules/active_in_cohort.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'
@@ -1891,7 +1880,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/requirement.rb'
     - 'bin/setup'
     - 'lib/util/mail/database_delivery.rb'
 
@@ -2163,7 +2151,6 @@ Style/StringLiterals:
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/decisions.rb'
-    - 'app/controllers/contacts_controller.rb'
     - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'

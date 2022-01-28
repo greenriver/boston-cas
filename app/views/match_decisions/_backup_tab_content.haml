@@ -1,3 +1,4 @@
+- active_tab = '' unless defined?(active_tab)
 - if can_reject_matches?
-  #backup.tab-pane{role: :tabpanel, aria: {labelledby:'backup'}}
+  #backup.tab-pane{role: :tabpanel, aria: {labelledby:'backup'}, class: [active_tab]}
     = render 'match_decisions/step_back', form: form

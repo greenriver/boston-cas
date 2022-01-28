@@ -1,13 +1,13 @@
 .o-choose__choice
   %header.jMatchHeader
     %ul.o-choose__nav.nav.jMatchActionNav
-      = render 'match_decisions/cancel_tab'
+      = render 'match_decisions/cancel_tab', active_tab: 'active'
       = render 'match_decisions/park_tab'
       = render 'match_decisions/backup_tab'
   .o-choose__content
     .tab-content
       - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
-      = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data
+      = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data, active_tab: 'active'
       = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
       = render 'match_decisions/backup_tab_content', form: form, cancel_data: cancel_data
 
