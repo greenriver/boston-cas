@@ -53,37 +53,36 @@
         .detail-box-value.d-flex.flex-wrap
           - if voucher.status_match.present?
             - button = true
-            - voucher.client_opportunity_matches.each.with_index do |match|
-              - next unless match.active?
+            - active_matches = voucher.client_opportunity_matches.select(&:active?)
+            - active_matches.each do |match|
+              - name = match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?)
+              - name = match.id if name == '(name hidden)'
               .w-100.d-flex
                 - can_see_details_of_this_match = ClientOpportunityMatch.accessible_by_user(current_user).where(id: match.id).present? rescue false
                 - if can_see_details_of_this_match
-                  .mb-2
+                  .mb-2{ data: { toggle: :tooltip, title: name }}
                     = link_to match.overall_status[:name], match_path(match)
                 - else
-                  .mb-2
+                  .mb-2{ data: { toggle: :tooltip, title: name }}
                     = match.overall_status[:name]
                 - if match.active? && can_reject_matches? && button
                   - button = false
                   = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'ml-auto btn btn-secondary btn-sm mb-2', method: :delete, data: {confirm: "Stopping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
-                    Stop Match
+                    = 'Stop Match'.pluralize(active_matches.count)
           - else
             No Match
         - if voucher.status_match.present?
           %h3.detail-box--label.mt-4 Active Clients
           .detail-box-value.d-flex.flex-wrap
           - if voucher.status_match.client.present?
-            - if can_view_all_matches?
-              - voucher.client_opportunity_matches.each do |match|
-                - next unless match.active?
-                .client-name.mb-2
+            - active_matches = voucher.client_opportunity_matches.select(&:active?)
+            - active_matches.each do |match|
+              .client-name.mb-2
+                - if can_view_all_matches?
                   = link_to client_path(match.client) do
-                    = match.client_name_for_contact current_contact, hidden: match.confidential? && ! show_confidential_names?
-            - else
-              - voucher.client_opportunity_matches.each do |match|
-                - next unless match.active?
-                .client-name.mb-2
-                  = match.client_name_for_contact current_contact, hidden: match.confidential? && ! show_confidential_names?
+                    = match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?)
+                - else
+                  = match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?)
         - if (! voucher.can_be_destroyed? && ! voucher.active_matches?) || voucher.opportunity.present?
           %h3.detail-box--label.mt-4 Alternate Clients
           .detail-box-value
