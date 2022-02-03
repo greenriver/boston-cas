@@ -4,12 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-##
-# Copyright 2016 - 2021 Green River Data Analysis, LLC
-#
-# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
-###
-
 class Rules::RequireInterestInNeighborhood < Rule
   def clients_that_fit(scope, requirement, opportunity)
     if Client.column_names.include?(:neighborhood_interests.to_s)
