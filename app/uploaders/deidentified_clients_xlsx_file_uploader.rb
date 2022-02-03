@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2021 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 # encoding: utf-8
 class DeidentifiedClientsXlsxFileUploader < CarrierWave::Uploader::Base
   # we will use mini magics API to process attachments

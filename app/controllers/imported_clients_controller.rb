@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2021 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 class ImportedClientsController < NonHmisClientsController
   before_action :require_can_manage_imported_clients!
 
