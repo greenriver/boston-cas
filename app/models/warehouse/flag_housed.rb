@@ -15,7 +15,9 @@ module Warehouse
         to_add = to_add.where.not(id: processed.pluck(:match_id))
       end
       to_add.each do |match|
-        warehouse_client_id = match.client.project_client.id_in_data_source
+        warehouse_client_id = match.client.project_client&.id_in_data_source
+        next unless warehouse_client_id
+
         cas_client_id = match.client.id
         match_id = match.id
         housed_on = match.success_time
