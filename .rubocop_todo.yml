@@ -860,7 +860,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
     - 'app/helpers/application_helper.rb'
     - 'app/models/message.rb'
     - 'app/models/rule.rb'
-    - 'app/models/warehouse/flag_housed.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -1487,7 +1486,6 @@ Lint/UselessAssignment:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'app/models/warehouse/flag_housed.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
@@ -2297,7 +2295,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/user.rb'
     - 'app/models/user_role.rb'
     - 'app/models/warehouse/file.rb'
-    - 'app/models/warehouse/flag_housed.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
