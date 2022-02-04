@@ -205,6 +205,7 @@ module Warehouse
           match_route: match_route.title,
           housing_type: match_route.housing_type,
           actor_type: match.current_decision.try(:actor_type) || 'N/A',
+          confidential: program.confidential || sub_program.confidential,
         }
 
         Warehouse::CasReport.create!(row.merge(clent_contacts: contact_details(match.client_contacts))) if Warehouse::Base.enabled?
