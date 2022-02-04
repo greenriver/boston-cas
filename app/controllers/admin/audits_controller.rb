@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 module Admin
   class AuditsController < ::ApplicationController
     before_action :require_can_audit_users!

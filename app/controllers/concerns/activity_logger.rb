@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 # This concern audits user activity.
 # Place the following in a controller (or ApplicationController)
 #

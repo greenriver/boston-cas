@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 # This class computes a metric (just a number) that gets bigger the more we
 # need additional job workers.
 #

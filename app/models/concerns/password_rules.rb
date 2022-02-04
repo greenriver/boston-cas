@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 module PasswordRules
   extend ActiveSupport::Concern
   include ActionView::Helpers::TextHelper

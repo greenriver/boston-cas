@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 class PrettyCheckboxesGroupInput < SimpleForm::Inputs::CollectionCheckBoxesInput
   def input(wrapper_options = nil)
     merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)

@@ -4,6 +4,5 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 class ApplicationJob < ActiveJob::Base
 end

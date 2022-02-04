@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-
 class IdentifiedPathwaysVersionThree < IdentifiedClientAssessment
   include PathwaysVersionThreeCalculations
 
