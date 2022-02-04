@@ -66,6 +66,11 @@ module MatchRoutes
         'Match expired – No agency interaction',
         'Match expired – Agency interaction',
         'Match stalled - Agency has disengaged',
+        'Match expired – No Housing Case Manager interaction',
+        'Match expired – No Shelter Agency interaction',
+        'Shelter Agency has disengaged',
+        'Housing Case Manager has disengaged',
+        'Match stalled – Housing Case Manager has disengaged',
       ].freeze
     end
   end
