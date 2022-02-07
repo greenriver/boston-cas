@@ -75,6 +75,11 @@ module CasSeeds
       ['Match expired – No agency interaction', nil],
       ['Match expired – Agency interaction', nil],
       ['Match stalled - Agency has disengaged', nil],
+      ['Match expired – No Housing Case Manager interaction', nil],
+      ['Match expired – No Shelter Agency interaction', nil],
+      ['Shelter Agency has disengaged', nil],
+      ['Housing Case Manager has disengaged', nil],
+      ['Match stalled – Housing Case Manager has disengaged', nil],
     ].freeze
 
     def run!

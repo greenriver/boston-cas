@@ -9,6 +9,7 @@
             %th Client Name
             %th Match Start Date
             %th Match Canceled/Declined Date
+            %th Status
             %th= _('Housing Search Providers')
             %th= _('Shelter Agency Contacts')
             %th= _('Housing Subsidy Administrators')
@@ -31,6 +32,7 @@
               %td= row.client.name
               %td= row.match_created_event.created_at.strftime('%m/%d/%Y')
               %td= decision.updated_at.strftime('%m/%d/%Y')
+              %td= row.overall_status.try(:[], :name)
               %td= format_contacts(row.hsp_contacts)
               %td= format_contacts(row.shelter_agency_contacts)
               %td= format_contacts(row.housing_subsidy_admin_contacts)

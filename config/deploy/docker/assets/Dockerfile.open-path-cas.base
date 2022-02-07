@@ -68,8 +68,20 @@ RUN mkdir -p app/assets/stylesheets/theme/styles && \
   rm .env && \
   mkdir tmp/pids
 
+RUN touch /etc/timezone
+RUN ln -sf /app/etc-localtime /etc/localtime
+RUN chown -R app:app tmp
+RUN chown -R app:app node_modules
+RUN chown -R app:app /usr/local/bundle
+RUN chown app:app /etc/timezone
+
 COPY config/deploy/docker/assets/REVISION ./
 
 COPY config/deploy/docker/assets/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
+
+RUN chown -R app:app /app
+
+USER app
+
 ENTRYPOINT ["entrypoint.sh"]

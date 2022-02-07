@@ -1,6 +1,8 @@
+- active_tab = '' unless defined?(active_tab)
+- aria_selected = 'true' if active_tab.present?
 - if can_reject_matches?
   %li.o-choose__nav-item.nav-item
-    %a.nav-link.o-choose__nav-link{href:'#park-client', data: {toggle: :tab}, role: :tab, aria:{controls:'park'}, title: 'Park'}
+    %a.nav-link.o-choose__nav-link{href:'#park-client', data: {toggle: :tab}, role: :tab, aria:{controls:'park', selected: aria_selected }, title: 'Park', class: [active_tab] }
       .o-choose__title
         .c-choice-icon.c-choice-icon--park
         %h3.jMatchActionTitle

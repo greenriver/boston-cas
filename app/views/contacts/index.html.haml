@@ -1,27 +1,22 @@
 .o-page__title
   %h1= t '.title'
-  - if can_edit_contacts?
-    = link_to new_contact_path, class: 'btn btn-primary ml-auto' do
-      %span.icon-plus
-      Add a Contact
-
+%p Contacts are now managed through their associated user accounts.
 - @prompt = t '.search_prompt'
 .row
   .col-sm-4
     = render 'search_form'
 :ruby
-  columns = ['last_name', 'first_name', 'middle_name', 'email', 'phone', 'role']
+  columns = ['last_name', 'first_name', 'email', 'phone']
   directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
   titles = {}
   directions.each {| k,v | titles[k] = @contacts.human_attribute_name(k)}
-.row.table-utilities
-  .col-sm-8
-    %p= page_entries_info @contacts
 
-.row
-  .col-sm-12
-    .table-responsive
-      %table.table.table-condensed.table-hover
+%p= page_entries_info @contacts
+
+.table-responsive
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
         %thead
           %tr
             - titles.each do | k, title |
@@ -29,25 +24,24 @@
                 = manual_sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
             %th Matches
-            %th Edit
         %tbody
           - @contacts.each do |c|
+            - user = c.user
             %tr
               %td
-                = link_to edit_contact_path(c) do
+                - if user && can_edit_users?
+                  = link_to c.last_name, edit_admin_user_path(user)
+                - else
+                  %i.icon-warning.mr-2{data: { toggle: :tooltip, title: 'No associated user' }}
                   = c.last_name
               %td
-                = link_to edit_contact_path(c) do
+                - if user && can_edit_users?
+                  = link_to c.first_name, edit_admin_user_path(user)
+                - else
                   = c.first_name
-              %td
-                = link_to edit_contact_path(c) do
-                  = c.middle_name
               %td= mail_to c.email, nil, target: '_blank'
               %td= c.phone
-              %td= c.role
               - match_count = c.client_opportunity_match_contacts.joins(:match).count
               %td.text-center= link_to_if match_count.positive?, match_count, move_matches_contact_path(c)
-              %td
-                = link_to 'Edit', edit_contact_path(c)
 
-    %p= paginate @contacts
+  %p= paginate @contacts

@@ -12,14 +12,14 @@ class Requirement < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
-  def clients_that_fit(scope, opportunity=nil)
+  def clients_that_fit(scope, opportunity = nil)
     return scope unless rule.present?
 
     rule.clients_that_fit(scope, self, opportunity)
   end
 
   def compatible_with(requirements)
-    if requirement = rule.requirement_implied_by(requirements)
+    if (requirement = rule.requirement_implied_by(requirements))
       requirement.positive == positive
     else
       true
@@ -31,16 +31,14 @@ class Requirement < ApplicationRecord
 
   def name(on_unit: false)
     if on_unit && rule_alternate_name.present?
-      "#{positive? ? 'Must' : "Can't" } #{_(rule_alternate_name)}"
+      "#{positive? ? 'Must' : "Can't"} #{_(rule_alternate_name)}"
     else
-      "#{positive? ? 'Must' : "Can't" } #{rule&.verb} #{_(rule_name)}"
+      "#{positive? ? 'Must' : "Can't"} #{rule&.verb} #{_(rule_name)}"
     end
   end
 
   def display_for_variable
-    if variable.present?
-      "(#{rule.display_for_variable(variable)})"
-    end
+    "(#{rule&.display_for_variable(variable)})" if variable.present?
   end
 
   def apply_to_match(match)

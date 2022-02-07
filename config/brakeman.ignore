@@ -51,26 +51,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "1520725d58b857728b8b8cbc947c87b269af85744feea8305f8bd65051d1c5a4",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/challenge.rb",
-      "line": 36,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable.downcase}\\\"'\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Rules::Challenge",
-        "method": "clients_that_fit"
-      },
-      "user_input": "requirement.variable.downcase",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "15dafe767dd3ee8f4ad2d10f3e833ed4d4b3763f74ecea893a8d8e5a6e3504ad",
@@ -108,26 +88,6 @@
         "template": "non_hmis_assessments/_index"
       },
       "user_input": "NonHmisClient.visible_to(current_user).find((params[:identified_client_id] or params[:deidentified_client_id]).to_i)",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "1704737ade48b7c920a1075f57912daac35bbd54af90535fd6d3b615e47d014e",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/contacts_controller.rb",
-      "line": 106,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:contact).permit(:first_name, :middle_name, :last_name, :email, :phone, :cell_phone, :role)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ContactsController",
-        "method": "contact_params"
-      },
-      "user_input": ":role",
       "confidence": "Medium",
       "note": ""
     },
@@ -179,26 +139,6 @@
         "template": "buildings/edit"
       },
       "user_input": null,
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "476688743b3e844ac105a19ff57d5843ea881e028f5d0ba6d2a7438436dc19f7",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/challenge.rb",
-      "line": 38,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"not(#{self.class.connection.quote_column_name(:challenges)} @> '\\\"#{requirement.variable.downcase}\\\"')\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Rules::Challenge",
-        "method": "clients_that_fit"
-      },
-      "user_input": "requirement.variable.downcase",
       "confidence": "Medium",
       "note": ""
     },
@@ -276,26 +216,6 @@
     {
       "warning_type": "Command Injection",
       "warning_code": 14,
-      "fingerprint": "6939d235d9f32e7a2694b926a5cf73222ec7b924323cb268a68c11d2a20ea082",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 376,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`docker image ls -f 'reference=#{repo_name}' | grep #{_ruby_version}--pre-cache`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Deployer",
-        "method": "_pre_cache_image_exists?"
-      },
-      "user_input": "repo_name",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
       "fingerprint": "6cfd47b3522f879e176ed00c1639c8431e26cf5798564e7ba8e89633bdda9f61",
       "check_name": "Execute",
       "message": "Possible command injection",
@@ -334,42 +254,22 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "8ce2d87286eb83eecf47607cb2d5a2789fdae3039e681714b44b99e2eb6cc26e",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/strength.rb",
-      "line": 33,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"#{self.class.connection.quote_column_name(:strengths)} @> '\\\"#{requirement.variable}\\\"'\")",
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "8a29ddebc189081add6710e179967e490ad042f12df9fdfaac8211e87e8d97db",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 380,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`docker image ls -f 'reference=#{repo_name}' | grep \"#{_ruby_version}-#{_pre_cache_version}--pre-cache\"`",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Rules::Strength",
-        "method": "clients_that_fit"
+        "class": "Deployer",
+        "method": "_pre_cache_image_exists?"
       },
-      "user_input": "requirement.variable",
-      "confidence": "Medium",
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "a6aa0af63b71b6840c3bca2420af631c54c7683ef1b28aad37fd6a5e27874c88",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/strength.rb",
-      "line": 35,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"not(#{self.class.connection.quote_column_name(:strengths)} @> '\\\"#{requirement.variable}\\\"')\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Rules::Strength",
-        "method": "clients_that_fit"
-      },
-      "user_input": "requirement.variable",
+      "user_input": "repo_name",
       "confidence": "Medium",
       "note": ""
     },
@@ -515,47 +415,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/matches/_show.haml",
-      "line": 21,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => match_scope.find(params[:match_id]).decision_from_param(params[:id]), {})",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "MatchDecisionsController",
-          "method": "show",
-          "line": 30,
-          "file": "app/controllers/match_decisions_controller.rb",
-          "rendered": {
-            "name": "matches/show",
-            "file": "app/views/matches/show.haml"
-          }
-        },
-        {
-          "type": "template",
-          "name": "matches/show",
-          "line": 1,
-          "file": "app/views/matches/show.haml",
-          "rendered": {
-            "name": "matches/_show",
-            "file": "app/views/matches/_show.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "matches/_show"
-      },
-      "user_input": "params[:id]",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "c010181163a6213991837cbb692eef6e7a252c6c22464b409cfe74cb213b923b",
@@ -612,37 +471,6 @@
         "method": "clients_that_fit"
       },
       "user_input": "requirement.variable",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "d47ad666bd2c5879fc0e74e99ba65968bc8260527d1f195e5be301befc55ea5f",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/admin/versions/index.haml",
-      "line": 13,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => PaperTrail::Version.preload(:item).order(:created_at => :desc).page(params[:page]).per(25), {})",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Admin::VersionsController",
-          "method": "index",
-          "line": 13,
-          "file": "app/controllers/admin/versions_controller.rb",
-          "rendered": {
-            "name": "admin/versions/index",
-            "file": "app/views/admin/versions/index.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "admin/versions/index"
-      },
-      "user_input": "params[:page]",
       "confidence": "Weak",
       "note": ""
     },
@@ -800,6 +628,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-12-23 20:55:41 +0000",
+  "updated": "2022-01-27 18:42:48 +0000",
   "brakeman_version": "5.0.4"
 }
