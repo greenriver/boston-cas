@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_11_202913) do
+ActiveRecord::Schema.define(version: 2022_02_07_143947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -865,6 +865,55 @@ ActiveRecord::Schema.define(version: 2022_01_11_202913) do
     t.integer "homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "homeless_nights_unsheltered", default: 0
+    t.integer "tc_hat_assessment_level"
+    t.string "tc_hat_household_type"
+    t.text "ongoing_support_reason"
+    t.string "ongoing_support_housing_type"
+    t.jsonb "strengths"
+    t.jsonb "challenges"
+    t.boolean "lifetime_sex_offender", default: false
+    t.boolean "state_id", default: false
+    t.boolean "birth_certificate", default: false
+    t.boolean "social_security_card", default: false
+    t.boolean "has_tax_id", default: false
+    t.string "tax_id"
+    t.boolean "roommate_ok", default: false
+    t.boolean "full_time_employed", default: false
+    t.boolean "can_work_full_time", default: false
+    t.boolean "willing_to_work_full_time", default: false
+    t.string "why_not_working"
+    t.boolean "th_desired", default: false
+    t.boolean "drug_test", default: false
+    t.boolean "heavy_drug_use", default: false
+    t.boolean "sober", default: false
+    t.boolean "willing_case_management", default: false
+    t.boolean "employed_three_months", default: false
+    t.boolean "living_wage", default: false
+    t.boolean "site_case_management_required", default: false
+    t.jsonb "tc_hat_client_history"
+    t.boolean "open_case", default: false
+    t.boolean "foster_care", default: false
+    t.boolean "currently_fleeing", default: false
+    t.date "dv_date"
+    t.boolean "tc_hat_ed_visits", default: false
+    t.boolean "tc_hat_hospitalizations", default: false
+    t.boolean "sixty_plus", default: false
+    t.boolean "cirrhosis", default: false
+    t.boolean "end_stage_renal_disease", default: false
+    t.boolean "heat_stroke", default: false
+    t.boolean "blind", default: false
+    t.boolean "tri_morbidity", default: false
+    t.boolean "high_potential_for_victimization", default: false
+    t.boolean "self_harm", default: false
+    t.boolean "medical_condition", default: false
+    t.boolean "psychiatric_condition", default: false
+    t.jsonb "housing_preferences"
+    t.jsonb "housing_rejected_preferences"
+    t.integer "tc_hat_tiny_home"
+    t.integer "tc_hat_rv"
+    t.integer "tc_hat_house"
+    t.integer "tc_hat_mobile_home"
+    t.integer "tc_hat_total_housing_rank"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1282,6 +1331,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_202913) do
     t.string "housing_type"
     t.boolean "ineligible_in_warehouse", default: false, null: false
     t.string "actor_type"
+    t.boolean "confidential", default: false
     t.index ["client_id", "match_id", "decision_id"], name: "index_reporting_decisions_c_m_d", unique: true
   end
 

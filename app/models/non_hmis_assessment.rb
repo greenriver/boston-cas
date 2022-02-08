@@ -49,6 +49,8 @@ class NonHmisAssessment < ActiveRecord::Base
       'DeidentifiedCovidPathwaysAssessment',
       'IdentifiedPathwaysVersionThree',
       'DeidentifiedPathwaysVersionThree',
+      'IdentifiedTcHat',
+      'DeidentifiedTcHat',
     ].freeze
   end
 
@@ -70,6 +72,8 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(IdentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
+      merge(IdentifiedTcHat.new.for_matching).
+      merge(DeidentifiedTcHat.new.for_matching).
       freeze
   end
 
@@ -253,6 +257,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :setting,
       :hud_assessment_location,
       :hud_assessment_type,
+      :tc_hat_assessment_level,
+      :tc_hat_household_type,
       denial_required: [],
       neighborhood_interests: [],
       provider_agency_preference: [],
