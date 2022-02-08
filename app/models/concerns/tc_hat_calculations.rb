@@ -80,6 +80,10 @@ module TcHatCalculations
           },
           as: :pretty_boolean_group,
         },
+        _strengths_and_challenges_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/strengths_and_challenges_preamble',
+        },
         strengths: {
           label: 'Strengths (Check all that apply.)',
           collection: Rules::Strength.new.available_strengths.to_h.invert,
@@ -92,7 +96,22 @@ module TcHatCalculations
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
         },
-
+        lifetime_sex_offender: {
+          label: 'Is the client a Lifetime Sex Offender?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        state_id: {
+          label: 'Does the client have a State ID/Drivers License?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
         setting: {
           label: 'Current living situation - select one (required)?',
           collection: {
