@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2022 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 class ImportedClient < NonHmisClient
   has_one :project_client, -> do
     where(

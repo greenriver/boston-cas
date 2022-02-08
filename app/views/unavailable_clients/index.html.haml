@@ -2,7 +2,7 @@
 - @prompt = t '.search_prompt'
 .row
   .col-sm-4
-    = render 'search_form'
+    = render 'search_form', destination: unavailable_clients_path
   .col-sm-8.filter-sort__filter.d-flex
     = render 'filter'
     = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
@@ -15,7 +15,7 @@
 
 %ul.nav.nav-tabs.margin-bottom-02
   %li.nav-item= link_to 'Available Clients', clients_path, class: 'nav-link'
-    
+
   %li.nav-item= link_to 'Unavailable Clients', unavailable_clients_path, class: 'nav-link active'
 
 .tab-content
