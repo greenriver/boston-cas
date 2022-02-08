@@ -882,6 +882,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_143947) do
     t.boolean "can_work_full_time", default: false
     t.boolean "willing_to_work_full_time", default: false
     t.string "why_not_working"
+    t.boolean "rrh_successful_exit", default: false
     t.boolean "th_desired", default: false
     t.boolean "drug_test", default: false
     t.boolean "heavy_drug_use", default: false
@@ -908,7 +909,9 @@ ActiveRecord::Schema.define(version: 2022_02_07_143947) do
     t.boolean "medical_condition", default: false
     t.boolean "psychiatric_condition", default: false
     t.jsonb "housing_preferences"
+    t.string "housing_preferences_other"
     t.jsonb "housing_rejected_preferences"
+    t.integer "tc_hat_apartment"
     t.integer "tc_hat_tiny_home"
     t.integer "tc_hat_rv"
     t.integer "tc_hat_house"

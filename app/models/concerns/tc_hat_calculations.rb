@@ -16,6 +16,61 @@ module TcHatCalculations
       total_days_homeless_in_the_last_three_years
     end
 
+    def client_history_options
+      {
+        acute_care_need: 'Acute care need (e.g., severe infection, acute diabetic condition, mental health crisis)',
+        unsheltered: 'Currently unsheltered or living in a place unfit for human habitation',
+        open_case: 'Current open case with State Dept. of Family Services (CPS)',
+        tc_hat_ed_visits: 'Four or more trips to the Emergency Room in the past year',
+        youth_homelessness: 'Had one or more experiences of homelessness before the age of 25 (adults in house)',
+        household_chronic_health_condition: 'Household member living with a chronic health condition that is disabling',
+        development_disorder: 'Intellectual/Developmental Disorder (IDD)',
+        n_a: 'N/A (None of these apply)',
+        no_cash: 'No cash income during the past year',
+        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or',
+        psychiatric_facility: 'One or more stays in a psychiatric facility (lifetime)',
+        substance_use_facility: 'One or more stays in a substance abuse treatment facility (lifetime)',
+        jail_stay: 'One or more stays in prison/jail/correctional facility (lifetime)',
+        dv_survivor: 'Survivor of family violence, sexual violence, or sex trafficking',
+        partner_violence_survivor: 'Survivor of Intimate Partner Violence',
+        foster_care: 'Was in foster care as a youth, at age 16 years or older',
+      }.transform_keys(&:to_s)
+    end
+
+    def housing_preference_options
+      {
+        apartment: 'Apartment',
+        accessible: 'Handicap Accessible',
+        house: 'House',
+        near_outdoors: 'Near outdoor spaces like parks, trails, and playgrounds',
+        public_transit: 'Near Public Transportation',
+        no_preference: 'No Preference',
+        other: 'Other',
+        pets_allowed: 'Pets Allowed',
+        with_formerly_homeless: 'Prefer to live in a community with others who are formerly homeless?',
+        quiet: 'Quiet Neighborhood',
+        roomate: 'Roommate',
+        rv: 'RV',
+        tiny_home: 'Tiny home',
+      }.transform_keys(&:to_s)
+    end
+
+    def housing_rejection_preference_options
+      {
+        apartment: 'Apartment',
+        accessible: 'Handicap Accessible',
+        house: 'House',
+        near_outdoors: 'Near outdoor spaces like parks, trails, and playgrounds',
+        public_transit: 'Near Public Transportation',
+        no_preference: 'No Preference',
+        pets_allowed: 'Pets Allowed',
+        quiet: 'Quiet Neighborhood',
+        roomate: 'Roommate',
+        rv: 'RV',
+        tiny_home: 'Tiny home',
+      }.transform_keys(&:to_s)
+    end
+
     def form_fields
       {
         entry_date: {
@@ -112,194 +167,365 @@ module TcHatCalculations
           },
           as: :pretty_boolean_group,
         },
-        setting: {
-          label: 'Current living situation - select one (required)?',
-          collection: {
-            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
-            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
-            _('Transitional Housing') => 'Transitional Housing',
-            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
-          },
-          as: :pretty_boolean_group,
-          required: true,
-        },
-        phone_number: {
-          label: 'Client phone number',
-        },
-        email_addresses: {
-          label: 'List any working email addresses you use',
-        },
-        shelter_name: {
-          label: 'What shelter(s) or street outreach programs do you currently stay with or work with?',
-          as: :select_2,
-          collection: ShelterHistory.shelter_locations,
-          input_html: { data: { tags: true } },
-        },
-        case_manager_contact_info: {
-          label: 'Do you have any case managers or agencies we could contact to get a hold of you?',
-          as: :text,
-          hint: 'Please provide email address and full name for each contact listed',
-        },
-        mailing_address: {
-          label: 'Client\'s Mailing Address',
-          as: :text,
-        },
-        day_locations: {
-          label: 'Are there agencies, shelters or places you hang out in during the day where we could connect with you?',
-        },
-        night_locations: {
-          label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
-        },
-        other_contact: {
-          label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
-        },
-        household_section: {
-          label: 'Household Composition',
-          questions: {
-            household_size: {
-              label: 'How many people are in the household? ',
-              input_html: { class: 'jHouseholdTrigger' },
-            },
-            hoh_age: {
-              label: 'How old is the head of household?',
-              collection: {
-                '18-24' => '18-24',
-                '25-49' => '25-49',
-                '50+' => '50+',
-              },
-              as: :pretty_boolean_group,
-            },
-          },
-        },
-        veteran_status: {
-          label: 'Did you serve in the military or do you have Veteran status?',
-
-          as: :pretty_boolean_group,
-          collection: VeteranStatus.pluck(:text).map { |t| [t, t] }.to_h,
-        },
-        income_total_annual: {
-          label: 'What is your total household’s estimated gross (before taxes are taken out) annual income? We ask because some of these units have income requirements. You may figure out monthly and multiply it by 12.',
-
-        },
-        youth_rrh_aggregate: {
-          label: 'Youth Choice (for heads of household who are 24 yrs. or younger)  Would you like to be considered for housing programs that are',
-
-          collection: NonHmisClient.available_youth_choices,
-          as: :pretty_boolean_group,
-        },
-        dv_rrh_aggregate: {
-          label: 'Survivor Choice (for those fleeing domestic violence): you indicated you are currently experiencing a form of violence. Would you like to be considered for housing programs that are',
-
-          collection: NonHmisClient.available_dv_choices,
-          as: :pretty_boolean_group,
-        },
-        sro_ok: {
-          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?',
-          number: '6A',
+        birth_certificate: {
+          label: 'Does the client have a Birth Certificate?',
           collection: {
             'Yes' => true,
             'No' => false,
-            'Not applicable' => nil,
           },
           as: :pretty_boolean_group,
         },
-        required_number_of_bedrooms: {
-          label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below you would move into.',
-          number: '6B',
-          collection: {
-            '2' => 2,
-            '3' => 3,
-            '4' => 4,
-            '5' => 5,
-            'Not applicable' => nil,
-          },
-          as: :pretty_boolean_group,
-        },
-        disability_section: {
-          label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.',
-          number: '6C',
-          questions: {
-            requires_wheelchair_accessibility: {
-              label: 'Wheelchair accessible unit',
-              number: '6C',
-              as: :pretty_boolean,
-              wrapper: :custom_boolean,
-            },
-            requires_elevator_access: {
-              label: 'First floor/elevator (little to no stairs to your unit)',
-              number: '6C',
-              as: :pretty_boolean,
-              wrapper: :custom_boolean,
-            },
-            accessibility_other: {
-              label: 'Other accessibility',
-              number: '6C',
-            },
-          },
-        },
-        disabled_housing: {
-          label: 'Are you interested in applying for housing units targeted for persons with disabilities? (You may have to provide documentation of a disability to qualify for these housing units.)',
-          number: '6D',
-          as: :pretty_boolean,
-          wrapper: :custom_boolean,
-        },
-        hiv_housing: {
-          label: 'Are you interested in applying for housing units targeted for persons with an HIV+ diagnosis? (You may have to provide documentation of a HIV to qualify for these housing units.)',
-          number: '6E',
-          as: :pretty_boolean_group,
-          collection: {
-            'Yes' => 'Yes',
-            'No' => 'No',
-          },
-          confidential: true,
-        },
-        affordable_housing: {
-          label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
-          number: '6F',
-          collection: {
-            _('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
-            _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
-          },
-          as: :pretty_checkboxes_group,
-        },
-        neighborhood_interests: {
-          label: 'Check off all the areas you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you would like to live.',
-          include_blank: 'Any Neighborhood / All Neighborhoods',
-          number: '7A',
-          collection: Neighborhood.for_select,
-          as: :pretty_checkboxes_group,
-        },
-        documented_disability: {
-          label: 'Disabling Condition: Have you ever been diagnosed by a licensed professional as having a disabling condition that is expected to be permanent and impede your ability to work? You do not need to disclose the condition.',
-          number: '8A',
+        social_security_card: {
+          label: 'Does the client have a Social Security Card?',
           collection: {
             'Yes' => true,
             'No' => false,
-            'Unknown' => nil,
           },
-          hint: 'Note to assessor on generating an accurate response: if participant receives any type of disability benefits, you can automatically select "yes"; if you or the participant are unsure, ask them if a medical professional has ever written a letter on their behalf for disabled housing, EAEDC, or other benefits, or if they have ever tried to apply for a disability resource, even if they do not currently receive them- check yes. The assessor may also check yes if a permanent disability is observed.',
           as: :pretty_boolean_group,
         },
-        background_check_issues: {
-          label: 'We are asking people what factors may be in their backgrounds so we can help people prepare supporting documentation, references and other positive information to the housing authority (check all that apply)? This is NOT to screen you out for a voucher, but rather to help overcome potential admission barriers.',
-          number: '8B',
+        has_tax_id: {
+          label: 'Do you or have you had (in the past) an I-9 or an ITIN (Individual Tax Identification Number)?',
           collection: {
-            'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)' => 'A housing authority or housing program terminated your subsidy (i.e. a housing voucher, a public housing unit, etc.)',
-            'You have been evicted from a legal tenancy where you were the lease holder.' => 'You have been evicted from a legal tenancy where you were the lease holder.',
-            'Prior to entering shelter or sleeping outside during this episode of homelessness, you came directly from jail, prison or a pre-release program.' => 'Prior to entering shelter or sleeping outside during this episode of homelessness, you came directly from jail, prison or a pre-release program.',
-            'You have been convicted (found guilty of) a violent crime' => 'You have been convicted (found guilty of) a violent crime',
-            'You have been convicted (found guilty of) a drug crime' => 'You have been convicted (found guilty of) a drug crime',
-            'Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.' => 'Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.',
-            'Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing.' => 'Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing.',
-            'None of the above' => 'None of the above',
+            'Yes' => true,
+            'No' => false,
           },
+          as: :pretty_boolean_group,
+        },
+        tax_id: {
+          label: 'What was/is your I-9 or ITIN number?',
+        },
+        _documents_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/documents_preamble',
+        },
+        roommate_ok: {
+          label: 'Would you consider living with a roommate?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        _medium_term_rental_assistance_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/medium_term_rental_assistance_preamble',
+        },
+        full_time_employed: {
+          label: '[CLIENT RESPONSE] Are you currently working a full time job?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        can_work_full_time: {
+          label: '[STAFF RESPONSE] Is the client able to work a full-time job?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        willing_to_work_full_time: {
+          label: '[STAFF RESPONSE] Is the client willing to work a full-time?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        why_not_working: {
+          label: '[CLIENT RESPONSE] If you can work and are willing to work a full time job, why are you not working right now?',
+        },
+        rrh_successful_exit: {
+          label: '[STAFF RESPONSE] I believe the client can successfully exit 12-24 month RRH Program and maintain their housing.',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        _th_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/th_preamble',
+        },
+        th_desired: {
+          label: '[CLIENT RESPONSE] Are you interested in Transitional Housing?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        _th_questions_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/th_questions_preamble',
+        },
+        drug_test: {
+          label: '[CLIENT RESPONSE] Can you pass a drug test?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        heavy_drug_use: {
+          label: '[CLIENT RESPONSE] Do you have a history of heavy drug use? (Use that has affected your ability to work and/or maintain housing?)',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        sober: {
+          label: '[CLIENT RESPONSE] Have you been clean/sober for at least one year?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        willing_case_management: {
+          label: '[CLIENT RESPONSE] Are you willing to engage with housing case management? (Would you participate in a program, goal setting, etc.?)',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        employed_three_months: {
+          label: '[CLIENT RESPONSE] Have you been employed for 3 months or more?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        living_wage: {
+          label: '[CLIENT RESPONSE] Are you earning $13 an hour or more?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        _long_term_rental_assistance_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/long_term_rental_assistance_preamble',
+        },
+        disabling_condition: {
+          label: '[STAFF RESPONSE] Does the client have a disability that is expected to be long-term, and substantially impairs their ability to live independently over time (as indicated in the HUD assessment)?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        site_case_management_required: {
+          label: '[STAFF RESPONSE] Does the client need site-based case management? (This is NOT skilled nursing, group home, or assisted living care.)',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        _client_history_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/client_history_preamble',
+        },
+        tc_hat_client_history: {
+          label: 'Client History (Check all that apply):',
+          collection: client_history_options.invert,
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
         },
-        financial_assistance_end_date: {
-          label: 'Latest Date Eligible for Financial Assistance',
-          number: '8C',
+        open_case: {
+          label: 'Current open case with State Dept. of Family Services (CPS)?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        foster_care: {
+          label: 'Was in foster care as a youth, at age 16 years or older?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        currently_fleeing: {
+          label: '[CLIENT RESPONSE] You indicated a history of Intimate Partner Violence (IPV). Are you currently fleeing?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        dv_date: {
+          label: '[CLIENT RESPONSE] You indicated a history of Intimate Partner Violence (IPV). What was the most recent date the violence occurred? (This can be an estimated date)',
           as: :date_picker,
+        },
+        tc_hat_ed_visits: {
+          label: 'More than three emergency room visits in a year?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        tc_hat_hospitalizations: {
+          label: 'More than Three Hospitalization or emergency room visits in a year?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        sixty_plus: {
+          label: 'Is the client 60 years old or older?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        cirrhosis: {
+          label: 'Does the client have cirrhosis of the liver?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        end_stage_renal_disease: {
+          label: 'Does the client have end stage renal disease?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        heat_stroke: {
+          label: 'Does the client have a history of Heat Stroke?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        blind: {
+          label: 'Is the client blind?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        hiv_aids: {
+          label: 'Does the client have HIV or AIDS?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        tri_morbidity: {
+          label: 'Does the client have "tri-morbidity" (co-occurring psychiatric, substance abuse, and a chronic medical condition)?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        high_potential_for_victimization: {
+          label: 'Is there a high potential for victimization?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        self_harm: {
+          label: 'Is there a danger of self harm or harm to other person in the community?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        medical_condition: {
+          label: 'Does the client have a chronic or acute medical condition?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        psychiatric_condition: {
+          label: 'Does the client have a chronic or acute psychiatric condition with extreme lack of judgement regarding safety?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        substance_abuse_problem: {
+          label: 'Does the client have a chronic or acute substance abuse with extreme lack of judgment regarding safety?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
+        assessment_score: {
+          label: 'Total Vulnerability Score',
+        },
+        _housing_preferences_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/housing_preferences_preamble',
+        },
+        housing_preferences: {
+          label: 'Housing Preference (Check all that apply.)',
+          collection: housing_preference_options.invert,
+          as: :pretty_checkboxes_group,
+          input_html: { multiple: true },
+        },
+        housing_preferences_other: {
+          label: 'Housing Preference if other',
+        },
+        neighborhood_interests: {
+          label: 'Housing Location Preference',
+          collection: Neighborhood.for_select,
+          as: :pretty_checkboxes_group,
+        },
+        _housing_rank_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/housing_rank_preamble',
+        },
+        tc_hat_apartment: {
+          label: 'Apartment',
+        },
+        tc_hat_tiny_home: {
+          label: 'Tiny Home',
+        },
+        tc_hat_rv: {
+          label: 'RV/Camper',
+        },
+        tc_hat_house: {
+          label: 'House',
+        },
+        tc_hat_mobile_home: {
+          label: 'Mobile Home/Manufactured Home',
+        },
+        tc_hat_total_housing_rank: {
+          label: 'Total Housing Rank',
+        },
+        housing_rejected_preferences: {
+          label: 'Which housing would not like to live in?',
+          collection: housing_rejection_preference_options.invert,
+          as: :pretty_checkboxes_group,
         },
       }
     end

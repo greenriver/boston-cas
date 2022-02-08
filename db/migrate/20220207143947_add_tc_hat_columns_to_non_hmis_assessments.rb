@@ -17,6 +17,7 @@ class AddTcHatColumnsToNonHmisAssessments < ActiveRecord::Migration[6.0]
     add_column :non_hmis_assessments, :can_work_full_time, :boolean, default: false
     add_column :non_hmis_assessments, :willing_to_work_full_time, :boolean, default: false
     add_column :non_hmis_assessments, :why_not_working, :string
+    add_column :non_hmis_assessments, :rrh_successful_exit, :boolean, default: false
     add_column :non_hmis_assessments, :th_desired, :boolean, default: false
     add_column :non_hmis_assessments, :drug_test, :boolean, default: false
     add_column :non_hmis_assessments, :heavy_drug_use, :boolean, default: false
@@ -44,7 +45,9 @@ class AddTcHatColumnsToNonHmisAssessments < ActiveRecord::Migration[6.0]
     add_column :non_hmis_assessments, :medical_condition, :boolean, default: false
     add_column :non_hmis_assessments, :psychiatric_condition, :boolean, default: false
     add_column :non_hmis_assessments, :housing_preferences, :jsonb
+    add_column :non_hmis_assessments, :housing_preferences_other, :string
     add_column :non_hmis_assessments, :housing_rejected_preferences, :jsonb
+    add_column :non_hmis_assessments, :tc_hat_apartment, :integer
     add_column :non_hmis_assessments, :tc_hat_tiny_home, :integer
     add_column :non_hmis_assessments, :tc_hat_rv, :integer
     add_column :non_hmis_assessments, :tc_hat_house, :integer
