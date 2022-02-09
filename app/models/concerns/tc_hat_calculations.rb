@@ -71,6 +71,10 @@ module TcHatCalculations
       }.transform_keys(&:to_s)
     end
 
+    def available_housing_ranks
+      @available_housing_ranks ||= (1..5).to_a.map { |i| [i, i] }.to_h
+    end
+
     def form_fields
       {
         entry_date: {
@@ -514,21 +518,33 @@ module TcHatCalculations
         },
         tc_hat_apartment: {
           label: 'Apartment',
+          collection: available_housing_ranks,
+          as: :select_2,
+          include_blank: 'Please Choose Rank',
         },
         tc_hat_tiny_home: {
           label: 'Tiny Home',
+          collection: available_housing_ranks,
+          as: :select_2,
+          include_blank: 'Please Choose Rank',
         },
         tc_hat_rv: {
           label: 'RV/Camper',
+          collection: available_housing_ranks,
+          as: :select_2,
+          include_blank: 'Please Choose Rank',
         },
         tc_hat_house: {
           label: 'House',
+          collection: available_housing_ranks,
+          as: :select_2,
+          include_blank: 'Please Choose Rank',
         },
         tc_hat_mobile_home: {
           label: 'Mobile Home/Manufactured Home',
-        },
-        tc_hat_total_housing_rank: {
-          label: 'Total Housing Rank',
+          collection: available_housing_ranks,
+          as: :select_2,
+          include_blank: 'Please Choose Rank',
         },
         housing_rejected_preferences: {
           label: 'Which housing would not like to live in?',
