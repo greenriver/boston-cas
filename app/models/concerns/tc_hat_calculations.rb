@@ -8,8 +8,18 @@ module TcHatCalculations
   extend ActiveSupport::Concern
 
   included do
+    after_initialize :set_defaults
+    validates_presence_of :entry_date, :hud_assessment_location, :hud_assessment_type, :tc_hat_assessment_level, :setting, on: [:create, :update]
+
+    private def set_defaults
+      return if persisted?
+
+      self.actively_homeless = true
+      self.tc_hat_assessment_level = 2
+    end
+
     def hud_assessment_level
-      assessment_level
+      tc_hat_assessment_level
     end
 
     def calculated_score
@@ -550,6 +560,13 @@ module TcHatCalculations
           label: 'Which housing would not like to live in?',
           collection: housing_rejection_preference_options.invert,
           as: :pretty_checkboxes_group,
+        },
+        actively_homeless: {
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
         },
       }
     end
