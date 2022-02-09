@@ -98,6 +98,14 @@ module TcHatCalculations
           },
           as: :pretty_boolean_group,
         },
+        veteran_status: {
+          label: 'Is the client a Veteran?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+        },
         days_homeless_in_the_last_three_years: {
           label: 'Total Days Homeless in the Past Three Years',
         },

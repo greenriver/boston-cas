@@ -10,52 +10,105 @@
     });
     $('input[name*="[need_daily_assistance]"]').trigger('change');
 
-    // DV
-    $('input[name*="[current_living_situation]"]').on('change', function(e) {
-      value = $('input[name*="[current_living_situation]"]:checked').val();
-      if(value !== undefined && value.startsWith('Currently fleeing')) {
-        $('.c-question[data-number="5D"]').removeClass('d-none');
+    // I9
+    $('input[name*="[has_tax_id]"]').on('change', function(e) {
+      var value = $('input[name*="[has_tax_id]"]:checked').val();
+      var $question = $('input[name*="[tax_id]"]').closest('.c-question')
+      if(value !== undefined && value == 'true') {
+        $question.removeClass('d-none');
       } else {
-        $('.c-question[data-number="5D"] input[type="radio"]').prop('checked', false);
-        $('.c-question[data-number="5D"]').addClass('d-none');
+        $question.addClass('d-none');
       }
     });
-    $('input[name*="[current_living_situation]"]').trigger('change');
+    $('input[name*="[has_tax_id]"]').trigger('change');
 
-    // Pending move-in
-    $('input[name*="[pending_subsidized_housing_placement]"]').on('change', function(e) {
-      if($('input[name*="[pending_subsidized_housing_placement]"]').is(':checked')) {
-        $('.c-question[data-number="3E"]').removeClass('d-none');
+    // Family
+    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+      var $question = $('input[name*="[open_case]"]').closest('.c-question')
+      if(value !== undefined && value == 'Adults with Children') {
+        $question.removeClass('d-none');
       } else {
-        $('.c-question[data-number="3E"]').addClass('d-none');
+        $question.addClass('d-none');
       }
     });
-    $('input[name*="[pending_subsidized_housing_placement]"]').trigger('change');
+    $('input[name*="[tc_hat_household_type]"]').trigger('change');
 
-    // RRH
-    $('input[name*="[rrh_desired]"]').on('change', function(e) {
-      if($('input[name*="[rrh_desired]"]').is(':checked')) {
-        $('.c-question[data-number="5B"]').addClass('d-none');
-        $('.c-question[data-number="5B"] input[type="radio"]').prop('checked', false);
+    // Youth
+    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
+
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+      var $question = $('input[name*="[foster_care]"]').closest('.c-question')
+      if(value !== undefined && value == 'Youth') {
+        $question.removeClass('d-none');
       } else {
-        $('.c-question[data-number="5B"]').removeClass('d-none');
-        $('.c-question[data-number="5C"] input[type="radio"]').prop('checked', false);
+        $question.addClass('d-none');
       }
     });
-    $('input[name*="[rrh_desired]"]').trigger('change');
+    $('input[name*="[tc_hat_household_type]"]').trigger('change');
 
-    // Days Homeless
-    var warehouse_selector = 'input[name*="[days_homeless_in_the_last_three_years]"]'
-    var extra_selector = 'input[name*="[additional_homeless_nights]"]'
-    var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]'
-    $(warehouse_selector).on('keyup, change', function(e) {
-      var warehouse_days = parseInt($(warehouse_selector).val() || 0);
-      var extra_days = parseInt($(extra_selector).val() || 0);
-      $(total_selector).val(warehouse_days + extra_days);
+    // IPV
+    $('input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_client_history]"][value="partner_violence_survivor"]').is(':checked');
+      var $question = $('input[name*="[currently_fleeing]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[dv_date]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
     });
-    $(extra_selector).on('keyup, change', function(e) {
-      var warehouse_days = parseInt($(warehouse_selector).val() || 0);
-      var extra_days = parseInt($(extra_selector).val() || 0);
-      $(total_selector).val(warehouse_days + extra_days);
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
+
+    // IDs
+    $('input[name*="[state_id]"], input[name*="[birth_certificate]"], input[name*="[social_security_card]"]').on('change', function(e) {
+      var value = [$('input[name*="[state_id]"]:checked').val(), $('input[name*="[birth_certificate]"]:checked').val(), $('input[name*="[social_security_card]"]:checked').val()].includes('true');
+      var $question = $('.jDocuments');
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
     });
-    $(warehouse_selector).trigger('keyup');
+    $('input[name*="[state_id]"], input[name*="[birth_certificate]"], input[name*="[social_security_card]"]').trigger('change');
+
+    // Sex Offender
+    $('input[name*="[challenges]"]').on('change', function(e) {
+      var value = $('input[name*="[challenges]"][value="sex offender"]').is(':checked');
+      var $question = $('input[name*="[lifetime_sex_offender]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[challenges]"]').trigger('change');
+
+    // Medium and Long Term
+    $('input[name*="[full_time_employed]"], input[name*="[rrh_successful_exit]"]').on('change', function(e) {
+      var value = [$('input[name*="[full_time_employed]"]:checked').val(), $('input[name*="[rrh_successful_exit]"]:checked').val()].includes('true');
+      var $question = $('input[name*="[disabling_condition]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+      var $question = $('input[name*="[site_case_management_required]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+      var $question = $('.jLongTermRental')
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+    });
+    $('input[name*="[full_time_employed]"], input[name*="[rrh_successful_exit]"]').trigger('change');
