@@ -45,7 +45,7 @@ class Opportunity < ApplicationRecord
   attr_accessor :program, :building, :units
 
   scope :with_voucher, -> do
-    where.not(voucher_id: nil).joins(:voucher)
+    where.not(voucher_id: nil).joins(:voucher).merge(Voucher.not_archived)
   end
   scope :available_candidate, -> do
     where(available_candidate: true)

@@ -10,13 +10,26 @@ class Voucher < ApplicationRecord
   include HasRequirements
   include MatchArchive
 
-  scope :available, -> { where available: true }
+  scope :available, -> do
+    where(available: true)
+  end
+
+  scope :archived, -> do
+    where.not(archived_at: nil)
+  end
+
+  scope :not_archived, -> do
+    where(archived_at: nil)
+  end
+
   scope :with_unit, -> do
     where.not(unit_id: nil)
   end
+
   scope :on_open_match, -> do
     joins(:client_opportunity_matches).merge(ClientOpportunityMatch.open)
   end
+
   belongs_to :sub_program
   belongs_to :unit
   belongs_to :creator, class_name: 'User', optional: true, inverse_of: :vouchers, foreign_key: :user_id
@@ -31,7 +44,7 @@ class Voucher < ApplicationRecord
 
   validate :cant_update_when_active_or_successful_match, unless: :skip_match_locking_validation
   validate :cant_have_unit_in_use
-  validate :requires_unit_if_avaiable
+  validate :requires_unit_if_available
 
   acts_as_paranoid
   has_paper_trail
@@ -131,6 +144,10 @@ class Voucher < ApplicationRecord
     ! client_opportunity_matches.in_process_or_complete.exists?
   end
 
+  def can_be_archived?
+    ! available && ! active_matches?
+  end
+
   def active_matches?
     client_opportunity_matches.active.exists?
   end
@@ -179,7 +196,7 @@ class Voucher < ApplicationRecord
     errors.add :unit_id, 'Unit in use'
   end
 
-  private def requires_unit_if_avaiable
+  private def requires_unit_if_available
     return unless changing_to_available? && unit_id.blank? && sub_program.has_buildings?
 
     errors.add :unit_id, 'Unit required to make the voucher available'

@@ -53,8 +53,8 @@ class Building < ApplicationRecord
     # and any unit already on a voucher on an open match
     # add any unit on a voucher with no match
     unavailable_ids = units.where(available: false).pluck(:id)
-    unavailable_ids += units.where(id: Voucher.with_unit.on_open_match.select(:unit_id)).pluck(:id)
-    unavailable_ids + Voucher.with_unit.where.not(id: Opportunity.joins(:client_opportunity_matches).select(:voucher_id)).pluck(:unit_id)
+    unavailable_ids += units.where(id: Voucher.not_archived.with_unit.on_open_match.select(:unit_id)).pluck(:id)
+    unavailable_ids + Voucher.not_archived.with_unit.where.not(id: Opportunity.joins(:client_opportunity_matches).select(:voucher_id)).pluck(:unit_id)
   end
 
   def fake_opportunites(n)
