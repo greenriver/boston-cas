@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_143947) do
+ActiveRecord::Schema.define(version: 2022_02_09_202102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,7 +288,18 @@ ActiveRecord::Schema.define(version: 2022_02_07_143947) do
     t.boolean "willing_case_management", default: false
     t.boolean "employed_three_months", default: false
     t.boolean "living_wage", default: false
+    t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
+    t.index ["available"], name: "index_clients_on_available"
+    t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
+    t.index ["date_of_birth"], name: "index_clients_on_date_of_birth"
+    t.index ["days_homeless_in_last_three_years"], name: "index_clients_on_days_homeless_in_last_three_years"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
+    t.index ["disabling_condition"], name: "index_clients_on_disabling_condition"
+    t.index ["enrolled_project_ids"], name: "index_clients_on_enrolled_project_ids"
+    t.index ["family_member"], name: "index_clients_on_family_member"
+    t.index ["health_prioritized"], name: "index_clients_on_health_prioritized"
+    t.index ["vispdat_priority_score"], name: "index_clients_on_vispdat_priority_score"
+    t.index ["vispdat_score"], name: "index_clients_on_vispdat_score"
   end
 
   create_table "configs", id: :serial, force: :cascade do |t|
