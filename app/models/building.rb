@@ -57,10 +57,10 @@ class Building < ApplicationRecord
     unavailable_ids + Voucher.not_archived.with_unit.where.not(id: Opportunity.joins(:client_opportunity_matches).select(:voucher_id)).pluck(:unit_id)
   end
 
-  def fake_opportunites(n)
+  def fake_opportunites(n) # rubocop:disable Naming/MethodParameterName
     (0 .. n).map do |i|
       opportunities.build do |opp|
-        opp.name = "#{name} ##{i+1}"
+        opp.name = "#{name} ##{i + 1}"
         opp.available = Faker::Boolean.boolean(0.085) ? true : false
         opp.address = Faker::Address.street_address
         opp.city = _('Boston')
@@ -73,9 +73,10 @@ class Building < ApplicationRecord
   def self.text_search(text)
     return none unless text.present?
 
-    subgrantee_matches = Subgrantee.where(
-      Subgrantee.arel_table[:id].eq arel_table[:subgrantee_id]
-    ).text_search(text).arel.exists
+    subgrantee_matches = Subgrantee.where(Subgrantee.arel_table[:id].eq arel_table[:subgrantee_id]).
+      text_search(text).
+      arel.
+      exists
 
     query = "%#{text}%"
     where(
@@ -83,7 +84,7 @@ class Building < ApplicationRecord
       .or(arel_table[:building_type].matches(query))
       .or(arel_table[:address].matches(query))
       .or(arel_table[:zip_code].matches(query))
-      .or(subgrantee_matches)
+      .or(subgrantee_matches),
     )
   end
 
@@ -112,17 +113,11 @@ class Building < ApplicationRecord
 
   def map_link
     link = ''
-    if address.present?
-      link = "http://maps.google.com/?q=#{address.strip},"
-    end
-    if city.present?
-      #link += "%20#{city},"
-    end
-    if state.present?
-      #link += "%20#{state}"
-    end
-    if zip_code.present?
-      link += "%20#{zip_code}"
-    end
+    link = "http://maps.google.com/?q=#{address.strip}," if address.present?
+    # link += "%20#{city}," if city.present?
+    # link += "%20#{state}" if state.present?
+    link += "%20#{zip_code}" if zip_code.present?
+
+    link
   end
 end
