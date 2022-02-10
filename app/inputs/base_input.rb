@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2022 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 module BaseInput
   def input(wrapper_options = nil)
     if options[:label].blank? && input_html_options[:placeholder].nil?

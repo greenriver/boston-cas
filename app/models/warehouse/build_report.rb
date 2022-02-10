@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2021 Green River Data Analysis, LLC
+# Copyright 2016 - 2022 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -205,6 +205,7 @@ module Warehouse
           match_route: match_route.title,
           housing_type: match_route.housing_type,
           actor_type: match.current_decision.try(:actor_type) || 'N/A',
+          confidential: program.confidential || sub_program.confidential,
         }
 
         Warehouse::CasReport.create!(row.merge(clent_contacts: contact_details(match.client_contacts))) if Warehouse::Base.enabled?

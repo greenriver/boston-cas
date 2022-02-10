@@ -1,9 +1,9 @@
 ###
-# Copyright 2016 - 2021 Green River Data Analysis, LLC
+# Copyright 2016 - 2022 Green River Data Analysis, LLC
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/master/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
-#
+
 class Dashboards::Base
   def initialize(start_date:, end_date:, match_route_name:, program_types:)
     @start_date = start_date
