@@ -99,3 +99,7 @@
         = link_to program_sub_program_voucher_path(id: voucher.id), method: :delete, data: {confirm: "Are you sure you want to delete this voucher?"}, class: 'btn btn-danger btn-sm' do
           %span.icon-cross
           Delete
+      - elsif voucher.can_be_archived?
+        = link_to archive_program_sub_program_voucher_path(id: voucher.id), method: :patch, data: {confirm: "Are you sure you want to archive this voucher? Archiving will hide this voucher permanently."}, class: 'btn btn-warning btn-sm' do
+          %span.icon-cross
+          Archive
