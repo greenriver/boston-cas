@@ -31,5 +31,7 @@ if enable_transation_db? && ActiveRecord::Base.connection.table_exists?('transla
     ignore_fuzzy: true,
   )
 else
+  require 'fast_gettext'
+
  FastGettext.add_text_domain(FastGettext.default_text_domain, path: 'config/locales', type: :yaml)
 end
