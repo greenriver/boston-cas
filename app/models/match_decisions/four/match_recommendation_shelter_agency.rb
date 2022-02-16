@@ -115,6 +115,7 @@ module MatchDecisions::Four
       end
 
       def acknowledged
+        # @decision.inform_client(:new_match)
       end
 
       def accepted

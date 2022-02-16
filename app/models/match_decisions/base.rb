@@ -337,6 +337,15 @@ module MatchDecisions
       end
     end
 
+
+    def inform_client(client_message)
+      client = match.client
+      return unless client.email.present? && client.send_emails?
+
+      ClientMailer.send(client_message, client.email).deliver_later
+      MatchEvents::ClientInformed.create!(match: match)
+    end
+
     def self.closed_match_statuses
       [
         :declined,

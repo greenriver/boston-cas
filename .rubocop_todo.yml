@@ -23,7 +23,6 @@ Layout/ArgumentAlignment:
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/contact_join_model.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
@@ -125,7 +124,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/file_tag.rb'
     - 'app/models/funding_source.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
     - 'app/models/opportunity_details/via_unit.rb'
@@ -177,7 +175,6 @@ Layout/EmptyLines:
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/match_decisions/accepts_decline_reason.rb'
     - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/match_recommendation_dnd_staff.rb'
@@ -347,7 +344,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_access_contexts/authenticated_user.rb'
     - 'app/models/match_access_contexts/notification.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
@@ -511,7 +507,6 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/tags_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/neighborhood.rb'
@@ -547,7 +542,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/models/concerns/updateable_attributes.rb'
     - 'app/models/match_access_contexts.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
@@ -695,7 +689,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/match_decisions/schedule_criminal_hearing_housing_subsidy_admin.rb'
@@ -743,8 +736,6 @@ Layout/IndentationWidth:
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/pathways_calculations.rb'
     - 'app/models/help.rb'
-    - 'app/models/match_decisions/base.rb'
-    - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -917,7 +908,6 @@ Layout/SpaceInLambdaLiteral:
   Exclude:
     - 'app/models/agency.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
@@ -1233,7 +1223,6 @@ Lint/DeprecatedClassMethods:
 Lint/DuplicateMethods:
   Exclude:
     - 'app/controllers/closed_matches_controller.rb'
-    - 'app/models/match_decisions/base.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1269,7 +1258,6 @@ Lint/RedundantStringCoercion:
 # AllowedMethods: present?, blank?, presence, try, try!, in?
 Lint/SafeNavigationChain:
   Exclude:
-    - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
 
 # Offense count: 9
 Lint/ShadowingOuterLocalVariable:
@@ -1309,9 +1297,7 @@ Lint/UnusedMethodArgument:
     - 'app/jobs/base_job.rb'
     - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_accepts_client.rb'
@@ -1513,7 +1499,6 @@ Naming/MemoizedInstanceVariableName:
     - 'app/models/concerns/match_decisions/accepts_decline_reason.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/subject_for_matches.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
 
@@ -1554,7 +1539,6 @@ Security/YAMLLoad:
 Style/Alias:
   Exclude:
     - 'app/models/contact.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
@@ -1618,7 +1602,6 @@ Style/ColonMethodCall:
 Style/EmptyElse:
   Exclude:
     - 'app/helpers/admin/users_helper.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/opportunity_details.rb'
 
 # Offense count: 2
@@ -1658,7 +1641,6 @@ Style/GuardClause:
     - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/match_access_contexts/notification.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/five/five_application_submission.rb'
     - 'app/models/match_decisions/five/five_lease_up.rb'
@@ -1666,7 +1648,6 @@ Style/GuardClause:
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/four/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
-    - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_accepts_client.rb'
@@ -1824,7 +1805,6 @@ Style/IfUnlessModifier:
     - 'app/models/identified_client.rb'
     - 'app/models/match_census.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/five/five_application_submission.rb'
     - 'app/models/match_decisions/five/five_lease_up.rb'
@@ -1832,7 +1812,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/four/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
-    - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_accepts_client.rb'
@@ -1869,7 +1848,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
@@ -1904,7 +1882,6 @@ Style/NegatedIf:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/match_decisions/four/match_recommendation_shelter_agency.rb'
     - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
 
 # Offense count: 3
@@ -1948,7 +1925,6 @@ Style/NumericPredicate:
     - 'app/controllers/system_status_controller.rb'
     - 'app/models/concerns/subject_for_matches.rb'
     - 'app/models/deidentified_clients_xlsx.rb'
-    - 'app/models/match_decisions/base.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -2055,7 +2031,6 @@ Style/RescueStandardError:
 # AllowedMethods: present?, blank?, presence, try, try!
 Style/SafeNavigation:
   Exclude:
-    - 'app/models/match_decisions/base.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -2144,7 +2119,6 @@ Style/StringLiterals:
     - 'app/models/concerns/subject_for_matches.rb'
     - 'app/models/config.rb'
     - 'app/models/contact.rb'
-    - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/five/five_application_submission.rb'
     - 'app/models/match_decisions/five/five_lease_up.rb'
     - 'app/models/match_decisions/five/five_match_recommendation.rb'
