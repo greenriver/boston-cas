@@ -289,7 +289,18 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "employed_three_months", default: false
     t.boolean "living_wage", default: false
     t.boolean "send_emails", default: false
+    t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
+    t.index ["available"], name: "index_clients_on_available"
+    t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
+    t.index ["date_of_birth"], name: "index_clients_on_date_of_birth"
+    t.index ["days_homeless_in_last_three_years"], name: "index_clients_on_days_homeless_in_last_three_years"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
+    t.index ["disabling_condition"], name: "index_clients_on_disabling_condition"
+    t.index ["enrolled_project_ids"], name: "index_clients_on_enrolled_project_ids"
+    t.index ["family_member"], name: "index_clients_on_family_member"
+    t.index ["health_prioritized"], name: "index_clients_on_health_prioritized"
+    t.index ["vispdat_priority_score"], name: "index_clients_on_vispdat_priority_score"
+    t.index ["vispdat_score"], name: "index_clients_on_vispdat_score"
   end
 
   create_table "configs", id: :serial, force: :cascade do |t|
@@ -1676,6 +1687,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.datetime "deleted_at"
     t.integer "user_id"
     t.datetime "made_available_at"
+    t.datetime "archived_at"
     t.index ["deleted_at"], name: "index_vouchers_on_deleted_at"
     t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id"
     t.index ["unit_id"], name: "index_vouchers_on_unit_id"

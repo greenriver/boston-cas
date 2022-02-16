@@ -129,6 +129,7 @@ Rails.application.routes.draw do
       resources :vouchers, only: [:index, :edit, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection
         delete :unavailable, on: :member
+        patch 'archive', on: :member
       end
       resources :in_progress_vouchers, only: [:index, :create, :update, :destroy] do
         patch 'bulk_update', on: :collection

@@ -20,23 +20,23 @@ class Opportunity < ApplicationRecord
 
   has_one :sub_program, through: :voucher
 
-  has_one :successful_match, -> {where closed: true, closed_reason: 'success'}, class_name: 'ClientOpportunityMatch'
+  has_one :successful_match, -> { where closed: true, closed_reason: 'success' }, class_name: 'ClientOpportunityMatch'
   # active or successful
-  has_one :status_match, -> {where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success')))}, class_name: 'ClientOpportunityMatch'
+  has_one :status_match, -> { where arel_table[:active].eq(true).or(arel_table[:closed].eq(true).and(arel_table[:closed_reason].eq('success'))) }, class_name: 'ClientOpportunityMatch'
 
   has_many :closed_matches, -> do
     where(closed: true).
-    order(updated_at: :desc)
+      order(updated_at: :desc)
   end, class_name: 'ClientOpportunityMatch'
 
   has_many :opportunity_contacts, dependent: :destroy, inverse_of: :opportunity
   has_many :contacts, through: :opportunity_contacts
 
   has_many :housing_subsidy_admin_contacts,
-    -> { where opportunity_contacts: {housing_subsidy_admin: true} },
-    class_name: 'Contact',
-    through: :opportunity_contacts,
-    source: :contact
+           -> { where opportunity_contacts: { housing_subsidy_admin: true } },
+           class_name: 'Contact',
+           through: :opportunity_contacts,
+           source: :contact
 
   has_one :match_route, through: :sub_program
 
@@ -45,7 +45,7 @@ class Opportunity < ApplicationRecord
   attr_accessor :program, :building, :units
 
   scope :with_voucher, -> do
-    where.not(voucher_id: nil).joins(:voucher)
+    where.not(voucher_id: nil).joins(:voucher).merge(Voucher.not_archived)
   end
   scope :available_candidate, -> do
     where(available_candidate: true)
@@ -59,7 +59,7 @@ class Opportunity < ApplicationRecord
   end
   # after_save :run_match_engine_if_newly_available
 
-  scope :on_route, -> (route) do
+  scope :on_route, ->(route) do
     joins(sub_program: :program).merge(SubProgram.on_route(route))
   end
 
@@ -70,22 +70,25 @@ class Opportunity < ApplicationRecord
   def self.text_search(text)
     return none unless text.present?
 
-    unit_matches = Unit.where(
-      Unit.arel_table[:id].eq arel_table[:unit_id]
-    ).text_search(text).arel.exists
+    unit_matches = Unit.where(Unit.arel_table[:id].eq arel_table[:unit_id]).
+      text_search(text).
+      arel.
+      exists
 
-    voucher_matches = Voucher.where(
-      Voucher.arel_table[:id].eq arel_table[:voucher_id]
-    ).text_search(text).arel.exists
+    voucher_matches = Voucher.where(Voucher.arel_table[:id].eq arel_table[:voucher_id]).
+      text_search(text).
+      arel.
+      exists
 
     where(
       unit_matches
-      .or(voucher_matches)
+      .or(voucher_matches),
     )
   end
 
   def self.match_text_search(text)
     return none unless text.present?
+
     where(id: ClientOpportunityMatch.text_search(text).select(:opportunity_id)).distinct
   end
 
@@ -127,13 +130,13 @@ class Opportunity < ApplicationRecord
   end
 
   def opportunity_details
-    @_opportunity_detail ||= OpportunityDetails.build self
+    @opportunity_details ||= OpportunityDetails.build self
   end
 
   def newly_available?
-    if available && available_changed?
-      Matching::MatchAvailableClientsForOpportunityJob.perform_later(self)
-    end
+    return unless available && available_changed?
+
+    Matching::MatchAvailableClientsForOpportunityJob.perform_later(self)
   end
 
   def prioritized_matches
@@ -146,13 +149,13 @@ class Opportunity < ApplicationRecord
       requirement.clients_that_fit(client_scope, self).exists?
     end
     attribute_matches = [
-      add_unit_attributes_filter(client_scope).exists?
+      add_unit_attributes_filter(client_scope).exists?,
     ]
     (requirement_matches + attribute_matches).all?
   end
 
   # Return prioritized clients who match this opportunity
-  def matching_clients(client_scope=Client.available_for_matching(match_route))
+  def matching_clients(client_scope = Client.available_for_matching(match_route))
     requirements_with_inherited.each do |requirement|
       client_scope = client_scope.merge(requirement.clients_that_fit(client_scope, self))
     end
@@ -162,9 +165,7 @@ class Opportunity < ApplicationRecord
   end
 
   def add_unit_attributes_filter(client_scope)
-    if unit.present? && unit.elevator_accessible == false
-      client_scope = client_scope.where(requires_elevator_access: false)
-    end
+    client_scope = client_scope.where(requires_elevator_access: false) if unit.present? && unit.elevator_accessible == false
     return client_scope
   end
 
