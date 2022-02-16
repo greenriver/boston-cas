@@ -2,7 +2,12 @@
 .row.c-card__content-blocks
   .c-card__content-block.col-md-12.col-lg-6
     %h5 Email
-    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.email || not_specified
+    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.email.presence || not_specified
+    - if @client.editable_by?(current_user)
+      = link_to edit_client_contact_path(@client), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
+        Edit
+    - if @client.send_emails?
+      %small Client has requested match emails
   .c-card__content-block.col-md-12.col-lg-6
     %h5 Home Phone
     %span.c-card__content-block.col-md-12.col-lg-6-text= @client.homephone || not_specified
