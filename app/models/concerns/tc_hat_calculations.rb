@@ -94,8 +94,6 @@ module TcHatCalculations
         },
         hud_assessment_location: {
           label: 'Assessment Location',
-          as: :select_2,
-          collection: hud_assessment_locations,
           required: true,
         },
         hud_assessment_type: {
