@@ -8,3 +8,10 @@
           Edit
 
   = render 'match_contacts/match_contacts_list', match: match
+  %ul.jMatchContactList.c-detail-group__content.list-unstyled
+    %li.c-detail-group__item
+      .c-detail-group__title--secondary Client Email
+      .detail-box--value
+        - if @match_contacts.match.client.send_emails?
+          = @client.email.presence || not_specified
+          %p Client has requested match emails

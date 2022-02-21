@@ -1,36 +1,40 @@
 - not_specified = '<span class="font-no-data">Not specified</span>'.html_safe
 .row.c-card__content-blocks
   .c-card__content-block.col-md-12.col-lg-6
-    %h5 Email
-    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.email.presence || not_specified
-    - if @client.editable_by?(current_user)
-      = link_to edit_client_contact_path(@client), class: 'btn btn-sm btn-light', data: {loads_in_pjax_modal: true} do
-        Edit
+    .d-flex.mb-2
+      %h5 Email
+      - if @client.editable_by?(current_user)
+        = link_to edit_client_contact_path(@client), class: 'btn btn-sm btn-light ml-auto', data: {loads_in_pjax_modal: true} do
+          Edit
+    %span.c-card__content-block-text
+      .mb-2
+        = @client.email.presence || not_specified
     - if @client.send_emails?
-      %small Client has requested match emails
+      %p.help-block.help-block--normal.mb-2 Client has requested match emails
+
   .c-card__content-block.col-md-12.col-lg-6
     %h5 Home Phone
-    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.homephone || not_specified
+    %span.c-card__content-block-text= @client.homephone || not_specified
   .c-card__content-block.col-md-12.col-lg-6
     %h5 Cell Phone
-    %span.c-card__content-block.col-md-12.col-lg-6-text= @client.cellphone || not_specified
+    %span.c-card__content-block-text= @client.cellphone || not_specified
   - if @client.workphone.present?
     .c-card__content-block.col-md-12.col-lg-6
       %h5 Work Phone
-      %span.c-card__content-block.col-md-12.col-lg-6-text= @client.workphone || not_specified
+      %span.c-card__content-block-text= @client.workphone || not_specified
   - if @client.pager.present?
     .c-card__content-block.col-md-12.col-lg-6
       %h5 Pager
-      %span.c-card__content-block.col-md-12.col-lg-6-text= @client.pager || not_specified
+      %span.c-card__content-block-text= @client.pager || not_specified
   - if @client.address.present?
     .c-card__content-block.col-md-12.col-lg-12
       %h5 Address
-      %span.c-card__content-block.col-md-12.col-lg-12-text= @client.address
+      %span.c-card__content-block-text= @client.address
   - if @client.project_client.default_shelter_agency_contacts
     .c-card__content-block.col-md-12.col-lg-12
       %h5 #{_('Shelter Agency Contacts')} from HMIS
-      %span.c-card__content-block.col-md-12.col-lg-12-text= @client.project_client.default_shelter_agency_contacts.join(', ')
+      %span.c-card__content-block-text= @client.project_client.default_shelter_agency_contacts.join(', ')
   - if @client.case_manager_contact_info
     .c-card__content-block.col-md-12.col-lg-12
       %h5 Case Manager Contact
-      %span.c-card__content-block.col-md-12.col-lg-12-text= @client.case_manager_contact_info
+      %span.c-card__content-block-text= @client.case_manager_contact_info

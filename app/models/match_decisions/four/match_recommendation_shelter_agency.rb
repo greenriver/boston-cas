@@ -95,7 +95,7 @@ module MatchDecisions::Four
     end
 
     def accessible_by?(contact)
-      contact&.user_can_act_on_behalf_of_match_contacts? || match&.send(contact_actor_type).include?(contact)
+      contact&.user_can_act_on_behalf_of_match_contacts? || match&.send(contact_actor_type)&.include?(contact)
     end
 
     def to_param
@@ -115,6 +115,7 @@ module MatchDecisions::Four
       end
 
       def acknowledged
+        # TODO: Uncomment this after we decide exactly what should be sent and where.
         # @decision.inform_client(:new_match)
       end
 

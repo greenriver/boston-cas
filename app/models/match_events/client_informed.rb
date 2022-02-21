@@ -11,7 +11,7 @@ module MatchEvents
     end
 
     def contact_name
-      'Client'
+      match.client&.full_name
     end
   end
 end

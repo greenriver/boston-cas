@@ -5,7 +5,9 @@
 ###
 
 class ClientMailer < ApplicationMailer
-  def new_match(recipient)
-    mail(to: recipient, subject: "Housing Opportunity")
+  def new_match(match)
+    @match = match
+    @client = match.client
+    mail(to: @client.email, subject: 'Housing Opportunity')
   end
 end
