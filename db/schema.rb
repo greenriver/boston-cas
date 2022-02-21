@@ -201,7 +201,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "disabling_condition", default: false
     t.datetime "release_of_information"
     t.date "prevent_matching_until"
-    t.boolean "dmh_eligible", default: false, null: false
+    t.boolean "dmh_eligible", default: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
@@ -226,8 +226,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.integer "vispdat_priority_score", default: 0
     t.integer "vispdat_length_homeless_in_days", default: 0, null: false
     t.boolean "cspech_eligible", default: false
-    t.date "calculated_last_homeless_night"
     t.string "alternate_names"
+    t.date "calculated_last_homeless_night"
     t.boolean "congregate_housing", default: false
     t.boolean "sober_housing", default: false
     t.jsonb "enrolled_project_ids"
@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "enrolled_in_rrh", default: false
     t.boolean "enrolled_in_psh", default: false
     t.boolean "enrolled_in_ph", default: false
-    t.boolean "majority_sheltered"
     t.string "address"
+    t.boolean "majority_sheltered"
     t.date "tie_breaker_date"
     t.jsonb "strengths", default: []
     t.jsonb "challenges", default: []
@@ -313,9 +313,9 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.integer "unavailable_for_length", default: 0
     t.string "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
     t.string "identified_client_assessment", default: "IdentifiedClientAssessment"
-    t.boolean "limit_client_names_on_matches", default: true
     t.integer "lock_days", default: 0, null: false
     t.integer "lock_grace_days", default: 0, null: false
+    t.boolean "limit_client_names_on_matches", default: true
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
@@ -402,8 +402,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
 
   create_table "entity_view_permissions", id: :serial, force: :cascade do |t|
     t.integer "user_id"
-    t.string "entity_type", null: false
     t.integer "entity_id", null: false
+    t.string "entity_type", null: false
     t.boolean "editable"
     t.datetime "deleted_at"
     t.bigint "agency_id"
@@ -552,8 +552,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.string "identity"
     t.boolean "success"
     t.string "failure_reason"
-    t.string "user_type"
     t.integer "user_id"
+    t.string "user_type"
     t.string "context"
     t.string "ip"
     t.text "user_agent"
@@ -869,12 +869,66 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.string "assessment_name"
     t.integer "hud_assessment_location"
     t.integer "hud_assessment_type"
+    t.string "staff_name"
+    t.string "staff_email"
     t.boolean "enrolled_in_es", default: false, null: false
     t.boolean "enrolled_in_so", default: false, null: false
     t.integer "additional_homeless_nights_sheltered", default: 0
     t.integer "homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "homeless_nights_unsheltered", default: 0
+    t.integer "tc_hat_assessment_level"
+    t.string "tc_hat_household_type"
+    t.text "ongoing_support_reason"
+    t.string "ongoing_support_housing_type"
+    t.jsonb "strengths"
+    t.jsonb "challenges"
+    t.boolean "lifetime_sex_offender", default: false
+    t.boolean "state_id", default: false
+    t.boolean "birth_certificate", default: false
+    t.boolean "social_security_card", default: false
+    t.boolean "has_tax_id", default: false
+    t.string "tax_id"
+    t.boolean "roommate_ok", default: false
+    t.boolean "full_time_employed", default: false
+    t.boolean "can_work_full_time", default: false
+    t.boolean "willing_to_work_full_time", default: false
+    t.string "why_not_working"
+    t.boolean "rrh_successful_exit", default: false
+    t.boolean "th_desired", default: false
+    t.boolean "drug_test", default: false
+    t.boolean "heavy_drug_use", default: false
+    t.boolean "sober", default: false
+    t.boolean "willing_case_management", default: false
+    t.boolean "employed_three_months", default: false
+    t.boolean "living_wage", default: false
+    t.boolean "site_case_management_required", default: false
+    t.jsonb "tc_hat_client_history"
+    t.boolean "open_case", default: false
+    t.boolean "foster_care", default: false
+    t.boolean "currently_fleeing", default: false
+    t.date "dv_date"
+    t.boolean "tc_hat_ed_visits", default: false
+    t.boolean "tc_hat_hospitalizations", default: false
+    t.boolean "sixty_plus", default: false
+    t.boolean "cirrhosis", default: false
+    t.boolean "end_stage_renal_disease", default: false
+    t.boolean "heat_stroke", default: false
+    t.boolean "blind", default: false
+    t.boolean "tri_morbidity", default: false
+    t.boolean "high_potential_for_victimization", default: false
+    t.boolean "self_harm", default: false
+    t.boolean "medical_condition", default: false
+    t.boolean "psychiatric_condition", default: false
+    t.jsonb "housing_preferences"
+    t.string "housing_preferences_other"
+    t.jsonb "housing_rejected_preferences"
+    t.integer "tc_hat_apartment"
+    t.integer "tc_hat_tiny_home"
+    t.integer "tc_hat_rv"
+    t.integer "tc_hat_house"
+    t.integer "tc_hat_mobile_home"
+    t.integer "tc_hat_total_housing_rank"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -910,13 +964,13 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.integer "gender"
     t.string "type"
     t.boolean "available", default: true, null: false
+    t.date "date_days_homeless_verified"
+    t.string "who_verified_days_homeless"
     t.json "neighborhood_interests", default: []
     t.float "income_total_monthly"
     t.boolean "disabling_condition", default: false
     t.boolean "physical_disability", default: false
     t.boolean "developmental_disability", default: false
-    t.date "date_days_homeless_verified"
-    t.string "who_verified_days_homeless"
     t.boolean "domestic_violence", default: false, null: false
     t.boolean "interested_in_set_asides", default: false
     t.jsonb "tags"
@@ -1124,7 +1178,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.string "workphone"
     t.string "pager"
     t.string "email"
-    t.boolean "dmh_eligible", default: false, null: false
+    t.boolean "dmh_eligible", default: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on"
@@ -1191,8 +1245,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "enrolled_in_rrh", default: false
     t.boolean "enrolled_in_psh", default: false
     t.boolean "enrolled_in_ph", default: false
-    t.boolean "majority_sheltered"
     t.string "address"
+    t.boolean "majority_sheltered"
     t.date "tie_breaker_date"
     t.jsonb "strengths", default: []
     t.jsonb "challenges", default: []
@@ -1298,8 +1352,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
 
   create_table "requirements", id: :serial, force: :cascade do |t|
     t.integer "rule_id"
-    t.string "requirer_type"
     t.integer "requirer_id"
+    t.string "requirer_type"
     t.boolean "positive"
     t.datetime "deleted_at"
     t.datetime "created_at"
@@ -1316,12 +1370,9 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.datetime "updated_at", null: false
     t.boolean "can_view_all_clients", default: false
     t.boolean "can_edit_all_clients", default: false
-    t.boolean "can_edit_clients_based_on_rules", default: false
     t.boolean "can_participate_in_matches", default: false
     t.boolean "can_view_all_matches", default: false
-    t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_see_alternate_matches", default: false
-    t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_match_contacts", default: false
     t.boolean "can_approve_matches", default: false
     t.boolean "can_reject_matches", default: false
@@ -1331,11 +1382,6 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "can_edit_users", default: false
     t.boolean "can_view_full_ssn", default: false
     t.boolean "can_view_full_dob", default: false
-    t.boolean "can_view_dmh_eligibility", default: false
-    t.boolean "can_view_va_eligibility", default: false
-    t.boolean "can_view_hues_eligibility", default: false
-    t.boolean "can_view_hiv_positive_eligibility", default: false
-    t.boolean "can_view_client_confidentiality", default: false
     t.boolean "can_view_buildings", default: false
     t.boolean "can_edit_buildings", default: false
     t.boolean "can_view_funding_sources", default: false
@@ -1345,9 +1391,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "can_view_vouchers", default: false
     t.boolean "can_edit_vouchers", default: false
     t.boolean "can_view_programs", default: false
-    t.boolean "can_view_assigned_programs", default: false
     t.boolean "can_edit_programs", default: false
-    t.boolean "can_edit_assigned_programs", default: false
     t.boolean "can_view_opportunities", default: false
     t.boolean "can_edit_opportunities", default: false
     t.boolean "can_reissue_notifications", default: false
@@ -1362,30 +1406,40 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "can_edit_available_services", default: false
     t.boolean "can_assign_services", default: false
     t.boolean "can_assign_requirements", default: false
+    t.boolean "can_view_dmh_eligibility", default: false
+    t.boolean "can_view_va_eligibility", default: false, null: false
+    t.boolean "can_view_hues_eligibility", default: false, null: false
     t.boolean "can_become_other_users", default: false
+    t.boolean "can_view_client_confidentiality", default: false, null: false
+    t.boolean "can_view_hiv_positive_eligibility", default: false
+    t.boolean "can_view_own_closed_matches", default: false
     t.boolean "can_edit_translations", default: false
     t.boolean "can_view_vspdats", default: false
     t.boolean "can_manage_config", default: false
     t.boolean "can_create_overall_note", default: false
-    t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_deidentified_clients", default: false
     t.boolean "can_manage_deidentified_clients", default: false
-    t.boolean "can_export_deidentified_clients", default: false
     t.boolean "can_add_cohorts_to_deidentified_clients", default: false
+    t.boolean "can_delete_client_notes", default: false
     t.boolean "can_enter_identified_clients", default: false
     t.boolean "can_manage_identified_clients", default: false
-    t.boolean "can_export_identified_clients", default: false
-    t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_add_cohorts_to_identified_clients", default: false
     t.boolean "can_manage_neighborhoods", default: false
+    t.boolean "can_view_assigned_programs", default: false
+    t.boolean "can_edit_assigned_programs", default: false
+    t.boolean "can_export_deidentified_clients", default: false
+    t.boolean "can_export_identified_clients", default: false
     t.boolean "can_manage_tags", default: false
     t.boolean "can_manage_imported_clients", default: false
+    t.boolean "can_edit_clients_based_on_rules", default: false
     t.boolean "can_send_notes_via_email", default: false
     t.boolean "can_upload_deidentified_clients", default: false
     t.boolean "can_delete_matches", default: false
     t.boolean "can_reopen_matches", default: false
+    t.boolean "can_see_all_alternate_matches", default: false
     t.boolean "can_edit_help", default: false
     t.boolean "can_audit_users", default: false
+    t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_manage_sessions", default: false
     t.boolean "can_edit_voucher_rules", default: false
     t.index ["name"], name: "index_roles_on_name"
@@ -1632,8 +1686,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer "invitation_limit"
-    t.string "invited_by_type"
     t.integer "invited_by_id"
+    t.string "invited_by_type"
     t.integer "invitations_count", default: 0
     t.boolean "receive_initial_notification", default: false
     t.string "first_name"
@@ -1665,6 +1719,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.string "session_id"
     t.string "request_id"
     t.string "notification_code"
+    t.text "object_changes"
     t.integer "referenced_user_id"
     t.string "referenced_entity_name"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
