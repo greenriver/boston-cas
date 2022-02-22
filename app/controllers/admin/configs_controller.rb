@@ -33,9 +33,19 @@ module Admin
         :deidentified_client_assessment,
         :lock_days,
         :lock_grace_days,
+        :include_note_in_email_default,
         non_hmis_fields: [],
       )
     end
+
+    def include_note_in_email_options
+      {
+        'Never include match notes in email notifications' => nil,
+        'Allow match notes in email notifications (default to no)' => false,
+        'Allow match notes in email notifications (default to yes)' => true,
+      }
+    end
+    helper_method :include_note_in_email_options
 
     def set_config
       @config = config_source.where(id: 1).first_or_create

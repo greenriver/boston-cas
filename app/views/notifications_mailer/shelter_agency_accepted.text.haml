@@ -13,6 +13,10 @@ View details and respond here:
 \
 = render 'program_details'
 \
+- if @notification.decision.include_note?
+  Notes:
+  \
+  #{@notification.decision.step_note}
 \
 \
 \

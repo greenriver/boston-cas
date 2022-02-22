@@ -16,6 +16,8 @@
         Client provided a
         = _(@match.client.housing_release_status)
 
+- unless Config.get(:include_note_in_email_default).nil?
+  = form.input :include_note_in_email, as: :boolean, required: true, inline_label: 'Include note content in notification email', hint: 'Do not include client details in the note if you include the content in the email.'
 = form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{_('shelter case manager')} and understands the services attached and the program requirements"
 - if Config.get(:require_cori_release)
   = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'

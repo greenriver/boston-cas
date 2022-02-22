@@ -44,7 +44,7 @@ module MatchDecisions
     scope :awaiting_action, -> do
       where(status: [:pending, :other_clients_canceled, :acknowledged])
     end
-    scope :last_updated_before, -> (date) do
+    scope :last_updated_before, ->(date) do
       where(arel_table[:updated_at].lteq(date))
     end
 
@@ -53,8 +53,8 @@ module MatchDecisions
     end
 
     has_many :decision_action_events,
-      class_name: MatchEvents::DecisionAction.name,
-      foreign_key: :decision_id
+             class_name: MatchEvents::DecisionAction.name,
+             foreign_key: :decision_id
 
     validate :ensure_status_allowed, if: :status
     validate :cancellations, if: :administrative_cancel_reason_id
@@ -71,13 +71,14 @@ module MatchDecisions
     end
 
     def contact_name
-      contact && contact.full_name
+      contact&.full_name
     end
-    alias_method :actor_name, :contact_name
+    alias actor_name contact_name
 
     def editable?
-      # can notification responses update this decision?
-      false
+      # can this decision be updated by a notification response?
+      # override this default behavior in subclasses
+      initialized? && match_open?
     end
 
     def expires?
@@ -111,11 +112,7 @@ module MatchDecisions
     end
 
     def set_stall_date
-      stall_on = if stallable? && stalled_after > 0
-        Date.current + stalled_after
-      else
-        nil
-      end
+      stall_on = (Date.current + stalled_after if stallable? && stalled_after.positive?)
 
       match.update(
         stall_date: stall_on,
@@ -150,7 +147,7 @@ module MatchDecisions
       decision_type
     end
 
-    def notifications fetch_strategy: :single_decision
+    def notifications(fetch_strategy: :single_decision) # rubocop:disable Lint/UnusedMethodArgument
       match.send("#{decision_type}_notifications")
     end
 
@@ -178,26 +175,18 @@ module MatchDecisions
     # do things like set the initial "pending" status and
     # send notifications
     # All sub-class overrides should call this first
-    def initialize_decision! send_notifications: true
+    def initialize_decision!(send_notifications: true) # rubocop:disable Lint/UnusedMethodArgument
       # always reset the stall date when the match moves into a new step
-      set_stall_date()
+      set_stall_date
     end
 
-    def uninitialize_decision! send_notifications: false
+    def uninitialize_decision!(send_notifications: false)
       update(status: nil)
-      if previous_step
-        previous_step.initialize_decision!(send_notifications: send_notifications)
-      end
+      previous_step&.initialize_decision!(send_notifications: send_notifications)
     end
 
     def initialized?
       status.present?
-    end
-
-    def editable?
-      # can this decision be updated by a notification response?
-      # override this default behavior in subclasses
-      initialized? && match_open?
     end
 
     def match_open?
@@ -244,7 +233,7 @@ module MatchDecisions
     # inherit in subclasses and add methods for each entry in #statuses
     class StatusCallbacks
       attr_reader :decision, :dependencies
-      def initialize decision, options
+      def initialize(decision, _options)
         @decision = decision
         @dependencies = dependencies
       end
@@ -256,7 +245,6 @@ module MatchDecisions
     end
     private_constant :StatusCallbacks
 
-
     def record_action_event! contact:
       decision_action_events.create! match: match, contact: contact, action: status, note: note
     end
@@ -264,21 +252,20 @@ module MatchDecisions
     def record_updated_unit! unit_id:, contact_id:
       voucher = match.opportunity.voucher
       return unless unit_id.present? && voucher.unit.present?
-      if voucher.unit_id != unit_id.to_i
-        details = match.opportunity_details
-        previous_unit = "#{details.unit_name} at #{details.building_name}"
-        voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
-        MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
-      end
+      return unless voucher.unit_id != unit_id.to_i
+
+      details = match.opportunity_details
+      previous_unit = "#{details.unit_name} at #{details.building_name}"
+      voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
+      MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
     end
 
     # override in subclass
     def notify_contact_of_action_taken_on_behalf_of contact:
-
     end
 
     def self.model_name
-      @_model_name ||= ActiveModel::Name.new(self, nil, "decision")
+      @model_name ||= ActiveModel::Name.new(self, nil, 'decision')
     end
 
     def to_partial_path
@@ -286,7 +273,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation, :disable_opportunity]
+      [:status, :note, :include_note_in_email, :prevent_matching_until, :administrative_cancel_reason_other_explanation, :disable_opportunity]
     end
 
     def whitelist_params_for_update params
@@ -299,7 +286,7 @@ module MatchDecisions
     end
 
     # override in subclass
-    def accessible_by? contact
+    def accessible_by?(_contact)
       false
     end
 
@@ -329,6 +316,16 @@ module MatchDecisions
     def next_step
       next_step_name = match_route.class.match_steps.invert[step_number + 1]
       match.decisions.find_by(type: next_step_name)
+    end
+
+    def include_note?
+      # Did the user indicate in the previous step that the included note text be included?
+      previous_step&.include_note_in_email?
+    end
+
+    def step_note
+      # Get the note from the most recent decision action in the previous step (in case there is more than one (e.g, if the match has been backed up)
+      previous_step&.decision_action_events&.order(created_at: :desc)&.limit(1)&.pluck(:note)&.first
     end
 
     def send_notifications_for_step
@@ -381,39 +378,32 @@ module MatchDecisions
       return :canceled if status_sym == :pending && match.closed?
       return :active if editable?
       return :incomplete if status_sym == :pending || status_sym == :other_clients_canceled || status.blank?
+
       :done
     end
 
-    private
+    private def decision_type
+      self.class.to_s.demodulize.underscore
+    end
 
-      def decision_type
-        self.class.to_s.demodulize.underscore
-      end
+    private def status_callbacks
+      self.class.const_get :StatusCallbacks
+    end
 
-      def status_callbacks
-        self.class.const_get :StatusCallbacks
-      end
+    private def ensure_status_allowed
+      errors.add :status, 'is not allowed' if statuses.with_indifferent_access[status].blank?
+    end
 
-      def ensure_status_allowed
-        if statuses.with_indifferent_access[status].blank?
-          errors.add :status, 'is not allowed'
-        end
-      end
+    private def cancellations
+      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
+    end
 
-      def cancellations
-        if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
-          errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'"
-        end
-      end
+    private def notification_class
+      "Notifications::#{self.class.to_s.demodulize}".constantize
+    end
 
-      def notification_class
-        "Notifications::#{self.class.to_s.demodulize}".constantize
-      end
-
-      def saved_status
-        changed_attributes[:status] || status
-      end
-
+    private def saved_status
+      changed_attributes[:status] || status
+    end
   end
-
 end
