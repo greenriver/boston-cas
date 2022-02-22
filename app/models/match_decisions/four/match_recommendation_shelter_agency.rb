@@ -79,6 +79,7 @@ module MatchDecisions::Four
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
+      inform_client(:new_match)
     end
 
     def notifications_for_this_step
@@ -90,7 +91,7 @@ module MatchDecisions::Four
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of(contact:)
+    def notify_contact_of_action_taken_on_behalf_of(contact:) # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match!(match, contact_actor_type) unless status == 'canceled'
     end
 
@@ -115,8 +116,6 @@ module MatchDecisions::Four
       end
 
       def acknowledged
-        # TODO: Uncomment this after we decide exactly what should be sent and where.
-        # @decision.inform_client(:new_match)
       end
 
       def accepted
@@ -157,15 +156,15 @@ module MatchDecisions::Four
     end
 
     private def validate_not_working_reasons_present_if_not_working_with_client
-      if not_working_with_client_reason.blank? && status == 'not_working_with_client'
-        errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client'
-      end
+      return unless not_working_with_client_reason.blank? && status == 'not_working_with_client'
+
+      errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client'
     end
 
     private def validate_client_last_seen_date_present_if_not_working_with_client
-      if not_working_with_client_reason.present? && client_last_seen_date.blank?
-        errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client'
-      end
+      return unless not_working_with_client_reason.present? && client_last_seen_date.blank?
+
+      errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client'
     end
 
     private def release_of_information_present_if_match_accepted
@@ -173,20 +172,16 @@ module MatchDecisions::Four
       # release_of_information = '1'
       # if the client previously signed the release
       # release_of_information = Time
-      if status == 'accepted' && release_of_information == '0'
-        errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
-      end
+      return unless status == 'accepted' && release_of_information == '0'
+
+      errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
     end
 
     private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
-      if status == 'accepted'
-        if ! client_spoken_with_services_agency
-          errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
-        end
-        if Config.get(:require_cori_release) && ! cori_release_form_submitted
-         errors.add :cori_release_form_submitted, 'A CORI release form is required.'
-        end
-      end
+      return unless status == 'accepted'
+
+      errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.' unless client_spoken_with_services_agency
+      errors.add :cori_release_form_submitted, 'A CORI release form is required.' if Config.get(:require_cori_release) && ! cori_release_form_submitted
     end
 
     private def decline_reason_blank?
