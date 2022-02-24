@@ -41,9 +41,12 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :match_recommendation_shelter_agency
   has_decision :confirm_shelter_agency_decline_dnd_staff
   has_decision :schedule_criminal_hearing_housing_subsidy_admin
+  has_decision :confirm_shelter_decline_of_hearing
   has_decision :approve_match_housing_subsidy_admin
+  has_decision :confirm_shelter_decline_of_hsa_approval
   has_decision :confirm_housing_subsidy_admin_decline_dnd_staff
   has_decision :record_client_housed_date_shelter_agency # Legacy decision type as of 10/16/2016
+  has_decision :confirm_shelter_decline_of_housed
   has_decision :record_client_housed_date_housing_subsidy_administrator
   has_decision :confirm_match_success_dnd_staff
 
@@ -355,8 +358,8 @@ class ClientOpportunityMatch < ApplicationRecord
   def current_decision
     return nil if closed?
 
-    # FIXME, should look for next decision on route based on route #match_steps
-    @current_decision ||= initialized_decisions.order(id: :desc).limit(1).first
+    @current_decision ||= initialized_decisions.find_by(status: [:pending, :acknowledged])
+    @current_decision ||= initialized_decisions.order_as_specified(type: match_route.class.match_steps_for_reporting.keys.reverse).limit(1).first
   end
 
   def unsuccessful_decision

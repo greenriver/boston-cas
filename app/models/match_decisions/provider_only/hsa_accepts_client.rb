@@ -82,7 +82,7 @@ module MatchDecisions::ProviderOnly
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
@@ -95,7 +95,7 @@ module MatchDecisions::ProviderOnly
       true
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
 
@@ -131,11 +131,7 @@ module MatchDecisions::ProviderOnly
     end
 
     private def note_present_if_status_declined
-      if note.blank? && status == 'declined'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
-
   end
-
 end

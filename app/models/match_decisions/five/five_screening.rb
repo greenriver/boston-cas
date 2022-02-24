@@ -36,8 +36,8 @@ module MatchDecisions::Five
       {
         pending: 'Pending',
         expiration_update: 'Pending',
-        mitigation_required: "#{_('Mitigation required')}",
-        mitigation_not_required: "#{_('No mitigation required')}",
+        mitigation_required: _('Mitigation required').to_s,
+        mitigation_not_required: _('No mitigation required').to_s,
         canceled: 'Canceled',
         declined: 'Declined',
         back: 'Pending',
@@ -70,7 +70,7 @@ module MatchDecisions::Five
       end
 
       def mitigation_required
-        mitigation_ids = @decision.required_mitigations.select{ |str| str.present? }.map(&:to_i)
+        mitigation_ids = @decision.required_mitigations.select(&:present?).map(&:to_i)
         match.mitigation_reasons = MitigationReason.where(id: mitigation_ids)
         @decision.next_step.initialize_decision!
       end
@@ -104,7 +104,7 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
   end

@@ -6,7 +6,6 @@
 
 module MatchDecisions
   class MatchRecommendationDndStaff < Base
-
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
@@ -68,12 +67,10 @@ module MatchDecisions
     end
 
     private def note_present_if_status_declined
-      if note.blank? && status == 'declined'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::DndStaffDecline.all
     end
 
@@ -94,8 +91,12 @@ module MatchDecisions
       def accepted
         @decision.next_step.initialize_decision!
 
-        if match.client.remote_id.present? && Warehouse::Base.enabled?
-          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation rescue nil
+        if match.client.remote_id.present? && Warehouse::Base.enabled? # rubocop:disable Style/GuardClause
+          begin
+            Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+          rescue StandardError
+            nil
+          end
         end
       end
 
@@ -114,40 +115,23 @@ module MatchDecisions
       saved_status == 'pending' && status == 'accepted'
     end
 
-
     def cant_accept_if_match_closed
-      if save_will_accept? && match.closed
-        then errors.add :status, "This match has already been closed."
-      end
+      errors.add :status, 'This match has already been closed.' if save_will_accept? && match.closed
     end
 
     def cant_accept_if_related_active_match
-      if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
-        then errors.add :status, "There is already another active match for this opportunity"
-      end
+      errors.add :status, 'There is already another active match for this opportunity' if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
     end
-
-
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      if save_will_accept? && match.shelter_agency_contacts.none?
-        missing_contacts << "a #{_('Shelter Agency')} Contact"
-      end
+      missing_contacts << "a #{_('Shelter Agency')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
 
-      if save_will_accept? && match.dnd_staff_contacts.none?
-        missing_contacts << "a #{_('DND')} Staff Contact"
-      end
+      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
 
-      if save_will_accept? && match.housing_subsidy_admin_contacts.none?
-        missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact"
-      end
+      missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
-      if missing_contacts.any?
-        errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
-      end
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
-
   end
-
 end

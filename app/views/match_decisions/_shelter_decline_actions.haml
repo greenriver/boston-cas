@@ -1,0 +1,13 @@
+.o-choose__choice.o-choose__choice--100
+  %header.jMatchHeader
+    %ul.o-choose__nav.nav.jMatchActionNav
+      = render 'match_decisions/shelter_decline_tab', active_tab: 'active'
+  .o-choose__content
+    .tab-content
+      = render 'match_decisions/shelter_decline_content', form: form, active_tab: 'active'
+
+= content_for :page_js do
+  :javascript
+    new App.Matches.ActionNav('.jMatchHeader')
+
+= render 'match_decisions/cancel_and_park_js'

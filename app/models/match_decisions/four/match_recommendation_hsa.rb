@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class MatchRecommendationHsa < ::MatchDecisions::Base
-
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
@@ -32,9 +31,8 @@ module MatchDecisions::Four
     private def decline_status_label
       [
         "Match declined by #{_('Housing Subsidy Administrator')}. Reason: #{decline_reason_name}",
-      ].join ". "
+      ].join '. '
     end
-
 
     def step_name
       "#{_('Housing Subsidy Administrator')} Initial Review of Match Recommendation"
@@ -89,7 +87,7 @@ module MatchDecisions::Four
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
@@ -103,12 +101,10 @@ module MatchDecisions::Four
     end
 
     private def note_present_if_status_declined
-      if note.blank? && status == 'declined'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       # FIXME: this may be different
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
@@ -136,6 +132,5 @@ module MatchDecisions::Four
     private def decline_reason_blank?
       decline_reason.blank?
     end
-
   end
 end

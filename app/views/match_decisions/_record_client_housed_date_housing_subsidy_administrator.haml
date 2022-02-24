@@ -2,13 +2,17 @@
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .o-choose.o-choose--flush.o-choose--flush-top
-        .o-choose__choice{ class: ('o-choose__choice--100' unless can_reject_matches?)}
-          %header
-            .o-choose__title
-              .c-choice-icon.c-choice-icon--confirm.mr-4
-              %h3 Continue Match
-          .o-choose__content
-            = render 'match_decisions/client_move_in_details', form: form, submit_label: 'Continue Match'
+        - if @decision.accessible_by?(current_contact)
+          .o-choose__choice{ class: ('o-choose__choice--100' unless can_reject_matches?)}
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--confirm.mr-4
+                %h3 Continue Match
+            .o-choose__content
+              = render 'match_decisions/client_move_in_details', form: form, submit_label: 'Continue Match'
 
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form
+        - elsif @decision.declineable_by?(current_contact)
+          .o-choose__choice.o-choose__choice--100{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
+            = render 'match_decisions/shelter_decline_actions', form: form

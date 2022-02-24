@@ -27,6 +27,7 @@ gem 'simple_form'
 gem 'virtus'
 
 gem 'kaminari'
+gem 'nokogiri'
 gem 'ransack'
 gem 'responders'
 gem 'memoist', require: false
