@@ -9,7 +9,7 @@ module TcHatCalculations
 
   included do
     after_initialize :set_defaults
-    validates_presence_of :entry_date, :hud_assessment_location, :hud_assessment_type, :tc_hat_assessment_level, :setting, on: [:create, :update]
+    validates_presence_of :entry_date, :hud_assessment_location, :hud_assessment_type, :tc_hat_assessment_level, on: [:create, :update]
 
     private def set_defaults
       return if persisted?
@@ -157,7 +157,7 @@ module TcHatCalculations
           as: :pretty_boolean_group,
           number: 'A-8',
         },
-        veteran_status: {
+        veteran: {
           label: 'Is the client a Veteran?',
           collection: {
             'Yes' => true,
