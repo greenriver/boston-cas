@@ -141,44 +141,42 @@ class MatchDecisionsController < ApplicationController
     redirect_to access_context.match_decision_path(@match, @decision, redirect: 'true')
   end
 
-  private
-
-  def find_match!
+  private def find_match!
     @match = match_scope.find params[:match_id]
   end
 
-  def set_client
+  private def set_client
     @client = @match.client
   end
 
-  def set_contacts
+  private def set_contacts
     @current_contact = current_contact
     @match_contacts = @match.match_contacts
   end
 
-  def find_decision!
+  private def find_decision!
     @decision = @match.decision_from_param(params[:id])
   end
 
-  def authorize_decision!
+  private def authorize_decision!
     return if @decision&.accessible_by?(current_contact) || @decision&.declineable_by?(current_contact)
 
     flash[:alert] = 'Sorry, you are not authorized to access that.'
     redirect_to access_context.match_path(@match)
   end
 
-  def authorize_notification_recreation!
+  private def authorize_notification_recreation!
     return if can_recreate_this_decision?
 
     flash[:alert] = 'Sorry, you are not authorized to access that.'
     redirect_to access_context.match_path(@match)
   end
 
-  def decision_params
+  private def decision_params
     @decision.whitelist_params_for_update params
   end
 
-  def match_contacts_params
+  private def match_contacts_params
     base_params = params[:match_contacts] || ActionController::Parameters.new
     base_params.permit(
       shelter_agency_contact_ids: [],

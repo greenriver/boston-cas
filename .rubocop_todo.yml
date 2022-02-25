@@ -41,7 +41,6 @@ Layout/BlockAlignment:
     - 'app/models/user.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/decisions_spec.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -716,7 +715,6 @@ Layout/IndentationWidth:
     - 'app/models/user.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/decisions_spec.rb'
 
 # Offense count: 27
 # Cop supports --auto-correct.
@@ -1057,7 +1055,6 @@ Layout/TrailingEmptyLines:
     - 'spec/factories/rules/male.rb'
     - 'spec/factories/rules/verified_disablity.rb'
     - 'spec/factories/tags.rb'
-    - 'spec/models/decisions_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
@@ -1515,7 +1512,6 @@ Style/BlockDelimiters:
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
-    - 'spec/models/decisions_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
@@ -1774,7 +1770,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
-    - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

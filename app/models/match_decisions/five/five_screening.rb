@@ -36,8 +36,8 @@ module MatchDecisions::Five
       {
         pending: 'Pending',
         expiration_update: 'Pending',
-        mitigation_required: _('Mitigation required').to_s,
-        mitigation_not_required: _('No mitigation required').to_s,
+        mitigation_required: _('Mitigation required'),
+        mitigation_not_required: _('No mitigation required'),
         canceled: 'Canceled',
         declined: 'Declined',
         back: 'Pending',

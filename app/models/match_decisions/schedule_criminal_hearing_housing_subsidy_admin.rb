@@ -142,13 +142,11 @@ module MatchDecisions
     end
     private_constant :StatusCallbacks
 
-    private
-
-    def criminal_hearing_date_present_if_scheduled
+    private def criminal_hearing_date_present_if_scheduled
       errors.add :criminal_hearing_date, 'must be filled in' if status == 'scheduled' && criminal_hearing_date.blank?
     end
 
-    def criminal_hearing_date_absent_if_no_hearing
+    private def criminal_hearing_date_absent_if_no_hearing
       errors.add :criminal_hearing_date, 'must not be filled in' if status == 'no_hearing' && criminal_hearing_date.present?
     end
   end

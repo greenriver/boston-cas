@@ -151,7 +151,7 @@ module MatchDecisions
     private_constant :StatusCallbacks
 
     private def note_present_if_status_declined
-      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status.in?(['declined'])
     end
   end
 end
