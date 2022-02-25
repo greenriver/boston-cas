@@ -135,7 +135,7 @@
     $('input[name*="[full_time_employed]"]').on('change', function(e) {
       var value = $('input[name*="[full_time_employed]"]:checked').val();
       var $question = $('input[name*="[can_work_full_time]"]').closest('.c-question');
-      if(value === undefined || value == false) {
+      if(value === undefined || value == 'false') {
         $question.removeClass('d-none');
       } else {
         $question.addClass('d-none');

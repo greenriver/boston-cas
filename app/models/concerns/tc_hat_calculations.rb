@@ -37,7 +37,7 @@ module TcHatCalculations
         development_disorder: 'Intellectual/Developmental Disorder (IDD)',
         n_a: 'N/A (None of these apply)',
         no_cash: 'No cash income during the past year',
-        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or',
+        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or group home)(lifetime)',
         psychiatric_facility: 'One or more stays in a psychiatric facility (lifetime)',
         substance_use_facility: 'One or more stays in a substance abuse treatment facility (lifetime)',
         jail_stay: 'One or more stays in prison/jail/correctional facility (lifetime)',
@@ -55,7 +55,6 @@ module TcHatCalculations
         near_outdoors: 'Near outdoor spaces like parks, trails, and playgrounds',
         public_transit: 'Near Public Transportation',
         no_preference: 'No Preference',
-        other: 'Other',
         pets_allowed: 'Pets Allowed',
         with_formerly_homeless: 'Prefer to live in a community with others who are formerly homeless?',
         quiet: 'Quiet Neighborhood',
@@ -87,20 +86,29 @@ module TcHatCalculations
 
     def form_fields
       {
+        _section_a_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/section_a_preamble',
+        },
         entry_date: {
           label: 'Date of Assessment',
           as: :date_picker,
           required: true,
+          number: 'A-1',
         },
         hud_assessment_location: {
           label: 'Assessment Location',
+          as: :select_2,
+          collection: hud_assessment_locations,
           required: true,
+          number: 'A-2',
         },
         hud_assessment_type: {
           label: 'Assessment Type',
           as: :select_2,
           collection: hud_assessment_types,
           required: true,
+          number: 'A-3',
         },
         tc_hat_assessment_level: {
           label: 'Assessment Level',
@@ -109,17 +117,7 @@ module TcHatCalculations
             'Housing Needs Assessment' => 2,
           },
           as: :pretty_boolean_group,
-        },
-        veteran_status: {
-          label: 'Is the client a Veteran?',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-          },
-          as: :pretty_boolean_group,
-        },
-        days_homeless_in_the_last_three_years: {
-          label: 'Total Days Homeless in the Past Three Years',
+          number: 'A-4',
         },
         tc_hat_household_type: {
           label: 'Household Type',
@@ -130,11 +128,13 @@ module TcHatCalculations
             'Youth (age 18-24)' => 'Youth',
           },
           as: :pretty_boolean_group,
+          number: 'A-5',
         },
         need_daily_assistance: {
           label: '[STAFF RESPONSE] Only check this box if you feel the client is unable to live alone due to needing around the clock care or that they may be dangerous/harmful to themselves or their neighbors without ongoing support. (If unknown, you may skip this question.)',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
+          number: 'A-6',
         },
         _needs_daily_assistance_preamble: {
           as: :partial,
@@ -143,6 +143,7 @@ module TcHatCalculations
         ongoing_support_reason: {
           label: '[STAFF RESPONSE] Explain why this client cannot live independently',
           question_wrapper: { class: 'jDailyAssistance' },
+          number: 'A-7',
         },
         ongoing_support_housing_type: {
           label: '[STAFF RESPONSE] What type of housing intervention would be more suitable for this client, if known?',
@@ -154,6 +155,24 @@ module TcHatCalculations
             'State Mental Health Institution' => 'State Mental Health Institution',
           },
           as: :pretty_boolean_group,
+          number: 'A-8',
+        },
+        veteran_status: {
+          label: 'Is the client a Veteran?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'A-9',
+        },
+        days_homeless_in_the_last_three_years: {
+          label: 'Total Days Homeless in the Past Three Years',
+          number: 'A-10',
+        },
+        _section_b_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/section_b_preamble',
         },
         _strengths_and_challenges_preamble: {
           as: :partial,
@@ -164,12 +183,14 @@ module TcHatCalculations
           collection: Rules::Strength.new.available_strengths.to_h.invert,
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
+          number: 'B-1',
         },
         challenges: {
           label: 'Possible challenges for housing placement options (Check all that apply)',
           collection: Rules::Challenge.new.available_challenges.to_h.invert,
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
+          number: 'B-2',
         },
         lifetime_sex_offender: {
           label: 'Is the client a Lifetime Sex Offender?',
@@ -178,6 +199,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'B-3',
         },
         state_id: {
           label: 'Does the client have a State ID/Drivers License?',
@@ -186,6 +208,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'B-4',
         },
         birth_certificate: {
           label: 'Does the client have a Birth Certificate?',
@@ -194,6 +217,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'B-5',
         },
         social_security_card: {
           label: 'Does the client have a Social Security Card?',
@@ -202,6 +226,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'B-6',
+        },
+        _documents_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/documents_preamble',
         },
         has_tax_id: {
           label: 'Do you or have you had (in the past) an I-9 or an ITIN (Individual Tax Identification Number)?',
@@ -210,13 +239,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'B-7',
         },
         tax_id: {
           label: 'What was/is your I-9 or ITIN number?',
-        },
-        _documents_preamble: {
-          as: :partial,
-          partial: 'non_hmis_assessments/tc_hat/documents_preamble',
+          number: 'B-8',
         },
         roommate_ok: {
           label: 'Would you consider living with a roommate?',
@@ -225,6 +252,10 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+        },
+        _section_c_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/section_c_preamble',
         },
         _medium_term_rental_assistance_preamble: {
           as: :partial,
@@ -237,6 +268,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-1',
         },
         can_work_full_time: {
           label: '[STAFF RESPONSE] Is the client able to work a full-time job?',
@@ -245,6 +277,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-2',
         },
         willing_to_work_full_time: {
           label: '[STAFF RESPONSE] Is the client willing to work a full-time?',
@@ -253,9 +286,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-3',
         },
         why_not_working: {
           label: '[CLIENT RESPONSE] If you can work and are willing to work a full time job, why are you not working right now?',
+          number: 'C-4',
         },
         rrh_successful_exit: {
           label: '[STAFF RESPONSE] I believe the client can successfully exit 12-24 month RRH Program and maintain their housing.',
@@ -264,6 +299,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-5',
         },
         _th_preamble: {
           as: :partial,
@@ -276,6 +312,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-6',
         },
         _th_questions_preamble: {
           as: :partial,
@@ -288,6 +325,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-7',
         },
         heavy_drug_use: {
           label: '[CLIENT RESPONSE] Do you have a history of heavy drug use? (Use that has affected your ability to work and/or maintain housing?)',
@@ -296,6 +334,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-8',
         },
         sober: {
           label: '[CLIENT RESPONSE] Have you been clean/sober for at least one year?',
@@ -304,6 +343,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-9',
         },
         willing_case_management: {
           label: '[CLIENT RESPONSE] Are you willing to engage with housing case management? (Would you participate in a program, goal setting, etc.?)',
@@ -312,6 +352,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-10',
         },
         employed_three_months: {
           label: '[CLIENT RESPONSE] Have you been employed for 3 months or more?',
@@ -320,6 +361,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-11',
         },
         living_wage: {
           label: '[CLIENT RESPONSE] Are you earning $13 an hour or more?',
@@ -328,6 +370,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'C-12',
+        },
+        _section_d_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/section_d_preamble',
         },
         _long_term_rental_assistance_preamble: {
           as: :partial,
@@ -340,6 +387,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'D-1',
         },
         site_case_management_required: {
           label: '[STAFF RESPONSE] Does the client need site-based case management? (This is NOT skilled nursing, group home, or assisted living care.)',
@@ -348,6 +396,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'D-2',
+        },
+        _section_e_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/section_e_preamble',
         },
         _client_history_preamble: {
           as: :partial,
@@ -358,6 +411,7 @@ module TcHatCalculations
           collection: client_history_options.invert,
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
+          number: 'E-1',
         },
         open_case: {
           label: 'Current open case with State Dept. of Family Services (CPS)?',
@@ -366,6 +420,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-2',
         },
         foster_care: {
           label: 'Was in foster care as a youth, at age 16 years or older?',
@@ -374,6 +429,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-3',
         },
         currently_fleeing: {
           label: '[CLIENT RESPONSE] You indicated a history of Intimate Partner Violence (IPV). Are you currently fleeing?',
@@ -382,10 +438,12 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-4',
         },
         dv_date: {
           label: '[CLIENT RESPONSE] You indicated a history of Intimate Partner Violence (IPV). What was the most recent date the violence occurred? (This can be an estimated date)',
           as: :date_picker,
+          number: 'E-5',
         },
         tc_hat_ed_visits: {
           label: 'More than three emergency room visits in a year?',
@@ -394,14 +452,16 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-6',
         },
         tc_hat_hospitalizations: {
-          label: 'More than Three Hospitalization or emergency room visits in a year?',
+          label: 'More than three hospitalization or emergency room visits in a year?',
           collection: {
             'Yes' => true,
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-7',
         },
         sixty_plus: {
           label: 'Is the client 60 years old or older?',
@@ -410,6 +470,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-8',
         },
         cirrhosis: {
           label: 'Does the client have cirrhosis of the liver?',
@@ -418,6 +479,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-9',
         },
         end_stage_renal_disease: {
           label: 'Does the client have end stage renal disease?',
@@ -426,6 +488,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-10',
         },
         heat_stroke: {
           label: 'Does the client have a history of Heat Stroke?',
@@ -434,6 +497,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-11',
         },
         blind: {
           label: 'Is the client blind?',
@@ -442,6 +506,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-12',
         },
         hiv_aids: {
           label: 'Does the client have HIV or AIDS?',
@@ -450,6 +515,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-13',
         },
         tri_morbidity: {
           label: 'Does the client have "tri-morbidity" (co-occurring psychiatric, substance abuse, and a chronic medical condition)?',
@@ -458,6 +524,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-14',
         },
         high_potential_for_victimization: {
           label: 'Is there a high potential for victimization?',
@@ -466,6 +533,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-15',
         },
         self_harm: {
           label: 'Is there a danger of self harm or harm to other person in the community?',
@@ -474,6 +542,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-16',
         },
         medical_condition: {
           label: 'Does the client have a chronic or acute medical condition?',
@@ -482,6 +551,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-17',
         },
         psychiatric_condition: {
           label: 'Does the client have a chronic or acute psychiatric condition with extreme lack of judgement regarding safety?',
@@ -490,6 +560,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-18',
         },
         substance_abuse_problem: {
           label: 'Does the client have a chronic or acute substance abuse with extreme lack of judgment regarding safety?',
@@ -498,9 +569,15 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'E-19',
         },
         assessment_score: {
           label: 'Total Vulnerability Score',
+          number: 'E-20',
+        },
+        _section_f_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/tc_hat/section_f_preamble',
         },
         _housing_preferences_preamble: {
           as: :partial,
@@ -511,14 +588,17 @@ module TcHatCalculations
           collection: housing_preference_options.invert,
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
+          number: 'F-1',
         },
         housing_preferences_other: {
           label: 'Housing Preference if other',
+          number: 'F-2',
         },
         neighborhood_interests: {
           label: 'Housing Location Preference',
           collection: Neighborhood.for_select,
           as: :pretty_checkboxes_group,
+          number: 'F-3',
         },
         _housing_rank_preamble: {
           as: :partial,
@@ -529,35 +609,41 @@ module TcHatCalculations
           collection: available_housing_ranks,
           as: :select_2,
           include_blank: 'Please Choose Rank',
+          number: 'F-6',
         },
         tc_hat_tiny_home: {
           label: 'Tiny Home',
           collection: available_housing_ranks,
           as: :select_2,
           include_blank: 'Please Choose Rank',
+          number: 'F-7',
         },
         tc_hat_rv: {
           label: 'RV/Camper',
           collection: available_housing_ranks,
           as: :select_2,
           include_blank: 'Please Choose Rank',
+          number: 'F-8',
         },
         tc_hat_house: {
           label: 'House',
           collection: available_housing_ranks,
           as: :select_2,
           include_blank: 'Please Choose Rank',
+          number: 'F-9',
         },
         tc_hat_mobile_home: {
           label: 'Mobile Home/Manufactured Home',
           collection: available_housing_ranks,
           as: :select_2,
           include_blank: 'Please Choose Rank',
+          number: 'F-10',
         },
         housing_rejected_preferences: {
-          label: 'Which housing would not like to live in?',
+          label: 'Which housing would you not like to live in?',
           collection: housing_rejection_preference_options.invert,
           as: :pretty_checkboxes_group,
+          number: 'F-11',
         },
         actively_homeless: {
           collection: {
@@ -565,6 +651,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'F-12',
         },
       }
     end
