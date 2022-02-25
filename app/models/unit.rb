@@ -18,7 +18,7 @@ class Unit < ApplicationRecord
   belongs_to :building, inverse_of: :units
   has_many :vouchers, inverse_of: :unit
   has_many :opportunities, through: :vouchers
-  has_one :active_voucher, -> { where available: true}, class_name: 'Voucher'
+  has_one :active_voucher, -> { where available: true }, class_name: 'Voucher'
   has_one :opportunity, through: :active_voucher
   has_many :housing_attributes, as: :housingable
   has_many :housing_media_links, as: :housingable
@@ -30,6 +30,7 @@ class Unit < ApplicationRecord
 
   def hmis_managed?
     return true if id_in_data_source
+
     return false
   end
 
@@ -38,11 +39,11 @@ class Unit < ApplicationRecord
   end
 
   def in_use?
-    # Unit is in use if a voucher contains its unit_id
+    # Unit is in use if a non-archived voucher contains its unit_id
     # AND (the voucher has never been involved in a match
     #   OR the match is open)
     voucher_never_used = Voucher.where(unit_id: id).where.not(id: Opportunity.select(:voucher_id)).exists?
-    voucher_on_open_match = Voucher.on_open_match.exists?(unit_id: id)
+    voucher_on_open_match = Voucher.not_archived.on_open_match.exists?(unit_id: id)
     voucher_never_used || voucher_on_open_match
   end
 
@@ -58,14 +59,15 @@ class Unit < ApplicationRecord
   def self.text_search(text)
     return none unless text.present?
 
-    building_matches = Building.where(
-      Building.arel_table[:id].eq arel_table[:building_id]
-    ).text_search(text).arel.exists
+    building_matches = Building.where(Building.arel_table[:id].eq arel_table[:building_id]).
+      text_search(text).
+      arel.
+      exists
 
     query = "%#{text}%"
     where(
       arel_table[:name].matches(query)
-      .or(building_matches)
+      .or(building_matches),
     )
   end
 
