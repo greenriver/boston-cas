@@ -115,8 +115,8 @@
 
     // Work?
     $('input[name*="[can_work_full_time]"], input[name*="[willing_to_work_full_time]"]').on('change', function(e) {
-      var value = [$('input[name*="[can_work_full_time]"]:checked').val(), $('input[name*="[willing_to_work_full_time]"]:checked').val()].includes('true');
-      var $question = $('input[name*="[why_not_working]"]').closest('.c-question');
+      var value = JSON.stringify([$('input[name*="[can_work_full_time]"]:checked').val(), $('input[name*="[willing_to_work_full_time]"]:checked').val()]) === JSON.stringify(['true', 'true']);
+      var $question = $('textarea[name*="[why_not_working]"]').closest('.c-question');
       if(value == true) {
         $question.removeClass('d-none');
       } else {

@@ -291,6 +291,7 @@ module TcHatCalculations
         why_not_working: {
           label: '[CLIENT RESPONSE] If you can work and are willing to work a full time job, why are you not working right now?',
           number: 'C-4',
+          as: :text,
         },
         rrh_successful_exit: {
           label: '[STAFF RESPONSE] I believe the client can successfully exit 12-24 month RRH Program and maintain their housing.',
