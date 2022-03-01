@@ -10,15 +10,15 @@ class VouchersController < ApplicationController
   before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update]
   before_action :require_can_reject_matches!, only: [:unavailable]
   before_action :require_can_edit_voucher_rules!, only: [:edit, :update]
-  before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable]
-  before_action :set_sub_program, only: [:edit, :update, :create, :index, :bulk_update, :unavailable]
-  before_action :set_program, only: [:edit, :update, :index, :bulk_update, :unavailable]
+  before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable, :archive]
+  before_action :set_sub_program, only: [:edit, :update, :create, :index, :bulk_update, :unavailable, :archive]
+  before_action :set_program, only: [:edit, :update, :index, :bulk_update, :unavailable, :archive]
   before_action :set_show_confidential_names
   include AjaxModalRails::Controller
 
   def index
     @vouchers = @subprogram.vouchers.order(:id)
-    @vouchers_for_page = @vouchers.select { |v| v.status_match.blank? }
+    @vouchers_for_page = @vouchers.select { |v| v.status_match.blank? && v.archived_at.blank? }
     @voucher_state = 'available or unmatched'
   end
 
@@ -75,6 +75,22 @@ class VouchersController < ApplicationController
       @subprogram.update_summary!
     else
       flash[:error] = 'The selected voucher does not have an active match, and cannot be stopped.'
+    end
+    redirect_to action: :index
+  end
+
+  def archive
+    # You can only archive vouchers that aren't available
+    # You can only archive vouchers that don't have an active match
+    opportunity = @voucher.opportunity
+    if @voucher.available
+      flash[:error] = 'Vouchers must be unavailable to be archived'
+    elsif opportunity.active_matches.exists?
+      flash[:error] = 'Vouchers be archived if there is an active match'
+    else
+      @voucher.update(archived_at: Time.current)
+      flash[:notice] = 'Voucher archived'
+
     end
     redirect_to action: :index
   end
