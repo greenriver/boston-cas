@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_10_135302) do
+ActiveRecord::Schema.define(version: 2022_02_15_214217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,6 +288,7 @@ ActiveRecord::Schema.define(version: 2022_02_10_135302) do
     t.boolean "willing_case_management", default: false
     t.boolean "employed_three_months", default: false
     t.boolean "living_wage", default: false
+    t.boolean "send_emails", default: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"

@@ -121,6 +121,9 @@ module Cas
 
       client_attributes[:developmental_disability] = nil unless client_attributes[:developmental_disability].to_i == 1
 
+      # If we are set to send emails to this client, treat CAS as authoritative
+      client_attributes[:email].delete if project_client.client && project_client.client.email.present? && project_client.client.send_emails?
+
       # remove non-matching column names
       [
         :vispdat_length_homeless_in_days,
