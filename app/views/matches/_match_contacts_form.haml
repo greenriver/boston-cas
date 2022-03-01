@@ -11,7 +11,25 @@
     .col-sm-6
       = render 'contact_manager/contact_field', contact_type: :shelter_agency_contacts, input_name: 'match_contacts[shelter_agency_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: true
     .col-sm-6
-      = render 'contact_manager/contact_field', contact_type: :client_contacts, input_name: 'match_contacts[client_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: false
+      .form-group.email.optional
+        .controls
+          .form--label-hint-wrapper
+            .form--label-hint
+              %label.control-label.email.optional Client Email
+              - if @match_contacts.match.client.send_emails?
+                %p= @client.email.presence || not_specified
+      .row
+        .col-sm-6
+          - if @match_contacts.match.client.send_emails?
+            %p
+              %em Client has requested match emails
+          - else
+            %p
+              %em Client has not requested match emails
+        .col-sm-6.text-right
+          = link_to client_path(@match_contacts.match.client), class: 'btn btn-sm btn-light' do
+            Edit Client
+      -# = render 'contact_manager/contact_field', contact_type: :client_contacts, input_name: 'match_contacts[client_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: false
 
   .row
     .col-sm-6

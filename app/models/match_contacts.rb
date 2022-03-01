@@ -21,7 +21,8 @@ class MatchContacts
                 :housing_subsidy_admin_contact_ids,
                 :ssp_contact_ids,
                 :hsp_contact_ids,
-                :do_contact_ids
+                :do_contact_ids,
+                :client_email
 
   delegate :to_param, to: :match
 
@@ -36,6 +37,7 @@ class MatchContacts
     self.ssp_contacts = match.ssp_contacts
     self.hsp_contacts = match.hsp_contacts
     self.do_contacts = match.do_contacts
+    self.client_email = match.client.email
   end
 
   def save

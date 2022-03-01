@@ -81,6 +81,7 @@ module MatchDecisions::Four
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
+      inform_client(:new_match)
     end
 
     def notifications_for_this_step
@@ -157,11 +158,15 @@ module MatchDecisions::Four
     end
 
     private def validate_not_working_reasons_present_if_not_working_with_client
-      errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client' if not_working_with_client_reason.blank? && status == 'not_working_with_client'
+      return unless not_working_with_client_reason.blank? && status == 'not_working_with_client'
+
+      errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client'
     end
 
     private def validate_client_last_seen_date_present_if_not_working_with_client
-      errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client' if not_working_with_client_reason.present? && client_last_seen_date.blank?
+      return unless not_working_with_client_reason.present? && client_last_seen_date.blank?
+
+      errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client'
     end
 
     private def release_of_information_present_if_match_accepted
@@ -169,7 +174,9 @@ module MatchDecisions::Four
       # release_of_information = '1'
       # if the client previously signed the release
       # release_of_information = Time
-      errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process' if status == 'accepted' && release_of_information == '0'
+      return unless status == 'accepted' && release_of_information == '0'
+
+      errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
     end
 
     private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
