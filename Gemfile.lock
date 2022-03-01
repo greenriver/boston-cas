@@ -725,7 +725,7 @@ DEPENDENCIES
   pretender
   pry-byebug
   pry-rails
-  puma
+  puma (>= 5.6.2)
   rack-mini-profiler
   rails (~> 6.0.4.6)
   rails-controller-testing

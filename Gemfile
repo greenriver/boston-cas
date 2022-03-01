@@ -57,7 +57,7 @@ gem 'aws-sdk-elasticloadbalancingv2', require: false
 gem 'json'
 gem 'amazing_print'
 
-gem 'puma'
+gem 'puma', '>= 5.6.2'
 gem 'redis'
 
 gem 'activerecord-session_store'
@@ -128,7 +128,6 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
-  gem 'puma'
 
   gem 'rack-mini-profiler', require: false
   gem 'test-unit', '~> 3.0', require: false
