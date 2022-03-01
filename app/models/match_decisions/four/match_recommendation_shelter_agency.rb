@@ -19,8 +19,6 @@ module MatchDecisions::Four
     validate :release_of_information_present_if_match_accepted
     validate :spoken_with_services_agency_and_cori_release_submitted_if_accepted
 
-    before_create :set_defaults
-
     def label
       label_for_status status
     end
@@ -188,10 +186,6 @@ module MatchDecisions::Four
 
     private def decline_reason_blank?
       decline_reason.blank? && not_working_with_client_reason.blank?
-    end
-
-    private def set_defaults
-      self.include_note_in_email_default = Config.get(:include_note_in_email_default)
     end
 
     def whitelist_params_for_update params
