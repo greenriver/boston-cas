@@ -1307,7 +1307,6 @@ Lint/UnusedBlockArgument:
 Lint/UnusedMethodArgument:
   Exclude:
     - 'app/jobs/base_job.rb'
-    - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/base.rb'
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
@@ -1443,7 +1442,6 @@ Lint/UselessAssignment:
     - 'app/models/cas_seeds/opportunities.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/identified_client.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
@@ -1655,7 +1653,6 @@ Style/GuardClause:
     - 'app/models/concerns/match_decisions/accepts_decline_reason.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/notifier_config.rb'
-    - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/match_access_contexts/notification.rb'
     - 'app/models/match_decisions/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/base.rb'
@@ -1947,7 +1944,6 @@ Style/NumericPredicate:
     - 'spec/**/*'
     - 'app/controllers/system_status_controller.rb'
     - 'app/models/concerns/subject_for_matches.rb'
-    - 'app/models/deidentified_clients_xlsx.rb'
     - 'app/models/match_decisions/base.rb'
 
 # Offense count: 1
