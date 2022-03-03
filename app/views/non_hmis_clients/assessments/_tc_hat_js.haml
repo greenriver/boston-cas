@@ -1,0 +1,248 @@
+= content_for :page_js do
+  :javascript
+    // Daily Assistance
+    $('input[name*="[need_daily_assistance]"]').on('change', function(e) {
+      if($(this).is(':checked')) {
+        $('.jDailyAssistance').removeClass('d-none');
+      } else {
+        $('.jDailyAssistance').addClass('d-none');
+      }
+    });
+    $('input[name*="[need_daily_assistance]"]').trigger('change');
+
+    // I9
+    $('input[name*="[has_tax_id]"]').on('change', function(e) {
+      var value = $('input[name*="[has_tax_id]"]:checked').val();
+      var $question = $('input[name*="[tax_id]"]').closest('.c-question');
+      if(value !== undefined && value == 'true') {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[has_tax_id]"]').trigger('change');
+
+    // Family
+    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+      var $question = $('input[name*="[open_case]"]').closest('.c-question');
+      if(value !== undefined && value == 'Adults with Children') {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[tc_hat_household_type]"]').trigger('change');
+
+    // Youth
+    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
+
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+      var $question = $('input[name*="[foster_care]"]').closest('.c-question');
+      if(value !== undefined && value == 'Youth') {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[tc_hat_household_type]"]').trigger('change');
+
+    // IPV
+    $('input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_client_history]"][value="partner_violence_survivor"]').is(':checked');
+      var $question = $('input[name*="[currently_fleeing]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[dv_date]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
+
+    // IDs
+    $('input[name*="[state_id]"], input[name*="[birth_certificate]"], input[name*="[social_security_card]"]').on('change', function(e) {
+      var value = [$('input[name*="[state_id]"]:checked').val(), $('input[name*="[birth_certificate]"]:checked').val(), $('input[name*="[social_security_card]"]:checked').val()].includes('true');
+      var $question = $('.jDocuments');
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[state_id]"], input[name*="[birth_certificate]"], input[name*="[social_security_card]"]').trigger('change');
+
+    // Sex Offender
+    $('input[name*="[challenges]"]').on('change', function(e) {
+      var value = $('input[name*="[challenges]"][value="sex offender"]').is(':checked');
+      var $question = $('input[name*="[lifetime_sex_offender]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[challenges]"]').trigger('change');
+
+    // Medium and Long Term
+    $('input[name*="[full_time_employed]"], input[name*="[rrh_successful_exit]"]').on('change', function(e) {
+      var value = [$('input[name*="[full_time_employed]"]:checked').val(), $('input[name*="[rrh_successful_exit]"]:checked').val()].includes('true');
+      var $question = $('input[name*="[disabling_condition]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+      var $question = $('input[name*="[site_case_management_required]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+      var $question = $('.jLongTermRental')
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+    });
+    $('input[name*="[full_time_employed]"], input[name*="[rrh_successful_exit]"]').trigger('change');
+
+    // Work?
+    $('input[name*="[can_work_full_time]"], input[name*="[willing_to_work_full_time]"]').on('change', function(e) {
+      var value = JSON.stringify([$('input[name*="[can_work_full_time]"]:checked').val(), $('input[name*="[willing_to_work_full_time]"]:checked').val()]) === JSON.stringify(['true', 'true']);
+      var $question = $('textarea[name*="[why_not_working]"]').closest('.c-question');
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[rrh_successful_exit]"]').closest('.c-question');
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[can_work_full_time]"], input[name*="[willing_to_work_full_time]"]').trigger('change');
+
+    // Working?
+    $('input[name*="[full_time_employed]"]').on('change', function(e) {
+      var value = $('input[name*="[full_time_employed]"]:checked').val();
+      var $question = $('input[name*="[can_work_full_time]"]').closest('.c-question');
+      if(value === undefined || value == 'false') {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[willing_to_work_full_time]"]').closest('.c-question');
+      if(value === undefined || value == 'false') {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[full_time_employed]"]').trigger('change');
+
+    // working or willing TH?
+    $('input[name*="[full_time_employed]"], input[name*="[willing_to_work_full_time]"]').on('change', function(e) {
+      var value = [$('input[name*="[full_time_employed]"]:checked').val(), $('input[name*="[willing_to_work_full_time]"]:checked').val()].includes('true');
+      var $question = $('.jTransitionalHousing');
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[th_desired]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[full_time_employed]"], input[name*="[willing_to_work_full_time]"]').trigger('change');
+
+    // TH
+    $('input[name*="[th_desired]"]').on('change', function(e) {
+      var value = [$('input[name*="[th_desired]"]:checked').val()].includes('true');
+      var $question = $('.jThDesired');
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[drug_test]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[heavy_drug_use]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[sober]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[willing_case_management]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[employed_three_months]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      var $question = $('input[name*="[living_wage]"]').closest('.c-question')
+      if(value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[th_desired]"]').trigger('change');
+
+    // others
+    $('input[name*="[housing_preferences]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+      var $question = $('input[name*="[housing_preferences_other]"]').closest('.c-question');
+      if(value !== undefined && value == 'other') {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[tc_hat_household_type]"]').trigger('change');
+
+    // Housing
+    var $inputs = $('select[name*="[tc_hat_apartment]"], select[name*="[tc_hat_tiny_home]"], select[name*="[tc_hat_rv]"], select[name*="[tc_hat_house]"], select[name*="[tc_hat_mobile_home]"]');
+    $inputs.on('change', function(e) {
+      var value = $(this).find('option:selected').val();
+      var in_use = $inputs.map(function(index, select) {
+        var v = $(select).find('option:selected').val();
+        return v === "" ? null : v;
+      }).toArray();
+      $.each($inputs, function(index_s, select) {
+        $.each($(select).find('option').not(':selected'), function(index_o, opt) {
+          if(in_use.includes($(opt).val())) {
+            $(opt).attr('disabled', 'disabled');
+          } else {
+            $(opt).removeAttr('disabled');
+          }
+        });
+      });
+    });
+    $('select[name*="[tc_hat_apartment]"]').trigger('change');
