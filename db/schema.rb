@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_04_163601) do
+ActiveRecord::Schema.define(version: 2022_02_15_214217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,7 +288,19 @@ ActiveRecord::Schema.define(version: 2022_02_04_163601) do
     t.boolean "willing_case_management", default: false
     t.boolean "employed_three_months", default: false
     t.boolean "living_wage", default: false
+    t.boolean "send_emails", default: false
+    t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
+    t.index ["available"], name: "index_clients_on_available"
+    t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
+    t.index ["date_of_birth"], name: "index_clients_on_date_of_birth"
+    t.index ["days_homeless_in_last_three_years"], name: "index_clients_on_days_homeless_in_last_three_years"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
+    t.index ["disabling_condition"], name: "index_clients_on_disabling_condition"
+    t.index ["enrolled_project_ids"], name: "index_clients_on_enrolled_project_ids"
+    t.index ["family_member"], name: "index_clients_on_family_member"
+    t.index ["health_prioritized"], name: "index_clients_on_health_prioritized"
+    t.index ["vispdat_priority_score"], name: "index_clients_on_vispdat_priority_score"
+    t.index ["vispdat_score"], name: "index_clients_on_vispdat_score"
   end
 
   create_table "configs", id: :serial, force: :cascade do |t|
@@ -865,6 +877,58 @@ ActiveRecord::Schema.define(version: 2022_02_04_163601) do
     t.integer "homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "homeless_nights_unsheltered", default: 0
+    t.integer "tc_hat_assessment_level"
+    t.string "tc_hat_household_type"
+    t.text "ongoing_support_reason"
+    t.string "ongoing_support_housing_type"
+    t.jsonb "strengths"
+    t.jsonb "challenges"
+    t.boolean "lifetime_sex_offender", default: false
+    t.boolean "state_id", default: false
+    t.boolean "birth_certificate", default: false
+    t.boolean "social_security_card", default: false
+    t.boolean "has_tax_id", default: false
+    t.string "tax_id"
+    t.boolean "roommate_ok", default: false
+    t.boolean "full_time_employed", default: false
+    t.boolean "can_work_full_time", default: false
+    t.boolean "willing_to_work_full_time", default: false
+    t.string "why_not_working"
+    t.boolean "rrh_successful_exit", default: false
+    t.boolean "th_desired", default: false
+    t.boolean "drug_test", default: false
+    t.boolean "heavy_drug_use", default: false
+    t.boolean "sober", default: false
+    t.boolean "willing_case_management", default: false
+    t.boolean "employed_three_months", default: false
+    t.boolean "living_wage", default: false
+    t.boolean "site_case_management_required", default: false
+    t.jsonb "tc_hat_client_history"
+    t.boolean "open_case", default: false
+    t.boolean "foster_care", default: false
+    t.boolean "currently_fleeing", default: false
+    t.date "dv_date"
+    t.boolean "tc_hat_ed_visits", default: false
+    t.boolean "tc_hat_hospitalizations", default: false
+    t.boolean "sixty_plus", default: false
+    t.boolean "cirrhosis", default: false
+    t.boolean "end_stage_renal_disease", default: false
+    t.boolean "heat_stroke", default: false
+    t.boolean "blind", default: false
+    t.boolean "tri_morbidity", default: false
+    t.boolean "high_potential_for_victimization", default: false
+    t.boolean "self_harm", default: false
+    t.boolean "medical_condition", default: false
+    t.boolean "psychiatric_condition", default: false
+    t.jsonb "housing_preferences"
+    t.string "housing_preferences_other"
+    t.jsonb "housing_rejected_preferences"
+    t.integer "tc_hat_apartment"
+    t.integer "tc_hat_tiny_home"
+    t.integer "tc_hat_rv"
+    t.integer "tc_hat_house"
+    t.integer "tc_hat_mobile_home"
+    t.integer "tc_hat_total_housing_rank"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1678,6 +1742,7 @@ ActiveRecord::Schema.define(version: 2022_02_04_163601) do
     t.datetime "deleted_at"
     t.integer "user_id"
     t.datetime "made_available_at"
+    t.datetime "archived_at"
     t.index ["deleted_at"], name: "index_vouchers_on_deleted_at"
     t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id"
     t.index ["unit_id"], name: "index_vouchers_on_unit_id"

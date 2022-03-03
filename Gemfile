@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord-import'
 gem 'pg', '~> 0.20.0'
-gem 'rails', '~>6.0.4.2'
+gem 'rails', '~>6.0.4.6'
 
 gem 'bcrypt'
 gem 'bootsnap'
@@ -11,6 +11,7 @@ gem 'composite_primary_keys', '~> 12.0'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
+gem 'nokogiri', '>= 1.13.2' # CVE-2021-30560
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'
@@ -56,7 +57,7 @@ gem 'aws-sdk-elasticloadbalancingv2', require: false
 gem 'json'
 gem 'amazing_print'
 
-gem 'puma'
+gem 'puma', '>= 5.6.2'
 gem 'redis'
 
 gem 'activerecord-session_store'
@@ -127,7 +128,6 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
-  gem 'puma'
 
   gem 'rack-mini-profiler', require: false
   gem 'test-unit', '~> 3.0', require: false
