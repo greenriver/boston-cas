@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_15_214217) do
+ActiveRecord::Schema.define(version: 2022_02_24_174712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.integer "lock_days", default: 0, null: false
     t.integer "lock_grace_days", default: 0, null: false
     t.boolean "limit_client_names_on_matches", default: true
+    t.boolean "include_note_in_email_default"
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
@@ -619,6 +620,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "disable_opportunity", default: false
     t.boolean "external_software_used", default: false, null: false
     t.string "address"
+    t.boolean "include_note_in_email"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
