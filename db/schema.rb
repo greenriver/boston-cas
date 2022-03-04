@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_15_214217) do
+ActiveRecord::Schema.define(version: 2022_03_02_211912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.integer "lock_days", default: 0, null: false
     t.integer "lock_grace_days", default: 0, null: false
     t.boolean "limit_client_names_on_matches", default: true
+    t.boolean "include_note_in_email_default"
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
@@ -619,6 +620,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "disable_opportunity", default: false
     t.boolean "external_software_used", default: false, null: false
     t.string "address"
+    t.boolean "include_note_in_email"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
@@ -929,6 +931,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.integer "tc_hat_house"
     t.integer "tc_hat_mobile_home"
     t.integer "tc_hat_total_housing_rank"
+    t.integer "days_homeless"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1013,6 +1016,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_214217) do
     t.boolean "ssn_refused", default: false
     t.integer "race"
     t.integer "ethnicity"
+    t.integer "days_homeless"
+    t.boolean "sixty_plus"
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 

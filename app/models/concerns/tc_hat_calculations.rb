@@ -23,7 +23,7 @@ module TcHatCalculations
     end
 
     def calculated_score
-      total_days_homeless_in_the_last_three_years
+      days_homeless
     end
 
     def client_history_options
@@ -166,8 +166,8 @@ module TcHatCalculations
           as: :pretty_boolean_group,
           number: 'A-9',
         },
-        days_homeless_in_the_last_three_years: {
-          label: 'Total Days Homeless in the Past Three Years',
+        days_homeless: {
+          label: 'Cumulative Days Homeless',
           number: 'A-10',
         },
         _section_b_preamble: {

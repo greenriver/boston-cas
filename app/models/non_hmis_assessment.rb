@@ -304,6 +304,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :tc_hat_house,
       :tc_hat_mobile_home,
       :tc_hat_total_housing_rank,
+      :days_homeless,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

@@ -367,6 +367,10 @@ class NonHmisClient < ApplicationRecord
     assessment.imported_timestamp = imported_timestamp
     assessment.is_currently_youth = is_currently_youth
     assessment.older_than_65 = older_than_65
+    assessment.days_homeless = days_homeless
+    assessment.sixty_plus = sixty_plus
+    assessment.tc_hat_household_type = 'Adults with Children' if family_member
+    assessment.hiv_aids = hiv_aids
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at
