@@ -1,0 +1,7 @@
+= content_for :modal_title do
+  Edit Email Preferences
+
+= simple_form_for @client, as: :contact_info, url: client_contact_path(@client) do |f|
+  = f.input :email
+  = f.input :send_emails, label: 'Client wishes to receive email from matches'
+  = f.submit value: 'Update', class: 'btn btn-secondary'

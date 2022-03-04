@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :clients, only: [:index, :show, :update] do
     resource :contacts, only: [:edit, :update], controller: :client_contacts, concerns: [:restorable]
+    resource :contact, only: [:edit, :update], controller: :client_contact
     patch :unavailable, on: :member
     resources :unavailable_on_route, only: [:destroy]
     resources :matches, controller: 'client_matches', only: :index

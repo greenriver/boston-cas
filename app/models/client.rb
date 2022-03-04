@@ -101,6 +101,10 @@ class Client < ApplicationRecord
     end
   end
 
+  def editable_by?(user)
+    Client.editable_by(user).where(id: id).exists?
+  end
+
   scope :parked, -> do
     joins(:unavailable_as_candidate_fors)
   end
@@ -546,10 +550,10 @@ class Client < ApplicationRecord
   end
 
   def has_enrollments?
-    self.enrolled_in_th ||
-    self.enrolled_in_sh ||
-    self.enrolled_in_so ||
-    self.enrolled_in_es
+    enrolled_in_th ||
+    enrolled_in_sh ||
+    enrolled_in_so ||
+    enrolled_in_es
   end
 
   def structured_rrh_assessment_contact_info
