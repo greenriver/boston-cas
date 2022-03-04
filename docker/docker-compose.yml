@@ -20,6 +20,7 @@ x-app: &app
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
+    BUNDLE_FORCE_RUBY_PLATFORM: 'true'
     CHROMEDRIVER_VERSION: 79.0.3945.36
   tmpfs:
     - /tmp

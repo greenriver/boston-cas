@@ -25,7 +25,7 @@ RUN apk add --no-cache \
   icu icu-dev \
   curl libcurl curl-dev \
   imagemagick \
-  libmagic file-dev file \
+  libmagic file-dev file gcompat \
   build-base libxml2-dev libxslt-dev postgresql-dev \
   wkhtmltopdf libgcc libstdc++ libx11 glib libxrender libxext libintl \
   ttf-dejavu ttf-droid ttf-freefont ttf-liberation \
