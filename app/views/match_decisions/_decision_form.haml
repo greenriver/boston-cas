@@ -1,4 +1,4 @@
-= simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|       
+= simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
   .row
     .col-md-6
       = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
@@ -15,7 +15,7 @@
         %p Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{_('Shelter Agency')} contact
         .row
           .col-md-6
-            = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers'}
+            = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers', value: @match.shelter_expiration }
         .form-actions.clearfix
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message
