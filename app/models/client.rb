@@ -350,6 +350,10 @@ class Client < ApplicationRecord
     tags.try(:[], tag_id.to_s)
   end
 
+  def days_homeless_populations match_route:
+    ''
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
