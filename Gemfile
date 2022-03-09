@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord-import'
 gem 'pg', '~> 0.20.0'
-gem 'rails', '~>6.0.4.6'
+gem 'rails', '~>6.0'
 
 gem 'bcrypt'
 gem 'bootsnap'
@@ -11,6 +11,7 @@ gem 'composite_primary_keys', '~> 12.0'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
+gem 'nokogiri', '>= 1.13.2' # CVE-2021-30560
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'
@@ -27,7 +28,6 @@ gem 'simple_form'
 gem 'virtus'
 
 gem 'kaminari'
-gem 'nokogiri'
 gem 'ransack'
 gem 'responders'
 gem 'memoist', require: false
@@ -40,9 +40,11 @@ gem 'ruby-filemagic'
 
 # AWS SDK is needed for deployment and within the application
 gem 'aws-sdk-rails'
+gem 'aws-sdk-autoscaling', '~> 1'
 gem 'aws-sdk-cloudwatchevents', '~> 1'
 gem 'aws-sdk-ecs', '~> 1'
 gem 'aws-sdk-ec2', '~> 1'
+gem 'aws-sdk-elasticloadbalancingv2', '~> 1'
 gem 'aws-sdk-glacier', '~> 1'
 gem 'aws-sdk-rds', '~> 1'
 gem 'aws-sdk-s3', '~> 1'
@@ -51,9 +53,9 @@ gem 'aws-sdk-ses', '~> 1'
 gem 'aws-sdk-iam', '~> 1'
 gem 'aws-sdk-ecr', '~> 1'
 gem 'aws-sdk-sns', require: false
+gem "aws-sdk-ssm", "~> 1"
 gem 'aws-sdk-cloudwatch', require: false
 gem 'aws-sdk-cloudwatchlogs', require: false
-gem 'aws-sdk-elasticloadbalancingv2', require: false
 gem 'json'
 gem 'amazing_print'
 

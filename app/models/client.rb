@@ -26,43 +26,43 @@ class Client < ApplicationRecord
   has_many :client_contacts, dependent: :destroy, inverse_of: :client
   has_many :contacts, through: :client_contacts
 
-  has_many :regular_client_contacts, -> { where regular: true},
-    class_name: 'ClientContact'
+  has_many :regular_client_contacts, -> { where regular: true },
+           class_name: 'ClientContact'
   has_many :regular_contacts,
-    through: :regular_client_contacts,
-    source: :contact
+           through: :regular_client_contacts,
+           source: :contact
 
-  has_many :shelter_agency_client_contacts, -> { where shelter_agency: true},
+  has_many :shelter_agency_client_contacts, -> { where shelter_agency: true },
            class_name: 'ClientContact'
   has_many :shelter_agency_contacts,
            through: :shelter_agency_client_contacts,
            source: :contact
 
-  has_many :dnd_staff_client_contacts, -> { where dnd_staff: true},
+  has_many :dnd_staff_client_contacts, -> { where dnd_staff: true },
            class_name: 'ClientContact'
   has_many :dnd_staff_contacts,
            through: :dnd_staff_client_contacts,
            source: :contact
 
-  has_many :housing_subsidy_admin_client_contacts, -> { where housing_subsidy_admin: true},
+  has_many :housing_subsidy_admin_client_contacts, -> { where housing_subsidy_admin: true },
            class_name: 'ClientContact'
   has_many :housing_subsidy_admin_contacts,
            through: :housing_subsidy_admin_client_contacts,
            source: :contact
 
-  has_many :hsp_client_contacts, -> { where hsp: true},
+  has_many :hsp_client_contacts, -> { where hsp: true },
            class_name: 'ClientContact'
   has_many :hsp_contacts,
            through: :hsp_client_contacts,
            source: :contact
 
-  has_many :ssp_client_contacts, -> { where ssp: true},
+  has_many :ssp_client_contacts, -> { where ssp: true },
            class_name: 'ClientContact'
   has_many :ssp_contacts,
            through: :ssp_client_contacts,
            source: :contact
 
-  has_many :do_client_contacts, -> { where do: true},
+  has_many :do_client_contacts, -> { where do: true },
            class_name: 'ClientContact'
   has_many :do_contacts,
            through: :do_client_contacts,
@@ -77,12 +77,12 @@ class Client < ApplicationRecord
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent', inverse_of: :client
   has_many :external_referrals, inverse_of: :client
 
-  validates :ssn, length: {maximum: 9}
+  validates :ssn, length: { maximum: 9 }
 
-  scope :visible_by, -> (user) do
+  scope :visible_by, ->(user) do
     if user&.can_view_all_clients? || user&.can_edit_all_clients?
       current_scope || all
-    elsif user&.can_edit_clients_based_on_rules? && user&.requirements.exists?
+    elsif user&.can_edit_clients_based_on_rules? && user&.requirements&.exists?
       client_scope = current_scope || all
       user.requirements.each do |requirement|
         client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
@@ -93,7 +93,7 @@ class Client < ApplicationRecord
     end
   end
 
-  scope :editable_by, -> (user) do
+  scope :editable_by, ->(user) do
     if user.can_edit_all_clients? || user.can_edit_clients_based_on_rules?
       visible_by(user)
     else
@@ -101,11 +101,15 @@ class Client < ApplicationRecord
     end
   end
 
+  def editable_by?(user)
+    Client.editable_by(user).where(id: id).exists?
+  end
+
   scope :parked, -> do
     joins(:unavailable_as_candidate_fors)
   end
 
-  scope :available_for_matching, -> (match_route)  do
+  scope :available_for_matching, ->(match_route) do
     # anyone who hasn't been matched fully, isn't parked
     available_clients = available.available_as_candidate(match_route)
     # and unless allowed by the route, isn't active in another match
@@ -113,14 +117,14 @@ class Client < ApplicationRecord
       available_clients.where.not(
         id: ClientOpportunityMatch.active.
           on_route(match_route).
-          joins(:client).select(arel_table[:id])
+          joins(:client).select(arel_table[:id]),
       )
     else
       available_clients
     end
   end
 
-  scope :available_as_candidate, -> (match_route) do
+  scope :available_as_candidate, ->(match_route) do
     where.not(id: UnavailableAsCandidateFor.for_route(match_route).select(:client_id))
   end
 
@@ -137,7 +141,7 @@ class Client < ApplicationRecord
     where(available: true)
   end
 
-  scope :unavailable_in, -> (route) do
+  scope :unavailable_in, ->(route) do
     joins(:unavailable_as_candidate_fors).merge(UnavailableAsCandidateFor.for_route(route))
   end
   # scope :fully_matched, -> {
@@ -145,54 +149,53 @@ class Client < ApplicationRecord
   #   where.not(id: active_in_match.select(:id))
   # }
 
-  scope :veteran, -> { where(veteran: true)}
-  scope :non_veteran, -> { where(veteran: false)}
+  scope :veteran, -> { where(veteran: true) }
+  scope :non_veteran, -> { where(veteran: false) }
   scope :confidential, -> { where(confidential: true) }
   scope :non_confidential, -> { where(confidential: false) }
   scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
 
-  scope :search_alternate_name, -> (name) do
+  scope :search_alternate_name, ->(name) do
     arel_table[:alternate_names].lower.matches("%#{name.downcase}%")
   end
-  scope :search_first_name, -> (name) do
+  scope :search_first_name, ->(name) do
     arel_table[:first_name].lower.matches("#{name.downcase}%")
   end
-  scope :search_last_name, -> (name) do
+  scope :search_last_name, ->(name) do
     arel_table[:last_name].lower.matches("#{name.downcase}%")
   end
-  scope :search_last_four, -> (last4) do
+  scope :search_last_four, ->(last4) do
     arel_table[:ssn].matches("%#{last4}")
   end
 
-  scope :text_search, -> (text) do
+  scope :text_search, ->(text) do
     return none unless text.present?
+
     text.strip!
     sa = arel_table
-    numeric = /[\d-]+/.match(text).try(:[], 0) == text
+    # numeric = /[\d-]+/.match(text).try(:[], 0) == text
     date = /\d\d?\/\d\d?\/\d\d\d\d/.match(text).try(:[], 0) == text
     social = /\d\d\d-?\d\d-?\d\d\d\d/.match(text).try(:[], 0) == text
     last_four = /\d{4}/.match(text).try(:[], 0) == text
     # Explicitly search for only last, first if there's a comma in the search
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
-      if last.present?
-        where = search_last_name(last).or(search_alternate_name(last))
-      end
+      where = search_last_name(last).or(search_alternate_name(last)) if last.present?
       if last.present? && first.present?
         where = where.and(search_first_name(first)).or(search_alternate_name(first))
       elsif first.present?
         where = search_first_name(first).or(search_alternate_name(first))
       end
-    # Explicity search for "first last"
+    # Explicitly search for "first last"
     elsif text.include?(' ')
       first, last = text.split(' ').map(&:strip)
-      where = search_first_name(first)
-        .and(search_last_name(last))
-        .or(search_alternate_name(first))
-        .or(search_alternate_name(last))
+      where = search_first_name(first).
+        and(search_last_name(last)).
+        or(search_alternate_name(first)).
+        or(search_alternate_name(last))
     # Explicitly search for a PersonalID
     elsif social
-      where = sa[:ssn].eq(text.gsub('-',''))
+      where = sa[:ssn].eq(text.gsub('-', ''))
     elsif last_four
       where = search_last_four(text)
     elsif date
@@ -200,22 +203,22 @@ class Client < ApplicationRecord
       where = sa[:date_of_birth].eq("#{year}-#{month}-#{day}")
     else
       query = "%#{text}%"
-      where = search_first_name(text)
-        .or(search_last_name(text))
-        .or(sa[:ssn].matches(query))
-        .or(search_alternate_name(text))
+      where = search_first_name(text).
+        or(search_last_name(text)).
+        or(sa[:ssn].matches(query)).
+        or(search_alternate_name(text))
     end
     where(where)
   end
 
-  def self.ransackable_scopes(auth_object = nil)
+  def self.ransackable_scopes(_auth_object = nil)
     [:text_search]
   end
 
   def full_name
-    [first_name, middle_name, last_name, name_suffix].select{|n| n.present?}.join(' ')
+    [first_name, middle_name, last_name, name_suffix].select(&:present?).join(' ')
   end
-  alias_method :name, :full_name
+  alias name full_name
 
   def client_name_for_user user, hidden:
     if user.can_view_all_clients? || accessible_by_user?(user)
@@ -228,12 +231,10 @@ class Client < ApplicationRecord
   def client_name_for_contact contact, hidden:
     if contact.user_can_view_all_clients?
       hide_name(name: full_name, hidden: hidden)
+    elsif project_client.non_hmis_client_identifier.blank?
+      '(name withheld)'
     else
-      if project_client.non_hmis_client_identifier.blank?
-        '(name withheld)'
-      else
-        hide_name(name: project_client.non_hmis_client_identifier, hidden: hidden)
-      end
+      hide_name(name: project_client.non_hmis_client_identifier, hidden: hidden)
     end
   end
 
@@ -257,9 +258,9 @@ class Client < ApplicationRecord
     match_route.match_prioritization.prioritization_for_clients(scope)
   end
 
-  # A random number for prioritizations that require a tie-breaker
+  # A random number for prioritization that require a tie-breaker
   def assign_tie_breaker
-    tie_breaker = rand
+    self.tie_breaker = rand
   end
 
   def self.add_missing_tie_breakers
@@ -315,29 +316,31 @@ class Client < ApplicationRecord
 
   def previously_merged?
     count = Client.where(merged_into: id).pluck(id).length
-    if count > 0
-      return true
-    end
-    return false
+    return true if count.positive?
+
+    false
   end
 
   def self.age date:, dob:
     return unless date.present? && dob.present?
+
     age = date.year - dob.year
     age -= 1 if dob > date.years_ago(age)
     return age
   end
 
-  def age date=Date.current
+  def age date = Date.current
     return unless date_of_birth.present?
+
     date = date.to_date
     dob = date_of_birth.to_date
     self.class.age(date: date, dob: dob)
   end
-  alias_method :age_on, :age
+  alias age_on age
 
   def cohorts
     return [] unless Warehouse::Base.enabled?
+
     Warehouse::Cohort.visible_in_cas.where(id: active_cohort_ids)
   end
 
@@ -346,13 +349,26 @@ class Client < ApplicationRecord
     tags.try(:[], tag_id.to_s)
   end
 
+  def days_homeless_populations(*)
+    {
+      'Veteran' => yes_no(veteran),
+      'Adult and Child' => yes_no(family_member),
+      'Youth' => yes_no(is_currently_youth || age&.between?(18, 24)),
+      'Days Homeless' => days_homeless,
+    }.map { |k, v| "#{k}: #{v}" }.join('; ')
+  end
+
+  private def yes_no(bool)
+    bool ? 'Yes' : 'No'
+  end
+
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
   end
 
   def housing_history
-    #client_opportunity_matches.inspect
+    # client_opportunity_matches.inspect
   end
 
   def match_for_opportunity(opportunity)
@@ -411,8 +427,8 @@ class Client < ApplicationRecord
           opportunity = active_match.opportunity
           active_match.canceled!
           MatchEvents::Parked.create!(
-              match_id: active_match.id,
-              contact_id: contact_id
+            match_id: active_match.id,
+            contact_id: contact_id,
           )
           opportunity.update(available_candidate: true)
         end
@@ -431,8 +447,8 @@ class Client < ApplicationRecord
         match.canceled! # note canceled! makes the client available in the route
         Notifications::MatchCanceled.create_for_match! match
         MatchEvents::Parked.create!(
-            match_id: match.id,
-            contact_id: contact_id
+          match_id: match.id,
+          contact_id: contact_id,
         )
         opportunity.update(available_candidate: true)
         # Delete any non-active open matches
@@ -444,15 +460,15 @@ class Client < ApplicationRecord
   end
 
   def remote_id
-   @remote_id ||= project_client&.id_in_data_source.presence
+    @remote_id ||= project_client&.id_in_data_source.presence
   end
 
   def remote_data_source_id
-   @remote_data_source_id ||= project_client&.data_source_id
+    @remote_data_source_id ||= project_client&.data_source_id
   end
 
   def remote_data_source
-   @remote_data_source ||= DataSource.find(remote_data_source_id) rescue false
+    @remote_data_source ||= DataSource.find(remote_data_source_id) rescue false # rubocop:disable Style/RescueModifier
   end
 
   def remote_client_visible_to?(user)
@@ -467,17 +483,17 @@ class Client < ApplicationRecord
   # be replaced with Client.remote_id
   # Default URL will use the warehouse setting from the site config
   def data_source_path
-   if remote_data_source_id && remote_id
+    return unless remote_data_source_id && remote_id
+
     # FIXME: if client....identified? change url
     internal_url = DataSource.where(id: remote_data_source_id).pluck(:client_url).first
     # Make sure links work for identified clients as well
     internal_url = internal_url.gsub('deidentified', 'identified') unless internal_url.blank? || project_client.is_deidentified?
     url = internal_url || Config.get(:warehouse_url) + "/clients/#{remote_id}"
     return url.gsub(':client_id:', remote_id.to_s) if url
-   end
   end
 
-  def has_full_housing_release?
+  def has_full_housing_release? # rubocop:disable Naming/PredicateName
     # If we have a warehouse connected, use the file tags available there
     release_tags = if Warehouse::Base.enabled? && remote_data_source.try(:db_identifier) != 'Deidentified'
       Warehouse::AvailableFileTag.full_release.pluck(:name)
@@ -515,8 +531,9 @@ class Client < ApplicationRecord
     (routes - ufs).count.zero?
   end
 
-  def is_available_for_matching?
+  def is_available_for_matching? # rubocop:disable Naming/PredicateName
     return false if unavailable_on_all_routes?
+
     available
   end
 
@@ -530,7 +547,7 @@ class Client < ApplicationRecord
         'Fully matched'
       end
     else
-      if unavailable_on_all_routes?
+      if unavailable_on_all_routes? # rubocop:disable Style/IfInsideElse
         'Not available on any route'
       else
         'Not available'
@@ -545,11 +562,11 @@ class Client < ApplicationRecord
       maximum(mdr_b_t[:updated_at])&.to_date
   end
 
-  def has_enrollments?
-    self.enrolled_in_th ||
-    self.enrolled_in_sh ||
-    self.enrolled_in_so ||
-    self.enrolled_in_es
+  def has_enrollments? # rubocop:disable Naming/PredicateName
+    enrolled_in_th ||
+    enrolled_in_sh ||
+    enrolled_in_so ||
+    enrolled_in_es
   end
 
   def structured_rrh_assessment_contact_info
@@ -578,20 +595,20 @@ class Client < ApplicationRecord
 
   def self.sort_options(show_vispdat: false, show_assessment: false)
     [
-      {title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
-      {title: 'Last name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true},
-      {title: 'First name A-Z', column: 'first_name', direction: 'asc', order: 'LOWER(first_name) ASC', visible: true},
-      {title: 'First name Z-A', column: 'first_name', direction: 'desc', order: 'LOWER(first_name) DESC', visible: true},
-      {title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc', order: 'date_of_birth DESC', visible: true},
-      {title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true},
-      {title: 'Homeless days', column: 'days_homeless', direction: 'desc', order: 'days_homeless DESC', visible: true},
-      {title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc',
-          order: 'days_homeless_in_last_three_years DESC', visible: true},
-      {title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
-          order: 'calculated_first_homeless_night ASC', visible: true},
-      {title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_assessment},
-      {title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat},
-      {title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true}
+      { title: 'Last name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true },
+      { title: 'Last name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true },
+      { title: 'First name A-Z', column: 'first_name', direction: 'asc', order: 'LOWER(first_name) ASC', visible: true },
+      { title: 'First name Z-A', column: 'first_name', direction: 'desc', order: 'LOWER(first_name) DESC', visible: true },
+      { title: 'Youngest to oldest', column: 'date_of_birth', direction: 'desc', order: 'date_of_birth DESC', visible: true },
+      { title: 'Oldest to youngest', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true },
+      { title: 'Homeless days', column: 'days_homeless', direction: 'desc', order: 'days_homeless DESC', visible: true },
+      { title: 'Most served in last three years', column: 'days_homeless_in_last_three_years', direction: 'desc',
+        order: 'days_homeless_in_last_three_years DESC', visible: true },
+      { title: 'Longest standing', column: 'calculated_first_homeless_night', direction: 'asc',
+        order: 'calculated_first_homeless_night ASC', visible: true },
+      { title: 'Assessment score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: show_assessment },
+      { title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat },
+      { title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true },
     ]
   end
 
