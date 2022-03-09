@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord-import'
 gem 'pg', '~> 0.20.0'
-gem 'rails', '~>6.0.4.6'
+gem 'rails', '~>6.0'
 
 gem 'bcrypt'
 gem 'bootsnap'
