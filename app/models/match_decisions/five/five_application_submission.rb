@@ -49,8 +49,8 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "Match Awaiting Application Submission"
-      when :expiration_update then "Match Awaiting Application Submission"
+      when :pending then 'Match Awaiting Application Submission'
+      when :expiration_update then 'Match Awaiting Application Submission'
       when :accepted then "Client Application Submitted by #{actor_type}"
       when :declined then "Match Declined by #{actor_type}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
@@ -98,14 +98,12 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
     private def application_date_present_if_status_complete
-      if status == 'completed' && application_date.blank?
-        errors.add :application_date, 'must be filled in'
-      end
+      errors.add :application_date, 'must be filled in' if status == 'completed' && application_date.blank?
     end
   end
 end

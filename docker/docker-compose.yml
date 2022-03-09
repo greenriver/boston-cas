@@ -22,6 +22,7 @@ x-app: &app
     EDITOR: vi
     BUNDLE_FORCE_RUBY_PLATFORM: 'true'
     CHROMEDRIVER_VERSION: 79.0.3945.36
+    BUNDLE_FORCE_RUBY_PLATFORM: true
   tmpfs:
     - /tmp
 

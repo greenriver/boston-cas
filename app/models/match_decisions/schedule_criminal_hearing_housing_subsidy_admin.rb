@@ -6,6 +6,7 @@
 
 module MatchDecisions
   class ScheduleCriminalHearingHousingSubsidyAdmin < Base
+    include MatchDecisions::AcceptsDeclineReason # For shelter agency declines
 
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
@@ -19,6 +20,8 @@ module MatchDecisions
       when :pending then "#{_('Housing Subsidy Administrator')} #{_('researching criminal background and deciding whether to schedule a hearing')}"
       when :scheduled then "#{_('Housing Subsidy Administrator')} #{_('has scheduled criminal background hearing for')} <strong>#{criminal_hearing_date}</strong>".html_safe
       when :no_hearing then "#{_('Housing Subsidy Administrator')} #{_('indicates there will not be a criminal background hearing')}"
+      when :shelter_declined then "Match declined by #{_('Shelter Agency Contact')}.  Reason: #{decline_reason_name}"
+      when :skipped then 'Skipped'
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -36,13 +39,19 @@ module MatchDecisions
       :housing_subsidy_admin_contacts
     end
 
+    def include_additional_shelter_agency_decline?
+      true
+    end
+
     def statuses
       {
         pending: 'Pending',
         scheduled: _('Criminal Background Hearing Scheduled'),
         no_hearing: _('There will not be a criminal background hearing'),
         canceled: 'Canceled',
+        shelter_declined: 'Declined by Shelter Agency',
         back: 'Pending',
+        skipped: 'Skipped',
       }
     end
 
@@ -63,6 +72,10 @@ module MatchDecisions
       ]
     end
 
+    private def decline_reason_scope(_contact)
+      MatchDecisionReasons::ShelterAgencyDecline.all
+    end
+
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'
@@ -78,7 +91,7 @@ module MatchDecisions
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
@@ -86,9 +99,14 @@ module MatchDecisions
       super + [:criminal_hearing_date]
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+      contact.in?(match.send(contact_actor_type))
+    end
+
+    def declineable_by?(contact)
+      contact.user_can_act_on_behalf_of_match_contacts? ||
+      contact.in?(match.shelter_agency_contacts)
     end
 
     def show_client_match_attributes?
@@ -105,7 +123,7 @@ module MatchDecisions
 
       def no_hearing
         # Set the next step status to approved and skip the next step
-        @decision.next_step.update(status: :accepted)
+        @decision.next_step.update(status: :skipped)
         @decision.next_step.next_step.initialize_decision!
       end
 
@@ -113,22 +131,23 @@ module MatchDecisions
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
+
+      def shelter_declined
+        @decision.class.transaction do
+          @decision.update(status: nil)
+          match.create_confirm_shelter_decline_of_hearing_decision unless match.confirm_shelter_decline_of_hearing_decision.present?
+          match.confirm_shelter_decline_of_hearing_decision.initialize_decision!
+        end
+      end
     end
     private_constant :StatusCallbacks
 
-    private
+    private def criminal_hearing_date_present_if_scheduled
+      errors.add :criminal_hearing_date, 'must be filled in' if status == 'scheduled' && criminal_hearing_date.blank?
+    end
 
-      def criminal_hearing_date_present_if_scheduled
-        if status == 'scheduled' && criminal_hearing_date.blank?
-          errors.add :criminal_hearing_date, 'must be filled in'
-        end
-      end
-
-      def criminal_hearing_date_absent_if_no_hearing
-        if status == 'no_hearing' && criminal_hearing_date.present?
-          errors.add :criminal_hearing_date, 'must not be filled in'
-        end
-      end
-
+    private def criminal_hearing_date_absent_if_no_hearing
+      errors.add :criminal_hearing_date, 'must not be filled in' if status == 'no_hearing' && criminal_hearing_date.present?
+    end
   end
 end

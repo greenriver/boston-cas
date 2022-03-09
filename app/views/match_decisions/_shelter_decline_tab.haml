@@ -1,0 +1,9 @@
+- if @decision.include_additional_shelter_agency_decline?
+  - active_tab = '' unless defined?(active_tab)
+  - aria_selected = 'true' if active_tab.present?
+  %li.nav-item.o-choose__nav-item
+    %a.nav-link.o-choose__nav-link{href:'#decline-client', data: {toggle: :tab}, role: :tab, aria:{controls:'decline', selected: aria_selected }, title: 'Decline', class: [active_tab] }
+      .o-choose__title
+        .c-choice-icon.c-choice-icon--reject
+        %h3.jMatchActionTitle
+          %span.o-choose__nav-link-title Decline

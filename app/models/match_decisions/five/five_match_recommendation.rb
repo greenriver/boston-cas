@@ -89,7 +89,7 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminDecline.all
     end
 
@@ -98,13 +98,11 @@ module MatchDecisions::Five
     end
 
     private def cant_accept_if_match_closed
-      errors.add :status, "This match has already been closed." if save_will_accept? && match.closed
+      errors.add :status, 'This match has already been closed.' if save_will_accept? && match.closed
     end
 
     private def cant_accept_if_related_active_match
-      if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
-      then errors.add :status, "There is already another active match for this opportunity"
-      end
+      errors.add :status, 'There is already another active match for this opportunity' if save_will_accept? && match.opportunity_related_matches.active.any? && ! match_route.allow_multiple_active_matches
     end
 
     private def ensure_required_contacts_present_on_accept

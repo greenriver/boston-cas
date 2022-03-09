@@ -107,7 +107,7 @@ module MatchDecisions::Four
       errors.add(:note, 'Please note why the match is declined.') if note.blank? && status == 'declined'
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
 

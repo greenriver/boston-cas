@@ -43,6 +43,8 @@ module CasSeeds
       ['Does not want housing at this time', CLIENT_REJECTED],
       ['Unsafe environment for this person', CLIENT_REJECTED],
       ['Client has another housing option', nil],
+      ['Client refused unit (non-SRO)', CLIENT_REJECTED],
+      ['Client refused voucher', CLIENT_REJECTED],
     ].freeze
 
     MITIGATION_REASONS = [
