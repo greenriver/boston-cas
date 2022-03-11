@@ -51,7 +51,7 @@ module MatchDecisions
         canceled: 'Canceled',
         shelter_declined: 'Declined by Shelter Agency',
         back: 'Pending',
-        skipped: 'Skipped',
+        skipped: _('There will not be a criminal background hearing'),
       }
     end
 
