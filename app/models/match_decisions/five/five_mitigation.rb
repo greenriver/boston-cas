@@ -86,7 +86,7 @@ module MatchDecisions::Five
       def record_mitigations
         return unless @decision.mitigations.present?
 
-        mitigation_ids = @decision.mitigations.select{ |str| str.present? }.map(&:to_i)
+        mitigation_ids = @decision.mitigations.select(&:present?).map(&:to_i)
         match.match_mitigation_reasons.where(id: mitigation_ids).update(addressed: true)
       end
     end
@@ -104,7 +104,7 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::MitigationDecline.all
     end
   end

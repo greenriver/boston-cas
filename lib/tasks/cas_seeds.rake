@@ -50,7 +50,6 @@ namespace :cas_seeds do
   # TODO: delete this?  I don't think we'll need it anymore
   desc 'ensure all users have contacts'
   task ensure_all_users_have_contacts: [:environment, "log:info_to_stdout"] do
-
     user_ids_to_exclude = Contact.distinct.pluck(:user_id)
 
     users = User.where.not(id: user_ids_to_exclude)

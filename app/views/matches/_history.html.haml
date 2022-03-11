@@ -10,7 +10,7 @@
         - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
           = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-sm btn-light'
   .c-card.c-card--block.c-card--flush.jHistoryCount{:data => {:history_events => @match.timeline_events.count}}
-    .c-card__content
+    .c-card__content.pt-0.pb-0
       .row
         .col-sm-7
         .col-sm-5.text-right

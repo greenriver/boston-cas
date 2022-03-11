@@ -6,6 +6,7 @@
 
 module MatchDecisions
   class RecordClientHousedDateHousingSubsidyAdministrator < Base
+    include MatchDecisions::AcceptsDeclineReason # For shelter agency declines
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -21,6 +22,8 @@ module MatchDecisions
       when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
       when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
       when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :shelter_declined then "Match declined by #{_('Shelter Agency Contact')}.  Reason: #{decline_reason_name}"
+      when :skipped then 'Skipped'
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -38,12 +41,18 @@ module MatchDecisions
       :housing_subsidy_admin_contacts
     end
 
+    def include_additional_shelter_agency_decline?
+      true
+    end
+
     def statuses
       {
         pending: 'Pending',
         other_clients_canceled: 'Pending, other matches on opportunity canceled',
         completed: 'Complete',
         canceled: 'Canceled',
+        shelter_declined: 'Declined by Shelter Agency',
+        skipped: _('There will not be a criminal background hearing'),
         back: 'Pending',
       }
     end
@@ -87,13 +96,22 @@ module MatchDecisions
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
-    def accessible_by? contact
+    def accessible_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+      contact.in?(match.send(contact_actor_type))
+    end
+
+    def declineable_by?(contact)
+      contact.user_can_act_on_behalf_of_match_contacts? ||
+      contact.in?(match.shelter_agency_contacts)
+    end
+
+    private def decline_reason_scope(_contact)
+      MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
     def show_client_match_attributes?
@@ -123,6 +141,14 @@ module MatchDecisions
         Notifications::MatchCanceled.create_for_match! match
         match.canceled!
       end
+
+      def shelter_declined
+        @decision.class.transaction do
+          @decision.update(status: nil)
+          match.create_confirm_shelter_decline_of_housed_decision unless match.confirm_shelter_decline_of_housed_decision.present?
+          match.confirm_shelter_decline_of_housed_decision.initialize_decision!
+        end
+      end
     end
     private_constant :StatusCallbacks
 
@@ -134,11 +160,7 @@ module MatchDecisions
     end
 
     private def client_move_in_date_present_if_status_complete
-      if status == 'completed' && client_move_in_date.blank?
-        errors.add :client_move_in_date, 'must be filled in'
-      end
+      errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
-
   end
-
 end

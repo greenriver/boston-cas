@@ -6,7 +6,6 @@
 
 module MatchDecisions
   class MatchRecommendationShelterAgency < Base
-
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
@@ -31,6 +30,7 @@ module MatchDecisions
       when :accepted then "Match accepted by #{_('Shelter Agency')}. Client has signed release of information, spoken with services agency and submitted a CORI release form"
       when :not_working_with_client then "#{_('Shelter Agency')} no longer working with client"
       when :expiration_update then "New Match Awaiting #{_('Shelter Agency')} Review"
+      when :shelter_declined then "Match declined by #{_('Shelter Agency Contact')}.  Reason: #{decline_reason_name}"
       when :declined then decline_status_label
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -40,10 +40,9 @@ module MatchDecisions
     private def decline_status_label
       [
         "Match declined by #{_('Shelter Agency')}. Reason: #{decline_reason_name}",
-        not_working_with_client_reason_status_label
-      ].join ". "
+        not_working_with_client_reason_status_label,
+      ].join '. '
     end
-
 
     def step_name
       "#{_('Shelter Agency')} Initial Review of Match Recommendation"
@@ -91,7 +90,7 @@ module MatchDecisions
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
@@ -101,15 +100,12 @@ module MatchDecisions
     end
 
     private def note_present_if_status_declined
-      if note.blank? && status == 'declined'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
-
 
     class StatusCallbacks < StatusCallbacks
       def pending
@@ -120,9 +116,7 @@ module MatchDecisions
 
       def accepted
         # Only update the client's release_of_information attribute if we just set it
-        if @decision.release_of_information == '1'
-          match.client.update_attribute(:release_of_information, Time.current)
-        end
+        match.client.update_attribute(:release_of_information, Time.current) if @decision.release_of_information == '1'
         @decision.next_step.initialize_decision!
       end
 
@@ -131,11 +125,9 @@ module MatchDecisions
       end
 
       def not_working_with_client
-
       end
 
       def expiration_update
-
       end
 
       def canceled
@@ -159,15 +151,11 @@ module MatchDecisions
     end
 
     private def validate_not_working_reasons_present_if_not_working_with_client
-      if not_working_with_client_reason.blank? && status == 'not_working_with_client'
-        errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client'
-      end
+      errors.add :not_working_with_client_reason_id, 'you must specify at least one reason if you are no longer working with the client' if not_working_with_client_reason.blank? && status == 'not_working_with_client'
     end
 
     private def validate_client_last_seen_date_present_if_not_working_with_client
-      if not_working_with_client_reason.present? && client_last_seen_date.blank?
-        errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client'
-      end
+      errors.add :client_last_seen_date, 'must be filled in if you are no longer working with the client' if not_working_with_client_reason.present? && client_last_seen_date.blank?
     end
 
     private def release_of_information_present_if_match_accepted
@@ -175,19 +163,13 @@ module MatchDecisions
       # release_of_information = '1'
       # if the client previously signed the release
       # release_of_information = Time
-      if status == 'accepted' && release_of_information == '0'
-        errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process'
-      end
+      errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process' if status == 'accepted' && release_of_information == '0'
     end
 
     private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
-      if status == 'accepted'
-        if ! client_spoken_with_services_agency
-          errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.'
-        end
-        if Config.get(:require_cori_release) && ! cori_release_form_submitted
-         errors.add :cori_release_form_submitted, 'A CORI release form is required.'
-        end
+      if status == 'accepted'  # rubocop:disable Style/GuardClause
+        errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.' unless client_spoken_with_services_agency
+        errors.add :cori_release_form_submitted, 'A CORI release form is required.' if Config.get(:require_cori_release) && ! cori_release_form_submitted
       end
     end
 
@@ -202,7 +184,7 @@ module MatchDecisions
         :working_with_client,
         :client_spoken_with_services_agency,
         :cori_release_form_submitted,
-        :shelter_expiration
+        :shelter_expiration,
       )
     end
   end

@@ -19,12 +19,12 @@ module MatchDecisions::HomelessSetAside
 
     def label_for_status status
       case status.to_sym
-        when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
-        when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
-        when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
-        when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
-        when :canceled then canceled_status_label
-        when :back then backup_status_label
+      when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
+      when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
+      when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
+      when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -51,12 +51,12 @@ module MatchDecisions::HomelessSetAside
 
     def statuses
       {
-          pending: 'Pending',
-          other_clients_canceled: 'Pending, other matches on opportunity canceled',
-          completed: 'Complete',
-          declined: 'Declined',
-          canceled: 'Canceled',
-          back: 'Pending',
+        pending: 'Pending',
+        other_clients_canceled: 'Pending, other matches on opportunity canceled',
+        completed: 'Complete',
+        declined: 'Declined',
+        canceled: 'Canceled',
+        back: 'Pending',
       }
     end
 
@@ -70,9 +70,9 @@ module MatchDecisions::HomelessSetAside
 
     def stalled_contact_types
       @stalled_contact_types ||= [
-          :shelter_agency_contacts,
-          :ssp_contacts,
-          :hsp_contacts,
+        :shelter_agency_contacts,
+        :ssp_contacts,
+        :hsp_contacts,
       ]
     end
 
@@ -97,7 +97,7 @@ module MatchDecisions::HomelessSetAside
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
@@ -106,7 +106,7 @@ module MatchDecisions::HomelessSetAside
           contact.in?(match.housing_subsidy_admin_contacts)
     end
 
-    def decline_reason_scope
+    def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
 
@@ -141,9 +141,7 @@ module MatchDecisions::HomelessSetAside
     end
 
     private def client_move_in_date_present_if_status_complete
-      if status == 'completed' && client_move_in_date.blank?
-        errors.add :client_move_in_date, 'must be filled in'
-      end
+      errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
   end
 end

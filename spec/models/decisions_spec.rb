@@ -5,7 +5,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
     MatchRoutes::Base.ensure_all
     MatchPrioritization::Base.ensure_all
     let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
-    let(:route) {
+    let(:route) do
       r = MatchRoutes::Default.first
       r.update(
         match_prioritization_id: priority.id,
@@ -13,7 +13,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
         should_activate_match: false,
       )
       r
-      }
+    end
     let(:program) { create :program, match_route: route }
     let(:sub_program) { create :sub_program, program: program }
     let(:voucher) { create :voucher, sub_program: sub_program }
@@ -81,7 +81,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
         describe 'when a stalled notice is submitted, the match un-stalls' do
           before(:each) do
             # This happens when the status update is submitted
-            the_match.current_decision.set_stall_date()
+            the_match.current_decision.set_stall_date
           end
           it 'the match should not be stalled' do
             expect(the_match.stalled?).to be false
@@ -90,7 +90,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
         describe 'when a decision is updated, the match un-stalls' do
           before(:each) do
             the_decision = the_match.current_decision
-            the_decision.update(status: :scheduled)
+            the_decision.update(status: :accepted)
             the_decision.run_status_callback!
           end
           it 'the match should not be stalled' do

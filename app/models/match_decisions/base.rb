@@ -6,6 +6,7 @@
 
 module MatchDecisions
   class Base < ApplicationRecord
+    extend OrderAsSpecified
     # MatchDecision objects represent individual decision points
     # in the flow map for a given match.  e.g. DND initial approval,
     # or shelter agency approval
@@ -167,6 +168,14 @@ module MatchDecisions
       false
     end
 
+    def include_additional_shelter_agency_decline?
+      false
+    end
+
+    def declineable_by?(_contact)
+      false
+    end
+
     ######################
     # Decision Lifecycle
     ######################
@@ -299,18 +308,20 @@ module MatchDecisions
     end
 
     def previous_step
-      step_index = reporting_step_number
-      return nil if step_index == 1 # We are already at the first step
-
-      # Look back, skipping steps we didn't run on the way forward
-      loop do
-        step_index -= 1
-        step_name = match_route.class.match_steps_for_reporting.invert[step_index]
-        step = match.decisions.find_by(type: step_name)
-        return step if step.nil? || step.status.present?
+      step_index = step_number
+      step_list = if step_index
+        match_route.class.match_steps
+      else
+        step_index = reporting_step_number
+        match_route.class.match_steps_for_reporting
       end
 
-      nil
+      return nil if step_index == 1 # We are already at the first step
+
+      step_index -= 1
+      step_name = step_list.invert[step_index]
+      step = match.decisions.find_by(type: step_name)
+      step
     end
 
     def next_step
@@ -384,6 +395,7 @@ module MatchDecisions
       status_sym = status.try(:to_sym)
       return :canceled if self.class.closed_match_statuses.include?(status_sym)
       return :canceled if status_sym == :pending && match.closed?
+      return :skipped if status_sym == :skipped
       return :active if editable?
       return :incomplete if status_sym == :pending || status_sym == :other_clients_canceled || status.blank?
 

@@ -75,6 +75,21 @@ $step-border-color: #E1E1E1;
     }
   }
 
+  &--skipped {
+    &:before {
+      content: '';
+      height: 3px;
+      background-color: $brand-success-l;
+      position: absolute;
+      width: $progress-step-space - 2;
+      left: calc(100% + 5px);
+      top: 50%;
+      transform: translate(0, -50%);
+      transform-origin: center center;
+      z-index: 1;
+    }
+  }
+
   &--active {
     border-color: $body-bg;
     background: $brand-primary;
@@ -187,7 +202,24 @@ $step-border-color: #E1E1E1;
   }
 }
 
+.c-stepped-progress__step--skipped .c-stepped-progress__step-link,
+.c-stepped-progress__step--skipped .c-stepped-progress__step-link--static {
+  &:after {
+    @include icon;
+    content: '#{map-get($icons, checkmark)}';
+  }
+}
+
 .c-stepped-progress__step--done .c-stepped-progress__step-link,
+.c-stepped-progress__step--final .c-stepped-progress__step-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.c-stepped-progress__step--skipped .c-stepped-progress__step-link,
 .c-stepped-progress__step--final .c-stepped-progress__step-link {
   display: flex;
   align-items: center;
@@ -221,12 +253,14 @@ $step-border-color: #E1E1E1;
 }
 
 .c-stepped-progress__step--done .c-stepped-progress__step-number,
+.c-stepped-progress__step--skipped .c-stepped-progress__step-number,
 .c-stepped-progress__step--final .c-stepped-progress__step-number,
 .c-stepped-progress__step--canceled .c-stepped-progress__step-number {
   display: none;
 }
 
 .c-stepped-progress__step--done,
+.c-stepped-progress__step--skipped,
 .c-stepped-progress__step--final,
 .c-stepped-progress__step--canceled {
   align-items: center;

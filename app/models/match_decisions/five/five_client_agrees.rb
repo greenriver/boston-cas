@@ -86,7 +86,7 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
 

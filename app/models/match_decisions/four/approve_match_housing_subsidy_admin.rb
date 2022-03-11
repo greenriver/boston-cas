@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
-
     include MatchDecisions::AcceptsDeclineReason
 
     # validate :note_present_if_status_declined
@@ -105,7 +104,7 @@ module MatchDecisions::Four
       :four_approve_match_housing_subsidy_admin
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminDecline.active
     end
 
@@ -130,11 +129,7 @@ module MatchDecisions::Four
     private_constant :StatusCallbacks
 
     private def note_present_if_status_declined
-      if note.blank? && status == 'declined'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
-
   end
-
 end
