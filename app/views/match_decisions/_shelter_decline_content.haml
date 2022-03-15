@@ -1,0 +1,14 @@
+- if @decision.include_additional_shelter_agency_decline?
+  - active_tab = '' unless defined?(active_tab)
+  - action_message ||= ''
+  - include_other = true unless include_other === false
+  #decline-client.tab-pane{role: :tabpanel, aria: {labelledby:'decline-client'}, class: [active_tab] }
+    = render 'match_decisions/decline_reason', form: form, include_other: include_other
+    - if !action_message.empty?
+      %p
+        %i.icon-info
+        = action_message
+    .form-actions.form-actions--right
+      %button{ class: 'btn btn-danger', data: {submit_param_name: 'decision[status]', submit_param_value: 'shelter_declined'}, disabled: !(@decision.editable?) }
+        %i.icon-cross
+        Decline Match

@@ -1,7 +1,13 @@
-Hello #{@client.first_name},
+Hello #{@contact.full_name},
 \
-= "A housing opportunity for which you may be eligible has become available. Please contact your #{_('case worker')} before #{@match.shelter_expiration} for more details."
+A housing opportunity for which you may be eligible has become available.
 \
+- if @match.shelter_expiration.present?
+  = "Please contact your #{_('case worker')} before #{@match.shelter_expiration} for more details."
+  \
+- else
+  = "Please contact your #{_('case worker')} for more details."
+  \
 = render 'notifications_mailer/shelter_agency_contacts'
 \
 \

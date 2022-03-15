@@ -44,8 +44,8 @@ module MatchDecisions::Five
 
     def label_for_status status
       case status.to_sym
-      when :pending then "Awaiting Move In"
-      when :expiration_update then "Awaiting Move In"
+      when :pending then 'Awaiting Move In'
+      when :expiration_update then 'Awaiting Move In'
       when :completed then "Match completed by #{actor_type}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
 
       when :canceled then canceled_status_label
@@ -89,7 +89,7 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
@@ -100,9 +100,7 @@ module MatchDecisions::Five
     end
 
     private def client_move_in_date_present_if_status_complete
-      if status == 'completed' && client_move_in_date.blank?
-        errors.add :client_move_in_date, 'must be filled in'
-      end
+      errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
   end
 end

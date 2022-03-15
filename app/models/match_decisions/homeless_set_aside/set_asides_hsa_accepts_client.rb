@@ -6,7 +6,6 @@
 
 module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcceptsClient < ::MatchDecisions::Base
-
     include MatchDecisions::AcceptsDeclineReason
 
     # validate :note_present_if_status_declined
@@ -76,7 +75,7 @@ module MatchDecisions::HomelessSetAside
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
@@ -85,7 +84,7 @@ module MatchDecisions::HomelessSetAside
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
-    private def decline_reason_scope
+    private def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
 
@@ -111,9 +110,7 @@ module MatchDecisions::HomelessSetAside
     private_constant :StatusCallbacks
 
     private def note_present_if_status_declined
-      if note.blank? && status == 'declined'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
 
     private def save_will_accept?
@@ -122,18 +119,11 @@ module MatchDecisions::HomelessSetAside
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      if save_will_accept? && match.dnd_staff_contacts.none?
-        missing_contacts << "a #{_('DND')} Staff Contact"
-      end
+      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
 
-      if save_will_accept? && match.housing_subsidy_admin_contacts.none?
-        missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact"
-      end
+      missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
-      if missing_contacts.any?
-        errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
-      end
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
   end
-
 end
