@@ -18,7 +18,7 @@
             .form--label-hint
               %label.control-label.email.optional Client Email
               - if @match_contacts.match.client.send_emails?
-                %p= @client.email.presence || not_specified
+                %p= @match_contacts.match.client.email.presence || not_specified
       .row
         .col-sm-6
           - if @match_contacts.match.client.send_emails?
