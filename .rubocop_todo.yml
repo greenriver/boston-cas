@@ -491,7 +491,6 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/tags_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/neighborhood.rb'
 
@@ -1803,7 +1802,6 @@ Style/NegatedIf:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/match_decisions/match_recommendation_shelter_agency.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
