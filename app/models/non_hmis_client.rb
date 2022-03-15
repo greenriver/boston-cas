@@ -276,6 +276,18 @@ class NonHmisClient < ApplicationRecord
       # Count equivalent counts as sheltered
       project_client.majority_sheltered = sheltered >= unsheltered
     end
+    project_client.strengths = current_assessment&.strengths&.reject(&:blank?)
+    project_client.challenges = current_assessment&.challenges&.reject(&:blank?)
+    project_client.open_case = current_assessment&.tc_hat_client_history&.include?('open_case')
+    project_client.foster_care = current_assessment&.foster_care
+    project_client.housing_for_formerly_homeless = current_assessment&.housing_preferences&.include?('with_formerly_homeless')
+    project_client.drug_test = current_assessment&.drug_test
+    project_client.heavy_drug_use = current_assessment&.heavy_drug_use
+    project_client.sober = current_assessment&.sober
+    project_client.willing_case_management = current_assessment&.willing_case_management
+    project_client.employed_three_months = current_assessment&.employed_three_months
+    project_client.living_wage = current_assessment&.living_wage
+
     project_client.needs_update = true
     project_client
   end
@@ -355,6 +367,10 @@ class NonHmisClient < ApplicationRecord
     assessment.imported_timestamp = imported_timestamp
     assessment.is_currently_youth = is_currently_youth
     assessment.older_than_65 = older_than_65
+    assessment.days_homeless = days_homeless
+    assessment.sixty_plus = sixty_plus
+    assessment.tc_hat_household_type = 'Adults with Children' if family_member
+    assessment.hiv_aids = hiv_aids
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_24_174712) do
+ActiveRecord::Schema.define(version: 2022_03_02_211912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -931,6 +931,7 @@ ActiveRecord::Schema.define(version: 2022_02_24_174712) do
     t.integer "tc_hat_house"
     t.integer "tc_hat_mobile_home"
     t.integer "tc_hat_total_housing_rank"
+    t.integer "days_homeless"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1015,6 +1016,8 @@ ActiveRecord::Schema.define(version: 2022_02_24_174712) do
     t.boolean "ssn_refused", default: false
     t.integer "race"
     t.integer "ethnicity"
+    t.integer "days_homeless"
+    t.boolean "sixty_plus"
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
