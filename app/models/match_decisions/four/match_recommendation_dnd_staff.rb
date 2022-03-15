@@ -91,7 +91,7 @@ module MatchDecisions::Four
       def accepted
         @decision.next_step.initialize_decision!
 
-        if match.client.remote_id.present? && Warehouse::Base.enabled? # rubocop:disable Style/GuardClause
+        if match.client.remote_id.present? && Warehouse::Base.enabled?
           begin
             Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
           rescue StandardError
