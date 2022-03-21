@@ -63,7 +63,8 @@
       %span.c-detailed-list__value= boolean_icon @client.site_case_management_required
     %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Currently fleeing DV')
-      %span.c-detailed-list__value
-        #{boolean_icon @client.currently_fleeing}
-        - if @client.dv_date.present?
-          as of #{@client.dv_date}
+      %span.c-detailed-list__value.d-flex
+        - if @client.currently_fleeing && @client.dv_date.present?
+          since #{@client.dv_date}
+        - else
+          #{boolean_icon false}
