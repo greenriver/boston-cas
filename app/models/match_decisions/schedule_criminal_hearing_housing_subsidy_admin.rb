@@ -134,7 +134,6 @@ module MatchDecisions
 
       def shelter_declined
         @decision.class.transaction do
-          @decision.update(status: nil)
           match.create_confirm_shelter_decline_of_hearing_decision unless match.confirm_shelter_decline_of_hearing_decision.present?
           match.confirm_shelter_decline_of_hearing_decision.initialize_decision!
         end

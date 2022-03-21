@@ -358,6 +358,7 @@ module MatchDecisions
         :declined,
         :canceled,
         :rejected,
+        :shelter_declined,
       ]
     end
 
