@@ -470,7 +470,7 @@ FactoryBot.define do
     name { 'Employed full-time' }
     verb { 'be' }
   end
-  factory :needs_daily_assistance, class: 'Rules::NeedsDailyAssistance' do
+  factory :need_daily_assistance, class: 'Rules::NeedsDailyAssistance' do
     name { 'Needing a higher level of care' }
     verb { 'be' }
   end
