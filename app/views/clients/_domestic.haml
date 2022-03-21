@@ -40,3 +40,30 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Earning a living wage ($13 or more)')
       %span.c-detailed-list__value= boolean_icon @client.living_wage
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Needs a higher level of care')
+      %span.c-detailed-list__value= boolean_icon @client.need_daily_assistance
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Employed full-time')
+      %span.c-detailed-list__value= boolean_icon @client.full_time_employed
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Able to work full-time')
+      %span.c-detailed-list__value= boolean_icon @client.can_work_full_time
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Willing to work full-time')
+      %span.c-detailed-list__value= boolean_icon @client.willing_to_work_full_time
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Able to successfully exit 12-24 month RRH program')
+      %span.c-detailed-list__value= boolean_icon @client.rrh_successful_exit
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Interested in Transitional Housing')
+      %span.c-detailed-list__value= boolean_icon @client.th_desired
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Needs site-based case management')
+      %span.c-detailed-list__value= boolean_icon @client.site_case_management_required
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Currently fleeing DV')
+      %span.c-detailed-list__value
+        #{boolean_icon @client.currently_fleeing}
+        - if @client.dv_date.present?
+          as of #{@client.dv_date}

@@ -22,6 +22,13 @@ RSpec.describe Rules::DrugTest, type: :model do
     :vash_eligible,
     :veteran,
     :willing_case_management,
+    :need_daily_assistance,
+    :full_time_employed,
+    :can_work_full_time,
+    :willing_to_work_full_time,
+    :rrh_successful_exit,
+    :th_desired,
+    :site_case_management_required,
   ].each do |boolean_rule|
     describe "clients that fit #{boolean_rule}" do
       let!(:rule) { create boolean_rule }

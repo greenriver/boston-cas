@@ -457,4 +457,37 @@ FactoryBot.define do
     name { 'Earning a living wage ($13 or more)' }
     verb { 'be' }
   end
+
+  factory :can_work_full_time, class: 'Rules::CanWorkFullTime' do
+    name { 'Able to work full-time' }
+    verb { 'be' }
+  end
+  factory :currently_fleeing, class: 'Rules::CurrentlyFleeing' do
+    name { 'Currently fleeing DV' }
+    verb { 'be' }
+  end
+  factory :full_time_employed, class: 'Rules::FullTimeEmployed' do
+    name { 'Employed full-time' }
+    verb { 'be' }
+  end
+  factory :needs_daily_assistance, class: 'Rules::NeedsDailyAssistance' do
+    name { 'Needing a higher level of care' }
+    verb { 'be' }
+  end
+  factory :rrh_successful_exit, class: 'Rules::RrhSuccessfulExit' do
+    name { 'Able to successfully exit 12-24 month RRH program' }
+    verb { 'be' }
+  end
+  factory :site_case_management_required, class: 'Rules::SiteCaseManagementRequired' do
+    name { 'Needing site-based case management' }
+    verb { 'be' }
+  end
+  factory :th_desired, class: 'Rules::ThDesired' do
+    name { 'Interested in Transitional Housing' }
+    verb { 'be' }
+  end
+  factory :willing_to_work_full_time, class: 'Rules::WillingToWorkFullTime' do
+    name { 'Willing to work full-time' }
+    verb { 'be' }
+  end
 end

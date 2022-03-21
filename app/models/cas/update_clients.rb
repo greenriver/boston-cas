@@ -251,6 +251,15 @@ module Cas
         :willing_case_management,
         :employed_three_months,
         :living_wage,
+        :need_daily_assistance,
+        :full_time_employed,
+        :can_work_full_time,
+        :willing_to_work_full_time,
+        :rrh_successful_exit,
+        :th_desired,
+        :site_case_management_required,
+        :currently_fleeing,
+        :dv_date,
       ]
     end
 
