@@ -280,7 +280,6 @@ class NonHmisClient < ApplicationRecord
     project_client.challenges = current_assessment&.challenges&.reject(&:blank?)
     project_client.open_case = current_assessment&.tc_hat_client_history&.include?('open_case')
     project_client.housing_for_formerly_homeless = current_assessment&.housing_preferences&.include?('with_formerly_homeless')
-    project_client.drug_test = current_assessment&.drug_test
 
     [
       :foster_care,

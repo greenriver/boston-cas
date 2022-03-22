@@ -17,7 +17,7 @@ class Rules::CurrentlyFleeing < Rule
         and(c_t[column_2].gteq(3.months.ago.to_date)),
       )
     else
-      scope.where(column => requirement.positive).
+      scope.where(column => false).
         or(scope.where(column_2 => nil)).
         or(scope.where(c_t[column_2].lt(3.months.ago.to_date)))
     end
