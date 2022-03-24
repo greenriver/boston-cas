@@ -40,7 +40,14 @@ module Reports
           @dv = @clients.select { |c| c.domestic_violence == 1 }.map(&:id).to_set
           @sheltered = @clients.select(&:majority_sheltered).map(&:id).to_set
           @unsheltered = @clients.reject(&:majority_sheltered).map(&:id).to_set
-          @clients = @clients.group_by { |c| c.assessment_name.gsub('Deidentified', '').gsub('Identified', '') }
+          # Get a hash of assessments that we can use for generating columns, we only need one per assessment type, ignore the differences between
+          # de-identified and identified
+          @assessment_classes = {}
+          @clients.each do |client|
+            assessment = NonHmisAssessment.to_class(client.assessment_name)
+            @assessment_classes[assessment.new.title] ||= assessment
+          end
+          @clients = @clients.group_by { |c| NonHmisAssessment.to_class(c.assessment_name).new.title }
 
           filename = 'CAS External Referrals.xlsx'
           render xlsx: 'index.xlsx', filename: filename

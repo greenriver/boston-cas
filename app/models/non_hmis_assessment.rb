@@ -383,6 +383,10 @@ class NonHmisAssessment < ActiveRecord::Base
     true
   end
 
+  def safe_form_field_labels
+    form_field_labels
+  end
+
   def form_field_labels
     return [] unless respond_to?(:form_fields)
 

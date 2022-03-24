@@ -1,5 +1,5 @@
 require 'street_address'
-def clients(sheet, rows)
+def clients(sheet, rows, assessment_klass)
   rows.each.with_index do |client, i|
     contacts = client.project_client.shelter_agency_contacts
     primary_contact = contacts&.first
@@ -59,7 +59,7 @@ def clients(sheet, rows)
   end
 end
 
-def header(sheet)
+def header(sheet, assessment_klass)
   title = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
   sheet.add_row(
     [
@@ -99,53 +99,58 @@ def header(sheet)
   sheet.merge_cells('G1:K1')
   sheet.merge_cells('L1:P1')
   sheet.merge_cells('Q1:T1')
+  sheet.merge_cells('Y1:AC1')
+  row = [
+    'First Name',
+    'Last Name',
+    'Middle Name',
+    'Email',
+    'Phone',
+    'Date of Birth',
+    'Age',
+    'Sheltered / Unsheltered',
+    'DV',
+    'Line 1',
+    'Line 2',
+    'City',
+    'State',
+    'ZIP Code',
+    'Caseworker First Name',
+    'Caseworker Last Name',
+    'Service Provider',
+    'Organization Name',
+    'Caseworker Email',
+    'Caseworker Phone',
+    'First Name',
+    'Last Name',
+    'Email',
+    'Phone',
+    'First Name',
+    'Last Name',
+    'Email',
+    'Phone',
+    'Warehouse ID',
+    'CAS Client ID',
+    'Rank',
+    'Assessment Score',
+    'Tie Breaker Date',
+  ]
+  row += assessment_klass.new.safe_form_field_labels
   sheet.add_row(
-    [
-      'First Name',
-      'Last Name',
-      'Middle Name',
-      'Email',
-      'Phone',
-      'Date of Birth',
-      'Age',
-      'Sheltered / Unsheltered',
-      'DV',
-      'Line 1',
-      'Line 2',
-      'City',
-      'State',
-      'ZIP Code',
-      'Caseworker First Name',
-      'Caseworker Last Name',
-      'Service Provider',
-      'Organization Name',
-      'Caseworker Email',
-      'Caseworker Phone',
-      'First Name',
-      'Last Name',
-      'Email',
-      'Phone',
-      'First Name',
-      'Last Name',
-      'Email',
-      'Phone',
-      'Warehouse ID',
-      'CAS Client ID',
-      'Rank',
-      'Assessment Score',
-      'Tie Breaker Date',
-    ],
+    row,
     style: title,
   )
 end
 
 wb = xlsx_package.workbook
-@clients.each do |assessment_name, client_list|
-  wb.add_worksheet(name: assessment_name[0..30]) do |sheet|
-    header(sheet)
-    clients(sheet, client_list)
+@clients.each do |title, client_list|
+  wb.add_worksheet(name: title[0..30]) do |sheet|
+    assessment_klass = @assessment_classes[title]
+    header(sheet, assessment_klass)
+    clients(sheet, client_list, assessment_klass)
   end
 end
+
 # wb.add_worksheet(name: 'Sheltered') do |sheet|
 #   header(sheet)
 #   clients(sheet, @sheltered)
