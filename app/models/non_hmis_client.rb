@@ -256,6 +256,12 @@ class NonHmisClient < ApplicationRecord
     project_client.hiv_positive = current_assessment&.hiv_aids || hiv_aids
     project_client.is_currently_youth = current_assessment&.is_currently_youth || false
     project_client.older_than_65 = current_assessment&.older_than_65
+    # assessor info
+    assessor = current_assessment&.user&.contact
+    project_client.assessor_first_name = assessor&.first_name
+    project_client.assessor_last_name = assessor&.last_name
+    project_client.assessor_email = assessor&.email
+    project_client.assessor_phone = assessor&.phone
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
     project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement

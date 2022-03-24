@@ -37,9 +37,10 @@ module Reports
         format.html {}
         format.xlsx do
           @clients = @clients.preload(:external_referrals, :active_matches, :project_client).to_a
-          @dv = @clients.select { |c| c.domestic_violence == 1 }
-          @sheltered = @clients.select(&:majority_sheltered)
-          @unsheltered = @clients.reject(&:majority_sheltered)
+          @dv = @clients.select { |c| c.domestic_violence == 1 }.map(&:id).to_set
+          @sheltered = @clients.select(&:majority_sheltered).map(&:id).to_set
+          @unsheltered = @clients.reject(&:majority_sheltered).map(&:id).to_set
+          @clients = @clients.group_by { |c| c.assessment_name.gsub('Deidentified', '').gsub('Identified', '') }
 
           filename = 'CAS External Referrals.xlsx'
           render xlsx: 'index.xlsx', filename: filename

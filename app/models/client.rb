@@ -493,9 +493,17 @@ class Client < ApplicationRecord
     return url.gsub(':client_id:', remote_id.to_s) if url
   end
 
+  private def from_hmis?
+    project_client.from_hmis?
+  end
+
+  def warehouse_id
+    remote_id if from_hmis?
+  end
+
   def has_full_housing_release? # rubocop:disable Naming/PredicateName
     # If we have a warehouse connected, use the file tags available there
-    release_tags = if Warehouse::Base.enabled? && remote_data_source.try(:db_identifier) != 'Deidentified'
+    release_tags = if from_hmis?
       Warehouse::AvailableFileTag.full_release.pluck(:name)
     else
       [_('Full HAN Release'), 'Full HAN Release']

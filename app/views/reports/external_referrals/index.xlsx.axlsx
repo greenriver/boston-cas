@@ -27,6 +27,9 @@ def clients(sheet, rows)
         client.email,
         client.cellphone,
         client.date_of_birth,
+        client.age,
+        if @sheltered.include?(client.id) then 'Sheltered' elsif @unsheltered.include?(client.id) then 'Unsheltered' end,
+        yes_no(@dv.include?(client.id)),
         address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
         '',
         address&.city,
@@ -42,6 +45,11 @@ def clients(sheet, rows)
         secondary_contact&.last_name,
         secondary_contact&.email,
         secondary_contact&.phone,
+        client.assessor_first_name,
+        client.assessor_last_name,
+        client.assessor_email,
+        client.assessor_phone,
+        client.warehouse_id,
         client.id,
         i + 1,
         client.assessment_score,
@@ -56,6 +64,8 @@ def header(sheet)
   sheet.add_row(
     [
       'Head of Household Identifying Information',
+      '',
+      '',
       '',
       '',
       '',
@@ -77,6 +87,11 @@ def header(sheet)
       '',
       '',
       '',
+      'Assessor Information',
+      '',
+      '',
+      '',
+      '',
     ],
     style: title,
   )
@@ -92,6 +107,9 @@ def header(sheet)
       'Email',
       'Phone',
       'Date of Birth',
+      'Age',
+      'Sheltered / Unsheltered',
+      'DV',
       'Line 1',
       'Line 2',
       'City',
@@ -107,6 +125,11 @@ def header(sheet)
       'Last Name',
       'Email',
       'Phone',
+      'First Name',
+      'Last Name',
+      'Email',
+      'Phone',
+      'Warehouse ID',
       'CAS Client ID',
       'Rank',
       'Assessment Score',
@@ -117,19 +140,21 @@ def header(sheet)
 end
 
 wb = xlsx_package.workbook
-wb.add_worksheet(name: 'CAS External Referrals') do |sheet|
-  header(sheet)
-  clients(sheet, @clients)
+@clients.each do |assessment_name, client_list|
+  wb.add_worksheet(name: assessment_name[0..30]) do |sheet|
+    header(sheet)
+    clients(sheet, client_list)
+  end
 end
-wb.add_worksheet(name: 'Sheltered') do |sheet|
-  header(sheet)
-  clients(sheet, @sheltered)
-end
-wb.add_worksheet(name: 'Unsheltered') do |sheet|
-  header(sheet)
-  clients(sheet, @unsheltered)
-end
-wb.add_worksheet(name: 'DV') do |sheet|
-  header(sheet)
-  clients(sheet, @dv)
-end
+# wb.add_worksheet(name: 'Sheltered') do |sheet|
+#   header(sheet)
+#   clients(sheet, @sheltered)
+# end
+# wb.add_worksheet(name: 'Unsheltered') do |sheet|
+#   header(sheet)
+#   clients(sheet, @unsheltered)
+# end
+# wb.add_worksheet(name: 'DV') do |sheet|
+#   header(sheet)
+#   clients(sheet, @dv)
+# end
