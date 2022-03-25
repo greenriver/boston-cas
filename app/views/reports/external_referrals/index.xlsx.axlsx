@@ -56,6 +56,7 @@ def clients(sheet, rows, assessment_klass)
         client.tie_breaker_date,
       ],
     )
+    row += client.project_client.non_hmis_client.current_assessment.form_field_values
   end
 end
 
