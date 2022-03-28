@@ -383,8 +383,118 @@ class NonHmisAssessment < ActiveRecord::Base
     true
   end
 
-  def safe_form_field_labels
-    form_field_labels
+  # Add or override as necessary for each assessment type
+  def export_fields
+    {
+      first_name: {
+        title: 'First Name',
+        client_field: :first_name,
+      },
+      last_name: {
+        title: 'Last Name',
+        client_field: :last_name,
+      },
+      middle_name: {
+        title: 'Middle Name',
+        client_field: :middle_name,
+      },
+      email: {
+        title: 'Email',
+        client_field: :email,
+      },
+      phone_number: {
+        title: 'Phone',
+        client_field: :cellphone,
+      },
+      date_of_birth: {
+        title: 'Date of Birth',
+        client_field: :date_of_birth,
+      },
+      age: {
+        title: 'Age',
+        client_field: :age,
+      },
+      dv: {
+        title: 'DV',
+        client_field: :dv,
+      },
+      line_1: {
+        title: 'Address Line 1',
+        client_field: :line_1,
+      },
+      line_2: {
+        title: 'Address Line 2',
+        client_field: :line_2,
+      },
+      city: {
+        title: 'City',
+        client_field: :city,
+      },
+      state: {
+        title: 'State',
+        client_field: :state,
+      },
+      postal_code: {
+        title: 'ZIP Code',
+        client_field: :postal_code,
+      },
+      primary_contact_first_name: {
+        title: 'Caseworker First Name',
+        client_field: :primary_contact_first_name,
+      },
+      primary_contact_last_name: {
+        title: 'Caseworker Last Name',
+        client_field: :primary_contact_last_name,
+      },
+      primary_contact_user_agency_name: {
+        title: 'Organization Name',
+        client_field: :primary_contact_user_agency_name,
+      },
+      primary_contact_email: {
+        title: 'Caseworker Email',
+        client_field: :primary_contact_email,
+      },
+      primary_contact_phone: {
+        title: 'Caseworker Phone',
+        client_field: :primary_contact_phone,
+      },
+      client_assessor_first_name: {
+        title: 'First Name',
+        client_field: :client_assessor_first_name,
+      },
+      client_assessor_last_name: {
+        title: 'Last Name',
+        client_field: :client_assessor_last_name,
+      },
+      client_assessor_email: {
+        title: 'Email',
+        client_field: :client_assessor_email,
+      },
+      client_assessor_phone: {
+        title: 'Phone',
+        client_field: :client_assessor_phone,
+      },
+      warehouse_id: {
+        title: 'Warehouse ID',
+        client_field: :warehouse_id,
+      },
+      id: {
+        title: 'CAS Client ID',
+        client_field: :id,
+      },
+      rank: {
+        title: 'Rank',
+        client_field: :rank,
+      },
+      assessment_score: {
+        title: 'Assessment Score',
+        client_field: :assessment_score,
+      },
+      tie_breaker_date: {
+        title: 'Tie Breaker Date',
+        client_field: :tie_breaker_date,
+      },
+    }
   end
 
   def form_field_labels

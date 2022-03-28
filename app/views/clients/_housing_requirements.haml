@@ -43,6 +43,9 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label Interested in Set-Asides
       %span.c-detailed-list__value= boolean_icon @client.interested_in_set_asides
+    %li..c-detailed-list__item
+      %span.c-detailed-list__label Would you consider living in a single room occupancy (SRO)?
+      %span.c-detailed-list__value= boolean_icon @client.sro_ok
     %li.c-detailed-list__item
       %span.c-detailed-list__label Holds Mobile Voucher On
       %span.c-detailed-list__value= @client.holds_voucher_on.try(:strftime, I18n.t('date.formats.default'))
