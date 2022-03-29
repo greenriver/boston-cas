@@ -508,6 +508,7 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/controllers/concerns/has_match_access_context.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/helpers/admin/users_helper.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/helpers/building_contacts_helper.rb'
     - 'app/helpers/client_matches_helper.rb'
     - 'app/helpers/contacts_helper.rb'
@@ -555,6 +556,7 @@ Layout/EndAlignment:
 Layout/ExtraSpacing:
   Exclude:
     - 'app/controllers/application_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/concerns/notifier_config.rb'
     - 'app/models/config.rb'
@@ -726,6 +728,7 @@ Layout/LeadingCommentSpace:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/config.rb'
     - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
@@ -785,6 +788,7 @@ Layout/SpaceAfterComma:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/rules/female.rb'
     - 'app/models/rules/male.rb'
@@ -805,6 +809,7 @@ Layout/SpaceAroundBlockParameters:
 Layout/SpaceAroundEqualsInParameterDefault:
   Exclude:
     - 'app/controllers/reports/parked_clients_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/models/message.rb'
     - 'app/models/rule.rb'
 
@@ -814,6 +819,7 @@ Layout/SpaceAroundEqualsInParameterDefault:
 # SupportedStylesForExponentOperator: space, no_space
 Layout/SpaceAroundOperators:
   Exclude:
+    - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/integration/match_engine_spec.rb'
@@ -962,6 +968,7 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
     - 'app/controllers/units_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -1697,6 +1704,7 @@ Style/HashSyntax:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
 
@@ -2029,6 +2037,7 @@ Style/StringLiterals:
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
     - 'app/helpers/admin/users_helper.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/mailers/account_mailer.rb'
     - 'app/mailers/notifications_mailer.rb'
@@ -2106,6 +2115,7 @@ Style/SymbolProc:
 # SupportedStyles: require_parentheses, require_no_parentheses, require_parentheses_when_complex
 Style/TernaryParentheses:
   Exclude:
+    - 'app/helpers/application_helper.rb'
 
 # Offense count: 76
 # Cop supports --auto-correct.
@@ -2156,6 +2166,7 @@ Style/TrailingCommaInArrayLiteral:
   Exclude:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/models/sub_program.rb'
     - 'bin/setup'
     - 'spec/integration/match_engine_spec.rb'
@@ -2169,6 +2180,7 @@ Style/TrailingCommaInHashLiteral:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/opportunity_matches_controller.rb'
+    - 'app/helpers/application_helper.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
@@ -2181,6 +2193,7 @@ Style/TrailingCommaInHashLiteral:
 # Cop supports --auto-correct.
 Style/WhenThen:
   Exclude:
+    - 'app/helpers/application_helper.rb'
 
 # Offense count: 20
 # Cop supports --auto-correct.
