@@ -566,7 +566,10 @@ class Client < ApplicationRecord
     enrolled_in_th ||
     enrolled_in_sh ||
     enrolled_in_so ||
-    enrolled_in_es
+    enrolled_in_es ||
+    enrolled_in_rrh ||
+    enrolled_in_psh ||
+    enrolled_in_ph
   end
 
   def structured_rrh_assessment_contact_info

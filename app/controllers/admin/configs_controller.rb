@@ -33,6 +33,7 @@ module Admin
         :deidentified_client_assessment,
         :lock_days,
         :lock_grace_days,
+        :include_note_in_email_default,
         non_hmis_fields: [],
       )
     end

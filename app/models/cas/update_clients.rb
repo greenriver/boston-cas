@@ -122,7 +122,8 @@ module Cas
       client_attributes[:developmental_disability] = nil unless client_attributes[:developmental_disability].to_i == 1
 
       # If we are set to send emails to this client, treat CAS as authoritative
-      client_attributes[:email].delete if project_client.client && project_client.client.email.present? && project_client.client.send_emails?
+      cas_client = project_client.client
+      client_attributes.delete(:email) if cas_client && cas_client.email.present? && cas_client.send_emails?
 
       # remove non-matching column names
       [
@@ -250,6 +251,15 @@ module Cas
         :willing_case_management,
         :employed_three_months,
         :living_wage,
+        :need_daily_assistance,
+        :full_time_employed,
+        :can_work_full_time,
+        :willing_to_work_full_time,
+        :rrh_successful_exit,
+        :th_desired,
+        :site_case_management_required,
+        :currently_fleeing,
+        :dv_date,
       ]
     end
 

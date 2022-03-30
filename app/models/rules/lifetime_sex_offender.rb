@@ -5,11 +5,10 @@
 ###
 
 class Rules::LifetimeSexOffender < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:lifetime_sex_offender.to_s)
-      scope.where(lifetime_sex_offender: requirement.positive)
-    else
-      raise RuleDatabaseStructureMissing.new("clients.lifetime_sex_offender missing. Cannot check clients against #{self.class}.")
-    end
+  def clients_that_fit(scope, requirement, opportunity) # rubocop:disable Lint/UnusedMethodArgument
+    column = :lifetime_sex_offender
+    raise RuleDatabaseStructureMissing.new("clients.#{column} missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(column.to_s)
+
+    scope.where(column => requirement.positive)
   end
 end

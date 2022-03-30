@@ -91,7 +91,7 @@ module MatchDecisions::Four
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
+    def notify_contact_of_action_taken_on_behalf_of contact:
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 

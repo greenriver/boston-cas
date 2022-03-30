@@ -268,13 +268,36 @@ class NonHmisClient < ApplicationRecord
     project_client.holds_voucher_on = current_assessment&.entry_date if current_assessment&.have_tenant_voucher
     project_client.enrolled_in_es = current_assessment&.enrolled_in_es || false
     project_client.enrolled_in_so = current_assessment&.enrolled_in_so || false
-    # if we have breakdowns of sheltered vs unsheltered we can set majority_sheltered
-    # otherwise, just leave it as nil
-    if current_assessment&.homeless_nights_sheltered.present? && current_assessment&.homeless_nights_unsheltered.present? && current_assessment&.additional_homeless_nights_sheltered.present? && current_assessment&.additional_homeless_nights_unsheltered.present?
-      sheltered = current_assessment.homeless_nights_sheltered + current_assessment.additional_homeless_nights_sheltered
-      unsheltered = current_assessment.homeless_nights_unsheltered + current_assessment.additional_homeless_nights_unsheltered
-      # Count equivalent counts as sheltered
-      project_client.majority_sheltered = sheltered >= unsheltered
+    # as of 3/21/2022 Set majority_sheltered based on CLS response
+    # possible responses are all sheltered except "Unsheltered"
+    project_client.majority_sheltered = current_assessment&.setting != 'Unsheltered'
+    project_client.strengths = current_assessment&.strengths&.reject(&:blank?)
+    project_client.challenges = current_assessment&.challenges&.reject(&:blank?)
+    project_client.open_case = current_assessment&.tc_hat_client_history&.include?('open_case')
+    project_client.housing_for_formerly_homeless = current_assessment&.housing_preferences&.include?('with_formerly_homeless')
+
+    [
+      :foster_care,
+      :drug_test,
+      :heavy_drug_use,
+      :sober,
+      :willing_case_management,
+      :employed_three_months,
+      :living_wage,
+      :need_daily_assistance,
+      :full_time_employed,
+      :can_work_full_time,
+      :willing_to_work_full_time,
+      :rrh_successful_exit,
+      :lifetime_sex_offender,
+      :th_desired,
+      :drug_test,
+      :employed_three_months,
+      :site_case_management_required,
+      :currently_fleeing,
+      :dv_date,
+    ].each do |method|
+      project_client[method] = current_assessment&.send(method)
     end
     project_client.needs_update = true
     project_client
@@ -355,6 +378,10 @@ class NonHmisClient < ApplicationRecord
     assessment.imported_timestamp = imported_timestamp
     assessment.is_currently_youth = is_currently_youth
     assessment.older_than_65 = older_than_65
+    assessment.days_homeless = days_homeless
+    assessment.sixty_plus = sixty_plus
+    assessment.tc_hat_household_type = 'Adults with Children' if family_member
+    assessment.hiv_aids = hiv_aids
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at
