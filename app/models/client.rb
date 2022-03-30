@@ -495,7 +495,7 @@ class Client < ApplicationRecord
   end
 
   private def from_hmis?
-    project_client.from_hmis?
+    project_client&.from_hmis?
   end
 
   def warehouse_id
