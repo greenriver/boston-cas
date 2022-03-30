@@ -81,6 +81,7 @@ module MatchDecisions
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
+      inform_client(:new_match)
     end
 
     def notifications_for_this_step

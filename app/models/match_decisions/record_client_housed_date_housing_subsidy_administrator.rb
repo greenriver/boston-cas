@@ -52,7 +52,7 @@ module MatchDecisions
         completed: 'Complete',
         canceled: 'Canceled',
         shelter_declined: 'Declined by Shelter Agency',
-        skipped: 'Skipped',
+        skipped: _('There will not be a criminal background hearing'),
         back: 'Pending',
       }
     end
@@ -144,7 +144,6 @@ module MatchDecisions
 
       def shelter_declined
         @decision.class.transaction do
-          @decision.update(status: nil)
           match.create_confirm_shelter_decline_of_housed_decision unless match.confirm_shelter_decline_of_housed_decision.present?
           match.confirm_shelter_decline_of_housed_decision.initialize_decision!
         end

@@ -109,3 +109,11 @@ Sober,Clean/sober for at least one year,,be
 WillingCaseManagement,Willing to engage with housing case management,,be
 EmployedThreeMonths,Employed for 3 or more months,,be
 LivingWage,Earning a living wage ($13 or more),,be
+CanWorkFullTime,Able to work full-time,,be
+CurrentlyFleeing,Currently fleeing DV,,be
+FullTimeEmployed,Employed full-time,,be
+NeedsDailyAssistance,Needing a higher level of care,,be
+RrhSuccessfulExit,Able to successfully exit 12-24 month RRH program,,be
+SiteCaseManagementRequired,Needing site-based case management,,be
+ThDesired,Interested in Transitional Housing,,be
+WillingToWorkFullTime,Willing to work full-time,,be

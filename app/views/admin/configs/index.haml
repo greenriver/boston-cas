@@ -14,6 +14,7 @@
       = f.input :warehouse_url, label: 'Warehouse URL'
       = f.input :ami, label: 'Individual Average Median Income'
       = f.input :vispdat_prioritization_scheme, collection: ProjectClient.vispdat_prioritization_schemes, label: 'VI-SPDAT Prioritization Scheme', include_blank: false, as: :select2
+      = f.input :include_note_in_email_default, collection: @config.include_note_in_email_options, label: 'Include match notes in email notification', include_blank: false, as: :select2
     .col-sm-6
       = f.input :identified_client_assessment, collection: IdentifiedClientAssessment.assessments, include_blank: false, as: :select2
       = f.input :deidentified_client_assessment, collection: DeidentifiedClientAssessment.assessments, include_blank: false, as: :select2

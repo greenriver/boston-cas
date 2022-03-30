@@ -202,3 +202,5 @@ end
 hud_codes
 StalledResponse.ensure_all
 maintain_report_definitions
+# force config refresh
+Config.first&.invalidate_cache

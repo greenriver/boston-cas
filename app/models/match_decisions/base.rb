@@ -76,6 +76,12 @@ module MatchDecisions
     end
     alias actor_name contact_name
 
+    def editable?
+      # can this decision be updated by a notification response?
+      # override this default behavior in subclasses
+      initialized? && match_open?
+    end
+
     def expires?
       false
     end
@@ -107,7 +113,7 @@ module MatchDecisions
     end
 
     def set_stall_date
-      stall_on = (Date.current + stalled_after if stallable? && stalled_after > 0) # rubocop:disable Style/NumericPredicate
+      stall_on = (Date.current + stalled_after if stallable? && stalled_after.positive?)
 
       match.update(
         stall_date: stall_on,
@@ -142,7 +148,7 @@ module MatchDecisions
       decision_type
     end
 
-    def notifications fetch_strategy: :single_decision # rubocop:disable Lint/UnusedMethodArgument
+    def notifications(fetch_strategy: :single_decision) # rubocop:disable Lint/UnusedMethodArgument
       match.send("#{decision_type}_notifications")
     end
 
@@ -178,24 +184,18 @@ module MatchDecisions
     # do things like set the initial "pending" status and
     # send notifications
     # All sub-class overrides should call this first
-    def initialize_decision! send_notifications: true # rubocop:disable Lint/UnusedMethodArgument
+    def initialize_decision!(send_notifications: true) # rubocop:disable Lint/UnusedMethodArgument
       # always reset the stall date when the match moves into a new step
       set_stall_date
     end
 
-    def uninitialize_decision! send_notifications: false
+    def uninitialize_decision!(send_notifications: false)
       update(status: nil)
       previous_step&.initialize_decision!(send_notifications: send_notifications)
     end
 
     def initialized?
       status.present?
-    end
-
-    def editable?
-      # can this decision be updated by a notification response?
-      # override this default behavior in subclasses
-      initialized? && match_open?
     end
 
     def match_open?
@@ -242,7 +242,7 @@ module MatchDecisions
     # inherit in subclasses and add methods for each entry in #statuses
     class StatusCallbacks
       attr_reader :decision, :dependencies
-      def initialize decision, _options
+      def initialize(decision, _options)
         @decision = decision
         @dependencies = dependencies
       end
@@ -261,13 +261,12 @@ module MatchDecisions
     def record_updated_unit! unit_id:, contact_id:
       voucher = match.opportunity.voucher
       return unless unit_id.present? && voucher.unit.present?
+      return unless voucher.unit_id != unit_id.to_i
 
-      if voucher.unit_id != unit_id.to_i # rubocop:disable Style/GuardClause
-        details = match.opportunity_details
-        previous_unit = "#{details.unit_name} at #{details.building_name}"
-        voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
-        MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
-      end
+      details = match.opportunity_details
+      previous_unit = "#{details.unit_name} at #{details.building_name}"
+      voucher.update!(skip_match_locking_validation: true, unit_id: unit_id)
+      MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
     end
 
     # override in subclass
@@ -275,7 +274,7 @@ module MatchDecisions
     end
 
     def self.model_name
-      @_model_name ||= ActiveModel::Name.new(self, nil, 'decision') # rubocop:disable Naming/MemoizedInstanceVariableName
+      @model_name ||= ActiveModel::Name.new(self, nil, 'decision')
     end
 
     def to_partial_path
@@ -283,7 +282,7 @@ module MatchDecisions
     end
 
     def permitted_params
-      [:status, :note, :prevent_matching_until, :administrative_cancel_reason_other_explanation, :disable_opportunity]
+      [:status, :note, :include_note_in_email, :prevent_matching_until, :administrative_cancel_reason_other_explanation, :disable_opportunity]
     end
 
     def whitelist_params_for_update params
@@ -296,7 +295,7 @@ module MatchDecisions
     end
 
     # override in subclass
-    def accessible_by? _contact
+    def accessible_by?(_contact)
       false
     end
 
@@ -330,6 +329,16 @@ module MatchDecisions
       match.decisions.find_by(type: next_step_name)
     end
 
+    def include_note?
+      # Did the user indicate in the previous step that the included note text be included?
+      previous_step&.include_note_in_email?
+    end
+
+    def step_note
+      # Get the note from the most recent decision action in the previous step (in case there is more than one (e.g, if the match has been backed up)
+      previous_step&.decision_action_events&.order(created_at: :desc)&.limit(1)&.pluck(:note)&.first
+    end
+
     def send_notifications_for_step
       notifications_for_this_step.each do |notification|
         notification.create_for_match! match
@@ -349,6 +358,7 @@ module MatchDecisions
         :declined,
         :canceled,
         :rejected,
+        :shelter_declined,
       ]
     end
 
@@ -393,29 +403,27 @@ module MatchDecisions
       :done
     end
 
-    private
-
-    def decision_type
+    private def decision_type
       self.class.to_s.demodulize.underscore
     end
 
-    def status_callbacks
+    private def status_callbacks
       self.class.const_get :StatusCallbacks
     end
 
-    def ensure_status_allowed
+    private def ensure_status_allowed
       errors.add :status, 'is not allowed' if statuses.with_indifferent_access[status].blank?
     end
 
-    def cancellations
+    private def cancellations
       errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
     end
 
-    def notification_class
+    private def notification_class
       "Notifications::#{self.class.to_s.demodulize}".constantize
     end
 
-    def saved_status
+    private def saved_status
       changed_attributes[:status] || status
     end
   end
