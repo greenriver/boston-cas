@@ -22,7 +22,11 @@
             %span.badge.badge-success.p-2
               = Rails.env
       - else
-        .rails-env.ml-auto.mr-6
+        .git-revision.ml-auto
+          .navbar-text
+            %span.badge.badge-warning.p-2
+              = git_revision
+        .rails-env.ml-4.mr-6
           .navbar-text
             %span.badge.badge-success.p-2
               = Rails.env
