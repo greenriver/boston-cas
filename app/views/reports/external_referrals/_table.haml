@@ -1,16 +1,20 @@
 = simple_form_for :referrals, as: :referrals, url: refer_reports_external_referrals_path({ filter: filter_params, format: :xlsx }) do |f|
-  .d-flex
+  .d-flex.mb-4
+    .mr-auto
+      %p= page_entries_info @clients
+      = paginate @clients
     = f.button :submit, value: 'Download Excel', class: 'btn btn-secondary mb-4 ml-auto', data: { disable_with: false }
 
   .table-responsive
     .c-card.c.card__flush.mb-4.p-0
       .c-card__content.p-0
-        %table.table.table-striped
+        %table.table.table-striped.mb-0
           %thead
             %tr
               %th Name or Identifier
               %th #{_('Full HAN Release')}?
               %th Last Referral Date
+              %th Assessment Type
               %th Assessment Date
               %th Assessment Score
               %th Tie Breaker Date
@@ -24,8 +28,11 @@
                 %td= client.full_name
                 %td= yes_no(client.has_full_housing_release?)
                 %td= client.external_referrals&.max_by(&:referred_on)&.referred_on
+                %td= NonHmisAssessment.title_from_type_for_matching(client.assessment_name)
                 %td= client.rrh_assessment_collected_at&.to_date
                 %td= client.assessment_score
                 %td= client.tie_breaker_date
                 %td
                   = f.input "[clients][#{client.id}]", as: :boolean, label: false, input_html: {class: 'jReferral'}
+  %p= page_entries_info @clients
+  = paginate @clients

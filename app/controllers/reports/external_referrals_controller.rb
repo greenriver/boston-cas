@@ -34,7 +34,11 @@ module Reports
 
     private def index_response
       respond_to do |format|
-        format.html {}
+        format.html do
+          # paginate, but attempt to get all clients on one page because we may be adding a referral,
+          # which won't work right if we're exporting a huge number all at once.
+          @clients = @clients.page(params[:page]).per(250)
+        end
         format.xlsx do
           @clients = @clients.preload(:external_referrals, :active_matches, :project_client).to_a
           @dv = @clients.select { |c| c.domestic_violence == 1 }.map(&:id).to_set
@@ -45,9 +49,11 @@ module Reports
           @assessment_classes = {}
           @clients.each do |client|
             assessment = NonHmisAssessment.to_class(client.assessment_name)
-            @assessment_classes[assessment.new.title] ||= assessment
+            title = NonHmisAssessment.title_from_type_for_matching(client.assessment_name).gsub(' - Identified', '').gsub(' - Deidentified', '')
+            @assessment_classes[title] ||= assessment
           end
-          @clients = @clients.group_by { |c| NonHmisAssessment.to_class(c.assessment_name).new.title }
+
+          @clients = @clients.group_by { |c| NonHmisAssessment.known_assessments_for_matching[c.assessment_name].gsub(' - Identified', '').gsub(' - Deidentified', '') }
 
           filename = 'CAS External Referrals.xlsx'
           render xlsx: 'index.xlsx', filename: filename

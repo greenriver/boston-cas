@@ -35,6 +35,9 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def self.to_class(name)
+    # TODO: this doesn't work for PathwaysVersionThree
+    # Pathways V3 has multiple assessment types we need to deal with
+    name = name&.gsub('VersionThreePathways', 'VersionThree')&.gsub('VersionThreeTransfer', 'VersionThree')
     klass_name = known_assessment_types.detect { |m| m == name } || 'IdentifiedClientAssessment'
     klass_name.constantize
   end
@@ -383,8 +386,12 @@ class NonHmisAssessment < ActiveRecord::Base
     true
   end
 
+  def self.export_headers(assessment_name)
+    export_fields(assessment_name).map { |_, config| config[:title] }
+  end
+
   # Add or override as necessary for each assessment type
-  def export_fields
+  def self.export_fields(_assessment_name)
     {
       first_name: {
         title: 'First Name',
@@ -414,29 +421,33 @@ class NonHmisAssessment < ActiveRecord::Base
         title: 'Age',
         client_field: :age,
       },
+      disabling_condition: {
+        title: 'Disabling Condition',
+        client_field: :disabling_condition_for_export,
+      },
       dv: {
         title: 'DV',
-        client_field: :dv,
+        client_field: :dv_for_export,
       },
       line_1: {
         title: 'Address Line 1',
-        client_field: :line_1,
+        client_field: :line_1_for_export,
       },
       line_2: {
         title: 'Address Line 2',
-        client_field: :line_2,
+        client_field: :line_2_for_export,
       },
       city: {
         title: 'City',
-        client_field: :city,
+        client_field: :city_for_export,
       },
       state: {
         title: 'State',
-        client_field: :state,
+        client_field: :state_for_export,
       },
       postal_code: {
         title: 'ZIP Code',
-        client_field: :postal_code,
+        client_field: :postal_code_for_export,
       },
       primary_contact_first_name: {
         title: 'Caseworker First Name',
@@ -447,7 +458,7 @@ class NonHmisAssessment < ActiveRecord::Base
         client_field: :primary_contact_last_name,
       },
       primary_contact_user_agency_name: {
-        title: 'Organization Name',
+        title: 'Caseworker Organization Name',
         client_field: :primary_contact_user_agency_name,
       },
       primary_contact_email: {
@@ -458,33 +469,45 @@ class NonHmisAssessment < ActiveRecord::Base
         title: 'Caseworker Phone',
         client_field: :primary_contact_phone,
       },
+      secondary_contact_first_name: {
+        title: 'Additional Caseworker First Name',
+        client_field: :secondary_contact_first_name,
+      },
+      secondary_contact_last_name: {
+        title: 'Additional Caseworker Last Name',
+        client_field: :secondary_contact_last_name,
+      },
+      secondary_contact_email: {
+        title: 'Additional Caseworker Email',
+        client_field: :secondary_contact_email,
+      },
+      secondary_contact_phone: {
+        title: 'Additional Caseworker Phone',
+        client_field: :secondary_contact_phone,
+      },
       client_assessor_first_name: {
-        title: 'First Name',
-        client_field: :client_assessor_first_name,
+        title: 'Assessor First Name',
+        client_field: :assessor_first_name,
       },
       client_assessor_last_name: {
-        title: 'Last Name',
-        client_field: :client_assessor_last_name,
+        title: 'Assessor Last Name',
+        client_field: :assessor_last_name,
       },
       client_assessor_email: {
-        title: 'Email',
-        client_field: :client_assessor_email,
+        title: 'Assessor Email',
+        client_field: :assessor_email,
       },
       client_assessor_phone: {
-        title: 'Phone',
-        client_field: :client_assessor_phone,
+        title: 'Assessor Phone',
+        client_field: :assessor_phone,
       },
       warehouse_id: {
-        title: 'Warehouse ID',
+        title: 'Client Warehouse ID',
         client_field: :warehouse_id,
       },
       id: {
         title: 'CAS Client ID',
         client_field: :id,
-      },
-      rank: {
-        title: 'Rank',
-        client_field: :rank,
       },
       assessment_score: {
         title: 'Assessment Score',
@@ -493,6 +516,14 @@ class NonHmisAssessment < ActiveRecord::Base
       tie_breaker_date: {
         title: 'Tie Breaker Date',
         client_field: :tie_breaker_date,
+      },
+      family_member: {
+        title: 'Family',
+        client_field: :family_member_for_export,
+      },
+      income_total_monthly: {
+        title: 'Monthly Income',
+        client_field: :income_total_monthly,
       },
     }
   end

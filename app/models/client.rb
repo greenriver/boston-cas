@@ -4,6 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+require 'street_address'
 class Client < ApplicationRecord
   before_create :assign_tie_breaker
 
@@ -603,6 +604,152 @@ class Client < ApplicationRecord
       'Neighborhood Preference' => neighborhoods,
     }
   end
+
+  # Export related
+  def dv_for_export
+    numeric_bool_for_export(domestic_violence)
+  end
+
+  def disabling_condition_for_export
+    bool_for_export(disabling_condition)
+  end
+
+  def line_1_for_export
+    address_for_export&.line1 || address # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
+  end
+
+  def line_2_for_export
+    '' # We don't have these yet
+  end
+
+  def city_for_export
+    address_for_export&.city
+  end
+
+  def state_for_export
+    address_for_export&.state
+  end
+
+  def postal_code_for_export
+    address_for_export&.postal_code
+  end
+
+  def primary_contact_first_name
+    contacts_for_export[:primary]&.first_name
+  end
+
+  def primary_contact_last_name
+    contacts_for_export[:primary]&.last_name
+  end
+
+  def primary_contact_user_agency_name
+    contacts_for_export[:primary]&.user&.agency&.name
+  end
+
+  def primary_contact_email
+    contacts_for_export[:primary]&.email
+  end
+
+  def primary_contact_phone
+    contacts_for_export[:primary]&.phone
+  end
+
+  def secondary_contact_first_name
+    contacts_for_export[:secondary]&.first_name
+  end
+
+  def secondary_contact_last_name
+    contacts_for_export[:secondary]&.last_name
+  end
+
+  def secondary_contact_email
+    contacts_for_export[:secondary]&.email
+  end
+
+  def secondary_contact_phone
+    contacts_for_export[:secondary]&.phone
+  end
+
+  def family_member_for_export
+    bool_for_export(family_member)
+  end
+
+  def majority_sheltered_for_export
+    return 'Sheltered' if majority_sheltered
+    return 'Unsheltered' if majority_sheltered == false
+  end
+
+  def youth_rrh_desired_for_export
+    bool_for_export(youth_rrh_desired)
+  end
+
+  def dv_rrh_desired_for_export
+    bool_for_export(dv_rrh_desired)
+  end
+
+  def sro_ok_for_export
+    bool_for_export(sro_ok)
+  end
+
+  def requires_wheelchair_accessibility_for_export
+    bool_for_export(requires_wheelchair_accessibility)
+  end
+
+  def requires_elevator_access_for_export
+    bool_for_export(requires_elevator_access)
+  end
+
+  def veteran_status_for_export
+    numeric_bool_for_export(veteran_status)
+  end
+
+  def neighborhood_interests_for_export
+    neighborhood_interests&.join('; ')
+  end
+
+  def need_daily_assistance_for_export
+    bool_for_export(need_daily_assistance)
+  end
+
+  private def numeric_bool_for_export(value)
+    return 'Yes' if value.to_s == '1'
+    return 'No' if value.to_s == '0'
+  end
+
+  private def bool_for_export(value)
+    return '' if value.nil?
+    return 'Yes' if value
+
+    'No'
+  end
+
+  private def contacts_for_export
+    @contacts_for_export ||= {}.tap do |ec|
+      export_contacts = project_client.shelter_agency_contacts
+      primary_contact = export_contacts&.first
+      secondary_contact = export_contacts&.second
+      primary_contact.email = primary_contact&.user&.email if primary_contact
+      secondary_contact.email = secondary_contact&.user&.email if secondary_contact
+      # Attempt to find a useful contact for the client, the format of these is not conducive to exporting
+      if primary_contact
+        secondary_contact ||= structured_rrh_assessment_contact_info
+      else
+        primary_contact = structured_rrh_assessment_contact_info
+      end
+      if primary_contact
+        secondary_contact ||= OpenStruct.new(first_name: case_manager_contact_info)
+      else
+        primary_contact = OpenStruct.new(first_name: case_manager_contact_info)
+      end
+      ec[:primary] = primary_contact
+      ec[:secondary] = secondary_contact
+    end
+  end
+
+  private def address_for_export
+    @address_for_export ||= StreetAddress::US.parse(address)
+  end
+  # End export related
 
   def self.sort_options(show_vispdat: false, show_assessment: false)
     [

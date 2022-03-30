@@ -1,164 +1,58 @@
 require 'street_address'
-def clients(sheet, rows, assessment_klass)
-  rows.each.with_index do |client, i|
-    contacts = client.project_client.shelter_agency_contacts
-    primary_contact = contacts&.first
-    secondary_contact = contacts&.second
-    primary_contact.email = primary_contact&.user&.email if primary_contact
-    secondary_contact.email = secondary_contact&.user&.email if secondary_contact
-    # Attempt to find a useful contact for the client, the format of these is not conducive to the report
-    if primary_contact
-      secondary_contact ||= client.structured_rrh_assessment_contact_info
-    else
-      primary_contact = client.structured_rrh_assessment_contact_info
-    end
-    if primary_contact
-      secondary_contact ||= OpenStruct.new(first_name: client.case_manager_contact_info)
-    else
-      primary_contact = OpenStruct.new(first_name: client.case_manager_contact_info)
-    end
-
-    address = StreetAddress::US.parse(client.address)
-    sheet.add_row(
-      [
-        client.first_name,
-        client.last_name,
-        client.middle_name,
-        client.email,
-        client.cellphone,
-        client.date_of_birth,
-        client.age,
-        if @sheltered.include?(client.id) then 'Sheltered' elsif @unsheltered.include?(client.id) then 'Unsheltered' end,
-        yes_no(@dv.include?(client.id)),
-        address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
-        '',
-        address&.city,
-        address&.state,
-        address&.postal_code,
-        primary_contact&.first_name,
-        primary_contact&.last_name,
-        primary_contact&.user&.agency&.name,
-        primary_contact&.email,
-        primary_contact&.phone,
-        secondary_contact&.first_name,
-        secondary_contact&.last_name,
-        secondary_contact&.email,
-        secondary_contact&.phone,
-        client.assessor_first_name,
-        client.assessor_last_name,
-        client.assessor_email,
-        client.assessor_phone,
-        client.warehouse_id,
-        client.id,
-        i + 1,
-        client.assessment_score,
-        client.tie_breaker_date,
-      ],
-    )
-    row += client.project_client.non_hmis_client.current_assessment.form_field_values
+def clients(sheet, rows, assessment_klass, title)
+  rows.each do |client|
+    row = assessment_klass.export_fields(title).values.map { |field| client.send(field[:client_field]) }
+    sheet.add_row(row)
+    # sheet.add_row(
+    #   [
+    #     client.first_name,
+    #     client.last_name,
+    #     client.middle_name,
+    #     client.email,
+    #     client.cellphone,
+    #     client.date_of_birth,
+    #     client.age,
+    #     if @sheltered.include?(client.id) then 'Sheltered' elsif @unsheltered.include?(client.id) then 'Unsheltered' end,
+    #     yes_no(@dv.include?(client.id)),
+    #     address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
+    #     '',
+    #     address&.city,
+    #     address&.state,
+    #     address&.postal_code,
+    #     primary_contact&.first_name,
+    #     primary_contact&.last_name,
+    #     primary_contact&.user&.agency&.name,
+    #     primary_contact&.email,
+    #     primary_contact&.phone,
+    #     secondary_contact&.first_name,
+    #     secondary_contact&.last_name,
+    #     secondary_contact&.email,
+    #     secondary_contact&.phone,
+    #     client.assessor_first_name,
+    #     client.assessor_last_name,
+    #     client.assessor_email,
+    #     client.assessor_phone,
+    #     client.warehouse_id,
+    #     client.id,
+    #     i + 1,
+    #     client.assessment_score,
+    #     client.tie_breaker_date,
+    #   ],
+    # )
+    # row += client.project_client.non_hmis_client.current_assessment.form_field_values
   end
 end
 
-def header(sheet, assessment_klass)
-  title = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
-  sheet.add_row(
-    [
-      'Head of Household Identifying Information',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      'Head of Household Address Where Currently Residing',
-      '',
-      '',
-      '',
-      '',
-      'Primary Service Provider',
-      '',
-      '',
-      '',
-      '',
-      'Additional Person Providing Assistance (Optional)',
-      '',
-      '',
-      '',
-      '',
-      '',
-      'Assessor Information',
-      '',
-      '',
-      '',
-      '',
-    ],
-    style: title,
-  )
-  sheet.merge_cells('A1:F1')
-  sheet.merge_cells('G1:K1')
-  sheet.merge_cells('L1:P1')
-  sheet.merge_cells('Q1:T1')
-  sheet.merge_cells('Y1:AC1')
-  row = [
-    'First Name',
-    'Last Name',
-    'Middle Name',
-    'Email',
-    'Phone',
-    'Date of Birth',
-    'Age',
-    'Sheltered / Unsheltered',
-    'DV',
-    'Line 1',
-    'Line 2',
-    'City',
-    'State',
-    'ZIP Code',
-    'Caseworker First Name',
-    'Caseworker Last Name',
-    'Organization Name',
-    'Caseworker Email',
-    'Caseworker Phone',
-    'First Name',
-    'Last Name',
-    'Email',
-    'Phone',
-    'First Name',
-    'Last Name',
-    'Email',
-    'Phone',
-    'Warehouse ID',
-    'CAS Client ID',
-    'Rank',
-    'Assessment Score',
-    'Tie Breaker Date',
-  ]
-  row += assessment_klass.new.safe_form_field_labels
-  sheet.add_row(
-    row,
-    style: title,
-  )
+def header(sheet, assessment_klass, title)
+  title_style = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
+  sheet.add_row(assessment_klass.export_headers(title), style: title_style)
 end
 
 wb = xlsx_package.workbook
 @clients.each do |title, client_list|
   wb.add_worksheet(name: title[0..30]) do |sheet|
     assessment_klass = @assessment_classes[title]
-    header(sheet, assessment_klass)
-    clients(sheet, client_list, assessment_klass)
+    header(sheet, assessment_klass, title)
+    clients(sheet, client_list, assessment_klass, title)
   end
 end
-
-# wb.add_worksheet(name: 'Sheltered') do |sheet|
-#   header(sheet)
-#   clients(sheet, @sheltered)
-# end
-# wb.add_worksheet(name: 'Unsheltered') do |sheet|
-#   header(sheet)
-#   clients(sheet, @unsheltered)
-# end
-# wb.add_worksheet(name: 'DV') do |sheet|
-#   header(sheet)
-#   clients(sheet, @dv)
-# end
