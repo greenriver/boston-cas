@@ -3,43 +3,6 @@ def clients(sheet, rows, assessment_klass, title)
   rows.each do |client|
     row = assessment_klass.export_fields(title).values.map { |field| client.send(field[:client_field]) }
     sheet.add_row(row)
-    # sheet.add_row(
-    #   [
-    #     client.first_name,
-    #     client.last_name,
-    #     client.middle_name,
-    #     client.email,
-    #     client.cellphone,
-    #     client.date_of_birth,
-    #     client.age,
-    #     if @sheltered.include?(client.id) then 'Sheltered' elsif @unsheltered.include?(client.id) then 'Unsheltered' end,
-    #     yes_no(@dv.include?(client.id)),
-    #     address&.line1 || client.address, # If we correctly parsed the string, it will have a line1, otherwise just echo back what was recorded
-    #     '',
-    #     address&.city,
-    #     address&.state,
-    #     address&.postal_code,
-    #     primary_contact&.first_name,
-    #     primary_contact&.last_name,
-    #     primary_contact&.user&.agency&.name,
-    #     primary_contact&.email,
-    #     primary_contact&.phone,
-    #     secondary_contact&.first_name,
-    #     secondary_contact&.last_name,
-    #     secondary_contact&.email,
-    #     secondary_contact&.phone,
-    #     client.assessor_first_name,
-    #     client.assessor_last_name,
-    #     client.assessor_email,
-    #     client.assessor_phone,
-    #     client.warehouse_id,
-    #     client.id,
-    #     i + 1,
-    #     client.assessment_score,
-    #     client.tie_breaker_date,
-    #   ],
-    # )
-    # row += client.project_client.non_hmis_client.current_assessment.form_field_values
   end
 end
 

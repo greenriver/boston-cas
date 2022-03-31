@@ -49,11 +49,11 @@ module Reports
           @assessment_classes = {}
           @clients.each do |client|
             assessment = NonHmisAssessment.to_class(client.assessment_name)
-            title = NonHmisAssessment.title_from_type_for_matching(client.assessment_name).gsub(' - Identified', '').gsub(' - Deidentified', '')
+            title = NonHmisAssessment.declassify_title(NonHmisAssessment.title_from_type_for_matching(client.assessment_name))
             @assessment_classes[title] ||= assessment
           end
 
-          @clients = @clients.group_by { |c| NonHmisAssessment.known_assessments_for_matching[c.assessment_name].gsub(' - Identified', '').gsub(' - Deidentified', '') }
+          @clients = @clients.group_by { |c| NonHmisAssessment.declassify_title(NonHmisAssessment.known_assessments_for_matching[c.assessment_name]) }
 
           filename = 'CAS External Referrals.xlsx'
           render xlsx: 'index.xlsx', filename: filename

@@ -84,6 +84,10 @@ class NonHmisAssessment < ActiveRecord::Base
     known_assessments_for_matching[type_for_matching]
   end
 
+  def self.declassify_title(name)
+    name.gsub(' - Identified', '').gsub(' - Deidentified', '')
+  end
+
   def title
     'Non-HMIS Assessment'
   end
