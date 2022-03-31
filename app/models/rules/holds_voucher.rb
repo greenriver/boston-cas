@@ -29,26 +29,26 @@ class Rules::HoldsVoucher < Rule
     return unless source_match.present?
 
     # Copy the relevant contacts from the source match
-    source_match.dnd_staff_contacts.each do |contact|
+    source_match.dnd_staff_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:dnd_staff, contact)
     end
-    source_match.housing_subsidy_admin_contacts.each do |contact|
+    source_match.housing_subsidy_admin_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:housing_subsidy_admin, contact)
     end
-    source_match.shelter_agency_contacts.each do |contact|
+    source_match.shelter_agency_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:shelter_agency, contact)
     end
-    source_match.client_contacts.each do |contact|
+    source_match.client_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:client, contact)
     end
 
-    source_match.ssp_contacts.each do |contact|
+    source_match.ssp_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:ssp, contact)
     end
-    source_match.hsp_contacts.each do |contact|
+    source_match.hsp_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:hsp, contact)
     end
-    source_match.do_contacts.each do |contact|
+    source_match.do_contacts.preload(:user).each do |contact|
       match.assign_match_role_to_contact(:do, contact)
     end
   end

@@ -730,6 +730,8 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def assign_match_role_to_contact role, contact
+    return unless contact.user.active?
+
     join_model = client_opportunity_match_contacts.detect do |match_contact|
       match_contact.contact_id == contact.id
     end
@@ -739,25 +741,25 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   private def add_default_dnd_staff_contacts!
-    Contact.where(user_id: User.dnd_initial_contact.select(:id)).each do |contact|
+    Contact.where(user_id: User.dnd_initial_contact.select(:id)).preload(:user).each do |contact|
       assign_match_role_to_contact :dnd_staff, contact
     end
-    sub_program.dnd_staff_contacts.each do |contact|
+    sub_program.dnd_staff_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :dnd_staff, contact
     end
-    client.dnd_staff_contacts.each do |contact|
+    client.dnd_staff_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :dnd_staff, contact
     end
   end
 
   private def add_default_housing_subsidy_admin_contacts!
-    opportunity.housing_subsidy_admin_contacts.each do |contact|
+    opportunity.housing_subsidy_admin_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :housing_subsidy_admin, contact
     end
-    sub_program.housing_subsidy_admin_contacts.each do |contact|
+    sub_program.housing_subsidy_admin_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :housing_subsidy_admin, contact
     end
-    client.housing_subsidy_admin_contacts.each do |contact|
+    client.housing_subsidy_admin_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :housing_subsidy_admin, contact
     end
     # If for some reason we forgot to setup the default HSA contacts
@@ -770,51 +772,51 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   private def add_default_client_contacts!
-    client.regular_contacts.each do |contact|
+    client.regular_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :client, contact
     end
-    sub_program.client_contacts.each do |contact|
+    sub_program.client_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :client, contact
     end
   end
 
   private def add_default_shelter_agency_contacts!
-    client.shelter_agency_contacts.each do |contact|
+    client.shelter_agency_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :shelter_agency, contact
     end
-    sub_program.shelter_agency_contacts.each do |contact|
+    sub_program.shelter_agency_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :shelter_agency, contact
     end
     if match_route.default_shelter_agency_contacts_from_project_client? # rubocop:disable Style/GuardClause
-      client.project_client.shelter_agency_contacts.each do |contact|
+      client.project_client.shelter_agency_contacts.preload(:user).each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
     end
   end
 
   private def add_default_ssp_contacts!
-    sub_program.ssp_contacts.each do |contact|
+    sub_program.ssp_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :ssp, contact
     end
-    client.ssp_contacts.each do |contact|
+    client.ssp_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :ssp, contact
     end
   end
 
   private def add_default_hsp_contacts!
-    sub_program.hsp_contacts.each do |contact|
+    sub_program.hsp_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :hsp, contact
     end
-    client.hsp_contacts.each do |contact|
+    client.hsp_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :hsp, contact
     end
   end
 
   private def add_default_do_contacts!
-    sub_program.do_contacts.each do |contact|
+    sub_program.do_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :do, contact
     end
-    client.do_contacts.each do |contact|
+    client.do_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :do, contact
     end
   end
