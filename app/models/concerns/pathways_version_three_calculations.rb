@@ -58,7 +58,7 @@ module PathwaysVersionThreeCalculations
       shared = super.merge(
         {
           entry_date: {
-            title: 'Entry Date',
+            title: 'Assessment Date',
             client_field: :entry_date,
           },
           setting: {
