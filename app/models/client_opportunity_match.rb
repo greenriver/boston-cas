@@ -788,7 +788,7 @@ class ClientOpportunityMatch < ApplicationRecord
       assign_match_role_to_contact :shelter_agency, contact
     end
     if match_route.default_shelter_agency_contacts_from_project_client? # rubocop:disable Style/GuardClause
-      client.project_client.shelter_agency_contacts.preload(:user).each do |contact|
+      client.project_client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
     end
