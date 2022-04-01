@@ -94,7 +94,7 @@ module PathwaysVersionThreeCalculations
             client_field: :requires_wheelchair_accessibility_for_export,
           },
           requires_elevator_access: {
-            title: 'Requires wheelchair accessibility?',
+            title: 'Requires elevator access or ground floor unit?',
             client_field: :requires_elevator_access_for_export,
           },
           neighborhood_interests: {
