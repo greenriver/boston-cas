@@ -730,7 +730,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def assign_match_role_to_contact role, contact
-    return unless contact.user.active?
+    return unless contact.user&.active?
 
     join_model = client_opportunity_match_contacts.detect do |match_contact|
       match_contact.contact_id == contact.id
