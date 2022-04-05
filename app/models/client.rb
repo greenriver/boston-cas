@@ -704,7 +704,7 @@ class Client < ApplicationRecord
   end
 
   def neighborhood_interests_for_export
-    neighborhood_interests&.join('; ')
+    Neighborhood.where(id: neighborhood_interests).pluck(:name).join('; ')
   end
 
   def need_daily_assistance_for_export

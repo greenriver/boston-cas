@@ -65,10 +65,6 @@ module PathwaysVersionThreeCalculations
             title: _('Current Living Situation'),
             client_field: :majority_sheltered_for_export,
           },
-          case_manager_contact_info: {
-            title: 'Case Manager Contact',
-            client_field: :case_manager_contact_info,
-          },
           veteran_status: {
             title: 'Veteran',
             client_field: :veteran_status_for_export,
