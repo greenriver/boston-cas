@@ -730,7 +730,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def assign_match_role_to_contact role, contact
-    return unless contact.user.active?
+    return unless contact.user&.active?
 
     join_model = client_opportunity_match_contacts.detect do |match_contact|
       match_contact.contact_id == contact.id
@@ -788,7 +788,7 @@ class ClientOpportunityMatch < ApplicationRecord
       assign_match_role_to_contact :shelter_agency, contact
     end
     if match_route.default_shelter_agency_contacts_from_project_client? # rubocop:disable Style/GuardClause
-      client.project_client.shelter_agency_contacts.preload(:user).each do |contact|
+      client.project_client.shelter_agency_contacts.each do |contact|
         assign_match_role_to_contact :shelter_agency, contact
       end
     end
