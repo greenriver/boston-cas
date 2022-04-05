@@ -28,12 +28,10 @@ class NonHmisClientsController < ApplicationController
 
     # filter
     @non_hmis_clients = @non_hmis_clients.where(agency: Agency.where(name: clean_agency)) if clean_agency.present?
-
     @non_hmis_clients = @non_hmis_clients.where('active_cohort_ids @> ?', clean_cohort) if clean_cohort.present?
-
     @non_hmis_clients = @non_hmis_clients.where(available: clean_available) unless clean_available.nil?
-
     @non_hmis_clients = @non_hmis_clients.family_member(clean_family_member) unless clean_family_member.nil?
+    @non_hmis_clients = @non_hmis_clients.joins(:non_hmis_assessments).merge(NonHmisAssessment.where(type: clean_assessment)) if clean_assessment.present?
 
     respond_to do |format|
       format.html do
@@ -91,9 +89,9 @@ class NonHmisClientsController < ApplicationController
     a_t = NonHmisAssessment.arel_table
     sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST, ' + a_t[:updated_at].desc.to_sql)
     @assessments = @non_hmis_client.non_hmis_assessments.order(sort_string)
-    if params[:assessment_id] && pathways_enabled?
-      render :assessment
-    end
+    return unless params[:assessment_id] && pathways_enabled?
+
+    render :assessment
   end
 
   def edit
@@ -125,15 +123,13 @@ class NonHmisClientsController < ApplicationController
       if pathways_enabled?
         if can_manage_identified_clients?
           @column = 'assessment_score'
-          @direction = 'desc'
         else
           @column = 'assessed_at'
-          @direction = 'asc'
         end
       else
-        @column = 'days_homeless_in_the_last_three_years'
-        @direction = 'desc'
+        @column = 'non_hmis_clients.days_homeless_in_the_last_three_years'
       end
+      @direction = 'desc'
       sort_string = "#{@column} #{@direction}"
     else
       sort_string = sort_options.select do |m|
@@ -142,7 +138,6 @@ class NonHmisClientsController < ApplicationController
     end
 
     sort_string += ' NULLS LAST' if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
-
     sort_string
   end
 
@@ -176,7 +171,7 @@ class NonHmisClientsController < ApplicationController
     user_scope.each do |user|
       agency_name = user.agency&.name || 'Unknown'
       @contacts[agency_name] ||= []
-      @contacts[agency_name] << [ "#{user.first_name} #{user.last_name} | #{user.email}", user.contact&.id ]
+      @contacts[agency_name] << ["#{user.first_name} #{user.last_name} | #{user.email}", user.contact&.id]
     end
   end
 
@@ -199,15 +194,19 @@ class NonHmisClientsController < ApplicationController
   def clean_cohort
     return nil unless Warehouse::Base.enabled?
 
-    NonHmisClient.possible_cohorts.keys.detect{|m| m.to_i == params[:cohort]&.to_i}.to_s
+    NonHmisClient.possible_cohorts.keys.detect { |m| m.to_i == params[:cohort]&.to_i }.to_s
   end
 
   def clean_available
-    [true, false].detect{|m| m.to_s == params[:available]}
+    [true, false].detect { |m| m.to_s == params[:available] }
   end
 
   def clean_family_member
-    [true, false].detect{|m| m.to_s == params[:family_member]}
+    [true, false].detect { |m| m.to_s == params[:family_member] }
+  end
+
+  def clean_assessment
+    NonHmisAssessment.known_assessment_types.detect { |klass_name| params[:assessment] == klass_name }
   end
 
   def clean_client_params(dirty_params)

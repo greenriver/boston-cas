@@ -20,11 +20,13 @@ class IdentifiedClientsController < NonHmisClientsController
     @non_hmis_client.update(clean_params(identified_client_params))
     if pathways_enabled?
       # mark the client as available if this is a new assessment
-      @non_hmis_client.update(
-        available: true,
-        available_date: nil,
-        available_reason: nil,
-      ) unless params[:assessment_id].present? || identified_client_params[:client_assessments_attributes].blank?
+      unless params[:assessment_id].present? || identified_client_params[:client_assessments_attributes].blank?
+        @non_hmis_client.update(
+          available: true,
+          available_date: nil,
+          available_reason: nil,
+        )
+      end
 
       @non_hmis_client.current_assessment&.update_assessment_score!
     end
@@ -37,7 +39,7 @@ class IdentifiedClientsController < NonHmisClientsController
     else
       @non_hmis_client.destroy
     end
-    respond_with(@non_hmis_client, location: identified_clients_path())
+    respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
   def assessment_type
@@ -52,21 +54,21 @@ class IdentifiedClientsController < NonHmisClientsController
 
   def sort_options
     [
-      {title: 'Last Name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true},
-      {title: 'Last Name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true},
-      {title: 'Age', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true},
-      {title: 'Agency A-Z', column: 'agencies.name', direction: 'asc', order: 'LOWER(agencies.name) ASC', visible: true},
-      {title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true},
-      {title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true},
-      {title: 'Assessment Date', column: 'assessed_at', direction: 'asc', order: 'assessed_at ASC', visible: true},
-      {title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-          order: 'days_homeless_in_the_last_three_years DESC', visible: true},
+      { title: 'Last Name A-Z', column: 'last_name', direction: 'asc', order: 'LOWER(last_name) ASC', visible: true },
+      { title: 'Last Name Z-A', column: 'last_name', direction: 'desc', order: 'LOWER(last_name) DESC', visible: true },
+      { title: 'Age', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true },
+      { title: 'Agency A-Z', column: 'agencies.name', direction: 'asc', order: 'LOWER(agencies.name) ASC', visible: true },
+      { title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true },
+      { title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true },
+      { title: 'Assessment Date', column: 'assessed_at', direction: 'desc', order: 'assessed_at DESC', visible: true },
+      { title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
+        order: 'days_homeless_in_the_last_three_years DESC', visible: true },
     ].freeze
   end
   helper_method :sort_options
 
   def filter_terms
-    [ :agency, :cohort, :family_member, :available ]
+    [:agency, :cohort, :family_member, :available]
   end
   helper_method :filter_terms
 

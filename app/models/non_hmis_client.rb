@@ -235,14 +235,17 @@ class NonHmisClient < ApplicationRecord
     project_client.required_minimum_occupancy = current_assessment&.required_minimum_occupancy || 1
     project_client.requires_wheelchair_accessibility = current_assessment&.requires_wheelchair_accessibility || false
     project_client.requires_elevator_access = current_assessment&.requires_elevator_access || false
-    project_client.family_member = current_assessment&.family_member || false
+    family = current_assessment&.family_member || current_assessment&.household_size.present? && current_assessment.household_size > 1 || false
+    project_client.family_member = family
 
     project_client.calculated_chronic_homelessness = current_assessment&.calculated_chronic_homelessness || false
     project_client.neighborhood_interests = current_assessment&.neighborhood_interests || []
     project_client.interested_in_set_asides = current_assessment&.interested_in_set_asides || false
 
-    project_client.income_total_monthly = current_assessment&.income_total_monthly
-    project_client.disabling_condition = (1 if current_assessment&.disabling_condition)
+    monthly_income = current_assessment&.income_total_monthly
+    monthly_income = current_assessment.income_total_annual / 12 if monthly_income.blank? && current_assessment&.income_total_annual.present?
+    project_client.income_total_monthly = monthly_income
+    project_client.disabling_condition = (1 if current_assessment&.documented_disability) || (1 if current_assessment&.disabling_condition)
     project_client.physical_disability = (1 if current_assessment&.physical_disability)
     project_client.developmental_disability = (1 if current_assessment&.developmental_disability)
     project_client.domestic_violence = 1 if current_assessment&.domestic_violence || identified == false
@@ -256,6 +259,12 @@ class NonHmisClient < ApplicationRecord
     project_client.hiv_positive = current_assessment&.hiv_aids || hiv_aids
     project_client.is_currently_youth = current_assessment&.is_currently_youth || false
     project_client.older_than_65 = current_assessment&.older_than_65
+    # assessor info
+    assessor = current_assessment&.user&.contact
+    project_client.assessor_first_name = assessor&.first_name
+    project_client.assessor_last_name = assessor&.last_name
+    project_client.assessor_email = assessor&.email
+    project_client.assessor_phone = assessor&.phone
     # Pathways
     project_client.income_maximization_assistance_requested = current_assessment&.income_maximization_assistance_requested
     project_client.pending_subsidized_housing_placement = current_assessment&.pending_subsidized_housing_placement
