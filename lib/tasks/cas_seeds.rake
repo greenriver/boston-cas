@@ -82,7 +82,7 @@ namespace :cas_seeds do
       email = 'test-noreply@example.com'
       if User.find_by(email: email).present?
         puts "A user with the email address #{email} already exists.  You can use the forgot my password option to set a password."
-        return
+        next
       end
       User.transaction do
         agency = Agency.where(name: 'Green River').first_or_create

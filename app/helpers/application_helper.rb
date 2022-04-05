@@ -155,6 +155,12 @@ module ApplicationHelper
     end
   end
 
+  def git_revision
+    File.read(File.join(Rails.root, 'REVISION'))
+  rescue StandardError
+    'unknown revision'
+  end
+
   def help_link
     @help_link ||= begin
       return nil unless help_for_path
