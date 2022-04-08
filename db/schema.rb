@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_21_123835) do
+ActiveRecord::Schema.define(version: 2022_03_24_155051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,10 @@ ActiveRecord::Schema.define(version: 2022_03_21_123835) do
     t.boolean "site_case_management_required", default: false
     t.boolean "currently_fleeing", default: false
     t.date "dv_date"
+    t.string "assessor_first_name"
+    t.string "assessor_last_name"
+    t.string "assessor_email"
+    t.string "assessor_phone"
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1282,6 +1286,10 @@ ActiveRecord::Schema.define(version: 2022_03_21_123835) do
     t.boolean "site_case_management_required", default: false
     t.boolean "currently_fleeing", default: false
     t.date "dv_date"
+    t.string "assessor_first_name"
+    t.string "assessor_last_name"
+    t.string "assessor_email"
+    t.string "assessor_phone"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

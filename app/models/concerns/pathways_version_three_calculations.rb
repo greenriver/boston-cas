@@ -54,6 +54,87 @@ module PathwaysVersionThreeCalculations
       end
     end
 
+    def self.export_fields(assessment_name)
+      shared = super.merge(
+        {
+          entry_date: {
+            title: 'Assessment Date',
+            client_field: :entry_date,
+          },
+          setting: {
+            title: _('Current Living Situation'),
+            client_field: :majority_sheltered_for_export,
+          },
+          veteran_status: {
+            title: 'Veteran',
+            client_field: :veteran_status_for_export,
+          },
+          youth_rrh_aggregate: {
+            title: 'Interested in Youth Rapid Re-Housing',
+            client_field: :youth_rrh_desired_for_export,
+          },
+          dv_rrh_aggregate: {
+            title: 'Interested in DV Rapid Re-Housing',
+            client_field: :dv_rrh_desired_for_export,
+          },
+          sro_ok: {
+            title: 'Would you consider living in a single room occupancy (SRO)?',
+            client_field: :sro_ok_for_export,
+          },
+          required_number_of_bedrooms: {
+            title: 'Minimum number of bedrooms required?',
+            client_field: :required_number_of_bedrooms,
+          },
+          requires_wheelchair_accessibility: {
+            title: 'Requires wheelchair accessibility?',
+            client_field: :requires_wheelchair_accessibility_for_export,
+          },
+          requires_elevator_access: {
+            title: 'Requires elevator access or ground floor unit?',
+            client_field: :requires_elevator_access_for_export,
+          },
+          neighborhood_interests: {
+            title: 'Neighborhood Interests',
+            client_field: :neighborhood_interests_for_export,
+          },
+          financial_assistance_end_date: {
+            title: _('Latest Date Eligible for Financial Assistance'),
+            client_field: :financial_assistance_end_date,
+          },
+          total_days_homeless_in_the_last_three_years: {
+            title: 'Days Homeless in Last Three Years',
+            client_field: :days_homeless_in_last_three_years,
+          },
+          need_daily_assistance: {
+            title: _('Needs a higher level of care'),
+            client_field: :need_daily_assistance_for_export,
+          },
+          # The following may be needed eventually, but aren't currently included
+          # disabled_housing: {
+          #   title: 'Interested in disabled housing',
+          #   client_field: :interested_in_disabled_housing,
+          # },
+          # affordable_housing: {
+          #   title: 'Interested in affordable housing',
+          #   client_field: :affordable_housing,
+          # },
+        },
+      )
+      case assessment_name
+      when 'Pathways 2021'
+        shared.merge(
+          {
+            income_maximization_assistance_requested: {
+              title: 'Interested in income maximization services',
+              client_field: :income_maximization_assistance_requested,
+            },
+          },
+        )
+      when 'Transfer Assessment'
+        shared
+      end
+    end
+
     def pathways_assessment_type
       :pathways_2021
     end

@@ -23,6 +23,12 @@
         %label.d-block Agency
         = select_tag :agency, options_for_select(NonHmisClient.possible_agencies, params[:agency]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
 
+      .o-filtration__option
+        %label.d-block Assessment Type
+        - assessment_types = NonHmisAssessment.known_assessment_types.select { |klass_name| klass_name.include?('Identified') }
+        - assessment_options = assessment_types.map { |klass_name| [ klass_name.constantize.new.title, klass_name] }
+        = select_tag :assessment, options_for_select(assessment_options, params[:assessment]), include_blank: "All", class: 'select2 select2--full-width'
+
       - unless pathways_enabled?
         .o-filtration__option
           %label.d-block Cohort

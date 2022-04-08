@@ -260,6 +260,10 @@ module Cas
         :site_case_management_required,
         :currently_fleeing,
         :dv_date,
+        :assessor_first_name,
+        :assessor_last_name,
+        :assessor_email,
+        :assessor_phone,
       ]
     end
 
