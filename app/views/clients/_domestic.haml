@@ -24,6 +24,10 @@
       %span.c-detailed-list__value= number_to_currency(@client.income_total_monthly)
 
     %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Interested in income maximization services')
+      %span.c-detailed-list__value= boolean_icon (@client.income_maximization_assistance_requested)
+
+    %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Strengths')
       %span.c-detailed-list__value= @client.strengths&.join(', ')&.titleize
 
