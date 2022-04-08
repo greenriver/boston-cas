@@ -589,7 +589,6 @@ Layout/FirstArgumentIndentation:
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
 Layout/FirstArrayElementIndentation:
   Exclude:
-    - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/models/match_routes/homeless_set_aside.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
@@ -624,8 +623,6 @@ Layout/FirstHashElementIndentation:
 # SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
 Layout/HashAlignment:
   Exclude:
-    - 'app/controllers/deidentified_clients_controller.rb'
-    - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
@@ -893,8 +890,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/deidentified_clients_controller.rb'
-    - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
@@ -954,8 +949,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/clients_controller.rb'
-    - 'app/controllers/deidentified_clients_controller.rb'
-    - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
@@ -1371,7 +1364,6 @@ Lint/UselessAssignment:
     - 'app/controllers/admin/translation_text_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/qualified_opportunities_controller.rb'
@@ -1763,8 +1755,6 @@ Style/MethodCallWithoutArgsParentheses:
   Exclude:
     - 'app/controllers/active_matches_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
-    - 'app/controllers/deidentified_clients_controller.rb'
-    - 'app/controllers/identified_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'spec/models/decisions_spec.rb'
 
@@ -1772,8 +1762,6 @@ Style/MethodCallWithoutArgsParentheses:
 # Cop supports --auto-correct.
 Style/MultilineIfModifier:
   Exclude:
-    - 'app/controllers/deidentified_clients_controller.rb'
-    - 'app/controllers/identified_clients_controller.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1796,7 +1784,6 @@ Style/MutableConstant:
 Style/NegatedIf:
   Exclude:
     - 'app/controllers/admin/users_controller.rb'
-    - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
@@ -1933,7 +1920,6 @@ Style/RescueModifier:
 # SupportedStyles: implicit, explicit
 Style/RescueStandardError:
   Exclude:
-    - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
 
 # Offense count: 3
@@ -2003,7 +1989,6 @@ Style/StringLiterals:
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/decisions.rb'
-    - 'app/controllers/deidentified_clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'

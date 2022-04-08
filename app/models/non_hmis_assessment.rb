@@ -35,6 +35,9 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def self.to_class(name)
+    # TODO: this doesn't work for PathwaysVersionThree
+    # Pathways V3 has multiple assessment types we need to deal with
+    name = name&.gsub('VersionThreePathways', 'VersionThree')&.gsub('VersionThreeTransfer', 'VersionThree')
     klass_name = known_assessment_types.detect { |m| m == name } || 'IdentifiedClientAssessment'
     klass_name.constantize
   end
@@ -79,6 +82,10 @@ class NonHmisAssessment < ActiveRecord::Base
 
   def self.title_from_type_for_matching(type_for_matching)
     known_assessments_for_matching[type_for_matching]
+  end
+
+  def self.declassify_title(name)
+    name.gsub(' - Identified', '').gsub(' - Deidentified', '')
   end
 
   def title
@@ -381,6 +388,148 @@ class NonHmisAssessment < ActiveRecord::Base
 
   def in_lock_grace_period?
     true
+  end
+
+  def self.export_headers(assessment_name)
+    export_fields(assessment_name).map { |_, config| config[:title] }
+  end
+
+  # Add or override as necessary for each assessment type
+  def self.export_fields(_assessment_name)
+    {
+      first_name: {
+        title: 'First Name',
+        client_field: :first_name,
+      },
+      last_name: {
+        title: 'Last Name',
+        client_field: :last_name,
+      },
+      middle_name: {
+        title: 'Middle Name',
+        client_field: :middle_name,
+      },
+      email: {
+        title: 'Email',
+        client_field: :email,
+      },
+      phone_number: {
+        title: 'Phone',
+        client_field: :cellphone,
+      },
+      date_of_birth: {
+        title: 'Date of Birth',
+        client_field: :date_of_birth,
+      },
+      age: {
+        title: 'Age',
+        client_field: :age,
+      },
+      disabling_condition: {
+        title: 'Disabling Condition',
+        client_field: :disabling_condition_for_export,
+      },
+      dv: {
+        title: 'DV',
+        client_field: :dv_for_export,
+      },
+      line_1: {
+        title: 'Address Line 1',
+        client_field: :line_1_for_export,
+      },
+      line_2: {
+        title: 'Address Line 2',
+        client_field: :line_2_for_export,
+      },
+      city: {
+        title: 'City',
+        client_field: :city_for_export,
+      },
+      state: {
+        title: 'State',
+        client_field: :state_for_export,
+      },
+      postal_code: {
+        title: 'ZIP Code',
+        client_field: :postal_code_for_export,
+      },
+      primary_contact_first_name: {
+        title: 'Caseworker First Name',
+        client_field: :primary_contact_first_name,
+      },
+      primary_contact_last_name: {
+        title: 'Caseworker Last Name',
+        client_field: :primary_contact_last_name,
+      },
+      primary_contact_user_agency_name: {
+        title: 'Caseworker Organization Name',
+        client_field: :primary_contact_user_agency_name,
+      },
+      primary_contact_email: {
+        title: 'Caseworker Email',
+        client_field: :primary_contact_email,
+      },
+      primary_contact_phone: {
+        title: 'Caseworker Phone',
+        client_field: :primary_contact_phone,
+      },
+      secondary_contact_first_name: {
+        title: 'Additional Caseworker First Name',
+        client_field: :secondary_contact_first_name,
+      },
+      secondary_contact_last_name: {
+        title: 'Additional Caseworker Last Name',
+        client_field: :secondary_contact_last_name,
+      },
+      secondary_contact_email: {
+        title: 'Additional Caseworker Email',
+        client_field: :secondary_contact_email,
+      },
+      secondary_contact_phone: {
+        title: 'Additional Caseworker Phone',
+        client_field: :secondary_contact_phone,
+      },
+      client_assessor_first_name: {
+        title: 'Assessor First Name',
+        client_field: :assessor_first_name,
+      },
+      client_assessor_last_name: {
+        title: 'Assessor Last Name',
+        client_field: :assessor_last_name,
+      },
+      client_assessor_email: {
+        title: 'Assessor Email',
+        client_field: :assessor_email,
+      },
+      client_assessor_phone: {
+        title: 'Assessor Phone',
+        client_field: :assessor_phone,
+      },
+      warehouse_id: {
+        title: 'Client Warehouse ID',
+        client_field: :warehouse_id,
+      },
+      id: {
+        title: 'CAS Client ID',
+        client_field: :id,
+      },
+      assessment_score: {
+        title: 'Assessment Score',
+        client_field: :assessment_score,
+      },
+      tie_breaker_date: {
+        title: 'Tie Breaker Date',
+        client_field: :tie_breaker_date,
+      },
+      family_member: {
+        title: 'Family',
+        client_field: :family_member_for_export,
+      },
+      income_total_monthly: {
+        title: 'Monthly Income',
+        client_field: :income_total_monthly,
+      },
+    }
   end
 
   def form_field_labels
