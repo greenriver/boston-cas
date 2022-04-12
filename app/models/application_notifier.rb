@@ -23,9 +23,9 @@
 # them as needed and if a service to do so is available. Logs
 # any network/services errors and recovers as well as it can.
 class ApplicationNotifier < Slack::Notifier
-  attr_writer :insert_log_url
+  attr_accessor :insert_log_url
 
-  def insert_log_url
+  def insert_log_url # rubocop:disable Lint/DuplicateMethods
     !!@insert_log_url # coerce bool
   end
 
