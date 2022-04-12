@@ -1170,7 +1170,6 @@ Lint/BooleanSymbol:
 # Cop supports --auto-correct.
 Lint/DeprecatedClassMethods:
   Exclude:
-    - 'app/jobs/base_job.rb'
 
 # Offense count: 3
 Lint/DuplicateMethods:
@@ -1246,7 +1245,6 @@ Lint/UnusedBlockArgument:
 # Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods.
 Lint/UnusedMethodArgument:
   Exclude:
-    - 'app/jobs/base_job.rb'
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
     - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
@@ -1447,7 +1445,6 @@ Naming/MemoizedInstanceVariableName:
 # AllowedNames: at, by, db, id, in, io, ip, of, on, os, pp, to
 Naming/MethodParameterName:
   Exclude:
-    - 'app/jobs/base_job.rb'
 
 # Offense count: 14
 # Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
@@ -1570,7 +1567,6 @@ Style/GuardClause:
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/jobs/base_job.rb'
     - 'app/mailers/notifications_mailer.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
@@ -1717,7 +1713,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/inputs/base_input.rb'
-    - 'app/jobs/base_job.rb'
     - 'app/mailers/account_mailer.rb'
     - 'app/mailers/application_mailer.rb'
     - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
