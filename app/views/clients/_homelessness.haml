@@ -11,6 +11,11 @@
       %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless)
     %li.c-detailed-list__item
       %span.c-detailed-list__label
+        Days Homeless in Last Three Years from HMIS
+        %span.icon-info{data: {toggle: :tooltip, title: 'Days in homeless enrollments, excluding any self-report'}}
+      %span.c-detailed-list__value= number_with_delimiter(@client.hmis_days_homeless_last_three_years)
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label
         Days Homeless in Last Three Years
         %span.icon-info{data: {toggle: :tooltip, title: 'Days in ES, SH, SO or TH with no overlapping PH'}}
       %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless_in_last_three_years)
