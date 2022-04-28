@@ -7,7 +7,7 @@
 module MatchPrioritization
   class MatchGroup < Base
     def self.title
-      'Match Group, Entry Date, VI-SPDAT score'
+      'Match Group'
     end
 
     def self.prioritization_for_clients(scope, match_route:) # rubocop:disable Lint/UnusedMethodArgument
