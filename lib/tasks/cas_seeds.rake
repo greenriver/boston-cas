@@ -6,10 +6,13 @@ namespace :cas_seeds do
     create_opportunities
     create_rules
     create_services
-    ensure_all_users_have_contacts
+    ensure_all_match_routes_exist
+    ensure_all_match_prioritization_schemes_exist
+    ensure_non_hmis_datasource_exists
     create_match_decision_reasons
     create_mitigation_reasons
     create_admin_user
+    ensure_all_users_have_contacts
   }
 
   desc 'create fake opportunities'
@@ -47,7 +50,6 @@ namespace :cas_seeds do
     CasSeeds::ChronicallyHomeless.new.run!
   end
 
-  # TODO: delete this?  I don't think we'll need it anymore
   desc 'ensure all users have contacts'
   task ensure_all_users_have_contacts: [:environment, "log:info_to_stdout"] do
     user_ids_to_exclude = Contact.distinct.pluck(:user_id)
@@ -73,6 +75,11 @@ namespace :cas_seeds do
   desc 'ensure all match prioritization schemes exist'
   task ensure_all_match_prioritization_schemes_exist: [:environment, "log:info_to_stdout"] do
     MatchPrioritization::Base.ensure_all
+  end
+
+  desc 'ensure non-HMIS data source exists'
+  task ensure_non_hmis_datasource_exists: [:environment, "log:info_to_stdout"] do
+    DataSource.where(name: 'Deidentified Clients', db_identifier: 'Deidentified').first_or_create
   end
 
   desc 'Create a first user'
