@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/util/exception_notifier.rb"
+
 require 'yaml'
 Rails.application.configure do
   deliver_method = ENV.fetch('MAIL_DELIVERY_METHOD') { 'smtp' }.to_sym
@@ -45,6 +47,9 @@ Rails.application.configure do
       :slack => {
         :webhook_url => slack_config[:webhook_url],
         :channel => slack_config[:channel],
+        :pre_callback => proc { |opts, _notifier, _backtrace, _message, message_opts|
+          ExceptionNotifierLib.insert_log_url!(message_opts)
+        },
         :additional_parameters => {
           :mrkdwn => true,
           :icon_url => slack_config[:icon_url]
