@@ -113,7 +113,7 @@ class MatchDecisionsController < ApplicationController
           if decision_params[:disable_opportunity] == '1'
             voucher = @match.opportunity.voucher
             voucher.update(available: false) if voucher.present?
-            @match.opportunity.update(available: false)
+            @match.opportunity.update(available: false, available_candidate: false)
           end
 
           # Note this was done on-behalf of someone else

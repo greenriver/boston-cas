@@ -57,9 +57,9 @@ module PathwaysVersionThreeCalculations
     def self.export_fields(assessment_name)
       shared = super.merge(
         {
-          entry_date: {
+          rrh_assessment_collected_at: {
             title: 'Assessment Date',
-            client_field: :entry_date,
+            client_field: :rrh_assessment_collected_at,
           },
           setting: {
             title: _('Current Living Situation'),

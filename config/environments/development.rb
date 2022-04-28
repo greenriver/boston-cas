@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/util/exception_notifier.rb"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -12,6 +14,9 @@ Rails.application.configure do
       :slack => {
         :webhook_url => slack_config[:webhook_url],
         :channel => slack_config[:channel],
+        :pre_callback => proc { |opts, _notifier, _backtrace, _message, message_opts|
+          ExceptionNotifierLib.insert_log_url!(message_opts)
+        },
         :additional_parameters => {
           :mrkdwn => true,
           :icon_url => slack_config[:icon_url]
@@ -96,7 +101,7 @@ Rails.application.configure do
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
-  if ENV['DISABLE_EVENT_FS_CHECKER'] != '1'
+  if ENV['ENABLE_EVENT_FS_CHECKER'] == '1'
     config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   end
 
