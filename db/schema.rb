@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_13_132343) do
+ActiveRecord::Schema.define(version: 2022_04_27_204926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -302,6 +302,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_132343) do
     t.string "assessor_last_name"
     t.string "assessor_email"
     t.string "assessor_phone"
+    t.integer "match_group"
     t.integer "hmis_days_homeless_all_time"
     t.integer "hmis_days_homeless_last_three_years"
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
@@ -1292,6 +1293,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_132343) do
     t.string "assessor_last_name"
     t.string "assessor_email"
     t.string "assessor_phone"
+    t.integer "match_group"
     t.integer "hmis_days_homeless_all_time"
     t.integer "hmis_days_homeless_last_three_years"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
