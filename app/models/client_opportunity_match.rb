@@ -358,8 +358,9 @@ class ClientOpportunityMatch < ApplicationRecord
   def current_decision
     return nil if closed?
 
-    @current_decision ||= initialized_decisions.find_by(status: [:pending, :acknowledged])
-    @current_decision ||= initialized_decisions.order_as_specified(type: match_route.class.match_steps_for_reporting.keys.reverse).limit(1).first
+    later_decisions_first = match_route.class.match_steps_for_reporting.keys.reverse
+    @current_decision ||= initialized_decisions.order_as_specified(type: later_decisions_first).find_by(status: [:pending, :acknowledged])
+    @current_decision ||= initialized_decisions.order_as_specified(type: later_decisions_first).limit(1).first
   end
 
   def unsuccessful_decision
