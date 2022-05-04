@@ -85,6 +85,10 @@ module MatchRoutes
       []
     end
 
+    def show_hearing_date
+      true
+    end
+
     def self.match_steps
       all_routes.map do |route|
         [route.name, route.match_steps]
