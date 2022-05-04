@@ -34,6 +34,7 @@ module MatchRoutes
         MatchRoutes::HomelessSetAside,
         MatchRoutes::Four,
         MatchRoutes::Five,
+        MatchRoutes::Six,
       ]
     end
 
@@ -145,6 +146,7 @@ module MatchRoutes
       {
         'No stalled notifications' => 0,
         '7 days' => 7,
+        '10 days' => 10,
         '14 days' => 14,
         '30 days' => 30,
       }
