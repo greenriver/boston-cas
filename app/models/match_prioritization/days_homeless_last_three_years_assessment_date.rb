@@ -19,5 +19,12 @@ module MatchPrioritization
     def self.client_prioritization_value_method
       'days_homeless_in_last_three_years'
     end
+
+    def important_days_homeless_calculations
+      [
+        :hmis_days_homeless_last_three_years,
+        :days_homeless_in_last_three_years,
+      ]
+    end
   end
 end

@@ -71,5 +71,14 @@ module MatchPrioritization
     def requires_tag?
       false
     end
+
+    def important_days_homeless_calculations
+      [
+        :days_homeless,
+        :hmis_days_homeless_last_three_years,
+        :days_homeless_in_last_three_years,
+        :days_literally_homeless_in_last_three_years,
+      ]
+    end
   end
 end
