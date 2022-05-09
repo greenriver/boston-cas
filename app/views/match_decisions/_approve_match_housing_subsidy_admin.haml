@@ -12,14 +12,15 @@
               -#   - if can_reject_matches?
               -#     %h3 Continue Match
             .o-choose__content
-              %p
-                - hearing_date = @match.schedule_criminal_hearing_housing_subsidy_admin_decision.criminal_hearing_date
-                - if hearing_date.present?
-                  = "Please note: #{_('a criminal background hearing has been schedule for')}"
-                  %strong
-                    = "#{hearing_date.to_s}."
-                - else
-                  = "Please note: #{_('No criminal background hearing was requested.')}"
+              - if @match.match_route.show_hearing_date
+                %p
+                  - hearing_date = @match.schedule_criminal_hearing_housing_subsidy_admin_decision.criminal_hearing_date
+                  - if hearing_date.present?
+                    = "Please note: #{_('a criminal background hearing has been schedule for')}"
+                    %strong
+                      = "#{hearing_date.to_s}."
+                  - else
+                    = "Please note: #{_('No criminal background hearing was requested.')}"
 
               = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
 
