@@ -34,6 +34,7 @@ module MatchRoutes
         MatchRoutes::HomelessSetAside,
         MatchRoutes::Four,
         MatchRoutes::Five,
+        MatchRoutes::Six,
       ]
     end
 
@@ -82,6 +83,10 @@ module MatchRoutes
 
     def additional_admin_reasons
       []
+    end
+
+    def show_hearing_date
+      true
     end
 
     def self.match_steps
@@ -145,6 +150,7 @@ module MatchRoutes
       {
         'No stalled notifications' => 0,
         '7 days' => 7,
+        '10 days' => 10,
         '14 days' => 14,
         '30 days' => 30,
       }
