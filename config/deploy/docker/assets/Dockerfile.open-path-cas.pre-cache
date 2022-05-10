@@ -15,7 +15,7 @@ RUN apk add --no-cache \
   curl libcurl curl-dev \
   libmagic file-dev file \
   build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
-  && git config --global --add safe.directory /app \
+  && git config --global --add safe.directory /app
 
 WORKDIR /app
 
