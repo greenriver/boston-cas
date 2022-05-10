@@ -94,7 +94,7 @@ RUN apk add --no-cache \
     lftp postgresql tmux postgis geos geos-dev proj proj-dev proj-util \
     shared-mime-info \
     && rm -rf /var/cache/apk/* \
-    && gem install bundler --version=2.2.6 \
+    && gem install bundler --version=2.3.8 \
     && bundle config without development test doc \
     && bundle install \
     && find /usr/local/bundle -name "*.o" -exec rm {} \; \
