@@ -11,7 +11,7 @@ gem 'composite_primary_keys', '~> 12.0'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
-gem 'nokogiri', '>= 1.13.2' # CVE-2021-30560
+gem 'nokogiri', '>= 1.13.4' # CVE-2021-30560
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'

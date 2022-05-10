@@ -30,9 +30,10 @@ ENV RAILS_LOG_TO_STDOUT=true \
   LANGUAGE=en_US.UTF-8
 
 ARG BUILDER
+ARG RUBY_VERSION
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=2.7.4
+LABEL "ruby-version"=$RUBY_VERSION
 
 # Get self-signed cert
 COPY --from=builder /key.pem /cert.pem /app/config/
