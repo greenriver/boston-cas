@@ -20,10 +20,11 @@ module MatchPrioritization
     end
 
     def important_days_homeless_calculations
-      [
+      calculations = [
         :hmis_days_homeless_last_three_years,
         :days_homeless_in_last_three_years,
       ]
+      days_homeless_labels.select { |k, _| k.in?(calculations) }
     end
   end
 end

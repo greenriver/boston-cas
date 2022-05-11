@@ -73,12 +73,28 @@ module MatchPrioritization
     end
 
     def important_days_homeless_calculations
-      [
-        :days_homeless,
-        :hmis_days_homeless_last_three_years,
-        :days_homeless_in_last_three_years,
-        :days_literally_homeless_in_last_three_years,
-      ]
+      days_homeless_labels
+    end
+
+    private def days_homeless_labels
+      {
+        days_homeless: {
+          label: _('Cumulative Days Homeless'),
+          tooltip: _('Cumulative days homeless, all-time'),
+        },
+        hmis_days_homeless_last_three_years: {
+          label: _('Days Homeless in Last Three Years from HMIS'),
+          tooltip: _('Days in homeless enrollments, excluding any self-report'),
+        },
+        days_homeless_in_last_three_years: {
+          label: _('Days Homeless in Last Three Years'),
+          tooltip: _('Days homeless in the last three years including self-reported days'),
+        },
+        days_literally_homeless_in_last_three_years: {
+          label: _('Days Literally Homeless in Last Three Years'),
+          tooltip: _('Days in ES, SH or SO with no overlapping TH or PH'),
+        },
+      }
     end
   end
 end
