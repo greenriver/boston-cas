@@ -36,6 +36,8 @@
           .navbar-text
             .badge.badge-info.p-2
               = Rails.version
+              on
+              = ENV['RUBY_VERSION']
         .rails-env.ml-4.mr-6
           .navbar-text
             %span.badge.badge-success.p-2
