@@ -10,6 +10,7 @@
   - else
     %p Sorry, you are not able to see that information at this time
 - else
+  - prioritization_scheme = @match.match_route.match_prioritization
   .c-card__content-group
     .c-card__content-group-heading
       .c-card__content-group-icon.icon-user
@@ -88,22 +89,11 @@
         %span.c-detailed-list__value
           = @client.project_client[:calculated_last_homeless_night]
           = @client.project_client.try(:building).try(:name)
-      %li.c-detailed-list__item
-        %span.c-detailed-list__label= _('Cumulative Days Homeless')
-        %span.icon-info{data: {toggle: :tooltip, title: _('Cumulative days homeless, all-time')}}
-        %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless)
-      %li.c-detailed-list__item
-        %span.c-detailed-list__label= _('Days Homeless in Last Three Years from HMIS')
-        %span.icon-info{data: {toggle: :tooltip, title: _('Days in homeless enrollments, excluding any self-report')}}
-        %span.c-detailed-list__value= number_with_delimiter(@client.hmis_days_homeless_last_three_years)
-      %li.c-detailed-list__item
-        %span.c-detailed-list__label= _('Days Homeless in Last Three Years')
-        %span.icon-info{data: {toggle: :tooltip, title: _('Days homeless in the last three years including self-reported days')}}
-        %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless_in_last_three_years)
-      %li.c-detailed-list__item
-        %span.c-detailed-list__label= _('Days Literally Homeless in Last Three Years')
-        %span.icon-info{data: {toggle: :tooltip, title: _('Days in ES, SH or SO with no overlapping TH or PH')}}
-        %span.c-detailed-list__value= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
+      - prioritization_scheme.important_days_homeless_calculations.each do |scheme, text|
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label= text[:label]
+          %span.icon-info{data: {toggle: :tooltip, title: text[:tooltip]}}
+          %span.c-detailed-list__value= number_with_delimiter(@client.send(scheme))
     .c-card__content-group-heading
       .c-card__content-group-icon.icon-house
       %h5 CAS Housing History

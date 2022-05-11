@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 23:04+0000\n"
-"PO-Revision-Date: 2022-04-27 23:04+0000\n"
+"POT-Creation-Date: 2022-05-11 18:01+0000\n"
+"PO-Revision-Date: 2022-05-11 18:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -237,6 +237,9 @@ msgstr ""
 msgid "HSA"
 msgstr ""
 
+msgid "HSA Complete Match"
+msgstr ""
+
 msgid "HSP"
 msgstr ""
 
@@ -319,6 +322,9 @@ msgid "Match Route Five"
 msgstr ""
 
 msgid "Match Route Four"
+msgstr ""
+
+msgid "Match Route Six"
 msgstr ""
 
 msgid "Match status update"
