@@ -724,7 +724,7 @@ DEPENDENCIES
   mini_magick
   minitest-reporters
   momentjs-rails (>= 2.9.0)
-  nokogiri (>= 1.13.4)
+  nokogiri (>= 1.13.6)
   order_as_specified
   overcommit
   paper_trail
