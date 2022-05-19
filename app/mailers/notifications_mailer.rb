@@ -403,6 +403,16 @@ class NotificationsMailer < DatabaseMailer
 
   # end Match Route Five
 
+  # Match Route Six
+
+  def approve_match_housing_subsidy_admin
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match accepted by #{_('Shelter Agency')} - Requires Your Action")
+  end
+
+  # end Match Route Six
+
   # Progress Updates
   def progress_update_requested
     @notifications = ::Notifications::Base.where(id: params[:notification_ids])

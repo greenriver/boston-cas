@@ -23,7 +23,7 @@ class DeidentifiedTcHat < DeidentifiedClientAssessment
       'Agency',
     ]
     columns << 'Assessment Date'
-    columns << 'Days Homeless in the Last 3 Years'
+    columns << 'Days Homeless'
     columns << 'Status'
     columns << 'CAS Client' if user.can_view_some_clients?
     columns << '' if user.can_manage_deidentified_clients?
@@ -58,7 +58,7 @@ class DeidentifiedTcHat < DeidentifiedClientAssessment
       end
     end
     row << assessment_date
-    row << current_assessment&.days_homeless_in_the_last_three_years
+    row << current_assessment&.days_homeless
     row << if client.available then 'Available' else 'Ineligible' end
     row << client_link if user.can_view_some_clients?
     row << delete_link if user.can_manage_deidentified_clients?

@@ -10,93 +10,120 @@
   - else
     %p Sorry, you are not able to see that information at this time
 - else
-  %p
-    %strong
-      = @client.full_name
-    %br
-    - if @client.date_of_birth.present?
-      %span.age
-        = "Date of Birth: #{@client.date_of_birth}"
-    - else
-      %span.age (age unknown)
-    %br
-    SSN:
-    - if @client.ssn.present?
-      = ssn(@client.ssn)
-    - else
-      none on file
-    %br
-    Gender:
-    = @client.gender.try(:text) || 'not on file'
-    %br
-    Race:
-    = @client.race.try(:text) || 'not on file'
-    %br
-    Ethnicity:
-    = @client.ethnicity.try(:text) || 'not on file'
-    %br
-    Home Phone:
-    = @client.homephone
-    %br
-    Cell Phone:
-    = @client.cellphone
-    - if @client.workphone.present?
-      %br
-      Work Phone
-      = @client.workphone
-    - if @client.pager.present?
-      %br
-      Pager:
-      = @client.pager
-    %br
-    Email:
-    = @client.email
+  - prioritization_scheme = @match.match_route.match_prioritization
+  .c-card__content-group
+    .c-card__content-group-heading
+      .c-card__content-group-icon.icon-user
+      %h5= @client.full_name
+    %ul.c-detailed-list<
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Age
+        %span.c-detailed-list__value
+          - if @client.date_of_birth.present?
+            = "#{@client.age} (#{@client.date_of_birth})"
+          - else
+            age unknown
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label SSN
+        %span.c-detailed-list__value
+          - if @client.ssn.present?
+            = ssn(@client.ssn)
+          - else
+            None on file
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Gender
+        %span.c-detailed-list__value= @client.gender.try(:text) || 'Not on file'
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Race
+        %span.c-detailed-list__value= @client.race.try(:text) || 'Not on file'
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Ethnicity
+        %span.c-detailed-list__value= @client.ethnicity.try(:text) || 'Not on file'
+    .c-card__content-group
+      .c-card__content-group-heading
+        .c-card__content-group-icon.icon-envelope-o
+        %h5 Contact Information
+    %ul.c-detailed-list<
+      - if @client.homephone.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Home Phone
+          %span.c-detailed-list__value= @client.homephone
+      - if @client.cellphone.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Cell Phone
+          %span.c-detailed-list__value= @client.cellphone
+      - if @client.workphone.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Work Phone
+          %span.c-detailed-list__value= @client.workphone
+      - if @client.pager.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Pager
+          %span.c-detailed-list__value= @client.pager
+      - if @client.email.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Email
+          %span.c-detailed-list__value= @client.email
+      - if @client.non_hmis? && @client.rrh_assessment_contact_info.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Client and/or Case Manager Contact Information
+          %span.c-detailed-list__value= simple_format @client.rrh_assessment_contact_info
+      - if @client.has_full_housing_release? && @client.rrh_assessment_contact_info.present?
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Contact info for maximizing income
+          %span.c-detailed-list__value= simple_format @client.rrh_assessment_contact_info
+  .c-card__content-group
+    .c-card__content-group-heading
+      .c-card__content-group-icon.icon-house
+      %h5 Homelessness
+    %ul.c-detailed-list<
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Homeless Since
+        %span.c-detailed-list__value
+          - if @client.calculated_first_homeless_night.present?
+            = @client.calculated_first_homeless_night
+          - else
+            Unknown
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label Last Bed Stay or Outreach Contact
+        %span.c-detailed-list__value
+          = @client.project_client[:calculated_last_homeless_night]
+          = @client.project_client.try(:building).try(:name)
+      - prioritization_scheme.important_days_homeless_calculations.each do |scheme, text|
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label= text[:label]
+          %span.icon-info{data: {toggle: :tooltip, title: text[:tooltip]}}
+          %span.c-detailed-list__value= number_with_delimiter(@client.send(scheme))
+    .c-card__content-group-heading
+      .c-card__content-group-icon.icon-house
+      %h5 CAS Housing History
     - if @client.holds_voucher_on.present?
-      %br
-      Holds Voucher On
-      = @client.holds_voucher_on
-    %br
-    - if @client.non_hmis?
-      %label Client and/or Case Manager Contact Information
-      .client__housing_release
-        For Non-HMIS Client #{@client.remote_id}
-        %br
-        = simple_format @client.rrh_assessment_contact_info
-    - elsif @client.has_full_housing_release?
-      %label Contact info for maximizing income
-      .client__housing_release= simple_format @client.rrh_assessment_contact_info
-  .row
-    .col-sm-6
-      %h4 Date of First Homelessness
-      %p
-        - if @client.calculated_first_homeless_night.present?
-          = @client.calculated_first_homeless_night
-        - else
-          Unknown
-    .col-sm-6
-      %h4 Last Bed Stay or Outreach Contact
-      = @client.project_client[:calculated_last_homeless_night]
-      = @client.project_client.try(:building).try(:name)
-
-  %h3 CAS Housing History
-  %p (This information is only known for opportunities created through CAS.)
-  %table.table.table-condensed
-    %thead
-      %tr
-        %th Date
-        %th Program
-        %th Notes
-    %tbody
-      - @matches.each do |match|
+      %ul.c-detailed-list<
+        %li.c-detailed-list__item
+          %span.c-detailed-list__label Holds Voucher On
+          %span.c-detailed-list__value= @client.holds_voucher_on
+    %p (This information is only known for opportunities created through CAS.)
+    %table.table.table-condensed
+      %thead
         %tr
-          %td
-            = match.updated_at.to_date
-          %td
-            = match.opportunity_details.program_name
-            - if ! match.opportunity_details.sub_program_name.blank?
-              = "(#{match.opportunity_details.sub_program_name})"
-          %td
-            = match.overall_status[:name]
+          %th Date
+          %th Program
+          %th Notes
+      %tbody
+        - @matches.each do |match|
+          %tr
+            %td
+              = match.updated_at.to_date
+            %td
+              = match.opportunity_details.program_name
+              - if ! match.opportunity_details.sub_program_name.blank?
+                = "(#{match.opportunity_details.sub_program_name})"
+            %td
+              = match.overall_status[:name]
 = content_for :modal_only_footer do
   = link_to access_context.match_client_details_path(@match) do
     %span.icon-printer{title: "Printable", data: {toggle: "tooltip", placement: "top"}, aria: {label: 'Printable'}}
+
+= content_for :page_js do
+  :javascript
+    $('[data-toggle="tooltip"]').tooltip();

@@ -206,7 +206,8 @@ class NonHmisClient < ApplicationRecord
     project_client.assessment_score = current_assessment&.assessment_score || 0
     project_client.days_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
     project_client.days_literally_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
-    project_client.days_homeless = current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.days_homeless = current_assessment&.days_homeless || current_assessment&.total_days_homeless_in_the_last_three_years || 0
+    project_client.hmis_days_homeless_last_three_years = current_assessment&.days_homeless_in_the_last_three_years
     project_client.date_days_homeless_verified = current_assessment&.date_days_homeless_verified
     project_client.who_verified_days_homeless = current_assessment&.who_verified_days_homeless
     project_client.entry_date = current_assessment&.entry_date
@@ -294,6 +295,7 @@ class NonHmisClient < ApplicationRecord
       :employed_three_months,
       :living_wage,
       :need_daily_assistance,
+
       :full_time_employed,
       :can_work_full_time,
       :willing_to_work_full_time,

@@ -5,7 +5,7 @@ x-app: &app
   build:
     context: .
     args:
-      RUBY_VERSION: 2.7.4
+      RUBY_VERSION: 2.7.6
       PG_MAJOR: '12'
       NODE_MAJOR: '12'
       YARN_VERSION: '1.17.3'
@@ -22,7 +22,6 @@ x-app: &app
     EDITOR: vi
     BUNDLE_FORCE_RUBY_PLATFORM: 'true'
     CHROMEDRIVER_VERSION: 79.0.3945.36
-    BUNDLE_FORCE_RUBY_PLATFORM: true
   tmpfs:
     - /tmp
 

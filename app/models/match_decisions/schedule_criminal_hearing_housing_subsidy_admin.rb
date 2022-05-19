@@ -117,6 +117,10 @@ module MatchDecisions
       def pending
       end
 
+      # This is only used for tests when checking stall state
+      def accepted
+      end
+
       def scheduled
         @decision.next_step.initialize_decision!
       end

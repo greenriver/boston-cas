@@ -193,6 +193,7 @@ module Cas
         :date_days_homeless_verified,
         :who_verified_days_homeless,
         :days_homeless_in_last_three_years,
+        :hmis_days_homeless_last_three_years,
         :days_literally_homeless_in_last_three_years,
         :ha_eligible,
         :cspech_eligible,

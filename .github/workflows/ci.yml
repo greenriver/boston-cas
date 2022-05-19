@@ -64,8 +64,7 @@ jobs:
             postgis \
             postgresql-client \
             python \
-            unzip \
-            wkhtmltopdf
+            unzip
 
           echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass

@@ -81,6 +81,14 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :five_mitigation, decision_class_name: 'MatchDecisions::Five::FiveMitigation', notification_class_name: 'Notifications::Five::Mitigation'
   has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
 
+  # Match Route 6
+  has_decision :six_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Six::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Six::MatchRecommendationDndStaff'
+  has_decision :six_match_recommendation_shelter_agency, decision_class_name: 'MatchDecisions::Six::MatchRecommendationShelterAgency', notification_class_name: 'Notifications::Six::MatchRecommendationShelterAgency'
+  has_decision :six_confirm_shelter_agency_decline_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmShelterAgencyDeclineDndStaff', notification_class_name: 'Notifications::Six::ConfirmShelterAgencyDeclineDndStaff'
+  has_decision :six_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Six::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Six::ApproveMatchHousingSubsidyAdmin'
+  has_decision :six_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Six::ConfirmHsaDeclineDndStaff'
+  has_decision :six_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Six::ConfirmMatchSuccessDndStaff'
+
   has_one :current_decision
 
   has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
@@ -358,8 +366,9 @@ class ClientOpportunityMatch < ApplicationRecord
   def current_decision
     return nil if closed?
 
-    @current_decision ||= initialized_decisions.find_by(status: [:pending, :acknowledged])
-    @current_decision ||= initialized_decisions.order_as_specified(type: match_route.class.match_steps_for_reporting.keys.reverse).limit(1).first
+    later_decisions_first = match_route.class.match_steps_for_reporting.keys.reverse
+    @current_decision ||= initialized_decisions.order_as_specified(type: later_decisions_first).find_by(status: [:pending, :acknowledged])
+    @current_decision ||= initialized_decisions.order_as_specified(type: later_decisions_first).limit(1).first
   end
 
   def unsuccessful_decision

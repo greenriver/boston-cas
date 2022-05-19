@@ -725,7 +725,7 @@ class Client < ApplicationRecord
 
   private def contacts_for_export
     @contacts_for_export ||= {}.tap do |ec|
-      export_contacts = project_client.shelter_agency_contacts
+      export_contacts = project_client&.shelter_agency_contacts
       primary_contact = export_contacts&.first
       secondary_contact = export_contacts&.second
       primary_contact.email = primary_contact&.user&.email if primary_contact

@@ -23,6 +23,12 @@ msgstr ""
 msgid "A criminal background hearing is not necessary"
 msgstr ""
 
+msgid "Able to successfully exit 12-24 month RRH program"
+msgstr ""
+
+msgid "Able to work full-time"
+msgstr ""
+
 msgid "Actively fleeing domestic violence in your home or staying with someone else"
 msgstr ""
 
@@ -77,6 +83,9 @@ msgstr ""
 msgid "CSPECH Eligible"
 msgstr ""
 
+msgid "Can pass a drug test"
+msgstr ""
+
 msgid "Cannot read uploaded file, is it an XLSX?"
 msgstr ""
 
@@ -96,6 +105,9 @@ msgid "Chronically homeless family"
 msgstr ""
 
 msgid "City of Boston"
+msgstr ""
+
+msgid "Clean/sober for at least one year"
 msgstr ""
 
 msgid "Client"
@@ -125,6 +137,21 @@ msgstr ""
 msgid "Criminal Background Hearing Scheduled"
 msgstr ""
 
+msgid "Cumulative Days Homeless"
+msgstr ""
+
+msgid "Cumulative days homeless, all-time"
+msgstr ""
+
+msgid "Current Living Situation"
+msgstr ""
+
+msgid "Current open case"
+msgstr ""
+
+msgid "Currently fleeing DV"
+msgstr ""
+
 msgid "Currently fleeing violence while in your own home or doubled up with others and a Boston resident."
 msgstr ""
 
@@ -135,6 +162,24 @@ msgid "Date and time of criminal background hearing"
 msgstr ""
 
 msgid "Date days homeless verified"
+msgstr ""
+
+msgid "Days Homeless in Last Three Years"
+msgstr ""
+
+msgid "Days Homeless in Last Three Years from HMIS"
+msgstr ""
+
+msgid "Days Literally Homeless in Last Three Years"
+msgstr ""
+
+msgid "Days homeless in the last three years including self-reported days"
+msgstr ""
+
+msgid "Days in ES, SH or SO with no overlapping TH or PH"
+msgstr ""
+
+msgid "Days in homeless enrollments, excluding any self-report"
 msgstr ""
 
 msgid "De-Identified Clients"
@@ -161,10 +206,19 @@ msgstr ""
 msgid "Do you expect this client to be successful in this match?"
 msgstr ""
 
+msgid "Earning a living wage ($13 or more)"
+msgstr ""
+
 msgid "Emergency Shelter (includes domestic violence shelters)"
 msgstr ""
 
 msgid "Emergency shelter in the City of Boston"
+msgstr ""
+
+msgid "Employed for 3 or more months"
+msgstr ""
+
+msgid "Employed full-time"
 msgstr ""
 
 msgid "Ending Veteran & Chronic Homelessness in Boston"
@@ -182,7 +236,13 @@ msgstr ""
 msgid "HSA"
 msgstr ""
 
+msgid "HSA Complete Match"
+msgstr ""
+
 msgid "HSP"
+msgstr ""
+
+msgid "History of heavy drug use"
 msgstr ""
 
 msgid "Homeless Set-Aside Route"
@@ -239,6 +299,12 @@ msgstr ""
 msgid "Ineligible Immigrant (Including Undocumented)"
 msgstr ""
 
+msgid "Interested in Transitional Housing"
+msgstr ""
+
+msgid "Interested in income maximization services"
+msgstr ""
+
 msgid "I’m undecided but may reconsider"
 msgstr ""
 
@@ -251,16 +317,13 @@ msgstr ""
 msgid "Limited CAS Release"
 msgstr ""
 
-msgid "Majority Sheltered"
-msgstr ""
-
-msgid "Majority Unsheltered"
-msgstr ""
-
 msgid "Match Route Five"
 msgstr ""
 
 msgid "Match Route Four"
+msgstr ""
+
+msgid "Match Route Six"
 msgstr ""
 
 msgid "Match status update"
@@ -279,6 +342,12 @@ msgid "Mitigation required"
 msgstr ""
 
 msgid "Move In"
+msgstr ""
+
+msgid "Needs a higher level of care"
+msgstr ""
+
+msgid "Needs site-based case management"
 msgstr ""
 
 msgid "Neighborhoods you are willing to live in."
@@ -386,6 +455,9 @@ msgstr ""
 msgid "Shelter Agency"
 msgstr ""
 
+msgid "Shelter Agency Contact"
+msgstr ""
+
 msgid "Shelter Agency Contacts"
 msgstr ""
 
@@ -408,6 +480,9 @@ msgid "Strengths"
 msgstr ""
 
 msgid "Submit Client Application"
+msgstr ""
+
+msgid "TC HAT"
 msgstr ""
 
 msgid "Tag"
@@ -468,6 +543,12 @@ msgid "We want to reach you when there is a housing program opening for you."
 msgstr ""
 
 msgid "When you indicate interest, notification will be sent to the"
+msgstr ""
+
+msgid "Willing to engage with housing case management"
+msgstr ""
+
+msgid "Willing to work full-time"
 msgstr ""
 
 msgid "Yes"
