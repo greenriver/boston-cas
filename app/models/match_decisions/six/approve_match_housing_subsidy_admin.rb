@@ -76,9 +76,9 @@ module MatchDecisions::Six
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::MatchRecommendationClient
+        m << Notifications::Six::MatchRecommendationClient
         m << Notifications::Six::ApproveMatchHousingSubsidyAdmin
-        m << Notifications::ShelterAgencyAccepted
+        m << Notifications::Six::ShelterAgencyAccepted
       end
     end
 
