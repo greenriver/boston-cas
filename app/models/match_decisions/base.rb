@@ -86,6 +86,10 @@ module MatchDecisions
       false
     end
 
+    def default_shelter_expiration
+      nil
+    end
+
     def stallable?
       false
     end

@@ -61,6 +61,10 @@ module MatchDecisions::Six
       send_notifications_for_step if send_notifications
     end
 
+    def default_shelter_expiration
+      Date.current + stalled_after
+    end
+
     def accessible_by? contact
       contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
     end
