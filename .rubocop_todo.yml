@@ -434,7 +434,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/notifications/no_longer_working_with_client.rb'
     - 'app/models/notifications/on_behalf_of.rb'
     - 'app/models/notifications/progress_update_requested.rb'
-    - 'app/models/notifications/progress_update_submitted.rb'
     - 'app/models/notifications/provider_only/confirm_hsa_decline_dnd_staff.rb'
     - 'app/models/notifications/provider_only/hsa_accepts_client.rb'
     - 'app/models/notifications/provider_only/hsa_accepts_client_ssp_notification.rb'
