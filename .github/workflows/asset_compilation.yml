@@ -23,22 +23,10 @@ jobs:
           - gha_staging_load_4
           - gha_staging_load_5
           - gha_staging_load_6
-          - gha_staging_load_7
-          - gha_staging_load_8
-          - gha_staging_load_9
-          - gha_staging_load_10
-          - gha_staging_load_11
           - gha_production_load_1
           - gha_production_load_2
           - gha_production_load_3
           - gha_production_load_4
-          - gha_production_load_5
-          - gha_production_load_6
-          - gha_production_load_7
-          - gha_production_load_8
-          - gha_production_load_9
-          - gha_production_load_10
-          - gha_production_load_11
 
     runs-on: ubuntu-20.04
     container: ruby:2.7.6-alpine
