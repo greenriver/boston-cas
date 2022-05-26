@@ -1,4 +1,4 @@
-FROM open-path-warehouse:latest--base
+FROM open-path-cas:latest--base
 
 USER root
 RUN apk add py3-pip
