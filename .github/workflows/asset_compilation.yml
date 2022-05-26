@@ -88,7 +88,6 @@ jobs:
         echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
         chmod 600 ~/.pgpass
 
-        npm install
         gem install bundler --version=2.3.8
 
     # According to https://www.jessesquires.com/blog/2021/08/23/caching-bundler-on-github-actions/
@@ -140,5 +139,10 @@ jobs:
         WAREHOUSE_DATABASE_DB: warehouse_db
         HEALTH_DATABASE_DB: health_db
         REPORTING_DATABASE_DB: reporting_db
+        DATABASE_DB_TEST: boston_cas_test
+        DEFAULT_FROM: greenriver.testing@mailinator.com
+        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+        HOSTNAME: openpath.host
+        PORT: 80
       run: |
         DEPLOY_PROTECT_SECRETS=true EXCEPTION_WEBHOOK_CHANNEL_OVERRIDE=gr-op-gha-except bundle exec bin/compile_assets.rb ${{ matrix.client_group }}
