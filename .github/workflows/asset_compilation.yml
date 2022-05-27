@@ -128,7 +128,6 @@ jobs:
         HEALTH_DATABASE_DB: health_db
         REPORTING_DATABASE_DB: reporting_db
         DATABASE_DB_TEST: boston_cas_test
-        DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
         HOSTNAME: openpath.host
         PORT: 80
       run: |
