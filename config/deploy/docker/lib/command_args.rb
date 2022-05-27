@@ -13,9 +13,7 @@ class CommandArgs
 
     if File.exist?(path)
       local_config = YAML.load_file(path)
-      if local_config.empty?
-        local_config = nil
-      end
+      local_config = nil if local_config.empty?
     else
       local_config = nil
     end
