@@ -9,10 +9,13 @@ require 'aws-sdk-cloudwatchevents'
 require 'aws-sdk-cloudwatch'
 require 'aws-sdk-cloudwatchlogs'
 require 'aws-sdk-ssm'
+require 'aws-sdk-s3'
 require 'active_support'
 
 module AwsSdkHelpers
   extend ActiveSupport::Concern
+
+  DEFAULT_AWS_REGION = 'us-east-1'.freeze
 
   module ClientMethods
     define_singleton_method(:iam) { Aws::IAM::Client.new }
@@ -26,6 +29,7 @@ module AwsSdkHelpers
     define_singleton_method(:cw) { Aws::CloudWatch::Client.new }
     define_singleton_method(:cwl) { Aws::CloudWatchLogs::Client.new }
     define_singleton_method(:ssm) { Aws::SSM::Client.new }
+    define_singleton_method(:s3) { Aws::S3::Client.new(region: ENV.fetch('AWS_REGION', DEFAULT_AWS_REGION)) }
 
     define_method(:iam)              { AwsSdkHelpers::ClientMethods.iam }
     define_method(:elbv2)            { AwsSdkHelpers::ClientMethods.elbv2 }
@@ -38,6 +42,7 @@ module AwsSdkHelpers
     define_method(:cw)               { AwsSdkHelpers::ClientMethods.cw }
     define_method(:cwl)              { AwsSdkHelpers::ClientMethods.cwl }
     define_method(:ssm)              { AwsSdkHelpers::ClientMethods.ssm }
+    define_method(:s3)               { AwsSdkHelpers::ClientMethods.s3 }
   end
 
   module Helpers
@@ -105,6 +110,17 @@ module AwsSdkHelpers
 
     def _on_demand_capacity_provider_name
       @_on_demand_capacity_provider_name ||= AwsSdkHelpers::Helpers.get_capacity_provider_name('OnDemand')
+    end
+
+    def self.get_secret(secret_arn)
+      resp = AwsSdkHelpers::ClientMethods.secretsmanager.get_secret_value(
+        secret_id: secret_arn,
+      )
+
+      return resp.to_h[:secret_string]
+    rescue Aws::Errors::MissingCredentialsError
+      warn 'Need credentials to sync secrets (or run on a server/container with a role)'
+      puts 'ERROR=secretsyncfailed'
     end
   end
 end
