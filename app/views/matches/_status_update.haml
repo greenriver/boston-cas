@@ -4,42 +4,66 @@
       %h2 Match Stalled
   .match-decision.c-card.c-card--flush.card--block
     .c-card__content
-      .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: {toggle: :buttons}}
-        - this_one = params[:working_with_client] == 'jStillWorking' || params[:working_with_client].blank?
-        %label.btn.btn-light{class: this_one ? 'active' : ''}
-          %input{type: :radio, name: :working_with_client, autocomplete: :off, checked: :checked, value: 'jStillWorking'}
-            Client is engaging
-            %br.d-sm-none
-            with housing services
-        - this_one = params[:working_with_client] == 'jNoLongerWorking'
-        %label.btn.btn-light{class: this_one ? 'active' : ''}
-          %input{type: :radio, name: :working_with_client, autocomplete: :off, value: 'jNoLongerWorking', checked: this_one}
-            Client is not engaging
-            %br.d-sm-none
-            with housing services
+      .o-pre-choose
+        .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: {toggle: :buttons}}
+          - this_one = params[:working_with_client] == 'jStillWorking' || params[:working_with_client].blank?
+          %label.btn.btn-light{class: this_one ? 'active' : ''}
+            %input{type: :radio, name: :working_with_client, autocomplete: :off, checked: :checked, value: 'jStillWorking'}
+              Client is engaging
+              %br.d-sm-none
+              with housing services
+          - this_one = params[:working_with_client] == 'jNoLongerWorking'
+          %label.btn.btn-light{class: this_one ? 'active' : ''}
+            %input{type: :radio, name: :working_with_client, autocomplete: :off, value: 'jNoLongerWorking', checked: this_one}
+              Client is not engaging
+              %br.d-sm-none
+              with housing services
+        .o-choose.o-choose--flush
+          - choice_class = if can_reject_matches? then 'o-choose__choice' else 'o-choose__choice--flush' end
+          %div.jNoLongerWorkingContent{class: choice_class}
+            .o-choose__content
+              = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
+                -# preserve the notification id if present
+                %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
+                = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
+                = f.input :response, collection: @decision.still_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
+                = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
 
-      .o-choose.o-choose--flush
-        .o-choose__choice.jNoLongerWorkingContent
-          .o-choose__content
-            = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
-              -# preserve the notification id if present
-              %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
-              = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
-              = f.input :response, collection: @decision.still_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
-              = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
+                = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
+          %div.jStillWorkingContent.d-none{class: choice_class}
+            .o-choose__content
+              = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
+                -# preserve the notification id if present
+                %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
+                = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
+                = f.input :response, collection: @decision.no_longer_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
+                = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
 
-              = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
-        .o-choose__choice.jStillWorkingContent.d-none
-          .o-choose__content
-            = simple_form_for @update, as: :status_update, url: match_match_progress_updates_path(match_id: @match.id) do |f|
-              -# preserve the notification id if present
-              %input{type: :hidden, name: :notification_id, value: params[:notification_id]}
-              = f.input :client_last_seen, as: :date_picker, input_html: {value: @update&.client_last_seen}
-              = f.input :response, collection: @decision.no_longer_active_responses, label: 'Status Update', as: :check_boxes, checked: @update&.response&.split('; ')
-              = f.input :note, label: 'Additional notes', hint: 'Please do not include specifics about the client (name, etc.) in these notes as they will be visible to everyone involved in the match, even if the client doesn\'t have a full release on file.' , input_html: {rows: 8, value: @update&.note}
+                = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
 
-              = f.button :submit, class: 'btn btn-primary', value: 'Submit Status Update'
 
+          - if can_reject_matches?
+            .o-choose__choice
+              %header.jMatchHeader
+                %ul.o-choose__nav.nav.jMatchActionNav
+                  = render 'match_decisions/cancel_tab', active_tab: 'active'
+                  = render 'match_decisions/park_tab'
+                  = render 'match_decisions/backup_tab'
+
+              .o-choose__content
+                = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+                  .tab-content
+                    - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+                    = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data, include_other: true, active_tab: 'active'
+                    = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
+                    = render 'match_decisions/backup_tab_content', form: form, cancel_data: cancel_data
+
+            = content_for :page_js do
+              :javascript
+                new window.App.SingleOptionCheckboxes( $('form.edit_decision')[0], 'decision[administrative_cancel_reason_id][]')
+                new window.App.Matches.Decline($('.jCancelReason input[type=checkbox]'),$('.jOtherCancelReason'));
+
+            = render 'match_decisions/cancel_and_park_js'
 
 
 = content_for :page_js do

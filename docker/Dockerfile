@@ -1,7 +1,7 @@
 # Based on https://github.com/ledermann/docker-rails/blob/develop/Dockerfile
 ARG RUBY_VERSION
 # NOTE FROM clears all ARGs
-FROM ruby:$RUBY_VERSION-alpine
+FROM ruby:$RUBY_VERSION-alpine3.15
 
 ARG PG_MAJOR
 ARG NODE_MAJOR
@@ -33,8 +33,13 @@ RUN apk add --no-cache \
   lftp postgresql tmux postgis geos geos-dev proj proj-dev proj-util zip expect \
   shared-mime-info \
   vim less \
+  tar \
+  xz \
+  python3 py3-pip \
   && git config --global --add safe.directory /app \
   && ln -s libproj.so.21.1.2 /usr/lib/libproj.so.20
+
+RUN pip3 install awscliv2
 
 RUN mkdir /app
 WORKDIR /app
