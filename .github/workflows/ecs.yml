@@ -87,7 +87,7 @@ jobs:
         then
           echo Pulling or building pre-cache image
           docker build --file=$DOCKER_ASSETS_PATH/Dockerfile.${ECR_REPOSITORY}.pre-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:${PRE_CACHE_TAG} .
-s
+
           echo Tagging pre-cache so local dockerfiles will work
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:${PRE_CACHE_TAG} ${ECR_REPOSITORY}:latest--pre-cache
 
