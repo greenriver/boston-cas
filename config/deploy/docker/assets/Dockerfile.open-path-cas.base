@@ -53,6 +53,7 @@ RUN bundle install --without=development
 # which is what the RUN true is for
 
 COPY lib ./lib
+RUN true
 COPY config ./config
 COPY spec ./spec
 COPY db ./db
