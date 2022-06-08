@@ -6,9 +6,11 @@ wb.add_worksheet(name: "Housed Client Addresses") do |sheet|
     result = []
     row.each_with_index do |value, index|
       display_type = column_types[index]
-      case display_type
-      when :boolean
+      transform = column_transformations[index]
+      if display_type == :boolean
         result << yes_no(value)
+      elsif transform.present?
+        result << transform.call(value)
       else
         result << value
       end
