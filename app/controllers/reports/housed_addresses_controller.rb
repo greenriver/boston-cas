@@ -77,8 +77,8 @@ module Reports
         'Last Name' => { query: c_t[:last_name], display_type: :text },
         'Housing Address' => { query: md_b_t[:address], display_type: :address },
         _('Did you or this client use external software to help with housing?') => { query: md_b_t[:external_software_used], display_type: :boolean },
-        'Lease Start Date' => { query: md_b_t[:client_move_in_date], display_type: :text, display_transform: ->(dt) { dt.to_date } },
-        'Lease End Date' => { query: md_b_t[:client_move_in_date], display_type: :text, display_transform: ->(dt) { dt.to_date >> 12 } },
+        'Lease Start Date' => { query: md_b_t[:client_move_in_date], display_type: :text, display_transform: ->(dt) { dt&.to_date } },
+        'Lease End Date' => { query: md_b_t[:client_move_in_date], display_type: :text, display_transform: ->(dt) { dt.to_date.present? && dt.to_date >> 12 } },
         'Match ID' => { query: com_t[:id], display_type: :integer },
       }.freeze
     end
