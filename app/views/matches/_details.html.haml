@@ -15,7 +15,7 @@
             .icon-checkmark
           .c-tag__content
             %span= match.overall_status[:name]
-  - if true # match.opportunity.multiple_active_matches?
+  - if match.opportunity.multiple_active_matches?
     .alert.alert-warning
       - translation = _('Multiple Match Disclaimer')
       %p
