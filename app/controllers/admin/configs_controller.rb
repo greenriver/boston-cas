@@ -34,6 +34,7 @@ module Admin
         :lock_days,
         :lock_grace_days,
         :include_note_in_email_default,
+        :notify_all_on_progress_update,
         non_hmis_fields: [],
       )
     end

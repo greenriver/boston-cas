@@ -43,7 +43,7 @@ COPY config/deploy/docker/assets/rds-combined-ca-bundle.pem /etc/ssl/certs/rds-c
 COPY Gemfile Gemfile.lock Rakefile config.ru ./
 COPY bin ./bin
 COPY public ./public
-COPY config/deploy/docker/assets/download_secrets.rb ./bin
+RUN true
 COPY config/deploy/docker/lib ./bin
 COPY config/deploy/docker/assets/deploy_tasks.open-path-cas.sh ./bin/deploy_tasks.sh
 
@@ -53,11 +53,13 @@ RUN bundle install --without=development
 # which is what the RUN true is for
 
 COPY lib ./lib
+RUN true
 COPY config ./config
 COPY spec ./spec
 COPY db ./db
 COPY app ./app
 COPY vendor ./vendor
+RUN true
 COPY locale ./locale
 
 RUN mkdir -p app/assets/stylesheets/theme/styles && \

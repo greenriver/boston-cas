@@ -1,6 +1,26 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "023c724508b4c341ebb8aae1c407e91e113c05bccffe0dca58702f276fbe1dd0",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/command_args.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`diff #{path} #{tmppath}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CommandArgs",
+        "method": "initialize"
+      },
+      "user_input": "path",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "06bf822a0152a43f4319c2f1355568e3e7442ef3b677221ef73749b49a482d00",
@@ -220,7 +240,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 157,
+      "line": 164,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -260,7 +280,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 380,
+      "line": 379,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`docker image ls -f 'reference=#{repo_name}' | grep \"#{_ruby_version}-#{_pre_cache_version}--pre-cache\"`",
       "render_path": null,
@@ -300,7 +320,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 156,
+      "line": 163,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -361,7 +381,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 151,
+      "line": 158,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -412,6 +432,47 @@
       },
       "user_input": "Config.get(:deidentified_client_assessment)",
       "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/matches/_show.haml",
+      "line": 21,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => match_scope.find(params[:match_id]).decision_from_param(params[:id]), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "MatchDecisionsController",
+          "method": "show",
+          "line": 27,
+          "file": "app/controllers/match_decisions_controller.rb",
+          "rendered": {
+            "name": "matches/show",
+            "file": "app/views/matches/show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/show",
+          "line": 1,
+          "file": "app/views/matches/show.haml",
+          "rendered": {
+            "name": "matches/_show",
+            "file": "app/views/matches/_show.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "matches/_show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
       "note": ""
     },
     {
@@ -471,6 +532,37 @@
         "method": "clients_that_fit"
       },
       "user_input": "requirement.variable",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "d47ad666bd2c5879fc0e74e99ba65968bc8260527d1f195e5be301befc55ea5f",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/admin/versions/index.haml",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => PaperTrail::Version.preload(:item).order(:created_at => :desc).page(params[:page]).per(25), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::VersionsController",
+          "method": "index",
+          "line": 13,
+          "file": "app/controllers/admin/versions_controller.rb",
+          "rendered": {
+            "name": "admin/versions/index",
+            "file": "app/views/admin/versions/index.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/versions/index"
+      },
+      "user_input": "params[:page]",
       "confidence": "Weak",
       "note": ""
     },
@@ -628,6 +720,6 @@
       "note": ""
     }
   ],
-  "updated": "2022-01-27 18:42:48 +0000",
+  "updated": "2022-05-28 18:52:12 +0000",
   "brakeman_version": "5.0.4"
 }

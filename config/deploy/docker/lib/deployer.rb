@@ -3,6 +3,7 @@ require 'byebug'
 require 'English'
 require_relative 'roll_out'
 require_relative 'aws_sdk_helpers'
+require_relative 'asset_compiler'
 
 class Deployer
   include AwsSdkHelpers::Helpers
@@ -149,7 +150,7 @@ class Deployer
   def _ensure_clean_repo!
     return unless `git status --porcelain` != ''
 
-    puts 'Aborting since git is not clean'
+    puts '[FATAL] Aborting since git is not clean'
     exit 1
   end
 
@@ -162,7 +163,7 @@ class Deployer
     remote = `git ls-remote origin | grep #{branch}`.chomp
     our_commit = `git rev-parse #{branch}`.chomp
 
-    raise 'Push or pull your branch first!' unless remote.start_with?(our_commit)
+    raise '[FATAL] Push or pull your branch first!' unless remote.start_with?(our_commit)
   end
 
   def _docker_login!
