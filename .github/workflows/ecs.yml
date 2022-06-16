@@ -130,12 +130,18 @@ jobs:
         docker build --file=$DOCKER_ASSETS_PATH/Dockerfile.${ECR_REPOSITORY}.dj -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--dj .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--dj
 
+        echo Building deploy
+        docker build --file=$DOCKER_ASSETS_PATH/Dockerfile.${ECR_REPOSITORY}.deploy -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--deploy .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--deploy
+
         echo $IMAGE_TAG--base > image-tag.txt
         echo $IMAGE_TAG--web >> image-tag.txt
         echo $IMAGE_TAG--dj >> image-tag.txt
+        echo $IMAGE_TAG--deploy >> image-tag.txt
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--base"
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--web"
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--dj"
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG--deploy"
 
     - name: Show image tag
       uses: actions/upload-artifact@v1
