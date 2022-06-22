@@ -7,7 +7,7 @@
 module MatchPrioritization
   class DaysHomelessPopulations < Base
     def self.title
-      'Veteran, Adult and Child, Youth, Cumulative days homeless'
+      'Adult and Child, Veteran, Youth, Cumulative days homeless'
     end
 
     def self.prioritization_for_clients(scope, match_route:) # rubocop:disable Lint/UnusedMethodArgument
