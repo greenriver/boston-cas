@@ -27,13 +27,14 @@
             %tr
               - row.each_with_index do |value, index|
                 - display_type = column_types[index]
+                - transform = column_transformations[index]
                 - case display_type
                   - when :boolean
                     %td= yes_no(value)
                   - when :address
                     %td= simple_format(value)
                   - else
-                    %td= value
+                    %td= transform.present? ? transform.call(value) : value
 - else
   .no-data
     No clients found.
