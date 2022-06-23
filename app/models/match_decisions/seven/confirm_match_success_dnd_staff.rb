@@ -57,6 +57,7 @@ module MatchDecisions::Seven
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Seven::ConfirmMatchSuccessDndStaff
+        m << Notifications::Seven::MatchSuccessShelterAgency
       end
     end
 

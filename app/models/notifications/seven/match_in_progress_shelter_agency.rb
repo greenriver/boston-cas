@@ -5,19 +5,19 @@
 ###
 
 module Notifications::Seven
-  class ConfirmHsaDeclineDndStaff < ::Notifications::Base
+  class MatchInProgressShelterAgency < ::Notifications::Base
     def self.create_for_match! match
-      match.dnd_staff_contacts.each do |contact|
+      match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.seven_confirm_housing_subsidy_admin_decline_dnd_staff_decision
+      match.seven_approve_match_housing_subsidy_admin_decision
     end
 
     def event_label
-      "#{_('DND')} notified of #{_('Housing Subsidy Administrator')} decline. Confirmation pending."
+      "#{_('Shelter Agency')} notified of approved potential match."
     end
   end
 end

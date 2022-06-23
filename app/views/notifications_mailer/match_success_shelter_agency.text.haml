@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+A #{_('Housing Subsidy Administrator')} has indicated that a CAS housing recommendation was successfully completed.
+\
+View details here:
+#{notification_match_decision_url @notification, @match, @decision}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'
