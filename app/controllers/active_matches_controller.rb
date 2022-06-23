@@ -60,7 +60,7 @@ class ActiveMatchesController < MatchListBaseController
   end
 
   private def match_scope
-    match_source.accessible_by_user(current_user).active
+    match_source.accessible_by_user(current_user).active.preload(:decisions)
   end
 
   private def set_heading

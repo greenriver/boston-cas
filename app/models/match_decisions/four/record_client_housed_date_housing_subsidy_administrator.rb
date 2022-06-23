@@ -46,6 +46,11 @@ module MatchDecisions::Four
       }
     end
 
+    def started?
+      status&.to_sym == :completed
+    end
+
+
     def editable?
       super && saved_status !~ /complete/
     end

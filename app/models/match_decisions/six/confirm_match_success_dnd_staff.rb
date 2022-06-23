@@ -32,6 +32,10 @@ module MatchDecisions::Six
       end
     end
 
+    def started?
+      status&.to_sym == :confirmed
+    end
+
     def step_name
       _('Confirm Match Success')
     end

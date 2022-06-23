@@ -102,12 +102,22 @@ module MatchDecisions
       false
     end
 
+    def started?
+      status&.to_sym == :accepted
+    end
+
     def stalled_after
       match_route.stalled_interval.days
     end
 
     def stalled_contact_types
       []
+    end
+
+    def date_successful
+      return nil unless started?
+
+      updated_at
     end
 
     def stalled_decision_contacts

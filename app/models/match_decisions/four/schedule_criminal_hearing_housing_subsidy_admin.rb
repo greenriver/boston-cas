@@ -46,6 +46,10 @@ module MatchDecisions::Four
       }
     end
 
+    def started?
+      status&.to_sym.in?([:scheduled, :no_hearing])
+    end
+
     def editable?
       super && saved_status !~ /scheduled|no_hearing/
     end

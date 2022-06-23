@@ -18,7 +18,7 @@
           = decision.step_name
         - if size == 'sm'
           - link = '#'
-          - if can_reject_matches? || match.past_first_step_or_all_steps_visible?
+          - if can_reject_matches? || match.on_or_after_first_client_step?
             - link = match_path(match)
           = link_to link, class: 'c-stepped-progress__step-link', data: {toggle: :tooltip, title: decision.step_name} do
             .c-stepped-progress__step-number= types[decision.type]

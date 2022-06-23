@@ -30,6 +30,13 @@ module ClientOpportunityMatches
         inverse_of: :match,
         dependent: :destroy
 
+      has_many :initialized_decisions,
+        -> { where.not(status: nil) },
+        class_name: 'MatchDecisions::Base',
+        foreign_key: 'match_id',
+        inverse_of: :match,
+        dependent: :destroy
+
       # macro to set up a decision within a match
       def self.has_decision decision_type, decision_class_name: nil, notification_class_name: nil
         decision_class_name ||= "MatchDecisions::#{decision_type.to_s.camelize}"
@@ -57,10 +64,6 @@ module ClientOpportunityMatches
       if param.to_sym.in? @@decision_types
         send "#{param}_decision"
       end
-    end
-
-    def initialized_decisions
-      decisions.where.not(status: nil)
     end
 
     private

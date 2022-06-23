@@ -93,7 +93,7 @@ module MatchDecisions::Five
     private_constant :StatusCallbacks
 
     def started?
-      status&.to_sym == :accepted
+      status&.to_sym.in?([:mitigation_required, :mitigation_not_required])
     end
 
     def editable?

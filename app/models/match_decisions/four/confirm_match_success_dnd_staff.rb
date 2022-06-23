@@ -45,6 +45,10 @@ module MatchDecisions::Four
       nil
     end
 
+    def started?
+      status&.to_sym == :confirmed
+    end
+
     def editable?
       super && status !~ /confirmed|rejected/
     end
