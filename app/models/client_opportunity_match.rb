@@ -289,7 +289,7 @@ class ClientOpportunityMatch < ApplicationRecord
   # Preload initialized_decisions
   def first_client_decision
     decision = initialized_decisions.detect do |d|
-      d.class.name ==  match_route.first_client_step
+      d.instance_of?(match_route)
     end
     return nil unless decision&.started?
 

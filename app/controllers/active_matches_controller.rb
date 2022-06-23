@@ -25,7 +25,7 @@ class ActiveMatchesController < MatchListBaseController
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
       joins(:client).
-      order(sort_matches())
+      order(sort_matches)
     @column = sort_column
     @direction = sort_direction
     @active_filter = @current_step.present? || @current_program.present?
@@ -54,7 +54,7 @@ class ActiveMatchesController < MatchListBaseController
             :project_client,
             :active_matches,
           ],
-        ]
+        ],
       ).
       page(@page).per(@page_size)
   end
@@ -68,11 +68,11 @@ class ActiveMatchesController < MatchListBaseController
   end
 
   def sort_column
-    available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
+    available_sort = ClientOpportunityMatch.sort_options.map { |m| m[:column] }
     @sort_column ||= available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 end
