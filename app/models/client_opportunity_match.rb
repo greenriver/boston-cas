@@ -289,7 +289,7 @@ class ClientOpportunityMatch < ApplicationRecord
   # Preload initialized_decisions
   def first_client_decision
     decision = initialized_decisions.detect do |d|
-      d.instance_of?(match_route)
+      d.class.name == match_route.first_client_step # rubocop:disable Style/ClassEqualityComparison
     end
     return nil unless decision&.started?
 

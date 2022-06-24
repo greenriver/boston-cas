@@ -60,10 +60,6 @@ module MatchRoutes
       end
     end
 
-    def self.first_client_step
-      match_steps.keys.first
-    end
-
     # implement in sub-classes
     def title
       raise NotImplementedError
@@ -79,7 +75,7 @@ module MatchRoutes
 
     # The number of the step in match_steps of the first step where a client interaction is required
     private def first_client_step_number
-      self.class.match_steps[self.class.first_client_step]
+      self.class.match_steps[first_client_step]
     end
 
     def on_or_after_first_client_step?(current_decision)
