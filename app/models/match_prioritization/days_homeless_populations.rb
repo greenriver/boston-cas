@@ -17,7 +17,7 @@ module MatchPrioritization
       is_youth = Arel.sql(c_t[:is_currently_youth].desc.to_sql + ' NULLS LAST')
       age_youth = Arel.sql("case when date_part('year', age(\"clients\".\"date_of_birth\")) BETWEEN 18 and 24 then 1 else 0 end desc")
       days = Arel.sql(c_t[:days_homeless].desc.to_sql + ' NULLS LAST')
-      scope.order(vets, family, is_youth, age_youth, days)
+      scope.order(family, vets, is_youth, age_youth, days)
     end
 
     def self.client_prioritization_value_method
