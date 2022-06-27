@@ -65,17 +65,20 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   def clean_row(client, row)
     result = row.dup
 
+    result[:neighborhood_interests] = convert_to_neighborhood_interests(client, :shelter_location, row[:shelter_location])
     result.delete(:shelter_location)
-    result.delete(:referral_date)
+    result[:disabling_condition] = yes_no_to_bool(client, :disabling_condition, row[:disabling_condition])
     # :client_identifier
-    result.delete(:date_first_homeless)
+    result[:substance_abuse_problem] = yes_no_to_bool(client, :substance_abuse_problem, row[:substance_abuse_problem])
+    result[:mental_health_problem] = yes_no_to_bool(client, :mental_health_problem, row[:mental_health_problem])
     result.delete(:occurrences_of_homelessness)
     result[:days_homeless] = convert_to_number(client, :days_homeless, row[:days_homeless])
     result[:family_member] = yes_no_to_bool(client, :family_member, row[:family_member])
-    result[:disabling_condition] = yes_no_to_bool(client, :disabling_condition, row[:disabling_condition])
-    result[:is_currently_youth] = yes_no_to_bool(client, :is_currently_youth, row[:is_currently_youth])
     result[:sixty_plus] = yes_no_to_bool(client, :sixty_plus, row[:sixty_plus])
-    result[:required_number_of_bedrooms] = convert_to_number(client, :required_number_of_bedrooms, row[:required_number_of_bedrooms])
+    result[:is_currently_youth] = yes_no_to_bool(client, :is_currently_youth, row[:is_currently_youth])
+    result[:calculated_chronic_homelessness] = yes_no_to_bool(client, :chronic_homeless, row[:chronic_homeless]) ? 1 : 0
+    result.delete(:chronic_homeless)
+    result[:pregnancy_status] = yes_no_to_bool(client, :pregnancy_status, row[:pregnancy_status])
     result[:veteran] = yes_no_to_bool(client, :veteran, row[:veteran])
     result[:hiv_aids] = yes_no_to_bool(client, :hiv_aids, row[:hiv_aids])
     result[:health_prioritized] = yes_no_to_bool(client, :health_prioritized, row[:health_prioritized])
@@ -103,6 +106,24 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   rescue StandardError
     client.errors.add('Information collected at', "'#{date}' cannot be parsed as a date")
     raise 'invalid date'
+  end
+
+  def convert_to_neighborhood_interests(client, field, val)
+    neighborhood_name = case val.to_i
+    when 1
+      'Fort Worth'
+    when 2
+      'Arlington'
+    else
+      client.errors.add(field, "Unable to parse neighborhood identifier: #{val}")
+      return nil # Don't convert invalid values
+    end
+    neighborhood = Neighborhood.text_search(neighborhood_name)
+    unless neighborhood.present?
+      client.errors.add(field, "Neighborhood '#{neighborhood_name}' not found.")
+      return nil
+    end
+    [neighborhood.id]
   end
 
   SECONDS_IN_DAY = 86_400
@@ -180,17 +201,18 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
   def self.file_attributes
     {
-      shelter_location: 'Shelter Location', # not in model
-      referral_date: 'Referral Date', # not in model
+      shelter_location: 'Shelter Location',
+      disabling_condition: 'Disabled Per HUD Language',
       client_identifier: 'Home-base ID',
-      date_first_homeless: 'Date First became Homeless', # not in model
-      occurrences_of_homelessness: 'Occurrences of Homelessness in Last Three Years', # not in model
-      days_homeless: 'Cumulative Days Homeless',
+      substance_abuse_problem: 'Substance Use Disability',
+      mental_health_problem: 'Mental Health Disability',
+      occurrences_of_homelessness: 'Occurrences of Homelessness in Last Three Years',
+      days_homeless: 'Cumulative days Homeless',
       family_member: 'Family of at least one Adult and one child',
       sixty_plus: 'Age greater than 60 years of age',
       is_currently_youth: 'Age less than 24 years of age',
-      disabling_condition: 'Permanent Supportive Housing Eligible',
-      required_number_of_bedrooms: 'Minimum Bedroom Size',
+      chronic_homeless: 'Permanent Supportive Housing Eligible',
+      pregnancy_status: 'Currently first time pregnant 28 weeks or less',
       veteran: 'Veteran Status',
       hiv_aids: 'HOPWA Eligible',
       health_prioritized: 'Prioritized for Health',
