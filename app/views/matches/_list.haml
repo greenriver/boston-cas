@@ -3,6 +3,7 @@
     - matches = opportunity.send(@match_state).where(id: @matches.select(:id))
   - else
     - matches = opportunity.send(@match_state)
+  - matches = matches.sort_by { |m| [m.first_client_decision&.updated_at&.to_i || Time.current.to_i, m.created_at.to_i] }
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
@@ -38,15 +39,15 @@
         %dl.inline
           %dt Available Since:
           %dd= voucher.made_available_at.try(:strftime, I18n.t('date.formats.default')) || 'unknown'
-        - if can_reject_matches? || matches.map(&:past_first_step_or_all_steps_visible?).any?
+        - if can_reject_matches? || matches.map(&:on_or_after_first_client_step?).any?
           - if match_type != 'opportunity' && opportunity.show_alternate_clients_to?(current_user)
             = link_to opportunity_matches_path(opportunity) do
               Prioritized Clients
       .col-9.mt-5
-        - matches.each do |match|
+        - matches.each.with_index do |match, i|
           - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
-          - hide_client_name = hide_client_name || ! (can_reject_matches? || match&.past_first_step_or_all_steps_visible?)
+          - hide_client_name = hide_client_name || ! (can_reject_matches? || match&.on_or_after_first_client_step?)
           - active_in_other_match_class = ''
           - next if match.client.blank?
           - if match.active? && match.client.active_in_match? && match.client.match_for_opportunity(match.opportunity) != match
@@ -61,11 +62,19 @@
                     - else
                       = match.client_name_for_contact current_contact, hidden: hide_client_name
               .col-9
-                %ul.d-flex.list-unstyled.align-items-center.mb-0
+                %ul.d-flex.list-unstyled.align-items-start.mb-0
                   %li
                     %dl
                       %dt.text-nowrap Initial Match Date
                       %dd= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+                    - if matches.count > 1
+                      - first_client_decision = match.first_client_decision
+                      - if first_client_decision.present?
+                        %dl
+                          %dt Client Accepted
+                          %dd= match.first_client_decision&.updated_at&.try(:strftime, I18n.t('date.formats.default'))
+                        - if i.zero?
+                          .badge.badge-info.p-2 Top Priority
                   %li.ml-6.mr-6
                     = render 'match_list_base/current_step', match: match, size: 'sm'
                   - unless match_type == 'opportunity'
@@ -81,7 +90,7 @@
                 = render 'matches/warnings', match: match
 
               .col.client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
-                - if can_reject_matches? || match&.past_first_step_or_all_steps_visible?
+                - if can_reject_matches? || match&.on_or_after_first_client_step?
                   = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
                 - else
                   This match is not currently available.

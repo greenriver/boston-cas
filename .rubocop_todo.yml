@@ -21,7 +21,6 @@ Layout/ArgumentAlignment:
   Exclude:
     - 'app/controllers/concerns/has_match_access_context.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/contact_join_model.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/engine.rb'
@@ -104,7 +103,6 @@ Layout/DotPosition:
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
     - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/related_default_contacts.rb'
     - 'app/models/contact.rb'
     - 'app/models/identified_client.rb'
@@ -168,9 +166,7 @@ Layout/EmptyLines:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/unavailable_clients_controller.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_routes/five.rb'
@@ -300,7 +296,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
     - 'app/controllers/match_progress_update_notes_controller.rb'
-    - 'app/controllers/matches_controller.rb'
     - 'app/controllers/messages_controller.rb'
     - 'app/controllers/neighborhoods_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
@@ -339,10 +334,7 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
     - 'app/models/match_decisions/four/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
     - 'app/models/match_decisions/four/confirm_hsa_initial_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/four/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/four/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
-    - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_confirm_hsa_accepts_client_decline_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/confirm_hsa_accepts_client_decline_dnd_staff.rb'
@@ -510,7 +502,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/helpers/opportunity_matches_helper.rb'
     - 'app/helpers/program_details_helper.rb'
     - 'app/models/concerns/availability.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/inherits_requirements_from_services_only.rb'
     - 'app/models/concerns/manages_services.rb'
@@ -522,7 +513,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
     - 'app/models/match_decisions/four/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
     - 'app/models/match_decisions/four/confirm_hsa_initial_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/four/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/four/confirm_shelter_agency_decline_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_confirm_hsa_accepts_client_decline_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
@@ -638,7 +628,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/controllers/matches_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
     - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
@@ -650,8 +639,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
-    - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/program.rb'
     - 'app/models/stalled_match_request.rb'
@@ -682,7 +669,6 @@ Layout/IndentationWidth:
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/controllers/matches_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
     - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
@@ -694,10 +680,8 @@ Layout/IndentationWidth:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/units_controller.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/pathways_calculations.rb'
     - 'app/models/help.rb'
-    - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/program.rb'
     - 'app/models/stalled_match_request.rb'
@@ -819,7 +803,6 @@ Layout/SpaceAroundOperators:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceBeforeBlockBraces:
   Exclude:
-    - 'app/controllers/active_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
@@ -901,7 +884,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideBlockBraces:
   Exclude:
-    - 'app/controllers/active_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
@@ -1239,8 +1221,6 @@ Lint/UnusedBlockArgument:
 Lint/UnusedMethodArgument:
   Exclude:
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
-    - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
-    - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/match_prioritization/assessment_score.rb'
     - 'app/models/match_prioritization/assessment_score_length_homeless_tie_breaker.rb'
@@ -1447,7 +1427,6 @@ Naming/PredicateName:
   Exclude:
     - 'spec/**/*'
     - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/contact.rb'
     - 'app/models/match_events/note.rb'
     - 'app/models/match_progress_updates/base.rb'
@@ -1514,7 +1493,6 @@ Style/ClassEqualityComparison:
 Style/ClassVars:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1558,16 +1536,11 @@ Style/GuardClause:
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/notifier_config.rb'
     - 'app/models/match_access_contexts/notification.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/four/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
-    - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
-    - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -1705,17 +1678,12 @@ Style/IfUnlessModifier:
     - 'app/inputs/base_input.rb'
     - 'app/mailers/account_mailer.rb'
     - 'app/mailers/application_mailer.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/identified_client.rb'
     - 'app/models/match_census.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/four/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
-    - 'app/models/match_decisions/four/record_client_housed_date_housing_subsidy_administrator.rb'
-    - 'app/models/match_decisions/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -1738,7 +1706,6 @@ Style/InverseMethods:
 # Configuration parameters: IgnoredMethods.
 Style/MethodCallWithoutArgsParentheses:
   Exclude:
-    - 'app/controllers/active_matches_controller.rb'
     - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'spec/models/decisions_spec.rb'
@@ -1869,7 +1836,6 @@ Style/RedundantSelf:
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/client_note.rb'
     - 'app/models/concerns/availability.rb'
-    - 'app/models/concerns/client_opportunity_matches/has_decisions.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/match_census.rb'
     - 'app/models/match_events/decision_action.rb'
@@ -1963,7 +1929,6 @@ Style/StringLiterals:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/account_passwords_controller.rb'
     - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/active_matches_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
     - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/application_controller.rb'
@@ -1997,10 +1962,7 @@ Style/StringLiterals:
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/subject_for_matches.rb'
     - 'app/models/contact.rb'
-    - 'app/models/match_decisions/five/five_application_submission.rb'
     - 'app/models/match_decisions/five/five_lease_up.rb'
-    - 'app/models/match_decisions/five/five_match_recommendation.rb'
-    - 'app/models/match_decisions/four/match_recommendation_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_progress_updates/base.rb'
@@ -2074,7 +2036,6 @@ Style/TernaryParentheses:
 # SupportedStylesForMultiline: comma, consistent_comma, no_comma
 Style/TrailingCommaInArguments:
   Exclude:
-    - 'app/controllers/active_matches_controller.rb'
     - 'app/controllers/admin/roles_controller.rb'
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/admin/users_controller.rb'

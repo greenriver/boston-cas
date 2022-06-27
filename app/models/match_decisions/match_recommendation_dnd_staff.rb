@@ -22,10 +22,6 @@ module MatchDecisions
       end
     end
 
-    def started?
-      status&.to_sym == :accepted
-    end
-
     def step_name
       "#{_('DND')} Initial Review"
     end

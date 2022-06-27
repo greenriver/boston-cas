@@ -27,6 +27,10 @@ module MatchDecisions
       end
     end
 
+    def started?
+      status&.to_sym.in?([:scheduled, :no_hearing, :skipped])
+    end
+
     def step_name
       "#{_('Housing Subsidy Administrator')} Reviews Match"
     end

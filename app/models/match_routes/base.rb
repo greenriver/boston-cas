@@ -70,6 +70,19 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def first_client_step
+      self.class.match_steps.keys.first
+    end
+
+    # The number of the step in match_steps of the first step where a client interaction is required
+    private def first_client_step_number
+      self.class.match_steps[first_client_step]
+    end
+
+    def on_or_after_first_client_step?(current_decision)
+      self.class.match_steps[current_decision.class.name] >= first_client_step_number
+    end
+
     def success_decision
       raise NotImplementedError
     end

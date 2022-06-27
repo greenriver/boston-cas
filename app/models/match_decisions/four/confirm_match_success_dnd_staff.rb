@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
-
     # validate :note_present_if_status_rejected
 
     def statuses
@@ -45,6 +44,10 @@ module MatchDecisions::Four
       nil
     end
 
+    def started?
+      status&.to_sym == :confirmed
+    end
+
     def editable?
       super && status !~ /confirmed|rejected/
     end
@@ -72,9 +75,7 @@ module MatchDecisions::Four
     end
 
     private def note_present_if_status_rejected
-      if note.blank? && status == 'rejected'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'rejected'
     end
 
     class StatusCallbacks < StatusCallbacks
@@ -92,7 +93,5 @@ module MatchDecisions::Four
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end

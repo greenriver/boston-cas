@@ -268,9 +268,9 @@ class ClientOpportunityMatch < ApplicationRecord
   def show_client_info_to? contact
     return false unless contact
     return true if contact.user_can_view_all_clients?
-    return past_first_step_or_all_steps_visible? if contact.in?(shelter_agency_contacts)
-    return past_first_step_or_all_steps_visible? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
-    return past_first_step_or_all_steps_visible? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
+    return on_or_after_first_client_step? if contact.in?(shelter_agency_contacts)
+    return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
+    return on_or_after_first_client_step? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
 
     client&.accessible_by_user?(contact.user)
   end
@@ -286,14 +286,20 @@ class ClientOpportunityMatch < ApplicationRecord
     joins(:program).merge(Program.editable_by(user))
   }
 
-  def past_first_step_or_all_steps_visible?
+  def on_or_after_first_client_step?
     return true if current_decision.blank?
 
-    if match_route.class.name.in?(['MatchRoutes::Default', 'MatchRoutes::Four'])
-      current_decision != send(match_route.initial_decision)
-    else
-      true
+    match_route.on_or_after_first_client_step?(current_decision)
+  end
+
+  # Preload initialized_decisions
+  def first_client_decision
+    decision = initialized_decisions.detect do |d|
+      d.class.name == match_route.first_client_step # rubocop:disable Style/ClassEqualityComparison
     end
+    return nil unless decision&.started?
+
+    decision
   end
 
   def client_info_approved_for_release?

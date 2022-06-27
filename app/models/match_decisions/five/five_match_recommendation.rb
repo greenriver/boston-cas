@@ -77,10 +77,6 @@ module MatchDecisions::Five
     end
     private_constant :StatusCallbacks
 
-    def started?
-      status&.to_sym == :accepted
-    end
-
     def editable?
       super && saved_status !~ /accepted|declined/
     end
