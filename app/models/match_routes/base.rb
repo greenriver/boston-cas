@@ -35,6 +35,7 @@ module MatchRoutes
         MatchRoutes::Four,
         MatchRoutes::Five,
         MatchRoutes::Six,
+        MatchRoutes::Seven,
       ]
     end
 
