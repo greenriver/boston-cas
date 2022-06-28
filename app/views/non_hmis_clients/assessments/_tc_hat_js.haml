@@ -23,34 +23,38 @@
     $('input[name*="[has_tax_id]"]').trigger('change');
 
     // Family
-    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
-      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+    $('input[name*="[tc_hat_household_type]"], input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var family = $('input[name*="[tc_hat_household_type]"]:checked').val() == 'Adults with Children';
+      var checked = $('input[name*="[tc_hat_client_history]"][value="open_case"]').is(':checked');
+      var value = family || checked;
       var $question = $('input[name*="[open_case]"]').closest('.c-question');
-      if(value !== undefined && value == 'Adults with Children') {
+      if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
         $question.addClass('d-none');
       }
     });
     $('input[name*="[tc_hat_household_type]"]').trigger('change');
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
 
-    // Youth
-    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
-
-      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
-      var $question = $('input[name*="[foster_care]"]').closest('.c-question');
-      if(value !== undefined && value == 'Youth') {
+    $('input[name*="[tc_hat_household_type]"], input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var youth = $('input[name*="[tc_hat_household_type]"]').val() == 'Youth';
+      var checked = $('input[name*="[tc_hat_client_history]"][value="foster_care"]').is(':checked');
+      var value = youth || checked;
+      var $question = $('input[name*="[foster_care]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
         $question.addClass('d-none');
       }
     });
     $('input[name*="[tc_hat_household_type]"]').trigger('change');
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
 
     // IPV
     $('input[name*="[tc_hat_client_history]"]').on('change', function(e) {
       var value = $('input[name*="[tc_hat_client_history]"][value="partner_violence_survivor"]').is(':checked');
-      var $question = $('input[name*="[currently_fleeing]"]').closest('.c-question')
+      var $question = $('input[name*="[currently_fleeing]"]').closest('.c-question');
       if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
@@ -60,6 +64,19 @@
       if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
+
+    // ED visits
+    $('input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_client_history]"][value="tc_hat_ed_visits"]').is(':checked');
+      var $question = $('input[name*="[tc_hat_ed_visits]"], input[name*="[tc_hat_hospitalizations]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        console.log('here')
         $question.addClass('d-none');
       }
     });
