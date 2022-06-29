@@ -118,7 +118,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       client.errors.add(field, "Unable to parse neighborhood identifier: #{val}")
       return nil # Don't convert invalid values
     end
-    neighborhood = Neighborhood.text_search(neighborhood_name)
+    neighborhood = Neighborhood.text_search(neighborhood_name).first
     unless neighborhood.present?
       client.errors.add(field, "Neighborhood '#{neighborhood_name}' not found.")
       return nil
