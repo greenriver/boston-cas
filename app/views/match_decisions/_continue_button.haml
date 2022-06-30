@@ -1,0 +1,8 @@
+- if @match.opportunity.multiple_active_matches? && @match.after_first_client_step? && ! @match.top_priority?
+  .alert.alert-warning
+    %i.icon-warning
+    = _('Another match is the top priority match.')
+.form-actions
+  %button{ button_attributes }
+    %i{class: "icon-#{icon}"}
+    = text

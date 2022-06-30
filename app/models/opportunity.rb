@@ -129,6 +129,10 @@ class Opportunity < ApplicationRecord
     active_matches.count > 1
   end
 
+  def prioritized_active_matches
+    active_matches.sort_by { |m| [m.first_client_decision&.updated_at&.to_i || Time.current.to_i, m.created_at.to_i] }
+  end
+
   def opportunity_details
     @opportunity_details ||= OpportunityDetails.build self
   end
