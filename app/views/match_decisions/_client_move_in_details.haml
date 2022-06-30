@@ -34,13 +34,7 @@
     = form.input :external_software_used, label: _('Did you or this client use external software to help with housing?'), as: :boolean, disabled: !@decision.editable?
   - if @decision.show_address_field? && !has_unit?
     = form.input :address, label: _('Address of housing'), as: :text, disabled: !@decision.editable?
-  .form-actions
-
-
-    %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?}
-      %i.icon-checkmark
-      = submit_label
-
+  = render 'match_decisions/continue_button', text: submit_label, icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable? }
 = content_for :page_js do
   :javascript
     $('select').select2();

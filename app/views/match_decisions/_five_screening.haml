@@ -19,10 +19,7 @@
                   = _('Mitigation required')
             .jMitigations.d-none
               = form.input :required_mitigations, as: :check_boxes, collection: MitigationReason.active
-            .form-actions
-              %button{class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
-                %i.icon-checkmark
-                Continue Match
+            = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
 
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form

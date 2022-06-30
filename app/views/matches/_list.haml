@@ -1,9 +1,10 @@
 - opportunities.each do |opportunity|
   - if @match_state == :closed_matches
     - matches = opportunity.send(@match_state).where(id: @matches.select(:id))
+  - elsif @match_state == :active_matches
+    - matches = opportunity.prioritized_active_matches
   - else
     - matches = opportunity.send(@match_state)
-  - matches = matches.sort_by { |m| [m.first_client_decision&.updated_at&.to_i || Time.current.to_i, m.created_at.to_i] }
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
@@ -44,7 +45,7 @@
             = link_to opportunity_matches_path(opportunity) do
               Prioritized Clients
       .col-9.mt-5
-        - matches.each.with_index do |match, i|
+        - matches.each do |match|
           - updated_at = if match_type == 'active' then match.current_decision&.updated_at else match.updated_at end
           - hide_client_name = (match.confidential? || match.client.match_for_opportunity(match.opportunity).try(:confidential?)) && ! show_confidential_names?
           - hide_client_name = hide_client_name || ! (can_reject_matches? || match&.on_or_after_first_client_step?)
@@ -73,7 +74,7 @@
                         %dl
                           %dt Client Accepted
                           %dd= match.first_client_decision&.updated_at&.try(:strftime, I18n.t('date.formats.default'))
-                        - if i.zero?
+                        - if match.top_priority?
                           .badge.badge-info.p-2 Top Priority
                   %li.ml-6.mr-6
                     = render 'match_list_base/current_step', match: match, size: 'sm'
@@ -90,7 +91,7 @@
                 = render 'matches/warnings', match: match
 
               .col.client__details.flex-column.d-flex.justify-content-start.align-items-end.ml-auto
-                - if can_reject_matches? || match&.on_or_after_first_client_step?
+                - if can_reject_matches? || match&.on_or_after_first_client_step? && match&.accessible_by?(current_user)
                   = link_to 'View Match', match_path(match), class: 'btn btn-light mb-2'
                 - else
                   This match is not currently available.
