@@ -43,7 +43,7 @@ module MatchRoutes
     end
 
     def success_decision
-      :sevem_confirm_match_success_dnd_staff_decision
+      :seven_confirm_match_success_dnd_staff_decision
     end
 
     def initial_contacts_for_match

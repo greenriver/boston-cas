@@ -738,6 +738,7 @@ DEPENDENCIES
   rails (~> 6.0)
   rails-controller-testing
   rails-erd
+  rails-html-sanitizer (>= 1.4.3)
   ransack
   redcarpet
   redis
