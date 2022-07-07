@@ -59,7 +59,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
   # Ignore the header, and empty rows
   def skip?(row, index)
-    index.zero? || row[3].blank?
+    index.zero? || row[2].blank?
   end
 
   def clean_row(client, row)
@@ -162,7 +162,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   end
 
   def yes_no_to_bool(client, field, val)
-    text = val&.downcase&.strip
+    text = val&.to_s&.downcase&.strip
     if ['yes', 'y'].include?(text)
       true
     elsif ['no', 'n'].include?(text)
