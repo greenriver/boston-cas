@@ -21,7 +21,7 @@ module MatchPrioritization
     end
 
     def self.client_prioritization_value_method
-      'days_homeless_populations'
+      'days_homeless_veterans_families_youth'
     end
   end
 end
