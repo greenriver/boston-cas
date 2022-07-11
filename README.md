@@ -89,3 +89,4 @@ We use the following common rails gems and conventions:
 * helpers need to be explictly loaded in controllers. i.e. we have `config.action_controller.include_all_helpers = false` set
 * `bin/rake generate controller ... ` doesn't make fixures and they are disabled in test_helper. We don't use them and instead seed data in test or let test create their own data however they need to.
 * it also doesn't make helper or asset stubs, make them by hand if you need one. See `config/application.rb` for details.
+

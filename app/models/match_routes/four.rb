@@ -41,6 +41,10 @@ module MatchRoutes
       }
     end
 
+    def first_client_step
+      'MatchDecisions::Four::MatchRecommendationShelterAgency'
+    end
+
     def initial_decision
       :four_match_recommendation_dnd_staff_decision
     end

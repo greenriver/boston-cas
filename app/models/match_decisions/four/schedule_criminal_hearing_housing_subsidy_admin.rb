@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class ScheduleCriminalHearingHousingSubsidyAdmin < ::MatchDecisions::Base
-
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
 
@@ -46,6 +45,10 @@ module MatchDecisions::Four
       }
     end
 
+    def started?
+      status&.to_sym.in?([:scheduled, :no_hearing])
+    end
+
     def editable?
       super && saved_status !~ /scheduled|no_hearing/
     end
@@ -77,7 +80,7 @@ module MatchDecisions::Four
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
@@ -117,17 +120,12 @@ module MatchDecisions::Four
 
     private
 
-      def criminal_hearing_date_present_if_scheduled
-        if status == 'scheduled' && criminal_hearing_date.blank?
-          errors.add :criminal_hearing_date, 'must be filled in'
-        end
-      end
+    def criminal_hearing_date_present_if_scheduled
+      errors.add :criminal_hearing_date, 'must be filled in' if status == 'scheduled' && criminal_hearing_date.blank?
+    end
 
-      def criminal_hearing_date_absent_if_no_hearing
-        if status == 'no_hearing' && criminal_hearing_date.present?
-          errors.add :criminal_hearing_date, 'must not be filled in'
-        end
-      end
-
+    def criminal_hearing_date_absent_if_no_hearing
+      errors.add :criminal_hearing_date, 'must not be filled in' if status == 'no_hearing' && criminal_hearing_date.present?
+    end
   end
 end

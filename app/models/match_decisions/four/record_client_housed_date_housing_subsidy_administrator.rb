@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class RecordClientHousedDateHousingSubsidyAdministrator < ::MatchDecisions::Base
-
     attr_accessor :building_id
     attr_accessor :unit_id
 
@@ -44,6 +43,10 @@ module MatchDecisions::Four
         canceled: 'Canceled',
         back: 'Pending',
       }
+    end
+
+    def started?
+      status&.to_sym == :completed
     end
 
     def editable?
@@ -84,7 +87,7 @@ module MatchDecisions::Four
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type unless status == 'canceled'
     end
 
@@ -130,13 +133,9 @@ module MatchDecisions::Four
     end
 
     private def client_move_in_date_present_if_status_complete
-      if status == 'completed' && client_move_in_date.blank?
-        errors.add :client_move_in_date, 'must be filled in'
-      end
+      errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
       # addresses are required for externally housed clients
-      if status == 'completed' && match.opportunity.voucher.unit.blank? && external_software_used && address.blank?
-        errors.add :address, 'must be filled in'
-      end
+      errors.add :address, 'must be filled in' if status == 'completed' && match.opportunity.voucher.unit.blank? && external_software_used && address.blank?
     end
   end
 end

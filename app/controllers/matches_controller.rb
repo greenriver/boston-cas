@@ -40,14 +40,13 @@ class MatchesController < ApplicationController
 
   private
 
-    def find_match!
-      @match = match_scope.find(params[:id])
-      # Prevent anyone other than an admin from seeing the DND initial review step
-      raise ActiveRecord::RecordNotFound unless can_reject_matches? || @match.past_first_step_or_all_steps_visible?
-    end
+  def find_match!
+    @match = match_scope.find(params[:id])
+    # Prevent anyone other than an admin from seeing the DND initial review step
+    raise ActiveRecord::RecordNotFound unless can_reject_matches? || @match.on_or_after_first_client_step?
+  end
 
-    def prevent_page_caching
-      response.headers['Cache-Control'] = 'private, max-age=0, no-cache, no-store'
-    end
-
+  def prevent_page_caching
+    response.headers['Cache-Control'] = 'private, max-age=0, no-cache, no-store'
+  end
 end

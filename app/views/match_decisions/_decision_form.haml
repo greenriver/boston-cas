@@ -23,10 +23,7 @@
             .alert.alert-danger
               = link_to @match.client.full_name, client_path(@match.client)
               Does not have a full housing release on file.
-        .form-actions
-          %button{class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)}
-            %i.icon-checkmark
-            Accept Match
+        = render 'match_decisions/continue_button', text: 'Accept Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
 
     - if can_reject_matches?
       = render 'match_decisions/decline_and_cancel_actions', form: form

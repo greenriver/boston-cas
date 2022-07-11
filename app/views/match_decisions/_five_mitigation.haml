@@ -10,10 +10,7 @@
           .o-choose__content
             .form-group.jSelections
               =form.input :mitigations, as: :check_boxes, collection: @match.match_mitigation_reasons, checked: @match.match_mitigation_reasons.addressed.pluck(:id), label: 'Successfully mitigated', input_html: {disabled: (!@decision.editable?)}
-            .form-actions
-              %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
-                %i.icon-checkmark
-                Continue Match
+            = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
         = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, the #{@match.match_route.contact_label_for(:dnd_staff_contacts)}  will be informed of the decision."
 
 - if(@decision.editable?)
