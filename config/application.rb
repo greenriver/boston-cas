@@ -56,7 +56,6 @@ module BostonCa
         request_time: Time.current,
         application: Rails.application.class,
         server_protocol: event.payload[:server_protocol],
-        forwarded_for: event.payload[:forwarded_for],
         host: event.payload[:host],
         remote_ip: event.payload[:remote_ip],
         ip: event.payload[:ip],
