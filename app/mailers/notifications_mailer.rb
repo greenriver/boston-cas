@@ -419,6 +419,12 @@ class NotificationsMailer < DatabaseMailer
 
   # Match Route Seven
 
+  def approve_match_housing_subsidy_admin_from_dnd
+    notification = params[:notification]
+    setup_instance_variables notification
+    mail(to: @contact.email, subject: "Match accepted by #{_('DND')} - Requires Your Action")
+  end
+
   def match_in_progress_shelter_agency
     notification = params[:notification]
     setup_instance_variables notification
