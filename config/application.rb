@@ -19,6 +19,9 @@ module BostonCa
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    # https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
+    config.active_record.use_yaml_unsafe_load = true
+
     # Use the responders controller from the responders gem
     config.app_generators.scaffold_controller :responders_controller
 
