@@ -196,6 +196,26 @@
     {
       "warning_type": "Command Injection",
       "warning_code": 14,
+      "fingerprint": "54f8e790a2519455109daadf5dd74297f7684aa397825fa9c2f1bf9bdef73192",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 161,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git ls-remote origin | grep refs/heads/#{`git rev-parse --abbrev-ref HEAD`.chomp}$`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_check_that_you_pushed_to_remote!"
+      },
+      "user_input": "`git rev-parse --abbrev-ref HEAD`.chomp",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
       "fingerprint": "615f7900b129c22f4d71c443ead85e0694fc30435dfdc15e52ec03a94d2a3057",
       "check_name": "Execute",
       "message": "Possible command injection",
@@ -240,7 +260,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 164,
+      "line": 162,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -260,7 +280,7 @@
       "check_name": "VerbConfusion",
       "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
       "file": "app/controllers/application_controller.rb",
-      "line": 96,
+      "line": 97,
       "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
       "code": "return unless request.get?",
       "render_path": null,
@@ -280,7 +300,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 379,
+      "line": 377,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`docker image ls -f 'reference=#{repo_name}' | grep \"#{_ruby_version}-#{_pre_cache_version}--pre-cache\"`",
       "render_path": null,
@@ -311,26 +331,6 @@
       },
       "user_input": "value_as_array(requirement.variable)",
       "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "afb39717e433c0f281415f74557735acd21b0970bcf69d294dd987a63f2ee6eb",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 163,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`git ls-remote origin | grep #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Deployer",
-        "method": "_check_that_you_pushed_to_remote!"
-      },
-      "user_input": "`git rev-parse --abbrev-ref HEAD`.chomp",
-      "confidence": "Medium",
       "note": ""
     },
     {
@@ -381,7 +381,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 158,
+      "line": 156,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -720,6 +720,6 @@
       "note": ""
     }
   ],
-  "updated": "2022-05-28 18:52:12 +0000",
+  "updated": "2022-07-15 12:46:12 +0000",
   "brakeman_version": "5.0.4"
 }
