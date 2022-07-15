@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+= "#{_('DND')} has accepted a match for the client below, and it is now ready for your action."
+\
+View details here:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'
