@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_24_201419) do
+ActiveRecord::Schema.define(version: 2022_07_21_125102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -948,6 +948,15 @@ ActiveRecord::Schema.define(version: 2022_06_24_201419) do
     t.integer "tc_hat_total_housing_rank"
     t.integer "days_homeless"
     t.boolean "pregnancy_status", default: false
+    t.boolean "jail_caused_episode", default: false
+    t.boolean "income_caused_episode", default: false
+    t.boolean "ipv_caused_episode", default: false
+    t.boolean "violence_caused_episode", default: false
+    t.boolean "chronic_health_caused_episode", default: false
+    t.boolean "acute_health_caused_episode", default: false
+    t.boolean "idd_caused_episode", default: false
+    t.boolean "pregnant", default: false
+    t.boolean "pregnant_under_28_weeks", default: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end

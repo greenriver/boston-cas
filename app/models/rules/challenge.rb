@@ -11,15 +11,15 @@ class Rules::Challenge < Rule
 
   def available_challenges
     [
-      'No Income/Set Income',
-      'Domestic Violence',
-      'No rental history',
       'Bad Credit',
+      'Domestic Violence',
       'Eviction History',
-      'Misdemeanor',
       'Felony Conviction /Criminal History',
-      'Sex Offender',
       'Meth production conviction',
+      'Misdemeanor',
+      'No Income/Set Income',
+      'No rental history',
+      'Sex Offender',
     ].map { |v| [v.downcase, v] }
   end
 

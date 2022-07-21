@@ -11,12 +11,13 @@ class Rules::Strength < Rule
 
   def available_strengths
     [
+      'Employable Skills',
+      'Employment Income',
+      'Good Credit',
+      'No Disabling Conditions',
+      'Recent Positive Rental History',
       'Reliable Vehicle',
       'Regular Income',
-      'Employable Skills',
-      'No Disabling Conditions',
-      'Good Credit',
-      'Recent Positive Rental History',
     ].map { |v| [v.downcase, v] }
   end
 

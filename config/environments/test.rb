@@ -58,4 +58,9 @@ Rails.application.configure do
 
   # Devise requires a default URL
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'] }
+
+  config.log_level = ENV.fetch('LOG_LEVEL') { 'info' }.to_sym
+  # Don't echo everything to STDOUT in the test environment
+  config.lograge.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
+  config.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
 end
