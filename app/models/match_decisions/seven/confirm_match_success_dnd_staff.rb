@@ -6,7 +6,7 @@
 
 module MatchDecisions::Seven
   class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
-    validate :note_present_if_status_rejected
+    # validate :note_present_if_status_rejected
 
     def statuses
       {

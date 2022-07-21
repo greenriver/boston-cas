@@ -229,6 +229,7 @@ Rails.application.routes.draw do
     get :operational
     get :cache_status
     get :details
+    get :ping
   end
 
   resources :deidentified_clients do

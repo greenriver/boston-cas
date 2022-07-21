@@ -1,10 +1,12 @@
 # A sample Gemfile
 source 'https://rubygems.org'
 
+gem 'activerecord', '>= 6.0.5.1' # >= 6.0.5.1 due to CVE-2022-32224
 gem 'activerecord-import'
 gem 'pg', '~> 0.20.0'
 gem 'rails', '~>6.0'
 gem 'rails-html-sanitizer', '>= 1.4.3' # >= 1.4.3 due to CVE-2022-32209
+gem 'activerecord', '>= 6.0.5.1' # for CVE-2022-32224
 
 gem 'bcrypt'
 gem 'bootsnap'
