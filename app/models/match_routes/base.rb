@@ -80,7 +80,19 @@ module MatchRoutes
     end
 
     def on_or_after_first_client_step?(current_decision)
-      self.class.match_steps[current_decision.class.name] >= first_client_step_number
+      on_first_client_step?(current_decision) || after_first_client_step?(current_decision)
+    end
+
+    def on_first_client_step?(current_decision)
+      return false unless self.class.match_steps[current_decision.class.name].present?
+
+      self.class.match_steps[current_decision.class.name] == first_client_step_number
+    end
+
+    def after_first_client_step?(current_decision)
+      return false unless self.class.match_steps[current_decision.class.name].present?
+
+      self.class.match_steps[current_decision.class.name] > first_client_step_number
     end
 
     def success_decision

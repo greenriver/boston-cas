@@ -27,11 +27,7 @@
                     = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
 
               = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
-              .form-actions
-                %button{class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
-                  %i.icon-checkmark
-                  Continue Match
-
+              = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form
         - elsif @decision.declineable_by?(current_contact)

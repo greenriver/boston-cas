@@ -12,10 +12,6 @@
             .o-choose__content
               - if @decision.status.to_s.in?(['pending', 'expiration_update'])
                 %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
-                .form-actions
-                  %button{class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?)}
-                    %i.icon-checkmark
-                    Acknowledge Receipt of Match Details
-
+                = render 'match_decisions/continue_button', text: 'Acknowledge Receipt of Match Details', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) }
           - if can_delete_matches?
             = render 'match_decisions/destroy_actions', form: form

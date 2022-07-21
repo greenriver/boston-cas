@@ -22,6 +22,7 @@ module MatchPrioritization
         MatchPrioritization::VispdatPriorityScore,
         MatchPrioritization::DaysHomeless,
         MatchPrioritization::DaysHomelessPopulations,
+        MatchPrioritization::DaysHomelessVeteransFamiliesYouth,
         MatchPrioritization::DaysHomelessLastThreeYears,
         MatchPrioritization::DaysHomelessLastThreeYearsRandomTieBreaker,
         MatchPrioritization::DaysHomelessLastThreeYearsAssessmentDate,

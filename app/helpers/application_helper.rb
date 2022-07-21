@@ -156,7 +156,7 @@ module ApplicationHelper
   end
 
   def git_revision
-    File.read(File.join(Rails.root, 'REVISION'))
+    ENV['DEPLOYMENT_ID']&.split('::').try(:[], 2)
   rescue StandardError
     'unknown revision'
   end

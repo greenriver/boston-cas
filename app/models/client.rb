@@ -352,6 +352,15 @@ class Client < ApplicationRecord
 
   def days_homeless_populations(*)
     {
+      'Adult and Child' => yes_no(family_member),
+      'Veteran' => yes_no(veteran),
+      'Youth' => yes_no(is_currently_youth || age&.between?(18, 24)),
+      'Days Homeless' => days_homeless,
+    }.map { |k, v| "#{k}: #{v}" }.join('; ')
+  end
+
+  def days_homeless_veterans_families_youth(*)
+    {
       'Veteran' => yes_no(veteran),
       'Adult and Child' => yes_no(family_member),
       'Youth' => yes_no(is_currently_youth || age&.between?(18, 24)),

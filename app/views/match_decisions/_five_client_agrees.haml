@@ -8,8 +8,5 @@
               .c-choice-icon.c-choice-icon--confirm.mr-4
               %h3 Client Agrees to Match
           .o-choose__content
-            .form-actions
-              %button{ class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
-                %i.icon-checkmark
-                Continue Match
+            = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
         = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, #{@match.match_route.contact_label_for(:housing_subsidy_admin_contacts)} will be informed of the decision."

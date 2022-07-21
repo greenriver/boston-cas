@@ -1,4 +1,5 @@
 require_relative 'boot'
+require_relative "../app/logger/log_formatter.rb"
 
 require 'rails/all'
 
@@ -18,6 +19,9 @@ module BostonCa
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+    # https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
+    config.active_record.use_yaml_unsafe_load = true
 
     # Use the responders controller from the responders gem
     config.app_generators.scaffold_controller :responders_controller
@@ -47,18 +51,30 @@ module BostonCa
     config.sandbox_email_mode = true
 
     config.lograge.enabled = true
+    config.lograge.logger = ActiveSupport::Logger.new(STDOUT)
+    config.lograge.formatter = Lograge::Formatters::Json.new
+    config.lograge.base_controller_class = ['ActionController::Base']
     config.lograge.custom_options = ->(event) do
       {
+        request_time: Time.current,
+        application: Rails.application.class,
         server_protocol: event.payload[:server_protocol],
-        forwarded_for: event.payload[:forwarded_for],
+        host: event.payload[:host],
         remote_ip: event.payload[:remote_ip],
+        ip: event.payload[:ip],
         session_id: event.payload[:session_id],
         user_id: event.payload[:user_id],
+        process_id: Process.pid,
         pid: event.payload[:pid],
-        request_id: event.payload[:request_id],
-        request_start: event.payload[:request_start]
+        request_id: event.payload[:request_id] || event.payload[:headers]['action_dispatch.request_id'],
+        request_start: event.payload[:request_start],
+        x_forwarded_for: event.payload[:x_forwarded_for],
+        rails_env: Rails.env,
+        exception: event.payload[:exception]&.first,
       }
     end
+    config.logger = ActiveSupport::Logger.new(STDOUT)
+    config.logger.formatter = LogFormatter.new
 
     # force all requests over ssl by default
     config.force_ssl = true
