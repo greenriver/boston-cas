@@ -15,7 +15,7 @@ class OpportunityMatchesController < ApplicationController
 
   def index
     clients_for_route = Client.available_for_matching(@opportunity.match_route)
-    @actives = @opportunity.active_matches.map { |match| match.client }
+    @actives = @opportunity.active_matches.map { |match| match.client }.compact
     @availables = @opportunity.matching_clients(clients_for_route)
     @matches = (@actives + @availables).uniq
     @sub_program = @opportunity.sub_program
