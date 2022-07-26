@@ -2,7 +2,7 @@
   - match_warning = "Activating this match will cancel all other active matches for #{client.name} on the #{@opportunity.match_route.title}."
 - else
   - match_warning = ''
-- if @opportunity.active_matches.exists?
+- if @opportunity.active_matches.exists? && @opportunity.active_matches.first.client.present?
   - text = 'Activate Match Canceling Current'
   - if match_warning.present?
     - match_warning += " In addition, it will cancel the current match involving #{@opportunity.active_matches.first.client.name}."

@@ -643,7 +643,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def poached!
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
-      client.make_available_in(match_route: match_route)
+      client&.make_available_in(match_route: match_route)
       opportunity.update! available_candidate: false
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
