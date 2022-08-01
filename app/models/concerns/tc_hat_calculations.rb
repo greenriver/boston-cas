@@ -28,22 +28,20 @@ module TcHatCalculations
 
     def client_history_options
       {
-        acute_care_need: 'Acute care need (e.g., severe infection, acute diabetic condition, mental health crisis)',
-        unsheltered: 'Currently unsheltered or living in a place unfit for human habitation',
-        open_case: 'Current open case with State Dept. of Family Services (CPS)',
         tc_hat_ed_visits: 'Four or more trips to the Emergency Room in the past year',
+        psychiatric_facility: 'One or more stays in a psychiatric facility (lifetime)',
+        jail_stay: 'One or more stays in prison/jail/correctional facility (lifetime)',
+        substance_use_facility: 'One or more stays in a substance abuse treatment facility (lifetime)',
+        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or group home)(lifetime)',
         youth_homelessness: 'Had one or more experiences of homelessness before the age of 25 (adults in house)',
+        no_cash: 'No earned income (from employment) during the past year',
+        partner_violence_survivor: 'Survivor of Intimate Partner Violence',
+        dv_survivor: 'Survivor of family violence, sexual violence, or sex trafficking',
+        unsheltered: 'Currently unsheltered or living in a place unfit for human habitation',
         household_chronic_health_condition: 'Household member living with a chronic health condition that is disabling',
+        acute_care_need: 'Acute care need (e.g., severe infection, acute diabetic condition, mental health crisis)',
         development_disorder: 'Intellectual/Developmental Disorder (IDD)',
         n_a: 'N/A (None of these apply)',
-        no_cash: 'No cash income during the past year',
-        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or group home)(lifetime)',
-        psychiatric_facility: 'One or more stays in a psychiatric facility (lifetime)',
-        substance_use_facility: 'One or more stays in a substance abuse treatment facility (lifetime)',
-        jail_stay: 'One or more stays in prison/jail/correctional facility (lifetime)',
-        dv_survivor: 'Survivor of family violence, sexual violence, or sex trafficking',
-        partner_violence_survivor: 'Survivor of Intimate Partner Violence',
-        foster_care: 'Was in foster care as a youth, at age 16 years or older',
       }.transform_keys(&:to_s)
     end
 

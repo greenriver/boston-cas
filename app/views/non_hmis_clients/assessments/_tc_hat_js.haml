@@ -24,9 +24,7 @@
 
     // Family
     $('input[name*="[tc_hat_household_type]"], input[name*="[tc_hat_client_history]"]').on('change', function(e) {
-      var family = $('input[name*="[tc_hat_household_type]"]:checked').val() == 'Adults with Children';
-      var checked = $('input[name*="[tc_hat_client_history]"][value="open_case"]').is(':checked');
-      var value = family || checked;
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val() == 'Adults with Children';
       var $question = $('input[name*="[open_case]"]').closest('.c-question');
       if(value !== undefined && value == true) {
         $question.removeClass('d-none');
