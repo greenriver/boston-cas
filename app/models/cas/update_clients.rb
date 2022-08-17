@@ -38,6 +38,11 @@ module Cas
           attrs = attributes_for_client(project_client)
           # Ignore merged clients
           attrs.delete(:available) if client.merged_into.present?
+          force_remove_unavailable_fors = attrs.delete(:force_remove_unavailable_fors)
+          # For anyone we've forced available in CAS, also make sure they are available on all routes
+          # this should be a small number of folks, so we won't bother batching it.
+          client.make_available_in_all_routes if force_remove_unavailable_fors
+
           # Special case for holds voucher on, because sometimes these come from matches and should not
           # be overridden
           client.holds_voucher_on = project_client.holds_voucher_on unless client.holds_internal_cas_voucher
