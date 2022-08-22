@@ -24,6 +24,7 @@ module Cas
           # Data has changed, see if we have any new matches
           Matching::RunEngineJob.perform_later
         end
+        remove_matches_with_deleted_clients
       end
     end
 
@@ -92,6 +93,16 @@ module Cas
         # everyone else just gets marked as available false
         client.destroy if client.client_opportunity_matches.in_process_or_complete.blank?
       end
+    end
+
+    # Handle race condition
+    def remove_matches_with_deleted_clients
+      # Destroys any ClientOpportunityMatch that points to a deleted client.
+      # This occurs when a client gets assigned to a match right after the
+      # client is deleted by the `remove_unused_clients` task. This can happen
+      # because the matching engine batch loads clients into memory.
+      all_clients = Client.pluck(:id)
+      ClientOpportunityMatch.where.not(client_id: all_clients).find_each(&:destroy)
     end
 
     def attributes_for_client project_client
