@@ -281,6 +281,7 @@ module Cas
         :assessor_last_name,
         :assessor_email,
         :assessor_phone,
+        :force_remove_unavailable_fors,
       ]
     end
 
