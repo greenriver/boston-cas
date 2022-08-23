@@ -38,9 +38,10 @@ module Cas
           attrs = attributes_for_client(project_client)
           # Ignore merged clients
           attrs.delete(:available) if client.merged_into.present?
-          force_remove_unavailable_fors = attrs.delete(:force_remove_unavailable_fors)
+
           # For anyone we've forced available in CAS, also make sure they are available on all routes
           # this should be a small number of folks, so we won't bother batching it.
+          force_remove_unavailable_fors = attrs.delete(:force_remove_unavailable_fors)
           client.make_available_in_all_routes if force_remove_unavailable_fors
 
           # Special case for holds voucher on, because sometimes these come from matches and should not
@@ -65,7 +66,9 @@ module Cas
       ProjectClient.needs_client.find_in_batches do |batch|
         clients = []
         batch.each do |project_client|
-          clients << Client.new(attributes_for_client(project_client))
+          attrs = attributes_for_client(project_client)
+          attrs.delete(:force_remove_unavailable_fors)
+          clients << Client.new(attrs)
         end
         result = Client.import(clients, all_or_none: true)
         raise "Failed to import #{clients.count} clients" if result.failed_instances.any?
