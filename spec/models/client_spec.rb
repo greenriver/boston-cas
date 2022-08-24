@@ -122,6 +122,18 @@ RSpec.describe Client, type: :model do
         prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
         expect(prioritized_clients).to eq(ordered_clients)
       end
+      it 'places nulls last in sort order' do
+        clients.each { |c| c.update(match_group: 1, physical_disability: true) }
+        clients[2].update(chronic_homeless: true, entry_date: Date.today, vispdat_score: 10)
+        clients[3].update(chronic_homeless: true, entry_date: Date.today, vispdat_score: nil)
+        clients[4].update(chronic_homeless: true, entry_date: nil, vispdat_score: 100)
+        clients[0].update(chronic_homeless: true, entry_date: nil, vispdat_score: 10)
+        clients[1].update(chronic_homeless: nil, entry_date: Date.today, vispdat_score: nil)
+
+        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
+        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
+        expect(prioritized_clients).to eq(ordered_clients)
+      end
     end
   end
 
