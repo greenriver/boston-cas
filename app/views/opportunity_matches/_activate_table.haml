@@ -12,6 +12,9 @@
           %tr
             %th Client Name
             %th.text-center= priority_label
+            - if supporting_data_columns.present?
+              - supporting_data_columns.map do |title, _|
+                %th.text-center= title
             %th.text-center Other Active Matches
             - if can_activate_matches?
               %th.text-center Activate Match?
@@ -30,6 +33,10 @@
                 = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
 
               %td.text-center= priority_value(client)
+              - if supporting_data_columns.present?
+                - supporting_data_columns.map do |title, method|
+                  - value = client.send(method)
+                  %td.text-center= [TrueClass, FalseClass].include?(value.class) ? checkmark(value) : value
               %td.text-center
                 = render 'client_match_routes', client: client
 

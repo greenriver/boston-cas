@@ -77,6 +77,14 @@ module MatchPrioritization
       days_homeless_labels
     end
 
+    def supporting_data_columns
+      self.class.supporting_data_columns
+    end
+
+    def self.supporting_data_columns
+      nil
+    end
+
     private def days_homeless_labels
       {
         days_homeless: {

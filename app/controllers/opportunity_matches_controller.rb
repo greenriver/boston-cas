@@ -79,6 +79,11 @@ class OpportunityMatchesController < ApplicationController
   end
   helper_method :priority_label
 
+  def supporting_data_columns
+    @opportunity.match_route.match_prioritization.supporting_data_columns
+  end
+  helper_method :supporting_data_columns
+
   def priority_value(client)
     meth = @opportunity.match_route.match_prioritization.client_prioritization_value_method
     if client.class.column_names.include?(meth.to_s)

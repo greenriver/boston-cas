@@ -276,6 +276,8 @@ module Cas
         :assessor_last_name,
         :assessor_email,
         :assessor_phone,
+        :match_group,
+        :encampment_decomissioned,
       ]
     end
 

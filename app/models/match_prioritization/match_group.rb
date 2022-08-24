@@ -23,5 +23,13 @@ module MatchPrioritization
     def self.client_prioritization_value_method
       'match_group'
     end
+
+    def self.supporting_data_columns
+      {
+        'Encampment Decomissioned' => :encampment_decomissioned?,
+        'Veteran' => :veteran?,
+        'Chronic' => :chronic_homeless?,
+      }
+    end
   end
 end
