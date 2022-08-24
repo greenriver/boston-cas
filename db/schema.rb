@@ -1299,6 +1299,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_201440) do
     t.integer "hmis_days_homeless_last_three_years"
     t.integer "match_group"
     t.boolean "encampment_decomissioned", default: false
+    t.boolean "force_remove_unavailable_fors", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
