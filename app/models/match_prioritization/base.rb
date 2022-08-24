@@ -31,7 +31,7 @@ module MatchPrioritization
         MatchPrioritization::AssessmentScoreFundingTieBreaker,
         MatchPrioritization::Rank,
         MatchPrioritization::HoldsVoucherOn,
-        MatchPrioritization::MatchGroupDisability,
+        MatchPrioritization::MatchGroup,
       ]
     end
 

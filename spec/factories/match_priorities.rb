@@ -26,7 +26,7 @@ FactoryBot.define do
   factory :priority_rank, class: 'MatchPrioritization::Rank' do
     active { true }
   end
-  factory :priority_match_group_disability, class: 'MatchPrioritization::MatchGroupDisability' do
+  factory :priority_match_group_disability, class: 'MatchPrioritization::MatchGroup' do
     active { true }
   end
 end
