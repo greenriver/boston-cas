@@ -92,6 +92,25 @@ RSpec.describe Client, type: :model do
         expect(Client.prioritized(route, Client.all).pluck(:id, :days_homeless_in_last_three_years, :entry_date, :tie_breaker)).to eq(ordered_clients)
       end
     end
+
+    context 'when prioritized by MatchGroup' do
+      let(:priority) { create :priority_match_group }
+      let(:route) { create :default_route, match_prioritization: priority }
+      it 'is an ActiveRecord::Relation' do
+        expect(Client.prioritized(route, Client.all)).to be_an ActiveRecord::Relation
+      end
+      it 'orders by match_group, then by entry_date, then by vispdat_score' do
+        clients[2].update(match_group: 1, entry_date: 1.year.ago, vispdat_score: 100) # 1 (vispdat tie breaker)
+        clients[3].update(match_group: 1, entry_date: 1.year.ago, vispdat_score: 10) # 2
+        clients[4].update(match_group: 1, entry_date: 1.week.ago, vispdat_score: 10) # 3 (entry date)
+        clients[0].update(match_group: 3, entry_date: 1.month.ago, vispdat_score: nil) # 4 (entry date)
+        clients[1].update(match_group: 3, entry_date: Date.today, vispdat_score: 100) # 5
+
+        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :match_group, :entry_date, :vispdat_score)
+        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :match_group, :entry_date, :vispdat_score)
+        expect(prioritized_clients).to eq(ordered_clients)
+      end
+    end
   end
 
   let(:bob_smith) { create :client, first_name: 'Bob', last_name: 'Smith' }
