@@ -20,8 +20,20 @@ module MatchPrioritization
       scope.order(vets, family, is_youth, age_youth, days)
     end
 
+    def self.client_prioritization_value_label
+      'Cumulative days homeless'
+    end
+
     def self.client_prioritization_value_method
-      'days_homeless_veterans_families_youth'
+      'days_homeless'
+    end
+
+    def self.supporting_data_columns
+      {
+        'Adult and Child' => ->(client) { client.family_member? },
+        'Veteran' => ->(client) { client.veteran? },
+        'Youth' => ->(client) { client.is_currently_youth? || client.age&.between?(18, 24) },
+      }
     end
   end
 end

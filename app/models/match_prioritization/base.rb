@@ -85,6 +85,14 @@ module MatchPrioritization
       nil
     end
 
+    def client_prioritization_value_label
+      self.class.client_prioritization_value_label
+    end
+
+    def self.client_prioritization_value_label
+      nil
+    end
+
     private def days_homeless_labels
       {
         days_homeless: {

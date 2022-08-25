@@ -35,7 +35,7 @@
               %td.text-center= priority_value(client)
               - if supporting_data_columns.present?
                 - supporting_data_columns.map do |title, method|
-                  - value = client.send(method)
+                  - value = method.call(client)
                   %td.text-center= [TrueClass, FalseClass].include?(value.class) ? checkmark(value) : value
               %td.text-center
                 = render 'client_match_routes', client: client

@@ -26,9 +26,9 @@ module MatchPrioritization
 
     def self.supporting_data_columns
       {
-        'Encampment Decomissioned' => :encampment_decomissioned?,
-        'Veteran' => :veteran?,
-        'Chronic' => :chronic_homeless?,
+        'Encampment Decomissioned' => ->(client) { client.encampment_decomissioned? },
+        'Veteran' => ->(client) { client.veteran? },
+        'Chronic' => ->(client) { client.chronic_homeless? },
       }
     end
   end

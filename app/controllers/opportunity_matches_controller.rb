@@ -75,7 +75,7 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def priority_label
-    @opportunity.match_route.match_prioritization.title
+    @opportunity.match_route.match_prioritization.client_prioritization_value_label || @opportunity.match_route.match_prioritization.title
   end
   helper_method :priority_label
 
