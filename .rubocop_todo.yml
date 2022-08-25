@@ -96,6 +96,7 @@ Layout/DotPosition:
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/units_controller.rb'
@@ -300,6 +301,7 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/notification_sessions_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/style_guides_controller.rb'
@@ -625,6 +627,7 @@ Layout/IndentationConsistency:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -665,6 +668,7 @@ Layout/IndentationWidth:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -724,6 +728,7 @@ Layout/MultilineMethodCallBraceLayout:
 Layout/MultilineMethodCallIndentation:
   Exclude:
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/identified_client.rb'
@@ -759,6 +764,7 @@ Layout/SpaceAfterComma:
 # SupportedStylesInsidePipes: space, no_space
 Layout/SpaceAroundBlockParameters:
   Exclude:
+    - 'app/controllers/opportunity_matches_controller.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -857,6 +863,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/models/user_role.rb'
     - 'lib/util/mail/database_delivery.rb'
@@ -1196,6 +1203,7 @@ Lint/UnreachableCode:
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:
   Exclude:
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
@@ -1683,6 +1691,7 @@ Style/IfUnlessModifier:
 Style/InverseMethods:
   Exclude:
     - 'app/controllers/concerns/match_building_and_unit.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
 
 # Offense count: 23
 # Cop supports --auto-correct.
@@ -1769,6 +1778,7 @@ Style/NumericPredicate:
 # Configuration parameters: AllowSafeAssignment, AllowInMultilineConditions.
 Style/ParenthesesAroundCondition:
   Exclude:
+    - 'app/controllers/opportunity_matches_controller.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -1926,6 +1936,7 @@ Style/StringLiterals:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
@@ -1996,6 +2007,7 @@ Style/StructInheritance:
 Style/SymbolProc:
   Exclude:
     - 'app/controllers/admin/users_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/user.rb'
@@ -2068,6 +2080,7 @@ Style/TrailingCommaInHashLiteral:
   Exclude:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
+    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
