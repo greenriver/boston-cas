@@ -54,6 +54,7 @@ class NonHmisAssessment < ActiveRecord::Base
       'DeidentifiedPathwaysVersionThree',
       'IdentifiedTcHat',
       'DeidentifiedTcHat',
+      'IdentifiedCeAssessment',
     ].freeze
   end
 
@@ -77,6 +78,7 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedTcHat.new.for_matching).
       merge(DeidentifiedTcHat.new.for_matching).
+      merge(IdentifiedCeAssessment.new.for_matching).
       freeze
   end
 
