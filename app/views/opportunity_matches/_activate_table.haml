@@ -11,10 +11,8 @@
         %thead
           %tr
             %th Client Name
-            %th.text-center= priority_label
-            - if supporting_data_columns.present?
-              - supporting_data_columns.map do |title, _|
-                %th.text-center= title
+            - priority_labels.map do |label|
+              %th.text-center= label
             %th.text-center Other Active Matches
             - if can_activate_matches?
               %th.text-center Activate Match?
@@ -31,12 +29,9 @@
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
                 = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
-
-              %td.text-center= priority_value(client)
-              - if supporting_data_columns.present?
-                - supporting_data_columns.map do |title, method|
-                  - value = method.call(client)
-                  %td.text-center= [TrueClass, FalseClass].include?(value.class) ? checkmark(value) : value
+              - priority_values(client).map do |value|
+                - isBoolean = [TrueClass, FalseClass].include?(value.class)
+                %td.text-center= isBoolean ? checkmark(value) : value
               %td.text-center
                 = render 'client_match_routes', client: client
 

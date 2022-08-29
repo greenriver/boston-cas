@@ -17,7 +17,7 @@ module MatchPrioritization
           order(c_t[:rrh_assessment_collected_at].desc)
     end
 
-    def self.client_prioritization_value_method
+    def self.client_prioritization_summary_method
       'assessment_score'
     end
   end

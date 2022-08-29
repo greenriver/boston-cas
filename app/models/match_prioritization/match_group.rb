@@ -20,12 +20,9 @@ module MatchPrioritization
       scope.order(match_group, chronic, entry_date, vispdat_score)
     end
 
-    def self.client_prioritization_value_method
-      'match_group'
-    end
-
     def self.supporting_data_columns
       {
+        'Match Group' => ->(client) { client.match_group },
         'Encampment Decomissioned' => ->(client) { client.encampment_decomissioned? },
         'Veteran' => ->(client) { client.veteran? },
         'Chronic' => ->(client) { client.chronic_homeless? },

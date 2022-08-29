@@ -15,7 +15,7 @@ module MatchPrioritization
       scope.order(c_t[:days_homeless].desc)
     end
 
-    def self.client_prioritization_value_method
+    def self.client_prioritization_summary_method
       'days_homeless'
     end
   end

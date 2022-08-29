@@ -45,8 +45,8 @@ module MatchPrioritization
       raise NotImplementedError
     end
 
-    def self.client_prioritization_value_method
-      raise NotImplementedError
+    def self.client_prioritization_summary_method
+      nil
     end
 
     def self.prioritization_for_clients(scope, match_route:)
@@ -61,8 +61,21 @@ module MatchPrioritization
       self.class.title
     end
 
-    def client_prioritization_value_method
-      self.class.client_prioritization_value_method
+    def client_prioritization_summary_method
+      self.class.client_prioritization_summary_method
+    end
+
+    def client_prioritization_summary(client, match_route)
+      if self.class.client_prioritization_summary_method.present?
+        fn = self.class.client_prioritization_summary_method
+        return client.send(fn) if client.class.column_names.include?(fn.to_s)
+
+        client.send(fn, match_route: match_route)
+      elsif self.class.supporting_data_columns.present?
+        self.class.supporting_data_columns.map { |key, func| "#{key}: #{func.call(client)}" }.join('; ')
+      else
+        raise NotImplementedError
+      end
     end
 
     def self.c_t
@@ -82,14 +95,6 @@ module MatchPrioritization
     end
 
     def self.supporting_data_columns
-      nil
-    end
-
-    def client_prioritization_value_label
-      self.class.client_prioritization_value_label
-    end
-
-    def self.client_prioritization_value_label
       nil
     end
 
