@@ -308,6 +308,7 @@ class NonHmisClient < ApplicationRecord
       :currently_fleeing,
       :dv_date,
       :pregnancy_status,
+      :pregnant_under_28_weeks,
     ].each do |method|
       project_client[method] = current_assessment&.send(method)
     end
@@ -395,6 +396,7 @@ class NonHmisClient < ApplicationRecord
     assessment.tc_hat_household_type = 'Adults with Children' if family_member
     assessment.hiv_aids = hiv_aids
     assessment.pregnancy_status = pregnancy_status
+    assessment.pregnant_under_28_weeks = pregnant_under_28_weeks
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at
