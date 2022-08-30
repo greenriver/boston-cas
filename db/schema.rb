@@ -1046,6 +1046,7 @@ ActiveRecord::Schema.define(version: 2022_08_30_184031) do
     t.integer "days_homeless"
     t.boolean "sixty_plus"
     t.boolean "pregnancy_status", default: false
+    t.boolean "pregnant_under_28_weeks", default: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 

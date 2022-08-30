@@ -189,7 +189,7 @@ class NonHmisClient < ApplicationRecord
     project_client.last_name = fix_last_name
     project_client.non_hmis_client_identifier = client_identifier
     project_client.active_cohort_ids = active_cohort_ids
-    project_client.date_of_birth = date_of_birth
+    project_client.date_of_birth = date_of_birth || current_assessment&.date_of_birth
     project_client.ssn = ssn
     project_client.middle_name = middle_name
     project_client.gender = gender

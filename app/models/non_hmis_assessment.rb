@@ -314,6 +314,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :tc_hat_mobile_home,
       :tc_hat_total_housing_rank,
       :days_homeless,
+      :pregnancy_status,
+      :pregnant_under_28_weeks,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

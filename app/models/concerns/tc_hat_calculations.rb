@@ -26,6 +26,17 @@ module TcHatCalculations
       days_homeless
     end
 
+    def rrh_desired
+      full_time_employed || rrh_successful_exit
+    end
+
+    # Fake the dob if the client is < 60
+    def date_of_birth
+      return unless sixty_plus
+
+      61.years.ago.to_date
+    end
+
     def client_history_options
       {
         tc_hat_ed_visits: 'Four or more trips to the Emergency Room in the past year',
@@ -476,7 +487,7 @@ module TcHatCalculations
           as: :pretty_boolean_group,
           number: 'E-8',
         },
-        pregnant: {
+        pregnancy_status: {
           label: 'Are you currently pregnant?',
           collection: {
             'Yes' => true,
