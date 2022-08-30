@@ -34,5 +34,8 @@
       %span.c-detailed-list__label Last Homeless Contact
       %span.c-detailed-list__value= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
     %li.c-detailed-list__item
+      %span.c-detailed-list__label Encampment Decomissioned
+      %span.c-detailed-list__value= boolean_icon @client.encampment_decomissioned
+    %li.c-detailed-list__item
       %span.c-detailed-list__label Chronically Homeless
       %span.c-detailed-list__value= boolean_icon @client.chronic_homeless

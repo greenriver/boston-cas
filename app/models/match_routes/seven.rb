@@ -49,5 +49,9 @@ module MatchRoutes
     def initial_contacts_for_match
       :dnd_staff_contacts
     end
+
+    def show_hearing_date
+      false
+    end
   end
 end

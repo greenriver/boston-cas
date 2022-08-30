@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_21_125102) do
+ActiveRecord::Schema.define(version: 2022_08_24_194138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(version: 2022_07_21_125102) do
     t.integer "hmis_days_homeless_all_time"
     t.integer "hmis_days_homeless_last_three_years"
     t.integer "match_group"
+    t.boolean "encampment_decomissioned", default: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1306,6 +1307,8 @@ ActiveRecord::Schema.define(version: 2022_07_21_125102) do
     t.integer "hmis_days_homeless_all_time"
     t.integer "hmis_days_homeless_last_three_years"
     t.integer "match_group"
+    t.boolean "force_remove_unavailable_fors", default: false
+    t.boolean "encampment_decomissioned", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

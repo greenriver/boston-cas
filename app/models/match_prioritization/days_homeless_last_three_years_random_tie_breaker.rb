@@ -15,7 +15,7 @@ module MatchPrioritization
         order(c_t[:tie_breaker].asc)
     end
 
-    def self.client_prioritization_value_method
+    def self.client_prioritization_summary_method
       'days_homeless_in_last_three_years'
     end
 
