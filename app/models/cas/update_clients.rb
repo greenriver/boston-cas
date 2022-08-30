@@ -285,6 +285,8 @@ module Cas
         :assessor_email,
         :assessor_phone,
         :force_remove_unavailable_fors,
+        :match_group,
+        :encampment_decomissioned,
       ]
     end
 

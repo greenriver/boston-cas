@@ -15,7 +15,7 @@ module MatchPrioritization
       scope.order(c_t[:holds_voucher_on].asc)
     end
 
-    def self.client_prioritization_value_method
+    def self.client_prioritization_summary_method
       'holds_voucher_on'
     end
   end

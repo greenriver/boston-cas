@@ -74,20 +74,28 @@ class OpportunityMatchesController < ApplicationController
     }
   end
 
-  def priority_label
-    @opportunity.match_route.match_prioritization.title
-  end
-  helper_method :priority_label
+  def priority_labels
+    supporting_data_columns = @opportunity.match_route.match_prioritization.supporting_data_columns
+    return supporting_data_columns.keys if supporting_data_columns.present?
 
-  def priority_value(client)
-    meth = @opportunity.match_route.match_prioritization.client_prioritization_value_method
-    if client.class.column_names.include?(meth.to_s)
-      client.send(meth)
-    else
-      client.send(meth, match_route: @opportunity.match_route)
-    end
+    [@opportunity.match_route.match_prioritization.title]
   end
-  helper_method :priority_value
+  helper_method :priority_labels
+
+  def priority_values(client)
+    supporting_data_columns = @opportunity.match_route.match_prioritization.supporting_data_columns
+    return supporting_data_columns.values.map { |fn| fn.call(client) } if supporting_data_columns.present?
+
+    fn = @opportunity.match_route.match_prioritization.client_prioritization_summary_method
+    value = if client.class.column_names.include?(fn.to_s)
+      client.send(fn)
+    else
+      client.send(fn, match_route: @opportunity.match_route)
+    end
+
+    [value]
+  end
+  helper_method :priority_values
 
   def match_routes(client)
     counts = client.client_opportunity_matches.active.open.
