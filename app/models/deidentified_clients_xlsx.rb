@@ -37,6 +37,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       rescue StandardError
         next
       end
+
       cleaned[:agency_id] = agency&.id
       cleaned[:identified] = false # mark as de-identified client
       cleaned[:available] = true if @update_availability
@@ -79,6 +80,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     result[:calculated_chronic_homelessness] = yes_no_to_bool(client, :chronic_homeless, row[:chronic_homeless]) ? 1 : 0
     result.delete(:chronic_homeless)
     result[:pregnancy_status] = yes_no_to_bool(client, :pregnancy_status, row[:pregnancy_status])
+    result[:pregnant_under_28_weeks] = result[:pregnancy_status]
     result[:veteran] = yes_no_to_bool(client, :veteran, row[:veteran])
     result[:hiv_aids] = yes_no_to_bool(client, :hiv_aids, row[:hiv_aids])
     result[:health_prioritized] = yes_no_to_bool(client, :health_prioritized, row[:health_prioritized])
@@ -115,8 +117,11 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     when 2
       'Arlington'
     else
-      client.errors.add(field, "Unable to parse neighborhood identifier: #{val}")
-      return nil # Don't convert invalid values
+      # accept text values, we'll add an error if it's not a known neighborhood
+      val
+      # leaving the following 2 lines until we have confirmation that this change is ok
+      # client.errors.add(field, "Unable to parse neighborhood identifier: #{val}")
+      # return nil # Don't convert invalid values
     end
     neighborhood = Neighborhood.text_search(neighborhood_name).first
     unless neighborhood.present?
