@@ -20,7 +20,7 @@ class MatchCensus < ActiveRecord::Base
   end
 
   def self.populate_from_opportunity! opp
-    self.transaction do
+    transaction do
       # Clear any existing data for this opportunity on this day, and rebuild
       where(opportunity_id: opp.id, date: Date.current).delete_all
       clients_for_route = Client.available_for_matching(opp.match_route)
@@ -38,9 +38,7 @@ class MatchCensus < ActiveRecord::Base
       if active_matches.any?
         active_matches.each do |match|
           prioritization_value = nil
-          if match.client.present?
-            prioritization_value = match_prioritization.client_prioritization_summary(match.client, opp.match_route)
-          end
+          prioritization_value = match_prioritization.client_prioritization_summary(match.client, opp.match_route) if match.client.present?
 
           create!(
             date: Date.current,
@@ -54,7 +52,6 @@ class MatchCensus < ActiveRecord::Base
             active_client_id: match.client_id,
             active_client_prioritization_value: prioritization_value,
             requirements: opp.requirements_for_archive,
-
           )
         end
       else

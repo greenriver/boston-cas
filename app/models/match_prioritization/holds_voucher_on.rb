@@ -6,12 +6,11 @@
 
 module MatchPrioritization
   class HoldsVoucherOn < Base
-
     def self.title
       'Date voucher was assigned'
     end
 
-    def self.prioritization_for_clients(scope, match_route:)
+    def self.prioritization_for_clients(scope, match_route:) # rubocop:disable Lint/UnusedMethodArgument
       scope.order(c_t[:holds_voucher_on].asc)
     end
 

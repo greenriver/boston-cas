@@ -11,7 +11,7 @@ class NonHmisAssessment < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate
+  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth
   attr_writer :total_days_homeless_in_the_last_three_years
 
   belongs_to :non_hmis_client
@@ -314,6 +314,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :tc_hat_mobile_home,
       :tc_hat_total_housing_rank,
       :days_homeless,
+      :pregnancy_status,
+      :pregnant_under_28_weeks,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

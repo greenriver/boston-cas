@@ -6,14 +6,13 @@
 
 module MatchPrioritization
   class VispdatScore < Base
-
     def self.title
       'VI-SPDAT Score'
     end
 
-    def self.prioritization_for_clients(scope, match_route:)
-      scope.where.not(c_t[:vispdat_score].eq(nil))
-          .order(c_t[:vispdat_score].desc)
+    def self.prioritization_for_clients(scope, match_route:) # rubocop:disable Lint/UnusedMethodArgument
+      scope.where.not(c_t[:vispdat_score].eq(nil)).
+        order(c_t[:vispdat_score].desc)
     end
 
     def self.client_prioritization_summary_method

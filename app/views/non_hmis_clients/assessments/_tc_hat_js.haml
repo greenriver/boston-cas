@@ -23,18 +23,20 @@
     $('input[name*="[has_tax_id]"]').trigger('change');
 
     // Family
-    $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
-      var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
+    $('input[name*="[tc_hat_household_type]"], input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_household_type]"]:checked').val() == 'Adults with Children';
       var $question = $('input[name*="[open_case]"]').closest('.c-question');
-      if(value !== undefined && value == 'Adults with Children') {
+      if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
         $question.addClass('d-none');
       }
     });
     $('input[name*="[tc_hat_household_type]"]').trigger('change');
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
 
     // Youth
+    /*
     $('input[name*="[tc_hat_household_type]"]').on('change', function(e) {
 
       var value = $('input[name*="[tc_hat_household_type]"]:checked').val();
@@ -46,17 +48,68 @@
       }
     });
     $('input[name*="[tc_hat_household_type]"]').trigger('change');
+    */
 
     // IPV
     $('input[name*="[tc_hat_client_history]"]').on('change', function(e) {
       var value = $('input[name*="[tc_hat_client_history]"][value="partner_violence_survivor"]').is(':checked');
-      var $question = $('input[name*="[currently_fleeing]"]').closest('.c-question')
+      var $question = $('input[name*="[currently_fleeing]"]').closest('.c-question');
       if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
         $question.addClass('d-none');
       }
-      var $question = $('input[name*="[dv_date]"]').closest('.c-question')
+      $question = $('input[name*="[dv_date]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      // episode causes
+      value = $('input[name*="[tc_hat_client_history]"][value="jail_stay"]').is(':checked');
+      $question = $('input[name*="[jail_caused_episode]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      value = $('input[name*="[tc_hat_client_history]"][value="no_cash"]').is(':checked');
+      $question = $('input[name*="[income_caused_episode]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      value = $('input[name*="[tc_hat_client_history]"][value="partner_violence_survivor"]').is(':checked');
+      $question = $('input[name*="[ipv_caused_episode]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      value = $('input[name*="[tc_hat_client_history]"][value="dv_survivor"]').is(':checked');
+      $question = $('input[name*="[violence_caused_episode]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      value = $('input[name*="[tc_hat_client_history]"][value="household_chronic_health_condition"]').is(':checked');
+      $question = $('input[name*="[chronic_health_caused_episode]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      value = $('input[name*="[tc_hat_client_history]"][value="acute_care_need"]').is(':checked');
+      $question = $('input[name*="[acute_health_caused_episode]"]').closest('.c-question')
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+      value = $('input[name*="[tc_hat_client_history]"][value="development_disorder"]').is(':checked');
+      $question = $('input[name*="[idd_caused_episode]"]').closest('.c-question')
       if(value !== undefined && value == true) {
         $question.removeClass('d-none');
       } else {
@@ -64,6 +117,32 @@
       }
     });
     $('input[name*="[tc_hat_client_history]"]').trigger('change');
+
+    // ED visits
+    $('input[name*="[tc_hat_client_history]"]').on('change', function(e) {
+      var value = $('input[name*="[tc_hat_client_history]"][value="tc_hat_ed_visits"]').is(':checked');
+      var $question = $('input[name*="[tc_hat_ed_visits]"], input[name*="[tc_hat_hospitalizations]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        console.log('here')
+        $question.addClass('d-none');
+      }
+    });
+    $('input[name*="[tc_hat_client_history]"]').trigger('change');
+
+    // Pregnancy
+    $('input[name*="[pregnant]"]').on('change', function(e) {
+      var value = $('input[name*="[pregnant]"]:checked').val();
+      var $question = $('input[name*="[pregnant_under_28_weeks]"]').closest('.c-question');
+      if(value === undefined || value == 'false') {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
+    });
+    $('input[name*="[pregnant]"]').trigger('change');
+
 
     // IDs
     $('input[name*="[state_id]"], input[name*="[birth_certificate]"], input[name*="[social_security_card]"]').on('change', function(e) {

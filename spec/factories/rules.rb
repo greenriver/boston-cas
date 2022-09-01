@@ -365,6 +365,10 @@ FactoryBot.define do
     name { 'Pregnant' }
     verb { 'be' }
   end
+  factory :pregnant_under_28_weeks, class: 'Rules::PregnantUnder28Weeks' do
+    name { 'Pregnant less than 28 weeks' }
+    verb { 'be' }
+  end
   factory :sro_ok, class: 'Rules::SroOk' do
     name { 'Ok wih SRO' }
     verb { 'be' }

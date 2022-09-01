@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_24_201440) do
+ActiveRecord::Schema.define(version: 2022_08_30_184031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -306,6 +306,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_201440) do
     t.integer "hmis_days_homeless_last_three_years"
     t.integer "match_group"
     t.boolean "encampment_decomissioned", default: false
+    t.boolean "pregnant_under_28_weeks", default: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -949,6 +950,15 @@ ActiveRecord::Schema.define(version: 2022_08_24_201440) do
     t.integer "tc_hat_total_housing_rank"
     t.integer "days_homeless"
     t.boolean "pregnancy_status", default: false
+    t.boolean "jail_caused_episode", default: false
+    t.boolean "income_caused_episode", default: false
+    t.boolean "ipv_caused_episode", default: false
+    t.boolean "violence_caused_episode", default: false
+    t.boolean "chronic_health_caused_episode", default: false
+    t.boolean "acute_health_caused_episode", default: false
+    t.boolean "idd_caused_episode", default: false
+    t.boolean "pregnant", default: false
+    t.boolean "pregnant_under_28_weeks", default: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1036,6 +1046,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_201440) do
     t.integer "days_homeless"
     t.boolean "sixty_plus"
     t.boolean "pregnancy_status", default: false
+    t.boolean "pregnant_under_28_weeks", default: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -1298,8 +1309,9 @@ ActiveRecord::Schema.define(version: 2022_08_24_201440) do
     t.integer "hmis_days_homeless_all_time"
     t.integer "hmis_days_homeless_last_three_years"
     t.integer "match_group"
-    t.boolean "encampment_decomissioned", default: false
     t.boolean "force_remove_unavailable_fors", default: false
+    t.boolean "encampment_decomissioned", default: false
+    t.boolean "pregnant_under_28_weeks", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

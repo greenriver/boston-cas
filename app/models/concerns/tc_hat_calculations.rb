@@ -26,24 +26,33 @@ module TcHatCalculations
       days_homeless
     end
 
+    def rrh_desired
+      full_time_employed || rrh_successful_exit
+    end
+
+    # Fake the dob if the client is < 60
+    def date_of_birth
+      return unless sixty_plus
+
+      61.years.ago.to_date
+    end
+
     def client_history_options
       {
-        acute_care_need: 'Acute care need (e.g., severe infection, acute diabetic condition, mental health crisis)',
-        unsheltered: 'Currently unsheltered or living in a place unfit for human habitation',
-        open_case: 'Current open case with State Dept. of Family Services (CPS)',
         tc_hat_ed_visits: 'Four or more trips to the Emergency Room in the past year',
+        psychiatric_facility: 'One or more stays in a psychiatric facility (lifetime)',
+        jail_stay: 'One or more stays in prison/jail/correctional facility (lifetime)',
+        substance_use_facility: 'One or more stays in a substance abuse treatment facility (lifetime)',
+        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or group home)(lifetime)',
         youth_homelessness: 'Had one or more experiences of homelessness before the age of 25 (adults in house)',
+        no_cash: 'No earned income (from employment) during the past year',
+        partner_violence_survivor: 'Survivor of Intimate Partner Violence',
+        dv_survivor: 'Survivor of family violence, sexual violence, or sex trafficking',
+        unsheltered: 'Currently unsheltered or living in a place unfit for human habitation',
         household_chronic_health_condition: 'Household member living with a chronic health condition that is disabling',
+        acute_care_need: 'Acute care need (e.g., severe infection, acute diabetic condition, mental health crisis)',
         development_disorder: 'Intellectual/Developmental Disorder (IDD)',
         n_a: 'N/A (None of these apply)',
-        no_cash: 'No cash income during the past year',
-        nursing_home: 'One or more stays in another type of residential facility (including a nursing home or group home)(lifetime)',
-        psychiatric_facility: 'One or more stays in a psychiatric facility (lifetime)',
-        substance_use_facility: 'One or more stays in a substance abuse treatment facility (lifetime)',
-        jail_stay: 'One or more stays in prison/jail/correctional facility (lifetime)',
-        dv_survivor: 'Survivor of family violence, sexual violence, or sex trafficking',
-        partner_violence_survivor: 'Survivor of Intimate Partner Violence',
-        foster_care: 'Was in foster care as a youth, at age 16 years or older',
       }.transform_keys(&:to_s)
     end
 
@@ -252,6 +261,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
+          number: 'B-9',
         },
         _section_c_preamble: {
           as: :partial,
@@ -414,6 +424,87 @@ module TcHatCalculations
           input_html: { multiple: true },
           number: 'E-1',
         },
+        jail_caused_episode: {
+          label: 'You have indicated your client has had one or more stays in prison/jail/correctional facility in their lifetime.  Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-2',
+        },
+        income_caused_episode: {
+          label: 'You have indicated your client has had NO earned income from employment during the past year. Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-3',
+        },
+        ipv_caused_episode: {
+          label: 'You have indicated your client is a survivor of Intimate Partner Violence. Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-4',
+        },
+        violence_caused_episode: {
+          label: 'You have indicated your client is a survivor of family violence, sexual violence, or sex trafficking. Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-5',
+        },
+        chronic_health_caused_episode: {
+          label: 'You have indicated that a household member is living with a chronic health condition that is disabling.  Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-6',
+        },
+        acute_health_caused_episode: {
+          label: 'You have indicated that the client has an acute health care need. Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-7',
+        },
+        idd_caused_episode: {
+          label: 'You have indicated that the client has an Intellectual/Developmental Disorder (IDD). Did this cause their current episode of homelessness?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-8',
+        },
+        pregnancy_status: {
+          label: 'Are you currently pregnant?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-9',
+        },
+        pregnant_under_28_weeks: {
+          label: 'If pregnant, is this your first pregnancy AND are you under 28 weeks in the course of the pregnancy?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'E-10',
+        },
         open_case: {
           label: 'Current open case with State Dept. of Family Services (CPS)?',
           collection: {
@@ -421,7 +512,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-2',
+          number: 'E-11',
         },
         foster_care: {
           label: 'Was in foster care as a youth, at age 16 years or older?',
@@ -430,7 +521,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-3',
+          number: 'E-12',
         },
         currently_fleeing: {
           label: '[CLIENT RESPONSE] You indicated a history of Intimate Partner Violence (IPV). Are you currently fleeing?',
@@ -439,31 +530,31 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-4',
+          number: 'E-13',
         },
         dv_date: {
           label: '[CLIENT RESPONSE] You indicated a history of Intimate Partner Violence (IPV). What was the most recent date the violence occurred? (This can be an estimated date)',
           as: :date_picker,
-          number: 'E-5',
+          number: 'E-14',
         },
         tc_hat_ed_visits: {
-          label: 'More than three emergency room visits in a year?',
+          label: 'Has the client had more than 3 hospitalizations or emergency room visits in a year?',
           collection: {
             'Yes' => true,
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-6',
+          number: 'E-15',
         },
-        tc_hat_hospitalizations: {
-          label: 'More than three hospitalization or emergency room visits in a year?',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-          },
-          as: :pretty_boolean_group,
-          number: 'E-7',
-        },
+        # tc_hat_hospitalizations: {
+        #   label: 'More than three hospitalization or emergency room visits in a year?',
+        #   collection: {
+        #     'Yes' => true,
+        #     'No' => false,
+        #   },
+        #   as: :pretty_boolean_group,
+        #   number: 'E-7',
+        # },
         sixty_plus: {
           label: 'Is the client 60 years old or older?',
           collection: {
@@ -471,7 +562,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-8',
+          number: 'E-16',
         },
         cirrhosis: {
           label: 'Does the client have cirrhosis of the liver?',
@@ -480,7 +571,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-9',
+          number: 'E-17',
         },
         end_stage_renal_disease: {
           label: 'Does the client have end stage renal disease?',
@@ -489,7 +580,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-10',
+          number: 'E-18',
         },
         heat_stroke: {
           label: 'Does the client have a history of Heat Stroke?',
@@ -498,7 +589,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-11',
+          number: 'E-19',
         },
         blind: {
           label: 'Is the client blind?',
@@ -507,7 +598,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-12',
+          number: 'E-20',
         },
         hiv_aids: {
           label: 'Does the client have HIV or AIDS?',
@@ -516,7 +607,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-13',
+          number: 'E-21',
         },
         tri_morbidity: {
           label: 'Does the client have "tri-morbidity" (co-occurring psychiatric, substance abuse, and a chronic medical condition)?',
@@ -525,7 +616,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-14',
+          number: 'E-22',
         },
         high_potential_for_victimization: {
           label: 'Is there a high potential for victimization?',
@@ -534,7 +625,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-15',
+          number: 'E-23',
         },
         self_harm: {
           label: 'Is there a danger of self harm or harm to other person in the community?',
@@ -543,7 +634,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-16',
+          number: 'E-24',
         },
         medical_condition: {
           label: 'Does the client have a chronic or acute medical condition?',
@@ -552,7 +643,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-17',
+          number: 'E-25',
         },
         psychiatric_condition: {
           label: 'Does the client have a chronic or acute psychiatric condition with extreme lack of judgement regarding safety?',
@@ -561,7 +652,7 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-18',
+          number: 'E-26',
         },
         substance_abuse_problem: {
           label: 'Does the client have a chronic or acute substance abuse with extreme lack of judgment regarding safety?',
@@ -570,11 +661,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'E-19',
+          number: 'E-27',
         },
         assessment_score: {
           label: 'Total Vulnerability Score',
-          number: 'E-20',
+          number: 'E-28',
         },
         _section_f_preamble: {
           as: :partial,
@@ -646,13 +737,21 @@ module TcHatCalculations
           as: :pretty_checkboxes_group,
           number: 'F-11',
         },
+        notes: {
+          label: 'Client Note',
+          number: 'F-12',
+        },
+        hoh_age: {
+          label: 'Age',
+          number: 'F-13',
+        },
         actively_homeless: {
           collection: {
             'Yes' => true,
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'F-12',
+          number: 'F-14',
         },
       }
     end

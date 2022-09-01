@@ -6,7 +6,6 @@
 
 module MatchPrioritization
   class Rank < Base
-
     def self.title
       'Rank'
     end
