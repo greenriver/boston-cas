@@ -90,6 +90,9 @@ Rails.application.configure do
 
   config.log_level = ENV.fetch('LOG_LEVEL') { 'debug' }.to_sym
   config.logger.formatter = ActiveSupport::Logger::SimpleFormatter.new
+  # Don't echo everything to STDOUT in the dev environment
+  config.lograge.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
+  config.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large

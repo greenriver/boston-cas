@@ -246,6 +246,7 @@ module Cas
         :case_manager_contact_info,
         :vash_eligible,
         :pregnancy_status,
+        :pregnant_under_28_weeks,
         :income_maximization_assistance_requested,
         :pending_subsidized_housing_placement,
         :rrh_th_desired,
@@ -285,6 +286,8 @@ module Cas
         :assessor_email,
         :assessor_phone,
         :force_remove_unavailable_fors,
+        :match_group,
+        :encampment_decomissioned,
       ]
     end
 

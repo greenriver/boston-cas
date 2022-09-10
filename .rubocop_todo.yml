@@ -96,7 +96,6 @@ Layout/DotPosition:
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/units_controller.rb'
@@ -106,7 +105,6 @@ Layout/DotPosition:
     - 'app/models/concerns/related_default_contacts.rb'
     - 'app/models/contact.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_prioritization/vispdat_score.rb'
     - 'app/models/program.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
@@ -207,7 +205,6 @@ Layout/EmptyLinesAroundAccessModifier:
 # Cop supports --auto-correct.
 Layout/EmptyLinesAroundArguments:
   Exclude:
-    - 'app/models/match_census.rb'
 
 # Offense count: 89
 # Cop supports --auto-correct.
@@ -301,7 +298,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/notification_sessions_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/style_guides_controller.rb'
@@ -344,14 +340,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_events/expiration_change.rb'
     - 'app/models/match_events/notification_delivery.rb'
-    - 'app/models/match_prioritization/assessment_score.rb'
-    - 'app/models/match_prioritization/assessment_score_length_homeless_tie_breaker.rb'
-    - 'app/models/match_prioritization/days_homeless.rb'
-    - 'app/models/match_prioritization/first_date_homeless.rb'
-    - 'app/models/match_prioritization/holds_voucher_on.rb'
-    - 'app/models/match_prioritization/rank.rb'
-    - 'app/models/match_prioritization/vispdat_priority_score.rb'
-    - 'app/models/match_prioritization/vispdat_score.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_progress_updates/hsa.rb'
     - 'app/models/match_progress_updates/hsp.rb'
@@ -627,7 +615,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -668,7 +655,6 @@ Layout/IndentationWidth:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -728,14 +714,9 @@ Layout/MultilineMethodCallBraceLayout:
 Layout/MultilineMethodCallIndentation:
   Exclude:
     - 'app/controllers/clients_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_prioritization/assessment_score.rb'
-    - 'app/models/match_prioritization/assessment_score_length_homeless_tie_breaker.rb'
-    - 'app/models/match_prioritization/vispdat_priority_score.rb'
-    - 'app/models/match_prioritization/vispdat_score.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/reporting/decisions.rb'
     - 'app/models/sub_program.rb'
@@ -764,7 +745,6 @@ Layout/SpaceAfterComma:
 # SupportedStylesInsidePipes: space, no_space
 Layout/SpaceAroundBlockParameters:
   Exclude:
-    - 'app/controllers/opportunity_matches_controller.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -863,7 +843,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/models/user_role.rb'
     - 'lib/util/mail/database_delivery.rb'
@@ -1203,7 +1182,6 @@ Lint/UnreachableCode:
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:
   Exclude:
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
@@ -1215,20 +1193,12 @@ Lint/UnusedMethodArgument:
   Exclude:
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/match_prioritization/assessment_score.rb'
-    - 'app/models/match_prioritization/assessment_score_length_homeless_tie_breaker.rb'
-    - 'app/models/match_prioritization/days_homeless.rb'
-    - 'app/models/match_prioritization/first_date_homeless.rb'
-    - 'app/models/match_prioritization/holds_voucher_on.rb'
-    - 'app/models/match_prioritization/vispdat_priority_score.rb'
-    - 'app/models/match_prioritization/vispdat_score.rb'
     - 'app/models/rule.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'
     - 'app/models/rules/age_greater_than_fifty_five.rb'
     - 'app/models/rules/age_greater_than_forty_five.rb'
     - 'app/models/rules/age_greater_than_sixteen.rb'
-    - 'app/models/rules/age_greater_than_sixty.rb'
     - 'app/models/rules/age_greater_than_sixty_five.rb'
     - 'app/models/rules/age_greater_than_sixty_two.rb'
     - 'app/models/rules/age_greater_than_twenty_five.rb'
@@ -1545,7 +1515,6 @@ Style/GuardClause:
     - 'app/models/rules/age_greater_than_fifty_five.rb'
     - 'app/models/rules/age_greater_than_forty_five.rb'
     - 'app/models/rules/age_greater_than_sixteen.rb'
-    - 'app/models/rules/age_greater_than_sixty.rb'
     - 'app/models/rules/age_greater_than_sixty_five.rb'
     - 'app/models/rules/age_greater_than_sixty_two.rb'
     - 'app/models/rules/age_greater_than_twenty_five.rb'
@@ -1674,7 +1643,6 @@ Style/IfUnlessModifier:
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_census.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
@@ -1691,7 +1659,6 @@ Style/IfUnlessModifier:
 Style/InverseMethods:
   Exclude:
     - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
 
 # Offense count: 23
 # Cop supports --auto-correct.
@@ -1778,7 +1745,6 @@ Style/NumericPredicate:
 # Configuration parameters: AllowSafeAssignment, AllowInMultilineConditions.
 Style/ParenthesesAroundCondition:
   Exclude:
-    - 'app/controllers/opportunity_matches_controller.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -1829,7 +1795,6 @@ Style/RedundantSelf:
     - 'app/models/client_note.rb'
     - 'app/models/concerns/availability.rb'
     - 'app/models/concerns/match_archive.rb'
-    - 'app/models/match_census.rb'
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/project_client.rb'
@@ -1936,7 +1901,6 @@ Style/StringLiterals:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
@@ -2007,7 +1971,6 @@ Style/StructInheritance:
 Style/SymbolProc:
   Exclude:
     - 'app/controllers/admin/users_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/user.rb'
@@ -2080,7 +2043,6 @@ Style/TrailingCommaInHashLiteral:
   Exclude:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/opportunity_matches_controller.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'

@@ -20,17 +20,16 @@ class MatchCensus < ActiveRecord::Base
   end
 
   def self.populate_from_opportunity! opp
-    self.transaction do
+    transaction do
       # Clear any existing data for this opportunity on this day, and rebuild
       where(opportunity_id: opp.id, date: Date.current).delete_all
       clients_for_route = Client.available_for_matching(opp.match_route)
       match_prioritization = opp.match_route.match_prioritization
-      prioritization_scheme = match_prioritization.class.client_prioritization_value_method
       # IDs of prioritized clients who match this opportunity, prioritized by route configuration
       available_client_ids = opp.matching_clients(clients_for_route).map do |client|
         {
           client_id: client.id,
-          score: client.public_send(prioritization_scheme),
+          score: match_prioritization.client_prioritization_summary(client, opp.match_route),
         }
       end
       sub_program = opp.sub_program
@@ -39,9 +38,7 @@ class MatchCensus < ActiveRecord::Base
       if active_matches.any?
         active_matches.each do |match|
           prioritization_value = nil
-          if match.client.present?
-            prioritization_value = match.client.public_send(prioritization_scheme)
-          end
+          prioritization_value = match_prioritization.client_prioritization_summary(match.client, opp.match_route) if match.client.present?
 
           create!(
             date: Date.current,
@@ -50,12 +47,11 @@ class MatchCensus < ActiveRecord::Base
             program_name: program.name,
             sub_program_name: sub_program.name,
             match_prioritization_id: match_prioritization.id,
-            prioritization_method_used: prioritization_scheme,
+            prioritization_method_used: match_prioritization.title,
             prioritized_client_ids: available_client_ids,
             active_client_id: match.client_id,
             active_client_prioritization_value: prioritization_value,
             requirements: opp.requirements_for_archive,
-
           )
         end
       else
@@ -66,7 +62,7 @@ class MatchCensus < ActiveRecord::Base
           sub_program_name: sub_program.name,
           prioritized_client_ids: available_client_ids,
           requirements: opp.requirements_for_archive,
-          prioritization_method_used: prioritization_scheme,
+          prioritization_method_used: match_prioritization.title,
           match_prioritization_id: match_prioritization.id,
         )
       end

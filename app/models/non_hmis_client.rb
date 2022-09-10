@@ -189,7 +189,7 @@ class NonHmisClient < ApplicationRecord
     project_client.last_name = fix_last_name
     project_client.non_hmis_client_identifier = client_identifier
     project_client.active_cohort_ids = active_cohort_ids
-    project_client.date_of_birth = date_of_birth
+    project_client.date_of_birth = date_of_birth || current_assessment&.date_of_birth
     project_client.ssn = ssn
     project_client.middle_name = middle_name
     project_client.gender = gender
@@ -308,6 +308,7 @@ class NonHmisClient < ApplicationRecord
       :currently_fleeing,
       :dv_date,
       :pregnancy_status,
+      :pregnant_under_28_weeks,
     ].each do |method|
       project_client[method] = current_assessment&.send(method)
     end
@@ -395,6 +396,7 @@ class NonHmisClient < ApplicationRecord
     assessment.tc_hat_household_type = 'Adults with Children' if family_member
     assessment.hiv_aids = hiv_aids
     assessment.pregnancy_status = pregnancy_status
+    assessment.pregnant_under_28_weeks = pregnant_under_28_weeks
 
     assessment.created_at = created_at
     assessment.updated_at = updated_at

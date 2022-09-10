@@ -6,7 +6,6 @@
 
 module MatchPrioritization
   class Rank < Base
-
     def self.title
       'Rank'
     end
@@ -18,7 +17,7 @@ module MatchPrioritization
         order(Arel.sql("tags ->>'#{tag_id}' ASC NULLS LAST"))
     end
 
-    def self.client_prioritization_value_method
+    def self.client_prioritization_summary_method
       'rank_for_tag'
     end
 

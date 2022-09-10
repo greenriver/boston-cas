@@ -350,28 +350,6 @@ class Client < ApplicationRecord
     tags.try(:[], tag_id.to_s)
   end
 
-  def days_homeless_populations(*)
-    {
-      'Adult and Child' => yes_no(family_member),
-      'Veteran' => yes_no(veteran),
-      'Youth' => yes_no(is_currently_youth || age&.between?(18, 24)),
-      'Days Homeless' => days_homeless,
-    }.map { |k, v| "#{k}: #{v}" }.join('; ')
-  end
-
-  def days_homeless_veterans_families_youth(*)
-    {
-      'Veteran' => yes_no(veteran),
-      'Adult and Child' => yes_no(family_member),
-      'Youth' => yes_no(is_currently_youth || age&.between?(18, 24)),
-      'Days Homeless' => days_homeless,
-    }.map { |k, v| "#{k}: #{v}" }.join('; ')
-  end
-
-  private def yes_no(bool)
-    bool ? 'Yes' : 'No'
-  end
-
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
