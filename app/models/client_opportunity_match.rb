@@ -95,6 +95,13 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :seven_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Seven::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Seven::ConfirmHsaDeclineDndStaff'
   has_decision :seven_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Seven::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Seven::ConfirmMatchSuccessDndStaff'
 
+  # Match Route 8
+  has_decision :eight_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Eight::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Eight::MatchRecommendationDndStaff'
+  has_decision :eight_record_voucher_date_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Eight::RecordVoucherDateHousingSubsidyAdmin', notification_class_name: 'Notifications::Eight::RecordVoucherDateHousingSubsidyAdmin'
+  has_decision :eight_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Eight::ConfirmHsaDeclineDndStaff'
+  has_decision :eight_lease_up, decision_class_name: 'MatchDecisions::Eight::LeaseUp', notification_class_name: 'Notifications::Eight::LeaseUp'
+  has_decision :eight_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Eight::ConfirmMatchSuccessDndStaff'
+
   has_one :current_decision
 
   has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
