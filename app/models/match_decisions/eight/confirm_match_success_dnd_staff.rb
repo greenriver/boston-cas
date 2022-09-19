@@ -6,8 +6,6 @@
 
 module MatchDecisions::Eight
   class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
-    # validate :note_present_if_status_rejected
-
     def statuses
       {
         pending: 'Pending',
@@ -67,10 +65,6 @@ module MatchDecisions::Eight
 
     def to_param
       :eight_confirm_match_success_dnd_staff
-    end
-
-    private def note_present_if_status_rejected
-      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'rejected'
     end
 
     class StatusCallbacks < StatusCallbacks

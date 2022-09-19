@@ -73,10 +73,6 @@ module MatchDecisions::Eight
       :eight_match_recommendation_dnd_staff
     end
 
-    private def note_present_if_status_declined
-      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
-    end
-
     private def decline_reason_scope(_contact)
       MatchDecisionReasons::DndStaffDecline.all
     end
