@@ -58,7 +58,10 @@ module MatchRoutes
 
     def self.ensure_all
       all_routes.each_with_index do |route, i|
-        route.first_or_create(weight: i)
+        route.first_or_create(weight: i) do |r|
+          r.active = false
+          r.save
+        end
       end
     end
 
