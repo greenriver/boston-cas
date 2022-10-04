@@ -67,7 +67,7 @@ module ClientOpportunityMatches
 
     def create_decisions!
       @@decision_types.each do |decision_type|
-        send("create_#{decision_type}_decision")
+        send("create_#{decision_type}_decision!")
       end
     end
 
