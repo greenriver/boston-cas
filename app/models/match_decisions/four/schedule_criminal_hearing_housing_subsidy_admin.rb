@@ -107,7 +107,7 @@ module MatchDecisions::Four
 
       def no_hearing
         # Set the next step status to approved and skip the next step
-        @decision.next_step.update(status: :accepted)
+        @decision.next_step.update!(status: :accepted)
         @decision.next_step.next_step.initialize_decision!
       end
 

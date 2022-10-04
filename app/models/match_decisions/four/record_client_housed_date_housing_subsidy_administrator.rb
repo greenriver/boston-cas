@@ -134,7 +134,7 @@ module MatchDecisions::Four
 
     private def client_move_in_date_present_if_status_complete
       errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
-      errors.add :address, 'must be filled in' if status == 'completed' && address.blank?
+      errors.add :address, 'must be filled in' if status == 'completed' && match.sub_program.program_type != 'Tenant-Based' && address.blank? && match.opportunity.voucher.unit.blank?
     end
   end
 end
