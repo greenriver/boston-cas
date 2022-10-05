@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Rules::Transgender, type: :model do
   describe 'clients_that_fit' do
-
     let!(:rule) { create :transgender }
 
     let!(:female) { create :client, female: true }
