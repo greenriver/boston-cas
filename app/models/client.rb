@@ -339,6 +339,30 @@ class Client < ApplicationRecord
   end
   alias age_on age
 
+  RACE_DESCRIPTIONS = {
+    am_ind_ak_native: 'American Indian, Alaska Native, or Indigenous',
+    asian: 'Asian or Asian American',
+    black_af_american: 'Black, African American, or African',
+    native_hi_pacific: 'Native Hawaiian or Pacific Islander',
+    white: 'White',
+  }.freeze
+
+  GENDER_DESCRIPTIONS = {
+    female: 'Female',
+    male: 'Male',
+    no_single_gender: 'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
+    transgender: 'Transgender',
+    questioning: 'Questioning',
+  }.freeze
+
+  def gender_descriptions
+    GENDER_DESCRIPTIONS.select { |k| send(k) }.values
+  end
+
+  def race_descriptions
+    RACE_DESCRIPTIONS.select { |k| send(k) }.values
+  end
+
   def cohorts
     return [] unless Warehouse::Base.enabled?
 

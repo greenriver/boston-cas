@@ -14,18 +14,18 @@
 
   .c-card__content-block.col-md-12.col-lg-6
     %h5 Home Phone
-    %span.c-card__content-block-text= @client.homephone || not_specified
+    %span.c-card__content-block-text= @client.homephone.presence || not_specified
   .c-card__content-block.col-md-12.col-lg-6
     %h5 Cell Phone
-    %span.c-card__content-block-text= @client.cellphone || not_specified
+    %span.c-card__content-block-text= @client.cellphone.presence || not_specified
   - if @client.workphone.present?
     .c-card__content-block.col-md-12.col-lg-6
       %h5 Work Phone
-      %span.c-card__content-block-text= @client.workphone || not_specified
+      %span.c-card__content-block-text= @client.workphone
   - if @client.pager.present?
     .c-card__content-block.col-md-12.col-lg-6
       %h5 Pager
-      %span.c-card__content-block-text= @client.pager || not_specified
+      %span.c-card__content-block-text= @client.pager
   - if @client.address.present?
     .c-card__content-block.col-md-12.col-lg-12
       %h5 Address
@@ -33,7 +33,7 @@
   - if @client.project_client.default_shelter_agency_contacts
     .c-card__content-block.col-md-12.col-lg-12
       %h5 #{_('Shelter Agency Contacts')} from HMIS
-      %span.c-card__content-block-text= @client.project_client.default_shelter_agency_contacts.join(', ')
+      %span.c-card__content-block-text= @client.project_client.default_shelter_agency_contacts.join(', ').presence || not_specified
   - if @client.case_manager_contact_info
     .c-card__content-block.col-md-12.col-lg-12
       %h5 Case Manager Contact
