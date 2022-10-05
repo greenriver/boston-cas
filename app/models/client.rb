@@ -16,9 +16,7 @@ class Client < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :ethnicity, foreign_key: :ethnicity_id, primary_key: :numeric
-  belongs_to :race, foreign_key: :race_id, primary_key: :numeric
   belongs_to :veteran_status, foreign_key: :veteran_status_id, primary_key: :numeric
-  belongs_to :gender, foreign_key: :gender_id, primary_key: :numeric
 
   has_one :project_client, primary_key: :id, foreign_key: :client_id
   has_many :building_clients

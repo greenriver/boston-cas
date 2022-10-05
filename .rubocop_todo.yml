@@ -38,14 +38,12 @@ Layout/ArgumentAlignment:
 Layout/BlockAlignment:
   Exclude:
     - 'app/models/user.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
 Layout/BlockEndNewline:
   Exclude:
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -174,7 +172,6 @@ Layout/EmptyLines:
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
     - 'bin/setup'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
     - 'spec/models/rules/vispdat_scores_spec.rb'
@@ -223,7 +220,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/factories/programs.rb'
     - 'spec/factories/requirements.rb'
     - 'spec/factories/users.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -665,7 +661,6 @@ Layout/IndentationWidth:
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 27
@@ -685,13 +680,11 @@ Layout/LeadingCommentSpace:
     - 'app/models/testing/matching/candidate_generation.rb'
     - 'app/models/user.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 6
 # Cop supports --auto-correct.
 Layout/MultilineBlockLayout:
   Exclude:
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 6
 # Cop supports --auto-correct.
@@ -720,7 +713,6 @@ Layout/MultilineMethodCallIndentation:
 # Cop supports --auto-correct.
 Layout/SpaceAfterColon:
   Exclude:
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 19
 # Cop supports --auto-correct.
@@ -756,7 +748,6 @@ Layout/SpaceAroundOperators:
   Exclude:
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
@@ -869,7 +860,6 @@ Layout/SpaceInsideBlockBraces:
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -901,7 +891,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
     - 'spec/controllers/clients_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
     - 'spec/models/rules/tagged_with_spec.rb'
@@ -1296,7 +1285,6 @@ Lint/UselessAssignment:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
     - 'spec/models/rules/bedroom_spec.rb'
@@ -1408,7 +1396,6 @@ Style/BlockComments:
 Style/BlockDelimiters:
   Exclude:
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
@@ -1923,7 +1910,6 @@ Style/StringLiterals:
     - 'spec/factories/client_notes.rb'
     - 'spec/factories/housing_media_links.rb'
     - 'spec/factories/roles.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -2009,7 +1995,6 @@ Style/TrailingCommaInArrayLiteral:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/models/sub_program.rb'
     - 'bin/setup'
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 21
 # Cop supports --auto-correct.
