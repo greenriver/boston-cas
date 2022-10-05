@@ -21,6 +21,14 @@ class UnitsController < ApplicationController
       unit_scope
     end
 
+    if params[:current_tab] == 'Inactive'
+      @units = @units.inactive
+      @current_tab_name = 'Inactive'
+    else
+      @units = @units.active
+      @current_tab_name = 'Active'
+    end
+
     # sort / paginate
     @units = @units
       .order(sort_column => sort_direction)
@@ -80,22 +88,32 @@ class UnitsController < ApplicationController
 
   # DELETE /hmis/units/1
   def destroy
-    building = @unit.building
-    if @unit.destroy
-      redirect_to building_path(building), notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
+    previous_page = Rails.application.routes.recognize_path(request.referrer)
+    next_url = if previous_page[:controller] == 'units' && previous_page[:action] == 'edit'
+      building_path(@unit.building)
     else
-      render :edit, {:flash => { :error => 'Unable to delete unit <strong>#{@unit[:name]}</strong>.'}}
+      request.referer
+    end
+
+    if @unit.destroy
+      redirect_to next_url, notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
+    else
+      redirect_to next_url, {:flash => { :error => 'Unable to delete unit <strong>#{@unit[:name]}</strong>.'}}
     end
   end
 
-  # RESTORE /hmis/units/1
+  # POST /hmis/units/1/restore
   def restore
-    if Unit.restore(params[:id])
-      @unit = Unit.find(params[:id])
-      redirect_to units_path, notice: "Unit <strong>#{@unit[:name]}</strong> successfully restored."
-    else
-      render :edit, {:flash => { :error => 'Unable to restore unit.'}}
-    end
+    @unit = Unit.find(params[:id])
+    @unit.update(active: true)
+    redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was restored.")
+  end
+
+  # POST /hmis/units/1/deactivate
+  def deactivate
+    @unit = Unit.find(params[:unit_id])
+    @unit.update(active: false)
+    redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was deactivated.")
   end
 
   def get_unit
@@ -126,6 +144,11 @@ class UnitsController < ApplicationController
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
       )
     end
+
+    def filter_params
+      params.permit(:q, :direction, :sort)
+    end
+    helper_method :filter_params
 
     def sort_column
       Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'

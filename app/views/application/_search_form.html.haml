@@ -4,6 +4,8 @@
     = hidden_field_tag :sort, params[:sort]
   - if params[:direction]
     = hidden_field_tag :direction, params[:direction]
+  - if params[:current_tab]
+    = hidden_field_tag :current_tab, params[:current_tab]
   - filter_terms.each do | term |
     - if params[term]
       = hidden_field_tag term, params[term]
