@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_05_133804) do
+ActiveRecord::Schema.define(version: 2022_10_05_190528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,7 +170,6 @@ ActiveRecord::Schema.define(version: 2022_10_05_133804) do
     t.string "name_quality", limit: 4
     t.string "ssn", limit: 9
     t.date "date_of_birth"
-    t.string "gender_other", limit: 50
     t.boolean "veteran", default: false
     t.boolean "chronic_homeless", default: false
     t.datetime "created_at", null: false
@@ -180,9 +179,7 @@ ActiveRecord::Schema.define(version: 2022_10_05_133804) do
     t.integer "split_from"
     t.integer "ssn_quality"
     t.integer "date_of_birth_quality"
-    t.integer "race_id"
     t.integer "ethnicity_id"
-    t.integer "gender_id"
     t.integer "veteran_status_id"
     t.integer "developmental_disability"
     t.integer "domestic_violence"
@@ -1193,9 +1190,6 @@ ActiveRecord::Schema.define(version: 2022_10_05_133804) do
     t.string "middle_name"
     t.integer "ssn_quality_code"
     t.integer "dob_quality_code"
-    t.string "primary_race"
-    t.string "secondary_race"
-    t.integer "gender"
     t.integer "ethnicity"
     t.integer "disabling_condition"
     t.integer "hud_chronic_homelessness"

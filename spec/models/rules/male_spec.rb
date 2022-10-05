@@ -1,17 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Rules::Male, type: :model do
-
-  let!(:male_gender) { create :male_gender}
-  let!(:female_gender) { create :female_gender }
-  let!(:trans_mf_gender) { create :trans_mf_gender }
-  let!(:trans_fm_gender) { create :trans_fm_gender }
-
   let!(:male_rule) { create :rules_male }
-  let!(:male_clients) { create_list :client, 2, gender_id: 1 }
-  let!(:female_clients) { create_list :client, 2, gender_id: 0 }
-  let!(:trans_mf_clients) { create_list :client, 2, gender_id: 2 }
-  let!(:trans_fm_clients) { create_list :client, 2, gender_id: 3 }
+
+  let!(:male_clients) { create_list :client, 2, male: true }
+  let!(:female_clients) { create_list :client, 2, female: true }
+  let!(:trans_mf_clients) { create_list :client, 2, female: true, transgender: true }
+  let!(:trans_fm_clients) { create_list :client, 2, male: true, transgender: true }
   let!(:positive) { create :requirement, rule: male_rule, positive: true }
   let!(:negative) { create :requirement, rule: male_rule, positive: false }
   let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
