@@ -345,6 +345,15 @@ class Client < ApplicationRecord
     white: 'White',
   }.freeze
 
+  RACE_DESCRIPTIONS_BRIEF = {
+    **RACE_DESCRIPTIONS,
+    am_ind_ak_native: 'American Indian/Alaska Native/Indigenous',
+    asian: 'Asian',
+    black_af_american: 'Black',
+    native_hi_pacific: 'Native Hawaiian/Pacific Islander',
+    white: 'White',
+  }.freeze
+
   GENDER_DESCRIPTIONS = {
     female: 'Female',
     male: 'Male',
@@ -353,12 +362,19 @@ class Client < ApplicationRecord
     questioning: 'Questioning',
   }.freeze
 
-  def gender_descriptions
-    GENDER_DESCRIPTIONS.select { |k| send(k) }.values
+  GENDER_DESCRIPTIONS_BRIEF = {
+    **GENDER_DESCRIPTIONS,
+    no_single_gender: 'Non-binary',
+  }.freeze
+
+  def gender_descriptions(brief: false)
+    map = brief ? GENDER_DESCRIPTIONS_BRIEF : GENDER_DESCRIPTIONS
+    map.select { |k| send(k) }.values
   end
 
-  def race_descriptions
-    RACE_DESCRIPTIONS.select { |k| send(k) }.values
+  def race_descriptions(brief: false)
+    map = brief ? RACE_DESCRIPTIONS_BRIEF : RACE_DESCRIPTIONS
+    map.select { |k| send(k) }.values
   end
 
   def cohorts
