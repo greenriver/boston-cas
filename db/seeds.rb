@@ -45,6 +45,7 @@ def hud_codes
   end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.6 Gender
   {
+    # TODO remove or fix, it is old codes
     0 => 'Female',
     1 => 'Male',
     2 => 'Trans Female (MTF or Male to Female)',

@@ -192,7 +192,10 @@ class NonHmisClient < ApplicationRecord
     project_client.date_of_birth = date_of_birth || current_assessment&.date_of_birth
     project_client.ssn = ssn
     project_client.middle_name = middle_name
-    project_client.gender = gender
+    # FIXME set gender
+    # FIXME set race
+    # rspec spec/tasks/update_project_clients_from_deidentified_clients_spec.rb
+
     project_client.email = email.presence || current_assessment&.email_addresses
     project_client.address = current_assessment&.mailing_address
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file

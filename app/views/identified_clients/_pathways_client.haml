@@ -12,6 +12,7 @@
       = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: ssn_label, hint: ssn_hint
     .c-question
       = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn_refused, label: ssn_refused_label
+    -# fixme render all values
     - if @non_hmis_client.gender
       .c-question
         = render 'non_hmis_clients/assessments/question_display', value: Gender.find_by(numeric: @non_hmis_client.gender)&.text, label: 'Gender'
@@ -22,15 +23,15 @@
       .c-question
         = render 'non_hmis_clients/assessments/question_display', value: Ethnicity.find_by(numeric: @non_hmis_client.ethnicity)&.text, label: 'Ethnicity'
   - else
-    = form.input :first_name, disabled: disabled
-    = form.input :middle_name, disabled: disabled
-    = form.input :last_name, disabled: disabled
-    = form.input :date_of_birth, as: :date_picker, disabled: disabled
-    = form.input :ssn, label: ssn_label, input_html: { maxlength: 9, style: 'width: 10em;' }, hint: ssn_hint, disabled: disabled
-    = form.input :ssn_refused, label: ssn_refused_label, as: :pretty_boolean, wrapper: :custom_boolean, disabled: disabled
-    = form.input :gender, collection: Gender.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
-    = form.input :race, collection: Race.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
-    = form.input :ethnicity, collection: Ethnicity.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, disabled: disabled
+    = form.input :first_name
+    = form.input :middle_name
+    = form.input :last_name
+    = form.input :date_of_birth, as: :date_picker
+    = form.input :ssn, label: ssn_label, input_html: { maxlength: 9, style: 'width: 10em;' }, hint: ssn_hint
+    = form.input :ssn_refused, label: ssn_refused_label, as: :pretty_boolean, wrapper: :custom_boolean
+    = form.input :gender, collection: Gender.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, input_html: { multiple: true }
+    = form.input :race, collection: Race.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, input_html: { multiple: true }
+    = form.input :ethnicity, collection: Ethnicity.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2
 %section
   -# Probably need to update with more appropriate title
   %h3 Agency Information
