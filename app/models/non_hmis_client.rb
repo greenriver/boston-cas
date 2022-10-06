@@ -6,6 +6,8 @@
 
 require 'memoist'
 class NonHmisClient < ApplicationRecord
+  include HudDemographics
+
   class_attribute :skip_build_assessment_if_missing
   after_initialize :build_assessment_if_missing
 
@@ -192,10 +194,6 @@ class NonHmisClient < ApplicationRecord
     project_client.date_of_birth = date_of_birth || current_assessment&.date_of_birth
     project_client.ssn = ssn
     project_client.middle_name = middle_name
-    # FIXME set gender
-    # FIXME set race
-    # rspec spec/tasks/update_project_clients_from_deidentified_clients_spec.rb
-
     project_client.email = email.presence || current_assessment&.email_addresses
     project_client.address = current_assessment&.mailing_address
     project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
@@ -203,6 +201,10 @@ class NonHmisClient < ApplicationRecord
     project_client.tags = cas_tags
     project_client.default_shelter_agency_contacts = [contact&.email] if contact_id.present?
     project_client.sync_with_cas = available
+    project_client.ethnicity = ethnicity
+    (HUD_RACES.keys + HUD_GENDERS.keys).each do |field|
+      project_client[field] = send(field)
+    end
 
     # current_assessment fields
     project_client.assessment_name = current_assessment&.for_matching&.keys&.first

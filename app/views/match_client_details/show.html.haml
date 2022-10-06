@@ -35,7 +35,7 @@
         %span.c-detailed-list__value= find_and_preserve(@client.gender_descriptions(brief: true).join(', ')).presence || 'Not on file'
       %li.c-detailed-list__item
         %span.c-detailed-list__label Race
-        %span.c-detailed-list__value= find_and_preserve(@client.race_descriptions(brief: true).join(', ')).presence || 'Not on file'
+        %span.c-detailed-list__value= find_and_preserve(@client.race_descriptions.join(',<br />')).presence || 'Not on file'
       %li.c-detailed-list__item
         %span.c-detailed-list__label Ethnicity
         %span.c-detailed-list__value= @client.ethnicity.try(:text) || 'Not on file'

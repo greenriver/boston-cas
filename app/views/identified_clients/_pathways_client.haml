@@ -12,13 +12,12 @@
       = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn, label: ssn_label, hint: ssn_hint
     .c-question
       = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.ssn_refused, label: ssn_refused_label
-    -# fixme render all values
-    - if @non_hmis_client.gender
+    - if @non_hmis_client.gender_descriptions(brief: true).any?
       .c-question
-        = render 'non_hmis_clients/assessments/question_display', value: Gender.find_by(numeric: @non_hmis_client.gender)&.text, label: 'Gender'
-    - if @non_hmis_client.race
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.gender_descriptions(brief: true).join(', '), label: 'Gender'
+    - if @non_hmis_client.race_descriptions.any?
       .c-question
-        = render 'non_hmis_clients/assessments/question_display', value: Race.find_by(numeric: @non_hmis_client.race)&.text, label: 'Race'
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.race_descriptions, label: 'Race'
     - if @non_hmis_client.ethnicity
       .c-question
         = render 'non_hmis_clients/assessments/question_display', value: Ethnicity.find_by(numeric: @non_hmis_client.ethnicity)&.text, label: 'Ethnicity'
@@ -29,8 +28,8 @@
     = form.input :date_of_birth, as: :date_picker
     = form.input :ssn, label: ssn_label, input_html: { maxlength: 9, style: 'width: 10em;' }, hint: ssn_hint
     = form.input :ssn_refused, label: ssn_refused_label, as: :pretty_boolean, wrapper: :custom_boolean
-    = form.input :gender, collection: Gender.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, input_html: { multiple: true }
-    = form.input :race, collection: Race.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2, input_html: { multiple: true }
+    = form.input :gender, collection: Client::HUD_GENDERS.invert.to_a, as: :select_2, input_html: { multiple: true }
+    = form.input :race, collection: Client::HUD_RACES.invert.to_a, as: :select_2, input_html: { multiple: true }
     = form.input :ethnicity, collection: Ethnicity.distinct.order(numeric: :asc).pluck(:text, :numeric), as: :select_2
 %section
   -# Probably need to update with more appropriate title

@@ -8,6 +8,9 @@ class IdentifiedClient < NonHmisClient
   has_many :client_assessments, class_name: 'IdentifiedClientAssessment', foreign_key: :non_hmis_client_id, dependent: :destroy
   accepts_nested_attributes_for :client_assessments
 
+  alias gender genders
+  alias race races
+
   # Allow same search rules as Client
   scope :text_search, -> (text) do
     return none unless text.present?
@@ -133,8 +136,8 @@ class IdentifiedClient < NonHmisClient
         middle_name,
         last_name,
         date_of_birth,
-        Gender.find_by(numeric: gender)&.text,
-        Race.find_by(numeric: race)&.text,
+        gender_descriptions.join(', '),
+        race_descriptions.join(', '),
         Ethnicity.find_by(numeric: ethnicity)&.text,
         ssn,
         agency&.name,
@@ -166,7 +169,7 @@ class IdentifiedClient < NonHmisClient
         current_assessment.requires_elevator_access,
         current_assessment.family_member,
         current_assessment.calculated_chronic_homelessness,
-        gender,
+        gender_descriptions.join(', '),
         current_assessment.date_days_homeless_verified,
         current_assessment.who_verified_days_homeless,
         current_assessment.income_total_monthly,

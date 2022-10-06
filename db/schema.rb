@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_05_190528) do
+ActiveRecord::Schema.define(version: 2022_10_06_142256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -487,11 +487,11 @@ ActiveRecord::Schema.define(version: 2022_10_05_190528) do
     t.datetime "deleted_at"
   end
 
-  create_table "genders", id: :serial, force: :cascade do |t|
+  create_table "genders", force: :cascade do |t|
     t.integer "numeric"
     t.string "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "has_developmental_disabilities", id: :serial, force: :cascade do |t|
@@ -999,7 +999,6 @@ ActiveRecord::Schema.define(version: 2022_10_05_190528) do
     t.boolean "family_member", default: false, null: false
     t.string "middle_name"
     t.integer "calculated_chronic_homelessness"
-    t.integer "gender"
     t.string "type"
     t.boolean "available", default: true, null: false
     t.json "neighborhood_interests", default: []
@@ -1049,12 +1048,21 @@ ActiveRecord::Schema.define(version: 2022_10_05_190528) do
     t.boolean "hiv_aids", default: false
     t.boolean "older_than_65"
     t.boolean "ssn_refused", default: false
-    t.integer "race"
     t.integer "ethnicity"
     t.integer "days_homeless"
     t.boolean "sixty_plus"
     t.boolean "pregnancy_status", default: false
     t.boolean "pregnant_under_28_weeks", default: false
+    t.boolean "am_ind_ak_native", default: false
+    t.boolean "asian", default: false
+    t.boolean "black_af_american", default: false
+    t.boolean "native_hi_pacific", default: false
+    t.boolean "white", default: false
+    t.boolean "female", default: false
+    t.boolean "male", default: false
+    t.boolean "no_single_gender", default: false
+    t.boolean "transgender", default: false
+    t.boolean "questioning", default: false
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -1121,11 +1129,11 @@ ActiveRecord::Schema.define(version: 2022_10_05_190528) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "primary_races", id: :serial, force: :cascade do |t|
+  create_table "primary_races", force: :cascade do |t|
     t.integer "numeric"
     t.string "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "program_contacts", id: :serial, force: :cascade do |t|
@@ -1714,6 +1722,7 @@ ActiveRecord::Schema.define(version: 2022_10_05_190528) do
     t.integer "data_source_id"
     t.string "data_source_id_column_name"
     t.boolean "elevator_accessible", default: false, null: false
+    t.boolean "active", default: true, null: false
     t.index ["building_id"], name: "index_units_on_building_id"
     t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)"
     t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source"

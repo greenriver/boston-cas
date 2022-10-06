@@ -11,6 +11,7 @@ class Client < ApplicationRecord
   include SubjectForMatches
   include MatchArchive
   include Availability
+  include HudDemographics
 
   has_paper_trail
   acts_as_paranoid
@@ -336,46 +337,6 @@ class Client < ApplicationRecord
     self.class.age(date: date, dob: dob)
   end
   alias age_on age
-
-  RACE_DESCRIPTIONS = {
-    am_ind_ak_native: 'American Indian, Alaska Native, or Indigenous',
-    asian: 'Asian or Asian American',
-    black_af_american: 'Black, African American, or African',
-    native_hi_pacific: 'Native Hawaiian or Pacific Islander',
-    white: 'White',
-  }.freeze
-
-  RACE_DESCRIPTIONS_BRIEF = {
-    **RACE_DESCRIPTIONS,
-    am_ind_ak_native: 'American Indian/Alaska Native/Indigenous',
-    asian: 'Asian',
-    black_af_american: 'Black',
-    native_hi_pacific: 'Native Hawaiian/Pacific Islander',
-    white: 'White',
-  }.freeze
-
-  GENDER_DESCRIPTIONS = {
-    female: 'Female',
-    male: 'Male',
-    no_single_gender: 'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
-    transgender: 'Transgender',
-    questioning: 'Questioning',
-  }.freeze
-
-  GENDER_DESCRIPTIONS_BRIEF = {
-    **GENDER_DESCRIPTIONS,
-    no_single_gender: 'Non-binary',
-  }.freeze
-
-  def gender_descriptions(brief: false)
-    map = brief ? GENDER_DESCRIPTIONS_BRIEF : GENDER_DESCRIPTIONS
-    map.select { |k| send(k) }.values
-  end
-
-  def race_descriptions(brief: false)
-    map = brief ? RACE_DESCRIPTIONS_BRIEF : RACE_DESCRIPTIONS
-    map.select { |k| send(k) }.values
-  end
 
   def cohorts
     return [] unless Warehouse::Base.enabled?
