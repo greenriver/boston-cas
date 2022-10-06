@@ -16,9 +16,9 @@ class UnitsController < ApplicationController
   def index
     # search
     @units = if params[:q].present?
-      unit_scope.text_search(params[:q])
+      Unit.text_search(params[:q])
     else
-      unit_scope
+      Unit.all
     end
 
     if params[:current_tab] == 'Inactive'
@@ -115,10 +115,6 @@ class UnitsController < ApplicationController
   end
 
   private
-
-  def unit_scope
-    Unit
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_unit
