@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_06_142256) do
+ActiveRecord::Schema.define(version: 2022_10_06_175808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -485,13 +485,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_142256) do
     t.integer "data_source_id"
     t.string "data_source_id_column_name"
     t.datetime "deleted_at"
-  end
-
-  create_table "genders", force: :cascade do |t|
-    t.integer "numeric"
-    t.string "text"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "has_developmental_disabilities", id: :serial, force: :cascade do |t|
@@ -1129,13 +1122,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_142256) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "primary_races", force: :cascade do |t|
-    t.integer "numeric"
-    t.string "text"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "program_contacts", id: :serial, force: :cascade do |t|
     t.integer "program_id", null: false
     t.integer "contact_id", null: false
@@ -1530,13 +1516,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_142256) do
     t.string "verb"
     t.string "alternate_name"
     t.index ["deleted_at"], name: "index_rules_on_deleted_at"
-  end
-
-  create_table "secondary_races", id: :serial, force: :cascade do |t|
-    t.integer "numeric"
-    t.string "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "service_rules", id: :serial, force: :cascade do |t|
