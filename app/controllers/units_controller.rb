@@ -75,14 +75,12 @@ class UnitsController < ApplicationController
         # make sure we have an opportunity with the associated unit
         # Or not, since we don't want to double up on opportunities with vouchers that
         # might also include this unit
-        #op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
+        # op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
-      if ! ajax_modal_request?
-        redirect_to building_path(@unit.building)
-      end
+      redirect_to building_path(@unit.building) unless ajax_modal_request?
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> was successfully updated."
     else
-      render :edit, {:flash => { :error => 'Unable to update unit <strong>#{@unit[:name]}</strong>.'}}
+      render :edit, { flash: { error: "Unable to update unit <strong>#{@unit[:name]}</strong>." } }
     end
   end
 
@@ -98,7 +96,7 @@ class UnitsController < ApplicationController
     if @unit.destroy
       redirect_to next_url, notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
     else
-      redirect_to next_url, {:flash => { :error => 'Unable to delete unit <strong>#{@unit[:name]}</strong>.'}}
+      redirect_to next_url, { flash: { error: "Unable to delete unit <strong>#{@unit[:name]}</strong>." } }
     end
   end
 
@@ -116,50 +114,46 @@ class UnitsController < ApplicationController
     redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was deactivated.")
   end
 
-  def get_unit
+  private
+
+  def unit_scope
+    Unit
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_unit
     @unit = Unit.find(params[:id])
   end
 
-  private
-    def unit_scope
-      Unit
-    end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unit
-      @unit = Unit.find(params[:id])
-    end
+  def set_building
+    @unit.building = Building.find(params[:building_id]) if params[:building_id]
+  end
 
-    def set_building
-      if params[:building_id]
-        @unit.building = Building.find(params[:building_id])
-      end
-    end
-    # Only allow a trusted parameter "white list" through.
-    def unit_params
-      params.require(:unit).permit(
-        :name,
-        :available,
-        :building_id,
-        :elevator_accessible,
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  # Only allow a trusted parameter "white list" through.
+  def unit_params
+    params.require(:unit).permit(
+      :name,
+      :available,
+      :building_id,
+      :elevator_accessible,
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+  end
 
-    def filter_params
-      params.permit(:q, :direction, :sort)
-    end
-    helper_method :filter_params
+  def filter_params
+    params.permit(:q, :direction, :sort)
+  end
+  helper_method :filter_params
 
-    def sort_column
-      Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  def sort_column
+    Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
-
+  def query_string
+    "%#{@query}%"
+  end
 end
