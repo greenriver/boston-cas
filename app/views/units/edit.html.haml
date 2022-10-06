@@ -21,5 +21,3 @@
         .mb-2
           - if @unit.active?
             = link_to "Deactivate Unit", unit_deactivate_path(@unit), method: :post, class: 'btn btn-secondary'
-          - else
-            = link_to "Restore Unit", restore_unit_path(@unit), method: :post, class: 'btn btn-secondary'
