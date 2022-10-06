@@ -44,7 +44,7 @@
                   %td{:class => deleted}= unit.name || '(no name)'
                   %td{:class => deleted}= checkmark unit.available
                   %td= link_to unit.building.name, building_path(unit.building)
-                  %td.d-flex.float-right
-                    =render 'actions', unit: unit
+                  %td
+                    .d-flex.float-right= render 'actions', unit: unit
       .d-flex.float-right
         = paginate @units

@@ -71,8 +71,8 @@
                   - if false && u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_matches&.present?
                     - match = u.active_match
                     = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?), match_path(match)
-                %td.float-right.d-flex
-                  = render 'units/actions', unit: u
+                %td
+                  .float-right.d-flex= render 'units/actions', unit: u
   - else
     .mt-4.mb-6 No units.
   .row
