@@ -1701,7 +1701,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.integer "data_source_id"
     t.string "data_source_id_column_name"
     t.boolean "elevator_accessible", default: false, null: false
-    t.boolean "active", default: true, null: false
     t.index ["building_id"], name: "index_units_on_building_id"
     t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)"
     t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source"
