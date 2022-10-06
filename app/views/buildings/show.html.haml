@@ -48,7 +48,7 @@
 
   %h2= "#{Building.model_name.human} Units"
   - if @building.units.inactive.any? || params[:current_tab]
-    = render 'units/tabs', current_tab: @current_tab_name, path: building_path(@building)
+    = render 'units/tabs', current_tab: @current_tab_name
   - if @units.any?
     .c-card.c.card__flush.mb-4
       .c-card__content.p-0.pb-4
