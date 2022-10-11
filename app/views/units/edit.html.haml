@@ -10,9 +10,14 @@
   .row
     .col-sm-8
       = render 'form'
-    - unless @unit.in_use?
-      .col-sm-4.text-right
-        %p.delete
-          = link_to unit_path(@unit), method: :delete, data: {confirm: "Please confirm that you'd like to delete this unit."}, class: 'btn btn-secondary' do
-            %span.icon-cross
-            = "Delete unit: #{@unit.name}"
+    .col-sm-1
+    .col-sm-3.text-right
+      .d-flex.flex-column
+        - unless @unit.in_use?
+          .mb-2
+            = link_to unit_path(@unit), method: :delete, data: {confirm: "Please confirm that you'd like to delete this unit."}, class: 'btn btn-outline-danger' do
+              %span.icon-cross
+              = "Delete unit: #{@unit.name}"
+        .mb-2
+          - if @unit.active?
+            = link_to "Deactivate Unit", unit_deactivate_path(@unit), method: :post, class: 'btn btn-secondary'

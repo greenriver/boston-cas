@@ -5,7 +5,7 @@
 ###
 
 class Rules::Female < Rule
-  def clients_that_fit(scope, requirement, opportunity)
+  def clients_that_fit(scope, requirement, opportunity) # rubocop:disable Lint/UnusedMethodArgument
     column = :female
     raise RuleDatabaseStructureMissing.new("clients.#{column} missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(column.to_s)
 

@@ -43,31 +43,38 @@
     columns = ['id', 'name', 'available']
     directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
     titles = {}
-    directions.each {| k,v | titles[k] = @building.units.human_attribute_name(k)}
+    directions.each {| k,v | titles[k] = @units.human_attribute_name(k)}
     titles['id'].upcase!
 
   %h2= "#{Building.model_name.human} Units"
-  .c-card.c.card__flush.mb-4
-    .c-card__content.p-0.pb-4
-      %table.table.table-striped
-        %thead
-          %tr
-            - titles.each do | k, title |
-              %th
-                = manual_sort_link(titles[k], k, directions)
-                %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th Match
-        %tbody
-          - @building.units.order(created_at: :asc).each do |u|
+  - if @building.units.inactive.any? || params[:current_tab]
+    = render 'units/tabs', current_tab: @current_tab_name
+  - if @units.any?
+    .c-card.c.card__flush.mb-4
+      .c-card__content.p-0.pb-4
+        %table.table.table-striped
+          %thead
             %tr
-              %td= link_to u.id, edit_unit_path(u)
-              %td= link_to u.name || '(no name)', edit_unit_path(u)
-              %td=checkmark u.available
-              %td
-                - if false && u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_matches&.present?
-                  - match = u.active_match
-                  = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?), match_path(match)
-
+              - titles.each do | k, title |
+                %th
+                  = manual_sort_link(titles[k], k, directions)
+                  %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+              %th Match
+              %th
+          %tbody
+            - @units.order(created_at: :asc).each do |u|
+              %tr
+                %td= link_to u.id, edit_unit_path(u)
+                %td= link_to u.name || '(no name)', edit_unit_path(u)
+                %td=checkmark u.available
+                %td
+                  - if false && u&.active_voucher&.opportunity.present? && u&.active_voucher&.present? && u&.active_matches&.present?
+                    - match = u.active_match
+                    = link_to match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?), match_path(match)
+                %td
+                  .float-right.d-flex= render 'units/actions', unit: u
+  - else
+    .mt-4.mb-6 No units.
   .row
     .col-sm-8
       %h2= "Default Building Attributes"

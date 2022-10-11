@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_06_175808) do
+ActiveRecord::Schema.define(version: 2022_10_06_175635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,7 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.string "name_quality", limit: 4
     t.string "ssn", limit: 9
     t.date "date_of_birth"
+    t.string "gender_other", limit: 50
     t.boolean "veteran", default: false
     t.boolean "chronic_homeless", default: false
     t.datetime "created_at", null: false
@@ -179,7 +180,9 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.integer "split_from"
     t.integer "ssn_quality"
     t.integer "date_of_birth_quality"
+    t.integer "race_id"
     t.integer "ethnicity_id"
+    t.integer "gender_id"
     t.integer "veteran_status_id"
     t.integer "developmental_disability"
     t.integer "domestic_violence"
@@ -314,9 +317,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
-    t.string "gender_other"
-    t.integer "gender_id"
-    t.integer "race_id"
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1187,6 +1187,9 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.string "middle_name"
     t.integer "ssn_quality_code"
     t.integer "dob_quality_code"
+    t.string "primary_race"
+    t.string "secondary_race"
+    t.integer "gender"
     t.integer "ethnicity"
     t.integer "disabling_condition"
     t.integer "hud_chronic_homelessness"
@@ -1311,8 +1314,8 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.integer "hmis_days_homeless_all_time"
     t.integer "hmis_days_homeless_last_three_years"
     t.integer "match_group"
-    t.boolean "encampment_decomissioned", default: false
     t.boolean "force_remove_unavailable_fors", default: false
+    t.boolean "encampment_decomissioned", default: false
     t.boolean "pregnant_under_28_weeks", default: false
     t.boolean "am_ind_ak_native", default: false
     t.boolean "asian", default: false
@@ -1324,9 +1327,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
-    t.integer "gender"
-    t.string "secondary_race"
-    t.string "primary_race"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1707,6 +1707,7 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.integer "data_source_id"
     t.string "data_source_id_column_name"
     t.boolean "elevator_accessible", default: false, null: false
+    t.boolean "active", default: true, null: false
     t.index ["building_id"], name: "index_units_on_building_id"
     t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)"
     t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source"

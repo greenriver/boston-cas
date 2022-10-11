@@ -96,7 +96,6 @@ Layout/DotPosition:
     - 'app/controllers/match_notes_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
     - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
@@ -141,7 +140,6 @@ Layout/EmptyLineBetweenDefs:
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/match_decisions/provider_only/confirm_hsa_accepts_client_decline_dnd_staff.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/five.rb'
@@ -192,7 +190,6 @@ Layout/EmptyLinesAroundAccessModifier:
     - 'app/controllers/services_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/program.rb'
     - 'app/models/sub_program.rb'
 
@@ -297,7 +294,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/tags_controller.rb'
     - 'app/controllers/unavailable_clients_controller.rb'
     - 'app/controllers/unavailable_on_route_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/jobs/matching/run_engine_job.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
@@ -613,7 +609,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/subgrantee_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/program.rb'
     - 'app/models/stalled_match_request.rb'
@@ -653,7 +648,6 @@ Layout/IndentationWidth:
     - 'app/controllers/subgrantee_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/concerns/pathways_calculations.rb'
     - 'app/models/help.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -669,7 +663,6 @@ Layout/IndentationWidth:
 Layout/LeadingCommentSpace:
   Exclude:
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
@@ -882,7 +875,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/messages_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -1099,7 +1091,6 @@ Lint/DuplicateMethods:
 # Cop supports --auto-correct.
 Lint/InterpolationCheck:
   Exclude:
-    - 'app/controllers/units_controller.rb'
 
 # Offense count: 2
 Lint/LiteralAsCondition:
@@ -1320,7 +1311,6 @@ Metrics/PerceivedComplexity:
 # Offense count: 3
 Naming/AccessorMethodName:
   Exclude:
-    - 'app/controllers/units_controller.rb'
 
 # Offense count: 1
 # Configuration parameters: ForbiddenDelimiters.
@@ -1464,7 +1454,6 @@ Style/GuardClause:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
@@ -1566,7 +1555,6 @@ Style/HashSyntax:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
@@ -1598,7 +1586,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/inputs/base_input.rb'
     - 'app/mailers/account_mailer.rb'
@@ -1660,7 +1647,6 @@ Style/NegatedIf:
   Exclude:
     - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
 
 # Offense count: 3
@@ -1871,7 +1857,6 @@ Style/StringLiterals:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/successful_vouchers_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
     - 'app/helpers/admin/users_helper.rb'
@@ -1967,7 +1952,6 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/client_opportunity_match_contact.rb'
     - 'app/models/contact.rb'

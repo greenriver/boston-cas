@@ -1,0 +1,7 @@
+/- true #if inactive_units.count > 1
+- filter_params ||= {}
+%ul.nav.nav-tabs.mb-0{role: :tablist}
+  - ['Active', 'Inactive'].each do |status|
+    - active_class = current_tab == status ? 'active' : ''
+    %li.nav-item{role: :presentation}
+      = link_to status, filter_params.merge(current_tab: status), class: "nav-link #{active_class}"
