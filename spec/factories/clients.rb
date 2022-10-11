@@ -4,7 +4,6 @@ FactoryBot.define do
     first_name { 'Client' }
     last_name { 'Last' }
     available { true }
-    gender_id { 0 } # female
     date_of_birth { '1990-01-01' }
     sequence(:vispdat_score) { |_n| Faker::Number.between(from: 1, to: 20) }
     sequence(:assessment_score) { |_n| Faker::Number.between(from: 1, to: 20) }

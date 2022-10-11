@@ -131,9 +131,7 @@ module Cas
         chronic_health_problem: project_client.chronic_health_condition.to_i == 1,
         ssn_quality: project_client.ssn_quality_code,
         date_of_birth_quality: project_client.dob_quality_code,
-        race_id: project_client.primary_race,
         ethnicity_id: project_client.ethnicity,
-        gender_id: project_client.gender,
       }.each do |key, value|
         client_attributes[key] = value
       end
@@ -185,9 +183,7 @@ module Cas
         :disabling_condition,
         :calculated_first_homeless_night,
         :calculated_last_homeless_night,
-        :primary_race,
         :ethnicity,
-        :gender,
         :substance_abuse_problem,
         :developmental_disability,
         :sync_with_cas,
@@ -288,6 +284,16 @@ module Cas
         :force_remove_unavailable_fors,
         :match_group,
         :encampment_decomissioned,
+        :am_ind_ak_native,
+        :asian,
+        :black_af_american,
+        :native_hi_pacific,
+        :white,
+        :female,
+        :male,
+        :no_single_gender,
+        :transgender,
+        :questioning,
       ]
     end
 

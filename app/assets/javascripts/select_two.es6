@@ -45,7 +45,7 @@ App.Form.Select2Input = class Select2Input {
       this.$select.select2(options)
 
       // Add select all functionality if has `multiple` attribute
-      if (field.hasAttribute('multiple')) {
+      if (field.hasAttribute('multiple') && !this.$select.data('disableselectall')) {
         this.initToggleSelectAll()
       }
 
