@@ -89,9 +89,7 @@ class IdentifiedClientsController < NonHmisClientsController
       :middle_name,
       :date_of_birth,
       :ssn,
-      :race,
       :ethnicity,
-      :gender,
       :limited_release_on_file,
       :full_release_on_file,
       :available,
@@ -108,6 +106,8 @@ class IdentifiedClientsController < NonHmisClientsController
       :shelter_name,
       :warehouse_client_id,
       active_cohort_ids: [],
+      gender: [],
+      race: [],
       client_assessments_attributes: [
         :id,
         :type,

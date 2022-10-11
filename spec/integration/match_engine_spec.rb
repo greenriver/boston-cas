@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe "Running the match engine...", type: :request do
+RSpec.describe 'Running the match engine...', type: :request do
   MatchRoutes::Base.ensure_all
   MatchPrioritization::Base.ensure_all
-  let!(:female_clients) { create_list :client, 2, gender_id: 0 }
-  let!(:male_clients) { create_list :client, 8, gender_id: 1 }
-  let!(:unknown_gender_clients) { create_list :client, 7, gender_id: nil }
-  let!(:female_veteran_clients) { create_list :client, 5, gender_id: 0, veteran: 1 }
-  let!(:male_veteran_clients) { create_list :client, 3, gender_id: 1, veteran: 1 }
-  let!(:ami_50_percent_clients) { create_list :client, 5, gender_id: 1, veteran: 0, income_total_monthly: Config.get(:ami)/ 2 }
-  let!(:ami_100_percent_clients) { create_list :client, 5, gender_id: 1, veteran: 0, income_total_monthly: Config.get(:ami) }
+  let!(:female_clients) { create_list :client, 2, female: true }
+  let!(:male_clients) { create_list :client, 8, male: true }
+  let!(:unknown_gender_clients) { create_list :client, 7 }
+  let!(:female_veteran_clients) { create_list :client, 5, female: true, veteran: 1 }
+  let!(:male_veteran_clients) { create_list :client, 3, male: true, veteran: 1 }
+  let!(:ami_50_percent_clients) { create_list :client, 5, male: true, veteran: 0, income_total_monthly: Config.get(:ami) / 2 }
+  let!(:ami_100_percent_clients) { create_list :client, 5, male: true, veteran: 0, income_total_monthly: Config.get(:ami) }
   let!(:age_10_clients) { create_list :client, 8, date_of_birth: Date.current - 10.years }
   let!(:age_16_clients) { create_list :client, 1, date_of_birth: Date.current - 16.years }
   let!(:age_18_clients) { create_list :client, 3, date_of_birth: Date.current - 18.years }
@@ -20,43 +20,42 @@ RSpec.describe "Running the match engine...", type: :request do
   let!(:veteran_chronic_homeless_substance_abuse_mental_clients) { create_list :client, 1, chronic_homeless: true, substance_abuse_problem: true, veteran: true, mental_health_problem: true }
   let!(:mental_health_clients) { create_list :client, 5, chronic_homeless: false, substance_abuse_problem: false, veteran: false, mental_health_problem: true }
   let!(:physically_disabled_clients) { create_list :client, 3, physical_disability: true }
-  let!(:physically_disabled_not_homeless_clients) { create_list :client, 3, physical_disability:true, available: false }
-  let!(:physically_disabled_male_clients) { create_list :client, 2, physical_disability: true, gender_id: 1 }
-  let!(:physically_disabled_male_chronic_clients) { create_list :client, 2, physical_disability: true, gender_id: 1, chronic_homeless: true }
-  let!(:physically_disabled_male_not_chronic_clients) { create_list :client, 2, physical_disability: true, gender_id: 1, chronic_homeless: false }
+  let!(:physically_disabled_not_homeless_clients) { create_list :client, 3, physical_disability: true, available: false }
+  let!(:physically_disabled_male_clients) { create_list :client, 2, physical_disability: true, male: true }
+  let!(:physically_disabled_male_chronic_clients) { create_list :client, 2, physical_disability: true, male: true, chronic_homeless: true }
+  let!(:physically_disabled_male_not_chronic_clients) { create_list :client, 2, physical_disability: true, male: true, chronic_homeless: false }
 
-  let!(:funding_source) { create :funding_source}
+  let!(:funding_source) { create :funding_source }
   let!(:subgrantee) { create :subgrantee }
   let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
-  let(:route) {
+  let(:route) do
     r = MatchRoutes::Default.first
     r.update(match_prioritization_id: priority.id)
     r
-    }
-
+  end
 
   def create_opportunity(*rules)
-    #Pass in any number of hashes that look like {rule: rule, positive: true}
+    # Pass in any number of hashes that look like {rule: rule, positive: true}
     requirements = rules.map { |rule| Requirement.new(rule: rule[:rule], positive: rule[:positive]) }
 
     program = create :program, funding_source: funding_source, requirements: requirements, match_route: route
     sub_program = create :sub_program, program: program, service_provider: subgrantee
     voucher = create :voucher, sub_program: sub_program
-    opportunity = create :opportunity, voucher: voucher
+    create :opportunity, voucher: voucher
   end
 
   def create_matches(*rules)
-    #Pass in any number of hashes that look like {rule: rule, positive: true}
+    # Pass in any number of hashes that look like {rule: rule, positive: true}
     opportunity = create_opportunity(*rules)
     Matching::Engine.new(Client.all, Opportunity.where(id: opportunity.id)).clients_for_matches(opportunity)
   end
 
-  #opportunity tests
+  # opportunity tests
   # describe "with female requirement" do
   #   let!(:matches) { create_matches( {rule: create(:female), positive: true} ) }
 
   #   it "matches only female clients" do
-  #     expected_ids = Client.where(gender_id: 0).map(&:id)
+  #     expected_ids = Client.where(female: true).map(&:id)
   #     expect(expected_ids).to include *matches.pluck(:id)
   #   end
 
@@ -155,7 +154,7 @@ RSpec.describe "Running the match engine...", type: :request do
   #     ) }
 
   #   it "matches only clients who have a physical disability and are homeless and male" do
-  #     expected_ids = Client.where(physical_disability: true, available: true, gender_id: 1).map(&:id)
+  #     expected_ids = Client.where(physical_disability: true, available: true, male: true).map(&:id)
   #     expect(expected_ids).to include *matches.pluck(:id)
   #   end
   # end
@@ -169,7 +168,7 @@ RSpec.describe "Running the match engine...", type: :request do
   #     ) }
 
   #   it "matches only clients who have a physical disability and are male, homeless, and chronically homeless" do
-  #     expected_ids = Client.where(physical_disability: true, available: true, chronic_homeless: true, gender_id: 1).map(&:id)
+  #     expected_ids = Client.where(physical_disability: true, available: true, chronic_homeless: true, male: true).map(&:id)
   #     expect(expected_ids).to include *matches.pluck(:id)
   #   end
   # end
@@ -210,11 +209,11 @@ RSpec.describe "Running the match engine...", type: :request do
   #   end
   # end
 
-  describe "when we feed the engine one client with many opportunities" do
+  describe 'when we feed the engine one client with many opportunities' do
     # skip 'need to fixup test data to get varying matchabilities across different opportunities
 
     # client: - homeless + physical disability + male + chronic
-    let!(:client) { Client.where(available: true, chronic_homeless: true, physical_disability: true, gender_id: 1).first }
+    let!(:client) { Client.where(available: true, chronic_homeless: true, physical_disability: true, male: true).first }
 
     # opportunities:
     # 1. doesn't match: no physical disability
@@ -222,36 +221,46 @@ RSpec.describe "Running the match engine...", type: :request do
     # 3. matches, more restrictive: homeless + physical disability + male
     # 4. matches, very restrictive: homeless + physical disability + male + chronic
     let!(:lots_of_clients) { create_list :client, 40, physical_disability: true }
-    let!(:least_restrictive) { create_opportunity(
-      {rule: create(:physical_disability), positive: false},
-    )}
+    let!(:least_restrictive) do
+      create_opportunity(
+        { rule: create(:physical_disability), positive: false },
+      )
+    end
     let!(:many_clients) { create_list :client, 30, physical_disability: true, available: true }
-    let!(:less_restrictive) { create_opportunity(
-      {rule: create(:homeless), positive: true},
-      {rule: create(:physical_disability), positive: true},
-    )}
-    let!(:some_clients) { create_list :client, 20, physical_disability: true, available: true, gender_id: 1 }
-    let!(:more_restrictive) { create_opportunity(
-      {rule: create(:homeless), positive: true},
-      {rule: create(:physical_disability), positive: true},
-      {rule: create(:male), positive: true},
-    )}
-    let!(:a_few_clients) { create_list :client, 10, physical_disability: true, available: true, gender_id: 1, chronic_homeless: true }
-    let!(:most_restrictive) { create_opportunity(
-      {rule: create(:homeless), positive: true},
-      {rule: create(:physical_disability), positive: true},
-      {rule: create(:male), positive: true},
-      {rule: create(:chronically_homeless), positive: true},
-    )}
+    let!(:less_restrictive) do
+      create_opportunity(
+        { rule: create(:homeless), positive: true },
+        { rule: create(:physical_disability), positive: true },
+      )
+    end
+    let!(:some_clients) { create_list :client, 20, physical_disability: true, available: true, male: true }
+    let!(:more_restrictive) do
+      create_opportunity(
+        { rule: create(:homeless), positive: true },
+        { rule: create(:physical_disability), positive: true },
+        { rule: create(:male), positive: true },
+      )
+    end
+    let!(:a_few_clients) { create_list :client, 10, physical_disability: true, available: true, male: true, chronic_homeless: true }
+    let!(:most_restrictive) do
+      create_opportunity(
+        { rule: create(:homeless), positive: true },
+        { rule: create(:physical_disability), positive: true },
+        { rule: create(:male), positive: true },
+        { rule: create(:chronically_homeless), positive: true },
+      )
+    end
 
-    let!(:restrictive_opportunities) { [
-      least_restrictive.id,
-      less_restrictive.id,
-      more_restrictive.id,
-      most_restrictive.id
-    ] }
+    let!(:restrictive_opportunities) do
+      [
+        least_restrictive.id,
+        less_restrictive.id,
+        more_restrictive.id,
+        most_restrictive.id,
+      ]
+    end
 
-    it "the most restrictive opportunity that matches is returned first (lowest matchability)" do
+    it 'the most restrictive opportunity that matches is returned first (lowest matchability)' do
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
@@ -259,7 +268,7 @@ RSpec.describe "Running the match engine...", type: :request do
       expect(client.prioritized_matches.first.opportunity.id).to eq(restrictive_opportunities.last)
     end
 
-    it "the most restrictive opportunity that matches is activated" do
+    it 'the most restrictive opportunity that matches is activated' do
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches
@@ -268,8 +277,7 @@ RSpec.describe "Running the match engine...", type: :request do
       expect(client.prioritized_matches.first.active).to be true
     end
 
-    it "Client is no longer available in the route" do
-
+    it 'Client is no longer available in the route' do
       # Update matchability
       Matching::Matchability.update(Opportunity.on_route(route).where(id: restrictive_opportunities), match_route: route)
       # generate matches

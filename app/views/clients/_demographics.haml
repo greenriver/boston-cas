@@ -1,3 +1,4 @@
+- not_specified = '<span class="font-no-data">Not specified</span>'.html_safe
 %section.c-card.c-card--flush
   %h3 Demographics and Contact Info
   .c-card__content
@@ -6,23 +7,24 @@
       .row.c-card__content-blocks
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Age
-          %span.c-card__content-block-text= @client.age
+          %span.c-card__content-block-text= @client.age || not_specified
           %span.c-card__content-block-text.col-md-12.col-lg-6.c-card__content-block-text--secondary= "(#{date_format(@client.date_of_birth)})" if @client.date_of_birth
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Gender
-          %span.c-card__content-block-text= @client.gender.try(:text)
+          %span.c-card__content-block-text= find_and_preserve(@client.gender_descriptions(brief: true).join(', ')).presence || not_specified
+
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Race
-          %span.c-card__content-block-text= @client.race.try(:text)
+          %span.c-card__content-block-text= find_and_preserve(@client.race_descriptions.join(',<br>')).presence || not_specified
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Ethnicity
-          %span.c-card__content-block-text= @client.ethnicity.try(:text)
+          %span.c-card__content-block-text= @client.ethnicity.try(:text) || not_specified
         .col-md-12.col-lg-6.c-card__content-block
           %h5 SSN
-          %span.c-card__content-block-text= masked_ssn @client.ssn
+          %span.c-card__content-block-text= @client.ssn.present? ? masked_ssn(@client.ssn) : not_specified
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Veteran
-          %span.c-card__content-block-text= @client.veteran_status.try(:text)
+          %span.c-card__content-block-text= @client.veteran_status.try(:text) || not_specified
         - if can_view_client_confidentiality?
           .col-md-12.c-card__content-block
             %h5 Confidential Client

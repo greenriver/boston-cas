@@ -63,7 +63,7 @@
                   unknown
                 = client_data_quality client, :date_of_birth
             %td
-              = client.gender.try(:text)
+              = find_and_preserve(client.gender_descriptions(brief: true).join(',<br>'))
             %td
               %nobr
                 = masked_ssn client.ssn
