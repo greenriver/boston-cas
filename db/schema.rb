@@ -314,6 +314,9 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
+    t.string "gender_other"
+    t.integer "gender_id"
+    t.integer "race_id"
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1321,6 +1324,9 @@ ActiveRecord::Schema.define(version: 2022_10_06_175808) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
+    t.integer "gender"
+    t.string "secondary_race"
+    t.string "primary_race"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
