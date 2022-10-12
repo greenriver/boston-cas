@@ -18,9 +18,17 @@ class ActiveMatchesController < MatchListBaseController
     @matches = match_scope
     @current_step = params[:current_step]
     @current_program = params[:current_program]
+    @current_contact_type = params[:current_contact_type]&.to_sym
+    if current_user.can_view_all_matches?
+      @current_filter_contact = params[:current_filter_contact]
+      @current_filter_contact = @current_filter_contact.to_i if @current_filter_contact.present?
+    elsif @current_contact_type.present?
+      @current_filter_contact = current_user.contact&.id
+    end
     @matches = filter_by_step(@current_step, @matches)
     @matches = filter_by_route(@current_route, @matches)
     @matches = filter_by_program(@current_program, @matches)
+    @matches = filter_by_contact(@current_filter_contact, @current_contact_type, @matches)
     @search_string = params[:q]
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").

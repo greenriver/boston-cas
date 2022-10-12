@@ -168,6 +168,16 @@ class MatchListBaseController < ApplicationController
   end
   helper_method :available_programs
 
+  def available_contact_types
+    MatchContacts.input_names
+  end
+  helper_method :available_contact_types
+
+  def available_contacts
+    Contact.active_contacts
+  end
+  helper_method :available_contacts
+
   private def filter_by_route route, scope
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
 
@@ -180,6 +190,12 @@ class MatchListBaseController < ApplicationController
 
     scope.joins(:program).
       merge(Program.where(id: program))
+  end
+
+  private def filter_by_contact(contact_id, contact_type, scope)
+    return scope unless contact_id.present? || contact_type.present?
+
+    scope.with_contact(contact_id, Contact.contact_type_for(contact_type))
   end
 
   private def decision_sub_query
