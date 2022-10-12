@@ -3,5 +3,8 @@
   .ml-2= link_to 'Deactivate', unit_deactivate_path(unit), method: :post, class: ['btn', 'btn-sm', 'btn-secondary']
 - else
   .ml-2= link_to 'Restore', restore_unit_path(unit), method: :post, class: ['btn', 'btn-sm', 'btn-secondary']
-- unless unit.in_use?
+- if unit.in_use?
+  .ml-2{ data: {toggle: :tooltip, title: 'Unit is in use' } }
+    %button.btn.btn-sm.btn-outline-secondary{ disabled: true, style: 'pointer-events: none;' } Delete
+- else
   .ml-2= link_to 'Delete', unit_path(unit), method: :delete, data: {confirm: "Please confirm that you'd like to delete this unit:  #{unit.name}.\nThis action cannot be undone."}, class: 'btn btn-sm btn-outline-danger'
