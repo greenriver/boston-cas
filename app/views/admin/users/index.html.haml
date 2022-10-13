@@ -46,7 +46,8 @@
                     %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
                 %th Roles
                 %th Status
-                %th Matches
+                %th.text-center Open Matches
+                %th.text-center Closed Matches
                 %th Actions
 
             %tbody
@@ -68,8 +69,9 @@
                   %td= user.roles_string
                   %td= render 'user_invitation_status', user: user
                   %td.text-center
-                    - matches = user.contact&.client_opportunity_match_contacts&.joins(:match) || []
-                    = matches.size
+                    = user.contact.open_match_count if user.contact.present?
+                  %td.text-center
+                    = user.contact.closed_match_count if user.contact.present?
                   %td
                     .w-100
                       = link_to(edit_admin_user_path(id: user), class: 'btn btn-sm btn-secondary mb-2 text-nowrap') do

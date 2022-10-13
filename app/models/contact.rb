@@ -98,4 +98,16 @@ class Contact < ApplicationRecord
   def phone_for_display
     phone.presence || cell_phone
   end
+
+  def client_opportunity_matches
+    @client_opportunity_matches ||= client_opportunity_match_contacts.joins(:match)
+  end
+
+  def open_match_count
+    client_opportunity_matches.merge(ClientOpportunityMatch.open).count
+  end
+
+  def closed_match_count
+    client_opportunity_matches.merge(ClientOpportunityMatch.closed).count
+  end
 end
