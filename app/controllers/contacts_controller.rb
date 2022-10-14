@@ -28,6 +28,15 @@ class ContactsController < ApplicationController
       .preload(:client_opportunity_match_contacts, :user)
       .order(sort_column => sort_direction)
       .page(params[:page]).per(25)
+
+    # count number of open/closed matches per contact
+    contact_ids = @contacts.map(&:id)
+    @open_matches = Contact.where(id: contact_ids).
+      joins(:matches).merge(ClientOpportunityMatch.open).
+      group(:id).count
+    @closed_matches = Contact.where(id: contact_ids).
+      joins(:matches).merge(ClientOpportunityMatch.closed).
+      group(:id).count
   end
 
   def move_matches

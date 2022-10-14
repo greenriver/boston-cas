@@ -30,6 +30,15 @@ module Admin
       @users = @users
         .order(sort_column => sort_direction)
         .page(params[:page]).per(25)
+
+      # count number of open/closed matches per user
+      user_ids = @users.map(&:id)
+      @open_matches = Contact.where(user_id: user_ids).
+        joins(:matches).merge(ClientOpportunityMatch.open).
+        group(:id).count
+      @closed_matches = Contact.where(user_id: user_ids).
+        joins(:matches).merge(ClientOpportunityMatch.closed).
+        group(:id).count
     end
 
     def edit
@@ -148,7 +157,7 @@ module Admin
       end
 
       def sort_direction
-        %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+        ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : "asc"
       end
 
       def set_user
