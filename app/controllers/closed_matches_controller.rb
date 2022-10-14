@@ -34,7 +34,7 @@ class ClosedMatchesController < MatchListBaseController
       order(sort_matches())
     @column = sort_column
     @direction = sort_direction
-    @active_filter = [@current_step, @current_program, @@current_contact_type, @current_filter_contact].map(&:presence).any?
+    @active_filter = [@current_step, @current_program, @current_contact_type, @current_filter_contact].map(&:presence).any?
     @types = MatchRoutes::Base.match_steps
 
     @page_size = 25
