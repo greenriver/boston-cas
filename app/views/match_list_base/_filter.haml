@@ -41,7 +41,7 @@
       - if current_user.can_view_all_matches?
         .o-filtration__option
           %select{name: :current_filter_contact, style: 'width: 100%;'}
-            %option{value: ''} Filter by User
+            %option{value: ''} Filter by contact
             - Contact.active_contacts.each do |contact|
               - selected = @current_filter_contact&.to_i == contact.id
               %option{value: contact.id, selected: selected}
