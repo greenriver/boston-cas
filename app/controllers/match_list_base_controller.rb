@@ -182,6 +182,12 @@ class MatchListBaseController < ApplicationController
       merge(Program.where(id: program))
   end
 
+  private def filter_by_contact(contact_id, contact_type, scope)
+    return scope unless contact_id.present? || contact_type.present?
+
+    scope.with_contact(contact_id, Contact.contact_type_for(contact_type))
+  end
+
   private def decision_sub_query
     MatchDecisions::Base.where('match_id = client_opportunity_matches.id').
       where.not(status: nil).
