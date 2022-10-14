@@ -87,6 +87,7 @@ Layout/DefEndAlignment:
 Layout/DotPosition:
   Exclude:
     - 'app/controllers/admin/agencies_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
@@ -99,6 +100,7 @@ Layout/DotPosition:
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
     - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
     - 'app/models/concerns/related_default_contacts.rb'
+    - 'app/models/contact.rb'
     - 'app/models/identified_client.rb'
     - 'app/models/program.rb'
     - 'app/models/sub_program.rb'
@@ -266,6 +268,7 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/recreate_invitations_controller.rb'
     - 'app/controllers/admin/resend_invitations_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
@@ -443,6 +446,7 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/neighborhoods_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
@@ -586,6 +590,7 @@ Layout/HashAlignment:
 # SupportedStyles: normal, indented_internal_methods
 Layout/IndentationConsistency:
   Exclude:
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
@@ -623,6 +628,7 @@ Layout/IndentationStyle:
 # Configuration parameters: Width, IgnoredPatterns.
 Layout/IndentationWidth:
   Exclude:
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
@@ -861,6 +867,7 @@ Layout/SpaceInsideBlockBraces:
 Layout/SpaceInsideHashLiteralBraces:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
@@ -1341,6 +1348,7 @@ Naming/PredicateName:
   Exclude:
     - 'spec/**/*'
     - 'app/controllers/concerns/match_building_and_unit.rb'
+    - 'app/models/contact.rb'
     - 'app/models/match_events/note.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/project_client.rb'
@@ -1358,6 +1366,7 @@ Security/YAMLLoad:
 # SupportedStyles: prefer_alias, prefer_alias_method
 Style/Alias:
   Exclude:
+    - 'app/models/contact.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
@@ -1437,6 +1446,7 @@ Style/ExpandPathArguments:
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Exclude:
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -1568,6 +1578,7 @@ Style/IfUnlessModifier:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/translation_keys_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
@@ -1634,6 +1645,7 @@ Style/MutableConstant:
 # SupportedStyles: both, prefix, postfix
 Style/NegatedIf:
   Exclude:
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
 
@@ -1712,6 +1724,7 @@ Style/RedundantBegin:
 # Cop supports --auto-correct.
 Style/RedundantInterpolation:
   Exclude:
+    - 'app/models/contact.rb'
     - 'spec/models/rules/active_in_cohort_spec.rb'
     - 'spec/models/rules/enrolled_in_hmis_project_spec.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
@@ -1824,6 +1837,7 @@ Style/StringLiterals:
     - 'app/controllers/account_passwords_controller.rb'
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
@@ -1851,6 +1865,7 @@ Style/StringLiterals:
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/subject_for_matches.rb'
+    - 'app/models/contact.rb'
     - 'app/models/match_decisions/five/five_lease_up.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
@@ -1902,6 +1917,7 @@ Style/StructInheritance:
 # IgnoredMethods: respond_to, define_method
 Style/SymbolProc:
   Exclude:
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/user.rb'
@@ -1922,6 +1938,7 @@ Style/TrailingCommaInArguments:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
     - 'app/controllers/admin/translation_keys_controller.rb'
+    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
@@ -1937,6 +1954,7 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/client_opportunity_match_contact.rb'
+    - 'app/models/contact.rb'
     - 'app/models/funding_source.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/program.rb'
