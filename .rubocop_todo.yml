@@ -274,6 +274,7 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -753,6 +754,7 @@ Layout/SpaceAroundOperators:
 Layout/SpaceBeforeBlockBraces:
   Exclude:
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -832,6 +834,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
 Layout/SpaceInsideBlockBraces:
   Exclude:
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -1082,6 +1085,7 @@ Lint/DeprecatedClassMethods:
 # Offense count: 3
 Lint/DuplicateMethods:
   Exclude:
+    - 'app/controllers/closed_matches_controller.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1612,6 +1616,7 @@ Style/InverseMethods:
 # Configuration parameters: IgnoredMethods.
 Style/MethodCallWithoutArgsParentheses:
   Exclude:
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'spec/models/decisions_spec.rb'
 
@@ -1839,6 +1844,7 @@ Style/StringLiterals:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/decisions.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -1936,6 +1942,7 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
