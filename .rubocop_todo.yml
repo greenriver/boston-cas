@@ -110,6 +110,7 @@ Layout/DotPosition:
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterGuardClause:
   Exclude:
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/file_tag.rb'
     - 'app/models/funding_source.rb'
@@ -155,6 +156,7 @@ Layout/EmptyLines:
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/unavailable_clients_controller.rb'
@@ -272,6 +274,7 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -751,6 +754,7 @@ Layout/SpaceAroundOperators:
 Layout/SpaceBeforeBlockBraces:
   Exclude:
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -813,6 +817,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/imported_clients_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/models/user_role.rb'
@@ -829,6 +834,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
 Layout/SpaceInsideBlockBraces:
   Exclude:
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -865,6 +871,7 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
@@ -1078,6 +1085,7 @@ Lint/DeprecatedClassMethods:
 # Offense count: 3
 Lint/DuplicateMethods:
   Exclude:
+    - 'app/controllers/closed_matches_controller.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1087,6 +1095,7 @@ Lint/InterpolationCheck:
 # Offense count: 2
 Lint/LiteralAsCondition:
   Exclude:
+    - 'app/controllers/match_list_base_controller.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1247,6 +1256,7 @@ Lint/UselessAssignment:
     - 'app/controllers/admin/translation_text_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/qualified_opportunities_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
@@ -1314,6 +1324,7 @@ Naming/HeredocDelimiterNaming:
 Naming/MemoizedInstanceVariableName:
   Exclude:
     - 'app/controllers/application_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/helpers/match_list_base_helper.rb'
     - 'app/models/concerns/contact_join_model.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
@@ -1439,6 +1450,7 @@ Style/GuardClause:
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
@@ -1570,6 +1582,7 @@ Style/IfUnlessModifier:
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -1603,6 +1616,8 @@ Style/InverseMethods:
 # Configuration parameters: IgnoredMethods.
 Style/MethodCallWithoutArgsParentheses:
   Exclude:
+    - 'app/controllers/closed_matches_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
@@ -1702,6 +1717,7 @@ Style/RaiseArgs:
 # Cop supports --auto-correct.
 Style/RedundantBegin:
   Exclude:
+    - 'app/controllers/match_list_base_controller.rb'
     - 'bin/yarn'
 
 # Offense count: 10
@@ -1781,6 +1797,7 @@ Style/Sample:
 # Cop supports --auto-correct.
 Style/SelfAssignment:
   Exclude:
+    - 'app/controllers/match_list_base_controller.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -1827,10 +1844,12 @@ Style/StringLiterals:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/concerns/decisions.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -1923,6 +1942,7 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
+    - 'app/controllers/closed_matches_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
@@ -1956,6 +1976,7 @@ Style/TrailingCommaInArguments:
 Style/TrailingCommaInArrayLiteral:
   Exclude:
     - 'app/controllers/associated_contacts_controller.rb'
+    - 'app/controllers/match_list_base_controller.rb'
     - 'app/models/sub_program.rb'
     - 'bin/setup'
 
