@@ -24,6 +24,7 @@ class Contact < ApplicationRecord
   has_many :clients, through: :client_contacts
   has_many :buildings, through: :building_contacts
   has_many :subgrantees, through: :subgrantee_contacts
+  has_many :matches, through: :client_opportunity_match_contacts, source: :match
 
   has_many :events, class_name: MatchEvents::Base.name, inverse_of: :contact
   has_many :messages

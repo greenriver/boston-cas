@@ -87,7 +87,6 @@ Layout/DefEndAlignment:
 Layout/DotPosition:
   Exclude:
     - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
@@ -267,7 +266,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/recreate_invitations_controller.rb'
     - 'app/controllers/admin/resend_invitations_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
@@ -445,7 +443,6 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/neighborhoods_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
@@ -589,7 +586,6 @@ Layout/HashAlignment:
 # SupportedStyles: normal, indented_internal_methods
 Layout/IndentationConsistency:
   Exclude:
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
@@ -627,7 +623,6 @@ Layout/IndentationStyle:
 # Configuration parameters: Width, IgnoredPatterns.
 Layout/IndentationWidth:
   Exclude:
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
@@ -866,7 +861,6 @@ Layout/SpaceInsideBlockBraces:
 Layout/SpaceInsideHashLiteralBraces:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
@@ -1443,7 +1437,6 @@ Style/ExpandPathArguments:
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Exclude:
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -1575,7 +1568,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
@@ -1642,7 +1634,6 @@ Style/MutableConstant:
 # SupportedStyles: both, prefix, postfix
 Style/NegatedIf:
   Exclude:
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
 
@@ -1833,7 +1824,6 @@ Style/StringLiterals:
     - 'app/controllers/account_passwords_controller.rb'
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
@@ -1912,7 +1902,6 @@ Style/StructInheritance:
 # IgnoredMethods: respond_to, define_method
 Style/SymbolProc:
   Exclude:
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/user.rb'
@@ -1933,7 +1922,6 @@ Style/TrailingCommaInArguments:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
