@@ -28,6 +28,14 @@ class Unit < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :active, -> do
+    where(active: true)
+  end
+
+  scope :inactive, -> do
+    where(active: false)
+  end
+
   def hmis_managed?
     return true if id_in_data_source
 

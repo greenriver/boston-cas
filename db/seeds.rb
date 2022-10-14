@@ -43,42 +43,6 @@ def hud_codes
     item.text = name
     item.save
   end
-  # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.6 Gender
-  {
-    0 => 'Female',
-    1 => 'Male',
-    2 => 'Trans Female (MTF or Male to Female)',
-    3 => 'Trans Male (FTM or Female to Male)',
-    4 => 'Gender non-conforming (i.e. not exclusively male or female)',
-    8 => 'Client doesn’t know',
-    9 => 'Client refused',
-    99 => 'Data not collected'
-  }.each do |id, name|
-    item = Gender.where(numeric: id).first_or_create! do |r|
-      r.numeric = id
-      r.text = name
-    end
-    item.text = name
-    item.save
-  end
-  # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.4 Race
-  {
-    1 => 'American Indian or Alaska Native',
-    2 => 'Asian',
-    3 => 'Black or African American',
-    4 => 'Native Hawaiian or Other Pacific Islander',
-    5 => 'White',
-    8 => 'Client doesn’t know',
-    9 => 'Client refused',
-    99 => 'Data not collected'
-  }.each do |id, name|
-    item = Race.where(numeric: id).first_or_create! do |r|
-      r.numeric = id
-      r.text = name
-    end
-    item.text = name
-    item.save
-  end
   # HUD HMIS Data Standards UNIVERSAL DATA ELEMENTS 3.5 Ethnicity
   Ethnicity.where(text: 'Other (Non-Hispanic/Latino)').delete_all
   {

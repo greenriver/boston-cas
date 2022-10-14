@@ -346,16 +346,6 @@ class NonHmisAssessment < ActiveRecord::Base
     }
   end
 
-  def genders
-    {
-      0 => 'Female',
-      1 => 'Male',
-      4 => 'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
-      5 => 'Transgender',
-      6 => 'Questioning',
-    }.freeze
-  end
-
   def hud_assessment_types
     {
       'Phone' => 1,

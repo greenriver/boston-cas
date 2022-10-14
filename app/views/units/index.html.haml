@@ -3,50 +3,48 @@
   .col-sm-8
     %h1= t '.title'
   .col-sm-4
-    = link_to new_unit_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+    = link_to new_unit_path, class: 'btn btn-primary float-right margin-bottom-02' do
       %span.icon-plus
       Add a Unit
 - @prompt = t '.search_prompt'
 .row
   .col-sm-6
     = render 'search_form'
+= render 'tabs', current_tab: @current_tab_name
 .row.table-utilities
-  .col-sm-8
-    %p= page_entries_info @units
+  .col-12
+    .d-flex.justify-content-between
+      %p= page_entries_info @units
+      = paginate @units
     :ruby
       columns = ['id', 'name', 'available', 'building_id']
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
       titles = {}
       directions.each {| k,v | titles[k] = @units.human_attribute_name(k)}
       titles['id'].upcase!
-  
-.row
-  .col-sm-12  
-    .c-card.c.card__flush.mb-4
-      .c-card__content.p-0.pb-4
-        %table.table.table-striped
-          %thead
-            %tr
-              - titles.each do | k, title |
-                %th
-                  = manual_sort_link(titles[k], k, directions)
-                  %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-              %th Edit
-          %tbody
-            - @units.each do |unit|
-              - if unit.deleted_at
-                - deleted = "deleted"
+- if @units.any?
+  .row
+    .col-sm-12
+      .c-card.c.card__flush.mb-4
+        .c-card__content.p-0.pb-4
+          %table.table.table-striped
+            %thead
               %tr
-                %td{:class => deleted}= unit.id
-                %td{:class => deleted}= unit.name || '(no name)'
-                %td{:class => deleted}= checkmark unit.available
-                %td= link_to unit.building.name, building_path(unit.building)
-                %td
-                  - if ! unit.deleted_at
-                    = link_to 'Edit', edit_unit_path(unit)
-                  - else
-                    = link_to 'Restore', restore_unit_path(unit.id), method: :post
-                          
-    %p= paginate @units
-    
-  
+                - titles.each do | k, title |
+                  %th
+                    = manual_sort_link(titles[k], k, directions)
+                    %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
+                %th
+            %tbody
+              - @units.each do |unit|
+                - if unit.deleted_at
+                  - deleted = "deleted"
+                %tr
+                  %td{:class => deleted}= unit.id
+                  %td{:class => deleted}= unit.name || '(no name)'
+                  %td{:class => deleted}= checkmark unit.available
+                  %td= link_to unit.building.name, building_path(unit.building)
+                  %td
+                    .d-flex.float-right= render 'actions', unit: unit
+      .d-flex.float-right
+        = paginate @units

@@ -16,9 +16,17 @@ class UnitsController < ApplicationController
   def index
     # search
     @units = if params[:q].present?
-      unit_scope.text_search(params[:q])
+      Unit.text_search(params[:q])
     else
-      unit_scope
+      Unit.all
+    end
+
+    if params[:current_tab] == 'Inactive'
+      @units = @units.inactive
+      @current_tab_name = 'Inactive'
+    else
+      @units = @units.active
+      @current_tab_name = 'Active'
     end
 
     # sort / paginate
@@ -67,76 +75,81 @@ class UnitsController < ApplicationController
         # make sure we have an opportunity with the associated unit
         # Or not, since we don't want to double up on opportunities with vouchers that
         # might also include this unit
-        #op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
+        # op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
-      if ! ajax_modal_request?
-        redirect_to building_path(@unit.building)
-      end
+      redirect_to building_path(@unit.building) unless ajax_modal_request?
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> was successfully updated."
     else
-      render :edit, {:flash => { :error => 'Unable to update unit <strong>#{@unit[:name]}</strong>.'}}
+      render :edit, { flash: { error: "Unable to update unit <strong>#{@unit[:name]}</strong>." } }
     end
   end
 
   # DELETE /hmis/units/1
   def destroy
-    building = @unit.building
+    previous_page = Rails.application.routes.recognize_path(request.referrer)
+    next_url = if previous_page[:controller] == 'units' && previous_page[:action] == 'edit'
+      building_path(@unit.building)
+    else
+      request.referer
+    end
+
     if @unit.destroy
-      redirect_to building_path(building), notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
+      redirect_to next_url, notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
     else
-      render :edit, {:flash => { :error => 'Unable to delete unit <strong>#{@unit[:name]}</strong>.'}}
+      redirect_to next_url, { flash: { error: "Unable to delete unit <strong>#{@unit[:name]}</strong>." } }
     end
   end
 
-  # RESTORE /hmis/units/1
+  # POST /hmis/units/1/restore
   def restore
-    if Unit.restore(params[:id])
-      @unit = Unit.find(params[:id])
-      redirect_to units_path, notice: "Unit <strong>#{@unit[:name]}</strong> successfully restored."
-    else
-      render :edit, {:flash => { :error => 'Unable to restore unit.'}}
-    end
+    @unit = Unit.find(params[:id])
+    @unit.update(active: true)
+    redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was restored.")
   end
 
-  def get_unit
-    @unit = Unit.find(params[:id])
+  # POST /hmis/units/1/deactivate
+  def deactivate
+    @unit = Unit.find(params[:unit_id])
+    @unit.update(active: false)
+    redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was deactivated.")
   end
 
   private
-    def unit_scope
-      Unit
-    end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unit
-      @unit = Unit.find(params[:id])
-    end
 
-    def set_building
-      if params[:building_id]
-        @unit.building = Building.find(params[:building_id])
-      end
-    end
-    # Only allow a trusted parameter "white list" through.
-    def unit_params
-      params.require(:unit).permit(
-        :name,
-        :available,
-        :building_id,
-        :elevator_accessible,
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_unit
+    @unit = Unit.find(params[:id])
+  end
 
-    def sort_column
-      Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  def set_building
+    @unit.building = Building.find(params[:building_id]) if params[:building_id]
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
+  # Only allow a trusted parameter "white list" through.
+  def unit_params
+    params.require(:unit).permit(
+      :name,
+      :available,
+      :building_id,
+      :elevator_accessible,
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
+  def filter_params
+    params.permit(:q, :direction, :sort)
+  end
+  helper_method :filter_params
 
+  def sort_column
+    Unit.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
+
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def query_string
+    "%#{@query}%"
+  end
 end

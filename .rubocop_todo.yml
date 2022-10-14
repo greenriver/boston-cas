@@ -38,14 +38,12 @@ Layout/ArgumentAlignment:
 Layout/BlockAlignment:
   Exclude:
     - 'app/models/user.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
 Layout/BlockEndNewline:
   Exclude:
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -98,7 +96,6 @@ Layout/DotPosition:
     - 'app/controllers/match_notes_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
     - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
@@ -143,7 +140,6 @@ Layout/EmptyLineBetweenDefs:
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/match_decisions/provider_only/confirm_hsa_accepts_client_decline_dnd_staff.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_routes/five.rb'
@@ -174,11 +170,8 @@ Layout/EmptyLines:
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
     - 'bin/setup'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
-    - 'spec/integration/match_engine_spec.rb'
-    - 'spec/models/rules/female_spec.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
-    - 'spec/models/rules/transgender_spec.rb'
     - 'spec/models/rules/vispdat_scores_spec.rb'
     - 'spec/support/tasks.rb'
     - 'spec/tasks/update_clients_spec.rb'
@@ -197,7 +190,6 @@ Layout/EmptyLinesAroundAccessModifier:
     - 'app/controllers/services_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/program.rb'
     - 'app/models/sub_program.rb'
 
@@ -225,7 +217,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/factories/programs.rb'
     - 'spec/factories/requirements.rb'
     - 'spec/factories/users.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -244,7 +235,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/models/rules/bedroom_spec.rb'
     - 'spec/models/rules/disability_verified_on_spec.rb'
     - 'spec/models/rules/enrolled_in_hmis_project_spec.rb'
-    - 'spec/models/rules/female_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
@@ -255,14 +245,12 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/models/rules/interested_in_rrh_spec.rb'
     - 'spec/models/rules/interested_in_set_asides_spec.rb'
     - 'spec/models/rules/interested_in_youth_rrh_spec.rb'
-    - 'spec/models/rules/male_spec.rb'
     - 'spec/models/rules/mi_and_sa_comorbid_spec.rb'
     - 'spec/models/rules/mi_sa_or_co_morbid_spec.rb'
     - 'spec/models/rules/occupancy_spec.rb'
     - 'spec/models/rules/require_interest_in_neighborhood_spec.rb'
     - 'spec/models/rules/seen_in_last_30_thirty_days_spec.rb'
     - 'spec/models/rules/tagged_with_spec.rb'
-    - 'spec/models/rules/transgender_spec.rb'
     - 'spec/models/rules/vispdat_scores_spec.rb'
     - 'spec/models/user_spec.rb'
     - 'spec/spec_helper.rb'
@@ -306,7 +294,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/tags_controller.rb'
     - 'app/controllers/unavailable_clients_controller.rb'
     - 'app/controllers/unavailable_on_route_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/jobs/matching/run_engine_job.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
@@ -540,7 +527,6 @@ Layout/ExtraSpacing:
     - 'spec/models/rules/income_less_than_thirty_percent_ami_spec.rb'
     - 'spec/models/rules/mi_and_sa_comorbid_spec.rb'
     - 'spec/models/rules/mi_sa_or_co_morbid_spec.rb'
-    - 'spec/models/rules/transgender_spec.rb'
     - 'spec/tasks/update_clients_spec.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
@@ -623,7 +609,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/subgrantee_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/program.rb'
     - 'app/models/stalled_match_request.rb'
@@ -663,7 +648,6 @@ Layout/IndentationWidth:
     - 'app/controllers/subgrantee_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/concerns/pathways_calculations.rb'
     - 'app/models/help.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -671,7 +655,6 @@ Layout/IndentationWidth:
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 27
@@ -680,7 +663,6 @@ Layout/IndentationWidth:
 Layout/LeadingCommentSpace:
   Exclude:
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
@@ -691,13 +673,11 @@ Layout/LeadingCommentSpace:
     - 'app/models/testing/matching/candidate_generation.rb'
     - 'app/models/user.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 6
 # Cop supports --auto-correct.
 Layout/MultilineBlockLayout:
   Exclude:
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 6
 # Cop supports --auto-correct.
@@ -726,7 +706,6 @@ Layout/MultilineMethodCallIndentation:
 # Cop supports --auto-correct.
 Layout/SpaceAfterColon:
   Exclude:
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 19
 # Cop supports --auto-correct.
@@ -735,8 +714,6 @@ Layout/SpaceAfterComma:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/models/concerns/match_archive.rb'
-    - 'app/models/rules/female.rb'
-    - 'app/models/rules/male.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
 # Offense count: 6
@@ -764,7 +741,6 @@ Layout/SpaceAroundOperators:
   Exclude:
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
@@ -877,12 +853,9 @@ Layout/SpaceInsideBlockBraces:
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
-    - 'spec/models/rules/female_spec.rb'
-    - 'spec/models/rules/male_spec.rb'
     - 'spec/tasks/update_clients_spec.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
@@ -902,7 +875,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/messages_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
     - 'app/models/concerns/match_archive.rb'
@@ -911,7 +883,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
     - 'spec/controllers/clients_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
     - 'spec/models/rules/tagged_with_spec.rb'
@@ -944,13 +915,11 @@ Layout/SpaceInsideParens:
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
     - 'spec/models/rules/bedroom_spec.rb'
     - 'spec/models/rules/disability_verified_on_spec.rb'
-    - 'spec/models/rules/female_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_thirty_percent_ami_spec.rb'
     - 'spec/models/rules/income_spec.rb'
-    - 'spec/models/rules/male_spec.rb'
     - 'spec/models/rules/occupancy_spec.rb'
     - 'spec/models/rules/seen_in_last_30_thirty_days_spec.rb'
     - 'spec/models/rules/seen_in_last_forty_five_days_spec.rb'
@@ -1043,7 +1012,6 @@ Layout/TrailingEmptyLines:
     - 'spec/models/rules/seen_in_last_forty_five_days_spec.rb'
     - 'spec/models/rules/seen_in_last_sixty_days_spec.rb'
     - 'spec/models/rules/tagged_with_spec.rb'
-    - 'spec/models/rules/transgender_spec.rb'
     - 'spec/models/rules/two_seventy_days_homeless_last_three_years_spec.rb'
     - 'spec/models/rules/two_seventy_days_homeless_spec.rb'
     - 'spec/models/rules/verified_days_homeless_spec.rb'
@@ -1062,13 +1030,11 @@ Layout/TrailingWhitespace:
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
     - 'spec/models/message_spec.rb'
-    - 'spec/models/rules/female_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_thirty_percent_ami_spec.rb'
     - 'spec/models/rules/income_spec.rb'
-    - 'spec/models/rules/male_spec.rb'
     - 'spec/models/rules/vispdat_scores_spec.rb'
 
 # Offense count: 1
@@ -1083,13 +1049,11 @@ Lint/AmbiguousOperator:
   Exclude:
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'spec/models/rules/disability_verified_on_spec.rb'
-    - 'spec/models/rules/female_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_thirty_percent_ami_spec.rb'
     - 'spec/models/rules/income_spec.rb'
-    - 'spec/models/rules/male_spec.rb'
 
 # Offense count: 13
 # Configuration parameters: AllowSafeAssignment.
@@ -1127,7 +1091,6 @@ Lint/DuplicateMethods:
 # Cop supports --auto-correct.
 Lint/InterpolationCheck:
   Exclude:
-    - 'app/controllers/units_controller.rb'
 
 # Offense count: 2
 Lint/LiteralAsCondition:
@@ -1219,7 +1182,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/rules/enrolled_in_sh.rb'
     - 'app/models/rules/enrolled_in_so.rb'
     - 'app/models/rules/enrolled_in_th.rb'
-    - 'app/models/rules/female.rb'
     - 'app/models/rules/ground_floor.rb'
     - 'app/models/rules/health_prioritized.rb'
     - 'app/models/rules/hmis_client.rb'
@@ -1238,7 +1200,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/rules/interested_in_rrh.rb'
     - 'app/models/rules/interested_in_set_asides.rb'
     - 'app/models/rules/interested_in_youth_rrh.rb'
-    - 'app/models/rules/male.rb'
     - 'app/models/rules/mental_health_eligible.rb'
     - 'app/models/rules/meth_production_conviction.rb'
     - 'app/models/rules/mi_and_sa_co_morbid.rb'
@@ -1261,7 +1222,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/rules/sro_ok.rb'
     - 'app/models/rules/ssvf_eligible.rb'
     - 'app/models/rules/tagged_with.rb'
-    - 'app/models/rules/transgender.rb'
     - 'app/models/rules/two_seventy_days_homeless.rb'
     - 'app/models/rules/two_seventy_days_homeless_last_three_years.rb'
     - 'app/models/rules/us_citizen.rb'
@@ -1316,7 +1276,6 @@ Lint/UselessAssignment:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
     - 'spec/models/rules/bedroom_spec.rb'
@@ -1352,7 +1311,6 @@ Metrics/PerceivedComplexity:
 # Offense count: 3
 Naming/AccessorMethodName:
   Exclude:
-    - 'app/controllers/units_controller.rb'
 
 # Offense count: 1
 # Configuration parameters: ForbiddenDelimiters.
@@ -1428,7 +1386,6 @@ Style/BlockComments:
 Style/BlockDelimiters:
   Exclude:
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
@@ -1497,7 +1454,6 @@ Style/GuardClause:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
@@ -1535,7 +1491,6 @@ Style/GuardClause:
     - 'app/models/rules/enrolled_in_sh.rb'
     - 'app/models/rules/enrolled_in_so.rb'
     - 'app/models/rules/enrolled_in_th.rb'
-    - 'app/models/rules/female.rb'
     - 'app/models/rules/ground_floor.rb'
     - 'app/models/rules/health_prioritized.rb'
     - 'app/models/rules/holds_voucher.rb'
@@ -1553,7 +1508,6 @@ Style/GuardClause:
     - 'app/models/rules/interested_in_rrh.rb'
     - 'app/models/rules/interested_in_set_asides.rb'
     - 'app/models/rules/interested_in_youth_rrh.rb'
-    - 'app/models/rules/male.rb'
     - 'app/models/rules/mental_health_eligible.rb'
     - 'app/models/rules/meth_production_conviction.rb'
     - 'app/models/rules/mi_and_sa_co_morbid.rb'
@@ -1576,7 +1530,6 @@ Style/GuardClause:
     - 'app/models/rules/sro_ok.rb'
     - 'app/models/rules/ssvf_eligible.rb'
     - 'app/models/rules/tagged_with.rb'
-    - 'app/models/rules/transgender.rb'
     - 'app/models/rules/two_seventy_days_homeless.rb'
     - 'app/models/rules/two_seventy_days_homeless_last_three_years.rb'
     - 'app/models/rules/us_citizen.rb'
@@ -1602,7 +1555,6 @@ Style/HashSyntax:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
@@ -1634,7 +1586,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/inputs/base_input.rb'
     - 'app/mailers/account_mailer.rb'
@@ -1696,7 +1647,6 @@ Style/NegatedIf:
   Exclude:
     - 'app/controllers/admin/users_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
 
 # Offense count: 3
@@ -1907,7 +1857,6 @@ Style/StringLiterals:
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/successful_vouchers_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
     - 'app/helpers/admin/users_helper.rb'
@@ -1944,10 +1893,8 @@ Style/StringLiterals:
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
     - 'spec/factories/client_notes.rb'
-    - 'spec/factories/genders.rb'
     - 'spec/factories/housing_media_links.rb'
     - 'spec/factories/roles.rb'
-    - 'spec/integration/match_engine_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -2005,7 +1952,6 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/units_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/client_opportunity_match_contact.rb'
     - 'app/models/contact.rb'
@@ -2033,7 +1979,6 @@ Style/TrailingCommaInArrayLiteral:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/models/sub_program.rb'
     - 'bin/setup'
-    - 'spec/integration/match_engine_spec.rb'
 
 # Offense count: 21
 # Cop supports --auto-correct.

@@ -48,6 +48,9 @@ input {
   }
 }
 
+.btn-outline-danger:not(:hover) {
+  background-color: white;
+}
 .checkbox,
 .radio {
   display: block;

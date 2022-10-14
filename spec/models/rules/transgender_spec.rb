@@ -2,27 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Rules::Transgender, type: :model do
   describe 'clients_that_fit' do
-
-    FEMALE = 0
-    MALE = 1
-    M_TO_F = 2
-    F_TO_M = 3
-    NO_ID = 4
-    UNKNOWN = 8
-    REFUSED = 9
-    UNCOLLECTED = 99
-
-
     let!(:rule) { create :transgender }
 
-    let!(:female) { create :client, gender_id: FEMALE }
-    let!(:male) { create :client, gender_id: MALE }
-    let!(:sue) { create :client, first_name: 'Sue', gender_id: M_TO_F  }
-    let!(:roy) { create :client, first_name: 'Roy',  gender_id: F_TO_M }
-    let!(:no_id) { create :client, gender_id: NO_ID }
-    let!(:unknown) { create :client, gender_id: UNKNOWN }
-    let!(:refused) { create :client, gender_id: REFUSED }
-    let!(:uncollected) { create :client, gender_id: UNCOLLECTED }
+    let!(:female) { create :client, female: true }
+    let!(:male) { create :client, male: true }
+    let!(:sue) { create :client, first_name: 'Sue', female: true, transgender: true }
+    let!(:roy) { create :client, first_name: 'Roy', male: true, transgender: true }
+    let!(:uncollected) { create :client }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
@@ -43,8 +29,8 @@ RSpec.describe Rules::Transgender, type: :model do
     end
 
     context 'when negative' do
-      it 'matches 6' do
-        expect(clients_that_dont_fit.count).to eq(6)
+      it 'matches 3' do
+        expect(clients_that_dont_fit.count).to eq(3)
       end
       it 'does not contain Roy' do
         expect(clients_that_dont_fit.ids).to_not include roy.id

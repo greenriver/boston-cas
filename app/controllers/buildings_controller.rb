@@ -41,6 +41,13 @@ class BuildingsController < ApplicationController
 
   # GET /hmis/buildings/1
   def show
+    if params[:current_tab] == 'Inactive'
+      @current_tab_name = 'Inactive'
+      @units = @building.units.inactive
+    else
+      @current_tab_name = 'Active'
+      @units = @building.units.active
+    end
   end
 
   def new

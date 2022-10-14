@@ -209,6 +209,7 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin',
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::Four::MatchRecommendationHsa',
         ], # 3,4,5,4
         requires_note: false,
       },
@@ -222,6 +223,7 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin',
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::Four::MatchRecommendationHsa',
         ], # 3,4,5,4
         requires_note: false,
       },
@@ -235,6 +237,7 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin',
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
+          'MatchDecisions::Four::MatchRecommendationHsa',
         ], # 3,4,5,4
         requires_note: false,
       },
@@ -262,6 +265,7 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator',
+          'MatchDecisions::Four::MatchRecommendationHsa',
         ], # 3,4,5,4
         requires_note: true,
         weight: 100,
