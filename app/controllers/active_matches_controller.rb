@@ -19,11 +19,10 @@ class ActiveMatchesController < MatchListBaseController
     @current_step = params[:current_step]
     @current_program = params[:current_program]
     @current_contact_type = params[:current_contact_type]&.to_sym
-    if current_user.can_view_all_matches?
-      @current_filter_contact = params[:current_filter_contact]
-      @current_filter_contact = @current_filter_contact.to_i if @current_filter_contact.present?
+    @current_filter_contact = if current_user.can_view_all_matches?
+      params[:current_filter_contact].to_i if params[:current_filter_contact].present?
     elsif @current_contact_type.present?
-      @current_filter_contact = current_user.contact&.id
+      current_user.contact&.id
     end
     @matches = filter_by_step(@current_step, @matches)
     @matches = filter_by_route(@current_route, @matches)
@@ -36,7 +35,7 @@ class ActiveMatchesController < MatchListBaseController
       order(sort_matches)
     @column = sort_column
     @direction = sort_direction
-    @active_filter = @current_step.present? || @current_program.present?
+    @active_filter = [@current_step, @current_program, @current_contact_type, @current_filter_contact].map(&:presence).any?
     @types = MatchRoutes::Base.match_steps
 
     @page_size = 25

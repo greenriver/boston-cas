@@ -35,7 +35,7 @@
       Currently sorted by:
       %strong= @sort_options.select{|m| m[:column] == @column && m[:direction] == @direction}.first[:title]
   .col-sm-4
-    - if @current_step.present? || @current_program.present? || @current_contact_type.present? || @current_filter_contact.present?
+    - if @active_filter
       - step_name = if @current_step.present? then @available_steps.to_h.invert[@current_step] else nil end
       - program_name = if @current_program.present? then @available_programs.index_by(&:id)[@current_program.to_i]&.name else nil end
       - contact_name = if @current_filter_contact.present? then Contact.find(@current_filter_contact).name else nil end

@@ -168,16 +168,6 @@ class MatchListBaseController < ApplicationController
   end
   helper_method :available_programs
 
-  def available_contact_types
-    MatchContacts.input_names
-  end
-  helper_method :available_contact_types
-
-  def available_contacts
-    Contact.active_contacts
-  end
-  helper_method :available_contacts
-
   private def filter_by_route route, scope
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
 

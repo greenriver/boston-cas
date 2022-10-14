@@ -42,7 +42,7 @@
         .o-filtration__option
           %select{name: :current_filter_contact, style: 'width: 100%;'}
             %option{value: ''} Filter by User
-            - available_contacts.each do |contact|
+            - Contact.active_contacts.each do |contact|
               - selected = @current_filter_contact&.to_i == contact.id
               %option{value: contact.id, selected: selected}
                 = contact.name
@@ -50,7 +50,7 @@
       .o-filtration__option
         %select{name: :current_contact_type, style: 'width: 100%;'}
           %option{value: ''} Filter by contact type
-          - available_contact_types.each do |contact_type|
+          - MatchContacts.input_names.each do |contact_type|
             - selected = @current_contact_type == contact_type
             %option{value: contact_type, selected: selected}
               = Contact::label_for(contact_type)&.gsub('Contacts', 'Contact')
