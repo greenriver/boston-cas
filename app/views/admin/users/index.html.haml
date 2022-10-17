@@ -46,7 +46,7 @@
                     %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
                 %th Roles
                 %th Status
-                %th.text-center Open Matches
+                %th.text-center Active Matches
                 %th.text-center Closed Matches
                 %th Actions
 
@@ -68,7 +68,7 @@
                     = user.email
                   %td= user.roles_string
                   %td= render 'user_invitation_status', user: user
-                  %td.text-center= @open_matches[user.id] || 0
+                  %td.text-center= @active_matches[user.id] || 0
                   %td.text-center= @closed_matches[user.id] || 0
                   %td
                     .w-100

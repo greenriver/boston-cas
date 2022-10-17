@@ -29,10 +29,10 @@ class ContactsController < ApplicationController
       .order(sort_column => sort_direction)
       .page(params[:page]).per(25)
 
-    # count number of open/closed matches per contact
+    # count number of active/closed matches per contact
     contact_ids = @contacts.map(&:id)
-    @open_matches = Contact.where(id: contact_ids).
-      joins(:matches).merge(ClientOpportunityMatch.open).
+    @active_matches = Contact.where(id: contact_ids).
+      joins(:matches).merge(ClientOpportunityMatch.active).
       group(:id).count
     @closed_matches = Contact.where(id: contact_ids).
       joins(:matches).merge(ClientOpportunityMatch.closed).
