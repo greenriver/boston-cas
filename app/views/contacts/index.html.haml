@@ -23,7 +23,7 @@
               %th
                 = manual_sort_link(titles[k], k, directions)
                 %i{:class => ["fa", "fa-sort-#{directions[k]}"] }
-            %th.text-center Open Matches
+            %th.text-center Active Matches
             %th.text-center Closed Matches
         %tbody
           - @contacts.each do |c|
@@ -42,8 +42,8 @@
                   = c.first_name
               %td= mail_to c.email, nil, target: '_blank'
               %td= c.phone
-              - open_match_count = @open_matches[c.id] || 0
-              %td.text-center= link_to_if open_match_count.positive?, open_match_count, move_matches_contact_path(c)
+              - active_match_count = @active_matches[c.id] || 0
+              %td.text-center= link_to_if active_match_count.positive?, active_match_count, move_matches_contact_path(c)
               %td.text-center= @closed_matches[c.id] || 0
 
   %p= paginate @contacts

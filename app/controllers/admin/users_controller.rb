@@ -31,10 +31,10 @@ module Admin
         .order(sort_column => sort_direction)
         .page(params[:page]).per(25)
 
-      # count number of open/closed matches per user
+      # count number of active/closed matches per user
       user_ids = @users.map(&:id)
-      @open_matches = Contact.where(user_id: user_ids).
-        joins(:matches).merge(ClientOpportunityMatch.open).
+      @active_matches = Contact.where(user_id: user_ids).
+        joins(:matches).merge(ClientOpportunityMatch.active).
         group(:id).count
       @closed_matches = Contact.where(user_id: user_ids).
         joins(:matches).merge(ClientOpportunityMatch.closed).
