@@ -278,9 +278,6 @@ GEM
     equalizer (0.0.11)
     erubi (1.10.0)
     erubis (2.7.0)
-    exception_notification (4.4.3)
-      actionmailer (>= 4.0, < 7)
-      activesupport (>= 4.0, < 7)
     execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
@@ -551,7 +548,6 @@ GEM
     rubocop-rspec (2.1.0)
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
-    ruby-filemagic (0.7.2)
     ruby-graphviz (1.2.5)
       rexml
     ruby-prof (1.4.2)
@@ -569,6 +565,11 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    sentry-rails (5.5.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.5.0)
+    sentry-ruby (5.5.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     sexp_processor (4.15.1)
     shellany (0.0.1)
     shoulda (4.0.0)
@@ -697,7 +698,6 @@ DEPENDENCIES
   devise-security
   devise_invitable
   dotenv-rails
-  exception_notification
   execjs
   factory_bot_rails
   faker
@@ -751,9 +751,9 @@ DEPENDENCIES
   rubocop-faker
   rubocop-rails
   rubocop-rspec
-  ruby-filemagic
   ruby-prof
   ruby_parser
+  sentry-rails (~> 5.5)
   shoulda
   simple_form
   slack-notifier

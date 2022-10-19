@@ -8,23 +8,6 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  slack_config = Rails.application.config_for(:exception_notifier)[:slack]
-  if slack_config.present?
-    config.middleware.use(ExceptionNotification::Rack,
-      :slack => {
-        :webhook_url => slack_config[:webhook_url],
-        :channel => slack_config[:channel],
-        :pre_callback => proc { |opts, _notifier, _backtrace, _message, message_opts|
-          ExceptionNotifierLib.insert_log_url!(message_opts)
-        },
-        :additional_parameters => {
-          :mrkdwn => true,
-          :icon_url => slack_config[:icon_url]
-        }
-      }
-    )
-  end
-
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -133,10 +116,4 @@ Rails.application.configure do
 
 
   I18n.config.available_locales = :en
-
-  # for testing purposes
-  Rails.application.config.middleware.use ExceptionNotification::Rack,
-  email: {
-    exception_recipients: %w{test-noreply@example.com}
-  }
 end

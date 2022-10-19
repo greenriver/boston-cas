@@ -506,7 +506,6 @@ Layout/EndAlignment:
 # Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
 Layout/ExtraSpacing:
   Exclude:
-    - 'app/controllers/application_controller.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'app/models/concerns/notifier_config.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
@@ -657,7 +656,6 @@ Layout/IndentationWidth:
 # Configuration parameters: AllowDoxygenCommentStyle, AllowGemfileRubyComment.
 Layout/LeadingCommentSpace:
   Exclude:
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/users/sessions_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
@@ -707,7 +705,6 @@ Layout/SpaceAfterColon:
 Layout/SpaceAfterComma:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/controllers/application_controller.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
@@ -808,7 +805,6 @@ Layout/SpaceInLambdaLiteral:
 # SupportedStylesForEmptyBrackets: space, no_space
 Layout/SpaceInsideArrayLiteralBrackets:
   Exclude:
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/imported_clients_controller.rb'
@@ -1317,7 +1313,6 @@ Naming/HeredocDelimiterNaming:
 # SupportedStylesForLeadingUnderscores: disallowed, required, optional
 Naming/MemoizedInstanceVariableName:
   Exclude:
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/helpers/match_list_base_helper.rb'
     - 'app/models/concerns/contact_join_model.rb'
@@ -1547,7 +1542,6 @@ Style/GuardClause:
 Style/HashSyntax:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
@@ -1571,7 +1565,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_opportunity_matches_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
@@ -1756,7 +1749,6 @@ Style/RegexpLiteral:
 Style/RescueModifier:
   Exclude:
     - 'app/controllers/admin/translation_keys_controller.rb'
-    - 'app/controllers/application_controller.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/warehouse/base.rb'
@@ -1828,7 +1820,6 @@ Style/StringLiterals:
     - 'app/controllers/account_passwords_controller.rb'
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/match_routes_controller.rb'
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
@@ -1974,7 +1965,6 @@ Style/TrailingCommaInArrayLiteral:
 # SupportedStylesForMultiline: comma, consistent_comma, no_comma
 Style/TrailingCommaInHashLiteral:
   Exclude:
-    - 'app/controllers/application_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'

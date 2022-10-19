@@ -22,11 +22,6 @@ class BaseJob < ApplicationJob
       end
     end
   end
-  # when queued with perform_later (active job, this gets used)
-  # This works in both situations
-  rescue_from Exception do |e|
-    notify_on_exception(e)
-  end
 
   if ENV['ECS'] != 'true'
     # When called through Delayed::Job, uses this hook
@@ -43,11 +38,6 @@ class BaseJob < ApplicationJob
       exit!(0)
     end
   end
-  # when queued with Delayed::Job.enqueue TestJob.new (this gets used)
-  # This will send two notifications for each error, probably
-  def error(_job, exc)
-    notify_on_exception(exc)
-  end
 
   private
 
@@ -56,15 +46,6 @@ class BaseJob < ApplicationJob
     return unless File.exist?('config/exception_notifier.yml')
 
     setup_notifier('DelayedJobRestarter')
-    @notifier.ping(msg) if @send_notifications
-  end
-
-  def notify_on_exception exception
-    return unless File.exist?('config/exception_notifier.yml')
-
-    setup_notifier('DelayedJobFailure')
-    msg = "*#{self.class.name}* `FAILED` with the following error: \n ```#{exception.inspect}```"
-    @notifier.insert_log_url = true
     @notifier.ping(msg) if @send_notifications
   end
 

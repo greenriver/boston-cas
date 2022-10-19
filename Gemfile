@@ -39,7 +39,7 @@ gem 'memoist', require: false
 gem 'carrierwave'
 gem 'carrierwave-i18n'
 gem 'mini_magick'
-gem 'ruby-filemagic'
+# gem 'ruby-filemagic'
 
 # AWS SDK is needed for deployment and within the application
 gem 'aws-sdk-rails'
@@ -100,7 +100,6 @@ gem 'whenever', require: false
 # There is no way to disable this
 gem 'faker'
 
-gem 'exception_notification'
 gem 'slack-notifier'
 
 gem 'daemons'
@@ -180,3 +179,5 @@ group :rake do
 end
 
 gem 'ajax_modal_rails', '~> 1.0'
+
+gem "sentry-rails", "~> 5.5"
