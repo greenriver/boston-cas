@@ -1,5 +1,3 @@
-require "#{Rails.root}/lib/util/exception_notifier.rb"
-
 require 'yaml'
 Rails.application.configure do
   deliver_method = ENV['MAIL_DELIVERY_METHOD'].to_sym
