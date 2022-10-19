@@ -35,10 +35,10 @@ module Admin
       user_ids = @users.map(&:id)
       @active_matches = Contact.where(user_id: user_ids).
         joins(:matches).merge(ClientOpportunityMatch.active).
-        group(:id).count
+        group(:user_id).count
       @closed_matches = Contact.where(user_id: user_ids).
         joins(:matches).merge(ClientOpportunityMatch.closed).
-        group(:id).count
+        group(:user_id).count
     end
 
     def edit
