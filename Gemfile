@@ -39,7 +39,7 @@ gem 'memoist', require: false
 gem 'carrierwave'
 gem 'carrierwave-i18n'
 gem 'mini_magick'
-# gem 'ruby-filemagic'
+gem 'ruby-filemagic'
 
 # AWS SDK is needed for deployment and within the application
 gem 'aws-sdk-rails'

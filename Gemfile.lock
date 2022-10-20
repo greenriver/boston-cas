@@ -548,6 +548,7 @@ GEM
     rubocop-rspec (2.1.0)
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
+    ruby-filemagic (0.7.3)
     ruby-graphviz (1.2.5)
       rexml
     ruby-prof (1.4.2)
@@ -751,6 +752,7 @@ DEPENDENCIES
   rubocop-faker
   rubocop-rails
   rubocop-rspec
+  ruby-filemagic
   ruby-prof
   ruby_parser
   sentry-rails (~> 5.5)
