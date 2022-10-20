@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+require_relative '../../lib/util/git'
+
 module ApplicationHelper
   # permissions
   # See Role.rb for specifics of what permissions are available
@@ -156,9 +158,7 @@ module ApplicationHelper
   end
 
   def git_revision
-    ENV['DEPLOYMENT_ID']&.split('::').try(:[], 2)
-  rescue StandardError
-    'unknown revision'
+    Git.revision
   end
 
   def help_link
