@@ -258,7 +258,7 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate(:show_client_match_attributes?, to: :current_decision, allow_nil: true)
 
   def confidential?
-    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release? && Config.get(:limit_client_names_on_matches))
+    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release?(match_route) && Config.get(:limit_client_names_on_matches))
   end
 
   def self.accessible_by_user(user)
@@ -283,7 +283,7 @@ class ClientOpportunityMatch < ApplicationRecord
     return false unless contact
     return true if contact.user_can_view_all_clients?
     return on_or_after_first_client_step? if contact.in?(shelter_agency_contacts)
-    return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
+    return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?(match_route)
     return on_or_after_first_client_step? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
 
     client&.accessible_by_user?(contact.user)
@@ -324,9 +324,9 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def client_info_approved_for_release?
     if match_route.class.name.in?(['MatchRoutes::Default'])
-      shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?
+      shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?(match_route)
     else
-      client&.has_full_housing_release? || ! Config.get(:limit_client_names_on_matches)
+      client&.has_full_housing_release?(match_route) || ! Config.get(:limit_client_names_on_matches)
     end
   end
 

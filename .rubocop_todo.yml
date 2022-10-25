@@ -443,7 +443,6 @@ Layout/EmptyLinesAroundMethodBody:
   Exclude:
     - 'app/controllers/accounts_controller.rb'
     - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/admin/match_routes_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/neighborhoods_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
@@ -1819,7 +1818,6 @@ Style/StringLiterals:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/account_passwords_controller.rb'
     - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/admin/match_routes_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
