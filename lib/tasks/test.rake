@@ -28,17 +28,25 @@ namespace :test do
     sleep 1
 
     # CAS does not actually use the ApplicationNotifier class, see notifier_config.rb
-
     # puts '@notifier.ping with exception (Sentry)'
     # @notifier.ping(
     #   'Testing .ping polymorphism - this should go to Sentry',
     #   {
-    #     exception: StandardError.new('Testing .ping polymorphism - this should go to Sentry'),
+    #     exception: StandardError.new('Testing .ping polymorphism - this should go to Sentry with data'),
     #     info: { with: 'data' },
     #   },
     # )
     # sleep 1
 
+    # puts '@notifier.ping with exception (Sentry), but no info'
+    # @notifier.ping(
+    #   'Testing .ping polymorphism - this should go to Sentry',
+    #   {
+    #     exception: StandardError.new('Testing .ping polymorphism - this should go to Sentry without data'),
+    #   },
+    # )
+    # sleep 1
+    #
     # puts '@notifier.ping normal (Slack)'
     # @notifier.ping('Testing .ping polymorphism - this should go to Slack')
   end
