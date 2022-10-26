@@ -1,6 +1,6 @@
 %ul.list-unstyled
   - opportunity.active_matches.each do |match|
-    - confidential_opportunity = opportunity&.confidential? && ! match&.client&.has_full_housing_release?
+    - confidential_opportunity = opportunity&.confidential? && ! match&.client&.has_full_housing_release?(match.match_route)
     - hide_client_name = match&.client&.confidential? || match.try(:confidential?) || confidential_opportunity
     - name = match&.client_name_for_contact(current_user.contact, hidden: hide_client_name) || client.client_name_for_contact(current_user.contact, hidden: hide_client_name)
     %li
