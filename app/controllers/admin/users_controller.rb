@@ -30,12 +30,21 @@ module Admin
       @users = @users
         .order(sort_column => sort_direction)
         .page(params[:page]).per(25)
+
+      # count number of active/closed matches per user
+      user_ids = @users.map(&:id)
+      @active_matches = Contact.where(user_id: user_ids).
+        joins(:matches).merge(ClientOpportunityMatch.active).
+        group(:user_id).count
+      @closed_matches = Contact.where(user_id: user_ids).
+        joins(:matches).merge(ClientOpportunityMatch.closed).
+        group(:user_id).count
     end
 
     def edit
       # check for existing contact with the same email
-      contact = Contact.where("LOWER(email) = ?", @user.email.downcase)&.first
-      if ! @user.contact
+      contact = Contact.where('LOWER(email) = ?', @user.email.downcase)&.first
+      unless @user.contact
         if contact.present?
           @user.contact = contact
         else
@@ -49,9 +58,7 @@ module Admin
     end
 
     def confirm
-      if ! adding_admin?
-        update
-      end
+      update unless adding_admin?
     end
 
     def impersonate
@@ -67,8 +74,8 @@ module Admin
 
     def update
       if adding_admin?
-        if ! current_user.valid_password?(confirmation_params[:confirmation_password])
-          flash[:error] = "User not updated. Incorrect password"
+        unless current_user.valid_password?(confirmation_params[:confirmation_password])
+          flash[:error] = 'User not updated. Incorrect password'
           render :confirm
           return
         end
@@ -76,7 +83,7 @@ module Admin
 
       @user.assign_attributes(user_params)
       if @user.save
-        redirect_to({action: :index}, notice: 'User updated')
+        redirect_to({ action: :index }, notice: 'User updated')
       else
         flash[:error] = 'Please review the form problems below'
         render :edit
@@ -85,7 +92,7 @@ module Admin
 
     def destroy
       @user.update(active: false)
-      redirect_to({action: :index}, notice: 'User deactivated')
+      redirect_to({ action: :index }, notice: 'User deactivated')
     end
 
     def reactivate
@@ -93,67 +100,65 @@ module Admin
       pass = Devise.friendly_token(50)
       @user.update(active: true, password: pass, password_confirmation: pass)
       @user.send_reset_password_instructions
-      redirect_to({action: :index}, notice: "User #{@user.name} re-activated")
-
+      redirect_to({ action: :index }, notice: "User #{@user.name} re-activated")
     end
 
     private
 
-      def adding_admin?
-        existing_roles = @user.user_roles
-        existing_roles.each do |role|
-          # User is already an admin, so we aren't adding anything
-          return false if role.administrative?
+    def adding_admin?
+      existing_roles = @user.user_roles
+      existing_roles.each do |role|
+        # User is already an admin, so we aren't adding anything
+        return false if role.administrative?
+      end
+
+      assigned_roles = user_params[:role_ids] || []
+      added_role_ids = assigned_roles - existing_roles.pluck(:role_id)
+      added_role_ids.reject(&:empty?).each do |id|
+        role = Role.find(id.to_i)
+        if role.administrative?
+          @admin_role_name = role.role_name
+          return true
         end
-
-        assigned_roles = user_params[:role_ids] || []
-        added_role_ids = assigned_roles - existing_roles.pluck(:role_id)
-        added_role_ids.reject { |id| id.empty? }.each do |id|
-          role = Role.find(id.to_i)
-          if role.administrative?
-            @admin_role_name = role.role_name
-            return true
-          end
-        end
-        return false
       end
+      return false
+    end
 
-      def user_scope
-        User.active.order(last_name: :asc, first_name: :asc)
-      end
+    def user_scope
+      User.active.order(last_name: :asc, first_name: :asc)
+    end
 
-      def user_params
-        params.require(:user).permit(
-          :first_name,
-          :last_name,
-          :email,
-          :receive_initial_notification,
-          :agency_id,
-          :exclude_from_directory,
-          :exclude_phone_from_directory,
-          role_ids: [],
-          contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role],
-          requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-        )
-      end
+    def user_params
+      params.require(:user).permit(
+        :first_name,
+        :last_name,
+        :email,
+        :receive_initial_notification,
+        :agency_id,
+        :exclude_from_directory,
+        :exclude_phone_from_directory,
+        role_ids: [],
+        contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role],
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+      )
+    end
 
-      def confirmation_params
-        params.require(:user).permit(
-          :confirmation_password
-        )
-      end
+    def confirmation_params
+      params.require(:user).permit(
+        :confirmation_password,
+      )
+    end
 
-      def sort_column
-        user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
-      end
+    def sort_column
+      user_scope.column_names.include?(params[:sort]) ? params[:sort] : 'last_name'
+    end
 
-      def sort_direction
-        %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-      end
+    def sort_direction
+      ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+    end
 
-      def set_user
-        @user = user_scope.find params[:id].to_i
-      end
-
+    def set_user
+      @user = user_scope.find params[:id].to_i
+    end
   end
 end

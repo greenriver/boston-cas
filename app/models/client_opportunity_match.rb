@@ -161,6 +161,13 @@ class ClientOpportunityMatch < ApplicationRecord
     where(arel_table[:active].eq(true).or(arel_table[:closed].eq(true)))
   end
 
+  scope :with_contact, ->(contact_id, contact_type) do
+    contact_scope = ClientOpportunityMatchContact.all
+    contact_scope = contact_scope.where(contact_id: contact_id) if contact_id.present?
+    contact_scope = contact_scope.where(contact_type => true) if contact_type.present?
+    joins(:contacts).merge(contact_scope)
+  end
+
   ######################
   # Contact Associations
   ######################

@@ -35,15 +35,17 @@
       Currently sorted by:
       %strong= @sort_options.select{|m| m[:column] == @column && m[:direction] == @direction}.first[:title]
   .col-sm-4
-    - if @current_step.present? || @current_program.present?
+    - if @active_filter
       - step_name = if @current_step.present? then @available_steps.to_h.invert[@current_step] else nil end
       - program_name = if @current_program.present? then @available_programs.index_by(&:id)[@current_program.to_i]&.name else nil end
-      - limits = [step_name, program_name].compact
+      - contact_name = if @current_filter_contact.present? then Contact.find(@current_filter_contact).name else nil end
+      - contact_type = if @current_contact_type.present? then Contact::label_for(@current_contact_type)&.gsub("Contacts", "Contact") else 'Contact' end
+      - contact_type = "Has #{contact_type}" if contact_type.present? && !contact_name.present?
+      - program_filters = [step_name, program_name].compact.join(' at ')
+      - contact_filters = [contact_type, contact_name].compact.join(': ')
       %p.client__current-sort-filter
         Limited to:
-        %strong= limits.join(' at ')
-
-
+        %strong= simple_format([program_filters, contact_filters].filter(&:presence).join(',<br />'), {}, wrapper_tag: 'span')
 
 %p= paginate @opportunities, params: {sort: @column, direction: @direction}
 = render 'matches/list', opportunities: @opportunities, match_type: 'active'
