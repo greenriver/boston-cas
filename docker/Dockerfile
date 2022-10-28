@@ -21,6 +21,7 @@ RUN apk add --no-cache \
   git \
   bash \
   freetds-dev \
+  docker \
   openssh ctags zsh \
   icu icu-dev \
   curl libcurl curl-dev \
@@ -38,8 +39,6 @@ RUN apk add --no-cache \
   python3 py3-pip \
   && git config --global --add safe.directory /app \
   && ln -s libproj.so.21.1.2 /usr/lib/libproj.so.20
-
-RUN pip3 install awscliv2
 
 RUN mkdir /app
 WORKDIR /app

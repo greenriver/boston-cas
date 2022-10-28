@@ -27,7 +27,7 @@ module MatchShow
     @sub_program = @match.sub_program
     @program = @match.program
     sub_program_has_files = @sub_program.file_tags.exists?
-    can_see_client_details = @client&.has_full_housing_release? || can_view_all_clients?
+    can_see_client_details = @client&.has_full_housing_release?(@opportunity.match_route) || can_view_all_clients?
 
     # Only show files if the user has access to the client details,
     # If the client has a full release on file or the user can see all clients

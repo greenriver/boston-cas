@@ -488,7 +488,9 @@ class Client < ApplicationRecord
     remote_id if from_hmis?
   end
 
-  def has_full_housing_release? # rubocop:disable Naming/PredicateName
+  def has_full_housing_release?(route = nil) # rubocop:disable Naming/PredicateName
+    return true if route.present? && ! route.expects_roi?
+
     # If we have a warehouse connected, use the file tags available there
     release_tags = if from_hmis?
       Warehouse::AvailableFileTag.full_release.pluck(:name)

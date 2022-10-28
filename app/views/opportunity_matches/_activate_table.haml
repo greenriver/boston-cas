@@ -21,7 +21,7 @@
         %tbody
           - @matches.each do |client|
             - match = client.match_for_opportunity(@opportunity)
-            - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?
+            - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?(@opportunity&.match_route)
             - confidential_client = client.confidential? || match.try(:confidential?)
             - hide_client_name = ( confidential_client || confidential_opportunity) && ! show_confidential_names?
             - name = match&.client_name_for_contact(current_user.contact, hidden: hide_client_name) || client.client_name_for_user(current_user, hidden: hide_client_name)
