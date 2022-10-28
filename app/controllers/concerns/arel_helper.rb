@@ -72,6 +72,27 @@ module ArelHelper
       joins(join)
     end
 
+    def age_on_date(start_date = Date.current)
+      cast(
+        datepart(
+          'YEAR',
+          nf('AGE', [start_date, c_t[:date_of_birth]]),
+        ),
+        'integer',
+      )
+    end
+
+    def datepart(type, date)
+      date = lit "#{Arel::Nodes::Quoted.new(date).to_sql}::date" if date.is_a? String
+      nf('DATE_PART', [type, date])
+    end
+
+    def cast(exp, as)
+      exp = qt(exp)
+      exp = lit(exp.to_sql) unless exp.respond_to?(:as)
+      nf('CAST', [exp.as(as)])
+    end
+
     # Shortcuts for arel tables
     def c_t
       Client.arel_table
