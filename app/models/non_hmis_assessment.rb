@@ -79,6 +79,7 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(IdentifiedTcHat.new.for_matching).
       merge(DeidentifiedTcHat.new.for_matching).
       merge(IdentifiedCeAssessment.new.for_matching).
+      merge(ImportedClientAssessment.new.for_matching).
       freeze
   end
 

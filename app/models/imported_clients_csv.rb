@@ -61,7 +61,7 @@ class ImportedClientsCsv < ApplicationRecord
       ).first_or_initialize do |c|
         @added += 1
         c.interested_in_set_asides = true # import is currently for set-asides, mark everyone as interested
-        c.available = false
+        c.available = true
         c.identified = true
       end
       assessment = client.current_assessment || client.client_assessments.build
@@ -226,8 +226,8 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def check_header
-    incoming = CSV.parse(content.lines.first).flatten.map{|m| m&.strip&.downcase}
-    expected = parsed_expected_header.map{|m| m&.strip&.downcase}
+    incoming = CSV.parse(content.lines.first).flatten.map { |m| m&.strip&.downcase }
+    expected = parsed_expected_header.map { |m| m&.strip&.downcase }
     # You can update the header string with File.read('path/to/file.csv').lines.first
     # Using CSV parse in case the quoting styles differ
     return true if incoming == expected
