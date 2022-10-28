@@ -8,6 +8,7 @@ class Reports::Dashboards::OverviewsController < ApplicationController
   include AjaxModalRails::Controller
 
   before_action :require_can_view_reports!
+  before_action :set_filter
   before_action :set_report
 
   def index
@@ -18,7 +19,7 @@ class Reports::Dashboards::OverviewsController < ApplicationController
     data = @report.public_send(@section)
     return Client.none if data.nil?
 
-    @key = data.keys.detect { |name| params[:key]== name } if params[:key].present?
+    @key = data.keys.detect { |name| params[:key] == name } if params[:key].present?
 
     ids = if @key.present?
       @sub_key = data[@key].keys.detect { |name| params[:sub_key] == name } if params[:sub_key].present?
@@ -46,15 +47,7 @@ class Reports::Dashboards::OverviewsController < ApplicationController
   end
 
   def details_params
-    {
-      filter:
-        {
-          start_date: @start_date,
-          end_date: @end_date,
-          match_route: @match_route_id,
-          program_types: @program_types,
-        }
-    }
+    @filter.for_params
   end
   helper_method :details_params
 
@@ -67,13 +60,18 @@ class Reports::Dashboards::OverviewsController < ApplicationController
   end
   helper_method :details_columns
 
-  def set_report
-    @start_date = params.dig(:filter, :start_date)&.to_date || Date.current.last_year
-    @end_date = params.dig(:filter, :end_date)&.to_date || Date.current
-    @match_route_id = params.dig(:filter, :match_route) || MatchRoutes::Base.available.first.id
-    @match_route_name = MatchRoutes::Base.find(@match_route_id.to_i).title
-    @program_types = params.dig(:filter, :program_types)&.reject { |type| type.blank? } || []
+  def filter_params
+    return {} unless params[:filters].present?
 
-    @report = Dashboards::Overview.new(start_date: @start_date, end_date: @end_date, match_route_name: @match_route_name, program_types: @program_types)
+    params.require(:filters).permit(@filter.known_params)
+  end
+
+  def set_filter
+    @filter = Reporting::FilterBase.new(default_start: Date.current.last_year, default_end: Date.current)
+    @filter.update(filter_params)
+  end
+
+  def set_report
+    @report = Dashboards::Overview.new(@filter)
   end
 end

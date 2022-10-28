@@ -1,11 +1,30 @@
-.row
-  .col-3
-    = form.input :start_date, as: :date_picker, input_html: { value: @start_date }
-  .col-3
-    = form.input :end_date, as: :date_picker, input_html: { value: @end_date }
-  .col-3
-    = form.input :match_route, collection: MatchRoutes::Base.available, selected: @match_route_id, include_blank: false, input_html: { class: 'select2 jMatchRoute' }
-  .col-3
-    = form.input :program_types, collection: SubProgram.types, label_method: ->(type) { type[:label] }, value_method: ->(type) { type[:value] }, selected: @program_types, input_html: { multiple: true, class: :select2 }
-
-= render 'init_select2'
+= simple_form_for @filter, as: :filters, method: :get, url: path do |f|
+  .row
+    .col-3
+      = f.input :start, as: :date_picker, input_html: { value: @start_date }
+    .col-3
+      = f.input :end, as: :date_picker, input_html: { value: @end_date }
+    .col-3
+      = f.input :match_routes, as: :select_2, collection: @filter.match_route_options_for_select, include_blank: false, input_html: { multiple: true }
+    .col-3
+      = f.input :program_types, as: :select_2, collection: @filter.program_type_options_for_select, input_html: { multiple: true }
+  .row
+    .col-3
+      = f.input :agencies, as: :select_2, collection: @filter.agency_options_for_select, include_blank: false, input_html: { multiple: true }
+    .col-3
+      = f.input :household_types, as: :select_2, collection: @filter.household_type_options_for_select, input_html: { multiple: true }
+    .col-3
+      = f.input :veteran_statuses, as: :select_2, collection: @filter.veteran_status_options_for_select, include_blank: false, input_html: { multiple: true }
+    .col-3
+      = f.input :age_ranges, as: :select_2, collection: @filter.age_range_options_for_select, input_html: { multiple: true }
+  .row
+    .col-3
+      = f.input :genders, as: :select_2, collection: @filter.gender_options_for_select, include_blank: false, input_html: { multiple: true }
+    .col-3
+      = f.input :races, as: :select_2, collection: @filter.race_options_for_select, input_html: { multiple: true }
+    .col-3
+      = f.input :ethnicities, as: :select_2, collection: @filter.ethnicity_options_for_select, include_blank: false, input_html: { multiple: true }
+    .col-3
+      = f.input :disabilities, as: :select_2, collection: @filter.disability_options_for_select, input_html: { multiple: true }
+  %hr
+  = f.submit 'Update Dashboard', class: 'btn btn-primary'

@@ -5,6 +5,12 @@
 ###
 
 class Dashboards::Overview < Dashboards::Base
+  def initialize(filter)
+    @start_date = filter.start
+    @end_date = filter.end
+
+    @filter = filter
+  end
 
   def in_progress
     @in_progress ||= reporting_scope.
@@ -22,7 +28,7 @@ class Dashboards::Overview < Dashboards::Base
 
   def match_results(start_date: @start_date, end_date: @end_date)
     hash = terminated(start_date: start_date, end_date: end_date).group_by(&:first)
-    hash.merge(hash) { |key, ids| ids.map { |key, id| id }}
+    hash.merge(hash) { |_, ids| ids.map { |_, id| id } }
   end
 
   def match_results_by_quarter
@@ -87,13 +93,7 @@ class Dashboards::Overview < Dashboards::Base
   end
 
   def reporting_scope
-    scope = Reporting::Decisions.
-      started_between(start_date: @start_date, end_date: @end_date).
-      where(match_route: @match_route_name)
-    if @program_types.present?
-      scope.where(program_type: @program_types)
-    else
-      scope
-    end
+    scope = Reporting::Decisions
+    @filter.apply(scope)
   end
 end

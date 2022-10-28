@@ -3,12 +3,7 @@
 
 .c-card
   .c-card__content
-    = simple_form_for :filter, method: :get do |f|
-      = render 'reports/dashboards/report_filter', form: f
-
-      %hr
-
-      = f.submit 'Update Dashboard', class: 'btn btn-primary'
+    = render 'reports/dashboards/report_filter', path: reports_dashboards_overviews_path
 
 .row
   .col.text-center
