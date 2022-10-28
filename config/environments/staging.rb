@@ -11,7 +11,6 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.digest = true
   config.force_ssl = false
-  config.log_level = ENV.fetch('LOG_LEVEL') { 'info' }.to_sym
   config.i18n.fallbacks = true
   config.active_support.deprecation = :notify
   config.active_record.dump_schema_after_migration = false
