@@ -24,6 +24,15 @@ class MatchDecisionsController < ApplicationController
     @program = @match.program
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
+    if @match.stalled?
+      @update = MatchProgressUpdates::Anyone.new(
+        match_id: @match.id,
+        contact_id: current_contact.id,
+        notification_id: params[:notification_id]&.to_i,
+        decision_id: @decision&.id,
+        submitted_at: Time.current,
+      )
+    end
     render 'matches/show'
   end
 
