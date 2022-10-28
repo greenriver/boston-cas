@@ -21,6 +21,7 @@ RUN apk add --no-cache \
   git \
   bash \
   freetds-dev \
+  docker \
   openssh ctags zsh \
   icu icu-dev \
   curl libcurl curl-dev \
