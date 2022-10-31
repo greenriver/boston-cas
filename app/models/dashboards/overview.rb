@@ -6,9 +6,6 @@
 
 class Dashboards::Overview < Dashboards::Base
   def initialize(filter)
-    @start_date = filter.start
-    @end_date = filter.end
-
     @filter = filter
   end
 
@@ -19,22 +16,23 @@ class Dashboards::Overview < Dashboards::Base
       pluck(:cas_client_id)
   end
 
-  def terminated(start_date: @start_date, end_date: @end_date)
+  def terminated(range = @filter.range)
     reporting_scope.
-      ended_between(start_date: start_date, end_date: end_date).
+      ended_between(range).
       distinct.
       pluck(:terminal_status, :cas_client_id)
   end
 
-  def match_results(start_date: @start_date, end_date: @end_date)
-    hash = terminated(start_date: start_date, end_date: end_date).group_by(&:first)
-    hash.merge(hash) { |_, ids| ids.map { |_, id| id } }
+  def match_results(range)
+    terminated(range).
+      group_by(&:shift).
+      transform_values(&:flatten)
   end
 
   def match_results_by_quarter
     quarters_in_report.map do |quarter, start_date|
       range = start_date.all_quarter
-      [quarter, match_results(start_date: range.first, end_date: range.last)]
+      [quarter, match_results(range)]
     end.to_h
   end
 

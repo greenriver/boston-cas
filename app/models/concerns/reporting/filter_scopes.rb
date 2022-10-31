@@ -8,7 +8,7 @@ module Reporting::FilterScopes
   extend ActiveSupport::Concern
   included do
     private def filter_for_range(scope)
-      scope.open_between(start_date: @filter.start, end_date: @filter.end)
+      scope.open_between(range)
     end
 
     private def filter_for_match_routes(scope)
