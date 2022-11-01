@@ -49,13 +49,22 @@ class ProgramsController < ApplicationController
       @programs = @programs.closed
     end
 
-    @programs = @programs
-      .joins(:program)
-      .includes(:building)
-      .references(:building)
-      .preload(:program)
-      .reorder(sort_string)
-      .page(params[:page]).per(25)
+    @programs = @programs.
+      joins(:program).
+      includes(:building).
+      references(:building).
+      preload(:program).
+      reorder(sort_string)
+
+    respond_to do |format|
+      format.html do
+        @programs = @programs.page(params[:page]).per(25)
+      end
+      format.xlsx do
+        filename = "CAS Programs-#{Date.current.strftime('%Y-%m-%d')}.xlsx"
+        headers['Content-Disposition'] = "attachment; filename=#{filename}"
+      end
+    end
   end
 
   def new

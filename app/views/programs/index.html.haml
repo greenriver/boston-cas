@@ -19,6 +19,12 @@
 .row.table-utilities
   .col-sm-8
     %p= page_entries_info @programs, entry_name: 'Sub-Programs'
+  .col-sm-4
+    .d-flex
+      .ml-auto
+        = link_to programs_path(format: :xlsx), class: 'btn btn-secondary' do
+          %span.icon-download2
+          Download
     :ruby
       columns = ['program_id', 'name', 'building_id']
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
@@ -42,7 +48,7 @@
             %th Organization
             %th Available/Unmatched
             %th In Progress
-            %th Sucessful
+            %th Successful
         %tbody
           - @programs.each do |sp|
             - if sp.deleted_at
