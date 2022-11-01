@@ -13,7 +13,7 @@ module Notifications::Eight
     end
 
     def decision
-      match.eight_approve_match_housing_subsidy_admin_decision
+      match.eight_record_voucher_date_housing_subsidy_admin_decision
     end
 
     def event_label
