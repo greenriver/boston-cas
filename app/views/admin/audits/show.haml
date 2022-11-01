@@ -6,23 +6,25 @@
 .d-flex
   %p= paginate @activity_log
 .table-responsive
-  %table.table.table-striped.table-hover
-    %thead
-      %tr
-        %th Action
-        %th Item
-        %th Date
-        %th IP Address
-    %tbody
-      - @activity_log.each do |i|
-        - title = i.title || i.controller_name
-        %tr
-          %td
-            - tooltip = "Method: #{i.method}"
-            %span.action{data: {toggle: :tooltip, title: tooltip}}
-              = i.action_name
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th Action
+            %th Item
+            %th Date
+            %th IP Address
+        %tbody
+          - @activity_log.each do |i|
+            - title = i.title || i.controller_name
+            %tr
+              %td
+                - tooltip = "Method: #{i.method}"
+                %span.action{data: {toggle: :tooltip, title: tooltip}}
+                  = i.action_name
 
-          %td= link_to title, i.path
-          %td= i.created_at
-          %td= i.ip_address
+              %td= link_to title, i.path
+              %td= i.created_at
+              %td= i.ip_address
 %p= paginate @activity_log

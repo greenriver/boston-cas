@@ -102,6 +102,13 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :eight_lease_up, decision_class_name: 'MatchDecisions::Eight::LeaseUp', notification_class_name: 'Notifications::Eight::LeaseUp'
   has_decision :eight_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Eight::ConfirmMatchSuccessDndStaff'
 
+  # Match Route 9
+  has_decision :nine_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Nine::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Nine::MatchRecommendationDndStaff'
+  has_decision :nine_record_voucher_date_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin', notification_class_name: 'Notifications::Nine::RecordVoucherDateHousingSubsidyAdmin'
+  has_decision :nine_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Nine::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Nine::ConfirmHsaDeclineDndStaff'
+  has_decision :nine_lease_up, decision_class_name: 'MatchDecisions::Nine::LeaseUp', notification_class_name: 'Notifications::Nine::LeaseUp'
+  has_decision :nine_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Nine::ConfirmMatchSuccessDndStaff'
+
   has_one :current_decision
 
   has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
@@ -258,7 +265,7 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate(:show_client_match_attributes?, to: :current_decision, allow_nil: true)
 
   def confidential?
-    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release? && Config.get(:limit_client_names_on_matches))
+    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release?(match_route) && Config.get(:limit_client_names_on_matches))
   end
 
   def self.accessible_by_user(user)
@@ -283,7 +290,7 @@ class ClientOpportunityMatch < ApplicationRecord
     return false unless contact
     return true if contact.user_can_view_all_clients?
     return on_or_after_first_client_step? if contact.in?(shelter_agency_contacts)
-    return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?
+    return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?(match_route)
     return on_or_after_first_client_step? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
 
     client&.accessible_by_user?(contact.user)
@@ -324,9 +331,9 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def client_info_approved_for_release?
     if match_route.class.name.in?(['MatchRoutes::Default'])
-      shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?
+      shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?(match_route)
     else
-      client&.has_full_housing_release? || ! Config.get(:limit_client_names_on_matches)
+      client&.has_full_housing_release?(match_route) || ! Config.get(:limit_client_names_on_matches)
     end
   end
 

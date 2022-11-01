@@ -10,11 +10,10 @@ module Admin
     before_action :load_match_route, only: [:edit, :update]
 
     def index
-      @routes = MatchRoutes::Base.all.order("id DESC")
+      @routes = MatchRoutes::Base.all.order(id: :desc)
     end
 
     def edit
-
     end
 
     def update
@@ -42,6 +41,7 @@ module Admin
         :stalled_interval,
         :housing_type,
         :send_notes_by_default,
+        :expects_roi,
       )
     end
 

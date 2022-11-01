@@ -19,7 +19,7 @@
         .form-actions.clearfix
           - @decision.errors[:status].each do |error_message|
             %p.error-block= error_message
-          - if ! @match.client.has_full_housing_release?
+          - if ! @match.client.has_full_housing_release?(@match&.match_route)
             .alert.alert-danger
               = link_to @match.client.full_name, client_path(@match.client)
               Does not have a full housing release on file.

@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
 
   #before_action :_basic_auth, if: -> { Rails.env.staging? }
   before_action :set_paper_trail_whodunnit
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :set_sentry_user
   before_action :possibly_reset_fast_gettext_cache
 
   before_action :prepare_exception_notifier
@@ -146,5 +146,9 @@ class ApplicationController < ActionController::Base
       current_user: current_user&.email || 'none',
       current_user_browser: browser.to_s,
     }
+  end
+
+  def set_sentry_user
+    Sentry.configure_scope { |scope| scope.set_user(id: current_user.id, email: current_user.email) } if ENV['CAS_SENTRY_DSN'].present? && defined?(current_user) && current_user.present?
   end
 end

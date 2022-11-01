@@ -1,7 +1,7 @@
 version: '3.8'
 
 x-app: &app
-  image: cas:0.0.2
+  image: cas:0.0.3
   build:
     context: .
     args:
@@ -12,6 +12,11 @@ x-app: &app
       BUNDLER_VERSION: '2.3.8'
       ADDITIONAL_PACKAGES: vim nodejs python2 unzip xvfb google-chrome-stable less freetds-dev freetds-bin phantomjs xfonts-75dpi alien libpng-dev libicu-dev libcurl4-openssl-dev curl libmagic-dev libmagickcore-dev libmagickwand-dev
   environment: &env
+    AWS_REGION: ${AWS_REGION:-us-east-1}
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    AWS_SECURITY_TOKEN: ${AWS_SECURITY_TOKEN}
+    AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
     NODE_ENV: ${NODE_ENV:-development}
     RAILS_ENV: ${RAILS_ENV:-development}
     REDIS_URL: redis://redis:6379/
@@ -83,6 +88,10 @@ services:
     stdin_open: true
     tty: true
     command: bundle exec rails server -b 0.0.0.0
+    labels:
+      - "traefik.http.routers.op.rule=Host(`open-path-cas.127.0.0.1.nip.io`)"
+      - "traefik.http.routers.op.tls=true"
+      - "traefik.http.services.op.loadbalancer.server.port=3000"
     expose:
       - 3000
     environment:

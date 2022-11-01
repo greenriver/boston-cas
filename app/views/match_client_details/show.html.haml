@@ -68,7 +68,7 @@
         %li.c-detailed-list__item
           %span.c-detailed-list__label Client and/or Case Manager Contact Information
           %span.c-detailed-list__value= simple_format @client.rrh_assessment_contact_info
-      - if @client.has_full_housing_release? && @client.rrh_assessment_contact_info.present?
+      - if @client.has_full_housing_release?(@match.match_route) && @client.rrh_assessment_contact_info.present?
         %li.c-detailed-list__item
           %span.c-detailed-list__label Contact info for maximizing income
           %span.c-detailed-list__value= simple_format @client.rrh_assessment_contact_info

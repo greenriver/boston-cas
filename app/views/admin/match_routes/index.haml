@@ -25,6 +25,7 @@
           %th Show the default contact types on a match
           %th Stall days
           %th Include note content by default
+          %th Expects ROI
           %th= _('Tag')
 
       %tbody
@@ -46,6 +47,7 @@
               - if route.stalled_interval > 0
                 = route.stalled_interval
             %td= checkmark(route.send_notes_by_default)
+            %td= checkmark(route.expects_roi)
             %td= route.tag&.name
 
 %h2 Notifications
