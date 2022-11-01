@@ -75,13 +75,11 @@ class ProgramsController < ApplicationController
     end
   end
 
-  private
-
-  def program_source
+  private def program_source
     Program
   end
 
-  def program_params
+  private def program_params
     params.require(:program).
       permit(
         :name,
@@ -103,34 +101,40 @@ class ProgramsController < ApplicationController
           :eligibility_requirement_notes,
         ],
         service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+        requirements_attributes: [
+          :id,
+          :rule_id,
+          :positive,
+          :variable,
+          :_destroy,
+        ],
       )
   end
 
-  def adding_sub_program
+  private def adding_sub_program
     program_params[:sub_program].present?
   end
 
-  def sort_column
+  private def sort_column
     return 'program_id' if params[:sort].blank?
 
     params[:sort]
   end
 
-  def sort_direction
+  private def sort_direction
     ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
-  def query_string
+  private def query_string
     "%#{@query}%"
   end
 
-  def filter_terms
+  private def filter_terms
     [:current_route]
   end
   helper_method :filter_terms
 
-  def sorter
+  private def sorter
     @column = params[:sort]
     @direction = params[:direction]
 
