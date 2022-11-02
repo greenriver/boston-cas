@@ -119,7 +119,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/opportunity_details/via_voucher.rb'
     - 'app/models/tag.rb'
     - 'app/models/user.rb'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -432,7 +431,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/warehouse/cas_vacancy.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 19
 # Cop supports --auto-correct.
@@ -574,7 +572,6 @@ Layout/HashAlignment:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 178
 # Cop supports --auto-correct.
@@ -752,7 +749,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -805,7 +801,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
     - 'app/models/user_role.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/require_interest_in_neighborhood_spec.rb'
     - 'spec/requests/express_neighborhood_interests_spec.rb'
@@ -886,7 +881,6 @@ Layout/SpaceInsideParens:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -934,7 +928,6 @@ Layout/TrailingEmptyLines:
     - 'app/models/mitigation_reason.rb'
     - 'app/models/notifications/five/base.rb'
     - 'app/models/warehouse/programs_to_projects.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/factories/match_decisions/hsa_accepts_client.rb'
     - 'spec/factories/match_decisions/match_recommendation_hsa_housing_date.rb'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
@@ -1380,7 +1373,6 @@ Style/BlockDelimiters:
 # Configuration parameters: AllowOnConstant.
 Style/CaseEquality:
   Exclude:
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1577,7 +1569,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'bin/setup'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -1854,7 +1845,6 @@ Style/StringLiterals:
     - 'bin/spring'
     - 'bin/update'
     - 'bin/yarn'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
