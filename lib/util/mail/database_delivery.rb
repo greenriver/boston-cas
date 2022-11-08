@@ -25,8 +25,15 @@ module Mail
         )
         user = contact.user
         if user.blank? || user.continuous_email_delivery?
-          ::ImmediateMailer.with(message: message, to: contact.email).immediate.deliver_now
-          message.update(sent_at: Time.current, seen_at: Time.current)
+          (1..10).each do
+            begin
+              ::ImmediateMailer.with(message: message, to: contact.email).immediate.deliver_now
+              message.update(sent_at: Time.current, seen_at: Time.current)
+              break
+            rescue Net::SMTPAuthenticationError
+              sleep 5
+            end
+          end
         end
       end
     end

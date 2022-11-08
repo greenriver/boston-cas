@@ -10,6 +10,12 @@
   - @upload.parsed_expected_header.each do |header|
     %li= header
 
+%p
+  Any newly imported clients will be made available for matching.
+  Existing clients that appear in the upload will be updated with any new information
+  in the file, but, will not be made available for matching if they are currently
+  ineligible.
+
 = simple_form_for @upload, url: imported_clients_path, method: :post do |f|
   = f.error_notification
   .form-inputs

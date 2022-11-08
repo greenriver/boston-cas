@@ -93,7 +93,6 @@ Layout/DotPosition:
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
@@ -120,7 +119,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/opportunity_details/via_voucher.rb'
     - 'app/models/tag.rb'
     - 'app/models/user.rb'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -183,7 +181,6 @@ Layout/EmptyLinesAroundAccessModifier:
   Exclude:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/services_controller.rb'
@@ -284,7 +281,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/notification_sessions_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/style_guides_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
@@ -435,7 +431,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/warehouse/cas_vacancy.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 19
 # Cop supports --auto-correct.
@@ -577,7 +572,6 @@ Layout/HashAlignment:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 178
 # Cop supports --auto-correct.
@@ -595,7 +589,6 @@ Layout/IndentationConsistency:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/services_controller.rb'
@@ -633,7 +626,6 @@ Layout/IndentationWidth:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/services_controller.rb'
@@ -757,7 +749,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
     - 'spec/models/message_spec.rb'
@@ -809,9 +800,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/models/user_role.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/require_interest_in_neighborhood_spec.rb'
     - 'spec/requests/express_neighborhood_interests_spec.rb'
@@ -862,7 +851,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
     - 'app/models/concerns/covid_pathways_calculations.rb'
     - 'app/models/concerns/inherits_requirements_from_services.rb'
@@ -893,7 +881,6 @@ Layout/SpaceInsideParens:
     - 'app/models/rules/seen_in_last_ninety_days.rb'
     - 'app/models/rules/seen_in_last_sixty_days.rb'
     - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -941,7 +928,6 @@ Layout/TrailingEmptyLines:
     - 'app/models/mitigation_reason.rb'
     - 'app/models/notifications/five/base.rb'
     - 'app/models/warehouse/programs_to_projects.rb'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/factories/match_decisions/hsa_accepts_client.rb'
     - 'spec/factories/match_decisions/match_recommendation_hsa_housing_date.rb'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
@@ -1246,7 +1232,6 @@ Lint/UselessAssignment:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/match_list_base_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/qualified_opportunities_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/cas_seeds/opportunities.rb'
@@ -1388,7 +1373,6 @@ Style/BlockDelimiters:
 # Configuration parameters: AllowOnConstant.
 Style/CaseEquality:
   Exclude:
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1568,7 +1552,6 @@ Style/IfUnlessModifier:
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/inputs/base_input.rb'
@@ -1586,7 +1569,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'bin/setup'
-    - 'lib/util/mail/database_delivery.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -1830,7 +1812,6 @@ Style/StringLiterals:
     - 'app/controllers/match_contacts_controller.rb'
     - 'app/controllers/match_list_base_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'
@@ -1864,7 +1845,6 @@ Style/StringLiterals:
     - 'bin/spring'
     - 'bin/update'
     - 'bin/yarn'
-    - 'lib/util/mail/database_delivery.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -1923,7 +1903,6 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/programs_controller.rb'
     - 'app/controllers/qualified_opportunities_controller.rb'
     - 'app/controllers/services_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'

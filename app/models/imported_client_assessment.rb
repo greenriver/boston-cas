@@ -13,9 +13,13 @@ class ImportedClientAssessment < NonHmisAssessment
   # validates :income_total_monthly, presence: true, numericality: true
   validates :voucher_agency, presence: true, if: :have_tenant_voucher?
 
+  def title
+    'Imported Client Assessment'
+  end
+
   def for_matching
     {
-      'IdentifiedClientAssessment' => 'Non-HMIS Assessment - Identified',
+      'ImportedClientAssessment' => title,
     }
   end
 

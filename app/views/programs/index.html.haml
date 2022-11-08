@@ -19,14 +19,21 @@
 .row.table-utilities
   .col-sm-8
     %p= page_entries_info @programs, entry_name: 'Sub-Programs'
+  .col-sm-4
+    .d-flex
+      .ml-auto
+        = link_to programs_path(format: :xlsx), class: 'btn btn-secondary' do
+          %span.icon-download2
+          Download
     :ruby
-      columns = ['program_id', 'name', 'building_id']
+      columns = ['program_id', 'sub_program_id', 'building_id']
+
       directions = current_sort_order(Hash[columns.map {|x| [x, nil]}])
       titles = {}
       directions.each {| k,v | titles[k] = @programs.human_attribute_name(k)}
       titles['program_id'] = 'Program'
       titles['building_id'] = "#{Building.model_name.human}"
-      titles['name'] = 'Sub-Program'
+      titles['sub_program_id'] = 'Sub-Program'
 .table-responsive
   .c-card.c.card__flush.mb-4
     .c-card__content.p-0
@@ -42,7 +49,7 @@
             %th Organization
             %th Available/Unmatched
             %th In Progress
-            %th Sucessful
+            %th Successful
         %tbody
           - @programs.each do |sp|
             - if sp.deleted_at
