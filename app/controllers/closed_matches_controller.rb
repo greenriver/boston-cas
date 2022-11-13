@@ -51,11 +51,13 @@ class ClosedMatchesController < MatchListBaseController
       preload(
         :voucher,
         :match_route,
+        unit: [:building],
         sub_program: [
           :program,
         ],
         @match_state =>
         [
+          :initialized_decisions,
           :decisions,
           :match_route,
           :sub_program,
