@@ -265,7 +265,13 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate(:show_client_match_attributes?, to: :current_decision, allow_nil: true)
 
   def confidential?
-    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release?(match_route) && Config.get(:limit_client_names_on_matches))
+    program&.confidential? ||
+    client&.confidential? ||
+    sub_program&.confidential? ||
+    (
+      !client&.has_full_housing_release?(match_route) &&
+      Config.get(:limit_client_names_on_matches)
+    )
   end
 
   def self.accessible_by_user(user)

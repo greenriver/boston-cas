@@ -1,6 +1,6 @@
 - opportunities.each do |opportunity|
   - if @match_state == :closed_matches
-    - matches = opportunity.send(@match_state).where(id: @matches.select(:id))
+    - matches = opportunity.send(@match_state).to_a.select { |m| m.id.in?(@matches.pluck(:id)) }
   - elsif @match_state == :active_matches
     - matches = opportunity.prioritized_active_matches
   - else

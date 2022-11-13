@@ -46,7 +46,8 @@ class ActiveMatchesController < MatchListBaseController
 
     @opportunities = opportunity_scope.where(id: opportunity_ids)
     @opportunities = @opportunities.order_as_specified(distinct_on: true, id: opportunity_ids) unless opportunity_ids.empty?
-    @opportunities = @opportunities.
+    @opportunities = @opportunities.page(@page).per(@page_size)
+    @opportunities_array = @opportunities.
       preload(
         :voucher,
         :match_route,
@@ -63,7 +64,7 @@ class ActiveMatchesController < MatchListBaseController
           ],
         ],
       ).
-      page(@page).per(@page_size)
+      to_a
   end
 
   private def match_scope

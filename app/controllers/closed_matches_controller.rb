@@ -31,7 +31,7 @@ class ClosedMatchesController < MatchListBaseController
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
       joins(:client).
-      order(sort_matches())
+      order(sort_matches)
     @column = sort_column
     @direction = sort_direction
     @active_filter = [@current_step, @current_program, @current_contact_type, @current_filter_contact].map(&:presence).any?
@@ -46,10 +46,14 @@ class ClosedMatchesController < MatchListBaseController
     @opportunities = opportunity_scope.where(id: opportunity_ids).
       order_as_specified(distinct_on: true, id: opportunity_ids).
       # order("array_position(ARRAY#{opportunity_ids}, opportunities.id)").
+      page(@page).per(@page_size)
+    @opportunities_array = @opportunities.
       preload(
         :voucher,
         :match_route,
-        sub_program: [:program],
+        sub_program: [
+          :program,
+        ],
         @match_state =>
         [
           :decisions,
@@ -60,9 +64,9 @@ class ClosedMatchesController < MatchListBaseController
             :project_client,
             :active_matches,
           ],
-        ]
+        ],
       ).
-      page(@page).per(@page_size)
+      to_a
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!
@@ -71,12 +75,12 @@ class ClosedMatchesController < MatchListBaseController
 
   def match_scope
     if can_view_all_matches?
-      ClientOpportunityMatch.
+      match_source.
         accessible_by_user(current_user).
         closed.
         joins(:client)
     else
-      ClientOpportunityMatch.
+      match_source.
         hsa_involved.
         accessible_by_user(current_user).
         closed.
@@ -88,17 +92,18 @@ class ClosedMatchesController < MatchListBaseController
     @heading = 'Closed Matches'
   end
 
-  private def match_scope
-    match_source.accessible_by_user(current_user).closed
-  end
+  # TODO: remove this, there was a duplicate method, leaving as of 11/13/2022
+  # until we've confirmed it was unnecessary
+  # private def match_scope
+  #   match_source.accessible_by_user(current_user).closed
+  # end
 
   private def sort_column
-    available_sort = ClientOpportunityMatch.sort_options.map{|m| m[:column]}
+    available_sort = ClientOpportunityMatch.sort_options.map { |m| m[:column] }
     available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
-
 end
