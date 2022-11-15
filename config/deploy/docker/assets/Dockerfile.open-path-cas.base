@@ -68,7 +68,8 @@ RUN mkdir -p app/assets/stylesheets/theme/styles && \
   cp config/deploy/docker/assets/database.open-path-cas.yml config/database.yml && \
   rm -rf tmp/* && \
   rm .env && \
-  mkdir tmp/pids
+  mkdir tmp/pids && \
+  yarn install --frozen-lockfile
 
 RUN touch /etc/timezone
 RUN ln -sf /app/etc-localtime /etc/localtime
