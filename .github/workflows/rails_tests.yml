@@ -83,6 +83,10 @@ jobs:
       - name: 'Install gems'
         run: |
           bundle install --jobs 4 --retry 3
+      - name: 'Install node packages'
+        run: |
+          yarn install --frozen-lockfile
+
       - name: 'App setup'
         run: |
           cp config/secrets.yml.sample config/secrets.yml
