@@ -27,6 +27,8 @@
 //= require jquery.periodicalupdater
 //= require jquery.updater
 //= require DataTables/datatables.min
+//= require d3/dist/d3.min
+//= require billboard.js/dist/billboard.min
 
 //////////////////////////
 // App specific code
