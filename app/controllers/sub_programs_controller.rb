@@ -101,7 +101,7 @@ class SubProgramsController < ApplicationController
       elsif can_view_assigned_programs?
         return Program.visible_by(current_user)
       else
-        not_authorized!
+        Program.none
       end
     end
 
@@ -111,7 +111,7 @@ class SubProgramsController < ApplicationController
       elsif can_view_assigned_programs?
         return SubProgram.visible_by(current_user)
       else
-        not_authorized!
+        SubProgram.none
       end
     end
 

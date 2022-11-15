@@ -1,0 +1,36 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: 'CAS Programs') do |sheet|
+  title = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
+  data_cell = sheet.styles.add_style(alignment: { horizontal: :left, vertical: :top, wrap_text: true })
+
+  sheet.add_row([
+    'Program',
+    'Sub Program',
+    'Building',
+    'Route',
+    'Organization',
+    'Available/Unmatched',
+    'In Progress',
+    'Successful',
+    'Link',
+  ], style: title)
+
+  @programs.each do |sp|
+    name = sp.program.name
+    link = edit_program_sub_program_url(sp.program, sp)
+    name << ' (deleted)' if sp.deleted_at.present?
+    row = [
+      name,
+      sp.name_with_status,
+      sp.site,
+      sp.program.match_route&.title,
+      sp.organizations.join(', '),
+      sp.vacancies,
+      sp.in_progress,
+      sp.matched,
+      link,
+    ]
+    sheet.add_row(row, style: data_cell)
+  end
+end
