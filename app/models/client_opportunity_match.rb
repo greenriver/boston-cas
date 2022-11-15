@@ -4,7 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-require 'memoist'
 class ClientOpportunityMatch < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
