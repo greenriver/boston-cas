@@ -40,7 +40,7 @@ COPY --from=builder /key.pem /cert.pem /app/config/
 # allow tls connection to database with verification
 COPY config/deploy/docker/assets/rds-combined-ca-bundle.pem /etc/ssl/certs/rds-combined-ca-bundle.pem
 
-COPY Gemfile Gemfile.lock Rakefile config.ru ./
+COPY Gemfile Gemfile.lock Rakefile config.ru package.json yarn.lock ./
 COPY bin ./bin
 COPY public ./public
 RUN true
