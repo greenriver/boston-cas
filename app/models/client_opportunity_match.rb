@@ -284,10 +284,8 @@ class ClientOpportunityMatch < ApplicationRecord
     where(id: accessible_match_ids(user))
   end
 
-  # To support memoist, we need to define this class method differently
-  class << self
-    extend Memoist
-    def accessible_match_ids(user)
+  def self.accessible_match_ids(user)
+    Rails.cache.fetch([__method__, user], expires_in: 3.minutes) do
       contact = user.contact
       contact_subquery = ClientOpportunityMatchContact.
         where(contact_id: contact.id).
@@ -295,7 +293,6 @@ class ClientOpportunityMatch < ApplicationRecord
       visible_subquery = visible_by(user).pluck(:id)
       (contact_subquery + visible_subquery).to_set
     end
-    memoize :accessible_match_ids
   end
 
   def accessible_by? user
