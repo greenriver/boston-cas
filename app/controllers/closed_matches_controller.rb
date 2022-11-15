@@ -32,6 +32,7 @@ class ClosedMatchesController < MatchListBaseController
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
       joins(:client).
       order(sort_matches)
+    @match_ids = @matches.pluck(:id)
     @column = sort_column
     @direction = sort_direction
     @active_filter = [@current_step, @current_program, @current_contact_type, @current_filter_contact].map(&:presence).any?

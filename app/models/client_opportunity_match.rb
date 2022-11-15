@@ -4,6 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+require 'memoist'
 class ClientOpportunityMatch < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
@@ -280,16 +281,25 @@ class ClientOpportunityMatch < ApplicationRecord
     return all if user.can_view_all_matches?
 
     # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
-    contact = user.contact
-    contact_subquery = ClientOpportunityMatchContact.
-      where(contact_id: contact.id).
-      pluck(:match_id)
-    visible_subquery = visible_by(user).pluck(:id)
-    where(id: contact_subquery + visible_subquery)
+    where(id: accessible_match_ids(user))
+  end
+
+  # To support memoist, we need to define this class method differently
+  class << self
+    extend Memoist
+    def accessible_match_ids(user)
+      contact = user.contact
+      contact_subquery = ClientOpportunityMatchContact.
+        where(contact_id: contact.id).
+        pluck(:match_id)
+      visible_subquery = visible_by(user).pluck(:id)
+      (contact_subquery + visible_subquery).to_set
+    end
+    memoize :accessible_match_ids
   end
 
   def accessible_by? user
-    self.class.accessible_by_user(user).where(id: id).exists?
+    @accessible_by ||= self.class.accessible_match_ids(user).include?(id)
   end
 
   def show_client_info_to? contact
