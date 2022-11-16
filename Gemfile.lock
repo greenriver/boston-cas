@@ -276,7 +276,7 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     equalizer (0.0.11)
-    erubi (1.10.0)
+    erubi (1.11.0)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_bot (6.1.0)
@@ -373,7 +373,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.2.8)
@@ -392,7 +392,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.2)
+    minitest (5.16.3)
     minitest-reporters (1.4.2)
       ansi
       builder
@@ -566,10 +566,10 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sentry-rails (5.5.0)
+    sentry-rails (5.6.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.5.0)
-    sentry-ruby (5.5.0)
+      sentry-ruby (~> 5.6.0)
+    sentry-ruby (5.6.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sexp_processor (4.15.1)
     shellany (0.0.1)
@@ -635,7 +635,7 @@ GEM
       zip_tricks (>= 4.5, < 6)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.6)
     zip_tricks (5.5.0)
 
 PLATFORMS
