@@ -25,7 +25,7 @@ RUN addgroup -g 1001 app \
 RUN gem install bundler --version=2.3.8 && \
   mkdir -p app/assets tmp/pids lib/assets vendor/assets public locale var
 
-COPY Gemfile Gemfile.lock Rakefile config.ru ./
+COPY Gemfile Gemfile.lock Rakefile config.ru package.json yarn.lock ./
 COPY bin ./bin
 COPY public ./public
 COPY lib ./lib
