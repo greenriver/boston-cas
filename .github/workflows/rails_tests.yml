@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     # Docker Hub image that the job executes in
-    container: ruby:2.7.2-slim-buster
+    container: ruby:2.7.6-alpine3.15
 
     # Service containers to run with job
     services:
@@ -39,54 +39,41 @@ jobs:
         ports:
           - 6379:6379
 
+    env:
+      DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+      DATABASE_DB_TEST: boston_cas_test
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Set up dependencies
-        env:
-          DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
-          DATABASE_DB_TEST: boston_cas_test
+
         run: |
-          apt-get update
-          apt-get install -y \
-            yarn \
-            build-essential \
-            curl \
-            freetds-bin \
-            freetds-dev \
+          apk add --no-cache \
+            nodejs yarn npm \
+            tzdata \
             git \
-            icu-devtools \
+            bash \
+            freetds-dev \
+            icu icu-dev \
+            curl libcurl curl-dev \
             imagemagick \
-            libc6-dev \
-            libcurl4-openssl-dev \
-            libgeos-dev \
-            libicu-dev \
-            libmagic-dev \
-            libpq-dev \
-            libproj-dev \
-            postgis \
-            postgresql-client \
-            python \
-            unzip
+            libmagic file-dev file \
+            build-base libxml2-dev libxslt-dev postgresql-dev \
+            libgcc libstdc++ libx11 glib libxrender libxext libintl ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-freefont \
+            freetype freetype-dev harfbuzz ca-certificates ttf-freefont \
+            postgresql tmux postgis geos geos-dev \
+            shared-mime-info
 
           echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass
 
+          yarn install --frozen-lockfile
           gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
           gem install bundler -v '< 2'
-
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js 10
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: '10'
-          check-latest: true
 
       - name: 'Install gems'
         run: |
           bundle install --jobs 4 --retry 3
-      - name: 'Install node packages'
-        run: |
-          yarn install --frozen-lockfile
 
       - name: 'App setup'
         run: |
