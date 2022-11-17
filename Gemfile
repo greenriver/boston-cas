@@ -92,7 +92,7 @@ gem 'handlebars_assets'
 gem 'momentjs-rails', '>= 2.9.0'
 
 gem 'delayed_job_active_record'
-gem 'uglifier'
+gem 'terser'
 
 gem 'whenever', require: false
 
