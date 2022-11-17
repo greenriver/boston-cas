@@ -33,6 +33,7 @@ class ActiveMatchesController < MatchListBaseController
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
       joins(:client).
       order(sort_matches)
+    @match_ids = @matches.pluck(:id)
     @column = sort_column
     @direction = sort_direction
     @active_filter = [@current_step, @current_program, @current_contact_type, @current_filter_contact].map(&:presence).any?
@@ -46,13 +47,16 @@ class ActiveMatchesController < MatchListBaseController
 
     @opportunities = opportunity_scope.where(id: opportunity_ids)
     @opportunities = @opportunities.order_as_specified(distinct_on: true, id: opportunity_ids) unless opportunity_ids.empty?
-    @opportunities = @opportunities.
+    @opportunities = @opportunities.page(@page).per(@page_size)
+    @opportunities_array = @opportunities.
       preload(
         :voucher,
         :match_route,
+        unit: [:building],
         sub_program: [:program],
         @match_state =>
         [
+          :initialized_decisions,
           :decisions,
           :match_route,
           :sub_program,
@@ -63,7 +67,7 @@ class ActiveMatchesController < MatchListBaseController
           ],
         ],
       ).
-      page(@page).per(@page_size)
+      to_a
   end
 
   private def match_scope

@@ -48,5 +48,5 @@
         %strong= simple_format([program_filters, contact_filters].filter(&:presence).join(',<br />'), {}, wrapper_tag: 'span')
 
 %p= paginate @opportunities, params: {sort: @column, direction: @direction}
-= render 'matches/list', opportunities: @opportunities, match_type: 'active'
+= render 'matches/list', opportunities: @opportunities_array, match_type: 'active'
 %p= paginate @opportunities, params: {sort: @column, direction: @direction}

@@ -265,7 +265,13 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate(:show_client_match_attributes?, to: :current_decision, allow_nil: true)
 
   def confidential?
-    program&.confidential? || client&.confidential? || sub_program&.confidential? || (!client&.has_full_housing_release?(match_route) && Config.get(:limit_client_names_on_matches))
+    program&.confidential? ||
+    client&.confidential? ||
+    sub_program&.confidential? ||
+    (
+      !client&.has_full_housing_release?(match_route) &&
+      Config.get(:limit_client_names_on_matches)
+    )
   end
 
   def self.accessible_by_user(user)
@@ -274,16 +280,22 @@ class ClientOpportunityMatch < ApplicationRecord
     return all if user.can_view_all_matches?
 
     # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
-    contact = user.contact
-    contact_subquery = ClientOpportunityMatchContact.
-      where(contact_id: contact.id).
-      pluck(:match_id)
-    visible_subquery = visible_by(user).pluck(:id)
-    where(id: contact_subquery + visible_subquery)
+    where(id: accessible_match_ids(user))
+  end
+
+  def self.accessible_match_ids(user)
+    Rails.cache.fetch([__method__, user], expires_in: 3.minutes) do
+      contact = user.contact
+      contact_subquery = ClientOpportunityMatchContact.
+        where(contact_id: contact.id).
+        pluck(:match_id)
+      visible_subquery = visible_by(user).pluck(:id)
+      (contact_subquery + visible_subquery).to_set
+    end
   end
 
   def accessible_by? user
-    self.class.accessible_by_user(user).where(id: id).exists?
+    @accessible_by ||= self.class.accessible_match_ids(user).include?(id)
   end
 
   def show_client_info_to? contact
