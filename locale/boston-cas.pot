@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 13:35+0000\n"
-"PO-Revision-Date: 2022-06-30 13:35+0000\n"
+"POT-Creation-Date: 2022-11-21 19:46+0000\n"
+"PO-Revision-Date: 2022-11-21 19:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -82,6 +82,9 @@ msgid "CAS"
 msgstr ""
 
 msgid "CAS Reports"
+msgstr ""
+
+msgid "CE Assessment"
 msgstr ""
 
 msgid "CSPECH Eligible"
@@ -321,10 +324,16 @@ msgstr ""
 msgid "Limited CAS Release"
 msgstr ""
 
+msgid "Match Route Eight"
+msgstr ""
+
 msgid "Match Route Five"
 msgstr ""
 
 msgid "Match Route Four"
+msgstr ""
+
+msgid "Match Route Nine"
 msgstr ""
 
 msgid "Match Route Seven"
@@ -427,6 +436,9 @@ msgid "RRH staff at Pine Street Inn"
 msgstr ""
 
 msgid "RRH staff at Woods Mullen Shelter"
+msgstr ""
+
+msgid "Record Date Voucher Issued"
 msgstr ""
 
 msgid "Release of information"

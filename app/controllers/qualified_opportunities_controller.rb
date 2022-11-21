@@ -38,9 +38,9 @@ class QualifiedOpportunitiesController < ApplicationController
       opportunity: @opportunity,
       client: @client,
       match_route: @opportunity.match_route,
-      universe_state: @universe_state
+      universe_state: universe_state,
     )
-    match.activate!
+    match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?)
     redirect_to match_path match
   end
 

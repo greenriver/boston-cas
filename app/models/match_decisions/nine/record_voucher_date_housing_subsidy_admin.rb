@@ -16,9 +16,9 @@ module MatchDecisions::Nine
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} reviewing match"
-      when :accepted then "#{_('Housing Subsidy Administrator')} issued voucher on  #{date_voucher_issued.try :strftime, '%m/%d/%Y'}"
-      when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{_('Housing Subsidy Administrator Nine')} reviewing match"
+      when :accepted then "#{_('Housing Subsidy Administrator Nine')} issued voucher on  #{date_voucher_issued.try :strftime, '%m/%d/%Y'}"
+      when :declined then "Match declined by #{_('Housing Subsidy Administrator Nine')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -38,7 +38,7 @@ module MatchDecisions::Nine
     end
 
     def actor_type
-      _('HSA')
+      _('HSA Nine')
     end
 
     def contact_actor_type

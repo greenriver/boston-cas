@@ -83,6 +83,9 @@ msgstr ""
 msgid "CAS Reports"
 msgstr ""
 
+msgid "CE Assessment"
+msgstr ""
+
 msgid "CSPECH Eligible"
 msgstr ""
 
@@ -320,10 +323,16 @@ msgstr ""
 msgid "Limited CAS Release"
 msgstr ""
 
+msgid "Match Route Eight"
+msgstr ""
+
 msgid "Match Route Five"
 msgstr ""
 
 msgid "Match Route Four"
+msgstr ""
+
+msgid "Match Route Nine"
 msgstr ""
 
 msgid "Match Route Seven"
@@ -426,6 +435,9 @@ msgid "RRH staff at Pine Street Inn"
 msgstr ""
 
 msgid "RRH staff at Woods Mullen Shelter"
+msgstr ""
+
+msgid "Record Date Voucher Issued"
 msgstr ""
 
 msgid "Release of information"

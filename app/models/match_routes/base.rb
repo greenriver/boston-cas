@@ -79,6 +79,10 @@ module MatchRoutes
       self.class.match_steps.keys.first
     end
 
+    def auto_initialize_event?
+      true
+    end
+
     # The number of the step in match_steps of the first step where a client interaction is required
     private def first_client_step_number
       self.class.match_steps[first_client_step]

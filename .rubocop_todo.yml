@@ -23,7 +23,6 @@ Layout/ArgumentAlignment:
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/models/concerns/contact_join_model.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
@@ -325,7 +324,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_progress_updates/ssp.rb'
     - 'app/models/match_routes/homeless_set_aside.rb'
     - 'app/models/match_routes/provider_only.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
     - 'app/models/notifications/base.rb'
@@ -440,7 +438,6 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/controllers/reissue_requests_controller.rb'
     - 'app/controllers/tags_controller.rb'
     - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/neighborhood.rb'
 
 # Offense count: 57
@@ -567,7 +564,6 @@ Layout/FirstHashElementIndentation:
 Layout/HashAlignment:
   Exclude:
     - 'app/controllers/imported_clients_controller.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
 
 # Offense count: 178
@@ -817,7 +813,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/imported_clients_csv.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/opportunity_contact.rb'
     - 'app/models/rules/tagged_with.rb'
@@ -868,7 +863,6 @@ Layout/SpaceInsideParens:
     - 'app/controllers/messages_controller.rb'
     - 'app/jobs/message_job.rb'
     - 'app/models/concerns/notifier_config.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/program.rb'
     - 'app/models/rules/seen_in_last_forty_five_days.rb'
     - 'app/models/rules/seen_in_last_ninety_days.rb'
@@ -1222,7 +1216,6 @@ Lint/UselessAssignment:
     - 'app/controllers/admin/translation_text_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/qualified_opportunities_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/models/cas_seeds/opportunities.rb'
     - 'app/models/cas_seeds/vouchers.rb'
@@ -1291,7 +1284,6 @@ Naming/MemoizedInstanceVariableName:
     - 'app/models/concerns/contact_join_model.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/subject_for_matches.rb'
-    - 'app/models/matching/engine.rb'
     - 'app/models/notifications/base.rb'
 
 # Offense count: 3
@@ -1883,7 +1875,6 @@ Style/TrailingCommaInArguments:
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/qualified_opportunities_controller.rb'
     - 'app/controllers/services_controller.rb'
     - 'app/controllers/sub_program_contacts_controller.rb'
     - 'app/controllers/subgrantees_controller.rb'

@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('Shelter Agency')} notified of approved potential match."
+      "#{_('Shelter Agency Nine')} notified of approved potential match."
     end
   end
 end

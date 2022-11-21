@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified client is awaiting Lease Up"
+      "#{_('Housing Subsidy Administrator Nine')} notified client is awaiting Lease Up"
     end
   end
 end

@@ -111,7 +111,8 @@ class ClientOpportunityMatch < ApplicationRecord
 
   has_one :current_decision
 
-  has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
+  has_many :referral_events, class_name: 'Warehouse::ReferralEvent'
+  has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent'
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled'].freeze
   validates :closed_reason, inclusion: { in: CLOSED_REASONS, if: :closed_reason }
@@ -613,11 +614,11 @@ class ClientOpportunityMatch < ApplicationRecord
       # so clean that up...
       Warehouse::CasHoused.where(match_id: id).destroy_all
 
-      referral_event&.clear if Warehouse::Base.enabled?
+      active_referral_event&.clear if Warehouse::Base.enabled?
     end
   end
 
-  def activate!
+  def activate!(touch_referral_event: true)
     self.class.transaction do
       update! active: true
       client.make_unavailable_in(match_route: match_route, expires_at: nil) if match_route.should_prevent_multiple_matches_per_client
@@ -628,7 +629,7 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all unless match_route.should_activate_match
 
-      init_referral_event if Warehouse::Base.enabled?
+      init_referral_event if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
@@ -640,7 +641,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
-  def rejected!
+  def rejected!(touch_referral_event: true)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
       client.make_available_in(match_route: match_route)
@@ -651,11 +652,11 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.rejected if Warehouse::Base.enabled?
+      active_referral_event&.rejected if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
-  def canceled!
+  def canceled!(touch_referral_event: true)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client.make_available_in(match_route: match_route)
@@ -666,14 +667,14 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.rejected if Warehouse::Base.enabled?
+      active_referral_event&.rejected if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
   # Similar to a cancel, but allow the client to re-match the same opportunity
   # if it comes up again.  Also, don't re-run the matching engine, we'll
   # put the opportunity
-  def poached!
+  def poached!(touch_referral_event: true)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client&.make_available_in(match_route: match_route)
@@ -682,11 +683,11 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.rejected if Warehouse::Base.enabled?
+      active_referral_event&.rejected if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
-  def succeeded!
+  def succeeded!(touch_referral_event: true)
     self.class.transaction do
       route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
@@ -742,7 +743,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.accepted if Warehouse::Base.enabled?
+      active_referral_event&.accepted if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
@@ -785,7 +786,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def init_referral_event
     return unless Warehouse::Base.enabled?
-    return referral_event if referral_event.present?
+    return active_referral_event if active_referral_event.present?
     return unless project_client&.from_hmis?
 
     create_referral_event(

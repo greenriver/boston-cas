@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of approved potential match."
+      "#{_('Housing Subsidy Administrator Nine')} notified of approved potential match."
     end
   end
 end

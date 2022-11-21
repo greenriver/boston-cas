@@ -19,7 +19,9 @@ module MatchRoutes
         'MatchDecisions::Nine::MatchRecommendationDndStaff' => 1,
         'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin' => 2,
         'MatchDecisions::Nine::LeaseUp' => 3,
-        'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff' => 4,
+        'MatchDecisions::Nine::DndStaffAssignsCaseContact' => 4,
+        'MatchDecisions::Nine::CaseContactAssignsManager' => 5,
+        'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff' => 6,
       }
     end
 
@@ -29,7 +31,11 @@ module MatchRoutes
         'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin' => 2,
         'MatchDecisions::Nine::ConfirmHousingSubsidyAdminDeclineDndStaff' => 3,
         'MatchDecisions::Nine::LeaseUp' => 4,
-        'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff' => 5,
+        'MatchDecisions::Nine::ConfirmLeaseUpFailure' => 5,
+        'MatchDecisions::Nine::DndStaffAssignsCaseContact' => 6,
+        'MatchDecisions::Nine::CaseContactAssignsManager' => 7,
+        'MatchDecisions::Nine::ConfirmCaseContactAssignsManagerFailure' => 8,
+        'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff' => 9,
       }
     end
 
@@ -53,6 +59,10 @@ module MatchRoutes
     end
 
     def show_hearing_date
+      false
+    end
+
+    def auto_initialize_event?
       false
     end
   end

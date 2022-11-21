@@ -36,7 +36,7 @@ class OpportunityMatchesController < ApplicationController
     client_ids_to_activate.each do |client_id|
       match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
         first_or_create(create_match_attributes(client_id))
-      match.activate!
+      match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?)
     end
     redirect_to opportunity_matches_path(@opportunity)
   end
@@ -53,7 +53,7 @@ class OpportunityMatchesController < ApplicationController
 
     match = ClientOpportunityMatch.create(create_match_attributes(client_id))
 
-    match.activate!
+    match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?)
     redirect_to match_path match
   end
 

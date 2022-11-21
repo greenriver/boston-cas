@@ -5,31 +5,31 @@
 ###
 
 module MatchDecisions::Nine
-  class LeaseUp < ::MatchDecisions::Base
+  class DndStaffAssignsCaseContact < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
-    validate :client_move_in_date_present_if_status_complete
+    validate :ensure_required_contacts_present_on_accept
 
     def step_name
-      _('Move In')
+      _("#{_('DND')} Assigns #{_('Stabilization Service Provider Nine')}")
     end
 
     def actor_type
-      _('HSA Nine')
+      _('DND')
     end
 
     def contact_actor_type
-      :housing_subsidy_admin_contacts
+      :dnd_staff_contacts
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::LeaseUp
+        m << Notifications::Nine::DndStaffAssignsCaseContact
       end
     end
 
     def permitted_params
-      super + [:client_move_in_date, :prevent_matching_until]
+      super
     end
 
     def statuses
@@ -44,9 +44,9 @@ module MatchDecisions::Nine
 
     def label_for_status status
       case status.to_sym
-      when :pending then 'Awaiting Move In'
-      when :expiration_update then 'Awaiting Move In'
-      when :completed then "Match completed by #{_('Housing Subsidy Administrator Nine')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :pending then 'Case Contact Assignment'
+      when :expiration_update then 'Case Contact Assignment'
+      when :completed then "Match completed by #{_('DND')}, Case Contact Assigned"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -95,7 +95,7 @@ module MatchDecisions::Nine
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
     end
 
     def whitelist_params_for_update params
@@ -104,8 +104,12 @@ module MatchDecisions::Nine
       )
     end
 
-    private def client_move_in_date_present_if_status_complete
-      errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
+    private def ensure_required_contacts_present_on_accept
+      missing_contacts = []
+      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
+      missing_contacts << "a #{_('Stabilization Service Provider Nine')} Contact" if save_will_accept? && match.ssp_contacts.none?
+
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
   end
 end

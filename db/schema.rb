@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_25_170741) do
+ActiveRecord::Schema.define(version: 2022_11_21_214935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -644,6 +644,7 @@ ActiveRecord::Schema.define(version: 2022_10_25_170741) do
     t.string "address"
     t.boolean "include_note_in_email"
     t.datetime "date_voucher_issued"
+    t.string "manager"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"

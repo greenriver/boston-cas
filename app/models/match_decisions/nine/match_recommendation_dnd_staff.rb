@@ -92,6 +92,7 @@ module MatchDecisions::Nine
         return unless match.client.remote_id.present? && Warehouse::Base.enabled?
 
         Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+        match.init_referral_event
       rescue StandardError
         nil
       end
@@ -123,7 +124,8 @@ module MatchDecisions::Nine
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
-      missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{_('Housing Subsidy Administrator Nine')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{_('Shelter Agency Nine')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
