@@ -359,7 +359,7 @@ class Client < ApplicationRecord
   end
 
   def match_for_opportunity(opportunity)
-    client_opportunity_matches.active.where(opportunity: opportunity).first
+    active_matches.detect { |m| m.opportunity_id == opportunity.id }
   end
 
   # NOTE: this uses any? instead of exists? so that data can pre pre-loaded in batches

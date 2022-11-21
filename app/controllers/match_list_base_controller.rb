@@ -27,9 +27,10 @@ class MatchListBaseController < ApplicationController
     @matches = @matches.
       references(:client).
       includes(:client).
-      order(sort_opportunities()).
+      order(sort_opportunities).
       preload(:client, :opportunity, :decisions).
       page(params[:page]).per(25)
+    @match_ids = @matches.pluck(:id)
     @show_vispdat = show_vispdat?
   end
 
@@ -43,7 +44,7 @@ class MatchListBaseController < ApplicationController
     elsif sort_column == 'first_name'
       column = 'clients.first_name'
     elsif sort_column == 'last_decision'
-      column = "last_decision.updated_at"
+      column = 'last_decision.updated_at'
     elsif sort_column == 'current_step'
       column = 'last_decision.type'
     elsif sort_column == 'days_homeless'
@@ -58,9 +59,8 @@ class MatchListBaseController < ApplicationController
       column = 'clients.last_name'
     end
     sort = "#{column} #{sort_direction}"
-    if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
-      sort = sort + ' NULLS LAST'
-    end
+    sort += ' NULLS LAST' if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
+    sort
   end
 
   private def qualified_match_sort_column
@@ -71,7 +71,7 @@ class MatchListBaseController < ApplicationController
     elsif sort_column == 'first_name'
       'clients.first_name'
     elsif sort_column == 'last_decision'
-      "last_decision.updated_at"
+      'last_decision.updated_at'
     elsif sort_column == 'current_step'
       'last_decision.type'
     elsif sort_column == 'days_homeless'
@@ -91,43 +91,41 @@ class MatchListBaseController < ApplicationController
 
   private def sort_matches
     sort = "#{qualified_match_sort_column} #{sort_direction}"
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      sort = sort + ' NULLS LAST'
-    end
+    sort += ' NULLS LAST' if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    sort
   end
 
   private def search_opportunities scope
     return scope unless params[:q].present?
+
     search_scope = scope.match_text_search(params[:q])
     unless current_user.can_view_all_clients?
       search_scope = search_scope.joins(:client_opportunity_match).
-        where(id: match_source.where(id: visible_match_ids()).select(:opportunity_id))
+        where(id: match_source.where(id: visible_match_ids).select(:opportunity_id))
     end
     search_scope
   end
 
   private def search_matches search_string, scope
     return scope unless search_string.present?
+
     search_scope = scope.text_search(search_string)
-    unless current_user.can_view_all_clients?
-      search_scope = search_scope.where(id: visible_match_ids())
-    end
+    search_scope = search_scope.where(id: visible_match_ids) unless current_user.can_view_all_clients?
     search_scope
   end
 
   private def filter_by_step step, scope
     return scope unless step.present? && (MatchDecisions::Base.filter_options.include?(step) || ClientOpportunityMatch::CLOSED_REASONS.include?(step))
+
     if MatchDecisions::Base.stalled_match_filter_options.include?(step)
       # determine delinquent progress updates
-      if step == 'Stalled Matches - awaiting response'
-        scope = scope.stalled_notifications_sent
-      end
+      scope = scope.stalled_notifications_sent if step == 'Stalled Matches - awaiting response'
     elsif ClientOpportunityMatch::CLOSED_REASONS.include?(step)
       # This throws a warning for brakeman, but is actually fine, since
       # it references the CLOSED_REASONS whitelist
       scope = scope.public_send(step)
     else
-      scope = scope.where(last_decision: {type: step}).select(:opportunity_id)
+      scope = scope.where(last_decision: { type: step }).select(:opportunity_id)
     end
     scope
   end
@@ -138,7 +136,7 @@ class MatchListBaseController < ApplicationController
   end
 
   private def set_available_steps
-    @available_steps ||= MatchDecisions::Base.filter_options.map do |value|
+    @available_steps ||= MatchDecisions::Base.filter_options.map do |value| # rubocop:disable Naming/MemoizedInstanceVariableName
       route = @current_route.constantize
       if route.available_sub_types_for_search.include?(value)
         [
@@ -148,7 +146,7 @@ class MatchListBaseController < ApplicationController
       elsif ! value.start_with?('MatchDecisions') # Handle stalled situation that doesn't match a decision name
         [
           value.capitalize,
-          value
+          value,
         ]
       else
         next
@@ -157,13 +155,11 @@ class MatchListBaseController < ApplicationController
   end
 
   def available_programs
-    @available_programs = begin
-      if @current_route.blank?
-        Program.visible_by(current_user)
-      else
-        route = MatchRoutes::Base.find_by(type: @current_route)
-        Program.visible_by(current_user).on_route(route)
-      end
+    @available_programs = if @current_route.blank?
+      Program.visible_by(current_user)
+    else
+      route = MatchRoutes::Base.find_by(type: @current_route)
+      Program.visible_by(current_user).on_route(route)
     end
   end
   helper_method :available_programs
@@ -172,7 +168,7 @@ class MatchListBaseController < ApplicationController
     return scope unless route.present? && MatchRoutes::Base.filterable_routes.values.include?(route)
 
     scope.joins(:match_route).
-      where(match_routes: {type: route})
+      where(match_routes: { type: route })
   end
 
   private def filter_by_program program, scope
@@ -208,11 +204,11 @@ class MatchListBaseController < ApplicationController
   end
 
   private def set_available_routes
-    @available_routes ||= MatchRoutes::Base.filterable_routes
+    @available_routes ||= MatchRoutes::Base.filterable_routes # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
   private def set_sort_options
-    @sort_options ||= ClientOpportunityMatch.sort_options
+    @sort_options ||= ClientOpportunityMatch.sort_options # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
   # This is painful, but we need to prevent leaking of client names
@@ -230,7 +226,7 @@ class MatchListBaseController < ApplicationController
     # end
 
     contact.client_opportunity_match_contacts.joins(:match).map(&:match).map do |m|
-      m.id if m.try(:show_client_info_to?, contact) || false
+      m.id if m.try(:show_client_info_to?, contact) || false # rubocop:disable Lint/LiteralAsCondition
     end.compact
   end
 
@@ -268,7 +264,7 @@ class MatchListBaseController < ApplicationController
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : default_sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : default_sort_direction
   end
 
   private def query_string
@@ -276,10 +272,9 @@ class MatchListBaseController < ApplicationController
   end
 
   private def filter_terms
-    [ :current_step, :current_route ]
+    [:current_step, :current_route]
   end
   helper_method :filter_terms
-
 
   private def filter_params
     params.permit(

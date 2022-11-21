@@ -28,6 +28,7 @@ class OpportunityMatchesController < ApplicationController
     @opportunities = @opportunity.class.where(id: @opportunity.id)
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
+    @match_ids = @matches.pluck(:id)
   end
 
   def create

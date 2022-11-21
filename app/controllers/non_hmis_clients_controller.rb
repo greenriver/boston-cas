@@ -212,16 +212,19 @@ class NonHmisClientsController < ApplicationController
   def clean_client_params(dirty_params)
     dirty_params[:active_cohort_ids] = dirty_params[:active_cohort_ids]&.reject(&:blank?)&.map(&:to_i)
     dirty_params[:active_cohort_ids] = nil if dirty_params[:active_cohort_ids].blank?
-
-    NonHmisClient::HUD_GENDERS.keys.each do |gender|
-      dirty_params[gender] = dirty_params[:gender].include?(gender.to_s)
+    if dirty_params[:gender].present?
+      NonHmisClient::HUD_GENDERS.keys.each do |gender|
+        dirty_params[gender] = dirty_params[:gender].include?(gender.to_s)
+      end
+      dirty_params.delete(:gender)
     end
-    dirty_params.delete(:gender)
 
-    NonHmisClient::HUD_RACES.keys.each do |race|
-      dirty_params[race] = dirty_params[:race].include?(race.to_s)
+    if dirty_params[:race].present?
+      NonHmisClient::HUD_RACES.keys.each do |race|
+        dirty_params[race] = dirty_params[:race].include?(race.to_s)
+      end
+      dirty_params.delete(:race)
     end
-    dirty_params.delete(:race)
 
     if can_edit_all_clients?
       contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
