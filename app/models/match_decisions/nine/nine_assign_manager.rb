@@ -5,31 +5,31 @@
 ###
 
 module MatchDecisions::Nine
-  class DndStaffAssignsCaseContact < ::MatchDecisions::Base
+  class NineAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
-    validate :ensure_required_contacts_present_on_accept
+    validate :manager_present_if_status_complete
 
     def step_name
-      _("#{_('DND')} Assigns #{_('Stabilization Service Provider Nine')}")
+      _("#{_('Stabilization Service Provider Nine')} Assigns Case Manager")
     end
 
     def actor_type
-      _('DND')
+      _('Stabilization Service Provider Nine')
     end
 
     def contact_actor_type
-      :dnd_staff_contacts
+      :ssp_contacts
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::DndStaffAssignsCaseContact
+        m << Notifications::Nine::NineAssignManager
       end
     end
 
     def permitted_params
-      super
+      super + [:manager]
     end
 
     def statuses
@@ -44,9 +44,9 @@ module MatchDecisions::Nine
 
     def label_for_status status
       case status.to_sym
-      when :pending then 'Case Contact Assignment'
-      when :expiration_update then 'Case Contact Assignment'
-      when :completed then "Match completed by #{_('DND')}, Case Contact Assigned"
+      when :pending then 'Awaiting Assigned Case Manager'
+      when :expiration_update then 'Awaiting Assigned Case Manger'
+      when :completed then "Match completed by #{_('Stabilization Service Provider Nine')}, assigned Case Manager #{manager}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -87,11 +87,7 @@ module MatchDecisions::Nine
 
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
-        contact.in?(match.housing_subsidy_admin_contacts)
-    end
-
-    def to_param
-      :nine_lease_up
+        contact.in?(match.send(contact_actor_type))
     end
 
     private def decline_reason_scope(_contact)
@@ -100,16 +96,12 @@ module MatchDecisions::Nine
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
-        :client_move_in_date,
+        :manager,
       )
     end
 
-    private def ensure_required_contacts_present_on_accept
-      missing_contacts = []
-      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
-      missing_contacts << "a #{_('Stabilization Service Provider Nine')} Contact" if save_will_accept? && match.ssp_contacts.none?
-
-      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
+    private def manager_present_if_status_complete
+      errors.add :manager, 'must be filled in' if status == 'completed' && manager.blank?
     end
   end
 end

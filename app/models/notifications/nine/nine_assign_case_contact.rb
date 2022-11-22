@@ -5,19 +5,19 @@
 ###
 
 module Notifications::Nine
-  class CaseContactAssignsManager < Notifications::Base
+  class NineAssignCaseContact < Notifications::Base
     def self.create_for_match! match
-      match.ssp_contacts.each do |contact|
+      match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.case_contact_assigns_manager_decision
+      match.nine_assign_case_contact_decision
     end
 
     def event_label
-      _("#{_('Stabilization Service Provider Nine')} notified, match awaiting case manager assignment")
+      "#{_('DND')} notified match needs #{_('Stabilization Service Provider Nine')} Contact"
     end
   end
 end

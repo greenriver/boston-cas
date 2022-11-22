@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Nine
-  class ConfirmMatchSuccessDndStaff < ::Notifications::Base
+  class NineConfirmMatchSuccess < ::Notifications::Base
     def self.create_for_match! match
       match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -13,7 +13,7 @@ module Notifications::Nine
     end
 
     def decision
-      match.nine_confirm_match_success_dnd_staff_decision
+      match.nine_confirm_match_success_decision
     end
 
     def event_label

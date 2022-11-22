@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Nine
-  class ConfirmLeaseUpFailure < ::MatchDecisions::Base
+  class NineConfirmLeaseUpDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
     def step_name
@@ -22,12 +22,8 @@ module MatchDecisions::Nine
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::MatchDeclined
+        m << Notifications::Nine::NineConfirmLeaseUpDecline
       end
-    end
-
-    def permitted_params
-      super
     end
 
     def statuses
@@ -61,17 +57,17 @@ module MatchDecisions::Nine
       end
 
       def decline_overridden
-        match.dnd_staff_assigns_case_contact_decision.initialize_decision!
+        @decision.next_step.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.lease_up_decision.initialize_decision!
+        @decision.previous_step.initialize_decision!
         @decision.uninitialize_decision!
       end
 
       def decline_confirmed
-        Notifications::Nine::HsaDeclineAccepted.create_for_match! match
+        Notifications::Nine::NineLeaseUpDeclineAccepted.create_for_match! match
         match.rejected!
       end
 
@@ -84,14 +80,6 @@ module MatchDecisions::Nine
 
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :confirm_lease_up_failure
     end
 
     private def decline_reason_scope(_contact)

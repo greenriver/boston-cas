@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Nine
-  class MatchRecommendationDndStaff < ::MatchDecisions::Base
+  class NineMatchRecommendation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
@@ -65,21 +65,13 @@ module MatchDecisions::Nine
       Date.current + stalled_after
     end
 
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :nine_match_recommendation_dnd_staff
-    end
-
     private def decline_reason_scope(_contact)
       MatchDecisionReasons::DndStaffDecline.all
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::MatchRecommendationDndStaff
+        m << Notifications::Nine::NineMatchRecommendation
       end
     end
 
@@ -92,7 +84,7 @@ module MatchDecisions::Nine
         return unless match.client.remote_id.present? && Warehouse::Base.enabled?
 
         Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
-        match.init_referral_event
+        match.init_referral_event if Warehouse::Base.enabled?
       rescue StandardError
         nil
       end

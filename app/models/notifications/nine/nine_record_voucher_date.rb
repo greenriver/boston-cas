@@ -5,19 +5,19 @@
 ###
 
 module Notifications::Nine
-  class ConfirmHsaDeclineDndStaff < ::Notifications::Base
+  class NineRecordVoucherDate < ::Notifications::Base
     def self.create_for_match! match
-      match.dnd_staff_contacts.each do |contact|
+      match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.nine_confirm_housing_subsidy_admin_decline_dnd_staff_decision
+      match.nine_record_voucher_date_decision
     end
 
     def event_label
-      "#{_('DND')} notified of #{_('Housing Subsidy Administrator Nine')} decline. Confirmation pending."
+      "#{_('Housing Subsidy Administrator Nine')} notified of approved potential match."
     end
   end
 end

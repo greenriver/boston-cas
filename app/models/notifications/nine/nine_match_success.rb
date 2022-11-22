@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Nine
-  class MatchInProgressShelterAgency < ::Notifications::Base
+  class NineMatchSuccess < ::Notifications::Base
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -13,11 +13,11 @@ module Notifications::Nine
     end
 
     def decision
-      match.nine_record_voucher_date_housing_subsidy_admin_decision
+      match.nine_confirm_match_success_decision
     end
 
     def event_label
-      "#{_('Shelter Agency Nine')} notified of approved potential match."
+      "#{_('Shelter Agency Nine')} notified of successful match."
     end
   end
 end

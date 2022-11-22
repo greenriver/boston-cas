@@ -5,9 +5,9 @@
 ###
 
 module Notifications::Nine
-  class MatchRecommendationDndStaff < Notifications::MatchRecommendationDndStaff
+  class NineMatchRecommendation < Notifications::MatchRecommendationDndStaff
     def decision
-      match.nine_match_recommendation_dnd_staff_decision
+      match.nine_match_recommendation
     end
   end
 end

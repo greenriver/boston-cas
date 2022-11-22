@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Nine
-  class ConfirmHousingSubsidyAdminDeclineDndStaff < ::MatchDecisions::Base
+  class NineConfirmVoucherDecline < ::MatchDecisions::Base
     def statuses
       {
         pending: 'Pending',
@@ -31,7 +31,7 @@ module MatchDecisions::Nine
     end
 
     def step_name
-      "#{_('DND')} Reviews Match Declined by #{_('HSA Nine')}"
+      "#{_('DND')} Reviews Voucher Declined by #{_('HSA Nine')}"
     end
 
     def actor_type
@@ -46,10 +46,6 @@ module MatchDecisions::Nine
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
 
-    def permitted_params
-      super
-    end
-
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'
@@ -58,16 +54,8 @@ module MatchDecisions::Nine
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::ConfirmHsaDeclineDndStaff
+        m << Notifications::Nine::NineConfirmVoucherDecline
       end
-    end
-
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :nine_confirm_housing_subsidy_admin_decline_dnd_staff
     end
 
     class StatusCallbacks < StatusCallbacks
@@ -75,17 +63,17 @@ module MatchDecisions::Nine
       end
 
       def decline_overridden
-        match.nine_confirm_match_success_dnd_staff_decision.initialize_decision!
+        @decision.next_step.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.nine_record_voucher_date_housing_subsidy_admin_decision.initialize_decision!
+        @decision.previous_step.initialize_decision!
         @decision.uninitialize_decision!
       end
 
       def decline_confirmed
-        Notifications::Nine::MatchRejected.create_for_match! match
+        Notifications::Nine::VoucherDeclineAccepted.create_for_match! match
         match.rejected!
       end
 

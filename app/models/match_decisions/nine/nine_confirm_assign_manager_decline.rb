@@ -5,11 +5,11 @@
 ###
 
 module MatchDecisions::Nine
-  class ConfirmCaseContactAssignsManagerFailure < ::MatchDecisions::Base
+  class NineConfirmAssignManagerDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
     def step_name
-      "#{_('DND')} confirms case manager assignment failure"
+      "#{_('DND')} confirms case manager assignment decline"
     end
 
     def actor_type
@@ -22,12 +22,8 @@ module MatchDecisions::Nine
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::MatchDeclined
+        m << Notifications::Nine::NineConfirmAssignManagerDecline
       end
-    end
-
-    def permitted_params
-      super
     end
 
     def statuses
@@ -61,17 +57,17 @@ module MatchDecisions::Nine
       end
 
       def decline_overridden
-        match.confirm_match_success_dnd_staff_decision.initialize_decision!
+        @decision.next_step.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.case_contact_assigns_manager_decision.initialize_decision!
+        @decision.previous_step.initialize_decision!
         @decision.uninitialize_decision!
       end
 
       def decline_confirmed
-        Notifications::Nine::SspDeclineAccepted.create_for_match! match
+        Notifications::Nine::CaseContactAssignsManagerDeclineAccepted.create_for_match! match
         match.rejected!
       end
 
@@ -84,18 +80,6 @@ module MatchDecisions::Nine
 
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :confirm_case_contact_assigns_manager_failure
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
     end
   end
 end

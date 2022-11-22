@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Nine
-  class RecordVoucherDateHousingSubsidyAdmin < ::MatchDecisions::Base
+  class NineRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :date_voucher_issued_present_if_status_complete
@@ -79,8 +79,8 @@ module MatchDecisions::Nine
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::RecordVoucherDateHousingSubsidyAdmin
-        m << Notifications::Nine::MatchInProgressShelterAgency
+        m << Notifications::Nine::NineRecordVoucherDate
+        m << Notifications::Nine::NineMatchInProgress
       end
     end
 
@@ -90,12 +90,12 @@ module MatchDecisions::Nine
 
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+        contact.in?(match.send(contact_actor_type))
     end
 
-    def to_param
-      :nine_record_voucher_date_housing_subsidy_admin
-    end
+    # def to_param
+    #   :nine_record_voucher_date_housing_subsidy_admin
+    # end
 
     private def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminDecline.active
