@@ -449,6 +449,8 @@ class NotificationsMailer < DatabaseMailer
 
   # End Match Route Eight
 
+  include RouteNineMailerMethods
+
   # Progress Updates
   def progress_update_requested
     @notifications = ::Notifications::Base.where(id: params[:notification_ids])
