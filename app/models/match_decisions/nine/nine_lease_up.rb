@@ -38,6 +38,7 @@ module MatchDecisions::Nine
         expiration_update: 'Pending',
         completed: 'Completed',
         canceled: 'Canceled',
+        declined: 'Declined',
         back: 'Pending',
       }
     end
@@ -47,6 +48,7 @@ module MatchDecisions::Nine
       when :pending then 'Awaiting Move In'
       when :expiration_update then 'Awaiting Move In'
       when :completed then "Match completed by #{_('Housing Subsidy Administrator Nine')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :declined then 'Match Declined'
 
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -68,6 +70,11 @@ module MatchDecisions::Nine
 
       def completed
         @decision.next_step.initialize_decision!
+      end
+
+      def declined
+        Notifications::MatchDeclined.create_for_match!(match)
+        match.nine_confirm_lease_up_decline_decision.initialize_decision!
       end
 
       def canceled

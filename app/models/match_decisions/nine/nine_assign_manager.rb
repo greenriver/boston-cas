@@ -37,6 +37,7 @@ module MatchDecisions::Nine
         pending: 'Pending',
         expiration_update: 'Pending',
         completed: 'Completed',
+        declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
       }
@@ -70,8 +71,13 @@ module MatchDecisions::Nine
         @decision.next_step.initialize_decision!
       end
 
+      def declined
+        Notifications::MatchDeclined.create_for_match!(match)
+        match.nine_confirm_assign_manager_decline_decision.initialize_decision!
+      end
+
       def canceled
-        Notifications::MatchCanceled.create_for_match! match
+        Notifications::MatchCanceled.create_for_match!(match)
         match.canceled!
       end
     end

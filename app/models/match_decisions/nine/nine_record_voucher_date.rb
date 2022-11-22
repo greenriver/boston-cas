@@ -111,7 +111,7 @@ module MatchDecisions::Nine
 
       def declined
         Notifications::MatchDeclined.create_for_match! match
-        match.nine_confirm_housing_subsidy_admin_decline_dnd_staff_decision.initialize_decision!
+        match.nine_confirm_voucher_decline_decision.initialize_decision!
       end
 
       def canceled

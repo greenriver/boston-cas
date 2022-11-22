@@ -95,6 +95,9 @@ msgstr ""
 msgid "Cannot read uploaded file, is it an XLSX?"
 msgstr ""
 
+msgid "Case Manager Name"
+msgstr ""
+
 msgid "Case Workers"
 msgstr ""
 
@@ -203,6 +206,9 @@ msgstr ""
 msgid "Development Officer Contacts"
 msgstr ""
 
+msgid "Development Officer Nine"
+msgstr ""
+
 msgid "Did you or this client use external software to help with housing?"
 msgstr ""
 
@@ -263,6 +269,9 @@ msgstr ""
 msgid "Housing Search Provider"
 msgstr ""
 
+msgid "Housing Search Provider Nine"
+msgstr ""
+
 msgid "Housing Search Providers"
 msgstr ""
 
@@ -321,6 +330,9 @@ msgid "I’m undecided but may reconsider"
 msgstr ""
 
 msgid "Latest Date Eligible for Financial Assistance"
+msgstr ""
+
+msgid "Lease start date"
 msgstr ""
 
 msgid "Life-Time Sex Offender"

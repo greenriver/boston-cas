@@ -16,26 +16,26 @@ module MatchRoutes
 
     def self.match_steps
       {
-        'MatchDecisions::Nine::MatchRecommendationDndStaff' => 1,
-        'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin' => 2,
-        'MatchDecisions::Nine::LeaseUp' => 3,
-        'MatchDecisions::Nine::DndStaffAssignsCaseContact' => 4,
-        'MatchDecisions::Nine::CaseContactAssignsManager' => 5,
-        'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff' => 6,
+        'MatchDecisions::Nine::NineMatchRecommendation' => 1,
+        'MatchDecisions::Nine::NineRecordVoucherDate' => 2,
+        'MatchDecisions::Nine::NineLeaseUp' => 3,
+        'MatchDecisions::Nine::NineAssignCaseContact' => 4,
+        'MatchDecisions::Nine::NineAssignManager' => 5,
+        'MatchDecisions::Nine::NineConfirmMatchSuccess' => 6,
       }
     end
 
     def self.match_steps_for_reporting
       {
-        'MatchDecisions::Nine::MatchRecommendationDndStaff' => 1,
-        'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin' => 2,
-        'MatchDecisions::Nine::ConfirmHousingSubsidyAdminDeclineDndStaff' => 3,
-        'MatchDecisions::Nine::LeaseUp' => 4,
-        'MatchDecisions::Nine::ConfirmLeaseUpFailure' => 5,
-        'MatchDecisions::Nine::DndStaffAssignsCaseContact' => 6,
-        'MatchDecisions::Nine::CaseContactAssignsManager' => 7,
-        'MatchDecisions::Nine::ConfirmCaseContactAssignsManagerFailure' => 8,
-        'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff' => 9,
+        'MatchDecisions::Nine::NineMatchRecommendation' => 1,
+        'MatchDecisions::Nine::NineRecordVoucherDate' => 2,
+        'MatchDecisions::Nine::NineConfirmVoucherDecline' => 3,
+        'MatchDecisions::Nine::NineLeaseUp' => 4,
+        'MatchDecisions::Nine::NineConfirmLeaseUpDecline' => 5,
+        'MatchDecisions::Nine::NineAssignCaseContact' => 6,
+        'MatchDecisions::Nine::NineAssignManager' => 7,
+        'MatchDecisions::Nine::NineConfirmAssignManagerDecline' => 8,
+        'MatchDecisions::Nine::NineConfirmMatchSuccess' => 9,
       }
     end
 
@@ -64,6 +64,23 @@ module MatchRoutes
 
     def auto_initialize_event?
       false
+    end
+
+    def contact_label_for(contact_type)
+      case contact_type
+      when :dnd_staff_contacts
+        _('DND')
+      when :housing_subsidy_admin_contacts
+        _('HSA Nine')
+      when :shelter_agency_contacts
+        _('Shelter Agency Nine')
+      when :ssp_contacts
+        _('Stabilization Service Provider Nine')
+      when :hsp_contacts
+        _('Housing Search Provider Nine')
+      when :do_contacts
+        _('Development Officer Nine')
+      end
     end
   end
 end
