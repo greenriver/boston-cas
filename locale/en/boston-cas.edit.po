@@ -245,6 +245,9 @@ msgstr ""
 msgid "HSA Complete Match"
 msgstr ""
 
+msgid "HSA Nine"
+msgstr ""
+
 msgid "HSP"
 msgstr ""
 
@@ -270,6 +273,9 @@ msgid "Housing Subsidy Administrator"
 msgstr ""
 
 msgid "Housing Subsidy Administrator CORI Hearing"
+msgstr ""
+
+msgid "Housing Subsidy Administrator Nine"
 msgstr ""
 
 msgid "Housing Subsidy Administrator status update"
@@ -482,10 +488,16 @@ msgstr ""
 msgid "Shelter Agency Contacts"
 msgstr ""
 
+msgid "Shelter Agency Nine"
+msgstr ""
+
 msgid "Should this tag be added to anyone with an assessment score?"
 msgstr ""
 
 msgid "Stabilization Service Provider"
+msgstr ""
+
+msgid "Stabilization Service Provider Nine"
 msgstr ""
 
 msgid "Stabilization Service Providers"

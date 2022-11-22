@@ -95,6 +95,10 @@ module MatchDecisions::Nine
       )
     end
 
+    private def save_will_accept?
+      saved_status == 'pending' && status == 'accepted'
+    end
+
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?

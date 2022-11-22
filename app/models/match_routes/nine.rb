@@ -47,11 +47,11 @@ module MatchRoutes
     end
 
     def initial_decision
-      :nine_match_recommendation_dnd_staff_decision
+      :nine_match_recommendation_decision
     end
 
     def success_decision
-      :nine_confirm_match_success_dnd_staff_decision
+      :nine_confirm_match_success_decision
     end
 
     def initial_contacts_for_match

@@ -103,11 +103,15 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :eight_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Eight::ConfirmMatchSuccessDndStaff'
 
   # Match Route 9
-  has_decision :nine_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Nine::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Nine::MatchRecommendationDndStaff'
-  has_decision :nine_record_voucher_date_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin', notification_class_name: 'Notifications::Nine::RecordVoucherDateHousingSubsidyAdmin'
-  has_decision :nine_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Nine::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Nine::ConfirmHsaDeclineDndStaff'
-  has_decision :nine_lease_up, decision_class_name: 'MatchDecisions::Nine::LeaseUp', notification_class_name: 'Notifications::Nine::LeaseUp'
-  has_decision :nine_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Nine::ConfirmMatchSuccessDndStaff'
+  has_decision :nine_match_recommendation, decision_class_name: 'MatchDecisions::Nine::NineMatchRecommendation', notification_class_name: 'Notifications::Nine::NineMatchRecommendation'
+  has_decision :nine_record_voucher_date, decision_class_name: 'MatchDecisions::Nine::NineRecordVoucherDate', notification_class_name: 'Notifications::Nine::NineRecordVoucherDate'
+  has_decision :nine_confirm_voucher_decline, decision_class_name: 'MatchDecisions::Nine::NineConfirmVoucherDecline', notification_class_name: 'Notifications::Nine::NineConfirmVoucherDecline'
+  has_decision :nine_lease_up, decision_class_name: 'MatchDecisions::Nine::NineLeaseUp', notification_class_name: 'Notifications::Nine::NineLeaseUp'
+  has_decision :nine_confirm_lease_up_decline, decision_class_name: 'MatchDecisions::Nine::NineConfirmLeaseUpDecline', notification_class_name: 'Notifications::Nine::NineConfirmLeaseUpDecline'
+  has_decision :nine_assign_case_contact, decision_class_name: 'MatchDecisions::Nine::NineAssignCaseContact', notification_class_name: 'Notifications::Nine::NineAssignCaseContact'
+  has_decision :nine_assign_manager, decision_class_name: 'MatchDecisions::Nine::NineAssignManager', notification_class_name: 'Notifications::Nine::NineAssignManager'
+  has_decision :nine_confirm_assign_manager_decline, decision_class_name: 'MatchDecisions::Nine::NineConfirmAssignManagerDecline', notification_class_name: 'Notifications::Nine::NineConfirmAssignManagerDecline'
+  has_decision :nine_confirm_match_success, decision_class_name: 'MatchDecisions::Nine::NineConfirmMatchSuccess', notification_class_name: 'Notifications::Nine::NineConfirmMatchSuccess'
 
   has_one :current_decision
 
