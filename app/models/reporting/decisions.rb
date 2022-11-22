@@ -137,12 +137,22 @@ class Reporting::Decisions < ApplicationRecord
     where(current_step: true)
   end
 
+  IN_PROGRESS = ['In Progress', 'Stalled'].freeze
+
   scope :in_progress, -> do
-    where(terminal_status: 'In Progress')
+    where(terminal_status: IN_PROGRESS)
+  end
+
+  scope :working, -> do
+    where(current_status: 'In Progress')
+  end
+
+  scope :stalled, -> do
+    where(current_status: 'Stalled')
   end
 
   scope :terminated, -> do
-    where.not(terminal_status: 'In Progress')
+    where.not(terminal_status: IN_PROGRESS)
   end
 
   scope :success, -> do
@@ -153,6 +163,11 @@ class Reporting::Decisions < ApplicationRecord
     where(terminal_status: ['Pre-empted', 'Rejected'])
   end
 
+  scope :has_reason, ->(reason) do
+    where(decline_reason: reason).
+      or(where(administrative_cancel_reason: reason))
+  end
+
   # This filters the decisions to ones with a reason field, but does not otherwise narrow the scope
   scope :has_a_reason, -> do
     where.not(decline_reason: nil).
@@ -161,6 +176,10 @@ class Reporting::Decisions < ApplicationRecord
 
   scope :preempted, -> do
     where(terminal_status: 'Pre-empted')
+  end
+
+  scope :declined, -> do
+    where(terminal_status: 'Declined')
   end
 
   scope :rejected, -> do

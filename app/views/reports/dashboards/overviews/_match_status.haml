@@ -1,0 +1,18 @@
+#matchStatusChart
+
+= content_for :page_js do
+  :javascript
+    var matchStatusChart = bb.generate({
+      data: {
+        columns: #{@report.match_statuses_json},
+        type: "pie",
+        onclick: follow_link
+      },
+      bindto: "#matchStatusChart"
+    });
+
+    function follow_link(status, event) {
+      url = "#{@details_url}" + encodeURI("&section=" + status.id)
+
+      window.open(url)
+    }

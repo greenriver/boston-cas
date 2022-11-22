@@ -10,6 +10,7 @@ module Reporting
 
     attribute :start, Date, lazy: true, default: ->(r, _) { r.default_start }
     attribute :end, Date, lazy: true, default: ->(r, _) { r.default_end }
+    attribute :match_route, Integer
     attribute :match_routes, Array, default: []
     attribute :program_types, Array, default: []
     attribute :agencies, Array, default: []
@@ -37,6 +38,7 @@ module Reporting
 
       self.start = filters.dig(:start)&.to_date || start
       self.end = filters.dig(:end)&.to_date || self.end
+      self.match_routes = Array.wrap(filters.dig(:match_route).to_i) if filters.dig(:match_route).present?
       self.match_routes = filters.dig(:match_routes)&.reject(&:blank?)&.map(&:to_i).presence || match_routes
       self.program_types = filters.dig(:program_types)&.reject(&:blank?).presence || program_types
       self.agencies = filters.dig(:agencies)&.reject(&:blank?)&.map(&:to_i).presence || agencies
@@ -98,6 +100,7 @@ module Reporting
       @known_params ||= [
         :start,
         :end,
+        :match_route,
         match_routes: [],
         program_types: [],
         agencies: [],

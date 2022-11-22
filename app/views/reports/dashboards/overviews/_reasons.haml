@@ -1,0 +1,22 @@
+#reasonsChart
+= pluralize(@report.total_unsuccessful_matches, 'unsuccessful match')
+
+= content_for :page_js do
+  :javascript
+    var reasonsChart = bb.generate({
+      data: {
+        columns: #{@report.reasons_json},
+        type: "pie",
+        onclick: follow_link
+      },
+      color: {
+        pattern: ["#fb4d42", "#288be4", "#091f2f", "#58585b", "#9E788F", "#A4B494", "#F3B3A6", "#F18F01", "#E59F71", "#ACADBC", "#D0F1BF"]
+      },
+      bindto: "#reasonsChart"
+    });
+
+    function follow_link(reason, event) {
+      url = "#{@details_url}" + encodeURI("&section=unsuccessful&reason=" + reason.id)
+
+      window.open(url)
+    }
