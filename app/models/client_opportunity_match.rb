@@ -62,24 +62,10 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :set_asides_confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
   # Match Route Four
-  has_decision :four_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Four::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Four::MatchRecommendationDndStaff'
-  has_decision :four_match_recommendation_shelter_agency, decision_class_name: 'MatchDecisions::Four::MatchRecommendationShelterAgency', notification_class_name: 'Notifications::Four::MatchRecommendationShelterAgency'
-  has_decision :four_confirm_shelter_agency_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmShelterAgencyDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmShelterAgencyDeclineDndStaff'
-  has_decision :four_match_recommendation_hsa, decision_class_name: 'MatchDecisions::Four::MatchRecommendationHsa', notification_class_name: 'Notifications::Four::MatchRecommendationHsa'
-  has_decision :four_confirm_hsa_initial_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHsaInitialDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHsaInitialDeclineDndStaff'
-  has_decision :four_schedule_criminal_hearing_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin', notification_class_name: 'Notifications::Four::ScheduleCriminalHearingHousingSubsidyAdmin'
-  has_decision :four_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Four::CriminalHearingScheduledClient'
-  has_decision :four_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHousingSubsidyAdminDeclineDndStaff'
-  has_decision :four_record_client_housed_date_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator', notification_class_name: 'Notifications::Four::HousingSubsidyAdminDecisionClient'
-  has_decision :four_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Four::ConfirmMatchSuccessDndStaff'
+  include RouteFourDecisions
 
   # Match Route Five
-  has_decision :five_match_recommendation, decision_class_name: 'MatchDecisions::Five::FiveMatchRecommendation', notification_class_name: 'Notifications::Five::MatchRecommendation'
-  has_decision :five_client_agrees, decision_class_name: 'MatchDecisions::Five::FiveClientAgrees', notification_class_name: 'Notifications::Five::ClientAgrees'
-  has_decision :five_application_submission, decision_class_name: 'MatchDecisions::Five::FiveApplicationSubmission', notification_class_name: 'Notifications::Five::ApplicationSubmission'
-  has_decision :five_screening, decision_class_name: 'MatchDecisions::Five::FiveScreening', notification_class_name: 'Notifications::Five::Screening'
-  has_decision :five_mitigation, decision_class_name: 'MatchDecisions::Five::FiveMitigation', notification_class_name: 'Notifications::Five::Mitigation'
-  has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
+  include RouteFiveDecisions
 
   # Match Route 6
   include RouteSixDecisions
