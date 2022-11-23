@@ -54,6 +54,14 @@ module MatchDecisions::Nine
       end
     end
 
+    def status_label
+      if match.nine_confirm_assign_manager_decline_decision.status == 'decline_overridden'
+        'Approved'
+      else
+        statuses[status && status.to_sym]
+      end
+    end
+
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: :pending

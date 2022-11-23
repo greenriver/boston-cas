@@ -1,8 +1,8 @@
 Hello #{@contact.full_name},
 \
-CAS has a new housing recommendation that has been sent to a #{_('Housing Subsidy Administrator Nine')}
+= "The match now requires final approval from #{_('DND')} staff to complete."
 \
-View details here:
+Please review the details of the match and note final approval here:
 #{notification_match_decision_url @notification, @match, @decision}
 \
 = render 'client_details'

@@ -96,7 +96,7 @@ module MatchDecisions::Nine
     end
 
     private def save_will_accept?
-      saved_status == 'pending' && status == 'accepted'
+      saved_status == 'pending' && status == 'completed'
     end
 
     private def ensure_required_contacts_present_on_accept

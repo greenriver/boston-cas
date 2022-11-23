@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Eight
-  class ConfirmHousingSubsidyAdminDeclineDndStaff < ::MatchDecisions::Base
+  class EightConfirmVoucherDecline < ::MatchDecisions::Base
     def statuses
       {
         pending: 'Pending',
@@ -22,16 +22,16 @@ module MatchDecisions::Eight
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator')} decline"
-      when :decline_overridden then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Housing Subsidy Administrator')}"
-      when :decline_overridden_returned then "#{_('Housing Subsidy Administrator')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator')}"
+      when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator Eight')} decline"
+      when :decline_overridden then "#{_('Housing Subsidy Administrator Eight')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Housing Subsidy Administrator Eight')}"
+      when :decline_overridden_returned then "#{_('Housing Subsidy Administrator Eight')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator Eight')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
       when :canceled then canceled_status_label
       end
     end
 
     def step_name
-      "#{_('DND')} Reviews Match Declined by #{_('HSA')}"
+      "#{_('DND')} Reviews Voucher Declined by #{_('HSA Eight')}"
     end
 
     def actor_type
@@ -54,16 +54,8 @@ module MatchDecisions::Eight
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Eight::ConfirmHsaDeclineDndStaff
+        m << Notifications::Eight::EightConfirmVoucherDecline
       end
-    end
-
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :eight_confirm_housing_subsidy_admin_decline_dnd_staff
     end
 
     class StatusCallbacks < StatusCallbacks
@@ -71,17 +63,17 @@ module MatchDecisions::Eight
       end
 
       def decline_overridden
-        match.eight_confirm_match_success_dnd_staff_decision.initialize_decision!
+        @decision.next_step.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.eight_record_voucher_date_housing_subsidy_admin_decision.initialize_decision!
+        @decision.previous_step.initialize_decision!
         @decision.uninitialize_decision!
       end
 
       def decline_confirmed
-        Notifications::Eight::MatchRejected.create_for_match! match
+        Notifications::Eight::VoucherDeclineAccepted.create_for_match! match
         match.rejected!
       end
 

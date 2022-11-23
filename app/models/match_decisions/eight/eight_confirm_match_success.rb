@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Eight
-  class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
+  class EightConfirmMatchSuccess < ::MatchDecisions::Base
     def statuses
       {
         pending: 'Pending',
@@ -54,17 +54,8 @@ module MatchDecisions::Eight
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Eight::ConfirmMatchSuccessDndStaff
-        m << Notifications::Eight::MatchSuccessShelterAgency
+        m << Notifications::Eight::EightConfirmMatchSuccess
       end
-    end
-
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :eight_confirm_match_success_dnd_staff
     end
 
     class StatusCallbacks < StatusCallbacks

@@ -5,17 +5,15 @@
 ###
 
 module MatchDecisions::Eight
-  class LeaseUp < ::MatchDecisions::Base
+  class EightAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
-    validate :client_move_in_date_present_if_status_complete
-
     def step_name
-      _('Move In')
+      _("#{_('Housing Subsidy Administrator Eight')} Assigns Case Manager")
     end
 
     def actor_type
-      _('HSA')
+      _('Housing Subsidy Administrator Eight')
     end
 
     def contact_actor_type
@@ -24,12 +22,12 @@ module MatchDecisions::Eight
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Eight::LeaseUp
+        m << Notifications::Eight::EightAssignManager
       end
     end
 
     def permitted_params
-      super + [:client_move_in_date, :prevent_matching_until]
+      super + [:manager]
     end
 
     def statuses
@@ -37,6 +35,7 @@ module MatchDecisions::Eight
         pending: 'Pending',
         expiration_update: 'Pending',
         completed: 'Completed',
+        declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
       }
@@ -44,12 +43,20 @@ module MatchDecisions::Eight
 
     def label_for_status status
       case status.to_sym
-      when :pending then 'Awaiting Move In'
-      when :expiration_update then 'Awaiting Move In'
-      when :completed then "Match completed by #{_('Housing Subsidy Administrator')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :pending then 'Awaiting Assigned Case Manager'
+      when :expiration_update then 'Awaiting Assigned Case Manger'
+      when :completed then "Match completed by #{_('Housing Subsidy Administrator Eight')}, assigned Case Manager #{manager}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label
+      end
+    end
+
+    def status_label
+      if match.eight_confirm_assign_manager_decline_decision.status == 'decline_overridden'
+        'Approved'
+      else
+        statuses[status && status.to_sym]
       end
     end
 
@@ -70,8 +77,13 @@ module MatchDecisions::Eight
         @decision.next_step.initialize_decision!
       end
 
+      def declined
+        Notifications::MatchDeclined.create_for_match!(match)
+        match.eight_confirm_assign_manager_decline_decision.initialize_decision!
+      end
+
       def canceled
-        Notifications::MatchCanceled.create_for_match! match
+        Notifications::MatchCanceled.create_for_match!(match)
         match.canceled!
       end
     end
@@ -87,25 +99,17 @@ module MatchDecisions::Eight
 
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
-        contact.in?(match.housing_subsidy_admin_contacts)
-    end
-
-    def to_param
-      :eight_lease_up
+        contact.in?(match.send(contact_actor_type))
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
     end
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
-        :client_move_in_date,
+        :manager,
       )
-    end
-
-    private def client_move_in_date_present_if_status_complete
-      errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
   end
 end

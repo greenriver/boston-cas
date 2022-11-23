@@ -12,6 +12,13 @@ class NotificationsMailer < DatabaseMailer
     @decision = notification.decision
   end
 
+  include RouteFourMailerMethods
+  include RouteFiveMailerMethods
+  include RouteSixMailerMethods
+  include RouteSevenMailerMethods
+  include RouteEightMailerMethods
+  include RouteNineMailerMethods
+
   def match_recommendation_dnd_staff
     notification = params[:notification]
     setup_instance_variables notification
@@ -315,141 +322,6 @@ class NotificationsMailer < DatabaseMailer
   end
 
   # end Set Asides
-
-  # Match Route Four
-
-  def match_recommendation_hsa
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
-  end
-
-  def match_recommendation_to_hsa_for_ssp
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match ready for review')
-  end
-
-  def housing_subsidy_administrator_accepted
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "Match accepted by #{_('HSA')}")
-  end
-
-  def confirm_hsa_initial_decline_dnd_staff
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
-  end
-
-  def match_success_confirmed
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match Success Confirmed')
-  end
-
-  def match_rejected
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match Rejected')
-  end
-
-  def match_declined
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match Declined')
-  end
-  # end Match Route Four
-
-  # Match Route Five
-
-  def match_recommendation
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
-  end
-
-  def client_agrees
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
-  end
-
-  def submit_application
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match ready for review')
-  end
-
-  def screening
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match is ready for client screening')
-  end
-
-  def mitigation
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match requires mitigation')
-  end
-
-  def lease_up
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match is awaiting move in')
-  end
-
-  # end Match Route Five
-
-  # Match Route Six
-
-  def approve_match_housing_subsidy_admin
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "Match accepted by #{_('Shelter Agency')} - Requires Your Action")
-  end
-
-  def confirm_match_success_shelter_agency
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Match Successful')
-  end
-
-  # end Match Route Six
-
-  # Match Route Seven
-
-  def approve_match_housing_subsidy_admin_from_dnd
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "Match accepted by #{_('DND')} - Requires Your Action")
-  end
-
-  def match_in_progress_shelter_agency
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "A match is in progress with a #{_('Housing Subsidy Administrator')}")
-  end
-
-  def match_success_shelter_agency
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: "A match was successful with a #{_('Housing Subsidy Administrator')}")
-  end
-
-  # end Match Route Seven
-
-  # Match Route Eight
-
-  def record_voucher_date_housing_subsidy_admin
-    notification = params[:notification]
-    setup_instance_variables notification
-    mail(to: @contact.email, subject: 'Housing Recommendation Approved - Requires Your Action')
-  end
-
-  # End Match Route Eight
-
-  include RouteNineMailerMethods
 
   # Progress Updates
   def progress_update_requested

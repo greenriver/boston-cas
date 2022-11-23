@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Eight
-  class ConfirmMatchSuccessDndStaff < ::Notifications::Base
+  class EightConfirmLeaseUpDecline < ::Notifications::Base
     def self.create_for_match! match
       match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -13,11 +13,11 @@ module Notifications::Eight
     end
 
     def decision
-      match.eight_confirm_match_success_dnd_staff_decision
+      match.eight_confirm_lease_up_decline_decision
     end
 
     def event_label
-      "#{_('DND')} Staff notified of successful match and asked to give final confirmation."
+      "#{_('DND')} notified of #{_('Housing Subsidy Administrator Eight')} decline. Confirmation pending."
     end
   end
 end

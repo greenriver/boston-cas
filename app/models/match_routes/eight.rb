@@ -16,20 +16,26 @@ module MatchRoutes
 
     def self.match_steps
       {
-        'MatchDecisions::Eight::MatchRecommendationDndStaff' => 1,
-        'MatchDecisions::Eight::RecordVoucherDateHousingSubsidyAdmin' => 2,
-        'MatchDecisions::Eight::LeaseUp' => 3,
-        'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff' => 4,
+        'MatchDecisions::Eight::EightMatchRecommendation' => 1,
+        'MatchDecisions::Eight::EightAssignManager' => 2,
+        'MatchDecisions::Eight::EightRecordVoucherDate' => 3,
+        'MatchDecisions::Eight::EightLeaseUp' => 4,
+        # 'MatchDecisions::Eight::EightAssignCaseContact' => 5,
+        'MatchDecisions::Eight::EightConfirmMatchSuccess' => 5,
       }
     end
 
     def self.match_steps_for_reporting
       {
-        'MatchDecisions::Eight::MatchRecommendationDndStaff' => 1,
-        'MatchDecisions::Eight::RecordVoucherDateHousingSubsidyAdmin' => 2,
-        'MatchDecisions::Eight::ConfirmHousingSubsidyAdminDeclineDndStaff' => 3,
-        'MatchDecisions::Eight::LeaseUp' => 4,
-        'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff' => 5,
+        'MatchDecisions::Eight::EightMatchRecommendation' => 1,
+        'MatchDecisions::Eight::EightAssignManager' => 2,
+        'MatchDecisions::Eight::EightConfirmAssignManagerDecline' => 3,
+        'MatchDecisions::Eight::EightRecordVoucherDate' => 4,
+        'MatchDecisions::Eight::EightConfirmVoucherDecline' => 5,
+        'MatchDecisions::Eight::EightLeaseUp' => 6,
+        'MatchDecisions::Eight::EightConfirmLeaseUpDecline' => 7,
+        # 'MatchDecisions::Eight::EightAssignCaseContact' => 6,
+        'MatchDecisions::Eight::EightConfirmMatchSuccess' => 8,
       }
     end
 
@@ -41,11 +47,11 @@ module MatchRoutes
     end
 
     def initial_decision
-      :eight_match_recommendation_dnd_staff_decision
+      :eight_match_recommendation_decision
     end
 
     def success_decision
-      :eight_confirm_match_success_dnd_staff_decision
+      :eight_confirm_match_success_decision
     end
 
     def initial_contacts_for_match
@@ -54,6 +60,23 @@ module MatchRoutes
 
     def show_hearing_date
       false
+    end
+
+    def contact_label_for(contact_type)
+      case contact_type
+      when :dnd_staff_contacts
+        _('DND')
+      when :housing_subsidy_admin_contacts
+        _('HSA Eight')
+      when :shelter_agency_contacts
+        _('Shelter Agency Eight')
+      when :ssp_contacts
+        _('Stabilization Service Provider Eight')
+      when :hsp_contacts
+        _('Housing Search Provider Eight')
+      when :do_contacts
+        _('Development Officer Eight')
+      end
     end
   end
 end

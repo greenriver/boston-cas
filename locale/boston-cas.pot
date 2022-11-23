@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 19:40+0000\n"
-"PO-Revision-Date: 2022-11-22 19:40+0000\n"
+"POT-Creation-Date: 2022-11-23 18:35+0000\n"
+"PO-Revision-Date: 2022-11-23 18:35+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -207,6 +207,9 @@ msgstr ""
 msgid "Development Officer Contacts"
 msgstr ""
 
+msgid "Development Officer Eight"
+msgstr ""
+
 msgid "Development Officer Nine"
 msgstr ""
 
@@ -252,6 +255,9 @@ msgstr ""
 msgid "HSA Complete Match"
 msgstr ""
 
+msgid "HSA Eight"
+msgstr ""
+
 msgid "HSA Nine"
 msgstr ""
 
@@ -270,6 +276,9 @@ msgstr ""
 msgid "Housing Search Provider"
 msgstr ""
 
+msgid "Housing Search Provider Eight"
+msgstr ""
+
 msgid "Housing Search Provider Nine"
 msgstr ""
 
@@ -283,6 +292,9 @@ msgid "Housing Subsidy Administrator"
 msgstr ""
 
 msgid "Housing Subsidy Administrator CORI Hearing"
+msgstr ""
+
+msgid "Housing Subsidy Administrator Eight"
 msgstr ""
 
 msgid "Housing Subsidy Administrator Nine"
@@ -501,6 +513,9 @@ msgstr ""
 msgid "Shelter Agency Contacts"
 msgstr ""
 
+msgid "Shelter Agency Eight"
+msgstr ""
+
 msgid "Shelter Agency Nine"
 msgstr ""
 
@@ -508,6 +523,9 @@ msgid "Should this tag be added to anyone with an assessment score?"
 msgstr ""
 
 msgid "Stabilization Service Provider"
+msgstr ""
+
+msgid "Stabilization Service Provider Eight"
 msgstr ""
 
 msgid "Stabilization Service Provider Nine"

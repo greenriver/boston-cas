@@ -82,36 +82,16 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
 
   # Match Route 6
-  has_decision :six_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Six::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Six::MatchRecommendationDndStaff'
-  has_decision :six_match_recommendation_shelter_agency, decision_class_name: 'MatchDecisions::Six::MatchRecommendationShelterAgency', notification_class_name: 'Notifications::Six::MatchRecommendationShelterAgency'
-  has_decision :six_confirm_shelter_agency_decline_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmShelterAgencyDeclineDndStaff', notification_class_name: 'Notifications::Six::ConfirmShelterAgencyDeclineDndStaff'
-  has_decision :six_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Six::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Six::ApproveMatchHousingSubsidyAdmin'
-  has_decision :six_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Six::ConfirmHsaDeclineDndStaff'
-  has_decision :six_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Six::ConfirmMatchSuccessDndStaff'
+  include RouteSixDecisions
 
   # Match Route 7
-  has_decision :seven_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Seven::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Seven::MatchRecommendationDndStaff'
-  has_decision :seven_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Seven::ApproveMatchHousingSubsidyAdmin'
-  has_decision :seven_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Seven::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Seven::ConfirmHsaDeclineDndStaff'
-  has_decision :seven_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Seven::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Seven::ConfirmMatchSuccessDndStaff'
+  include RouteSevenDecisions
 
   # Match Route 8
-  has_decision :eight_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Eight::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Eight::MatchRecommendationDndStaff'
-  has_decision :eight_record_voucher_date_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Eight::RecordVoucherDateHousingSubsidyAdmin', notification_class_name: 'Notifications::Eight::RecordVoucherDateHousingSubsidyAdmin'
-  has_decision :eight_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Eight::ConfirmHsaDeclineDndStaff'
-  has_decision :eight_lease_up, decision_class_name: 'MatchDecisions::Eight::LeaseUp', notification_class_name: 'Notifications::Eight::LeaseUp'
-  has_decision :eight_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Eight::ConfirmMatchSuccessDndStaff'
+  include RouteEightDecisions
 
   # Match Route 9
-  has_decision :nine_match_recommendation, decision_class_name: 'MatchDecisions::Nine::NineMatchRecommendation', notification_class_name: 'Notifications::Nine::NineMatchRecommendation'
-  has_decision :nine_record_voucher_date, decision_class_name: 'MatchDecisions::Nine::NineRecordVoucherDate', notification_class_name: 'Notifications::Nine::NineRecordVoucherDate'
-  has_decision :nine_confirm_voucher_decline, decision_class_name: 'MatchDecisions::Nine::NineConfirmVoucherDecline', notification_class_name: 'Notifications::Nine::NineConfirmVoucherDecline'
-  has_decision :nine_lease_up, decision_class_name: 'MatchDecisions::Nine::NineLeaseUp', notification_class_name: 'Notifications::Nine::NineLeaseUp'
-  has_decision :nine_confirm_lease_up_decline, decision_class_name: 'MatchDecisions::Nine::NineConfirmLeaseUpDecline', notification_class_name: 'Notifications::Nine::NineConfirmLeaseUpDecline'
-  has_decision :nine_assign_case_contact, decision_class_name: 'MatchDecisions::Nine::NineAssignCaseContact', notification_class_name: 'Notifications::Nine::NineAssignCaseContact'
-  has_decision :nine_assign_manager, decision_class_name: 'MatchDecisions::Nine::NineAssignManager', notification_class_name: 'Notifications::Nine::NineAssignManager'
-  has_decision :nine_confirm_assign_manager_decline, decision_class_name: 'MatchDecisions::Nine::NineConfirmAssignManagerDecline', notification_class_name: 'Notifications::Nine::NineConfirmAssignManagerDecline'
-  has_decision :nine_confirm_match_success, decision_class_name: 'MatchDecisions::Nine::NineConfirmMatchSuccess', notification_class_name: 'Notifications::Nine::NineConfirmMatchSuccess'
+  include RouteNineDecisions
 
   has_one :current_decision
 

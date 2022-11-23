@@ -42,6 +42,7 @@ module MatchRoutes
     def required_contact_types
       [
         'dnd_staff',
+        'shelter_agency_contacts',
         'housing_subsidy_admin',
       ]
     end

@@ -5,19 +5,19 @@
 ###
 
 module Notifications::Eight
-  class LeaseUp < Notifications::Base
+  class EightConfirmVoucherDecline < ::Notifications::Base
     def self.create_for_match! match
-      match.housing_subsidy_admin_contacts.each do |contact|
+      match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.eight_lease_up_decision
+      match.eight_confirm_voucher_decline_decision
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified client is awaiting Lease Up"
+      "#{_('DND')} notified of #{_('Housing Subsidy Administrator Eight')} decline. Confirmation pending."
     end
   end
 end

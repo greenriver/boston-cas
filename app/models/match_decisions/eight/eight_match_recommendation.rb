@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Eight
-  class MatchRecommendationDndStaff < ::MatchDecisions::Base
+  class EightMatchRecommendation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
@@ -65,21 +65,13 @@ module MatchDecisions::Eight
       Date.current + stalled_after
     end
 
-    def accessible_by? contact
-      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
-    end
-
-    def to_param
-      :eight_match_recommendation_dnd_staff
-    end
-
     private def decline_reason_scope(_contact)
       MatchDecisionReasons::DndStaffDecline.all
     end
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Eight::MatchRecommendationDndStaff
+        m << Notifications::Eight::EightMatchRecommendation
       end
     end
 
@@ -92,6 +84,7 @@ module MatchDecisions::Eight
         return unless match.client.remote_id.present? && Warehouse::Base.enabled?
 
         Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+        match.init_referral_event if Warehouse::Base.enabled?
       rescue StandardError
         nil
       end
@@ -123,7 +116,7 @@ module MatchDecisions::Eight
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
-      missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{_('Housing Subsidy Administrator Eight')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

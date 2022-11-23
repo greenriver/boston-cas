@@ -1,7 +1,5 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
-    = render 'matches/match_contacts_form'
-
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .o-choose.o-choose--flush.o-choose
         - if @decision.accessible_by?(current_contact)
@@ -11,6 +9,11 @@
                 .c-choice-icon.c-choice-icon--confirm.mr-4
                 %h3 Continue Match
             .o-choose__content
+              %p Using the following button, please add the Case Manager for this match process under the #{_('Stabilization Service Provider Nine')} category.
+              = link_to access_context.edit_match_contacts_path(@match), data: {loads_in_pjax_modal: true}, class: [:btn, 'btn-primary'] do
+                %span.icon-pencil
+                Assign Case Manager Contact
+              %p.mt-4 Once the contact has been assigned, click the Continue Match button below.
               = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: (!@decision.editable?) }
           - action_message ||= ''
           - include_other = true unless include_other === false

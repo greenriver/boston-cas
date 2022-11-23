@@ -10,6 +10,7 @@ class MatchesController < ApplicationController
   include MatchShow
   include AjaxModalRails::Controller
   include MatchBuildingAndUnit
+  include ContactEditPermissions
 
   skip_before_action :authenticate_user!
   before_action :require_match_access_context!

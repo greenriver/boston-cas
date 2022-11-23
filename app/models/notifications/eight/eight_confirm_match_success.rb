@@ -5,19 +5,19 @@
 ###
 
 module Notifications::Eight
-  class RecordVoucherDateHousingSubsidyAdmin < ::Notifications::Base
+  class EightConfirmMatchSuccess < ::Notifications::Base
     def self.create_for_match! match
-      match.housing_subsidy_admin_contacts.each do |contact|
+      match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.eight_record_voucher_date_housing_subsidy_admin_decision
+      match.eight_confirm_match_success_decision
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of approved potential match."
+      "#{_('DND')} Staff notified of successful match and asked to give final confirmation."
     end
   end
 end

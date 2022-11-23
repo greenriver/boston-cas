@@ -4,8 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-module MatchDecisions::Nine
-  class NineLeaseUp < ::MatchDecisions::Base
+module MatchDecisions::Eight
+  class EightLeaseUp < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
     validate :client_move_in_date_present_if_status_complete
@@ -15,7 +15,7 @@ module MatchDecisions::Nine
     end
 
     def actor_type
-      _('HSA Nine')
+      _('HSA Eight')
     end
 
     def contact_actor_type
@@ -24,7 +24,7 @@ module MatchDecisions::Nine
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Nine::NineLeaseUp
+        m << Notifications::Eight::EightLeaseUp
       end
     end
 
@@ -47,7 +47,7 @@ module MatchDecisions::Nine
       case status.to_sym
       when :pending then 'Awaiting Move In'
       when :expiration_update then 'Awaiting Move In'
-      when :completed then "Match completed by #{_('Housing Subsidy Administrator Nine')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "Match completed by #{_('Housing Subsidy Administrator Eight')}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :declined then 'Match Declined'
 
       when :canceled then canceled_status_label
@@ -56,7 +56,7 @@ module MatchDecisions::Nine
     end
 
     def status_label
-      if match.nine_confirm_lease_up_decline_decision.status == 'decline_overridden'
+      if match.eight_confirm_lease_up_decline_decision.status == 'decline_overridden'
         'Approved'
       else
         statuses[status && status.to_sym]
@@ -82,7 +82,7 @@ module MatchDecisions::Nine
 
       def declined
         Notifications::MatchDeclined.create_for_match!(match)
-        match.nine_confirm_lease_up_decline_decision.initialize_decision!
+        match.eight_confirm_lease_up_decline_decision.initialize_decision!
       end
 
       def canceled

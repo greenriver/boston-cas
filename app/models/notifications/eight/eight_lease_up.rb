@@ -5,19 +5,19 @@
 ###
 
 module Notifications::Eight
-  class MatchInProgressShelterAgency < ::Notifications::Base
+  class EightLeaseUp < Notifications::Base
     def self.create_for_match! match
-      match.shelter_agency_contacts.each do |contact|
+      match.housing_subsidy_admin_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.eight_record_voucher_date_housing_subsidy_admin_decision
+      match.eight_lease_up_decision
     end
 
     def event_label
-      "#{_('Shelter Agency')} notified of approved potential match."
+      "#{_('Housing Subsidy Administrator Eight')} notified client is awaiting #{_('Move In')}"
     end
   end
 end
