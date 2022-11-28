@@ -10,20 +10,20 @@ class Reporting::Decisions < ApplicationRecord
   belongs_to :client, foreign_key: :cas_client_id
 
   scope :started_between, ->(range) do
-    where(match_started_at: range)
+    where(match_started_at: range.begin.beginning_of_day .. range.end.end_of_day)
   end
 
   scope :ended_between, ->(range) do
     terminated.
-      where(updated_at: (range.begin .. range.end + 1.day))
+      where(updated_at: (range.begin.beginning_of_day .. range.end.end_of_day))
   end
 
   scope :open_between, ->(range) do
     at = arel_table
     # Excellent discussion of why this works:
     # http://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
-    d_1_start = range.begin
-    d_1_end = range.end
+    d_1_start = range.begin.beginning_of_day # these are timestamps
+    d_1_end = range.end.end_of_day # these are timestamps
     d_2_start = at[:match_started_at]
     d_2_end = at[:updated_at]
     # Currently does not count as an overlap if one starts on the end of the other

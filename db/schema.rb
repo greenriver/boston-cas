@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_15_174445) do
+ActiveRecord::Schema.define(version: 2022_11_22_204546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.boolean "enrolled_in_rrh", default: false
     t.boolean "enrolled_in_psh", default: false
     t.boolean "enrolled_in_ph", default: false
-    t.boolean "majority_sheltered"
     t.string "address"
+    t.boolean "majority_sheltered"
     t.date "tie_breaker_date"
     t.jsonb "strengths", default: []
     t.jsonb "challenges", default: []
@@ -341,9 +341,9 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.integer "unavailable_for_length", default: 0
     t.string "deidentified_client_assessment", default: "DeidentifiedClientAssessment"
     t.string "identified_client_assessment", default: "IdentifiedClientAssessment"
-    t.boolean "limit_client_names_on_matches", default: true
     t.integer "lock_days", default: 0, null: false
     t.integer "lock_grace_days", default: 0, null: false
+    t.boolean "limit_client_names_on_matches", default: true
     t.boolean "include_note_in_email_default"
     t.boolean "notify_all_on_progress_update", default: false
   end
@@ -644,6 +644,7 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.string "address"
     t.boolean "include_note_in_email"
     t.datetime "date_voucher_issued"
+    t.string "manager"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
@@ -720,7 +721,7 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "stalled_interval", default: 7, null: false
-    t.integer "match_prioritization_id", default: 5, null: false
+    t.integer "match_prioritization_id", default: 6, null: false
     t.boolean "should_cancel_other_matches", default: true, null: false
     t.boolean "should_activate_match", default: true, null: false
     t.boolean "should_prevent_multiple_matches_per_client", default: true, null: false
@@ -1285,8 +1286,8 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.boolean "enrolled_in_rrh", default: false
     t.boolean "enrolled_in_psh", default: false
     t.boolean "enrolled_in_ph", default: false
-    t.boolean "majority_sheltered"
     t.string "address"
+    t.boolean "majority_sheltered"
     t.date "tie_breaker_date"
     t.jsonb "strengths", default: []
     t.jsonb "challenges", default: []
@@ -1473,6 +1474,7 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.boolean "can_view_assigned_programs", default: false
     t.boolean "can_edit_programs", default: false
     t.boolean "can_edit_assigned_programs", default: false
+    t.boolean "can_edit_voucher_rules", default: false
     t.boolean "can_view_opportunities", default: false
     t.boolean "can_edit_opportunities", default: false
     t.boolean "can_reissue_notifications", default: false
@@ -1512,7 +1514,6 @@ ActiveRecord::Schema.define(version: 2022_11_15_174445) do
     t.boolean "can_edit_help", default: false
     t.boolean "can_audit_users", default: false
     t.boolean "can_manage_sessions", default: false
-    t.boolean "can_edit_voucher_rules", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 

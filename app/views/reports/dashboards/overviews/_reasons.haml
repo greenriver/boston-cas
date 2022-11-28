@@ -5,7 +5,7 @@
   :javascript
     var reasonsChart = bb.generate({
       data: {
-        columns: #{@report.reasons_json},
+        columns: #{@report.unsuccessful_match_reasons.to_a.to_json.html_safe},
         type: "pie",
         onclick: follow_link
       },

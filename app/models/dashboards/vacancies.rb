@@ -42,18 +42,18 @@ class Dashboards::Vacancies < Dashboards::Base
       distinct.
       pluck(r_d_t[:program_type], :cas_client_id, :created_at, r_d_t[:updated_at], r_d_t[:client_move_in_date]).group_by(&:first)
     hash.merge(hash) do |_key, ids|
-      ids.map do |program_type, id, created_at, decision_updated_at, move_in_date|
+      ids.map do |_, id, created_at, decision_updated_at, move_in_date|
         occupied_at = move_in_date || decision_updated_at
         {
           id: id,
-          days_to_success: (occupied_at.to_date - created_at.to_date).to_i
+          days_to_success: (occupied_at.to_date - created_at.to_date).to_i,
         }
       end
     end
   end
 
   def vacancies_filled_by_quarter
-    @vacancies_filled_by_quarter ||= quarters_in_report.map do |quarter, start_date|
+    @vacancies_filled_by_quarter ||= quarters_contained_in_report.map do |quarter, start_date|
       range = start_date.all_quarter
       [quarter, vacancies_filled(start_date: range.first, end_date: range.last)]
     end.to_h

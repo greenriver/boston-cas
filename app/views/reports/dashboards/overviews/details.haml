@@ -5,16 +5,19 @@
 - content_for :title, title
 = content_for :modal_title, title
 
-%table.table
-  %thead
-    %th Match
-    %th Client
-    - details_columns.each do |name|
-      %th= name.to_s.humanize
-  %tbody
-    - @data.each do |row|
-      %tr
-        %td= link_to row.match_id, match_path(row.match_id)
-        %td= link_to row.client.name, client_path(row.cas_client_id)
-        - details_columns.each do |name|
-          %td= row.public_send(name)
+.table-responsive
+  .c-card.c.card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-striped.mb-0
+        %thead
+          %th Match
+          %th Client
+          - details_columns.each do |name|
+            %th= name.to_s.humanize
+        %tbody
+          - @data.each do |row|
+            %tr
+              %td= link_to row.match_id, match_path(row.match_id)
+              %td= link_to row.client.name, client_path(row.cas_client_id)
+              - details_columns.each do |name|
+                %td= row.public_send(name)

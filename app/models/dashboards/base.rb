@@ -47,7 +47,9 @@ class Dashboards::Base
     end
   end
 
-  def quarters_in_report
+  # Returns a hash of Quarter name and start date of the quarter for
+  # quarters that are completely contained within the reporting period
+  def quarters_contained_in_report
     # Find first quarter in year that is also in reporting period
     quarter = @filter.start.beginning_of_quarter
     q_num = quarter_number(@filter.start) # zero-based
@@ -55,13 +57,15 @@ class Dashboards::Base
     # Enumerate quarters that are in the reporting period
     quarters = {}
     until quarter > @filter.end
-      quarter_label = "#{quarter.year}.#{(q_num % 4) + 1}"
+      quarter_label = "#{quarter.year} Q#{(q_num % 4) + 1}"
       quarters[quarter_label] = quarter
 
       quarter = quarter.next_quarter
       q_num += 1
     end
-    quarters
+    quarters.select do |_, q_start|
+      q_start > @filter.start && q_start.end_of_quarter <= @filter.end
+    end
   end
 
   private def quarter_number(date)
