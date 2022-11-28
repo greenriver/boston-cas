@@ -11,6 +11,15 @@ class Reports::Dashboards::OverviewsController < ApplicationController
 
   def index
     @details_url = details_reports_dashboards_overviews_path(details_params)
+    @longitudinal = @report.longitudinal_dates.count > 1
+    return unless @longitudinal
+
+    match_statuses_by_quarter = [
+      ['Q1', 10, 20, 30],
+      ['Q2', 5, 7, 11],
+    ]
+    @match_statuses_by_quarter_json = match_statuses_by_quarter.to_json.html_safe
+    @quarters_json = [match_statuses_by_quarter.map(&:first)].to_json.html_safe
   end
 
   def details

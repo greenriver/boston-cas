@@ -5,6 +5,8 @@
 ###
 
 class Dashboards::Overview < Dashboards::Base
+  attr_accessor :filter
+
   def initialize(filter)
     @filter = filter
   end

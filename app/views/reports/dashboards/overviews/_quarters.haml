@@ -1,0 +1,34 @@
+#quarterChart
+
+= content_for :page_js do
+  :javascript
+    var reasonsChart = bb.generate({
+      data: {
+        columns: #{@match_statuses_by_quarter_json},
+        type: "bar",
+        groups: #{@quarters_json}
+      },
+      color: {
+        pattern: ["#fb4d42", "#288be4", "#091f2f", "#58585b", "#9E788F", "#A4B494", "#F3B3A6", "#F18F01", "#E59F71", "#ACADBC", "#D0F1BF"]
+      },
+      bar: {
+        width: {
+          ratio: 0.9,
+          max: 30
+        }
+      },
+      padding: false,
+      axis: {
+        rotated: true,
+        x: {
+          show: false
+        },
+        y: {
+          show: false
+        }
+      },
+      legend: {
+          show: false
+      },
+      bindto: "#quarterChart"
+    });

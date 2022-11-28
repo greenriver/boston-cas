@@ -35,6 +35,18 @@ class Dashboards::Base
     end
   end
 
+  def longitudinal_dates
+    @longitudinal_dates ||= [].tap do |dates|
+      end_quarter = @filter.end
+      start_quarter = end_quarter - 3.months
+      while start_quarter >= @filter.start
+        dates << [start_quarter, end_quarter]
+        end_quarter = start_quarter - 1.days
+        start_quarter = end_quarter - 3.months
+      end
+    end
+  end
+
   def quarters_in_report
     # Find first quarter in year that is also in reporting period
     quarter = @filter.start.beginning_of_quarter
