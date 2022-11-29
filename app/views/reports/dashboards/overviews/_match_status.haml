@@ -1,18 +1,21 @@
-#matchStatusChart
+- matches = @report.match_statuses.to_a
+- if matches.present?
+  %h2 Match Status
+  #matchStatusChart
 
-= content_for :page_js do
-  :javascript
-    var matchStatusChart = bb.generate({
-      data: {
-        columns: #{@report.match_statuses_json},
-        type: "pie",
-        onclick: follow_link
-      },
-      bindto: "#matchStatusChart"
-    });
+  = content_for :page_js do
+    :javascript
+      var matchStatusChart = bb.generate({
+        data: {
+          columns: #{matches.to_json.html_safe},
+          type: "pie",
+          onclick: follow_link
+        },
+        bindto: "#matchStatusChart"
+      });
 
-    function follow_link(status, event) {
-      url = "#{@details_url}" + encodeURI("&section=" + status.id)
+      function follow_link(status, event) {
+        url = "#{@details_url}" + encodeURI("&section=" + status.id)
 
-      window.open(url)
-    }
+        window.open(url)
+      }

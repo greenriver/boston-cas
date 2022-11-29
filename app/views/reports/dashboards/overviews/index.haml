@@ -6,20 +6,20 @@
     = render 'reports/dashboards/report_filter', path: reports_dashboards_overviews_path
 
 .row
-  .col.text-center
+  .col-6.text-center
     %h4
-      = link_to pluralize(@report.in_progress.current_step.count, 'match'),  details_reports_dashboards_overviews_path(details_params.merge(section: :in_progress)), target: '_blank'
-      currently in progress
+      = link_to pluralize(@report.in_progress.current_step.count, 'Ongoing Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'In Progress or Stalled')), target: '_blank'
+      %br
+      %em In Progress or Stalled
+  .col-6.text-center
+    %h4= link_to pluralize(@report.total_unsuccessful_matches, 'Unsuccessful Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'Unsuccessful')), target: '_blank'
 
 .row.mt-4
   .col-6.text-center
-    %h2 Match Status
     = render 'match_status'
 
   .col-6.text-center
-    %h2 Unsuccessful Reasons
     = render 'reasons'
 
-- if @longitudinal
-  .row
-    = render 'quarters'
+- if @report.show_quarters?
+  .mt-6= render 'quarters'

@@ -143,7 +143,7 @@ class Reporting::Decisions < ApplicationRecord
     where(terminal_status: IN_PROGRESS)
   end
 
-  scope :working, -> do
+  scope :ongoing_not_stalled, -> do
     where(current_status: 'In Progress')
   end
 

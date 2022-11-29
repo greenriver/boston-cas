@@ -11,20 +11,19 @@ class Reports::Dashboards::OverviewsController < ApplicationController
 
   def index
     @details_url = details_reports_dashboards_overviews_path(details_params)
-    @longitudinal = @report.longitudinal_dates.count > 1
   end
 
   def details
-    @section = sections.detect { |name| @report.section_name(params[:section]).to_sym == name }
-    data = @report.public_send(@section)
-    return dashboard_source.none if data.blank?
+    section = sections.detect { |name| @report.section_name(params[:section]).to_sym == name }
+    data = @report.public_send(section)
+    @section = @report.human_readable_section_name(section)
 
-    @reason = params[:reason]
-    data = data.has_reason(@reason) if @reason.present?
-
-    data = data.current_step.joins(:client)
-
-    @data = data.current_step.order(updated_at: :desc)
+    if params[:section].downcase == 'unsuccessful' && params[:reason].present?
+      data = data.has_reason(params[:reason])
+      @reason = @report.reason_from_param(params[:reason])
+    end
+    data = data.current_step.joins(:client).current_step.order(updated_at: :desc)
+    @pagy, @data = pagy(data.current_step.joins(:client).order(updated_at: :desc), items: 50)
   end
 
   def sections
@@ -35,16 +34,6 @@ class Reports::Dashboards::OverviewsController < ApplicationController
     @filter.for_params
   end
   helper_method :details_params
-
-  def details_columns
-    [
-      :terminal_status,
-      :updated_at,
-      :program_name,
-      :sub_program_name,
-    ]
-  end
-  helper_method :details_columns
 
   def filter_params
     return {} unless params[:filters].present?

@@ -1,4 +1,5 @@
-#quarterChart
+%h2 Unsuccessful Matches by Quarter
+#quarterChart{style: 'height: 150px;'}
 
 = content_for :page_js do
   :javascript
@@ -10,7 +11,6 @@
       bar: {
         width: {
           ratio: 0.9,
-          max: 30
         }
       },
       grid: {
@@ -29,7 +29,7 @@
         },
         y: {
           tick: {
-            count: 1,
+            count: 2,
           }
         }
       },

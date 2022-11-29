@@ -31,6 +31,7 @@ gem 'simple_form'
 gem 'virtus'
 
 gem 'kaminari'
+gem 'pagy'
 gem 'ransack'
 gem 'responders'
 gem 'memoist', require: false

@@ -51,3 +51,16 @@ table tr.no-border {
   border-bottom-color: $gray-020;
   border-bottom-size: 2px;
 }
+
+.pagy-container {
+  display: flex;
+  align-items: center;
+
+  nav {
+    margin-left: auto;
+  }
+
+  ul.pagination {
+    margin-bottom: 0;
+  }
+}

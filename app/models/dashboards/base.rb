@@ -15,16 +15,20 @@ class Dashboards::Base
 
   def self.section_names
     @section_names ||= {
-      'In Progress' => :working,
+      'In Progress' => :ongoing_not_stalled,
       'Stalled' => :stalled,
       'Success' => :success,
       'Pre-empted' => :preempted,
       'Rejected' => :rejected,
       'Declined' => :declined,
-
-      'in_progress' => :in_progress,
-      'unsuccessful' => :unsuccessful,
+      'Expired' => :expired,
+      'In Progress or Stalled' => :in_progress,
+      'Unsuccessful' => :unsuccessful,
     }
+  end
+
+  def human_readable_section_name(section)
+    self.class.section_names.invert[section.to_sym]
   end
 
   # Query functions for sections, turns the section keys into scope names
@@ -33,6 +37,10 @@ class Dashboards::Base
       reporting_scope.
         public_send(status)
     end
+  end
+
+  def show_quarters?
+    longitudinal_dates.count > 1
   end
 
   def longitudinal_dates

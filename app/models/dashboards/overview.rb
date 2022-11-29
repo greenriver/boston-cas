@@ -16,14 +16,35 @@ class Dashboards::Overview < Dashboards::Base
       in_progress
   end
 
-  def match_statuses_json
-    match_statuses.to_a.to_json.html_safe
-  end
-
   def match_statuses
     reporting_scope.
       group(:current_status).
       count
+  end
+
+  def detail_info
+    {
+      terminal_status: {
+        header: 'Terminal Status',
+      },
+      updated_at: {
+        header: 'Date of Status',
+      },
+      program_name: {
+        header: 'Program Name',
+      },
+      sub_program_name: {
+        header: 'Sub Program Name',
+      },
+    }
+  end
+
+  def detail_headers
+    detail_info.values.map { |v| v[:header] }
+  end
+
+  def detail_columns
+    detail_info.keys
   end
 
   # Return format:
@@ -73,6 +94,12 @@ class Dashboards::Overview < Dashboards::Base
     @total_unsuccessful_matches ||= reporting_scope.unsuccessful.count
   end
 
+  def reason_from_param(reason)
+    return unless reason.present?
+
+    unsuccessful_match_reasons.keys.detect { |r| r.downcase == reason.downcase }
+  end
+
   private def combine_other_reasons(reason)
     return 'Other' if reason.starts_with?('Other: ')
 
@@ -91,7 +118,7 @@ class Dashboards::Overview < Dashboards::Base
   end
 
   private def reporting_scope
-    scope = Reporting::Decisions
+    scope = Reporting::Decisions.current_step
     @filter.apply(scope)
   end
 end
