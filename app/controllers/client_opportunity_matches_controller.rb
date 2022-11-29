@@ -20,7 +20,8 @@ class ClientOpportunityMatchesController < ApplicationController
     end
 
     # client filter
-    @matches = @matches.where(client_id: @client.id) if params[:client_id].present? && (@client = Client.find(params[:client_id].to_i))
+    @client = Client.find( params[:client_id].to_i) if  params[:client_id].present?
+    @matches = @matches.where(client_id: @client.id) if @client.present?
 
     # opportunity filter
     @matches = @matches.where(opportunity_id: @opportunity.id) if params[:opportunity_id].present? && (@opportunity = Opportunity.find(params[:opportunity_id].to_i))
