@@ -1,0 +1,10 @@
+.c-card
+  .c-card__header
+    %h2 Average Successful Match Length
+  .c-card__content
+    .jumbotron
+      - @report.average_days_initiation_to_step_completion.each do |(_, match_step), count|
+        .mb-6
+          %h3.text-center Match Initiation to #{match_step}
+          .text-center.display-4
+            = pluralize(count.round, 'Day')

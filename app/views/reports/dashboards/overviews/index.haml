@@ -4,22 +4,29 @@
 .c-card
   .c-card__content
     = render 'reports/dashboards/report_filter', path: reports_dashboards_overviews_path
+.c-card
+  .c-card__header
+    %h3 Match Details
+  .c-card__content
+    .row
+      .col-6.text-center
+        %h4
+          = link_to pluralize(@report.in_progress.current_step.count, 'Ongoing Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'In Progress or Stalled')), target: '_blank'
+          %br
+          %em In Progress or Stalled
+      .col-6.text-center
+        %h4= link_to pluralize(@report.total_unsuccessful_matches, 'Unsuccessful Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'Unsuccessful')), target: '_blank'
 
-.row
-  .col-6.text-center
-    %h4
-      = link_to pluralize(@report.in_progress.current_step.count, 'Ongoing Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'In Progress or Stalled')), target: '_blank'
-      %br
-      %em In Progress or Stalled
-  .col-6.text-center
-    %h4= link_to pluralize(@report.total_unsuccessful_matches, 'Unsuccessful Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'Unsuccessful')), target: '_blank'
+    .row.mt-4
+      .col-6.text-center
+        = render 'match_status'
 
-.row.mt-4
-  .col-6.text-center
-    = render 'match_status'
-
-  .col-6.text-center
-    = render 'reasons'
+      .col-6.text-center
+        = render 'reasons'
 
 - if @report.show_quarters?
-  .mt-6= render 'quarters'
+  = render 'quarters'
+
+.row
+  .col-6
+    = render 'success'

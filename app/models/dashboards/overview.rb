@@ -12,12 +12,12 @@ class Dashboards::Overview < Dashboards::Base
   end
 
   def in_progress
-    @in_progress ||= reporting_scope.
+    @in_progress ||= reporting_scope.current_step.
       in_progress
   end
 
   def match_statuses
-    reporting_scope.
+    reporting_scope.current_step.
       group(:current_status).
       count
   end
@@ -91,7 +91,7 @@ class Dashboards::Overview < Dashboards::Base
   end
 
   def total_unsuccessful_matches
-    @total_unsuccessful_matches ||= reporting_scope.unsuccessful.count
+    @total_unsuccessful_matches ||= reporting_scope.current_step.unsuccessful.count
   end
 
   def reason_from_param(reason)
@@ -106,8 +106,25 @@ class Dashboards::Overview < Dashboards::Base
     reason
   end
 
+  # Return the average elapsed days between match_started_at and the current step
+  # updated_at (for successful matches)
+  def average_days_initiation_to_step_completion
+    route = MatchRoutes::Base.where(id: @filter.match_routes).first
+    active_steps = route.class.match_steps.keys
+    reporting_decision_numbers = route.class.match_steps_for_reporting.select { |k, _| k.in?(active_steps) }.values
+    reporting_scope.success.
+      where(decision_order: reporting_decision_numbers).
+      group([:decision_order, :match_step]).
+      average(
+        Arel::Nodes::Subtraction.new(
+          r_d_t[:updated_at],
+          r_d_t[:match_started_at],
+        ),
+      ).sort_by { |(decision_order, _), _| decision_order }
+  end
+
   def unsuccessful_match_reasons
-    @unsuccessful_match_reasons ||= reporting_scope.
+    @unsuccessful_match_reasons ||= reporting_scope.current_step.
       unsuccessful.
       has_a_reason.
       pluck(:decline_reason, :administrative_cancel_reason).
@@ -118,7 +135,7 @@ class Dashboards::Overview < Dashboards::Base
   end
 
   private def reporting_scope
-    scope = Reporting::Decisions.current_step
+    scope = Reporting::Decisions
     @filter.apply(scope)
   end
 end

@@ -5,6 +5,7 @@
 ###
 
 class Dashboards::Base
+  include ArelHelper
   def section_name(name)
     self.class.section_names[name]
   end
@@ -34,7 +35,7 @@ class Dashboards::Base
   # Query functions for sections, turns the section keys into scope names
   section_names.values.each do |status|
     define_method(status.to_s) do
-      reporting_scope.
+      reporting_scope.current_step.
         public_send(status)
     end
   end
