@@ -137,6 +137,18 @@ class Reporting::Decisions < ApplicationRecord
     where(current_step: true)
   end
 
+  # Only steps that actually took place
+  # this is an approximation, where the updated timestamp is more than 9 seconds
+  # after the created timestamp
+  scope :activated, -> do
+    where(
+      Arel::Nodes::Subtraction.new(
+        r_d_t[:updated_at].extract(:epoch),
+        r_d_t[:created_at].extract(:epoch),
+      ).gt(9),
+    )
+  end
+
   IN_PROGRESS = ['In Progress', 'Stalled'].freeze
 
   scope :in_progress, -> do

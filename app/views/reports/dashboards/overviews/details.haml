@@ -19,7 +19,7 @@
                 %td= link_to row.match_id, match_path(row.match_id)
                 %td= link_to row.client.name, client_path(row.cas_client_id)
                 - @report.detail_columns.each do |name|
-                  %td= row.public_send(name)
+                  %td= @report.format_datum(name, row.public_send(name))
     = render 'common/pagination_bottom', item_name: 'user'
 - else
   .none-found No matches found.

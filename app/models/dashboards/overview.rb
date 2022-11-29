@@ -24,11 +24,16 @@ class Dashboards::Overview < Dashboards::Base
 
   def detail_info
     {
+      match_started_at: {
+        header: 'Match Start',
+        transformation: :to_date,
+      },
       terminal_status: {
         header: 'Terminal Status',
       },
       updated_at: {
         header: 'Date of Status',
+        transformation: :to_date,
       },
       program_name: {
         header: 'Program Name',
@@ -37,6 +42,13 @@ class Dashboards::Overview < Dashboards::Base
         header: 'Sub Program Name',
       },
     }
+  end
+
+  def format_datum(key, datum)
+    formatter = detail_info[key][:transformation]
+    return datum unless formatter.present?
+
+    datum.send(formatter)
   end
 
   def detail_headers
@@ -109,10 +121,8 @@ class Dashboards::Overview < Dashboards::Base
   # Return the average elapsed days between match_started_at and the current step
   # updated_at (for successful matches)
   def average_days_initiation_to_step_completion
-    route = MatchRoutes::Base.where(id: @filter.match_routes).first
-    active_steps = route.class.match_steps.keys
-    reporting_decision_numbers = route.class.match_steps_for_reporting.select { |k, _| k.in?(active_steps) }.values
-    reporting_scope.success.
+    reporting_scope.activated.
+      success.
       where(decision_order: reporting_decision_numbers).
       group([:decision_order, :match_step]).
       average(
@@ -121,6 +131,20 @@ class Dashboards::Overview < Dashboards::Base
           r_d_t[:match_started_at],
         ),
       ).sort_by { |(decision_order, _), _| decision_order }
+  end
+
+  def average_days_to_complete_each_step
+    reporting_scope.activated.
+      success.
+      where(decision_order: reporting_decision_numbers).
+      group([:decision_order, :match_step]).
+      average(:elapsed_days).sort_by { |(decision_order, _), _| decision_order }
+  end
+
+  private def reporting_decision_numbers
+    route = MatchRoutes::Base.where(id: @filter.match_routes).first
+    active_steps = route.class.match_steps.keys
+    route.class.match_steps_for_reporting.select { |k, _| k.in?(active_steps) }.values
   end
 
   def unsuccessful_match_reasons
