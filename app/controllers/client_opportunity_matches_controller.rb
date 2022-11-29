@@ -24,7 +24,8 @@ class ClientOpportunityMatchesController < ApplicationController
     @matches = @matches.where(client_id: @client.id) if @client.present?
 
     # opportunity filter
-    @matches = @matches.where(opportunity_id: @opportunity.id) if params[:opportunity_id].present? && (@opportunity = Opportunity.find(params[:opportunity_id].to_i))
+    @opportunity = Opportunity.find(params[:opportunity_id].to_i) if params[:opportunity_id].present?
+    @matches = @matches.where(opportunity_id: @opportunity.id) if @opportunity.present?
 
     # sort / paginate
     @matches = @matches
