@@ -57,12 +57,13 @@ module MatchDecisions::Eight
       end
 
       def decline_overridden
-        @decision.next_step.initialize_decision!
+        match.eight_lease_up_decision.update(status: :skipped)
+        match.eight_confirm_match_success.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        @decision.previous_step.initialize_decision!
+        match.eight_lease_up_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
 
