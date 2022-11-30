@@ -291,6 +291,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :employed_three_months,
       :living_wage,
       :site_case_management_required,
+      :ongoing_case_management_required,
       :open_case,
       :foster_care,
       :currently_fleeing,

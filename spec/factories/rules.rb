@@ -486,6 +486,10 @@ FactoryBot.define do
     name { 'Needing site-based case management' }
     verb { 'be' }
   end
+  factory :ongoing_case_management_required, class: 'Rules::OngoingCaseManagementRequired' do
+    name { 'Needing ongoing housing case management' }
+    verb { 'be' }
+  end
   factory :th_desired, class: 'Rules::ThDesired' do
     name { 'Interested in Transitional Housing' }
     verb { 'be' }

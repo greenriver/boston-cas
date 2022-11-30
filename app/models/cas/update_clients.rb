@@ -275,6 +275,7 @@ module Cas
         :rrh_successful_exit,
         :th_desired,
         :site_case_management_required,
+        :ongoing_case_management_required,
         :currently_fleeing,
         :dv_date,
         :assessor_first_name,
