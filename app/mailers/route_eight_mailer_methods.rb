@@ -60,7 +60,7 @@ module RouteEightMailerMethods
     def eight_confirm_assign_manager_decline
       notification = params[:notification]
       setup_instance_variables notification
-      mail(to: @contact.email, subject: "Match Declined by #{_('Stabilization Service Provider Eight')} - Requires Your Action")
+      mail(to: @contact.email, subject: "Match Declined by #{_('HSA Eight')} - Requires Your Action")
     end
 
     def eight_confirm_match_success
