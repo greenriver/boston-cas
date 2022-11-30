@@ -7,7 +7,6 @@
 module RouteEightMailerMethods
   extend ActiveSupport::Concern
   included do
-    # Match Route Eight
     def eight_match_recommendation
       notification = params[:notification]
       setup_instance_variables notification
@@ -75,6 +74,5 @@ module RouteEightMailerMethods
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match Successful')
     end
-    # End Match Route Eight
   end
 end

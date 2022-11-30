@@ -7,7 +7,6 @@
 module RouteNineMailerMethods
   extend ActiveSupport::Concern
   included do
-    # Match Route Nine
     def nine_match_recommendation
       notification = params[:notification]
       setup_instance_variables notification
@@ -75,6 +74,5 @@ module RouteNineMailerMethods
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match Successful')
     end
-    # End Match Route Nine
   end
 end
