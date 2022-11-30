@@ -63,13 +63,13 @@ module MatchDecisions::Nine
       end
 
       def decline_overridden
-        match.nine_record_voucher_decision.update(status: :skipped)
+        match.nine_record_voucher_date_decision.update(status: :skipped)
         match.nine_lease_up.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.nine_record_voucher_decision.initialize_decision!
+        match.nine_record_voucher_date_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
 
