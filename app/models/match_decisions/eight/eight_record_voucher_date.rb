@@ -91,10 +91,6 @@ module MatchDecisions::Eight
         contact.in?(match.send(contact_actor_type))
     end
 
-    # def to_param
-    #   :eight_record_voucher_date_housing_subsidy_admin
-    # end
-
     private def decline_reason_scope(_contact)
       MatchDecisionReasons::HousingSubsidyAdminDecline.active
     end
