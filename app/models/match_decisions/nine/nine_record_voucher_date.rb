@@ -132,7 +132,7 @@ module MatchDecisions::Nine
     end
 
     private def date_voucher_issued_present_if_status_complete
-      errors.add :date_voucher_issued, 'must be filled in' if status == 'completed' && date_voucher_issued.blank?
+      errors.add :date_voucher_issued, 'must be filled in' if status == 'accepted' && date_voucher_issued.blank?
     end
   end
 end
