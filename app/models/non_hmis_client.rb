@@ -310,6 +310,7 @@ class NonHmisClient < ApplicationRecord
       :drug_test,
       :employed_three_months,
       :site_case_management_required,
+      :ongoing_case_management_required,
       :currently_fleeing,
       :dv_date,
       :pregnancy_status,

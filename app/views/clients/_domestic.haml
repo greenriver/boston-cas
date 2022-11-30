@@ -66,6 +66,9 @@
       %span.c-detailed-list__label= _('Needs site-based case management')
       %span.c-detailed-list__value= boolean_icon @client.site_case_management_required
     %li.c-detailed-list__item
+      %span.c-detailed-list__label= _('Needs ongoing housing case management')
+      %span.c-detailed-list__value= boolean_icon @client.ongoing_case_management_required
+    %li.c-detailed-list__item
       %span.c-detailed-list__label= _('Currently fleeing DV')
       %span.c-detailed-list__value.d-flex
         - if @client.currently_fleeing && @client.dv_date.present?
