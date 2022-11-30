@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-class Rules::SiteCaseManagementRequired < Rule
+class Rules::OngoingCaseManagementRequired < Rule
   def clients_that_fit(scope, requirement, _opportunity)
     column = :ongoing_case_management_required
     raise RuleDatabaseStructureMissing.new("clients.#{column} missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(column.to_s)
