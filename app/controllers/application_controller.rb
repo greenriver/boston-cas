@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   include ControllerAuthorization
   include ActivityLogger
   include ArelHelper
+  include Pagy::Backend
   self.responder = ApplicationResponder
   respond_to :html, :js, :json, :csv
   impersonates :user
