@@ -83,5 +83,14 @@ module MatchRoutes
         _('Development Officer Nine')
       end
     end
+
+    def visible_contact_types
+      [
+        :dnd_staff_contacts,
+        :housing_subsidy_admin_contacts,
+        :shelter_agency_contacts,
+        :ssp_contacts,
+      ]
+    end
   end
 end

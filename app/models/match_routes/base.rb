@@ -165,6 +165,17 @@ module MatchRoutes
       end
     end
 
+    def visible_contact_types
+      [
+        :shelter_agency_contacts,
+        :dnd_staff_contacts,
+        :housing_subsidy_admin_contacts,
+        :ssp_contacts,
+        :hsp_contacts,
+        :do_contacts,
+      ]
+    end
+
     def self.max_matches_per_client
       6
     end
