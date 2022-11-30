@@ -105,7 +105,7 @@ module MatchDecisions::Nine
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
+      MatchDecisionReasons::NineCaseContactAssignsManagerDecline.active
     end
 
     def whitelist_params_for_update params

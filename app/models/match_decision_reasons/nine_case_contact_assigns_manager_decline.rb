@@ -5,9 +5,9 @@
 ###
 
 module MatchDecisionReasons
-  class CaseContactAssignsManagerDecline < Base
+  class NineCaseContactAssignsManagerDecline < Base
     def title
-      "#{_('Housing Subsidy Administrator Eight')} Decline"
+      "#{_('Stabilization Service Provider Nine')} Decline"
     end
   end
 end
