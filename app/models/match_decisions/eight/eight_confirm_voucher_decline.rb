@@ -64,7 +64,7 @@ module MatchDecisions::Eight
 
       def decline_overridden
         match.eight_record_voucher_date_decision.update(status: :skipped)
-        match.eight_lease_up.initialize_decision!
+        match.eight_lease_up_decision.initialize_decision!
       end
 
       def decline_overridden_returned

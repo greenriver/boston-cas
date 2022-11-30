@@ -58,7 +58,7 @@ module MatchDecisions::Eight
 
       def decline_overridden
         match.eight_lease_up_decision.update(status: :skipped)
-        match.eight_confirm_match_success.initialize_decision!
+        match.eight_confirm_match_success_decision.initialize_decision!
       end
 
       def decline_overridden_returned

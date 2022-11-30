@@ -58,7 +58,7 @@ module MatchDecisions::Eight
 
       def decline_overridden
         match.eight_assign_manager_decision.update(status: :skipped)
-        match.eight_record_voucher_date.initialize_decision!
+        match.eight_record_voucher_date_decision.initialize_decision!
       end
 
       def decline_overridden_returned
