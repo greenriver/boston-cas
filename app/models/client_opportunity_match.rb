@@ -759,7 +759,7 @@ class ClientOpportunityMatch < ApplicationRecord
     return active_referral_event if active_referral_event.present?
     return unless project_client&.from_hmis?
 
-    create_referral_event(
+    create_active_referral_event(
       cas_client_id: client.id,
       hmis_client_id: project_client.id_in_data_source,
       program_id: program.id,

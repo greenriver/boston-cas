@@ -8,6 +8,8 @@ module MatchDecisions::Eight
   class EightAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
+    validate :ensure_required_contacts_present_on_complete
+
     def step_name
       _("#{_('Housing Subsidy Administrator Eight')} Assigns Case Manager")
     end
@@ -110,6 +112,13 @@ module MatchDecisions::Eight
       super.merge params.require(:decision).permit(
         :manager,
       )
+    end
+
+    private def ensure_required_contacts_present_on_complete
+      missing_contacts = []
+      missing_contacts << "a #{_('Housing Subsidy Administrator Eight')} Contact" if status == 'completed' && match.housing_subsidy_admin_contacts.none?
+
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
   end
 end
