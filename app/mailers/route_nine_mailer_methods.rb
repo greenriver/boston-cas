@@ -69,7 +69,7 @@ module RouteNineMailerMethods
       mail(to: @contact.email, subject: 'Housing Recommendation - Requires Final Approval')
     end
 
-    def nine_confirm_match_success
+    def nine_match_success
       notification = params[:notification]
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match Successful')
