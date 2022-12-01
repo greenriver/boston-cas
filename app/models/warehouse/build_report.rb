@@ -164,6 +164,11 @@ module Warehouse
         end
 
         ineligible_in_warehouse = decision&.decline_reason&.ineligible_in_warehouse || false
+        current_status = if match.active? && match.stalled?
+          'Stalled'
+        else
+          match.overall_status[:name]
+        end
 
         row = {
           source_data_source: data_source,
@@ -202,13 +207,20 @@ module Warehouse
           program_name: program.name,
           sub_program_name: sub_program.name,
           terminal_status: match.overall_status[:name],
+          current_status: current_status,
           match_route: match_route.title,
           housing_type: match_route.housing_type,
           actor_type: match.current_decision.try(:actor_type) || 'N/A',
           confidential: program.confidential || sub_program.confidential,
+          step_tag: decision.step_tag,
         }
 
-        Warehouse::CasReport.create!(row.merge(clent_contacts: contact_details(match.client_contacts))) if Warehouse::Base.enabled?
+        # FIXME: A batch insert here would be much faster
+        if Warehouse::Base.enabled?
+          warehouse_row = row.merge(clent_contacts: contact_details(match.client_contacts)) # Misspelled
+          warehouse_row = warehouse_row.except(:current_status, :step_tag) # CAS only
+          Warehouse::CasReport.create!(warehouse_row)
+        end
         Reporting::Decisions.create!(row.merge(client_contacts: contact_details(match.client_contacts)))
 
         previous_updated_at = decision.updated_at

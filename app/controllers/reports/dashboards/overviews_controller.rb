@@ -5,75 +5,56 @@
 ###
 
 class Reports::Dashboards::OverviewsController < ApplicationController
-  include AjaxModalRails::Controller
-
   before_action :require_can_view_reports!
+  before_action :set_filter
   before_action :set_report
 
   def index
+    @details_url = details_reports_dashboards_overviews_path(details_params)
   end
 
   def details
-    @section = sections.detect { |name| params[:section].to_sym == name }
-    data = @report.public_send(@section)
-    return Client.none if data.nil?
+    section = sections.detect { |name| @report.section_name(params[:section]).to_sym == name }
+    data = @report.public_send(section)
+    @section = @report.human_readable_section_name(section)
 
-    @key = data.keys.detect { |name| params[:key]== name } if params[:key].present?
-
-    ids = if @key.present?
-      @sub_key = data[@key].keys.detect { |name| params[:sub_key] == name } if params[:sub_key].present?
-      if @sub_key.present?
-        data[@key][@sub_key]
-      else
-        data[@key]
-      end
-    else
-      data
+    if params[:section].downcase == 'unsuccessful' && params[:reason].present?
+      data = data.has_reason(params[:reason])
+      @reason = @report.reason_from_param(params[:reason])
     end
-
-    @total_clients = ids.count
-    @clients = Client.where(id: ids).
-      visible_by(current_user).
-      select(*details_columns)
+    data = data.current_step.joins(:client).current_step.order(updated_at: :desc)
+    @pagy, @data = pagy(data.current_step.joins(:client).order(updated_at: :desc), items: 50)
   end
 
   def sections
-    [
-      :in_progress,
-      :match_results,
-      :match_results_by_quarter,
-    ]
+    @report.section_ids
   end
 
   def details_params
-    {
-      filter:
-        {
-          start_date: @start_date,
-          end_date: @end_date,
-          match_route: @match_route_id,
-          program_types: @program_types,
-        }
-    }
+    @filter.for_params
   end
   helper_method :details_params
 
-  def details_columns
-    [
-      :id,
-      :first_name,
-      :last_name,
-    ]
+  def filter_params
+    return {} unless params[:filters].present?
+
+    params.require(:filters).permit(@filter.known_params)
   end
-  helper_method :details_columns
+
+  def set_filter
+    @filter = Reporting::FilterBase.new(
+      default_start: Date.current.last_year,
+      default_end: Date.current,
+      match_routes: Reporting::FilterBase.new.match_route_options_for_select.values.first,
+    )
+    @filter.update(filter_params)
+  end
 
   def set_report
-    @start_date = params.dig(:filter, :start_date)&.to_date || Date.current.last_year
-    @end_date = params.dig(:filter, :end_date)&.to_date || Date.current
-    @match_route_id = params.dig(:filter, :match_route) || MatchRoutes::Base.available.first.id
-    @match_route_name = MatchRoutes::Base.find(@match_route_id.to_i).title
-    @program_types = params.dig(:filter, :program_types)&.reject { |type| type.blank? } || []
+    @report = dashboard_source.new(@filter)
+  end
 
-    @report = Dashboards::Overview.new(start_date: @start_date, end_date: @end_date, match_route_name: @match_route_name, program_types: @program_types)
+  def dashboard_source
+    Dashboards::Overview
   end
 end

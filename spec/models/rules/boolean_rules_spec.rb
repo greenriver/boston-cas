@@ -29,6 +29,7 @@ RSpec.describe Rules::DrugTest, type: :model do
     :rrh_successful_exit,
     :th_desired,
     :site_case_management_required,
+    :ongoing_case_management_required,
   ].each do |boolean_rule|
     describe "clients that fit #{boolean_rule}" do
       let!(:rule) { create boolean_rule }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_22_204546) do
+ActiveRecord::Schema.define(version: 2022_11_30_160214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -287,6 +287,7 @@ ActiveRecord::Schema.define(version: 2022_11_22_204546) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
+    t.boolean "ongoing_case_management_required", default: false
   end
 
   create_table "configs", id: :serial, force: :cascade do |t|
@@ -889,6 +890,7 @@ ActiveRecord::Schema.define(version: 2022_11_22_204546) do
     t.boolean "idd_caused_episode", default: false
     t.boolean "pregnant", default: false
     t.boolean "pregnant_under_28_weeks", default: false
+    t.boolean "ongoing_case_management_required", default: false
   end
 
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
@@ -1232,6 +1234,7 @@ ActiveRecord::Schema.define(version: 2022_11_22_204546) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
+    t.boolean "ongoing_case_management_required", default: false
   end
 
   create_table "project_programs", id: :serial, force: :cascade do |t|

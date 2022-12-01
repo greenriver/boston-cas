@@ -1,0 +1,14 @@
+.c-card
+  .c-card__header
+    %h2 Average Time to Complete Each Step
+  .c-card__content.p-0
+    %table.table.mb-0.table-striped
+      %thead
+        %tr
+          %th Step
+          %th Average Days
+      %tbody
+        - @report.average_days_to_complete_each_step.each do |(_, match_step), count|
+          %tr
+            %td= match_step
+            %td= count.round

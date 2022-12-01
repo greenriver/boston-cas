@@ -419,6 +419,8 @@ GEM
     overcommit (0.57.0)
       childprocess (>= 0.6.3, < 5)
       iniparse (~> 1.4)
+    pagy (5.10.1)
+      activesupport
     paper_trail (11.1.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
@@ -729,6 +731,7 @@ DEPENDENCIES
   nokogiri (>= 1.13.6)
   order_as_specified
   overcommit
+  pagy
   paper_trail
   paranoia (~> 2.0)
   pg (~> 0.20.0)

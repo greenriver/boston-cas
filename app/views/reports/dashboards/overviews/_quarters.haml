@@ -1,0 +1,41 @@
+.c-card
+  .c-card__header
+    %h2 Unsuccessful Matches by Quarter
+  .c-card__content
+    #quarterChart
+
+    = content_for :page_js do
+      :javascript
+        var reasonsChart = bb.generate({
+          data: #{@report.quarter_chart_data.to_json.html_safe},
+          color: {
+            pattern: ["#fb4d42", "#288be4", "#091f2f", "#58585b", "#9E788F", "#A4B494", "#F3B3A6", "#F18F01", "#E59F71", "#ACADBC", "#D0F1BF"]
+          },
+          bar: {
+            width: {
+              ratio: 0.9,
+            }
+          },
+          grid: {
+            y: {
+              lines: [
+                {
+                  value: 0
+                }
+              ]
+            }
+          },
+          axis: {
+            rotated: true,
+            x: {
+              type: "category",
+              categories: #{@report.quarter_chart_names.to_json.html_safe}
+            },
+            y: {
+              tick: {
+                count: 2,
+              }
+            }
+          },
+          bindto: "#quarterChart"
+        });

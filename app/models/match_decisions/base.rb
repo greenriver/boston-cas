@@ -71,6 +71,10 @@ module MatchDecisions
       decision_type.humanize.titleize
     end
 
+    def step_tag
+      nil
+    end
+
     def contact_name
       contact&.full_name
     end
