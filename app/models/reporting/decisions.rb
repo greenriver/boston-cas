@@ -54,13 +54,13 @@ class Reporting::Decisions < ApplicationRecord
       when :individual
         c_t[:family_member].eq(false)
       when :individual_adult
-        a_t[:family_member].eq(false).and(age_on_date.gteq(18))
+        c_t[:family_member].eq(false).and(age_on_date.gteq(18))
       when :individual_child
-        a_t[:family_member].eq(false).and(age_on_date.lt(18))
+        c_t[:family_member].eq(false).and(age_on_date.lt(18))
       when :adult_and_child
-        a_t[:family_member].eq(true).and(a_t[:child_in_household].eq(true))
+        c_t[:family_member].eq(true).and(c_t[:child_in_household].eq(true))
       when :parenting_youth
-        a_t[:family_member].eq(true).and(a_t[:child_in_household].eq(true).and(age_on_date.lteq(24)))
+        c_t[:family_member].eq(true).and(c_t[:child_in_household].eq(true).and(age_on_date.lteq(24)))
       end
     end.reduce(&:or)
     joins(:client).
