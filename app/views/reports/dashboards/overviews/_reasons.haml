@@ -1,7 +1,12 @@
+%h4= link_to pluralize(@report.total_unsuccessful_matches, 'Unsuccessful Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'Unsuccessful')), target: '_blank'
 - matches = @report.unsuccessful_match_reasons.to_a
 - if matches.any?
   %h2 Unsuccessful Reasons
-  #reasonsChart
+  .row
+    .col-8
+      #reasonsChart
+    .col-4
+      #reasonsChartLegend
 
   = content_for :page_js do
     :javascript
@@ -12,7 +17,23 @@
           onclick: follow_link
         },
         color: {
-          pattern: ["#fb4d42", "#288be4", "#091f2f", "#58585b", "#9E788F", "#A4B494", "#F3B3A6", "#F18F01", "#E59F71", "#ACADBC", "#D0F1BF"]
+          pattern: d3[`scheme${'Tableau10'}`]
+        },
+        tooltip: {
+          format: {
+            value: function(value, ratio, id, index) {
+              return `${d3.format(",.1%")(ratio)} (${value} matches)`;
+            }
+          }
+        },
+        legend: {
+          contents: {
+            bindto: "#reasonsChartLegend",
+            template: (title, color) => {
+              const swatch = `<svg class="chart-legend-item-swatch-prs1" style="width: 20px; height: 20px;" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="${color}"/></svg>`;
+              return `<div class="mb-2"><div class="chart-legend-item-prs1 align-items-center">${swatch}<div class="chart-legend-item-label-prs1 pl-2 pr-4" style="display: inline;">${title}</div></div></div>`;
+            },
+          }
         },
         bindto: "#reasonsChart"
       });

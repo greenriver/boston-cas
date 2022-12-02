@@ -8,15 +8,8 @@
   .col-6
     .c-card
       .c-card__header
-        %h2 Successful Matches
-      .c-card__content
-        .text-center
-          %h4
-            = link_to pluralize(@report.in_progress.current_step.count, 'Ongoing Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'In Progress or Stalled')), target: '_blank'
-            %br
-            %em In Progress or Stalled
-
-          = render 'match_status'
+        %h2 All Matches
+      .c-card__content= render 'match_status'
 
       = render 'success'
       = render 'steps'
@@ -24,10 +17,7 @@
   .col-6
     .c-card
       .c-card__header
-        %h3 Unsuccessful Matches
-      .c-card__content
-        .text-center
-          %h4= link_to pluralize(@report.total_unsuccessful_matches, 'Unsuccessful Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'Unsuccessful')), target: '_blank'
-          = render 'reasons'
+        %h2 Unsuccessful Matches
+      .c-card__content= render 'reasons'
     - if @report.show_quarters?
       = render 'quarters'
