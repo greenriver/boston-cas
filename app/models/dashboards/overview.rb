@@ -91,7 +91,7 @@ class Dashboards::Overview < Dashboards::Base
 
   def quarter_chart_data
     {
-      columns: match_statuses_by_quarter.map { |k, v| [k] + v },
+      columns: match_statuses_by_quarter.map { |k, v| [k] + v }.sort_by(&:first),
       type: 'bar',
       groups: [quarter_chart_groups],
       stack: { normalize: true },
@@ -151,6 +151,7 @@ class Dashboards::Overview < Dashboards::Base
     @unsuccessful_match_reasons ||= reporting_scope.current_step.
       unsuccessful.
       has_a_reason.
+      order(cl(r_d_t[:decline_reason], r_d_t[:administrative_cancel_reason])).
       pluck(:decline_reason, :administrative_cancel_reason).
       map do |(decline, cancel)|
         combine_other_reasons(decline || cancel)

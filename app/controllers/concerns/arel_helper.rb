@@ -18,6 +18,10 @@ module ArelHelper
     def nf(*args)
       self.class.nf(*args)
     end
+
+    def cl(*args)
+      self.class.cl(*args)
+    end
   end
 
   # and to the class itself (so they can be used in scopes, for example)
@@ -38,6 +42,10 @@ module ArelHelper
       raise 'args must be an Array' unless args.is_a?(Array)
 
       Arel::Nodes::NamedFunction.new name, args.map { |v| qt v }, aka
+    end
+
+    def cl(*args)
+      nf('COALESCE', args)
     end
 
     # Example
