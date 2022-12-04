@@ -66,7 +66,7 @@ module MatchDecisions::Nine
         return unless Warehouse::Base.enabled?
 
         match.active_referral_event&.accepted
-        match.init_referral_event
+        match.init_referral_event(event: 5) # Referral to Post-placement/ follow-up case management
       end
 
       def canceled

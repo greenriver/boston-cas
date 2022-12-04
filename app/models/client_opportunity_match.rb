@@ -754,9 +754,11 @@ class ClientOpportunityMatch < ApplicationRecord
       where.not(id: id)
   end
 
-  def init_referral_event
+  def init_referral_event(event: sub_program&.event)
     return unless Warehouse::Base.enabled?
-    return active_referral_event if active_referral_event.present?
+    # Don't create a new event if we have an incomplete one
+    # But allow more than one event per match
+    return active_referral_event if active_referral_event.present? && active_referral_event.referral_result.blank?
     return unless project_client&.from_hmis?
 
     create_active_referral_event(
@@ -764,7 +766,7 @@ class ClientOpportunityMatch < ApplicationRecord
       hmis_client_id: project_client.id_in_data_source,
       program_id: program.id,
       referral_date: match_created_event&.date,
-      event: sub_program.event,
+      event: event,
     )
   end
 
