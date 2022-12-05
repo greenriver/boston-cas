@@ -4,6 +4,7 @@ FactoryBot.define do
     opportunity
     closed { false }
     active { true }
+    match_route { MatchRoutes::Default.first }
   end
 
   factory :successful_client_opportunity_match, class: 'ClientOpportunityMatch' do

@@ -1,0 +1,19 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-choose.o-choose--flush.o-choose--flush-top
+        - if @decision.accessible_by?(current_contact)
+          .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--confirm.mr-4
+                %h3 Continue Match
+            .o-choose__content
+              %p
+                Please record the name of the case manager.
+              = form.input :manager, label: _('Case Manager Name'), disabled: !@decision.editable?
+              = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+
+              = render 'match_decisions/continue_button', text: 'Complete Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: (!@decision.editable?) }
+
+        = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, the #{@match.match_route.contact_label_for(:dnd_staff_contacts)} will be informed of the decision."

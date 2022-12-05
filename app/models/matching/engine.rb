@@ -6,7 +6,7 @@
 
 class Matching::Engine
   class << self
-    def for_available_clients(opportunities, match_route: )
+    def for_available_clients(opportunities, match_route:)
       new(available_clients(match_route: match_route), opportunities)
     end
 
@@ -28,7 +28,6 @@ class Matching::Engine
       # Need to require a voucher or else we end up with very odd situations
       Opportunity.with_voucher.available_candidate.on_route(match_route)
     end
-
   end
 
   attr_reader :clients, :opportunities
@@ -61,7 +60,7 @@ class Matching::Engine
     # it adds its own limit, which just overrides the first one. I should just
     # make my own custom batch finder (or remove this one for now...)
     relation.find_in_batches(batch_size: batch_size).each do |batch|
-      batch.each {|item| yield item}
+      batch.each { |item| yield item }
     end
   end
 
@@ -75,14 +74,16 @@ class Matching::Engine
         opportunity: opportunity.opportunity_details.opportunity_for_archive,
         client: client.prepare_for_archive,
       }
-      match = client.candidate_matches.create(opportunity: opportunity,
+      match = client.candidate_matches.create(
+        opportunity: opportunity,
         client: client,
         match_route: opportunity.match_route,
-        universe_state: universe_state)
+        universe_state: universe_state,
+      )
 
       if client_priority == 1
         if opportunity.match_route.should_activate_match
-          match.activate!
+          match.activate!(touch_referral_event: opportunity.match_route.auto_initialize_event?)
         else
           match.matched!
         end
@@ -100,15 +101,14 @@ class Matching::Engine
     client_scope = opportunity.add_unit_attributes_filter(client_scope)
 
     opportunity.matching_co_candidates_for_max(client_scope)
-
   end
 
   def prioritized_candidate_opportunities
-    @_prioritized_candidate_opportunities ||= opportunity_candidates(opportunities).order(:matchability)
+    @prioritized_candidate_opportunities ||= opportunity_candidates(opportunities).order(:matchability)
   end
 
   def prioritized_candidate_clients match_route:
-    @_prioritized_candidate_clients = Client.prioritized(match_route, client_candidates(clients, match_route: match_route))
+    Client.prioritized(match_route, client_candidates(clients, match_route: match_route))
   end
 
   def opportunity_candidates subjects

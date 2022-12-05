@@ -79,6 +79,10 @@ module MatchRoutes
       self.class.match_steps.keys.first
     end
 
+    def auto_initialize_event?
+      true
+    end
+
     # The number of the step in match_steps of the first step where a client interaction is required
     private def first_client_step_number
       self.class.match_steps[first_client_step]
@@ -159,6 +163,17 @@ module MatchRoutes
       when :do_contacts
         _('Development Officer')
       end
+    end
+
+    def visible_contact_types
+      [
+        :shelter_agency_contacts,
+        :dnd_staff_contacts,
+        :housing_subsidy_admin_contacts,
+        :ssp_contacts,
+        :hsp_contacts,
+        :do_contacts,
+      ]
     end
 
     def self.max_matches_per_client

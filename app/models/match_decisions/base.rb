@@ -312,9 +312,19 @@ module MatchDecisions
       result
     end
 
+    # By default we allow admins access to any step, the following is what you'll
+    # want 90% of the time for steps assigned to normal contacts
+    ############
+    # contact.user_can_act_on_behalf_of_match_contacts? ||
+    #   contact.in?(match.send(contact_actor_type))
+    ############
     # override in subclass
-    def accessible_by?(_contact)
-      false
+    def accessible_by?(contact)
+      admin_only?(contact)
+    end
+
+    private def admin_only?(contact)
+      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
     end
 
     def step_number

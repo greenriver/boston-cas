@@ -19,19 +19,20 @@ if enable_transation_db? && ActiveRecord::Base.connection.table_exists?('transla
   require 'fast_gettext'
   require 'gettext'
   require "fast_gettext/translation_repository/db"
-  FastGettext.default_available_locales = ['en']
-  FastGettext.default_text_domain = 'boston-cas'
   FastGettext::TranslationRepository::Db.require_models #load and include default models
 
   FastGettext.add_text_domain(
-    FastGettext.default_text_domain,
+    'boston-cas',
     path: 'locale',
     type: :db,
     model: TranslationKey,
     ignore_fuzzy: true,
   )
+  FastGettext.default_available_locales = [:en]
+  FastGettext.default_text_domain = 'boston-cas'
 else
   require 'fast_gettext'
   require 'gettext'
-  FastGettext.add_text_domain(FastGettext.default_text_domain, path: 'config/locales', type: :yaml)
+  FastGettext.add_text_domain('boston-cas', path: 'locale')
+  FastGettext.default_text_domain = 'boston-cas'
 end

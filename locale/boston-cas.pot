@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 13:35+0000\n"
-"PO-Revision-Date: 2022-06-30 13:35+0000\n"
+"POT-Creation-Date: 2022-11-23 18:35+0000\n"
+"PO-Revision-Date: 2022-11-23 18:35+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -84,6 +84,9 @@ msgstr ""
 msgid "CAS Reports"
 msgstr ""
 
+msgid "CE Assessment"
+msgstr ""
+
 msgid "CSPECH Eligible"
 msgstr ""
 
@@ -91,6 +94,9 @@ msgid "Can pass a drug test"
 msgstr ""
 
 msgid "Cannot read uploaded file, is it an XLSX?"
+msgstr ""
+
+msgid "Case Manager Name"
 msgstr ""
 
 msgid "Case Workers"
@@ -201,6 +207,12 @@ msgstr ""
 msgid "Development Officer Contacts"
 msgstr ""
 
+msgid "Development Officer Eight"
+msgstr ""
+
+msgid "Development Officer Nine"
+msgstr ""
+
 msgid "Did you or this client use external software to help with housing?"
 msgstr ""
 
@@ -243,6 +255,12 @@ msgstr ""
 msgid "HSA Complete Match"
 msgstr ""
 
+msgid "HSA Eight"
+msgstr ""
+
+msgid "HSA Nine"
+msgstr ""
+
 msgid "HSP"
 msgstr ""
 
@@ -258,6 +276,12 @@ msgstr ""
 msgid "Housing Search Provider"
 msgstr ""
 
+msgid "Housing Search Provider Eight"
+msgstr ""
+
+msgid "Housing Search Provider Nine"
+msgstr ""
+
 msgid "Housing Search Providers"
 msgstr ""
 
@@ -268,6 +292,12 @@ msgid "Housing Subsidy Administrator"
 msgstr ""
 
 msgid "Housing Subsidy Administrator CORI Hearing"
+msgstr ""
+
+msgid "Housing Subsidy Administrator Eight"
+msgstr ""
+
+msgid "Housing Subsidy Administrator Nine"
 msgstr ""
 
 msgid "Housing Subsidy Administrator status update"
@@ -315,16 +345,25 @@ msgstr ""
 msgid "Latest Date Eligible for Financial Assistance"
 msgstr ""
 
+msgid "Lease start date"
+msgstr ""
+
 msgid "Life-Time Sex Offender"
 msgstr ""
 
 msgid "Limited CAS Release"
 msgstr ""
 
+msgid "Match Route Eight"
+msgstr ""
+
 msgid "Match Route Five"
 msgstr ""
 
 msgid "Match Route Four"
+msgstr ""
+
+msgid "Match Route Nine"
 msgstr ""
 
 msgid "Match Route Seven"
@@ -429,6 +468,9 @@ msgstr ""
 msgid "RRH staff at Woods Mullen Shelter"
 msgstr ""
 
+msgid "Record Date Voucher Issued"
+msgstr ""
+
 msgid "Release of information"
 msgstr ""
 
@@ -471,10 +513,22 @@ msgstr ""
 msgid "Shelter Agency Contacts"
 msgstr ""
 
+msgid "Shelter Agency Eight"
+msgstr ""
+
+msgid "Shelter Agency Nine"
+msgstr ""
+
 msgid "Should this tag be added to anyone with an assessment score?"
 msgstr ""
 
 msgid "Stabilization Service Provider"
+msgstr ""
+
+msgid "Stabilization Service Provider Eight"
+msgstr ""
+
+msgid "Stabilization Service Provider Nine"
 msgstr ""
 
 msgid "Stabilization Service Providers"

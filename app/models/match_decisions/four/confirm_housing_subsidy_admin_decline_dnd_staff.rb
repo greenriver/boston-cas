@@ -6,7 +6,6 @@
 
 module MatchDecisions::Four
   class ConfirmHousingSubsidyAdminDeclineDndStaff < ::MatchDecisions::Base
-
     def statuses
       {
         pending: 'Pending',
@@ -14,7 +13,7 @@ module MatchDecisions::Four
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
-       }
+      }
     end
 
     def label
@@ -45,10 +44,6 @@ module MatchDecisions::Four
 
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
-    def permitted_params
-      super
     end
 
     def initialize_decision! send_notifications: true
@@ -101,7 +96,5 @@ module MatchDecisions::Four
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end
