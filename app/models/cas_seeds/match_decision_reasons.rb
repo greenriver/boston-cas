@@ -98,6 +98,8 @@ module CasSeeds
       create_shelter_agency_not_working_with_client_other_reason!
       create_admin_cancel_reasons!
       create_mitigation_reasons!
+      create_case_contact_assigns_manager_decline_reasons!
+      create_nine_case_contact_assigns_manager_decline_reasons!
     end
 
     private def create_other_reason!
