@@ -34,8 +34,10 @@ module Warehouse
 
         vacancies << vacancy
       end
-      Warehouse::CasVacancy.delete_all
-      Warehouse::CasVacancy.import!(vacancies)
+      Warehouse::CasVacancy.transaction do
+        Warehouse::CasVacancy.delete_all
+        Warehouse::CasVacancy.import!(vacancies)
+      end
     end
 
     # Utility method to generate sql for an attribute name
