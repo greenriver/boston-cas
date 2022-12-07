@@ -1,5 +1,7 @@
 - if match.similar_matches.present?
-  %h3.detail-box--label Similar Matches
+  %h3.detail-box--label
+    Similar Matches
+    %i.icon-info{data: {toggle: :tooltip, title: 'The following matches involved the same client and sub-program.'}}
   .detail-box--value
     %dl
       - match.similar_matches.each do |m|
