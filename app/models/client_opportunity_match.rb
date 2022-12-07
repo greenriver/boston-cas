@@ -862,6 +862,37 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
+  # List any matches that the client had at the same sub-program within the last year
+  #
+  # @return [Array] hashes of information about matches for this client
+  #   that occurred at the same sub-program and closed within the last
+  #   year. Format
+  # [
+  #   {
+  #     id: match_id,
+  #     terminal_step: 'Step Name',
+  #     terminal_status: 'Label for step',
+  #     terminal_date: timestamp_of_step,
+  #    },
+  # ]
+  def similar_matches
+    @similar_matches ||= client.client_opportunity_matches.closed.
+      where.not(id: id).
+      joins(:initialized_decisions, :sub_program).
+      merge(SubProgram.where(id: sub_program.id)).
+      to_a. # there's a JSON field, it really doesn't like to distinct on
+      uniq.
+      map do |m|
+        decision = m.initialized_decisions.last
+        {
+          id: m.id,
+          terminal_step: decision.step_name,
+          terminal_status: decision.label,
+          terminal_date: decision.updated_at,
+        }
+      end
+  end
+
   def self.prioritized_by_client(match_route, scope)
     match_route.match_prioritization.prioritization_for_clients(scope)
   end
