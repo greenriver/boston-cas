@@ -213,6 +213,10 @@ module MatchRoutes
       'Project-Based'
     end
 
+    def status_declined?(match)
+      raise NotImplementedError
+    end
+
     private def has_tag_if_prioritization_requires_it # rubocop:disable  Naming/PredicateName
       errors.add :tag_id, 'Chosen prioritization scheme requires a tag be set' if tag_id.blank? && match_prioritization&.requires_tag?
     end

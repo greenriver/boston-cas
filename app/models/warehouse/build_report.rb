@@ -83,61 +83,64 @@ module Warehouse
     end
 
     def fill_cas_report_table!
-      transaction_wrapper = if Warehouse::Base.enabled?
-        Warehouse::CasReport
-      else
-        Reporting::Decisions
+      report_data = ::Client.joins(:project_client, client_opportunity_matches: :decisions).preload(
+        :project_client,
+        {
+          client_opportunity_matches: [
+            :match_route,
+            :dnd_staff_contacts,
+            :housing_subsidy_admin_contacts,
+            :client_contacts,
+            :shelter_agency_contacts,
+            :ssp_contacts,
+            :hsp_contacts,
+            :match_recommendation_dnd_staff_decision,
+            :match_recommendation_shelter_agency_decision,
+            :confirm_shelter_agency_decline_dnd_staff_decision,
+            :approve_match_housing_subsidy_admin_decision,
+            :confirm_housing_subsidy_admin_decline_dnd_staff_decision,
+            decisions: [
+              :decline_reason,
+              :not_working_with_client_reason,
+              :administrative_cancel_reason,
+              decision_action_events: { contact: :agency },
+            ],
+            opportunity: [voucher: :sub_program],
+            sub_program: :program,
+          ],
+        },
+      ).where(md_b_t[:status].not_eq(nil)).distinct
+
+      match_rows = []
+      report_data.find_each do |client|
+        client_id = client.project_client.id_in_data_source
+        next if client_id.blank?
+
+        data_source = data_source_name(client.project_client.data_source_id)
+        client.client_opportunity_matches.each do |match|
+          match_rows << fill_report_match_rows(client, client_id, data_source, match)
+        end
       end
 
-      transaction_wrapper.transaction do
-        # Replace all CAS data in the warehouse every time
-        Warehouse::CasReport.delete_all if Warehouse::Base.enabled?
-        # Replace reporting decisions data
+      match_rows.flatten!
+
+      # Replace reporting decisions data
+      Reporting::Decisions.transaction do
         Reporting::Decisions.delete_all
-
-        report_data = ::Client.joins(:project_client, client_opportunity_matches: :decisions).preload(
-          :project_client,
-          {
-            client_opportunity_matches: [
-              :dnd_staff_contacts,
-              :housing_subsidy_admin_contacts,
-              :client_contacts,
-              :shelter_agency_contacts,
-              :ssp_contacts,
-              :hsp_contacts,
-              decisions: [
-                :decline_reason,
-                :not_working_with_client_reason,
-                :administrative_cancel_reason,
-                decision_action_events: { contact: :agency },
-              ],
-              opportunity: [voucher: :sub_program],
-            ],
-          },
-        ).where(md_b_t[:status].not_eq(nil)).distinct
-
-        match_rows = []
-        report_data.find_each do |client|
-          client_id = client.project_client.id_in_data_source
-          next if client_id.blank?
-
-          data_source = data_source_name(client.project_client.data_source_id)
-          client.client_opportunity_matches.each do |match|
-            match_rows << fill_report_match_rows(client, client_id, data_source, match)
-          end
-        end
-
-        match_rows.flatten!
         Reporting::Decisions.import!(match_rows)
+      end
 
-        if Warehouse::Base.enabled?
-          warehouse_rows = match_rows.map do |source_row|
-            row = source_row.dup
-            row[:clent_contacts] = row.delete(:client_contacts) # There is a typo in the warehouse schema
-            row.except!(:current_status, :step_tag) # Not in warehouse schema
-          end
-          Warehouse::CasReport.import!(warehouse_rows)
-        end
+      return unless Warehouse::Base.enabled?
+
+      warehouse_rows = match_rows.map do |source_row|
+        row = source_row.dup
+        row[:clent_contacts] = row.delete(:client_contacts) # There is a typo in the warehouse schema
+        row.except!(:current_status, :step_tag) # Not in warehouse schema
+      end
+      # Replace all CAS data in the warehouse every time
+      Warehouse::CasReport.transaction do
+        Warehouse::CasReport.delete_all
+        Warehouse::CasReport.import!(warehouse_rows)
       end
     end
 

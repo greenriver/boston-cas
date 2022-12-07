@@ -16,7 +16,7 @@
     .col-4
       = f.input :program_types, as: :select_2, collection: @filter.program_type_options_for_select, input_html: { multiple: true, placeholder: 'Any Program Type', data: { placeholder: 'Any Program Type' } }
     .col-4
-      - hint = 'Based on agency assignments'
+      - hint = 'Limits to programs assigned to chosen agencies'
       = f.input :agencies, as: :select_2, collection: @filter.agency_options_for_select, include_blank: false, hint: hint, input_html: { multiple: true, placeholder: 'Any Agency', data: { placeholder: 'Any Agency' } }
   %hr
   %h2 Client-level Filters

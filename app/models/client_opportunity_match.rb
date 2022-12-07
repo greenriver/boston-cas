@@ -79,8 +79,6 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 9
   include RouteNineDecisions
 
-  has_one :current_decision
-
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent'
 
@@ -485,14 +483,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def status_declined?
-    dnd_status = match_recommendation_dnd_staff_decision&.status
-    shelter_status = match_recommendation_shelter_agency_decision&.status
-    shelter_override_status = confirm_shelter_agency_decline_dnd_staff_decision&.status
-    shelter_declined = (shelter_status == 'declined' && ! shelter_override_status == 'decline_overridden')
-    hsa_status = approve_match_housing_subsidy_admin_decision&.status
-    hsa_override_status = confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status
-    hsa_declined = (hsa_status == 'declined' && ! hsa_override_status == 'decline_overridden')
-    dnd_status == 'decline' || shelter_declined || hsa_declined
+    match_route.status_declined?(self)
   end
 
   def stalled?
