@@ -56,5 +56,15 @@ module MatchRoutes
     def initial_contacts_for_match
       :dnd_staff_contacts
     end
+
+    def status_declined?(match)
+      [
+        match.match_recommendation_dnd_staff_decision&.status == 'declined',
+        match.match_recommendation_shelter_agency_decision&.status == 'declined' &&
+          match.confirm_shelter_agency_decline_dnd_staff_decision&.status != 'decline_overridden',
+        match.approve_match_housing_subsidy_admin_decision&.status == 'declined' &&
+          match.confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status != 'decline_overridden',
+      ].any?
+    end
   end
 end

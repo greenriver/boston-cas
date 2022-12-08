@@ -95,6 +95,7 @@ module MatchDecisions::HomelessSetAside
       end
 
       def declined
+        # FIXME: next time we use the set-aside route, we need a new decision here
         match.set_asides_confirm_hsa_accepts_client_decline_dnd_staff_decision.initialize_decision!
       end
 

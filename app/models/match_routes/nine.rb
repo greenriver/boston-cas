@@ -92,5 +92,17 @@ module MatchRoutes
         :ssp_contacts,
       ]
     end
+
+    def status_declined?(match)
+      [
+        match.nine_match_recommendation_decision&.status == 'declined',
+        match.nine_record_voucher_date_decision&.status == 'declined' &&
+          match.nine_confirm_voucher_decline_decline_decision&.status != 'decline_overridden',
+        match.nine_lease_up_decision&.status == 'declined' &&
+          match.nine_confirm_lease_up_decline_decision&.status != 'decline_overridden',
+        match.nine_assign_manager_decision&.status == 'declined' &&
+          match.nine_confirm_assign_manager_decline_decision&.status != 'decline_overridden',
+      ].any?
+    end
   end
 end

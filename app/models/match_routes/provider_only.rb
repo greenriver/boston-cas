@@ -6,7 +6,6 @@
 
 module MatchRoutes
   class ProviderOnly < Base
-
     def title
       _('Provider Only Route')
     end
@@ -17,17 +16,17 @@ module MatchRoutes
 
     def self.match_steps
       {
-       'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
-       'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
+        'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
+        'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
       }
     end
 
     def self.match_steps_for_reporting
       {
-       'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
-       'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
-       'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
-       }
+        'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
+        'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
+        'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
+      }
     end
 
     def required_contact_types
@@ -47,6 +46,13 @@ module MatchRoutes
 
     def initial_contacts_for_match
       :housing_subsidy_admin_contacts
+    end
+
+    def status_declined?(match)
+      [
+        match.hsa_accepts_client_decision&.status == 'declined' &&
+          match.confirm_hsa_accepts_client_decline_dnd_staff_decision&.status != 'decline_overridden',
+      ].any?
     end
   end
 end

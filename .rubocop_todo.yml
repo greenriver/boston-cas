@@ -135,7 +135,6 @@ Layout/EmptyLineBetweenDefs:
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/match_routes/five.rb'
     - 'app/models/program.rb'
     - 'app/models/rules/holds_voucher.rb'
     - 'app/models/sub_program.rb'
@@ -155,7 +154,6 @@ Layout/EmptyLines:
     - 'app/models/match_access_contexts/notification.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
-    - 'app/models/match_routes/five.rb'
     - 'app/models/rules/holds_voucher.rb'
     - 'app/models/warehouse/cas_availability.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
@@ -314,8 +312,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_progress_updates/hsp.rb'
     - 'app/models/match_progress_updates/shelter_agency.rb'
     - 'app/models/match_progress_updates/ssp.rb'
-    - 'app/models/match_routes/homeless_set_aside.rb'
-    - 'app/models/match_routes/provider_only.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
     - 'app/models/notifications/base.rb'
@@ -516,7 +512,6 @@ Layout/FirstArgumentIndentation:
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
 Layout/FirstArrayElementIndentation:
   Exclude:
-    - 'app/models/match_routes/homeless_set_aside.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
@@ -530,8 +525,6 @@ Layout/FirstHashElementIndentation:
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
     - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
-    - 'app/models/match_routes/homeless_set_aside.rb'
-    - 'app/models/match_routes/provider_only.rb'
     - 'app/models/sub_program.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
