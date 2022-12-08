@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+CAS match needs a case manager.
+\
+View details here:
+#{notification_match_decision_url @notification, @match, @decision}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

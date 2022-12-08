@@ -20,14 +20,12 @@ class ClientOpportunityMatchesController < ApplicationController
     end
 
     # client filter
-    if params[:client_id].present? && (@client = Client.find(params[:client_id].to_i))
-      @matches = @matches.where(client_id: @client.id)
-    end
+    @client = Client.find( params[:client_id].to_i) if  params[:client_id].present?
+    @matches = @matches.where(client_id: @client.id) if @client.present?
 
     # opportunity filter
-    if params[:opportunity_id].present? && (@opportunity = Opportunity.find(params[:opportunity_id].to_i))
-      @matches = @matches.where(opportunity_id: @opportunity.id)
-    end
+    @opportunity = Opportunity.find(params[:opportunity_id].to_i) if params[:opportunity_id].present?
+    @matches = @matches.where(opportunity_id: @opportunity.id) if @opportunity.present?
 
     # sort / paginate
     @matches = @matches
@@ -51,10 +49,10 @@ class ClientOpportunityMatchesController < ApplicationController
       score: Faker::Number.between(25, 100),
       client: client,
       opportunity: opportunity,
-      proposed_at: Date.current
+      proposed_at: Date.current,
     )
     match.add_default_contacts!
-    match.match_recommendation_dnd_staff_decision.initialize_decision!
+    match.send(match.route.initial_decision).initialize_decision!
     flash[:notice] = 'Random Match created'
     redirect_to root_path
   end
@@ -78,11 +76,10 @@ class ClientOpportunityMatchesController < ApplicationController
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
   def query_string
     "%#{params[:q]}%"
   end
-
 end

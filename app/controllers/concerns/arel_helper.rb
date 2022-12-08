@@ -18,6 +18,10 @@ module ArelHelper
     def nf(*args)
       self.class.nf(*args)
     end
+
+    def cl(*args)
+      self.class.cl(*args)
+    end
   end
 
   # and to the class itself (so they can be used in scopes, for example)
@@ -38,6 +42,10 @@ module ArelHelper
       raise 'args must be an Array' unless args.is_a?(Array)
 
       Arel::Nodes::NamedFunction.new name, args.map { |v| qt v }, aka
+    end
+
+    def cl(*args)
+      nf('COALESCE', args)
     end
 
     # Example
@@ -70,6 +78,27 @@ module ArelHelper
       )
 
       joins(join)
+    end
+
+    def age_on_date(start_date = Date.current)
+      cast(
+        datepart(
+          'YEAR',
+          nf('AGE', [start_date, c_t[:date_of_birth]]),
+        ),
+        'integer',
+      )
+    end
+
+    def datepart(type, date)
+      date = lit "#{Arel::Nodes::Quoted.new(date).to_sql}::date" if date.is_a? String
+      nf('DATE_PART', [type, date])
+    end
+
+    def cast(exp, as)
+      exp = qt(exp)
+      exp = lit(exp.to_sql) unless exp.respond_to?(:as)
+      nf('CAST', [exp.as(as)])
     end
 
     # Shortcuts for arel tables

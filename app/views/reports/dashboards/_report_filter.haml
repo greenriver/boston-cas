@@ -1,11 +1,34 @@
-.row
-  .col-3
-    = form.input :start_date, as: :date_picker, input_html: { value: @start_date }
-  .col-3
-    = form.input :end_date, as: :date_picker, input_html: { value: @end_date }
-  .col-3
-    = form.input :match_route, collection: MatchRoutes::Base.available, selected: @match_route_id, include_blank: false, input_html: { class: 'select2 jMatchRoute' }
-  .col-3
-    = form.input :program_types, collection: SubProgram.types, label_method: ->(type) { type[:label] }, value_method: ->(type) { type[:value] }, selected: @program_types, input_html: { multiple: true, class: :select2 }
-
-= render 'init_select2'
+- multiple_routes = multiple_routes == true
+= simple_form_for @filter, as: :filters, method: :get, url: path do |f|
+  .row
+    .col-3
+      = f.input :start, as: :date_picker, input_html: { value: @start_date }, required: true
+    .col-3
+      = f.input :end, as: :date_picker, input_html: { value: @end_date }, required: true
+    .col-3
+      - if multiple_routes
+        = f.input :match_routes, as: :select_2, collection: @filter.match_route_options_for_select, required: true, input_html: { multiple: true }
+      - else
+        = f.input :match_route, as: :select_2, collection: @filter.match_route_options_for_select,  selected: @filter.match_routes&.first, include_blank: false
+    .col-3
+      = f.input :program_types, as: :select_2, collection: @filter.program_type_options_for_select, input_html: { multiple: true, placeholder: 'Any Program Type', data: { placeholder: 'Any Program Type' } }
+  .row
+    .col-3
+      = f.input :agencies, as: :select_2, collection: @filter.agency_options_for_select, include_blank: false, input_html: { multiple: true, placeholder: 'Any Agency', data: { placeholder: 'Any Agency' } }
+    .col-3
+      = f.input :household_types, as: :select_2, collection: @filter.household_type_options_for_select, input_html: { multiple: true, placeholder: 'Any Household Type', data: { placeholder: 'Any Household Type' } }
+    .col-3
+      = f.input :veteran_statuses, as: :select_2, collection: @filter.veteran_status_options_for_select, include_blank: false, input_html: { multiple: true, placeholder: 'Any Veteran Status', data: { placeholder: 'Any Veteran Status' } }
+    .col-3
+      = f.input :age_ranges, as: :select_2, collection: @filter.age_range_options_for_select, input_html: { multiple: true, placeholder: 'Any Age Range', data: { placeholder: 'Any Age Range' } }
+  .row
+    .col-3
+      = f.input :genders, as: :select_2, collection: @filter.gender_options_for_select, include_blank: false, input_html: { multiple: true, placeholder: 'Any Gender', data: { placeholder: 'Any Gender' } }
+    .col-3
+      = f.input :races, as: :select_2, collection: @filter.race_options_for_select, input_html: { multiple: true, placeholder: 'Any Race', data: { placeholder: 'Any Race' } }
+    .col-3
+      = f.input :ethnicities, as: :select_2, collection: @filter.ethnicity_options_for_select, include_blank: false, input_html: { multiple: true, placeholder: 'Any Ethnicity', data: { placeholder: 'Any Ethnicity' } }
+    .col-3
+      = f.input :disabilities, as: :select_2, collection: @filter.disability_options_for_select, input_html: { multiple: true, placeholder: 'Any Disability Status', data: { placeholder: 'Any Disability Status' } }
+  %hr
+  = f.submit 'Update Dashboard', class: 'btn btn-primary'

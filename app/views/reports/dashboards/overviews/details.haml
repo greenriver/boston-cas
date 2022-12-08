@@ -1,22 +1,25 @@
-- if @sub_key.present?
-  - title = " #{@sub_key} #{@section.to_s.humanize} (#{@key})".titlecase
--else
-  - title = " #{@key} #{@section.to_s.humanize}".titlecase
+- title = if @reason.present? then @reason else @section end
 - content_for :title, title
 = content_for :modal_title, title
 
-%p= "#{pluralize(@total_clients, 'client')} total, #{pluralize(@total_clients - @clients.size, 'name')} withheld"
-
-%table.table
-  %thead
-    - details_columns.each do |name|
-      %th= name.to_s.humanize
-  %tbody
-    - @clients.each do |client|
-      %tr
-        - details_columns.each do |name|
-          - value = client.public_send(name)
-          - if name == :id
-            %td= link_to value, client_path(value)
-          - else
-            %td= value
+- if @pagy.count.positive?
+  = render 'common/pagination_top', item_name: 'match'
+  .table-responsive
+    .c-card.c.card__flush.mb-4
+      .c-card__content.p-0
+        %table.table.table-striped.mb-0
+          %thead
+            %th Match
+            %th Client
+            - @report.detail_headers.each do |name|
+              %th= name
+          %tbody
+            - @data.each do |row|
+              %tr
+                %td= link_to row.match_id, match_path(row.match_id)
+                %td= link_to row.client.name, client_path(row.cas_client_id)
+                - @report.detail_columns.each do |name|
+                  %td= @report.format_datum(name, row.public_send(name))
+    = render 'common/pagination_bottom', item_name: 'user'
+- else
+  .none-found No matches found.

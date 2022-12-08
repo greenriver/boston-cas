@@ -6,7 +6,6 @@
 
 module MatchDecisions::HomelessSetAside
   class SetAsidesConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
-
     def statuses
       {
         pending: 'Pending',
@@ -15,7 +14,7 @@ module MatchDecisions::HomelessSetAside
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
         back: 'Pending',
-       }
+      }
     end
 
     def label
@@ -47,10 +46,6 @@ module MatchDecisions::HomelessSetAside
 
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
-    def permitted_params
-      super
     end
 
     def initialize_decision! send_notifications: true
@@ -97,7 +92,5 @@ module MatchDecisions::HomelessSetAside
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end

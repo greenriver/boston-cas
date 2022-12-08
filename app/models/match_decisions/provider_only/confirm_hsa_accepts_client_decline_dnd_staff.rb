@@ -9,6 +9,7 @@ module MatchDecisions::ProviderOnly
     def to_partial_path
       'match_decisions/confirm_hsa_accepts_client_decline_dnd_staff'
     end
+
     def statuses
       {
         pending: 'Pending',
@@ -16,7 +17,7 @@ module MatchDecisions::ProviderOnly
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
-       }
+      }
     end
 
     def label
@@ -47,10 +48,6 @@ module MatchDecisions::ProviderOnly
 
     def editable?
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
-    def permitted_params
-      super
     end
 
     def initialize_decision! send_notifications: true
@@ -102,7 +99,5 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end

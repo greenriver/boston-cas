@@ -1,0 +1,56 @@
+.c-card
+  .c-card__header
+    %h2 Unsuccessful Matches by Quarter
+  .c-card__content
+    #quarterChart
+    #quarterChartLegend
+    = content_for :page_js do
+      :javascript
+        var reasonsChart = bb.generate({
+          data: #{@report.quarter_chart_data.to_json.html_safe},
+          color: {
+            pattern: d3[`scheme${'Tableau10'}`]
+          },
+          bar: {
+            padding: 5,
+          },
+          grid: {
+            y: {
+              lines: [
+                {
+                  value: 0
+                }
+              ]
+            }
+          },
+          axis: {
+            rotated: true,
+            x: {
+              type: "category",
+              categories: #{@report.quarter_chart_names.to_json.html_safe},
+
+            },
+            y: {
+              tick: {
+                count: 2,
+              }
+            }
+          },
+          tooltip: {
+            format: {
+              value: function(value, ratio, id, index) {
+                return `${d3.format(",.1%")(ratio)} (${value} matches)`;
+              }
+            }
+          },
+          legend: {
+          contents: {
+            bindto: "#quarterChartLegend",
+            template: (title, color) => {
+              const swatch = `<svg class="chart-legend-item-swatch-prs1" style="width: 20px; height: 20px;" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="${color}"/></svg>`;
+              return `<div class="mb-2"><div class="chart-legend-item-prs1 align-items-center">${swatch}<div class="chart-legend-item-label-prs1 pl-2 pr-4" style="display: inline;">${title}</div></div></div>`;
+            },
+          }
+        },
+          bindto: "#quarterChart"
+        });

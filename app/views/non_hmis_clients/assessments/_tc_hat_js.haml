@@ -183,6 +183,12 @@
       } else {
         $question.removeClass('d-none');
       }
+      var $question = $('input[name*="[ongoing_case_management_required]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.addClass('d-none');
+      } else {
+        $question.removeClass('d-none');
+      }
       var $question = $('.jLongTermRental')
       if(value !== undefined && value == true) {
         $question.addClass('d-none');

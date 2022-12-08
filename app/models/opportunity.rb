@@ -195,8 +195,8 @@ class Opportunity < ApplicationRecord
   end
 
   # Get visibility from the associated SubProgram
-  delegate :visible_by?, to: :sub_program
-  delegate :editable_by?, to: :sub_program
+  delegate :visible_by?, to: :sub_program, allow_nil: true
+  delegate :editable_by?, to: :sub_program, allow_nil: true
 
   scope :visible_by, ->(user) {
     joins(:sub_program).merge(SubProgram.visible_by(user))

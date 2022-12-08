@@ -1,6 +1,8 @@
 - contact_ids_with_active_users = Contact.active_contacts.pluck(:id)
 %ul.jMatchContactList.c-detail-group__content.list-unstyled
   - match.contact_titles.each do |contact_type, title|
+    - next unless match.match_route.visible_contact_types.include?(contact_type.to_sym)
+
     %li.c-detail-group__item
       -# Force some translations
       - _('Housing Subsidy Administrators')

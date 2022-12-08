@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+= "The match now requires final approval from #{_('DND')} staff to complete."
+\
+Please review the details of the match and note final approval here:
+#{notification_match_decision_url @notification, @match, @decision}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

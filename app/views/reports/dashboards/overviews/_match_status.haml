@@ -1,0 +1,42 @@
+%h4= link_to pluralize(@report.in_progress.current_step.count, 'Ongoing Match'),  details_reports_dashboards_overviews_path(details_params.merge(section: 'In Progress or Stalled')), target: '_blank'
+- matches = @report.match_statuses.to_a
+- if matches.present?
+  %h2 Match Status
+  .row
+    .col-8
+      #matchStatusChart
+    .col-4
+      #matchStatusChartLegend
+
+  = content_for :page_js do
+    :javascript
+      var matchStatusChart = bb.generate({
+        data: {
+          columns: #{matches.to_json.html_safe},
+          type: "pie",
+          onclick: follow_link
+        },
+        tooltip: {
+          format: {
+            value: function(value, ratio, id, index) {
+              return `${d3.format(",.1%")(ratio)} (${value} matches)`;
+            }
+          }
+        },
+        legend: {
+          contents: {
+            bindto: "#matchStatusChartLegend",
+            template: (title, color) => {
+              const swatch = `<svg class="chart-legend-item-swatch-prs1" style="width: 20px; height: 20px;" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="${color}"/></svg>`;
+              return `<div class="mb-2"><div class="chart-legend-item-prs1 align-items-center">${swatch}<div class="chart-legend-item-label-prs1 pl-2 pr-4" style="display: inline;">${title}</div></div></div>`;
+            },
+          }
+        },
+        bindto: "#matchStatusChart"
+      });
+
+      function follow_link(status, event) {
+        url = "#{@details_url}" + encodeURI("&section=" + status.id)
+
+        window.open(url)
+      }

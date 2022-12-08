@@ -25,7 +25,7 @@
     Please record the date the client moved in.
   .row
     .col-md-6
-      = form.input :client_move_in_date, label: 'Lease start date', as: :date_picker, disabled: !@decision.editable?
+      = form.input :client_move_in_date, label: _('Lease start date'), as: :date_picker, disabled: !@decision.editable?
   .form-inputs
     = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
   %p

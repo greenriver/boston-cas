@@ -14,7 +14,7 @@ gem 'composite_primary_keys', '~> 12.0'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
-gem 'nokogiri', '>= 1.13.6' # CVE-2022-29181
+gem 'nokogiri', '>= 1.13.10' # >= 1.13.10 due to GHSA-qv4q-mr5r-qprj
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'
@@ -31,6 +31,7 @@ gem 'simple_form'
 gem 'virtus'
 
 gem 'kaminari'
+gem 'pagy'
 gem 'ransack'
 gem 'responders'
 gem 'memoist', require: false
@@ -92,7 +93,7 @@ gem 'handlebars_assets'
 gem 'momentjs-rails', '>= 2.9.0'
 
 gem 'delayed_job_active_record'
-gem 'uglifier'
+gem 'terser'
 
 gem 'whenever', require: false
 

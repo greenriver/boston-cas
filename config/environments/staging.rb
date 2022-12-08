@@ -7,7 +7,7 @@ Rails.application.configure do
   config.eager_load = true
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  config.assets.js_compressor = :terser
   config.assets.compile = true
   config.assets.digest = true
   config.force_ssl = false

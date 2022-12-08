@@ -62,56 +62,27 @@ class ClientOpportunityMatch < ApplicationRecord
   has_decision :set_asides_confirm_hsa_accepts_client_decline_dnd_staff, decision_class_name: 'MatchDecisions::HomelessSetAside::SetAsidesConfirmHsaAcceptsClientDeclineDndStaff', notification_class_name: 'Notifications::ConfirmHousingSubsidyAdminDeclineDndStaff'
 
   # Match Route Four
-  has_decision :four_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Four::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Four::MatchRecommendationDndStaff'
-  has_decision :four_match_recommendation_shelter_agency, decision_class_name: 'MatchDecisions::Four::MatchRecommendationShelterAgency', notification_class_name: 'Notifications::Four::MatchRecommendationShelterAgency'
-  has_decision :four_confirm_shelter_agency_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmShelterAgencyDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmShelterAgencyDeclineDndStaff'
-  has_decision :four_match_recommendation_hsa, decision_class_name: 'MatchDecisions::Four::MatchRecommendationHsa', notification_class_name: 'Notifications::Four::MatchRecommendationHsa'
-  has_decision :four_confirm_hsa_initial_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHsaInitialDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHsaInitialDeclineDndStaff'
-  has_decision :four_schedule_criminal_hearing_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin', notification_class_name: 'Notifications::Four::ScheduleCriminalHearingHousingSubsidyAdmin'
-  has_decision :four_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Four::CriminalHearingScheduledClient'
-  has_decision :four_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Four::ConfirmHousingSubsidyAdminDeclineDndStaff'
-  has_decision :four_record_client_housed_date_housing_subsidy_administrator, decision_class_name: 'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator', notification_class_name: 'Notifications::Four::HousingSubsidyAdminDecisionClient'
-  has_decision :four_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Four::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Four::ConfirmMatchSuccessDndStaff'
+  include RouteFourDecisions
 
   # Match Route Five
-  has_decision :five_match_recommendation, decision_class_name: 'MatchDecisions::Five::FiveMatchRecommendation', notification_class_name: 'Notifications::Five::MatchRecommendation'
-  has_decision :five_client_agrees, decision_class_name: 'MatchDecisions::Five::FiveClientAgrees', notification_class_name: 'Notifications::Five::ClientAgrees'
-  has_decision :five_application_submission, decision_class_name: 'MatchDecisions::Five::FiveApplicationSubmission', notification_class_name: 'Notifications::Five::ApplicationSubmission'
-  has_decision :five_screening, decision_class_name: 'MatchDecisions::Five::FiveScreening', notification_class_name: 'Notifications::Five::Screening'
-  has_decision :five_mitigation, decision_class_name: 'MatchDecisions::Five::FiveMitigation', notification_class_name: 'Notifications::Five::Mitigation'
-  has_decision :five_lease_up, decision_class_name: 'MatchDecisions::Five::FiveLeaseUp', notification_class_name: 'Notifications::Five::LeaseUp'
+  include RouteFiveDecisions
 
   # Match Route 6
-  has_decision :six_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Six::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Six::MatchRecommendationDndStaff'
-  has_decision :six_match_recommendation_shelter_agency, decision_class_name: 'MatchDecisions::Six::MatchRecommendationShelterAgency', notification_class_name: 'Notifications::Six::MatchRecommendationShelterAgency'
-  has_decision :six_confirm_shelter_agency_decline_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmShelterAgencyDeclineDndStaff', notification_class_name: 'Notifications::Six::ConfirmShelterAgencyDeclineDndStaff'
-  has_decision :six_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Six::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Six::ApproveMatchHousingSubsidyAdmin'
-  has_decision :six_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Six::ConfirmHsaDeclineDndStaff'
-  has_decision :six_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Six::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Six::ConfirmMatchSuccessDndStaff'
+  include RouteSixDecisions
 
   # Match Route 7
-  has_decision :seven_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Seven::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Seven::MatchRecommendationDndStaff'
-  has_decision :seven_approve_match_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin', notification_class_name: 'Notifications::Seven::ApproveMatchHousingSubsidyAdmin'
-  has_decision :seven_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Seven::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Seven::ConfirmHsaDeclineDndStaff'
-  has_decision :seven_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Seven::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Seven::ConfirmMatchSuccessDndStaff'
+  include RouteSevenDecisions
 
   # Match Route 8
-  has_decision :eight_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Eight::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Eight::MatchRecommendationDndStaff'
-  has_decision :eight_record_voucher_date_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Eight::RecordVoucherDateHousingSubsidyAdmin', notification_class_name: 'Notifications::Eight::RecordVoucherDateHousingSubsidyAdmin'
-  has_decision :eight_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Eight::ConfirmHsaDeclineDndStaff'
-  has_decision :eight_lease_up, decision_class_name: 'MatchDecisions::Eight::LeaseUp', notification_class_name: 'Notifications::Eight::LeaseUp'
-  has_decision :eight_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Eight::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Eight::ConfirmMatchSuccessDndStaff'
+  include RouteEightDecisions
 
   # Match Route 9
-  has_decision :nine_match_recommendation_dnd_staff, decision_class_name: 'MatchDecisions::Nine::MatchRecommendationDndStaff', notification_class_name: 'Notifications::Nine::MatchRecommendationDndStaff'
-  has_decision :nine_record_voucher_date_housing_subsidy_admin, decision_class_name: 'MatchDecisions::Nine::RecordVoucherDateHousingSubsidyAdmin', notification_class_name: 'Notifications::Nine::RecordVoucherDateHousingSubsidyAdmin'
-  has_decision :nine_confirm_housing_subsidy_admin_decline_dnd_staff, decision_class_name: 'MatchDecisions::Nine::ConfirmHousingSubsidyAdminDeclineDndStaff', notification_class_name: 'Notifications::Nine::ConfirmHsaDeclineDndStaff'
-  has_decision :nine_lease_up, decision_class_name: 'MatchDecisions::Nine::LeaseUp', notification_class_name: 'Notifications::Nine::LeaseUp'
-  has_decision :nine_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Nine::ConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Nine::ConfirmMatchSuccessDndStaff'
+  include RouteNineDecisions
 
   has_one :current_decision
 
-  has_one :referral_event, class_name: 'Warehouse::ReferralEvent'
+  has_many :referral_events, class_name: 'Warehouse::ReferralEvent'
+  has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent'
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled'].freeze
   validates :closed_reason, inclusion: { in: CLOSED_REASONS, if: :closed_reason }
@@ -613,11 +584,11 @@ class ClientOpportunityMatch < ApplicationRecord
       # so clean that up...
       Warehouse::CasHoused.where(match_id: id).destroy_all
 
-      referral_event&.clear if Warehouse::Base.enabled?
+      active_referral_event&.clear if Warehouse::Base.enabled?
     end
   end
 
-  def activate!
+  def activate!(touch_referral_event: true)
     self.class.transaction do
       update! active: true
       client.make_unavailable_in(match_route: match_route, expires_at: nil) if match_route.should_prevent_multiple_matches_per_client
@@ -628,7 +599,7 @@ class ClientOpportunityMatch < ApplicationRecord
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       related_proposed_matches.destroy_all unless match_route.should_activate_match
 
-      init_referral_event if Warehouse::Base.enabled?
+      init_referral_event if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
@@ -640,7 +611,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
-  def rejected!
+  def rejected!(touch_referral_event: true)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
       client.make_available_in(match_route: match_route)
@@ -651,11 +622,11 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.rejected if Warehouse::Base.enabled?
+      active_referral_event&.rejected if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
-  def canceled!
+  def canceled!(touch_referral_event: true)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client.make_available_in(match_route: match_route)
@@ -666,14 +637,14 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.rejected if Warehouse::Base.enabled?
+      active_referral_event&.rejected if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
   # Similar to a cancel, but allow the client to re-match the same opportunity
   # if it comes up again.  Also, don't re-run the matching engine, we'll
   # put the opportunity
-  def poached!
+  def poached!(touch_referral_event: true)
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client&.make_available_in(match_route: match_route)
@@ -682,11 +653,11 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.rejected if Warehouse::Base.enabled?
+      active_referral_event&.rejected if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
-  def succeeded!
+  def succeeded!(touch_referral_event: true)
     self.class.transaction do
       route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
@@ -742,7 +713,7 @@ class ClientOpportunityMatch < ApplicationRecord
       # Prevent access to this match by notification after 1 week
       expire_all_notifications
 
-      referral_event&.accepted if Warehouse::Base.enabled?
+      active_referral_event&.accepted if Warehouse::Base.enabled? && touch_referral_event
     end
   end
 
@@ -783,17 +754,19 @@ class ClientOpportunityMatch < ApplicationRecord
       where.not(id: id)
   end
 
-  def init_referral_event
+  def init_referral_event(event: sub_program&.event)
     return unless Warehouse::Base.enabled?
-    return referral_event if referral_event.present?
+    # Don't create a new event if we have an incomplete one
+    # But allow more than one event per match
+    return active_referral_event if active_referral_event.present? && active_referral_event.referral_result.blank?
     return unless project_client&.from_hmis?
 
-    create_referral_event(
+    create_active_referral_event(
       cas_client_id: client.id,
       hmis_client_id: project_client.id_in_data_source,
       program_id: program.id,
       referral_date: match_created_event&.date,
-      event: sub_program.event,
+      event: event,
     )
   end
 

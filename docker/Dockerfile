@@ -61,7 +61,7 @@ RUN gem update --system \
     && gem install bundler:$BUNDLER_VERSION \
     && bundle \
     && bundle exec rails webpacker:install \
-    && yarn install
+    && yarn install --frozen-lockfile
 
 COPY docker/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh

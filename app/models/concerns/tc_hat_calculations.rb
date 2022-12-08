@@ -409,6 +409,15 @@ module TcHatCalculations
           as: :pretty_boolean_group,
           number: 'D-2',
         },
+        ongoing_case_management_required: {
+          label: '[STAFF RESPONSE] Does the client need ongoing housing case management to sustain housing?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'D-3',
+        },
         _section_e_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/tc_hat/section_e_preamble',
