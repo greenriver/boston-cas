@@ -6,6 +6,7 @@ gem 'activerecord-import'
 gem 'pg', '~> 0.20.0'
 gem 'rails', '~>6.0'
 gem 'rails-html-sanitizer', '>= 1.4.3' # >= 1.4.3 due to CVE-2022-32209
+gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
 
 gem 'bcrypt'
