@@ -1,17 +1,17 @@
 # A sample Gemfile
 source 'https://rubygems.org'
 
-gem 'activerecord', '>= 6.0.5.1' # >= 6.0.5.1 due to CVE-2022-32224
+gem 'activerecord', '>= 6.1.7' # >= 6.0.5.1 due to CVE-2022-32224
 gem 'activerecord-import'
-gem 'pg', '~> 0.20.0'
-gem 'rails', '~>6.0'
+gem 'pg', '~> 1.1.0'
+gem 'rails', '~>6.1.7'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
 gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
 
 gem 'bcrypt'
 gem 'bootsnap'
-gem 'composite_primary_keys', '~> 12.0'
+gem 'composite_primary_keys', '~> 13.0'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
@@ -172,12 +172,6 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-mocks'
   gem 'shoulda'
-end
-
-group :rake do
-  gem 'fast_gettext'
-  gem 'gettext', '>=3.0.2'
-  gem 'gettext_i18n_rails'
 end
 
 gem 'ajax_modal_rails', '~> 1.0'

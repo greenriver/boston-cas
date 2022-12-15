@@ -50,7 +50,6 @@ Layout/BlockEndNewline:
 # SupportedStyles: case, end
 Layout/CaseIndentation:
   Exclude:
-    - 'app/models/project_client.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -401,7 +400,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/opportunity_details/via_voucher.rb'
     - 'app/models/opportunity_property.rb'
     - 'app/models/program.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/project_program.rb'
     - 'app/models/service.rb'
     - 'app/models/stalled_match_request.rb'
@@ -745,7 +743,6 @@ Layout/SpaceInLambdaLiteral:
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
     - 'app/models/program.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/tag.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
@@ -920,7 +917,6 @@ Layout/TrailingEmptyLines:
     - 'spec/models/rules/enrolled_in_so_spec.rb'
     - 'spec/models/rules/enrolled_in_th_spec.rb'
     - 'spec/models/rules/ground_floor_spec.rb'
-    - 'spec/models/rules/hmis_client_spec.rb'
     - 'spec/models/rules/homeless_spec.rb'
     - 'spec/models/rules/housing_authority_eligible_spec.rb'
     - 'spec/models/rules/hues_eligible_spec.rb'
@@ -933,7 +929,6 @@ Layout/TrailingEmptyLines:
     - 'spec/models/rules/mi_and_sa_comorbid_spec.rb'
     - 'spec/models/rules/mi_sa_or_co_morbid_spec.rb'
     - 'spec/models/rules/never_evicted_spec.rb'
-    - 'spec/models/rules/non_hmis_client_spec.rb'
     - 'spec/models/rules/one_eighty_days_homeless_last_three_years_spec.rb'
     - 'spec/models/rules/one_eighty_days_homeless_spec.rb'
     - 'spec/models/rules/one_year_homeless_last_three_years_spec.rb'
@@ -1276,7 +1271,6 @@ Naming/PredicateName:
     - 'app/models/contact.rb'
     - 'app/models/match_events/note.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
 
 # Offense count: 1
@@ -1629,7 +1623,6 @@ Style/RaiseArgs:
 # Cop supports --auto-correct.
 Style/RedundantBegin:
   Exclude:
-    - 'bin/yarn'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -1658,7 +1651,6 @@ Style/RedundantSelf:
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
     - 'app/models/warehouse/cas_availability.rb'
@@ -1734,7 +1726,6 @@ Style/SlicingWithRange:
 # Cop supports --auto-correct.
 Style/StderrPuts:
   Exclude:
-    - 'bin/yarn'
 
 # Offense count: 456
 # Cop supports --auto-correct.
@@ -1784,9 +1775,7 @@ Style/StringLiterals:
     - 'bin/guard'
     - 'bin/rspec'
     - 'bin/setup'
-    - 'bin/spring'
     - 'bin/update'
-    - 'bin/yarn'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -1853,7 +1842,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/funding_source.rb'
     - 'app/models/match_progress_updates/base.rb'
     - 'app/models/program.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/rules/pathways_eligible.rb'
     - 'app/models/rules/youth.rb'
     - 'app/models/sub_program.rb'
