@@ -5,14 +5,17 @@
 ###
 
 class ImmediateMailer < ApplicationMailer
-  def immediate
-    to = params[:to]
-    @message = params[:message]
-
+  def immediate(message, to, delivery_method_options = nil)
+    @message = message
     # Don't send to disabled accounts, but let contacts with no accounts go through
     inactive_user = User.inactive.find_by(email: to)
     return if inactive_user.present?
 
-    mail to: to, subject: "#{prefix} #{@message.subject}"
+    mail(
+      from: message.from,
+      to: to,
+      subject: "#{prefix} #{@message.subject}",
+      delivery_method_options: delivery_method_options,
+    )
   end
 end

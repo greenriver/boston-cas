@@ -1,11 +1,17 @@
 require "active_support/core_ext/integer/time"
+I18n.config.available_locales = :en
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  # Don't force ssl for docker development
+  config.force_ssl = false
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
+
+  config.hosts = [ /.*/ ]
 
   # Do not eager load code on boot.
   config.eager_load = false
@@ -28,7 +34,10 @@ Rails.application.configure do
   else
     config.action_controller.perform_caching = false
 
-    config.cache_store = :null_store
+    cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
+    cache_namespace = "#{ENV.fetch('CLIENT')}-#{Rails.env}-cas"
+    redis_config = Rails.application.config_for(:cache_store).merge({ expires_in: 5.minutes, ssl: cache_ssl, namespace: cache_namespace})
+    config.cache_store = :redis_cache_store, redis_config
   end
 
   if ENV['SMTP_SERVER']
@@ -53,9 +62,9 @@ Rails.application.configure do
     end
   else
     # Don't care if the mailer can't send.
-    config.action_mailer.raise_delivery_errors = false
+    config.action_mailer.raise_delivery_errors = true
 
-    config.action_mailer.delivery_method = ENV.fetch("DEV_MAILER") { :letter_opener }.to_sym
+    config.action_mailer.delivery_method = ENV.fetch("DEV_MAILER") { :file }.to_sym
   end
   config.action_mailer.perform_caching = false
 
@@ -63,14 +72,13 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Print deprecation notices to the Rails logger.
-  config.active_support.deprecation = :raise
+  config.active_support.deprecation = :log
 
   # Log disallowed deprecations.
   config.active_support.disallowed_deprecation = :log
 
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
-
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
@@ -89,29 +97,35 @@ Rails.application.configure do
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
+  # Devise requires a default URL
+  config.action_mailer.default_url_options = { host: ENV['FQDN'], port: ENV['PORT'] }
+
+  # don't need email sandbox with letter opener
+  config.sandbox_email_mode = true
+
+  # do gzip compressing in dev mode to simulate nginx config in production
+  config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
+
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   if ENV['ENABLE_EVENT_FS_CHECKER'] == '1'
     config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   end
 
-  # Devise requires a default URL
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'], protocol: :http }
-
-  # don't need email sandbox with letter opener
-  config.sandbox_email_mode = true
-
-  config.force_ssl = false
-  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours)
-
   # Web console from outside of docker
   config.web_console.allowed_ips = ['172.16.0.0/12', '192.168.0.0/16', '10.0.0.0/8']
 
-  # do gzip compressing in dev mode to simulate nginx config in production
-  config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
+  console do
+    if ENV['CONSOLE'] == 'pry'
+      require 'pry-rails'
+      config.console = Pry
+    else
+      require 'irb'
+      config.console = IRB
+    end
+  end
 
-  # Disable hostname checking for puma-dev
-  config.hosts.clear
-
-  I18n.config.available_locales = :en
+  # In order to fix the problem, the following options must be set.
+  routes.default_url_options ||= {}
+  routes.default_url_options[:script_name]= ''
 end

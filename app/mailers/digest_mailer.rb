@@ -5,11 +5,10 @@
 ###
 
 class DigestMailer < ApplicationMailer
+  def digest(user, messages)
+    @messages = messages
+    return unless user.active?
 
-  def digest
-    user = params[:user]
-    @messages = params[:messages]
     mail to: user.email, subject: "#{prefix} #{user.email_schedule} digest"
   end
-
 end
