@@ -66,7 +66,6 @@ gem 'amazing_print'
 
 gem 'puma', '>= 5.6.2'
 gem 'redis'
-gem 'redis-actionpack'
 
 gem 'activerecord-session_store'
 gem 'lograge'
