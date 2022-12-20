@@ -86,7 +86,8 @@
 
   - if help_link || can_edit_help?
     = render 'menus/help'
-
+  - if Rails.env.development?
+    = render 'menus/style_guide'
   %ul.o-menu__group.no-border.list-unstyled
     %li.o-menu__item
       = link_to edit_account_path, class: 'o-menu__link' do
@@ -95,6 +96,7 @@
       = link_to destroy_user_session_path, :method => :delete, class: 'o-menu__link' do
         %span.mr-2 Sign Out
         %i{class: "icon-exit"}
+
 
   %a.js-back-to-top.o-menu__to-top.o-menu__link{ href:'#' }
     Back to Top

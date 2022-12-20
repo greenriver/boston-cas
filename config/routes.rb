@@ -266,16 +266,16 @@ Rails.application.routes.draw do
   resources :help
 
   unless Rails.env.production?
-    resource 'style_guide', only: :none do
-      get 'dnd_match_review'
-      get 'icon_font'
-      get 'match_contacts_modal'
-      get 'stepped_progress'
-      get 'tags'
-      get 'typography'
-      get 'summary'
-      get 'pagination'
-      get 'form'
+    resources 'style_guides', only: :index do
+      get 'dnd_match_review', on: :collection
+      get 'icon_font', on: :collection
+      get 'match_contacts_modal', on: :collection
+      get 'stepped_progress', on: :collection
+      get 'tags', on: :collection
+      get 'typography', on: :collection
+      get 'summary', on: :collection
+      get 'pagination', on: :collection
+      get 'form', on: :collection
     end
   end
 
