@@ -18,8 +18,7 @@ module Warehouse
     end
 
     def fill_cas_vacancy_table!
-      Warehouse::CasVacancy.delete_all
-
+      vacancies = []
       ::Voucher.all.preload(sub_program: :program).each do |voucher|
         vacancy = Warehouse::CasVacancy.new(program_id: voucher.sub_program.program.id, sub_program_id: voucher.sub_program_id)
 
@@ -33,7 +32,11 @@ module Warehouse
         vacancy.first_matched_at = ClientOpportunityMatch.joins(:opportunity).
           where(opportunities: { voucher_id: voucher.id }).maximum(attribute_to_sql(Opportunity, :created_at))
 
-        vacancy.save!
+        vacancies << vacancy
+      end
+      Warehouse::CasVacancy.transaction do
+        Warehouse::CasVacancy.delete_all
+        Warehouse::CasVacancy.import!(vacancies)
       end
     end
 
@@ -75,53 +78,69 @@ module Warehouse
       end
       Warehouse::CasNonHmisClientHistory.transaction do
         Warehouse::CasNonHmisClientHistory.delete_all
-        history.each(&:save!)
+        Warehouse::CasNonHmisClientHistory.import!(history)
       end
     end
 
     def fill_cas_report_table!
-      transaction_wrapper = if Warehouse::Base.enabled?
-        Warehouse::CasReport
-      else
-        Reporting::Decisions
+      report_data = ::Client.joins(:project_client, client_opportunity_matches: :decisions).preload(
+        :project_client,
+        {
+          client_opportunity_matches: [
+            :match_route,
+            :dnd_staff_contacts,
+            :housing_subsidy_admin_contacts,
+            :client_contacts,
+            :shelter_agency_contacts,
+            :ssp_contacts,
+            :hsp_contacts,
+            :match_recommendation_dnd_staff_decision,
+            :match_recommendation_shelter_agency_decision,
+            :confirm_shelter_agency_decline_dnd_staff_decision,
+            :approve_match_housing_subsidy_admin_decision,
+            :confirm_housing_subsidy_admin_decline_dnd_staff_decision,
+            decisions: [
+              :decline_reason,
+              :not_working_with_client_reason,
+              :administrative_cancel_reason,
+              decision_action_events: { contact: :agency },
+            ],
+            opportunity: [voucher: :sub_program],
+            sub_program: :program,
+          ],
+        },
+      ).where(md_b_t[:status].not_eq(nil)).distinct
+
+      match_rows = []
+      report_data.find_each do |client|
+        client_id = client.project_client.id_in_data_source
+        next if client_id.blank?
+
+        data_source = data_source_name(client.project_client.data_source_id)
+        client.client_opportunity_matches.each do |match|
+          match_rows << fill_report_match_rows(client, client_id, data_source, match)
+        end
       end
 
-      transaction_wrapper.transaction do
-        # Replace all CAS data in the warehouse every time
-        Warehouse::CasReport.delete_all if Warehouse::Base.enabled?
-        # Replace reporting decisions data
+      match_rows.flatten!
+
+      # Replace reporting decisions data
+      Reporting::Decisions.transaction do
         Reporting::Decisions.delete_all
+        Reporting::Decisions.import!(match_rows)
+      end
 
-        report_data = ::Client.joins(:project_client, client_opportunity_matches: :decisions).preload(
-          :project_client,
-          {
-            client_opportunity_matches: [
-              :dnd_staff_contacts,
-              :housing_subsidy_admin_contacts,
-              :client_contacts,
-              :shelter_agency_contacts,
-              :ssp_contacts,
-              :hsp_contacts,
-              decisions: [
-                :decline_reason,
-                :not_working_with_client_reason,
-                :administrative_cancel_reason,
-                decision_action_events: { contact: :agency },
-              ],
-              opportunity: [voucher: :sub_program],
-            ],
-          },
-        ).where(md_b_t[:status].not_eq(nil)).distinct
+      return unless Warehouse::Base.enabled?
 
-        report_data.find_each do |client|
-          client_id = client.project_client.id_in_data_source
-          next if client_id.blank?
-
-          data_source = data_source_name(client.project_client.data_source_id)
-          client.client_opportunity_matches.each do |match|
-            fill_report_match_rows(client, client_id, data_source, match)
-          end
-        end
+      warehouse_rows = match_rows.map do |source_row|
+        row = source_row.dup
+        row[:clent_contacts] = row.delete(:client_contacts) # There is a typo in the warehouse schema
+        row.except!(:current_status, :step_tag) # Not in warehouse schema
+      end
+      # Replace all CAS data in the warehouse every time
+      Warehouse::CasReport.transaction do
+        Warehouse::CasReport.delete_all
+        Warehouse::CasReport.import!(warehouse_rows)
       end
     end
 
@@ -143,6 +162,7 @@ module Warehouse
       # Debugging
       # puts decisions.map{|m| [m[:id], m[:type], m.status, m.label, m.label.blank?]}.uniq.inspect
       current_decision = decisions.last
+      rows = []
       decisions.each_with_index do |decision, _idx|
         elapsed_days = (decision.updated_at.to_date - previous_updated_at.to_date).to_i if previous_updated_at
         # we want to be able to report on whether or not the HSA requested a CORI check
@@ -213,18 +233,13 @@ module Warehouse
           actor_type: match.current_decision.try(:actor_type) || 'N/A',
           confidential: program.confidential || sub_program.confidential,
           step_tag: decision.step_tag,
+          client_contacts: contact_details(match.client_contacts),
         }
-
-        # FIXME: A batch insert here would be much faster
-        if Warehouse::Base.enabled?
-          warehouse_row = row.merge(clent_contacts: contact_details(match.client_contacts)) # Misspelled
-          warehouse_row = warehouse_row.except(:current_status, :step_tag) # CAS only
-          Warehouse::CasReport.create!(warehouse_row)
-        end
-        Reporting::Decisions.create!(row.merge(client_contacts: contact_details(match.client_contacts)))
-
+        rows << row
         previous_updated_at = decision.updated_at
       end
+
+      rows
     end
 
     def data_source_name data_source_id

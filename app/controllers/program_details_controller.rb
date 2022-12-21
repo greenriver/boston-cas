@@ -29,7 +29,7 @@ class ProgramDetailsController < ApplicationController
   end
 
   private def set_subprogram
-    @subprogram = @program.sub_programs.find params[:sub_program_id]
+    @subprogram = @program.sub_programs.find_by(id: params[:sub_program_id])
   end
 
   private def program_params

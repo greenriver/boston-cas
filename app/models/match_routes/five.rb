@@ -55,7 +55,6 @@ module MatchRoutes
       ]
     end
 
-
     def contact_label_for(contact_type)
       case contact_type
       when :dnd_staff_contacts
@@ -71,6 +70,15 @@ module MatchRoutes
       when :do_contacts
         _('Route Five Development Officer')
       end
+    end
+
+    def status_declined?(match)
+      [
+        match.five_match_recommendation_decision&.status == 'declined',
+        match.five_client_agrees_decision&.status == 'declined',
+        match.five_screening_decision&.status == 'declined',
+        match.five_mitigation_decision&.status == 'declined',
+      ].any?
     end
   end
 end

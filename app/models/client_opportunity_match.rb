@@ -79,8 +79,6 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 9
   include RouteNineDecisions
 
-  has_one :current_decision
-
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent'
 
@@ -485,14 +483,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def status_declined?
-    dnd_status = match_recommendation_dnd_staff_decision&.status
-    shelter_status = match_recommendation_shelter_agency_decision&.status
-    shelter_override_status = confirm_shelter_agency_decline_dnd_staff_decision&.status
-    shelter_declined = (shelter_status == 'declined' && ! shelter_override_status == 'decline_overridden')
-    hsa_status = approve_match_housing_subsidy_admin_decision&.status
-    hsa_override_status = confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status
-    hsa_declined = (hsa_status == 'declined' && ! hsa_override_status == 'decline_overridden')
-    dnd_status == 'decline' || shelter_declined || hsa_declined
+    match_route.status_declined?(self)
   end
 
   def stalled?
@@ -860,6 +851,37 @@ class ClientOpportunityMatch < ApplicationRecord
     client.do_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :do, contact
     end
+  end
+
+  # List any matches that the client had at the same sub-program within the last year
+  #
+  # @return [Array] hashes of information about matches for this client
+  #   that occurred at the same sub-program and closed within the last
+  #   year. Format
+  # [
+  #   {
+  #     id: match_id,
+  #     terminal_step: 'Step Name',
+  #     terminal_status: 'Label for step',
+  #     terminal_date: timestamp_of_step,
+  #    },
+  # ]
+  def similar_matches
+    @similar_matches ||= client.client_opportunity_matches.closed.
+      where.not(id: id).
+      joins(:initialized_decisions, :sub_program).
+      merge(SubProgram.where(id: sub_program.id)).
+      to_a. # there's a JSON field, it really doesn't like to distinct on
+      uniq.
+      map do |m|
+        decision = m.initialized_decisions.last
+        {
+          id: m.id,
+          terminal_step: decision.step_name,
+          terminal_status: decision.label,
+          terminal_date: decision.updated_at,
+        }
+      end
   end
 
   def self.prioritized_by_client(match_route, scope)

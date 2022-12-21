@@ -133,7 +133,7 @@ module Reporting
     end
 
     def agency_options_for_select
-      Agency.pluck(:name, :id).to_h
+      Agency.order(name: :asc).pluck(:name, :id).to_h
     end
 
     def household_type_options_for_select

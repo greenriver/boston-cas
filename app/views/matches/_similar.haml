@@ -1,0 +1,8 @@
+- if match.similar_matches.present?
+  %h3.detail-box--label
+    Similar Matches
+    %i.icon-info{data: {toggle: :tooltip, title: 'The following matches involved the same client and sub-program.'}}
+  .detail-box--value
+    %dl
+      - match.similar_matches.each do |m|
+        %dd= link_to("#{m[:terminal_status]} on #{m[:terminal_date].to_date}", match_path(m[:id]))

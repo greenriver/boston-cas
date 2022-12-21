@@ -53,5 +53,13 @@ module MatchRoutes
     def show_hearing_date
       false
     end
+
+    def status_declined?(match)
+      [
+        match.seven_match_recommendation_dnd_staff_decision&.status == 'declined',
+        match.seven_approve_match_housing_subsidy_admin_decision&.status == 'declined' &&
+          match.seven_confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status != 'decline_overridden',
+      ].any?
+    end
   end
 end

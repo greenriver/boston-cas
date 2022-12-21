@@ -77,5 +77,17 @@ module MatchRoutes
         'Match stalled – Housing Case Manager has disengaged',
       ].freeze
     end
+
+    def status_declined?(match)
+      [
+        match.four_match_recommendation_dnd_staff_decision&.status == 'declined',
+        match.four_match_recommendation_shelter_agency_decision&.status == 'declined' &&
+          match.four_confirm_shelter_agency_decline_dnd_staff_decision&.status != 'decline_overridden',
+        match.four_match_recommendation_hsa_decision&.status == 'declined' &&
+          match.four_confirm_hsa_initial_decline_dnd_staff_decision&.status != 'decline_overridden',
+        match.four_approve_match_housing_subsidy_admin_decision&.status == 'declined' &&
+          match.four_confirm_housing_subsidy_admin_decline_dnd_staff_decision != 'decline_overridden',
+      ].any?
+    end
   end
 end

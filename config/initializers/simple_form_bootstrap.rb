@@ -28,9 +28,9 @@ SimpleForm.setup do |config|
     b.use :label
 
     b.wrapper tag: 'div', class: 'controls' do |ba|
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block label-helper label-helper--info' }
       ba.use :error, wrap_with: { tag: 'p', class: 'error-block' }
       ba.use :input, class: 'form-control'
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block label-helper label-helper--info' }
     end
   end
 
@@ -45,7 +45,7 @@ SimpleForm.setup do |config|
 
     b.use :input, class: 'form-control'
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
-    b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    b.use :hint, wrap_with: { tag: 'small', class: 'form-text' }
   end
 
   config.wrappers :vertical_form_hint_first, tag: 'div', class: 'form-group', error_class: 'error' do |b|
@@ -187,7 +187,7 @@ SimpleForm.setup do |config|
   # Check the Bootstrap docs (http://getbootstrap.com)
   # to learn about the different styles for forms and inputs,
   # buttons and other elements.
-  config.default_wrapper = :vertical_form_hint_first
+  config.default_wrapper = :vertical_form
   config.wrapper_mappings = {
     check_boxes: :vertical_radio_and_checkboxes,
     radio_buttons: :vertical_radio_and_checkboxes,

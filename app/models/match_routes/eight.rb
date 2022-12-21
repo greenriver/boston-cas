@@ -85,5 +85,17 @@ module MatchRoutes
         :housing_subsidy_admin_contacts,
       ]
     end
+
+    def status_declined?(match)
+      [
+        match.eight_match_recommendation_decision&.status == 'declined',
+        match.eight_assign_manager_decision&.status == 'declined' &&
+          match.eight_confirm_assign_manager_decline_decision&.status != 'decline_overridden',
+        match.eight_record_voucher_date_decision&.status == 'declined' &&
+          match.eight_confirm_voucher_decline_decision&.status != 'decline_overridden',
+        match.eight_lease_up_decision&.status == 'declined' &&
+          match.eight_confirm_lease_up_decline_decision&.status != 'decline_overridden',
+      ].any?
+    end
   end
 end
