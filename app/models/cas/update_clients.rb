@@ -295,6 +295,7 @@ module Cas
         :no_single_gender,
         :transgender,
         :questioning,
+        :file_tags,
       ]
     end
 
