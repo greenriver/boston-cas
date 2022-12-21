@@ -86,6 +86,7 @@ gem 'redcarpet'
 
 gem 'authtrail' # for logging login attempts
 gem 'maxminddb' # for local geocoding of login attempts
+gem 'geocoder'
 
 gem 'attribute_normalizer'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
@@ -110,9 +111,9 @@ gem 'dotenv-rails'
 gem 'auto-session-timeout'
 
 # Translations
-gem 'fast_gettext', require: false
-gem 'gettext', '>=3.0.2', require: false
-gem 'gettext_i18n_rails', require: false
+gem 'fast_gettext'
+gem 'gettext', '>=3.0.2'
+gem 'gettext_i18n_rails'
 gem 'grosser-pomo'
 gem 'ruby_parser', require: false
 
