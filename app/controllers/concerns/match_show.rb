@@ -50,7 +50,7 @@ module MatchShow
           OpenStruct.new(Hash[columns.keys.zip(row)])
         end
       @files = Warehouse::Tag.find(file_tag_ids).map do |tag|
-        file = available_files.detect { |f| f.tag_id == tag.tag_id }
+        file = available_files.detect { |f| f.tag_id == tag.id }
         required = tag.id.in?(required_tag_ids)
         if file
           [tag.name, [required, file]]
