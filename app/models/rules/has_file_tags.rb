@@ -21,6 +21,10 @@ class Rules::HasFileTags < Rule
     value_as_array(value).join(', ')
   end
 
+  def associated_file_tags(value)
+    Warehouse::Tag.where(name: value_as_array(value)).pluck(:id)
+  end
+
   def clients_that_fit(scope, requirement, _opportunity)
     raise RuleDatabaseStructureMissing.new("clients.file_tags missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:file_tags.to_s)
 

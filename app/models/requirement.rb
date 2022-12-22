@@ -46,4 +46,8 @@ class Requirement < ApplicationRecord
 
     rule.apply_to_match(match)
   end
+
+  def associated_file_tags
+    rule&.associated_file_tags(variable)
+  end
 end

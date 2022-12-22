@@ -884,6 +884,10 @@ class ClientOpportunityMatch < ApplicationRecord
       end
   end
 
+  def associated_file_tags
+    sub_program.file_tags.pluck(:tag_id) + requirements_with_inherited.map(&:associated_file_tags).flatten.compact
+  end
+
   def self.prioritized_by_client(match_route, scope)
     match_route.match_prioritization.prioritization_for_clients(scope)
   end
