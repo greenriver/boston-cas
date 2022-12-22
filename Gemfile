@@ -1,7 +1,7 @@
 # A sample Gemfile
 source 'https://rubygems.org'
 
-gem 'activerecord', '>= 6.1.7' # >= 6.0.5.1 due to CVE-2022-32224
+gem 'activerecord'
 gem 'activerecord-import'
 gem 'pg', '~> 1.1.0'
 gem 'rails', '~>6.1.7'

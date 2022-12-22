@@ -21,8 +21,6 @@ Rails.application.configure do
 
   # config.assets.js_compressor = :terser
 
-  # Enable/disable caching. By default caching is disabled.
-  # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
@@ -61,7 +59,7 @@ Rails.application.configure do
       }
     end
   else
-    # Don't care if the mailer can't send.
+    # Raise on delivery errors since CAS is basically a mail sending tool
     config.action_mailer.raise_delivery_errors = true
 
     config.action_mailer.delivery_method = ENV.fetch("DEV_MAILER") { :file }.to_sym
@@ -99,8 +97,6 @@ Rails.application.configure do
 
   # Devise requires a default URL
   config.action_mailer.default_url_options = { host: ENV['FQDN'], port: ENV['PORT'] }
-
-  # don't need email sandbox with letter opener
   config.sandbox_email_mode = true
 
   # do gzip compressing in dev mode to simulate nginx config in production
@@ -125,7 +121,6 @@ Rails.application.configure do
     end
   end
 
-  # In order to fix the problem, the following options must be set.
   routes.default_url_options ||= {}
   routes.default_url_options[:script_name]= ''
 end

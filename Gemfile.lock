@@ -674,7 +674,7 @@ DEPENDENCIES
   StreetAddress
   active_record_distinct_on
   active_record_query_trace
-  activerecord (>= 6.1.7)
+  activerecord
   activerecord-import
   activerecord-session_store
   ajax_modal_rails (~> 1.0)
