@@ -56,7 +56,7 @@ module MatchRoutes
       [
         match.set_asides_hsa_accepts_client_decision&.status == 'declined' &&
           match.set_asides_confirm_hsa_accepts_client_decline_dnd_staff_decision&.status != 'decline_overridden',
-        match.set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator_decision&.status &&
+        match.set_asides_record_client_housed_date_or_decline_housing_subsidy_administrator_decision&.status == 'declined' &&
           match.set_asides_confirm_hsa_accepts_client_decline_dnd_staff_decision&.status != 'decline_overridden',
       ].any?
     end
