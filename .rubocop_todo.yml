@@ -58,7 +58,6 @@ Layout/ClosingHeredocIndentation:
 # Cop supports --auto-correct.
 Layout/ClosingParenthesisIndentation:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
 
 # Offense count: 4
@@ -625,7 +624,6 @@ Layout/MultilineBlockLayout:
 # SupportedStyles: symmetrical, new_line, same_line
 Layout/MultilineMethodCallBraceLayout:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
@@ -649,7 +647,6 @@ Layout/SpaceAfterColon:
 # Cop supports --auto-correct.
 Layout/SpaceAfterComma:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
@@ -1255,7 +1252,6 @@ Naming/PredicateName:
 # Cop supports --auto-correct.
 Security/YAMLLoad:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -1307,13 +1303,11 @@ Style/ClassEqualityComparison:
 # Offense count: 2
 Style/ClassVars:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/ColonMethodCall:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -1445,7 +1439,6 @@ Style/GuardClause:
 # SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
 Style/HashSyntax:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
@@ -1468,7 +1461,6 @@ Style/IfUnlessModifier:
   Exclude:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/rules_controller.rb'
@@ -1640,7 +1632,6 @@ Style/RegexpLiteral:
 # Cop supports --auto-correct.
 Style/RescueModifier:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/warehouse/base.rb'
@@ -1793,7 +1784,6 @@ Style/TernaryParentheses:
 Style/TrailingCommaInArguments:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'

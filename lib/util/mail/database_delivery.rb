@@ -10,6 +10,7 @@ module Mail
       subject = ApplicationMailer.remove_prefix(mail.subject)
       from = mail[:from]&.to_s || ENV['DEFAULT_FROM']
       Rails.logger.fatal 'no DEFAULT_FROM specified in .env; mail cannot be sent' if from.nil?
+      delivery_method_options = @parameters
 
       Contact.where(email: mail[:to].addresses).each do |contact|
         # store the "email" in the database
@@ -24,7 +25,7 @@ module Mail
         next unless user.blank? || user.continuous_email_delivery?
 
         10.times do
-          ::ImmediateMailer.immediate(message, contact.email).deliver_now
+          ::ImmediateMailer.immediate(message, contact.email, **delivery_method_options).deliver_now
           message.update(sent_at: Time.current, seen_at: Time.current)
           break
         rescue Net::SMTPAuthenticationError

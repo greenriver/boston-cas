@@ -7,38 +7,33 @@
 module RouteFiveMailerMethods
   extend ActiveSupport::Concern
   included do
-    def match_recommendation
-      notification = params[:notification]
+    def match_recommendation(notification = nil)
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
     end
 
-    def client_agrees
-      notification = params[:notification]
+    def client_agrees(notification = nil)
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
     end
 
-    def submit_application
-      notification = params[:notification]
+    def application_submission(notification = nil)
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match ready for review')
     end
 
-    def screening
-      notification = params[:notification]
+    def screening(notification)
+      # notification = params[:notification]
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match is ready for client screening')
     end
 
-    def mitigation
-      notification = params[:notification]
+    def mitigation(notification = nil)
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match requires mitigation')
     end
 
-    def lease_up
-      notification = params[:notification]
+    def lease_up(notification = nil)
       setup_instance_variables notification
       mail(to: @contact.email, subject: 'Match is awaiting move in')
     end
