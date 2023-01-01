@@ -54,6 +54,4 @@
           %i.icon-filter
           Filter
 
-= content_for :page_js do
-  :javascript
-    $('select').select2();
+= render 'init_filter_select2'
