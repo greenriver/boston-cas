@@ -10,7 +10,7 @@
 - editable = current_user&.can_edit_match_contacts? || current_contact&.user_can_edit_match_contacts? || (hsa_can_edit_contacts? && contacts_type == 'housing_subsidy_admin')
 
 - if editable
-  = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, include_blank: true, input_html: {class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name}}
+  = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, include_blank: true, input_html: {id: "#{contact_type}_#{SecureRandom.hex(5)}", class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name}}
   %div{ data: {selected_contacts: true} }
     - object.send(selected_contacts_method)&.each do |contact|
       .selected-contact.c-contact-list__contact.margin-0

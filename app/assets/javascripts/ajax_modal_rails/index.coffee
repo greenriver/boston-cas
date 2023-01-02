@@ -35,7 +35,7 @@ class window.AjaxModal
         complete: (xhr, status) =>
           @loading.hide()
           @content.html xhr.responseText
-          @content.find('.select2').select2({ dropdownParent: @content })
+          @content.find('select.select2').select2({ dropdownParent: @content })
           @open
 
   _registerForms: ->
@@ -55,7 +55,7 @@ class window.AjaxModal
         complete: (xhr, status) =>
           @loading.hide()
           @content.html xhr.responseText
-          @content.find('.select2').select2({ dropdownParent: @content })
+          @content.find('select.select2').select2({ dropdownParent: @content })
           @open
       return false
 
