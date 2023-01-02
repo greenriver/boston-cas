@@ -3,8 +3,7 @@
   sheet = Rails.root.join('app', 'assets', 'stylesheets', '_custom', "#{ENV['CLIENT']}.scss")
   if ENV['CLIENT'].present? && File.exists?(sheet)
 %>
-/* @import "./_custom/<%=ENV['CLIENT']%>"; */
-@import "./_custom/hforward";
+  @import "./_custom/<%=ENV['CLIENT']%>";
 <% end %>
 <%
   sheet = Rails.root.join('app', 'assets', 'stylesheets', '_custom', 'env', "#{ENV['RAILS_ENV']}.scss")
