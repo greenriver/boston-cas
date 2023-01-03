@@ -21,11 +21,11 @@
 
       .o-filtration__option
         %label.d-block Family Member?
-        = select_tag :family_member, options_from_collection_for_select({true: "Yes", false: "No"}, :first, :last, params[:family_member]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :family_member, options_from_collection_for_select({true: "Yes", false: "No"}, :first, :last, params[:family_member]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__option
         %label.d-block Available?
-        = select_tag :available, options_from_collection_for_select([['Yes', true], ['No', false]], :last, :first, params[:available]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :available, options_from_collection_for_select([['Yes', true], ['No', false]], :last, :first, params[:available]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__actions.form__actions
         = link_to imported_clients_path(params.permit(:sort, :direction, :q)), class: 'btn btn-light' do
@@ -35,4 +35,4 @@
           %i.icon-filter
           Filter
 
-= render 'init_filter_select2'
+= render 'init_select2'

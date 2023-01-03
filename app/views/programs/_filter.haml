@@ -21,7 +21,7 @@
         = hidden_field_tag :q, params[:q]
 
       .o-filtration__option
-        %select{name: :current_route, style: 'width: 100%;'}
+        %select.select2{name: :current_route, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} Show all Match Routes
           - @available_routes.each do |label,value|
             - selected = @current_route == value
@@ -42,4 +42,4 @@
           %i.icon-filter
           Filter
 
-= render 'init_filter_select2'
+= render 'init_select2'

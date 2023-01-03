@@ -22,7 +22,7 @@
         = hidden_field_tag :tab, params[:tab]
 
       .o-filtration__option
-        %select.mb-4{name: :status, style: 'width: 100%;'}
+        %select.select2.mb-4{name: :status, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} Filter by Status
           - Opportunity.available_stati.each do |t|
             - selected = @match_status == t
@@ -30,7 +30,7 @@
 
       .o-filtration__option
         %label.d-block Voucher Type
-        %select.mb-4{name: :program_type, style: 'width: 100%;'}
+        %select.select2.mb-4{name: :program_type, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} All
           - SubProgram.types.each do |t|
             - selected = @program_type == t[:value]
@@ -38,7 +38,7 @@
 
       .o-filtration__option
         %label.d-block Active Matches
-        %select.mb-4{name: :max_actives, style: 'width: 100%;'}
+        %select.select2.mb-4{name: :max_actives, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} All Vacancies
           - selected = @max_actives == 1
           %option{value: 1, selected: selected} Un-matched Vacancies
@@ -54,4 +54,4 @@
           %i.icon-filter
           Filter
 
-= render 'init_filter_select2'
+= render 'init_select2'

@@ -21,26 +21,26 @@
 
       .o-filtration__option
         %label.d-block Agency
-        = select_tag :agency, options_for_select(NonHmisClient.possible_agencies, params[:agency]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :agency, options_for_select(NonHmisClient.possible_agencies, params[:agency]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__option
         %label.d-block Assessment Type
         - assessment_types = NonHmisAssessment.known_assessment_types.select { |klass_name| klass_name.include?('Identified') }
         - assessment_options = assessment_types.map { |klass_name| [ klass_name.constantize.new.title, klass_name] }
-        = select_tag :assessment, options_for_select(assessment_options, params[:assessment]), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :assessment, options_for_select(assessment_options, params[:assessment]), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       - unless pathways_enabled?
         .o-filtration__option
           %label.d-block Cohort
-          = select_tag :cohort, options_from_collection_for_select(NonHmisClient.possible_cohorts, :first, :last, params[:cohort]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+          = select_tag :cohort, options_from_collection_for_select(NonHmisClient.possible_cohorts, :first, :last, params[:cohort]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__option
         %label.d-block Family Member?
-        = select_tag :family_member, options_from_collection_for_select({true: "Yes", false: "No"}, :first, :last, params[:family_member]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :family_member, options_from_collection_for_select({true: "Yes", false: "No"}, :first, :last, params[:family_member]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__option
         %label.d-block Available?
-        = select_tag :available, options_from_collection_for_select([['Yes', true], ['No', false]], :last, :first, params[:available]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :available, options_from_collection_for_select([['Yes', true], ['No', false]], :last, :first, params[:available]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__actions.form__actions
         = link_to identified_clients_path(params.permit(:sort, :direction, :q)), class: 'btn btn-light' do
@@ -50,4 +50,4 @@
           %i.icon-filter
           Filter
 
-= render 'init_filter_select2'
+= render 'init_select2'
