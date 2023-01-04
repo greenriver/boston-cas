@@ -14,13 +14,15 @@ class Rule < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
-  def always_apply?; false; end
+  def always_apply?
+    false
+  end
 
-  def clients_that_fit(scope, requirement, opportunity=nil)
+  def clients_that_fit(_scope, _requirement, _opportunity = nil)
     raise "You need to define clients_that_fit on your Rule subclass #{self.class}."
   end
 
-  def requirement_implied_by(requirements)
+  def requirement_implied_by(_requirements)
     nil
     # Somewhat hard-coded logic (defined in subclasses) giving you a
     # requirement for this rule which a client will
@@ -39,12 +41,16 @@ class Rule < ApplicationRecord
     false
   end
 
-  def display_for_variable value
+  def display_for_variable(_value)
     nil
   end
 
   def apply_to_match(match)
   end
+
+  def associated_file_tags(_value)
+    []
+  end
 end
 
-class RuleDatabaseStructureMissing < StandardError ; end
+class RuleDatabaseStructureMissing < StandardError; end
