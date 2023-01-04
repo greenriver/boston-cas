@@ -1,0 +1,3 @@
+- rule = has_file_tags
+%h4 Required Documentation
+= select_tag(:variable, options_from_collection_for_select(rule.available_tags, :first, :last), class: 'variable', name: 'variable', multiple: true, id: "variable_#{rule.id}", data: { options: rule.available_tags.to_json })

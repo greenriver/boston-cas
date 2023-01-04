@@ -663,7 +663,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
   Exclude:
     - 'app/controllers/reports/parked_clients_controller.rb'
     - 'app/models/message.rb'
-    - 'app/models/rule.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -712,7 +711,6 @@ Layout/SpaceBeforeFirstArg:
 # Cop supports --auto-correct.
 Layout/SpaceBeforeSemicolon:
   Exclude:
-    - 'app/models/rule.rb'
 
 # Offense count: 37
 # Cop supports --auto-correct.
@@ -1058,7 +1056,6 @@ Lint/UnusedMethodArgument:
   Exclude:
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/rule.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'
     - 'app/models/rules/age_greater_than_fifty_five.rb'
@@ -1676,7 +1673,6 @@ Style/Semicolon:
 # Configuration parameters: AllowIfMethodIsEmpty.
 Style/SingleLineMethods:
   Exclude:
-    - 'app/models/rule.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
