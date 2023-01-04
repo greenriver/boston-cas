@@ -7,7 +7,7 @@
 .detail-box--value
   - if @show_files
     -# Show the most recent version of any matching files
-    - @files.each do |tag, (required, file)|
+    - @files.each do |tag, (required, source, file)|
       .file
         - if required
           *
@@ -16,5 +16,6 @@
           = link_to tag, Config.get(:warehouse_url) + "/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
         - else
           = tag
+        %em.detail-box--requirement-source= "(#{source})"
   - else
     None

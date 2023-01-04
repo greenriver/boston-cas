@@ -48,7 +48,8 @@ class Rule < ApplicationRecord
   def apply_to_match(match)
   end
 
-  def associated_file_tags(value)
+  def associated_file_tags(_value)
+    []
   end
 end
 

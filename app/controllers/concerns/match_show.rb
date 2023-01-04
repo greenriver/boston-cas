@@ -27,7 +27,8 @@ module MatchShow
     @sub_program = @match.sub_program
     @program = @match.program
     can_see_client_details = @client&.has_full_housing_release?(@opportunity.match_route) || can_view_all_clients?
-    file_tag_ids = @match.associated_file_tags
+    file_tags = @match.associated_file_tags
+    file_tag_ids = file_tags.keys
     required_tag_ids = file_tag_ids - @sub_program.file_tags.pluck(:tag_id)
     sub_program_has_files = file_tag_ids.size.positive?
 
@@ -53,9 +54,9 @@ module MatchShow
         file = available_files.detect { |f| f.tag_id == tag.id }
         required = tag.id.in?(required_tag_ids)
         if file
-          [tag.name, [required, file]]
+          [tag.name, [required, file_tags[tag.id], file]]
         else
-          [tag.name, [required, nil]]
+          [tag.name, [required, file_tags[tag.id], nil]]
         end
       end.to_h
     end
