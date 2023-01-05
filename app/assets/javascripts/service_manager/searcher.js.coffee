@@ -7,7 +7,7 @@ class App.ServiceManager.Searcher
     @placeholder = "Start typing name or select from list."
     @_init_select2()
     @_init_select_listener()
-    
+
   _init_select2: ->
     $(@element).select2
       theme: 'bootstrap'
@@ -16,7 +16,7 @@ class App.ServiceManager.Searcher
       allowClear: true
     # fix select2 container width in modals
     $('.select2-container').attr 'style', 'width: 100%;'
-  
+
   _init_select_listener: ->
     $(@element).on 'change', (evt) =>
       @controller.show_loading_spinner =>
@@ -26,13 +26,13 @@ class App.ServiceManager.Searcher
         @reset()
         @controller.select_service selected_service
         @controller.hide_loading_spinner()
-  
+
   reset: ->
     $(@element).val("")
     $(@element).select2 'destroy'
     $(@element).find('option').remove()
     @_init_select2()
-  
+
   _select2_data: ->
     result = [{id: "", text: ""}]
     result = result.concat @available_services.map (service) => {text: "#{service.name}", id: service.id}

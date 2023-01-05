@@ -8,7 +8,7 @@ def enable_transation_db?
   return false if ENV['DISABLE_FAST_GETTEXT_DB']
   # db access is cached <-> only first lookup hits the db
   ActiveRecord::Base.connection
-rescue ActiveRecord::NoDatabaseError, PG::ConnectionBad
+rescue ActiveRecord::NoDatabaseError, PG::ConnectionBad, ActiveRecord::ConnectionNotEstablished
   false
 else
   true

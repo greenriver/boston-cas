@@ -74,7 +74,7 @@ module MatchDecisions::Nine
       end
 
       def decline_confirmed
-        Notifications::Nine::VoucherDeclineAccepted.create_for_match! match
+        Notifications::Nine::MatchRejected.create_for_match! match
         match.rejected!
       end
 

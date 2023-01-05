@@ -109,6 +109,7 @@ jobs:
           DEFAULT_FROM: greenriver.testing@mailinator.com
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           HOSTNAME: openpath.host
+          FQDN: openpath.host
           PORT: 80
         run: |
           bundle exec rspec

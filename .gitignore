@@ -19,6 +19,7 @@ capybara-*.html
 rerun.txt
 pickle-email-*.html
 .irb-history
+.pry_history
 .vscode/
 TAGS
 yarn-error.log

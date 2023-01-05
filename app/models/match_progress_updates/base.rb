@@ -17,35 +17,28 @@ module MatchProgressUpdates
       'match_progress_updates/progress_update'
     end
 
-    belongs_to :match,
-      class_name: ClientOpportunityMatch.name,
-      inverse_of: :status_updates
+    belongs_to :match, class_name: ClientOpportunityMatch.name, inverse_of: :status_updates
 
-    belongs_to :notification,
-      class_name: Notifications::Base.name
+    belongs_to :notification, class_name: Notifications::Base.name
 
-    belongs_to :contact,
-      inverse_of: :status_updates
-    delegate :name, to: :contact, allow_nil: :true, prefix: true
+    belongs_to :contact, inverse_of: :status_updates
+    delegate :name, to: :contact, allow_nil: true, prefix: true
 
-    belongs_to :decision,
-      class_name: MatchDecisions::Base.name
+    belongs_to :decision, class_name: MatchDecisions::Base.name
 
     has_one :match_route, through: :match
     delegate :stalled_interval, to: :match_route
 
     scope :incomplete, -> do
-      mpu_t = arel_table
       joins(:match).
-      merge(ClientOpportunityMatch.stalled).
-      where(submitted_at: nil)
-      # where(mpu_t[:due_at].lteq(Time.new))
+        merge(ClientOpportunityMatch.stalled).
+        where(submitted_at: nil)
     end
 
-    scope :incomplete_for_contact, -> (contact_id:) do
+    scope :incomplete_for_contact, ->(contact_id:) do
       incomplete.
-      where.not(requested_at: nil).
-      where(contact_id: contact_id)
+        where.not(requested_at: nil).
+        where(contact_id: contact_id)
     end
 
     scope :complete, -> do
@@ -56,9 +49,9 @@ module MatchProgressUpdates
     scope :should_notify_dnd, -> do
       mpu_t = arel_table
       incomplete.
-      where.not(requested_at: nil).
-      where(mpu_t[:requested_at].lteq(dnd_interval.ago)).
-      where(dnd_notified_at: nil)
+        where.not(requested_at: nil).
+        where(mpu_t[:requested_at].lteq(dnd_interval.ago)).
+        where(dnd_notified_at: nil)
     end
 
     alias_attribute :timestamp, :submitted_at
@@ -113,7 +106,7 @@ module MatchProgressUpdates
       editing_contact.present? && (contact == editing_contact || match.can_create_administrative_note?(editing_contact))
     end
 
-    def is_editable?
+    def is_editable? # rubocop:disable Naming/PredicateName
       response.blank? && match.stalled?
     end
 
@@ -127,19 +120,19 @@ module MatchProgressUpdates
     end
 
     def self.create_for_match! match
-      match.public_send(self.match_contact_scope).each do |contact|
-
+      match.public_send(match_contact_scope).each do |contact|
         where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
     end
+
     def self.match_contact_scope
       raise 'Abstract method'
     end
 
     def note_required_if_other!
-      if response.present? && response_requires_note? && note.strip.blank?
-        errors.add :note, "must be filled in for some options"
-      end
+      return unless response.present? && response_requires_note? && note.strip.blank?
+
+      errors.add :note, 'must be filled in for some options'
     end
 
     def response_requires_note?
@@ -167,10 +160,10 @@ module MatchProgressUpdates
         match_ids.each do |match_id|
           notifications << Notifications::ProgressUpdateRequested.create_for_match!(
             match_id: match_id,
-            contact_id: contact_id
+            contact_id: contact_id,
           )
         end
-        NotificationsMailer.with(notification_ids: notifications.map(&:id)).progress_update_requested.deliver_later
+        NotificationsMailer.progress_update_requested(notifications.map(&:id)).deliver_later
         notifications.each(&:record_delivery_event!)
       end
       # make note on all matches that a notification was sent
@@ -199,10 +192,10 @@ module MatchProgressUpdates
         match_ids.each do |match_id|
           notifications << Notifications::DndProgressUpdateLate.create_for_match!(
             match_id: match_id,
-            contact_id: contact_id
+            contact_id: contact_id,
           )
         end
-        NotificationsMailer.with(notification_ids: notifications.map(&:id)).dnd_progress_update_late.deliver_later
+        NotificationsMailer.dnd_progress_update_late(notifications.map(&:id)).deliver_later
         notifications.each(&:record_delivery_event!)
       end
       # make note on all matches that a notification was sent
@@ -230,6 +223,5 @@ module MatchProgressUpdates
     def next_step_number(step_number)
       step_number # default to staying the same
     end
-
   end
 end

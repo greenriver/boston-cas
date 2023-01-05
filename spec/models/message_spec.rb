@@ -1,43 +1,44 @@
 require 'rails_helper'
-include ActiveJob::TestHelper
+
 RSpec.describe Message, type: :model do
-  before { clear_enqueued_jobs }
-  let!(:contact) { create :contact, email: "noreply@greenriver.com" }
+  include ActiveJob::TestHelper
+  ActiveJob::Base.queue_adapter = :test
+  let!(:contact) { create :contact, email: 'noreply@greenriver.com' }
 
   describe 'When no user is connected to a contact' do
     describe 'Sending a message with deliver_now' do
-      it 'creates a message' do 
+      it 'creates a message' do
         expect do
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_now
-        end.to change{Message.count}.by(1)
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.to change { Message.count }.by(1)
       end
 
       it 'sends a message' do
         expect do
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_now
+          TestDatabaseMailer.ping(contact.email).deliver_now
         end.to change { ActionMailer::Base.deliveries.size }.by(1)
       end
     end
 
     describe 'Sending a message with deliver_later' do
-      it 'enqueues a job' do 
-        expect {
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-        }.to have_enqueued_job.on_queue('mailers')
+      it 'enqueues a job' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_later
+        end.to have_enqueued_job(ActionMailer::MailDeliveryJob)
       end
 
-      it 'creates a message' do 
-        perform_enqueued_jobs do 
+      it 'creates a message' do
+        perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-          end.to change{Message.count}.by(1)
+            TestDatabaseMailer.ping(contact.email).deliver_later
+          end.to change { Message.count }.by(1)
         end
       end
 
       it 'sends a message' do
-        perform_enqueued_jobs do 
+        perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
+            TestDatabaseMailer.ping(contact.email).deliver_later
           end.to change { ActionMailer::Base.deliveries.size }.by(1)
         end
       end
@@ -47,38 +48,38 @@ RSpec.describe Message, type: :model do
     let!(:user) { create :user, contact: contact, email_schedule: 'immediate' }
 
     describe 'Sending a message with deliver_now' do
-      it 'creates a message' do 
+      it 'creates a message' do
         expect do
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_now
-        end.to change{Message.count}.by(1)
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.to change { Message.count }.by(1)
       end
 
       it 'sends a message' do
         expect do
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_now
+          TestDatabaseMailer.ping(contact.email).deliver_now
         end.to change { ActionMailer::Base.deliveries.size }.by(1)
       end
     end
 
     describe 'Sending a message with deliver_later' do
-      it 'enqueues a job' do 
-        expect {
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-        }.to have_enqueued_job.on_queue('mailers')
+      it 'enqueues a job' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_later
+        end.to have_enqueued_job(ActionMailer::MailDeliveryJob)
       end
 
-      it 'creates a message' do 
-        perform_enqueued_jobs do 
+      it 'creates a message' do
+        perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-          end.to change{Message.count}.by(1)
+            TestDatabaseMailer.ping(contact.email).deliver_later
+          end.to change { Message.count }.by(1)
         end
       end
 
       it 'sends a message' do
-        perform_enqueued_jobs do 
+        perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
+            TestDatabaseMailer.ping(contact.email).deliver_later
           end.to change { ActionMailer::Base.deliveries.size }.by(1)
         end
       end
@@ -89,38 +90,38 @@ RSpec.describe Message, type: :model do
     let!(:user) { create :user, contact: contact, email_schedule: 'daily' }
 
     describe 'Sending a message with deliver_now' do
-      it 'creates a message' do 
+      it 'creates a message' do
         expect do
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_now
-        end.to change{Message.count}.by(1)
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.to change { Message.count }.by(1)
       end
 
       it 'does not send a message' do
         expect do
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_now
+          TestDatabaseMailer.ping(contact.email).deliver_now
         end.to change { ActionMailer::Base.deliveries.size }.by(0)
       end
     end
 
     describe 'Sending a message with deliver_later' do
-      it 'enqueues a job' do 
-        expect {
-          TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-        }.to have_enqueued_job.on_queue('mailers')
+      it 'enqueues a job' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_later
+        end.to have_enqueued_job(ActionMailer::MailDeliveryJob)
       end
 
-      it 'creates a message' do 
-        perform_enqueued_jobs do 
+      it 'creates a message' do
+        perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-          end.to change{Message.count}.by(1)
+            TestDatabaseMailer.ping(contact.email).deliver_later
+          end.to change { Message.count }.by(1)
         end
       end
 
       it 'does not send a message' do
-        perform_enqueued_jobs do 
+        perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
+            TestDatabaseMailer.ping(contact.email).deliver_later
           end.to change { ActionMailer::Base.deliveries.size }.by(0)
         end
       end
@@ -128,12 +129,11 @@ RSpec.describe Message, type: :model do
       it 'running daily messages task sends a message' do
         perform_enqueued_jobs do
           expect do
-            TestDatabaseMailer.with(email: contact.email).ping.deliver_later
-            MessageJob.new('daily').perform  
+            TestDatabaseMailer.ping(contact.email).deliver_later
+            MessageJob.new('daily').perform
           end.to change { ActionMailer::Base.deliveries.size }.by(1)
         end
       end
     end
   end
-
 end
