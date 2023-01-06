@@ -29,6 +29,11 @@ module CasSeeds
       ['Health and Safety', nil],
     ].freeze
 
+    LIMITED_HSA_REASONS = [
+      ['Client needs higher level of care', PROVIDER_REJECTED],
+      ['Unable to reach client after multiple attempts', nil],
+    ].freeze
+
     HSA_PROVIDER_ONLY_REASONS = [
       ['Household could not be located', nil],
       ['Ineligible for Housing Program', nil],
@@ -82,6 +87,8 @@ module CasSeeds
       ['Shelter Agency has disengaged', nil],
       ['Housing Case Manager has disengaged', nil],
       ['Match stalled – Housing Case Manager has disengaged', nil],
+      ['Client needs higher level of care', nil],
+      ['Unable to reach client after multiple attempts', nil],
     ].freeze
 
     NINE_CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS = [].freeze
@@ -117,6 +124,11 @@ module CasSeeds
     private def create_hsa_reasons!
       HSA_REASONS.each do |reason_name, referral_result|
         reason = ::MatchDecisionReasons::HousingSubsidyAdminDecline.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
+      end
+
+      LIMITED_HSA_REASONS.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::HousingSubsidyAdminDecline.where(name: reason_name, limited: true).first_or_create!
         reason.update(referral_result: referral_result)
       end
     end

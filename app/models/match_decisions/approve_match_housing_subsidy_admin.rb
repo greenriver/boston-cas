@@ -119,7 +119,7 @@ module MatchDecisions
       elsif contact.in?(match.shelter_agency_contacts)
         MatchDecisionReasons::ShelterAgencyDecline.all
       else
-        MatchDecisionReasons::HousingSubsidyAdminDecline.active
+        MatchDecisionReasons::HousingSubsidyAdminDecline.available
       end
     end
 

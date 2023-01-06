@@ -106,7 +106,7 @@ module MatchDecisions::Eight
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::HousingSubsidyAdminDecline.available(route: match_route)
     end
 
     def whitelist_params_for_update params

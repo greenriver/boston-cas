@@ -96,7 +96,7 @@ module MatchDecisions::Seven
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::HousingSubsidyAdminDecline.available
     end
 
     class StatusCallbacks < StatusCallbacks
