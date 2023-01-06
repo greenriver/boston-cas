@@ -1054,7 +1054,6 @@ Lint/UnusedBlockArgument:
 # Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods.
 Lint/UnusedMethodArgument:
   Exclude:
-    - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'

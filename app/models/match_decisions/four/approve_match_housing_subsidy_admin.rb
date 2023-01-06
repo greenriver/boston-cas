@@ -91,7 +91,7 @@ module MatchDecisions::Four
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of(contact:) # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
@@ -105,7 +105,7 @@ module MatchDecisions::Four
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::HousingSubsidyAdminDecline.available
     end
 
     class StatusCallbacks < StatusCallbacks

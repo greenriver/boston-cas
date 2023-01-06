@@ -86,7 +86,7 @@ module MatchDecisions::Five
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.all
+      MatchDecisionReasons::HousingSubsidyAdminDecline.available
     end
 
     private def save_will_accept?

@@ -92,7 +92,7 @@ module MatchDecisions::Eight
     end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::HousingSubsidyAdminDecline.available(route: match_route)
     end
 
     class StatusCallbacks < StatusCallbacks
