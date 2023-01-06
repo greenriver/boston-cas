@@ -6,7 +6,7 @@
 
 module MatchDecisionReasons
   class HousingSubsidyAdminDecline < Base
-    def self.available(include_other: true, route: nil) # rubocop:disable Lint/UnusedMethodArgument
+    def self.available(include_other: false, route: nil)
       other = MatchDecisionReasons::Other.first
       # none = OpenStruct.new(name: 'None', id: nil)
       av = active.to_a
@@ -15,7 +15,7 @@ module MatchDecisionReasons
         av.reject! { |reason| route.removed_hsa_reasons.include?(reason.name) } if route.removed_hsa_reasons.any?
         av += limited.where(name: route.additional_hsa_reasons).to_a if route.additional_hsa_reasons.any?
       end
-      av << other
+      av << other if include_other
 
       av
     end
