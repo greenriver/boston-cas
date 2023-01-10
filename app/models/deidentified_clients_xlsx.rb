@@ -40,15 +40,21 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
       cleaned[:agency_id] = agency&.id
       cleaned[:identified] = false # mark as de-identified client
-      cleaned[:available] = true if @update_availability
+      if @update_availability
+        cleaned[:available] = true
+        cleaned[:actively_homeless] = true
+      end
 
       @added += 1 if client.updated_at.nil?
       @touched += 1 if client.updated_at.present?
       client.update(cleaned)
 
       assessment = client.current_assessment
+      assessment.actively_homeless = true if @update_availability
       assessment_type = Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
       assessment = build_assessment(client, agency, assessment_type) if assessment.nil? || assessment.class.name != assessment_type
+      # maintain current active status
+      client.actively_homeless = assessment.actively_homeless
       assessment = client.update_assessment_from_client(assessment)
       assessment.save(validate: false) # We don't have the CE Event required fields
     end
@@ -87,6 +93,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
     result[:last_name] = "Anonymous - #{row[:client_identifier]}"
     result[:first_name] = "Anonymous - #{row[:client_identifier]}"
+    result[:entry_date] ||= Date.current
 
     result
   end
