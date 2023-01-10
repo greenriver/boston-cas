@@ -38,10 +38,6 @@ class ApplicationController < ActionController::Base
   # Allow devise login links to pass along a destination
   after_action :store_current_location, :unless => :devise_controller?
 
-  if Rails.configuration.force_ssl
-    force_ssl
-  end
-
   private
 
   def _basic_auth
