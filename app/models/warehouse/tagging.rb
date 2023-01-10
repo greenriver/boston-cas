@@ -9,5 +9,6 @@ module Warehouse
     # Ignore the STI bits
     self.inheritance_column = nil
     belongs_to :file, -> { where(taggable_type: 'GrdaWarehouse::File') }, primary_key: :id, foreign_key: :taggable_id
+    belongs_to :tag
   end
 end

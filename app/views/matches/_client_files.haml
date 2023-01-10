@@ -12,8 +12,10 @@
         - if required
           *
         - if file.present?
-          - label = "#{tag} (#{file.effective_date})"
-          = link_to tag, Config.get(:warehouse_url) + "/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
+          - if file.effective_date.present?
+            - date = " (#{date_format(file.effective_date)})"
+          - label = "#{tag}#{date}"
+          = link_to label, Config.get(:warehouse_url) + "/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
         - else
           = tag
         %em.detail-box--requirement-source= "(#{source})"

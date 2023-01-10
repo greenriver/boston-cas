@@ -1,0 +1,20 @@
+.col-md-6.c-card__content-group
+  .c-card__content-group-heading
+    .c-card__content-group-icon.icon-clipboard-check
+    %h5 Files
+  - if @files.present?
+    %table.table
+      %thead
+        %tr
+          %th File
+          %th Effective Date
+      %tbody
+        - @files.each do |tag, date, id|
+          %tr
+            %td= link_to_if id.present?, tag, Config.get(:warehouse_url) + "/clients/#{@client.remote_id}/files/#{id}", target: '_blank'
+            - if date.present?
+              %td= date_format(date)
+            - else
+              %td.font-no-data None
+  - else
+    %p.font-no-data None

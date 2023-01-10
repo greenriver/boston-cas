@@ -41,6 +41,7 @@ module MatchShow
       columns = {
         id: :id,
         updated_at: :updated_at,
+        effective_date: :effective_date,
         tag_id: t_t[:tag_id].as('tag_id').to_sql,
       }
       available_files = Warehouse::File.for_client(@client.remote_id).
