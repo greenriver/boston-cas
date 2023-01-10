@@ -12,8 +12,14 @@
         - if required
           *
         - if file.present?
-          - label = "#{tag} (#{file.effective_date})"
-          = link_to tag, Config.get(:warehouse_url) + "/clients/#{client.remote_id}/files/#{file.id}", target: '_blank'
+          - if file.effective_date.present? || file.expiration_date.present?
+            - dates = []
+            - dates << "effective: #{date_format(file.effective_date)}" if file.effective_date.present?
+            - dates << "expires: #{date_format(file.expiration_date)}" if file.expiration_date.present?
+            - dates.compact!
+            - dates_part = " (#{dates.join(', ')})" if dates.size.positive?
+          - label = "#{tag}#{dates_part}"
+          = link_to label, file.file_url, target: '_blank'
         - else
           = tag
         %em.detail-box--requirement-source= "(#{source})"

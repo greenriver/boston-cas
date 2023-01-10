@@ -38,20 +38,13 @@ module MatchShow
     @show_files = @show_client_info && can_see_client_details && sub_program_has_files
     if @show_files && Warehouse::Base.enabled?
       t_t = Warehouse::Tagging.arel_table
-      columns = {
-        id: :id,
-        updated_at: :updated_at,
-        tag_id: t_t[:tag_id].as('tag_id').to_sql,
-      }
       available_files = Warehouse::File.for_client(@client.remote_id).
-        joins(:taggings).
-        where(t_t[:tag_id].in(file_tag_ids)).
-        order(updated_at: :desc).
-        pluck(*columns.values).map do |row|
-          OpenStruct.new(Hash[columns.keys.zip(row)])
-        end
+        joins(taggings: :tag).
+        preload(taggings: :tag).
+        where(t_t[:tag_id].in(file_tag_ids))
+
       @files = Warehouse::Tag.find(file_tag_ids).map do |tag|
-        file = available_files.detect { |f| f.tag_id == tag.id }
+        file = available_files.detect { |f| f.taggings.where(tag_id: tag.id).exists? }
         required = tag.id.in?(required_tag_ids)
         if file
           [tag.name, [required, file_tags[tag.id], file]]
