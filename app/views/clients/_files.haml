@@ -8,12 +8,17 @@
         %tr
           %th File
           %th Effective Date
+          %th Expiration Date
       %tbody
-        - @files.each do |tag, date, id|
+        - @files.each do |tag, file|
           %tr
-            %td= link_to_if id.present?, tag, Config.get(:warehouse_url) + "/clients/#{@client.remote_id}/files/#{id}", target: '_blank'
-            - if date.present?
-              %td= date_format(date)
+            %td= link_to tag, file.file_url, target: '_blank'
+            - if file.effective_date.present?
+              %td= date_format(file.effective_date)
+            - else
+              %td.font-no-data None
+            - if file.expiration_date.present?
+              %td= date_format(file.expiration_date)
             - else
               %td.font-no-data None
   - else

@@ -83,7 +83,6 @@ Layout/DotPosition:
   Exclude:
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_notes_controller.rb'
@@ -253,7 +252,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/building_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
     - 'app/controllers/match_client_details_controller.rb'
     - 'app/controllers/match_contacts_controller.rb'
@@ -629,7 +627,6 @@ Layout/MultilineMethodCallBraceLayout:
 # SupportedStyles: aligned, indented, indented_relative_to_receiver
 Layout/MultilineMethodCallIndentation:
   Exclude:
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/identified_client.rb'
@@ -684,7 +681,6 @@ Layout/SpaceAroundOperators:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceBeforeBlockBraces:
   Exclude:
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -727,7 +723,6 @@ Layout/SpaceInLambdaLiteral:
     - 'app/models/tag.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
     - 'app/models/warehouse/client.rb'
-    - 'app/models/warehouse/file.rb'
 
 # Offense count: 60
 # Cop supports --auto-correct.
@@ -736,7 +731,6 @@ Layout/SpaceInLambdaLiteral:
 # SupportedStylesForEmptyBrackets: space, no_space
 Layout/SpaceInsideArrayLiteralBrackets:
   Exclude:
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/messages_controller.rb'
@@ -752,7 +746,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideBlockBraces:
   Exclude:
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/controller_authorization.rb'
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -783,7 +776,6 @@ Layout/SpaceInsideHashLiteralBraces:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/messages_controller.rb'
     - 'app/controllers/testing/matching/candidate_generations_controller.rb'
@@ -1456,7 +1448,6 @@ Style/IfUnlessModifier:
   Exclude:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
@@ -1696,7 +1687,6 @@ Style/StringLiterals:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/clients_controller.rb'
     - 'app/controllers/concerns/decisions.rb'
     - 'app/controllers/imported_clients_controller.rb'
     - 'app/controllers/in_progress_vouchers_controller.rb'
@@ -1798,7 +1788,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/subgrantee.rb'
     - 'app/models/user.rb'
     - 'app/models/user_role.rb'
-    - 'app/models/warehouse/file.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 

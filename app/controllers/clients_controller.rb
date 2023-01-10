@@ -59,10 +59,14 @@ class ClientsController < ApplicationController
     @client_notes = @client.client_notes
     @client_note = ClientNote.new
     @neighborhood_interests = Neighborhood.where(id: @client.neighborhood_interests).order(:name).pluck(:name)
-    @files = Warehouse::File.for_client(@client.remote_id).
+    files = Warehouse::File.for_client(@client.remote_id).
       joins(taggings: :tag).
-      order(tag_t[:name]).
-      pluck(tag_t[:name], :effective_date, :id)
+      preload(taggings: :tag)
+    @files = files.map do |file|
+      file.taggings.map do |tagging|
+        [tagging.tag.name, file]
+      end
+    end.flatten(1)
   end
 
   def update
