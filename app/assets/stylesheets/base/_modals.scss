@@ -45,6 +45,9 @@
 .modal-content {
   background: $white;
 }
+.modal-dialog-scrollable .modal-content {
+  overflow: visible;
+}
 
 .modal-dialog {
   @include media-breakpoint-down(sm) {
