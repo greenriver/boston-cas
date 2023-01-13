@@ -10,7 +10,7 @@ Rails.application.configure do
   config.assets.js_compressor = :terser
   config.assets.compile = true
   config.assets.digest = true
-  config.force_ssl = true
+  config.force_ssl = false
   config.i18n.fallbacks = true
   config.active_support.deprecation = :notify
   config.active_record.dump_schema_after_migration = false
@@ -31,7 +31,7 @@ Rails.application.configure do
 
   cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
   cache_namespace = "#{ENV.fetch('CLIENT')}-#{Rails.env}-cas"
-  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, raise_errors: false, ssl: cache_ssl, namespace: cache_namespace)
+  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, ssl: cache_ssl, namespace: cache_namespace)
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = deliver_method
   config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
