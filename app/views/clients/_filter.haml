@@ -21,11 +21,11 @@
 
       .o-filtration__option
         %label.d-block Availability
-        = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :availability, options_from_collection_for_select(Client.possible_availability_states, :first, :last, params[:availability]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__option
         %label.d-block Veteran
-        = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 select2--full-width'
+        = select_tag :veteran, options_from_collection_for_select({1 => 'Veterans', 0 => 'Non-Veterans'}, :first, :last, params[:veteran]&.to_sym), include_blank: "All", class: 'select2 select2--full-width', data: { 'dropdown-parent' => '.o-filtration__container form' }
 
       .o-filtration__actions.form__actions
         = link_to clients_path(params.permit(:sort, :direction, :q)), class: 'btn btn-light' do

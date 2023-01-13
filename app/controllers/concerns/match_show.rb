@@ -26,8 +26,11 @@ module MatchShow
     @show_client_info = @match.show_client_info_to?(access_context.current_contact)
     @sub_program = @match.sub_program
     @program = @match.program
-    sub_program_has_files = @sub_program.file_tags.exists?
     can_see_client_details = @client&.has_full_housing_release?(@opportunity.match_route) || can_view_all_clients?
+    file_tags = @match.associated_file_tags
+    file_tag_ids = file_tags.keys
+    required_tag_ids = file_tag_ids - @sub_program.file_tags.pluck(:tag_id)
+    sub_program_has_files = file_tag_ids.size.positive?
 
     # Only show files if the user has access to the client details,
     # If the client has a full release on file or the user can see all clients
@@ -42,17 +45,18 @@ module MatchShow
       }
       available_files = Warehouse::File.for_client(@client.remote_id).
         joins(:taggings).
-        where(taggings: { tag_id: @sub_program.file_tags.pluck(:tag_id) }).
+        where(t_t[:tag_id].in(file_tag_ids)).
         order(updated_at: :desc).
         pluck(*columns.values).map do |row|
           OpenStruct.new(Hash[columns.keys.zip(row)])
         end
-      @files = @sub_program.file_tags.map do |tag|
-        file = available_files.detect { |f| f.tag_id == tag.tag_id }
+      @files = Warehouse::Tag.find(file_tag_ids).map do |tag|
+        file = available_files.detect { |f| f.tag_id == tag.id }
+        required = tag.id.in?(required_tag_ids)
         if file
-          [tag.name, file]
+          [tag.name, [required, file_tags[tag.id], file]]
         else
-          [tag.name, {}]
+          [tag.name, [required, file_tags[tag.id], nil]]
         end
       end.to_h
     end

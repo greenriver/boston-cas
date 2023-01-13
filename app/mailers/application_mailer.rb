@@ -8,20 +8,9 @@ class ApplicationMailer < ActionMailer::Base
   default from: ENV['DEFAULT_FROM']
   layout 'mailer'
 
-  if Rails.configuration.sandbox_email_mode
-    ActionMailer::Base.register_interceptor SandboxEmailInterceptor
-  end
+  ActionMailer::Base.register_interceptor SandboxEmailInterceptor if Rails.configuration.sandbox_email_mode
 
-  if ENV['SES_MONITOR_OUTGOING_EMAIL'] == 'true'
-    ActionMailer::Base.register_interceptor CloudwatchEmailInterceptor
-  end
-
-  def notification_expired message
-    @contact = message[:recipient]
-    @body = message[:body]
-    @subject = message[:subject]
-    mail(to: @contact.email, subject: @subject, body: @body)
-  end
+  ActionMailer::Base.register_interceptor CloudwatchEmailInterceptor if ENV['SES_MONITOR_OUTGOING_EMAIL'] == 'true'
 
   def self.prefix
     '[CAS]'
@@ -31,9 +20,16 @@ class ApplicationMailer < ActionMailer::Base
     self.class.prefix
   end
 
+  def notification_expired message
+    @contact = message[:recipient]
+    @body = message[:body]
+    @subject = message[:subject]
+    mail(to: @contact.email, subject: @subject, body: @body)
+  end
+
   def self.remove_prefix(subject)
     if subject.starts_with? prefix
-      subject[prefix.length..-1].strip
+      subject[prefix.length..].strip
     else
       subject
     end

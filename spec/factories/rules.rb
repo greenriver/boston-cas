@@ -498,4 +498,8 @@ FactoryBot.define do
     name { 'Willing to work full-time' }
     verb { 'be' }
   end
+  factory :has_file_tags, class: 'Rules::HasFileTags' do
+    name { 'All required documention' }
+    verb { 'have' }
+  end
 end

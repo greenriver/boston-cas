@@ -22,8 +22,6 @@ Layout/ArgumentAlignment:
     - 'app/controllers/concerns/has_match_access_context.rb'
     - 'app/controllers/match_decision_acknowledgments_controller.rb'
     - 'app/models/concerns/contact_join_model.rb'
-    - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/notifications/base.rb'
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
     - 'bin/guard'
@@ -50,7 +48,6 @@ Layout/BlockEndNewline:
 # SupportedStyles: case, end
 Layout/CaseIndentation:
   Exclude:
-    - 'app/models/project_client.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -61,7 +58,6 @@ Layout/ClosingHeredocIndentation:
 # Cop supports --auto-correct.
 Layout/ClosingParenthesisIndentation:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
 
 # Offense count: 4
@@ -134,7 +130,6 @@ Layout/EmptyLineBetweenDefs:
     - 'app/controllers/admin/agencies_controller.rb'
     - 'app/controllers/client_matches_controller.rb'
     - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/program.rb'
     - 'app/models/rules/holds_voucher.rb'
     - 'app/models/sub_program.rb'
@@ -195,7 +190,6 @@ Layout/EmptyLinesAroundBlockBody:
   Exclude:
     - 'app/models/concerns/availability.rb'
     - 'app/models/concerns/subject_for_matches.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -208,7 +202,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/factories/users.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_five_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_spec.rb'
@@ -282,7 +275,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/jobs/matching/run_engine_job.rb'
     - 'app/mail_interceptors/sandbox_email_interceptor.rb'
-    - 'app/mailers/digest_mailer.rb'
     - 'app/models/building_contact.rb'
     - 'app/models/cas/update_voucher_availability.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
@@ -299,7 +291,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_access_contexts/notification.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/four/confirm_shelter_agency_decline_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -307,14 +298,12 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/match_events/expiration_change.rb'
     - 'app/models/match_events/notification_delivery.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/match_progress_updates/hsa.rb'
     - 'app/models/match_progress_updates/hsp.rb'
     - 'app/models/match_progress_updates/shelter_agency.rb'
     - 'app/models/match_progress_updates/ssp.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
-    - 'app/models/notifications/base.rb'
     - 'app/models/notifications/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
     - 'app/models/notifications/confirm_match_success_dnd_staff.rb'
     - 'app/models/notifications/confirm_shelter_agency_decline_dnd_staff.rb'
@@ -401,7 +390,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'app/models/opportunity_details/via_voucher.rb'
     - 'app/models/opportunity_property.rb'
     - 'app/models/program.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/project_program.rb'
     - 'app/models/service.rb'
     - 'app/models/stalled_match_request.rb'
@@ -457,7 +445,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'app/models/match_access_contexts.rb'
     - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
     - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/four/confirm_shelter_agency_decline_dnd_staff.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
@@ -523,7 +510,6 @@ Layout/FirstHashElementIndentation:
   Exclude:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
-    - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
     - 'app/models/sub_program.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
@@ -539,7 +525,6 @@ Layout/FirstHashElementIndentation:
 Layout/HashAlignment:
   Exclude:
     - 'app/controllers/imported_clients_controller.rb'
-    - 'app/models/notifications/base.rb'
 
 # Offense count: 178
 # Cop supports --auto-correct.
@@ -637,7 +622,6 @@ Layout/MultilineBlockLayout:
 # SupportedStyles: symmetrical, new_line, same_line
 Layout/MultilineMethodCallBraceLayout:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
@@ -649,7 +633,6 @@ Layout/MultilineMethodCallIndentation:
     - 'app/controllers/rules_controller.rb'
     - 'app/models/cas_seeds/client_regular_contact.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
 
@@ -662,7 +645,6 @@ Layout/SpaceAfterColon:
 # Cop supports --auto-correct.
 Layout/SpaceAfterComma:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
@@ -681,7 +663,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
   Exclude:
     - 'app/controllers/reports/parked_clients_controller.rb'
     - 'app/models/message.rb'
-    - 'app/models/rule.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -716,7 +697,6 @@ Layout/SpaceBeforeBlockBraces:
     - 'app/models/sub_program.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
 # Offense count: 2
@@ -731,7 +711,6 @@ Layout/SpaceBeforeFirstArg:
 # Cop supports --auto-correct.
 Layout/SpaceBeforeSemicolon:
   Exclude:
-    - 'app/models/rule.rb'
 
 # Offense count: 37
 # Cop supports --auto-correct.
@@ -741,11 +720,9 @@ Layout/SpaceInLambdaLiteral:
   Exclude:
     - 'app/models/agency.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/message.rb'
     - 'app/models/neighborhood.rb'
     - 'app/models/program.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/tag.rb'
     - 'app/models/unavailable_as_candidate_for.rb'
@@ -794,7 +771,6 @@ Layout/SpaceInsideBlockBraces:
     - 'spec/controllers/messages_controller_spec.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/tasks/update_clients_spec.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
@@ -832,7 +808,6 @@ Layout/SpaceInsideParens:
   Exclude:
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/messages_controller.rb'
-    - 'app/jobs/message_job.rb'
     - 'app/models/concerns/notifier_config.rb'
     - 'app/models/program.rb'
     - 'app/models/rules/seen_in_last_forty_five_days.rb'
@@ -896,7 +871,6 @@ Layout/TrailingEmptyLines:
     - 'spec/factories/rules/verified_disablity.rb'
     - 'spec/factories/tags.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_five_spec.rb'
@@ -920,7 +894,6 @@ Layout/TrailingEmptyLines:
     - 'spec/models/rules/enrolled_in_so_spec.rb'
     - 'spec/models/rules/enrolled_in_th_spec.rb'
     - 'spec/models/rules/ground_floor_spec.rb'
-    - 'spec/models/rules/hmis_client_spec.rb'
     - 'spec/models/rules/homeless_spec.rb'
     - 'spec/models/rules/housing_authority_eligible_spec.rb'
     - 'spec/models/rules/hues_eligible_spec.rb'
@@ -933,7 +906,6 @@ Layout/TrailingEmptyLines:
     - 'spec/models/rules/mi_and_sa_comorbid_spec.rb'
     - 'spec/models/rules/mi_sa_or_co_morbid_spec.rb'
     - 'spec/models/rules/never_evicted_spec.rb'
-    - 'spec/models/rules/non_hmis_client_spec.rb'
     - 'spec/models/rules/one_eighty_days_homeless_last_three_years_spec.rb'
     - 'spec/models/rules/one_eighty_days_homeless_spec.rb'
     - 'spec/models/rules/one_year_homeless_last_three_years_spec.rb'
@@ -962,7 +934,6 @@ Layout/TrailingWhitespace:
     - 'spec/factories/housing_attributes.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/match_events/note_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_sixty_percent_ami_spec.rb'
@@ -1008,7 +979,6 @@ Lint/AssignmentInCondition:
 # Cop supports --auto-correct.
 Lint/BooleanSymbol:
   Exclude:
-    - 'app/models/match_progress_updates/base.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -1055,7 +1025,6 @@ Lint/SafeNavigationChain:
 # Offense count: 9
 Lint/ShadowingOuterLocalVariable:
   Exclude:
-    - 'app/jobs/message_job.rb'
     - 'app/models/cas_seeds/vouchers.rb'
 
 # Offense count: 2
@@ -1087,7 +1056,6 @@ Lint/UnusedMethodArgument:
   Exclude:
     - 'app/models/match_decisions/four/approve_match_housing_subsidy_admin.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/rule.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
     - 'app/models/rules/age_greater_than_fifty.rb'
     - 'app/models/rules/age_greater_than_fifty_five.rb'
@@ -1192,7 +1160,6 @@ Lint/UselessAssignment:
     - 'app/models/cas_seeds/vouchers.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/identified_client.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/notifications/criminal_hearing_scheduled_dnd_staff.rb'
     - 'app/models/notifications/criminal_hearing_scheduled_housing_subsidy_admin.rb'
@@ -1255,7 +1222,6 @@ Naming/MemoizedInstanceVariableName:
     - 'app/models/concerns/contact_join_model.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/subject_for_matches.rb'
-    - 'app/models/notifications/base.rb'
 
 # Offense count: 3
 # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
@@ -1275,15 +1241,12 @@ Naming/PredicateName:
     - 'app/controllers/concerns/match_building_and_unit.rb'
     - 'app/models/contact.rb'
     - 'app/models/match_events/note.rb'
-    - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 Security/YAMLLoad:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -1312,7 +1275,6 @@ Style/BlockDelimiters:
   Exclude:
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
@@ -1336,13 +1298,11 @@ Style/ClassEqualityComparison:
 # Offense count: 2
 Style/ClassVars:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/ColonMethodCall:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -1385,7 +1345,6 @@ Style/GuardClause:
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/rules/active_in_cohort.rb'
     - 'app/models/rules/age_greater_than_eightteen.rb'
@@ -1475,7 +1434,6 @@ Style/GuardClause:
 # SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
 Style/HashSyntax:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
@@ -1498,14 +1456,12 @@ Style/IfUnlessModifier:
   Exclude:
     - 'app/controllers/account_emails_controller.rb'
     - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/clients_controller.rb'
     - 'app/controllers/notification_registrations_controller.rb'
     - 'app/controllers/rules_controller.rb'
     - 'app/controllers/users/invitations_controller.rb'
     - 'app/inputs/base_input.rb'
     - 'app/mailers/account_mailer.rb'
-    - 'app/mailers/application_mailer.rb'
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
@@ -1515,7 +1471,6 @@ Style/IfUnlessModifier:
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
     - 'app/models/match_events/decision_action.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'bin/setup'
 
@@ -1629,7 +1584,6 @@ Style/RaiseArgs:
 # Cop supports --auto-correct.
 Style/RedundantBegin:
   Exclude:
-    - 'bin/yarn'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -1657,8 +1611,6 @@ Style/RedundantSelf:
     - 'app/models/concerns/availability.rb'
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/match_events/decision_action.rb'
-    - 'app/models/match_progress_updates/base.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/user.rb'
     - 'app/models/warehouse/cas_availability.rb'
@@ -1675,7 +1627,6 @@ Style/RegexpLiteral:
 # Cop supports --auto-correct.
 Style/RescueModifier:
   Exclude:
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
     - 'app/models/warehouse/base.rb'
@@ -1722,19 +1673,16 @@ Style/Semicolon:
 # Configuration parameters: AllowIfMethodIsEmpty.
 Style/SingleLineMethods:
   Exclude:
-    - 'app/models/rule.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/SlicingWithRange:
   Exclude:
-    - 'app/mailers/application_mailer.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/StderrPuts:
   Exclude:
-    - 'bin/yarn'
 
 # Offense count: 456
 # Cop supports --auto-correct.
@@ -1771,12 +1719,9 @@ Style/StringLiterals:
     - 'app/models/match_decisions/five/five_lease_up.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/match_decisions/provider_only/hsa_acknowledges_receipt.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/notifications/base.rb'
     - 'app/models/notifications/match_initiation_for_manual_notification.rb'
     - 'app/models/notifications/match_success_confirmed.rb'
-    - 'app/models/notifications/note_sent.rb'
     - 'app/models/notifications/progress_update_requested.rb'
     - 'app/models/race.rb'
     - 'app/models/service.rb'
@@ -1784,9 +1729,7 @@ Style/StringLiterals:
     - 'bin/guard'
     - 'bin/rspec'
     - 'bin/setup'
-    - 'bin/spring'
     - 'bin/update'
-    - 'bin/yarn'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -1798,7 +1741,6 @@ Style/StringLiterals:
     - 'spec/factories/roles.rb'
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
-    - 'spec/models/message_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/rails_helper.rb'
     - 'spec/requests/express_neighborhood_interests_spec.rb'
@@ -1810,7 +1752,6 @@ Style/StringLiterals:
 # Cop supports --auto-correct.
 Style/StructInheritance:
   Exclude:
-    - 'app/jobs/message_job.rb'
 
 # Offense count: 17
 # Cop supports --auto-correct.
@@ -1837,7 +1778,6 @@ Style/TernaryParentheses:
 Style/TrailingCommaInArguments:
   Exclude:
     - 'app/controllers/admin/roles_controller.rb'
-    - 'app/controllers/admin/translation_keys_controller.rb'
     - 'app/controllers/associated_contacts_controller.rb'
     - 'app/controllers/client_contacts_controller.rb'
     - 'app/controllers/funding_sources_controller.rb'
@@ -1851,9 +1791,7 @@ Style/TrailingCommaInArguments:
     - 'app/models/client_opportunity_match_contact.rb'
     - 'app/models/contact.rb'
     - 'app/models/funding_source.rb'
-    - 'app/models/match_progress_updates/base.rb'
     - 'app/models/program.rb'
-    - 'app/models/project_client.rb'
     - 'app/models/rules/pathways_eligible.rb'
     - 'app/models/rules/youth.rb'
     - 'app/models/sub_program.rb'
@@ -1882,7 +1820,6 @@ Style/TrailingCommaInHashLiteral:
   Exclude:
     - 'app/controllers/client_notes_controller.rb'
     - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
-    - 'app/mailers/test_database_mailer.rb'
     - 'app/mailers/test_mailer.rb'
     - 'app/models/sub_program.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'

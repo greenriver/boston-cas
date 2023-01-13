@@ -11,17 +11,14 @@ module Notifications
     has_paper_trail
 
     def self.model_name
-      @_model_name ||= ActiveModel::Name.new(self, nil, 'notification')
+      @_model_name ||= ActiveModel::Name.new(self, nil, 'notification') # rubocop:disable Naming/MemoizedInstanceVariableName
     end
 
-    belongs_to :match, class_name: 'ClientOpportunityMatch',
-      foreign_key: 'client_opportunity_match_id'
+    belongs_to :match, class_name: 'ClientOpportunityMatch', foreign_key: 'client_opportunity_match_id'
 
     belongs_to :recipient, class_name: 'Contact'
     delegate :name, to: :recipient, allow_nil: true, prefix: true
-    has_many :notification_delivery_events,
-      class_name: 'MatchEvents::NotificationDelivery',
-      foreign_key: :notification_id
+    has_many :notification_delivery_events, class_name: 'MatchEvents::NotificationDelivery', foreign_key: :notification_id
 
     validates :code, uniqueness: true
 
@@ -42,7 +39,7 @@ module Notifications
 
     class DeliverJob < ActiveJob::Base
       def perform(notification)
-        NotificationsMailer.with(notification: notification).send(notification.notification_type).deliver_now
+        NotificationsMailer.send(notification.notification_type, notification).deliver_now
         notification.record_delivery_event!
       end
     end
@@ -64,7 +61,7 @@ module Notifications
 
     def event_label
       # how should this notification be dislayed when shown in an event timeline?
-      raise "abstract method not implemented"
+      raise 'abstract method not implemented'
     end
 
     def record_delivery_event!
@@ -91,6 +88,5 @@ module Notifications
     def registration_role
       nil
     end
-
   end
 end

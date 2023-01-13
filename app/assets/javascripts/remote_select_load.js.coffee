@@ -18,4 +18,4 @@ App.remoteSelectLoad.init = (root) =>
       $select.attr('placeholder', original_placeholder)
       if $select.hasClass('select2')
         $select.select2('destroy')
-        new App.Form.Select2Input this, { placeholder: original_placeholder }
+        new App.Form.Select2Input this, { placeholder: original_placeholder, dropdownParent: $select.parent() }

@@ -68,7 +68,7 @@ module MatchDecisions::Eight
       end
 
       def decline_confirmed
-        Notifications::Eight::CaseContactAssignsManagerDeclineAccepted.create_for_match! match
+        Notifications::Eight::MatchRejected.create_for_match! match
         match.rejected!
       end
 

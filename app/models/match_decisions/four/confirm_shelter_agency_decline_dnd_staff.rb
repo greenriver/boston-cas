@@ -86,7 +86,7 @@ module MatchDecisions::Four
       end
 
       def decline_confirmed
-        Notifications::Four::ShelterAgencyDeclineAccepted.create_for_match! match
+        Notifications::Four::MatchRejected.create_for_match! match
         match.rejected!
       end
 
@@ -96,7 +96,5 @@ module MatchDecisions::Four
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end

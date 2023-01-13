@@ -23,7 +23,7 @@
         = hidden_field_tag :current_route, params[:current_route]
 
       .o-filtration__option
-        %select{name: :current_step, style: 'width: 100%;'}
+        %select.select2{name: :current_step, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} Filter by Current Step
           - available_steps.each do |label,value|
             - selected = @current_step == value
@@ -31,7 +31,7 @@
               = label
 
       .o-filtration__option
-        %select{name: :current_program, style: 'width: 100%;'}
+        %select.select2{name: :current_program, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} Filter by Program
           - available_programs.each do |program|
             - selected = @current_program.to_i == program.id
@@ -40,7 +40,7 @@
 
       - if current_user.can_view_all_matches?
         .o-filtration__option
-          %select{name: :current_filter_contact, style: 'width: 100%;'}
+          %select.select2{name: :current_filter_contact, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
             %option{value: ''} Filter by Contact
             - Contact.active_contacts.each do |contact|
               - selected = @current_filter_contact&.to_i == contact.id
@@ -48,7 +48,7 @@
                 = contact.name
 
       .o-filtration__option
-        %select{name: :current_contact_type, style: 'width: 100%;'}
+        %select.select2{name: :current_contact_type, style: 'width: 100%;', data: { 'dropdown-parent' => '.o-filtration__container form' }}
           %option{value: ''} Filter by Contact Type
           - MatchContacts.input_names.each do |contact_type|
             - selected = @current_contact_type == contact_type
@@ -63,6 +63,4 @@
           %i.icon-filter
           Filter
 
-= content_for :page_js do
-  :javascript
-    $('select').select2();
+= render 'init_select2'

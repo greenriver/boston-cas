@@ -5,11 +5,14 @@
 ###
 
 class DigestMailer < ApplicationMailer
+  def digest(user, messages)
+    @messages = messages
+    # quietly eat messages if the user is no longer active
+    unless user.active?
+      Rails.logger.info("#{user.name} #{user.email} no longer active, refusing to send a message")
+      return
+    end
 
-  def digest
-    user = params[:user]
-    @messages = params[:messages]
     mail to: user.email, subject: "#{prefix} #{user.email_schedule} digest"
   end
-
 end

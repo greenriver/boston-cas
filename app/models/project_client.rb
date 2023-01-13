@@ -6,7 +6,7 @@
 
 class ProjectClient < ApplicationRecord
 
-  has_one :client, required: false, primary_key: :client_id, foreign_key: :id
+  has_one :client, primary_key: :client_id, foreign_key: :id, inverse_of: :project_client
 
   belongs_to :data_source, optional: true
 

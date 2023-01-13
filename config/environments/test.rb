@@ -7,7 +7,9 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.cache_classes = true
+  config.action_view.cache_template_loading = true
 
+  config.cache_store = :null_store
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
   # preloads Rails for running tests, you may have to set it to true.
@@ -22,7 +24,9 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  config.cache_store = :null_store
+
+  # time zone
+  config.time_zone = 'America/New_York'
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -39,23 +43,18 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'], protocol: :http }
-  config.active_job.queue_adapter = :test
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  # Raises error for missing translations.
-  # config.action_view.raise_on_missing_translations = true
-
-  config.force_ssl = false
-
-  # time zone
-  config.time_zone = 'Eastern Time (US & Canada)'
-
   # don't need email sandbox with test deliverer
   config.sandbox_email_mode = false
 
+  # Raises error for missing translations.
+  # config.action_view.raise_on_missing_translations = true
+
   # Devise requires a default URL
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], port: ENV['PORT'] }
+  config.action_mailer.default_url_options = { host: ENV['FQDN'], port: ENV['PORT'] }
+
+  config.force_ssl = false
 end

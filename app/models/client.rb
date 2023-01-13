@@ -19,7 +19,7 @@ class Client < ApplicationRecord
   belongs_to :ethnicity, foreign_key: :ethnicity_id, primary_key: :numeric
   belongs_to :veteran_status, foreign_key: :veteran_status_id, primary_key: :numeric
 
-  has_one :project_client, primary_key: :id, foreign_key: :client_id
+  belongs_to :project_client, primary_key: :client_id, foreign_key: :id, optional: true
   has_many :building_clients
 
   # all contacts

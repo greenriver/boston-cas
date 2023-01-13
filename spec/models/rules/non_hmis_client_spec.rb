@@ -3,14 +3,15 @@ require 'rails_helper'
 RSpec.describe Rules::NonHmisClient, type: :model do
   describe 'clients_that_fit' do
     let!(:rule) { create :non_hmis_client }
-    let!(:hmis_project_client) { create :hmis_project_client }
-    let!(:non_hmis_project_client) { create :non_hmis_project_client }
 
-    let!(:bob) { create :client, first_name: 'Bob', project_client: non_hmis_project_client }
-    let!(:roy) { create :client, first_name: 'Roy', project_client: hmis_project_client }
+    let!(:bob) { create :client, first_name: 'Bob' }
+    let!(:roy) { create :client, first_name: 'Roy' }
 
     let!(:positive) { create :requirement, rule: rule, positive: true }
     let!(:negative) { create :requirement, rule: rule, positive: false }
+
+    let!(:non_hmis_project_client) { create :non_hmis_project_client, client_id: bob.id }
+    let!(:hmis_project_client) { create :hmis_project_client, client_id: roy.id }
 
     let!(:clients_that_fit) { positive.clients_that_fit(Client.all) }
     let!(:clients_that_dont_fit) { negative.clients_that_fit(Client.all) }
