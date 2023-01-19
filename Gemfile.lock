@@ -308,7 +308,7 @@ GEM
       text (>= 1.3.0)
     gettext_i18n_rails (1.9.0)
       fast_gettext (>= 0.9.0)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     grosser-pomo (0.5.1)
     guard (2.18.0)
@@ -402,7 +402,7 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    minitest (5.17.0)
     minitest-reporters (1.5.0)
       ansi
       builder
