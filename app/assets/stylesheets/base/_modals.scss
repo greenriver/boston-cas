@@ -1,3 +1,6 @@
+.modal-dialog-centered.modal-dialog-scrollable .modal-content {
+  max-height: 100%;
+}
 .modal-title {
   font-size: rem(24);
   color: $brand-primary;
