@@ -112,6 +112,14 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def removed_hsa_reasons
+      []
+    end
+
+    def additional_hsa_reasons
+      []
+    end
+
     def removed_admin_reasons
       []
     end

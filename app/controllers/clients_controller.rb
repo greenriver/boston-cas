@@ -5,6 +5,8 @@
 ###
 
 class ClientsController < ApplicationController
+  include ArelHelper
+
   before_action :authenticate_user!
   before_action :some_clients_viewable!
   before_action :some_clients_editable!, only: [:update, :destroy]
@@ -32,7 +34,7 @@ class ClientsController < ApplicationController
       end
     end
     if params[:availability].present?
-      available_scope = Client.possible_availability_states.keys.detect{ |m| m == params[:availability].to_sym}
+      available_scope = Client.possible_availability_states.keys.detect { |m| m == params[:availability].to_sym }
       available_scope ||= :all
       @clients = @clients.public_send(available_scope)
     end
@@ -42,10 +44,10 @@ class ClientsController < ApplicationController
 
     client_ids = @clients.map(&:id)
 
-    @matches = ClientOpportunityMatch
-              .group(:client_id)
-              .where(client_id: client_ids)
-              .count
+    @matches = ClientOpportunityMatch.
+      group(:client_id).
+      where(client_id: client_ids).
+      count
 
     @active_filter = params[:availability].present? || params[:veteran].present?
     @available_clients = @clients.available
@@ -57,6 +59,14 @@ class ClientsController < ApplicationController
     @client_notes = @client.client_notes
     @client_note = ClientNote.new
     @neighborhood_interests = Neighborhood.where(id: @client.neighborhood_interests).order(:name).pluck(:name)
+    files = Warehouse::File.for_client(@client.remote_id).
+      joins(taggings: :tag).
+      preload(taggings: :tag)
+    @files = files.map do |file|
+      file.taggings.map do |tagging|
+        [tagging.tag.name, file]
+      end
+    end.flatten(1)
   end
 
   def update
@@ -71,10 +81,10 @@ class ClientsController < ApplicationController
       if request.xhr?
         head :ok
       else
-        redirect_to client_path(@client), notice: "Client updated"
+        redirect_to client_path(@client), notice: 'Client updated'
       end
     else
-      render :show, {flash: {error: 'Unable update client.'}}
+      render :show, { flash: { error: 'Unable update client.' } }
     end
   end
 
@@ -92,7 +102,7 @@ class ClientsController < ApplicationController
   private
 
   def filter_terms
-    [ :availability, :veteran ]
+    [:availability, :veteran]
   end
   helper_method :filter_terms
 
@@ -110,10 +120,8 @@ class ClientsController < ApplicationController
       end.first[:order]
     end
 
-    if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
-      sort_string += ' NULLS LAST'
-    end
-    return sort_string
+    sort_string += ' NULLS LAST' if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
+    sort_string
   end
 
   def client_scope
@@ -141,7 +149,7 @@ class ClientsController < ApplicationController
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
   def query_string
@@ -155,5 +163,4 @@ class ClientsController < ApplicationController
   def some_clients_editable!
     Client.editable_by(current_user).exists?
   end
-
 end

@@ -55,7 +55,7 @@ class DeidentifiedClientsController < NonHmisClientsController
     end
 
     file = import_params[:file]
-    update_availability = import_params[:update_availability]
+    update_availability = import_params[:update_availability].to_s.in?(['1', 'true'])
     begin
       @upload = DeidentifiedClientsXlsx.create(
         filename: file.original_filename,

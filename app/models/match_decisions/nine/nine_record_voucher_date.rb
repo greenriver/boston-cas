@@ -8,7 +8,8 @@ module MatchDecisions::Nine
   class NineRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
 
-    validate :date_voucher_issued_present_if_status_complete
+    validate :date_voucher_issued_present_if_status_accept
+    validate :ensure_required_contacts_present_on_accept
 
     def label
       label_for_status status
@@ -98,7 +99,7 @@ module MatchDecisions::Nine
     # end
 
     private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.active
+      MatchDecisionReasons::HousingSubsidyAdminDecline.available(route: match_route)
     end
 
     class StatusCallbacks < StatusCallbacks
@@ -131,8 +132,15 @@ module MatchDecisions::Nine
       )
     end
 
-    private def date_voucher_issued_present_if_status_complete
+    private def date_voucher_issued_present_if_status_accept
       errors.add :date_voucher_issued, 'must be filled in' if status == 'accepted' && date_voucher_issued.blank?
+    end
+
+    private def ensure_required_contacts_present_on_accept
+      missing_contacts = []
+      missing_contacts << "a #{_('Housing Subsidy Administrator Nine')} Contact" if status == 'accepted' && match.housing_subsidy_admin_contacts.none?
+
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
   end
 end

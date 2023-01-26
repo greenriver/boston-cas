@@ -50,11 +50,13 @@ class ContactsController < ApplicationController
         where(contact_id: @contact.id).
         update_all(contact_id: destination)
       flash[:notice] = 'Matches updated'
-      redirect_to action: :index
     else
-      flash[:error] = 'Matches unchanged, no destination specified'
-      redirect_to action: :move_matches
+      ClientOpportunityMatchContact.
+        where(contact_id: @contact.id).
+        update_all(deleted_at: Time.current)
+      flash[:notice] = 'Contact removed from all matches'
     end
+    redirect_to action: :index
   end
 
   private def contact_source

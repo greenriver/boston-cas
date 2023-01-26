@@ -146,6 +146,10 @@ module ArelHelper
       SubProgram.arel_table
     end
 
+    def tag_t
+      Warehouse::Tag.arel_table
+    end
+
     def com_t
       ClientOpportunityMatch.arel_table
     end
@@ -193,6 +197,10 @@ module ArelHelper
 
   def sp_t
     SubProgram.arel_table
+  end
+
+  def tag_t
+    Warehouse::Tag.arel_table
   end
 
   def com_t

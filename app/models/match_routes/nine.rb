@@ -67,6 +67,37 @@ module MatchRoutes
       false
     end
 
+    def removed_hsa_reasons
+      @removed_hsa_reasons ||= [
+        'CORI',
+        'SORI',
+        'Falsification of documents',
+        'Health and Safety',
+        'Additional screening criteria imposed by third parties',
+      ]
+    end
+
+    def additional_hsa_reasons
+      @additional_hsa_reasons ||= [
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+      ]
+    end
+
+    def removed_admin_reasons
+      @removed_admin_reasons ||= [
+        'SSP CORI',
+        'HSP CORI',
+      ].freeze
+    end
+
+    def additional_admin_reasons
+      @additional_admin_reasons ||= [
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+      ].freeze
+    end
+
     def contact_label_for(contact_type)
       case contact_type
       when :dnd_staff_contacts
