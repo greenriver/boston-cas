@@ -31,7 +31,7 @@ module Reports
     helper_method :header
 
     def data
-      @addresses.pluck(columns)
+      @addresses.pluck(*columns)
     end
     helper_method :data
 
