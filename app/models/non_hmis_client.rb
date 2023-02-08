@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-require 'memoist'
+require 'memery'
 class NonHmisClient < ApplicationRecord
   include HudDemographics
 
@@ -426,7 +426,7 @@ class NonHmisClient < ApplicationRecord
   # @@assessment_tags, but comes with an api
   # you can bust the cache with assessment_tags(true)
   class << self
-    extend Memoist
+    include Memery
     def assessment_tags
       Tag.where(rrh_assessment_trigger: true)
     end

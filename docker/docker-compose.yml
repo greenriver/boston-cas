@@ -1,11 +1,11 @@
 version: '3.8'
 
 x-app: &app
-  image: cas:0.0.3
+  image: cas:0.0.4
   build:
     context: .
     args:
-      RUBY_VERSION: 2.7.7
+      RUBY_VERSION: 3.2.0
       PG_MAJOR: '12'
       NODE_MAJOR: '12'
       YARN_VERSION: '1.17.3'

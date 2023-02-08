@@ -35,7 +35,7 @@ gem 'kaminari'
 gem 'pagy'
 gem 'ransack'
 gem 'responders'
-gem 'memoist', require: false
+gem 'memery', require: false
 
 # File processing
 gem 'carrierwave'

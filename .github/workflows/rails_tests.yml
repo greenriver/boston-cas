@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     # Docker Hub image that the job executes in
-    container: ruby:2.7.7-alpine3.15
+    container: ruby:3.2.0-alpine3.16
 
     # Service containers to run with job
     services:
