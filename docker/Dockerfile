@@ -1,7 +1,7 @@
 # Based on https://github.com/ledermann/docker-rails/blob/develop/Dockerfile
 ARG RUBY_VERSION
 # NOTE FROM clears all ARGs
-FROM ruby:$RUBY_VERSION-alpine3.15
+FROM ruby:$RUBY_VERSION-alpine3.17
 
 ARG PG_MAJOR
 ARG NODE_MAJOR
