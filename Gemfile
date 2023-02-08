@@ -35,7 +35,7 @@ gem 'kaminari'
 gem 'pagy'
 gem 'ransack'
 gem 'responders'
-gem 'memoist', require: false
+gem 'memery', require: false
 
 # File processing
 gem 'carrierwave'
@@ -165,6 +165,7 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-faker', require: false
+  gem 'deprecation_toolkit', require: false
 end
 
 group :test do

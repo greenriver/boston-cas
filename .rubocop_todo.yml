@@ -994,7 +994,6 @@ Lint/LiteralAsCondition:
 # Cop supports --auto-correct.
 Lint/NonDeterministicRequireOrder:
   Exclude:
-    - 'spec/rails_helper.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
@@ -1315,7 +1314,6 @@ Style/Encoding:
 # Cop supports --auto-correct.
 Style/ExpandPathArguments:
   Exclude:
-    - 'spec/rails_helper.rb'
 
 # Offense count: 193
 # Configuration parameters: MinBodyLength.
@@ -1731,7 +1729,6 @@ Style/StringLiterals:
     - 'spec/models/client_notes_spec.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
-    - 'spec/rails_helper.rb'
     - 'spec/requests/express_neighborhood_interests_spec.rb'
     - 'spec/support/tasks.rb'
     - 'spec/tasks/update_clients_spec.rb'

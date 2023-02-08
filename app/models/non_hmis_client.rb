@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-require 'memoist'
+require 'memery'
 class NonHmisClient < ApplicationRecord
   include HudDemographics
 
@@ -424,9 +424,9 @@ class NonHmisClient < ApplicationRecord
   # Memoize assessment_tags at the class, they don't change often
   # This is the syntax for class method memoization, it is equivalent to
   # @@assessment_tags, but comes with an api
-  # you can bust the cache with assessment_tags(true)
+  # you can bust the cache with NonHmisClient.clear_memery_cache!
   class << self
-    extend Memoist
+    include Memery
     def assessment_tags
       Tag.where(rrh_assessment_trigger: true)
     end
@@ -463,7 +463,7 @@ class NonHmisClient < ApplicationRecord
     # prevent unneeded after_initialize hook from running queries
     NonHmisClient.skip_build_assessment_if_missing = true
     # make sure we have a recent set of assessment tags (cache bust)
-    self.class.assessment_tags(true)
+    self.class.clear_memery_cache!
     # remove unused ProjectClients
     ProjectClient.where(data_source_id: self.class.data_source.id).
       where.not(id_in_data_source: NonHmisClient.select(:id)).
