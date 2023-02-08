@@ -73,7 +73,7 @@ jobs:
           chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont \
           lftp postgresql tmux postgis geos geos-dev \
           shared-mime-info \
-          python3 py3-pip
+          python3 py3-pip xz
 
         pip3 install awscli
 

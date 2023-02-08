@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'activerecord-import'
-gem 'pg', '~> 1.1.0'
+gem 'pg', '~> 1.1'
 gem 'rails', '~>6.1'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
 gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
