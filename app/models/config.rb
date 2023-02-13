@@ -28,7 +28,7 @@ class Config < ApplicationRecord
   end
 
   def self.get(config)
-    @settings = Rails.cache.fetch(name) do
+    @settings = Rails.cache.fetch(name.to_s) do
       first_or_create
     end
     @settings.public_send(config)

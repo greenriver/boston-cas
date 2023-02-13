@@ -121,7 +121,7 @@ class OpportunitiesController < ApplicationController
         building = Building.find(opportunity_params[:building].to_i)
       end
     end
-    @opportunity.errors[:units] = 'Required, and must be a number' if params[:opportunity][:units].blank? || ! params[:opportunity][:units] =~ /\A\d+\z/
+    @opportunity.errors.add(:units, 'Required, and must be a number') if params[:opportunity][:units].blank? || ! params[:opportunity][:units].to_i.positive?
 
     if @opportunity.errors.present?
       @programs = sub_program_scope
