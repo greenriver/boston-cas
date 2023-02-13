@@ -19,7 +19,7 @@ module Reports
         end
         format.xlsx do
           filename = 'Agency Interactions.xlsx'
-          render xlsx: 'index.xlsx', filename: filename
+          render xlsx: 'index', filename: filename
         end
       end
     end

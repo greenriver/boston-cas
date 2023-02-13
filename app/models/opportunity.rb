@@ -161,11 +161,11 @@ class Opportunity < ApplicationRecord
   # Return prioritized clients who match this opportunity
   def matching_clients(client_scope = Client.available_for_matching(match_route))
     requirements_with_inherited.each do |requirement|
-      client_scope = client_scope.merge(requirement.clients_that_fit(client_scope, self))
+      client_scope = client_scope.merge(requirement.clients_that_fit(client_scope, self), rewhere: true)
     end
     client_scope = add_unit_attributes_filter(client_scope)
     client_scope = client_scope.not_rejected_for(id)
-    client_scope.merge(Client.prioritized(match_route, client_scope))
+    client_scope.merge(Client.prioritized(match_route, client_scope), rewhere: true)
   end
 
   def add_unit_attributes_filter(client_scope)

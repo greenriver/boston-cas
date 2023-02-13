@@ -5,11 +5,11 @@ x-app: &app
   build:
     context: .
     args:
-      RUBY_VERSION: 2.7.6
+      RUBY_VERSION: 2.7.7
       PG_MAJOR: '12'
       NODE_MAJOR: '12'
       YARN_VERSION: '1.17.3'
-      BUNDLER_VERSION: '2.3.8'
+      BUNDLER_VERSION: '2.4.6'
       ADDITIONAL_PACKAGES: vim nodejs python2 unzip xvfb google-chrome-stable less freetds-dev freetds-bin phantomjs xfonts-75dpi alien libpng-dev libicu-dev libcurl4-openssl-dev curl libmagic-dev libmagickcore-dev libmagickwand-dev
   environment: &env
     AWS_REGION: ${AWS_REGION:-us-east-1}
