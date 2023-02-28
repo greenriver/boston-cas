@@ -34,7 +34,6 @@ Layout/ArgumentAlignment:
 # SupportedStylesAlignWith: either, start_of_block, start_of_line
 Layout/BlockAlignment:
   Exclude:
-    - 'app/models/user.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 5
@@ -95,7 +94,6 @@ Layout/DotPosition:
     - 'app/models/identified_client.rb'
     - 'app/models/program.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/user.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
@@ -110,7 +108,6 @@ Layout/EmptyLineAfterGuardClause:
     - 'app/models/opportunity_details/via_unit.rb'
     - 'app/models/opportunity_details/via_voucher.rb'
     - 'app/models/tag.rb'
-    - 'app/models/user.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -551,7 +548,6 @@ Layout/IndentationConsistency:
     - 'app/models/program.rb'
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/user.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 1
@@ -590,7 +586,6 @@ Layout/IndentationWidth:
     - 'app/models/program.rb'
     - 'app/models/stalled_match_request.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/user.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 27
@@ -606,7 +601,6 @@ Layout/LeadingCommentSpace:
     - 'app/models/rules/income_less_than_thirty_percent_ami.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/testing/matching/candidate_generation.rb'
-    - 'app/models/user.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
 
 # Offense count: 6
@@ -758,7 +752,6 @@ Layout/SpaceInsideBlockBraces:
     - 'app/models/opportunity_contact.rb'
     - 'app/models/rules/tagged_with.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/user.rb'
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
@@ -785,7 +778,6 @@ Layout/SpaceInsideHashLiteralBraces:
     - 'app/models/program.rb'
     - 'app/models/rules/pathways_eligible.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/user.rb'
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
@@ -1126,7 +1118,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/rules/wheelchair.rb'
     - 'app/models/rules/willing_to_live_in_congregate_housing.rb'
     - 'app/models/rules/youth.rb'
-    - 'app/models/user.rb'
     - 'app/models/user_role.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'app/uploaders/imported_clients_csv_file_uploader.rb'
@@ -1600,7 +1591,6 @@ Style/RedundantSelf:
     - 'app/models/concerns/match_archive.rb'
     - 'app/models/match_events/decision_action.rb'
     - 'app/models/sub_program.rb'
-    - 'app/models/user.rb'
     - 'app/models/warehouse/cas_availability.rb'
 
 # Offense count: 1
@@ -1747,7 +1737,6 @@ Style/SymbolProc:
   Exclude:
     - 'app/models/concerns/has_or_inherits_services.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/user.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
 # Offense count: 2
@@ -1782,7 +1771,6 @@ Style/TrailingCommaInArguments:
     - 'app/models/rules/youth.rb'
     - 'app/models/sub_program.rb'
     - 'app/models/subgrantee.rb'
-    - 'app/models/user.rb'
     - 'app/models/user_role.rb'
     - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
