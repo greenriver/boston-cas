@@ -1697,7 +1697,6 @@ Style/StringLiterals:
     - 'app/models/concerns/match_decisions/accepts_not_working_with_client_reason.rb'
     - 'app/models/concerns/subject_for_matches.rb'
     - 'app/models/contact.rb'
-    - 'app/models/match_decisions/five/five_lease_up.rb'
     - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
     - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'app/models/notifications/match_initiation_for_manual_notification.rb'

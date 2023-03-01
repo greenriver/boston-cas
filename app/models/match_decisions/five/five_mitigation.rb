@@ -100,8 +100,11 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::MitigationDecline.all
+    def step_decline_reasons(_contact)
+      @step_decline_reasons ||= [
+        'Mitigation failed',
+        'Other',
+      ]
     end
   end
 end
