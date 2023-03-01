@@ -113,13 +113,40 @@ module MatchDecisions
       contact.in?(match.shelter_agency_contacts)
     end
 
-    private def decline_reason_scope(contact)
+    def step_decline_reasons(contact)
+      @shelter_agency_contact_reasons ||= [
+        'Client has another housing option',
+        'Does not agree to services',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Other',
+      ].freeze
+
+      @hsa_contact_reasons ||= [
+        'CORI',
+        'SORI',
+        'Immigration status',
+        'Household did not respond after initial acceptance of match',
+        'Ineligible for Housing Program',
+        'Client refused offer',
+        'Self-resolved',
+        'Falsification of documents',
+        'Additional screening criteria imposed by third parties',
+        'Health and Safety',
+        'Other',
+      ]
+      @combined_reasons ||= (@shelter_agency_contact_reasons + @hsa_contact_reasons).uniq.freeze
+
       if contact.user_can_act_on_behalf_of_match_contacts?
-        MatchDecisionReasons::Base.where(type: ['MatchDecisionReasons::ShelterAgencyDecline', 'MatchDecisionReasons::HousingSubsidyAdminDecline'])
+        @combined_reasons
       elsif contact.in?(match.shelter_agency_contacts)
-        MatchDecisionReasons::ShelterAgencyDecline.all
+        @shelter_agency_contact_reasons
       else
-        MatchDecisionReasons::HousingSubsidyAdminDecline.available
+        @hsa_contact_reasons
       end
     end
 

@@ -76,8 +76,17 @@ module MatchDecisions
       ]
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::ShelterAgencyDecline.all
+    def step_decline_reasons(_contact)
+      @step_decline_reasons ||= [
+        'Client has another housing option',
+        'Does not agree to services',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+      ]
     end
 
     def initialize_decision! send_notifications: true
