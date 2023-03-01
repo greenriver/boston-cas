@@ -10,6 +10,7 @@ module MatchDecisions::ProviderOnly
       'match_decisions/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultHsaPriorityDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -93,10 +94,6 @@ module MatchDecisions::ProviderOnly
 
     def show_client_match_attributes?
       true
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
 
     class StatusCallbacks < StatusCallbacks
