@@ -104,8 +104,10 @@ module MatchDecisions::Nine
         contact.in?(match.send(contact_actor_type))
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::NineCaseContactAssignsManagerDecline.active
+    def step_decline_reasons(_contact)
+      @step_decline_reasons ||= [
+        'Other',
+      ].freeze
     end
 
     def whitelist_params_for_update params
