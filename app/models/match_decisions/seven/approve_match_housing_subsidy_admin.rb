@@ -7,6 +7,7 @@
 module MatchDecisions::Seven
   class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultHsaDeclineReasons
 
     def label
       label_for_status status
@@ -93,10 +94,6 @@ module MatchDecisions::Seven
 
     def to_param
       :seven_approve_match_housing_subsidy_admin
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.available
     end
 
     class StatusCallbacks < StatusCallbacks
