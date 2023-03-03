@@ -461,18 +461,6 @@ module MatchDecisions
       MatchDecisionReasons::All.where(name: step_cancel_reasons)
     end
 
-    def step_hsa_cancel_reasons
-      @step_hsa_cancel_reasons ||= [
-        'Vacancy should not have been entered',
-        'Vacancy filled by other client',
-        'Other',
-      ]
-    end
-
-    def hsa_cancel_reasons
-      MatchDecisionReasons::All.where(name: step_hsa_cancel_reasons)
-    end
-
     private def ensure_status_allowed
       errors.add :status, 'is not allowed' if statuses.with_indifferent_access[status].blank?
     end

@@ -97,6 +97,14 @@ module MatchDecisions::ProviderOnly
     end
     private_constant :StatusCallbacks
 
+    def step_cancel_reasons
+      [
+        'Vacancy should not have been entered',
+        'Vacancy filled by other client',
+        'Other',
+      ]
+    end
+
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
         :shelter_expiration,
