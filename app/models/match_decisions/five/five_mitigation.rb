@@ -101,7 +101,7 @@ module MatchDecisions::Five
     end
 
     def step_decline_reasons(_contact)
-      @step_decline_reasons ||= [
+      [
         'Mitigation failed',
         'Other',
       ]

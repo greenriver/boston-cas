@@ -90,7 +90,7 @@ module MatchDecisions::Nine
     end
 
     def step_decline_reasons(_contact)
-      @step_decline_reasons ||= [
+      [
         'Other',
       ].freeze
     end
