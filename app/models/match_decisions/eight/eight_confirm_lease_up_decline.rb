@@ -83,8 +83,17 @@ module MatchDecisions::Eight
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
+    def step_decline_reasons(_contact)
+      @step_decline_reasons ||= [
+        'Immigration status',
+        'Ineligible for Housing Program',
+        'Self-resolved',
+        'Household did not respond after initial acceptance of match',
+        'Client refused offer',
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+        'Other',
+      ].freeze
     end
   end
 end
