@@ -10,7 +10,6 @@ module MatchDecisions::ProviderOnly
       'match_decisions/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultHsaPriorityDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -118,6 +117,20 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
+
+    def step_decline_reasons(_contact)
+      [
+        'Client has another housing option',
+        'Does not agree to services',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Other',
+      ]
+    end
 
     def step_cancel_reasons
       [
