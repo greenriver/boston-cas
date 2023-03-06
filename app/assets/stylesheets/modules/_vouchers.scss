@@ -8,3 +8,10 @@
 .vouchers--available {
   width: 6rem;
 }
+
+.vouchers--building .select2-container .select2-selection--single .select2-selection__rendered,
+.vouchers--unit .select2-container .select2-selection--single .select2-selection__rendered
+{
+  white-space: normal;
+  word-wrap: anywhere;
+}
