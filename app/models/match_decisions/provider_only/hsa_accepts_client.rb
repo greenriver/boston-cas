@@ -120,15 +120,10 @@ module MatchDecisions::ProviderOnly
 
     def step_decline_reasons(_contact)
       [
-        'Client has another housing option',
-        'Does not agree to services',
-        'Unwilling to live in that neighborhood',
-        'Unwilling to live in SRO',
-        'Does not want housing at this time',
-        'Unsafe environment for this person',
-        'Client refused unit (non-SRO)',
-        'Client refused voucher',
-        'Other',
+        'Household could not be located',
+        'Ineligible for Housing Program',
+        'Client refused offer',
+        'Health and Safety',
       ]
     end
 
