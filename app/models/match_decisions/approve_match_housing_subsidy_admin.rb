@@ -130,6 +130,8 @@ module MatchDecisions
         'CORI',
         'SORI',
         'Immigration status',
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
         'Household did not respond after initial acceptance of match',
         'Ineligible for Housing Program',
         'Client refused offer',
