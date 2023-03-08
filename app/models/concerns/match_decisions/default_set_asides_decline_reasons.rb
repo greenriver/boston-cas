@@ -17,7 +17,7 @@ module MatchDecisions
         'Vacancy filled by other client',
         'Client has declined match',
         'Client has disengaged',
-        'Client cannot be located',
+        'Household could not be located',
         'CORI',
         'Unwilling to live in that neighborhood',
         'Unwilling to live in SRO',
