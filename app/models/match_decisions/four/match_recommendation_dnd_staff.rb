@@ -8,6 +8,7 @@ module MatchDecisions::Four
   class MatchRecommendationDndStaff < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::DefaultDndStaffDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match

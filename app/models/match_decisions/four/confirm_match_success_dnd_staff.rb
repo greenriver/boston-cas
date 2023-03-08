@@ -6,6 +6,7 @@
 
 module MatchDecisions::Four
   class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::RouteFourCancelReasons
     # validate :note_present_if_status_rejected
 
     def statuses

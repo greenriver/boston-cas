@@ -8,6 +8,7 @@ module MatchDecisions::Four
   class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::DefaultHsaDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     # validate :note_present_if_status_declined
 
