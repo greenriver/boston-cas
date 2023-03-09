@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineAssignCaseContact < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :ensure_required_contacts_present_on_accept
 

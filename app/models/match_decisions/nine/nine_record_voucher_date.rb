@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :date_voucher_issued_present_if_status_accept
     validate :ensure_required_contacts_present_on_accept

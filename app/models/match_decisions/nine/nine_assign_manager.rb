@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :manager_present_if_status_complete
 
