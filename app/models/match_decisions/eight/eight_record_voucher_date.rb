@@ -7,6 +7,7 @@
 module MatchDecisions::Eight
   class EightRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :date_voucher_issued_present_if_status_complete
 

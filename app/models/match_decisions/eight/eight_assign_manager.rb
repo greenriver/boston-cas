@@ -7,6 +7,7 @@
 module MatchDecisions::Eight
   class EightAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :ensure_required_contacts_present_on_complete
 
