@@ -61,7 +61,7 @@ class SystemStatusController < ApplicationController
     jobs_stats = {}
     jobs_message = 'OK'
     Delayed::Job.select('distinct queue').pluck(:queue).each do |queue|
-      scope = Delayed::Job.where(queue:)
+      scope = Delayed::Job.where(queue: queue)
       enqueued = scope.where(failed_at: nil).count
       failed = scope.where.not(failed_at: nil).count
 
@@ -74,8 +74,8 @@ class SystemStatusController < ApplicationController
       end
 
       jobs_stats[queue] = {
-        enqueued:,
-        failed:,
+        enqueued: enqueued,
+        failed: failed,
       }
     end
 
@@ -88,8 +88,8 @@ class SystemStatusController < ApplicationController
 
     payload = {
       db: db_message,
-      jobs_stats:,
-      jobs_message:,
+      jobs_stats: jobs_stats,
+      jobs_message: jobs_message,
       revision: Git.revision,
       branch: Git.branch,
       hostname: `hostname`.chomp,
@@ -98,10 +98,10 @@ class SystemStatusController < ApplicationController
       registered_deployment_id: Rails.cache.read('registered-deployment-id'),
       environment_deployment_id: ENV['DEPLOYMENT_ID'],
       last_migration: {
-        cas:,
+        cas: cas,
       },
     }
 
-    render json: payload, status:
+    render json: payload, status: status
   end
 end
