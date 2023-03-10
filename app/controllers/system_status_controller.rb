@@ -17,7 +17,7 @@ class SystemStatusController < ApplicationController
   # operational
   def operational
     user_count = User.all.count
-    if user_count > 0
+    if user_count.positive?
       Rails.logger.info 'Operating system is operational'
       render plain: 'OK'
     else
@@ -50,17 +50,6 @@ class SystemStatusController < ApplicationController
 
     status = 417 if cache_message != 'OK'
 
-    branch = begin
-               `git rev-parse HEAD`.chomp
-             rescue StandardError
-               'unknown'
-             end
-    revision = (begin
-                  File.read(File.join(Rails.root, 'REVISION'))
-                rescue StandardError
-                  branch
-                end)
-
     db_message = 'UNKNOWN'
     begin
       db_message = (ApplicationRecord.connection.execute('select 1') ? 'OK' : 'FAILED')
@@ -72,7 +61,7 @@ class SystemStatusController < ApplicationController
     jobs_stats = {}
     jobs_message = 'OK'
     Delayed::Job.select('distinct queue').pluck(:queue).each do |queue|
-      scope = Delayed::Job.where(queue: queue)
+      scope = Delayed::Job.where(queue:)
       enqueued = scope.where(failed_at: nil).count
       failed = scope.where.not(failed_at: nil).count
 
@@ -85,8 +74,8 @@ class SystemStatusController < ApplicationController
       end
 
       jobs_stats[queue] = {
-        enqueued: enqueued,
-        failed: failed,
+        enqueued:,
+        failed:,
       }
     end
 
@@ -99,20 +88,20 @@ class SystemStatusController < ApplicationController
 
     payload = {
       db: db_message,
-      jobs_stats: jobs_stats,
-      jobs_message: jobs_message,
-      revision: revision.chomp,
-      branch: branch,
+      jobs_stats:,
+      jobs_message:,
+      revision: Git.revision,
+      branch: Git.branch,
       hostname: `hostname`.chomp,
       cache: cache_message,
       user_count_positive: User.all.any?,
       registered_deployment_id: Rails.cache.read('registered-deployment-id'),
       environment_deployment_id: ENV['DEPLOYMENT_ID'],
       last_migration: {
-        cas: cas,
+        cas:,
       },
     }
 
-    render json: payload, status: status
+    render json: payload, status:
   end
 end

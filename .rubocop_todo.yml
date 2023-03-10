@@ -1533,7 +1533,6 @@ Style/NonNilCheck:
 Style/NumericPredicate:
   Exclude:
     - 'spec/**/*'
-    - 'app/controllers/system_status_controller.rb'
     - 'app/models/concerns/subject_for_matches.rb'
 
 # Offense count: 1
