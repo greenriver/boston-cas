@@ -124,6 +124,7 @@ module MatchDecisions::ProviderOnly
         'Ineligible for Housing Program',
         'Client refused offer',
         'Health and Safety',
+        'Other',
       ]
     end
 
