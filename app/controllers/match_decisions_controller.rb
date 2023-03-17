@@ -150,6 +150,16 @@ class MatchDecisionsController < ApplicationController
     redirect_to access_context.match_decision_path(@match, @decision, redirect: 'true')
   end
 
+  def recreate_hsa_notifications_nine
+    if @decision.editable? && @decision.class.name.in?(['MatchDecisions::Nine::NineRecordVoucherDate'])
+      flash[:notice] = "Resent notifications for #{_('HSA Nine')}"
+      @decision.recreate_hsa_notifications
+    else
+      flash[:alert] = 'Unable to recreate notifications for this step, it is now locked.'
+    end
+    redirect_to access_context.match_decision_path(@match, @decision, redirect: 'true')
+  end
+
   private def find_match!
     @match = match_scope.find params[:match_id]
   end

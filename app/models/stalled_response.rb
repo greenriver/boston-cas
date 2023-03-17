@@ -143,7 +143,8 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
           'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator',
-        ], # 3,4,5,4
+          'MatchDecisions::Nine::NineRecordVoucherDate',
+        ], # 3,4,5,4,9
         requires_note: true,
         weight: 100,
       },
@@ -210,7 +211,8 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
-        ], # 3,4,5,4
+          'MatchDecisions::Nine::NineRecordVoucherDate',
+        ], # 3,4,5,4,9
         requires_note: false,
       },
       {
@@ -224,7 +226,8 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
-        ], # 3,4,5,4
+          'MatchDecisions::Nine::NineRecordVoucherDate',
+        ], # 3,4,5,4,9
         requires_note: false,
       },
       {
@@ -238,7 +241,8 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin',
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
-        ], # 3,4,5,4
+          'MatchDecisions::Nine::NineRecordVoucherDate',
+        ], # 3,4,5,4,9
         requires_note: false,
       },
       {
@@ -266,7 +270,8 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
-        ], # 3,4,5,4
+          'MatchDecisions::Nine::NineRecordVoucherDate',
+        ], # 3,4,5,4,9
         requires_note: true,
         weight: 100,
       },
