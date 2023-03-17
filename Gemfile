@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'activerecord-import'
+gem 'rack', '>= 2.2.6.4'
+gem 'activesupport', '>= 6.1.7.3'
 gem 'pg', '~> 1.1'
 gem 'rails', '~>6.1'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
