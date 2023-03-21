@@ -181,25 +181,6 @@
       "note": ""
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 123,
-      "fingerprint": "425dcb3af9624f11f12d777d6f9fe05995719975a155c30012baa6b9dc3487df",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 2.7.7 ends on 2023-03-31",
-      "file": "Gemfile.lock",
-      "line": 480,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Weak",
-      "cwe_id": [
-        1104
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "50b6526d2855834552716cadcb7d87a71e755a9982a18a0f4a570048d2765096",
@@ -345,6 +326,25 @@
       "confidence": "Weak",
       "cwe_id": [
         352
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 123,
+      "fingerprint": "870fa4a5cfd770898e1b7a159368b4210fe366634512563f9fb1c1cbbfef1d78",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 2.7.7 ends on 2023-03-31",
+      "file": "Gemfile.lock",
+      "line": 486,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        1104
       ],
       "note": ""
     },
@@ -800,6 +800,6 @@
       "note": ""
     }
   ],
-  "updated": "2023-02-03 13:55:46 +0000",
+  "updated": "2023-03-21 11:48:07 -0400",
   "brakeman_version": "5.4.0"
 }
