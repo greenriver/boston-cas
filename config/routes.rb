@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       resources :decisions, only: [:show, :update], controller: 'match_decisions' do
         resource :acknowledgment, only: [:create], controller: 'match_decision_acknowledgments'
         get :recreate_notifications, on: :member
+        get :recreate_hsa_notifications_nine, on: :member
       end
 
       resource :contacts, only: [:edit, :update], controller: 'match_contacts'
