@@ -144,7 +144,9 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::MatchRecommendationHsa',
           'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator',
           'MatchDecisions::Nine::NineRecordVoucherDate',
-        ], # 3,4,5,4,9
+          'MatchDecisions::Eight::EightRecordVoucherDate',
+          'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin',
+        ], # 3,4,5,4,7,8,9
         requires_note: true,
         weight: 100,
       },
@@ -212,7 +214,9 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
           'MatchDecisions::Nine::NineRecordVoucherDate',
-        ], # 3,4,5,4,9
+          'MatchDecisions::Eight::EightRecordVoucherDate',
+          'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin',
+        ], # 3,4,5,4,7,8,9
         requires_note: false,
       },
       {
@@ -227,7 +231,9 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
           'MatchDecisions::Nine::NineRecordVoucherDate',
-        ], # 3,4,5,4,9
+          'MatchDecisions::Eight::EightRecordVoucherDate',
+          'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin',
+        ], # 3,4,5,4,7,8,9
         requires_note: false,
       },
       {
@@ -242,7 +248,9 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
           'MatchDecisions::Nine::NineRecordVoucherDate',
-        ], # 3,4,5,4,9
+          'MatchDecisions::Eight::EightRecordVoucherDate',
+          'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin',
+        ], # 3,4,5,4,7,8,9
         requires_note: false,
       },
       {
@@ -271,7 +279,9 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::HomelessSetAside::SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator',
           'MatchDecisions::Four::MatchRecommendationHsa',
           'MatchDecisions::Nine::NineRecordVoucherDate',
-        ], # 3,4,5,4,9
+          'MatchDecisions::Eight::EightRecordVoucherDate',
+          'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin',
+        ], # 3,4,5,4,7,8,9
         requires_note: true,
         weight: 100,
       },
