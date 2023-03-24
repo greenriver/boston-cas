@@ -116,7 +116,7 @@ module MatchDecisions::Nine
         'Client needs higher level of care',
         'Unable to reach client after multiple attempts',
         'Other',
-      ].freeze
+      ]
     end
 
     def whitelist_params_for_update params

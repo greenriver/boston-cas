@@ -9,7 +9,7 @@ module MatchDecisions
     extend ActiveSupport::Concern
 
     def step_cancel_reasons
-      @step_cancel_reasons = [
+      [
         'Vacancy should not have been entered',
         'Client received another housing opportunity',
         'Client no longer eligible for match',

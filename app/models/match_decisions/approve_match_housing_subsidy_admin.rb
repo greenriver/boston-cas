@@ -114,7 +114,7 @@ module MatchDecisions
     end
 
     def step_decline_reasons(contact)
-      @shelter_agency_contact_reasons ||= [
+      shelter_agency_contact_reasons = [
         'Client has another housing option',
         'Does not agree to services',
         'Unwilling to live in that neighborhood',
@@ -124,9 +124,9 @@ module MatchDecisions
         'Client refused unit (non-SRO)',
         'Client refused voucher',
         'Other',
-      ].freeze
+      ]
 
-      @hsa_contact_reasons ||= [
+      hsa_contact_reasons = [
         'CORI',
         'SORI',
         'Immigration status',
@@ -141,14 +141,14 @@ module MatchDecisions
         'Health and Safety',
         'Other',
       ]
-      @combined_reasons ||= (@shelter_agency_contact_reasons + @hsa_contact_reasons).uniq.freeze
+      combined_reasons ||= (shelter_agency_contact_reasons + hsa_contact_reasons).uniq
 
       if contact.user_can_act_on_behalf_of_match_contacts?
-        @combined_reasons
+        combined_reasons
       elsif contact.in?(match.shelter_agency_contacts)
-        @shelter_agency_contact_reasons
+        shelter_agency_contact_reasons
       else
-        @hsa_contact_reasons
+        hsa_contact_reasons
       end
     end
 

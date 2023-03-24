@@ -108,7 +108,7 @@ module MatchDecisions::Eight
     def step_decline_reasons(_contact)
       [
         'Other',
-      ].freeze
+      ]
     end
 
     def whitelist_params_for_update params

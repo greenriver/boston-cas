@@ -9,7 +9,7 @@ module MatchDecisions
     extend ActiveSupport::Concern
 
     def step_decline_reasons(_contact)
-      @step_decline_reasons ||= [
+      [
         'Client has another housing option',
         'Does not agree to services',
         'Unwilling to live in that neighborhood',

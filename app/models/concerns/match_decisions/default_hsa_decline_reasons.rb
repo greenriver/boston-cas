@@ -9,7 +9,7 @@ module MatchDecisions
     extend ActiveSupport::Concern
 
     def step_decline_reasons(_contact)
-      @step_decline_reasons ||= [
+      [
         'Immigration status',
         'Ineligible for Housing Program',
         'Self-resolved',

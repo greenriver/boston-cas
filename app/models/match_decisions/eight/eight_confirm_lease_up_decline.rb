@@ -94,7 +94,7 @@ module MatchDecisions::Eight
         'Client needs higher level of care',
         'Unable to reach client after multiple attempts',
         'Other',
-      ].freeze
+      ]
     end
   end
 end

@@ -9,7 +9,7 @@ module MatchDecisions
     extend ActiveSupport::Concern
 
     def step_decline_reasons(_contact)
-      @step_decline_reasons ||= [
+      [
         'Vacancy should not have been entered',
         'Client received another housing opportunity',
         'Client no longer eligible for match',

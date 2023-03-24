@@ -9,7 +9,7 @@ module MatchDecisions
     extend ActiveSupport::Concern
 
     def step_decline_reasons(_contact)
-      @step_decline_reasons ||= [
+      [
         "Client won't be eligible for services",
         "Client won't be eligible for housing type",
         "Client won't be eligible based on funding source",
