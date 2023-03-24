@@ -109,9 +109,11 @@ class Reporting::Decisions < ApplicationRecord
   scope :ethnicity, ->(limit) do
     # Ethnicity is mapped through a lookup table
     values = [].tap do |vals|
-      vals << Ethnicity.find_by(numeric: 0).id if limit.include?(:non_hispanic)
-      vals << Ethnicity.find_by(numeric: 1).id if limit.include?(:hispanic)
+      vals << Ethnicity.find_by(text: 'Non-Hispanic/Non-Latino').numeric if limit.include?(:non_hispanic)
+      vals << Ethnicity.find_by(text: 'Hispanic/Latino').numeric if limit.include?(:hispanic)
     end
+
+    # note, Client.ethnicity_id is mapped to Ethnicity.numeric
     joins(:client).
       where(c_t[:ethnicity_id].in(values))
   end
