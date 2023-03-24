@@ -113,6 +113,7 @@ class Reporting::Decisions < ApplicationRecord
       vals << Ethnicity.find_by(text: 'Hispanic/Latino').numeric if limit.include?(:hispanic)
     end
 
+    # note, Client.ethnicity_id is mapped to Ethnicity.numeric
     joins(:client).
       where(c_t[:ethnicity_id].in(values))
   end
