@@ -45,7 +45,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
 
   # Print deprecation notices to the stderr.
-  config.active_support.deprecation = :stderr
+  config.active_support.deprecation = :raise
 
   # don't need email sandbox with test deliverer
   config.sandbox_email_mode = false

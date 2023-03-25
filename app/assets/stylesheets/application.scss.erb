@@ -1,13 +1,13 @@
 // Per installation and environment files
 <%
   sheet = Rails.root.join('app', 'assets', 'stylesheets', '_custom', "#{ENV['CLIENT']}.scss")
-  if ENV['CLIENT'].present? && File.exists?(sheet)
+  if ENV['CLIENT'].present? && File.exist?(sheet)
 %>
   @import "./_custom/<%=ENV['CLIENT']%>";
 <% end %>
 <%
   sheet = Rails.root.join('app', 'assets', 'stylesheets', '_custom', 'env', "#{ENV['RAILS_ENV']}.scss")
-  if ENV['RAILS_ENV'].present? && File.exists?(sheet)
+  if ENV['RAILS_ENV'].present? && File.exist?(sheet)
 %>
 @import "./_custom/env/<%=ENV['RAILS_ENV']%>";
 <% end %>

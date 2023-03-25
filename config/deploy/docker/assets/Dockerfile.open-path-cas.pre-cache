@@ -1,7 +1,7 @@
 #####################################################
 ## Multi-stage build to speed up subsequent builds ##
 #####################################################
-FROM ruby:2.7.7-alpine3.15
+FROM ruby:3.1.3-alpine3.17
 
 #freetds-dev \
 # maybe can get rid of icu?
@@ -14,7 +14,7 @@ RUN apk add --no-cache \
   curl libcurl curl-dev \
   libmagic file-dev file \
   build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
-  tar \
+  tar xz \
   && git config --global --add safe.directory /app
 
 WORKDIR /app

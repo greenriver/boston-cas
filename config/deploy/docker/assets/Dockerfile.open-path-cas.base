@@ -32,7 +32,7 @@ ENV RAILS_LOG_TO_STDOUT=true \
 ARG BUILDER
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=2.7.7
+LABEL "ruby-version"=3.1.3
 
 # Get self-signed cert
 COPY --from=builder /key.pem /cert.pem /app/config/
@@ -79,6 +79,7 @@ RUN chown -R app:app /usr/local/bundle
 RUN chown app:app /etc/timezone
 
 COPY config/deploy/docker/assets/REVISION ./
+COPY config/deploy/docker/assets/GIT_BRANCH ./
 
 COPY config/deploy/docker/assets/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
