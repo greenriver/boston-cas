@@ -13,7 +13,11 @@
               = link_to access_context.edit_match_contacts_path(@match), data: {loads_in_pjax_modal: true}, class: [:btn, 'btn-primary'] do
                 %span.icon-pencil
                 Assign Navigator Contact
-              %p.mt-4 Once the contact has been assigned, click the Accept Match button below.
+              %p.mt-4 Once the contact has been assigned, you can notify the navigator contact of the match by clicking the Resend Notifications button.
+              - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
+                = link_to recreate_hsa_notifications_nine_match_decision_path(@match, @match.current_decision), class: 'btn btn-light' do
+                  %i.icon-envelope-o
+                  Resend #{_('HSA Nine')} Notifications
       .o-choose.o-choose--flush.o-choose--flush-top
         - if @decision.accessible_by?(current_contact)
           .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?)]}

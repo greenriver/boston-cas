@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -144,6 +144,16 @@ class MatchDecisionsController < ApplicationController
     if @decision.editable?
       flash[:notice] = 'Recreated notifications for this step'
       @decision.recreate_notifications_for_this_step
+    else
+      flash[:alert] = 'Unable to recreate notifications for this step, it is now locked.'
+    end
+    redirect_to access_context.match_decision_path(@match, @decision, redirect: 'true')
+  end
+
+  def recreate_hsa_notifications_nine
+    if @decision.editable? && @decision.class.name.in?(['MatchDecisions::Nine::NineRecordVoucherDate'])
+      flash[:notice] = "Resent notifications for #{_('HSA Nine')}"
+      @decision.recreate_hsa_notifications
     else
       flash[:alert] = 'Unable to recreate notifications for this step, it is now locked.'
     end

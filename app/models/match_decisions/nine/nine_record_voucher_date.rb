@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -83,6 +83,11 @@ module MatchDecisions::Nine
         m << Notifications::Nine::NineRecordVoucherDate
         m << Notifications::Nine::NineMatchInProgress
       end
+    end
+
+    # special case for when a new navigator has been assigned
+    def recreate_hsa_notifications
+      Notifications::Nine::NineRecordVoucherDate.create_for_match! match
     end
 
     def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
