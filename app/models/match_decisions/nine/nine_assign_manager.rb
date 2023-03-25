@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :manager_present_if_status_complete
 
@@ -104,8 +105,10 @@ module MatchDecisions::Nine
         contact.in?(match.send(contact_actor_type))
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::NineCaseContactAssignsManagerDecline.active
+    def step_decline_reasons(_contact)
+      [
+        'Other',
+      ]
     end
 
     def whitelist_params_for_update params

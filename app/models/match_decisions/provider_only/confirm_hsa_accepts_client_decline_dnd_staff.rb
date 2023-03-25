@@ -100,4 +100,12 @@ module MatchDecisions::ProviderOnly
     end
     private_constant :StatusCallbacks
   end
+
+  def step_cancel_reasons
+    [
+      'Vacancy should not have been entered',
+      'Vacancy filled by other client',
+      'Other',
+    ]
+  end
 end

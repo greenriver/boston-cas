@@ -7,6 +7,8 @@
 module MatchDecisions::Eight
   class EightMatchRecommendation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultDndStaffDeclineReasons
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
@@ -63,10 +65,6 @@ module MatchDecisions::Eight
 
     def default_shelter_expiration
       Date.current + stalled_after
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::DndStaffDecline.all
     end
 
     def notifications_for_this_step

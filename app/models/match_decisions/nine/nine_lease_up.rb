@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineLeaseUp < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :client_move_in_date_present_if_status_complete
 
@@ -105,8 +106,17 @@ module MatchDecisions::Nine
         contact.in?(match.send(contact_actor_type))
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.available(route: match_route)
+    def step_decline_reasons(_contact)
+      [
+        'Immigration status',
+        'Ineligible for Housing Program',
+        'Self-resolved',
+        'Household did not respond after initial acceptance of match',
+        'Client refused offer',
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+        'Other',
+      ]
     end
 
     def whitelist_params_for_update params

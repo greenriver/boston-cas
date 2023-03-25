@@ -6,6 +6,8 @@
 
 module MatchDecisions::Four
   class ScheduleCriminalHearingHousingSubsidyAdmin < ::MatchDecisions::Base
+    include MatchDecisions::RouteFourCancelReasons
+
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
 
