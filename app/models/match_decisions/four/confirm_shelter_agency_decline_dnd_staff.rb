@@ -6,6 +6,8 @@
 
 module MatchDecisions::Four
   class ConfirmShelterAgencyDeclineDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::RouteFourCancelReasons
+
     def statuses
       {
         pending: 'Pending',

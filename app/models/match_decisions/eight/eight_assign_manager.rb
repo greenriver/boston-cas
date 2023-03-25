@@ -7,6 +7,7 @@
 module MatchDecisions::Eight
   class EightAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :ensure_required_contacts_present_on_complete
 
@@ -104,8 +105,10 @@ module MatchDecisions::Eight
         contact.in?(match.send(contact_actor_type))
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
+    def step_decline_reasons(_contact)
+      [
+        'Other',
+      ]
     end
 
     def whitelist_params_for_update params

@@ -7,6 +7,7 @@
 module MatchDecisions
   class RecordClientHousedDateHousingSubsidyAdministrator < Base
     include MatchDecisions::AcceptsDeclineReason # For shelter agency declines
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -108,10 +109,6 @@ module MatchDecisions
     def declineable_by?(contact)
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.shelter_agency_contacts)
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
     def show_client_match_attributes?

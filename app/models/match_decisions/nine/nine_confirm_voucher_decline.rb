@@ -6,6 +6,8 @@
 
 module MatchDecisions::Nine
   class NineConfirmVoucherDecline < ::MatchDecisions::Base
+    include MatchDecisions::RouteEightCancelReasons
+
     def statuses
       {
         pending: 'Pending',

@@ -7,6 +7,7 @@
 module MatchDecisions::Eight
   class EightConfirmAssignManagerDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     def step_name
       "#{_('DND')} confirms case manager assignment decline"

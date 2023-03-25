@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineAssignCaseContact < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :ensure_required_contacts_present_on_accept
 
@@ -87,6 +88,12 @@ module MatchDecisions::Nine
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
         contact.in?(match.send(contact_actor_type))
+    end
+
+    def step_decline_reasons(_contact)
+      [
+        'Other',
+      ]
     end
 
     def whitelist_params_for_update params

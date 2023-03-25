@@ -7,6 +7,7 @@
 module MatchDecisions::Five
   class FiveScreening < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
 
     attr_accessor :required_mitigations
 
@@ -102,10 +103,6 @@ module MatchDecisions::Five
 
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::ShelterAgencyDecline.all
     end
   end
 end

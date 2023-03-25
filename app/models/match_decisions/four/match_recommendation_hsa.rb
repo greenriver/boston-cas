@@ -8,6 +8,8 @@ module MatchDecisions::Four
   class MatchRecommendationHsa < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     # proxy for client.release_of_information
     attr_accessor :release_of_information
@@ -102,11 +104,6 @@ module MatchDecisions::Four
 
     private def note_present_if_status_declined
       errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
-    end
-
-    private def decline_reason_scope(_contact)
-      # FIXME: this may be different
-      MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
     class StatusCallbacks < StatusCallbacks

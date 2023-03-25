@@ -439,6 +439,28 @@ module MatchDecisions
       self.class.const_get :StatusCallbacks
     end
 
+    def step_cancel_reasons
+      @step_cancel_reasons ||= [
+        'Match expired',
+        'Client has declined match',
+        'Client has disengaged',
+        'Client has disappeared',
+        'SSP CORI',
+        'HSP CORI',
+        'Incarcerated',
+        'Vacancy should not have been entered',
+        'Client received another housing opportunity',
+        'Client no longer eligible for match',
+        'Client deceased',
+        'Vacancy filled by other client',
+        'Other',
+      ]
+    end
+
+    def cancel_reasons
+      MatchDecisionReasons::All.where(name: step_cancel_reasons)
+    end
+
     private def ensure_status_allowed
       errors.add :status, 'is not allowed' if statuses.with_indifferent_access[status].blank?
     end
