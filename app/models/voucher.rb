@@ -158,6 +158,17 @@ class Voucher < ApplicationRecord
     [:client_search]
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+   [
+   ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [
+      status_match: :client
+    ]
+  end
+
   scope :client_search, ->(text) do
     return none unless text.present?
 
