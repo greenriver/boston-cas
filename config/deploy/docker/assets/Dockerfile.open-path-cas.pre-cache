@@ -33,6 +33,7 @@ COPY config ./config
 COPY app ./app
 COPY vendor ./vendor
 COPY config/deploy/docker/assets/dotenv.temporary ./.env
+COPY sample.irbrc ./.irbrc
 
 # https://github.com/sass/sassc-ruby/issues/146#issuecomment-542288556
 # core dumps during precompile on github when using the pre-cache image pulled
