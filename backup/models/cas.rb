@@ -6,8 +6,8 @@
 # Documentation: http://backup.github.io/backup
 # Issue Tracker: https://github.com/backup/backup/issues
 
-db_config = YAML.load_file('config/database.yml')['production']
-notifier_config = YAML.load_file('config/exception_notifier.yml')['production']
+db_config = YAML.load_file('config/database.yml', aliases: true)['production']
+notifier_config = YAML.load_file('config/exception_notifier.yml', aliases: true)['production']
 
 Backup::Model.new(:cas, 'Description for cas') do
   database PostgreSQL do |db|

@@ -19,11 +19,6 @@ Layout/AccessModifierIndentation:
 # SupportedStyles: with_first_argument, with_fixed_indentation
 Layout/ArgumentAlignment:
   Exclude:
-    - 'app/controllers/concerns/has_match_access_context.rb'
-    - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/models/concerns/contact_join_model.rb'
-    - 'app/models/stalled_match_request.rb'
-    - 'app/models/sub_program.rb'
     - 'bin/guard'
     - 'bin/rspec'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
@@ -57,14 +52,11 @@ Layout/ClosingHeredocIndentation:
 # Cop supports --auto-correct.
 Layout/ClosingParenthesisIndentation:
   Exclude:
-    - 'app/controllers/client_contacts_controller.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
 Layout/CommentIndentation:
   Exclude:
-    - 'app/controllers/services_controller.rb'
-    - 'app/models/rules/pathways_eligible.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -72,7 +64,6 @@ Layout/CommentIndentation:
 # SupportedStylesAlignWith: start_of_line, def
 Layout/DefEndAlignment:
   Exclude:
-    - 'app/controllers/reports_controller.rb'
 
 # Offense count: 95
 # Cop supports --auto-correct.
@@ -80,41 +71,16 @@ Layout/DefEndAlignment:
 # SupportedStyles: leading, trailing
 Layout/DotPosition:
   Exclude:
-    - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/match_client_details_controller.rb'
-    - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/models/cas_seeds/client_regular_contact.rb'
-    - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
-    - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
-    - 'app/models/concerns/related_default_contacts.rb'
-    - 'app/models/contact.rb'
-    - 'app/models/identified_client.rb'
-    - 'app/models/program.rb'
-    - 'app/models/sub_program.rb'
 
 # Offense count: 45
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterGuardClause:
   Exclude:
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/file_tag.rb'
-    - 'app/models/funding_source.rb'
-    - 'app/models/identified_client.rb'
-    - 'app/models/message.rb'
-    - 'app/models/neighborhood.rb'
-    - 'app/models/opportunity_details/via_unit.rb'
-    - 'app/models/opportunity_details/via_voucher.rb'
-    - 'app/models/tag.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterMagicComment:
   Exclude:
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
     - 'bin/guard'
     - 'bin/rspec'
 
@@ -123,31 +89,11 @@ Layout/EmptyLineAfterMagicComment:
 # Configuration parameters: EmptyLineBetweenMethodDefs, EmptyLineBetweenClassDefs, EmptyLineBetweenModuleDefs, AllowAdjacentOneLineDefs, NumberOfEmptyLines.
 Layout/EmptyLineBetweenDefs:
   Exclude:
-    - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/client_matches_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/program.rb'
-    - 'app/models/rules/holds_voucher.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 53
 # Cop supports --auto-correct.
 Layout/EmptyLines:
   Exclude:
-    - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/client_matches_controller.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/unavailable_clients_controller.rb'
-    - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/rules/holds_voucher.rb'
-    - 'app/models/warehouse/cas_availability.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
     - 'bin/setup'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
@@ -162,15 +108,6 @@ Layout/EmptyLines:
 # SupportedStyles: around, only_before
 Layout/EmptyLinesAroundAccessModifier:
   Exclude:
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/reissue_requests_controller.rb'
-    - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/services_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/program.rb'
-    - 'app/models/sub_program.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -183,8 +120,6 @@ Layout/EmptyLinesAroundArguments:
 # SupportedStyles: empty_lines, no_empty_lines
 Layout/EmptyLinesAroundBlockBody:
   Exclude:
-    - 'app/models/concerns/availability.rb'
-    - 'app/models/concerns/subject_for_matches.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -240,174 +175,11 @@ Layout/EmptyLinesAroundBlockBody:
 # SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
 Layout/EmptyLinesAroundClassBody:
   Exclude:
-    - 'app/controllers/account_emails_controller.rb'
-    - 'app/controllers/account_passwords_controller.rb'
-    - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/admin/recreate_invitations_controller.rb'
-    - 'app/controllers/admin/resend_invitations_controller.rb'
-    - 'app/controllers/building_contacts_controller.rb'
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/match_client_details_controller.rb'
-    - 'app/controllers/match_contacts_controller.rb'
-    - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/match_progress_update_notes_controller.rb'
-    - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/neighborhoods_controller.rb'
-    - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/notification_sessions_controller.rb'
-    - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/reissue_requests_controller.rb'
-    - 'app/controllers/style_guides_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/subgrantee_contacts_controller.rb'
-    - 'app/controllers/tags_controller.rb'
-    - 'app/controllers/unavailable_clients_controller.rb'
-    - 'app/controllers/unavailable_on_route_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/jobs/matching/run_engine_job.rb'
-    - 'app/mail_interceptors/sandbox_email_interceptor.rb'
-    - 'app/models/building_contact.rb'
-    - 'app/models/cas/update_voucher_availability.rb'
-    - 'app/models/cas_seeds/client_regular_contact.rb'
-    - 'app/models/cas_seeds/client_shelter_agency_contact.rb'
-    - 'app/models/cas_seeds/opportunities.rb'
-    - 'app/models/cas_seeds/opportunity_housing_subsidy_admin_contact.rb'
-    - 'app/models/cas_seeds/rules.rb'
-    - 'app/models/cas_seeds/services.rb'
-    - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/client_contact.rb'
-    - 'app/models/client_opportunity_match_contact.rb'
-    - 'app/models/data_source.rb'
-    - 'app/models/match_access_contexts/authenticated_user.rb'
-    - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/match_events/created.rb'
-    - 'app/models/match_events/decision_action.rb'
-    - 'app/models/match_events/expiration_change.rb'
-    - 'app/models/match_events/notification_delivery.rb'
-    - 'app/models/match_progress_updates/hsa.rb'
-    - 'app/models/match_progress_updates/hsp.rb'
-    - 'app/models/match_progress_updates/shelter_agency.rb'
-    - 'app/models/match_progress_updates/ssp.rb'
-    - 'app/models/message.rb'
-    - 'app/models/neighborhood.rb'
-    - 'app/models/notifications/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
-    - 'app/models/notifications/confirm_match_success_dnd_staff.rb'
-    - 'app/models/notifications/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_client.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_dnd_staff.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_housing_subsidy_admin.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_hsp.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_shelter_agency.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_ssp.rb'
-    - 'app/models/notifications/dnd_progress_update_late.rb'
-    - 'app/models/notifications/four/confirm_housing_subsidy_admin_decline_dnd_staff.rb'
-    - 'app/models/notifications/four/confirm_hsa_initial_decline_dnd_staff.rb'
-    - 'app/models/notifications/four/confirm_match_success_dnd_staff.rb'
-    - 'app/models/notifications/four/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/notifications/four/criminal_hearing_scheduled_client.rb'
-    - 'app/models/notifications/four/housing_subsidy_administrator_accepted.rb'
-    - 'app/models/notifications/four/match_recommendation_dnd_staff.rb'
-    - 'app/models/notifications/four/match_recommendation_housing_subsidy_admin.rb'
-    - 'app/models/notifications/four/match_recommendation_hsa.rb'
-    - 'app/models/notifications/four/match_recommendation_shelter_agency.rb'
-    - 'app/models/notifications/four/match_recommendation_ssp.rb'
-    - 'app/models/notifications/four/match_recommendation_to_hsa_for_ssp.rb'
-    - 'app/models/notifications/four/no_longer_working_with_client.rb'
-    - 'app/models/notifications/four/schedule_criminal_hearing_housing_subsidy_admin.rb'
-    - 'app/models/notifications/four/schedule_criminal_hearing_hsp.rb'
-    - 'app/models/notifications/four/schedule_criminal_hearing_ssp.rb'
-    - 'app/models/notifications/four/shelter_agency_accepted.rb'
-    - 'app/models/notifications/four/shelter_agency_decline_accepted.rb'
-    - 'app/models/notifications/homeless_set_aside/confirm_hsa_decline_dnd_staff.rb'
-    - 'app/models/notifications/homeless_set_aside/hsa_accepts_client.rb'
-    - 'app/models/notifications/homeless_set_aside/hsa_accepts_client_ssp_notification.rb'
-    - 'app/models/notifications/homeless_set_aside/hsa_decision_client.rb'
-    - 'app/models/notifications/homeless_set_aside/hsa_decision_hsp.rb'
-    - 'app/models/notifications/homeless_set_aside/hsa_decision_shelter_agency.rb'
-    - 'app/models/notifications/homeless_set_aside/hsa_decision_ssp.rb'
-    - 'app/models/notifications/homeless_set_aside/match_initiation_for_hsa.rb'
-    - 'app/models/notifications/homeless_set_aside/match_initiation_for_shelter_agency.rb'
-    - 'app/models/notifications/homeless_set_aside/match_initiation_for_ssp.rb'
-    - 'app/models/notifications/housing_opportunity_successfully_filled.rb'
-    - 'app/models/notifications/housing_subsidy_admin_accepted_match_development_officer.rb'
-    - 'app/models/notifications/housing_subsidy_admin_accepted_match_dnd_staff.rb'
-    - 'app/models/notifications/housing_subsidy_admin_decision_client.rb'
-    - 'app/models/notifications/housing_subsidy_admin_decision_development_officer.rb'
-    - 'app/models/notifications/housing_subsidy_admin_decision_hsp.rb'
-    - 'app/models/notifications/housing_subsidy_admin_decision_shelter_agency.rb'
-    - 'app/models/notifications/housing_subsidy_admin_decision_ssp.rb'
-    - 'app/models/notifications/housing_subsidy_admin_declined_match_hsp.rb'
-    - 'app/models/notifications/housing_subsidy_admin_declined_match_shelter_agency.rb'
-    - 'app/models/notifications/housing_subsidy_admin_declined_match_ssp.rb'
-    - 'app/models/notifications/match_canceled.rb'
-    - 'app/models/notifications/match_initiation_for_manual_notification.rb'
-    - 'app/models/notifications/match_recommendation_client.rb'
-    - 'app/models/notifications/match_recommendation_dnd_staff.rb'
-    - 'app/models/notifications/match_recommendation_housing_subsidy_admin.rb'
-    - 'app/models/notifications/match_recommendation_hsp.rb'
-    - 'app/models/notifications/match_recommendation_shelter_agency.rb'
-    - 'app/models/notifications/match_recommendation_ssp.rb'
-    - 'app/models/notifications/match_success_confirmed.rb'
-    - 'app/models/notifications/match_success_confirmed_development_officer.rb'
-    - 'app/models/notifications/move_in_date_set.rb'
-    - 'app/models/notifications/no_longer_working_with_client.rb'
-    - 'app/models/notifications/on_behalf_of.rb'
-    - 'app/models/notifications/progress_update_requested.rb'
-    - 'app/models/notifications/provider_only/confirm_hsa_decline_dnd_staff.rb'
-    - 'app/models/notifications/provider_only/hsa_accepts_client.rb'
-    - 'app/models/notifications/provider_only/hsa_accepts_client_ssp_notification.rb'
-    - 'app/models/notifications/provider_only/hsa_decision_client.rb'
-    - 'app/models/notifications/provider_only/hsa_decision_hsp.rb'
-    - 'app/models/notifications/provider_only/hsa_decision_shelter_agency.rb'
-    - 'app/models/notifications/provider_only/hsa_decision_ssp.rb'
-    - 'app/models/notifications/provider_only/match_initiation_for_hsa.rb'
-    - 'app/models/notifications/provider_only/match_initiation_for_shelter_agency.rb'
-    - 'app/models/notifications/provider_only/match_initiation_for_ssp.rb'
-    - 'app/models/notifications/record_client_housed_date_housing_subsidy_administrator.rb'
-    - 'app/models/notifications/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/notifications/schedule_criminal_hearing_housing_subsidy_admin.rb'
-    - 'app/models/notifications/schedule_criminal_hearing_hsp.rb'
-    - 'app/models/notifications/schedule_criminal_hearing_ssp.rb'
-    - 'app/models/notifications/shelter_agency_accepted.rb'
-    - 'app/models/notifications/shelter_agency_decline_accepted.rb'
-    - 'app/models/opportunity_contact.rb'
-    - 'app/models/opportunity_details/blank.rb'
-    - 'app/models/opportunity_details/via_unit.rb'
-    - 'app/models/opportunity_details/via_voucher.rb'
-    - 'app/models/opportunity_property.rb'
-    - 'app/models/program.rb'
-    - 'app/models/project_program.rb'
-    - 'app/models/service.rb'
-    - 'app/models/stalled_match_request.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/models/subgrantee_contact.rb'
-    - 'app/models/tag.rb'
-    - 'app/models/unavailable_as_candidate_for.rb'
-    - 'app/models/warehouse/available_file_tag.rb'
-    - 'app/models/warehouse/cas_housed.rb'
-    - 'app/models/warehouse/cas_vacancy.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 19
 # Cop supports --auto-correct.
 Layout/EmptyLinesAroundMethodBody:
   Exclude:
-    - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/neighborhoods_controller.rb'
-    - 'app/controllers/reissue_requests_controller.rb'
-    - 'app/controllers/tags_controller.rb'
-    - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/neighborhood.rb'
 
 # Offense count: 57
 # Cop supports --auto-correct.
@@ -415,32 +187,6 @@ Layout/EmptyLinesAroundMethodBody:
 # SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
 Layout/EmptyLinesAroundModuleBody:
   Exclude:
-    - 'app/controllers/admin/roles_controller.rb'
-    - 'app/controllers/concerns/contact_edit_permissions.rb'
-    - 'app/controllers/concerns/has_match_access_context.rb'
-    - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/helpers/admin/users_helper.rb'
-    - 'app/helpers/building_contacts_helper.rb'
-    - 'app/helpers/client_matches_helper.rb'
-    - 'app/helpers/contacts_helper.rb'
-    - 'app/helpers/match_access_contexts_helper.rb'
-    - 'app/helpers/match_list_base_helper.rb'
-    - 'app/helpers/match_notes_helper.rb'
-    - 'app/helpers/opportunity_alternate_matches_helper.rb'
-    - 'app/helpers/opportunity_matches_helper.rb'
-    - 'app/helpers/program_details_helper.rb'
-    - 'app/models/concerns/availability.rb'
-    - 'app/models/concerns/inherits_requirements_from_services.rb'
-    - 'app/models/concerns/inherits_requirements_from_services_only.rb'
-    - 'app/models/concerns/manages_services.rb'
-    - 'app/models/concerns/related_default_contacts.rb'
-    - 'app/models/concerns/updateable_attributes.rb'
-    - 'app/models/match_access_contexts.rb'
-    - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/confirm_shelter_agency_decline_dnd_staff.rb'
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/opportunity_details.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -448,16 +194,12 @@ Layout/EmptyLinesAroundModuleBody:
 # SupportedStylesAlignWith: keyword, variable, start_of_line
 Layout/EndAlignment:
   Exclude:
-    - 'app/models/help.rb'
-    - 'app/models/match_decisions/five/base.rb'
 
 # Offense count: 55
 # Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
 Layout/ExtraSpacing:
   Exclude:
-    - 'app/mail_interceptors/sandbox_email_interceptor.rb'
-    - 'app/models/concerns/notifier_config.rb'
     - 'spec/models/rules/age_greater_than_eightteen_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_five_spec.rb'
     - 'spec/models/rules/age_greater_than_fifty_spec.rb'
@@ -482,8 +224,6 @@ Layout/ExtraSpacing:
 # SupportedStyles: consistent, consistent_relative_to_receiver, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
 Layout/FirstArgumentIndentation:
   Exclude:
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/models/program.rb'
 
 # Offense count: 8
 # Cop supports --auto-correct.
@@ -491,8 +231,6 @@ Layout/FirstArgumentIndentation:
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
 Layout/FirstArrayElementIndentation:
   Exclude:
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 32
 # Cop supports --auto-correct.
@@ -500,10 +238,6 @@ Layout/FirstArrayElementIndentation:
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
 Layout/FirstHashElementIndentation:
   Exclude:
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
-    - 'app/mailers/test_mailer.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -516,7 +250,6 @@ Layout/FirstHashElementIndentation:
 # SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
 Layout/HashAlignment:
   Exclude:
-    - 'app/controllers/imported_clients_controller.rb'
 
 # Offense count: 178
 # Cop supports --auto-correct.
@@ -524,27 +257,6 @@ Layout/HashAlignment:
 # SupportedStyles: normal, indented_internal_methods
 Layout/IndentationConsistency:
   Exclude:
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/building_contacts_controller.rb'
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/controllers/client_matches_controller.rb'
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/match_client_details_controller.rb'
-    - 'app/controllers/match_contacts_controller.rb'
-    - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/reissue_requests_controller.rb'
-    - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/services_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/subgrantee_contacts_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/program.rb'
-    - 'app/models/stalled_match_request.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 1
@@ -559,30 +271,6 @@ Layout/IndentationStyle:
 # Configuration parameters: Width, IgnoredPatterns.
 Layout/IndentationWidth:
   Exclude:
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/building_contacts_controller.rb'
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/controllers/client_matches_controller.rb'
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/concerns/controller_authorization.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/match_client_details_controller.rb'
-    - 'app/controllers/match_contacts_controller.rb'
-    - 'app/controllers/match_decision_acknowledgments_controller.rb'
-    - 'app/controllers/opportunity_contacts_controller.rb'
-    - 'app/controllers/reissue_requests_controller.rb'
-    - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/services_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/subgrantee_contacts_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/concerns/pathways_calculations.rb'
-    - 'app/models/help.rb'
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/program.rb'
-    - 'app/models/stalled_match_request.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/models/client_notes_spec.rb'
 
 # Offense count: 27
@@ -590,14 +278,6 @@ Layout/IndentationWidth:
 # Configuration parameters: AllowDoxygenCommentStyle, AllowGemfileRubyComment.
 Layout/LeadingCommentSpace:
   Exclude:
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_fifty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_sixty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_thirty_percent_ami.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/models/testing/matching/candidate_generation.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
 
 # Offense count: 6
@@ -618,11 +298,6 @@ Layout/MultilineMethodCallBraceLayout:
 # SupportedStyles: aligned, indented, indented_relative_to_receiver
 Layout/MultilineMethodCallIndentation:
   Exclude:
-    - 'app/controllers/rules_controller.rb'
-    - 'app/models/cas_seeds/client_regular_contact.rb'
-    - 'app/models/identified_client.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/models/unavailable_as_candidate_for.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -633,7 +308,6 @@ Layout/SpaceAfterColon:
 # Cop supports --auto-correct.
 Layout/SpaceAfterComma:
   Exclude:
-    - 'app/models/concerns/match_archive.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
 # Offense count: 6
@@ -649,8 +323,6 @@ Layout/SpaceAroundBlockParameters:
 # SupportedStyles: space, no_space
 Layout/SpaceAroundEqualsInParameterDefault:
   Exclude:
-    - 'app/controllers/reports/parked_clients_controller.rb'
-    - 'app/models/message.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -658,7 +330,6 @@ Layout/SpaceAroundEqualsInParameterDefault:
 # SupportedStylesForExponentOperator: space, no_space
 Layout/SpaceAroundOperators:
   Exclude:
-    - 'app/mail_interceptors/sandbox_email_interceptor.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
@@ -672,16 +343,6 @@ Layout/SpaceAroundOperators:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceBeforeBlockBraces:
   Exclude:
-    - 'app/controllers/concerns/controller_authorization.rb'
-    - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/in_progress_vouchers_controller.rb'
-    - 'app/controllers/successful_vouchers_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/rules/tagged_with.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
@@ -691,8 +352,6 @@ Layout/SpaceBeforeBlockBraces:
 # Configuration parameters: AllowForAlignment.
 Layout/SpaceBeforeFirstArg:
   Exclude:
-    - 'app/models/notifications/homeless_set_aside/hsa_accepts_client_ssp_notification.rb'
-    - 'app/models/notifications/provider_only/hsa_accepts_client_ssp_notification.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -705,15 +364,6 @@ Layout/SpaceBeforeSemicolon:
 # SupportedStyles: require_no_space, require_space
 Layout/SpaceInLambdaLiteral:
   Exclude:
-    - 'app/models/agency.rb'
-    - 'app/models/identified_client.rb'
-    - 'app/models/message.rb'
-    - 'app/models/neighborhood.rb'
-    - 'app/models/program.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/models/tag.rb'
-    - 'app/models/unavailable_as_candidate_for.rb'
-    - 'app/models/warehouse/client.rb'
 
 # Offense count: 60
 # Cop supports --auto-correct.
@@ -722,10 +372,6 @@ Layout/SpaceInLambdaLiteral:
 # SupportedStylesForEmptyBrackets: space, no_space
 Layout/SpaceInsideArrayLiteralBrackets:
   Exclude:
-    - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/messages_controller.rb'
-    - 'app/models/user_role.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/require_interest_in_neighborhood_spec.rb'
     - 'spec/requests/express_neighborhood_interests_spec.rb'
@@ -737,18 +383,6 @@ Layout/SpaceInsideArrayLiteralBrackets:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideBlockBraces:
   Exclude:
-    - 'app/controllers/concerns/controller_authorization.rb'
-    - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/in_progress_vouchers_controller.rb'
-    - 'app/controllers/successful_vouchers_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/helpers/match_list_base_helper.rb'
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/opportunity_contact.rb'
-    - 'app/models/rules/tagged_with.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/controllers/match_decisions_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'
@@ -764,17 +398,6 @@ Layout/SpaceInsideBlockBraces:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideHashLiteralBraces:
   Exclude:
-    - 'app/controllers/admin/roles_controller.rb'
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/testing/matching/candidate_generations_controller.rb'
-    - 'app/models/concerns/covid_pathways_calculations.rb'
-    - 'app/models/concerns/inherits_requirements_from_services.rb'
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/program.rb'
-    - 'app/models/rules/pathways_eligible.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/controllers/clients_controller_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
@@ -787,14 +410,6 @@ Layout/SpaceInsideHashLiteralBraces:
 # SupportedStyles: space, no_space
 Layout/SpaceInsideParens:
   Exclude:
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/messages_controller.rb'
-    - 'app/models/concerns/notifier_config.rb'
-    - 'app/models/program.rb'
-    - 'app/models/rules/seen_in_last_forty_five_days.rb'
-    - 'app/models/rules/seen_in_last_ninety_days.rb'
-    - 'app/models/rules/seen_in_last_sixty_days.rb'
-    - 'app/models/rules/seen_in_last_thirty_days.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/accounts_controller_spec.rb'
@@ -836,12 +451,6 @@ Layout/SpaceInsideStringInterpolation:
 # SupportedStyles: final_newline, final_blank_line
 Layout/TrailingEmptyLines:
   Exclude:
-    - 'app/controllers/imported_clients_controller.rb'
-    - 'app/models/match_decisions/five/base.rb'
-    - 'app/models/match_mitigation_reason.rb'
-    - 'app/models/mitigation_reason.rb'
-    - 'app/models/notifications/five/base.rb'
-    - 'app/models/warehouse/programs_to_projects.rb'
     - 'spec/factories/match_decisions/hsa_accepts_client.rb'
     - 'spec/factories/match_decisions/match_recommendation_hsa_housing_date.rb'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
@@ -932,7 +541,6 @@ Lint/AmbiguousBlockAssociation:
 # Cop supports --auto-correct.
 Lint/AmbiguousOperator:
   Exclude:
-    - 'app/controllers/concerns/controller_authorization.rb'
     - 'spec/models/rules/disability_verified_on_spec.rb'
     - 'spec/models/rules/income_less_than_eighty_percent_ami_spec.rb'
     - 'spec/models/rules/income_less_than_fifty_percent_ami_spec.rb'
@@ -944,17 +552,6 @@ Lint/AmbiguousOperator:
 # Configuration parameters: AllowSafeAssignment.
 Lint/AssignmentInCondition:
   Exclude:
-    - 'app/controllers/admin/agencies_controller.rb'
-    - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/neighborhoods_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/tags_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/models/rules/aids_or_related_diseases.rb'
-    - 'app/models/rules/seen_in_last_forty_five_days.rb'
-    - 'app/models/rules/seen_in_last_ninety_days.rb'
-    - 'app/models/rules/seen_in_last_sixty_days.rb'
-    - 'app/models/rules/seen_in_last_thirty_days.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -994,7 +591,6 @@ Lint/ParenthesesAsGroupedExpression:
 # Cop supports --auto-correct.
 Lint/RedundantStringCoercion:
   Exclude:
-    - 'app/models/rules/tagged_with.rb'
 
 # Offense count: 2
 # Configuration parameters: AllowedMethods.
@@ -1005,150 +601,37 @@ Lint/SafeNavigationChain:
 # Offense count: 9
 Lint/ShadowingOuterLocalVariable:
   Exclude:
-    - 'app/models/cas_seeds/vouchers.rb'
 
 # Offense count: 2
 # Configuration parameters: AllowKeywordBlockArguments.
 Lint/UnderscorePrefixedVariableName:
   Exclude:
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
 
 # Offense count: 2
 Lint/UnreachableCode:
   Exclude:
-    - 'app/controllers/match_contacts_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
 
 # Offense count: 20
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:
   Exclude:
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
 
 # Offense count: 128
 # Cop supports --auto-correct.
 # Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods.
 Lint/UnusedMethodArgument:
   Exclude:
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/rules/age_greater_than_eightteen.rb'
-    - 'app/models/rules/age_greater_than_fifty.rb'
-    - 'app/models/rules/age_greater_than_fifty_five.rb'
-    - 'app/models/rules/age_greater_than_forty_five.rb'
-    - 'app/models/rules/age_greater_than_sixteen.rb'
-    - 'app/models/rules/age_greater_than_sixty_five.rb'
-    - 'app/models/rules/age_greater_than_sixty_two.rb'
-    - 'app/models/rules/age_greater_than_twenty_five.rb'
-    - 'app/models/rules/aids_or_related_diseases.rb'
-    - 'app/models/rules/appropriate_for_sober_supportive_housing.rb'
-    - 'app/models/rules/assessment_score_greater_than_zero.rb'
-    - 'app/models/rules/asylee.rb'
-    - 'app/models/rules/bedroom.rb'
-    - 'app/models/rules/child_in_household.rb'
-    - 'app/models/rules/chronic_substance_use.rb'
-    - 'app/models/rules/chronically_homeless.rb'
-    - 'app/models/rules/cspech_eligible.rb'
-    - 'app/models/rules/developmental_disability.rb'
-    - 'app/models/rules/disabling_condition.rb'
-    - 'app/models/rules/dmh_eligible.rb'
-    - 'app/models/rules/elevator.rb'
-    - 'app/models/rules/enrolled_in_es.rb'
-    - 'app/models/rules/enrolled_in_sh.rb'
-    - 'app/models/rules/enrolled_in_so.rb'
-    - 'app/models/rules/enrolled_in_th.rb'
-    - 'app/models/rules/ground_floor.rb'
-    - 'app/models/rules/health_prioritized.rb'
-    - 'app/models/rules/hmis_client.rb'
-    - 'app/models/rules/holds_voucher.rb'
-    - 'app/models/rules/homeless.rb'
-    - 'app/models/rules/housing_authority_eligible.rb'
-    - 'app/models/rules/hues_eligible.rb'
-    - 'app/models/rules/income.rb'
-    - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_fifty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_sixty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_thirty_percent_ami.rb'
-    - 'app/models/rules/ineligible_immigrant.rb'
-    - 'app/models/rules/interested_in_dv_rrh.rb'
-    - 'app/models/rules/interested_in_neighborhood.rb'
-    - 'app/models/rules/interested_in_rrh.rb'
-    - 'app/models/rules/interested_in_set_asides.rb'
-    - 'app/models/rules/interested_in_youth_rrh.rb'
-    - 'app/models/rules/mental_health_eligible.rb'
-    - 'app/models/rules/meth_production_conviction.rb'
-    - 'app/models/rules/mi_and_sa_co_morbid.rb'
-    - 'app/models/rules/mi_sa_or_co_morbid.rb'
-    - 'app/models/rules/never_evicted.rb'
-    - 'app/models/rules/non_hmis_client.rb'
-    - 'app/models/rules/occupancy.rb'
-    - 'app/models/rules/one_eighty_days_homeless.rb'
-    - 'app/models/rules/one_eighty_days_homeless_last_three_years.rb'
-    - 'app/models/rules/one_year_homeless.rb'
-    - 'app/models/rules/one_year_homeless_last_three_years.rb'
-    - 'app/models/rules/part_of_a_family.rb'
-    - 'app/models/rules/physical_disabling_condition.rb'
-    - 'app/models/rules/pregnant.rb'
-    - 'app/models/rules/require_interest_in_neighborhood.rb'
-    - 'app/models/rules/seen_in_last_forty_five_days.rb'
-    - 'app/models/rules/seen_in_last_ninety_days.rb'
-    - 'app/models/rules/seen_in_last_sixty_days.rb'
-    - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'app/models/rules/sro_ok.rb'
-    - 'app/models/rules/ssvf_eligible.rb'
-    - 'app/models/rules/tagged_with.rb'
-    - 'app/models/rules/two_seventy_days_homeless.rb'
-    - 'app/models/rules/two_seventy_days_homeless_last_three_years.rb'
-    - 'app/models/rules/us_citizen.rb'
-    - 'app/models/rules/va_eligible.rb'
-    - 'app/models/rules/vash_eligible.rb'
-    - 'app/models/rules/verified_days_homeless.rb'
-    - 'app/models/rules/verified_disability.rb'
-    - 'app/models/rules/veteran.rb'
-    - 'app/models/rules/vispdat_score_eight_or_more.rb'
-    - 'app/models/rules/vispdat_score_four_or_less.rb'
-    - 'app/models/rules/vispdat_score_four_to_seven.rb'
-    - 'app/models/rules/vispdat_score_three_or_less.rb'
-    - 'app/models/rules/wheelchair.rb'
-    - 'app/models/rules/willing_to_live_in_congregate_housing.rb'
-    - 'app/models/rules/youth.rb'
-    - 'app/models/user_role.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: ContextCreatingMethods, MethodCreatingMethods.
 Lint/UselessAccessModifier:
   Exclude:
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/models/cas/update_voucher_availability.rb'
 
 # Offense count: 69
 Lint/UselessAssignment:
   Exclude:
-    - 'app/controllers/admin/translation_text_controller.rb'
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/cas_seeds/opportunities.rb'
-    - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/identified_client.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_dnd_staff.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_housing_subsidy_admin.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_hsp.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_shelter_agency.rb'
-    - 'app/models/notifications/criminal_hearing_scheduled_ssp.rb'
-    - 'app/models/rules/aids_or_related_diseases.rb'
-    - 'app/models/rules/seen_in_last_forty_five_days.rb'
-    - 'app/models/rules/seen_in_last_ninety_days.rb'
-    - 'app/models/rules/seen_in_last_sixty_days.rb'
-    - 'app/models/rules/seen_in_last_thirty_days.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
     - 'spec/models/rules/bedroom_spec.rb'
@@ -1196,9 +679,6 @@ Naming/HeredocDelimiterNaming:
 # SupportedStylesForLeadingUnderscores: disallowed, required, optional
 Naming/MemoizedInstanceVariableName:
   Exclude:
-    - 'app/helpers/match_list_base_helper.rb'
-    - 'app/models/concerns/contact_join_model.rb'
-    - 'app/models/concerns/subject_for_matches.rb'
 
 # Offense count: 3
 # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
@@ -1215,10 +695,6 @@ Naming/MethodParameterName:
 Naming/PredicateName:
   Exclude:
     - 'spec/**/*'
-    - 'app/controllers/concerns/match_building_and_unit.rb'
-    - 'app/models/contact.rb'
-    - 'app/models/match_events/note.rb'
-    - 'app/models/sub_program.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1231,9 +707,6 @@ Security/YAMLLoad:
 # SupportedStyles: prefer_alias, prefer_alias_method
 Style/Alias:
   Exclude:
-    - 'app/models/contact.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1287,15 +760,11 @@ Style/ColonMethodCall:
 # SupportedStyles: empty, nil, both
 Style/EmptyElse:
   Exclude:
-    - 'app/helpers/admin/users_helper.rb'
-    - 'app/models/opportunity_details.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/Encoding:
   Exclude:
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1306,101 +775,6 @@ Style/ExpandPathArguments:
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Exclude:
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/match_contacts_controller.rb'
-    - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/concerns/notifier_config.rb'
-    - 'app/models/match_access_contexts/notification.rb'
-    - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/rules/active_in_cohort.rb'
-    - 'app/models/rules/age_greater_than_eightteen.rb'
-    - 'app/models/rules/age_greater_than_fifty.rb'
-    - 'app/models/rules/age_greater_than_fifty_five.rb'
-    - 'app/models/rules/age_greater_than_forty_five.rb'
-    - 'app/models/rules/age_greater_than_sixteen.rb'
-    - 'app/models/rules/age_greater_than_sixty_five.rb'
-    - 'app/models/rules/age_greater_than_sixty_two.rb'
-    - 'app/models/rules/age_greater_than_twenty_five.rb'
-    - 'app/models/rules/aids_or_related_diseases.rb'
-    - 'app/models/rules/appropriate_for_sober_supportive_housing.rb'
-    - 'app/models/rules/assessment_score_greater_than_zero.rb'
-    - 'app/models/rules/asylee.rb'
-    - 'app/models/rules/bedroom.rb'
-    - 'app/models/rules/child_in_household.rb'
-    - 'app/models/rules/chronic_substance_use.rb'
-    - 'app/models/rules/chronically_homeless.rb'
-    - 'app/models/rules/cspech_eligible.rb'
-    - 'app/models/rules/developmental_disability.rb'
-    - 'app/models/rules/disabling_condition.rb'
-    - 'app/models/rules/dmh_eligible.rb'
-    - 'app/models/rules/elevator.rb'
-    - 'app/models/rules/enrolled_in_es.rb'
-    - 'app/models/rules/enrolled_in_sh.rb'
-    - 'app/models/rules/enrolled_in_so.rb'
-    - 'app/models/rules/enrolled_in_th.rb'
-    - 'app/models/rules/ground_floor.rb'
-    - 'app/models/rules/health_prioritized.rb'
-    - 'app/models/rules/holds_voucher.rb'
-    - 'app/models/rules/homeless.rb'
-    - 'app/models/rules/housing_authority_eligible.rb'
-    - 'app/models/rules/hues_eligible.rb'
-    - 'app/models/rules/income.rb'
-    - 'app/models/rules/income_less_than_eighty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_fifty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_sixty_percent_ami.rb'
-    - 'app/models/rules/income_less_than_thirty_percent_ami.rb'
-    - 'app/models/rules/ineligible_immigrant.rb'
-    - 'app/models/rules/interested_in_dv_rrh.rb'
-    - 'app/models/rules/interested_in_neighborhood.rb'
-    - 'app/models/rules/interested_in_rrh.rb'
-    - 'app/models/rules/interested_in_set_asides.rb'
-    - 'app/models/rules/interested_in_youth_rrh.rb'
-    - 'app/models/rules/mental_health_eligible.rb'
-    - 'app/models/rules/meth_production_conviction.rb'
-    - 'app/models/rules/mi_and_sa_co_morbid.rb'
-    - 'app/models/rules/mi_sa_or_co_morbid.rb'
-    - 'app/models/rules/never_evicted.rb'
-    - 'app/models/rules/occupancy.rb'
-    - 'app/models/rules/one_eighty_days_homeless.rb'
-    - 'app/models/rules/one_eighty_days_homeless_last_three_years.rb'
-    - 'app/models/rules/one_year_homeless.rb'
-    - 'app/models/rules/one_year_homeless_last_three_years.rb'
-    - 'app/models/rules/part_of_a_family.rb'
-    - 'app/models/rules/physical_disabling_condition.rb'
-    - 'app/models/rules/pregnant.rb'
-    - 'app/models/rules/rank_below.rb'
-    - 'app/models/rules/require_interest_in_neighborhood.rb'
-    - 'app/models/rules/seen_in_last_forty_five_days.rb'
-    - 'app/models/rules/seen_in_last_ninety_days.rb'
-    - 'app/models/rules/seen_in_last_sixty_days.rb'
-    - 'app/models/rules/seen_in_last_thirty_days.rb'
-    - 'app/models/rules/sro_ok.rb'
-    - 'app/models/rules/ssvf_eligible.rb'
-    - 'app/models/rules/tagged_with.rb'
-    - 'app/models/rules/two_seventy_days_homeless.rb'
-    - 'app/models/rules/two_seventy_days_homeless_last_three_years.rb'
-    - 'app/models/rules/us_citizen.rb'
-    - 'app/models/rules/va_eligible.rb'
-    - 'app/models/rules/vash_eligible.rb'
-    - 'app/models/rules/verified_days_homeless.rb'
-    - 'app/models/rules/verified_disability.rb'
-    - 'app/models/rules/veteran.rb'
-    - 'app/models/rules/vispdat_score_eight_or_more.rb'
-    - 'app/models/rules/vispdat_score_four_or_less.rb'
-    - 'app/models/rules/vispdat_score_four_to_seven.rb'
-    - 'app/models/rules/vispdat_score_three_or_less.rb'
-    - 'app/models/rules/wheelchair.rb'
-    - 'app/models/rules/willing_to_live_in_congregate_housing.rb'
-    - 'app/models/rules/youth.rb'
-    - 'app/models/sub_program.rb'
 
 # Offense count: 15
 # Cop supports --auto-correct.
@@ -1408,7 +782,6 @@ Style/GuardClause:
 # SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
 Style/HashSyntax:
   Exclude:
-    - 'app/controllers/users/invitations_controller.rb'
     - 'spec/controllers/client_notes_controller_spec.rb'
     - 'spec/support/tasks.rb'
 
@@ -1416,7 +789,6 @@ Style/HashSyntax:
 # Cop supports --auto-correct.
 Style/IdenticalConditionalBranches:
   Exclude:
-    - 'app/controllers/sub_program_contacts_controller.rb'
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -1428,21 +800,6 @@ Style/IfInsideElse:
 # Cop supports --auto-correct.
 Style/IfUnlessModifier:
   Exclude:
-    - 'app/controllers/account_emails_controller.rb'
-    - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/inputs/base_input.rb'
-    - 'app/mailers/account_mailer.rb'
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/identified_client.rb'
-    - 'app/models/match_decisions/confirm_match_success_dnd_staff.rb'
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/match_decisions/record_client_housed_date_shelter_agency.rb'
-    - 'app/models/match_events/decision_action.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'bin/setup'
 
 # Offense count: 3
@@ -1450,7 +807,6 @@ Style/IfUnlessModifier:
 # Configuration parameters: InverseMethods, InverseBlocks.
 Style/InverseMethods:
   Exclude:
-    - 'app/controllers/concerns/match_building_and_unit.rb'
 
 # Offense count: 23
 # Cop supports --auto-correct.
@@ -1468,7 +824,6 @@ Style/MultilineIfModifier:
 # Cop supports --auto-correct.
 Style/MultilineIfThen:
   Exclude:
-    - 'app/models/match_access_contexts.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -1476,7 +831,6 @@ Style/MultilineIfThen:
 # SupportedStyles: literals, strict
 Style/MutableConstant:
   Exclude:
-    - 'app/models/message.rb'
 
 # Offense count: 14
 # Cop supports --auto-correct.
@@ -1484,8 +838,6 @@ Style/MutableConstant:
 # SupportedStyles: both, prefix, postfix
 Style/NegatedIf:
   Exclude:
-    - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -1501,8 +853,6 @@ Style/NestedParenthesizedCalls:
 # SupportedStyles: skip_modifier_ifs, always
 Style/Next:
   Exclude:
-    - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/warehouse/cas_availability.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1510,7 +860,6 @@ Style/Next:
 # SupportedStyles: predicate, comparison
 Style/NilComparison:
   Exclude:
-    - 'app/models/program.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1525,8 +874,6 @@ Style/NonNilCheck:
 Style/NumericPredicate:
   Exclude:
     - 'spec/**/*'
-    - 'app/controllers/system_status_controller.rb'
-    - 'app/models/concerns/subject_for_matches.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1539,9 +886,6 @@ Style/ParenthesesAroundCondition:
 # Configuration parameters: PreferredDelimiters.
 Style/PercentLiteralDelimiters:
   Exclude:
-    - 'app/models/message.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
     - 'bin/setup'
 
 # Offense count: 90
@@ -1560,7 +904,6 @@ Style/RedundantBegin:
 # Cop supports --auto-correct.
 Style/RedundantInterpolation:
   Exclude:
-    - 'app/models/contact.rb'
     - 'spec/models/rules/active_in_cohort_spec.rb'
     - 'spec/models/rules/enrolled_in_hmis_project_spec.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
@@ -1570,20 +913,11 @@ Style/RedundantInterpolation:
 # Cop supports --auto-correct.
 Style/RedundantParentheses:
   Exclude:
-    - 'app/models/notifications/housing_subsidy_admin_declined_match_hsp.rb'
-    - 'app/models/notifications/housing_subsidy_admin_declined_match_ssp.rb'
 
 # Offense count: 37
 # Cop supports --auto-correct.
 Style/RedundantSelf:
   Exclude:
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/client_note.rb'
-    - 'app/models/concerns/availability.rb'
-    - 'app/models/concerns/match_archive.rb'
-    - 'app/models/match_events/decision_action.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/models/warehouse/cas_availability.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1597,10 +931,6 @@ Style/RegexpLiteral:
 # Cop supports --auto-correct.
 Style/RescueModifier:
   Exclude:
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/warehouse/base.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
-    - 'app/uploaders/imported_clients_csv_file_uploader.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -1608,7 +938,6 @@ Style/RescueModifier:
 # SupportedStyles: implicit, explicit
 Style/RescueStandardError:
   Exclude:
-    - 'app/controllers/imported_clients_controller.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -1621,7 +950,6 @@ Style/SafeNavigation:
 # Cop supports --auto-correct.
 Style/Sample:
   Exclude:
-    - 'app/models/cas_seeds/opportunities.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -1633,9 +961,6 @@ Style/SelfAssignment:
 # Configuration parameters: AllowAsExpressionSeparator.
 Style/Semicolon:
   Exclude:
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/concerns/has_requirements.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1659,37 +984,6 @@ Style/StderrPuts:
 # SupportedStyles: single_quotes, double_quotes
 Style/StringLiterals:
   Exclude:
-    - 'app/controllers/account_emails_controller.rb'
-    - 'app/controllers/account_passwords_controller.rb'
-    - 'app/controllers/accounts_controller.rb'
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/controllers/concerns/decisions.rb'
-    - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/in_progress_vouchers_controller.rb'
-    - 'app/controllers/match_contacts_controller.rb'
-    - 'app/controllers/notification_registrations_controller.rb'
-    - 'app/controllers/rules_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/successful_vouchers_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/helpers/admin/users_helper.rb'
-    - 'app/mail_interceptors/sandbox_email_interceptor.rb'
-    - 'app/mailers/account_mailer.rb'
-    - 'app/models/cas_seeds/vouchers.rb'
-    - 'app/models/concerns/subject_for_matches.rb'
-    - 'app/models/contact.rb'
-    - 'app/models/match_decisions/homeless_set_aside/set_asides_hsa_acknowledges_receipt.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
-    - 'app/models/notifications/match_initiation_for_manual_notification.rb'
-    - 'app/models/notifications/match_success_confirmed.rb'
-    - 'app/models/notifications/progress_update_requested.rb'
-    - 'app/models/race.rb'
-    - 'app/models/service.rb'
     - 'bin/deploy'
     - 'bin/guard'
     - 'bin/rspec'
@@ -1723,8 +1017,6 @@ Style/StructInheritance:
 # IgnoredMethods: respond_to, define_method
 Style/SymbolProc:
   Exclude:
-    - 'app/models/concerns/has_or_inherits_services.rb'
-    - 'app/models/matching/has_or_inherits_requirements.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
 
 # Offense count: 2
@@ -1740,27 +1032,6 @@ Style/TernaryParentheses:
 # SupportedStylesForMultiline: comma, consistent_comma, no_comma
 Style/TrailingCommaInArguments:
   Exclude:
-    - 'app/controllers/admin/roles_controller.rb'
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/controllers/client_contacts_controller.rb'
-    - 'app/controllers/funding_sources_controller.rb'
-    - 'app/controllers/imported_clients_controller.rb'
-    - 'app/controllers/match_notes_controller.rb'
-    - 'app/controllers/services_controller.rb'
-    - 'app/controllers/sub_program_contacts_controller.rb'
-    - 'app/controllers/subgrantees_controller.rb'
-    - 'app/controllers/unit_for_building_controller.rb'
-    - 'app/controllers/users/invitations_controller.rb'
-    - 'app/models/client_opportunity_match_contact.rb'
-    - 'app/models/contact.rb'
-    - 'app/models/funding_source.rb'
-    - 'app/models/program.rb'
-    - 'app/models/rules/pathways_eligible.rb'
-    - 'app/models/rules/youth.rb'
-    - 'app/models/sub_program.rb'
-    - 'app/models/subgrantee.rb'
-    - 'app/models/user_role.rb'
-    - 'app/uploaders/deidentified_clients_xlsx_file_uploader.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
 # Offense count: 17
@@ -1769,8 +1040,6 @@ Style/TrailingCommaInArguments:
 # SupportedStylesForMultiline: comma, consistent_comma, no_comma
 Style/TrailingCommaInArrayLiteral:
   Exclude:
-    - 'app/controllers/associated_contacts_controller.rb'
-    - 'app/models/sub_program.rb'
     - 'bin/setup'
 
 # Offense count: 21
@@ -1779,10 +1048,6 @@ Style/TrailingCommaInArrayLiteral:
 # SupportedStylesForMultiline: comma, consistent_comma, no_comma
 Style/TrailingCommaInHashLiteral:
   Exclude:
-    - 'app/controllers/client_notes_controller.rb'
-    - 'app/mail_interceptors/cloudwatch_email_interceptor.rb'
-    - 'app/mailers/test_mailer.rb'
-    - 'app/models/sub_program.rb'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
     - 'spec/controllers/messages_controller_spec.rb'

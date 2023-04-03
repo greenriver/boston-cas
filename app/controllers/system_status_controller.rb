@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -17,7 +17,7 @@ class SystemStatusController < ApplicationController
   # operational
   def operational
     user_count = User.all.count
-    if user_count > 0
+    if user_count.positive?
       Rails.logger.info 'Operating system is operational'
       render plain: 'OK'
     else
@@ -49,17 +49,6 @@ class SystemStatusController < ApplicationController
     cache_message = (set_value == pulled_value ? 'OK' : 'FAILED')
 
     status = 417 if cache_message != 'OK'
-
-    branch = begin
-               `git rev-parse HEAD`.chomp
-             rescue StandardError
-               'unknown'
-             end
-    revision = (begin
-                  File.read(File.join(Rails.root, 'REVISION'))
-                rescue StandardError
-                  branch
-                end)
 
     db_message = 'UNKNOWN'
     begin
@@ -101,8 +90,8 @@ class SystemStatusController < ApplicationController
       db: db_message,
       jobs_stats: jobs_stats,
       jobs_message: jobs_message,
-      revision: revision.chomp,
-      branch: branch,
+      revision: Git.revision,
+      branch: Git.branch,
       hostname: `hostname`.chomp,
       cache: cache_message,
       user_count_positive: User.all.any?,

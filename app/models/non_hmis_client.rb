@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -167,6 +167,19 @@ class NonHmisClient < ApplicationRecord
 
   def self.ransackable_scopes(_auth_object = nil)
     [:text_search]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+   [
+    'first_name',
+    'middle_name',
+    'last_name',
+    'date_of_birth',
+   ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    []
   end
 
   def self.possible_agencies

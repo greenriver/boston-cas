@@ -1,13 +1,27 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/hmis-warehouse/blob/production/LICENSE.md
 ###
 
 class Git
   def self.revision
-    ENV['DEPLOYMENT_ID']&.split('::').try(:[], 2)
+    if Rails.env.development?
+      `git rev-parse --short=9 HEAD`.chomp
+    else
+      File.read("#{Rails.root}/REVISION").chomp
+    end
   rescue StandardError
-    'unknown revision'
+    'unknown'
+  end
+
+  def self.branch
+    if Rails.env.development?
+      `git branch --no-color --show-current`.chomp
+    else
+      File.read("#{Rails.root}/GIT_BRANCH").chomp
+    end
+  rescue StandardError
+    'unknown'
   end
 end

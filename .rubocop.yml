@@ -240,3 +240,5 @@ Style/SoleNestedConditional:
   Enabled: false
 Style/ExplicitBlockArgument:
   Enabled: false
+Style/HashSyntax:
+  EnforcedShorthandSyntax: never
