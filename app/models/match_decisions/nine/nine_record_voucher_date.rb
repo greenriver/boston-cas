@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::Nine
   class NineRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     validate :date_voucher_issued_present_if_status_accept
     validate :ensure_required_contacts_present_on_accept
@@ -85,6 +86,11 @@ module MatchDecisions::Nine
       end
     end
 
+    # special case for when a new navigator has been assigned
+    def recreate_hsa_notifications
+      Notifications::Nine::NineRecordVoucherDate.create_for_match! match
+    end
+
     def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
@@ -98,8 +104,17 @@ module MatchDecisions::Nine
     #   :nine_record_voucher_date_housing_subsidy_admin
     # end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.available(route: match_route)
+    def step_decline_reasons(_contact)
+      [
+        'Immigration status',
+        'Ineligible for Housing Program',
+        'Self-resolved',
+        'Household did not respond after initial acceptance of match',
+        'Client refused offer',
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+        'Other',
+      ]
     end
 
     class StatusCallbacks < StatusCallbacks

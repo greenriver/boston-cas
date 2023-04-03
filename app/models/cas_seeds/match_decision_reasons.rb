@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -95,6 +95,10 @@ module CasSeeds
 
     CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS = [].freeze
 
+    OTHER = [
+      ['Other', nil],
+    ].freeze
+
     def run!
       create_other_reason!
       create_dnd_reasons!
@@ -107,6 +111,24 @@ module CasSeeds
       create_mitigation_reasons!
       create_case_contact_assigns_manager_decline_reasons!
       create_nine_case_contact_assigns_manager_decline_reasons!
+      create_base_reasons!
+    end
+
+    private def create_base_reasons!
+      reasons = DND_REASONS +
+      HSA_REASONS +
+      LIMITED_HSA_REASONS +
+      HSA_PROVIDER_ONLY_REASONS +
+      SHELTER_AGENCY_REASONS +
+      MITIGATION_REASONS +
+      SHELTER_AGENCY_NOT_WORKING_WITH_CLIENT_REASONS +
+      ADMINISTRATIVE_CANCEL_REASONS +
+      LIMITED_ADMINISTRATIVE_CANCEL_REASONS +
+      OTHER
+      reasons.each do |reason_name, referral_result|
+        reason = ::MatchDecisionReasons::All.where(name: reason_name).first_or_create!
+        reason.update(referral_result: referral_result)
+      end
     end
 
     private def create_other_reason!

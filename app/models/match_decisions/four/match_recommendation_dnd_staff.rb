@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,8 @@
 module MatchDecisions::Four
   class MatchRecommendationDndStaff < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultDndStaffDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
@@ -70,10 +72,6 @@ module MatchDecisions::Four
       errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::DndStaffDecline.all
-    end
-
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Four::MatchRecommendationDndStaff
@@ -87,13 +85,9 @@ module MatchDecisions::Four
       def accepted
         @decision.next_step.initialize_decision!
 
-        if match.client.remote_id.present? && Warehouse::Base.enabled?
-          begin
-            Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
-          rescue StandardError
-            nil
-          end
-        end
+        return unless match.client.remote_id.present? && Warehouse::Base.enabled?
+
+        Warehouse::Client.find_by(id: match.client.remote_id)&.queue_history_pdf_generation
       end
 
       def declined

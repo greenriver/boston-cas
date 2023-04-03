@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -12,12 +12,20 @@ module MatchDecisions
       validate :validate_not_working_with_client_reason
     end
 
+    def step_not_working_with_client_reasons
+      [
+        'Barred from working with agency',
+        'Hospitalized',
+        'Don’t know / disappeared',
+        'Incarcerated',
+      ]
+    end
+
     def not_working_with_client_reasons
-      @_not_working_with_client_reasons ||= [].tap do |result|
-        MatchDecisionReasons::ShelterAgencyNotWorkingWithClient.all.each do |reason|
+      @not_working_with_client_reasons ||= [].tap do |result|
+        MatchDecisionReasons::All.where(name: step_not_working_with_client_reasons).find_each do |reason|
           result << reason
         end
-        result << MatchDecisionReasons::ShelterAgencyNotWorkingWithClientOther.first
       end
     end
 
@@ -32,41 +40,32 @@ module MatchDecisions
     end
 
     private def validate_not_working_with_client_reason
-      if not_working_with_client_reason&.other? && not_working_with_client_reason_other_explanation.blank?
-        errors.add :not_working_with_client_reason_other_explanation, "must be filled in if choosing 'Other'"
-      end
+      return unless not_working_with_client_reason&.other? && not_working_with_client_reason_other_explanation.blank?
+
+      errors.add :not_working_with_client_reason_other_explanation, "must be filled in if choosing 'Other'"
     end
 
     private def not_working_with_client_reason_status_label
-      if not_working_with_client_reason.blank?
-        return nil
-      elsif not_working_with_client_reason.other?
-        "Not working with client: Other (#{not_working_with_client_reason_other_explanation})"
-      else
-        "Not working with client: #{not_working_with_client_reason.name}"
-      end
+      return nil if not_working_with_client_reason.blank?
+      return "Not working with client: Other (#{not_working_with_client_reason_other_explanation})" if not_working_with_client_reason.other?
+
+      "Not working with client: #{not_working_with_client_reason.name}"
     end
 
     def decline_reason_name
       if not_working_with_client_reason.present?
-        if not_working_with_client_reason.other?
-          "Other (#{not_working_with_client_reason_other_explanation})"
-        else
-          reason = not_working_with_client_reason.name
-          if not_working_with_client_reason_other_explanation.present?
-            reason += ". Note: #{not_working_with_client_reason_other_explanation}"
-          end
-          reason
-        end
+        return "Other (#{not_working_with_client_reason_other_explanation})" if not_working_with_client_reason.other?
+
+        reason = not_working_with_client_reason.name
+        reason += ". Note: #{not_working_with_client_reason_other_explanation}" if not_working_with_client_reason_other_explanation.present?
+        reason
       elsif decline_reason.blank?
-        "none given"
+        'none given'
       elsif decline_reason.other?
         "Other (#{decline_reason_other_explanation})"
       else
         reason = decline_reason.name
-        if decline_reason_other_explanation.present?
-          reason += ". Note: #{decline_reason_other_explanation}"
-        end
+        reason += ". Note: #{decline_reason_other_explanation}" if decline_reason_other_explanation.present?
         reason
       end
     end

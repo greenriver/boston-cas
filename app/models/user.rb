@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -24,25 +24,25 @@ class User < ApplicationRecord
          :pwned_password,
          :session_limitable,
          password_length: 10..128
-  #has_secure_password # not needed with devise
+  # has_secure_password # not needed with devise
   # Connect users to login attempts
   has_many :login_activities, as: :user
 
   attr_accessor :editable_programs
 
-  validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: {maximum: 250}, on: :update
-  validates :first_name, presence: true, length: {maximum: 40}
-  validates :last_name, presence: true, length: {maximum: 40}
+  validates :email, presence: true, uniqueness: true, email_format: { check_mx: true }, length: { maximum: 250 }, on: :update
+  validates :first_name, presence: true, length: { maximum: 40 }
+  validates :last_name, presence: true, length: { maximum: 40 }
   validates :email_schedule, inclusion: { in: Message::SCHEDULES }, allow_blank: false
   validates :agency_id, presence: true
 
-  scope :admin, -> {joins(:roles).where(roles: {name: 'admin'})}
-  scope :dnd_staff, -> {joins(:roles).where(roles: {can_edit_all_clients: true})}
-  scope :developer, -> {joins(:roles).where(roles: {name: 'developer'})}
+  scope :admin, -> { joins(:roles).where(roles: { name: 'admin' }) }
+  scope :dnd_staff, -> { joins(:roles).where(roles: { can_edit_all_clients: true }) }
+  scope :developer, -> { joins(:roles).where(roles: { name: 'developer' }) }
   scope :dnd_initial_contact, -> { active.dnd_staff.where receive_initial_notification: true }
-  scope :housing_subsidy_admin, -> {joins(:roles).where(roles: {can_add_vacancies: true})}
-  scope :active, -> {where active: true}
-  scope :inactive, -> {where active: false}
+  scope :housing_subsidy_admin, -> { joins(:roles).where(roles: { can_add_vacancies: true }) }
+  scope :active, -> { where active: true }
+  scope :inactive, -> { where active: false }
   scope :has_recent_activity, -> do
     where(id: ActivityLog.where(created_at: 30.minutes.ago..Time.current).select(:user_id)).
       where.not(unique_session_id: nil)
@@ -78,6 +78,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def skip_session_limitable?
+    ENV.fetch('SKIP_SESSION_LIMITABLE', false) == 'true'
+  end
+
   # load a hash of permission names (e.g. 'can_view_reports')
   # to a boolean true if the user has the permission through one
   # of their roles
@@ -91,22 +95,22 @@ class User < ApplicationRecord
     end
   end
 
- # define helper methods for looking up if this
- # user has an permission through one of its roles
- Role.permissions.each do |permission|
+  # define helper methods for looking up if this
+  # user has an permission through one of its roles
+  Role.permissions.each do |permission|
     define_method(permission) do
       @permisisons ||= load_effective_permissions
       @permisisons[permission]
     end
 
     define_method("#{permission}?") do
-      self.send(permission)
+      send(permission)
     end
   end
 
   def roles_string
     roles
-      .map { |r| r.role_name }
+      .map { |r| r.role_name } # rubocop:disable Style/SymbolProc
       .join(', ')
   end
 
@@ -127,7 +131,7 @@ class User < ApplicationRecord
     where(
       arel_table[:first_name].matches(query)
       .or(arel_table[:last_name].matches(query))
-      .or(arel_table[:email].matches(query))
+      .or(arel_table[:email].matches(query)),
     )
   end
 
@@ -146,6 +150,7 @@ class User < ApplicationRecord
   # https://github.com/plataformatec/devise/wiki/How-To:-Add-timeout_in-value-dynamically
   def timeout_in
     return 2.hours if can_act_on_behalf_of_match_contacts?
+
     30.minutes
   end
 
@@ -160,7 +165,7 @@ class User < ApplicationRecord
     true
   end
 
-  def self.describe_changes(version, changes)
+  def self.describe_changes(_version, changes)
     changes.slice(*whitelist_for_changes_display).map do |name, values|
       "Changed #{humanize_attribute_name(name)}: from \"#{values.first}\" to \"#{values.last}\"."
     end

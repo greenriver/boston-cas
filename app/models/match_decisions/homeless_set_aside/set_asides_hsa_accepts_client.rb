@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcceptsClient < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultSetAsidesDeclineReasons
 
     # validate :note_present_if_status_declined
     validate :ensure_required_contacts_present_on_accept
@@ -78,10 +79,6 @@ module MatchDecisions::HomelessSetAside
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
     end
 
     class StatusCallbacks < StatusCallbacks

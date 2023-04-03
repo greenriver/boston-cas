@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::Eight
   class EightConfirmAssignManagerDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     def step_name
       "#{_('DND')} confirms case manager assignment decline"

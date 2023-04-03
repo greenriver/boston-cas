@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::Five
   class FiveMatchRecommendation < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultHsaDeclineReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
@@ -83,10 +84,6 @@ module MatchDecisions::Five
 
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.available
     end
 
     private def save_will_accept?

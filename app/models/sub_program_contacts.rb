@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -41,6 +41,7 @@ class SubProgramContacts
   def save
     return unless valid?
 
+    successful = false
     sub_program.class.transaction do
       SubProgramContact.where(sub_program_id: sub_program.id).delete_all
 
@@ -66,8 +67,9 @@ class SubProgramContacts
         SubProgramContact.create(do: true, contact_id: id, sub_program_id: sub_program.id)
       end
 
-      return true
+      successful = true
     end
+    successful
   end
 
   def available_client_contacts base_scope = Contact.active_contacts

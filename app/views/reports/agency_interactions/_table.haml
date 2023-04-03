@@ -27,7 +27,7 @@
               - section_id = reason_id
               - section = MatchDecisionReasons::Base.find(section_id)
               %tr
-                %td.table-dark{colspan:9}= reason_text(section)
+                %td.table-dark{colspan: 10}= reason_text(section)
             %tr
               %td= row.client.name
               %td= row.match_created_event.created_at.strftime('%m/%d/%Y')

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -100,8 +100,11 @@ module MatchDecisions::Five
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::MitigationDecline.all
+    def step_decline_reasons(_contact)
+      [
+        'Mitigation failed',
+        'Other',
+      ]
     end
   end
 end

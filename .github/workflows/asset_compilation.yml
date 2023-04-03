@@ -33,7 +33,7 @@ jobs:
           - gha_production_load_6
 
     runs-on: ubuntu-20.04
-    container: ruby:2.7.6-alpine
+    container: ruby:3.1.3-alpine3.17
 
     steps:
     - name: Checkout
@@ -71,16 +71,16 @@ jobs:
           build-base libxml2-dev libxslt-dev postgresql-dev \
           libgcc libstdc++ libx11 glib libxrender libxext libintl ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-freefont \
           chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont \
-          lftp postgresql tmux postgis geos geos-dev \
+          lftp postgresql tmux postgis geos geos-dev xz \
           shared-mime-info \
-          python3 py3-pip
+          python3 py3-pip xz
 
         pip3 install awscli
 
         echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
         chmod 600 ~/.pgpass
 
-        gem install bundler --version=2.3.8
+        gem install bundler --version=2.4.6
 
     # According to https://www.jessesquires.com/blog/2021/08/23/caching-bundler-on-github-actions/
     # this is fragile and failure prone, but the step they recommend using instead (ruby/ruby-setup)

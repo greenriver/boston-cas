@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::Seven
   class MatchRecommendationDndStaff < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultDndStaffDeclineReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
@@ -75,10 +76,6 @@ module MatchDecisions::Seven
 
     private def note_present_if_status_declined
       errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::DndStaffDecline.all
     end
 
     def notifications_for_this_step

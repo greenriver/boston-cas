@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::Five
   class FiveApplicationSubmission < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
 
     validate :application_date_present_if_status_complete
 
@@ -92,10 +93,6 @@ module MatchDecisions::Five
 
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
     private def application_date_present_if_status_complete

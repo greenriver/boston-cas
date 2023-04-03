@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions
   class MatchRecommendationShelterAgency < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
     # proxy for client.release_of_information
@@ -102,10 +103,6 @@ module MatchDecisions
 
     private def note_present_if_status_declined
       errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'declined'
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::ShelterAgencyDecline.all
     end
 
     class StatusCallbacks < StatusCallbacks

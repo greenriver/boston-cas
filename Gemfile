@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'activerecord-import'
-gem 'pg', '~> 1.1.0'
+gem 'rack', '>= 2.2.6.4'
+gem 'activesupport', '>= 6.1.7.3'
+gem 'pg', '~> 1.1'
 gem 'rails', '~>6.1'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
 gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
@@ -35,7 +37,7 @@ gem 'kaminari'
 gem 'pagy'
 gem 'ransack'
 gem 'responders'
-gem 'memoist', require: false
+gem 'memery', require: false
 
 # File processing
 gem 'carrierwave'
@@ -58,7 +60,7 @@ gem 'aws-sdk-ses', '~> 1'
 gem 'aws-sdk-iam', '~> 1'
 gem 'aws-sdk-ecr', '~> 1'
 gem 'aws-sdk-sns', require: false
-gem "aws-sdk-ssm", "~> 1"
+gem 'aws-sdk-ssm', '~> 1'
 gem 'aws-sdk-cloudwatch', require: false
 gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'json'
@@ -128,6 +130,12 @@ gem 'roo'
 
 gem 'browser'
 gem 'net-http'
+gem 'ajax_modal_rails', '~> 1.0'
+
+gem 'sentry-rails', '~> 5.5'
+gem 'warning'
+
+
 
 group :development do
   # gem 'spring'
@@ -165,6 +173,7 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-faker', require: false
+  gem 'deprecation_toolkit', require: false
 end
 
 group :test do
@@ -175,7 +184,3 @@ group :test do
   gem 'rspec-mocks'
   gem 'shoulda'
 end
-
-gem 'ajax_modal_rails', '~> 1.0'
-
-gem "sentry-rails", "~> 5.5"

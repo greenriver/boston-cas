@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,8 @@
 module MatchDecisions::Four
   class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultHsaDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     # validate :note_present_if_status_declined
 
@@ -102,10 +104,6 @@ module MatchDecisions::Four
 
     def to_param
       :four_approve_match_housing_subsidy_admin
-    end
-
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminDecline.available
     end
 
     class StatusCallbacks < StatusCallbacks

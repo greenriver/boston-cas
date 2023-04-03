@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -41,6 +41,7 @@ class ClientContacts
   def save
     return unless valid?
 
+    successful = false
     Contact.transaction do
       ClientContact.where(client_id: client.id).delete_all
 
@@ -66,7 +67,7 @@ class ClientContacts
         ClientContact.create(do: true, contact_id: id, client_id: client.id)
       end
 
-      return true
+      successful = true
     end
 
     client.shelter_agency_contact_ids = shelter_agency_contact_ids.map(&:to_i)
@@ -76,6 +77,8 @@ class ClientContacts
     client.ssp_contact_ids = ssp_contact_ids.map(&:to_i)
     client.hsp_contact_ids = hsp_contact_ids.map(&:to_i)
     client.do_contact_ids = do_contact_ids.map(&:to_i)
+
+    successful
   end
 
   def available_regular_contacts base_scope = Contact.active_contacts

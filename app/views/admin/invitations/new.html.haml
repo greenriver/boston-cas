@@ -1,10 +1,10 @@
 %h2
   = t "devise.invitations.new.header"
-=simple_form_for resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post} do |f| 
-  = devise_error_messages! 
+=simple_form_for resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post} do |f|
+  = render 'devise/shared/error_messages', resource: resource
   = f.input :first_name, required: true
   = f.input :last_name, required: true
-  - resource.class.invite_key_fields.each do |field| 
+  - resource.class.invite_key_fields.each do |field|
     = f.input field
 
   = f.button :submit, t("devise.invitations.new.submit_button")

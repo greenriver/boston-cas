@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -95,10 +95,6 @@ module MatchDecisions::ProviderOnly
       true
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::HousingSubsidyAdminPriorityDecline.active
-    end
-
     class StatusCallbacks < StatusCallbacks
       def pending
       end
@@ -121,6 +117,24 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
+
+    def step_decline_reasons(_contact)
+      [
+        'Household could not be located',
+        'Ineligible for Housing Program',
+        'Client refused offer',
+        'Health and Safety',
+        'Other',
+      ]
+    end
+
+    def step_cancel_reasons
+      [
+        'Vacancy should not have been entered',
+        'Vacancy filled by other client',
+        'Other',
+      ]
+    end
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(

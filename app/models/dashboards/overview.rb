@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -118,6 +118,7 @@ class Dashboards::Overview < Dashboards::Base
     reason
   end
 
+  SECONDS_IN_A_DAY = 24 * 60 * 60
   # Return the average elapsed days between match_started_at and the current step
   # updated_at (for successful matches)
   def average_days_initiation_to_step_completion
@@ -130,7 +131,8 @@ class Dashboards::Overview < Dashboards::Base
           r_d_t[:updated_at],
           r_d_t[:match_started_at],
         ),
-      ).sort_by { |(decision_order, _), _| decision_order }
+      ).sort_by { |(decision_order, _), _| decision_order }.
+      map { |l, i| [l, i.to_i / ActiveSupport::Duration::SECONDS_PER_DAY] }
   end
 
   def average_days_to_complete_each_step

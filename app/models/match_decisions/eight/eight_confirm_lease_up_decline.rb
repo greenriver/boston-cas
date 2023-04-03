@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,6 +7,7 @@
 module MatchDecisions::Eight
   class EightConfirmLeaseUpDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     def step_name
       "#{_('DND')} confirms #{_('Move In')} failure"
@@ -83,8 +84,17 @@ module MatchDecisions::Eight
       super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
 
-    private def decline_reason_scope(_contact)
-      MatchDecisionReasons::CaseContactAssignsManagerDecline.active
+    def step_decline_reasons(_contact)
+      [
+        'Immigration status',
+        'Ineligible for Housing Program',
+        'Self-resolved',
+        'Household did not respond after initial acceptance of match',
+        'Client refused offer',
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+        'Other',
+      ]
     end
   end
 end

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -28,7 +28,7 @@ class Config < ApplicationRecord
   end
 
   def self.get(config)
-    @settings = Rails.cache.fetch(name) do
+    @settings = Rails.cache.fetch(name.to_s) do
       first_or_create
     end
     @settings.public_send(config)

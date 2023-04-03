@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2022 Green River Data Analysis, LLC
+# Copyright 2016 - 2023 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -21,7 +21,7 @@ module Reports
         format.xlsx do
           @included_sub_programs = sub_program_list.invert.slice(*report_params[:sub_programs])
           filename = 'CAS Match Progress.xlsx'
-          render xlsx: 'index.xlsx', filename: filename
+          render xlsx: 'index', filename: filename
         end
       end
     end
@@ -49,11 +49,11 @@ module Reports
       events = match.events.to_a
       all_events = (events + status_history).sort_by(&:created_at)
       all_events.each do |event|
-        if event.include_in_tracking_sheet?
-          steps[step_number] ||= []
-          steps[step_number].push(*event.tracking_events) if event.include_tracking_event?
-          step_number = event.next_step_number(step_number)
-        end
+        next unless event.include_in_tracking_sheet?
+
+        steps[step_number] ||= []
+        steps[step_number].push(*event.tracking_events) if event.include_tracking_event?
+        step_number = event.next_step_number(step_number)
       end
       steps
     end
@@ -61,7 +61,7 @@ module Reports
     def clients(sub_program_id)
       Client.
         visible_by(current_user).
-        joins(client_opportunity_matches: {opportunity: :voucher}).
+        joins(client_opportunity_matches: { opportunity: :voucher }).
         merge(ClientOpportunityMatch.active).
         merge(Voucher.where(sub_program_id: sub_program_id)).
         order(:last_name, :first_name).
@@ -93,14 +93,12 @@ module Reports
     helper_method :sub_programs
 
     def sub_program_list
-      @sub_program_list ||= begin
-        sub_programs.map do |project_name, sub_project_name, id|
-          [
-            [project_name, sub_project_name].join('|'),
-            id,
-          ]
-        end.to_h
-      end
+      @sub_program_list ||= sub_programs.map do |project_name, sub_project_name, id|
+        [
+          [project_name, sub_project_name].join('|'),
+          id,
+        ]
+      end.to_h
     end
     helper_method :sub_program_list
 
