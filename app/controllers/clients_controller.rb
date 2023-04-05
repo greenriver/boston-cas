@@ -6,6 +6,7 @@
 
 class ClientsController < ApplicationController
   include ArelHelper
+  include Search
 
   before_action :authenticate_user!
   before_action :some_clients_viewable!
@@ -23,8 +24,12 @@ class ClientsController < ApplicationController
     @sorted_by = Client.sort_options(show_vispdat: @show_vispdat, show_assessment: @show_assessment).select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
-    @q = client_scope.ransack(params[:q])
-    @clients = @q.result(distinct: false)
+    search_setup(scope: :text_search)
+    @clients = if @search_string.present?
+      @search
+    else
+      client_scope
+    end
     # Filter
     if params[:veteran].present?
       if params[:veteran] == '1'
@@ -52,6 +57,10 @@ class ClientsController < ApplicationController
     @active_filter = params[:availability].present? || params[:veteran].present?
     @available_clients = @clients.available
     @unavailable_clients = @clients.unavailable
+  end
+
+  private def search_scope
+    client_scope
   end
 
   # GET /clients/1

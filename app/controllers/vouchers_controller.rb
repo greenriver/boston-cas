@@ -15,6 +15,7 @@ class VouchersController < ApplicationController
   before_action :set_program, only: [:edit, :update, :index, :bulk_update, :unavailable, :archive]
   before_action :set_show_confidential_names
   include AjaxModalRails::Controller
+  include Search
 
   def index
     @vouchers = @subprogram.vouchers.order(:id)
@@ -184,5 +185,9 @@ class VouchersController < ApplicationController
       permit(
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
       )
+  end
+
+  def search_scope
+    @vouchers.preload(:client_opportunity_matches)
   end
 end

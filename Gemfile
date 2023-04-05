@@ -35,7 +35,6 @@ gem 'virtus'
 
 gem 'kaminari'
 gem 'pagy'
-gem 'ransack'
 gem 'responders'
 gem 'memery', require: false
 
