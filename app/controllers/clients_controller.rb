@@ -24,7 +24,7 @@ class ClientsController < ApplicationController
     @sorted_by = Client.sort_options(show_vispdat: @show_vispdat, show_assessment: @show_assessment).select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
-    search_setup(scope: :text_search)
+    @search = search_setup(scope: :text_search)
     @clients = if @search_string.present?
       @search
     else

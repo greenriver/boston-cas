@@ -24,7 +24,7 @@ class NonHmisClientsController < ApplicationController
     end.first&.try(:[], :title)
 
     # construct query
-    search_setup(scope: :text_search)
+    @search = search_setup(scope: :text_search)
     @non_hmis_clients = @search
 
     # filter

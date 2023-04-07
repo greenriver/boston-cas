@@ -8,7 +8,7 @@ class SuccessfulVouchersController < VouchersController
   def index
     @show_search = true
     @vouchers = @subprogram.vouchers.order(:id)
-    search_setup(scope: :client_search)
+    @search = search_setup(scope: :client_search)
     @vouchers_for_page = @search.select { |v| v.status_match.present? && v.status_match.successful? }
     if @search_string.present?
       @vouchers_for_page = @vouchers_for_page.select { |v| v.status_match.present? && !v.status_match.confidential? }
