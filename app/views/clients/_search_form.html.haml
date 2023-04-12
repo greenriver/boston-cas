@@ -1,6 +1,6 @@
 - options = { class: :jSearch }
 - options[:url] = destination if defined?(destination)
-= search_form_for @q, **options do |f|
+= simple_form_for :search_form, **options, method: :get do |f|
   -# Preserve sort and filtering
   - if params[:sort]
     = hidden_field_tag :sort, params[:sort]
@@ -10,7 +10,7 @@
     - if params[term]
       = hidden_field_tag term, params[term]
 
-  .input-group{style: 'margin-bottom: 20px;'}
-    = f.search_field :text_search, placeholder: @prompt, class: 'form-control', autofocus: true
-    %span.input-group-append
+  .input-group
+    = f.input :q, placeholder: @prompt, class: 'form-control', autofocus: true, input_html: { value: @search_string }, label: false
+    %span.input-group-append.mb-4
       %button.btn.btn-primary{type: :submit} Search

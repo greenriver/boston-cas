@@ -76,7 +76,8 @@
           .detail-box-value.d-flex.flex-wrap
           - if voucher.status_match.client.present?
             - active_matches = voucher.client_opportunity_matches.select(&:active?)
-            - active_matches.each do |match|
+            - successful_matches = voucher.client_opportunity_matches.select(&:successful?)
+            - (active_matches + successful_matches).each do |match|
               .client-name.mb-2
                 - if can_view_all_matches?
                   = link_to client_path(match.client) do

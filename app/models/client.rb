@@ -211,24 +211,6 @@ class Client < ApplicationRecord
     where(where)
   end
 
-  def self.ransackable_scopes(_auth_object = nil)
-    [:text_search]
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-   [
-    'alternate_names',
-    'first_name',
-    'middle_name',
-    'last_name',
-    'date_of_birth',
-   ]
-  end
-
-  def self.ransackable_associations(auth_object = nil)
-    []
-  end
-
   def full_name
     [first_name, middle_name, last_name, name_suffix].select(&:present?).join(' ')
   end
