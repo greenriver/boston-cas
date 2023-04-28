@@ -26,7 +26,7 @@
                   %td= "#{client.first_name} #{client.last_name} (#{client.email})"
                 - else
                   %td
-                %td= error.first.to_s.humanize
-                %td= error.last.capitalize
+                %td= error.attribute.to_s.humanize
+                %td= error.message.capitalize
 .row
   = link_to 'Return to Clients', imported_clients_path, class: 'btn btn-sm btn-primary'
