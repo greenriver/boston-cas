@@ -21,6 +21,15 @@ module MatchDecisions
         'CORI',
         'Unwilling to live in that neighborhood',
         'Unwilling to live in SRO',
+        'Health and Safety',
+        'Other',
+      ]
+    end
+
+    def step_cancel_reasons
+      [
+        'Match expired',
+        'Vacancy should not have been entered',
         'Other',
       ]
     end
