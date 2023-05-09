@@ -70,7 +70,6 @@ jobs:
         export RUBY_VERSION=`cat .ruby-version`
         export PRE_CACHE_VERSION=`cat .pre-cache-version`
         export PRE_CACHE_TAG="${RUBY_VERSION}-${PRE_CACHE_VERSION}--pre-cache"
-        echo "::set-output name=pre_cache_tag::$PRE_CACHE_TAG"
 
         echo $SHA > ${DOCKER_ASSETS_PATH}/REVISION
         echo $BRANCH > ${DOCKER_ASSETS_PATH}/GIT_BRANCH
