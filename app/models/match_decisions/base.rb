@@ -440,7 +440,7 @@ module MatchDecisions
     end
 
     def step_cancel_reasons
-      @step_cancel_reasons ||= [
+      [
         'Match expired',
         'Client has declined match',
         'Client has disengaged',

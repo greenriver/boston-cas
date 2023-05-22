@@ -8,6 +8,7 @@ require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   include AjaxModalRails::Controller
   include MatchShow
+  include Search
   before_action :load_client, only: [:show, :edit, :update, :new_assessment, :destroy, :shelter_location]
   before_action :require_can_edit_this_client!, only: [:edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
@@ -23,8 +24,8 @@ class NonHmisClientsController < ApplicationController
     end.first&.try(:[], :title)
 
     # construct query
-    @q = client_source.ransack(params[:q])
-    @non_hmis_clients = @q.result(distinct: false)
+    @search = search_setup(scope: :text_search)
+    @non_hmis_clients = @search
 
     # filter
     @non_hmis_clients = @non_hmis_clients.where(agency: Agency.where(name: clean_agency)) if clean_agency.present?
@@ -44,6 +45,10 @@ class NonHmisClientsController < ApplicationController
         download
       end
     end
+  end
+
+  private def search_scope
+    client_source
   end
 
   def download

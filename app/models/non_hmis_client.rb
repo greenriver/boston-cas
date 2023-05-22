@@ -165,23 +165,6 @@ class NonHmisClient < ApplicationRecord
     arel_table[:client_identifier].lower.matches("%#{name.downcase}%")
   end
 
-  def self.ransackable_scopes(_auth_object = nil)
-    [:text_search]
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-   [
-    'first_name',
-    'middle_name',
-    'last_name',
-    'date_of_birth',
-   ]
-  end
-
-  def self.ransackable_associations(auth_object = nil)
-    []
-  end
-
   def self.possible_agencies
     Agency.order(:name).pluck(:name)
   end

@@ -7,36 +7,6 @@
 class ImportedClientsCsv < ApplicationRecord
   mount_uploader :file, ImportedClientsCsvFileUploader
 
-  FORM_TIMESTAMP = 0 # A
-  USER_EMAIL = 1 # B
-  HOUSING_STATUS = 2 # D
-  DAYS_HOMELESS = 3 # E
-  SHELTER_NAME = 4 # G
-  ENTRY_DATE = 5 # H
-  CASE_MANAGER_NAME = 6 # I
-  CASE_MANAGER_PHONE = 7 # J
-  HOH_FIRST_NAME = 8 # L
-  HOH_LAST_NAME = 9 # M
-  HOH_PHONE = 10 # N
-  HOH_EMAIL = 11 # O
-  FAMILY_STUDIO = 12 # P
-  CHILDREN = 13 # Q
-  FAMILY_ONE_BR = 14 # R
-  SRO = 15 # S
-  INDIVIDUAL_STUDIO = 16 # T
-  ACCESSIBILITY_NEEDS = 17 # U
-  INTERESTED_IN_DISABLED_HOUSING = 18 # V
-  FIFTY_FIVE = 19 # W
-  SIXTY_TWO = 20 # X
-  VETERAN = 21 # Y
-  NEIGHBORHOODS = 22 # Z
-  CASE_MANAGER_EMAIL = 23 # AA
-  BEDROOMS = 24 # AB
-  ANNUAL_INCOME = 25 # AC
-  VOUCHER = 26 # AD
-  VOUCHER_AGENCY = 27 # AE
-  AGE = 28 # AF
-
   attr_reader :added, :touched, :problems, :clients
 
   def initialize(attributes = {})
@@ -50,9 +20,9 @@ class ImportedClientsCsv < ApplicationRecord
     return false unless check_header
 
     CSV.parse(content, headers: true) do |row|
-      first_name = row[HOH_FIRST_NAME]
-      last_name = row[HOH_LAST_NAME]
-      email = row[HOH_EMAIL]
+      first_name = row[header.hoh_first_name]
+      last_name = row[header.hoh_last_name]
+      email = row[header.hoh_email]
 
       client = ImportedClient.where(
         first_name: first_name,
@@ -66,43 +36,42 @@ class ImportedClientsCsv < ApplicationRecord
       end
       assessment = client.current_assessment || client.client_assessments.build
 
-      timestamp = convert_to_time(row[FORM_TIMESTAMP])
+      timestamp = convert_to_time(row[header.timestamp])
       if assessment.imported_timestamp.nil? || timestamp > assessment.imported_timestamp
         @clients << client
         @touched += 1 if assessment.imported_timestamp.present?
         assessment.update(
+          interested_in_set_asides: true,
           imported_timestamp: timestamp,
 
-          set_asides_housing_status: row[HOUSING_STATUS],
+          set_asides_housing_status: row[header.housing_status],
           domestic_violence: fleeing_domestic_violence?(row),
           days_homeless_in_the_last_three_years: days_homeless(row),
-          shelter_name: row[SHELTER_NAME],
-          entry_date: convert_to_date(row[ENTRY_DATE]),
+          shelter_name: row[header.shelter_name],
+          entry_date: convert_to_date(row[header.date_entered_shelter]),
           case_manager_contact_info: case_manager(client, row),
-          phone_number: row[HOH_PHONE],
+          phone_number: row[header.hoh_phone],
           income_total_monthly: monthly_income(row),
-          have_tenant_voucher: yes_no_to_bool(row[VOUCHER]),
-          voucher_agency: row[VOUCHER_AGENCY],
-          children_info: row[CHILDREN],
+          have_tenant_voucher: yes_no_to_bool(row[header.has_voucher]),
+          voucher_agency: row[header.voucher_agency],
+          children_info: row[header.children],
           family_member: family?(row),
           studio_ok: studio_ok?(row),
-          one_br_ok: yes_no_to_bool(row[FAMILY_ONE_BR]),
-          sro_ok: yes_no_to_bool(row[SRO]),
+          one_br_ok: yes_no_to_bool(row[header.family_one_br_ok]),
+          sro_ok: yes_no_to_bool(row[header.individual_sro_ok]),
           required_number_of_bedrooms: bedrooms(row),
           requires_wheelchair_accessibility: wheelchair_accessible?(row),
           requires_elevator_access: elevator_access?(row),
           disabling_condition: disability?(row),
-          interested_in_disabled_housing: yes_no_to_bool(row[INTERESTED_IN_DISABLED_HOUSING]),
-          fifty_five_plus: yes_no_to_bool(row[FIFTY_FIVE]),
-          sixty_two_plus: yes_no_to_bool(row[SIXTY_TWO]),
-          veteran: yes_no_to_bool(row[VETERAN]),
+          interested_in_disabled_housing: yes_no_to_bool(row[header.interested_in_disabled_housing]),
+          veteran: yes_no_to_bool(row[header.veteran]),
           neighborhood_interests: determine_neighborhood_interests(client, row),
-          hoh_age: clean_integer(row[AGE]),
         )
+        # binding.pry
         client.update(
           agency_id: agency&.id,
           date_of_birth: calculate_dob(row),
-          shelter_name: row[SHELTER_NAME],
+          shelter_name: row[header.shelter_name],
         )
       end
     end
@@ -132,41 +101,52 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def fleeing_domestic_violence?(row)
-    status = row[HOUSING_STATUS]
-    status.present? && status.include?('OR A.2)')
+    status = row[header.housing_status]
+    status.present? && status.include?('A.2')
   end
 
   def days_homeless(row)
-    Integer(row[DAYS_HOMELESS])
+    Integer(row[header.days_homeless])
     rescue ArgumentError, TypeError
       nil
   end
 
   def case_manager(client, row)
     info = []
-    name = row[CASE_MANAGER_NAME]
+    name = row[header.case_manager_name]
     if name.present?
       info << name
     else
       client.errors.add(:case_manager_contact_info, 'case manager name can\'t be blank')
     end
-    phone = row[CASE_MANAGER_PHONE]
+    phone = row[header.case_manager_phone]
     if phone.present?
       info << phone
     else
       client.errors.add(:case_manager_contact_info, 'case manager phone can\'t be blank')
     end
-    email = row[CASE_MANAGER_EMAIL]
+    email = row[header.case_manager_email]
     if email.present?
       info << email
     else
       client.errors.add(:case_manager_contact_info, 'case manager email can\'t be blank')
     end
+
+    alternate_contact = []
+    alternate_contact << row[header.alternative_contact_name]
+    alternate_contact << row[header.alternative_contact_phone]
+    alternate_contact << row[header.alternative_contact_email]
+
+    if alternate_contact.present?
+      info << 'Alternate contact: '
+      info += alternate_contact
+    end
+
     info.join(' / ')
   end
 
   def monthly_income(row)
-    Float(row[ANNUAL_INCOME]) / 12
+    Float(row[header.annual_income]) / 12
   rescue ArgumentError, TypeError
     nil
   end
@@ -176,48 +156,47 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def family?(row)
-    row[CHILDREN].present? || row[FAMILY_STUDIO] != 'Not Applicable' || row[FAMILY_ONE_BR] != 'Not Applicable'
+    row[header.children].present? || row[header.family_studio_ok] != 'Not Applicable' || row[header.family_one_br_ok] != 'Not Applicable'
   end
 
   def studio_ok?(row)
-    yes_no_to_bool(row[FAMILY_STUDIO]) || yes_no_to_bool(row[INDIVIDUAL_STUDIO])
+    yes_no_to_bool(row[header.family_studio_ok]) || yes_no_to_bool(row[header.individual_studio_ok])
   end
 
   def bedrooms(row)
-    return nil unless row[BEDROOMS].present?
+    return nil unless row[header.bedrooms].present?
 
-    bedrooms = row[BEDROOMS].gsub(/bedroom/, '').to_i
+    bedrooms = row[header.bedrooms].gsub(/bedroom/, '').to_i
     return bedrooms if bedrooms > 1
 
     nil
   end
 
   def wheelchair_accessible?(row)
-    needs = row[ACCESSIBILITY_NEEDS]
+    needs = row[header.accessibility_needs]
     needs.present? && needs.include?('wheelchair')
   end
 
   def elevator_access?(row)
-    needs = row[ACCESSIBILITY_NEEDS]
+    needs = row[header.accessibility_needs]
     needs.present? && needs.include?('elevator')
   end
 
   def disability?(row)
-    needs = row[ACCESSIBILITY_NEEDS]
+    needs = row[header.accessibility_needs]
     wheelchair_accessible?(row) || elevator_access?(row) || needs.include?('other accessibility')
   end
 
   def calculate_dob(row)
-    age = clean_integer(row[AGE])
-    return Date.new(Date.current.year - age) if age.present?
-    return Date.new(Date.current.year - 62) if yes_no_to_bool(row[SIXTY_TWO])
-    return Date.new(Date.current.year - 55) if yes_no_to_bool(row[FIFTY_FIVE])
+    year = row[header.hoh_year_of_birth]
+    return nil unless year.present?
 
-    nil
+    client.errors.add(:hoh_year_of_birth, 'four-digit year is required') unless year.to_i >= 1000
+    "#{year}-01-01".to_date
   end
 
   def determine_neighborhood_interests(client, row)
-    neighborhoods = row[NEIGHBORHOODS].split(';')
+    neighborhoods = row[header.neighborhoods].split(';')
     interests = neighborhoods.flat_map do |neighborhood_name|
       Neighborhood.where(name: neighborhood_name).pluck(:id)
     end
@@ -226,24 +205,59 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def check_header
-    incoming = CSV.parse(content.lines.first).flatten.map { |m| m&.strip&.downcase }
-    expected = parsed_expected_header.map { |m| m&.strip&.downcase }
+    incoming = CSV.parse(content.lines.first).flatten.to_set
+    expected = expected_header.values.to_set
+
     # You can update the header string with File.read('path/to/file.csv').lines.first
     # Using CSV parse in case the quoting styles differ
     return true if incoming == expected
 
-    Rails.logger.error (incoming - expected).inspect
-    Rails.logger.error (expected - incoming).inspect
+    differences = (incoming ^ expected).to_a.join(', ')
+    Rails.logger.error("Headers do not match: #{differences}")
+
     false
   end
 
-  def parsed_expected_header
-    CSV.parse(expected_header).flatten
+  def expected_header
+    {
+      timestamp: 'Timestamp',
+      email: 'Email Address',
+      provider_ack: 'Provider Acknowledgment',
+      housing_status: 'Household is currently:',
+      days_homeless: 'Cumulative number of days in the last three years',
+      provider_ack_2: 'Provider Acknowledgment 2',
+      shelter_name: 'Name of shelter where household resides.',
+      date_entered_shelter: 'Date household entered above mentioned shelter.',
+      case_manager_name: 'Case manager/shelter provider contact name',
+      case_manager_phone: 'Case manager/shelter provider contact phone number',
+      case_manager_email: 'Case manager/shelter provider email address',
+      alternative_contact_name: 'Alternate case manager/shelter provider contact name',
+      alternative_contact_phone: 'Alternate phone number',
+      alternative_contact_email: 'Alternate email address',
+      signature: 'Household Acknowledgment',
+      hoh_last_name: 'Last Name (Head of Household)',
+      hoh_first_name: 'First Name (Head of Household)',
+      hoh_phone: 'Head of household phone number',
+      hoh_email: 'Head of household email address',
+      hoh_age_range: 'Head of Household Age',
+      hoh_year_of_birth: 'Head of Household Year of Birth',
+      annual_income: 'What is the estimated annual income for your household next year?',
+      has_voucher: 'Do you currently have a tenant-based housing choice voucher?',
+      voucher_agency: 'Voucher administering housing authority/agency',
+      children: 'Children Age & Gender',
+      family_studio_ok: 'If you are a family with children, would you consider a studio?',
+      family_one_br_ok: 'If you are a family with children, would you consider a one bedroom?',
+      individual_sro_ok: 'If you are an individual, would you consider living in an SRO (single room occupancy)?',
+      individual_studio_ok: 'If you are an individual, would you consider living in a studio?',
+      bedrooms: 'If you need a bedroom size larger than SRO, studio, or 1 bedroom, please choose a size below.',
+      accessibility_needs: 'Are you seeking any of the following due to a disability?',
+      interested_in_disabled_housing: 'Interest in units for disabled persons?',
+      veteran: 'Are you a veteran?',
+      neighborhoods: 'Neighborhood Preference',
+    }.freeze
   end
 
-  def expected_header
-    "timestamp,email,housing status,days homeless in past 3 years,shelter name,entry date,case manager name,case manager phone,first name,last name,client phone number,client email address,family studio acceptable,children details,family one bedroom acceptable,individual sro acceptable,individual studio acceptable,accessibility needs,interested in disabled housing,55 or older,62 or older,veteran,neighborhoods,case manager email,bedrooms required,annual income,tenant-based voucher,voucher agency,hoh age\r\n"
-    # NOTE: Prior header, remove after transition is complete
-    # "Timestamp,Email Address,I certify that the below mentioned household fits each part of the Boston Homeless Set Aside Preference definition (below) to the best of my knowledge. I understand that as case manager I must obtain documentation of Homeless Status and retain that documentation in a client file to be provided upon request. I certify this by typing my name below.,Household is currently: ,Cumulative number of days in the last three years that the household has met the definition above and is documented according to the documentation requirements below. This number cannot exceed 1096. ,I have obtained documentation according to the documentation requirements described above. I acknowledge that the household has voluntarily shown interest and willingness to participate in the Boston Homeless Set Aside Preference and move to a new apartment. I certify this by typing my name below. ,\"Name of shelter where household resides. If household is unsheltered, living on the street, please state this.\",\"Date household entered above mentioned shelter. If household is unsheltered, living on the street, please enter the date household began living on the street. \",Case manager/shelter provider contact name ,Case manager/shelter provider contact phone number ,I acknowledge the above statement by typing my name below. ,First Name (head of household),Last Name (head of household),Head of household phone number,Head of household email address,\"If you are a family with children, would you consider a studio?\",What is the age and gender of each of the children in the household? (this information may be used by some housing providers to determine the number of bedrooms your household may receive priority for),\"If you are a family with children, would you consider a one bedroom?\",\"If you are an individual, would you consider living in an SRO (single room occupancy)?\",\"If you are an individual, would you consider living in a studio?\",\"Are you seeking any of the following due to a disability?  If yes, you may have to provide documentation of disability - related need.\",\"Are you interested in applying for housing units targeted for persons with disabilities? (the definition of disability, as well as eligibility or preference criteria, may vary depending on the housing. You may have to provide documentation of a disability to qualify for these housing units.)\",Are you 55 years of age or older?,Are you 62 years of age or older?,Are you a veteran?,\"Check off all the Boston neighborhoods you are willing to live in. Since these units are rare, the more neighborhoods you are willing to live in helps your chances of being match to a unit. \",Case manager/shelter provider email address,,\"If you need a bedroom size larger than SRO, studio, or 1 bedroom, please choose a size below. \",What is the estimated annual income for your household next year?,Do you currently have a tenant-based housing choice voucher? ,\"If you have a tenant-based housing choice voucher, what is the administering housing authority/agency?\",Housed?,Notes\r\n"
+  def header
+    @header ||= OpenStruct.new(expected_header)
   end
 end
