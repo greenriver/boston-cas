@@ -40,7 +40,7 @@ module MatchDecisions::Nine
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('DND')} to confirm #{_('HSA Nine')} decline"
-      when :decline_overridden then "#{_('HSA Nine')} Decline overridden by DND.  Match proceeding to #{_('DND')}"
+      when :decline_overridden then "#{_('HSA Nine')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Stabilization Service Provider Nine')}"
       when :decline_overridden_returned then "#{_('HSA Nine')} overridden by #{_('DND')}.  Match returned to the #{_('HSA Nine')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
       when :canceled then canceled_status_label
@@ -59,7 +59,7 @@ module MatchDecisions::Nine
 
       def decline_overridden
         match.nine_lease_up_decision.update(status: :skipped)
-        match.nine_assign_case_contact_decision.initialize_decision!
+        match.nine_assign_manager_decision.initialize_decision!
       end
 
       def decline_overridden_returned
