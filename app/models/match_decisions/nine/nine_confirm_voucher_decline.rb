@@ -25,7 +25,7 @@ module MatchDecisions::Nine
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator Nine')} decline"
-      when :decline_overridden then "#{_('Housing Subsidy Administrator Nine')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Housing Subsidy Administrator Nine')}"
+      when :decline_overridden then "#{_('Housing Subsidy Administrator Nine')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('DND')}"
       when :decline_overridden_returned then "#{_('Housing Subsidy Administrator Nine')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator Nine')}"
       when :decline_confirmed then "Match rejected by #{_('DND')}"
       when :canceled then canceled_status_label
@@ -66,7 +66,7 @@ module MatchDecisions::Nine
 
       def decline_overridden
         match.nine_record_voucher_date_decision.update(status: :skipped)
-        match.nine_lease_up_decision.initialize_decision!
+        match.nine_assign_case_contact_decision.initialize_decision!
       end
 
       def decline_overridden_returned
