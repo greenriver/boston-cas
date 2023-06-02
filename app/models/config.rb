@@ -30,7 +30,7 @@ class Config < ApplicationRecord
 
   def self.get(config)
     # Use cached config for 30 seconds
-    return @settings.public_send(config) if @settings && @settings_update_at.present? && @settings_update_at > 30.seconds.ago
+    return @settings.public_send(config) if @settings && @settings_update_at.present? && @settings_update_at > 30.seconds.ago && ! Rails.env.test? # always re-fetch for tests
 
     @settings = first_or_create
     @settings_update_at = Time.current
