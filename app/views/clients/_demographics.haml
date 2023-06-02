@@ -23,11 +23,11 @@
         .col-md-12.col-lg-6.c-card__content-block
           %h5 SSN
           %span.c-card__content-block-text
-            - if @client.ssn.present? ?
+            - if @client.ssn.present?
               - if can_view_full_ssn?
                 = ssn(@client.ssn)
               - else
-                = masked_ssn(@client.ssn) :
+                = masked_ssn(@client.ssn)
             - else
               = not_specified
         .col-md-12.col-lg-6.c-card__content-block
