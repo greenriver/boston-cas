@@ -20,14 +20,19 @@
         %span.c-detailed-list__label Age
         %span.c-detailed-list__value
           - if @client.date_of_birth.present?
-            = "#{@client.age} (#{@client.date_of_birth})"
+            = @client.age
+            - if can_view_full_dob?
+              (#{@client.date_of_birth})
           - else
             age unknown
       %li.c-detailed-list__item
         %span.c-detailed-list__label SSN
         %span.c-detailed-list__value
           - if @client.ssn.present?
-            = ssn(@client.ssn)
+            - if can_view_full_ssn?
+              = ssn(@client.ssn)
+            - else
+              = masked_ssn(@client.ssn)
           - else
             None on file
       %li.c-detailed-list__item
