@@ -24,7 +24,8 @@ class Config < ApplicationRecord
   end
 
   def self.invalidate_cache
-    Rails.cache.delete(name)
+    @settings = nil
+    @settings_update_at = nil
   end
 
   def self.get(config)
