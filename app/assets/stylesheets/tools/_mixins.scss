@@ -296,7 +296,6 @@
   margin-bottom: 0;
   transition: .15s ease-in-out;
   display: flex;
-  min-height: rem($size);
   min-width: rem($size);
   padding: space(2);
   min-height: $size + 20px;
@@ -312,7 +311,7 @@
     @include metric;
   }
   .c-checkbox__label {
-    margin-top: 5px;
+    // margin-top: 5px;
     max-width: 85ch;
     font-weight: normal;
   }
