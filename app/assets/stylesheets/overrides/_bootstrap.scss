@@ -55,7 +55,8 @@ input {
 .radio {
   display: block;
   input {
-    margin-right: space(1);
+    margin-right: space(2);
+    min-height: auto;
   }
   label {
     display: flex;

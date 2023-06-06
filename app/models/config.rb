@@ -24,13 +24,16 @@ class Config < ApplicationRecord
   end
 
   def self.invalidate_cache
-    Rails.cache.delete(name)
+    @settings = nil
+    @settings_update_at = nil
   end
 
   def self.get(config)
-    @settings = Rails.cache.fetch(name.to_s) do
-      first_or_create
-    end
+    # Use cached config for 30 seconds
+    return @settings.public_send(config) if @settings && @settings_update_at.present? && @settings_update_at > 30.seconds.ago && ! Rails.env.test? # always re-fetch for tests
+
+    @settings = first_or_create
+    @settings_update_at = Time.current
     @settings.public_send(config)
   end
 

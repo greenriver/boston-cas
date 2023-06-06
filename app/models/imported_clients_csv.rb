@@ -67,7 +67,6 @@ class ImportedClientsCsv < ApplicationRecord
           veteran: yes_no_to_bool(row[header.veteran]),
           neighborhood_interests: determine_neighborhood_interests(client, row),
         )
-        # binding.pry
         client.update(
           agency_id: agency&.id,
           date_of_birth: calculate_dob(row),
@@ -87,8 +86,13 @@ class ImportedClientsCsv < ApplicationRecord
   def convert_to_time(str)
     return unless str
 
-    DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
+    return DateTime.strptime(str, '%m/%d/%Y %H:%M:%S')
   rescue ArgumentError
+    begin
+      return DateTime.strptime(str, '%m/%d/%Y %H:%M')
+    rescue Date::Error
+      DateTime.parse(str)
+    end
     DateTime.parse(str)
   end
 
