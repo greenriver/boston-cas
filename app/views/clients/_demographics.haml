@@ -8,7 +8,8 @@
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Age
           %span.c-card__content-block-text= @client.age || not_specified
-          %span.c-card__content-block-text.col-md-12.col-lg-6.c-card__content-block-text--secondary= "(#{date_format(@client.date_of_birth)})" if @client.date_of_birth
+          - if can_view_full_dob?
+            %span.c-card__content-block-text.col-md-12.col-lg-6.c-card__content-block-text--secondary= "(#{date_format(@client.date_of_birth)})" if @client.date_of_birth
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Gender
           %span.c-card__content-block-text= find_and_preserve(@client.gender_descriptions(brief: true).join(', ')).presence || not_specified
@@ -21,7 +22,14 @@
           %span.c-card__content-block-text= @client.ethnicity.try(:text) || not_specified
         .col-md-12.col-lg-6.c-card__content-block
           %h5 SSN
-          %span.c-card__content-block-text= @client.ssn.present? ? masked_ssn(@client.ssn) : not_specified
+          %span.c-card__content-block-text
+            - if @client.ssn.present?
+              - if can_view_full_ssn?
+                = ssn(@client.ssn)
+              - else
+                = masked_ssn(@client.ssn)
+            - else
+              = not_specified
         .col-md-12.col-lg-6.c-card__content-block
           %h5 Veteran
           %span.c-card__content-block-text= @client.veteran_status.try(:text) || not_specified
