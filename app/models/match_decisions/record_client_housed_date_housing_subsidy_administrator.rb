@@ -22,7 +22,7 @@ module MatchDecisions
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
       when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
-      when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "#{_('Housing Subsidy Administrator')} notes #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :shelter_declined then "Match declined by #{_('Shelter Agency Contact')}.  Reason: #{decline_reason_name}"
       when :skipped then 'Skipped'
       when :canceled then canceled_status_label

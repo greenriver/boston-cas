@@ -109,7 +109,6 @@ module MatchDecisions::Nine
         'Immigration status',
         'Ineligible for Housing Program',
         'Self-resolved',
-        'Household did not respond after initial acceptance of match',
         'Client refused offer',
         'Client needs higher level of care',
         'Unable to reach client after multiple attempts',

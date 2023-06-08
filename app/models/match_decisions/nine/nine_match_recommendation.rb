@@ -73,6 +73,19 @@ module MatchDecisions::Nine
       end
     end
 
+    def step_cancel_reasons
+      [
+        'Match expired',
+        'Client has disengaged',
+        'Client has disappeared',
+        'SSP CORI',
+        'HSP CORI',
+        'Incarcerated',
+        'Client no longer eligible for match',
+        'Other',
+      ]
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
