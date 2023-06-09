@@ -6,7 +6,7 @@
     = f.input :units, required: true, label: "How many vacancies would you like to create?", as: :integer, input_html: {maxlength: 3, size: 4}
 
   .form-actions
-    = f.button :submit, value: 'Add Vacancies'
+    = f.button :submit, value: 'Create Vacancies', data: { disable_with: 'Creating...' }
 
 = content_for :page_js do
   :javascript
