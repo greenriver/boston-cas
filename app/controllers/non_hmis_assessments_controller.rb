@@ -23,6 +23,7 @@ class NonHmisAssessmentsController < ApplicationController
   def create
     @assessment = build_assessment
     opts = clean_assessment_params(@assessment.assessment_params(params))
+
     @assessment.update(opts)
     @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
     if @assessment.save
@@ -90,6 +91,9 @@ class NonHmisAssessmentsController < ApplicationController
       end
       assessment_params.extract![:dv_rrh_aggregate]
     end
+
+    # We're using a varchar as a boolean
+    assessment_params[:need_daily_assistance] = nil if assessment_params.key?(:need_daily_assistance) && assessment_params[:need_daily_assistance].to_s == '0'
 
     assessment_params[:neighborhood_interests] = assessment_params[:neighborhood_interests]&.reject(&:blank?)&.map(&:to_i) if assessment_params[:neighborhood_interests].present?
 
