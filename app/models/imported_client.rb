@@ -100,7 +100,7 @@ class ImportedClient < NonHmisClient
   end
 
   def warehouse_project_client
-    @warehouse_project_client ||= ProjectClient.where(data_source_id: warehouse_data_source, id_in_data_source: warehouse_client_id)
+    @warehouse_project_client ||= ProjectClient.find_by(data_source_id: warehouse_data_source, id_in_data_source: warehouse_client_id)
   end
 
   def warehouse_data_source
