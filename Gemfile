@@ -70,6 +70,7 @@ gem 'redis'
 
 gem 'activerecord-session_store'
 gem 'lograge'
+gem 'logstop'
 gem 'paper_trail'
 gem 'paranoia', '~> 2.0'
 gem 'validate_url'
