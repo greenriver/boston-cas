@@ -101,8 +101,6 @@ module MatchDecisions::Nine
         'Match expired',
         'Client has disengaged',
         'Client has disappeared',
-        'SSP CORI',
-        'HSP CORI',
         'Incarcerated',
         'Client received another housing opportunity',
         'Client no longer eligible for match',
