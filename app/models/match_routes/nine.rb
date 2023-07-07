@@ -19,8 +19,8 @@ module MatchRoutes
         'MatchDecisions::Nine::NineMatchRecommendation' => 1,
         'MatchDecisions::Nine::NineRecordVoucherDate' => 2,
         'MatchDecisions::Nine::NineAssignCaseContact' => 3,
-        'MatchDecisions::Nine::NineLeaseUp' => 4,
-        'MatchDecisions::Nine::NineAssignManager' => 5,
+        'MatchDecisions::Nine::NineAssignManager' => 4,
+        'MatchDecisions::Nine::NineLeaseUp' => 5,
         'MatchDecisions::Nine::NineConfirmMatchSuccess' => 6,
       }
     end
@@ -31,10 +31,10 @@ module MatchRoutes
         'MatchDecisions::Nine::NineRecordVoucherDate' => 2,
         'MatchDecisions::Nine::NineConfirmVoucherDecline' => 3,
         'MatchDecisions::Nine::NineAssignCaseContact' => 4,
-        'MatchDecisions::Nine::NineLeaseUp' => 5,
-        'MatchDecisions::Nine::NineConfirmLeaseUpDecline' => 6,
-        'MatchDecisions::Nine::NineAssignManager' => 7,
-        'MatchDecisions::Nine::NineConfirmAssignManagerDecline' => 8,
+        'MatchDecisions::Nine::NineAssignManager' => 5,
+        'MatchDecisions::Nine::NineConfirmAssignManagerDecline' => 6,
+        'MatchDecisions::Nine::NineLeaseUp' => 7,
+        'MatchDecisions::Nine::NineConfirmLeaseUpDecline' => 8,
         'MatchDecisions::Nine::NineConfirmMatchSuccess' => 9,
       }
     end

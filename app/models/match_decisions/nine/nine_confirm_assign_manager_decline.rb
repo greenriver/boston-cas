@@ -59,7 +59,7 @@ module MatchDecisions::Nine
 
       def decline_overridden
         match.nine_assign_manager_decision.update(status: :skipped)
-        match.nine_confirm_match_success_decision.initialize_decision!
+        match.nine_lease_up_decision.initialize_decision!
       end
 
       def decline_overridden_returned

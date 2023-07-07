@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: boston-cas 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 18:35+0000\n"
-"PO-Revision-Date: 2022-11-23 18:35+0000\n"
+"POT-Creation-Date: 2023-06-08 20:31+0000\n"
+"PO-Revision-Date: 2023-06-08 20:31+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -396,6 +396,9 @@ msgstr ""
 msgid "Needs a higher level of care"
 msgstr ""
 
+msgid "Needs ongoing housing case management"
+msgstr ""
+
 msgid "Needs site-based case management"
 msgstr ""
 
@@ -646,6 +649,9 @@ msgid "housing subsidy administrator"
 msgstr ""
 
 msgid "indicates there will not be a criminal background hearing"
+msgstr ""
+
+msgid "lease start date"
 msgstr ""
 
 msgid "match shelter agency agreement modal"

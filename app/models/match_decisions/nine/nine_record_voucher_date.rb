@@ -9,6 +9,8 @@ module MatchDecisions::Nine
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteEightCancelReasons
 
+    attr_accessor :rfta_submitted
+
     validate :date_voucher_issued_present_if_status_accept
     validate :ensure_required_contacts_present_on_accept
 
@@ -104,17 +106,24 @@ module MatchDecisions::Nine
     #   :nine_record_voucher_date_housing_subsidy_admin
     # end
 
-    def step_decline_reasons(_contact)
-      [
+    private def decline_reason_scope(_contact)
+      reasons = [
         'Immigration status',
         'Ineligible for Housing Program',
         'Self-resolved',
-        'Household did not respond after initial acceptance of match',
         'Client refused offer',
         'Client needs higher level of care',
         'Unable to reach client after multiple attempts',
-        'Other',
       ]
+      MatchDecisionReasons::Base.where(type: 'MatchDecisionReasons::All', name: reasons).
+        or(MatchDecisionReasons::NineRecordVoucherDateDecline.all)
+    end
+
+    # Only record an event if we moved forward (which only happens if rfta_submitted is checked)
+    def record_action_event! contact:
+      return unless rfta_submitted == true || rfta_submitted.to_s == '1'
+
+      super(contact: contact)
     end
 
     class StatusCallbacks < StatusCallbacks
@@ -122,7 +131,11 @@ module MatchDecisions::Nine
       end
 
       def accepted
-        @decision.next_step.initialize_decision!
+        if @decision.rfta_submitted == true || @decision.rfta_submitted.to_s == '1'
+          @decision.next_step.initialize_decision!
+        else
+          @decision.update(status: :pending)
+        end
       end
 
       def declined
@@ -144,6 +157,7 @@ module MatchDecisions::Nine
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
         :date_voucher_issued,
+        :rfta_submitted,
       )
     end
 

@@ -91,6 +91,10 @@ module CasSeeds
       ['Unable to reach client after multiple attempts', nil],
     ].freeze
 
+    NINE_RECORD_VOUCHER_DATE_DECLINE_REASONS = [
+      [' Household became disengaged', nil],
+    ].freeze
+
     NINE_CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS = [].freeze
 
     CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS = [].freeze
@@ -109,6 +113,7 @@ module CasSeeds
       create_shelter_agency_not_working_with_client_other_reason!
       create_admin_cancel_reasons!
       create_mitigation_reasons!
+      create_record_voucher_decline_reasons!
       create_case_contact_assigns_manager_decline_reasons!
       create_nine_case_contact_assigns_manager_decline_reasons!
       create_base_reasons!
@@ -197,6 +202,12 @@ module CasSeeds
     private def create_mitigation_reasons!
       MITIGATION_REASONS.each do |reason_name, _|
         ::MatchDecisionReasons::MitigationDecline.where(name: reason_name).first_or_create!
+      end
+    end
+
+    private def create_record_voucher_decline_reasons!
+      NINE_RECORD_VOUCHER_DATE_DECLINE_REASONS.each do |reason_name, _|
+        ::MatchDecisionReasons::NineRecordVoucherDateDecline.where(name: reason_name).first_or_create!
       end
     end
 
