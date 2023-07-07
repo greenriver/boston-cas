@@ -44,30 +44,30 @@ class Deployer
   attr_accessor :assume_ci_build
   attr_accessor :push_allowed
 
-  attr_accessor :force_build
-
   # The fully-qualified domain name of the application
   # We use this so we can get data from the app about the deployment state
   attr_accessor :fqdn
 
   attr_accessor :cluster
 
-  def initialize(target_group_name:, assume_ci_build: true, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, registry_id:, repo_name:, fqdn:)
-    self.cluster           = _cluster_name
-    self.target_group_name = target_group_name
-    self.assume_ci_build   = assume_ci_build
-    self.secrets_arn       = secrets_arn
-    self.execution_role    = execution_role
-    self.task_role         = task_role
-    self.dj_options        = dj_options || []
-    self.fqdn              = fqdn
-    self.push_allowed      = true
-    self.web_options       = web_options
-    self.force_build       = false
-    self.registry_id       = registry_id
-    self.repo_name         = repo_name
-    self.variant           = 'web'
-    self.version           = `git rev-parse --short=9 HEAD`.chomp
+  attr_accessor :service_registry_arns
+
+  def initialize(target_group_name:, assume_ci_build: true, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, registry_id:, repo_name:, fqdn:, service_registry_arns:{})
+    self.service_registry_arns    = service_registry_arns
+    self.cluster                  = _cluster_name
+    self.target_group_name        = target_group_name
+    self.assume_ci_build          = assume_ci_build
+    self.secrets_arn              = secrets_arn
+    self.execution_role           = execution_role
+    self.task_role                = task_role
+    self.dj_options               = dj_options || []
+    self.fqdn                     = fqdn
+    self.push_allowed             = true
+    self.web_options              = web_options
+    self.registry_id              = registry_id
+    self.repo_name                = repo_name
+    self.variant                  = 'web'
+    self.version                  = `git rev-parse --short=9 HEAD`.chomp
 
     Dir.chdir(_root)
   end
@@ -89,7 +89,6 @@ class Deployer
     roll_out.run!
 
     _add_latest_tags!
-    _clean_up_old_local_images!
   end
 
   def run_migrations!
@@ -109,13 +108,6 @@ class Deployer
     end
 
     roll_out.bootstrap_databases!
-  end
-
-  def test_build!
-    self.assume_ci_build = false
-    self.push_allowed = false
-    self.force_build = true
-    _build_and_push_all!
   end
 
   private
@@ -142,6 +134,7 @@ class Deployer
         task_role: task_role,
         web_options: web_options,
         capacity_providers: _capacity_providers,
+        service_registry_arns: service_registry_arns,
       )
   end
 
@@ -164,6 +157,19 @@ class Deployer
     raise '[FATAL] Push or pull your branch first!' unless remote.start_with?(our_commit)
   end
 
+  def _check_compiled_assets!
+    secrets_arn_ = secrets_arn.gsub(/[^0-9A-Za-z\_\-\:\/]/, '') # Sanitize for cli.
+    target_group_name_ = target_group_name&.gsub(/[^0-9A-Za-z\_\-]/, '') # Sanitize for cli.
+    checksum = `SECRET_ARN=#{secrets_arn_.shellescape} ASSETS_PREFIX=#{target_group_name_.shellescape} bin/asset_checksum`.split(' ')[-1]
+
+    compiled_assets_s3_path = AssetCompiler.compiled_assets_s3_path(target_group_name_, checksum)
+    while `aws s3 ls #{compiled_assets_s3_path.shellescape}`.strip.empty?
+      puts "[INFO] Assets for hash [#{checksum}] not compiled yet, waiting 60 seconds..."
+      sleep 60
+    end
+    puts "[INFO] Assets for hash [#{checksum}] are compiled, proceeding..."
+  end
+
   def _docker_login!
     resp = ecr.get_authorization_token
     data = resp.to_h[:authorization_data].first
@@ -174,52 +180,31 @@ class Deployer
   end
 
   def _build_and_push_all!
-    _build_and_push_image('pre-cache') if !_pre_cache_image_exists? || force_build
-    _build_and_push_image('base')
-    _build_and_push_image('web')
-    _build_and_push_image('dj')
-    # _build_and_push_image('cron')
+    _wait_for_image_ready('pre-cache')
+    _wait_for_image_ready('base')
   end
 
-  def _build_and_push_image(variant)
+  def _wait_for_image_ready(variant)
     self.variant = variant
 
     unless File.exist?(_dockerfile_path)
-      puts "[WARN] Not building #{variant} since the dockerfile #{_dockerfile_path} doesn't exist"
+      puts "[WARN] Not checking #{variant} since the dockerfile #{_dockerfile_path} doesn't exist"
       return
     end
 
     _set_image_tag!
 
-    if assume_ci_build
-      while _revision_not_in_repo?
-        puts "[INFO] Build did not finish yet for #{image_tag}. Trying again in #{WAIT_TIME} minutes."
-        # puts "[DEBUG] These are the tags:"
-        # puts _image_tags_in_repo.join(', ')
+    while _revision_not_in_repo?
+      puts "[INFO] Build did not finish yet for #{image_tag}. Trying again in #{WAIT_TIME} minutes."
+      # puts "[DEBUG] These are the tags:"
+      # puts _image_tags_in_repo.join(', ')
 
-        sleep WAIT_TIME * 60
-      end
-    end
-
-    if _revision_not_in_repo? || force_build
-      _build!
-      _tag_the_image!
-      _push_image! if push_allowed
-    else
-      puts "[INFO] Not building or pushing image #{image_tag}. It's already in the repo."
-
-      if ENV['PULL_LATEST'] == 'true'
-        puts "Pulling just so we have it locally (it's not required)."
-        _run("docker image pull #{_remote_tag}")
-        _tag_the_image!(authority: 'them')
-      end
+      sleep WAIT_TIME * 60
     end
   end
 
   def _add_latest_tags!
     _add_latest_tag!('base')
-    _add_latest_tag!('web')
-    _add_latest_tag!('dj')
   end
 
   def _add_latest_tag!(variant)
@@ -319,37 +304,8 @@ class Deployer
     end
   end
 
-  # This is a crude thing, but hopefully will inspire something not crude
-  def _test_stack!
-    _run('tmux split-window -h')
-    _run("tmux send-keys :1 'cd config/deploy/docker/local-test'")
-
-    puts 'Sleeping to let stack boot'
-    sleep 20
-
-    _run(<<~CMD)
-      curl -k -H 'Host: #{TEST_HOST}' https://localhost:#{TEST_PORT}
-    CMD
-  end
-
   def debug?
     ENV['DEBUG'] == 'true'
-  end
-
-  def _push_image!
-    if debug?
-      puts 'Skipping pushing to remote'
-      return
-    end
-
-    _run("docker push #{_remote_tag}")
-    _run("docker push #{_remote_latest_tag}")
-  end
-
-  def _clean_up_old_local_images!
-    _run(<<~CMD)
-      docker image prune --force -a --filter 'label=app=#{repo_name}' --filter 'until=100h'
-    CMD
   end
 
   def _image_tags_in_repo
