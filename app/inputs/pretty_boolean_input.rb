@@ -25,6 +25,6 @@ class PrettyBooleanInput < SimpleForm::Inputs::BooleanInput
     end
   end
 
-  def label
+  def label(wrapper_options)
   end
 end
