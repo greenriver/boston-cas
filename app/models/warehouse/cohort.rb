@@ -7,6 +7,8 @@
 module Warehouse
   class Cohort < Base
     self.inheritance_column = :_disabled
+    acts_as_paranoid
+
     scope :active, -> do
       where(active_cohort: true, deleted_at: nil)
     end
