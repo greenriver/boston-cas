@@ -7,8 +7,9 @@
 module Warehouse
   class Client < Base
     self.table_name = :Client
+    acts_as_paranoid(column: :DateDeleted)
 
-    scope :for_client, -> (warehouse_client_id) do
+    scope :for_client, ->(warehouse_client_id) do
       where(id: warehouse_client_id)
     end
 
