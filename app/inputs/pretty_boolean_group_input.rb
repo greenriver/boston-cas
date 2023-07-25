@@ -15,7 +15,7 @@ class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
 
       check =
         template.content_tag(:span, template.content_tag(:span, '', class: 'c-checkbox__check-icon'), class: 'c-checkbox__check-container')
-      collection.each_with_index do |(label, value, _attrs), _index|
+      collection.each do |label, value, _attrs|
         name = "#{object_name}[#{attribute_name}]"
         if input_html_options[:multiple]
           checked = current_value && value.in?(current_value)
