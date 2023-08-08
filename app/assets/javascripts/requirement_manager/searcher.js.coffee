@@ -21,6 +21,7 @@ class App.RequirementManager.Searcher
       data: @_select2_data()
       placeholder: @placeholder
       width: '100%'
+      dropdownParent: $(@element).closest('form')
 
   _init_select_listener: ->
     $(".jVariableRequirment").hide()
