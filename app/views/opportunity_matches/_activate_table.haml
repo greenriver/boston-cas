@@ -11,6 +11,9 @@
         %thead
           %tr
             %th Client Name
+            %th Assessment Type
+            %th Minimum Bedrooms
+            %th Minimum Occupancy
             - priority_labels.map do |label|
               %th.text-center= label
             %th.text-center Other Active Matches
@@ -29,6 +32,9 @@
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
                 = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
+              %td= NonHmisAssessment.title_from_type_for_matching(client.assessment_name)
+              %td= client.required_number_of_bedrooms
+              %td= client.required_minimum_occupancy
               - priority_values(client).map do |value|
                 - isBoolean = [TrueClass, FalseClass].include?(value.class)
                 %td.text-center= isBoolean ? checkmark(value) : value
