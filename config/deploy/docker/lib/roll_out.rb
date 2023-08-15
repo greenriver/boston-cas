@@ -34,6 +34,7 @@ class RollOut
   attr_accessor :task_arn
   attr_accessor :web_options
   attr_accessor :only_check_ram
+  attr_accessor :service_registry_arns
 
   include SharedLogic
   include AwsSdkHelpers::Helpers
@@ -51,19 +52,24 @@ class RollOut
 
   DEFAULT_CPU_SHARES = 256
 
-  def initialize(image_base:, target_group_name:, target_group_arn:, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, fqdn:, capacity_providers:)
-    self.cluster             = _cluster_name
-    self.image_base          = image_base
-    self.secrets_arn         = secrets_arn
-    self.target_group_arn    = target_group_arn
-    self.target_group_name   = target_group_name
-    self.execution_role      = execution_role
-    self.task_role           = task_role
-    self.dj_options          = dj_options
-    self.web_options         = web_options
-    self.status_uri          = URI("https://#{fqdn}/system_status/details")
-    self.only_check_ram      = false
-    @capacity_providers      = capacity_providers
+  def initialize(image_base:, target_group_name:, target_group_arn:, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, fqdn:, capacity_providers:, service_registry_arns:)
+    self.cluster                  = _cluster_name
+    self.image_base               = image_base
+    self.secrets_arn              = secrets_arn
+    self.target_group_arn         = target_group_arn
+    self.target_group_name        = target_group_name
+    self.execution_role           = execution_role
+    self.task_role                = task_role
+    self.dj_options               = dj_options
+    self.web_options              = web_options
+    self.status_uri               = URI("https://#{fqdn}/system_status/details")
+    self.only_check_ram           = false
+    self.service_registry_arns    = service_registry_arns || {}
+    @capacity_providers           = capacity_providers
+
+    puts '[WARN] You should specify a web service registry ARN value for service discovery (Cloud Map)' if service_registry_arns['web'].nil?
+
+    puts '[WARN] You should specify a DJ service registry ARN value for service discovery (Cloud Map)' if service_registry_arns['dj'].nil?
 
     if task_role.nil? || task_role.match(/^\s*$/)
       puts "\n[WARN] task role was not set. The containers will use the role of the entire instance\n\n"
@@ -147,13 +153,17 @@ class RollOut
   end
 
   def bootstrap_databases!
-    name = target_group_name + '-bootstrap-dbs'
+    name = target_group_name + '-deploy-tasks'
+
+    environment = default_environment.dup
+    environment << { 'name' => 'BOOTSTRAP_DATABASES', 'value' => 'true' }
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_RAM_MB,
-      image: image_base + '--dj',
+      image: image_base + '--deploy',
+      environment: environment,
       name: name,
-      command: ['bin/db_prep'],
+      command: ['bin/deploy_tasks.sh'],
     )
 
     _run_task!
@@ -179,7 +189,7 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_DJ_RAM_MB.call(target_group_name),
-      image: image_base + '--dj',
+      image: image_base + '--base',
       name: name,
       # command: ['echo', 'workerhere'],
     )
@@ -190,7 +200,7 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_RAM_MB,
-      image: image_base + '--dj',
+      image: image_base + '--base',
       name: name,
       command: ['rake', 'jobs:workoff'],
     )
@@ -213,11 +223,27 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: soft_mem_limit_mb,
-      image: image_base + '--web',
+      image: image_base + '--base',
       environment: environment,
+      health_check: {
+        start_period: 15,   # seconds
+        interval: (60 * 5), # seconds (5 minutes)
+        timeout: 10, # seconds
+        command: ['curl', '-k', '-f', 'https://localhost:3000/system_status/operational'],
+      },
+      docker_labels: {
+        'PROMETHEUS_EXPORTER_PORT' => '9394',
+        'role' => 'web',
+      },
+      command: ['puma', '-b', 'ssl://0.0.0.0:3000?key=/app/config/key.pem&cert=/app/config/cert.pem&verify_mode=none'],
       ports: [
         {
-          'container_port' => 3000,
+          'container_port' => 3000, # rails app
+          'host_port' => 0,
+          'protocol' => 'tcp',
+        },
+        {
+          'container_port' => 9394, # metrics
           'host_port' => 0,
           'protocol' => 'tcp',
         },
@@ -237,7 +263,20 @@ class RollOut
 
     minimum, maximum = _get_min_max_from_desired(web_options['container_count'])
 
-    # Keep web containers on long-term providers
+    service_registries =
+      if service_registry_arns['web']
+        [
+          {
+            container_name: name,
+            container_port: 9394,
+            registry_arn: service_registry_arns['web'],
+          },
+        ]
+      else
+        []
+      end
+
+    # Keep production web containers on long-term providers
     _start_service!(
       capacity_provider: _long_term_capacity_provider_name,
       name: name + '-2', # version bump for change from port 443 -> 3000
@@ -245,6 +284,7 @@ class RollOut
       desired_count: web_options['container_count'] || 1,
       minimum_healthy_percent: minimum,
       maximum_percent: maximum,
+      service_registries: service_registries,
     )
   end
 
@@ -263,14 +303,30 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: soft_mem_limit_mb,
-      image: image_base + '--dj',
+      image: image_base + '--base',
       name: name,
       environment: environment,
+      docker_labels: {
+        'role' => 'jobs',
+      },
+      command: ['rake', 'jobs:work'],
     )
 
     return if self.only_check_ram
 
     minimum, maximum = _get_min_max_from_desired(dj_options['container_count'])
+
+    # service_registries =
+    #   if service_registry_arns['dj']
+    #     {
+    #       container_name: name,
+    #       container_port: 9394,
+    #       registry_arn: service_registry_arns['dj'],
+    #     }
+    #   else
+    #     []
+    #   end
+    service_registries = []
 
     _start_service!(
       name: name,
@@ -278,6 +334,7 @@ class RollOut
       desired_count: dj_options['container_count'] || 1,
       maximum_percent: maximum,
       minimum_healthy_percent: minimum,
+      service_registries: service_registries,
     )
   end
 
@@ -304,7 +361,7 @@ class RollOut
     @seen = true
   end
 
-  def _register_task!(name:, image:, cpu_shares: nil, soft_mem_limit_mb: 512, ports: [], environment: nil, command: nil, stop_timeout: 30)
+  def _register_task!(name:, image:, cpu_shares: nil, soft_mem_limit_mb: 512, ports: [], environment: nil, command: nil, stop_timeout: 30, docker_labels: {}, health_check: nil)
     puts "[INFO] Registering #{name} task #{target_group_name}"
 
     environment ||= default_environment.dup
@@ -345,6 +402,15 @@ class RollOut
 
     return if self.only_check_ram
 
+    log_configuration = {
+      log_driver: 'awslogs',
+      options: {
+        'awslogs-group' => target_group_name,
+        'awslogs-region' => 'us-east-1',
+        'awslogs-stream-prefix' => log_prefix,
+      },
+    }
+
     container_definition = {
       name: name,
       image: image,
@@ -356,6 +422,7 @@ class RollOut
       # Soft limit
       memory_reservation: (ma.use_memory_analyzer? ? ma.recommended_soft_limit_mb : soft_mem_limit_mb),
 
+      docker_labels: docker_labels,
       port_mappings: ports,
       essential: true,
       environment: environment,
@@ -366,19 +433,13 @@ class RollOut
       secrets: [
         # { name: "SOME_PASSWORD", value_from: some_passowrd_secrets_arn, },
       ],
-      log_configuration: {
-        log_driver: 'awslogs',
-        options: {
-          'awslogs-group' => target_group_name,
-          'awslogs-region' => 'us-east-1',
-          'awslogs-stream-prefix' => log_prefix,
-        },
-      },
+      log_configuration: log_configuration,
     }
 
     puts "[INFO] hard RAM limit: #{container_definition[:memory]} #{target_group_name}"
     puts "[INFO] soft RAM limit: #{container_definition[:memory_reservation]} #{target_group_name}"
 
+    container_definition[:health_check] = health_check unless health_check.nil?
     container_definition[:command] = command unless command.nil?
 
     task_definition_payload = {
@@ -478,8 +539,9 @@ class RollOut
       _stop_task!
       _run_task!
     end
-
     _tail_logs
+    rescue Interrupt, SystemExit
+      _interrupt
   end
 
   def _get_status
@@ -504,8 +566,6 @@ class RollOut
       puts "[FATAL] The log stream #{log_stream_name} does not exist. At least not yet. Waiting 30 seconds...#{target_group_name}"
       sleep 30
       _tail_logs
-      rescue Interrupt, SystemExit
-       _interrupt
     end
     begin
       chars_written = 0
@@ -516,6 +576,7 @@ class RollOut
         -e AWS_SECURITY_TOKEN=#{ENV['AWS_SECURITY_TOKEN']} \
         -e AWS_SESSION_TOKEN=#{ENV['AWS_SESSION_TOKEN']} \
         --rm -it amazon/aws-cli logs tail #{target_group_name} --follow --log-stream-names=#{log_stream_name}"
+
       PTY.spawn(cmd) do |stdout, _stdin, _pid|
         stdout.each do |line|
           chars_written += line.length
@@ -526,20 +587,21 @@ class RollOut
           end
         end
       rescue Errno::EIO
-        if chars_written > 500
-          puts '[WARN] Errno:EIO error, but this probably just meams that the process has finished giving output'
-          return false
-        else
-          raise '[FATAL] Errno:EIO error. Too few lines output from logs before it was done tailing'
-        end
+        raise '[FATAL] Errno:EIO error. Too few lines output from logs before it was done tailing' unless chars_written > 500
+
+        puts '[WARN] Errno:EIO error, but this probably just means that the process has finished giving output'
+        return false
       end
-    rescue PTY::ChildExited
+    rescue Errno::ENOENT => e
       puts "[FATAL] Run this manually: aws logs tail #{target_group_name} --follow --log-stream-names=#{log_stream_name}"
       raise e
+    rescue PTY::ChildExited
+      puts '[WARN] The child process exited!'
+      return false
     end
   end
 
-  def _start_service!(capacity_provider:, load_balancers: [], desired_count: 1, name:, maximum_percent: 100, minimum_healthy_percent: 0)
+  def _start_service!(capacity_provider:, load_balancers: [], desired_count: 1, name:, maximum_percent: 100, minimum_healthy_percent: 0, service_registries: [])
     services = ecs.list_services({ cluster: cluster })
 
     # services result is paginated. The first any iterates over each page
@@ -575,6 +637,7 @@ class RollOut
             rollback: true,
           },
         },
+        service_registries: service_registries,
       }
 
       payload[:health_check_grace_period_seconds] = five_minutes if load_balancers.length.positive?
@@ -598,6 +661,7 @@ class RollOut
           maximum_percent: maximum_percent,
           minimum_healthy_percent: minimum_healthy_percent,
         },
+        service_registries: service_registries,
         placement_strategy: _placement_strategy,
         load_balancers: load_balancers,
       }
@@ -635,6 +699,7 @@ class RollOut
   def _interrupt
     puts "❗ Caught interrupt, stopping task #{self.task_arn}..."
     _stop_task!
+    puts "\n"
     exit 130
   end
 end

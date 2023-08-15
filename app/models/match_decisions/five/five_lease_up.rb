@@ -47,7 +47,7 @@ module MatchDecisions::Five
       case status.to_sym
       when :pending then 'Awaiting Move In'
       when :expiration_update then 'Awaiting Move In'
-      when :completed then "Match completed by #{actor_type}, lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "Match completed by #{actor_type}, #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label

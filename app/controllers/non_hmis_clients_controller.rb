@@ -127,9 +127,9 @@ class NonHmisClientsController < ApplicationController
     if @column.blank?
       if pathways_enabled?
         if can_manage_identified_clients?
-          @column = 'assessment_score'
+          @column = 'non_hmis_clients.assessment_score'
         else
-          @column = 'assessed_at'
+          @column = 'non_hmis_clients.assessed_at'
         end
       else
         @column = 'non_hmis_clients.days_homeless_in_the_last_three_years'

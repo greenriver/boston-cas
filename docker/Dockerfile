@@ -36,8 +36,9 @@ RUN apk add --no-cache \
   vim less \
   tar xz \
   python3 py3-pip \
-  && git config --global --add safe.directory /app \
-  && ln -s libproj.so.21.1.2 /usr/lib/libproj.so.20
+  && git config --global --add safe.directory /app
+  #\
+  #&& ln -s libproj.so.21.1.2 /usr/lib/libproj.so.20
 
 RUN mkdir /app
 WORKDIR /app

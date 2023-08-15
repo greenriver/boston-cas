@@ -96,6 +96,18 @@ module MatchDecisions::Nine
       ]
     end
 
+    def step_cancel_reasons
+      [
+        'Match expired',
+        'Client has disengaged',
+        'Client has disappeared',
+        'Incarcerated',
+        'Client received another housing opportunity',
+        'Client no longer eligible for match',
+        'Other',
+      ]
+    end
+
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
         :client_move_in_date,

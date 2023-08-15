@@ -7,4 +7,5 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   include ArelHelper
+  self.filter_attributes = Rails.application.config.filter_parameters
 end

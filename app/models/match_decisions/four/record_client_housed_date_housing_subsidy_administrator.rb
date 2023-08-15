@@ -20,7 +20,7 @@ module MatchDecisions::Four
     def label_for_status status
       case status.to_sym
       when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
-      when :completed then "#{_('Housing Subsidy Administrator')} notes lease start date #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "#{_('Housing Subsidy Administrator')} notes #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end

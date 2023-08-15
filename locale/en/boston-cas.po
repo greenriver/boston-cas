@@ -395,6 +395,9 @@ msgstr ""
 msgid "Needs a higher level of care"
 msgstr ""
 
+msgid "Needs ongoing housing case management"
+msgstr ""
+
 msgid "Needs site-based case management"
 msgstr ""
 
@@ -645,6 +648,9 @@ msgid "housing subsidy administrator"
 msgstr ""
 
 msgid "indicates there will not be a criminal background hearing"
+msgstr ""
+
+msgid "lease start date"
 msgstr ""
 
 msgid "match shelter agency agreement modal"

@@ -59,8 +59,8 @@ class IdentifiedClientsController < NonHmisClientsController
       { title: 'Age', column: 'date_of_birth', direction: 'asc', order: 'date_of_birth ASC', visible: true },
       { title: 'Agency A-Z', column: 'agencies.name', direction: 'asc', order: 'LOWER(agencies.name) ASC', visible: true },
       { title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true },
-      { title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'assessment_score DESC', visible: true },
-      { title: 'Assessment Date', column: 'assessed_at', direction: 'desc', order: 'assessed_at DESC', visible: true },
+      { title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'non_hmis_clients.assessment_score DESC', visible: true },
+      { title: 'Assessment Date', column: 'assessed_at', direction: 'desc', order: 'non_hmis_clients.assessed_at DESC', visible: true },
       { title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
         order: 'days_homeless_in_the_last_three_years DESC', visible: true },
     ].freeze
