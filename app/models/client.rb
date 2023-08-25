@@ -155,6 +155,11 @@ class Client < ApplicationRecord
   scope :non_confidential, -> { where(confidential: false) }
   scope :full_release, -> { where(housing_release_status: 'Full HAN Release') }
 
+  scope :active_cohorts, ->(limit) do
+    limit = Array.wrap(limit).map(&:to_s).reject(&:blank?).map(&:to_i)
+    where('active_cohort_ids @> ANY(ARRAY [?]::jsonb[])', limit.to_s)
+  end
+
   scope :search_alternate_name, ->(name) do
     arel_table[:alternate_names].lower.matches("%#{name.downcase}%")
   end

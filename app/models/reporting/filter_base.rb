@@ -21,6 +21,7 @@ module Reporting
     attribute :races, Array, default: []
     attribute :ethnicities, Array, default: []
     attribute :disabilities, Array, default: []
+    attribute :cohort_ids, Array, default: []
 
     # Defaults
     attribute :default_start, Date, default: (Date.current - 1.year).beginning_of_year
@@ -49,6 +50,7 @@ module Reporting
       self.races = filters.dig(:races)&.reject(&:blank?)&.map(&:to_sym).presence || races
       self.ethnicities = filters.dig(:ethnicities)&.reject(&:blank?)&.map(&:to_sym).presence || ethnicities
       self.disabilities = filters.dig(:disabilities)&.reject(&:blank?)&.map(&:to_sym).presence || disabilities
+      self.cohort_ids = filters.dig(:cohort_ids)&.reject(&:blank?)&.map(&:to_sym).presence || cohort_ids
 
       ensure_date_order if valid?
       self
@@ -67,6 +69,7 @@ module Reporting
       scope = filter_for_races(scope)
       scope = filter_for_ethnicities(scope)
       scope = filter_for_disabilities(scope)
+      scope = filter_for_cohorts(scope)
 
       scope
     end
@@ -87,6 +90,7 @@ module Reporting
           races: races,
           ethnicities: ethnicities,
           disabilities: disabilities,
+          cohort_ids: cohort_ids,
         },
       }
     end
@@ -111,6 +115,7 @@ module Reporting
         races: [],
         ethnicities: [],
         disabilities: [],
+        cohort_ids: [],
       ].freeze
     end
 
@@ -207,6 +212,10 @@ module Reporting
       }.invert
     end
 
+    def cohort_options_for_select
+      Warehouse::Cohort.visible_in_cas.pluck(:name, :id).to_h
+    end
+
     def selected_params_for_display
       {}.tap do |opts|
         opts['Report Range'] = date_range_words
@@ -220,6 +229,7 @@ module Reporting
         opts['Races'] = race_names
         opts['Ethnicities'] = ethnicity_names
         opts['Disabilities'] = disability_names
+        opts['Cohorts'] = cohort_names
       end
     end
 
@@ -315,6 +325,8 @@ module Reporting
         ethnicity_names
       when :disabilities
         disability_names
+      when :cohort_ids
+        cohort_names
       end
     end
 
@@ -352,6 +364,10 @@ module Reporting
 
     private def disability_names
       disability_name_options_for_select.invert.select { |k, _| disabilities(k) }.values
+    end
+
+    private def cohort_names
+      cohort_options_for_select.invert.select { |k, _| cohort_ids.include?(k) }.values
     end
   end
 end
