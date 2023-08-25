@@ -88,6 +88,8 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def self.declassify_title(name)
+    return unless name.present?
+
     name.gsub(' - Identified', '').gsub(' - Deidentified', '')
   end
 
