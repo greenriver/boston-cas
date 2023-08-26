@@ -409,7 +409,7 @@ GEM
     method_source (1.0.0)
     mini_magick (4.12.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
+    mini_portile2 (2.8.4)
     minitest (5.19.0)
     minitest-reporters (1.5.0)
       ansi
@@ -436,7 +436,7 @@ GEM
       net-protocol
     net-ssh (7.0.1)
     nio4r (2.5.9)
-    nokogiri (1.15.2)
+    nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     notiffany (0.1.3)
@@ -770,7 +770,7 @@ DEPENDENCIES
   minitest-reporters
   momentjs-rails (>= 2.9.0)
   net-http
-  nokogiri (>= 1.13.10)
+  nokogiri (>= 1.15.4)
   order_as_specified
   overcommit
   pagy
