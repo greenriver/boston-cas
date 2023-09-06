@@ -16,15 +16,15 @@ module MatchRoutes
 
     def self.match_steps
       {
-        'MatchDecisions::Ten::MatchRecommendation' => 1,
-        'MatchDecisions::Nine::NineConfirmMatchSuccess' => 2,
+        'MatchDecisions::Ten::TenMatchRecommendation' => 1,
+        'MatchDecisions::Ten::TenConfirmMatchSuccess' => 2,
       }
     end
 
     def self.match_steps_for_reporting
       {
-        'MatchDecisions::Ten::MatchRecommendation' => 1,
-        'MatchDecisions::Nine::NineConfirmMatchSuccess' => 2,
+        'MatchDecisions::Ten::TenMatchRecommendation' => 1,
+        'MatchDecisions::Ten::TenConfirmMatchSuccess' => 2,
       }
     end
 
@@ -50,8 +50,7 @@ module MatchRoutes
 
     def status_declined?(match)
       [
-        match.hsa_accepts_client_decision&.status == 'declined' &&
-          match.confirm_hsa_accepts_client_decline_dnd_staff_decision&.status != 'decline_overridden',
+        match.ten_match_recommendation_decision&.status == 'declined',
       ].any?
     end
   end
