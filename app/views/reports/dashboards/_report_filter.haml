@@ -30,11 +30,13 @@
     .col-3
       = f.input :genders, as: :select_2, collection: @filter.gender_options_for_select, include_blank: false, input_html: { multiple: true, placeholder: 'Any Gender', data: { placeholder: 'Any Gender' } }
   .row
-    .col-4
+    .col-3
       = f.input :races, as: :select_2, collection: @filter.race_options_for_select, input_html: { multiple: true, placeholder: 'Any Race', data: { placeholder: 'Any Race' } }
-    .col-4
+    .col-3
       = f.input :ethnicities, as: :select_2, collection: @filter.ethnicity_options_for_select, include_blank: false, input_html: { multiple: true, placeholder: 'Any Ethnicity', data: { placeholder: 'Any Ethnicity' } }
-    .col-4
+    .col-3
       = f.input :disabilities, as: :select_2, collection: @filter.disability_options_for_select, input_html: { multiple: true, placeholder: 'Any Disability Status', data: { placeholder: 'Any Disability Status' } }
+    .col-3
+      = f.input :cohort_ids, as: :select_2, collection: @filter.cohort_options_for_select, input_html: { multiple: true, placeholder: 'Any Cohort', data: { placeholder: 'Any Cohort' } }, label: 'Cohorts', hint: 'Note, choosing multiple cohorts will require clients to be on all chosen cohorts'
   %hr
   = f.submit 'Update Dashboard', class: 'btn btn-primary'

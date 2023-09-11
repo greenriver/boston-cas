@@ -70,5 +70,11 @@ module Reporting::FilterScopes
 
       scope.disability(@filter.disabilities)
     end
+
+    private def filter_for_cohorts(scope)
+      return scope if @filter.cohort_ids.blank?
+
+      scope.cohorts(@filter.cohort_ids)
+    end
   end
 end

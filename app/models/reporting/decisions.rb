@@ -135,6 +135,11 @@ class Reporting::Decisions < ApplicationRecord
       where(options)
   end
 
+  scope :cohorts, ->(limit) do
+    joins(:client).
+      merge(Client.active_cohorts(limit))
+  end
+
   scope :current_step, -> do
     where(current_step: true)
   end
