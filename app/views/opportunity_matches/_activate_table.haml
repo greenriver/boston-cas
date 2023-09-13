@@ -1,3 +1,4 @@
+- pathways_assessment = Config.get(:identified_client_assessment).include?('Pathways')
 .c-card.c-card-flush
   .c-card__content
     = simple_form_for :checkboxes do |f|
@@ -13,7 +14,8 @@
             %th Client Name
             %th Assessment Type
             %th Minimum Bedrooms
-            %th Minimum Occupancy
+            - unless pathways_assessment
+              %th Minimum Occupancy
             - priority_labels.map do |label|
               %th.text-center= label
             %th.text-center Other Active Matches
@@ -37,7 +39,8 @@
                 = client.required_number_of_bedrooms
                 - if client.sro_ok
                   (SRO OK)
-              %td= client.required_minimum_occupancy
+              - unless pathways_assessment
+                %td= client.required_minimum_occupancy
               - priority_values(client).map do |value|
                 - isBoolean = [TrueClass, FalseClass].include?(value.class)
                 %td.text-center= isBoolean ? checkmark(value) : value
