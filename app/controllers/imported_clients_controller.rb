@@ -37,9 +37,10 @@ class ImportedClientsController < NonHmisClientsController
         render :new
         return
       end
-    rescue # rubocop:disable Style/RescueStandardError
+    rescue Exception => e
       @upload = ImportedClientsCsv.new
       flash[:alert] = _('Unable to upload file, is it a CSV?')
+      Sentry.capture_exception(e)
       render :new
     end
   end

@@ -200,8 +200,10 @@ class ImportedClientsCsv < ApplicationRecord
   end
 
   def determine_neighborhood_interests(client, row)
-    neighborhoods = row[header.neighborhoods].split(';')
-    interests = neighborhoods.flat_map do |neighborhood_name|
+    neighborhoods = row[header.neighborhoods]&.split(';')
+    return [] if neighborhoods.blank?
+
+    interests = neighborhoods&.flat_map do |neighborhood_name|
       Neighborhood.where(name: neighborhood_name).pluck(:id)
     end
     client.errors.add(:neighborhood_interests, 'not all neighborhoods are valid') if interests.size != neighborhoods.size
