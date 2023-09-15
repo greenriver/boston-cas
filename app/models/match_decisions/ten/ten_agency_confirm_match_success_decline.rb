@@ -7,7 +7,7 @@
 module MatchDecisions::Ten
   class TenAgencyConfirmMatchSuccessDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteEightCancelReasons
+    include MatchDecisions::RouteTenCancelReasons
 
     def step_name
       "#{_('DND')} Confirms Match Success Decline"

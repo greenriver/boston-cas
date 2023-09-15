@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-module RouteNineMailerMethods
+module RouteTenMailerMethods
   extend ActiveSupport::Concern
   included do
     def ten_agency_confirm_match_success(notification = nil)

@@ -14,6 +14,5 @@
               %h3 Confirm Match
           .o-choose__content
             %p Confirming match success will complete the match and remove the client and voucher/unit from future matching.
-            -# = form.submit 'Confirm Match Success', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?)
             = render 'match_decisions/continue_button', text: 'Confirm Match Success', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?) }
         = render 'match_decisions/reject_actions', form: form
