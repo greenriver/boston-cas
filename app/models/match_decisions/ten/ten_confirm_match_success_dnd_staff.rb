@@ -5,7 +5,9 @@
 ###
 
 module MatchDecisions::Ten
-  class TenConfirmMatchSuccess < ::MatchDecisions::Base
+  class TenConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
+    # validate :note_present_if_status_rejected
+
     def statuses
       {
         pending: 'Pending',
@@ -30,8 +32,12 @@ module MatchDecisions::Ten
       end
     end
 
+    def started?
+      status&.to_sym == :confirmed
+    end
+
     def step_name
-      _('Confirm Match Success')
+      _('Close Match')
     end
 
     def actor_type
@@ -54,9 +60,20 @@ module MatchDecisions::Ten
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Ten::TenConfirmMatchSuccess
-        m << Notifications::Ten::TenMatchSuccess
+        m << Notifications::Ten::TenConfirmMatchSuccessDndStaff
       end
+    end
+
+    def accessible_by? contact
+      contact&.user_can_reject_matches? || contact&.user_can_approve_matches?
+    end
+
+    def to_param
+      :ten_confirm_match_success_dnd_staff
+    end
+
+    private def note_present_if_status_rejected
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'rejected'
     end
 
     class StatusCallbacks < StatusCallbacks

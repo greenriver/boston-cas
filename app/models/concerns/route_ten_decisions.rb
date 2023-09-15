@@ -8,7 +8,8 @@ module RouteTenDecisions
   extend ActiveSupport::Concern
 
   included do
-    has_decision :ten_match_recommendation, decision_class_name: 'MatchDecisions::Ten::TenMatchRecommendation', notification_class_name: 'Notifications::Ten::TenMatchRecommendation'
-    has_decision :ten_confirm_match_success, decision_class_name: 'MatchDecisions::Ten::TenConfirmMatchSuccess', notification_class_name: 'Notifications::Ten::TenConfirmMatchSuccess'
+    has_decision :ten_agency_confirm_match_success, decision_class_name: 'MatchDecisions::Ten::TenAgencyConfirmMatchSuccess', notification_class_name: 'Notifications::Ten::TenAgencyConfirmMatchSuccess'
+    has_decision :ten_agency_confirm_match_success_decline, decision_class_name: 'MatchDecisions::Ten::TenAgencyConfirmMatchSuccessDecline', notification_class_name: 'Notifications::Ten::TenAgencyConfirmMatchSuccessDecline'
+    has_decision :ten_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Ten::TenConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Ten::TenConfirmMatchSuccessDndStaff'
   end
 end
