@@ -7,7 +7,7 @@
 module MatchDecisions::Ten
   class TenAgencyConfirmMatchSuccess < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultShelterAgencyDeclineReasons
+    include MatchDecisions::RouteTenDeclineReasons
     include MatchDecisions::RouteTenCancelReasons
 
     def label
