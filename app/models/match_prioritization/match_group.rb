@@ -15,10 +15,12 @@ module MatchPrioritization
       match_group = Arel.sql(c_t[:match_group].asc.to_sql + ' NULLS LAST') # 1, 2, 3
       veteran = Arel.sql(c_t[:veteran].desc.to_sql + ' NULLS LAST') # veteran prioritized over non-veteran
       chronic = Arel.sql(c_t[:chronic_homeless].desc.to_sql + ' NULLS LAST') # chronic prioritized over non-chronic
-      entry_date = Arel.sql(c_t[:entry_date].asc.to_sql + ' NULLS LAST') # older prioritized over newer
-      vispdat_score = Arel.sql(c_t[:vispdat_score].desc.to_sql + ' NULLS LAST') # higher prioritized over lover
+      days_homeless = Arel.sql(c_t[:days_homeless].desc.to_sql + ' NULLS LAST') # longer homeless period prioritized over shorter
+      # entry date and vispdat score removed 10/8 in favor of cumulative LOT homeless
+      # entry_date = Arel.sql(c_t[:entry_date].asc.to_sql + ' NULLS LAST') # older prioritized over newer
+      # vispdat_score = Arel.sql(c_t[:vispdat_score].desc.to_sql + ' NULLS LAST') # higher prioritized over lower
 
-      scope.order(match_group, veteran, chronic, entry_date, vispdat_score)
+      scope.order(match_group, veteran, chronic, days_homeless)
     end
 
     def self.supporting_data_columns
