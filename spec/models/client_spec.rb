@@ -112,38 +112,38 @@ RSpec.describe Client, type: :model do
       end
       it 'secondary sort by veteran and chronic' do
         clients.each { |c| c.update(match_group: 1) }
-        clients[2].update(veteran: true, chronic_homeless: true, entry_date: 1.week.ago)
-        clients[3].update(veteran: true, chronic_homeless: false, entry_date: 1.month.ago)
-        clients[4].update(veteran: false, chronic_homeless: true, entry_date: 1.week.ago)
-        clients[0].update(veteran: false, chronic_homeless: false, entry_date: 1.month.ago)
-        clients[1].update(veteran: nil, chronic_homeless: false, entry_date: 1.week.ago)
+        clients[2].update(veteran: true, chronic_homeless: true, days_homeless: 20)
+        clients[3].update(veteran: true, chronic_homeless: false, days_homeless: 30)
+        clients[4].update(veteran: false, chronic_homeless: true, days_homeless: 20)
+        clients[0].update(veteran: false, chronic_homeless: false, days_homeless: 30)
+        clients[1].update(veteran: nil, chronic_homeless: false, days_homeless: 20)
 
-        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
-        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
+        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :chronic_homeless, :days_homeless)
+        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :days_homeless)
         expect(prioritized_clients).to eq(ordered_clients)
       end
-      it 'tie breaks on entry date and vispdat score' do
+      it 'tie breaks on days_homeless' do
         clients.each { |c| c.update(match_group: 2, veteran: true, chronic_homeless: true) }
-        clients[2].update(entry_date: 1.year.ago)
-        clients[3].update(entry_date: 1.month.ago, vispdat_score: 100)
-        clients[4].update(entry_date: 1.month.ago, vispdat_score: 10)
-        clients[0].update(entry_date: 1.week.ago, vispdat_score: 100)
-        clients[1].update(entry_date: 1.week.ago)
+        clients[2].update(days_homeless: 101)
+        clients[3].update(days_homeless: 100)
+        clients[4].update(days_homeless: 90)
+        clients[0].update(days_homeless: 1)
+        clients[1].update(days_homeless: 0)
 
-        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
-        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
+        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :chronic_homeless, :days_homeless)
+        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :days_homeless)
         expect(prioritized_clients).to eq(ordered_clients)
       end
       it 'places nulls last in sort order' do
         clients.each { |c| c.update(match_group: 1) }
-        clients[2].update(chronic_homeless: true, entry_date: Date.today, vispdat_score: 10)
-        clients[3].update(chronic_homeless: true, entry_date: Date.today, vispdat_score: nil)
-        clients[4].update(chronic_homeless: true, entry_date: nil, vispdat_score: 100)
-        clients[0].update(chronic_homeless: true, entry_date: nil, vispdat_score: 10)
-        clients[1].update(chronic_homeless: nil, entry_date: Date.today, vispdat_score: nil)
+        clients[2].update(chronic_homeless: true, days_homeless: 101)
+        clients[3].update(chronic_homeless: true, days_homeless: 100)
+        clients[4].update(chronic_homeless: true, days_homeless: nil)
+        clients[0].update(chronic_homeless: true, days_homeless: 10)
+        clients[1].update(chronic_homeless: nil, days_homeless: nil)
 
-        ordered_clients = [clients[2], clients[3], clients[4], clients[0], clients[1]].pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
-        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :entry_date, :vispdat_score)
+        ordered_clients = [clients[2], clients[3], clients[0], clients[4], clients[1]].pluck(:id, :chronic_homeless, :days_homeless)
+        prioritized_clients = Client.prioritized(route, Client.all).pluck(:id, :chronic_homeless, :days_homeless)
         expect(prioritized_clients).to eq(ordered_clients)
       end
     end
