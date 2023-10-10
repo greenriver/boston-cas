@@ -6,6 +6,8 @@
 
 module MatchDecisions::Ten
   class TenConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::RouteTenDeclineReasons
+    include MatchDecisions::RouteTenCancelReasons
     # validate :note_present_if_status_rejected
 
     def statuses

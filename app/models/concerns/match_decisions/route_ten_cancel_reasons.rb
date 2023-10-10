@@ -10,18 +10,18 @@ module MatchDecisions
 
     def step_cancel_reasons
       [
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+        'Incarcerated',
         'Match expired',
+        'Client has declined match',
+        'Client has disengaged',
+        'Client has disappeared',
         'Vacancy should not have been entered',
         'Client received another housing opportunity',
         'Client no longer eligible for match',
         'Client deceased',
-        'Incarcerated',
         'Vacancy filled by other client',
-        'Client has declined match',
-        'Client has disengaged',
-        'Client has disappeared',
-        'Client needs higher level of care',
-        'Unable to reach client after multiple attempts',
         'Other',
       ]
     end
