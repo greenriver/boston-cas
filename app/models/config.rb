@@ -9,6 +9,16 @@ class Config < ApplicationRecord
   before_create :set_defaults
   serialize :non_hmis_fields, Array
 
+  def never_send_match_summary_email?
+    send_match_summary_email_on.nil?
+  end
+
+  def self.send_match_summary_email_on_options
+    [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday].map.with_index do |option, i|
+      [option.to_s.titleize, i]
+    end
+  end
+
   def invalidate_cache
     self.class.invalidate_cache
   end

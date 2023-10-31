@@ -1,0 +1,8 @@
+%h1 Match Digest
+- @matches.each do |group, group_values|
+  %h2= "#{group_values[:title]} (#{group_values[:matches].size})"
+  - unless group_values[:matches].empty?
+    %ul
+      - group_values[:matches].each do |match|
+        %li
+          = link_to match[:text], match[:path]

@@ -92,6 +92,10 @@ class ClientOpportunityMatch < ApplicationRecord
     joins(:program).merge(Program.on_route(route))
   end
 
+  scope :diet, -> do
+    select(attribute_names - ['universe_state'])
+  end
+
   ###################
   ## Life cycle Scopes
   ###################
@@ -107,6 +111,7 @@ class ClientOpportunityMatch < ApplicationRecord
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
+  scope :expired, -> { where shelter_expiration: ..Date.current }
   scope :stalled, -> do
     active.where(arel_table[:stall_date].lteq(Date.current))
   end
@@ -377,6 +382,33 @@ class ClientOpportunityMatch < ApplicationRecord
     )
   end
 
+  def self.send_summary_emails
+    config = Config.last
+    return if config.never_send_match_summary_email?
+    return unless config.send_match_summary_email_on == Date.current.wday
+
+    match_groups = [
+      # stalled
+      stalled.preload(:contacts),
+      # canceled
+      canceled.where(updated_at: 1.week.ago..).preload(:contacts),
+      # expiring
+      where(shelter_expiration: Date.current..Date.current + 1.week).preload(:contacts),
+      # expired
+      expired.where(shelter_expiration: 1.week.ago..).preload(:contacts),
+      # active
+      active.preload(:contacts),
+    ]
+
+    contact_ids = match_groups.map do |group|
+      group.map { |d| d.contacts.map(&:id) }.flatten
+    end.flatten.uniq
+
+    Contact.where(id: contact_ids).find_each do |contact|
+      MatchDigestMailer.digest(contact).deliver_now
+    end
+  end
+
   def self.associations_adding_requirements
     [:opportunity]
   end
@@ -491,6 +523,37 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def stalled?
     self.class.stalled.where(id: id).exists?
+  end
+
+  def decision_stalled?
+    return false unless initialized_decisions.pending&.first&.stallable?
+    return false unless stall_date.present?
+
+    stall_date <= Date.current
+  end
+
+  def canceled?
+    closed? && closed_reason == 'canceled'
+  end
+
+  def canceled_recently?
+    canceled? && updated_at > 1.week.ago
+  end
+
+  def expiring_soon?
+    return false if shelter_expiration.blank?
+
+    shelter_expiration > Date.current && shelter_expiration < Date.current + 1.week
+  end
+
+  def expired?
+    return false if shelter_expiration.blank?
+
+    shelter_expiration <= Date.current
+  end
+
+  def expired_recently?
+    expired? && shelter_expiration > 1.week.ago
   end
 
   def successful?

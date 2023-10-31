@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_21_195906) do
+ActiveRecord::Schema.define(version: 2023_10_30_212931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -348,6 +348,7 @@ ActiveRecord::Schema.define(version: 2022_12_21_195906) do
     t.boolean "limit_client_names_on_matches", default: true
     t.boolean "include_note_in_email_default"
     t.boolean "notify_all_on_progress_update", default: false
+    t.integer "send_match_summary_email_on"
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
