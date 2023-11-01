@@ -88,7 +88,7 @@ class ImportedClient < NonHmisClient
   def warehouse_assessment?
     if warehouse_project_client.present?
       # Does warehouse_project_client have the pathways tag?
-      warehouse_project_client.tags.keys.include? pathways_tag_id
+      warehouse_project_client.tags&.keys&.include?(pathways_tag_id)
     else
       false
     end

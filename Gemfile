@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord'
 gem 'activerecord-import'
 gem 'rack', '>= 2.2.6.4'
-gem 'activesupport', '>= 6.1.7.3'
+gem 'activesupport', '>= 6.1.7.5' # CVE-2023-38037
 gem 'pg', '~> 1.1'
 gem 'rails', '~>6.1'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
@@ -17,7 +17,7 @@ gem 'composite_primary_keys', '~> 13.0'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
-gem 'nokogiri', '>= 1.13.10' # >= 1.13.10 due to GHSA-qv4q-mr5r-qprj
+gem 'nokogiri', '>= 1.15.4' # CVE-2017-15412
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'
@@ -65,7 +65,7 @@ gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'json'
 gem 'amazing_print'
 
-gem 'puma', '>= 5.6.2'
+gem 'puma', '~> 6.3'
 gem 'redis'
 
 gem 'activerecord-session_store'
