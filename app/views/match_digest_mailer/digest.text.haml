@@ -1,0 +1,10 @@
+CAS Match Weekly Summary
+\
+The following matches may require attention.
+\
+- @matches.each do |group, group_values|
+  = "#{group_values[:title]} (#{group_values[:matches].size})"
+  \
+  - group_values[:matches].each do |match|
+    #{match[:text]} (#{match[:path]})
+    \

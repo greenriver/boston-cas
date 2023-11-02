@@ -6,51 +6,56 @@
 
 class MatchDigestMailer < ApplicationMailer
   def digest(contact)
-@matches = { 
-  stalled: {
-    title: 'Stalled',
-    matches: [],
-  },
-  canceled: {
-    title: 'Recently Canceled',
-    matches: [],
-  },
-  expired: {
-    title: 'Recently Expired',
-    matches: [],
-  },
-  expiring: {
-    title: 'Expiring Soon',
-    matches: [],
-  },
-  active: {
-    title: 'Active',
-    matches: [],
-  },
-}
+    @matches = {
+      stalled: {
+        title: 'Stalled',
+        matches: [],
+      },
+      canceled: {
+        title: 'Recently Canceled',
+        matches: [],
+      },
+      expired: {
+        title: 'Recently Expired',
+        matches: [],
+      },
+      expiring: {
+        title: 'Expiring Soon',
+        matches: [],
+      },
+      active: {
+        title: 'Active',
+        matches: [],
+      },
+    }
     contact.matches.distinct.diet.find_each do |match|
       next unless match.show_client_info_to?(contact)
 
       match_data = { path: match_url(match) }
+      updated_at = match.updated_at.strftime(I18n.t('date.formats.default'))
       if match.decision_stalled?
         @matches[:stalled][:matches] << match_data.
-          merge(text: "Stalled: #{match.stall_date.try(:strftime, I18n.t('date.formats.default')) || 'unknown'}")
+          merge(text: "Stalled on: #{match.stall_date.try(:strftime, I18n.t('date.formats.default')) || 'unknown'}, last updated: #{updated_at}")
       elsif match.canceled_recently?
         @matches[:canceled][:matches] << match_data.
-          merge(text: "Canceled: #{match.updated_at.strftime(I18n.t('date.formats.default')) || 'unknown'}")
+          merge(text: "Canceled on: #{match.updated_at.strftime(I18n.t('date.formats.default')) || 'unknown'}, last updated: #{updated_at}")
       elsif match.expired_recently?
         @matches[:expired][:matches] << match_data.
-          merge(text: "Expired: #{match.shelter_expiration.strftime(I18n.t('date.formats.default')) || 'unknown'}")
+          merge(text: "Expired on: #{match.shelter_expiration.strftime(I18n.t('date.formats.default')) || 'unknown'}, last updated: #{updated_at}")
       elsif match.expiring_soon?
         @matches[:expiring][:matches] << match_data.
-          merge(text: "Expiring: #{match.shelter_expiration.strftime(I18n.t('date.formats.default')) || 'unknown'}")
+          merge(text: "Expiring: #{match.shelter_expiration.strftime(I18n.t('date.formats.default')) || 'unknown'}, last updated: #{updated_at}")
       elsif match.active?
         matched_on = match.created_at.strftime(I18n.t('date.formats.default'))
-        updated_at = match.updated_at.strftime(I18n.t('date.formats.default'))
         @matches[:active][:matches] << match_data.
-          merge(text: "Active: #{matched_on} - #{updated_at}")
+          merge(text: "Match started: #{matched_on}, last updated: #{updated_at}")
       end
     end
+    @matches.each do |k, v|
+      @matches.delete(k) if v[:matches].empty?
+    end
+    return if @matches.values.flat_map { |v| v[:matches] }.empty?
+
     mail to: contact.email, subject: 'Weekly CAS Match Summary'
   end
 end

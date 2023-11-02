@@ -389,19 +389,19 @@ class ClientOpportunityMatch < ApplicationRecord
 
     match_groups = [
       # stalled
-      stalled.preload(:contacts),
+      stalled,
       # canceled
-      canceled.where(updated_at: 1.week.ago..).preload(:contacts),
+      canceled.where(updated_at: 1.week.ago..),
       # expiring
-      where(shelter_expiration: Date.current..Date.current + 1.week).preload(:contacts),
+      where(shelter_expiration: Date.current..Date.current + 1.week),
       # expired
-      expired.where(shelter_expiration: 1.week.ago..).preload(:contacts),
+      expired.where(shelter_expiration: 1.week.ago..),
       # active
-      active.preload(:contacts),
+      active,
     ]
 
     contact_ids = match_groups.map do |group|
-      group.flat_map { |d| d.contacts.map(&:id) }
+      group.preload(:contacts).flat_map { |d| d.contacts.map(&:id) }
     end.flatten.uniq
 
     Contact.where(id: contact_ids).find_each do |contact|
