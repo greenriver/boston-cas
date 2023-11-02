@@ -401,7 +401,7 @@ class ClientOpportunityMatch < ApplicationRecord
     ]
 
     contact_ids = match_groups.map do |group|
-      group.map { |d| d.contacts.map(&:id) }.flatten
+      group.flat_map { |d| d.contacts.map(&:id) }
     end.flatten.uniq
 
     Contact.where(id: contact_ids).find_each do |contact|

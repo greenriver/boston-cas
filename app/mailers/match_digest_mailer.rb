@@ -6,15 +6,28 @@
 
 class MatchDigestMailer < ApplicationMailer
   def digest(contact)
-    @matches = [
-      ['Stalled', :stalled],
-      ['Recently Canceled', :canceled],
-      ['Recently Expired', :expired],
-      ['Expiring Soon', :expiring],
-      ['Active', :active],
-    ].each_with_object({}) do |group, hash|
-      hash[group[1]] = { title: group[0], matches: [] }
-    end
+@matches = { 
+  stalled: {
+    title: 'Stalled',
+    matches: [],
+  },
+  canceled: {
+    title: 'Recently Canceled',
+    matches: [],
+  },
+  expired: {
+    title: 'Recently Expired',
+    matches: [],
+  },
+  expiring: {
+    title: 'Expiring Soon',
+    matches: [],
+  },
+  active: {
+    title: 'Active',
+    matches: [],
+  },
+}
     contact.matches.distinct.diet.find_each do |match|
       next unless match.show_client_info_to?(contact)
 
@@ -38,6 +51,6 @@ class MatchDigestMailer < ApplicationMailer
           merge(text: "Active: #{matched_on} - #{updated_at}")
       end
     end
-    mail to: contact.email, subject: 'Match Digest'
+    mail to: contact.email, subject: 'Weekly CAS Match Summary'
   end
 end
