@@ -6,6 +6,7 @@
 
 module MatchDecisions::Ten
   class TenConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteTenDeclineReasons
     include MatchDecisions::RouteTenCancelReasons
     # validate :note_present_if_status_rejected
@@ -14,8 +15,9 @@ module MatchDecisions::Ten
       {
         pending: 'Pending',
         confirmed: 'Confirmed',
-        rejected: 'Rejected',
-        canceled: 'Canceled', # added to support cancellations caused by other match success
+        rejected: 'Rejected', # Not currently used
+        declined: 'Declined',
+        canceled: 'Canceled',
         back: 'Pending',
       }
     end
@@ -28,8 +30,8 @@ module MatchDecisions::Ten
       case status.to_sym
       when :pending then "#{_('DND')} to confirm match success"
       when :confirmed then "#{_('DND')} confirms match success"
-      when :rejected then "Match rejected by #{_('DND')}"
-      when :canceled then 'Match canceled'
+      when :rejected, :declined then "Match rejected by #{_('DND')}.  Reason: #{decline_reason_name}"
+      when :canceled then canceled_status_label
       when :back then backup_status_label
       end
     end
@@ -51,7 +53,7 @@ module MatchDecisions::Ten
     end
 
     def editable?
-      super && status !~ /confirmed|rejected/
+      super && status !~ /confirmed|declined/
     end
 
     def initialize_decision! send_notifications: true
@@ -85,6 +87,16 @@ module MatchDecisions::Ten
       def confirmed
         Notifications::MatchSuccessConfirmed.create_for_match! match
         match.succeeded!
+      end
+
+      def declined
+        Notifications::MatchDeclined.create_for_match! match
+        match.rejected!
+      end
+
+      def canceled
+        Notifications::MatchCanceled.create_for_match! match
+        match.canceled!
       end
 
       def rejected
