@@ -13,9 +13,13 @@ class Config < ApplicationRecord
     send_match_summary_email_on.nil?
   end
 
+  def send_match_summary_email_on_day
+    Date::DAYNAMES[send_match_summary_email_on]
+  end
+
   def self.send_match_summary_email_on_options
-    [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday].map.with_index do |option, i|
-      [option.to_s.titleize, i]
+    Date::DAYNAMES.map.with_index do |day, i|
+      [day, i]
     end
   end
 

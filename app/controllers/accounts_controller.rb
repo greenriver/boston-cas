@@ -9,16 +9,22 @@ class AccountsController < ApplicationController
   before_action :set_user
 
   def edit
-
   end
 
   def update
     changed_notes = []
-    if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
-      changed_notes << "Account name was updated."
-    end
-    if @user.email_schedule != account_params[:email_schedule]
-      changed_notes << "Email schedule was updated."
+    changed_notes << 'Account name was updated.' if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
+
+    changed_notes << 'Email schedule was updated.' if @user.email_schedule != account_params[:email_schedule]
+
+    params_opt_out = account_params[:opt_out_match_digest_email] == '1'
+    if @user.opt_out_match_digest_email != params_opt_out
+      config = Config.last
+      if params_opt_out
+        changed_notes << 'You have opted out of weekly match digest emails'
+      else
+        changed_notes << "You will receive weekly match digest emails on #{config.send_match_summary_email_on_day}"
+      end
     end
 
     if changed_notes.present?
@@ -40,11 +46,11 @@ class AccountsController < ApplicationController
         :first_name,
         :last_name,
         :email_schedule,
+        :opt_out_match_digest_email,
       )
   end
 
   private def set_user
     @user = current_user
   end
-
 end
