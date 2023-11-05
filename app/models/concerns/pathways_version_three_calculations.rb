@@ -1180,11 +1180,6 @@ module PathwaysVersionThreeCalculations
           label: 'Unsheltered Boston homeless nights you are adding to their length of time homeless in the warehouse.',
           number: '9D',
         },
-        # self_reported_days_verified: {
-        #   label: 'I have completed this Pathways assessment and have added more than 548 non-HMIS days to this assessment. I certify that I went through each step in the Documenting Current Boston Homelessness form and that myself or my agency have had consistent contact with this client to reasonably believe them to be homeless for total # of non-HMIS days that have been added to the assessment.',
-        #   number: '',
-        #   as: :pretty_boolean,
-        # },
         self_reported_days_verified: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/self_reported_days_verified',

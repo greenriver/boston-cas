@@ -110,12 +110,15 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def total_days_homeless_in_the_last_three_years
-    (days_homeless_in_the_last_three_years || 0) +
-    (additional_homeless_nights || 0) +
-    (additional_homeless_nights_sheltered || 0) +
-    (homeless_nights_sheltered || 0) +
-    (additional_homeless_nights_unsheltered || 0) +
-    (homeless_nights_unsheltered || 0)
+    warehouse_days = (days_homeless_in_the_last_three_years || 0) +
+      (homeless_nights_sheltered || 0) +
+      (homeless_nights_unsheltered || 0)
+    extra_days = (additional_homeless_nights || 0) +
+      (additional_homeless_nights_sheltered || 0) +
+      (additional_homeless_nights_unsheltered || 0)
+    extra_days = extra_days > 548 ? 548 : extra_days unless self_reported_days_verified?
+    total = warehouse_days + extra_days
+    total > 1096 ? 1096 : total
   end
 
   private def update_assessment_score
@@ -231,6 +234,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :homeless_nights_unsheltered,
       :additional_homeless_nights_sheltered,
       :additional_homeless_nights_unsheltered,
+      :self_reported_days_verified,
       :notes,
       :children_info,
       :chronic_health_condition,
