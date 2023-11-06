@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-class MatchDigestMailer < ApplicationMailer
+class MatchDigestMailer < DatabaseMailer
   def digest(contact)
     @matches = {
       stalled: {
@@ -31,7 +31,8 @@ class MatchDigestMailer < ApplicationMailer
     contact.matches.distinct.diet.find_each do |match|
       next unless match.show_client_info_to?(contact)
 
-      match_data = { path: match_url(match) }
+      # Unclear why host isn't correctly set as it is for other mailers
+      match_data = { path: match_url(match, host: ENV['FQDN']) }
       updated_at = match.updated_at.strftime(I18n.t('date.formats.default'))
       if match.decision_stalled?
         @matches[:stalled][:matches] << match_data.
