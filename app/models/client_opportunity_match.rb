@@ -407,7 +407,6 @@ class ClientOpportunityMatch < ApplicationRecord
     Contact.where(id: contact_ids).find_each do |contact|
       if contact.user.present?
         MatchDigestMailer.digest(contact).deliver_now unless contact.user.opt_out_match_digest_email?
-
       else
         # a contact doesn't have to have a user?
         # Do we need another opt-out option for these contacts?

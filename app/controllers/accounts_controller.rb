@@ -12,18 +12,18 @@ class AccountsController < ApplicationController
   end
 
   def update
+    config = Config.last
     changed_notes = []
     changed_notes << 'Account name was updated.' if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
 
     changed_notes << 'Email schedule was updated.' if @user.email_schedule != account_params[:email_schedule]
 
-    params_opt_out = account_params[:opt_out_match_digest_email] == '1'
-    if @user.opt_out_match_digest_email != params_opt_out
-      config = Config.last
-      if params_opt_out
-        changed_notes << 'You have opted out of weekly match digest emails'
+    params_opt_out = account_params[:opt_out_match_digest_email].to_s == '1'
+    if @user.opt_out_match_digest_email != params_opt_out && ! config.never_send_match_summary_email?
+      changed_notes << if params_opt_out
+        'You have opted out of weekly match digest emails'
       else
-        changed_notes << "You will receive weekly match digest emails on #{config.send_match_summary_email_on_day}"
+        "You will receive weekly match digest emails on #{config.send_match_summary_email_on_day}"
       end
     end
 
