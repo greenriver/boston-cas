@@ -109,16 +109,29 @@ class NonHmisAssessment < ActiveRecord::Base
     non_hmis_client.save
   end
 
+  def pathways_v3?
+    type.include?('PathwaysVersionThree')
+  end
+
   def total_days_homeless_in_the_last_three_years
-    warehouse_days = (days_homeless_in_the_last_three_years || 0) +
-      (homeless_nights_sheltered || 0) +
-      (homeless_nights_unsheltered || 0)
-    extra_days = (additional_homeless_nights || 0) +
+    if pathways_v3?
+      warehouse_days = (days_homeless_in_the_last_three_years || 0) +
+        (homeless_nights_sheltered || 0) +
+        (homeless_nights_unsheltered || 0)
+      extra_days = (additional_homeless_nights || 0) +
+        (additional_homeless_nights_sheltered || 0) +
+        (additional_homeless_nights_unsheltered || 0)
+      extra_days = extra_days > 548 ? 548 : extra_days unless self_reported_days_verified?
+      total = warehouse_days + extra_days
+      total > 1096 ? 1096 : total
+    else
+      (days_homeless_in_the_last_three_years || 0) +
+      (additional_homeless_nights || 0) +
       (additional_homeless_nights_sheltered || 0) +
-      (additional_homeless_nights_unsheltered || 0)
-    extra_days = extra_days > 548 ? 548 : extra_days unless self_reported_days_verified?
-    total = warehouse_days + extra_days
-    total > 1096 ? 1096 : total
+      (homeless_nights_sheltered || 0) +
+      (additional_homeless_nights_unsheltered || 0) +
+      (homeless_nights_unsheltered || 0)
+    end
   end
 
   private def update_assessment_score
