@@ -27,17 +27,27 @@
     var warehouse_unsheltered_selector = 'input[name*="[homeless_nights_unsheltered]"]';
     var extra_sheltered_selector = 'input[name*="[additional_homeless_nights_sheltered]"]';
     var extra_unsheltered_selector = 'input[name*="[additional_homeless_nights_unsheltered]"]';
-    var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]'
+    var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]';
+    var additional_days_verified_selector = 'input[name*="[self_reported_days_verified]"]'
+    var additional_days_verified_checkbox = $('input.pretty_boolean[name*="[self_reported_days_verified]"]')[0];
+
+    var calculate_total_days = function(e) {
+      var warehouse_days = parseInt($(warehouse_sheltered_selector).val() || 0) + parseInt($(warehouse_unsheltered_selector).val() || 0);
+      var extra_days = parseInt($(extra_sheltered_selector).val() || 0) + parseInt($(extra_unsheltered_selector).val() || 0);
+      if(!additional_days_verified_checkbox.checked) {
+        extra_days = extra_days > 548 ? 548 : extra_days
+      }
+      var total = warehouse_days + extra_days
+      total = total > 1096 ? 1096 : total
+      $(total_selector).val(total);
+    }
     $(
       warehouse_sheltered_selector + ',' +
       warehouse_unsheltered_selector + ',' +
       extra_sheltered_selector + ',' +
-      extra_unsheltered_selector
-    ).on('keyup, change', function(e) {
-      var warehouse_days = parseInt($(warehouse_sheltered_selector).val() || 0) + parseInt($(warehouse_unsheltered_selector).val() || 0);
-      var extra_days = parseInt($(extra_sheltered_selector).val() || 0) + parseInt($(extra_unsheltered_selector).val() || 0);
-      $(total_selector).val(warehouse_days + extra_days);
-    });
+      extra_unsheltered_selector + ',' +
+      additional_days_verified_selector
+    ).on('keyup, change', calculate_total_days);
 
     $(warehouse_sheltered_selector).trigger('change');
 
