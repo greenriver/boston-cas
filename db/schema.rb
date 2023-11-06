@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_03_194209) do
+ActiveRecord::Schema.define(version: 2023_11_06_003238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1774,7 +1774,7 @@ ActiveRecord::Schema.define(version: 2023_11_03_194209) do
     t.boolean "exclude_from_directory", default: false
     t.boolean "exclude_phone_from_directory", default: false
     t.string "unique_session_id"
-    t.boolean "opt_out_match_digest_email", default: false
+    t.boolean "receive_weekly_match_summary_email", default: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

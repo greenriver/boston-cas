@@ -18,8 +18,8 @@ class AccountsController < ApplicationController
 
     changed_notes << 'Email schedule was updated.' if @user.email_schedule != account_params[:email_schedule]
 
-    params_opt_out = account_params[:opt_out_match_digest_email].to_s == '1'
-    if @user.opt_out_match_digest_email != params_opt_out && ! config.never_send_match_summary_email?
+    params_opt_out = account_params[:receive_weekly_match_summary_email].to_s == '1'
+    if @user.receive_weekly_match_summary_email != params_opt_out && ! config.never_send_match_summary_email?
       changed_notes << if params_opt_out
         'You have opted out of weekly match digest emails'
       else
@@ -46,7 +46,7 @@ class AccountsController < ApplicationController
         :first_name,
         :last_name,
         :email_schedule,
-        :opt_out_match_digest_email,
+        :receive_weekly_match_summary_email,
       )
   end
 

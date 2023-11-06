@@ -405,12 +405,11 @@ class ClientOpportunityMatch < ApplicationRecord
     end.flatten.uniq
 
     Contact.where(id: contact_ids).find_each do |contact|
-      if contact.user.present?
-        MatchDigestMailer.digest(contact).deliver_now unless contact.user.opt_out_match_digest_email?
-      else
-        # a contact doesn't have to have a user?
-        # Do we need another opt-out option for these contacts?
+      # If the contact is missing a user account, don't send this
+      if contact.user.present? && contact.user.receive_weekly_match_summary_email?
         MatchDigestMailer.digest(contact).deliver_now
+        # Attempt to be nice to the mailer
+        sleep(5)
       end
     end
   end
