@@ -12,6 +12,8 @@ class AccountsController < ApplicationController
   end
 
   def update
+    # for tests
+    send_match_summary_email_on = Config.get(:send_match_summary_email_on) if Rails.env.test? # rubocop:disable Lint/UselessAssignment
     config = Config.last
     changed_notes = []
     changed_notes << 'Account name was updated.' if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
