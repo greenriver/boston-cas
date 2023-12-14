@@ -37,6 +37,38 @@ module TcHatCalculations
       61.years.ago.to_date
     end
 
+    # Override required_number_of_bedrooms since the TC HAT doesn't currently ask it
+    def required_number_of_bedrooms
+      num = 1
+      num = 2 if tc_hat_single_parent_child_over_ten
+
+      num = case household_size
+      # when 1, 2 # unnecessary, these would result in 1 bedroom
+      when 3, 4
+        2
+      when (5..)
+        3
+      else
+        num
+      end
+      num
+    end
+
+    def required_minimum_occupancy
+      household_size
+    end
+
+    # Override family_member since the TC HAT doesn't currently ask it
+    def family_member
+      # There is a child, but the parent doesn't, and won't have custody
+      return false if tc_hat_single_parent_child_over_ten && (!tc_hat_legal_custody && !tc_hat_will_gain_legal_custody)
+      # Client indicated the household is adult only
+      return false unless tc_hat_household_type.in?(['Adults with Children', 'Youth'])
+      return true if household_size.present? && household_size > 1
+
+      false
+    end
+
     def client_history_options
       {
         tc_hat_ed_visits: 'Four or more trips to the Emergency Room in the past year',
@@ -128,22 +160,58 @@ module TcHatCalculations
           as: :pretty_boolean_group,
           number: 'A-4',
         },
+        _tc_hat_placed_on_list_note: {
+          label: 'Prioritization Status',
+          number: 'A-5',
+          description: 'Placed on prioritization list',
+        },
         tc_hat_household_type: {
           label: 'Household Type',
           collection: {
+            'Single Adult Only' => 'Single Adult Only',
             '2+ Adults Only (no minors)' => 'Adults Only',
             'Family (including minor children)' => 'Adults with Children',
-            'Single Adult Only' => 'Single Adult Only',
             'Youth (age 18-24)' => 'Youth',
           },
           as: :pretty_boolean_group,
-          number: 'A-5',
+          number: 'A-6',
+        },
+        tc_hat_single_parent_child_over_ten: {
+          label: 'Are you a single parent with a child over the age of 10?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'A-7',
+        },
+        household_size: {
+          label: 'How many household members (including minor children) do you expect to live with you when you\'re housed?',
+          number: 'A-8',
+        },
+        tc_hat_legal_custody: {
+          label: 'Do you have legal custody of your children?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'A-9',
+        },
+        tc_hat_will_gain_legal_custody: {
+          label: 'If you do not have legal custody of your children, will you gain custody of the children when you are housed?',
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          as: :pretty_boolean_group,
+          number: 'A-10',
         },
         need_daily_assistance: {
           label: '[STAFF RESPONSE] Only check this box if you feel the client is unable to live alone due to needing around the clock care or that they may be dangerous/harmful to themselves or their neighbors without ongoing support. (If unknown, you may skip this question.)',
           as: :pretty_boolean,
           wrapper: :custom_boolean,
-          number: 'A-6',
+          number: 'A-11',
         },
         _needs_daily_assistance_preamble: {
           as: :partial,
@@ -152,7 +220,7 @@ module TcHatCalculations
         ongoing_support_reason: {
           label: '[STAFF RESPONSE] Explain why this client cannot live independently',
           question_wrapper: { class: 'jDailyAssistance' },
-          number: 'A-7',
+          number: 'A-12',
         },
         ongoing_support_housing_type: {
           label: '[STAFF RESPONSE] What type of housing intervention would be more suitable for this client, if known?',
@@ -164,7 +232,7 @@ module TcHatCalculations
             'State Mental Health Institution' => 'State Mental Health Institution',
           },
           as: :pretty_boolean_group,
-          number: 'A-8',
+          number: 'A-13',
         },
         veteran: {
           label: 'Is the client a Veteran?',
@@ -173,11 +241,11 @@ module TcHatCalculations
             'No' => false,
           },
           as: :pretty_boolean_group,
-          number: 'A-9',
+          number: 'A-14',
         },
         days_homeless: {
           label: 'Cumulative Days Homeless',
-          number: 'A-10',
+          number: 'A-15',
         },
         _section_b_preamble: {
           as: :partial,
