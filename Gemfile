@@ -39,7 +39,7 @@ gem 'responders'
 gem 'memery', require: false
 
 # File processing
-gem 'carrierwave'
+gem 'carrierwave', '>= 2.2.5' # CVE-2023-49090
 gem 'carrierwave-i18n'
 gem 'mini_magick'
 gem 'ruby-filemagic'
