@@ -73,7 +73,6 @@ services:
     depends_on:
       - db
       - redis
-      - mailhog
 
   dj:
     <<: *backend
@@ -89,9 +88,15 @@ services:
     tty: true
     command: bundle exec rails server -b 0.0.0.0
     labels:
-      - "traefik.http.routers.op.rule=Host(`open-path-cas.127.0.0.1.nip.io`)"
-      - "traefik.http.routers.op.tls=true"
-      - "traefik.http.services.op.loadbalancer.server.port=3000"
+      - traefik.enable=true
+      - traefik.http.routers.op.entrypoints=web
+      - traefik.http.routers.op.rule=Host(`boston-cas.dev.test`)
+      - traefik.http.services.cas_https.loadbalancer.server.port=3000
+      - traefik.http.routers.cas_https.rule=Host(`boston-cas.dev.test`)
+      - traefik.http.routers.cas_https.tls=true
+      - traefik.http.routers.cas_https.entrypoints=web-secure
+      - traefik.http.middlewares.cas_https.redirectscheme.scheme=https
+      - traefik.http.routers.op.middlewares=cas_https
     expose:
       - 3000
     environment:
@@ -101,7 +106,6 @@ services:
     depends_on:
       - db
       - redis
-      - mailhog
 
   db:
     image: postgres:12-alpine
@@ -119,16 +123,6 @@ services:
       - redis:/data
     ports:
       - 6379
-
-  mailhog:
-    image: mailhog/mailhog:latest
-    restart: always
-    environment:
-      VIRTUAL_HOST: mail.${FQDN:-boston-cas.dev.test}
-      VIRTUAL_PORT: 8025
-    expose:
-      - 8025
-      - 1025
 
 secrets:
   host_ssh_key:
