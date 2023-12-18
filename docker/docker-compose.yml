@@ -89,14 +89,14 @@ services:
     command: bundle exec rails server -b 0.0.0.0
     labels:
       - traefik.enable=true
-      - traefik.http.routers.op.entrypoints=web
-      - traefik.http.routers.op.rule=Host(`boston-cas.dev.test`)
+      - traefik.http.routers.cas.entrypoints=web
+      - traefik.http.routers.cas.rule=Host(`boston-cas.dev.test`)
       - traefik.http.services.cas_https.loadbalancer.server.port=3000
       - traefik.http.routers.cas_https.rule=Host(`boston-cas.dev.test`)
       - traefik.http.routers.cas_https.tls=true
       - traefik.http.routers.cas_https.entrypoints=web-secure
       - traefik.http.middlewares.cas_https.redirectscheme.scheme=https
-      - traefik.http.routers.op.middlewares=cas_https
+      - traefik.http.routers.cas.middlewares=cas_https
     expose:
       - 3000
     environment:
@@ -137,4 +137,5 @@ volumes:
 
 networks:
   default:
-    name: nginx-proxy
+    name: traefik
+    external: true
