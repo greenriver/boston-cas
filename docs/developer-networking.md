@@ -15,3 +15,25 @@ Mail delivery is done through [MailHog, please see documentation in the Warehous
 
 ## DNS
 DNS is handled by [Traefik, please see documentation in the Warehouse](https://github.com/greenriver/hmis-warehouse/blob/6a4100102293a21d7d0d8d31e0a6ec18728d39ce/docs/traefik/developer-network.md)
+
+### DIRENV
+
+If not already set up, install DIRENV. You will need to allow the changes after updating the file.
+
+```
+brew install direnv
+direnv allow
+```
+
+Append your `.envrc` with the following 
+
+```
+export FQDN=boston-cas.dev.test
+export TRAEFIK_ENABLED=true
+```
+
+Allow the file changes through direnv
+```
+direnv allow
+```
+For direnv to work properly it needs to be hooked into the shell. Each shell has its own extension mechanism. Complete the [setup instructions](https://direnv.net/docs/hook.html) for  your shell.
