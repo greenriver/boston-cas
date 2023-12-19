@@ -11,3 +11,9 @@
       %br
   - else
     None
+
+- if @sub_program.eligibility_requirement_notes?
+  %h3.detail-box--label
+    Additional Eligibility Requirements
+  .detail-box--value
+    = @sub_program.eligibility_requirement_notes
