@@ -609,6 +609,14 @@ class ClientOpportunityMatch < ApplicationRecord
     Matching::RunEngineJob.perform_later
   end
 
+  def top_priority?
+    return false if closed?
+    return false unless on_or_after_first_client_step?
+    return false unless opportunity.multiple_active_matches?
+
+    self == opportunity.prioritized_active_matches.first
+  end
+
   def would_be_client_multiple_match
     client_related_matches.on_route(match_route).active.exists? && match_route.should_prevent_multiple_matches_per_client
   end
