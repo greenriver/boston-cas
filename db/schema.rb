@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_21_195906) do
+ActiveRecord::Schema.define(version: 2023_11_06_003238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -348,6 +348,7 @@ ActiveRecord::Schema.define(version: 2022_12_21_195906) do
     t.boolean "limit_client_names_on_matches", default: true
     t.boolean "include_note_in_email_default"
     t.boolean "notify_all_on_progress_update", default: false
+    t.integer "send_match_summary_email_on"
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
@@ -970,6 +971,7 @@ ActiveRecord::Schema.define(version: 2022_12_21_195906) do
     t.boolean "pregnant", default: false
     t.boolean "pregnant_under_28_weeks", default: false
     t.boolean "ongoing_case_management_required", default: false
+    t.boolean "self_reported_days_verified", default: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1772,6 +1774,7 @@ ActiveRecord::Schema.define(version: 2022_12_21_195906) do
     t.boolean "exclude_from_directory", default: false
     t.boolean "exclude_phone_from_directory", default: false
     t.string "unique_session_id"
+    t.boolean "receive_weekly_match_summary_email", default: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

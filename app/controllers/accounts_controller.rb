@@ -9,16 +9,24 @@ class AccountsController < ApplicationController
   before_action :set_user
 
   def edit
-
   end
 
   def update
+    # for tests
+    send_match_summary_email_on = Config.get(:send_match_summary_email_on) if Rails.env.test? # rubocop:disable Lint/UselessAssignment
+    config = Config.last
     changed_notes = []
-    if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
-      changed_notes << "Account name was updated."
-    end
-    if @user.email_schedule != account_params[:email_schedule]
-      changed_notes << "Email schedule was updated."
+    changed_notes << 'Account name was updated.' if @user.first_name != account_params[:first_name] || @user.last_name != account_params[:last_name]
+
+    changed_notes << 'Email schedule was updated.' if @user.email_schedule != account_params[:email_schedule]
+
+    params_summary_opt_in = account_params[:receive_weekly_match_summary_email].to_s == '1'
+    if @user.receive_weekly_match_summary_email != params_summary_opt_in && ! config.never_send_match_summary_email?
+      changed_notes << if params_summary_opt_in
+        "You will receive weekly match digest emails on #{config.send_match_summary_email_on_day}"
+      else
+        'You have opted out of weekly match digest emails'
+      end
     end
 
     if changed_notes.present?
@@ -40,11 +48,11 @@ class AccountsController < ApplicationController
         :first_name,
         :last_name,
         :email_schedule,
+        :receive_weekly_match_summary_email,
       )
   end
 
   private def set_user
     @user = current_user
   end
-
 end

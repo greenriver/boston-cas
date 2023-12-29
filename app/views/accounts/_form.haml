@@ -6,6 +6,9 @@
         = f.input :first_name
         = f.input :last_name
         = f.input :email_schedule, collection: Message::SCHEDULES.map{ |s| [ s.titleize, s ] }, include_blank: false, hint: 'Messages not sent on the "immediate" schedule are sent as a digest.'
+        - config = Config.last
+        - unless config.never_send_match_summary_email?
+          = f.input :receive_weekly_match_summary_email, as: :pretty_boolean, label: 'Receive weekly match summary email', hint: "Emails are sent every #{config.send_match_summary_email_on_day}"
 
       .form-actions
         = f.button :submit, value: 'Update Account'

@@ -79,6 +79,9 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 9
   include RouteNineDecisions
 
+  # Match Route 10
+  include RouteTenDecisions
+
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent'
 
@@ -87,6 +90,10 @@ class ClientOpportunityMatch < ApplicationRecord
 
   scope :on_route, ->(route) do
     joins(:program).merge(Program.on_route(route))
+  end
+
+  scope :diet, -> do
+    select(attribute_names - ['universe_state'])
   end
 
   ###################
@@ -104,6 +111,7 @@ class ClientOpportunityMatch < ApplicationRecord
   scope :rejected, -> { where closed: true, closed_reason: 'rejected' }
   scope :preempted, -> { where closed: true, closed_reason: 'canceled' }
   scope :canceled, -> { preempted } # alias
+  scope :expired, -> { where shelter_expiration: ..Date.current }
   scope :stalled, -> do
     active.where(arel_table[:stall_date].lteq(Date.current))
   end
@@ -374,6 +382,38 @@ class ClientOpportunityMatch < ApplicationRecord
     )
   end
 
+  def self.send_summary_emails
+    config = Config.last
+    return if config.never_send_match_summary_email?
+    return unless config.send_match_summary_email_on == Date.current.wday
+
+    match_groups = [
+      # stalled
+      stalled,
+      # canceled
+      canceled.where(updated_at: 1.week.ago..),
+      # expiring
+      where(shelter_expiration: Date.current..Date.current + 1.week),
+      # expired
+      expired.where(shelter_expiration: 1.week.ago..),
+      # active
+      active,
+    ]
+
+    contact_ids = match_groups.map do |group|
+      group.preload(:contacts).flat_map { |d| d.contacts.map(&:id) }
+    end.flatten.uniq
+
+    Contact.where(id: contact_ids).find_each do |contact|
+      # If the contact is missing a user account, don't send this
+      if contact.user.present? && contact.user.receive_weekly_match_summary_email?
+        MatchDigestMailer.digest(contact).deliver_now
+        # Attempt to be nice to the mailer
+        sleep(5)
+      end
+    end
+  end
+
   def self.associations_adding_requirements
     [:opportunity]
   end
@@ -488,6 +528,37 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def stalled?
     self.class.stalled.where(id: id).exists?
+  end
+
+  def decision_stalled?
+    return false unless initialized_decisions.pending&.first&.stallable?
+    return false unless stall_date.present?
+
+    stall_date <= Date.current
+  end
+
+  def canceled?
+    closed? && closed_reason == 'canceled'
+  end
+
+  def canceled_recently?
+    canceled? && updated_at > 1.week.ago
+  end
+
+  def expiring_soon?
+    return false if shelter_expiration.blank?
+
+    shelter_expiration > Date.current && shelter_expiration < Date.current + 1.week
+  end
+
+  def expired?
+    return false if shelter_expiration.blank?
+
+    shelter_expiration <= Date.current
+  end
+
+  def expired_recently?
+    expired? && shelter_expiration > 1.week.ago
   end
 
   def successful?

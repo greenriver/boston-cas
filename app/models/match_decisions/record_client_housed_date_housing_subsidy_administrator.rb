@@ -78,6 +78,20 @@ module MatchDecisions
       super + [:client_move_in_date]
     end
 
+    def step_decline_reasons(_contact)
+      [
+        'Client has another housing option',
+        'Does not agree to services',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Health and Safety',
+      ]
+    end
+
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update(status: 'pending')

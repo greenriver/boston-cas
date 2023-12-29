@@ -11,6 +11,7 @@ namespace :cas do
     Cas::UpdateVoucherAvailability.new.run!
     UnavailableAsCandidateFor.cleanup_expired!
     Matching::RunEngineJob.perform_later
+    ClientOpportunityMatch.send_summary_emails
   end
 
   desc 'Hourly tasks'

@@ -99,6 +99,16 @@ module CasSeeds
 
     CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS = [].freeze
 
+    TEN_DECLINE_REASONS = [
+      ['Immigration status', nil],
+      ['Household did not respond after initial acceptance of match', nil],
+      ['Ineligible for Housing Program', nil],
+      ['Client refused offer', nil],
+      ['Self-resolved', nil],
+      ['Client needs higher level of care', nil],
+      ['Unable to reach client after multiple attempts', nil],
+    ].freeze
+
     OTHER = [
       ['Other', nil],
     ].freeze
@@ -116,6 +126,7 @@ module CasSeeds
       create_record_voucher_decline_reasons!
       create_case_contact_assigns_manager_decline_reasons!
       create_nine_case_contact_assigns_manager_decline_reasons!
+      create_ten_decline_reasons!
       create_base_reasons!
     end
 
@@ -220,6 +231,12 @@ module CasSeeds
     private def create_nine_case_contact_assigns_manager_decline_reasons!
       NINE_CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS.each do |reason_name, _|
         ::MatchDecisionReasons::NineCaseContactAssignsManagerDecline.where(name: reason_name).first_or_create!
+      end
+    end
+
+    private def create_ten_decline_reasons!
+      TEN_DECLINE_REASONS.each do |reason_name, _|
+        ::MatchDecisionReasons::RouteTenDeclineReasons.where(name: reason_name).first_or_create!
       end
     end
   end
