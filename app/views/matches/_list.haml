@@ -74,8 +74,6 @@
                         %dl
                           %dt Client Accepted
                           %dd= match.first_client_decision&.updated_at&.try(:strftime, I18n.t('date.formats.default'))
-                        - if match.top_priority?
-                          .badge.badge-info.p-2 Top Priority
                   %li.ml-6.mr-6
                     = render 'match_list_base/current_step', match: match, size: 'sm'
                   - unless match_type == 'opportunity'

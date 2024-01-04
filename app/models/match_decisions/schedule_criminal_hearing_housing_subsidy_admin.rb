@@ -86,6 +86,7 @@ module MatchDecisions
         'Unsafe environment for this person',
         'Client refused unit (non-SRO)',
         'Client refused voucher',
+        'Health and Safety',
       ]
     end
 

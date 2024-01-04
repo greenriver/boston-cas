@@ -24,8 +24,6 @@
           Please be advised that other clients have also been matched to this vacancy and the first client to successfully complete the CAS process with the #{_('HSA')} will be offered the unit.
         - else
           = translation
-      - if match.top_priority?
-        .badge.badge-info.p-2.mt-4 Top Priority
 
   - if @decision.is_a?(MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin)
     - if 'Remember to check housing availablility' != _('Remember to check housing availablility')
