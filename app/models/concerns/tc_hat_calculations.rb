@@ -65,6 +65,9 @@ module TcHatCalculations
       # Client indicated the household is adult only
       return false unless tc_hat_household_type.in?(['Adults with Children', 'Youth'])
       return true if household_size.present? && household_size > 1
+      # If the client failed to count the child, but will have custody at some point,
+      # still consider this a family
+      return true if household_size == 1 && (tc_hat_legal_custody || tc_hat_will_gain_legal_custody)
 
       false
     end
