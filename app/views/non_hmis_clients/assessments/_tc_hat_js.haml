@@ -31,6 +31,34 @@
       } else {
         $question.addClass('d-none');
       }
+
+      var $question = $('input[name*="[tc_hat_single_parent_child_over_ten]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+
+      var $question = $('input[name*="[household_size]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+
+      var $question = $('input[name*="[tc_hat_legal_custody]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
+
+      var $question = $('input[name*="[tc_hat_will_gain_legal_custody]"]').closest('.c-question');
+      if(value !== undefined && value == true) {
+        $question.removeClass('d-none');
+      } else {
+        $question.addClass('d-none');
+      }
     });
     $('input[name*="[tc_hat_household_type]"]').trigger('change');
     $('input[name*="[tc_hat_client_history]"]').trigger('change');

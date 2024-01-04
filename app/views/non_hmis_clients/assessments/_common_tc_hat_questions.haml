@@ -61,6 +61,10 @@
             .c-question__input
               - if options[:as] == :pretty_boolean
                 = form.input(field_name, {}.merge(options))
+              - elsif field_name.starts_with?('_')
+                = form.label field_name, { pre_label: options[:number] }.merge(options)
+                .description
+                  = options[:description]
               - else
                 = form.input(field_name, { pre_label: options[:number] }.merge(options))
 
