@@ -296,6 +296,7 @@ module Cas
         :transgender,
         :questioning,
         :file_tags,
+        :housing_barrier,
       ]
     end
 

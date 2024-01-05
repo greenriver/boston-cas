@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_14_141207) do
+ActiveRecord::Schema.define(version: 2024_01_05_133456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -319,6 +319,7 @@ ActiveRecord::Schema.define(version: 2023_12_14_141207) do
     t.boolean "questioning", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.jsonb "file_tags", default: {}
+    t.boolean "housing_barrier", default: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -975,6 +976,7 @@ ActiveRecord::Schema.define(version: 2023_12_14_141207) do
     t.boolean "tc_hat_single_parent_child_over_ten", default: false
     t.boolean "tc_hat_legal_custody"
     t.boolean "tc_hat_will_gain_legal_custody"
+    t.boolean "housing_barrier", default: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1341,6 +1343,7 @@ ActiveRecord::Schema.define(version: 2023_12_14_141207) do
     t.boolean "questioning", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.jsonb "file_tags", default: {}
+    t.boolean "housing_barrier", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
