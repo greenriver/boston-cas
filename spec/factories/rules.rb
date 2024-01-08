@@ -502,4 +502,8 @@ FactoryBot.define do
     name { 'All required documention' }
     verb { 'have' }
   end
+  factory :service_need, class: 'Rules::ServiceNeed' do
+    name { 'a service need' }
+    verb { 'have' }
+  end
 end

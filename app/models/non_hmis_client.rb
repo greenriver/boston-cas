@@ -215,6 +215,7 @@ class NonHmisClient < ApplicationRecord
     project_client.rrh_assessment_collected_at = current_assessment&.entry_date
     project_client.financial_assistance_end_date = current_assessment&.financial_assistance_end_date
     project_client.tie_breaker_date = current_assessment&.tie_breaker_date
+    project_client.service_need = current_assessment&.service_need
 
     if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current

@@ -296,6 +296,7 @@ module Cas
         :transgender,
         :questioning,
         :file_tags,
+        :service_need,
       ]
     end
 
