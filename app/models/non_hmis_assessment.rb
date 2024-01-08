@@ -134,6 +134,10 @@ class NonHmisAssessment < ActiveRecord::Base
     end
   end
 
+  def total_homeless_nights_unsheltered
+    (homeless_nights_unsheltered || 0) + (additional_homeless_nights_unsheltered || 0)
+  end
+
   private def update_assessment_score
     self.assessment_score = calculated_score if respond_to? :calculated_score
 
