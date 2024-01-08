@@ -121,4 +121,5 @@ WillingToWorkFullTime,Willing to work full-time,,be
 EncampmentDecommissioned,Been in a decommissioned encampment,,have
 OngoingCaseManagementRequired,Needing ongoing housing case management,,be
 HasFileTags,All required documentation,,have
+ServiceNeed,a service need indicator,,have
 HousingBarrier,a housing barrier (life-time sex offender or methamphetamine conviction),,have

@@ -1,5 +1,5 @@
 class Rules::HousingBarrier < Rule
-  def clients_that_fit(scope, requirement, opportunity)
+  def clients_that_fit(scope, requirement, _opportunity)
     if Client.column_names.include?(:housing_barrier.to_s)
       scope.where(housing_barrier: requirement.positive)
     else
