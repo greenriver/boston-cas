@@ -506,4 +506,8 @@ FactoryBot.define do
     name { 'a service need' }
     verb { 'have' }
   end
+  factory :housing_barrier, class: 'Rules::HousingBarrier' do
+    name { 'a housing barrier' }
+    verb { 'have' }
+  end
 end

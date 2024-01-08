@@ -297,6 +297,7 @@ module Cas
         :questioning,
         :file_tags,
         :service_need,
+        :housing_barrier,
       ]
     end
 

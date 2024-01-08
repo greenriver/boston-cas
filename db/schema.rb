@@ -319,6 +319,7 @@ ActiveRecord::Schema.define(version: 2024_01_05_212255) do
     t.boolean "questioning", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.jsonb "file_tags", default: {}
+    t.boolean "housing_barrier", default: false
     t.boolean "service_need", default: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
@@ -976,6 +977,7 @@ ActiveRecord::Schema.define(version: 2024_01_05_212255) do
     t.boolean "tc_hat_single_parent_child_over_ten", default: false
     t.boolean "tc_hat_legal_custody"
     t.boolean "tc_hat_will_gain_legal_custody"
+    t.boolean "housing_barrier", default: false
     t.boolean "service_need", default: false
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
@@ -1343,6 +1345,7 @@ ActiveRecord::Schema.define(version: 2024_01_05_212255) do
     t.boolean "questioning", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.jsonb "file_tags", default: {}
+    t.boolean "housing_barrier", default: false
     t.boolean "service_need", default: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
