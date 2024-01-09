@@ -298,6 +298,9 @@ module Cas
         :file_tags,
         :service_need,
         :housing_barrier,
+        :additional_homeless_nights_sheltered,
+        :additional_homeless_nights_unsheltered,
+        :total_homeless_nights_unsheltered,
       ]
     end
 

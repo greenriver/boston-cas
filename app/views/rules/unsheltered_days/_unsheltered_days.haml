@@ -1,0 +1,3 @@
+- rule = unsheltered_days
+%h4 Unsheltered Days
+= select_tag(:variable, options_from_collection_for_select(rule.available_unsheltered_days, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_unsheltered_days.to_h.to_json})

@@ -217,6 +217,9 @@ class NonHmisClient < ApplicationRecord
     project_client.tie_breaker_date = current_assessment&.tie_breaker_date
     project_client.service_need = current_assessment&.service_need
     project_client.housing_barrier = current_assessment&.housing_barrier
+    project_client.additional_homeless_nights_sheltered = current_assessment&.additional_homeless_nights_sheltered
+    project_client.additional_homeless_nights_unsheltered = current_assessment&.additional_homeless_nights_unsheltered
+    project_client.total_homeless_nights_unsheltered = current_assessment&.total_homeless_nights_unsheltered
 
     if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current
