@@ -1,0 +1,73 @@
+= content_for :page_js do
+  :javascript
+    // Youth
+    $('input[name*="[hoh_age]"]').on('change', function(e) {
+      if($('input[name*="[hoh_age]"]:checked').val() == '18-24') {
+        $('.c-question[data-number="5C"]').removeClass('d-none');
+      } else {
+        $('.c-question[data-number="5C"]').addClass('d-none');
+      }
+    });
+    $('input[name*="[hoh_age]"]').trigger('change');
+
+    // DV
+    $('input[name*="[setting]"]').on('change', function(e) {
+      value = $('input[name*="[setting]"]:checked').val();
+      if(value !== undefined && value.startsWith('Actively fleeing')) {
+        $('.c-question[data-number="5D"]').removeClass('d-none');
+      } else {
+        $('.c-question[data-number="5D"] input[type="radio"]').prop('checked', false);
+        $('.c-question[data-number="5D"]').addClass('d-none');
+      }
+    });
+    $('input[name*="[setting]"]').trigger('change');
+
+    // Days Homeless
+    var warehouse_sheltered_selector = 'input[name*="[homeless_nights_sheltered]"]';
+    var warehouse_unsheltered_selector = 'input[name*="[homeless_nights_unsheltered]"]';
+    var extra_sheltered_selector = 'input[name*="[additional_homeless_nights_sheltered]"]';
+    var extra_unsheltered_selector = 'input[name*="[additional_homeless_nights_unsheltered]"]';
+    var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]';
+    var additional_days_verified_selector = 'input[name*="[self_reported_days_verified]"]'
+    var additional_days_verified_checkbox = $('input.pretty_boolean[name*="[self_reported_days_verified]"]')[0];
+
+    var calculate_total_days = function(e) {
+      var warehouse_days = parseInt($(warehouse_sheltered_selector).val() || 0) + parseInt($(warehouse_unsheltered_selector).val() || 0);
+      var extra_days = parseInt($(extra_sheltered_selector).val() || 0) + parseInt($(extra_unsheltered_selector).val() || 0);
+      if(!additional_days_verified_checkbox.checked) {
+        extra_days = extra_days > 548 ? 548 : extra_days
+      }
+      var total = warehouse_days + extra_days
+      total = total > 1096 ? 1096 : total
+      $(total_selector).val(total);
+    }
+    $(
+      warehouse_sheltered_selector + ',' +
+      warehouse_unsheltered_selector + ',' +
+      extra_sheltered_selector + ',' +
+      extra_unsheltered_selector + ',' +
+      additional_days_verified_selector
+    ).on('keyup, change', calculate_total_days);
+
+    $(warehouse_sheltered_selector).trigger('change');
+
+    // Households
+    $('.jHouseholdTrigger').on('change keyup input', function(e){
+      if($(this).val() > 1) {
+        $('.jHouseholdDetails').removeClass('d-none');
+      } else {
+        $('.jHouseholdDetails').addClass('d-none');
+      }
+    });
+    $('.jHouseholdTrigger').trigger('keyup');
+
+    // Deal with "None of the Above"
+    $('input[type=checkbox]').on('change', function(e){
+      var none_of_the_above = $(this).val() == 'None of the above' || $(this).val() == 'none'
+      if(none_of_the_above && $(this).is(':checked')) {
+        // console.log($(this).is(':checked'));
+        var neighbors = $(this).closest('.controls').find('input[type=checkbox]').not(this);
+        neighbors.prop('checked', false);
+        // console.log(neighbors);
+      }
+    })

@@ -11,6 +11,7 @@ class IdentifiedClientAssessment < NonHmisAssessment
       'Pathways Assessment' => 'IdentifiedPathwaysAssessment',
       'COVID Pathways Assessment' => 'IdentifiedCovidPathwaysAssessment',
       'Pathways V3' => 'IdentifiedPathwaysVersionThree',
+      'Pathways V4' => 'IdentifiedPathwaysVersionFour',
       'TC HAT' => 'IdentifiedTcHat',
       'CE Assessment' => 'IdentifiedCeAssessment',
     }

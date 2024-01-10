@@ -1,0 +1,3 @@
+- limited = if defined?(limited) then limited else @assessment.hide_confidential?(current_user) end
+%section.o-questions__section
+  = render 'non_hmis_clients/assessments/common_pathways_version_four_questions', form: assessment_form, disabled: disabled, limited: limited
