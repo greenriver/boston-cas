@@ -266,6 +266,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :phone_number,
       :email_addresses,
       :mailing_address,
+      :agency_name,
       :day_locations,
       :agency_day_contact_info,
       :night_locations,
@@ -388,7 +389,6 @@ class NonHmisAssessment < ActiveRecord::Base
       :tc_hat_will_gain_legal_custody,
       :housing_barrier,
       :service_need,
-      :agency_name,
       :partner_name,
       :partner_warehouse_id,
       strengths: [],
@@ -405,8 +405,6 @@ class NonHmisAssessment < ActiveRecord::Base
       intensive_needs: [],
       background_check_issues: [],
       household_members: {},
-      household_adults: {},
-
     ].freeze
   end
 

@@ -906,7 +906,7 @@ module PathwaysVersionFourCalculations
         },
         _contact_preamble: {
           as: :partial,
-          partial: 'non_hmis_assessments/pathways_version_four/contact_preamble',
+          partial: 'non_hmis_assessments/pathways_version_four/pathways_contact_preamble',
         },
         phone_number: {
           label: 'Client phone number:',
@@ -1148,7 +1148,6 @@ module PathwaysVersionFourCalculations
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_three/self_reported_days_verified',
         },
-        # TODO: javascript and backend calculations
         total_homeless_nights_sheltered: {
           label: 'Total # of Sheltered Nights:',
           hint: 'Auto calculated',
