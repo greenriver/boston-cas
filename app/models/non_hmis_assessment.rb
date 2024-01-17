@@ -79,9 +79,7 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
-      merge(IdentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
-      merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedTcHat.new.for_matching).
       merge(DeidentifiedTcHat.new.for_matching).
       merge(IdentifiedCeAssessment.new.for_matching).
@@ -126,7 +124,7 @@ class NonHmisAssessment < ActiveRecord::Base
   def total_days_homeless_in_the_last_three_years
     if pathways_v4?
       total = total_homeless_nights_sheltered + total_homeless_nights_unsheltered
-      total > 1096 ? 1096 : total
+      total.clamp(0, 1096)
     elsif pathways_v3?
       warehouse_days = (days_homeless_in_the_last_three_years || 0) +
         (homeless_nights_sheltered || 0) +
