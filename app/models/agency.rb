@@ -14,6 +14,10 @@ class Agency < ApplicationRecord
     where(arel_table[:name].lower.matches("%#{text.downcase}%"))
   end
 
+  def self.agency_names
+    distinct.where.not(name: nil).order(:name).pluck(:name, :id).select(&:present?).uniq.map { |v, k| [v, k] }.to_h
+  end
+
   def program_names
     Program.editable_by_agency(self).order(:name).pluck(:name).join(', ')
   end

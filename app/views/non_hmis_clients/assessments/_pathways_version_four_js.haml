@@ -27,18 +27,33 @@
     var warehouse_unsheltered_selector = 'input[name*="[homeless_nights_unsheltered]"]';
     var extra_sheltered_selector = 'input[name*="[additional_homeless_nights_sheltered]"]';
     var extra_unsheltered_selector = 'input[name*="[additional_homeless_nights_unsheltered]"]';
+    var total_sheltered_selector = 'input[name*="[total_homeless_nights_sheltered]"]';
+    var total_unsheltered_selector = 'input[name*="[total_homeless_nights_unsheltered]"]';
     var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]';
     var additional_days_verified_selector = 'input[name*="[self_reported_days_verified]"]'
     var additional_days_verified_checkbox = $('input.pretty_boolean[name*="[self_reported_days_verified]"]')[0];
 
     var calculate_total_days = function(e) {
-      var warehouse_days = parseInt($(warehouse_sheltered_selector).val() || 0) + parseInt($(warehouse_unsheltered_selector).val() || 0);
-      var extra_days = parseInt($(extra_sheltered_selector).val() || 0) + parseInt($(extra_unsheltered_selector).val() || 0);
+      var warehouse_sheltered = parseInt($(warehouse_sheltered_selector).val() || 0)
+      var warehouse_unsheltered = parseInt($(warehouse_unsheltered_selector).val() || 0);
+      var extra_sheltered_days = parseInt($(extra_sheltered_selector).val() || 0);
+      var extra_unsheltered_days = parseInt($(extra_unsheltered_selector).val() || 0);
+
       if(!additional_days_verified_checkbox.checked) {
-        extra_days = extra_days > 548 ? 548 : extra_days
+        extra_unsheltered_days = extra_unsheltered_days > 548 ? 548 : extra_unsheltered_days
+        max_sheltered = Math.max(548 - extra_unsheltered_days, 0)
+        extra_sheltered_days = extra_sheltered_days > max_sheltered ? max_sheltered : extra_sheltered_days
       }
+      var warehouse_days = warehouse_sheltered + warehouse_unsheltered;
+      var extra_days = extra_sheltered_days + extra_unsheltered_days;
+
+      var total_sheltered = warehouse_sheltered + extra_sheltered_days;
+      var total_unsheltered = warehouse_unsheltered + extra_unsheltered_days;
       var total = warehouse_days + extra_days
       total = total > 1096 ? 1096 : total
+
+      $(total_sheltered_selector).val(total_sheltered);
+      $(total_unsheltered_selector).val(total_unsheltered);
       $(total_selector).val(total);
     }
     $(
