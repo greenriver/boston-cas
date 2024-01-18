@@ -39,9 +39,16 @@
       var extra_sheltered_days = parseInt($(extra_sheltered_selector).val() || 0);
       var extra_unsheltered_days = parseInt($(extra_unsheltered_selector).val() || 0);
 
+      // If a client has more than 548 self-reported days (combination of sheltered and unsheltered) 
+      // and does not have a verification uploaded, count unsheltered days first, then count sheltered days UP TO 548.
+      // If the additional days are verified, use the provided amounts.
       if(!additional_days_verified_checkbox.checked) {
+        // 1. Cap the total unsheltered at 548 days if it is greater than this amount.
         extra_unsheltered_days = extra_unsheltered_days > 548 ? 548 : extra_unsheltered_days
+        // 2. Find the maximum amount of sheltered days to count based on the total unsheltered days.
+        //    The combination of the two cannot exeed 548.
         max_sheltered = Math.max(548 - extra_unsheltered_days, 0)
+        // 3. Cap the sheltered days counted at the calculated max if it exceeds that amount.
         extra_sheltered_days = extra_sheltered_days > max_sheltered ? max_sheltered : extra_sheltered_days
       }
       var warehouse_days = warehouse_sheltered + warehouse_unsheltered;
