@@ -121,7 +121,7 @@ module PathwaysVersionFourCalculations
         },
       )
       case assessment_name
-      when 'Pathways 2021'
+      when 'Pathways 2024'
         shared.merge(
           {
             income_maximization_assistance_requested: {
