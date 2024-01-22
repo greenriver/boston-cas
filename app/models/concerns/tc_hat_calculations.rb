@@ -193,7 +193,7 @@ module TcHatCalculations
           number: 'A-8',
         },
         tc_hat_legal_custody: {
-          label: 'Do you have legal custody of your children?',
+          label: 'Do you have legal custody of your children? (This includes shared custody.)',
           collection: {
             'Yes' => true,
             'No' => false,
