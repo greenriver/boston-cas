@@ -65,7 +65,7 @@ gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'json'
 gem 'amazing_print'
 
-gem 'puma', '~> 6.3'
+gem 'puma', '>= 6.4.2'
 gem 'redis'
 
 gem 'activerecord-session_store'
