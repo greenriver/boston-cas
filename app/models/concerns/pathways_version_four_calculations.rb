@@ -8,10 +8,9 @@ module PathwaysVersionFourCalculations
   extend ActiveSupport::Concern
 
   included do
-    PHONE_NUMBER_REGEX = /\(?[\d]{3}\)?[\s|-]?[\d]{3}-?[\d]{4}/
     validates_presence_of :entry_date, :hud_assessment_location, :hud_assessment_type, :setting, on: [:create, :update]
     validates_email_format_of :email_addresses, allow_blank: true, if: :pathways?
-    validates_format_of :phone_number, with: PHONE_NUMBER_REGEX, message: 'Must be a valid phone number (10 digits).', allow_blank: true, if: :pathways?
+    validates_format_of :phone_number, with: NonHmisClientsHelper::PHONE_NUMBER_REGEX, message: 'Must be a valid phone number (10 digits).', allow_blank: true, if: :pathways?
     validates :household_size, numericality: { greater_than: 0 }, if: :pathways?
     validates :homeless_nights_sheltered, :additional_homeless_nights_sheltered, :homeless_nights_unsheltered, :additional_homeless_nights_unsheltered, numericality: { less_than_or_equal_to: 1096 }, if: :pathways?
     validates :denial_required, inclusion: { in: [nil, ['']], message: 'Cannot be checked unless Barriers to Housing is Yes' }, unless: :housing_barrier?, if: :pathways?
