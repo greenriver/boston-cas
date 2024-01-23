@@ -13,8 +13,12 @@
             .form--lable-hint
               %label.control-label Permission to Share Your Information with Partner Agencies
               %p To sign you up for housing programs you may be interested in, we would like to ask for your permission to share information with participating agencies who manage these programs so they may contact you when there is an opening. All of the participating agencies have agreed to keep all data confidential and secure. Is this okay with you?
+              .c-question__input
+                %p 
+                = form.input :share_information_permission, as: :pretty_boolean_group, collection: { 'Yes' => true, 'No' => false }
+              %br
               %p
-                %strong Yes
+                %strong If Yes
               %p
                 Check to see if a Housing Assistance Network (HAN) Release of Information is uploaded into the client's 
                 %a{ href: 'https://docs.google.com/document/d/16YiTz-g2J3xREtAsqS6NRRwckO0uWmdYApYg2NvOByI/edit?usp=sharing', target: :blank } warehouse
@@ -26,7 +30,7 @@
                     %a{ href: 'https://docs.google.com/document/d/16YiTz-g2J3xREtAsqS6NRRwckO0uWmdYApYg2NvOByI/edit?usp=sharing', target: :blank } HAN release
                     and upload to the Warehouse. If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, keep their release of information on file. If you are using CAS, also check the box on the Non-HMIS Client edit screen indicating that you have a HAN in your file. 
               %p
-                %strong No
+                %strong If No
                 %ul
                   %li 
                     If the client chooses not to share information with other provider agencies, staff may sign a

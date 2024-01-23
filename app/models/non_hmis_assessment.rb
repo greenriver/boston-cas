@@ -164,7 +164,7 @@ class NonHmisAssessment < ActiveRecord::Base
         # 3. Cap the sheltered days counted at the calculated max if it exceeds that amount.
         extra_nights_sheltered = extra_nights_sheltered > max_sheltered ? max_sheltered : extra_nights_sheltered
       end
-      warehouse_sheltered + extra_nights_sheltered
+      (warehouse_sheltered + extra_nights_sheltered).clamp(0, 1096)
     else
       (homeless_nights_sheltered || 0) + (additional_homeless_nights_sheltered || 0)
     end
@@ -179,7 +179,7 @@ class NonHmisAssessment < ActiveRecord::Base
         # If they are not verified, cap the total unsheltered at 548.
         extra_nights_unsheltered = extra_nights_unsheltered > 548 ? 548 : extra_nights_unsheltered
       end
-      warehouse_unsheltered + extra_nights_unsheltered
+      (warehouse_unsheltered + extra_nights_unsheltered).clamp(0, 1096)
     else
       (homeless_nights_unsheltered || 0) + (additional_homeless_nights_unsheltered || 0)
     end
@@ -400,6 +400,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :service_need,
       :partner_name,
       :partner_warehouse_id,
+      :share_information_permission,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

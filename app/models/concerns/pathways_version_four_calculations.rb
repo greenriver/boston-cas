@@ -8,12 +8,23 @@ module PathwaysVersionFourCalculations
   extend ActiveSupport::Concern
 
   included do
+    PHONE_NUMBER_REGEX = /\(?[\d]{3}\)?[\s|-]?[\d]{3}-?[\d]{4}/
     validates_presence_of :entry_date, :hud_assessment_location, :hud_assessment_type, :setting, on: [:create, :update]
+    validates_email_format_of :email_addresses, if: :pathways?
+    validates_format_of :phone_number, with: PHONE_NUMBER_REGEX, message: 'Must be a valid phone number (10 digits).', if: :pathways?
+    validates :household_size, numericality: { greater_than: 0 }, if: :pathways?
+    validates :homeless_nights_sheltered, :additional_homeless_nights_sheltered, :homeless_nights_unsheltered, :additional_homeless_nights_unsheltered, numericality: { less_than_or_equal_to: 1096 }, if: :pathways?
+    validates :denial_required, inclusion: { in: [nil, ['']], message: 'Cannot be checked unless Barriers to Housing is Yes' }, unless: :housing_barrier?, if: :pathways?
+    validates :service_need_indicators, inclusion: { in: [nil, ''], message: 'Cannot be checked unless Service Need Indicator is Yes' }, unless: :service_need?, if: :pathways?
 
     def title
       return pathways_title if assessment_type.blank?
 
       assessment_type_options[assessment_type.to_sym][:title]
+    end
+
+    def pathways?
+      assessment_type.to_sym == :pathways_2024
     end
 
     def for_matching
@@ -976,8 +987,8 @@ module PathwaysVersionFourCalculations
           number: '3B',
           as: :pretty_boolean_group,
           collection: {
-            'Yes' => 'Yes',
-            'No' => 'No',
+            'Yes' => true,
+            'No' => false,
           },
         },
         household_section: {
@@ -1004,7 +1015,7 @@ module PathwaysVersionFourCalculations
           as: :pretty_boolean_group,
         },
         required_number_of_bedrooms: {
-          label: '​​If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below',
+          label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below',
           number: '5',
           collection: {
             '2' => 2,
@@ -1042,10 +1053,9 @@ module PathwaysVersionFourCalculations
           number: '7',
           as: :pretty_boolean_group,
           collection: {
-            'Yes' => 'Yes',
-            'No' => 'No',
+            'Yes' => true,
+            'No' => false,
           },
-          confidential: true,
         },
         housing_barrier_section: {
           label: 'Barriers to Housing:',
@@ -1056,8 +1066,8 @@ module PathwaysVersionFourCalculations
               number: 8,
               as: :pretty_boolean_group,
               collection: {
-                'Yes' => 'Yes',
-                'No' => 'No',
+                'Yes' => true,
+                'No' => false,
               },
             },
             denial_required: {
@@ -1082,15 +1092,15 @@ module PathwaysVersionFourCalculations
               number: 9,
               as: :pretty_boolean_group,
               collection: {
-                'Yes' => 'Yes',
-                'No' => 'No',
+                'Yes' => true,
+                'No' => false,
               },
             },
             service_need_indicators: {
               label: 'If yes, which ones [OPTIONAL]',
               number: '9',
               collection: {
-                _('Ive faced indefinite restrictions and a history of restrictions from area shelters') => 'restrictions from area shelters',
+                _('I’ve faced indefinite restrictions and a history of restrictions from area shelters') => 'restrictions from area shelters',
                 _('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
                 _('My experience of homelessness began in Boston over 10 years ago') => 'homelessness begain 10 years ago',
                 _('I have a criminal record (CORI) or ongoing legal cases') => 'criminal record (CORI) or ongoing legal cases',
@@ -1146,7 +1156,7 @@ module PathwaysVersionFourCalculations
         },
         self_reported_days_verified: {
           as: :partial,
-          partial: 'non_hmis_assessments/pathways_version_three/self_reported_days_verified',
+          partial: 'non_hmis_assessments/pathways_version_four/self_reported_days_verified',
         },
         total_homeless_nights_sheltered: {
           label: 'Total # of Sheltered Nights:',
@@ -1165,6 +1175,10 @@ module PathwaysVersionFourCalculations
           hint: 'Auto calculated',
           number: '10G',
           disabled: true,
+        },
+        _household_history_epilogue: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_epilogue',
         },
       }
     end

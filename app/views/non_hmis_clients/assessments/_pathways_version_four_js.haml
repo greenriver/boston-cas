@@ -55,7 +55,9 @@
       var extra_days = extra_sheltered_days + extra_unsheltered_days;
 
       var total_sheltered = warehouse_sheltered + extra_sheltered_days;
+      total_sheltered = total_sheltered > 1096 ? 1096 : total_sheltered;
       var total_unsheltered = warehouse_unsheltered + extra_unsheltered_days;
+      total_unsheltered = total_unsheltered > 1096 ? 1096 : total_unsheltered;
       var total = warehouse_days + extra_days
       total = total > 1096 ? 1096 : total
 
