@@ -10,8 +10,8 @@ module PathwaysVersionFourCalculations
   included do
     PHONE_NUMBER_REGEX = /\(?[\d]{3}\)?[\s|-]?[\d]{3}-?[\d]{4}/
     validates_presence_of :entry_date, :hud_assessment_location, :hud_assessment_type, :setting, on: [:create, :update]
-    validates_email_format_of :email_addresses, if: :pathways?
-    validates_format_of :phone_number, with: PHONE_NUMBER_REGEX, message: 'Must be a valid phone number (10 digits).', if: :pathways?
+    validates_email_format_of :email_addresses, allow_blank: true, if: :pathways?
+    validates_format_of :phone_number, with: PHONE_NUMBER_REGEX, message: 'Must be a valid phone number (10 digits).', allow_blank: true, if: :pathways?
     validates :household_size, numericality: { greater_than: 0 }, if: :pathways?
     validates :homeless_nights_sheltered, :additional_homeless_nights_sheltered, :homeless_nights_unsheltered, :additional_homeless_nights_unsheltered, numericality: { less_than_or_equal_to: 1096 }, if: :pathways?
     validates :denial_required, inclusion: { in: [nil, ['']], message: 'Cannot be checked unless Barriers to Housing is Yes' }, unless: :housing_barrier?, if: :pathways?
@@ -1100,7 +1100,7 @@ module PathwaysVersionFourCalculations
               label: 'If yes, which ones [OPTIONAL]',
               number: '9',
               collection: {
-                _('I’ve faced indefinite restrictions and a history of restrictions from area shelters') => 'restrictions from area shelters',
+                _("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters', 
                 _('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
                 _('My experience of homelessness began in Boston over 10 years ago') => 'homelessness begain 10 years ago',
                 _('I have a criminal record (CORI) or ongoing legal cases') => 'criminal record (CORI) or ongoing legal cases',
