@@ -554,6 +554,10 @@ class NonHmisAssessment < ActiveRecord::Base
     }
   end
 
+  def child_in_household
+    false # Override as appropriate
+  end
+
   def form_field_labels
     return [] unless respond_to?(:form_fields)
 
