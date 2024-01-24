@@ -72,6 +72,10 @@ module TcHatCalculations
       false
     end
 
+    def child_in_household
+      return tc_hat_household_type == 'Adults with Children'
+    end
+
     def client_history_options
       {
         tc_hat_ed_visits: 'Four or more trips to the Emergency Room in the past year',

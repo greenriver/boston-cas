@@ -316,6 +316,7 @@ class NonHmisClient < ApplicationRecord
       :dv_date,
       :pregnancy_status,
       :pregnant_under_28_weeks,
+      :child_in_household,
     ].each do |method|
       project_client[method] = current_assessment&.send(method)
     end
