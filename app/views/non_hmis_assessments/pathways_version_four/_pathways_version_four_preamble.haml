@@ -1,0 +1,45 @@
+%p
+  Please read this 
+  %a{ href: 'https://bit.ly/pathways24intro', target: :_blank } bit.ly/pathways24intro
+  before completing the assessment
+
+.c-question{data: {number: '1'}}
+  .c-question__wrapper
+    .c-question__number 1
+    .c-question__input
+      .form-group
+        .controls
+          .form--label-hint-wrapper
+            .form--lable-hint
+              %label.control-label Permission to Share Your Information with Partner Agencies
+              %p To sign you up for housing programs you may be interested in, we would like to ask for your permission to share information with participating agencies who manage these programs so they may contact you when there is an opening. All of the participating agencies have agreed to keep all data confidential and secure. Is this okay with you?
+              .c-question__input
+                %p 
+                = form.input :share_information_permission, as: :pretty_boolean_group, collection: { 'Yes' => true, 'No' => false }
+              %br
+              %p
+                %strong If Yes
+              %p
+                Check to see if a Housing Assistance Network (HAN) Release of Information is uploaded into the client's 
+                %a{ href: 'https://docs.google.com/document/d/16YiTz-g2J3xREtAsqS6NRRwckO0uWmdYApYg2NvOByI/edit?usp=sharing', target: :blank } warehouse
+                record.
+                %ul
+                  %li If one IS uploaded, proceed to the next section 
+                  %li
+                    If one IS NOT uploaded, complete a 
+                    %a{ href: 'https://docs.google.com/document/d/16YiTz-g2J3xREtAsqS6NRRwckO0uWmdYApYg2NvOByI/edit?usp=sharing', target: :blank } HAN release
+                    and upload to the Warehouse. If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, keep their release of information on file. If you are using CAS, also check the box on the Non-HMIS Client edit screen indicating that you have a HAN in your file. 
+              %p
+                %strong If No
+                %ul
+                  %li 
+                    If the client chooses not to share information with other provider agencies, staff may sign a
+                    %a{ href: 'https://www.boston.gov/sites/default/files/file/2020/01/Limited-CAS-Release.pdf', target: :blank } Limited CAS release
+                    so that the Coordinated Entry lead agency can sign them up for programs, but not share information with any other providers. Check to see if a Limited CAS release is uploaded into the client's 
+                    %a{ href: Config.get(:warehouse_url), target: :blank } warehouse
+                    record.
+                  %li If one IS uploaded, proceed to the next section.
+                  %li If one IS NOT uploaded, staff may sign a Limited CAS release and upload to the Warehouse. If it is not uploaded, the referral may get stuck due to lack of permission. If your agency is not on the warehouse, keep their release of information on file. If you are using CAS, also check the box on the Non-HMIS Client edit screen indicating that you have a Limited CAS Release in your file.
+
+%h1.mt-8 Assessment Questions
+%hr

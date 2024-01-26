@@ -5,6 +5,8 @@
 ###
 
 module NonHmisClientsHelper
+  PHONE_NUMBER_REGEX = /(?<!\d)\(?[\d]{3}\)?[\s|-]?[\d]{3}-?[\d]{4}(?!\d)/
+
   def client_type
     controller_name.gsub('_clients', '')
   end

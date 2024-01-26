@@ -1,0 +1,33 @@
+.jHouseholdDetails
+  %h4 List the members of your household (who will be living with you).
+  %p This should include everyone execpt the head of household, who's information should be used for the remainder of this assessment.
+  .c-card
+    %table.table.table-striped.mb-0
+      %thead
+        %tr
+          %th{style: 'min-width: 15em'} Name
+          %th{style: 'min-width: 15em'} Relationship to Head of Household
+          %th{style: 'min-width: 15em'} Gender
+          %th Date of Birth
+          %th Age
+      %tbody
+        - (0..5).each do |i|
+          %tr
+            %td
+              - field_name = "#{@assessment.model_name.param_key}[household_members][#{i}][member_name]"
+              = form.input :household_members, as: :string, input_html: { name: field_name, id: field_name, value: @assessment.household_members.try(:[], i.to_s).try(:[], 'member_name'), style: 'width: 100%' }, label: false
+            %td
+              - field_name = "#{@assessment.model_name.param_key}[household_members][#{i}][relationship]"
+              - value = @assessment.household_members.try(:[], i.to_s).try(:[], 'relationship').to_i
+              = form.input :household_members, as: :select_2, collection: @assessment.relationships_to_hoh.invert, input_html: { name: field_name, id: field_name }, selected: value, label: false, include_blank: true
+            %td{style: 'max-width: 15em'}
+              - field_name = "#{@assessment.model_name.param_key}[household_members][#{i}][gender]"
+              - value = @assessment.household_members.try(:[], i.to_s).try(:[], 'gender')
+              - value = value.to_i if value.present?
+              = form.input :household_members, as: :select_2, collection: NonHmisClient::HUD_GENDERS.invert.to_a, input_html: { name: field_name, id: field_name, multiple: true, data: { disableSelectAll: true } }, selected: value, label: false, include_blank: true
+            %td{ style: 'min-width: 12em;' }
+              - field_name = "#{@assessment.model_name.param_key}[household_members][#{i}][dob]"
+              = form.input :household_members, as: :date_picker, input_html: { name: field_name, id: field_name, value: @assessment.household_members.try(:[], i.to_s).try(:[], 'dob') || '', size: 8 }, label: false
+            %td
+              - field_name = "#{@assessment.model_name.param_key}[household_members][#{i}][age]"
+              = form.input :household_members, as: :integer, input_html: { name: field_name, id: field_name, value: @assessment.household_members.try(:[], i.to_s).try(:[], 'age'), style: 'width: 6em;' }, label: false

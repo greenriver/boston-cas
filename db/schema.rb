@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_08_143931) do
+ActiveRecord::Schema.define(version: 2024_01_23_130412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -319,8 +319,8 @@ ActiveRecord::Schema.define(version: 2024_01_08_143931) do
     t.boolean "questioning", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.jsonb "file_tags", default: {}
+    t.boolean "housing_barrier", default: false
     t.boolean "service_need", default: false
-    t.boolean "housing_barrier", default: false, null: false
     t.integer "additional_homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_unsheltered", default: 0
@@ -980,8 +980,16 @@ ActiveRecord::Schema.define(version: 2024_01_08_143931) do
     t.boolean "tc_hat_single_parent_child_over_ten", default: false
     t.boolean "tc_hat_legal_custody"
     t.boolean "tc_hat_will_gain_legal_custody"
+    t.boolean "housing_barrier", default: false
     t.boolean "service_need", default: false
-    t.boolean "housing_barrier", default: false, null: false
+    t.text "agency_name"
+    t.text "agency_day_contact_info"
+    t.text "agency_night_contact_info"
+    t.boolean "interested_in_rapid_rehousing"
+    t.boolean "pregnant_or_parent"
+    t.text "partner_warehouse_id"
+    t.text "partner_name"
+    t.boolean "share_information_permission"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1348,8 +1356,8 @@ ActiveRecord::Schema.define(version: 2024_01_08_143931) do
     t.boolean "questioning", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.jsonb "file_tags", default: {}
+    t.boolean "housing_barrier", default: false
     t.boolean "service_need", default: false
-    t.boolean "housing_barrier", default: false, null: false
     t.integer "additional_homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_unsheltered", default: 0
