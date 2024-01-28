@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_06_003238) do
+ActiveRecord::Schema.define(version: 2023_12_14_141207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -972,6 +972,9 @@ ActiveRecord::Schema.define(version: 2023_11_06_003238) do
     t.boolean "pregnant_under_28_weeks", default: false
     t.boolean "ongoing_case_management_required", default: false
     t.boolean "self_reported_days_verified", default: false
+    t.boolean "tc_hat_single_parent_child_over_ten", default: false
+    t.boolean "tc_hat_legal_custody"
+    t.boolean "tc_hat_will_gain_legal_custody"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
