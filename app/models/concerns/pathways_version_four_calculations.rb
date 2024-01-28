@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -1100,7 +1100,7 @@ module PathwaysVersionFourCalculations
               label: 'If yes, which ones [OPTIONAL]',
               number: '9',
               collection: {
-                _("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters', 
+                _("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters',
                 _('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
                 _('My experience of homelessness began in Boston over 10 years ago') => 'homelessness begain 10 years ago',
                 _('I have a criminal record (CORI) or ongoing legal cases') => 'criminal record (CORI) or ongoing legal cases',
