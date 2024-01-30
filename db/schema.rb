@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_23_130412) do
+ActiveRecord::Schema.define(version: 2024_01_30_195037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -985,7 +985,6 @@ ActiveRecord::Schema.define(version: 2024_01_23_130412) do
     t.text "agency_name"
     t.text "agency_day_contact_info"
     t.text "agency_night_contact_info"
-    t.boolean "interested_in_rapid_rehousing"
     t.boolean "pregnant_or_parent"
     t.text "partner_warehouse_id"
     t.text "partner_name"
