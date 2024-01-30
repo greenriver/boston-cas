@@ -308,7 +308,6 @@ class NonHmisAssessment < ActiveRecord::Base
       :fifty_five_plus,
       :have_tenant_voucher,
       :interested_in_disabled_housing,
-      :interested_in_rapid_rehousing,
       :mental_health_problem,
       :older_than_65,
       :one_br_ok,

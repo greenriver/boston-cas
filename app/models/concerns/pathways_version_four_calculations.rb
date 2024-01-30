@@ -1048,7 +1048,7 @@ module PathwaysVersionFourCalculations
             },
           },
         },
-        interested_in_rapid_rehousing: {
+        rrh_desired: {
           label: 'Are you interested Rapid Re-Housing?',
           number: '7',
           as: :pretty_boolean_group,
