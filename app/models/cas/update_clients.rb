@@ -207,7 +207,7 @@ module Cas
         :days_homeless,
         :date_days_homeless_verified,
         :who_verified_days_homeless,
-        :days_homeless_in_last_three_years,
+        :days_homeless_in_last_three_years, # Pathways V4 10g (and from other sources)
         :hmis_days_homeless_last_three_years,
         :days_literally_homeless_in_last_three_years,
         :ha_eligible,
@@ -298,9 +298,12 @@ module Cas
         :file_tags,
         :service_need,
         :housing_barrier,
-        :additional_homeless_nights_sheltered,
-        :additional_homeless_nights_unsheltered,
-        :total_homeless_nights_unsheltered,
+        :additional_homeless_nights_sheltered, # Pathways V4 10b
+        :additional_homeless_nights_unsheltered, # Pathways V4 10d
+        :total_homeless_nights_unsheltered, # Pathways V4 10f
+        :calculated_homeless_nights_sheltered, # Pathways V4 10a
+        :calculated_homeless_nights_unsheltered, # Pathways V4 10c
+        :total_homeless_nights_sheltered, # Pathways V4 10e
       ]
     end
 
