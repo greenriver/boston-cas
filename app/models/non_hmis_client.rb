@@ -220,6 +220,9 @@ class NonHmisClient < ApplicationRecord
     project_client.additional_homeless_nights_sheltered = current_assessment&.additional_homeless_nights_sheltered
     project_client.additional_homeless_nights_unsheltered = current_assessment&.additional_homeless_nights_unsheltered
     project_client.total_homeless_nights_unsheltered = current_assessment&.total_homeless_nights_unsheltered
+    project_client.calculated_homeless_nights_sheltered = current_assessment&.homeless_nights_sheltered
+    project_client.calculated_homeless_nights_unsheltered = current_assessment&.homeless_nights_unsheltered
+    project_client.total_homeless_nights_sheltered = current_assessment&.total_homeless_nights_sheltered
 
     if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current

@@ -51,6 +51,10 @@ class Config < ApplicationRecord
     @settings.public_send(config)
   end
 
+  def self.using_pathways?
+    get(:deidentified_client_assessment).include?('Pathways') || get(:identified_client_assessment).include?('Pathways')
+  end
+
   def include_note_in_email_options
     @include_note_in_email_options ||= {
       'Never include match notes in email notifications' => nil,
