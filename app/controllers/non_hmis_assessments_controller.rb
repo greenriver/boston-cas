@@ -27,6 +27,7 @@ class NonHmisAssessmentsController < ApplicationController
     @assessment.update(opts)
     @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
     if @assessment.save
+      enforce_no_transfer_2024!
       redirect_to @non_hmis_client
     else
       render :new
@@ -43,10 +44,19 @@ class NonHmisAssessmentsController < ApplicationController
     opts = clean_assessment_params(@assessment.assessment_params(params))
     if @assessment.update(opts)
       @non_hmis_client.update(assessed_at: @assessment.entry_date) if @assessment.entry_date
+      enforce_no_transfer_2024!
       redirect_to @non_hmis_client
     else
       render :edit
     end
+  end
+
+  # TODO: Until we have a Transfer 2024 assessment, just convert all transfer assessments to 2021 assessments
+  private def enforce_no_transfer_2024!
+    NonHmisAssessment.where(assessment_name: :DeidentifiedPathwaysVersionFourTransfer).
+      update_all(assessment_name: :DeidentifiedPathwaysVersionThreeTransfer, type: :DeidentifiedPathwaysVersionThree)
+    NonHmisAssessment.where(assessment_name: :IdentifiedPathwaysVersionFourTransfer).
+      update_all(assessment_name: :IdentifiedPathwaysVersionThreeTransfer, type: :IdentifiedPathwaysVersionThree)
   end
 
   def destroy

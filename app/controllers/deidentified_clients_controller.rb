@@ -29,6 +29,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       end
 
       @non_hmis_client.current_assessment&.update_assessment_score!
+
     end
     respond_with(@non_hmis_client, location: path_for_non_hmis_client)
   end
