@@ -75,10 +75,6 @@ jobs:
         run: |
           bundle install --jobs 4 --retry 3
 
-      - uses: actions/checkout@v3
-      - name: 'Install gems'
-        run: |
-          bundle install --jobs 4 --retry 3
       - name: Run bundle-audit
         run: |
           bundle exec bundle-audit check --update --ignore CVE-2019-16676 CVE-2017-1002201
