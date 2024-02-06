@@ -39,13 +39,18 @@ jobs:
         ports:
           - 6379:6379
 
+    env:
+      DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+      DATABASE_DB_TEST: boston_cas_test
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Set up dependencies
-        env:
-          DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
-          DATABASE_DB_TEST: boston_cas_test
+
         run: |
           apk add --no-cache \
+            nodejs yarn npm \
+            tzdata \
             git \
             bash \
             freetds-dev \
@@ -66,7 +71,6 @@ jobs:
           gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
           gem install bundler -v '< 2'
 
-      - uses: actions/checkout@v3
       - name: 'Install gems'
         run: |
           bundle install --jobs 4 --retry 3
