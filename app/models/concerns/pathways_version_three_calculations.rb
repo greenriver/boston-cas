@@ -130,7 +130,7 @@ module PathwaysVersionThreeCalculations
             },
           },
         )
-      when 'Transfer Assessment'
+      when 'Transfer Assessment 2021'
         shared
       end
     end

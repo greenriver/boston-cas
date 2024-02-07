@@ -141,7 +141,7 @@ module PathwaysVersionFourCalculations
             },
           },
         )
-      when 'Transfer Assessment'
+      when 'Transfer Assessment 2024'
         shared
       end
     end
