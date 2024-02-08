@@ -60,7 +60,6 @@ COPY db ./db
 COPY app ./app
 COPY vendor ./vendor
 RUN true
-COPY locale ./locale
 
 RUN mkdir -p app/assets/stylesheets/theme/styles && \
   touch app/assets/stylesheets/theme/styles/_variables.scss && \
