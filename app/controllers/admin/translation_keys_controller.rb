@@ -37,12 +37,12 @@ module Admin
       end
       @translations = @translations.where(common: true) if @search.common
 
-      @translations = @translations.page(params[:page]).per(25)
+      @pagy, @translations = pagy(@translations)
       render action: :index
     end
 
     def new
-      @translation = TranslationKey.new
+      @translation = translation_source.new
 
       render action: :edit
     end

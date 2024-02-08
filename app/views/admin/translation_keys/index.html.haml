@@ -3,12 +3,12 @@
 %h1 Manage Translations
 .row.table-utilities
   .col-sm-4
-    %p= page_entries_info @translations, entry_name: Translation.translate('translation')
-    %p= paginate @translations
-.row
-  .col-sm-8
-    - if @translations.present?
-      .table-responsive
+    = render 'common/pagination_top', item_name: 'translation'
+- if @pagy.count.positive?
+  .row
+    .col-sm-8
+      = render 'common/pagination_top', item_name: 'translation'
+      .table-responsive.card
         %table.table.table-striped
           %thead
             %tr
@@ -25,12 +25,16 @@
                 %td
                   %button.btn.btn-secondary.btn-sm
                     Save
-  .col-sm-4
-    = simple_form_for :search, as: :search, url: admin_translation_keys_path, method: :get do |f|
-      = f.input :q, label: 'Search'
-      = f.input :missing_translations, as: :boolean, label: 'Only show untranslated strings'
-      = f.input :common, as: :boolean, label: 'Only common translations'
-      = f.button :submit, value: 'Search or Filter'
+      = render 'common/pagination_bottom', item_name: 'translation'
+    .col-sm-4.mt-8
+      .well
+        = simple_form_for :search, as: :search, url: admin_translation_keys_path, method: :get do |f|
+          = f.input :q, label: 'Search'
+          = f.input :missing_translations, as: :boolean, label: 'Only show untranslated strings'
+          = f.input :common, as: :boolean, label: 'Only common translations'
+          = f.button :submit, value: 'Search or Filter'
+- else
+  .none-found No translations found.
 
 = content_for :page_js do
   :javascript
