@@ -75,9 +75,9 @@ class Contact < ApplicationRecord
       regular_contacts: "#{Translation.translate('Client')} Contacts",
       dnd_staff_contacts: "#{Translation.translate('DND')} Staff Contacts",
       housing_subsidy_admin_contacts: "#{Translation.translate('Housing Subsidy Administrator')} Contacts",
-      ssp_contacts: Translation.translate('Stabilization Service Provider').to_s,
-      hsp_contacts: Translation.translate('Housing Search Provider').to_s,
-      do_contacts: Translation.translate('Development Officer Contacts').to_s,
+      ssp_contacts: Translation.translate('Stabilization Service Provider'),
+      hsp_contacts: Translation.translate('Housing Search Provider'),
+      do_contacts: Translation.translate('Development Officer Contacts'),
     }
     choices[input_name] || input_name
   end
