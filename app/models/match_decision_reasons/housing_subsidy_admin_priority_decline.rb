@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class HousingSubsidyAdminPriorityDecline < Base
     def title
-      "#{_('HSA')} Priority Decline"
+      "#{Translation.translate('HSA')} Priority Decline"
     end
   end
 end

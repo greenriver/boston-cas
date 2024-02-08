@@ -21,7 +21,7 @@ module MatchDecisionReasons
     end
 
     def title
-      "#{_('HSA')} Decline"
+      "#{Translation.translate('HSA')} Decline"
     end
   end
 end

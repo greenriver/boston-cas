@@ -2,8 +2,8 @@
   Client
   - unless match.client&.has_full_housing_release?(match&.match_route)
     .limited-cas-release
-      %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "This client has not signed the #{_('HAN release')} and their name cannot be released to the #{_('HSA')}, #{_('SSP')}, or the #{_('HSP')}. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the #{_('HAN release')} at any time during the match the change will be reflected in CAS and their information will become available."}}
-      - release_status = if  match.client.housing_release_status.blank? || match.client.housing_release_status.downcase == 'none on file' then 'No release on file' else _(match.client.housing_release_status) end
+      %span.icon-info.text-color-danger{data:{ toggle: :tooltip, placement: :top, title: "This client has not signed the #{Translation.translate('HAN release')} and their name cannot be released to the #{Translation.translate('HSA')}, #{Translation.translate('SSP')}, or the #{Translation.translate('HSP')}. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the #{Translation.translate('HAN release')} at any time during the match the change will be reflected in CAS and their information will become available."}}
+      - release_status = if  match.client.housing_release_status.blank? || match.client.housing_release_status.downcase == 'none on file' then 'No release on file' else Translation.translate(match.client.housing_release_status) end
       = release_status
 .detail-box--value
   - link = if user_signed_in? then access_context.match_client_details_path(match) else new_user_session_path end

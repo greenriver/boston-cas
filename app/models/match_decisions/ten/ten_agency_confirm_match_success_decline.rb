@@ -11,11 +11,11 @@ module MatchDecisions::Ten
     include MatchDecisions::RouteTenCancelReasons
 
     def step_name
-      "#{_('DND')} Confirms Match Success Decline"
+      "#{Translation.translate('DND')} Confirms Match Success Decline"
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type
@@ -40,10 +40,10 @@ module MatchDecisions::Ten
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm #{_('Shelter Agency Ten')} decline"
-      when :decline_overridden then "#{_('Shelter Agency Ten')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('DND')}"
-      when :decline_overridden_returned then "#{_('Shelter Agency Ten')} overridden by #{_('DND')}.  Match returned to the #{_('Shelter Agency Ten')}"
-      when :decline_confirmed then "Match rejected by #{_('DND')}"
+      when :pending then "#{Translation.translate('DND')} to confirm #{Translation.translate('Shelter Agency Ten')} decline"
+      when :decline_overridden then "#{Translation.translate('Shelter Agency Ten')} Decline overridden by #{Translation.translate('DND')}.  Match proceeding to #{Translation.translate('DND')}"
+      when :decline_overridden_returned then "#{Translation.translate('Shelter Agency Ten')} overridden by #{Translation.translate('DND')}.  Match returned to the #{Translation.translate('Shelter Agency Ten')}"
+      when :decline_confirmed then "Match rejected by #{Translation.translate('DND')}"
       when :canceled then canceled_status_label
       end
     end

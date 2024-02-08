@@ -14,7 +14,7 @@ module Notifications::ProviderOnly
     end
 
     def event_label
-      "#{_'SSP'} notified of #{_('Housing Subsidy Administrator')} acceptance"
+      "#{Translation.translate('SSP')} notified of #{Translation.translate('Housing Subsidy Administrator')} acceptance"
     end
 
     def show_client_info?

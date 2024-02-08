@@ -14,7 +14,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} reviews match with client"
+      "#{Translation.translate('Housing Subsidy Administrator')} reviews match with client"
     end
 
     def show_client_info?

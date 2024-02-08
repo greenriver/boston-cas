@@ -1,6 +1,6 @@
 Hello #{@contact.full_name},
 \
-= "The match now requires final approval from #{_('DND')} staff to complete."
+= "The match now requires final approval from #{Translation.translate('DND')} staff to complete."
 \
 Please review the details of the match and note final approval here:
 #{notification_match_decision_url @notification, @match, @decision}

@@ -18,7 +18,7 @@ module Notifications::Four
     end
 
     def event_label
-      "#{_('DND')}  notified of #{_('Shelter Agency')} match acceptance"
+      "#{Translation.translate('DND')}  notified of #{Translation.translate('Shelter Agency')} match acceptance"
     end
 
   end

@@ -1,2 +1,2 @@
-#{_('Case Workers')} for this match:
+#{Translation.translate('Case Workers')} for this match:
 #{@match.shelter_agency_contacts.map { |c| [c.name, c.email, (c.phone if c.phone != 'x')].map(&:presence).compact.join(' ') }.join("\n") }

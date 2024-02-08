@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('DND')} Staff notified of successful match and asked to give final confirmation."
+      "#{Translation.translate('DND')} Staff notified of successful match and asked to give final confirmation."
     end
   end
 end

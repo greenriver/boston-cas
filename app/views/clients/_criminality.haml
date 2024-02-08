@@ -4,8 +4,8 @@
     %h5 Criminality
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Life-Time Sex Offender')
+      %span.c-detailed-list__label= Translation.translate('Life-Time Sex Offender')
       %span.c-detailed-list__value= boolean_icon (@client.lifetime_sex_offender)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Meth Production Conviction')
+      %span.c-detailed-list__label= Translation.translate('Meth Production Conviction')
       %span.c-detailed-list__value= boolean_icon (@client.meth_production_conviction)

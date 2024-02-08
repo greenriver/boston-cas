@@ -8,7 +8,7 @@ module MatchProgressUpdates
   class ShelterAgency < Base
 
     def name
-      "#{_('Shelter Agency')} status update"
+      "#{Translation.translate('Shelter Agency')} status update"
     end
 
     def self.match_contact_scope

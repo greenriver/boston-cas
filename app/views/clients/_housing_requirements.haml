@@ -6,13 +6,13 @@
     %li.c-detailed-list__item
       %span.c-detailed-list__label Housing Release
       %span.c-detailed-list__value
-        = _(@client.housing_release_status.presence) || 'Not Signed'
+        = Translation.translate(@client.housing_release_status.presence) || 'Not Signed'
     %li.c-detailed-list__item
       %span.c-detailed-list__label Most recent assessment completion date
       %span.c-detailed-list__value= @client.entry_date.try(:strftime, I18n.t('date.formats.default'))
     - if @client.release_of_information.present?
       %li.c-detailed-list__item
-        %span.c-detailed-list__label= "#{_('Release of information')} signed on"
+        %span.c-detailed-list__label= "#{Translation.translate('Release of information')} signed on"
         %span.c-detailed-list__value= @client.release_of_information.try(:to_date)
     %li.c-detailed-list__item
       %span.c-detailed-list__label Requires elevator access or ground floor unit?

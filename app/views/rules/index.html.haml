@@ -5,7 +5,7 @@
     %p
       = "These rules are available to apply (\"must\" or \"can't\") when editing a funding source, sub-grantee, subcontractor, #{Building.model_name.human.downcase}, service, or program."
       %br
-      = "For now, if #{_('DND')} needs to change wording or add a rule, please email Green River."
+      = "For now, if #{Translation.translate('DND')} needs to change wording or add a rule, please email Green River."
 
 .table-responsive
   .c-card.c.card__flush.mb-4
@@ -22,7 +22,7 @@
             %tr
               - attributes = {:class => rule.deleted_at.present? ? 'deleted' : nil}
               %td{attributes}= rule.verb.try :titleize
-              %td{attributes}= _(rule.name)
+              %td{attributes}= Translation.translate(rule.name)
               %td{attributes}
                 - if rule.always_apply?
                   Always Apply

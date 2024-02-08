@@ -4,7 +4,7 @@
     %h5 Eligibility
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Housing Authority Eligible')
+      %span.c-detailed-list__label= Translation.translate('Housing Authority Eligible')
       %span.c-detailed-list__value= boolean_icon @client.ha_eligible
     - if can_view_va_eligibility?
       %li.c-detailed-list__item
@@ -17,13 +17,13 @@
       %span.c-detailed-list__label SSVF Eligible
       %span.c-detailed-list__value= boolean_icon @client.ssvf_eligible
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('CSPECH Eligible')
+      %span.c-detailed-list__label= Translation.translate('CSPECH Eligible')
       %span.c-detailed-list__value= boolean_icon (@client.cspech_eligible)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Latest Date Eligible for Financial Assistance')
+      %span.c-detailed-list__label= Translation.translate('Latest Date Eligible for Financial Assistance')
       %span.c-detailed-list__value= @client.financial_assistance_end_date
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Current Living Situation')
+      %span.c-detailed-list__label= Translation.translate('Current Living Situation')
       %span.c-detailed-list__value
         - if @client.majority_sheltered.nil?
           Unknown

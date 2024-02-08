@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class CaseContactAssignsManagerDecline < Base
     def title
-      "#{_('Housing Subsidy Administrator Eight')} Decline"
+      "#{Translation.translate('Housing Subsidy Administrator Eight')} Decline"
     end
   end
 end

@@ -17,7 +17,7 @@ module Notifications::Eight
     end
 
     def event_label
-      "#{_('DND')} notified of #{_('Housing Subsidy Administrator Eight')} decline. Confirmation pending."
+      "#{Translation.translate('DND')} notified of #{Translation.translate('Housing Subsidy Administrator Eight')} decline. Confirmation pending."
     end
   end
 end

@@ -15,13 +15,13 @@
                 .radio
                   %label
                     = form.radio_button :status, :no_hearing, checked: true
-                    = _('A criminal background hearing is not necessary')
+                    = Translation.translate('A criminal background hearing is not necessary')
                 .radio
                   %label
                     = form.radio_button :status, :scheduled, disabled: ! @decision.editable?, class: ''
-                    = _('There will be a criminal background hearing')
+                    = Translation.translate('There will be a criminal background hearing')
               .jScheduled.d-none
-                %label(for="decision_criminal_hearing_date")= _('Date and time of criminal background hearing')
+                %label(for="decision_criminal_hearing_date")= Translation.translate('Date and time of criminal background hearing')
                 .row.form-group
                   .col-md-6
                     = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}

@@ -112,11 +112,6 @@ gem 'dotenv-rails'
 
 gem 'auto-session-timeout'
 
-# Translations
-gem 'fast_gettext'
-gem 'gettext', '>=3.0.2'
-gem 'gettext_i18n_rails'
-gem 'grosser-pomo'
 gem 'ruby_parser', require: false
 
 # gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
@@ -134,8 +129,6 @@ gem 'ajax_modal_rails', '~> 1.0'
 
 gem 'sentry-rails', '~> 5.5'
 gem 'warning'
-
-
 
 group :development do
   # gem 'spring'

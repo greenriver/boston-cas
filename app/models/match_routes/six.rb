@@ -7,7 +7,7 @@
 module MatchRoutes
   class Six < Base
     def title
-      _('Match Route Six')
+      Translation.translate('Match Route Six')
     end
 
     def self.available_sub_types_for_search

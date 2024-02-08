@@ -2,7 +2,7 @@ Hello #{@contact.full_name},
 \
 A CAS housing recommendation has been updated.
 \
-= "The client and #{_('case worker')} have indicated interest in the opportunity and the match now requires review by a #{_('Housing Subsidy Administrator')} to proceed."
+= "The client and #{Translation.translate('case worker')} have indicated interest in the opportunity and the match now requires review by a #{Translation.translate('Housing Subsidy Administrator')} to proceed."
 \
 View details and respond here:
 #{notification_match_url @notification, @match}

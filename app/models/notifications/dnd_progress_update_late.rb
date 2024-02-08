@@ -17,7 +17,7 @@ module Notifications
     end
 
     def event_label
-      "Progress update late, #{_('DND')} notified"
+      "Progress update late, #{Translation.translate('DND')} notified"
     end
 
   end

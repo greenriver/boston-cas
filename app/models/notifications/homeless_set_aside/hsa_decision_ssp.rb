@@ -15,7 +15,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{_('Stabilization Services Provider')} sent notice of #{_('Housing Subsidy Administrator')}'s decision."
+      "#{Translation.translate('Stabilization Services Provider')} sent notice of #{Translation.translate('Housing Subsidy Administrator')}'s decision."
     end
 
   end

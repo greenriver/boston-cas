@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      _("#{_('Stabilization Service Provider Nine')} notified, match awaiting case manager assignment")
+      Translation.translate("#{Translation.translate('Stabilization Service Provider Nine')} notified, match awaiting case manager assignment")
     end
   end
 end

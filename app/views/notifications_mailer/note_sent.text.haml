@@ -1,12 +1,12 @@
 Hello #{@contact.full_name},
 \
 - if @include_content
-  The following note was sent to you via #{_('Boston\'s Coordinated Access System')}.
+  The following note was sent to you via #{Translation.translate('Boston\'s Coordinated Access System')}.
   \
   Note:
   #{simple_format @note}
 - else
-  A note was posted for you in #{_('Boston\'s Coordinated Access System')}.
+  A note was posted for you in #{Translation.translate('Boston\'s Coordinated Access System')}.
 \
 Details:
 #{notification_match_url @notification, @match}

@@ -297,7 +297,6 @@ GEM
       railties (>= 5.0.0)
     faker (3.0.0)
       i18n (>= 1.8.11, < 2)
-    fast_gettext (2.2.0)
     ffi (1.15.5)
     font-awesome-sass (6.2.1)
       sassc (~> 2.0)
@@ -306,16 +305,8 @@ GEM
     forwardable (1.3.3)
     fuzzy_match (2.1.0)
     geocoder (1.6.4)
-    gettext (3.4.3)
-      erubi
-      locale (>= 2.0.5)
-      prime
-      text (>= 1.3.0)
-    gettext_i18n_rails (1.9.0)
-      fast_gettext (>= 0.9.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    grosser-pomo (0.5.1)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -741,14 +732,10 @@ DEPENDENCIES
   execjs
   factory_bot_rails
   faker
-  fast_gettext
   font-awesome-sass
   foreman
   fuzzy_match
   geocoder
-  gettext (>= 3.0.2)
-  gettext_i18n_rails
-  grosser-pomo
   guard-rspec
   haml-rails
   handlebars_assets

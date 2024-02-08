@@ -20,9 +20,9 @@ module MatchDecisions::Nine
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator Nine')} reviewing match"
-      when :accepted then "#{_('Housing Subsidy Administrator Nine')} issued voucher on  #{date_voucher_issued.try :strftime, '%m/%d/%Y'}"
-      when :declined then "Match declined by #{_('Housing Subsidy Administrator Nine')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator Nine')} reviewing match"
+      when :accepted then "#{Translation.translate('Housing Subsidy Administrator Nine')} issued voucher on  #{date_voucher_issued.try :strftime, '%m/%d/%Y'}"
+      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator Nine')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -38,11 +38,11 @@ module MatchDecisions::Nine
     end
 
     def step_name
-      _('Record Date Voucher Issued')
+      Translation.translate('Record Date Voucher Issued')
     end
 
     def actor_type
-      _('HSA Nine')
+      Translation.translate('HSA Nine')
     end
 
     def contact_actor_type
@@ -167,7 +167,7 @@ module MatchDecisions::Nine
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{_('Housing Subsidy Administrator Nine')} Contact" if status == 'accepted' && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator Nine')} Contact" if status == 'accepted' && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

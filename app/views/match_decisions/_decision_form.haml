@@ -12,7 +12,7 @@
         %label
           Expire Match
           %span.label-helper.label-helper--optional optional
-        %p Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{_('Shelter Agency')} contact
+        %p Optionally provide a date after which the match will be expired if it hasn't been accepted by a #{Translation.translate('Shelter Agency')} contact
         .row
           .col-md-6
             = form.input :shelter_expiration, as: :date_picker, label: false, input_html: {class: 'jButtonStateTriggers', value: @match.shelter_expiration.presence || @decision.default_shelter_expiration}

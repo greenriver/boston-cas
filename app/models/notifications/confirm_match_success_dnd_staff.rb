@@ -18,7 +18,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('DND')} Staff notified of client housed date and asked to give final confirmation to match."
+      "#{Translation.translate('DND')} Staff notified of client housed date and asked to give final confirmation to match."
     end
 
   end

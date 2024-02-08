@@ -496,15 +496,15 @@ class Client < ApplicationRecord
     release_tags = if from_hmis?
       Warehouse::AvailableFileTag.full_release.pluck(:name)
     else
-      [_('Full HAN Release'), 'Full HAN Release']
+      [Translation.translate('Full HAN Release'), 'Full HAN Release']
     end
-    ([_('Full HAN Release')] + release_tags).include? housing_release_status
+    ([Translation.translate('Full HAN Release')] + release_tags).include? housing_release_status
   end
 
   # This is only here to allow the translation tool to find it for translating
   def translated_text_of_release_types
-    _('Full HAN Release')
-    _('Limited CAS Release')
+    Translation.translate('Full HAN Release')
+    Translation.translate('Limited CAS Release')
   end
 
   def self.possible_availability_states

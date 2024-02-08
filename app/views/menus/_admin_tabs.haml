@@ -8,7 +8,7 @@
       = link_to 'Agencies', admin_agencies_path, class: 'nav-link'
   -if can_edit_translations?
     %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_translation_keys_path))}
-      = link_to 'Manage Translations', admin_translation_keys_path, class: 'nav-link'
+      = link_to 'Translations', admin_translation_keys_path, class: 'nav-link'
   -if can_manage_config?
     %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_configs_path))}
       = link_to 'Site Configuration', admin_configs_path, class: 'nav-link'
@@ -18,4 +18,3 @@
   - if can_manage_sessions?
     %li.nav-item{role: 'presentation', class: ('active' if controller_name == "sessions")}
       = link_to 'Sessions', admin_sessions_path, class: 'nav-link'
-

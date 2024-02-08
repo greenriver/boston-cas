@@ -18,7 +18,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('DND')} notified of new match"
+      "#{Translation.translate('DND')} notified of new match"
     end
 
     def contacts_editable?

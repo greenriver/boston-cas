@@ -4,19 +4,19 @@
     %h5 Domestic
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Part of a family')
+      %span.c-detailed-list__label= Translation.translate('Part of a family')
       %span.c-detailed-list__value= boolean_icon (@client.family_member)
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Children under age 18 in household')
+      %span.c-detailed-list__label= Translation.translate('Children under age 18 in household')
       %span.c-detailed-list__value= boolean_icon (@client.child_in_household)
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Youth in foster care')
+      %span.c-detailed-list__label= Translation.translate('Youth in foster care')
       %span.c-detailed-list__value= boolean_icon (@client.foster_care)
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Current open case')
+      %span.c-detailed-list__label= Translation.translate('Current open case')
       %span.c-detailed-list__value= boolean_icon (@client.open_case)
 
     %li.c-detailed-list__item
@@ -24,52 +24,52 @@
       %span.c-detailed-list__value= number_to_currency(@client.income_total_monthly)
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Interested in income maximization services')
+      %span.c-detailed-list__label= Translation.translate('Interested in income maximization services')
       %span.c-detailed-list__value= boolean_icon (@client.income_maximization_assistance_requested)
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Strengths')
+      %span.c-detailed-list__label= Translation.translate('Strengths')
       %span.c-detailed-list__value= @client.strengths&.join(', ')&.titleize
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Challenges for housing placment')
+      %span.c-detailed-list__label= Translation.translate('Challenges for housing placment')
       %span.c-detailed-list__value= @client.challenges&.join(', ')&.titleize
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Willing to engage with housing case management')
+      %span.c-detailed-list__label= Translation.translate('Willing to engage with housing case management')
       %span.c-detailed-list__value= boolean_icon @client.willing_case_management
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Employed for 3 or more months')
+      %span.c-detailed-list__label= Translation.translate('Employed for 3 or more months')
       %span.c-detailed-list__value= boolean_icon @client.employed_three_months
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Earning a living wage ($13 or more)')
+      %span.c-detailed-list__label= Translation.translate('Earning a living wage ($13 or more)')
       %span.c-detailed-list__value= boolean_icon @client.living_wage
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Needs a higher level of care')
+      %span.c-detailed-list__label= Translation.translate('Needs a higher level of care')
       %span.c-detailed-list__value= boolean_icon @client.need_daily_assistance
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Employed full-time')
+      %span.c-detailed-list__label= Translation.translate('Employed full-time')
       %span.c-detailed-list__value= boolean_icon @client.full_time_employed
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Able to work full-time')
+      %span.c-detailed-list__label= Translation.translate('Able to work full-time')
       %span.c-detailed-list__value= boolean_icon @client.can_work_full_time
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Willing to work full-time')
+      %span.c-detailed-list__label= Translation.translate('Willing to work full-time')
       %span.c-detailed-list__value= boolean_icon @client.willing_to_work_full_time
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Able to successfully exit 12-24 month RRH program')
+      %span.c-detailed-list__label= Translation.translate('Able to successfully exit 12-24 month RRH program')
       %span.c-detailed-list__value= boolean_icon @client.rrh_successful_exit
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Interested in Transitional Housing')
+      %span.c-detailed-list__label= Translation.translate('Interested in Transitional Housing')
       %span.c-detailed-list__value= boolean_icon @client.th_desired
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Needs site-based case management')
+      %span.c-detailed-list__label= Translation.translate('Needs site-based case management')
       %span.c-detailed-list__value= boolean_icon @client.site_case_management_required
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Needs ongoing housing case management')
+      %span.c-detailed-list__label= Translation.translate('Needs ongoing housing case management')
       %span.c-detailed-list__value= boolean_icon @client.ongoing_case_management_required
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Currently fleeing DV')
+      %span.c-detailed-list__label= Translation.translate('Currently fleeing DV')
       %span.c-detailed-list__value.d-flex
         - if @client.currently_fleeing && @client.dv_date.present?
           since #{@client.dv_date}

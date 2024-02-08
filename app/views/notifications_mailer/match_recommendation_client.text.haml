@@ -3,10 +3,10 @@ Hello #{@contact.name},
 A housing opportunity for which you may be eligible has become available.
 \
 - if @match.shelter_expiration.present?
-  = "Please contact your #{_('case worker')} before #{@match.shelter_expiration} for more details."
+  = "Please contact your #{Translation.translate('case worker')} before #{@match.shelter_expiration} for more details."
   \
 - else
-  = "Please contact your #{_('case worker')} for more details."
+  = "Please contact your #{Translation.translate('case worker')} for more details."
   \
 = render 'shelter_agency_contacts'
 \

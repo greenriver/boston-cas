@@ -112,57 +112,57 @@ class NotificationsMailer < DatabaseMailer
 
   def housing_subsidy_admin_decision_client(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_shelter_agency(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_ssp(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_hsp(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_decision_development_officer(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def housing_subsidy_admin_accepted_match_dnd_staff(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Accepted by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Accepted by #{Translation.translate('HSA')}")
   end
 
   def housing_subsidy_admin_declined_match_shelter_agency(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')}")
   end
 
   def housing_subsidy_admin_declined_match_ssp(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')}")
   end
 
   def housing_subsidy_admin_declined_match_hsp(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')}")
   end
 
   def confirm_shelter_agency_decline_dnd_staff(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Declined by #{_('Shelter Agency')} - Requires Your Action")
+    mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('Shelter Agency')} - Requires Your Action")
   end
 
   def confirm_housing_subsidy_admin_decline_dnd_staff(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
+    mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')} - Requires Your Action")
   end
 
   def on_behalf_of(notification = nil)
@@ -182,7 +182,7 @@ class NotificationsMailer < DatabaseMailer
 
   def shelter_agency_accepted(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "#{_('Shelter Agency')} Accepted Match")
+    mail(to: @contact.email, subject: "#{Translation.translate('Shelter Agency')} Accepted Match")
   end
 
   def shelter_agency_decline_accepted(notification = nil)
@@ -219,32 +219,32 @@ class NotificationsMailer < DatabaseMailer
 
   def hsa_accepts_client_ssp_notification(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match accepted by #{_('HSA')}")
+    mail(to: @contact.email, subject: "Match accepted by #{Translation.translate('HSA')}")
   end
 
   def confirm_hsa_decline_dnd_staff(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
+    mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')} - Requires Your Action")
   end
 
   def hsa_decision_client(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def hsa_decision_shelter_agency(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def hsa_decision_ssp(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   def hsa_decision_hsp(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: "Decision from #{_('Housing Subsidy Administrator')}")
+    mail(to: @contact.email, subject: "Decision from #{Translation.translate('Housing Subsidy Administrator')}")
   end
 
   # End Provider Only

@@ -17,7 +17,7 @@ module Notifications::Eight
     end
 
     def event_label
-      _("#{_('Housing Subsidy Administrator Eight')} notified, match awaiting case manager assignment")
+      Translation.translate("#{Translation.translate('Housing Subsidy Administrator Eight')} notified, match awaiting case manager assignment")
     end
   end
 end

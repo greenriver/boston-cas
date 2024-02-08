@@ -17,7 +17,7 @@ module Notifications::Seven
     end
 
     def event_label
-      "#{_('Shelter Agency')} notified of successful match."
+      "#{Translation.translate('Shelter Agency')} notified of successful match."
     end
   end
 end

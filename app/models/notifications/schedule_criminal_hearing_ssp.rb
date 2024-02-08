@@ -18,7 +18,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Stabilization Service Provider')} was sent full details of match for review"
+      "#{Translation.translate('Stabilization Service Provider')} was sent full details of match for review"
     end
 
   end

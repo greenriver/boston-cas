@@ -18,7 +18,7 @@
 %h4 Veteran RRH:
 %p Veteran specific RRH is available via direct referral through Supportive Services for Veteran Families (SSVF) with no Pathways Assessment required at the following agencies:
 - markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true)
-= markdown.render(_('Veteran Agency Contact Details')).html_safe
+= markdown.render(Translation.translate('Veteran Agency Contact Details')).html_safe
 
 %h2 Key Introduction Points to Share with the Participant
 %p
@@ -156,7 +156,7 @@
   All youth specific RRH opportunities are being matched through CAS via the Pathways assessment.
 %h4 Veteran RRH:
 %p Veteran specific RRH is available via direct referral through Supportive Services for Veteran Families (SSVF) with no Pathways Assessment required at the following agencies:
-%p= _('Veteran Agency Contact Details')
+%p= Translation.translate('Veteran Agency Contact Details')
 
 %h2 Key Points to Share with the Participant Regarding Confidentiality
 %p

@@ -1,4 +1,4 @@
-- title = _('Tags')
+- title = Translation.translate('Tags')
 - content_for :title, title
 
 .o-page
@@ -7,7 +7,7 @@
     .o-page__action.o-page__action--stacked
       = link_to new_tag_path, class: 'btn btn-primary pull-right margin-bottom-02' do
         %span.icon-plus
-        Add a #{_('Tag')}
+        Add a #{Translation.translate('Tag')}
 
   .row
     .col-sm-12
@@ -29,7 +29,7 @@
           %thead
             %tr
               %th Name
-              %th= _('Added to assessed clients')
+              %th= Translation.translate('Added to assessed clients')
               %th
               %th
           %tbody

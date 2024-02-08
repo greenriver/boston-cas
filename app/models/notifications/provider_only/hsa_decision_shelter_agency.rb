@@ -17,7 +17,7 @@ module Notifications::ProviderOnly
     end
 
     def event_label
-      "#{_('Shelter Agency')} sent notice of #{_('Housing Subsidy Administrator')}'s decision."
+      "#{Translation.translate('Shelter Agency')} sent notice of #{Translation.translate('Housing Subsidy Administrator')}'s decision."
     end
 
   end

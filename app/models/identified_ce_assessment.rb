@@ -6,7 +6,7 @@
 
 class IdentifiedCeAssessment < IdentifiedClientAssessment
   def title
-    _('CE Assessment')
+    Translation.translate('CE Assessment')
   end
 
   def for_matching

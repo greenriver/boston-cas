@@ -9,7 +9,7 @@
                 .c-choice-icon.c-choice-icon--confirm.mr-4
                 %h3 Continue Match
             .o-choose__content
-              %p Using the following button, please add the Case Manager for this match process under the #{_('Stabilization Service Provider Nine')} category.
+              %p Using the following button, please add the Case Manager for this match process under the #{Translation.translate('Stabilization Service Provider Nine')} category.
               = link_to access_context.edit_match_contacts_path(@match), data: {loads_in_pjax_modal: true}, class: [:btn, 'btn-primary'] do
                 %span.icon-pencil
                 Assign Case Manager Contact

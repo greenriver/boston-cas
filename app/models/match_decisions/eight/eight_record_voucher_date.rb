@@ -17,9 +17,9 @@ module MatchDecisions::Eight
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator Eight')} reviewing match"
-      when :accepted then "#{_('Housing Subsidy Administrator Eight')} issued voucher on  #{date_voucher_issued.try :strftime, '%m/%d/%Y'}"
-      when :declined then "Match declined by #{_('Housing Subsidy Administrator Eight')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator Eight')} reviewing match"
+      when :accepted then "#{Translation.translate('Housing Subsidy Administrator Eight')} issued voucher on  #{date_voucher_issued.try :strftime, '%m/%d/%Y'}"
+      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator Eight')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -34,11 +34,11 @@ module MatchDecisions::Eight
     end
 
     def step_name
-      _('Record Date Voucher Issued')
+      Translation.translate('Record Date Voucher Issued')
     end
 
     def actor_type
-      _('HSA Eight')
+      Translation.translate('HSA Eight')
     end
 
     def contact_actor_type

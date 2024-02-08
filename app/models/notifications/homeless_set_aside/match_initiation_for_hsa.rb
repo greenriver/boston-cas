@@ -14,7 +14,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of match detail"
+      "#{Translation.translate('Housing Subsidy Administrator')} notified of match detail"
     end
 
     def show_client_info?

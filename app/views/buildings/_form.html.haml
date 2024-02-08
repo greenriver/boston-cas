@@ -24,7 +24,7 @@
             = render 'housing_attributes/attributes', housing_object: @building, mode: mode, heading: ''
 
         .c-card.c-card--flush.my-8
-          %h3= _('Photos and Videos')
+          %h3= Translation.translate('Photos and Videos')
           .c-card__content.p-0.pb-4
             = render 'housing_media_links/links', housing_object: @building, mode: mode, heading: ''
 

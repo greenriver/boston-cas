@@ -12,7 +12,7 @@
       %br
     - if match.opportunity_details&.building_media_links.length > 0
       .building-media-links.mt-2
-        %h4= _('Photos and Videos')
+        %h4= Translation.translate('Photos and Videos')
         - match.opportunity_details.building_media_links.each do |link|
           = link_to link.label, link.url, target: '_blank'
           %br
@@ -28,7 +28,7 @@
             %br
       - if match.opportunity_details&.unit_media_links.length > 0
         .unit-media-links.mt-2
-          %h4= _('Photos and Videos')
+          %h4= Translation.translate('Photos and Videos')
           - match.opportunity_details.unit_media_links.each do |link|
             = link_to link.label, link.url, target: '_blank'
             %br

@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      "Contact notified, action taken by #{_('DND')}"
+      "Contact notified, action taken by #{Translation.translate('DND')}"
     end
 
   end

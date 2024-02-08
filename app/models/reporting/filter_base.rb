@@ -122,7 +122,7 @@ module Reporting
     def match_route_options_for_select
       MatchRoutes::Base.active.map do |route|
         [
-          _(route.title),
+          Translation.translate(route.title),
           route.id,
         ]
       end.to_h

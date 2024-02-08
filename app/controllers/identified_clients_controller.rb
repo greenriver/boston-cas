@@ -191,6 +191,6 @@ class IdentifiedClientsController < NonHmisClientsController
   end
 
   private def client_type
-    _('Identified Clients')
+    Translation.translate('Identified Clients')
   end
 end

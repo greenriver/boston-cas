@@ -17,8 +17,8 @@ module MatchDecisions::ProviderOnly
 
     def label_for_status status
       case status.to_sym
-      when :pending, :expiration_update then "New Match Awaiting Acknowledgment by #{_('HSA')}"
-      when :acknowledged then "Match acknowledged by #{_('HSA')}.  In review"
+      when :pending, :expiration_update then "New Match Awaiting Acknowledgment by #{Translation.translate('HSA')}"
+      when :acknowledged then "Match acknowledged by #{Translation.translate('HSA')}.  In review"
       when :canceled then canceled_status_label
       end
     end
@@ -28,11 +28,11 @@ module MatchDecisions::ProviderOnly
     end
 
     def step_name
-      "New Match for #{_('HSA')}"
+      "New Match for #{Translation.translate('HSA')}"
     end
 
     def actor_type
-      _('HSA')
+      Translation.translate('HSA')
     end
 
     def contact_actor_type
@@ -135,8 +135,8 @@ module MatchDecisions::ProviderOnly
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
-      missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{Translation.translate('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
+      missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

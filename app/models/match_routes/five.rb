@@ -7,7 +7,7 @@
 module MatchRoutes
   class Five < Base
     def title
-      _('Match Route Five')
+      Translation.translate('Match Route Five')
     end
 
     def self.available_sub_types_for_search
@@ -58,17 +58,17 @@ module MatchRoutes
     def contact_label_for(contact_type)
       case contact_type
       when :dnd_staff_contacts
-        _('Route Five DND Contact')
+        Translation.translate('Route Five DND Contact')
       when :housing_subsidy_admin_contacts
-        _('Route Five HSA')
+        Translation.translate('Route Five HSA')
       when :shelter_agency_contacts
-        _('Route Five Shelter Agency')
+        Translation.translate('Route Five Shelter Agency')
       when :ssp_contacts
-        _('Route Five Stabilization Service Provider')
+        Translation.translate('Route Five Stabilization Service Provider')
       when :hsp_contacts
-        _('Route Five Housing Search Provider')
+        Translation.translate('Route Five Housing Search Provider')
       when :do_contacts
-        _('Route Five Development Officer')
+        Translation.translate('Route Five Development Officer')
       end
     end
 

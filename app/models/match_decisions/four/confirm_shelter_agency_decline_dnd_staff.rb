@@ -24,20 +24,20 @@ module MatchDecisions::Four
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm #{_('Shelter Agency')} decline"
-      when :decline_overridden then "#{_('Shelter Agency')} Decline overridden by DND.  Match proceeding to #{_('Housing Subsidy Administrator')}"
-      when :decline_overridden_returned then "#{_('Shelter Agency')} overridden by #{_('DND')}.  Match returned to the #{_('Shelter Agency')}"
-      when :decline_confirmed then "Match rejected by #{_('DND')}"
+      when :pending then "#{Translation.translate('DND')} to confirm #{Translation.translate('Shelter Agency')} decline"
+      when :decline_overridden then "#{Translation.translate('Shelter Agency')} Decline overridden by DND.  Match proceeding to #{Translation.translate('Housing Subsidy Administrator')}"
+      when :decline_overridden_returned then "#{Translation.translate('Shelter Agency')} overridden by #{Translation.translate('DND')}.  Match returned to the #{Translation.translate('Shelter Agency')}"
+      when :decline_confirmed then "Match rejected by #{Translation.translate('DND')}"
       when :canceled then canceled_status_label
       end
     end
 
     def step_name
-      "#{_('DND')} Reviews Match Declined by #{_('Shelter Agency')}"
+      "#{Translation.translate('DND')} Reviews Match Declined by #{Translation.translate('Shelter Agency')}"
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type

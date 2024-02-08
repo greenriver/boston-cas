@@ -14,18 +14,18 @@
       %strong
         = checkmark(true)
         Client provided a
-        = _(@match.client.housing_release_status)
+        = Translation.translate(@match.client.housing_release_status)
 
 - unless Config.get(:include_note_in_email_default).nil?
   = form.input :include_note_in_email, as: :boolean, inline_label: 'Include note content in notification email', hint: 'Do not include client details in the note if you include the content in the email.', input_html: { checked: Config.get(:include_note_in_email_default) }
-= form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{_('shelter case manager')} and understands the services attached and the program requirements"
+= form.input :client_spoken_with_services_agency, as: :boolean, required: true, inline_label: "Client has spoken to a #{Translation.translate('shelter case manager')} and understands the services attached and the program requirements"
 - if Config.get(:require_cori_release)
   = form.input :cori_release_form_submitted, as: :boolean, required: true, inline_label: 'Client has submitted a CORI release form'
 
 %p
-  = _('The client does not need to be document-ready in order to indicate interest.')
+  = Translation.translate('The client does not need to be document-ready in order to indicate interest.')
   %br
-  = "#{_('When you indicate interest, notification will be sent to the')} #{_('Housing Subsidy Administrator')}. If the #{_('HSA')} has a release, #{_('they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing.')}"
+  = "#{Translation.translate('When you indicate interest, notification will be sent to the')} #{Translation.translate('Housing Subsidy Administrator')}. If the #{Translation.translate('HSA')} has a release, #{Translation.translate('they can proceed to determine whether a criminal background hearing is needed. You will be notified when they either accept the match or schedule a hearing.')}"
 
 = render 'match_decisions/continue_button', text: 'Indicate Interest in Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jNeedsToAgree', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted', toggle: 'modal', target: '#shelter-agency-modal'}, disabled: !(@decision.editable?)}
 

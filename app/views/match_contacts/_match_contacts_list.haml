@@ -5,10 +5,10 @@
 
     %li.c-detail-group__item
       -# Force some translations
-      - _('Housing Subsidy Administrators')
-      - _('Stabilization Service Providers')
-      - _('Housing Search Providers')
-      .c-detail-group__title--secondary= _(title)
+      - Translation.translate('Housing Subsidy Administrators')
+      - Translation.translate('Stabilization Service Providers')
+      - Translation.translate('Housing Search Providers')
+      .c-detail-group__title--secondary= Translation.translate(title)
       .detail-box--value
         - match.send(contact_type).each do |contact|
           - data = {}

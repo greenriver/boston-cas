@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Housing Search Provider')} notified of potential match (no client details sent)"
+      "#{Translation.translate('Housing Search Provider')} notified of potential match (no client details sent)"
     end
 
     def show_client_info?

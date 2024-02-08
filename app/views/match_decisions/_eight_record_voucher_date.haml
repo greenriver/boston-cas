@@ -19,7 +19,7 @@
                 If the match is accepted, all involved parties will be notified.
 
               = render 'match_decisions/continue_button', text: 'Accept Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
-          = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, the #{_('DND')} will be informed of the decision."
+          = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, the #{Translation.translate('DND')} will be informed of the decision."
         - elsif @decision.declineable_by?(current_contact)
           .o-choose__choice.o-choose__choice--100{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
             = render 'match_decisions/shelter_decline_actions', form: form

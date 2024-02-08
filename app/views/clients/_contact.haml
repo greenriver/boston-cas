@@ -32,7 +32,7 @@
       %span.c-card__content-block-text= @client.address
   - if @client.project_client.default_shelter_agency_contacts
     .c-card__content-block.col-md-12.col-lg-12
-      %h5 #{_('Shelter Agency Contacts')} from HMIS
+      %h5 #{Translation.translate('Shelter Agency Contacts')} from HMIS
       %span.c-card__content-block-text= @client.project_client.default_shelter_agency_contacts.join(', ').presence || not_specified
   - if @client.case_manager_contact_info
     .c-card__content-block.col-md-12.col-lg-12
