@@ -18,8 +18,8 @@ module MatchDecisions
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Shelter Agency')} to note when client will move in."
-      when :completed then "#{_('Shelter Agency')} notes client will move in #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :pending then "#{Translation.translate('Shelter Agency')} to note when client will move in."
+      when :completed then "#{Translation.translate('Shelter Agency')} notes client will move in #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :canceled then canceled_status_label
       end
     end
@@ -29,7 +29,7 @@ module MatchDecisions
     end
 
     def actor_type
-      _('Shelter Agency')
+      Translation.translate('Shelter Agency')
     end
 
     def contact_actor_type

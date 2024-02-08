@@ -17,20 +17,20 @@ module MatchDecisions::Four
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} #{_('researching criminal background and deciding whether to schedule a hearing')}"
-      when :scheduled then "#{_('Housing Subsidy Administrator')} #{_('has scheduled criminal background hearing for')} <strong>#{criminal_hearing_date}</strong>".html_safe
-      when :no_hearing then "#{_('Housing Subsidy Administrator')} #{_('indicates there will not be a criminal background hearing')}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator')} #{Translation.translate('researching criminal background and deciding whether to schedule a hearing')}"
+      when :scheduled then "#{Translation.translate('Housing Subsidy Administrator')} #{Translation.translate('has scheduled criminal background hearing for')} <strong>#{criminal_hearing_date}</strong>".html_safe
+      when :no_hearing then "#{Translation.translate('Housing Subsidy Administrator')} #{Translation.translate('indicates there will not be a criminal background hearing')}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
     end
 
     def step_name
-      "#{_('Housing Subsidy Administrator')} Reviews Match"
+      "#{Translation.translate('Housing Subsidy Administrator')} Reviews Match"
     end
 
     def actor_type
-      _('HSA')
+      Translation.translate('HSA')
     end
 
     def contact_actor_type
@@ -40,8 +40,8 @@ module MatchDecisions::Four
     def statuses
       {
         pending: 'Pending',
-        scheduled: _('Criminal Background Hearing Scheduled'),
-        no_hearing: _('There will not be a criminal background hearing'),
+        scheduled: Translation.translate('Criminal Background Hearing Scheduled'),
+        no_hearing: Translation.translate('There will not be a criminal background hearing'),
         canceled: 'Canceled',
         back: 'Pending',
       }

@@ -31,9 +31,9 @@ class Requirement < ApplicationRecord
 
   def name(on_unit: false)
     if on_unit && rule_alternate_name.present?
-      "#{positive? ? 'Must' : "Can't"} #{_(rule_alternate_name)}"
+      "#{positive? ? 'Must' : "Can't"} #{Translation.translate(rule_alternate_name)}"
     else
-      "#{positive? ? 'Must' : "Can't"} #{rule&.verb} #{_(rule_name)}"
+      "#{positive? ? 'Must' : "Can't"} #{rule&.verb} #{Translation.translate(rule_name)}"
     end
   end
 

@@ -18,7 +18,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Shelter Agency')} notified of #{_('DND')} acceptance of #{_('Shelter Agency')} decline"
+      "#{Translation.translate('Shelter Agency')} notified of #{Translation.translate('DND')} acceptance of #{Translation.translate('Shelter Agency')} decline"
     end
 
   end

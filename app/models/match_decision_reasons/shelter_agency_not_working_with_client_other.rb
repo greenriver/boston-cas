@@ -15,7 +15,7 @@ module MatchDecisionReasons
     end
 
     def title
-      "#{_('Shelter Agency')} Not Working with Client Other"
+      "#{Translation.translate('Shelter Agency')} Not Working with Client Other"
     end
   end
 end

@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Development Officer')} notified of match success confirmation."
+      "#{Translation.translate('Development Officer')} notified of match success confirmation."
     end
 
   end

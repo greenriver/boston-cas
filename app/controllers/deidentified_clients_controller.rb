@@ -50,7 +50,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   def import
     unless params[:deidentified_clients_xlsx]&.[](:file)
       @upload = DeidentifiedClientsXlsx.new
-      flash[:alert] = _('You must attach a file in the form.')
+      flash[:alert] = Translation.translate('You must attach a file in the form.')
       render :choose_upload
       return
     end
@@ -66,14 +66,14 @@ class DeidentifiedClientsController < NonHmisClientsController
       )
     rescue StandardError
       @upload = DeidentifiedClientsXlsx.new
-      flash[:alert] = _('Cannot read uploaded file, is it an XLSX?')
+      flash[:alert] = Translation.translate('Cannot read uploaded file, is it an XLSX?')
       render :choose_upload
       return
     end
 
     unless @upload.valid_header?
       @upload = DeidentifiedClientsXlsx.new
-      flash[:alert] = _('Uploaded file does not have the correct header. Incorrect file?')
+      flash[:alert] = Translation.translate('Uploaded file does not have the correct header. Incorrect file?')
       render :choose_upload
       return
     end
@@ -237,6 +237,6 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   private def client_type
-    _('De-Identified Clients')
+    Translation.translate('De-Identified Clients')
   end
 end

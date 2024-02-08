@@ -33,7 +33,7 @@
   - if active == 'qualified_opportunities'
     %li.nav-item.active{role: 'presentation'}
       %a.nav-link{href: '#'}
-        = _('Qualified Opportunities')
+        = Translation.translate('Qualified Opportunities')
   - else
     %li.nav-item
-      = link_to _('Qualified Opportunities'), client_qualified_opportunities_path(client_id: client_id), class: 'nav-link'
+      = link_to Translation.translate('Qualified Opportunities'), client_qualified_opportunities_path(client_id: client_id), class: 'nav-link'

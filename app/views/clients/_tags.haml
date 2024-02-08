@@ -1,12 +1,12 @@
 .col-md-6.c-card__content-group
   .c-card__content-group-heading
     .c-card__content-group-icon.icon-group
-    %h5= _('Tags')
+    %h5= Translation.translate('Tags')
   - if @client.tags.present?
     %table.table
       %thead
         %tr
-          %th= _('Tag')
+          %th= Translation.translate('Tag')
           %th Value
           %th From Assessment?
       %tbody

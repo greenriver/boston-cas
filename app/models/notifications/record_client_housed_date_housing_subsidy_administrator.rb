@@ -17,7 +17,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of approved match and asked to record #{_('lease start date')}"
+      "#{Translation.translate('Housing Subsidy Administrator')} notified of approved match and asked to record #{Translation.translate('lease start date')}"
     end
   end
 end

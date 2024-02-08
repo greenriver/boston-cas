@@ -19,8 +19,8 @@ module MatchDecisions::Four
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
-      when :completed then "#{_('Housing Subsidy Administrator')} notes #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator')} to note when client will move in."
+      when :completed then "#{Translation.translate('Housing Subsidy Administrator')} notes #{Translation.translate('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -31,7 +31,7 @@ module MatchDecisions::Four
     end
 
     def actor_type
-      _('HSA')
+      Translation.translate('HSA')
     end
 
     def contact_actor_type

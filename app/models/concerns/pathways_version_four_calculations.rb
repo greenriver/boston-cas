@@ -73,7 +73,7 @@ module PathwaysVersionFourCalculations
             client_field: :rrh_assessment_collected_at,
           },
           setting: {
-            title: _('Current Living Situation'),
+            title: Translation.translate('Current Living Situation'),
             client_field: :majority_sheltered_for_export,
           },
           veteran_status: {
@@ -109,7 +109,7 @@ module PathwaysVersionFourCalculations
             client_field: :neighborhood_interests_for_export,
           },
           financial_assistance_end_date: {
-            title: _('Latest Date Eligible for Financial Assistance'),
+            title: Translation.translate('Latest Date Eligible for Financial Assistance'),
             client_field: :financial_assistance_end_date,
           },
           total_days_homeless_in_the_last_three_years: {
@@ -117,7 +117,7 @@ module PathwaysVersionFourCalculations
             client_field: :days_homeless_in_last_three_years,
           },
           need_daily_assistance: {
-            title: _('Needs a higher level of care'),
+            title: Translation.translate('Needs a higher level of care'),
             client_field: :need_daily_assistance_for_export,
           },
           # The following may be needed eventually, but aren't currently included
@@ -163,11 +163,11 @@ module PathwaysVersionFourCalculations
     end
 
     def pathways_description
-      _('We want to reach you when there is a housing program opening for you.')
+      Translation.translate('We want to reach you when there is a housing program opening for you.')
     end
 
     def transfer_description
-      _('Gather information about a rapid re-housing (RRH) participant’s housing stability.')
+      Translation.translate('Gather information about a rapid re-housing (RRH) participant’s housing stability.')
     end
 
     def assessment_type_options
@@ -507,10 +507,10 @@ module PathwaysVersionFourCalculations
           label: 'Current living situation - select one (required)?',
           number: '',
           collection: {
-            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
-            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
-            _('Transitional Housing') => 'Transitional Housing',
-            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+            Translation.translate('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            Translation.translate('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            Translation.translate('Transitional Housing') => 'Transitional Housing',
+            Translation.translate('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
           as: :pretty_boolean_group,
           required: true,
@@ -678,8 +678,8 @@ module PathwaysVersionFourCalculations
           label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
           number: '6F',
           collection: {
-            _('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
-            _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
+            Translation.translate('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
+            Translation.translate('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
           },
           as: :pretty_checkboxes_group,
         },
@@ -908,10 +908,10 @@ module PathwaysVersionFourCalculations
           label: 'Current living situation - select one (required)?',
           number: '',
           collection: {
-            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
-            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
-            _('Transitional Housing') => 'Transitional Housing',
-            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+            Translation.translate('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            Translation.translate('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            Translation.translate('Transitional Housing') => 'Transitional Housing',
+            Translation.translate('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
           as: :pretty_boolean_group,
         },
@@ -1074,10 +1074,10 @@ module PathwaysVersionFourCalculations
               label: 'If yes, which ones [OPTIONAL]',
               number: '8',
               collection: {
-                _('Have been convicted or found guilty of producing methamphetamine on subsidized properties OR') => 'manufacture or production of methamphetamine in household',
-                _('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years OR') => 'evicted from or voucher terminated from a BHA',
-                _('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
-                _('Other (open cases, undocumented, etc.)') => 'other',
+                Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties OR') => 'manufacture or production of methamphetamine in household',
+                Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years OR') => 'evicted from or voucher terminated from a BHA',
+                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
+                Translation.translate('Other (open cases, undocumented, etc.)') => 'other',
               },
               as: :pretty_checkboxes_group,
             },
@@ -1100,15 +1100,15 @@ module PathwaysVersionFourCalculations
               label: 'If yes, which ones [OPTIONAL]',
               number: '9',
               collection: {
-                _("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters',
-                _('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
-                _('My experience of homelessness began in Boston over 10 years ago') => 'homelessness begain 10 years ago',
-                _('I have a criminal record (CORI) or ongoing legal cases') => 'criminal record (CORI) or ongoing legal cases',
-                _('I am on a High Utilizer of Emergency Services (HUES) list.') => 'on the HUES list',
-                _('I am or have been at risk of engaging in high-risk and exploitative situations, such as sex trafficking.') => 'at risk of engaging in high-risk and exploitative situations',
-                _('In the last 3 years, I have been housed but lost housing') => 'lost housing in the last 3 years',
-                _('I have a history of extended stays (12+ months) in medical respite and other inpatient treatment facilities') => 'history of extended stas in inpatient treatment facilities',
-                _('In the last 2 years, I have had at least one Section 12 or 35 and/or have been involuntarily committed') => 'involuntarily committed and 1+ Section 12 or 35 in the last 2 years',
+                Translation.translate("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters',
+                Translation.translate('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
+                Translation.translate('My experience of homelessness began in Boston over 10 years ago') => 'homelessness begain 10 years ago',
+                Translation.translate('I have a criminal record (CORI) or ongoing legal cases') => 'criminal record (CORI) or ongoing legal cases',
+                Translation.translate('I am on a High Utilizer of Emergency Services (HUES) list.') => 'on the HUES list',
+                Translation.translate('I am or have been at risk of engaging in high-risk and exploitative situations, such as sex trafficking.') => 'at risk of engaging in high-risk and exploitative situations',
+                Translation.translate('In the last 3 years, I have been housed but lost housing') => 'lost housing in the last 3 years',
+                Translation.translate('I have a history of extended stays (12+ months) in medical respite and other inpatient treatment facilities') => 'history of extended stas in inpatient treatment facilities',
+                Translation.translate('In the last 2 years, I have had at least one Section 12 or 35 and/or have been involuntarily committed') => 'involuntarily committed and 1+ Section 12 or 35 in the last 2 years',
               },
               as: :pretty_checkboxes_group,
             },

@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class NineRecordVoucherDateDecline < Base
     def title
-      "#{_('Housing Subsidy Administrator Nine')} Decline"
+      "#{Translation.translate('Housing Subsidy Administrator Nine')} Decline"
     end
   end
 end

@@ -28,9 +28,9 @@ module MatchDecisions::Ten
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm match success"
-      when :confirmed then "#{_('DND')} confirms match success"
-      when :rejected, :declined then "Match rejected by #{_('DND')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{Translation.translate('DND')} to confirm match success"
+      when :confirmed then "#{Translation.translate('DND')} confirms match success"
+      when :rejected, :declined then "Match rejected by #{Translation.translate('DND')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -41,11 +41,11 @@ module MatchDecisions::Ten
     end
 
     def step_name
-      _('Close Match')
+      Translation.translate('Close Match')
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type

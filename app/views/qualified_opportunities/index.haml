@@ -1,4 +1,4 @@
-%h1= _('Qualified Opportunities')
+%h1= Translation.translate('Qualified Opportunities')
 .row
   .col-sm-12
     = render 'clients/tab_navigation', active: 'qualified_opportunities', client_id: @client.id
@@ -10,7 +10,7 @@
         %p
           = link_to "Match ID: #{match.id}", match_path(match)
 - if @opportunities.any?
-  %p #{@client.full_name} meets all requirements for the following vacancies.  These vacancies are either not yet involved in an active match, or the match has not progressed to a stage that would be disruptive if it were canceled, such as #{_("#{_('DND')} Initial Review")}.  Activating a match on a vacancy below will cancel any match involving the vacancy returning the matched client into the pool of available clients. It will not cancel other matches involving #{@client.full_name}.
+  %p #{@client.full_name} meets all requirements for the following vacancies.  These vacancies are either not yet involved in an active match, or the match has not progressed to a stage that would be disruptive if it were canceled, such as #{Translation.translate("#{Translation.translate('DND')} Initial Review")}.  Activating a match on a vacancy below will cancel any match involving the vacancy returning the matched client into the pool of available clients. It will not cancel other matches involving #{@client.full_name}.
 
   .table-responsive
     .c-card.c.card__flush.mb-4

@@ -32,7 +32,7 @@ module Notifications
       if Config.get(:notify_all_on_progress_update)
         'Progress update submitted, all contacts notified'
       else
-        "Progress update submitted, #{_('DND')} notified"
+        "Progress update submitted, #{Translation.translate('DND')} notified"
       end
     end
   end

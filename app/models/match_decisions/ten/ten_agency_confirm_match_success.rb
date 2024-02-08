@@ -16,9 +16,9 @@ module MatchDecisions::Ten
 
     def label_for_status status
       case status.to_sym
-      when :pending, :expiration_update then "#{_('Shelter Agency Ten')} assigned match"
-      when :confirmed then "Match success confirmed by #{_('Shelter Agency Ten')}"
-      when :declined then "Match declined by #{_('Shelter Agency Ten')}.  Reason: #{decline_reason_name}"
+      when :pending, :expiration_update then "#{Translation.translate('Shelter Agency Ten')} assigned match"
+      when :confirmed then "Match success confirmed by #{Translation.translate('Shelter Agency Ten')}"
+      when :declined then "Match declined by #{Translation.translate('Shelter Agency Ten')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -34,11 +34,11 @@ module MatchDecisions::Ten
     end
 
     def step_name
-      _('Confirm Match Success')
+      Translation.translate('Confirm Match Success')
     end
 
     def actor_type
-      _('Shelter Agency Ten')
+      Translation.translate('Shelter Agency Ten')
     end
 
     def contact_actor_type

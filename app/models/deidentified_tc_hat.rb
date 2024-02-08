@@ -8,7 +8,7 @@ class DeidentifiedTcHat < DeidentifiedClientAssessment
   include TcHatCalculations
 
   def title
-    _('TC HAT')
+    Translation.translate('TC HAT')
   end
 
   def for_matching

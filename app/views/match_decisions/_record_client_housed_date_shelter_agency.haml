@@ -31,7 +31,7 @@
               %h3 Cancel Match
           .o-choose__content
             = form.submit 'Submit', class: 'btn btn-primary', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: !@decision.editable?
-            %p= "#{_('DND')} will receive notification of the housing date."
+            %p= "#{Translation.translate('DND')} will receive notification of the housing date."
 
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form

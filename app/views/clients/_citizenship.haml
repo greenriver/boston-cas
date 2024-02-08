@@ -4,11 +4,11 @@
     %h5 Citizenship
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('U.S Citizen or Permanent Resident')
+      %span.c-detailed-list__label= Translation.translate('U.S Citizen or Permanent Resident')
       %span.c-detailed-list__value= boolean_icon (@client.us_citizen)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Asylee, Refugee')
+      %span.c-detailed-list__label= Translation.translate('Asylee, Refugee')
       %span.c-detailed-list__value= boolean_icon (@client.asylee)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= _('Ineligible Immigrant (Including Undocumented)')
+      %span.c-detailed-list__label= Translation.translate('Ineligible Immigrant (Including Undocumented)')
       %span.c-detailed-list__value= boolean_icon (@client.ineligible_immigrant)

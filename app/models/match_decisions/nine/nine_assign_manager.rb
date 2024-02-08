@@ -12,11 +12,11 @@ module MatchDecisions::Nine
     validate :manager_present_if_status_complete
 
     def step_name
-      _("#{_('Stabilization Service Provider Nine')} Assigns Case Manager")
+      Translation.translate("#{Translation.translate('Stabilization Service Provider Nine')} Assigns Case Manager")
     end
 
     def actor_type
-      _('Stabilization Service Provider Nine')
+      Translation.translate('Stabilization Service Provider Nine')
     end
 
     def contact_actor_type
@@ -48,7 +48,7 @@ module MatchDecisions::Nine
       case status.to_sym
       when :pending then 'Awaiting Assigned Case Manager'
       when :expiration_update then 'Awaiting Assigned Case Manger'
-      when :completed then "Match completed by #{_('Stabilization Service Provider Nine')}, assigned Case Manager #{manager}"
+      when :completed then "Match completed by #{Translation.translate('Stabilization Service Provider Nine')}, assigned Case Manager #{manager}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label

@@ -18,7 +18,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{_('DND')} notified of #{_('housing subsidy administrator')} decline.  Confirmation pending."
+      "#{Translation.translate('DND')} notified of #{Translation.translate('housing subsidy administrator')} decline.  Confirmation pending."
     end
 
   end

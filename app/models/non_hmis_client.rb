@@ -192,8 +192,8 @@ class NonHmisClient < ApplicationRecord
     project_client.middle_name = middle_name
     project_client.email = email.presence || current_assessment&.email_addresses
     project_client.address = current_assessment&.mailing_address
-    project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
-    project_client.housing_release_status = _('Limited CAS Release') if limited_release_on_file
+    project_client.housing_release_status = Translation.translate('Full HAN Release') if full_release_on_file
+    project_client.housing_release_status = Translation.translate('Limited CAS Release') if limited_release_on_file
     project_client.tags = cas_tags
     project_client.default_shelter_agency_contacts = [contact&.email] if contact_id.present?
     project_client.sync_with_cas = available

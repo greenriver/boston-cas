@@ -14,7 +14,7 @@ module Notifications::Four
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator')} notified of potential match"
+      "#{Translation.translate('Housing Subsidy Administrator')} notified of potential match"
     end
 
     def decision

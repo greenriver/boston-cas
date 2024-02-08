@@ -7,7 +7,7 @@
 module MatchRoutes
   class HomelessSetAside < Base
     def title
-      _('Homeless Set-Aside Route')
+      Translation.translate('Homeless Set-Aside Route')
     end
 
     def self.available_sub_types_for_search

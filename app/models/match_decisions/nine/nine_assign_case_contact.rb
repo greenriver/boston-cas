@@ -12,11 +12,11 @@ module MatchDecisions::Nine
     validate :ensure_required_contacts_present_on_accept
 
     def step_name
-      "#{_('DND')} Assigns #{_('Stabilization Service Provider Nine')}"
+      "#{Translation.translate('DND')} Assigns #{Translation.translate('Stabilization Service Provider Nine')}"
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type
@@ -42,7 +42,7 @@ module MatchDecisions::Nine
       case status.to_sym
       when :pending then 'Case Contact Assignment'
       when :expiration_update then 'Case Contact Assignment'
-      when :completed then "Case Contact Assigned by #{_('DND')}"
+      when :completed then "Case Contact Assigned by #{Translation.translate('DND')}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -120,8 +120,8 @@ module MatchDecisions::Nine
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
-      missing_contacts << "a #{_('Stabilization Service Provider Nine')} Contact" if save_will_accept? && match.ssp_contacts.none?
+      missing_contacts << "a #{Translation.translate('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
+      missing_contacts << "a #{Translation.translate('Stabilization Service Provider Nine')} Contact" if save_will_accept? && match.ssp_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

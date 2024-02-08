@@ -10,11 +10,11 @@ module MatchDecisions::Eight
     include MatchDecisions::RouteEightCancelReasons
 
     def step_name
-      "#{_('DND')} confirms case manager assignment decline"
+      "#{Translation.translate('DND')} confirms case manager assignment decline"
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type
@@ -39,10 +39,10 @@ module MatchDecisions::Eight
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator Eight')} decline"
-      when :decline_overridden then "#{_('Housing Subsidy Administrator Eight')} Decline overridden by DND.  Match proceeding to #{_('DND')}"
-      when :decline_overridden_returned then "#{_('Housing Subsidy Administrator Eight')} overridden by #{_('DND')}.  Match returned to the #{_('Housing Subsidy Administrator Eight')}"
-      when :decline_confirmed then "Match rejected by #{_('DND')}"
+      when :pending then "#{Translation.translate('DND')} to confirm #{Translation.translate('Housing Subsidy Administrator Eight')} decline"
+      when :decline_overridden then "#{Translation.translate('Housing Subsidy Administrator Eight')} Decline overridden by DND.  Match proceeding to #{Translation.translate('DND')}"
+      when :decline_overridden_returned then "#{Translation.translate('Housing Subsidy Administrator Eight')} overridden by #{Translation.translate('DND')}.  Match returned to the #{Translation.translate('Housing Subsidy Administrator Eight')}"
+      when :decline_confirmed then "Match rejected by #{Translation.translate('DND')}"
       when :canceled then canceled_status_label
       end
     end

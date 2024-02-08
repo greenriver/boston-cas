@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('DND')} notified match needs #{_('Stabilization Service Provider Nine')} Contact"
+      "#{Translation.translate('DND')} notified match needs #{Translation.translate('Stabilization Service Provider Nine')} Contact"
     end
   end
 end

@@ -14,9 +14,9 @@ module Notifications
     end
 
     def event_label
-      label = _('Shelter Agency')
+      label = Translation.translate('Shelter Agency')
       label += ' '
-      label += _('sent notice of criminal background hearing date.')
+      label += Translation.translate('sent notice of criminal background hearing date.')
     end
 
   end

@@ -11,7 +11,7 @@ module MatchDecisions::Five
     attr_accessor :mitigations
 
     def step_name
-      _('Mitigation')
+      Translation.translate('Mitigation')
     end
 
     def contact_actor_type

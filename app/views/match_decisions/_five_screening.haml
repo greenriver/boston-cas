@@ -12,11 +12,11 @@
               .radio
                 %label
                   = form.radio_button :status, :mitigation_not_required, checked: true
-                  = _('Mitigation is not required')
+                  = Translation.translate('Mitigation is not required')
               .radio
                 %label
                   = form.radio_button :status, :mitigation_required, disabled: ! @decision.editable?, class: ''
-                  = _('Mitigation required')
+                  = Translation.translate('Mitigation required')
             .jMitigations.d-none
               = form.input :required_mitigations, as: :check_boxes, collection: MitigationReason.active
             = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jSubmit', disabled: !@decision.editable?}

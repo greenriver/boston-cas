@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('DND')} notified of #{_('Stabilization Service Provider Nine')} decline. Confirmation pending."
+      "#{Translation.translate('DND')} notified of #{Translation.translate('Stabilization Service Provider Nine')} decline. Confirmation pending."
     end
   end
 end

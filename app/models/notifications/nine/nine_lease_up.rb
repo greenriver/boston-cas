@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator Nine')} notified client is awaiting #{_('Move In')}"
+      "#{Translation.translate('Housing Subsidy Administrator Nine')} notified client is awaiting #{Translation.translate('Move In')}"
     end
   end
 end

@@ -10,11 +10,11 @@ module MatchDecisions::Eight
     include MatchDecisions::RouteEightCancelReasons
 
     def step_name
-      "#{_('DND')} confirms #{_('Move In')} failure"
+      "#{Translation.translate('DND')} confirms #{Translation.translate('Move In')} failure"
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type
@@ -39,10 +39,10 @@ module MatchDecisions::Eight
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm #{_('HSA Eight')} decline"
-      when :decline_overridden then "#{_('HSA Eight')} Decline overridden by DND.  Match proceeding to #{_('DND')}"
-      when :decline_overridden_returned then "#{_('HSA Eight')} overridden by #{_('DND')}.  Match returned to the #{_('HSA Eight')}"
-      when :decline_confirmed then "Match rejected by #{_('DND')}"
+      when :pending then "#{Translation.translate('DND')} to confirm #{Translation.translate('HSA Eight')} decline"
+      when :decline_overridden then "#{Translation.translate('HSA Eight')} Decline overridden by DND.  Match proceeding to #{Translation.translate('DND')}"
+      when :decline_overridden_returned then "#{Translation.translate('HSA Eight')} overridden by #{Translation.translate('DND')}.  Match returned to the #{Translation.translate('HSA Eight')}"
+      when :decline_confirmed then "Match rejected by #{Translation.translate('DND')}"
       when :canceled then canceled_status_label
       end
     end

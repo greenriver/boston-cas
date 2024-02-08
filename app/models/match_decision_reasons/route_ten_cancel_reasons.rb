@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class RouteTenCancelReasons < Base
     def title
-      "#{_('Route Ten')} Cancel"
+      "#{Translation.translate('Route Ten')} Cancel"
     end
   end
 end

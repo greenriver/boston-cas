@@ -43,7 +43,7 @@ class NotificationRegistrationsController < Devise::RegistrationsController
 
   private def ensure_notification_allows_registration!
     unless @notification.allows_registration?
-      flash[:alert] = "Sorry, you do not have authorization to create an account.  Please contact #{_('DND')}."
+      flash[:alert] = "Sorry, you do not have authorization to create an account.  Please contact #{Translation.translate('DND')}."
       redirect_to new_notification_session_path(@notification)
     end
   end

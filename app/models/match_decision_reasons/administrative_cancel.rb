@@ -37,7 +37,7 @@ module MatchDecisionReasons
     end
 
     def title
-      _('Administrative Cancelation')
+      Translation.translate('Administrative Cancelation')
     end
   end
 end

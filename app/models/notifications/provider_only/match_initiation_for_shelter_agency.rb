@@ -14,7 +14,7 @@ module Notifications::ProviderOnly
     end
 
     def event_label
-      "#{_('Shelter Agency')} notified of match detail"
+      "#{Translation.translate('Shelter Agency')} notified of match detail"
     end
 
     def show_client_info?

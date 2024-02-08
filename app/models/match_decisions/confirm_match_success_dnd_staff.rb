@@ -25,20 +25,20 @@ module MatchDecisions
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm match success"
-      when :confirmed then "#{_('DND')} confirms match success"
-      when :rejected then "Match rejected by #{_('DND')}"
+      when :pending then "#{Translation.translate('DND')} to confirm match success"
+      when :confirmed then "#{Translation.translate('DND')} confirms match success"
+      when :rejected then "Match rejected by #{Translation.translate('DND')}"
       when :canceled then 'Match canceled'
       when :back then backup_status_label
       end
     end
 
     def step_name
-      _('Confirm Match Success')
+      Translation.translate('Confirm Match Success')
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type

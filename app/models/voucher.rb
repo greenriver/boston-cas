@@ -82,7 +82,7 @@ class Voucher < ApplicationRecord
   end
 
   def self.translated_confirmation_text
-    _('Translate this to add voucher confirmation')
+    Translation.translate('Translate this to add voucher confirmation')
   end
 
   def name

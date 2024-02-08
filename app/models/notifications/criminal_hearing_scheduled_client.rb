@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      _('Client sent notice of criminal background hearing date.')
+      Translation.translate('Client sent notice of criminal background hearing date.')
     end
 
   end

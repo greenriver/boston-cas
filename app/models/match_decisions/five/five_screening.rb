@@ -12,7 +12,7 @@ module MatchDecisions::Five
     attr_accessor :required_mitigations
 
     def step_name
-      _('Client Screening')
+      Translation.translate('Client Screening')
     end
 
     def contact_actor_type
@@ -37,8 +37,8 @@ module MatchDecisions::Five
       {
         pending: 'Pending',
         expiration_update: 'Pending',
-        mitigation_required: _('Mitigation required'),
-        mitigation_not_required: _('No mitigation required'),
+        mitigation_required: Translation.translate('Mitigation required'),
+        mitigation_not_required: Translation.translate('No mitigation required'),
         canceled: 'Canceled',
         declined: 'Declined',
         back: 'Pending',
@@ -49,8 +49,8 @@ module MatchDecisions::Five
       case status.to_sym
       when :pending then "#{actor_type} Screening Client"
       when :expiration_update then "#{actor_type} Screening Client"
-      when :mitigation_required then "#{actor_type} #{_('determined mitigation required')}"
-      when :mitigation_not_required then "#{actor_type} #{_('determined mitigation not required')}"
+      when :mitigation_required then "#{actor_type} #{Translation.translate('determined mitigation required')}"
+      when :mitigation_not_required then "#{actor_type} #{Translation.translate('determined mitigation not required')}"
       when :declined then "Match Declined by #{actor_type}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label

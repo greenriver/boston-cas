@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_02_142811) do
+ActiveRecord::Schema.define(version: 2024_02_07_200027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1717,6 +1717,15 @@ ActiveRecord::Schema.define(version: 2024_02_02_142811) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["translation_key_id"], name: "index_translation_texts_on_translation_key_id"
+  end
+
+  create_table "translations", force: :cascade do |t|
+    t.string "key"
+    t.string "text"
+    t.boolean "common", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key"], name: "index_translations_on_key"
   end
 
   create_table "unavailable_as_candidate_fors", id: :serial, force: :cascade do |t|

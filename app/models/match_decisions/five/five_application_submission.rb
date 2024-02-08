@@ -12,7 +12,7 @@ module MatchDecisions::Five
     validate :application_date_present_if_status_complete
 
     def step_name
-      _('Submit Client Application')
+      Translation.translate('Submit Client Application')
     end
 
     def expires?

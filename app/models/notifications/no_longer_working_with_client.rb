@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('DND')} notified, contact no longer working with client"
+      "#{Translation.translate('DND')} notified, contact no longer working with client"
     end
 
   end

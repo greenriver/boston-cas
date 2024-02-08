@@ -17,7 +17,7 @@ module Notifications
     end
 
     def event_label
-      "Sent notice of #{_('Housing Subsidy Administrator')}'s decision to #{_('Development Officer')}"
+      "Sent notice of #{Translation.translate('Housing Subsidy Administrator')}'s decision to #{Translation.translate('Development Officer')}"
     end
 
   end

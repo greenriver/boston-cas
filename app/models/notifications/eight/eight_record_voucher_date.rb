@@ -17,7 +17,7 @@ module Notifications::Eight
     end
 
     def event_label
-      "#{_('Housing Subsidy Administrator Eight')} notified of approved potential match."
+      "#{Translation.translate('Housing Subsidy Administrator Eight')} notified of approved potential match."
     end
   end
 end

@@ -73,8 +73,8 @@ module MatchProgressUpdates
     #     'Client searching for unit',
     #     'Client has submitted request for tenancy',
     #     'Client is waiting for project/sponsor based unit to become available',
-    #     "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} waiting on documentation",
-    #     "#{_('SSP')}/#{_('HSP')}/#{_('HSA')}  CORI mitigation",
+    #     "#{Translation.translate('SSP')}/#{Translation.translate('HSP')}/#{Translation.translate('HSA')} waiting on documentation",
+    #     "#{Translation.translate('SSP')}/#{Translation.translate('HSP')}/#{Translation.translate('HSA')}  CORI mitigation",
     #     'Client has submitted Reasonable Accommodation',
     #     other_response,
     #   ]
@@ -86,7 +86,7 @@ module MatchProgressUpdates
     #     'Client incarcerated',
     #     'Client in medical institution',
     #     'Client declining services',
-    #     "#{_('SSP')}/#{_('HSP')}/#{_('HSA')} unable to contact client",
+    #     "#{Translation.translate('SSP')}/#{Translation.translate('HSP')}/#{Translation.translate('HSA')} unable to contact client",
     #     other_response,
     #   ]
     # end

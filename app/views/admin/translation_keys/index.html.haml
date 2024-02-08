@@ -5,7 +5,7 @@
 %h1 Manage Translations
 .row.table-utilities
   .col-sm-4
-    %p= page_entries_info @translation_keys, entry_name: _('translation')
+    %p= page_entries_info @translation_keys, entry_name: Translation.translate('translation')
     %p= paginate @translation_keys
 .row
   .col-sm-8

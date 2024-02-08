@@ -34,7 +34,7 @@ class Rule < ApplicationRecord
   end
 
   def name_with_verb
-    "#{verb} #{_(name)}"
+    "#{verb} #{Translation.translate(name)}"
   end
 
   def variable_requirement?

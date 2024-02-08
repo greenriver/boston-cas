@@ -2,7 +2,7 @@ Hello #{@contact.full_name},
 \
 The CAS has generated a new match recommendation.
 \
-This match has not yet been reviewed by the #{_('HSA')}:
+This match has not yet been reviewed by the #{Translation.translate('HSA')}:
 #{notification_match_url @notification, @match}
 \
 = render 'client_details'

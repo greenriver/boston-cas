@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class ShelterAgencyDecline < Base
     def title
-      "#{_('Shelter Agency')} Decline"
+      "#{Translation.translate('Shelter Agency')} Decline"
     end
   end
 end
