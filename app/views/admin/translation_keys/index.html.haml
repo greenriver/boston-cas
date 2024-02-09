@@ -1,13 +1,10 @@
 = render 'menus/admin_tabs'
 
 %h1 Manage Translations
-.row.table-utilities
-  .col-sm-4
-    = render 'common/pagination_top', item_name: 'translation'
 - if @pagy.count.positive?
+  = render 'common/pagination_top', item_name: 'translation'
   .row
     .col-sm-8
-      = render 'common/pagination_top', item_name: 'translation'
       .table-responsive.card
         %table.table.table-striped
           %thead
