@@ -823,6 +823,12 @@ class ClientOpportunityMatch < ApplicationRecord
     return active_referral_event if active_referral_event.present? && active_referral_event.referral_result.blank?
     return unless project_client&.from_hmis?
 
+    # If the match is closed, see if we have any referral events with results, return the last one if we do
+    latest_complete_referral_event = referral_events.where.not(referral_result: nil).last
+    return latest_complete_referral_event if closed? && latest_complete_referral_event.present?
+
+    # Otherwise the match is ongoing or closed and missing a result,
+    # result will be added in ReferralEvent.sync_match_referrals!
     create_active_referral_event(
       cas_client_id: client.id,
       hmis_client_id: project_client.id_in_data_source,

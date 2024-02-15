@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_23_130412) do
+ActiveRecord::Schema.define(version: 2024_02_12_143240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -324,6 +324,9 @@ ActiveRecord::Schema.define(version: 2024_01_23_130412) do
     t.integer "additional_homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_unsheltered", default: 0
+    t.integer "calculated_homeless_nights_sheltered", default: 0
+    t.integer "calculated_homeless_nights_unsheltered", default: 0
+    t.integer "total_homeless_nights_sheltered", default: 0
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -985,7 +988,6 @@ ActiveRecord::Schema.define(version: 2024_01_23_130412) do
     t.text "agency_name"
     t.text "agency_day_contact_info"
     t.text "agency_night_contact_info"
-    t.boolean "interested_in_rapid_rehousing"
     t.boolean "pregnant_or_parent"
     t.text "partner_warehouse_id"
     t.text "partner_name"
@@ -1361,6 +1363,9 @@ ActiveRecord::Schema.define(version: 2024_01_23_130412) do
     t.integer "additional_homeless_nights_sheltered", default: 0
     t.integer "additional_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_unsheltered", default: 0
+    t.integer "calculated_homeless_nights_sheltered", default: 0
+    t.integer "calculated_homeless_nights_unsheltered", default: 0
+    t.integer "total_homeless_nights_sheltered", default: 0
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1712,6 +1717,15 @@ ActiveRecord::Schema.define(version: 2024_01_23_130412) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["translation_key_id"], name: "index_translation_texts_on_translation_key_id"
+  end
+
+  create_table "translations", force: :cascade do |t|
+    t.string "key"
+    t.string "text"
+    t.boolean "common", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key"], name: "index_translations_on_key"
   end
 
   create_table "unavailable_as_candidate_fors", id: :serial, force: :cascade do |t|
