@@ -103,8 +103,6 @@ module AwsSdkHelpers
         Rails.logger.warn "No capacity provider name found: #{which}" if defined?(Rails)
         puts "❗ No capacity provider name found: #{which}"
       end
-
-      params.parameters.any? ? params.parameters[0][:value] : ''
     end
 
     def _short_term_capacity_provider_name(target_group_name = false)

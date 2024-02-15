@@ -39,11 +39,6 @@ class Deployer
 
   attr_accessor :web_options
 
-  # github actions or other CI builds the image, so when true, don't try to
-  # build locally and push (which can be slow).
-  attr_accessor :assume_ci_build
-  attr_accessor :push_allowed
-
   # The fully-qualified domain name of the application
   # We use this so we can get data from the app about the deployment state
   attr_accessor :fqdn
@@ -52,22 +47,23 @@ class Deployer
 
   attr_accessor :service_registry_arns
 
-  def initialize(target_group_name:, assume_ci_build: true, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, registry_id:, repo_name:, fqdn:, service_registry_arns:{})
-    self.service_registry_arns    = service_registry_arns
+  attr_accessor :args
+
+  def initialize(args)
+    self.service_registry_arns    = args.fetch(:service_registry_arns)
     self.cluster                  = _cluster_name
-    self.target_group_name        = target_group_name
-    self.assume_ci_build          = assume_ci_build
-    self.secrets_arn              = secrets_arn
-    self.execution_role           = execution_role
-    self.task_role                = task_role
-    self.dj_options               = dj_options || []
-    self.fqdn                     = fqdn
-    self.push_allowed             = true
-    self.web_options              = web_options
-    self.registry_id              = registry_id
-    self.repo_name                = repo_name
+    self.target_group_name        = args.fetch(:target_group_name)
+    self.secrets_arn              = args.fetch(:secrets_arn)
+    self.execution_role           = args.fetch(:execution_role)
+    self.task_role                = args.fetch(:task_role)
+    self.dj_options               = args.fetch(:dj_options, [])
+    self.fqdn                     = args.fetch(:fqdn)
+    self.web_options              = args.fetch(:web_options)
+    self.registry_id              = args.fetch(:registry_id)
+    self.repo_name                = args.fetch(:repo_name)
     self.variant                  = 'web'
-    self.version                  = `git rev-parse --short=9 HEAD`.chomp
+    self.version                  = `git rev-parse --short=7 HEAD`.chomp
+    self.args                     = OpenStruct.new(args)
 
     Dir.chdir(_root)
   end
@@ -88,7 +84,7 @@ class Deployer
 
     roll_out.run!
 
-    _add_latest_tags!
+    _add_latest_tag!
   end
 
   def run_migrations!
@@ -110,6 +106,14 @@ class Deployer
     roll_out.bootstrap_databases!
   end
 
+  def self.check_that_you_pushed_to_remote!
+    branch = `git rev-parse --abbrev-ref HEAD`.chomp
+    remote = `git ls-remote origin | grep refs/heads/#{branch}$`.chomp
+    our_commit = `git rev-parse #{branch}`.chomp
+
+    raise '[FATAL] Push or pull your branch first!' unless remote.start_with?(our_commit)
+  end
+
   private
 
   def _initial_steps
@@ -117,7 +121,7 @@ class Deployer
     _set_revision!
     _check_that_you_pushed_to_remote!
     _docker_login!
-    _build_and_push_all!
+    _wait_for_image_ready
     _check_secrets!
   end
 
@@ -135,6 +139,7 @@ class Deployer
         web_options: web_options,
         capacity_providers: _capacity_providers,
         service_registry_arns: service_registry_arns,
+        args: args,
       )
   end
 
@@ -150,11 +155,7 @@ class Deployer
   end
 
   def _check_that_you_pushed_to_remote!
-    branch = `git rev-parse --abbrev-ref HEAD`.chomp
-    remote = `git ls-remote origin | grep refs/heads/#{branch}$`.chomp
-    our_commit = `git rev-parse #{branch}`.chomp
-
-    raise '[FATAL] Push or pull your branch first!' unless remote.start_with?(our_commit)
+    self.class.check_that_you_pushed_to_remote!
   end
 
   def _check_compiled_assets!
@@ -179,19 +180,7 @@ class Deployer
     _run(cmd, alt_msg: 'docker login')
   end
 
-  def _build_and_push_all!
-    _wait_for_image_ready('pre-cache')
-    _wait_for_image_ready('base')
-  end
-
-  def _wait_for_image_ready(variant)
-    self.variant = variant
-
-    unless File.exist?(_dockerfile_path)
-      puts "[WARN] Not checking #{variant} since the dockerfile #{_dockerfile_path} doesn't exist"
-      return
-    end
-
+  def _wait_for_image_ready
     _set_image_tag!
 
     while _revision_not_in_repo?
@@ -203,19 +192,14 @@ class Deployer
     end
   end
 
-  def _add_latest_tags!
-    _add_latest_tag!('base')
-  end
-
-  def _add_latest_tag!(variant)
-    self.variant = variant
+  def _add_latest_tag!
     _set_image_tag!
 
     puts "[INFO] Update latest tag for '#{image_tag}':"
-    if image_tag_latest.nil?
-      puts '>> Skipping, no latest tag set (this is the pre-cache image).'
-      return
-    end
+    # if image_tag_latest.nil?
+    #   puts '>> Skipping, no latest tag set (this is the pre-cache image).'
+    #   return
+    # end
 
     getparams = {
       repository_name: repo_name,
@@ -272,36 +256,15 @@ class Deployer
   end
 
   def _set_image_tag!
-    if variant == 'pre-cache'
-      self.image_tag = "#{_ruby_version}-#{_pre_cache_version}--pre-cache"
-    elsif ENV['IMAGE_TAG']
-      self.image_tag = ENV['IMAGE_TAG'] + "--#{variant}"
-      self.image_tag_latest = 'latest-' + ENV['IMAGE_TAG'] + "--#{variant}"
+    if ENV['IMAGE_TAG']
+      self.image_tag = ENV['IMAGE_TAG']
+      self.image_tag_latest = 'latest-' + ENV['IMAGE_TAG']
     else
-      self.image_tag = "githash-#{version}--#{variant}"
-      self.image_tag_latest = "latest-#{target_group_name}--#{variant}"
+      self.image_tag = "githash-#{version}"
+      self.image_tag_latest = "latest-#{target_group_name}"
     end
 
     # puts "Setting image tag to #{image_tag}"
-  end
-
-  def _build!
-    _run(<<~CMD)
-      docker build
-        --file=#{_dockerfile_path}
-        --tag #{repo_name}:latest--#{variant}
-        .
-    CMD
-  end
-
-  def _tag_the_image!(authority: 'us')
-    if authority == 'us'
-      _run("docker image tag #{repo_name}:latest--#{variant} #{_remote_tag}")
-    elsif authority == 'them'
-      _run("docker image tag #{_remote_tag} #{repo_name}:latest--#{variant} ")
-    else
-      raise 'invalid authority'
-    end
   end
 
   def debug?
@@ -327,12 +290,6 @@ class Deployer
     _image_tags_in_repo.none? do |tag|
       tag == image_tag
     end
-  end
-
-  def _pre_cache_image_exists?
-    result = `docker image ls -f 'reference=#{repo_name}' | grep "#{_ruby_version}-#{_pre_cache_version}--pre-cache"`
-
-    !result.match?(/^\s*$/)
   end
 
   def _remote_tag

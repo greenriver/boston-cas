@@ -54,9 +54,9 @@ echo "...rake db:seed took $(expr $T2 - $T1) seconds"
 
 echo 'Installing cron'
 T1=`date +%s`
-./bin/cron_installer.rb
+bundle exec config/deploy/lib/cron_installer.rb
 T2=`date +%s`
-echo "..../bin/cron_installer.rb took $(expr $T2 - $T1) seconds"
+echo "..../cron_installer.rb took $(expr $T2 - $T1) seconds"
 
 # keep this always at the end of this file
 echo making interface aware this script completed
