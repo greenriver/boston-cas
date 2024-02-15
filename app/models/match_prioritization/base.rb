@@ -29,6 +29,7 @@ module MatchPrioritization
         MatchPrioritization::AssessmentScore,
         MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
         MatchPrioritization::AssessmentScoreFundingTieBreaker,
+        MatchPrioritization::AssessmentScoreRandomTieBreaker,
         MatchPrioritization::Rank,
         MatchPrioritization::HoldsVoucherOn,
         MatchPrioritization::MatchGroup,
