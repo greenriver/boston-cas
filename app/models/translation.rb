@@ -20,7 +20,7 @@ class Translation < ApplicationRecord
   end
 
   def self.cache_key(text)
-    digest = Digest::MD5.hexdigest(text)
+    digest = Digest::MD5.hexdigest(text.to_s)
     "translations/#{digest}"
   end
 
