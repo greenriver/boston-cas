@@ -28,6 +28,10 @@
       %span.c-detailed-list__value= boolean_icon (@client.income_maximization_assistance_requested)
 
     %li.c-detailed-list__item
+      %span.c-detailed-list__label= Translation.translate('Service Need')
+      %span.c-detailed-list__value= boolean_icon (@client.service_need)
+
+    %li.c-detailed-list__item
       %span.c-detailed-list__label= Translation.translate('Strengths')
       %span.c-detailed-list__value= @client.strengths&.join(', ')&.titleize
 
