@@ -27,7 +27,7 @@
                 - if rule.always_apply?
                   Always Apply
               %td{attributes}
-                = rule.requirements.map(&:requirer).select(&:present?).map(&:name)&.join('<br />')&.html_safe
+                = rule.requirements.map(&:requirer).select(&:present?).map(&:name)&.uniq&.join('<br />')&.html_safe
 
               -# %td
               -#   - if !rule.deleted_at
