@@ -128,17 +128,19 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache/${{ matrix.cache_key }},mode=max
 
       - name: Push scanned image with tags
+        env:
+          image: ${{ secrets.ECR_REPOSITORY_URI }}
         run: |
-          echo "${{ steps.meta.outputs.tags }}" | xargs -I TAG -n1 docker tag ${{ matrix.image }} TAG
+          echo "${{ steps.meta.outputs.tags }}" | xargs -I TAG -n1 docker tag ${image} TAG
 
           # docker image ls
 
           if [[ "${{ matrix.keep_latest_tag }}" != "true" ]]
           then
-            docker image rm ${{ matrix.image }}:latest
+            docker image rm ${image}:latest
           fi
 
-          docker push --all-tags ${{ matrix.image }}
+          docker push --all-tags ${image}
 
       - name: Check trivy db sha
         id: trivy-db

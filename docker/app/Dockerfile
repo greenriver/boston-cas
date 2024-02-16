@@ -154,6 +154,8 @@ RUN rm -rf tmp/* \
   && mkdir -p tmp/pids locale var \
   && mkdir -p app/assets/stylesheets/theme/styles \
   && touch app/assets/stylesheets/theme/styles/_variables.scss \
-  && RAILS_ENV=production bundle exec rake assets:precompile \
   && rm -rf tmp/* \
   && mkdir tmp/pids
+
+# Need a image that builds to debug why it's failing on github and not locally
+#&& RAILS_ENV=production bundle exec rake assets:precompile \
