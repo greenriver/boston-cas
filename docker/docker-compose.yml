@@ -8,7 +8,6 @@ x-app: &app
     dockerfile: docker/app/Dockerfile
     args:
       BUILD_TAG: 3.1.4-alpine3.18
-      #RUBY_VERSION: 3.1.4
       PG_MAJOR: '12'
       NODE_MAJOR: '12'
       YARN_VERSION: '1.17.3'

@@ -131,15 +131,15 @@ FROM base AS prod-build
 COPY docker/app/entrypoint.sh /usr/bin/
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
-COPY --chown=app-user:app-user --from=cert /key.pem /cert.pem /app/config/
-COPY --chown=app-user:app-user Gemfile Gemfile.lock ./
+COPY --chown=app-user:${GROUP_ID} --from=cert /key.pem /cert.pem /app/config/
+COPY --chown=app-user:${GROUP_ID} Gemfile Gemfile.lock ./
 
 RUN bundle config without development test doc \
   && bundle install \
   && find /bundle -name "*.o" -exec rm {} \; \
   && find /bundle -name "*.c" -exec rm {} \;
 
-COPY --chown=app-user:app-user package.json yarn.lock ./
+COPY --chown=app-user:${GROUP_ID} package.json yarn.lock ./
 RUN yarn install --frozen-lockfile \
   && yarn cache clean
 
