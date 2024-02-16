@@ -34,9 +34,12 @@ jobs:
             cache_key: cas
             hadolint_ignore: DL3018,DL3013
             trivy_skip_files: /app/config/key.pem,/app/docker/sftp/ssh_host_ed25519_key,/app/docker/sftp/ssh_host_rsa_key
+            target: prod-build
             build-args: |
               BUILD_TAG=3.1.4-alpine3.18
               BUNDLER_VERSION=2.4.13
+              USER_ID=1000
+              GROUP_ID=1000
             tags: |
               type=sha,prefix=githash-
             # type=ref,event=branch,prefix=branch-
@@ -72,6 +75,10 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           role-session-name: warehouse-github-action
+
+      - name: Install aws cli
+        id: install-aws-cli
+        uses: unfor19/install-aws-cli-action@v1
 
       - name: Prepare
         id: prep
