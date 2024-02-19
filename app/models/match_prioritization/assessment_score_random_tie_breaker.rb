@@ -7,7 +7,7 @@
 module MatchPrioritization
   class AssessmentScoreRandomTieBreaker < Base
     def self.title
-      'Assessment Score with Tie Breaker Date'
+      'Assessment Score with Random Tie Breaker'
     end
 
     def self.prioritization_for_clients(scope, match_route:) # rubocop:disable Lint/UnusedMethodArgument
