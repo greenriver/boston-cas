@@ -16,7 +16,6 @@ fi
 ASSETS_BUCKET_NAME=openpath-ecs-assets UPDATE_ONLY=false bundle exec ./bin/sync_app_assets.rb > asset.checksum.log 2>&1
 
 # NOTE: enabling this will print out a list of files that will be included in the checksum
-# Also NOTE: if you are having trouble getting the checksum to match, you may want to rebuild the pre-cache image
 # tar -cf - --sort=name `# Force sorting` \
 #   --mtime='UTC 2019-01-01' `# Normalize modified time.` \
 #   --group=0 `# Normalize group owner.` \
