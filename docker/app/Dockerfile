@@ -69,11 +69,14 @@ RUN apk update \
      git \
      bash \
      icu icu-dev \
+		 py3-pip \
      curl libcurl curl-dev \
      libmagic file-dev file \
      build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
      tar xz \
   && git config --global --add safe.directory /app
+
+RUN pip3 install --no-cache-dir awscli
 
 WORKDIR /app
 
@@ -111,14 +114,11 @@ RUN git config --global --add safe.directory /app \
 		neovim \
 		nodejs \
 		openssh \
-		py3-pip \
 		unzip \
 		vim \
 		xvfb \
 		zsh \
   && rm -rf /var/cache/apk/*
-
-RUN pip3 install --no-cache-dir awscli
 
 USER app-user
 
