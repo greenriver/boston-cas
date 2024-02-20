@@ -38,7 +38,7 @@ echo $TIMEZONE > /etc/timezone
 
 echo 'Clobbering assets...'
 T1=`date +%s`
-bundle exec rake assets:clobber && mkdir -p ./public/assets
+./bin/rake assets:clobber && mkdir -p ./public/assets
 T2=`date +%s`
 echo "...clobbering took $(expr $T2 - $T1) seconds"
 
@@ -66,5 +66,5 @@ echo "...pulling compiled assets took $(expr $T2 - $T1) seconds"
 cd ../..
 
 # Then exec the container's main process (what's set as CMD in the Dockerfile).
-echo "calling: $@"
+echo "calling: bundle exec $@"
 bundle exec "$@"

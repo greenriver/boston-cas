@@ -36,6 +36,7 @@ class AssetCompiler
     end
 
     puts "Asset checksum: [#{checksum}]"
+    puts "Asset checksum log: [#{File.read('asset.checksum.log')}]"
 
     existing_assets = ''
     time_me name: 'Checking if compiled assets already exist' do
