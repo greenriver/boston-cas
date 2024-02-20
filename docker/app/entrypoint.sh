@@ -66,5 +66,5 @@ echo "...pulling compiled assets took $(expr $T2 - $T1) seconds"
 cd ../..
 
 # Then exec the container's main process (what's set as CMD in the Dockerfile).
-echo "calling: bundle exec $@"
-bundle exec "$@"
+echo "Calling: $@"
+exec "$@"
