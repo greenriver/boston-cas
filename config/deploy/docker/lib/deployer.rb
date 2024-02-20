@@ -163,6 +163,8 @@ class Deployer
     target_group_name_ = target_group_name&.gsub(/[^0-9A-Za-z\_\-]/, '') # Sanitize for cli.
     checksum = `SECRET_ARN=#{secrets_arn_.shellescape} ASSETS_PREFIX=#{target_group_name_.shellescape} bin/asset_checksum`.split(' ')[-1]
 
+    puts "[DEBUG] logs for asset_checksum: #{File.read('asset.checksum.log')}"
+
     compiled_assets_s3_path = AssetCompiler.compiled_assets_s3_path(target_group_name_, checksum)
     while `aws s3 ls #{compiled_assets_s3_path.shellescape}`.strip.empty?
       puts "[INFO] Assets for hash [#{checksum}] not compiled yet, waiting 60 seconds..."
