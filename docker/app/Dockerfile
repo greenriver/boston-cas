@@ -53,6 +53,8 @@ ENV CHROMIUM_PATH=/usr/bin/chromium-browser
 
 # Allow tls connection to database with verification
 COPY docker/app/us-east-1-bundle.pem  /etc/ssl/certs/us-east-1-bundle.pem
+# Deprecated and soon to expire
+COPY docker/app/rds-combined-ca-bundle.pem /etc/ssl/certs/rds-combined-ca-bundle.pem
 
 SHELL [ "/bin/ash", "-o", "pipefail", "-c" ]
 RUN addgroup -g ${GROUP_ID} app-user || echo ok \
