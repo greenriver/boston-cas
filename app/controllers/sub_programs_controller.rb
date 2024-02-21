@@ -83,6 +83,7 @@ class SubProgramsController < ApplicationController
           :confidential,
           :event,
           :eligibility_requirement_notes,
+          :weighting_rules_active,
         )
     end
 

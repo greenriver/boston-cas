@@ -30,8 +30,10 @@ class WeightingRule < ApplicationRecord
     for_route(route_id).update_all(applied_to: 0)
   end
 
-  def self.requirements_and_increment!(route)
+  def self.requirements_and_increment!(sub_program)
+    route = sub_program.match_route
     return unless route.weighting_rules.present?
+    return unless sub_program.weighting_rules_active?
 
     rule = next_for(route.id)
     rule.increment!

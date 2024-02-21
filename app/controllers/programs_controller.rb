@@ -99,6 +99,7 @@ class ProgramsController < ApplicationController
           :hsa_id,
           :confidential,
           :eligibility_requirement_notes,
+          :weighting_rules_active,
         ],
         service_ids: [],
         requirements_attributes: [

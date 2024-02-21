@@ -27,13 +27,14 @@
               = t[:label]
             - if t[:building]
               = building = sp.association :building, label: 'Building Name', wrapper_html: {class: 'building form-group__indented-01'}, input_html: {class: 'jBuilding'}
+      .form-group.form-group__indented-02
+        = sp.input :weighting_rules_active, label: 'Obey Match-Route Weighting Rules'
 
       = render 'service_manager/form_fields', form: f, heading: 'Services Attached to this Program'
 
       = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Program', help_text: "In programs with more than one #{Building.model_name.human.downcase}, when a match is made, only #{Building.model_name.human.downcase} rules for the applicable #{Building.model_name.human.downcase} will be applied.  If you need to ensure a rule will be applied across all #{Building.model_name.human.downcase} in the program, add it on this program screen as well."
       .form-group.eligibility-requirement-notes
         = sp.input :eligibility_requirement_notes, hint: 'If there are eligibility requirements that don\'t fit within the defined rules, provide a brief explanation here.  They will be displayed on any match involving this opportunity.', label: 'Eligibility Requirement Notes'
-
   .form__actions
     - if @program.id
       = f.button :submit, value: 'Add Sub-Program', class: 'btn btn-primary'

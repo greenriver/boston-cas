@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_12_143240) do
+ActiveRecord::Schema.define(version: 2024_02_20_202037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1655,6 +1655,7 @@ ActiveRecord::Schema.define(version: 2024_02_12_143240) do
     t.text "eligibility_requirement_notes"
     t.boolean "closed", default: false
     t.integer "event"
+    t.boolean "weighting_rules_active", default: true
     t.index ["building_id"], name: "index_sub_programs_on_building_id"
     t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at"
     t.index ["program_id"], name: "index_sub_programs_on_program_id"
