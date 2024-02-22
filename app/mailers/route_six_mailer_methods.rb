@@ -34,12 +34,12 @@ module RouteSixMailerMethods
 
     def six_match_recommendation_client(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: '3 REMOVE THIS AFTER TESTING New Housing Opportunity')
+      mail(to: @contact.email, subject: 'New Housing Opportunity')
     end
 
     def six_match_recommendation_dnd_staff(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: '4 REMOVE THIS AFTER TESTING New Housing Recommendation - Requires Your Action')
+      mail(to: @contact.email, subject: 'New Housing Recommendation - Requires Your Action')
     end
 
     def six_match_recommendation_shelter_agency(notification = nil)
