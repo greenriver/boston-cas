@@ -1,0 +1,16 @@
+Hello #{@contact.full_name},
+
+The match
+#{notification_match_decision_url @notification, @match, @decision}
+was successful.
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

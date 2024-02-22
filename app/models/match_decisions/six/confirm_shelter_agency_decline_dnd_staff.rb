@@ -22,20 +22,20 @@ module MatchDecisions::Six
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('DND')} to confirm #{Translation.translate('Shelter Agency')} decline"
-      when :decline_overridden then "#{Translation.translate('Shelter Agency')} Decline overridden by DND.  Match proceeding to #{Translation.translate('Housing Subsidy Administrator')}"
-      when :decline_overridden_returned then "#{Translation.translate('Shelter Agency')} overridden by #{Translation.translate('DND')}.  Match returned to the #{Translation.translate('Shelter Agency')}"
-      when :decline_confirmed then "Match rejected by #{Translation.translate('DND')}"
+      when :pending then "#{Translation.translate('CoC Six')} to confirm #{Translation.translate('Shelter Agency Six')} decline"
+      when :decline_overridden then "#{Translation.translate('Shelter Agency Six')} Decline overridden by DND.  Match proceeding to #{Translation.translate('Housing Subsidy Administrator Six')}"
+      when :decline_overridden_returned then "#{Translation.translate('Shelter Agency Six')} overridden by #{Translation.translate('CoC Six')}.  Match returned to the #{Translation.translate('Shelter Agency Six')}"
+      when :decline_confirmed then "Match rejected by #{Translation.translate('CoC Six')}"
       when :canceled then canceled_status_label
       end
     end
 
     def step_name
-      "#{Translation.translate('DND')} Reviews Match Declined by #{Translation.translate('Shelter Agency')}"
+      "#{Translation.translate('CoC Six')} Reviews Match Declined by #{Translation.translate('Shelter Agency Six')}"
     end
 
     def actor_type
-      Translation.translate('DND')
+      Translation.translate('CoC Six')
     end
 
     def contact_actor_type

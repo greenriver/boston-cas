@@ -24,9 +24,9 @@ module MatchDecisions::Six
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('DND')} to confirm match success"
-      when :confirmed then "#{Translation.translate('DND')} confirms match success"
-      when :rejected then "Match rejected by #{Translation.translate('DND')}"
+      when :pending then "#{Translation.translate('CoC Six')} to confirm match success"
+      when :confirmed then "#{Translation.translate('CoC Six')} confirms match success"
+      when :rejected then "Match rejected by #{Translation.translate('CoC Six')}"
       when :canceled then 'Match canceled'
       when :back then backup_status_label
       end
@@ -37,11 +37,11 @@ module MatchDecisions::Six
     end
 
     def step_name
-      Translation.translate('Confirm Match Success')
+      Translation.translate('Confirm Match Success Six')
     end
 
     def actor_type
-      Translation.translate('DND')
+      Translation.translate('CoC Six')
     end
 
     def contact_actor_type

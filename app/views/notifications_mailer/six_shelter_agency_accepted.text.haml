@@ -1,0 +1,23 @@
+Hello #{@contact.full_name},
+\
+A CAS housing recommendation has been updated.
+\
+= "A #{Translation.translate('Shelter Agency Six')} contact has accepted the match."
+\
+View details and respond here:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+- if @notification.decision.include_note?
+  Notes:
+  \
+  #{@notification.decision.step_note}
+\
+\
+\
+= render 'email_footer'

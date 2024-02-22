@@ -1,0 +1,19 @@
+Hello #{@contact.full_name},
+\
+= "A #{Translation.translate('Shelter Agency Six')} has declined a housing match."
+\
+= "The match now requires #{Translation.translate('CoC Six')} confirmation to fully close it and make the voucher or unit and client available for future matching."
+\
+Please review details:
+#{notification_match_decision_url @notification, @match, @decision}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

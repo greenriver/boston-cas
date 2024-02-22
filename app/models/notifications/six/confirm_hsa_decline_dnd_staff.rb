@@ -12,12 +12,18 @@ module Notifications::Six
       end
     end
 
+    def notification_type
+      # prefix used for finding relevant information in other objects
+      # e.g. mailer, match decisions
+      "six_#{self.class.to_s.demodulize.underscore}"
+    end
+
     def decision
       match.six_confirm_housing_subsidy_admin_decline_dnd_staff_decision
     end
 
     def event_label
-      "#{Translation.translate('DND')} notified of #{Translation.translate('Housing Subsidy Administrator')} decline. Confirmation pending."
+      "#{Translation.translate('CoC Six')} notified of #{Translation.translate('Housing Subsidy Administrator Six')} decline. Confirmation pending."
     end
   end
 end
