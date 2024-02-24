@@ -138,7 +138,7 @@ if __FILE__.include?('list')
 elsif __FILE__.include?('ssh')
   if ARGV.count.positive?
     (client, service, environment, service_type) = ARGV
-    service ||= 'warehouse'
+    service ||= 'cas'
     environment ||= 'production'
     service_type ||= 'dj'
     ContainerList.new.ssh_to(client: client, service: service, environment: environment, service_type: service_type)
