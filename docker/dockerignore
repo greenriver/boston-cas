@@ -14,3 +14,4 @@ byebug_history
 .powrc
 .env.*
 untracked
+database.yml

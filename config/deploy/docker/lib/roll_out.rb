@@ -35,11 +35,11 @@ class RollOut
   attr_accessor :web_options
   attr_accessor :only_check_ram
   attr_accessor :service_registry_arns
+  attr_accessor :args
 
   include SharedLogic
   include AwsSdkHelpers::Helpers
 
-  # FIXME: cpu shares as parameter
   # FIXME: log level as parameter
 
   DEFAULT_SOFT_WEB_RAM_MB = 1800
@@ -52,7 +52,7 @@ class RollOut
 
   DEFAULT_CPU_SHARES = 256
 
-  def initialize(image_base:, target_group_name:, target_group_arn:, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, fqdn:, capacity_providers:, service_registry_arns:)
+  def initialize(args:, image_base:, target_group_name:, target_group_arn:, secrets_arn:, execution_role:, task_role:, dj_options: nil, web_options:, fqdn:, capacity_providers:, service_registry_arns:) # rubocop:disable Metrics/ParameterLists
     self.cluster                  = _cluster_name
     self.image_base               = image_base
     self.secrets_arn              = secrets_arn
@@ -65,6 +65,7 @@ class RollOut
     self.status_uri               = URI("https://#{fqdn}/system_status/details")
     self.only_check_ram           = false
     self.service_registry_arns    = service_registry_arns || {}
+    self.args                     = args
     @capacity_providers           = capacity_providers
 
     puts '[WARN] You should specify a web service registry ARN value for service discovery (Cloud Map)' if service_registry_arns['web'].nil?
@@ -84,7 +85,7 @@ class RollOut
 
     if target_group_name.match?(/production|prd/)
       self.rails_env = 'production'
-    elsif target_group_name.match?(/staging|stg/)
+    elsif target_group_name.match?(/staging|stg|training/)
       self.rails_env = 'staging'
     else
       raise 'Cannot figure out environment from target_group_name!'
@@ -160,10 +161,11 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_RAM_MB,
-      image: image_base + '--deploy',
+      image: image_base,
       environment: environment,
       name: name,
-      command: ['bin/deploy_tasks.sh'],
+      command: ['/app/bin/deploy_tasks.sh'],
+      variant: 'deploy',
     )
 
     _run_task!
@@ -174,9 +176,11 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_RAM_MB,
-      image: image_base + '--deploy',
+      image: image_base,
       name: name,
+      cpu_shares: args.dig(:cpu_shares, :deploy),
       command: ['bin/deploy_tasks.sh'],
+      variant: 'deploy',
     )
 
     _run_task!
@@ -189,8 +193,10 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_DJ_RAM_MB.call(target_group_name),
-      image: image_base + '--base',
+      image: image_base,
+      cpu_shares: args.dig(:cpu_shares, :cron),
       name: name,
+      variant: 'cron',
       # command: ['echo', 'workerhere'],
     )
   end
@@ -200,9 +206,11 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: DEFAULT_SOFT_RAM_MB,
-      image: image_base + '--base',
+      image: image_base,
       name: name,
+      cpu_shares: args.dig(:cpu_shares, :workoff),
       command: ['rake', 'jobs:workoff'],
+      variant: 'workoff',
     )
 
     self.default_environment << { name: 'WORKOFF_TASK_DEFINITION', value: self.task_definition }
@@ -223,8 +231,9 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: soft_mem_limit_mb,
-      image: image_base + '--base',
+      image: image_base,
       environment: environment,
+      cpu_shares: args.dig(:cpu_shares, :web),
       health_check: {
         start_period: 15,   # seconds
         interval: (60 * 5), # seconds (5 minutes)
@@ -235,7 +244,7 @@ class RollOut
         'PROMETHEUS_EXPORTER_PORT' => '9394',
         'role' => 'web',
       },
-      command: ['puma', '-b', 'ssl://0.0.0.0:3000?key=/app/config/key.pem&cert=/app/config/cert.pem&verify_mode=none'],
+      command: ['bundle', 'exec', 'puma', '-b', 'ssl://0.0.0.0:3000?key=/app/config/key.pem&cert=/app/config/cert.pem&verify_mode=none'],
       ports: [
         {
           'container_port' => 3000, # rails app
@@ -249,6 +258,7 @@ class RollOut
         },
       ],
       name: name,
+      variant: 'web',
     )
 
     return if self.only_check_ram
@@ -303,13 +313,15 @@ class RollOut
 
     _register_task!(
       soft_mem_limit_mb: soft_mem_limit_mb,
-      image: image_base + '--base',
+      image: image_base,
       name: name,
+      cpu_shares: args.dig(:cpu_shares, :dj),
       environment: environment,
       docker_labels: {
         'role' => 'jobs',
       },
       command: ['rake', 'jobs:work'],
+      variant: 'dj',
     )
 
     return if self.only_check_ram
@@ -361,7 +373,7 @@ class RollOut
     @seen = true
   end
 
-  def _register_task!(name:, image:, cpu_shares: nil, soft_mem_limit_mb: 512, ports: [], environment: nil, command: nil, stop_timeout: 30, docker_labels: {}, health_check: nil)
+  def _register_task!(name:, image:, variant:, cpu_shares: nil, soft_mem_limit_mb: 512, ports: [], environment: nil, command: nil, stop_timeout: 30, docker_labels: {}, health_check: nil) # rubocop:disable Metrics/ParameterLists
     puts "[INFO] Registering #{name} task #{target_group_name}"
 
     environment ||= default_environment.dup
@@ -372,7 +384,19 @@ class RollOut
     # instance. Any unused get divided up at the same ratio as all the
     # containers running.
     # Increase this to limit number of containers on a box if there are cpu capacity issues.
-    cpu_shares ||= DEFAULT_CPU_SHARES
+    if cpu_shares.nil?
+      cpu_shares = DEFAULT_CPU_SHARES
+    else
+      aka = (cpu_shares / 1024.0).round(3)
+      puts "[INFO] Setting cpu shares to #{cpu_shares} (#{aka} vCPU) for #{name} task #{target_group_name}"
+      if cpu_shares % 2**7 != 0
+        puts '[FATAL] cpu shares was not divisible by 128'
+        exit 1
+      elsif cpu_shares < 128
+        puts '[FATAL] cpu shares was too small'
+        exit 1
+      end
+    end
 
     memory_multiplier = RAM_OVERCOMMIT_MULTIPLIER.call(target_group_name)
 
@@ -387,7 +411,7 @@ class RollOut
     self.log_stream_name_template = "#{log_prefix}/#{name}/TASK_ID"
     environment << { 'name' => 'LOG_STREAM_NAME_PREFIX', 'value' => "#{log_prefix}/#{name}" }
 
-    environment << { 'name' => 'CONTAINER_VARIANT', 'value' => image.split('--')[1].to_s }
+    environment << { 'name' => 'CONTAINER_VARIANT', 'value' => variant }
 
     ten_minutes = 10 * 60
 
