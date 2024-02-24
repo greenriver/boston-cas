@@ -52,6 +52,8 @@ class NonHmisAssessment < ActiveRecord::Base
       'DeidentifiedCovidPathwaysAssessment',
       'IdentifiedPathwaysVersionThree',
       'DeidentifiedPathwaysVersionThree',
+      'IdentifiedPathwaysVersionFour',
+      'DeidentifiedPathwaysVersionFour',
       'IdentifiedTcHat',
       'DeidentifiedTcHat',
       'IdentifiedCeAssessment',
@@ -76,6 +78,10 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(IdentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
+      merge(IdentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
+      merge(IdentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
+      merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
+      merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedTcHat.new.for_matching).
       merge(DeidentifiedTcHat.new.for_matching).
       merge(IdentifiedCeAssessment.new.for_matching).
@@ -113,8 +119,15 @@ class NonHmisAssessment < ActiveRecord::Base
     type.include?('PathwaysVersionThree')
   end
 
+  def pathways_v4?
+    type.include?('PathwaysVersionFour')
+  end
+
   def total_days_homeless_in_the_last_three_years
-    if pathways_v3?
+    if pathways_v4?
+      total = total_homeless_nights_sheltered + total_homeless_nights_unsheltered
+      total.clamp(0, 1096)
+    elsif pathways_v3?
       warehouse_days = (days_homeless_in_the_last_three_years || 0) +
         (homeless_nights_sheltered || 0) +
         (homeless_nights_unsheltered || 0)
@@ -131,6 +144,44 @@ class NonHmisAssessment < ActiveRecord::Base
       (homeless_nights_sheltered || 0) +
       (additional_homeless_nights_unsheltered || 0) +
       (homeless_nights_unsheltered || 0)
+    end
+  end
+
+  def total_homeless_nights_sheltered
+    if pathways_v4?
+      warehouse_sheltered = (homeless_nights_sheltered || 0)
+      extra_nights_sheltered = (additional_homeless_nights_sheltered || 0)
+      extra_nights_unsheltered = (additional_homeless_nights_unsheltered || 0)
+      # If a client has more than 548 self-reported days (combination of sheltered and unsheltered)
+      # and does not have a verification uploaded, count unsheltered days first, then count sheltered days UP TO 548.
+      # If the self reported days are verified, use the provided amounts.
+      unless self_reported_days_verified
+        # 1. Cap the total unsheltered at 548 days if it is greater than this amount.
+        extra_nights_unsheltered = extra_nights_unsheltered > 548 ? 548 : extra_nights_unsheltered
+        # 2. Find the maximum amount of sheltered days to count based on the total unsheltered days.
+        #    The combination of the two cannot exeed 548.
+        max_sheltered = [548 - extra_nights_unsheltered, 0].max
+        # 3. Cap the sheltered days counted at the calculated max if it exceeds that amount.
+        extra_nights_sheltered = extra_nights_sheltered > max_sheltered ? max_sheltered : extra_nights_sheltered
+      end
+      (warehouse_sheltered + extra_nights_sheltered).clamp(0, 1096)
+    else
+      (homeless_nights_sheltered || 0) + (additional_homeless_nights_sheltered || 0)
+    end
+  end
+
+  def total_homeless_nights_unsheltered
+    if pathways_v4?
+      warehouse_unsheltered = (homeless_nights_unsheltered || 0)
+      extra_nights_unsheltered = (additional_homeless_nights_unsheltered || 0)
+      # If the self reported days are verified, use the provided amounts.
+      unless self_reported_days_verified
+        # If they are not verified, cap the total unsheltered at 548.
+        extra_nights_unsheltered = extra_nights_unsheltered > 548 ? 548 : extra_nights_unsheltered
+      end
+      (warehouse_unsheltered + extra_nights_unsheltered).clamp(0, 1096)
+    else
+      (homeless_nights_unsheltered || 0) + (additional_homeless_nights_unsheltered || 0)
     end
   end
 
@@ -224,8 +275,11 @@ class NonHmisAssessment < ActiveRecord::Base
       :phone_number,
       :email_addresses,
       :mailing_address,
+      :agency_name,
       :day_locations,
+      :agency_day_contact_info,
       :night_locations,
+      :agency_night_contact_info,
       :other_contact,
       :household_size,
       :hoh_age,
@@ -254,6 +308,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :fifty_five_plus,
       :have_tenant_voucher,
       :interested_in_disabled_housing,
+      :interested_in_rapid_rehousing,
       :mental_health_problem,
       :older_than_65,
       :one_br_ok,
@@ -337,9 +392,15 @@ class NonHmisAssessment < ActiveRecord::Base
       :days_homeless,
       :pregnancy_status,
       :pregnant_under_28_weeks,
+      :pregnant_or_parent,
       :tc_hat_single_parent_child_over_ten,
       :tc_hat_legal_custody,
       :tc_hat_will_gain_legal_custody,
+      :housing_barrier,
+      :service_need,
+      :partner_name,
+      :partner_warehouse_id,
+      :share_information_permission,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],
@@ -548,6 +609,10 @@ class NonHmisAssessment < ActiveRecord::Base
         client_field: :income_total_monthly,
       },
     }
+  end
+
+  def child_in_household
+    false # Override as appropriate
   end
 
   def form_field_labels
