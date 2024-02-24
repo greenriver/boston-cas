@@ -79,7 +79,7 @@ gem 'marginalia'
 gem 'active_record_distinct_on'
 
 gem 'devise', '~> 4'
-gem 'devise_invitable'
+gem 'devise_invitable', '>= 2.0.9'
 gem 'devise-pwned_password'
 gem 'devise-security'
 gem 'html2haml'
