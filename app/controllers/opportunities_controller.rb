@@ -133,7 +133,7 @@ class OpportunitiesController < ApplicationController
       opportunity_params[:units].to_i.times do
         unit = Unit.create(building: building, name: SecureRandom.hex, available: true) if sub_program.has_buildings?
         options = { sub_program: sub_program, available: true, creator: @current_user }
-        requirements = WeightingRule.requirements_and_increment!(sub_program.match_route)
+        requirements = WeightingRule.requirements_and_increment!(sub_program)
         options[:requirements] = requirements if requirements.present?
         voucher = Voucher.new(options)
         voucher.unit = unit
