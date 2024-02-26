@@ -1,0 +1,19 @@
+Hello #{@contact.full_name},
+\
+The CAS has generated a new match recommendation.
+\
+= "This match requires approval from #{Translation.translate('CoC Six')} staff."
+\
+Please review details and approve or decline the match:
+#{notification_match_decision_url @notification, @match, @decision}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

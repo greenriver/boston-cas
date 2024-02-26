@@ -1,0 +1,16 @@
+Hello #{@contact.name},
+\
+A housing opportunity for which you may be eligible has become available.
+\
+- if @match.shelter_expiration.present?
+  = "Please contact your #{Translation.translate('case worker six')} before #{@match.shelter_expiration} for more details."
+  \
+- else
+  = "Please contact your #{Translation.translate('case worker six')} for more details."
+  \
+= render 'shelter_agency_contacts'
+\
+\
+\
+\
+(This is an automated email, so please don't reply--replies won't go anywhere.)

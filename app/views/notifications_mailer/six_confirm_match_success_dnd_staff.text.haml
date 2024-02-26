@@ -1,0 +1,20 @@
+Hello #{@contact.full_name},
+- if @match.decisions.where.not(client_move_in_date: nil).exists?
+  \
+  A client move-in date has been noted for a housing match in CAS.
+\
+= "The match now requires final approval from #{Translation.translate('CoC Six')} staff to complete."
+\
+Please review the details of the match and note final approval here:
+#{notification_match_decision_url @notification, @match, @decision}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

@@ -11,13 +11,19 @@ module Notifications::Six
         create! match: match, recipient: contact
       end
     end
+ 
+    def notification_type
+      # prefix used for finding relevant information in other objects
+      # e.g. mailer, match decisions
+      "six_#{self.class.to_s.demodulize.underscore}"
+    end
 
     def decision
       match.six_approve_match_housing_subsidy_admin_decision
     end
 
     def event_label
-      "#{Translation.translate('Housing Subsidy Administrator')} notified of approved potential match."
+      "#{Translation.translate('Housing Subsidy Administrator Six')} notified of approved potential match."
     end
   end
 end
