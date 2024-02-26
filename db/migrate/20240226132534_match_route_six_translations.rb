@@ -19,6 +19,6 @@ class MatchRouteSixTranslations < ActiveRecord::Migration[6.1]
       'CoC Six' => 'DND',
       'Confirm Match Success Six' => 'Confirm Match Success',
       'case worker six' => 'case worker',
-      'CAS has a new housing recommendation that requires your review. Six' => 'Your client has matched to a vacancy in a housing navigation program. Please connect with housing navigation program staff to discuss this opportunity with the client. You should not accept or decline the opportunity in the CAS system prior to the client discussing the opportunity with housing navigation program staff:',
+      'View details here: Six' => 'Your client has matched to a vacancy in a housing navigation program. Please connect with housing navigation program staff to discuss this opportunity with the client. You should not accept or decline the opportunity in the CAS system prior to the client discussing the opportunity with housing navigation program staff:',
     }
 end
