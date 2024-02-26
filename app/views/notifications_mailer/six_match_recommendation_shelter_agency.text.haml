@@ -2,7 +2,7 @@ Hello #{@contact.full_name},
 \
 CAS has a new housing recommendation that requires your review.
 \
-Your client has matched to a vacancy in a housing navigation program. Please connect with housing navigation program staff to discuss this opportunity with the client. You should not accept or decline the opportunity in the CAS system prior to the client discussing the opportunity with housing navigation program staff:
+#{Translation.translate('CAS has a new housing recommendation that requires your review. Six')}
 #{notification_match_decision_url @notification, @match, @decision}
 \
 = render 'client_details'
