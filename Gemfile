@@ -5,6 +5,7 @@ gem 'activerecord'
 gem 'activerecord-import'
 gem 'rack', '>= 2.2.8.1'
 gem 'activesupport', '>= 6.1.7.5' # CVE-2023-38037
+gem 'activestorage', '>= 6.1.7.7' # CVE-2024-26144
 gem 'pg', '~> 1.1'
 gem 'rails', '~>6.1'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519

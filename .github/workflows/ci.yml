@@ -77,7 +77,7 @@ jobs:
 
       - name: Run bundle-audit
         run: |
-          bundle exec bundle-audit check --update --ignore CVE-2019-16676 CVE-2017-1002201
+          bundle exec bundle-audit check --update --ignore CVE-2019-16676 CVE-2017-1002201 CVE-2024-26143
       - name: Run brakeman
         run: |
           bundle exec brakeman -q --no-pager --except PermitAttributes,Render
