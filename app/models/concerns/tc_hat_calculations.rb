@@ -60,6 +60,8 @@ module TcHatCalculations
 
     # Override family_member since the TC HAT doesn't currently ask it
     def family_member
+      # Pregnant clients are always considered a family
+      return true if pregnancy_status
       # There is a child, but the parent doesn't, and won't have custody
       return false if tc_hat_single_parent_child_over_ten && (!tc_hat_legal_custody && !tc_hat_will_gain_legal_custody)
       # Client indicated the household is adult only
