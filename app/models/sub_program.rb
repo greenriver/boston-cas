@@ -94,6 +94,7 @@ class SubProgram < ApplicationRecord
       { value: 'Sponsor-Based', label: 'Sponsor-Based (mobile)', building: false },
       { value: 'Sponsor-Based-With-Site', label: 'Sponsor-Based (at a site)', building: true },
       { value: 'Set-Aside', label: 'Set-Aside', building: true },
+      { value: 'Navigation', label: 'Navigation', building: false },
     ]
   end
 
