@@ -594,6 +594,10 @@ class Client < ApplicationRecord
     }
   end
 
+  def calculated_is_currently_youth
+    is_currently_youth || age&.between?(18, 24) || false
+  end
+
   # Export related
   def dv_for_export
     numeric_bool_for_export(domestic_violence)
@@ -768,7 +772,6 @@ class Client < ApplicationRecord
       },
       chronic_homeless: {
         title: 'Chronically Homeless',
-        alt_title: 'Chronic',
         description: nil,
         type: 'Boolean',
       },
@@ -899,7 +902,6 @@ class Client < ApplicationRecord
       },
       days_homeless_in_last_three_years: {
         title: Config.using_pathways? ? 'Total # of nights' : Translation.translate('Days Homeless in Last Three Years'),
-        alt_title: 'Days homeless in the last three years',
         description: Config.using_pathways? ? 'Warehouse + added Boston homeless nights*: _____________________ (cannot exceed 1096)' : Translation.translate('Days homeless in the last three years including self-reported days'),
         type: 'Integer',
       },
@@ -1067,12 +1069,11 @@ class Client < ApplicationRecord
       },
       older_than_65: {
         title: 'Manually Flagged as Over 65 ',
-        description: nil, 
+        description: nil,
         ype: 'Boolean',
       },
       holds_voucher_on: {
-        title: 'Holds Mobile Voucher On',
-        alt_title: 'Date voucher was assigned',
+        title: 'Date voucher was assigned',
         description: nil,
         type: 'Date',
       },

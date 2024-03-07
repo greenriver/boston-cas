@@ -19,5 +19,11 @@ module MatchPrioritization
     def self.client_prioritization_summary_method
       'assessment_score'
     end
+
+    def self.supporting_column_names
+      [
+        :assessment_score,
+      ]
+    end
   end
 end

@@ -23,6 +23,12 @@ module MatchPrioritization
       'assessment_score'
     end
 
+    def self.supporting_column_names
+      [
+        :assessment_score,
+      ]
+    end
+
     def important_days_homeless_calculations
       calculations = [
         :hmis_days_homeless_last_three_years,

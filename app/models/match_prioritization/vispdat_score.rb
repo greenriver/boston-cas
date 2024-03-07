@@ -18,5 +18,11 @@ module MatchPrioritization
     def self.client_prioritization_summary_method
       'vispdat_score'
     end
+
+    def self.supporting_column_names
+      [
+        :vispdat_score,
+      ]
+    end
   end
 end

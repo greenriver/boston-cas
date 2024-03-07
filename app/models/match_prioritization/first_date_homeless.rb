@@ -17,5 +17,11 @@ module MatchPrioritization
     def self.client_prioritization_summary_method
       'calculated_first_homeless_night'
     end
+
+    def self.supporting_column_names
+      [
+        :calculated_first_homeless_night,
+      ]
+    end
   end
 end

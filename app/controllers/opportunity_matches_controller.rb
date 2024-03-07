@@ -86,9 +86,7 @@ class OpportunityMatchesController < ApplicationController
         next if column_data.blank?
         next if column_data[:display_check].present? && send(column_data[:display_check]) == false
 
-        title = column_data[:title]
-        title = column_data[:alt_title] if column_data[:alt_title].present?
-        result << title
+        result << column_data[:title]
       end
     end
   end
@@ -99,7 +97,7 @@ class OpportunityMatchesController < ApplicationController
       @opportunity.match_route.prioritized_client_columns.map(&:to_sym).each do |column|
         column_data = prioritized_column_data[column]
         next if column_data.blank?
-        next if column_data[:display_check].present? && send(column_data[:display_check]) == false
+        next if column_data[:display_check].present? && ! current_user.public_send(column_data[:display_check])
 
         result << client.send(column)
       end

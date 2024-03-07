@@ -17,5 +17,11 @@ module MatchPrioritization
     def self.client_prioritization_summary_method
       'holds_voucher_on'
     end
+
+    def self.supporting_column_names
+      [
+        :holds_voucher_on,
+      ]
+    end
   end
 end
