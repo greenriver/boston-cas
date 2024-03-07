@@ -24,7 +24,7 @@ module MatchPrioritization
       [
         :veteran,
         :family_member,
-        :is_currently_youth,
+        :calculated_is_currently_youth,
         :days_homeless,
       ]
     end
