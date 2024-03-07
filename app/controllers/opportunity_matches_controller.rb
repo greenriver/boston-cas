@@ -75,6 +75,36 @@ class OpportunityMatchesController < ApplicationController
     }
   end
 
+  def prioritized_column_data
+    @prioritized_column_data ||= Client.prioritized_columns_data
+  end
+
+  def prioritized_column_labels
+    [].tap do |result|
+      @opportunity.match_route.prioritized_client_columns.map(&:to_sym).each do |column|
+        column_data = prioritized_column_data[column]
+        next if column_data.blank?
+        next if column_data[:display_check].present? && send(column_data[:display_check]) == false
+
+        result << column_data[:title]
+      end
+    end
+  end
+  helper_method :prioritized_column_labels
+
+  def prioritized_column_values(client)
+    [].tap do |result|
+      @opportunity.match_route.prioritized_client_columns.map(&:to_sym).each do |column|
+        column_data = prioritized_column_data[column]
+        next if column_data.blank?
+        next if column_data[:display_check].present? && ! current_user.public_send(column_data[:display_check])
+
+        result << client.send(column)
+      end
+    end
+  end
+  helper_method :prioritized_column_values
+
   def priority_labels
     supporting_data_columns = @opportunity.match_route.match_prioritization.supporting_data_columns
     return supporting_data_columns.keys if supporting_data_columns.present?

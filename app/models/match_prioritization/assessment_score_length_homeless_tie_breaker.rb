@@ -16,6 +16,12 @@ module MatchPrioritization
         order(c_t[:days_homeless].desc)
     end
 
+    def self.supporting_column_names
+      [
+        :assessment_score,
+      ]
+    end
+
     def self.client_prioritization_summary_method
       'assessment_score'
     end

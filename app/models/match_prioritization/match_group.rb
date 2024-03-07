@@ -23,6 +23,15 @@ module MatchPrioritization
       scope.order(match_group, veteran, chronic, days_homeless)
     end
 
+    def self.supporting_column_names
+      [
+        :match_group,
+        :encampment_decomissioned,
+        :veteran,
+        :chronic_homeless,
+      ]
+    end
+
     def self.supporting_data_columns
       {
         'Match Group' => ->(client) { client.match_group },

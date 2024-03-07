@@ -20,6 +20,12 @@ module MatchPrioritization
       'days_homeless_in_last_three_years'
     end
 
+    def self.supporting_column_names
+      [
+        :days_homeless_in_last_three_years,
+      ]
+    end
+
     def important_days_homeless_calculations
       calculations = [
         :hmis_days_homeless_last_three_years,

@@ -594,6 +594,10 @@ class Client < ApplicationRecord
     }
   end
 
+  def calculated_is_currently_youth
+    is_currently_youth || age&.between?(18, 24) || false
+  end
+
   # Export related
   def dv_for_export
     numeric_bool_for_export(domestic_violence)
@@ -757,6 +761,533 @@ class Client < ApplicationRecord
       { title: 'VI-SPDAT score', column: 'vispdat_score', direction: 'desc', order: 'vispdat_score DESC', visible: show_vispdat },
       { title: 'Priority score', column: 'vispdat_priority_score', direction: 'desc', order: 'vispdat_priority_score DESC', visible: true },
     ]
+  end
+
+  def self.prioritized_columns_data
+    @prioritized_columns_data ||= {
+      veteran: {
+        title: 'Veteran',
+        description: nil,
+        type: 'Boolean',
+      },
+      chronic_homeless: {
+        title: 'Chronically Homeless',
+        description: nil,
+        type: 'Boolean',
+      },
+      developmental_disability: {
+        title: 'Developmental Disability',
+        description: nil,
+        type: 'Integer',
+      },
+      domestic_violence: {
+        title: 'Domestic Violence Survivor',
+        description: nil,
+        type: 'Integer',
+      },
+      calculated_first_homeless_night: {
+        title: 'Homeless Since',
+        description: nil,
+        type: 'Date',
+      },
+      hiv_aids: {
+        title: 'HIV/AIDS (HUD)',
+        description: nil,
+        type: 'Boolean',
+      },
+      chronic_health_problem: {
+        title: 'Chronic Health Condition',
+        description: nil,
+        type: 'Boolean',
+      },
+      mental_health_problem: {
+        title: 'Mental Health Disorder',
+        description: nil,
+        type: 'Boolean',
+      },
+      substance_abuse_problem: {
+        title: 'Substance Use Disorder',
+        description: nil,
+        type: 'Boolean',
+      },
+      physical_disability: {
+        title: 'Physical Disability',
+        description: nil,
+        type: 'Boolean',
+      },
+      disabling_condition: {
+        title: 'Disabling Condition',
+        description: nil,
+        type: 'Boolean',
+      },
+      release_of_information: {
+        title: "#{Translation.translate('Release of information')} signed on",
+        description: nil,
+        type: 'Datetime',
+      },
+      dmh_eligible: {
+        title: 'DMH Eligible',
+        description: nil,
+        type: 'Boolean',
+        display_check: 'can_view_dmh_eligibility?',
+      },
+      va_eligible: {
+        title: 'VA Eligible',
+        description: nil,
+        type: 'Boolean',
+        display_check: 'can_view_va_eligibility?',
+      },
+      hues_eligible: {
+        title: 'Hues Eligible',
+        description: nil,
+        type: 'Boolean',
+        display_check: 'can_view_hues_eligibility?',
+      },
+      disability_verified_on: {
+        title: 'Disability Verified On',
+        description: nil,
+        type: 'Datetime',
+      },
+      income_total_monthly: {
+        title: 'Total Monthly Income',
+        description: nil,
+        type: 'Float',
+      },
+      hiv_positive: {
+        title: 'HIV+',
+        description: nil,
+        type: 'Boolean',
+        display_check: 'can_view_hiv_positive_eligibility?',
+      },
+      housing_release_status: {
+        title: 'Housing Release',
+        description: nil,
+        type: 'String',
+      },
+      vispdat_score: {
+        title: 'VI-SPDAT Score',
+        description: nil,
+        type: 'Integer',
+        display_check: 'can_view_vspdats?',
+      },
+      family_member: {
+        title: Translation.translate('Part of a family') ,
+        description: nil,
+        type: 'Boolean',
+      },
+      child_in_household: {
+        title: Translation.translate('Children under age 18 in household'),
+        description: nil,
+        type: 'Boolean',
+      },
+      lifetime_sex_offender: {
+        title: Translation.translate('Life-Time Sex Offender') ,
+        description: nil,
+        type: 'Boolean',
+      },
+      meth_production_conviction: {
+        title: Translation.translate('Meth Production Conviction'),
+        description: nil,
+        type: 'Boolean',
+      },
+      days_homeless: {
+        title: Translation.translate('Cumulative Days Homeless'),
+        description: Translation.translate('Cumulative days homeless, all-time'),
+        type: 'Integer',
+      },
+      ha_eligible: {
+        title: Translation.translate('Housing Authority Eligible'),
+        description: nil,
+        type: 'Boolean',
+      },
+      days_homeless_in_last_three_years: {
+        title: Config.using_pathways? ? 'Total # of nights' : Translation.translate('Days Homeless in Last Three Years'),
+        description: Config.using_pathways? ? 'Warehouse + added Boston homeless nights*: _____________________ (cannot exceed 1096)' : Translation.translate('Days homeless in the last three years including self-reported days'),
+        type: 'Integer',
+      },
+      vispdat_priority_score: {
+        title: 'VI-SPDAT Priority Score',
+        description: 'VI-SPDAT score plus a set amount based on other criteria.  See the warehouse CAS Readiness page for details.',
+        type: 'Integer',
+        display_check: 'can_view_vspdats?',
+      },
+      cspech_eligible: {
+        title: Translation.translate('CSPECH Eligible'),
+        description: nil,
+        type: 'Boolean',
+      },
+      calculated_last_homeless_night: {
+        title: 'Last Homeless Contact',
+        description: nil,
+        type: 'Date',
+      },
+      congregate_housing: {
+        title: 'Willing to live in congregate housing',
+        description: nil,
+        type: 'Boolean',
+      },
+      sober_housing: {
+        title: 'Appropriate for sober supportive housing',
+        description: nil,
+        type: 'Boolean',
+      },
+      assessment_score: {
+        title: 'Assessment Score',
+        description: nil,
+        type: 'Integer',
+      },
+      ssvf_eligible: {
+        title: 'SSVF Eligible',
+        description: nil,
+        type: 'Boolean',
+      },
+      rrh_desired: {
+        title: 'Interested in Rapid Re-Housing ',
+        description: nil,
+        type: 'Boolean',
+      },
+      youth_rrh_desired: {
+        title: 'Interested in Youth Rapid Re-Housing',
+        description: nil,
+        type: 'Boolean',
+      },
+      rrh_assessment_contact_info: {
+        title: 'Case Manager Contact Information',
+        description: nil,
+        type: 'String',
+      },
+      rrh_assessment_collected_at: {
+        title: 'Assessment Collected',
+        description: nil,
+        type: 'Datetime',
+      },
+      enrolled_in_th: {
+        title: 'Enrolled In TH',
+        description: nil,
+        type: 'Boolean',
+      },
+      enrolled_in_es: {
+        title: 'Enrolled In ES',
+        description: nil,
+        type: 'Boolean',
+      },
+      enrolled_in_sh: {
+        title: 'Enrolled In SH',
+        description: nil,
+        type: 'Boolean',
+      },
+      enrolled_in_so: {
+        title: 'Enrolled In SO',
+        description: nil,
+        type: 'Boolean',
+      },
+      days_literally_homeless_in_last_three_years: {
+        title: Translation.translate('Days Literally Homeless in Last Three Years'),
+        description: Translation.translate('Days in ES, SH or SO with no overlapping TH or PH'),
+        type: 'Integer',
+      },
+      requires_wheelchair_accessibility: {
+        title: 'Requires wheelchair accessibility?',
+        description: nil,
+        type: 'Boolean',
+      },
+      required_number_of_bedrooms: {
+        title: 'Minimum number of bedrooms required?',
+        description: nil,
+        type: 'Integer',
+      },
+      required_minimum_occupancy: {
+        title: 'Minimum occupancy required?',
+        description: nil,
+        type: 'Integer',
+      },
+      requires_elevator_access: {
+        title: 'Requires elevator access or ground floor unit?',
+        description: nil,
+        type: 'Boolean',
+      },
+      neighborhood_interests: {
+        title: 'Neighborhood Interests',
+        description: nil,
+        type: 'Jsonb',
+      },
+      date_days_homeless_verified: {
+        title: 'Days Homeless Verified',
+        description: nil,
+        type: 'Date',
+      },
+      who_verified_days_homeless: {
+        title: 'Who Verified Days Homeless',
+        description: nil,
+        type: 'String',
+      },
+      interested_in_set_asides: {
+        title: 'Interested in Set-Asides',
+        description: nil,
+        type: 'Boolean',
+      },
+      tags: {
+        title: 'Tags',
+        description: nil,
+        type: 'Jsonb',
+      },
+      vash_eligible: {
+        title: 'VASH Eligible',
+        description: nil,
+        type: 'Boolean',
+        display_check: 'can_view_va_eligibility?',
+      },
+      pregnancy_status: {
+        title: 'Pregnant',
+        description: nil,
+        type: 'Boolean',
+      },
+      income_maximization_assistance_requested: {
+        title: Translation.translate('Interested in income maximization services'),
+        description: nil,
+        type: 'Boolean',
+      },
+      sro_ok: {
+        title: 'Would you consider living in a single room occupancy (SRO)?',
+        description: nil,
+        type: 'Boolean',
+      },
+      dv_rrh_desired: {
+        title: 'Interested in DV Rapid Re-Housing',
+        description: nil,
+        type: 'Boolean',
+      },
+      health_prioritized: {
+        title: 'Health Prioritized',
+        description: nil,
+        type: 'Boolean',
+      },
+      is_currently_youth: {
+        title: 'Manually Flagged as Youth',
+        description: nil,
+        type: 'Boolean',
+      },
+      older_than_65: {
+        title: 'Manually Flagged as Over 65 ',
+        description: nil,
+        ype: 'Boolean',
+      },
+      holds_voucher_on: {
+        title: 'Date voucher was assigned',
+        description: nil,
+        type: 'Date',
+      },
+      assessment_name: {
+        title: 'Assessment',
+        description: nil,
+        type: 'String',
+      },
+      entry_date: {
+        title: 'Most recent assessment completion date',
+        description: nil,
+        type: 'Date',
+      },
+      financial_assistance_end_date: {
+        title: Translation.translate('Latest Date Eligible for Financial Assistance'),
+        description: nil,
+        type: 'Date',
+      },
+      enrolled_in_rrh: {
+        title: 'Enrolled In RRH',
+        description: nil,
+        type: 'Boolean',
+      },
+      enrolled_in_psh: {
+        title: 'Enrolled In PSH',
+        description: nil,
+        type: 'Boolean',
+      },
+      enrolled_in_ph: {
+        title: 'Enrolled In PH',
+        description: nil,
+        type: 'Boolean',
+      },
+      majority_sheltered_for_export: {
+        title: Translation.translate('Current Living Situation'),
+        description: nil,
+        type: 'Boolean',
+      },
+      majority_sheltered: {
+        title: 'Majority Sheltered',
+        description: nil,
+        type: 'Boolean',
+      },
+      strengths: {
+        title: Translation.translate('Strengths'),
+        description: nil,
+        type: 'Jsonb',
+      },
+      challenges: {
+        title: Translation.translate('Challenges for housing placment'),
+        description: nil,
+        type: 'Jsonb',
+      },
+      foster_care: {
+        title: Translation.translate('Youth in foster care'),
+        description: nil,
+        type: 'Boolean',
+      },
+      open_case: {
+        title: Translation.translate('Current open case'),
+        description: nil,
+        type: 'Boolean',
+      },
+      drug_test: {
+        title: Translation.translate('Can pass a drug test'),
+        description: nil,
+        type: 'Boolean',
+      },
+      heavy_drug_use: {
+        title: Translation.translate('History of heavy drug use'),
+        description: nil,
+        type: 'Boolean',
+      },
+      sober: {
+        title: Translation.translate('Clean/sober for at least one year'),
+        description: nil,
+        type: 'Boolean',
+      },
+      willing_case_management: {
+        title: Translation.translate('Willing to engage with housing case management'),
+        description: nil,
+        type: 'Boolean',
+      },
+      employed_three_months: {
+        title: Translation.translate('Employed for 3 or more months'),
+        description: nil,
+        type: 'Boolean',
+      },
+      living_wage: {
+        title: Translation.translate('Earning a living wage ($13 or more)'),
+        description: nil,
+        type: 'Boolean',
+      },
+      need_daily_assistance: {
+        title: Translation.translate('Needs a higher level of care'),
+        description: nil,
+        type: 'Boolean',
+      },
+      full_time_employed: {
+        title: Translation.translate('Employed full-time'),
+        description: nil,
+        type: 'Boolean',
+      },
+      can_work_full_time: {
+        title: Translation.translate('Able to work full-time'),
+        description: nil,
+        type: 'Boolean',
+      },
+      willing_to_work_full_time: {
+        title: Translation.translate('Willing to work full-time'),
+        description: nil,
+        type: 'Boolean',
+      },
+      rrh_successful_exit: {
+        title: Translation.translate('Able to successfully exit 12-24 month RRH program'),
+        description: nil,
+        type: 'Boolean',
+      },
+      th_desired: {
+        title: Translation.translate('Interested in Transitional Housing'),
+        description: nil,
+        type: 'Boolean',
+      },
+      site_case_management_required: {
+        title: Translation.translate('Needs site-based case management'),
+        description: nil,
+        type: 'Boolean',
+      },
+      currently_fleeing: {
+        title: Translation.translate('Currently fleeing DV'),
+        description: nil,
+        type: 'Boolean',
+      },
+      dv_date: {
+        title: 'DV Date',
+        description: nil,
+        type: 'Date',
+      },
+      hmis_days_homeless_last_three_years: {
+        title: Translation.translate('Days Homeless in Last Three Years from HMIS'),
+        description: Translation.translate('Days in homeless enrollments, excluding any self-report'),
+        type: 'Integer',
+      },
+      match_group: {
+        title: 'Match Group',
+        description: nil,
+        type: 'Integer',
+      },
+      encampment_decomissioned: {
+        title: 'Encampment Decomissioned',
+        description: nil,
+        type: 'Boolean',
+      },
+      pregnant_under_28_weeks: {
+        title: 'Pregnant Under 28 Weeks',
+        description: nil,
+        type: 'Boolean',
+      },
+      ongoing_case_management_required: {
+        title: Translation.translate('Needs ongoing housing case management'),
+        description: nil,
+        type: 'Boolean',
+      },
+      housing_barrier: {
+        title: Translation.translate('Housing Barrier'),
+        description: nil,
+        type: 'Boolean',
+      },
+      service_need: {
+        title: Translation.translate('Service Need') ,
+        description: nil,
+        type: 'Boolean',
+      },
+      additional_homeless_nights_sheltered: {
+        title: 'Length of Time Homeless (Sheltered) - Non-HMIS',
+        description: 'Does the client have additional sheltered nights outside of HMIS/Warehouse? (At a shelter or hotel/motel paid by government or charity.)',
+        type: 'Integer',
+      },
+      additional_homeless_nights_unsheltered: {
+        title: 'Length of Time Homeless (Unsheltered) - Non-HMIS ',
+        description: 'Does the client have additional unsheltered  nights outside of HMIS/Warehouse? (Place not meant for human habitation/outside/car/station.)',
+        type: 'Integer',
+      },
+      total_homeless_nights_unsheltered: {
+        title: 'Total # of Unsheltered Nights',
+        description: 'Warehouse + added Boston homeless nights',
+        type: 'Integer',
+      },
+      calculated_homeless_nights_sheltered: {
+        title: 'Length of Time Homeless (Sheltered) - Warehouse',
+        description: 'Check the client’s record in the Warehouse; how many sheltered homeless nights in a shelter in the last 3 years does the client have?',
+        type: 'Integer',
+      },
+      calculated_homeless_nights_unsheltered: {
+        title: 'Length of Time Homeless (Unsheltered) - Warehouse',
+        description: 'Check the client’s record in the Warehouse; how many unsheltered homeless nights in the last 3 years does the client have?',
+        type: 'Integer',
+      },
+      total_homeless_nights_sheltered: {
+        title: 'Total # of Sheltered Nights',
+        description: 'Warehouse + added Boston homeless nights',
+        type: 'Integer',
+      },
+      last_ineligible_response: {
+        title: 'Previously Marked Ineligible for Pathways',
+        description: nil,
+        type: 'Date',
+      },
+      cohorts: {
+        title: 'Cohorts',
+        description: nil,
+        type: 'Date',
+      },
+    }
   end
 
   def self.log message

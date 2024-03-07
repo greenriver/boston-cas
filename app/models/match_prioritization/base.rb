@@ -50,6 +50,10 @@ module MatchPrioritization
       nil
     end
 
+    def self.supporting_column_names
+      nil
+    end
+
     def self.prioritization_for_clients(scope, match_route:)
       raise NotImplementedError
     end

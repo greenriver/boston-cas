@@ -23,6 +23,7 @@
           = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: false, input_html: { class: :select2 }
           = f.input :stalled_interval, collection: @route.stall_intervals, label: "Days until a match is considered stalled", input_html: { class: :select2 }
           = f.association :tag, include_blank: 'Optional Tag', input_html: { class: :select2 }, hint: 'Assigning a tag is required if the route is prioritized by rank.'
+          = f.input :prioritized_client_columns, collection: Client.prioritized_columns_data.map { |column| [column.last[:title], column.first] }.sort, label: 'Prioritized Client Columns', input_html: { class: :select2, multiple: true }
           = f.button :submit, value: "Update #{@route.title}"
   .col-md-6
     .c-card
@@ -63,6 +64,5 @@
                             %i.icon-cross
         - else
           %p Weighting rules allow you to attach requiremnts to each voucher created on this route.  If you have more than one weighting rule on the route, rules will be applied to balance out the use of each rule over time.
-
 
 = render 'init_select2'

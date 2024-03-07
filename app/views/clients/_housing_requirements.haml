@@ -4,63 +4,63 @@
     %h5 Housing Requirements & History
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Housing Release
+      %span.c-detailed-list__label= @column_data[:housing_release_status][:title]
       %span.c-detailed-list__value
         = Translation.translate(@client.housing_release_status).presence || 'Not Signed'
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Most recent assessment completion date
+      %span.c-detailed-list__label= @column_data[:entry_date][:title]
       %span.c-detailed-list__value= @client.entry_date.try(:strftime, I18n.t('date.formats.default'))
     - if @client.release_of_information.present?
       %li.c-detailed-list__item
-        %span.c-detailed-list__label= "#{Translation.translate('Release of information')} signed on"
+        %span.c-detailed-list__label= @column_data[:release_of_information][:title]
         %span.c-detailed-list__value= @client.release_of_information.try(:to_date)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Requires elevator access or ground floor unit?
+      %span.c-detailed-list__label= @column_data[:requires_elevator_access][:title]
       %span.c-detailed-list__value= boolean_icon @client.requires_elevator_access
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Requires wheelchair accessibility?
+      %span.c-detailed-list__label= @column_data[:requires_wheelchair_accessibility][:title]
       %span.c-detailed-list__value= boolean_icon @client.requires_wheelchair_accessibility
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Minimum number of bedrooms required?
+      %span.c-detailed-list__label= @column_data[:required_number_of_bedrooms][:title]
       %span.c-detailed-list__value= @client.required_number_of_bedrooms
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Minimum occupancy required?
+      %span.c-detailed-list__label= @column_data[:required_minimum_occupancy][:title]
       %span.c-detailed-list__value= @client.required_minimum_occupancy
 
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Willing to live in congregate housing
+      %span.c-detailed-list__label= @column_data[:congregate_housing][:title]
       %span.c-detailed-list__value= boolean_icon @client.congregate_housing
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Appropriate for sober supportive housing
+      %span.c-detailed-list__label= @column_data[:sober_housing][:title]
       %span.c-detailed-list__value= boolean_icon @client.sober_housing
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Interested in Rapid Re-Housing
+      %span.c-detailed-list__label= @column_data[:rrh_desired][:title]
       %span.c-detailed-list__value= boolean_icon @client.rrh_desired
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Interested in Youth Rapid Re-Housing
+      %span.c-detailed-list__label= @column_data[:youth_rrh_desired][:title]
       %span.c-detailed-list__value= boolean_icon @client.youth_rrh_desired
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Interested in DV Rapid Re-Housing
+      %span.c-detailed-list__label= @column_data[:dv_rrh_desired][:title]
       %span.c-detailed-list__value= boolean_icon @client.dv_rrh_desired
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Interested in Set-Asides
+      %span.c-detailed-list__label= @column_data[:interested_in_set_asides][:title]
       %span.c-detailed-list__value= boolean_icon @client.interested_in_set_asides
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Would you consider living in a single room occupancy (SRO)?
+      %span.c-detailed-list__label= @column_data[:sro_ok][:title]
       %span.c-detailed-list__value= boolean_icon @client.sro_ok
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Holds Mobile Voucher On
+      %span.c-detailed-list__label= @column_data[:holds_voucher_on][:title]
       %span.c-detailed-list__value= @client.holds_voucher_on.try(:strftime, I18n.t('date.formats.default'))
 
     - if @client.non_hmis?
       %li.c-detailed-list__item
-        %span.c-detailed-list__label Manually Flagged as Youth
+        %span.c-detailed-list__label= @column_data[:is_currently_youth][:title]
         %span.c-detailed-list__value= boolean_icon @client.is_currently_youth
       %li.c-detailed-list__item
-        %span.c-detailed-list__label Manually Flagged as Over 65
+        %span.c-detailed-list__label= @column_data[:older_than_65][:title]
         %span.c-detailed-list__value= boolean_icon @client.older_than_65
       %li
-        %span.c-detailed-list__label Client and/or Case Manager Contact Information
+        %span.c-detailed-list__label= "Client and/or #{@column_data[:rrh_assessment_contact_info][:title]}"
         - contact_info = @client.rrh_assessment_contact_info.presence || 'None on file'
         .mt-2.ml-8.o-text--normal= simple_format contact_info
 
@@ -68,10 +68,10 @@
       - contact_info = @client.rrh_assessment_contact_info
       - if contact_info.present?
         %li
-          %span.c-detailed-list__label Case Manager Contact Information
+          %span.c-detailed-list__label @column_data[:rrh_assessment_contact_info]
           .mt-2.ml-8.o-text--normal= simple_format contact_info
     - if @client.last_ineligible_response.present?
       - response = @client.last_ineligible_response
       %li.c-detailed-list__item
-        %span.c-detailed-list__label Previously Marked Ineligible for Pathways
+        %span.c-detailed-list__label @column_data[:last_ineligible_response]
         %span.c-detailed-list__value= response ? response : boolean_icon(false)
