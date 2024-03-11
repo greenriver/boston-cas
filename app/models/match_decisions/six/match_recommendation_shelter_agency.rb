@@ -8,7 +8,8 @@ module MatchDecisions::Six
   class MatchRecommendationShelterAgency < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
-    include MatchDecisions::DefaultShelterAgencyDeclineReasons
+    include MatchDecisions::RouteSixDeclineReasons
+    include MatchDecisions::RouteSixCancelReasons
 
     # proxy for client.release_of_information
     attr_accessor :release_of_information

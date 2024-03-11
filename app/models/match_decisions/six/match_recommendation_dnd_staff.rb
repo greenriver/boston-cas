@@ -7,7 +7,8 @@
 module MatchDecisions::Six
   class MatchRecommendationDndStaff < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultDndStaffDeclineReasons
+    include MatchDecisions::RouteSixDeclineReasons
+    include MatchDecisions::RouteSixCancelReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
