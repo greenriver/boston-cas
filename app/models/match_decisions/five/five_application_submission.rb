@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -12,7 +12,7 @@ module MatchDecisions::Five
     validate :application_date_present_if_status_complete
 
     def step_name
-      _('Submit Client Application')
+      Translation.translate('Submit Client Application')
     end
 
     def expires?

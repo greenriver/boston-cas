@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -43,7 +43,7 @@ class NotificationRegistrationsController < Devise::RegistrationsController
 
   private def ensure_notification_allows_registration!
     unless @notification.allows_registration?
-      flash[:alert] = "Sorry, you do not have authorization to create an account.  Please contact #{_('DND')}."
+      flash[:alert] = "Sorry, you do not have authorization to create an account.  Please contact #{Translation.translate('DND')}."
       redirect_to new_notification_session_path(@notification)
     end
   end

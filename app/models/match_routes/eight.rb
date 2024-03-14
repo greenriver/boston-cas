@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,7 +7,7 @@
 module MatchRoutes
   class Eight < Base
     def title
-      _('Match Route Eight')
+      Translation.translate('Match Route Eight')
     end
 
     def self.available_sub_types_for_search
@@ -96,17 +96,17 @@ module MatchRoutes
     def contact_label_for(contact_type)
       case contact_type
       when :dnd_staff_contacts
-        _('DND')
+        Translation.translate('DND')
       when :housing_subsidy_admin_contacts
-        _('HSA Eight')
+        Translation.translate('HSA Eight')
       when :shelter_agency_contacts
-        _('Shelter Agency Eight')
+        Translation.translate('Shelter Agency Eight')
       when :ssp_contacts
-        _('Stabilization Service Provider Eight')
+        Translation.translate('Stabilization Service Provider Eight')
       when :hsp_contacts
-        _('Housing Search Provider Eight')
+        Translation.translate('Housing Search Provider Eight')
       when :do_contacts
-        _('Development Officer Eight')
+        Translation.translate('Development Officer Eight')
       end
     end
 

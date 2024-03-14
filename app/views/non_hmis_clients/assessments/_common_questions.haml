@@ -12,7 +12,7 @@
 .c-question
   .c-question__wrapper
     .c-question__number 4D.
-    - label = _('3D. Total # of Boston Homeless Nights')
+    - label = Translation.translate('3D. Total # of Boston Homeless Nights')
     - if disabled
       = render 'non_hmis_clients/assessments/question_display', value: @assessment.days_homeless_in_the_last_three_years, label: label
     - else
@@ -58,13 +58,13 @@
 .c-question
   .c-question__wrapper
     .c-question__number 6H.
-    - label = _('Neighborhoods you are willing to live in.')
-    - blank_label = _('Any neighborhood')
+    - label = Translation.translate('Neighborhoods you are willing to live in.')
+    - blank_label = Translation.translate('Any neighborhood')
     - if disabled
       = render 'non_hmis_clients/assessments/question_display', value: @neighborhoods.select{|k,_| k.in?(@assessment.neighborhood_interests)}&.map(&:last), label: label, include_blank: blank_label
     - else
       .c-question__input
-        = form.label :neighborhood_interests, pre_label: '6H.', label: _('Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.')
+        = form.label :neighborhood_interests, pre_label: '6H.', label: Translation.translate('Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.')
         = form.input :neighborhood_interests, collection: @neighborhoods, label_method: :last, value_method: :first, input_html: { multiple: true, class: :select2 }, label: false, include_blank: blank_label
 .c-question
   = form.input :interested_in_set_asides, as: :pretty_boolean, wrapper: :custom_boolean, pre_label: '6I.', label: 'Confirm Interest in Signing Up for Homeless Set Aside Units', hint: 'Check the box to confirm that the Client answered yes to all 4 and is interested in signing up for Homeless Set Aside Units.'

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -29,6 +29,7 @@ module MatchPrioritization
         MatchPrioritization::AssessmentScore,
         MatchPrioritization::AssessmentScoreLengthHomelessTieBreaker,
         MatchPrioritization::AssessmentScoreFundingTieBreaker,
+        MatchPrioritization::AssessmentScoreRandomTieBreaker,
         MatchPrioritization::Rank,
         MatchPrioritization::HoldsVoucherOn,
         MatchPrioritization::MatchGroup,
@@ -101,20 +102,20 @@ module MatchPrioritization
     private def days_homeless_labels
       {
         days_homeless: {
-          label: _('Cumulative Days Homeless'),
-          tooltip: _('Cumulative days homeless, all-time'),
+          label: Translation.translate('Cumulative Days Homeless'),
+          tooltip: Translation.translate('Cumulative days homeless, all-time'),
         },
         hmis_days_homeless_last_three_years: {
-          label: _('Days Homeless in Last Three Years from HMIS'),
-          tooltip: _('Days in homeless enrollments, excluding any self-report'),
+          label: Translation.translate('Days Homeless in Last Three Years from HMIS'),
+          tooltip: Translation.translate('Days in homeless enrollments, excluding any self-report'),
         },
         days_homeless_in_last_three_years: {
-          label: _('Days Homeless in Last Three Years'),
-          tooltip: _('Days homeless in the last three years including self-reported days'),
+          label: Translation.translate('Days Homeless in Last Three Years'),
+          tooltip: Translation.translate('Days homeless in the last three years including self-reported days'),
         },
         days_literally_homeless_in_last_three_years: {
-          label: _('Days Literally Homeless in Last Three Years'),
-          tooltip: _('Days in ES, SH or SO with no overlapping TH or PH'),
+          label: Translation.translate('Days Literally Homeless in Last Three Years'),
+          tooltip: Translation.translate('Days in ES, SH or SO with no overlapping TH or PH'),
         },
       }
     end

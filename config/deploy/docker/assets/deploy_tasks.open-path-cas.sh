@@ -10,12 +10,6 @@ bundle exec rake db:migrate
 T2=`date +%s`
 echo "...rake db:migrate took $(expr $T2 - $T1) seconds"
 
-echo 'Translations'
-T1=`date +%s`
-bundle exec rake gettext:sync_to_po_and_db
-T2=`date +%s`
-echo "...rake gettext:sync_to_po_and_db took $(expr $T2 - $T1) seconds"
-
 echo 'Rules seeding'
 T1=`date +%s`
 bundle exec rake cas_seeds:create_rules

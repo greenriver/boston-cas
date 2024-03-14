@@ -1,8 +1,8 @@
 Hello #{@contact.full_name},
 \
-= "A #{_('Housing Subsidy Administrator')} has set the #{_('lease start date')}."
+= "A #{Translation.translate('Housing Subsidy Administrator')} has set the #{Translation.translate('lease start date')}."
 \
-The #{_('lease start date')} is:
+The #{Translation.translate('lease start date')} is:
 = @match.record_client_housed_date_housing_subsidy_administrator_decision.client_move_in_date.try(&:to_date) || 'Not set'
 \
 Details:

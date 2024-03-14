@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -34,7 +34,7 @@ class Rule < ApplicationRecord
   end
 
   def name_with_verb
-    "#{verb} #{_(name)}"
+    "#{verb} #{Translation.translate(name)}"
   end
 
   def variable_requirement?

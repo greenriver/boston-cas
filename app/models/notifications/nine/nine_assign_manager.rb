@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      _("#{_('Stabilization Service Provider Nine')} notified, match awaiting case manager assignment")
+      Translation.translate("#{Translation.translate('Stabilization Service Provider Nine')} notified, match awaiting case manager assignment")
     end
   end
 end

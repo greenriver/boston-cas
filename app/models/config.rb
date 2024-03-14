@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -49,6 +49,10 @@ class Config < ApplicationRecord
     @settings = first_or_create
     @settings_update_at = Time.current
     @settings.public_send(config)
+  end
+
+  def self.using_pathways?
+    get(:deidentified_client_assessment).include?('Pathways') || get(:identified_client_assessment).include?('Pathways')
   end
 
   def include_note_in_email_options

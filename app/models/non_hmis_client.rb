@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -192,8 +192,8 @@ class NonHmisClient < ApplicationRecord
     project_client.middle_name = middle_name
     project_client.email = email.presence || current_assessment&.email_addresses
     project_client.address = current_assessment&.mailing_address
-    project_client.housing_release_status = _('Full HAN Release') if full_release_on_file
-    project_client.housing_release_status = _('Limited CAS Release') if limited_release_on_file
+    project_client.housing_release_status = Translation.translate('Full HAN Release') if full_release_on_file
+    project_client.housing_release_status = Translation.translate('Limited CAS Release') if limited_release_on_file
     project_client.tags = cas_tags
     project_client.default_shelter_agency_contacts = [contact&.email] if contact_id.present?
     project_client.sync_with_cas = available
@@ -220,6 +220,9 @@ class NonHmisClient < ApplicationRecord
     project_client.additional_homeless_nights_sheltered = current_assessment&.additional_homeless_nights_sheltered
     project_client.additional_homeless_nights_unsheltered = current_assessment&.additional_homeless_nights_unsheltered
     project_client.total_homeless_nights_unsheltered = current_assessment&.total_homeless_nights_unsheltered
+    project_client.calculated_homeless_nights_sheltered = current_assessment&.homeless_nights_sheltered
+    project_client.calculated_homeless_nights_unsheltered = current_assessment&.homeless_nights_unsheltered
+    project_client.total_homeless_nights_sheltered = current_assessment&.total_homeless_nights_sheltered
 
     if current_assessment&.actively_homeless
       project_client.calculated_last_homeless_night = Date.current

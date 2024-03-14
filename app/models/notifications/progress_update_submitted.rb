@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -32,7 +32,7 @@ module Notifications
       if Config.get(:notify_all_on_progress_update)
         'Progress update submitted, all contacts notified'
       else
-        "Progress update submitted, #{_('DND')} notified"
+        "Progress update submitted, #{Translation.translate('DND')} notified"
       end
     end
   end

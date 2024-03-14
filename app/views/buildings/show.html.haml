@@ -84,7 +84,7 @@
 
   .row
     .col-sm-8
-      %h2= _('Photos and Videos')
+      %h2= Translation.translate('Photos and Videos')
       .c-card__content.p-0.pb-4
         - if @building.housing_media_links.exists?
           = render 'housing_media_links/links', housing_object: @building, heading: ''

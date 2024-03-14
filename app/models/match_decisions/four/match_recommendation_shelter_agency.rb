@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -27,10 +27,10 @@ module MatchDecisions::Four
 
     def label_for_status status
       case status.to_sym
-      when :pending, :expiration_update then "New Match Awaiting #{_('Shelter Agency')} Review"
-      when :acknowledged then "Match acknowledged by #{_('Shelter Agency')}.  In review"
-      when :accepted then "Match accepted by #{_('Shelter Agency')}. Client has signed release of information, spoken with services agency and submitted a CORI release form"
-      when :not_working_with_client then "#{_('Shelter Agency')} no longer working with client"
+      when :pending, :expiration_update then "New Match Awaiting #{Translation.translate('Shelter Agency')} Review"
+      when :acknowledged then "Match acknowledged by #{Translation.translate('Shelter Agency')}.  In review"
+      when :accepted then "Match accepted by #{Translation.translate('Shelter Agency')}. Client has signed release of information, spoken with services agency and submitted a CORI release form"
+      when :not_working_with_client then "#{Translation.translate('Shelter Agency')} no longer working with client"
       when :declined then decline_status_label
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -39,17 +39,17 @@ module MatchDecisions::Four
 
     private def decline_status_label
       [
-        "Match declined by #{_('Shelter Agency')}. Reason: #{decline_reason_name}",
+        "Match declined by #{Translation.translate('Shelter Agency')}. Reason: #{decline_reason_name}",
         not_working_with_client_reason_status_label,
       ].join '. '
     end
 
     def step_name
-      "#{_('Shelter Agency')} Initial Review of Match Recommendation"
+      "#{Translation.translate('Shelter Agency')} Initial Review of Match Recommendation"
     end
 
     def actor_type
-      [_('Shelter Agency'), 'or', _('HSA')].join(' ')
+      [Translation.translate('Shelter Agency'), 'or', Translation.translate('HSA')].join(' ')
     end
 
     def expires?

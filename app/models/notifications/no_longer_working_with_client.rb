@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('DND')} notified, contact no longer working with client"
+      "#{Translation.translate('DND')} notified, contact no longer working with client"
     end
 
   end

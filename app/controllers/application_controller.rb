@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -22,7 +22,6 @@ class ApplicationController < ActionController::Base
   prepend_before_action :skip_timeout
 
   helper_method :locale
-  before_action :set_gettext_locale
   before_action :set_hostname
 
   before_action :compose_activity, except: [:poll, :active, :rollup, :image] # , only: [:show, :index, :merge, :unmerge, :edit, :update, :destroy, :create, :new]
@@ -31,7 +30,6 @@ class ApplicationController < ActionController::Base
   #before_action :_basic_auth, if: -> { Rails.env.staging? }
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!, :set_sentry_user
-  before_action :possibly_reset_fast_gettext_cache
 
   before_action :prepare_exception_notifier
 
@@ -97,11 +95,6 @@ class ApplicationController < ActionController::Base
     store_location_for(:user, request.url)
   end
 
-  def set_gettext_locale
-    session[:locale] = I18n.locale = FastGettext.set_locale(locale)
-    super
-  end
-
   protected
 
   def configure_permitted_parameters
@@ -116,16 +109,6 @@ class ApplicationController < ActionController::Base
   def locale
     default_locale = 'en'
     params[:locale] || session[:locale] || default_locale
-  end
-
-  def possibly_reset_fast_gettext_cache
-    key_for_host = "translation-fresh-at-for-#{set_hostname}"
-    last_change = Rails.cache.fetch('translation-fresh-at') { Time.current }
-    last_loaded_for_host = Rails.cache.read(key_for_host)
-    return unless last_loaded_for_host.blank? || last_change > last_loaded_for_host
-
-    FastGettext.cache.reload!
-    Rails.cache.write(key_for_host, Time.current)
   end
 
   # don't extend the user's session if its an ajax request.

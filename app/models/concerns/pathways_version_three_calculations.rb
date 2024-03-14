@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -62,7 +62,7 @@ module PathwaysVersionThreeCalculations
             client_field: :rrh_assessment_collected_at,
           },
           setting: {
-            title: _('Current Living Situation'),
+            title: Translation.translate('Current Living Situation'),
             client_field: :majority_sheltered_for_export,
           },
           veteran_status: {
@@ -98,7 +98,7 @@ module PathwaysVersionThreeCalculations
             client_field: :neighborhood_interests_for_export,
           },
           financial_assistance_end_date: {
-            title: _('Latest Date Eligible for Financial Assistance'),
+            title: Translation.translate('Latest Date Eligible for Financial Assistance'),
             client_field: :financial_assistance_end_date,
           },
           total_days_homeless_in_the_last_three_years: {
@@ -106,7 +106,7 @@ module PathwaysVersionThreeCalculations
             client_field: :days_homeless_in_last_three_years,
           },
           need_daily_assistance: {
-            title: _('Needs a higher level of care'),
+            title: Translation.translate('Needs a higher level of care'),
             client_field: :need_daily_assistance_for_export,
           },
           # The following may be needed eventually, but aren't currently included
@@ -152,11 +152,11 @@ module PathwaysVersionThreeCalculations
     end
 
     def pathways_description
-      _('We want to reach you when there is a housing program opening for you.')
+      Translation.translate('We want to reach you when there is a housing program opening for you.')
     end
 
     def transfer_description
-      _('Gather information about a rapid re-housing (RRH) participant’s housing stability.')
+      Translation.translate('Gather information about a rapid re-housing (RRH) participant’s housing stability.')
     end
 
     def assessment_type_options
@@ -496,10 +496,10 @@ module PathwaysVersionThreeCalculations
           label: 'Current living situation - select one (required)?',
           number: '',
           collection: {
-            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
-            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
-            _('Transitional Housing') => 'Transitional Housing',
-            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+            Translation.translate('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            Translation.translate('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            Translation.translate('Transitional Housing') => 'Transitional Housing',
+            Translation.translate('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
           as: :pretty_boolean_group,
           required: true,
@@ -667,8 +667,8 @@ module PathwaysVersionThreeCalculations
           label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
           number: '6F',
           collection: {
-            _('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
-            _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
+            Translation.translate('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
+            Translation.translate('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
           },
           as: :pretty_checkboxes_group,
         },
@@ -897,10 +897,10 @@ module PathwaysVersionThreeCalculations
           label: 'Current living situation - select one (required)?',
           number: '',
           collection: {
-            _('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
-            _('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
-            _('Transitional Housing') => 'Transitional Housing',
-            _('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+            Translation.translate('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            Translation.translate('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            Translation.translate('Transitional Housing') => 'Transitional Housing',
+            Translation.translate('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
           },
           as: :pretty_boolean_group,
         },
@@ -985,7 +985,7 @@ module PathwaysVersionThreeCalculations
         income_maximization_assistance_requested: {
           label: 'We have income maximization services we can offer to people who sign up for these housing opportunities and are waiting for an offer. These services include staff who are trained in resources and ways to increase your income by budgeting, applying for all benefits you may need and/or linking to employment opportunities. Are you interested in using this service while you wait for housing?',
           number: '4B',
-          # hint: _('Note for Assessor Staff regarding income maximization'),
+          # hint: Translation.translate('Note for Assessor Staff regarding income maximization'),
           as: :pretty_boolean,
           wrapper: :custom_boolean,
         },
@@ -1001,10 +1001,10 @@ module PathwaysVersionThreeCalculations
             possible_housing_situation: {
               label: 'Sharing housing',
               collection: {
-                _('Yes') => 'Yes',
-                _('No, I want my own home') => 'No, I want my own home',
-                _('No, I have had negative roommate experiences before') => 'No, I have had negative roommate experiences before',
-                _('No, I do not know anyone to share housing with') => 'No, I do not know anyone to share housing with',
+                Translation.translate('Yes') => 'Yes',
+                Translation.translate('No, I want my own home') => 'No, I want my own home',
+                Translation.translate('No, I have had negative roommate experiences before') => 'No, I have had negative roommate experiences before',
+                Translation.translate('No, I do not know anyone to share housing with') => 'No, I do not know anyone to share housing with',
               },
               as: :pretty_boolean_group,
             },
@@ -1094,8 +1094,8 @@ module PathwaysVersionThreeCalculations
           label: 'While openings are not common, we do have different types of affordable housing. Check the types you would be willing to take if there was an opening',
           number: '6F',
           collection: {
-            _('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
-            _('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
+            Translation.translate('Voucher: An affordable housing "ticket" used to find a home with private landlords. It is mobile, so you can move units and still keep the affordability (about 30-40% of your income for rent)') => 'Voucher',
+            Translation.translate('Project-Based unit: The unit is affordable (about 30-40% of your income), but the affordability is attached to the unit. It is not mobile- if you leave, you will lose the affordability. You do not have to do a full housing search in the private market with landlords because the actual unit would be open and available.') => 'Project-Based unit',
           },
           as: :pretty_checkboxes_group,
         },
@@ -1136,9 +1136,9 @@ module PathwaysVersionThreeCalculations
           label: 'There are two circumstances where the housing authorities administering these vouchers are required to deny an applicant. In an effort to be considerate of your time, it is best for us to figure out whether these barriers might come up for you now. Have you experienced any of the following? (Check all that apply)',
           number: '8B',
           collection: {
-            _('Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing') => 'manufacture or production of methamphetamine in household',
-            _('Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.') => 'lifetime sex offender in household',
-            _('None of the above ') => 'none',
+            Translation.translate('Any household member has been convicted of the manufacture or production of methamphetamine in federally assisted housing') => 'manufacture or production of methamphetamine in household',
+            Translation.translate('Any member of your household is subject to a lifetime registration requirement under a state sex offender registration program.') => 'lifetime sex offender in household',
+            Translation.translate('None of the above ') => 'none',
           },
           as: :pretty_checkboxes_group,
         },

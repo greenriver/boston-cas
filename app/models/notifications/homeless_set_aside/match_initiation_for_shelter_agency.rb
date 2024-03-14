@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -14,7 +14,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{_('Shelter Agency')} notified of match detail"
+      "#{Translation.translate('Shelter Agency')} notified of match detail"
     end
 
     def show_client_info?

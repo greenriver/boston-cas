@@ -3,7 +3,7 @@
 
 %p.content
   An account has been created for you for the
-  #{_('City of Boston')} Coordinated Access System.  Please follow the link below to finish
+  #{Translation.translate('City of Boston')} Coordinated Access System.  Please follow the link below to finish
   setting up your account:
   %br
   = link_to 'Setup Account', accept_invitation_url(@resource, invitation_token: @token)

@@ -183,6 +183,40 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
+      "fingerprint": "4d07b6db27f38d8334c1cdb085024af1a122fcb263118f2b3a91a51d4993f22c",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/layouts/application.html.haml",
+      "line": 31,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Translation.translate(\"Boston Coordinated Access\").split(\" \").join(\"<br />\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "AccountEmailsController",
+          "method": "update",
+          "line": 28,
+          "file": "app/controllers/account_emails_controller.rb",
+          "rendered": {
+            "name": "layouts/application",
+            "file": "app/views/layouts/application.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "layouts/application"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "50b6526d2855834552716cadcb7d87a71e755a9982a18a0f4a570048d2765096",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
@@ -221,7 +255,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 161,
+      "line": 154,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep refs/heads/#{`git rev-parse --abbrev-ref HEAD`.chomp}$`",
       "render_path": null,
@@ -234,6 +268,39 @@
       "confidence": "Medium",
       "cwe_id": [
         77
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "56d6c57b58aa10d073020b82321767564a0ae7ff153f3db75a178cd675506d52",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/common/_pagination_bottom.haml",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "pagy_info(@pagy, :item_name => Translation.translate((local_assigns[:item_name] or \"item\")).pluralize(@pagy.count))",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "admin/translation_keys/index",
+          "line": 28,
+          "file": "app/views/admin/translation_keys/index.html.haml",
+          "rendered": {
+            "name": "common/_pagination_bottom",
+            "file": "app/views/common/_pagination_bottom.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "common/_pagination_bottom"
+      },
+      "user_input": "Translation.translate((local_assigns[:item_name] or \"item\")).pluralize(@pagy.count)",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
@@ -284,13 +351,46 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "6ba0d2d291e9ed4d3462446812b6dfebf0e54d4ca70f6783eedc7135aaedf835",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/common/_pagination_top.haml",
+      "line": 2,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "pagy_info(@pagy, :item_name => Translation.translate((local_assigns[:item_name] or \"item\")).pluralize(@pagy.count))",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "admin/translation_keys/index",
+          "line": 6,
+          "file": "app/views/admin/translation_keys/index.html.haml",
+          "rendered": {
+            "name": "common/_pagination_top",
+            "file": "app/views/common/_pagination_top.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "common/_pagination_top"
+      },
+      "user_input": "Translation.translate((local_assigns[:item_name] or \"item\")).pluralize(@pagy.count)",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "6cfd47b3522f879e176ed00c1639c8431e26cf5798564e7ba8e89633bdda9f61",
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 162,
+      "line": 155,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -313,7 +413,7 @@
       "check_name": "VerbConfusion",
       "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
       "file": "app/controllers/application_controller.rb",
-      "line": 94,
+      "line": 92,
       "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
       "code": "return unless request.get?",
       "render_path": null,
@@ -330,32 +430,13 @@
       "note": ""
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 123,
-      "fingerprint": "870fa4a5cfd770898e1b7a159368b4210fe366634512563f9fb1c1cbbfef1d78",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 2.7.7 ends on 2023-03-31",
-      "file": "Gemfile.lock",
-      "line": 486,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Medium",
-      "cwe_id": [
-        1104
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "8a29ddebc189081add6710e179967e490ad042f12df9fdfaac8211e87e8d97db",
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 377,
+      "line": 333,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`docker image ls -f 'reference=#{repo_name}' | grep \"#{_ruby_version}-#{_pre_cache_version}--pre-cache\"`",
       "render_path": null,
@@ -445,7 +526,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 156,
+      "line": 149,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -508,6 +589,28 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "bb2b5579661c41e20caf19f39fd81a014bffe21e004f4a1ae103e1f3657e82ff",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/non_hmis_assessments/pathways_version_three/_pathways_version_three_preamble.haml",
+      "line": 21,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "markdown.render(Translation.translate(\"Veteran Agency Contact Details\"))",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "non_hmis_assessments/pathways_version_three/_pathways_version_three_preamble"
+      },
+      "user_input": "Translation.translate(\"Veteran Agency Contact Details\")",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
@@ -548,29 +651,6 @@
       "confidence": "Weak",
       "cwe_id": [
         22
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Redirect",
-      "warning_code": 18,
-      "fingerprint": "cf9fa747c96c496625affc43ebc9ecdb01c696ca61f911e2de7da2f6188b251d",
-      "check_name": "Redirect",
-      "message": "Possible unprotected redirect",
-      "file": "app/controllers/admin/translation_keys_controller.rb",
-      "line": 63,
-      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
-      "code": "redirect_to(TranslationKey.find(params[:id].to_i))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::TranslationKeysController",
-        "method": "update"
-      },
-      "user_input": "params[:id].to_i",
-      "confidence": "Weak",
-      "cwe_id": [
-        601
       ],
       "note": ""
     },
@@ -800,6 +880,6 @@
       "note": ""
     }
   ],
-  "updated": "2023-03-21 11:48:07 -0400",
+  "updated": "2024-02-08 20:28:58 +0000",
   "brakeman_version": "5.4.0"
 }

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -74,10 +74,10 @@ class DeidentifiedClient < NonHmisClient
         'Required number of bedrooms',
         'Required minimum occupancy',
         'Requires elevator access',
-        _('Part of a family'),
-        _('Chronically homeless family'),
+        Translation.translate('Part of a family'),
+        Translation.translate('Chronically homeless family'),
         'Gender',
-        _('Date days homeless verified'),
+        Translation.translate('Date days homeless verified'),
         'Who verified days homeless',
         'Total monthly income',
         'Disabling condition',

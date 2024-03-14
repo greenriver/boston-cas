@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -10,7 +10,7 @@ module MatchDecisions::Five
     include MatchDecisions::DefaultShelterAgencyDeclineReasons
 
     def step_name
-      _('Client Agrees To Match')
+      Translation.translate('Client Agrees To Match')
     end
 
     def contact_actor_type

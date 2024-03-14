@@ -10,7 +10,7 @@
 - elsif @notification.decision.blank?
   %p This step is no longer part of the match.
 - elsif @notification.decision.editable?
-  %p= "This link has expired. #{_('DND')} has been prompted to reissue an email notification to you with a new expiring link."
+  %p= "This link has expired. #{Translation.translate('DND')} has been prompted to reissue an email notification to you with a new expiring link."
 - else
   - if @match.current_decision.present?
     .row

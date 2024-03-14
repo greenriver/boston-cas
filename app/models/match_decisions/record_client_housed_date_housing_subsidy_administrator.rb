@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -20,10 +20,10 @@ module MatchDecisions
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} to note when client will move in."
-      when :other_clients_canceled then "#{_('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
-      when :completed then "#{_('Housing Subsidy Administrator')} notes #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
-      when :shelter_declined then "Match declined by #{_('Shelter Agency Contact')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator')} to note when client will move in."
+      when :other_clients_canceled then "#{Translation.translate('Housing Subsidy Administrator')} has confirmed client will move-in, and has canceled other matches on the opportunity"
+      when :completed then "#{Translation.translate('Housing Subsidy Administrator')} notes #{Translation.translate('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :shelter_declined then "Match declined by #{Translation.translate('Shelter Agency Contact')}.  Reason: #{decline_reason_name}"
       when :skipped then 'Skipped'
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -35,7 +35,7 @@ module MatchDecisions
     end
 
     def actor_type
-      _('HSA')
+      Translation.translate('HSA')
     end
 
     def contact_actor_type
@@ -53,7 +53,7 @@ module MatchDecisions
         completed: 'Complete',
         canceled: 'Canceled',
         shelter_declined: 'Declined by Shelter Agency',
-        skipped: _('There will not be a criminal background hearing'),
+        skipped: Translation.translate('There will not be a criminal background hearing'),
         back: 'Pending',
       }
     end

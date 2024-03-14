@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -17,7 +17,7 @@ module Notifications::Seven
     end
 
     def event_label
-      "#{_('DND')} notified of #{_('Housing Subsidy Administrator')} decline. Confirmation pending."
+      "#{Translation.translate('DND')} notified of #{Translation.translate('Housing Subsidy Administrator')} decline. Confirmation pending."
     end
   end
 end

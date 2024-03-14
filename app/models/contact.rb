@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -70,14 +70,14 @@ class Contact < ApplicationRecord
   # Used when no more-specific context is available
   def self.label_for(input_name)
     choices = {
-      shelter_agency_contacts: "#{_('Shelter Agency')} and/or #{_('Housing Search Worker')} Contacts",
-      client_contacts: "#{_('Client')} Contacts",
-      regular_contacts: "#{_('Client')} Contacts",
-      dnd_staff_contacts: "#{_('DND')} Staff Contacts",
-      housing_subsidy_admin_contacts: "#{_('Housing Subsidy Administrator')} Contacts",
-      ssp_contacts: "#{_('Stabilization Service Provider')}",
-      hsp_contacts: "#{_('Housing Search Provider')}",
-      do_contacts: "#{_('Development Officer Contacts')}",
+      shelter_agency_contacts: "#{Translation.translate('Shelter Agency')} and/or #{Translation.translate('Housing Search Worker')} Contacts",
+      client_contacts: "#{Translation.translate('Client')} Contacts",
+      regular_contacts: "#{Translation.translate('Client')} Contacts",
+      dnd_staff_contacts: "#{Translation.translate('DND')} Staff Contacts",
+      housing_subsidy_admin_contacts: "#{Translation.translate('Housing Subsidy Administrator')} Contacts",
+      ssp_contacts: Translation.translate('Stabilization Service Provider'),
+      hsp_contacts: Translation.translate('Housing Search Provider'),
+      do_contacts: Translation.translate('Development Officer Contacts'),
     }
     choices[input_name] || input_name
   end

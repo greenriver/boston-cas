@@ -25,9 +25,6 @@ bundle exec rake reports:seed
 echo General seeding
 bundle exec rake db:seed
 
-echo Translations
-bundle exec rake gettext:sync_to_po_and_db
-
 echo Installing cron
 ./bin/cron_installer.rb
 

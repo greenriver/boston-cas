@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -19,12 +19,12 @@ module RouteFourMailerMethods
 
     def housing_subsidy_administrator_accepted(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match accepted by #{_('HSA')}")
+      mail(to: @contact.email, subject: "Match accepted by #{Translation.translate('HSA')}")
     end
 
     def confirm_hsa_initial_decline_dnd_staff(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Declined by #{_('HSA')} - Requires Your Action")
+      mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')} - Requires Your Action")
     end
 
     def match_success_confirmed(notification = nil)

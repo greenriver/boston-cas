@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -18,9 +18,9 @@ module MatchDecisions::HomelessSetAside
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('Housing Subsidy Administrator')} reviewing match"
-      when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}"
-      when :declined then "Match declined by #{_('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator')} reviewing match"
+      when :accepted then "Match accepted by #{Translation.translate('Housing Subsidy Administrator')}"
+      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
@@ -35,11 +35,11 @@ module MatchDecisions::HomelessSetAside
     end
 
     def step_name
-      _('Client Agrees to Match')
+      Translation.translate('Client Agrees to Match')
     end
 
     def actor_type
-      _('HSA')
+      Translation.translate('HSA')
     end
 
     def contact_actor_type
@@ -113,9 +113,9 @@ module MatchDecisions::HomelessSetAside
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{_('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
+      missing_contacts << "a #{Translation.translate('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
 
-      missing_contacts << "a #{_('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

@@ -81,6 +81,26 @@ RSpec.describe Client, type: :model do
       end
     end
 
+    context 'when prioritized by AssessmentScore with random tie breaker' do
+      let(:priority) { create :priority_assessment_score_random_tie_breaker }
+      let(:route) { create :default_route, match_prioritization: priority }
+      before :each do
+        # set the two top scores to the same thing, make sure we get the client with the lowest tie breaker
+        # as the highest priority
+        highest_scores = clients.sort_by(&:assessment_score).last(2)
+        top_score = highest_scores.map(&:assessment_score).max
+        highest_scores.each { |c| c.update(assessment_score: top_score) }
+      end
+      it 'is an ActiveRecord::Relation' do
+        expect(Client.prioritized(route, Client.all)).to be_an ActiveRecord::Relation
+      end
+      it 'orders by assessment_score' do
+        ordered_clients = Client.order(assessment_score: :desc, tie_breaker: :asc).pluck(:id, :assessment_score, :tie_breaker)
+        expect(Client.prioritized(route, Client.all).pluck(:id, :assessment_score, :tie_breaker)).to eq(ordered_clients)
+        expect(Client.prioritized(route, Client.all).first(2).map(&:assessment_score).uniq.count).to eq(1)
+      end
+    end
+
     context 'when prioritized by DaysHomelessLastThreeYears assessment date tie breaker' do
       let(:priority) { create :priority_days_homeless_last_three_years_assessment_date }
       let(:route) { create :default_route, match_prioritization: priority }

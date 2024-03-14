@@ -11,7 +11,7 @@
             .o-choose__content
               %p
                 Please record the name of the case manager.
-              = form.input :manager, label: _('Case Manager Name'), disabled: !@decision.editable?
+              = form.input :manager, label: Translation.translate('Case Manager Name'), disabled: !@decision.editable?
               = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
 
               = render 'match_decisions/continue_button', text: 'Complete Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'completed'}, disabled: (!@decision.editable?) }

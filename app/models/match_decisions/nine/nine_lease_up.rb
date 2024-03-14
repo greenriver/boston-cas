@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -12,11 +12,11 @@ module MatchDecisions::Nine
     validate :client_move_in_date_present_if_status_complete
 
     def step_name
-      _('Move In')
+      Translation.translate('Move In')
     end
 
     def actor_type
-      _('HSA Nine')
+      Translation.translate('HSA Nine')
     end
 
     def contact_actor_type
@@ -48,7 +48,7 @@ module MatchDecisions::Nine
       case status.to_sym
       when :pending then 'Awaiting Move In'
       when :expiration_update then 'Awaiting Move In'
-      when :completed then "Match completed by #{_('Housing Subsidy Administrator Nine')}, #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "Match completed by #{Translation.translate('Housing Subsidy Administrator Nine')}, #{Translation.translate('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
       when :declined then 'Match Declined'
 
       when :canceled then canceled_status_label

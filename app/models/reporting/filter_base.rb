@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -122,7 +122,7 @@ module Reporting
     def match_route_options_for_select
       MatchRoutes::Base.active.map do |route|
         [
-          _(route.title),
+          Translation.translate(route.title),
           route.id,
         ]
       end.to_h

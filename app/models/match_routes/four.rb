@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,7 +7,7 @@
 module MatchRoutes
   class Four < Base
     def title
-      _('Match Route Four')
+      Translation.translate('Match Route Four')
     end
 
     def self.available_sub_types_for_search

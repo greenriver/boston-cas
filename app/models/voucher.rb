@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -82,7 +82,7 @@ class Voucher < ApplicationRecord
   end
 
   def self.translated_confirmation_text
-    _('Translate this to add voucher confirmation')
+    Translation.translate('Translate this to add voucher confirmation')
   end
 
   def name

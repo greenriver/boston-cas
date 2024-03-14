@@ -29,7 +29,7 @@
 .row
   .col-md-8
     .c-question
-      - label = "Default #{_('Shelter Agency')} Contact"
+      - label = "Default #{Translation.translate('Shelter Agency')} Contact"
       - if disabled
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name, label: label
       - else

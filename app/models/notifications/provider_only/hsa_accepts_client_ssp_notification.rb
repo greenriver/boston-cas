@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -14,7 +14,7 @@ module Notifications::ProviderOnly
     end
 
     def event_label
-      "#{_'SSP'} notified of #{_('Housing Subsidy Administrator')} acceptance"
+      "#{Translation.translate('SSP')} notified of #{Translation.translate('Housing Subsidy Administrator')} acceptance"
     end
 
     def show_client_info?

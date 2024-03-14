@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -24,7 +24,7 @@ module Notifications
     end
 
     def event_label
-      "#{_('Shelter Agency')}, #{_('Housing Subsidy Administrator')}, #{_('Stabilization Service Provider')}, and #{_('Housing Search Provider')} contacts notified, #{_('lease start date')} set."
+      "#{Translation.translate('Shelter Agency')}, #{Translation.translate('Housing Subsidy Administrator')}, #{Translation.translate('Stabilization Service Provider')}, and #{Translation.translate('Housing Search Provider')} contacts notified, #{Translation.translate('lease start date')} set."
     end
   end
 end

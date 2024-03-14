@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -11,7 +11,7 @@ module MatchDecisions::Five
     attr_accessor :mitigations
 
     def step_name
-      _('Mitigation')
+      Translation.translate('Mitigation')
     end
 
     def contact_actor_type

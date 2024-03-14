@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -18,7 +18,7 @@ module Notifications::Four
     end
 
     def event_label
-      "#{_('DND')}  notified of #{_('Shelter Agency')} match acceptance"
+      "#{Translation.translate('DND')}  notified of #{Translation.translate('Shelter Agency')} match acceptance"
     end
 
   end

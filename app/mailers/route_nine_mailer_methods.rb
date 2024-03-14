@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -24,7 +24,7 @@ module RouteNineMailerMethods
 
     def nine_confirm_hsa_decline(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Declined by #{_('HSA Nine')} - Requires Your Action")
+      mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA Nine')} - Requires Your Action")
     end
 
     def nine_confirm_voucher_decline(notification = nil)
@@ -33,7 +33,7 @@ module RouteNineMailerMethods
 
     def nine_lease_up(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match is awaiting #{_('Move In')}")
+      mail(to: @contact.email, subject: "Match is awaiting #{Translation.translate('Move In')}")
     end
 
     def nine_confirm_lease_up_decline(notification = nil)
@@ -52,7 +52,7 @@ module RouteNineMailerMethods
 
     def nine_confirm_assign_manager_decline(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Declined by #{_('Stabilization Service Provider Nine')} - Requires Your Action")
+      mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('Stabilization Service Provider Nine')} - Requires Your Action")
     end
 
     def nine_confirm_match_success(notification = nil)

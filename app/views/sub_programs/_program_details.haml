@@ -19,7 +19,7 @@
   .c-card__content
     %table.table.table-condensed
       %tr.no-border
-        %th Contacts Editable by #{_('HSA')}?
+        %th Contacts Editable by #{Translation.translate('HSA')}?
         %td= checkmark @program.match_route&.contacts_editable_by_hsa
       %tr
         %th Prioritized by

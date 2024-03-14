@@ -5,7 +5,7 @@
 
 :ruby
   mode ||= 'read'
-  heading ||= _('Photos and Videos')
+  heading ||= Translation.translate('Photos and Videos')
 
 .c-card.c-card--flush.mb-4
   %h3= heading
@@ -31,4 +31,4 @@
       .text-right
         = link_to new_polymorphic_path([housing_object, HousingMediaLink]), class: 'btn btn-secondary mr-4 mt-4', data: {loads_in_pjax_modal: true} do
           %i.icon-plus
-          = _('Add Photo or Video Link')
+          = Translation.translate('Add Photo or Video Link')

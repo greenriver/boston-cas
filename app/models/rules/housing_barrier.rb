@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 class Rules::HousingBarrier < Rule
   def clients_that_fit(scope, requirement, _opportunity)
     if Client.column_names.include?(:housing_barrier.to_s)

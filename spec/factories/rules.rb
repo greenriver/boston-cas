@@ -204,7 +204,7 @@ FactoryBot.define do
     verb { 'have' }
   end
   factory :cspech_eligible, class: 'Rules::CspechEligible' do
-    name { 'CSPECH eligible' }
+    name { Translation.translate('CSPECH eligible') }
     verb { 'be' }
   end
   factory :developmental_disability, class: 'Rules::DevelopmentalDisability' do
@@ -463,7 +463,7 @@ FactoryBot.define do
   end
 
   factory :can_work_full_time, class: 'Rules::CanWorkFullTime' do
-    name { 'Able to work full-time' }
+    name { Translation.translate('Able to work full-time') }
     verb { 'be' }
   end
   factory :currently_fleeing, class: 'Rules::CurrentlyFleeing' do
@@ -479,7 +479,7 @@ FactoryBot.define do
     verb { 'be' }
   end
   factory :rrh_successful_exit, class: 'Rules::RrhSuccessfulExit' do
-    name { 'Able to successfully exit 12-24 month RRH program' }
+    name { Translation.translate('Able to successfully exit 12-24 month RRH program') }
     verb { 'be' }
   end
   factory :site_case_management_required, class: 'Rules::SiteCaseManagementRequired' do

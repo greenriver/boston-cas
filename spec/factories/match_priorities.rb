@@ -23,6 +23,9 @@ FactoryBot.define do
   factory :priority_assessment_score_funding_tie_breaker, class: 'MatchPrioritization::AssessmentScoreFundingTieBreaker' do
     active { true }
   end
+  factory :priority_assessment_score_random_tie_breaker, class: 'MatchPrioritization::AssessmentScoreRandomTieBreaker' do
+    active { true }
+  end
   factory :priority_rank, class: 'MatchPrioritization::Rank' do
     active { true }
   end

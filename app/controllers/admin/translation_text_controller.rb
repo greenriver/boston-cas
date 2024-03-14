@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -7,19 +7,16 @@
 module Admin
   class TranslationTextController < ApplicationController
     before_action :require_can_edit_translations!
-    before_action :find_translation_text
+    before_action :set_translation
 
     def update
       error = false
       begin
-        tp = text_params
-        @text.update(text_params)
-        if tp[:text].blank?
-          @text.text = nil
-          @text.save
-          Rails.cache.write('translation-fresh-at', Time.current)
-        end
-      rescue Exception => e
+        @translation.assign_attributes(text_params)
+        @translation.text = nil if text_params[:text]&.strip&.blank?
+        @translation.save
+        @translation.invalidate_cache
+      rescue Exception
         error = true
         render status: 500, json: 'Unable to save translation', layout: false
       end
@@ -27,16 +24,16 @@ module Admin
       render status: 200, json: "Translation saved: #{text}", layout: false unless error
     end
 
-    def translation_text_source
-      TranslationText
+    def translation_source
+      Translation
     end
 
-    def find_translation_text
-      @text = translation_text_source.find(params[:id].to_i)
+    def set_translation
+      @translation = translation_source.find(params[:id].to_i)
     end
 
     def text_params
-      params.require(:translation_text).permit(:text, :id, :locale)
+      params.require(:translation).permit(:text, :id)
     end
   end
 end

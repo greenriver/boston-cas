@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -17,7 +17,7 @@ module Notifications::Eight
     end
 
     def event_label
-      _("#{_('Housing Subsidy Administrator Eight')} notified, match awaiting case manager assignment")
+      Translation.translate("#{Translation.translate('Housing Subsidy Administrator Eight')} notified, match awaiting case manager assignment")
     end
   end
 end

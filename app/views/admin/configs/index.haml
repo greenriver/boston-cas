@@ -8,7 +8,7 @@
 = simple_form_for @config, url: admin_configs_path do |f|
   .row
     .col-sm-6
-      = f.input :dnd_interval, label: "Stalled Match #{_('DND')} Notification Length in Days", input_html: {size: 4, style: 'width: 4em;'}
+      = f.input :dnd_interval, label: "Stalled Match #{Translation.translate('DND')} Notification Length in Days", input_html: {size: 4, style: 'width: 4em;'}
       = f.input :notify_all_on_progress_update
       = f.input :require_cori_release, label: "Require CORI Release"
       = f.input :limit_client_names_on_matches

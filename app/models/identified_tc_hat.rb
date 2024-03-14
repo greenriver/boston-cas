@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2019 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -8,7 +8,7 @@ class IdentifiedTcHat < IdentifiedClientAssessment
   include TcHatCalculations
 
   def title
-    _('TC HAT')
+    Translation.translate('TC HAT')
   end
 
   def for_matching

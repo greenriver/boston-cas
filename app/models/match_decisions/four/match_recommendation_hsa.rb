@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -22,8 +22,8 @@ module MatchDecisions::Four
 
     def label_for_status status
       case status.to_sym
-      when :pending then "Match Awaiting #{_('Housing Subsidy Administrator')} Review"
-      when :accepted then "Match accepted by #{_('Housing Subsidy Administrator')}."
+      when :pending then "Match Awaiting #{Translation.translate('Housing Subsidy Administrator')} Review"
+      when :accepted then "Match accepted by #{Translation.translate('Housing Subsidy Administrator')}."
       when :declined then decline_status_label
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -32,16 +32,16 @@ module MatchDecisions::Four
 
     private def decline_status_label
       [
-        "Match declined by #{_('Housing Subsidy Administrator')}. Reason: #{decline_reason_name}",
+        "Match declined by #{Translation.translate('Housing Subsidy Administrator')}. Reason: #{decline_reason_name}",
       ].join '. '
     end
 
     def step_name
-      "#{_('Housing Subsidy Administrator')} Initial Review of Match Recommendation"
+      "#{Translation.translate('Housing Subsidy Administrator')} Initial Review of Match Recommendation"
     end
 
     def actor_type
-      _('HSA')
+      Translation.translate('HSA')
     end
 
     def contact_actor_type

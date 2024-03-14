@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -8,7 +8,7 @@ module MatchProgressUpdates
   class Anyone < Base
     validates_presence_of :response, :client_last_seen
     def name
-      _('Match status update')
+      Translation.translate('Match status update')
     end
 
     def self.match_contact_scope

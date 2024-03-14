@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -12,7 +12,7 @@ module MatchDecisions::Five
     validate :client_move_in_date_present_if_status_complete
 
     def step_name
-      _('Move In')
+      Translation.translate('Move In')
     end
 
     def contact_actor_type
@@ -47,7 +47,7 @@ module MatchDecisions::Five
       case status.to_sym
       when :pending then 'Awaiting Move In'
       when :expiration_update then 'Awaiting Move In'
-      when :completed then "Match completed by #{actor_type}, #{_('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :completed then "Match completed by #{actor_type}, #{Translation.translate('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
 
       when :canceled then canceled_status_label
       when :back then backup_status_label

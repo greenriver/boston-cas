@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -22,20 +22,20 @@ module MatchDecisions::Eight
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{_('DND')} to confirm #{_('Housing Subsidy Administrator Eight')} decline"
-      when :decline_overridden then "#{_('Housing Subsidy Administrator Eight')} Decline overridden by #{_('DND')}.  Match proceeding to #{_('Housing Subsidy Administrator Eight')}"
-      when :decline_overridden_returned then "#{_('Housing Subsidy Administrator Eight')} Decline overridden by #{_('DND')}.  Match returned to #{_('Housing Subsidy Administrator Eight')}"
-      when :decline_confirmed then "Match rejected by #{_('DND')}"
+      when :pending then "#{Translation.translate('DND')} to confirm #{Translation.translate('Housing Subsidy Administrator Eight')} decline"
+      when :decline_overridden then "#{Translation.translate('Housing Subsidy Administrator Eight')} Decline overridden by #{Translation.translate('DND')}.  Match proceeding to #{Translation.translate('Housing Subsidy Administrator Eight')}"
+      when :decline_overridden_returned then "#{Translation.translate('Housing Subsidy Administrator Eight')} Decline overridden by #{Translation.translate('DND')}.  Match returned to #{Translation.translate('Housing Subsidy Administrator Eight')}"
+      when :decline_confirmed then "Match rejected by #{Translation.translate('DND')}"
       when :canceled then canceled_status_label
       end
     end
 
     def step_name
-      "#{_('DND')} Reviews Voucher Declined by #{_('HSA Eight')}"
+      "#{Translation.translate('DND')} Reviews Voucher Declined by #{Translation.translate('HSA Eight')}"
     end
 
     def actor_type
-      _('DND')
+      Translation.translate('DND')
     end
 
     def contact_actor_type

@@ -21,6 +21,8 @@ namespace :cas do
       sp.update_summary!
     end
     Client.add_missing_tie_breakers
+
+    BuildTranslationCacheJob.perform_later
   end
 
   desc 'Add/Update Clients with chronically homeless'

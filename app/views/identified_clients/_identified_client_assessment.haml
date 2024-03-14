@@ -17,9 +17,9 @@
     = assessment_form.input :days_homeless_in_the_last_three_years, disabled: disabled
     = assessment_form.input :date_days_homeless_verified, as: :date_picker, label: 'Date of Assessment', disabled: disabled
     = assessment_form.input :who_verified_days_homeless, disabled: disabled
-    = assessment_form.input :family_member, label: _('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
+    = assessment_form.input :family_member, label: Translation.translate('Part of a family'), input_html: {class: 'jFamily'}, disabled: disabled
     .jChronicallyHomeless
-      = assessment_form.input :calculated_chronic_homelessness, as: :boolean, label: _('Chronically homeless family'), disabled: disabled
+      = assessment_form.input :calculated_chronic_homelessness, as: :boolean, label: Translation.translate('Chronically homeless family'), disabled: disabled
     = assessment_form.input :rrh_desired, label: 'Interested in RRH', disabled: disabled
     = assessment_form.input :youth_rrh_desired, label: 'Only interested in Youth RRH', disabled: disabled
     = assessment_form.input :income_total_monthly, label: 'Total monthly income', disabled: disabled
@@ -34,7 +34,7 @@
     = assessment_form.input :disabling_condition, disabled: disabled
     = assessment_form.input :physical_disability, disabled: disabled
     = assessment_form.input :developmental_disability, disabled: disabled
-    = assessment_form.input :requires_wheelchair_accessibility, label: _('Requires wheelchair accessible unit'), disabled: disabled
-    = assessment_form.input :requires_elevator_access, label: _('Requires ground floor unit or elevator access'), disabled: disabled
+    = assessment_form.input :requires_wheelchair_accessibility, label: Translation.translate('Requires wheelchair accessible unit'), disabled: disabled
+    = assessment_form.input :requires_elevator_access, label: Translation.translate('Requires ground floor unit or elevator access'), disabled: disabled
 
     = render 'deidentified_clients/js'

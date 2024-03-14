@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -158,19 +158,19 @@ module MatchRoutes
     def contact_label_for(contact_type)
       case contact_type
       when :dnd_staff_contacts
-        _('DND')
+        Translation.translate('DND')
       when :housing_subsidy_admin_contacts
-        _('Housing Subsidy Administrator')
+        Translation.translate('Housing Subsidy Administrator')
       when :client_contacts
-        _('Client')
+        Translation.translate('Client')
       when :shelter_agency_contacts
-        _('Shelter Agency')
+        Translation.translate('Shelter Agency')
       when :ssp_contacts
-        _('Stabilization Service Provider')
+        Translation.translate('Stabilization Service Provider')
       when :hsp_contacts
-        _('Housing Search Provider')
+        Translation.translate('Housing Search Provider')
       when :do_contacts
-        _('Development Officer')
+        Translation.translate('Development Officer')
       end
     end
 

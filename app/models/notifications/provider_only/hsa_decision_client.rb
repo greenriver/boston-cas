@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -15,7 +15,7 @@ module Notifications::ProviderOnly
     end
 
     def event_label
-      "Client sent notice of #{_('Housing Subsidy Administrator')}'s decision."
+      "Client sent notice of #{Translation.translate('Housing Subsidy Administrator')}'s decision."
     end
 
   end

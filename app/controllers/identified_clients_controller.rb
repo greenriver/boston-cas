@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -191,6 +191,6 @@ class IdentifiedClientsController < NonHmisClientsController
   end
 
   private def client_type
-    _('Identified Clients')
+    Translation.translate('Identified Clients')
   end
 end

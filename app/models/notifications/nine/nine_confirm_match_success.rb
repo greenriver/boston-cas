@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -17,7 +17,7 @@ module Notifications::Nine
     end
 
     def event_label
-      "#{_('DND')} Staff notified of successful match and asked to give final confirmation."
+      "#{Translation.translate('DND')} Staff notified of successful match and asked to give final confirmation."
     end
   end
 end

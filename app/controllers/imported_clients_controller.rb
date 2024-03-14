@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -14,7 +14,7 @@ class ImportedClientsController < NonHmisClientsController
   def create
     unless params[:imported_clients_csv]&.[](:file)
       @upload = ImportedClientsCsv.new
-      flash[:alert] = _('You must attach a file in the form.')
+      flash[:alert] = Translation.translate('You must attach a file in the form.')
       render :new
       return
     end
@@ -33,13 +33,13 @@ class ImportedClientsController < NonHmisClientsController
       success = @upload.import(current_user.agency)
       unless success
         @upload = ImportedClientsCsv.new
-        flash[:alert] = _('The file header is incorrect.')
+        flash[:alert] = Translation.translate('The file header is incorrect.')
         render :new
         return
       end
     rescue Exception => e
       @upload = ImportedClientsCsv.new
-      flash[:alert] = _('Unable to upload file, is it a CSV?')
+      flash[:alert] = Translation.translate('Unable to upload file, is it a CSV?')
       Sentry.capture_exception(e)
       render :new
     end

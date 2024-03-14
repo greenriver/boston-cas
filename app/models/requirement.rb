@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2023 Green River Data Analysis, LLC
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -31,9 +31,9 @@ class Requirement < ApplicationRecord
 
   def name(on_unit: false)
     if on_unit && rule_alternate_name.present?
-      "#{positive? ? 'Must' : "Can't"} #{_(rule_alternate_name)}"
+      "#{positive? ? 'Must' : "Can't"} #{Translation.translate(rule_alternate_name)}"
     else
-      "#{positive? ? 'Must' : "Can't"} #{rule&.verb} #{_(rule_name)}"
+      "#{positive? ? 'Must' : "Can't"} #{rule&.verb} #{Translation.translate(rule_name)}"
     end
   end
 
