@@ -245,8 +245,7 @@ class NonHmisClient < ApplicationRecord
     project_client.required_minimum_occupancy = current_assessment&.required_minimum_occupancy || 1
     project_client.requires_wheelchair_accessibility = current_assessment&.requires_wheelchair_accessibility || false
     project_client.requires_elevator_access = current_assessment&.requires_elevator_access || false
-    family = current_assessment&.family_member || current_assessment&.household_size.present? && current_assessment.household_size > 1 || false
-    project_client.family_member = family
+    project_client.family_member = current_assessment&.family_member || (current_assessment&.household_size&.> 1) || current_assessment&.pregnant_or_parent?.present? || false
 
     project_client.calculated_chronic_homelessness = current_assessment&.calculated_chronic_homelessness || false
     project_client.neighborhood_interests = current_assessment&.neighborhood_interests || []
