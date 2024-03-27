@@ -42,6 +42,7 @@ module Admin
         :housing_type,
         :send_notes_by_default,
         :expects_roi,
+        prioritized_client_columns: [],
       )
     end
 

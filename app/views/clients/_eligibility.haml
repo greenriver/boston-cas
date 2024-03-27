@@ -4,26 +4,26 @@
     %h5 Eligibility
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= Translation.translate('Housing Authority Eligible')
+      %span.c-detailed-list__label= @column_data[:ha_eligible][:title]
       %span.c-detailed-list__value= boolean_icon @client.ha_eligible
     - if can_view_va_eligibility?
       %li.c-detailed-list__item
-        %span.c-detailed-list__label VA Eligible
+        %span.c-detailed-list__label= @column_data[:va_eligible][:title]
         %span.c-detailed-list__value= boolean_icon @client.va_eligible
       %li.c-detailed-list__item
-        %span.c-detailed-list__label VASH Eligible
+        %span.c-detailed-list__label= @column_data[:vash_eligible][:title]
         %span.c-detailed-list__value= boolean_icon @client.vash_eligible
     %li.c-detailed-list__item
-      %span.c-detailed-list__label SSVF Eligible
+      %span.c-detailed-list__label= @column_data[:ssvf_eligible][:title]
       %span.c-detailed-list__value= boolean_icon @client.ssvf_eligible
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= Translation.translate('CSPECH Eligible')
+      %span.c-detailed-list__label= @column_data[:cspech_eligible][:title]
       %span.c-detailed-list__value= boolean_icon (@client.cspech_eligible)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= Translation.translate('Latest Date Eligible for Financial Assistance')
+      %span.c-detailed-list__label= @column_data[:financial_assistance_end_date][:title]
       %span.c-detailed-list__value= @client.financial_assistance_end_date
     %li.c-detailed-list__item
-      %span.c-detailed-list__label= Translation.translate('Current Living Situation')
+      %span.c-detailed-list__label= @column_data[:majority_sheltered_for_export][:title]
       %span.c-detailed-list__value
         - if @client.majority_sheltered.nil?
           Unknown

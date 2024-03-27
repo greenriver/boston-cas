@@ -16,7 +16,7 @@
             %th Minimum Bedrooms
             - unless pathways_assessment
               %th Minimum Occupancy
-            - priority_labels.map do |label|
+            - prioritized_column_labels.map do |label|
               %th.text-center= label
             %th.text-center Other Active Matches
             - if can_activate_matches?
@@ -41,7 +41,7 @@
                   (SRO OK)
               - unless pathways_assessment
                 %td= client.required_minimum_occupancy
-              - priority_values(client).map do |value|
+              - prioritized_column_values(client).map do |value|
                 - isBoolean = [TrueClass, FalseClass].include?(value.class)
                 %td.text-center= isBoolean ? checkmark(value) : value
               %td.text-center

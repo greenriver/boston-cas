@@ -46,7 +46,7 @@ module Notifications
     private_constant :DeliverJob
 
     def to_partial_path
-      "notifications/#{self.class.to_s.demodulize.underscore}"
+      "notifications/#{notification_type}"
     end
 
     def notification_type

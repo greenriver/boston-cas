@@ -3,8 +3,9 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'activerecord-import'
-gem 'rack', '>= 2.2.6.4'
+gem 'rack', '>= 2.2.8.1'
 gem 'activesupport', '>= 6.1.7.5' # CVE-2023-38037
+gem 'activestorage', '>= 6.1.7.7' # CVE-2024-26144
 gem 'pg', '~> 1.1'
 gem 'rails', '~>6.1'
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
@@ -79,7 +80,7 @@ gem 'marginalia'
 gem 'active_record_distinct_on'
 
 gem 'devise', '~> 4'
-gem 'devise_invitable'
+gem 'devise_invitable', '>= 2.0.9'
 gem 'devise-pwned_password'
 gem 'devise-security'
 gem 'html2haml'

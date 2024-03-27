@@ -59,5 +59,18 @@ module MatchRoutes
           match.six_confirm_housing_subsidy_admin_decline_dnd_staff_decision&.status != 'decline_overridden',
       ].any?
     end
+
+    def contact_label_for(contact_type)
+      case contact_type
+      when :dnd_staff_contacts
+        Translation.translate('CoC Six')
+      when :housing_subsidy_admin_contacts
+        Translation.translate('Housing Subsidy Administrator Six')
+      when :shelter_agency_contacts
+        Translation.translate('Shelter Agency Six')
+      else
+        super(contact_type)
+      end
+    end
   end
 end

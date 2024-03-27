@@ -15,9 +15,9 @@ module MatchDecisions::Six
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('Housing Subsidy Administrator')} reviewing match"
-      when :accepted then "Match accepted by #{Translation.translate('Housing Subsidy Administrator')}"
-      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
+      when :pending then "#{Translation.translate('Housing Subsidy Administrator Six')} reviewing match"
+      when :accepted then "Match accepted by #{Translation.translate('Housing Subsidy Administrator Six')}"
+      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator Six')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -33,11 +33,11 @@ module MatchDecisions::Six
     end
 
     def step_name
-      Translation.translate('HSA Complete Match')
+      Translation.translate('HSA Complete Match Six')
     end
 
     def actor_type
-      Translation.translate('HSA')
+      Translation.translate('HSA Six')
     end
 
     def contact_actor_type

@@ -21,6 +21,12 @@ module MatchPrioritization
       'rank_for_tag'
     end
 
+    def self.supporting_column_names
+      [
+        :rank_for_tag,
+      ]
+    end
+
     def requires_tag?
       true
     end

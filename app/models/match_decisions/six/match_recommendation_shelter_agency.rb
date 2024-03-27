@@ -26,10 +26,10 @@ module MatchDecisions::Six
 
     def label_for_status status
       case status.to_sym
-      when :pending, :expiration_update then "New Match Awaiting #{Translation.translate('Shelter Agency')} Review"
-      when :acknowledged then "Match acknowledged by #{Translation.translate('Shelter Agency')}. In review"
-      when :accepted then "Match accepted by #{Translation.translate('Shelter Agency')}. Client has signed release of information, spoken with services agency"
-      when :not_working_with_client then "#{Translation.translate('Shelter Agency')} no longer working with client"
+      when :pending, :expiration_update then "New Match Awaiting #{Translation.translate('Shelter Agency Six')} Review"
+      when :acknowledged then "Match acknowledged by #{Translation.translate('Shelter Agency Six')}. In review"
+      when :accepted then "Match accepted by #{Translation.translate('Shelter Agency Six')}. Client has signed release of information, spoken with services agency"
+      when :not_working_with_client then "#{Translation.translate('Shelter Agency Six')} no longer working with client"
       when :declined then decline_status_label
       when :canceled then canceled_status_label
       when :back then backup_status_label
@@ -38,17 +38,17 @@ module MatchDecisions::Six
 
     private def decline_status_label
       [
-        "Match declined by #{Translation.translate('Shelter Agency')}. Reason: #{decline_reason_name}",
+        "Match declined by #{Translation.translate('Shelter Agency Six')}. Reason: #{decline_reason_name}",
         not_working_with_client_reason_status_label,
       ].join '. '
     end
 
     def step_name
-      "#{Translation.translate('Shelter Agency')} Initial Review of Match Recommendation"
+      "#{Translation.translate('Shelter Agency Six')} Initial Review of Match Recommendation"
     end
 
     def actor_type
-      Translation.translate('Shelter Agency')
+      Translation.translate('Shelter Agency Six')
     end
 
     def expires?

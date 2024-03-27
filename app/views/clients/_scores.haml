@@ -4,22 +4,22 @@
     %h5 Scores
   %ul.c-detailed-list<
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Assessment
+      %span.c-detailed-list__label= @column_data[:assessment_name][:title]
       - assessment_name = NonHmisAssessment.title_from_type_for_matching(@client.assessment_name)
       %span.c-detailed-list__value= assessment_name
     %li.c-detailed-list__item
       - collected = @client.rrh_assessment_collected_at
-      %span.c-detailed-list__label Assessment Collected
+      %span.c-detailed-list__label= @column_data[:rrh_assessment_collected_at][:title]
       %span.c-detailed-list__value= collected&.to_date ? collected : boolean_icon(false)
     %li.c-detailed-list__item
-      %span.c-detailed-list__label Assessment Score
+      %span.c-detailed-list__label= @column_data[:assessment_score][:title]
       %span.c-detailed-list__value= @client.assessment_score
     - if can_view_vspdats?
       %li.c-detailed-list__item
-        %span.c-detailed-list__label VI-SPDAT Score
+        %span.c-detailed-list__label= @column_data[:vispdat_score][:title]
         %span.c-detailed-list__value= @client.vispdat_score
       %li.c-detailed-list__item
         %span.c-detailed-list__label
-          %span VI-SPDAT Priority Score
-          %span.icon-info{data: {toggle: :tooltip}, title: 'VI-SPDAT score plus a set amount based on other criteria.  See the warehouse CAS Readiness page for details.'}
+          %span= @column_data[:vispdat_priority_score][:title]
+          %span.icon-info{data: {toggle: :tooltip}, title: @column_data[:vispdat_priority_score][:description]}
         %span.c-detailed-list__value= @client.vispdat_priority_score

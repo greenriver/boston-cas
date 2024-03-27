@@ -15,19 +15,19 @@ module MatchDecisions::Six
 
     def label_for_status status
       case status.to_sym
-      when :pending then "New Match Awaiting #{Translation.translate('DND')} Review"
-      when :accepted then "New Match Accepted by #{Translation.translate('DND')}"
-      when :declined then "New Match Declined by #{Translation.translate('DND')}.  Reason: #{decline_reason_name}"
+      when :pending then "New Match Awaiting #{Translation.translate('CoC Six')} Review"
+      when :accepted then "New Match Accepted by #{Translation.translate('CoC Six')}"
+      when :declined then "New Match Declined by #{Translation.translate('CoC Six')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       end
     end
 
     def step_name
-      "#{Translation.translate('DND')} Initial Review"
+      "#{Translation.translate('CoC Six')} Initial Review"
     end
 
     def actor_type
-      Translation.translate('DND')
+      Translation.translate('CoC Six')
     end
 
     def contact_actor_type
@@ -119,11 +119,11 @@ module MatchDecisions::Six
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{Translation.translate('Shelter Agency')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
+      missing_contacts << "a #{Translation.translate('Shelter Agency Six')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
 
-      missing_contacts << "a #{Translation.translate('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
+      missing_contacts << "a #{Translation.translate('CoC Six')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
 
-      missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
+      missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator Six')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

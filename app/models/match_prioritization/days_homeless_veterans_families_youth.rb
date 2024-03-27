@@ -20,6 +20,15 @@ module MatchPrioritization
       scope.order(vets, family, is_youth, age_youth, days)
     end
 
+    def self.supporting_column_names
+      [
+        :veteran,
+        :family_member,
+        :calculated_is_currently_youth,
+        :days_homeless,
+      ]
+    end
+
     def self.supporting_data_columns
       {
         'Veteran' => ->(client) { client.veteran? },

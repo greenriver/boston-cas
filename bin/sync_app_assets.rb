@@ -12,10 +12,12 @@ begin
   bucket = ENV.fetch('ASSETS_BUCKET_NAME')
   prefix = ENV.fetch('ASSETS_PREFIX') || 'default'
 
-  resp = client.list_objects({
-    bucket: bucket,
-    prefix: prefix,
-  })
+  resp = client.list_objects(
+    {
+      bucket: bucket,
+      prefix: prefix,
+    }
+  )
   #resp = client.list_objects({ bucket: bucket, prefix: '', })
 
   if resp.is_truncated

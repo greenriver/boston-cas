@@ -65,6 +65,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1
   def show
+    @column_data = Client.prioritized_columns_data
     @client_notes = @client.client_notes
     @client_note = ClientNote.new
     @neighborhood_interests = Neighborhood.where(id: @client.neighborhood_interests).order(:name).pluck(:name)

@@ -1,0 +1,3 @@
+- rule = bedroom_exact
+%h4 Number of Bedrooms
+= select_tag(:variable, options_from_collection_for_select(rule.available_number_of_bedrooms, :first, :last), class: 'variable', id: "variable_#{rule.id}", data: {options: rule.available_number_of_bedrooms.to_h.to_json})

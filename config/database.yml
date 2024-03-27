@@ -17,7 +17,7 @@ default: &default
   <% end %>
   <% if ENV['RAILS_ENV'] == 'production' || ENV['RAILS_ENV'] == 'staging' %>
   sslmode: 'verify-full'
-  sslrootcert: /etc/ssl/certs/rds-combined-ca-bundle.pem
+  sslrootcert: /etc/ssl/certs/us-east-1-bundle.pem
   <% end %>
 
 development:
