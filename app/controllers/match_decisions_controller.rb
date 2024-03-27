@@ -42,7 +42,14 @@ class MatchDecisionsController < ApplicationController
     @types = MatchRoutes::Base.match_steps
 
     @match_contacts.update match_contacts_params if params[:match_contacts].present?
-    if !@decision.editable?
+    # If the match is already expired, and we're un-expiring it, then allow it
+    if @match.expired? && params[:commit] == 'Save Expiration Date' && can_reject_matches? && decision_params[:shelter_expiration].present?
+      original_status = @decision.status
+      change_expiration
+      # Enforce whatever status this was originally in
+      @decision.update(status: original_status)
+      redirect_to access_context.match_path(@match)
+    elsif !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
       redirect_to access_context.match_decision_path(@match, @decision)
 
@@ -87,19 +94,7 @@ class MatchDecisionsController < ApplicationController
       # partial updates
       @decision.class.transaction do
         # If we are expiring the match for shelter agencies
-        if can_reject_matches? && decision_params[:shelter_expiration].present?
-          old_expiration = @match.shelter_expiration
-          new_expiration = decision_params[:shelter_expiration]
-          @match.update(shelter_expiration: new_expiration)
-          if old_expiration.blank? || old_expiration.to_date != new_expiration.to_date
-            note = "Shelter review expiration date set to #{new_expiration}."
-            MatchEvents::ExpirationChange.create!(
-              match_id: @match.id,
-              contact_id: current_contact.id,
-              note: note,
-            )
-          end
-        end
+        change_expiration if can_reject_matches? && decision_params[:shelter_expiration].present?
 
         if can_delete_matches? && decision_params[:status] == 'destroy'
           opportunity = @match.opportunity
@@ -138,6 +133,20 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = "Please review the form problems below.<br /> #{@decision.errors.full_messages.join('; ')}"
       render 'matches/show'
     end
+  end
+
+  private def change_expiration
+    old_expiration = @match.shelter_expiration
+    new_expiration = decision_params[:shelter_expiration]
+    @match.update(shelter_expiration: new_expiration)
+    return unless old_expiration.blank? || old_expiration.to_date != new_expiration.to_date
+
+    note = "Shelter review expiration date set to #{new_expiration}."
+    MatchEvents::ExpirationChange.create!(
+      match_id: @match.id,
+      contact_id: current_contact.id,
+      note: note,
+    )
   end
 
   def recreate_notifications
