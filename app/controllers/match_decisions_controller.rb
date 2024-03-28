@@ -46,8 +46,13 @@ class MatchDecisionsController < ApplicationController
     if @match.expired? && params[:commit] == 'Save Expiration Date' && can_reject_matches? && decision_params[:shelter_expiration].present?
       original_status = @decision.status
       change_expiration
-      # Enforce whatever status this was originally in
-      @decision.update(status: original_status)
+      # If the expiration is now in the future, move the decision back to the pending state
+      status = if @match.shelter_expiration >= Date.current
+        :pending
+      else
+        original_status
+      end
+      @decision.update(status: status)
       redirect_to access_context.match_path(@match)
     elsif !@decision.editable?
       flash[:error] = 'Sorry, a response has already been recorded and this step is now locked.'
