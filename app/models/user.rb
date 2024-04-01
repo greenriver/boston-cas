@@ -201,4 +201,8 @@ class User < ApplicationRecord
   def inherited_requirements_by_source
     {}
   end
+
+  def name_with_email
+    "#{name} <#{email}>"
+  end
 end

@@ -25,7 +25,8 @@ module Admin
     end
 
     def create
-      if @agency = Agency.create(agency_params)
+      @agency = Agency.create(agency_params)
+      if @agency.present?
         requested_programs = programs_params[:editable_programs].reject(&:blank?).map(&:to_i)
         requested_programs.each do |program_id|
           EntityViewPermission.create(entity: Program.find(program_id), agency: @agency, editable: true)
@@ -38,7 +39,6 @@ module Admin
     end
 
     def edit
-
     end
 
     def update
@@ -50,6 +50,23 @@ module Admin
       else
         render :edit
       end
+    end
+
+    def move_user
+      @agency = agency_scope.find(params[:agency_id].to_i)
+      user = User.find(user_params[:user_id])
+      if user.update(agency_id: user_params[:new_agency_id])
+        flash[:notice] = "#{user.name_with_email} was successfully moved."
+        redirect_to edit_admin_agency_path(@agency)
+      else
+        flash[:error] = "Unable to move #{user.name_with_email}."
+        render :edit
+      end
+    end
+
+    private def user_params
+      params.require(:user).
+        permit(:user_id, :new_agency_id)
     end
 
     def destroy
@@ -69,7 +86,6 @@ module Admin
         EntityViewPermission.create(entity: Program.find(program_id), agency: @agency, editable: true)
       end
     end
-
 
     def set_agency
       @agency = agency_scope.find(params[:id].to_i)

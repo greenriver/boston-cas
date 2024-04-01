@@ -1,0 +1,40 @@
+- if @agency.users.exists?
+
+  %ul.nav.nav-tabs.mb-0
+    %li.nav-item
+      %a.nav-link.active{href: '#active', role: "presentation", data: {toggle: :tab}, aria: {controls:"active", selected:"true"}}
+        Active Users
+        .badge.badge-primary.badge-pill
+          #{@agency.users.active.count}
+    %li.nav-item
+      %a.nav-link{href: '#inactive', role: "presentation", data: {toggle: :tab}, aria: {controls:"inactive", selected:"false"}}
+        Inactive Users
+
+  .tab-content
+    .tab-pane.show.active.fade#active{role: 'tabpanel', aria: {labelledby: 'active'}}
+      %table.table.table-striped
+        %tbody
+          - @agency.users.active.each do |user|
+            %tr
+              %td= user.name_with_email
+              %td
+                = simple_form_for(:user, url: admin_agency_move_user_path(@agency)) do |f|
+                  = f.hidden_field :user_id, value: user.id
+                  .d-flex
+                    = f.input :new_agency_id, collection: Agency.all, as: :select_2, input_html: { id: "new_agency_id_for_#{user.id}"}, selected: @agency.id
+                    .mt-no-label.pt-no-label.ml-4
+                      = f.button :submit, 'Move User', class: 'btn btn-sm btn-secondary'
+
+    .tab-pane.fade#inactive{role: 'tabpanel', aria: {labelledby: 'inactive'}}
+      %table.table.table-striped
+        %tbody
+          - @agency.users.inactive.each do |user|
+            %tr
+              %td= user.name_with_email
+              %td
+                = simple_form_for(:user, url: admin_agency_move_user_path(@agency)) do |f|
+                  = f.hidden_field :user_id, value: user.id
+                  .d-flex
+                    = f.input :new_agency_id, collection: Agency.all, as: :select_2, input_html: { id: "new_agency_id_for_#{user.id}"}, selected: @agency.id
+                    .mt-no-label.pt-no-label.ml-4
+                      = f.button :submit, 'Move User', class: 'btn btn-sm btn-secondary'
