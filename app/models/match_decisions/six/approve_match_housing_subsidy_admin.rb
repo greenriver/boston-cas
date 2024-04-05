@@ -10,6 +10,10 @@ module MatchDecisions::Six
     include MatchDecisions::RouteSixDeclineReasons
     include MatchDecisions::RouteSixCancelReasons
 
+    def to_partial_path
+      'match_decisions/six_approve_match_housing_subsidy_admin'
+    end
+
     def label
       label_for_status status
     end
@@ -95,6 +99,16 @@ module MatchDecisions::Six
 
     def to_param
       :six_approve_match_housing_subsidy_admin
+    end
+
+    def whitelist_params_for_update params
+      super.merge params.require(:decision).permit(
+        :building_id,
+        :unit_id,
+        :client_move_in_date,
+        :external_software_used,
+        :address,
+      )
     end
 
     class StatusCallbacks < StatusCallbacks
