@@ -42,6 +42,9 @@ module Admin
         :housing_type,
         :send_notes_by_default,
         :expects_roi,
+        :show_referral_source,
+        :show_move_in_date,
+        :show_address_field,
         prioritized_client_columns: [],
       )
     end

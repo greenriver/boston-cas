@@ -99,11 +99,15 @@ module MatchDecisions
     end
 
     def show_address_field?
-      false
+      match_route.show_address_field
     end
 
     def show_referral_source?
-      false
+      match_route.show_referral_source
+    end
+
+    def show_move_in_date?
+      match_route.show_move_in_date
     end
 
     def started?
