@@ -33,7 +33,7 @@ module MatchDecisionReasons
     end
 
     def other?
-      false
+      name == 'Other'
     end
 
     def not_working_with_client?
