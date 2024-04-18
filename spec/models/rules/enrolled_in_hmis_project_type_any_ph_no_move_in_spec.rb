@@ -28,7 +28,7 @@ RSpec.describe Rules::EnrolledInHmisProjectTypeAnyPhNoMoveIn, type: :model do
     end
 
     context 'when negative ph' do
-      it 'matches 2' do
+      it 'matches 3' do
         expect(clients_that_dont_fit_ph.count).to eq(3)
       end
     end
