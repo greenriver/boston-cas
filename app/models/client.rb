@@ -567,7 +567,10 @@ class Client < ApplicationRecord
     enrolled_in_es ||
     enrolled_in_rrh ||
     enrolled_in_psh ||
-    enrolled_in_ph
+    enrolled_in_ph ||
+    enrolled_in_rrh_pre_move_in ||
+    enrolled_in_psh_pre_move_in ||
+    enrolled_in_ph_pre_move_in
   end
 
   def structured_rrh_assessment_contact_info
@@ -871,7 +874,7 @@ class Client < ApplicationRecord
         display_check: 'can_view_vspdats?',
       },
       family_member: {
-        title: Translation.translate('Part of a family') ,
+        title: Translation.translate('Part of a family'),
         description: nil,
         type: 'Boolean',
       },
@@ -881,7 +884,7 @@ class Client < ApplicationRecord
         type: 'Boolean',
       },
       lifetime_sex_offender: {
-        title: Translation.translate('Life-Time Sex Offender') ,
+        title: Translation.translate('Life-Time Sex Offender'),
         description: nil,
         type: 'Boolean',
       },
@@ -1243,7 +1246,7 @@ class Client < ApplicationRecord
         type: 'Boolean',
       },
       service_need: {
-        title: Translation.translate('Service Need') ,
+        title: Translation.translate('Service Need'),
         description: nil,
         type: 'Boolean',
       },

@@ -124,4 +124,8 @@ OngoingCaseManagementRequired,Needing ongoing housing case management,,be
 HasFileTags,All required documentation,,have
 ServiceNeed,a service need indicator,,have
 HousingBarrier,a housing barrier (life-time sex offender or methamphetamine conviction),,have
-UnshelteredDays, selected number of days unsheltered,,have 
+UnshelteredDays, selected number of days unsheltered,,have
+EnrolledInRrhNoMoveIn,Enrolled in Rapid Re-Housing without move-in date,,be
+EnrolledInPshNoMoveIn,Enrolled in PSH (Permanent Supportive Housing) without move-in date,,be
+EnrolledInPhNoMoveIn,Enrolled in PH (PH – Housing Only or Housing with Services (no disability required for entry) without move-in date,,be
+EnrolledInHmisProjectTypeAnyPhNoMoveIn,Enrolled in one of the specified PH Project Types without a move in date,,be
