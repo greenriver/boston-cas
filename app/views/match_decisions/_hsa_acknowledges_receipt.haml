@@ -13,7 +13,7 @@
               - if @decision.status.to_s.in?(['pending', 'expiration_update'])
                 %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
                 = render 'match_decisions/continue_button', text: 'Acknowledge Receipt of Match Details', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) }
-          - if can_reject_matches??
+          - if can_reject_matches?
             .o-choose__choice
               %header.jMatchHeader
                 %ul.o-choose__nav.nav.jMatchActionNav
