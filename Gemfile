@@ -19,7 +19,6 @@ gem 'with_advisory_lock'
 gem 'nokogiri', '>= 1.16.2' # GHSA-xc9x-jj77-9p9j
 
 gem 'autoprefixer-rails'
-gem 'haml', '~> 5.2.2' # pinned to v5, v6 was not escaping correctly
 gem 'haml-rails'
 gem 'babel-transpiler'
 gem 'bootstrap', '~> 4.3.1' # updating this to 4.5.3 causes a weird missing variable bug
@@ -37,6 +36,7 @@ gem 'kaminari'
 gem 'pagy'
 gem 'responders'
 gem 'memery', require: false
+gem 'todo_or_die'
 
 # File processing
 gem 'carrierwave', '>= 2.2.5' # CVE-2023-49090

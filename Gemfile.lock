@@ -333,8 +333,9 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    haml (5.2.2)
-      temple (>= 0.8.0)
+    haml (6.3.0)
+      temple (>= 0.8.2)
+      thor
       tilt
     haml-rails (2.1.0)
       actionpack (>= 5.1)
@@ -663,6 +664,7 @@ GEM
     tilt (2.3.0)
     timecop (0.9.8)
     timeout (0.4.1)
+    todo_or_die (0.1.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -772,7 +774,6 @@ DEPENDENCIES
   fuzzy_match
   geocoder
   guard-rspec
-  haml (~> 5.2.2)
   haml-rails
   handlebars_assets
   html2haml
@@ -830,6 +831,7 @@ DEPENDENCIES
   terser
   test-unit (~> 3.0)
   timecop
+  todo_or_die
   tzinfo (>= 1.2.10)
   validate_url
   validates_email_format_of
