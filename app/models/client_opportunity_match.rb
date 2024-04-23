@@ -11,6 +11,7 @@ class ClientOpportunityMatch < ApplicationRecord
   include ActionView::Helpers
   include Rails.application.routes.url_helpers
 
+  self.table_name = 'client_opportunity_matches'
   def self.model_name
     @model_name ||= ActiveModel::Name.new(self, nil, 'match')
   end
