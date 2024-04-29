@@ -1,20 +1,18 @@
 # A sample Gemfile
 source 'https://rubygems.org'
 
-gem 'activerecord'
 gem 'activerecord-import'
 gem 'rack', '>= 2.2.8.1'
-gem 'activesupport', '>= 6.1.7.5' # CVE-2023-38037
-gem 'activestorage', '>= 6.1.7.7' # CVE-2024-26144
 gem 'pg', '~> 1.1'
-gem 'rails', '~>6.1'
+gem 'rails', '~> 7.0.8.1'
+gem "sprockets-rails"
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
 gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
 
 gem 'bcrypt'
 gem 'bootsnap'
-gem 'composite_primary_keys', '~> 13.0'
+gem 'composite_primary_keys', '~> 14.0.9'
 gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
 gem 'order_as_specified'
 gem 'with_advisory_lock'
@@ -38,6 +36,7 @@ gem 'kaminari'
 gem 'pagy'
 gem 'responders'
 gem 'memery', require: false
+gem 'todo_or_die'
 
 # File processing
 gem 'carrierwave', '>= 2.2.5' # CVE-2023-49090

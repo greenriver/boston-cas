@@ -21,6 +21,9 @@ Rails.application.configure do
 
   # config.assets.js_compressor = :terser
 
+  # Enable server timing
+  config.server_timing = true
+
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
