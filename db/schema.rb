@@ -326,6 +326,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_22_044709) do
     t.integer "calculated_homeless_nights_sheltered", default: 0
     t.integer "calculated_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_sheltered", default: 0
+    t.boolean "enrolled_in_ph_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_psh_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_rrh_pre_move_in", default: false, null: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -744,6 +747,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_22_044709) do
     t.boolean "send_notes_by_default", default: false, null: false
     t.boolean "expects_roi", default: true
     t.text "prioritized_client_columns"
+    t.boolean "show_referral_source", default: false
+    t.boolean "show_move_in_date", default: false
+    t.boolean "show_address_field", default: false
     t.index ["tag_id"], name: "index_match_routes_on_tag_id"
   end
 
@@ -1366,6 +1372,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_22_044709) do
     t.integer "calculated_homeless_nights_sheltered", default: 0
     t.integer "calculated_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_sheltered", default: 0
+    t.boolean "enrolled_in_ph_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_psh_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_rrh_pre_move_in", default: false, null: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

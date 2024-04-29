@@ -7,6 +7,9 @@
 module MatchDecisions::Six
   class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
     # validate :note_present_if_status_rejected
+    def to_partial_path
+      'match_decisions/six_confirm_match_success_dnd_staff'
+    end
 
     def statuses
       {
@@ -71,6 +74,16 @@ module MatchDecisions::Six
 
     def to_param
       :six_confirm_match_success_dnd_staff
+    end
+
+    def whitelist_params_for_update params
+      super.merge params.require(:decision).permit(
+        :building_id,
+        :unit_id,
+        :client_move_in_date,
+        :external_software_used,
+        :address,
+      )
     end
 
     private def note_present_if_status_rejected

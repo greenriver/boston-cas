@@ -264,6 +264,23 @@ FactoryBot.define do
     verb { 'be' }
   end
 
+  factory :enrolled_in_rrh_pre_move_in, class: 'Rules::EnrolledInRrhNoMoveIn' do
+    name { 'Enrolled in Rapid Re-Housing without move-in date' }
+    verb { 'be' }
+  end
+  factory :enrolled_in_psh_pre_move_in, class: 'Rules::EnrolledInPshNoMoveIn' do
+    name { 'Enrolled in PSH (Permanent Supportive Housing) without move-in date' }
+    verb { 'be' }
+  end
+  factory :enrolled_in_ph_pre_move_in, class: 'Rules::EnrolledInPhNoMoveIn' do
+    name { 'Enrolled in PH (PH – Housing Only or Housing with Services (no disability required for entry) without move-in date' }
+    verb { 'be' }
+  end
+  factory :enrolled_in_hmis_project_type_any_ph_no_move_in, class: 'Rules::EnrolledInHmisProjectTypeAnyPhNoMoveIn' do
+    name { 'Enrolled in HMIS Project Type' }
+    verb { 'be' }
+  end
+
   factory :non_hmis_assessment_type, class: 'Rules::NonHmisAssessmentType' do
     name { 'Most recent assessment is one of the specified assessments' }
     verb { 'have' }

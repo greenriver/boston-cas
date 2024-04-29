@@ -21,13 +21,13 @@
           input_html: {class: 'unit', data: {dependent: true, url: '/buildings/:id/available_move_in_units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}}
   %hr
 %div
-  %p
-    Please record the date the client moved in.
-  .row
-    .col-md-6
-      = form.input :client_move_in_date, label: Translation.translate('Lease start date'), as: :date_picker, disabled: !@decision.editable?
-  .form-inputs
-    = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
+  - if @decision.show_move_in_date?
+    %p Please record the date the client moved in.
+    .row
+      .col-md-6
+        = form.input :client_move_in_date, label: Translation.translate('Lease start date'), as: :date_picker, disabled: !@decision.editable?
+    .form-inputs
+      = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
   %p
     = "#{Translation.translate('DND')} and the #{Translation.translate('Shelter Agency')} contact will receive notification of the housing date."
   - if @decision.show_referral_source?
