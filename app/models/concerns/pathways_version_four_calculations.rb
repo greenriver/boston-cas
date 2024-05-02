@@ -465,7 +465,9 @@ module PathwaysVersionFourCalculations
     def form_fields
       case title
       when pathways_title
-        pathways_form_fields
+        pathways_fields = pathways_form_fields
+        pathways_fields = deidentify_form_fields(pathways_fields) unless identified?
+        pathways_fields
       when transfer_title
         transfer_form_fields
       else
@@ -475,6 +477,12 @@ module PathwaysVersionFourCalculations
 
     def picker_form_fields
       []
+    end
+
+    def deidentify_form_fields(form_fields)
+      # Remove the fields with identifying information from the form
+      identifying_fields = [:phone_number, :email_addresses]
+      form_fields.except(*identifying_fields)
     end
 
     def transfer_form_fields
