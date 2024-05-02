@@ -14,6 +14,8 @@ class Rule < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
+  validates_presence_of :variable, if: :variable_requirement?
+
   def always_apply?
     false
   end
