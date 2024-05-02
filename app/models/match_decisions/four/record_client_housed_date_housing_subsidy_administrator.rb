@@ -102,14 +102,6 @@ module MatchDecisions::Four
       :four_record_client_housed_date_housing_subsidy_administrator
     end
 
-    def show_address_field?
-      true
-    end
-
-    def show_referral_source?
-      true
-    end
-
     class StatusCallbacks < StatusCallbacks
       def pending
       end

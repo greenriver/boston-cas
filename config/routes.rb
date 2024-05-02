@@ -164,7 +164,9 @@ Rails.application.routes.draw do
         post :stop_impersonating
       end
     end
-    resources :agencies
+    resources :agencies do
+      post :move_user
+    end
     resources :roles
     resources :versions, only: [:index]
 
