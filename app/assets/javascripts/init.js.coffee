@@ -9,6 +9,12 @@ App.init = ->
     id = $(this).attr('id')
     checked = $(this).prop('checked')
     $('input.' + id).prop('checked', checked)
+  # fix select2 open focus behavior
+  $(document).on 'select2:open', (e) =>
+    selectId = e.target.id
+    $(".select2-search__field[aria-controls='select2-" + selectId + "-results']").each (key, value) ->
+        value.focus();
+
   return true
 
 # TODO may also need to do on pjax_modal change
