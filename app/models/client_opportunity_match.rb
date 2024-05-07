@@ -28,14 +28,14 @@ class ClientOpportunityMatch < ApplicationRecord
   delegate :opportunity_details, to: :opportunity, allow_nil: true
   delegate :contacts_editable_by_hsa, to: :match_route
   delegate :has_buildings?, to: :sub_program
-  has_one :sub_program, through: :opportunity, foreign_key: "client_opportunity_match_id"
-  has_one :program, through: :sub_program, foreign_key: "client_opportunity_match_id"
-  has_one :project_client, through: :client, foreign_key: "client_opportunity_match_id"
+  has_one :sub_program, through: :opportunity, foreign_key: 'client_opportunity_match_id'
+  has_one :program, through: :sub_program, foreign_key: 'client_opportunity_match_id'
+  has_one :project_client, through: :client, foreign_key: 'client_opportunity_match_id'
 
-  has_many :notifications, class_name: 'Notifications::Base', foreign_key: "client_opportunity_match_id"
+  has_many :notifications, class_name: 'Notifications::Base', foreign_key: 'client_opportunity_match_id'
 
-  has_many :match_mitigation_reasons, foreign_key: "client_opportunity_match_id"
-  has_many :mitigation_reasons, through: :match_mitigation_reasons, foreign_key: "client_opportunity_match_id"
+  has_many :match_mitigation_reasons, foreign_key: 'client_opportunity_match_id'
+  has_many :mitigation_reasons, through: :match_mitigation_reasons, foreign_key: 'client_opportunity_match_id'
 
   # Default Match Route
   has_decision :match_recommendation_dnd_staff
@@ -83,8 +83,8 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 10
   include RouteTenDecisions
 
-  has_many :referral_events, class_name: 'Warehouse::ReferralEvent', foreign_key: "client_opportunity_match_id"
-  has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent', foreign_key: "client_opportunity_match_id"
+  has_many :referral_events, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
+  has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
 
   CLOSED_REASONS = ['success', 'rejected', 'canceled'].freeze
   validates :closed_reason, inclusion: { in: CLOSED_REASONS, if: :closed_reason }
@@ -159,54 +159,54 @@ class ClientOpportunityMatch < ApplicationRecord
 
   # All Contacts
   has_many :client_opportunity_match_contacts, dependent: :destroy, inverse_of: :match, foreign_key: 'match_id'
-  has_many :contacts, through: :client_opportunity_match_contacts, foreign_key: "client_opportunity_match_id"
+  has_many :contacts, through: :client_opportunity_match_contacts, foreign_key: 'client_opportunity_match_id'
 
   # filtered by role
   has_many :dnd_staff_contacts,
            -> { where(client_opportunity_match_contacts: { dnd_staff: true }) },
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :housing_subsidy_admin_contacts,
            -> { where(client_opportunity_match_contacts: { housing_subsidy_admin: true }) },
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :client_contacts,
            -> { where(client_opportunity_match_contacts: { client: true }) }, # remove active_contact to not limit client contacts to active users
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :shelter_agency_contacts,
            -> { where(client_opportunity_match_contacts: { shelter_agency: true }) },
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :ssp_contacts,
            -> { where(client_opportunity_match_contacts: { ssp: true }) },
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :hsp_contacts,
            -> { where(client_opportunity_match_contacts: { hsp: true }) },
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
 
   has_many :do_contacts,
            -> { where(client_opportunity_match_contacts: { do: true }) },
-           foreign_key: "client_opportunity_match_id",
+           foreign_key: 'client_opportunity_match_id',
            class_name: 'Contact',
            through: :client_opportunity_match_contacts,
            source: :contact
@@ -214,7 +214,7 @@ class ClientOpportunityMatch < ApplicationRecord
   has_many :hsa_or_shelter_agency_contacts, -> do
     where(client_opportunity_match_contacts: { housing_subsidy_admin: true }).
       or(where(client_opportunity_match_contacts: { shelter_agency: true }))
-  end, class_name: 'Contact', through: :client_opportunity_match_contacts, source: :contact, foreign_key: "client_opportunity_match_id"
+  end, class_name: 'Contact', through: :client_opportunity_match_contacts, source: :contact, foreign_key: 'client_opportunity_match_id'
 
   has_many :events,
            class_name: 'MatchEvents::Base',
@@ -756,8 +756,8 @@ class ClientOpportunityMatch < ApplicationRecord
 
       # Cleanup other matches on the same opportunity
       if route.should_activate_match && ! route.allow_multiple_active_matches
-        # If the match was automatically activated, we just need to clean up any leftovers
-        opportunity_related_matches.destroy_all
+        # If the match was automatically activated, we just need to clean up any leftover ongoing matches
+        opportunity_related_matches.open.destroy_all
       else
         opportunity_related_matches.each do |match|
           if match.active
