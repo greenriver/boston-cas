@@ -1290,6 +1290,21 @@ class Client < ApplicationRecord
         description: nil,
         type: 'Date',
       },
+      last_seen_projects: {
+        title: 'Last Seen Location',
+        description: nil,
+        type: 'Jsonb',
+      },
+      ongoing_es_enrollments: {
+        title: 'Open ES Enrollments',
+        description: nil,
+        type: 'Jsonb',
+      },
+      ongoing_so_enrollments: {
+        title: 'Open SO Enrollments',
+        description: nil,
+        type: 'Jsonb',
+      },
     }
   end
 
