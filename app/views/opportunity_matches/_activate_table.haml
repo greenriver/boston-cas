@@ -42,6 +42,7 @@
               - unless pathways_assessment
                 %td= client.required_minimum_occupancy
               - prioritized_column_values(client).map do |value|
+                - value = value.join('; ') if value.class == Array
                 - isBoolean = [TrueClass, FalseClass].include?(value.class)
                 %td.text-center= isBoolean ? checkmark(value) : value
               %td.text-center
