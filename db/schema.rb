@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_05_165545) do
+ActiveRecord::Schema.define(version: 2024_04_17_172150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -327,6 +327,9 @@ ActiveRecord::Schema.define(version: 2024_04_05_165545) do
     t.integer "calculated_homeless_nights_sheltered", default: 0
     t.integer "calculated_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_sheltered", default: 0
+    t.boolean "enrolled_in_ph_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_psh_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_rrh_pre_move_in", default: false, null: false
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1370,6 +1373,9 @@ ActiveRecord::Schema.define(version: 2024_04_05_165545) do
     t.integer "calculated_homeless_nights_sheltered", default: 0
     t.integer "calculated_homeless_nights_unsheltered", default: 0
     t.integer "total_homeless_nights_sheltered", default: 0
+    t.boolean "enrolled_in_ph_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_psh_pre_move_in", default: false, null: false
+    t.boolean "enrolled_in_rrh_pre_move_in", default: false, null: false
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"

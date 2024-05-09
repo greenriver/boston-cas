@@ -16,12 +16,8 @@ class ProgramDetailsController < ApplicationController
   end
 
   def update
-    if @program.update(program_params)
-      flash[:notice] = 'Program Details saved.'
-      redirect_to action: :edit
-    else
-      render :edit
-    end
+    @program.update(program_params)
+    respond_with(@program, location: edit_program_sub_program_program_details_path)
   end
 
   private def set_program
