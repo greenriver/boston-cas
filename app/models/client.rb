@@ -1291,7 +1291,7 @@ class Client < ApplicationRecord
         type: 'Date',
       },
       last_seen_projects: {
-        title: 'Last Seen Location',
+        title: 'Last Seen Locations',
         description: nil,
         type: 'Jsonb',
       },

@@ -76,7 +76,7 @@ class ClientsController < ApplicationController
       file.taggings.map do |tagging|
         [tagging.tag.name, file]
       end
-    end.flatten(1)
+    end.flatten(1).uniq
   end
 
   def update
