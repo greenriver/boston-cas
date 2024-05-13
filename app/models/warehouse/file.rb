@@ -9,6 +9,7 @@ module Warehouse
     # Ignore the STI bits
     self.inheritance_column = nil
     has_many :taggings, primary_key: :id, foreign_key: :taggable_id
+    acts_as_paranoid
 
     scope :for_client, ->(warehouse_client_id) do
       where(

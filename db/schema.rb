@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_22_044709) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_08_140355) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -329,6 +329,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_22_044709) do
     t.boolean "enrolled_in_ph_pre_move_in", default: false, null: false
     t.boolean "enrolled_in_psh_pre_move_in", default: false, null: false
     t.boolean "enrolled_in_rrh_pre_move_in", default: false, null: false
+    t.jsonb "ongoing_es_enrollments"
+    t.jsonb "ongoing_so_enrollments"
+    t.jsonb "last_seen_projects"
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1375,6 +1378,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_22_044709) do
     t.boolean "enrolled_in_ph_pre_move_in", default: false, null: false
     t.boolean "enrolled_in_psh_pre_move_in", default: false, null: false
     t.boolean "enrolled_in_rrh_pre_move_in", default: false, null: false
+    t.jsonb "ongoing_es_enrollments"
+    t.jsonb "ongoing_so_enrollments"
+    t.jsonb "last_seen_projects"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
