@@ -2,6 +2,10 @@ require_relative 'boot'
 
 require 'rails/all'
 
+# The env var is the same as config.active_support.disable_to_s_conversion = true but impacts driver initializers that load before this app config block
+#   * Note, we still use the deprecated behavior for date/time. It's preserved in config/initializers/legacy_rails_conversions.rb
+ENV['RAILS_DISABLE_DEPRECATED_TO_S_CONVERSION'] = 'true'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -9,7 +13,7 @@ Bundler.require(*Rails.groups)
 module BostonCa
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # FIXME Suppress the Rails 5 belongs_to requirement
     Rails.application.config.active_record.belongs_to_required_by_default = false
