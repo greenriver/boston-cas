@@ -33,7 +33,7 @@
   %li.c-detailed-list__item
     %span.c-detailed-list__label Last Seen Locations
     %span.c-detailed-list__value.text-right
-      - @client.last_seen_projects.each do |project|
+      - @client.last_seen_projects&.each do |project|
         .contact= project
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:chronic_homeless][:title]
