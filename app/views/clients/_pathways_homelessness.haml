@@ -31,5 +31,10 @@
     %span.c-detailed-list__label= @column_data[:calculated_last_homeless_night][:title]
     %span.c-detailed-list__value= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
   %li.c-detailed-list__item
+    %span.c-detailed-list__label Last Seen Locations
+    %span.c-detailed-list__value.text-right
+      - @client.last_seen_projects&.each do |project|
+        .contact= project
+  %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:chronic_homeless][:title]
     %span.c-detailed-list__value= boolean_icon @client.chronic_homeless
