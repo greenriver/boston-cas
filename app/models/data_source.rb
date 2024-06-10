@@ -5,7 +5,6 @@
 ###
 
 class DataSource < ApplicationRecord
-
   belongs_to :building
   has_many :building_clients
   has_many :project_clients
@@ -19,5 +18,4 @@ class DataSource < ApplicationRecord
   scope :hmis, -> do
     where.not(db_identifier: 'Deidentified')
   end
-
 end

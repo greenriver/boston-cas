@@ -6,7 +6,6 @@
 
 module MatchDecisions
   class ConfirmMatchSuccessDndStaff < Base
-
     # validate :note_present_if_status_rejected
 
     def statuses
@@ -68,9 +67,7 @@ module MatchDecisions
     end
 
     private def note_present_if_status_rejected
-      if note.blank? && status == 'rejected'
-        errors.add :note, 'Please note why the match is declined.'
-      end
+      errors.add :note, 'Please note why the match is declined.' if note.blank? && status == 'rejected'
     end
 
     def show_client_match_attributes?
@@ -83,7 +80,7 @@ module MatchDecisions
 
       def confirmed
         Notifications::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
-        match.succeeded!
+        match.succeeded!(user: @dependencies.try(:[], :user))
       end
 
       def rejected
@@ -91,7 +88,5 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end

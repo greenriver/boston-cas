@@ -79,7 +79,7 @@ module MatchDecisions::ProviderOnly
       end
 
       def decline_overridden
-        match.succeeded!
+        match.succeeded!(user: @dependencies.try(:[], :user))
       end
 
       def decline_overridden_returned

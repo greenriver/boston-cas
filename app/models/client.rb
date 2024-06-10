@@ -368,85 +368,6 @@ class Client < ApplicationRecord
     active_matches.any?
   end
 
-  def available_as_candidate_for_any_route?
-    (
-      MatchRoutes::Base.available.pluck(:type) -
-      UnavailableAsCandidateFor.where(client_id: id).distinct.pluck(:match_route_type)
-    ).any?
-  end
-
-  def make_available_in match_route:
-    route_name = MatchRoutes::Base.route_name_from_route(match_route)
-    UnavailableAsCandidateFor.where(client_id: id, match_route_type: route_name).destroy_all
-  end
-
-  def make_available_in_all_routes
-    UnavailableAsCandidateFor.where(client_id: id).destroy_all
-  end
-
-  private def default_unavailable_expiration_date
-    days = Config.get(:unavailable_for_length)
-    return nil unless days.present? && days.positive?
-
-    Date.current + days.days
-  end
-
-  def make_unavailable_in(match_route:, expires_at: default_unavailable_expiration_date)
-    route_name = MatchRoutes::Base.route_name_from_route(match_route)
-
-    un = unavailable_as_candidate_fors.where(match_route_type: route_name).first_or_create
-    un.update(expires_at: expires_at)
-  end
-
-  def make_unavailable_in_all_routes(expires_at: default_unavailable_expiration_date)
-    MatchRoutes::Base.all_routes.each do |route|
-      make_unavailable_in(match_route: route, expires_at: expires_at)
-    end
-  end
-
-  # cancel_specific must be a match object
-  def unavailable(permanent: false, contact_id: nil, cancel_all: false, cancel_specific: false, expires_at: default_unavailable_expiration_date)
-    Client.transaction do
-      update(available: false) if permanent
-
-      if cancel_all
-        # Cancel any active matches
-        client_opportunity_matches.active.each do |active_match|
-          opportunity = active_match.opportunity
-          active_match.canceled!
-          MatchEvents::Parked.create!(
-            match_id: active_match.id,
-            contact_id: contact_id,
-          )
-          opportunity.update(available_candidate: true)
-        end
-        # Delete any non-active open matches
-        client_opportunity_matches.open.each(&:delete)
-        # Prevent any new matches for this client
-        # This will re-queue the client once the date is passed
-        make_unavailable_in_all_routes(expires_at: expires_at)
-      end
-
-      if cancel_specific
-        # remove from specific match and proposed on same route
-        match = cancel_specific
-        opportunity = match.opportunity
-        route = match.match_route
-        match.canceled! # note canceled! makes the client available in the route
-        Notifications::MatchCanceled.create_for_match! match
-        MatchEvents::Parked.create!(
-          match_id: match.id,
-          contact_id: contact_id,
-        )
-        opportunity.update(available_candidate: true)
-        # Delete any non-active open matches
-        client_opportunity_matches.on_route(route).proposed.each(&:delete)
-        make_unavailable_in(match_route: route, expires_at: expires_at)
-      end
-    end
-    Matching::RunEngineJob.perform_later
-  end
-
   def remote_id
     @remote_id ||= project_client&.id_in_data_source.presence
   end
@@ -456,7 +377,7 @@ class Client < ApplicationRecord
   end
 
   def remote_data_source
-    @remote_data_source ||= DataSource.find(remote_data_source_id) rescue false # rubocop:disable Style/RescueModifier
+    @remote_data_source ||= project_client&.data_source || false
   end
 
   def remote_client_visible_to?(user)

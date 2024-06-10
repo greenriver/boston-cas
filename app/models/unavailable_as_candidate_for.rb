@@ -8,11 +8,14 @@
 # specific match route, existence of a record in this table for a given route
 # means the client is unavailable.
 class UnavailableAsCandidateFor < ApplicationRecord
+  include ArelHelper
   belongs_to :client
   belongs_to :route, class_name: 'MatchRoutes::Base', primary_key: :type, foreign_key: :match_route_type
+  belongs_to :user, optional: true
+  belongs_to :match, class_name: 'ClientOpportunityMatch', optional: true
   has_paper_trail
 
-  scope :for_route, -> (route) do
+  scope :for_route, ->(route) do
     route_name = MatchRoutes::Base.route_name_from_route(route)
     where(match_route_type: route_name)
   end
@@ -40,7 +43,22 @@ class UnavailableAsCandidateFor < ApplicationRecord
 
   def self.cleanup_expired!
     where.not(expires_at: nil).
-    where(arel_table[:expires_at].lt(Date.current)).destroy_all
+      where(arel_table[:expires_at].lt(Date.current)).
+      destroy_all
   end
 
+  def self.download_columns
+    {
+      'First Name' => ->(parked) { parked.client.first_name },
+      'Last Name' => ->(parked) { parked.client.last_name },
+      'CAS Client ID' => ->(parked) { parked.client_id },
+      'Remote ID' => ->(parked) { parked.client.remote_id },
+      'Remote Source' => ->(parked) { parked.client.remote_data_source&.name },
+      'Route' => ->(parked) { parked.route.title },
+      'Parked On' => ->(parked) { parked.created_at.to_date },
+      'Parked Until' => ->(parked) { parked.expires_at&.to_date || 'Indefinite' },
+      # 'Parked By' => :user_id,
+      # 'Parked Reason' => :reason,
+    }
+  end
 end

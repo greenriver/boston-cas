@@ -120,7 +120,7 @@ module MatchDecisions::HomelessSetAside
       end
 
       def completed
-        match.succeeded!
+        match.succeeded!(user: @dependencies.try(:[], :user))
       end
 
       def declined

@@ -256,15 +256,15 @@ module MatchDecisions
       statuses[status && status.to_sym]
     end
 
-    def run_status_callback! **dependencies
+    def run_status_callback!(**dependencies)
       match.clear_current_decision_cache!
-      status_callbacks.new(self, dependencies).public_send status
+      status_callbacks.new(self, dependencies).public_send(status)
     end
 
     # inherit in subclasses and add methods for each entry in #statuses
     class StatusCallbacks
       attr_reader :decision, :dependencies
-      def initialize(decision, _options)
+      def initialize(decision, dependencies)
         @decision = decision
         @dependencies = dependencies
       end

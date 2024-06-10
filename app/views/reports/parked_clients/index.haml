@@ -14,7 +14,13 @@
       %li.nav-item{role: :presentation}
         = link_to route_name, reports_parked_clients_path(tab: tab_label), class: "nav-link #{active}"
 - if @clients.any?
-  %p= "The following clients have been removed temporarily from matching the #{@route.title}"
+  .d-flex
+    %p= "The following clients have been removed temporarily from matching the #{@route.title}"
+    .ml-auto
+      = link_to reports_parked_clients_path(format: :xlsx), class: 'btn btn-secondary' do
+        %i.icon-download2
+        Download
+
   %p= page_entries_info @clients
   .table-responsive
     .c-card.c.card__flush.mb-4
