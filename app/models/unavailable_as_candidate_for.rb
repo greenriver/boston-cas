@@ -57,8 +57,8 @@ class UnavailableAsCandidateFor < ApplicationRecord
       'Route' => ->(parked) { parked.route.title },
       'Parked On' => ->(parked) { parked.created_at.to_date },
       'Parked Until' => ->(parked) { parked.expires_at&.to_date || 'Indefinite' },
-      # 'Parked By' => :user_id,
-      # 'Parked Reason' => :reason,
+      'Parked By' => ->(parked) { parked.user&.name_with_email },
+      'Parked Reason' => ->(parked) { parked.reason },
     }
   end
 end

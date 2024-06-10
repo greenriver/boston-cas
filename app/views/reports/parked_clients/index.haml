@@ -1,7 +1,11 @@
 = render 'reports/crumbs_operational'
-.row
-  .col-sm-12
-    %h1 Currently Parked Clients
+.d-flex
+  %h1 Currently Parked Clients
+  .ml-auto
+    = link_to reports_parked_clients_path(format: :xlsx), class: 'btn btn-secondary' do
+      %i.icon-download2
+      Download
+
 - if @routes.count > 1
   %ul.nav.nav-tabs{role: :tablist}
     - @routes.each do |route|
@@ -14,13 +18,7 @@
       %li.nav-item{role: :presentation}
         = link_to route_name, reports_parked_clients_path(tab: tab_label), class: "nav-link #{active}"
 - if @clients.any?
-  .d-flex
-    %p= "The following clients have been removed temporarily from matching the #{@route.title}"
-    .ml-auto
-      = link_to reports_parked_clients_path(format: :xlsx), class: 'btn btn-secondary' do
-        %i.icon-download2
-        Download
-
+  %p= "The following clients have been removed temporarily from matching the #{@route.title}"
   %p= page_entries_info @clients
   .table-responsive
     .c-card.c.card__flush.mb-4
@@ -31,13 +29,18 @@
               %th Last Name
               %th First Name
               %th Parked Until
+              %th Parked By
+              %th Parked Reason
           %tbody
             - @clients.each do |client|
+              - parked = client.unavailable_as_candidate_fors.merge(UnavailableAsCandidateFor.for_route(@route))&.first
               %tr
                 %td
                   = link_to_if can_view_all_clients?, client.last_name, client_path(client)
                 %td= link_to_if can_view_all_clients?, client.first_name, client_path(client)
-                %td= client.unavailable_as_candidate_fors.merge(UnavailableAsCandidateFor.for_route(@route))&.first&.expires_at&.to_date
+                %td= parked&.expires_at&.to_date
+                %td= parked&.user&.name_with_email
+                %td= parked&.reason
   %p= paginate @clients
 - else
   %p No parked clients at this time.

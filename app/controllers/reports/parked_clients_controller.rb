@@ -26,7 +26,7 @@ module Reports
             merge(client_scope).
             where(match_route_type: MatchRoutes::Base.active.select(:type)).
             preload(:user, client: { project_client: :data_source })
-          filename = "Parked Clients #{Time.current.to_fs(:db)}"
+          filename = "Parked Clients #{Time.current.to_fs(:db)}.xlsx"
           render xlsx: 'index', filename: filename
         end
       end
