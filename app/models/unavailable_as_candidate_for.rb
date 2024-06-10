@@ -8,7 +8,6 @@
 # specific match route, existence of a record in this table for a given route
 # means the client is unavailable.
 class UnavailableAsCandidateFor < ApplicationRecord
-  include ArelHelper
   belongs_to :client
   belongs_to :route, class_name: 'MatchRoutes::Base', primary_key: :type, foreign_key: :match_route_type
   belongs_to :user, optional: true
