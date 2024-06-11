@@ -83,7 +83,7 @@ module Availability
             opportunity.update!(available_candidate: true)
           end
           # Delete any non-active open matches
-          client_opportunity_matches.open.each(&:delete)
+          client_opportunity_matches.open.each(&:destroy!)
           # Prevent any new matches for this client
           # This will re-queue the client once the date is passed
           make_unavailable_in_all_routes(expires_at: expires_at, user: user, match: match, reason: 'Parked')
