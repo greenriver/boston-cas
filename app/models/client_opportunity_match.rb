@@ -644,9 +644,9 @@ class ClientOpportunityMatch < ApplicationRecord
     restrictions
   end
 
-  def reopen!(contact)
+  def reopen!(contact, user: nil)
     self.class.transaction do
-      client.make_unavailable_in(match_route: match_route, expires_at: nil)
+      client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
@@ -658,11 +658,11 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
-  def activate!(touch_referral_event: true)
+  def activate!(touch_referral_event: true, user: nil)
     self.class.transaction do
-      update! active: true
-      client.make_unavailable_in(match_route: match_route, expires_at: nil) if match_route.should_prevent_multiple_matches_per_client
-      opportunity.update available_candidate: false
+      update!(active: true)
+      client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT) if match_route.should_prevent_multiple_matches_per_client
+      opportunity.update(available_candidate: false)
       add_default_contacts!
       requirements_with_inherited.each { |req| req.apply_to_match(self) }
       send(match_route.initial_decision).initialize_decision!
@@ -727,7 +727,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
-  def succeeded!(touch_referral_event: true)
+  def succeeded!(touch_referral_event: true, user: nil)
     self.class.transaction do
       route = opportunity.match_route
       update! active: false, closed: true, closed_reason: 'success'
@@ -736,9 +736,11 @@ class ClientOpportunityMatch < ApplicationRecord
       if route.should_cancel_other_matches
         client_related_matches.each do |match|
           if match.current_decision.present?
-            MatchEvents::DecisionAction.create(match_id: match.id,
-                                               decision_id: match.current_decision.id,
-                                               action: :canceled)
+            MatchEvents::DecisionAction.create(
+              match_id: match.id,
+              decision_id: match.current_decision.id,
+              action: :canceled,
+            )
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Client received another housing opportunity')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id
             match.poached!
@@ -748,10 +750,10 @@ class ClientOpportunityMatch < ApplicationRecord
         end
         client.update available: false
         # Prevent matching on any route
-        client.make_unavailable_in_all_routes
+        client.make_unavailable_in_all_routes(user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
       else
         # Prevent matching on this route again
-        client.make_unavailable_in(match_route: route)
+        client.make_unavailable_in(match_route: route, user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
       end
 
       # Cleanup other matches on the same opportunity
@@ -761,9 +763,11 @@ class ClientOpportunityMatch < ApplicationRecord
       else
         opportunity_related_matches.each do |match|
           if match.active
-            MatchEvents::DecisionAction.create(match_id: match.id,
-                                               decision_id: match.current_decision.id,
-                                               action: :canceled)
+            MatchEvents::DecisionAction.create(
+              match_id: match.id,
+              decision_id: match.current_decision.id,
+              action: :canceled,
+            )
             opportunity.notify_contacts_opportunity_taken(match)
             reason = MatchDecisionReasons::AdministrativeCancel.find_by(name: 'Vacancy filled by other client')
             match.current_decision.update! status: 'canceled', administrative_cancel_reason_id: reason.id

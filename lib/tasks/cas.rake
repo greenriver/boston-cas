@@ -7,7 +7,6 @@ namespace :cas do
 
     Warehouse::BuildReport.new.run! if Warehouse::Base.enabled?
     Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
-    # Client.ensure_availability
     Cas::UpdateVoucherAvailability.new.run!
     UnavailableAsCandidateFor.cleanup_expired!
     Matching::RunEngineJob.perform_later

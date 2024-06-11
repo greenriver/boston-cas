@@ -120,7 +120,7 @@ module MatchDecisions::HomelessSetAside
       end
 
       def completed
-        match.succeeded!
+        match.succeeded!(user: user)
       end
 
       def declined

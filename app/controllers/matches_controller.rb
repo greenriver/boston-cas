@@ -30,7 +30,7 @@ class MatchesController < ApplicationController
 
   def reopen
     @match = match_scope.find(params[:match_id])
-    @match.reopen!(current_contact)
+    @match.reopen!(current_contact, user: current_user)
     redirect_to match_path(@match)
   end
 

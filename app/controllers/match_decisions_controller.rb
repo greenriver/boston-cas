@@ -36,7 +36,7 @@ class MatchDecisionsController < ApplicationController
     render 'matches/show'
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     @program = @match.program
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
@@ -114,9 +114,16 @@ class MatchDecisionsController < ApplicationController
           # re-enable the client for matching
           prevent_matching_until = decision_params[:prevent_matching_until]&.to_date
           if can_reject_matches? && prevent_matching_until.present? && prevent_matching_until > Date.current
-            @match.client.unavailable(permanent: false, contact_id: current_contact.id, cancel_specific: @match, expires_at: prevent_matching_until)
+            @match.client.unavailable(
+              permanent: false,
+              contact_id: current_contact.id,
+              cancel_specific: @match,
+              expires_at: prevent_matching_until,
+              user: current_user,
+              match: @match,
+            )
           else
-            @decision.run_status_callback!
+            @decision.run_status_callback!(user: current_user)
           end
 
           if decision_params[:disable_opportunity] == '1'

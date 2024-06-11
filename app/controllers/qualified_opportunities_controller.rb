@@ -40,7 +40,7 @@ class QualifiedOpportunitiesController < ApplicationController
       match_route: @opportunity.match_route,
       universe_state: universe_state,
     )
-    match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?)
+    match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?, user: current_user)
     redirect_to match_path match
   end
 

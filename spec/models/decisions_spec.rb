@@ -40,7 +40,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
       the_match.hsp_contacts << hsp_user.contact
       the_match.ssp_contacts << ssp_user.contact
 
-      the_match.activate!
+      the_match.activate!(user: dnd_user)
     end
     it 'there are no stalled matches initially' do
       expect(ClientOpportunityMatch.stalled.count).to be 0
