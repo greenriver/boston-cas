@@ -57,7 +57,7 @@ RSpec.describe ClientOpportunityMatch, type: :model do
         match.activate!(user: user)
         aggregate_failures do
           expect(UnavailableAsCandidateFor.count).to eq(1)
-          expect(UnavailableAsCandidateFor.first.route).to eq(default_route)
+          expect(UnavailableAsCandidateFor.first.match_route_type).to eq(default_route.class.name)
           expect(UnavailableAsCandidateFor.first.reason).to eq(UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
           expect(UnavailableAsCandidateFor.first.user_id).to eq(user.id)
           expect(UnavailableAsCandidateFor.first.match_id).to eq(match.id)
