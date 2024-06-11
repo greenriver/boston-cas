@@ -69,7 +69,7 @@ module Availability
       match: nil
     )
       Client.transaction do
-        update(available: false) if permanent
+        update!(available: false) if permanent
 
         if cancel_all
           # Cancel any active matches
@@ -80,7 +80,7 @@ module Availability
               match_id: active_match.id,
               contact_id: contact_id,
             )
-            opportunity.update(available_candidate: true)
+            opportunity.update!(available_candidate: true)
           end
           # Delete any non-active open matches
           client_opportunity_matches.open.each(&:delete)
