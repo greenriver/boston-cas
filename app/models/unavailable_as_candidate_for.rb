@@ -14,6 +14,10 @@ class UnavailableAsCandidateFor < ApplicationRecord
   belongs_to :match, class_name: 'ClientOpportunityMatch', optional: true
   has_paper_trail
 
+  ACTIVE_MATCH_TEXT = 'Active Match'.freeze
+  SUCCESSFUL_MATCH_TEXT = 'Successful Match'.freeze
+  PARKED_TEXT = 'Parked'.freeze
+
   scope :for_route, ->(route) do
     route_name = MatchRoutes::Base.route_name_from_route(route)
     where(match_route_type: route_name)

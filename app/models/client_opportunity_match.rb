@@ -646,7 +646,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def reopen!(contact, user: nil)
     self.class.transaction do
-      client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: 'Active Match')
+      client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
@@ -661,7 +661,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def activate!(touch_referral_event: true, user: nil)
     self.class.transaction do
       update!(active: true)
-      client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: 'Active Match') if match_route.should_prevent_multiple_matches_per_client
+      client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT) if match_route.should_prevent_multiple_matches_per_client
       opportunity.update(available_candidate: false)
       add_default_contacts!
       requirements_with_inherited.each { |req| req.apply_to_match(self) }
@@ -750,10 +750,10 @@ class ClientOpportunityMatch < ApplicationRecord
         end
         client.update available: false
         # Prevent matching on any route
-        client.make_unavailable_in_all_routes(user: user, match: self, reason: 'Successful Match')
+        client.make_unavailable_in_all_routes(user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
       else
         # Prevent matching on this route again
-        client.make_unavailable_in(match_route: route, user: user, match: self, reason: 'Successful Match')
+        client.make_unavailable_in(match_route: route, user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
       end
 
       # Cleanup other matches on the same opportunity
