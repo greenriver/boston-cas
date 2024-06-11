@@ -100,7 +100,7 @@ module Availability
             match_id: match.id,
             contact_id: contact_id,
           )
-          opportunity.update(available_candidate: true)
+          opportunity.update!(available_candidate: true)
           # Delete any non-active open matches
           client_opportunity_matches.on_route(route).proposed.each(&:delete)
           make_unavailable_in(match_route: route, expires_at: expires_at, user: user, match: match, reason: 'Parked')
