@@ -270,6 +270,10 @@ module MatchDecisions
       end
       delegate :match, to: :decision
 
+      private def user
+        @dependencies.try(:[], :user)
+      end
+
       def back
         @decision.uninitialize_decision!
       end

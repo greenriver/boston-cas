@@ -86,7 +86,7 @@ module MatchDecisions::Ten
 
       def confirmed
         Notifications::MatchSuccessConfirmed.create_for_match! match
-        match.succeeded!(user: @dependencies.try(:[], :user))
+        match.succeeded!(user: user)
       end
 
       def declined

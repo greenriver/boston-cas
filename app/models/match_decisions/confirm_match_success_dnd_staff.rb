@@ -80,7 +80,7 @@ module MatchDecisions
 
       def confirmed
         Notifications::MatchSuccessConfirmedDevelopmentOfficer.create_for_match! match
-        match.succeeded!(user: @dependencies.try(:[], :user))
+        match.succeeded!(user: user)
       end
 
       def rejected

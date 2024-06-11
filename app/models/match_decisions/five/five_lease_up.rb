@@ -68,7 +68,7 @@ module MatchDecisions::Five
       end
 
       def completed
-        match.succeeded!(user: @dependencies.try(:[], :user))
+        match.succeeded!(user: user)
       end
 
       def canceled
