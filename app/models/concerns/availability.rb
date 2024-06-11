@@ -42,9 +42,9 @@ module Availability
       route_name = MatchRoutes::Base.route_name_from_route(match_route)
 
       # Delete any previous unavailable_as_candidate_fors so we can track the reason for this one
-      unavailable_as_candidate_fors.where(match_route_type: route_name).destroy_all
+      unavailable_as_candidate_fors.where(match_route_type: route_name).each(&:desroy!)
 
-      unavailable_as_candidate_fors.where(match_route_type: route_name).create(
+      unavailable_as_candidate_fors.where(match_route_type: route_name).create!(
         expires_at: expires_at,
         user_id: user&.id,
         reason: reason,
