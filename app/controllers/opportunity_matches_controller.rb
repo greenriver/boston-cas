@@ -32,8 +32,8 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def create
-    client_ids_to_activate = params[:checkboxes].select { |_key, value| value == '1' }.keys.map(&:to_i)
-    client_ids_to_activate.each do |client_id|
+    client_ids_to_activate = params[:checkboxes]&.select { |_key, value| value == '1' }&.keys&.map(&:to_i)
+    client_ids_to_activate&.each do |client_id|
       match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
         first_or_create(create_match_attributes(client_id))
       match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?, user: current_user)
