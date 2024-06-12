@@ -6,8 +6,12 @@
 
 class DeidentifiedClientsXlsx < ApplicationRecord
   mount_uploader :file, DeidentifiedClientsXlsxFileUploader
-  attr_accessor :update_availability
+  attr_accessor :agency_id, :update_availability
   attr_reader :added, :touched, :problems, :clients
+
+  def agency_options_for_select
+    Agency.order(name: :asc).pluck(:name, :id).to_h
+  end
 
   def valid_header?
     parse_xlsx unless @xlsx
@@ -24,13 +28,13 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
     return unless valid_header?
 
-    DeidentifiedClient.update_all(available: false) if @update_availability
+    DeidentifiedClient.where(agency: agency).update_all(available: false) if @update_availability
 
     @xlsx.each_with_index do |raw, index|
       next if skip?(raw, index)
 
       row = Hash[file_attributes.keys.zip(raw)]
-      client = DeidentifiedClient.where(client_identifier: row[:client_identifier]).first_or_initialize
+      client = DeidentifiedClient.where(agency: agency, client_identifier: row[:client_identifier]).first_or_initialize
       @clients << client
       cleaned = begin
         clean_row(client, row)
