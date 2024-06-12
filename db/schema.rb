@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_08_140355) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.text "referrer"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.index ["controller_name"], name: "index_activity_logs_on_controller_name"
+    t.index ["created_at", "item_model", "user_id"], name: "index_activity_logs_on_created_at_and_item_model_and_user_id"
+    t.index ["created_at"], name: "activity_logs_created_at_idx", using: :brin
+    t.index ["created_at"], name: "created_at_idx", using: :brin
+    t.index ["item_model", "user_id", "created_at"], name: "index_activity_logs_on_item_model_and_user_id_and_created_at"
+    t.index ["item_model", "user_id"], name: "index_activity_logs_on_item_model_and_user_id"
+    t.index ["item_model"], name: "index_activity_logs_on_item_model"
+    t.index ["user_id", "item_model", "created_at"], name: "index_activity_logs_on_user_id_and_item_model_and_created_at"
+    t.index ["user_id"], name: "index_activity_logs_on_user_id"
   end
 
   create_table "agencies", id: :serial, force: :cascade do |t|
@@ -42,6 +51,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["building_id"], name: "index_building_contacts_on_building_id"
+    t.index ["contact_id"], name: "index_building_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_building_contacts_on_deleted_at"
   end
 
   create_table "building_services", id: :serial, force: :cascade do |t|
@@ -50,6 +62,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["building_id"], name: "index_building_services_on_building_id"
+    t.index ["deleted_at"], name: "index_building_services_on_deleted_at"
+    t.index ["service_id"], name: "index_building_services_on_service_id"
   end
 
   create_table "buildings", id: :serial, force: :cascade do |t|
@@ -67,6 +82,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "state"
     t.string "zip_code"
     t.string "geo_code"
+    t.index ["id_in_data_source"], name: "index_buildings_on_id_in_data_source"
+    t.index ["subgrantee_id"], name: "index_buildings_on_subgrantee_id"
   end
 
   create_table "client_contacts", id: :serial, force: :cascade do |t|
@@ -82,6 +99,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "ssp", default: false, null: false
     t.boolean "hsp", default: false, null: false
     t.boolean "do", default: false, null: false
+    t.index ["client_id"], name: "index_client_contacts_on_client_id"
+    t.index ["contact_id"], name: "index_client_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_client_contacts_on_deleted_at"
   end
 
   create_table "client_notes", id: :serial, force: :cascade do |t|
@@ -107,6 +127,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "ssp", default: false, null: false
     t.boolean "hsp", default: false, null: false
     t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_client_opportunity_match_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_client_opportunity_match_contacts_on_deleted_at"
+    t.index ["match_id"], name: "index_client_opportunity_match_contacts_on_match_id"
   end
 
   create_table "client_opportunity_matches", id: :serial, force: :cascade do |t|
@@ -129,6 +152,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "stall_contacts_notified", precision: nil
     t.datetime "dnd_notified", precision: nil
     t.integer "match_route_id"
+    t.index ["active"], name: "index_client_opportunity_matches_on_active"
+    t.index ["client_id"], name: "index_client_opportunity_matches_on_client_id"
+    t.index ["closed"], name: "index_client_opportunity_matches_on_closed"
+    t.index ["closed_reason"], name: "index_client_opportunity_matches_on_closed_reason"
+    t.index ["contact_id"], name: "index_client_opportunity_matches_on_contact_id"
+    t.index ["deleted_at"], name: "index_client_opportunity_matches_on_deleted_at", where: "(deleted_at IS NULL)"
+    t.index ["opportunity_id"], name: "index_client_opportunity_matches_on_opportunity_id"
   end
 
   create_table "clients", id: :serial, force: :cascade do |t|
@@ -170,7 +200,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "disabling_condition", default: false
     t.datetime "release_of_information", precision: nil
     t.date "prevent_matching_until"
-    t.boolean "dmh_eligible", default: false
+    t.boolean "dmh_eligible", default: false, null: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on", precision: nil
@@ -302,6 +332,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.jsonb "ongoing_es_enrollments"
     t.jsonb "ongoing_so_enrollments"
     t.jsonb "last_seen_projects"
+    t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
+    t.index ["available"], name: "index_clients_on_available"
+    t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
+    t.index ["date_of_birth"], name: "index_clients_on_date_of_birth"
+    t.index ["days_homeless_in_last_three_years"], name: "index_clients_on_days_homeless_in_last_three_years"
+    t.index ["deleted_at"], name: "index_clients_on_deleted_at"
+    t.index ["disabling_condition"], name: "index_clients_on_disabling_condition"
+    t.index ["enrolled_project_ids"], name: "index_clients_on_enrolled_project_ids"
+    t.index ["family_member"], name: "index_clients_on_family_member"
+    t.index ["health_prioritized"], name: "index_clients_on_health_prioritized"
+    t.index ["vispdat_priority_score"], name: "index_clients_on_vispdat_priority_score"
+    t.index ["vispdat_score"], name: "index_clients_on_vispdat_score"
   end
 
   create_table "configs", id: :serial, force: :cascade do |t|
@@ -339,6 +381,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "role_in_organization"
     t.string "cell_phone"
     t.string "middle_name"
+    t.index ["deleted_at"], name: "index_contacts_on_deleted_at"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
   create_table "data_sources", id: :serial, force: :cascade do |t|
@@ -378,6 +422,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "queue"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "disabling_conditions", id: :serial, force: :cascade do |t|
@@ -408,6 +453,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "editable"
     t.datetime "deleted_at", precision: nil
     t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_entity_view_permissions_on_agency_id"
+    t.index ["entity_type", "entity_id"], name: "index_entity_view_permissions_on_entity_type_and_entity_id"
+    t.index ["user_id"], name: "index_entity_view_permissions_on_user_id"
   end
 
   create_table "ethnicities", id: :serial, force: :cascade do |t|
@@ -424,6 +472,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["client_id"], name: "index_external_referrals_on_client_id"
+    t.index ["created_at"], name: "index_external_referrals_on_created_at"
+    t.index ["updated_at"], name: "index_external_referrals_on_updated_at"
+    t.index ["user_id"], name: "index_external_referrals_on_user_id"
   end
 
   create_table "file_tags", id: :serial, force: :cascade do |t|
@@ -438,6 +490,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["deleted_at"], name: "index_funding_source_services_on_deleted_at"
+    t.index ["funding_source_id"], name: "index_funding_source_services_on_funding_source_id"
+    t.index ["service_id"], name: "index_funding_source_services_on_service_id"
   end
 
   create_table "funding_sources", id: :serial, force: :cascade do |t|
@@ -494,6 +549,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "deleted_at", precision: nil
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_attributes_on_housingable_type_and_housingable_id"
   end
 
   create_table "housing_media_links", force: :cascade do |t|
@@ -504,6 +560,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "deleted_at", precision: nil
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["housingable_type", "housingable_id"], name: "index_housing_media_links_on_housingable_type_and_id"
   end
 
   create_table "imported_clients_csvs", id: :serial, force: :cascade do |t|
@@ -560,6 +617,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.integer "match_prioritization_id"
     t.integer "active_client_prioritization_value"
     t.string "prioritization_method_used"
+    t.index ["date"], name: "index_match_census_on_date"
+    t.index ["match_id"], name: "index_match_census_on_match_id"
+    t.index ["match_prioritization_id"], name: "index_match_census_on_match_prioritization_id"
+    t.index ["opportunity_id"], name: "index_match_census_on_opportunity_id"
   end
 
   create_table "match_decision_reasons", id: :serial, force: :cascade do |t|
@@ -571,6 +632,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "ineligible_in_warehouse", default: false, null: false
     t.integer "referral_result"
     t.boolean "limited", default: false
+    t.index ["type"], name: "index_match_decision_reasons_on_type"
   end
 
   create_table "match_decisions", id: :serial, force: :cascade do |t|
@@ -599,6 +661,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "include_note_in_email"
     t.datetime "date_voucher_issued", precision: nil
     t.string "manager"
+    t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
+    t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
+    t.index ["match_id"], name: "index_match_decisions_on_match_id"
+    t.index ["not_working_with_client_reason_id"], name: "index_match_decisions_on_not_working_with_client_reason_id"
   end
 
   create_table "match_events", id: :serial, force: :cascade do |t|
@@ -616,6 +682,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.date "client_last_seen_date"
     t.boolean "admin_note", default: false, null: false
     t.integer "client_id"
+    t.index ["decision_id"], name: "index_match_events_on_decision_id"
+    t.index ["match_id"], name: "index_match_events_on_match_id"
+    t.index ["not_working_with_client_reason_id"], name: "index_match_events_on_not_working_with_client_reason_id"
+    t.index ["notification_id"], name: "index_match_events_on_notification_id"
   end
 
   create_table "match_mitigation_reasons", force: :cascade do |t|
@@ -624,6 +694,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "addressed", default: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["client_opportunity_match_id"], name: "index_match_mitigation_reasons_on_client_opportunity_match_id"
+    t.index ["mitigation_reason_id"], name: "index_match_mitigation_reasons_on_mitigation_reason_id"
   end
 
   create_table "match_prioritizations", id: :serial, force: :cascade do |t|
@@ -650,6 +722,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
     t.date "client_last_seen"
+    t.index ["contact_id"], name: "index_match_progress_updates_on_contact_id"
+    t.index ["decision_id"], name: "index_match_progress_updates_on_decision_id"
+    t.index ["match_id"], name: "index_match_progress_updates_on_match_id"
+    t.index ["notification_id"], name: "index_match_progress_updates_on_notification_id"
+    t.index ["type"], name: "index_match_progress_updates_on_type"
   end
 
   create_table "match_routes", id: :serial, force: :cascade do |t|
@@ -660,7 +737,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "stalled_interval", default: 7, null: false
-    t.integer "match_prioritization_id", default: 5, null: false
+    t.integer "match_prioritization_id", default: 6, null: false
     t.boolean "should_cancel_other_matches", default: true, null: false
     t.boolean "should_activate_match", default: true, null: false
     t.boolean "should_prevent_multiple_matches_per_client", default: true, null: false
@@ -676,6 +753,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "show_referral_source", default: false
     t.boolean "show_move_in_date", default: false
     t.boolean "show_address_field", default: false
+    t.index ["tag_id"], name: "index_match_routes_on_tag_id"
   end
 
   create_table "messages", id: :serial, force: :cascade do |t|
@@ -923,6 +1001,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.text "partner_warehouse_id"
     t.text "partner_name"
     t.boolean "share_information_permission"
+    t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
+    t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
 
   create_table "non_hmis_clients", id: :serial, force: :cascade do |t|
@@ -1017,6 +1097,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
+    t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
   create_table "notifications", id: :serial, force: :cascade do |t|
@@ -1041,6 +1122,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.integer "voucher_id"
     t.float "matchability"
     t.boolean "success", default: false
+    t.index ["deleted_at"], name: "index_opportunities_on_deleted_at", where: "(deleted_at IS NULL)"
+    t.index ["unit_id"], name: "index_opportunities_on_unit_id"
+    t.index ["voucher_id"], name: "index_opportunities_on_voucher_id"
   end
 
   create_table "opportunity_contacts", id: :serial, force: :cascade do |t|
@@ -1050,12 +1134,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
     t.boolean "housing_subsidy_admin", default: false, null: false
+    t.index ["contact_id"], name: "index_opportunity_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at"
+    t.index ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id"
   end
 
   create_table "opportunity_properties", id: :serial, force: :cascade do |t|
     t.integer "opportunity_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["opportunity_id"], name: "index_opportunity_properties_on_opportunity_id"
   end
 
   create_table "outreach_histories", force: :cascade do |t|
@@ -1064,6 +1152,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "outreach_name"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["non_hmis_client_id"], name: "index_outreach_histories_on_non_hmis_client_id"
+    t.index ["user_id"], name: "index_outreach_histories_on_user_id"
   end
 
   create_table "physical_disabilities", id: :serial, force: :cascade do |t|
@@ -1087,6 +1177,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "ssp", default: false, null: false
     t.boolean "hsp", default: false, null: false
     t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_program_contacts_on_contact_id"
+    t.index ["program_id"], name: "index_program_contacts_on_program_id"
   end
 
   create_table "program_services", id: :serial, force: :cascade do |t|
@@ -1095,6 +1187,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["deleted_at"], name: "index_program_services_on_deleted_at"
+    t.index ["program_id"], name: "index_program_services_on_program_id"
+    t.index ["service_id"], name: "index_program_services_on_service_id"
   end
 
   create_table "programs", id: :serial, force: :cascade do |t|
@@ -1109,6 +1204,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "confidential", default: false, null: false
     t.integer "match_route_id", default: 1
     t.text "description"
+    t.index ["contact_id"], name: "index_programs_on_contact_id"
+    t.index ["deleted_at"], name: "index_programs_on_deleted_at"
+    t.index ["funding_source_id"], name: "index_programs_on_funding_source_id"
+    t.index ["subgrantee_id"], name: "index_programs_on_subgrantee_id"
   end
 
   create_table "project_clients", id: :serial, force: :cascade do |t|
@@ -1156,7 +1255,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "workphone"
     t.string "pager"
     t.string "email"
-    t.boolean "dmh_eligible", default: false
+    t.boolean "dmh_eligible", default: false, null: false
     t.boolean "va_eligible", default: false, null: false
     t.boolean "hues_eligible", default: false, null: false
     t.datetime "disability_verified_on", precision: nil
@@ -1282,6 +1381,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.jsonb "ongoing_es_enrollments"
     t.jsonb "ongoing_so_enrollments"
     t.jsonb "last_seen_projects"
+    t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
+    t.index ["client_id"], name: "index_project_clients_on_client_id"
+    t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
+    t.index ["source_last_changed"], name: "index_project_clients_on_source_last_changed"
   end
 
   create_table "project_programs", id: :serial, force: :cascade do |t|
@@ -1301,6 +1404,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "request_sent_at", precision: nil
+    t.index ["deleted_at"], name: "index_reissue_requests_on_deleted_at"
+    t.index ["notification_id"], name: "index_reissue_requests_on_notification_id"
+    t.index ["reissued_by"], name: "index_reissue_requests_on_reissued_by"
   end
 
   create_table "rejected_matches", id: :serial, force: :cascade do |t|
@@ -1308,6 +1414,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.integer "opportunity_id", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.index ["client_id"], name: "index_rejected_matches_on_client_id"
+    t.index ["opportunity_id"], name: "index_rejected_matches_on_opportunity_id"
   end
 
   create_table "report_definitions", force: :cascade do |t|
@@ -1363,6 +1471,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "confidential", default: false
     t.string "current_status"
     t.string "step_tag"
+    t.index ["client_id", "match_id", "decision_id"], name: "index_reporting_decisions_c_m_d", unique: true
   end
 
   create_table "requirements", id: :serial, force: :cascade do |t|
@@ -1374,6 +1483,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.string "variable"
+    t.index ["deleted_at"], name: "index_requirements_on_deleted_at"
+    t.index ["requirer_type", "requirer_id"], name: "index_requirements_on_requirer_type_and_requirer_id"
+    t.index ["rule_id"], name: "index_requirements_on_rule_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -1454,6 +1566,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_manage_sessions", default: false
     t.boolean "can_edit_voucher_rules", default: false
+    t.index ["name"], name: "index_roles_on_name"
   end
 
   create_table "rules", id: :serial, force: :cascade do |t|
@@ -1464,6 +1577,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "type"
     t.string "verb"
     t.string "alternate_name"
+    t.index ["deleted_at"], name: "index_rules_on_deleted_at"
   end
 
   create_table "service_rules", id: :serial, force: :cascade do |t|
@@ -1472,6 +1586,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["deleted_at"], name: "index_service_rules_on_deleted_at"
+    t.index ["rule_id"], name: "index_service_rules_on_rule_id"
+    t.index ["service_id"], name: "index_service_rules_on_service_id"
   end
 
   create_table "services", id: :serial, force: :cascade do |t|
@@ -1496,6 +1613,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "shelter_name"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["non_hmis_client_id"], name: "index_shelter_histories_on_non_hmis_client_id"
+    t.index ["user_id"], name: "index_shelter_histories_on_user_id"
   end
 
   create_table "social_security_number_quality_codes", id: :serial, force: :cascade do |t|
@@ -1528,6 +1647,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "ssp", default: false, null: false
     t.boolean "hsp", default: false, null: false
     t.boolean "do", default: false, null: false
+    t.index ["contact_id"], name: "index_sub_program_contacts_on_contact_id"
+    t.index ["sub_program_id"], name: "index_sub_program_contacts_on_sub_program_id"
   end
 
   create_table "sub_programs", id: :serial, force: :cascade do |t|
@@ -1550,6 +1671,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "closed", default: false
     t.integer "event"
     t.boolean "weighting_rules_active", default: true
+    t.index ["building_id"], name: "index_sub_programs_on_building_id"
+    t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at"
+    t.index ["program_id"], name: "index_sub_programs_on_program_id"
+    t.index ["subgrantee_id"], name: "index_sub_programs_on_subgrantee_id"
   end
 
   create_table "subgrantee_contacts", id: :serial, force: :cascade do |t|
@@ -1558,6 +1683,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["contact_id"], name: "index_subgrantee_contacts_on_contact_id"
+    t.index ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at"
+    t.index ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id"
   end
 
   create_table "subgrantee_services", id: :serial, force: :cascade do |t|
@@ -1566,6 +1694,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["deleted_at"], name: "index_subgrantee_services_on_deleted_at"
+    t.index ["service_id"], name: "index_subgrantee_services_on_service_id"
+    t.index ["subgrantee_id"], name: "index_subgrantee_services_on_subgrantee_id"
   end
 
   create_table "subgrantees", id: :serial, force: :cascade do |t|
@@ -1619,11 +1750,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "expires_at", precision: nil
-    t.bigint "user_id"
-    t.bigint "match_id"
-    t.string "reason"
-    t.index ["match_id"], name: "index_unavailable_as_candidate_fors_on_match_id"
-    t.index ["user_id"], name: "index_unavailable_as_candidate_fors_on_user_id"
+    t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
+    t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
   end
 
   create_table "units", id: :serial, force: :cascade do |t|
@@ -1646,6 +1774,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.string "data_source_id_column_name"
     t.boolean "elevator_accessible", default: false, null: false
     t.boolean "active", default: true, null: false
+    t.index ["building_id"], name: "index_units_on_building_id"
+    t.index ["deleted_at"], name: "index_units_on_deleted_at", where: "(deleted_at IS NULL)"
+    t.index ["id_in_data_source"], name: "index_units_on_id_in_data_source"
   end
 
   create_table "user_roles", id: :serial, force: :cascade do |t|
@@ -1654,6 +1785,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -1695,6 +1828,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "exclude_phone_from_directory", default: false
     t.string "unique_session_id"
     t.boolean "receive_weekly_match_summary_email", default: true
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invitations_count"], name: "index_users_on_invitations_count"
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|
@@ -1731,6 +1871,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.integer "user_id"
     t.datetime "made_available_at", precision: nil
     t.datetime "archived_at", precision: nil
+    t.index ["deleted_at"], name: "index_vouchers_on_deleted_at"
+    t.index ["sub_program_id"], name: "index_vouchers_on_sub_program_id"
+    t.index ["unit_id"], name: "index_vouchers_on_unit_id"
   end
 
   create_table "weighting_rules", force: :cascade do |t|
@@ -1740,6 +1883,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.index ["requirement_id"], name: "index_weighting_rules_on_requirement_id"
+    t.index ["route_id"], name: "index_weighting_rules_on_route_id"
   end
 
   add_foreign_key "non_hmis_assessments", "users", name: "non_hmis_assessments_user_id_fkey"
