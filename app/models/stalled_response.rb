@@ -29,7 +29,9 @@ class StalledResponse < ApplicationRecord
   end
 
   scope :for_decision, ->(decision_type) do
-    where(decision_type: decision_type)
+    responses = where(decision_type: decision_type)
+    responses = where(decision_type: 'DEFAULT') if responses.empty?
+    responses
   end
 
   def format_for_checkboxes
@@ -135,6 +137,7 @@ class StalledResponse < ApplicationRecord
         client_engaging: true,
         reason: 'Other',
         steps: [
+          'DEFAULT',
           'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
           'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
@@ -270,6 +273,7 @@ class StalledResponse < ApplicationRecord
         client_engaging: false,
         reason: 'Other',
         steps: [
+          'DEFAULT',
           'MatchDecisions::RecordClientHousedDateHousingSubsidyAdministrator',
           'MatchDecisions::ScheduleCriminalHearingHousingSubsidyAdmin',
           'MatchDecisions::ApproveMatchHousingSubsidyAdmin',
