@@ -56,7 +56,9 @@ class UnavailableAsCandidateFor < ApplicationRecord
       'Last Name' => ->(parked) { parked.client.last_name },
       'CAS Client ID' => ->(parked) { parked.client_id },
       'Remote ID' => ->(parked) { parked.client.remote_id },
-      'Remote Source' => ->(parked) { parked.client.remote_data_source&.name },
+      'Remote Source' => ->(parked) do
+        parked.client.remote_data_source&.name if parked.client.remote_data_source # rubocop:disable Style/SafeNavigation
+      end,
       'Route' => ->(parked) { parked.route.title },
       'Parked On' => ->(parked) { parked.created_at.to_date },
       'Parked Until' => ->(parked) { parked.expires_at&.to_date || 'Indefinite' },
