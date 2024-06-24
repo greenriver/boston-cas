@@ -19,6 +19,7 @@ class NotificationsMailer < DatabaseMailer
   include RouteEightMailerMethods
   include RouteNineMailerMethods
   include RouteTenMailerMethods
+  include RouteElevenMailerMethods
 
   def match_recommendation_dnd_staff(notification = nil)
     setup_instance_variables(notification)
