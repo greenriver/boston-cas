@@ -7,7 +7,7 @@
 module MatchDecisions::Eleven
   class ElevenHsaAcknowledgesReceipt < ::MatchDecisions::Base
     def to_partial_path
-      'match_decisions/eleven_hsa_acknowledges_receipt'
+      'match_decisions/eleven/hsa_acknowledges_receipt'
     end
 
     validate :cant_accept_if_match_closed
@@ -37,7 +37,7 @@ module MatchDecisions::Eleven
     end
 
     def contact_actor_type
-      nil
+      :housing_subsidy_admin_contacts
     end
 
     def statuses
@@ -66,8 +66,8 @@ module MatchDecisions::Eleven
     end
 
     def accessible_by? contact
-      contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+      contact.user_can_act_on_behalf_of_match_contacts?
+      contact.in?(match.send(contact_actor_type))
     end
 
     def notifications_for_this_step

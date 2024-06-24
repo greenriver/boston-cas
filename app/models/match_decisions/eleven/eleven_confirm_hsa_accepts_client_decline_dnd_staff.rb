@@ -7,7 +7,7 @@
 module MatchDecisions::Eleven
   class ElevenConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
     def to_partial_path
-      'match_decisions/eleven_confirm_hsa_accepts_client_decline_dnd_staff'
+      'match_decisions/eleven/confirm_hsa_accepts_client_decline_dnd_staff'
     end
 
     def statuses
@@ -67,7 +67,8 @@ module MatchDecisions::Eleven
     end
 
     def accessible_by? contact
-      contact.user_can_reject_matches? || contact.user_can_approve_matches?
+      contact.user_can_reject_matches? ||
+      contact.user_can_approve_matches?
     end
 
     def show_client_match_attributes?
@@ -90,7 +91,6 @@ module MatchDecisions::Eleven
 
       def decline_confirmed
         match.rejected!
-        # TODO maybe rerun the matching engine for that vacancy and client
       end
 
       def canceled

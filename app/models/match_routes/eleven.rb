@@ -56,7 +56,7 @@ module MatchRoutes
     end
 
     def contact_label_for(contact_type)
-      case contact_type
+      case contact_type&.to_sym
       when :dnd_staff_contacts
         Translation.translate('CoC Eleven')
       when :housing_subsidy_admin_contacts

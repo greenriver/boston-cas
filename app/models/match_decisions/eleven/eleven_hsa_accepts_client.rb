@@ -7,7 +7,7 @@
 module MatchDecisions::Eleven
   class ElevenHsaAcceptsClient < ::MatchDecisions::Base
     def to_partial_path
-      'match_decisions/eleven_hsa_accepts_client'
+      'match_decisions/eleven/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
 
@@ -88,7 +88,7 @@ module MatchDecisions::Eleven
 
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
-      contact.in?(match.housing_subsidy_admin_contacts)
+      contact.in?(match.send(contact_actor_type))
     end
 
     def show_client_match_attributes?
