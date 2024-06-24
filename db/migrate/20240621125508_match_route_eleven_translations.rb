@@ -7,12 +7,14 @@ class MatchRouteElevenTranslations < ActiveRecord::Migration[7.0]
       )
     end
   end 
+
   def down
     Translation.where(key: translations_eleven.keys).destroy_all
   end
+
   private
     def translations_eleven = {
-      'Match Route Eleven' => 'Match Route Eleven',  
+      'Match Route Eleven' => 'Match Route Eleven',
       'SSP Eleven' => 'SSP',
       'Shelter Agency Eleven' => 'Shelter Agency',
       'HSA Eleven' => 'HSA',

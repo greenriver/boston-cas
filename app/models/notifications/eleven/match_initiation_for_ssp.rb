@@ -29,6 +29,5 @@ module Notifications::Eleven
     def allows_registration?
       false
     end
-
   end
 end
