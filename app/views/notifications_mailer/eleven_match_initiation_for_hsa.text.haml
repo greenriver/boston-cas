@@ -1,0 +1,19 @@
+Hello #{@contact.full_name},
+\
+The CAS has generated a new match recommendation.  
+\
+Please acknowledge receipt of this match and review the associated HSA contacts.
+\
+Please review details:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'
