@@ -14,7 +14,7 @@ class SetupLogging
     # Some Green River clients have multiple tenants running the same general
     # code (but with different databases or environment variables)
     tenant: ENV.fetch('CLIENT', 'unknown-client-set-CLIENT-env-var'),
-  }
+  }.freeze
 
   def initialize(config)
     self.config = config
