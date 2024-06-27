@@ -62,6 +62,12 @@ tasks = [
     frequency: 1.hours,
     interruptable: true,
   },
+  {
+    task: 'db:sesssions:trim',
+    frequency: 1.day,
+    at: '1:00 am',
+    interruptable: true,
+  },
 ]
 
 job_type :rake_short, 'cd :path && :environment_variable=:environment bundle exec rake :task --silent #capacity_provider:short-term'

@@ -16,14 +16,7 @@ class SystemStatusController < ApplicationController
   # Provide a path for nagios or other system checker to determine if the system is
   # operational
   def operational
-    user_count = User.all.count
-    if user_count.positive?
-      Rails.logger.info 'Operating system is operational'
-      render plain: 'OK'
-    else
-      Rails.logger.info 'Operating system is not operational'
-      render status: 500, plain: 'FAIL'
-    end
+    render plain: 'OK'
   end
 
   def cache_status

@@ -89,7 +89,7 @@ RUN gem update --system \
 	&& echo 'America/New_York' > /etc/timezone \
 	&& chmod a+w /etc/timezone
 
-USER app-user
+USER ${USER_ID}
 
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
 
@@ -122,7 +122,7 @@ RUN git config --global --add safe.directory /app \
 		zsh \
   && rm -rf /var/cache/apk/*
 
-USER app-user
+USER ${USER_ID}
 
 ########################################
 ## Stage/target for use in production ##

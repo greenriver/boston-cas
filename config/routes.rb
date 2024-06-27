@@ -235,6 +235,7 @@ Rails.application.routes.draw do
     get :details
     get :ping
   end
+  get "healthz" => "system_status#operational"
 
   resources :deidentified_clients do
     resources :non_hmis_assessments do

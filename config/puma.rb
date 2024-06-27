@@ -46,3 +46,7 @@ persistent_timeout ENV.fetch('PUMA_PERSISTENT_TIMEOUT') { 70 }.to_i
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+activate_control_app
+plugin :yabeda
+plugin :yabeda_prometheus
