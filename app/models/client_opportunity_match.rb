@@ -242,6 +242,14 @@ class ClientOpportunityMatch < ApplicationRecord
            class_name: 'MatchProgressUpdates::Base',
            foreign_key: :match_id
 
+  def includes_contact?(contact_type, contact_id)
+    return send(contact_type).where(id: contact_id).present? if contact_type.present? && contact_id.present?
+    return send(contact_type).present? if contact_type.present?
+    return contacts.where(id: contact_id).present? if contact_id.present?
+
+    true
+  end
+
   def self.closed_filter_options
     {
       'Success' => 'success',

@@ -5,6 +5,7 @@
     - matches = opportunity.prioritized_active_matches
   - else
     - matches = opportunity.send(@match_state)
+  - matches = matches.select { |m| m.includes_contact?(@current_contact_type, @current_filter_contact) } if @current_contact_type.present? || @current_filter_contact.present?
   - sub_program = opportunity.sub_program
   - program = sub_program.program
   - unit = opportunity.unit
