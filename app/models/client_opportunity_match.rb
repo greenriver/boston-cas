@@ -658,6 +658,9 @@ class ClientOpportunityMatch < ApplicationRecord
   def reopen!(contact, user: nil)
     self.class.transaction do
       client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
+      match_route.routes_parked_on_active_match.reject(&:empty?).each do |park_route|
+        client.make_unavailable_in(match_route: park_route.constantize, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
+      end
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
@@ -673,6 +676,9 @@ class ClientOpportunityMatch < ApplicationRecord
     self.class.transaction do
       update!(active: true)
       client.make_unavailable_in(match_route: match_route, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT) if match_route.should_prevent_multiple_matches_per_client
+      match_route.routes_parked_on_active_match.reject(&:empty?).each do |park_route|
+        client.make_unavailable_in(match_route: park_route.constantize, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
+      end
       opportunity.update(available_candidate: false)
       add_default_contacts!
       requirements_with_inherited.each { |req| req.apply_to_match(self) }
@@ -696,6 +702,7 @@ class ClientOpportunityMatch < ApplicationRecord
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'rejected'
       client.make_available_in(match_route: match_route)
+      unpark_routes_parked_for_active_match
       opportunity.update! available_candidate: !opportunity.active_matches.exists?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
@@ -711,6 +718,7 @@ class ClientOpportunityMatch < ApplicationRecord
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client.make_available_in(match_route: match_route)
+      unpark_routes_parked_for_active_match
       opportunity.update! available_candidate: !opportunity.active_matches.exists?
       RejectedMatch.create! client_id: client.id, opportunity_id: opportunity.id
       Matching::RunEngineJob.perform_later
@@ -729,6 +737,7 @@ class ClientOpportunityMatch < ApplicationRecord
     self.class.transaction do
       update! active: false, closed: true, closed_reason: 'canceled'
       client&.make_available_in(match_route: match_route)
+      unpark_routes_parked_for_active_match
       opportunity.update! available_candidate: false
       opportunity.try(:voucher).try(:sub_program).try(:update_summary!)
       # Prevent access to this match by notification after 1 week
@@ -765,6 +774,10 @@ class ClientOpportunityMatch < ApplicationRecord
       else
         # Prevent matching on this route again
         client.make_unavailable_in(match_route: route, user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
+      end
+
+      match_route.routes_parked_on_successful_match.reject(&:empty?).each do |park_route|
+        client.make_unavailable_in(match_route: park_route.constantize, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
       end
 
       # Cleanup other matches on the same opportunity
@@ -950,6 +963,17 @@ class ClientOpportunityMatch < ApplicationRecord
     end
     client.do_contacts.preload(:user).each do |contact|
       assign_match_role_to_contact :do, contact
+    end
+  end
+
+  private def unpark_routes_parked_for_active_match
+    # Get routes parked for the current client due to an active route
+    parked_active_client_routes = client&.unavailable_as_candidate_fors&.map { |r| r.match_route_type if r.reason == UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT }&.compact
+    # Get routes from the config that are to be parked due to an active match on the current route
+    routes_to_park_by_active_match = match_route.routes_parked_on_active_match.reject(&:empty?)
+    # Unpark routes where above lists intersect
+    (parked_active_client_routes & routes_to_park_by_active_match).each do |parked_route|
+      client&.make_available_in(match_route: parked_route.constantize)
     end
   end
 
