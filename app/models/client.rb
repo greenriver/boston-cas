@@ -456,6 +456,10 @@ class Client < ApplicationRecord
     available
   end
 
+  def unavailable_fors_include_active_match
+    unavailable_as_candidate_fors.detect { |uf| uf.reason == UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT }.present?
+  end
+
   def available_text
     if is_available_for_matching?
       if available_as_candidate_for_any_route?
