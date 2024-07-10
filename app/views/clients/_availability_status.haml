@@ -10,7 +10,7 @@
 - if @client.unavailable_as_candidate_fors.exists?
   .blocked-on-routes
     %p.m-2.mt-4.muted-text
-      - if @client.unavailable_fors_include_active_match
+      - if @client.unavailable_fors_include_active_match?
         %em Clients are blocked from matching while actively in a resource match.
       - else
         - if UnavailableAsCandidateFor.expiration_length.positive?
