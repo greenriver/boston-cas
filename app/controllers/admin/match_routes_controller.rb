@@ -46,6 +46,8 @@ module Admin
         :show_move_in_date,
         :show_address_field,
         prioritized_client_columns: [],
+        routes_parked_on_active_match: [],
+        routes_parked_on_successful_match: [],
       )
     end
 
