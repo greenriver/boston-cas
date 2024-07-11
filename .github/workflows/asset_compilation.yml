@@ -60,6 +60,7 @@ jobs:
       run: |
         apk add --no-cache \
           nodejs yarn npm \
+          aws-cli \
           tzdata \
           git \
           bash \
@@ -73,9 +74,7 @@ jobs:
           chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont \
           lftp postgresql tmux postgis geos geos-dev xz \
           shared-mime-info \
-          python3 py3-pip xz
-
-        pip3 install awscli
+          xz
 
         echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
         chmod 600 ~/.pgpass
