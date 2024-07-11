@@ -27,7 +27,7 @@ ARG GROUP_ID=10000
 ARG BUNDLER_VERSION=2.4.13
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=3.1.4
+LABEL "ruby-version"=3.1.6
 
 ENV LANG=C.UTF-8
 ENV GEM_HOME=/bundle
@@ -67,18 +67,16 @@ RUN apk update \
   && apk upgrade --no-cache \
   && apk add --no-cache \
      nodejs yarn \
+     aws-cli \
      tzdata \
      git \
      bash \
      icu icu-dev \
-		 py3-pip \
      curl libcurl curl-dev \
      libmagic file-dev file \
      build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
      tar xz \
   && git config --global --add safe.directory /app
-
-RUN pip3 install --no-cache-dir awscli
 
 WORKDIR /app
 
