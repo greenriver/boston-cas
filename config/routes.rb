@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  devise_for :users, controllers: { invitations: 'users/invitations', sessions: 'users/sessions'}
+  devise_for :users, controllers: { invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_scope :user do
     match 'active' => 'users/sessions#active', via: :get
     match 'timeout' => 'users/sessions#timeout', via: :get
@@ -89,7 +89,7 @@ Rails.application.routes.draw do
   # also temporary, for testing
   namespace :testing do
     namespace :matching do
-      resources :candidate_generations, only: %i{new create}
+      resources :candidate_generations, only: [:new, :create]
     end
   end
 
@@ -105,7 +105,6 @@ Rails.application.routes.draw do
       resources :sessions, only: [:new, :create], controller: 'notification_sessions'
       resources :registrations, only: [:new, :create], controller: 'notification_registrations'
     end
-
   end
 
   resources :contacts, only: [:index] do
@@ -235,6 +234,7 @@ Rails.application.routes.draw do
     get :details
     get :ping
   end
+  get 'healthz' => 'system_status#operational'
 
   resources :deidentified_clients do
     resources :non_hmis_assessments do
