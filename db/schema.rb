@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_08_140355) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1750,8 +1750,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_08_140355) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "expires_at", precision: nil
+    t.bigint "user_id"
+    t.bigint "match_id"
+    t.string "reason"
     t.index ["client_id"], name: "index_unavailable_as_candidate_fors_on_client_id"
+    t.index ["match_id"], name: "index_unavailable_as_candidate_fors_on_match_id"
     t.index ["match_route_type"], name: "index_unavailable_as_candidate_fors_on_match_route_type"
+    t.index ["user_id"], name: "index_unavailable_as_candidate_fors_on_user_id"
   end
 
   create_table "units", id: :serial, force: :cascade do |t|

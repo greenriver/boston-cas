@@ -101,7 +101,7 @@ module MatchDecisions::ProviderOnly
 
       def accepted
         Notifications::ProviderOnly::HsaAcceptsClientSspNotification.create_for_match! match
-        match.succeeded!
+        match.succeeded!(user: user)
       end
 
       def declined

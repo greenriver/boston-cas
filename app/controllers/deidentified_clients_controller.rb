@@ -44,19 +44,28 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   def choose_upload
-    @upload = DeidentifiedClientsXlsx.new
+    @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
   end
 
   def import
     unless params[:deidentified_clients_xlsx]&.[](:file)
-      @upload = DeidentifiedClientsXlsx.new
+      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
       flash[:alert] = Translation.translate('You must attach a file in the form.')
       render :choose_upload
       return
     end
 
     file = import_params[:file]
+    agency = Agency.find(import_params[:agency_id].to_i)
     update_availability = import_params[:update_availability].to_s.in?(['1', 'true'])
+
+    unless agency.present?
+      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+      flash[:alert] = Translation.translate('You must select a valid agency')
+      render :choose_upload
+      return
+    end
+
     begin
       @upload = DeidentifiedClientsXlsx.create(
         filename: file.original_filename,
@@ -65,20 +74,20 @@ class DeidentifiedClientsController < NonHmisClientsController
         content: file.read,
       )
     rescue StandardError
-      @upload = DeidentifiedClientsXlsx.new
+      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
       flash[:alert] = Translation.translate('Cannot read uploaded file, is it an XLSX?')
       render :choose_upload
       return
     end
 
     unless @upload.valid_header?
-      @upload = DeidentifiedClientsXlsx.new
+      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
       flash[:alert] = Translation.translate('Uploaded file does not have the correct header. Incorrect file?')
       render :choose_upload
       return
     end
 
-    @upload.import(current_user.agency, update_availability: update_availability)
+    @upload.import(agency, update_availability: update_availability)
   end
 
   def assessment_type
@@ -232,6 +241,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   private def import_params
     params.require(:deidentified_clients_xlsx).permit(
       :file,
+      :agency_id,
       :update_availability,
     )
   end

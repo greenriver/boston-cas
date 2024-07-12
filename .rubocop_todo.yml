@@ -343,7 +343,6 @@ Layout/SpaceAroundOperators:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceBeforeBlockBraces:
   Exclude:
-    - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/imported_clients_csv_spec.rb'
     - 'spec/tasks/update_project_clients_from_deidentified_clients_spec.rb'
 
@@ -724,7 +723,6 @@ Style/BlockComments:
 Style/BlockDelimiters:
   Exclude:
     - 'spec/controllers/client_notes_controller_spec.rb'
-    - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/models/rules/assessment_scores_spec.rb'
     - 'spec/models/rules/assessment_scores_specified_spec.rb'
@@ -813,7 +811,6 @@ Style/InverseMethods:
 # Configuration parameters: IgnoredMethods.
 Style/MethodCallWithoutArgsParentheses:
   Exclude:
-    - 'spec/models/decisions_spec.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -999,7 +996,6 @@ Style/StringLiterals:
     - 'spec/factories/housing_media_links.rb'
     - 'spec/factories/roles.rb'
     - 'spec/models/client_notes_spec.rb'
-    - 'spec/models/client_opportunity_match_spec.rb'
     - 'spec/models/prioritization/rank_spec.rb'
     - 'spec/requests/express_neighborhood_interests_spec.rb'
     - 'spec/support/tasks.rb'

@@ -86,7 +86,7 @@ class ClientsController < ApplicationController
       prevent_matching_until = params[:client].try(:[], :prevent_matching_until)
       should_prevent_matching = prevent_matching_until.present? && prevent_matching_until.to_date > Date.current
 
-      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: prevent_matching_until.to_date) if should_prevent_matching
+      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: prevent_matching_until.to_date, user: current_user) if should_prevent_matching
 
       if request.xhr?
         head :ok
@@ -105,7 +105,7 @@ class ClientsController < ApplicationController
   # Remove the client from any other proposed matches
   # Mark the Client as available = false
   def unavailable
-    @client.unavailable(permanent: true)
+    @client.unavailable(permanent: true, user: current_user)
     redirect_to action: :show
   end
 

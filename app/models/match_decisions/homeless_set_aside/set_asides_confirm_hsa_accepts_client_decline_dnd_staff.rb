@@ -73,7 +73,7 @@ module MatchDecisions::HomelessSetAside
       end
 
       def decline_overridden
-        match.succeeded!
+        match.succeeded!(user: user)
       end
 
       def decline_overridden_returned

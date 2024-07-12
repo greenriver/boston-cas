@@ -1,0 +1,10 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: 'Parked-Clients') do |sheet|
+  sheet.add_row(UnavailableAsCandidateFor.download_columns.keys)
+  @parked.find_each do |park|
+    row = UnavailableAsCandidateFor.download_columns.values.map do |col|
+      col.call(park)
+    end
+    sheet.add_row(row)
+  end
+end

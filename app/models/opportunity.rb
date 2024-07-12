@@ -216,11 +216,11 @@ class Opportunity < ApplicationRecord
   # remove voucher
   # remove self (opportunity)
 
-  def stop_matches_and_remove_entire_history_from_existance!
+  def stop_matches_and_remove_entire_history_from_existence!
     Opportunity.transaction do
       client_opportunity_matches.each do |match|
         match.client.update(available: true)
-        match.client.make_unavailable_in(match_route: match_route)
+        match.client.make_unavailable_in(match_route: match_route, match: match)
         match.client_opportunity_match_contacts.destroy_all
         match.notifications.destroy_all
         match.destroy

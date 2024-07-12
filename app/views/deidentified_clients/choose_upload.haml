@@ -8,10 +8,13 @@
 %ul
   - DeidentifiedClientsXlsx.file_header.each do |label|
     %ul= label
-= simple_form_for @upload, url: import_deidentified_clients_path, method: :post do |f|
-  = f.error_notification
-  .form-inputs
-    = f.input :file, as: :file, label: false
-    = f.input :update_availability, as: :boolean, label: 'Update client availability', hint: 'Make only the clients that appear in the selected file available'
-  .form-actions
-    = f.button :submit, value: 'Upload Excel'
+  .row
+    .col-sm-6
+      = simple_form_for @upload, url: import_deidentified_clients_path, method: :post do |f|
+        = f.error_notification
+        .form-inputs
+          = f.input :file, as: :file, label: false
+          = f.input :agency_id, as: :select_2, collection: @upload.agency_options_for_select, required: true
+          = f.input :update_availability, as: :boolean, label: 'Update client availability', hint: 'Make only the clients in the selected agency that appear in the selected file available'
+        .form-actions
+          = f.button :submit, value: 'Upload Excel'

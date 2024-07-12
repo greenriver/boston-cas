@@ -10,9 +10,15 @@
 class UnavailableAsCandidateFor < ApplicationRecord
   belongs_to :client
   belongs_to :route, class_name: 'MatchRoutes::Base', primary_key: :type, foreign_key: :match_route_type
+  belongs_to :user, optional: true
+  belongs_to :match, class_name: 'ClientOpportunityMatch', optional: true
   has_paper_trail
 
-  scope :for_route, -> (route) do
+  ACTIVE_MATCH_TEXT = 'Active Match'.freeze
+  SUCCESSFUL_MATCH_TEXT = 'Successful Match'.freeze
+  PARKED_TEXT = 'Parked'.freeze
+
+  scope :for_route, ->(route) do
     route_name = MatchRoutes::Base.route_name_from_route(route)
     where(match_route_type: route_name)
   end
@@ -40,7 +46,24 @@ class UnavailableAsCandidateFor < ApplicationRecord
 
   def self.cleanup_expired!
     where.not(expires_at: nil).
-    where(arel_table[:expires_at].lt(Date.current)).destroy_all
+      where(arel_table[:expires_at].lt(Date.current)).
+      destroy_all
   end
 
+  def self.download_columns
+    {
+      'First Name' => ->(parked) { parked.client.first_name },
+      'Last Name' => ->(parked) { parked.client.last_name },
+      'CAS Client ID' => ->(parked) { parked.client_id },
+      'Remote ID' => ->(parked) { parked.client.remote_id },
+      'Remote Source' => ->(parked) do
+        parked.client.remote_data_source&.name if parked.client.remote_data_source # rubocop:disable Style/SafeNavigation
+      end,
+      'Route' => ->(parked) { parked.route.title },
+      'Parked On' => ->(parked) { parked.created_at.to_date },
+      'Parked Until' => ->(parked) { parked.expires_at&.to_date || 'Indefinite' },
+      'Parked By' => ->(parked) { parked.user&.name_with_email },
+      'Parked Reason' => ->(parked) { parked.reason },
+    }
+  end
 end
