@@ -54,6 +54,28 @@ class ActiveMatchesController < MatchListBaseController
         :match_route,
         unit: [:building],
         sub_program: [:program],
+        active_matches: [
+          :contacts,
+          :dnd_staff_contacts,
+          :housing_subsidy_admin_contacts,
+          :client_contacts,
+          :shelter_agency_contacts,
+          :ssp_contacts,
+          :hsp_contacts,
+          :do_contacts,
+          :hsa_or_shelter_agency_contacts,
+        ],
+        closed_matches: [
+          :contacts,
+          :dnd_staff_contacts,
+          :housing_subsidy_admin_contacts,
+          :client_contacts,
+          :shelter_agency_contacts,
+          :ssp_contacts,
+          :hsp_contacts,
+          :do_contacts,
+          :hsa_or_shelter_agency_contacts,
+        ],
         @match_state =>
         [
           :initialized_decisions,
