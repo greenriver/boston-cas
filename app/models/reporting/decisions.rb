@@ -123,7 +123,7 @@ class Reporting::Decisions < ApplicationRecord
     options = limit.map do |d|
       case d
       when :hiv_aids
-        c_t[:hiv_aids].eq(true).or((c_t[:hiv_positive].eq(true)))
+        c_t[:hiv_aids].eq(true).or(c_t[:hiv_positive].eq(true))
       when :developmental_disability
         c_t[:developmental_disability].eq(1)
       when :disability_verified_on
