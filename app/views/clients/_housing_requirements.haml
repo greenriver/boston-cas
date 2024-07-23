@@ -68,7 +68,7 @@
       - contact_info = @client.rrh_assessment_contact_info
       - if contact_info.present?
         %li
-          %span.c-detailed-list__label @column_data[:rrh_assessment_contact_info]
+          %span.c-detailed-list__label= @column_data[:rrh_assessment_contact_info]
           .mt-2.ml-8.o-text--normal= simple_format contact_info
     - if @client.last_ineligible_response.present?
       - response = @client.last_ineligible_response
