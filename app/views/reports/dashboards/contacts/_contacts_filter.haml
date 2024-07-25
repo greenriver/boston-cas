@@ -4,9 +4,9 @@
       = f.input :start, as: :date_picker, input_html: { value: @start_date }, required: true
     .col-3
       = f.input :end, as: :date_picker, input_html: { value: @end_date }, required: true
-  .row 
-    .col-3 
+  .row
+    .col-3
       = f.input :contacts, as: :select_2, collection: @filter.contact_options_for_select, input_html: { multiple: true }
-    .col-3 
-      = f.input :contact_type, as: :select_2, collection: @filter.contact_type_options_for_select, include_blank: true
+    .col-3
+      = f.input :contact_type, as: :select_2, collection: @filter.contact_type_options_for_select, include_blank: 'Any Contact Type'
   = f.submit 'Update Dashboard', class: 'btn btn-primary'

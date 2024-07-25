@@ -15,7 +15,7 @@ class Reports::Dashboards::ContactsController < ApplicationController
 
   def details
     column = params[:column]
-    route = params[:route_id]
+    route = params[:route_id].to_i
     data = @report.route_data(route)
     @route = data[:route]
     @column = @report.human_readable_column_name(column)
