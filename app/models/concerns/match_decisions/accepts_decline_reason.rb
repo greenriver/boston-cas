@@ -26,6 +26,8 @@ module MatchDecisions
           end
           result << MatchDecisionReasons::Other.first if include_other
         end
+        # Move other to the end of the list
+        result.sort_by! { |m| m.name.downcase == 'other' ? 1 : 0 }
       end
     end
 

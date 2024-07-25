@@ -19,6 +19,7 @@ module MatchDecisions
         'Client deceased',
         'Other',
         'Health and Safety',
+        'Client receiving navigation services',
       ]
     end
   end
