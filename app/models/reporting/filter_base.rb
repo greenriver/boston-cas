@@ -22,6 +22,8 @@ module Reporting
     attribute :ethnicities, Array, default: []
     attribute :disabilities, Array, default: []
     attribute :cohort_ids, Array, default: []
+    attribute :contacts, Array, default: []
+    attribute :contact_type, Integer
 
     # Defaults
     attribute :default_start, Date, default: (Date.current - 1.year).beginning_of_year
@@ -51,6 +53,8 @@ module Reporting
       self.ethnicities = filters.dig(:ethnicities)&.reject(&:blank?)&.map(&:to_sym).presence || ethnicities
       self.disabilities = filters.dig(:disabilities)&.reject(&:blank?)&.map(&:to_sym).presence || disabilities
       self.cohort_ids = filters.dig(:cohort_ids)&.reject(&:blank?)&.map(&:to_sym).presence || cohort_ids
+      self.contacts = filters.dig(:contacts)&.reject(&:blank?)&.map(&:to_sym).presence || contacts
+      self.contact_type = filters.dig(:contact_type)&.presence || contact_type
 
       ensure_date_order if valid?
       self
@@ -70,6 +74,8 @@ module Reporting
       scope = filter_for_ethnicities(scope)
       scope = filter_for_disabilities(scope)
       scope = filter_for_cohorts(scope)
+      scope = filter_for_contacts(scope)
+      scope = filter_for_contact_type(scope)
 
       scope
     end
@@ -90,7 +96,8 @@ module Reporting
           races: races,
           ethnicities: ethnicities,
           disabilities: disabilities,
-          cohort_ids: cohort_ids,
+          contacts: contacts,
+          contact_type: contact_type,
         },
       }
     end
@@ -105,6 +112,7 @@ module Reporting
         :start,
         :end,
         :match_route,
+        :contact_type,
         match_routes: [],
         program_types: [],
         agencies: [],
@@ -116,6 +124,7 @@ module Reporting
         ethnicities: [],
         disabilities: [],
         cohort_ids: [],
+        contacts: [],
       ].freeze
     end
 
@@ -231,6 +240,24 @@ module Reporting
         opts['Disabilities'] = disability_names
         opts['Cohorts'] = cohort_names
       end
+    end
+
+    def contact_options_for_select
+      Contact.active_contacts.map do |contact|
+        [
+          contact.name,
+          contact.id,
+        ]
+      end.to_h
+    end
+
+    def contact_type_options_for_select
+      MatchContacts.input_names.map do |contact_type|
+        [
+          Contact.label_for(contact_type)&.gsub('Contacts', 'Contact'),
+          contact_type,
+        ]
+      end.to_h
     end
 
     def describe_filter(keys = nil)

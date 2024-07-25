@@ -8,6 +8,7 @@ class Reporting::Decisions < ApplicationRecord
   include ArelHelper
 
   belongs_to :client, foreign_key: :cas_client_id
+  belongs_to :match, class_name: 'ClientOpportunityMatch'
 
   scope :started_between, ->(range) do
     where(match_started_at: range.begin.beginning_of_day .. range.end.end_of_day)
@@ -122,7 +123,7 @@ class Reporting::Decisions < ApplicationRecord
     options = limit.map do |d|
       case d
       when :hiv_aids
-        c_t[:hiv_aids].eq(true).or((c_t[:hiv_positive].eq(true)))
+        c_t[:hiv_aids].eq(true).or(c_t[:hiv_positive].eq(true))
       when :developmental_disability
         c_t[:developmental_disability].eq(1)
       when :disability_verified_on
@@ -138,6 +139,21 @@ class Reporting::Decisions < ApplicationRecord
   scope :cohorts, ->(limit) do
     joins(:client).
       merge(Client.active_cohorts(limit))
+  end
+
+  scope :contacts, ->(limit) do
+    joins(match: :contacts).
+      merge(ClientOpportunityMatchContact.where(contact_id: limit))
+  end
+
+  scope :contacts_in_type, ->(contact_array, type) do
+    type.chomp!('_contacts')
+
+    contacts = ClientOpportunityMatchContact.where(type.to_sym => true)
+    contacts.where(contact_id: contact_array) unless contact_array.blank?
+
+    joins(match: :contacts).
+      merge(contacts)
   end
 
   scope :current_step, -> do
@@ -160,6 +176,11 @@ class Reporting::Decisions < ApplicationRecord
 
   scope :in_progress, -> do
     where(terminal_status: IN_PROGRESS)
+  end
+
+  scope :expired, -> do
+    joins(:match).
+      merge(ClientOpportunityMatch.where(shelter_expiration: ..Date.current))
   end
 
   scope :ongoing_not_stalled, -> do

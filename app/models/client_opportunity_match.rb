@@ -662,7 +662,7 @@ class ClientOpportunityMatch < ApplicationRecord
     self.class.transaction do
       # Park client on any other routes where this route is set to block matching when the client is involved in this route
       match_route.routes_parked_on_active_match.reject(&:empty?).each do |park_route|
-        client.make_unavailable_in(match_route: park_route.constantize, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
+        client.make_unavailable_in(match_route: park_route.constantize, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
       end
       update(closed: false, active: true, closed_reason: nil)
       current_decision.update(status: :pending)
@@ -680,7 +680,7 @@ class ClientOpportunityMatch < ApplicationRecord
       update!(active: true)
       # Park client on any other routes where this route is set to block matching when the client is involved in this route
       match_route.routes_parked_on_active_match.reject(&:empty?).each do |park_route|
-        client.make_unavailable_in(match_route: park_route.constantize, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
+        client.make_unavailable_in(match_route: park_route.constantize, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
       end
       opportunity.update(available_candidate: false)
       add_default_contacts!
@@ -774,7 +774,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
       # Park client on any other routes where this route is set to block matching when the client is successful on this route
       match_route.routes_parked_on_successful_match.reject(&:empty?).each do |park_route|
-        client.make_unavailable_in(match_route: park_route.constantize, expires_at: nil, user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
+        client.make_unavailable_in(match_route: park_route.constantize, user: user, match: self, reason: UnavailableAsCandidateFor::SUCCESSFUL_MATCH_TEXT)
       end
 
       # Cleanup other matches on the same opportunity

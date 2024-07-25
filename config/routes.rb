@@ -200,6 +200,11 @@ Rails.application.routes.draw do
           get :details
         end
       end
+      resources :contacts, only: [:index] do
+        collection do
+          get :details
+        end
+      end
       resources :vacancies, only: [:index] do
         collection do
           get :details
