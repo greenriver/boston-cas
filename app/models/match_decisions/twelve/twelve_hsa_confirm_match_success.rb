@@ -36,7 +36,7 @@ module MatchDecisions::Twelve
 
     # if we've overridden this decision, indicate that (this is sent to the client)
     def status_label
-      if match.twelve_hsa_match_success_decline_decision.status == 'decline_overridden'
+      if match.twelve_hsa_match_decline_decision.status == 'decline_overridden'
         'Approved'
       else
         statuses[status && status.to_sym]
@@ -108,7 +108,7 @@ module MatchDecisions::Twelve
       end
 
       def declined
-        match.twelve_hsa_confirm_match_success_decline_decision.initialize_decision!
+        match.twelve_hsa_confirm_match_decline_decision.initialize_decision!
       end
 
       def canceled

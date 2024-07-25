@@ -15,7 +15,7 @@ module MatchDecisions::Twelve
     end
 
     def step_name
-      "#{Translation.translate('CoC Twelve')} Confirms Match Success Decline"
+      "#{Translation.translate('CoC Twelve')} Match Decline Review"
     end
 
     def actor_type

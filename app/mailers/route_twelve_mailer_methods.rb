@@ -22,7 +22,7 @@ module RouteTwelveMailerMethods
       mail(to: @contact.email, subject: 'New Housing Recommendation - Requires Your Action')
     end
 
-    def twelve_hsa_confirm_match_success_decline(notification = nil)
+    def twelve_hsa_confirm_match_decline(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('Shelter Agency Ten')} - Requires Your Action")
     end

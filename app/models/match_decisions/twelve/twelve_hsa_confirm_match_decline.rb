@@ -5,17 +5,17 @@
 ###
 
 module MatchDecisions::Twelve
-  class TwelveHsaConfirmMatchSuccessDecline < ::MatchDecisions::Base
+  class TwelveHsaConfirmMatchDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteTwelveDeclineReasons
     include MatchDecisions::RouteTwelveCancelReasons
 
     def to_partial_path
-      'match_decisions/twelve/hsa_confirm_match_success_decline'
+      'match_decisions/twelve/hsa_confirm_match_decline'
     end
 
     def step_name
-      "#{Translation.translate('CoC Twelve')} Confirms Match Success Decline"
+      "#{Translation.translate('CoC Twelve')} Match Decline Review"
     end
 
     def actor_type
@@ -28,7 +28,7 @@ module MatchDecisions::Twelve
 
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Twelve::TwelveHsaConfirmMatchSuccessDecline
+        m << Notifications::Twelve::TwelveHsaConfirmMatchDecline
       end
     end
 

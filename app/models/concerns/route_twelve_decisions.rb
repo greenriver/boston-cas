@@ -11,7 +11,7 @@ module RouteTwelveDecisions
     has_decision :twelve_agency_acknowledges_receipt, decision_class_name: 'MatchDecisions::Twelve::TwelveAgencyAcknowledgesReceipt', notification_class_name: 'Notifications::Twelve::TwelveAgencyAcknowledgesReceipt'
     has_decision :twelve_agency_acknowledges_receipt_decline, decision_class_name: 'MatchDecisions::Twelve::TwelveAgencyAcknowledgesReceiptDecline', notification_class_name: 'Notifications::Twelve::TwelveAgencyAcknowledgesReceiptDecline'
     has_decision :twelve_hsa_confirm_match_success, decision_class_name: 'MatchDecisions::Twelve::TwelveHsaConfirmMatchSuccess', notification_class_name: 'Notifications::Twelve::TwelveHsaConfirmMatchSuccess'
-    has_decision :twelve_hsa_confirm_match_success_decline, decision_class_name: 'MatchDecisions::Twelve::TwelveHsaConfirmMatchSuccessDecline', notification_class_name: 'Notifications::Twelve::TwelveHsaConfirmMatchSuccessDecline'
+    has_decision :twelve_hsa_confirm_match_decline, decision_class_name: 'MatchDecisions::Twelve::TwelveHsaConfirmMatchDecline', notification_class_name: 'Notifications::Twelve::TwelveHsaConfirmMatchDecline'
     has_decision :twelve_confirm_match_success_dnd_staff, decision_class_name: 'MatchDecisions::Twelve::TwelveConfirmMatchSuccessDndStaff', notification_class_name: 'Notifications::Twelve::TwelveConfirmMatchSuccessDndStaff'
   end
 end

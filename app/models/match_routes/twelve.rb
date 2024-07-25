@@ -27,7 +27,7 @@ module MatchRoutes
         'MatchDecisions::Twelve::TwelveAgencyAcknowledgesReceipt' => 1,
         'MatchDecisions::Twelve::TwelveAgencyAcknowledgesReceiptDecline' => 2,
         'MatchDecisions::Twelve::TwelveHsaConfirmMatchSuccess' => 3,
-        'MatchDecisions::Twelve::TwelveHsaConfirmMatchSuccessDecline' => 4,
+        'MatchDecisions::Twelve::TwelveHsaConfirmMatchDecline' => 4,
         'MatchDecisions::Twelve::TwelveConfirmMatchSuccessDndStaff' => 5,
       }
     end
