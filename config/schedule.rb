@@ -63,7 +63,7 @@ tasks = [
     interruptable: true,
   },
   {
-    task: 'db:sesssions:trim',
+    task: 'db:sessions:trim',
     frequency: 1.day,
     at: '1:00 am',
     interruptable: true,
