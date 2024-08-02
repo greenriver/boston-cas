@@ -16,32 +16,32 @@ module MatchRoutes
 
     def self.match_steps
       {
-        'MatchDecisions::Thirteen::ClientMatch' => 1,
-        'MatchDecisions::Thirteen::MatchAcknowledgement' => 2,
-        'MatchDecisions::Thirteen::ClientReview' => 3,
-        'MatchDecisions::Thirteen::HearingScheduled' => 4,
-        'MatchDecisions::Thirteen::HearingOutcome' => 5,
-        'MatchDecisions::Thirteen::HsaReview' => 6,
-        'MatchDecisions::Thirteen::AcceptReferral' => 7,
-        'MatchDecisions::Thirteen::ConfirmMatchSuccess' => 8,
+        'MatchDecisions::Thirteen::ThirteenClientMatch' => 1,
+        'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement' => 2,
+        'MatchDecisions::Thirteen::ThirteenClientReview' => 3,
+        'MatchDecisions::Thirteen::ThirteenHearingScheduled' => 4,
+        'MatchDecisions::Thirteen::ThirteenHearingOutcome' => 5,
+        'MatchDecisions::Thirteen::ThirteenHsaReview' => 6,
+        'MatchDecisions::Thirteen::ThirteenAcceptReferral' => 7,
+        'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess' => 8,
       }
     end
 
     def self.match_steps_for_reporting
       {
-        'MatchDecisions::Thirteen::ClientMatch' => 1,
-        'MatchDecisions::Thirteen::MatchAcknowledgement' => 2,
-        'MatchDecisions::Thirteen::ClientReview' => 3,
-        'MatchDecisions::Thirteen::ClientReviewDecline' => 4,
-        'MatchDecisions::Thirteen::HearingScheduled' => 5,
-        'MatchDecisions::Thirteen::HearingScheduledDecline' => 6,
-        'MatchDecisions::Thirteen::HearingOutcome' => 7,
-        'MatchDecisions::Thirteen::HearingOutcomeDecline' => 8,
-        'MatchDecisions::Thirteen::HsaReview' => 9,
-        'MatchDecisions::Thirteen::HsaReviewDecline' => 10,
-        'MatchDecisions::Thirteen::AcceptReferral' => 11,
-        'MatchDecisions::Thirteen::AcceptReferralDecline' => 12,
-        'MatchDecisions::Thirteen::ConfirmMatchSuccess' => 13,
+        'MatchDecisions::Thirteen::ThirteenClientMatch' => 1,
+        'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement' => 2,
+        'MatchDecisions::Thirteen::ThirteenClientReview' => 3,
+        'MatchDecisions::Thirteen::ThirteenClientReviewDecline' => 4,
+        'MatchDecisions::Thirteen::ThirteenHearingScheduled' => 5,
+        'MatchDecisions::Thirteen::ThirteenHearingScheduledDecline' => 6,
+        'MatchDecisions::Thirteen::ThirteenHearingOutcome' => 7,
+        'MatchDecisions::Thirteen::ThirteenHearingOutcomeDecline' => 8,
+        'MatchDecisions::Thirteen::ThirteenHsaReview' => 9,
+        'MatchDecisions::Thirteen::ThirteenHsaReviewDecline' => 10,
+        'MatchDecisions::Thirteen::ThirteenAcceptReferral' => 11,
+        'MatchDecisions::Thirteen::ThirteenAcceptReferralDecline' => 12,
+        'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess' => 13,
       }
     end
 

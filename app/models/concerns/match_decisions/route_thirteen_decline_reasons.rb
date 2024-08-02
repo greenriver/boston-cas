@@ -8,7 +8,7 @@ module MatchDecisions
   module RouteThirteenDeclineReasons
     extend ActiveSupport::Concern
 
-    def step_decline_reasons
+    def step_decline_reasons(_contact)
       [
         'Client has another housing option',
         'Does not agree to services',
