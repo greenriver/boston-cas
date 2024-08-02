@@ -6,6 +6,10 @@
 
 module MatchDecisions::Eleven
   class ElevenConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteElevenDeclineReasons
+    include MatchDecisions::RouteElevenCancelReasons
+
     def to_partial_path
       'match_decisions/eleven/confirm_hsa_accepts_client_decline_dnd_staff'
     end
@@ -99,13 +103,5 @@ module MatchDecisions::Eleven
       end
     end
     private_constant :StatusCallbacks
-  end
-
-  def step_cancel_reasons
-    [
-      'Vacancy should not have been entered',
-      'Vacancy filled by other client',
-      'Other',
-    ]
   end
 end
