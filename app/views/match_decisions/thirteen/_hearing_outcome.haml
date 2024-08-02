@@ -18,7 +18,7 @@
                   .col-md-6
                     = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
 
-              = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
+              = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jSubmit', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
         - if can_reject_matches?
           = render 'match_decisions/cancel_actions', form: form
         - elsif @decision.declineable_by?(current_contact)

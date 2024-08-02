@@ -18,6 +18,10 @@ module MatchDecisions::Thirteen
       }
     end
 
+    def to_partial_path
+      'match_decisions/thirteen/confirm_match_success'
+    end
+
     def label
       label_for_status status
     end

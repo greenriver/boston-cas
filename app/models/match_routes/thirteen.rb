@@ -77,7 +77,7 @@ module MatchRoutes
     end
 
     def success_decision
-      :thirteen_confirm_match_success
+      :thirteen_confirm_match_success_decision
     end
 
     def initial_contacts_for_match
