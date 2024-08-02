@@ -15,7 +15,7 @@ class SubProgramsController < ApplicationController
   def new
     program = Program.find(params[:program_id])
     program_type = program.match_route.default_program_type
-    @subprogram = SubProgram.new({program_type: program_type, program: program})
+    @subprogram = SubProgram.new({ program_type: program_type, program: program })
   end
 
   def edit
@@ -26,30 +26,30 @@ class SubProgramsController < ApplicationController
     @subprogram = SubProgram.new
     @subprogram.assign_attributes sub_program_params
     @subprogram.program = @program
-    prevent_incorrect_building()
+    prevent_incorrect_building
     if @subprogram.save
       redirect_to action: :index, controller: :programs
       flash[:notice] = "#{@subprogram.program.name} created."
     else
-      flash[:error] = "Please review the form problems below."
+      flash[:error] = 'Please review the form problems below.'
       render :new
     end
   end
 
   def update
     @subprogram.assign_attributes(sub_program_params)
-    prevent_incorrect_building()
+    prevent_incorrect_building
     if @subprogram.save
       @subprogram.file_tags.destroy_all
       if file_tag_params.any? && Warehouse::Base.enabled?
-        tags = Warehouse::Tag.where(id:file_tag_params).map do |tag|
+        Warehouse::Tag.where(id: file_tag_params).map do |tag|
           @subprogram.file_tags.create(tag_id: tag.id, name: tag.name)
         end
       end
       redirect_to action: :edit
       flash[:notice] = "Program \"<a href=\"#{edit_program_sub_program_path(@subprogram.program, @subprogram)}\">#{@subprogram.program.name}</a>\" updated."
     else
-      flash[:error] = "Please review the form problems below."
+      flash[:error] = 'Please review the form problems below.'
       render :new
     end
   end
