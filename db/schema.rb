@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_08_180516) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_31_130949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1673,6 +1673,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_08_180516) do
     t.boolean "closed", default: false
     t.integer "event"
     t.boolean "weighting_rules_active", default: true
+    t.boolean "cori_hearing_required"
     t.index ["building_id"], name: "index_sub_programs_on_building_id"
     t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at"
     t.index ["program_id"], name: "index_sub_programs_on_program_id"

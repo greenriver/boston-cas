@@ -1,0 +1,62 @@
+.match-decision.c-card.c-card--flush.card--block
+  %p.mb-3 Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
+
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      .o-choose.o-choose--flush.o-choose--flush-top
+        - if @decision.accessible_by?(current_contact)
+          .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?), ( 'o-choose__choice--100' unless can_reject_matches?)]}
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--confirm.mr-4
+                %h3 Continue Match
+            .o-choose__content
+              .jScheduled.d-none
+                %label(for="decision_criminal_hearing_date")= Translation.translate('Date and time of criminal background hearing')
+                .row.form-group
+                  .col-md-6
+                    = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
+
+              = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
+        - if can_reject_matches?
+          = render 'match_decisions/cancel_actions', form: form
+        - elsif @decision.declineable_by?(current_contact)
+          .o-choose__choice.o-choose__choice--100{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
+            = render 'match_decisions/shelter_decline_actions', form: form
+
+= content_for :page_js do
+  :javascript
+    $('.date_time_picker').datetimepicker({
+      sideBySide: true,
+      stepping: 15,
+      format: "MMM D, YYYY h:mm a",
+      icons: {
+        time: "icon icon-clock",
+        date: "icon icon-calendar",
+        up: "icon icon-arrow-up",
+        down: "icon icon-arrow-down"
+      }
+    });
+
+    function update_button_states() {
+        var prevent_matching_present = $('#decision_prevent_matching_until').val() != ''
+        if(prevent_matching_present) {
+          $('.jSubmit').attr('disabled', 'disabled');
+          $('.jCancel').removeAttr('disabled');
+        } else {
+         $('.jSubmit').removeAttr('disabled');
+
+        }
+    }
+
+    $('#decision_prevent_matching_until').on("change", update_button_states);
+    $('#decision_prevent_matching_until').trigger('change');
+
+    $('.jSelections input').on('change', function(){
+      var action = 'addClass'
+      if ($(this).val() === 'scheduled') {
+        action = 'removeClass'
+      }
+      $('.jScheduled')[action]('d-none')
+    });
+    $('.jSelections input:checked').trigger('change');

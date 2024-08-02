@@ -100,6 +100,7 @@ class ProgramsController < ApplicationController
           :confidential,
           :eligibility_requirement_notes,
           :weighting_rules_active,
+          :cori_hearing_required,
         ],
         service_ids: [],
         requirements_attributes: [
