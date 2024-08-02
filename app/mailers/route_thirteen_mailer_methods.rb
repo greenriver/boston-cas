@@ -102,22 +102,22 @@ module RouteThirteenMailerMethods
       mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA Thirteen')} - Requires Your Action")
     end
 
-    def thirteen_hsa_review_shelter_agency(notification = nil)
+    def thirteen_accept_referral_shelter_agency(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
     end
 
-    def thirteen_hsa_review_hsa(notification = nil)
+    def thirteen_accept_referral_hsa(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')} - Requires Your Action")
     end
 
-    def thirteen_hsa_review_ssp(notification = nil)
+    def thirteen_accept_referral_ssp(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
     end
 
-    def thirteen_hsa_review_hsp(notification = nil)
+    def thirteen_accept_referral_hsp(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
     end
