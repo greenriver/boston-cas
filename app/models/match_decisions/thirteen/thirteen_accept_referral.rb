@@ -11,6 +11,7 @@ module MatchDecisions::Thirteen
     include MatchDecisions::RouteThirteenDeclineReasons
 
     validate :ensure_required_contacts_present_on_accept
+    validate :ensure_required_contacts_present_on_accept
 
     def to_partial_path
       'match_decisions/thirteen/accept_referral'
@@ -48,6 +49,10 @@ module MatchDecisions::Thirteen
       }
     end
 
+    def permitted_params
+      super + [:date_voucher_issued]
+    end
+
     def label_for_status status
       case status.to_sym
       when :pending then "#{Translation.translate('HSA Thirteen')} assigned match"
@@ -67,8 +72,14 @@ module MatchDecisions::Thirteen
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{Translation.translate('Shelter Agency Thirteen')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
+      missing_contacts << "a #{Translation.translate('SSP Thirteen')} Contact" if save_will_accept? && match.ssp_contacts.none?
+      missing_contacts << "a #{Translation.translate('HSP Thirteen')} Contact" if save_will_accept? && match.hsp_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
+    end
+
+    private def date_voucher_issued_present_if_status_complete
+      errors.add :date_voucher_issued, 'must be filled in' if status == 'accepted' && date_voucher_issued.blank?
     end
 
     private def save_will_accept?

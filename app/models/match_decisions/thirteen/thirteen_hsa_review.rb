@@ -17,7 +17,7 @@ module MatchDecisions::Thirteen
     end
 
     def step_name
-      'HSA Review'
+      "#{Translation.translate('HSA Thirteen')} Review"
     end
 
     def actor_type
