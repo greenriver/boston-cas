@@ -1,11 +1,16 @@
+@import '../settings/variables';
+@import '../settings/spacing';
+@import 'bootstrap/functions';
+
 // Remove the unit of a length
 // Source: https://css-tricks.com/snippets/sass/strip-unit-function/
 // @param {Number} $number - Number to remove unit from
 // @return {Number} - Unitless number
 @function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
+  @if type-of($number)=='number' and not unitless($number) {
     @return $number / ($number * 0 + 1);
   }
+
   @return $number;
 }
 
@@ -32,7 +37,7 @@
 // Font tracking to letter-spacing
 // @param {Number} $target - value of leading
 // @return {Number} - computed leading value
-@function tracking( $target ) {
+@function tracking($target ) {
   @return ($target / 1000) * 1rem;
 }
 
@@ -40,4 +45,27 @@
 // @return {Number} - relative line-height
 @function line-height($height, $font-size) {
   @return strip-unit($height) / strip-unit($font-size);
+}
+
+// @param {Number} $position - Text string of position
+// @return {Number} - z-index value
+@function font-weight($weight-string) {
+  @return map-get($font-weights, $weight-string);
+}
+
+@function determine-color-for-best-contrast($color) {
+  @if (strip-unit(lightness($color )) > 45) {
+    @return black;
+  }
+
+  @else {
+    @return white;
+  }
+}
+
+@mixin flex($grow: 1, $shrink: 1, $basis: auto) {
+  flex: $grow $shrink $basis;
+  flex-grow: $grow;
+  flex-shrink: $shrink;
+  flex-basis: $basis;
 }
