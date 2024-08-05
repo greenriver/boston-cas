@@ -1,7 +1,4 @@
 .match-decision.c-card.c-card--flush.card--block
-  %p.mb-3 Contacts associated with this match will receive a notification of this submission. The next step will be your decision whether or not to accept the match.
-
-  TODO: THIS NEEDS TO BE CHANGED TO DOCUMENT - "Outcome of cori hearing"
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .o-choose.o-choose--flush.o-choose--flush-top
@@ -12,6 +9,15 @@
                 .c-choice-icon.c-choice-icon--confirm.mr-4
                 %h3 Continue Match
             .o-choose__content
+              - if @match.match_route.show_hearing_date
+                %p
+                  - hearing_date = @match.thirteen_hearing_scheduled_decision.criminal_hearing_date
+                  - if hearing_date.present?
+                    = "Please note: #{Translation.translate('a criminal background hearing has been schedule for')}"
+                    %strong
+                      = "#{hearing_date.to_s}."
+                = form.input :criminal_hearing_outcome_recorded, as: :boolean, required: true, inline_label: "#{Translation.translate('The outcome of the criminal background hearing has been recorded')}"
+                -#= form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
               .jScheduled.d-none
                 %label(for="decision_criminal_hearing_date")= "Hearing Outcome"
                 .row.form-group
@@ -19,11 +25,7 @@
                     = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
 
               = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: { class: 'btn btn-success jSubmit', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?) }
-        - if can_reject_matches?
-          = render 'match_decisions/cancel_actions', form: form
-        - elsif @decision.declineable_by?(current_contact)
-          .o-choose__choice.o-choose__choice--100{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
-            = render 'match_decisions/shelter_decline_actions', form: form
+        = render 'match_decisions/decline_and_cancel_backup_actions', form: form, action_message: "If the match is declined, the #{Translation.translate('CoC Thirteen')} will be informed of the decision."
 
 = content_for :page_js do
   :javascript

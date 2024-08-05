@@ -19,5 +19,9 @@ module Notifications::Thirteen
     def event_label
       "#{Translation.translate('HSA Thirteen')} notified of referral acceptance."
     end
+
+    def to_partial_path
+      "notifications/thirteen/#{notification_type}"
+    end
   end
 end

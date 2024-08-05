@@ -9,7 +9,6 @@ module MatchDecisions::Thirteen
     include MatchDecisions::RouteThirteenCancelReasons
 
     validate :ensure_required_contacts_present_on_accept
-    validate :validate_cancel_reason
 
     def to_partial_path
       'match_decisions/thirteen/match_acknowledgement'
@@ -40,6 +39,7 @@ module MatchDecisions::Thirteen
         pending: 'Pending',
         acknowledged: 'Acknowledged',
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
 
@@ -48,6 +48,7 @@ module MatchDecisions::Thirteen
       when :pending then "#{Translation.translate('Shelter Agency Thirteen')} assigned match"
       when :acknowledged then "Match acknowledged by #{Translation.translate('Shelter Agency Thirteen')}.  In review"
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
@@ -64,14 +65,8 @@ module MatchDecisions::Thirteen
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
 
-    private def validate_cancel_reason
-      errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
-
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
-    end
-
     private def save_will_accept?
-      saved_status == 'pending' && status == 'confirmed'
+      saved_status == 'pending' && status == 'acknowledged'
     end
 
     class StatusCallbacks < StatusCallbacks

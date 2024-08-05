@@ -9,7 +9,6 @@ module MatchDecisions::Thirteen
     include MatchDecisions::RouteThirteenCancelReasons
 
     validate :ensure_required_contacts_present_on_accept
-    validate :validate_cancel_reason
 
     def to_partial_path
       'match_decisions/thirteen/client_match'
@@ -26,16 +25,6 @@ module MatchDecisions::Thirteen
     def contact_actor_type
       :dnd_staff_contacts
     end
-
-    # def accessible_by?(contact)
-      # contact.user_can_act_on_behalf_of_match_contacts? ||
-      # contact.in?(match.send(contact_actor_type))
-    # end
-
-    # def declineable_by?(contact)
-    #   contact.user_can_act_on_behalf_of_match_contacts? ||
-    #   contact.in?(match.shelter_agency_contacts)
-    # end
 
     # Notifications to send when this step is initiated
     def notifications_for_this_step
@@ -78,14 +67,8 @@ module MatchDecisions::Thirteen
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
 
-    private def validate_cancel_reason
-      errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
-
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
-    end
-
     private def save_will_accept?
-      saved_status == 'pending' && status == 'confirmed'
+      saved_status == 'pending' && status == 'accepted'
     end
 
     # Override default behavior

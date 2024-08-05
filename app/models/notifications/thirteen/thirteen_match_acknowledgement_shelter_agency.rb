@@ -19,5 +19,9 @@ module Notifications::Thirteen
     def event_label
       "#{Translation.translate('Shelter Agency Thirteen')} notified of match."
     end
+
+    def to_partial_path
+      "notifications/thirteen/#{notification_type}"
+    end
   end
 end

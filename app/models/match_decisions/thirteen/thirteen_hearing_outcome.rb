@@ -11,7 +11,7 @@ module MatchDecisions::Thirteen
     include MatchDecisions::RouteThirteenDeclineReasons
 
     validate :ensure_required_contacts_present_on_accept
-    validate :validate_cancel_reason
+    validate :criminal_hearing_outcome_has_been_recorded
 
     def to_partial_path
       'match_decisions/thirteen/hearing_outcome'
@@ -44,7 +44,12 @@ module MatchDecisions::Thirteen
         accepted: 'Accepted',
         canceled: 'Canceled',
         declined: 'Declined',
+        back: 'Pending',
       }
+    end
+
+    def permitted_params
+      super + [:criminal_hearing_outcome_recorded]
     end
 
     def label_for_status status
@@ -53,6 +58,7 @@ module MatchDecisions::Thirteen
       when :accepted then "Hearing Outcome Added by #{Translation.translate('HSA Thirteen')}."
       when :canceled then canceled_status_label
       when :declined then 'Match Declined'
+      when :back then backup_status_label
       end
     end
 
@@ -69,14 +75,12 @@ module MatchDecisions::Thirteen
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end
 
-    private def validate_cancel_reason
-      errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
-
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
+    private def save_will_accept?
+      saved_status == 'pending' && status == 'accepted'
     end
 
-    private def save_will_accept?
-      saved_status == 'pending' && status == 'confirmed'
+    private def criminal_hearing_outcome_has_been_recorded
+      errors.add :criminal_hearing_outcome_recorded, 'must be checked' if save_will_accept? && criminal_hearing_outcome_recorded.blank?
     end
 
     class StatusCallbacks < StatusCallbacks

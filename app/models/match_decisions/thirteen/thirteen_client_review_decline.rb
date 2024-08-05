@@ -39,6 +39,7 @@ module MatchDecisions::Thirteen
         decline_overridden_returned: 'Decline Overridden, Returned',
         decline_confirmed: 'Decline Confirmed',
         canceled: 'Canceled',
+        back: 'Pending',
       }
     end
 
@@ -49,6 +50,7 @@ module MatchDecisions::Thirteen
       when :decline_overridden_returned then "#{Translation.translate('Shelter Agency Thirteen')} overridden by #{Translation.translate('CoC Thirteen')}.  Match returned to the #{Translation.translate('Shelter Agency Thirteen')}"
       when :decline_confirmed then "Match rejected by #{Translation.translate('CoC Thirteen')}"
       when :canceled then canceled_status_label
+      when :back then backup_status_label
       end
     end
 
