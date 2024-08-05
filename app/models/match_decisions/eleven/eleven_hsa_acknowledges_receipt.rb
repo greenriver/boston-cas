@@ -6,6 +6,10 @@
 
 module MatchDecisions::Eleven
   class ElevenHsaAcknowledgesReceipt < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteElevenDeclineReasons
+    include MatchDecisions::RouteElevenCancelReasons
+
     def to_partial_path
       'match_decisions/eleven/hsa_acknowledges_receipt'
     end
@@ -98,15 +102,6 @@ module MatchDecisions::Eleven
       end
     end
     private_constant :StatusCallbacks
-
-    def step_cancel_reasons
-      [
-        'Vacancy should not have been entered',
-        'Vacancy filled by other client',
-        'Match expired',
-        'Other',
-      ]
-    end
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(

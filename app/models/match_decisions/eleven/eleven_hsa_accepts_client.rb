@@ -6,6 +6,10 @@
 
 module MatchDecisions::Eleven
   class ElevenHsaAcceptsClient < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteElevenDeclineReasons
+    include MatchDecisions::RouteElevenCancelReasons
+
     def to_partial_path
       'match_decisions/eleven/hsa_accepts_client'
     end
@@ -117,24 +121,6 @@ module MatchDecisions::Eleven
       end
     end
     private_constant :StatusCallbacks
-
-    def step_decline_reasons(_contact)
-      [
-        'Household could not be located',
-        'Ineligible for Housing Program',
-        'Client refused offer',
-        'Health and Safety',
-        'Other',
-      ]
-    end
-
-    def step_cancel_reasons
-      [
-        'Vacancy should not have been entered',
-        'Vacancy filled by other client',
-        'Other',
-      ]
-    end
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(
