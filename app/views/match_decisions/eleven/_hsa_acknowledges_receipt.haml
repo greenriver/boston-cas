@@ -1,0 +1,34 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      = render 'match_decisions/shelter_agency_expiration', form: form
+      - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.current || can_reject_matches?
+        .o-choose.o-choose--flush
+          .o-choose__choice
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--confirm.mr-4
+                %h3 Acknowledge Match
+            .o-choose__content
+              - if @decision.status.to_s.in?(['pending', 'expiration_update'])
+                %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
+                = render 'match_decisions/continue_button', text: 'Acknowledge Receipt of Match Details', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) }
+          - if can_reject_matches?
+            .o-choose__choice
+              %header.jMatchHeader
+                %ul.o-choose__nav.nav.jMatchActionNav
+                  = render 'match_decisions/cancel_tab', active_tab: 'active'
+                  = render 'match_decisions/park_tab'
+                  = render 'match_decisions/destroy_tab'
+              .o-choose__content
+                .tab-content
+                  - cancel_data = {submit_param_name: 'decision[status]', submit_param_value: 'canceled'}
+                  = render 'match_decisions/cancel_tab_content', form: form, cancel_data: cancel_data, active_tab: 'active'
+                  = render 'match_decisions/park_tab_content', form: form, cancel_data: cancel_data
+                  = render 'match_decisions/destroy_tab_content', form: form
+
+            = content_for :page_js do
+              :javascript
+                new App.Matches.ActionNav('.jMatchHeader')
+
+            = render 'match_decisions/cancel_and_park_js'

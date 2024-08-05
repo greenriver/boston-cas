@@ -83,6 +83,9 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 10
   include RouteTenDecisions
 
+  # Match Route 11
+  include RouteElevenDecisions
+
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
 
@@ -238,6 +241,14 @@ class ClientOpportunityMatch < ApplicationRecord
   has_many :status_updates,
            class_name: 'MatchProgressUpdates::Base',
            foreign_key: :match_id
+
+  def includes_contact?(contact_type, contact_id)
+    return send(contact_type).where(id: contact_id).present? if contact_type.present? && contact_id.present?
+    return send(contact_type).present? if contact_type.present?
+    return contacts.where(id: contact_id).present? if contact_id.present?
+
+    true
+  end
 
   def self.closed_filter_options
     {

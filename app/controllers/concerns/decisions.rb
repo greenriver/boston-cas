@@ -14,7 +14,7 @@ module Decisions
     helper_method :can_recreate_this_decision?
 
     def hsa_can_resend_this_step?
-      ["MatchDecisions::ProviderOnly::HsaAcceptsClient"].include?(@decision&.type) &&
+      ['MatchDecisions::ProviderOnly::HsaAcceptsClient', 'MatchDecisions::Eleven::ElevenHsaAcceptsClient'].include?(@decision&.type) &&
       @match.contacts_editable_by_hsa &&
       current_contact.in?(@match.housing_subsidy_admin_contacts)
     end
