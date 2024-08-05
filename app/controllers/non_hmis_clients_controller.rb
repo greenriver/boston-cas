@@ -165,7 +165,7 @@ class NonHmisClientsController < ApplicationController
   def load_contacts
     @contacts = {}
     user_scope = User.active.joins(:contact).order(:email)
-    # If we can edit all clients, or manage a specific set of de-identified clients
+    # If we can edit all clients, or manage a specific set of de-identified clients, then we can access all agencies
     if ! can_edit_all_clients? && ! can_manage_all_identified_clients? && ! can_manage_all_deidentified_clients?
       if current_user.agency.present?
         user_scope = user_scope.where(agency_id: current_user.agency.id)
