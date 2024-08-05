@@ -21,7 +21,8 @@ gem 'nokogiri', '>= 1.16.4' # GHSA-r95h-9x8f-r3f7
 gem 'autoprefixer-rails'
 gem 'haml-rails'
 gem 'babel-transpiler'
-gem 'bootstrap', '~> 4.3.1' # updating this to 4.5.3 causes a weird missing variable bug
+# gem 'bootstrap', '~> 4.3.1' # updating this to 4.5.3 causes a weird missing variable bug
+gem 'bootstrap', '~> 4.6.2' # updating this to 4.5.3 causes a weird missing variable bug
 gem 'coffee-rails'
 gem 'execjs'
 gem 'jquery-rails'

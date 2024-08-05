@@ -34,6 +34,9 @@ $info:          $brand-info;
 $warning:       $brand-warning;
 $danger:        $brand-danger;
 
+$light: $gray-015;
+$dark: $gray-080;
+
 $theme-colors: () !default;
 $theme-colors: map-merge((
   "primary":    $primary,
@@ -49,6 +52,7 @@ $theme-colors: map-merge((
 // Tooltips
 $tooltip-font-size: 13px;
 $tooltip-max-width: 300px;
+$tooltip-max-width: 275px;
 
 $heading-color: $gray-070;
 
@@ -59,10 +63,41 @@ $link-hover-decoration: none;
 $pagination-padding-y: .65rem;
 $pagination-padding-x: 1rem;
 
+// Labels
+$label-default-bg: lighten($gray-light, 30%);
+$label-primary-bg: $brand-primary-l;
+
 // Pagination
+$pagination-padding-y: .65rem;
+$pagination-padding-x: 1rem;
 $pagination-color: $link-color;
 $pagination-active-bg: $brand-primary-d;
 
 // Table
 $table-head-bg: $gray-015;
 $table-hover-bg: lighten($cob-sg-blue-005, 2%);
+
+$font-size-base: 1rem !default;
+$font-size-large: ceil(($font-size-base * 1.25)) !default; // ~18px
+$font-size-small: ceil(($font-size-base * 0.833)) !default; // ~12px
+$h1-font-size: 2.074rem;
+$h2-font-size: 1.728rem;
+$h3-font-size: 1.44rem;
+$h4-font-size: 1.2rem;
+$h5-font-size: $font-size-base !default;
+$h6-font-size: ceil(($font-size-base * 0.833)) !default; // ~12px
+
+$font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+
+$headings-font-family: 'Open Sans Condensed', sans-serif;
+$headings-font-weight: 700 !default;
+$headings-line-height: 1.2 !default;
+$headings-color: inherit !default;
+
+$enable-caret: false;
+
+// Modals
+$modal-xl: 80vw;
+$modal-lg: 65vw;
+$modal-md: 600px;
+$modal-sm: 300px;
