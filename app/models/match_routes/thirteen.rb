@@ -62,9 +62,9 @@ module MatchRoutes
       when :housing_subsidy_admin_contacts
         Translation.translate('HSA Thirteen')
       when :ssp_contacts
-        Translation.translate('SSP Thirteen')
+        Translation.translate('Stabilization Service Providers Thirteen')
       when :hsp_contacts
-        Translation.translate('HSP Thirteen')
+        Translation.translate('Housing Search Provider Thirteen')
       when :dnd_staff_contacts
         Translation.translate('CoC Thirteen')
       else

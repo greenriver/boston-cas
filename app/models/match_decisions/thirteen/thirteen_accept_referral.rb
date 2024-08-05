@@ -72,8 +72,8 @@ module MatchDecisions::Thirteen
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{Translation.translate('Shelter Agency Thirteen')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
-      missing_contacts << "a #{Translation.translate('SSP Thirteen')} Contact" if save_will_accept? && match.ssp_contacts.none?
-      missing_contacts << "a #{Translation.translate('HSP Thirteen')} Contact" if save_will_accept? && match.hsp_contacts.none?
+      missing_contacts << "a #{Translation.translate('Stabilization Service Providers Thirteen')} Contact" if save_will_accept? && match.ssp_contacts.none?
+      missing_contacts << "a #{Translation.translate('Housing Search Provider Thirteen')} Contact" if save_will_accept? && match.hsp_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

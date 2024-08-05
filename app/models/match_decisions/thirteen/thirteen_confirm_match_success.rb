@@ -28,9 +28,9 @@ module MatchDecisions::Thirteen
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('DND')} to confirm match success"
-      when :confirmed then "#{Translation.translate('DND')} confirms match success"
-      when :rejected then "Match rejected by #{Translation.translate('DND')}"
+      when :pending then "#{Translation.translate('CoC Thirteen')} to confirm match success"
+      when :confirmed then "#{Translation.translate('CoC Thirteen')} confirms match success"
+      when :rejected then "Match rejected by #{Translation.translate('CoC Thirteen')}"
       when :canceled then 'Match canceled'
       when :back then backup_status_label
       end
@@ -41,7 +41,7 @@ module MatchDecisions::Thirteen
     end
 
     def actor_type
-      Translation.translate('DND')
+      Translation.translate('CoC Thirteen')
     end
 
     def contact_actor_type
