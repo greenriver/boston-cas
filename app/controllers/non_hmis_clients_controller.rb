@@ -165,7 +165,8 @@ class NonHmisClientsController < ApplicationController
   def load_contacts
     @contacts = {}
     user_scope = User.active.joins(:contact).order(:email)
-    unless can_edit_all_clients?
+    # If we can edit all clients, or manage a specific set of de-identified clients
+    if ! can_edit_all_clients? && ! can_manage_all_identified_clients? && ! can_manage_all_deidentified_clients?
       if current_user.agency.present?
         user_scope = user_scope.where(agency_id: current_user.agency.id)
       else
@@ -231,7 +232,7 @@ class NonHmisClientsController < ApplicationController
       dirty_params.delete(:race)
     end
 
-    if can_edit_all_clients?
+    if can_edit_all_clients? || can_manage_all_identified_clients? || can_manage_all_deidentified_clients?
       contact_agency_id = agency_id_for_contact(dirty_params[:contact_id])
       dirty_params[:agency_id] = contact_agency_id if contact_agency_id.present?
     else

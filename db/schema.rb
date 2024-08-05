@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_08_180516) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_05_131951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1568,6 +1568,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_08_180516) do
     t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_manage_sessions", default: false
     t.boolean "can_edit_voucher_rules", default: false
+    t.boolean "can_manage_all_deidentified_clients", default: false
+    t.boolean "can_manage_all_identified_clients", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
