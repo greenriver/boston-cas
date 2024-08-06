@@ -52,10 +52,11 @@ class Opportunity < ApplicationRecord
   end
 
   scope :available_for_poaching, -> do
-    available_candidate_ids = Opportunity.available_candidate.pluck(:id)
-    unstarted_ids = Opportunity.joins(active_matches: :match_recommendation_dnd_staff_decision).
+    available_candidate_ids = current_scope.available_candidate.pluck(:id)
+    # Join any unstarted matches
+    unstarted_ids = current_scope.joins(active_matches: :initial_decision).
       merge(MatchDecisions::Base.pending).pluck(:id)
-    Opportunity.where(id: available_candidate_ids + unstarted_ids)
+    where(id: available_candidate_ids + unstarted_ids)
   end
   # after_save :run_match_engine_if_newly_available
 
