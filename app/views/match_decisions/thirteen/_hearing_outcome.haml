@@ -13,10 +13,10 @@
                 %p
                   - hearing_date = @match.thirteen_hearing_scheduled_decision.criminal_hearing_date
                   - if hearing_date.present?
-                    = "Please note: #{Translation.translate('a criminal background hearing has been schedule for')}"
+                    = "Please note: #{Translation.translate('a hearing has been schedule for')}"
                     %strong
                       = "#{hearing_date.to_s}."
-                = form.input :criminal_hearing_outcome_recorded, as: :boolean, required: true, inline_label: "#{Translation.translate('The outcome of the criminal background hearing has been recorded')}"
+                = form.input :criminal_hearing_outcome_recorded, as: :boolean, required: true, inline_label: "#{Translation.translate('The outcome of the hearing has been recorded')}"
                 -#= form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
               .jScheduled.d-none
                 %label(for="decision_criminal_hearing_date")= "Hearing Outcome"

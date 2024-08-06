@@ -11,7 +11,7 @@
       .form-group.form-group__indented-02
         = sp.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
       .form-group.form-group__indented-02
-        = sp.input :cori_hearing_required, label: 'Requires CORI Hearing', hint: "This sub-program requires a CORI review for any clients matched in #{Translation.translate('Route Thirteen')}"
+        = sp.input :cori_hearing_required, label: "Requires #{Translation.translate('CORI hearing')}", hint: "This sub-program requires a #{Translation.translate('CORI hearing')} review for any clients matched in #{Translation.translate('Route Thirteen')}"
       .form-group.form-group__indented-02
         = sp.association :housing_subsidy_administrator, label: "#{Translation.translate('Housing Subsidy Administrator')}"
       .form-group.form-group__indented-02

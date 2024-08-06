@@ -8,53 +8,33 @@ module MatchDecisions
   module RouteThirteenCancelReasons
     extend ActiveSupport::Concern
 
+    def pre_hsa_decision? = [
+      'MatchDecisions::Thirteen::ThirteenClientMatch',
+      'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
+    ].include?(type)
+
+    def match_success_decision?
+      type == 'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess'
+    end
+
     def step_cancel_reasons
       [].tap do |reasons|
         reasons << 'Incarcerated'
         reasons << 'Institutionalized'
         reasons << 'In Treatment/Recovery Center'
-        reasons << 'Match expired' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-          'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess',
-        ].include?(type)
-        reasons << 'Client has declined match' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-        ].include?(type)
-        reasons << 'Client has disengaged' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-        ].include?(type)
-        reasons << 'Client has disappeared' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-        ].include?(type)
-        reasons << 'CORI' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-        ].include?(type)
-        reasons << 'SORI' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-        ].include?(type)
+        reasons << 'Match expired' unless pre_hsa_decision? || match_success_decision?
+        reasons << 'Client has declined match' unless pre_hsa_decision?
+        reasons << 'Client has disengaged' unless pre_hsa_decision?
+        reasons << 'Client has disappeared' unless pre_hsa_decision?
+        reasons << 'CORI' unless pre_hsa_decision?
+        reasons << 'SORI' unless pre_hsa_decision?
         reasons << 'Vacancy should not have been entered'
         reasons << 'Client received another housing opportunity'
-        reasons << 'Client no longer eligible for match' unless [
-          'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess',
-        ].include?(type)
+        reasons << 'Client no longer eligible for match' unless match_success_decision?
         reasons << 'Client deceased'
-        reasons << 'Vacancy filled by other client' unless [
-          'MatchDecisions::Thirteen::ThirteenClientMatch',
-          'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-          'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess',
-        ].include?(type)
-        reasons << 'Health and Safety' unless [
-          'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess',
-        ].include?(type)
-        reasons << 'Do not allow other matches for this vacancy' unless [
-          'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess',
-        ].include?(type)
+        reasons << 'Vacancy filled by other client' unless pre_hsa_decision? || match_success_decision?
+        reasons << 'Health and Safety' unless match_success_decision?
+        reasons << 'Do not allow other matches for this vacancy' unless match_success_decision?
         reasons << 'Other'
       end
     end

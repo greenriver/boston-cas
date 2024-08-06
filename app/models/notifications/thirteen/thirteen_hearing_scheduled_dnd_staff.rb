@@ -17,7 +17,7 @@ module Notifications::Thirteen
     end
 
     def event_label
-      "#{Translation.translate('CoC Thirteen')} notified of pending CORI review."
+      "#{Translation.translate('CoC Thirteen')} notified of pending #{Translation.translate('CORI hearing')} review."
     end
 
     def to_partial_path

@@ -12,7 +12,7 @@
               %p This sub-program belongs to a confidential program.  Client names will be hidden when shown in lists of matches by default.
             - else
               = f.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
-            = f.input :cori_hearing_required, label: 'Requires CORI Hearing', hint: "This sub-program requires a CORI review for any clients matched in #{Translation.translate('Route Thirteen')}"
+            = f.input :cori_hearing_required, label: "Requires #{Translation.translate('CORI hearing')}", hint: "This sub-program requires a #{Translation.translate('CORI hearing')} review for any clients matched in #{Translation.translate('Route Thirteen')}"
             = f.association :housing_subsidy_administrator, label: "#{Translation.translate('Housing Subsidy Administrator')}", as: :select2
             = f.association :service_provider, label: 'Service Provider', as: :select2
             = f.association :sub_contractor, label: 'Sub-Contractor', as: :select2

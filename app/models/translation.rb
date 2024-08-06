@@ -95,6 +95,7 @@ class Translation < ApplicationRecord
       'CoC Thirteen',
       'Confirm Match Success',
       'Confirm Match Success Six',
+      'CORI hearing',
       'Criminal Background Hearing',
       'Criminal Background Hearing Scheduled',
       'CSPECH Eligible',

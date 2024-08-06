@@ -1,6 +1,5 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
-    TODO: Add Text here
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
       .o-choose.o-choose--flush.o-choose--flush-top
         .o-choose__choice{class: [('o-choose__choice--disabled' if !@decision.editable?)]}
