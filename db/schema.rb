@@ -1569,6 +1569,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_05_133313) do
     t.boolean "can_view_all_covid_pathways", default: false
     t.boolean "can_manage_sessions", default: false
     t.boolean "can_edit_voucher_rules", default: false
+    t.boolean "can_manage_all_deidentified_clients", default: false
+    t.boolean "can_manage_all_identified_clients", default: false
     t.index ["name"], name: "index_roles_on_name"
   end
 
