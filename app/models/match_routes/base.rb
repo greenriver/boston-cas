@@ -44,6 +44,7 @@ module MatchRoutes
         MatchRoutes::Ten,
         MatchRoutes::Eleven,
         MatchRoutes::Twelve,
+        MatchRoutes::Thirteen,
       ]
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_05_131951) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_05_133313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -661,6 +661,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_05_131951) do
     t.boolean "include_note_in_email"
     t.datetime "date_voucher_issued", precision: nil
     t.string "manager"
+    t.boolean "criminal_hearing_outcome_recorded"
     t.index ["administrative_cancel_reason_id"], name: "index_match_decisions_on_administrative_cancel_reason_id"
     t.index ["decline_reason_id"], name: "index_match_decisions_on_decline_reason_id"
     t.index ["match_id"], name: "index_match_decisions_on_match_id"
@@ -1675,6 +1676,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_05_131951) do
     t.boolean "closed", default: false
     t.integer "event"
     t.boolean "weighting_rules_active", default: true
+    t.boolean "cori_hearing_required"
     t.index ["building_id"], name: "index_sub_programs_on_building_id"
     t.index ["deleted_at"], name: "index_sub_programs_on_deleted_at"
     t.index ["program_id"], name: "index_sub_programs_on_program_id"
