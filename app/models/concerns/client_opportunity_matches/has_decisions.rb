@@ -36,6 +36,17 @@ module ClientOpportunityMatches
                inverse_of: :match,
                dependent: :destroy
 
+      has_one :initial_decision, -> do
+        initial_decisions = one_for_column(
+          order_clause: MatchDecisions::Base.arel_table[:id].asc,
+          source_arel_table: MatchDecisions::Base.arel_table,
+          group_on: :match_id,
+          scope: MatchDecisions::Base.initialized_decisions,
+        )
+        where(id: initial_decisions)
+      end, class_name: 'MatchDecisions::Base',
+           foreign_key: 'match_id'
+
       # macro to set up a decision within a match
       def self.has_decision(decision_type, decision_class_name: nil, notification_class_name: nil) # rubocop:disable Naming/PredicateName
         decision_class_name ||= "MatchDecisions::#{decision_type.to_s.camelize}"
