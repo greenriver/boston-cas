@@ -8,10 +8,12 @@ module MatchDecisions
   module RouteThirteenCancelReasons
     extend ActiveSupport::Concern
 
-    def pre_hsa_decision? = [
-      'MatchDecisions::Thirteen::ThirteenClientMatch',
-      'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
-    ].include?(type)
+    def pre_hsa_decision?
+      [
+        'MatchDecisions::Thirteen::ThirteenClientMatch',
+        'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
+      ].include?(type)
+    end
 
     def match_success_decision?
       type == 'MatchDecisions::Thirteen::ThirteenConfirmMatchSuccess'
