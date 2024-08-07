@@ -36,7 +36,6 @@ module MatchDecisions
         reasons << 'Client deceased'
         reasons << 'Vacancy filled by other client' unless pre_hsa_decision? || match_success_decision?
         reasons << 'Health and Safety' unless match_success_decision?
-        reasons << 'Do not allow other matches for this vacancy' unless match_success_decision?
         reasons << 'Other'
       end
     end

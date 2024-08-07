@@ -122,7 +122,7 @@ module Warehouse
         end
       end
 
-      match_rows.flatten!
+      match_rows.flatten!.compact!
 
       # Replace reporting decisions data
       Reporting::Decisions.transaction do
