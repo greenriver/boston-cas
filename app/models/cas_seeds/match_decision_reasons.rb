@@ -10,35 +10,35 @@ module CasSeeds
     PROVIDER_REJECTED = 3
 
     DND_REASONS = [
-      ["Client won't be eligible for services", nil],
-      ["Client won't be eligible for housing type", nil],
-      ["Client won't be eligible based on funding source", nil],
-      ['Client has another housing option', nil],
+      ["Client won't be eligible for services", PROVIDER_REJECTED],
+      ["Client won't be eligible for housing type", PROVIDER_REJECTED],
+      ["Client won't be eligible based on funding source", PROVIDER_REJECTED],
+      ['Client has another housing option', CLIENT_REJECTED],
     ].freeze
 
     HSA_REASONS = [
       ['CORI', PROVIDER_REJECTED],
       ['SORI', PROVIDER_REJECTED],
-      ['Immigration status', nil],
-      ['Household did not respond after initial acceptance of match', CLIENT_REJECTED],
-      ['Ineligible for Housing Program', nil],
+      ['Immigration status', PROVIDER_REJECTED],
+      ['Household did not respond after initial acceptance of match', PROVIDER_REJECTED],
+      ['Ineligible for Housing Program', PROVIDER_REJECTED],
       ['Client refused offer', CLIENT_REJECTED],
-      ['Self-resolved', nil],
-      ['Falsification of documents', nil],
+      ['Self-resolved', CLIENT_REJECTED],
+      ['Falsification of documents', PROVIDER_REJECTED],
       ['Additional screening criteria imposed by third parties', PROVIDER_REJECTED],
-      ['Health and Safety', nil],
+      ['Health and Safety', PROVIDER_REJECTED],
     ].freeze
 
     LIMITED_HSA_REASONS = [
       ['Client needs higher level of care', PROVIDER_REJECTED],
-      ['Unable to reach client after multiple attempts', nil],
+      ['Unable to reach client after multiple attempts', PROVIDER_REJECTED],
     ].freeze
 
     HSA_PROVIDER_ONLY_REASONS = [
-      ['Household could not be located', nil],
-      ['Ineligible for Housing Program', nil],
+      ['Household could not be located', PROVIDER_REJECTED],
+      ['Ineligible for Housing Program', PROVIDER_REJECTED],
       ['Client refused offer', CLIENT_REJECTED],
-      ['Health and Safety', nil],
+      ['Health and Safety', PROVIDER_REJECTED],
     ].freeze
 
     SHELTER_AGENCY_REASONS = [
@@ -47,7 +47,7 @@ module CasSeeds
       ['Unwilling to live in SRO', CLIENT_REJECTED],
       ['Does not want housing at this time', CLIENT_REJECTED],
       ['Unsafe environment for this person', CLIENT_REJECTED],
-      ['Client has another housing option', nil],
+      ['Client has another housing option', CLIENT_REJECTED],
       ['Client refused unit (non-SRO)', CLIENT_REJECTED],
       ['Client refused voucher', CLIENT_REJECTED],
     ].freeze
@@ -60,7 +60,7 @@ module CasSeeds
       ['Barred from working with agency', PROVIDER_REJECTED],
       ['Hospitalized', nil],
       ['Don’t know / disappeared', nil],
-      ['Incarcerated', nil],
+      ['Incarcerated', CLIENT_REJECTED],
     ].freeze
 
     ADMINISTRATIVE_CANCEL_REASONS = [
@@ -70,26 +70,26 @@ module CasSeeds
       ['Client has disappeared', CLIENT_REJECTED],
       ['SSP CORI', PROVIDER_REJECTED],
       ['HSP CORI', PROVIDER_REJECTED],
-      ['Incarcerated', nil],
+      ['Incarcerated', CLIENT_REJECTED],
       ['Vacancy should not have been entered', nil],
-      ['Client received another housing opportunity', nil],
-      ['Client no longer eligible for match', nil],
-      ['Client deceased', nil],
-      ['Vacancy filled by other client', nil],
+      ['Client received another housing opportunity', CLIENT_REJECTED],
+      ['Client no longer eligible for match', PROVIDER_REJECTED],
+      ['Client deceased', CLIENT_REJECTED],
+      ['Vacancy filled by other client', PROVIDER_REJECTED],
       ['Client receiving navigation services', nil],
     ].freeze
 
     LIMITED_ADMINISTRATIVE_CANCEL_REASONS = [
-      ['Match expired – No agency interaction', nil],
+      ['Match expired – No agency interaction', PROVIDER_REJECTED],
       ['Match expired – Agency interaction', nil],
-      ['Match stalled - Agency has disengaged', nil],
-      ['Match expired – No Housing Case Manager interaction', nil],
-      ['Match expired – No Shelter Agency interaction', nil],
-      ['Shelter Agency has disengaged', nil],
-      ['Housing Case Manager has disengaged', nil],
-      ['Match stalled – Housing Case Manager has disengaged', nil],
-      ['Client needs higher level of care', nil],
-      ['Unable to reach client after multiple attempts', nil],
+      ['Match stalled - Agency has disengaged', PROVIDER_REJECTED],
+      ['Match expired – No Housing Case Manager interaction', PROVIDER_REJECTED],
+      ['Match expired – No Shelter Agency interaction', PROVIDER_REJECTED],
+      ['Shelter Agency has disengaged', PROVIDER_REJECTED],
+      ['Housing Case Manager has disengaged', PROVIDER_REJECTED],
+      ['Match stalled – Housing Case Manager has disengaged', PROVIDER_REJECTED],
+      ['Client needs higher level of care', PROVIDER_REJECTED],
+      ['Unable to reach client after multiple attempts', PROVIDER_REJECTED],
     ].freeze
 
     NINE_RECORD_VOUCHER_DATE_DECLINE_REASONS = [
@@ -101,13 +101,13 @@ module CasSeeds
     CASE_CONTACT_ASSIGNS_MANAGER_DECLINE_REASONS = [].freeze
 
     TEN_DECLINE_REASONS = [
-      ['Immigration status', nil],
-      ['Household did not respond after initial acceptance of match', nil],
-      ['Ineligible for Housing Program', nil],
-      ['Client refused offer', nil],
-      ['Self-resolved', nil],
-      ['Client needs higher level of care', nil],
-      ['Unable to reach client after multiple attempts', nil],
+      ['Immigration status', PROVIDER_REJECTED],
+      ['Household did not respond after initial acceptance of match', PROVIDER_REJECTED],
+      ['Ineligible for Housing Program', PROVIDER_REJECTED],
+      ['Client refused offer', CLIENT_REJECTED],
+      ['Self-resolved', CLIENT_REJECTED],
+      ['Client needs higher level of care', PROVIDER_REJECTED],
+      ['Unable to reach client after multiple attempts', PROVIDER_REJECTED],
     ].freeze
 
     OTHER = [
