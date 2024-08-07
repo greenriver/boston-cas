@@ -89,6 +89,9 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 12
   include RouteTwelveDecisions
 
+  # Match Route 13
+  include RouteThirteenDecisions
+
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
 

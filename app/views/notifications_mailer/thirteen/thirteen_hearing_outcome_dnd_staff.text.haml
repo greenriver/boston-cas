@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+#{Translation.translate('HSA Thirteen')} has schedule a CORI hearing. The match is pending the outcome of this hearing being entered by #{Translation.translate('HSA Thirteen')}.
+\
+Please review details:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'
