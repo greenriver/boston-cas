@@ -5,7 +5,7 @@
 ###
 
 module Notifications::Thirteen
-  class ThirteenHearingOutcomedDecline < ::Notifications::Base
+  class ThirteenHearingOutcomeDecline < ::Notifications::Base
     def self.create_for_match! match
       match.dnd_staff_contacts.each do |contact|
         create! match: match, recipient: contact

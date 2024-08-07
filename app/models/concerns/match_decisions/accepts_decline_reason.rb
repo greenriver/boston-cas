@@ -12,20 +12,19 @@ module MatchDecisions
       validate :validate_decline_reason
     end
 
-    # FIXME: remove 'include_other' after migration
-    def decline_reasons(include_other: true, contact:)
+    def decline_reasons(contact:)
       @_decline_reasons ||= [].tap do |result| # rubocop:disable Naming/MemoizedInstanceVariableName
-        # FIXME: remove if/else after migration
-        if respond_to?(:step_decline_reasons)
-          MatchDecisionReasons::All.where(name: step_decline_reasons(contact)).find_each do |reason|
-            result << reason
-          end
-        else
-          decline_reason_scope(contact).each do |reason|
-            result << reason
-          end
-          result << MatchDecisionReasons::Other.first if include_other
+        # # FIXME: remove if/else after migration
+        # if respond_to?(:step_decline_reasons)
+        MatchDecisionReasons::All.active.where(name: step_decline_reasons(contact)).find_each do |reason|
+          result << reason
         end
+        # else
+        #   decline_reason_scope(contact).each do |reason|
+        #     result << reason
+        #   end
+        #   result << MatchDecisionReasons::Other.first if include_other
+        # end
         # Move other to the end of the list
         result.sort_by! { |m| m.name.downcase == 'other' ? 1 : 0 }
       end
