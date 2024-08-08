@@ -1,7 +1,15 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      = render 'match_decisions/shelter_agency_expiration', form: form
+      - if @match.shelter_expiration?
+        - if @match.shelter_expiration >= Date.current
+          %p
+            This match will expire if the client has not expressed interest in the match before
+            %strong= "#{@match.shelter_expiration}."
+        - else
+          %p
+            This match expired on
+            %strong= "#{@match.shelter_expiration}."
       - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.current || can_reject_matches?
         .o-choose.o-choose--flush
           .o-choose__choice
