@@ -65,13 +65,13 @@ module MatchDecisions::Thirteen
       end
 
       def decline_overridden
-        match.thirteen_hearing_scheuled_decision.update(status: :skipped)
+        match.thirteen_hearing_scheduled_decision.update(status: :skipped)
         match.thirteen_hearing_outcome_decision.initialize_decision!
       end
 
       def decline_overridden_returned
         # Re-initialize the previous decision
-        match.thirteen_hearing_scheuled_decision.initialize_decision!
+        match.thirteen_hearing_scheduled_decision.initialize_decision!
         @decision.uninitialize_decision!
       end
 

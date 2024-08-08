@@ -87,15 +87,15 @@ module MatchRoutes
     def status_declined?(match)
       [
         match.thirteen_client_review_decision&.status == 'declined' &&
-          match.thirteen_client_review_decision_dnd_staff_decision&.status != 'decline_overridden',
+          match.thirteen_client_review_decline_decision&.status != 'decline_overridden',
         match.thirteen_hearing_scheduled_decision&.status == 'declined' &&
-          match.thirteen_hearing_scheduled_decision_dnd_staff_decision&.status != 'decline_overridden',
+          match.thirteen_hearing_scheduled_decline_decision&.status != 'decline_overridden',
         match.thirteen_hearing_outcome_decision&.status == 'declined' &&
-          match.thirteen_hearing_outcome_decision_dnd_staff_decision&.status != 'decline_overridden',
+          match.thirteen_hearing_outcome_decline_decision&.status != 'decline_overridden',
         match.thirteen_hsa_review_decision&.status == 'declined' &&
-          match.thirteen_hsa_review_decision_dnd_staff_decision&.status != 'decline_overridden',
+          match.thirteen_hsa_review_decline_decision&.status != 'decline_overridden',
         match.thirteen_accept_referral_decision&.status == 'declined' &&
-          match.thirteen_accept_referral_decision_dnd_staff_decision&.status != 'decline_overridden',
+          match.thirteen_accept_referral_decline_decision&.status != 'decline_overridden',
       ].any?
     end
   end
