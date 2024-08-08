@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class HousingSubsidyAdminDecline < Base
     def self.available(include_other: false, route: nil)
-      other = MatchDecisionReasons::Other.first
+      other = MatchDecisionReasons::Base.other.first
       # none = OpenStruct.new(name: 'None', id: nil)
       av = active.to_a
       # av << none

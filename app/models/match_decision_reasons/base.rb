@@ -6,16 +6,8 @@
 
 module MatchDecisionReasons
   class Base < ApplicationRecord
-    # Pick-list reasons associated with a particular match decision
-    # Reasons are currently split up by actor type
-    # + special other option and shelter agency
-    # no longer working with the client
-    # Per requirements in https://www.pivotaltracker.com/story/show/118185729
-    # Feel free to change how available reasons are associated with decisions
-    # as the requirements evolve
-    # ~@rrosen, 5/24/2016
-
     self.table_name = 'match_decision_reasons'
+    acts_as_paranoid
 
     has_many :decisions, class_name: 'MatchDecisions::Base', foreign_key: :decline_reason_id
 
@@ -29,15 +21,11 @@ module MatchDecisionReasons
     validates :name, presence: true
 
     def title
-      type.demodulize.underscore.humanize
+      name
     end
 
     def other?
       name == 'Other'
-    end
-
-    def not_working_with_client?
-      false
     end
   end
 end
