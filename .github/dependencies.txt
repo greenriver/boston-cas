@@ -1,3 +1,4 @@
+aws-cli
 bash
 build-base
 ca-certificates
@@ -34,6 +35,7 @@ postgis
 postgresql
 postgresql-dev
 shared-mime-info
+tmux
 ttf-dejavu
 ttf-droid
 ttf-freefont
@@ -41,4 +43,5 @@ ttf-freefont
 ttf-freefont
 ttf-liberation
 tzdata
+xz
 yarn

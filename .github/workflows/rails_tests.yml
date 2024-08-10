@@ -5,11 +5,9 @@ on:
     branches:
       - '*'
       - '**/*'
-  # NOTE: you don't need to build all PRs if you are also building all branches
-  # pull_request:
-  #   branches:
-  #     - '*'
-  #     - '**/*'
+concurrency:
+  group: ${{ github.ref }}-tests
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -48,31 +46,26 @@ jobs:
       - name: Set up dependencies
 
         run: |
-          apk add --no-cache \
-            nodejs yarn npm \
-            tzdata \
-            git \
-            bash \
-            freetds-dev \
-            icu icu-dev \
-            curl libcurl curl-dev \
-            imagemagick \
-            libmagic file-dev file \
-            build-base libxml2-dev libxslt-dev postgresql-dev \
-            libgcc libstdc++ libx11 glib libxrender libxext libintl ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-freefont \
-            freetype freetype-dev harfbuzz ca-certificates ttf-freefont \
-            postgresql tmux postgis geos geos-dev xz \
-            shared-mime-info
+          apk add --no-cache $(cat .github/dependencies.txt)
 
           echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass
 
           yarn install --frozen-lockfile
-          gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
-          gem install bundler -v '< 2'
 
-      - name: 'Install gems'
+      - name: cache gems
+        uses: actions/cache@v4
+        id: gemcache
+        with:
+          path: |
+            vendor/bundle
+            /usr/local/bundle/
+          key: ${{ runner.os }}-gemcache-${{ hashFiles('**/Gemfile.lock') }}-${{ hashFiles('**/.ruby-version') }}
+
+      - name: Install gems
         run: |
+          gem install bundler --version=2.5.17
+          bundle config set --local without 'production staging development'
           bundle install --jobs 4 --retry 3
 
       - name: 'App setup'
