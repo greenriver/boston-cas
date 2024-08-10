@@ -1,0 +1,38 @@
+name: Bundle Audit and Brakeman
+on:
+  push:
+    branches:
+      - '*'
+      - '**/*'
+concurrency:
+  group: ${{ github.ref }}-audit
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    # Docker Hub image that the job executes in
+    container: ruby:3.1.6-alpine3.20
+
+    # Service containers to run with job
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up dependencies
+
+        run: |
+          apk add --no-cache $(cat .github/dependencies.txt)
+
+      - name: Install gems
+        run: |
+          gem install bundler --version=2.5.17
+          bundle config set --local without 'production staging development'
+          bundle install --jobs 10 --retry 3
+
+      - name: Run bundle-audit
+        run: |
+          bundle exec bundle-audit check --update
+      - name: Run brakeman
+        run: |
+          bundle exec brakeman -q --no-pager --except PermitAttributes,Render
