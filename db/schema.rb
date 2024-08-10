@@ -12,8 +12,7 @@
 
 ActiveRecord::Schema[7.0].define(version: 2024_08_07_201535) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"#test
-
+  enable_extension "plpgsql"
 
   create_table "activity_logs", force: :cascade do |t|
     t.string "item_model"
