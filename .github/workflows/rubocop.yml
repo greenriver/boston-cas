@@ -30,10 +30,6 @@ jobs:
         run: |
           apk add --no-cache $(cat .github/dependencies.txt)
 
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       # ensure changed-files can read repo files from git
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory /__w/boston-cas/boston-cas
