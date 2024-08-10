@@ -59,8 +59,9 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
+          # Ignore files explicitly excluded in .rubocop.yml
+          rubocop_patterns="db/*\|config/*\|config/environments/*\|config/initializers/*\|config/locales/*\|scripts/*\|bin/rails\|bin/rake\|bin/bundle\|bin/db_prep\|app/assets/*"
           files=`echo "${ALL_CHANGED_FILES}" | tr " " "\n" | grep "**/*.rb" | tr "\n" " ./"`
           num=`echo $files | wc -w`
           echo $files
-          cat ./.rubocop.yml
           if [ $num -gt 0 ]; then bundle exec rubocop --config ./.rubocop.yml $files; else echo "No changed ruby files"; fi
