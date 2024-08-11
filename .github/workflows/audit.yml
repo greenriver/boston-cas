@@ -18,13 +18,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up dependencies
 
+      - name: Set up dependencies
         run: |
           apk add --no-cache $(cat .github/dependencies.txt)
 
       - name: 'Install gems'
         run: |
+          gem install bundler --version=2.5.17
+          bundle config set --local without 'production staging development'
           bundle install --jobs 4 --retry 3
 
       - name: Run bundle-audit
