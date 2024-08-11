@@ -5,43 +5,16 @@ on:
     branches:
       - '*'
       - '**/*'
-  # NOTE: you don't need to build all PRs if you are also building all branches
-  # pull_request:
-  #   branches:
-  #     - '*'
-  #     - '**/*'
+concurrency:
+  group: ${{ github.ref }}-audit
+  cancel-in-progress: true
+
 jobs:
-  build:
+  audit:
     runs-on: ubuntu-20.04
     # Docker Hub image that the job executes in
     container: ruby:3.1.6-alpine3.20
 
-    # Service containers to run with job
-    services:
-      postgres:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASS: postgres
-          POSTGRES_MULTIPLE_EXTENSIONS: hstore
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
-      redis:
-        image: redis:alpine
-        ports:
-          - 6379:6379
-
-    env:
-      DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
-      DATABASE_DB_TEST: boston_cas_test
     steps:
       - name: Checkout
         uses: actions/checkout@v3
