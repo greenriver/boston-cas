@@ -12,6 +12,7 @@ freetype
 freetype-dev
 geos
 geos-dev
+git
 glib
 harfbuzz
 icu

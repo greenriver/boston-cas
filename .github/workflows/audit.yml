@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up dependencies
         run: |
@@ -29,6 +29,8 @@ jobs:
 
       - name: Run bundle-audit
         run: |
+          gem install bundler --version=2.5.17
+          bundle config set --local without 'production staging development'
           bundle exec bundle-audit check --update
       - name: Run brakeman
         run: |
