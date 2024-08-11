@@ -25,12 +25,12 @@ jobs:
 
       - name: 'Install gems'
         run: |
+          gem install bundler --version=2.5.17
+          bundle config set --local without 'production staging development'
           bundle install --jobs 4 --retry 3
 
       - name: Run bundle-audit
         run: |
-          gem install bundler --version=2.5.17
-          bundle config set --local without 'production staging development'
           bundle exec bundle-audit check --update
       - name: Run brakeman
         run: |
