@@ -1,48 +1,83 @@
 name: Bundle Audit and Brakeman
+
 on:
   push:
     branches:
       - '*'
       - '**/*'
-concurrency:
-  group: ${{ github.ref }}-audit
-  cancel-in-progress: true
-
+  # NOTE: you don't need to build all PRs if you are also building all branches
+  # pull_request:
+  #   branches:
+  #     - '*'
+  #     - '**/*'
 jobs:
-  # Label of the container job
-  audit:
-    # Containers must run in Linux based operating systems
+  build:
     runs-on: ubuntu-20.04
-
     # Docker Hub image that the job executes in
     container: ruby:3.1.6-alpine3.20
+
+    # Service containers to run with job
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASS: postgres
+          POSTGRES_MULTIPLE_EXTENSIONS: hstore
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+
+    env:
+      DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
+      DATABASE_DB_TEST: boston_cas_test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v3
       - name: Set up dependencies
-        run: |
-          apk add --no-cache $(cat .github/dependencies.txt)
 
-      - name: cache gems
-        uses: actions/cache@v4
-        id: gemcache
-        with:
-          path: |
-            vendor/bundle
-            /usr/local/bundle/
-          key: ${{ runner.os }}-gemcache-${{ hashFiles('**/Gemfile.lock') }}-${{ hashFiles('**/.ruby-version') }}
-
-      - name: Install gems
         run: |
-          gem install bundler --version=2.5.17
-          bundle config set --local without 'production staging development'
+          apk add --no-cache \
+            nodejs yarn npm \
+            tzdata \
+            git \
+            bash \
+            freetds-dev \
+            icu icu-dev \
+            curl libcurl curl-dev \
+            imagemagick \
+            libmagic file-dev file \
+            build-base libxml2-dev libxslt-dev postgresql-dev \
+            libgcc libstdc++ libx11 glib libxrender libxext libintl ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-freefont \
+            freetype freetype-dev harfbuzz ca-certificates ttf-freefont \
+            postgresql tmux postgis geos geos-dev xz \
+            shared-mime-info
+
+          echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
+          chmod 600 ~/.pgpass
+
+          yarn install --frozen-lockfile
+          gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+          gem install bundler -v '< 2'
+
+      - name: 'Install gems'
+        run: |
           bundle install --jobs 4 --retry 3
 
       - name: Run bundle-audit
         run: |
           bundle exec bundle-audit check --update
-
       - name: Run brakeman
         run: |
           bundle exec brakeman -q --no-pager --except PermitAttributes,Render
