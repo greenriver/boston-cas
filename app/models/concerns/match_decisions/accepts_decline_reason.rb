@@ -22,11 +22,6 @@ module MatchDecisions
       end
     end
 
-    private def decline_reason_scope(_contact)
-      # just the base scope.  other gets included automatically by #decline_reasons
-      raise 'abstract method not implemented'
-    end
-
     def whitelist_params_for_update params
       result = super
       reason_id_array = Array.wrap params.require(:decision)[:decline_reason_id]

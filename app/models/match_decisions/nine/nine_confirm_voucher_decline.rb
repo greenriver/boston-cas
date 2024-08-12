@@ -6,7 +6,7 @@
 
 module MatchDecisions::Nine
   class NineConfirmVoucherDecline < ::MatchDecisions::Base
-    include MatchDecisions::RouteEightCancelReasons
+    include MatchDecisions::RouteNineCancelReasons
 
     def statuses
       {
