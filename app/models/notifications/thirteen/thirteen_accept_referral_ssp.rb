@@ -19,9 +19,5 @@ module Notifications::Thirteen
     def event_label
       "#{Translation.translate('HSA Thirteen')} notified of match update - pending #{Translation.translate('HSA Thirteen')} accepting referral."
     end
-
-    def to_partial_path
-      "notifications/thirteen/#{notification_type}"
-    end
   end
 end

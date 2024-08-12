@@ -19,9 +19,5 @@ module Notifications::Thirteen
     def event_label
       "#{Translation.translate('CoC Thirteen')} notified of #{Translation.translate('Shelter Agency Thirteen')} decline.  Confirmation pending."
     end
-
-    def to_partial_path
-      "notifications/thirteen/#{notification_type}"
-    end
   end
 end

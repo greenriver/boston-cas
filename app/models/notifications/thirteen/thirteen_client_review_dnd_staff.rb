@@ -19,9 +19,5 @@ module Notifications::Thirteen
     def event_label
       "#{Translation.translate('CoC Thirteen')} notified of acknowledged match."
     end
-
-    def to_partial_path
-      "notifications/thirteen/#{notification_type}"
-    end
   end
 end
