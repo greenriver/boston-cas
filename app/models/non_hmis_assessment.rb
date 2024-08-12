@@ -149,9 +149,9 @@ class NonHmisAssessment < ActiveRecord::Base
 
   def total_homeless_nights_sheltered
     if pathways_v4?
-      warehouse_sheltered = (homeless_nights_sheltered || 0)
-      extra_nights_sheltered = (additional_homeless_nights_sheltered || 0)
-      extra_nights_unsheltered = (additional_homeless_nights_unsheltered || 0)
+      warehouse_sheltered = (homeless_nights_sheltered || 0) # rubocop:disable Style/RedundantParentheses
+      extra_nights_sheltered = (additional_homeless_nights_sheltered || 0) # rubocop:disable Style/RedundantParentheses
+      extra_nights_unsheltered = (additional_homeless_nights_unsheltered || 0) # rubocop:disable Style/RedundantParentheses
       # If a client has more than 548 self-reported days (combination of sheltered and unsheltered)
       # and does not have a verification uploaded, count unsheltered days first, then count sheltered days UP TO 548.
       # If the self reported days are verified, use the provided amounts.
@@ -172,8 +172,8 @@ class NonHmisAssessment < ActiveRecord::Base
 
   def total_homeless_nights_unsheltered
     if pathways_v4?
-      warehouse_unsheltered = (homeless_nights_unsheltered || 0)
-      extra_nights_unsheltered = (additional_homeless_nights_unsheltered || 0)
+      warehouse_unsheltered = (homeless_nights_unsheltered || 0) # rubocop:disable Style/RedundantParentheses
+      extra_nights_unsheltered = (additional_homeless_nights_unsheltered || 0) # rubocop:disable Style/RedundantParentheses
       # If the self reported days are verified, use the provided amounts.
       unless self_reported_days_verified
         # If they are not verified, cap the total unsheltered at 548.
@@ -400,6 +400,13 @@ class NonHmisAssessment < ActiveRecord::Base
       :partner_name,
       :partner_warehouse_id,
       :share_information_permission,
+      :jail_caused_episode,
+      :income_caused_episode,
+      :ipv_caused_episode,
+      :violence_caused_episode,
+      :chronic_health_caused_episode,
+      :acute_health_caused_episode,
+      :idd_caused_episode,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],
