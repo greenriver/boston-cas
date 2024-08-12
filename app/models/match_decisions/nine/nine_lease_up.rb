@@ -7,7 +7,8 @@
 module MatchDecisions::Nine
   class NineLeaseUp < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteEightCancelReasons
+    include MatchDecisions::RouteNineDeclineReasons
+    include MatchDecisions::RouteNineCancelReasons
 
     validate :client_move_in_date_present_if_status_complete
 

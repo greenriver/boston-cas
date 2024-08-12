@@ -7,8 +7,8 @@
 module MatchDecisions::Nine
   class NineMatchRecommendation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteNineDeclineReasons
     include MatchDecisions::DefaultDndStaffDeclineReasons
-    include MatchDecisions::RouteEightCancelReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
