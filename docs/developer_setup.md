@@ -35,4 +35,4 @@ Depending on how your development environment's root permission are set, you may
 
 `docker compose run -u 0 --entrypoint='' web chown -R app-user:app-user /node_modules /bundle /app /log /tmp`
 
-you may need to replace or add to the `/node_modules /bundle /app /log /tmp` section to include the directory needing a permission reset.
+You may need to replace or add to the `/node_modules /bundle /app /log /tmp` section to include the directory needing a permission reset.
