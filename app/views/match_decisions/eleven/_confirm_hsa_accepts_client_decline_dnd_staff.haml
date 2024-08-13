@@ -1,11 +1,6 @@
 .match-decision.c-card.c-card--flush.card--block
   .c-card__content
     = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
-      .o-pre-choose
-        .form-inputs
-          .row
-            .col-md-6
-              = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
       .o-choose.o-choose--flush
         - if can_reject_matches?
           .o-choose__choice

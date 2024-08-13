@@ -4,8 +4,7 @@
       = render 'match_decisions/shelter_agency_expiration', form: form
       - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.current || can_reject_matches?
         .o-pre-choose
-          %p After contacting the client and obtaining client consent to proceed and all necessary paperwork submit this form to indicate acceptance of the match for all parties.
-          = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+          %p.mb-0 After contacting the client and obtaining client consent to proceed and all necessary paperwork submit this form to indicate acceptance of the match for all parties.
         .o-choose.o-choose--flush
           .o-choose__choice
             %header
