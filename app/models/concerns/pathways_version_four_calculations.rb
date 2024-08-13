@@ -65,6 +65,10 @@ module PathwaysVersionFourCalculations
       end
     end
 
+    def family_member
+      pregnant_or_parent
+    end
+
     def self.export_fields(assessment_name)
       shared = super.merge(
         {
