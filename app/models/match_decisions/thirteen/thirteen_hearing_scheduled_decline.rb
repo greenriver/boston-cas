@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Thirteen
-  class ThirteenHearingScheduledDecline < ::MatchDecisions::Base
+  class ThirteenHearingScheduledDecline < Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteThirteenDeclineReasons
     include MatchDecisions::RouteThirteenCancelReasons

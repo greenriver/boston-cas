@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Thirteen
-  class ThirteenAcceptReferral < ::MatchDecisions::Base
+  class ThirteenAcceptReferral < Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteThirteenCancelReasons
     include MatchDecisions::RouteThirteenDeclineReasons
