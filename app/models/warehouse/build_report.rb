@@ -122,7 +122,9 @@ module Warehouse
         end
       end
 
-      match_rows.flatten!.compact!
+      # Oddly, calling `match_rows.flatten!` turns match_rows into nil when it is an empty array
+      match_rows = match_rows.flatten
+      match_rows.compact!
 
       # Replace reporting decisions data
       Reporting::Decisions.transaction do
