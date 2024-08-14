@@ -5,13 +5,13 @@
 ###
 
 module MatchDecisions::Thirteen
-  class ThirteenAcceptReferralDecline < ::MatchDecisions::Base
+  class ThirteenAcceptReferralDecline < Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteThirteenDeclineReasons
     include MatchDecisions::RouteThirteenCancelReasons
 
     def to_partial_path
-      'match_decisions/thirteen/hsa_review_decline'
+      'match_decisions/thirteen/accept_referral_decline'
     end
 
     def step_name

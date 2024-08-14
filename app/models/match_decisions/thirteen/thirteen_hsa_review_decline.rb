@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Thirteen
-  class ThirteenHsaReviewDecline < ::MatchDecisions::Base
+  class ThirteenHsaReviewDecline < Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteThirteenDeclineReasons
     include MatchDecisions::RouteThirteenCancelReasons
