@@ -13,6 +13,7 @@ class NonHmisAssessment < ActiveRecord::Base
 
   attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth
   attr_writer :total_days_homeless_in_the_last_three_years
+  alias_attribute :substance_use, :substance_abuse_problem
 
   belongs_to :non_hmis_client
   belongs_to :user
@@ -407,6 +408,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :chronic_health_caused_episode,
       :acute_health_caused_episode,
       :idd_caused_episode,
+      :federal_benefits,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],
