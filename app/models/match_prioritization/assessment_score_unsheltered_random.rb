@@ -22,7 +22,7 @@ module MatchPrioritization
 
     def self.supporting_column_names
       [
-        :assessment_score,
+        :total_homeless_nights_unsheltered,
       ]
     end
   end
