@@ -170,7 +170,7 @@ class Opportunity < ApplicationRecord
     end
     client_scope = add_unit_attributes_filter(client_scope)
     client_scope = client_scope.not_rejected_for(id)
-    client_scope.merge(Client.prioritized(self, client_scope), rewhere: true)
+    client_scope.merge(Client.prioritized(active_prioritization_scheme, client_scope), rewhere: true)
   end
 
   def add_unit_attributes_filter(client_scope)

@@ -108,7 +108,7 @@ class Matching::Engine
   end
 
   def prioritized_candidate_clients opportunity
-    Client.prioritized(opportunity, client_candidates(clients, match_route: match_route))
+    Client.prioritized(opportunity.active_prioritization_scheme, client_candidates(clients, match_route: opportunity.match_route))
   end
 
   def opportunity_candidates subjects
