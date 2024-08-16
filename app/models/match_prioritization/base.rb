@@ -33,7 +33,7 @@ module MatchPrioritization
         MatchPrioritization::Rank,
         MatchPrioritization::HoldsVoucherOn,
         MatchPrioritization::MatchGroup,
-        MatchPrioritization::AssessmentScoreUnshelteredRandom,
+        MatchPrioritization::UnshelteredRandom,
       ]
     end
 

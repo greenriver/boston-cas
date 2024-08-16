@@ -5,7 +5,7 @@
 ###
 
 module MatchPrioritization
-  class AssessmentScoreUnshelteredRandom < Base
+  class UnshelteredRandom < Base
     def self.title
       'Total Unsheltered nights, random tie breaker'
     end
