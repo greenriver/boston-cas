@@ -96,7 +96,7 @@ class Matching::Engine
   end
 
   def clients_for_matches opportunity
-    client_scope = prioritized_candidate_clients(match_route: opportunity.match_route)
+    client_scope = prioritized_candidate_clients(opportunity)
     # take into account unit attributes
     client_scope = opportunity.add_unit_attributes_filter(client_scope)
 
@@ -107,8 +107,8 @@ class Matching::Engine
     @prioritized_candidate_opportunities ||= opportunity_candidates(opportunities).order(:matchability)
   end
 
-  def prioritized_candidate_clients match_route:
-    Client.prioritized(match_route, client_candidates(clients, match_route: match_route))
+  def prioritized_candidate_clients opportunity
+    Client.prioritized(opportunity, client_candidates(clients, match_route: match_route))
   end
 
   def opportunity_candidates subjects
