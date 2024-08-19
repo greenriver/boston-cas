@@ -11,6 +11,7 @@ class Rules::UnshelteredDays < Rule
 
   def available_unsheltered_days
     [
+      [1, '1 Day'],
       [30, '30 Days'],
       [60, '60 Days'],
       [90, '90 Days'],
@@ -27,14 +28,12 @@ class Rules::UnshelteredDays < Rule
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
-    if Client.column_names.include?(:total_homeless_nights_unsheltered.to_s)
-      if requirement.positive
-        scope.where(c_t[:total_homeless_nights_unsheltered].gteq(requirement.variable))
-      else
-        scope.where(c_t[:total_homeless_nights_unsheltered].lt(requirement.variable))
-      end
+    raise RuleDatabaseStructureMissing.new("clients.total_homeless_nights_unsheltered missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:total_homeless_nights_unsheltered.to_s)
+
+    if requirement.positive
+      scope.where(c_t[:total_homeless_nights_unsheltered].gteq(requirement.variable))
     else
-      raise RuleDatabaseStructureMissing.new("clients.total_homeless_nights_unsheltered missing. Cannot check clients against #{self.class}.")
+      scope.where(c_t[:total_homeless_nights_unsheltered].lt(requirement.variable))
     end
   end
 end
