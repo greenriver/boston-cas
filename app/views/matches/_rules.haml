@@ -1,3 +1,6 @@
+%h3.detail-box--label Prioritized By
+.detail-box--value
+  = match.opportunity.active_prioritization_scheme.title
 %h3.detail-box--label Rules
 .detail-box--value
   - requirements = match.requirements_with_inherited
@@ -9,7 +12,7 @@
 
   - changed_ids = match&.requirements_changes_ids
   - if requirements.count > 0
-    - requirements.each do |r| 
+    - requirements.each do |r|
       = '*' if changed_ids.include? r.rule_id
       = r.name(on_unit: on_unit)
       - if r.variable.present?

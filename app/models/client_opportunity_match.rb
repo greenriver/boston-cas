@@ -1021,8 +1021,8 @@ class ClientOpportunityMatch < ApplicationRecord
     tags.to_h
   end
 
-  def self.prioritized_by_client(match_route, scope)
-    match_route.match_prioritization.prioritization_for_clients(scope)
+  def self.prioritized_by_client(opportunity, scope)
+    opportunity.active_prioritization_scheme.prioritization_for_clients(scope, opportunity: opportunity)
   end
 
   def self.sort_options

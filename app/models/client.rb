@@ -255,8 +255,8 @@ class Client < ApplicationRecord
     @default_client_contacts ||= ClientContacts.new client: self
   end
 
-  def self.prioritized(match_route, scope)
-    match_route.match_prioritization.prioritization_for_clients(scope)
+  def self.prioritized(prioritization_scheme, scope)
+    prioritization_scheme.prioritization_for_clients(scope)
   end
 
   # A random number for prioritization that require a tie-breaker
