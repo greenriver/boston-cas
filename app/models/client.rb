@@ -380,6 +380,17 @@ class Client < ApplicationRecord
     @remote_data_source ||= project_client&.data_source || false
   end
 
+  def required_number_of_bedrooms_or_sro_ok
+    text = required_number_of_bedrooms.to_s
+    text += ' (SRO OK)' if sro_ok
+
+    text
+  end
+
+  def assessment_type_description
+    NonHmisAssessment.declassify_title(NonHmisAssessment.title_from_type_for_matching(assessment_name))
+  end
+
   def remote_client_visible_to?(user)
     return true unless project_client.is_deidentified? || project_client.is_identified?
     return true if NonHmisClient.visible_to(user).where(id: remote_id).exists?
@@ -1229,6 +1240,16 @@ class Client < ApplicationRecord
         title: 'Open SO Enrollments',
         description: nil,
         type: 'Jsonb',
+      },
+      required_number_of_bedrooms_or_sro_ok: {
+        title: 'Minimum Bedrooms',
+        description: nil,
+        type: 'String',
+      },
+      assessment_type_description: {
+        title: 'Assessment Type',
+        description: nil,
+        type: 'String',
       },
     }
   end
