@@ -43,7 +43,7 @@ class Reporting::Decisions < ApplicationRecord
   end
 
   scope :program, ->(limit) do
-    where(program_name: Program.find(limit).pluck(:name))
+    where(program_name: Program.where(id: limit).select(:name))
   end
 
   scope :associated_with_agency, ->(limit) do
