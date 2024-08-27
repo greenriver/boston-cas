@@ -23,6 +23,12 @@ module Reporting::FilterScopes
       scope.program_type(@filter.program_types)
     end
 
+    private def filter_for_programs(scope)
+      return scope if @filter.programs.blank?
+
+      scope.program(@filter.programs)
+    end
+
     private def filter_for_agencies(scope)
       return scope if @filter.agencies.blank?
 
