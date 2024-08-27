@@ -42,6 +42,10 @@ class Reporting::Decisions < ApplicationRecord
     where(program_type: limit)
   end
 
+  scope :program, ->(limit) do
+    where(program_name: Program.where(id: limit).select(:name))
+  end
+
   scope :associated_with_agency, ->(limit) do
     # joins are hard through polymorphic associations...
     program_names = EntityViewPermission.where(entity_type: 'Program', editable: true, agency_id: limit).

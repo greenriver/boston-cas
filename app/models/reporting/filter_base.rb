@@ -12,6 +12,7 @@ module Reporting
     attribute :end, Date, lazy: true, default: ->(r, _) { r.default_end }
     attribute :match_route, Integer
     attribute :match_routes, Array, default: []
+    attribute :programs, Array, default: []
     attribute :program_types, Array, default: []
     attribute :agencies, Array, default: []
     attribute :household_types, Array, default: []
@@ -43,6 +44,7 @@ module Reporting
       self.end = filters.dig(:end)&.to_date || self.end
       self.match_routes = Array.wrap(filters.dig(:match_route).to_i) if filters.dig(:match_route).present?
       self.match_routes = filters.dig(:match_routes)&.reject(&:blank?)&.map(&:to_i).presence || match_routes
+      self.programs = filters.dig(:programs)&.reject(&:blank?).presence || programs
       self.program_types = filters.dig(:program_types)&.reject(&:blank?).presence || program_types
       self.agencies = filters.dig(:agencies)&.reject(&:blank?)&.map(&:to_i).presence || agencies
       self.household_types = filters.dig(:household_types)&.reject(&:blank?)&.map(&:to_sym).presence || household_types
@@ -64,6 +66,7 @@ module Reporting
       @filter = self
       scope = filter_for_range(scope)
       scope = filter_for_match_routes(scope)
+      scope = filter_for_programs(scope)
       scope = filter_for_program_types(scope)
       scope = filter_for_agencies(scope)
       scope = filter_for_household_types(scope)
@@ -87,6 +90,7 @@ module Reporting
           start: start,
           end: self.end,
           match_routes: match_routes,
+          programs: programs,
           program_types: program_types,
           agencies: agencies,
           household_types: household_types,
@@ -114,6 +118,7 @@ module Reporting
         :match_route,
         :contact_type,
         match_routes: [],
+        programs: [],
         program_types: [],
         agencies: [],
         household_types: [],
@@ -135,6 +140,10 @@ module Reporting
           route.id,
         ]
       end.to_h
+    end
+
+    def program_options_for_select
+      Program.order(name: :asc).pluck(:name, :id).to_h
     end
 
     def program_type_options_for_select
@@ -334,6 +343,8 @@ module Reporting
         nil
       when :match_routes
         match_route_names
+      when :programs
+        program_names
       when :program_types
         program_type_names
       when :agencies
@@ -359,6 +370,10 @@ module Reporting
 
     private def match_route_names
       match_route_options_for_select.invert.select { |k, _| match_routes.include?(k) }.values
+    end
+
+    private def program_names
+      program_options_for_select.invert.select { |k, _| programs.include?(k) }.values
     end
 
     private def program_type_names
