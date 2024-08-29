@@ -101,6 +101,10 @@ module MatchDecisions
       false
     end
 
+    def skipped?
+      false
+    end
+
     def show_address_field?
       match_route.show_address_field
     end
