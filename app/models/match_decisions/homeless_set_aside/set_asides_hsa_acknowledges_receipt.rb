@@ -6,7 +6,6 @@
 
 module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcknowledgesReceipt < ::MatchDecisions::Base
-
     include MatchDecisions::AcceptsDeclineReason
 
     validate :cant_accept_if_match_closed
@@ -45,10 +44,6 @@ module MatchDecisions::HomelessSetAside
       }
     end
 
-    def editable?
-      super && saved_status !~ /acknowledged/
-    end
-
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: :pending
@@ -75,8 +70,12 @@ module MatchDecisions::HomelessSetAside
       def acknowledged
         @decision.next_step.initialize_decision!
 
-        if match.client.remote_id.present? && Warehouse::Base.enabled?
-          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation rescue nil
+        return unless match.client.remote_id.present? && Warehouse::Base.enabled?
+
+        begin
+          Warehouse::Client.find(match.client.remote_id).queue_history_pdf_generation
+        rescue StandardError
+          nil
         end
       end
 
@@ -91,34 +90,27 @@ module MatchDecisions::HomelessSetAside
       saved_status == 'pending' && status == 'acknowledged'
     end
 
-
     def cant_accept_if_match_closed
-      if save_will_accept? && match.closed
-        then errors.add :status, "This match has already been closed."
-      end
+      return unless save_will_accept? && match.closed
+
+      errors.add :status, 'This match has already been closed.'
     end
 
     def can_only_accept_an_opportunity_once
-      if save_will_accept? && match.already_active_for_opportunity.any?
-        then errors.add :status, "The receipt of this opportunity has already been acknowledged"
-      end
+      return unless save_will_accept? && match.already_active_for_opportunity.any?
+
+      errors.add :status, 'The receipt of this opportunity has already been acknowledged'
     end
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      if save_will_accept? && match.dnd_staff_contacts.none?
-        missing_contacts << "a #{Translation.translate('DND')} Staff Contact"
-      end
+      missing_contacts << "a #{Translation.translate('DND')} Staff Contact" if save_will_accept? && match.dnd_staff_contacts.none?
 
-      if save_will_accept? && match.housing_subsidy_admin_contacts.none?
-        missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator')} Contact"
-      end
+      missing_contacts << "a #{Translation.translate('Housing Subsidy Administrator')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
-      if missing_contacts.any?
-        errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
-      end
+      return unless missing_contacts.any?
+
+      errors.add :match_contacts, "needs #{missing_contacts.to_sentence}"
     end
-
   end
-
 end

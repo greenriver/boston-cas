@@ -81,10 +81,6 @@ module MatchDecisions::Nine
     end
     private_constant :StatusCallbacks
 
-    def editable?
-      super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
     def step_decline_reasons(_contact)
       [
         'Immigration status',

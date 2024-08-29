@@ -87,10 +87,6 @@ module MatchDecisions::Five
     end
     private_constant :StatusCallbacks
 
-    def editable?
-      super && saved_status !~ /accepted|declined/
-    end
-
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end
