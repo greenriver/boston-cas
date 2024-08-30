@@ -46,8 +46,14 @@ module TcHatCalculations
       # when 1, 2 # unnecessary, these would result in 1 bedroom
       when 3, 4
         2
-      when (5..)
+      when 5, 6
         3
+      when 7, 8
+        4
+      when 9, 10
+        5
+      when (11..)
+        6
       else
         num
       end

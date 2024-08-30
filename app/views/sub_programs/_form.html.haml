@@ -13,6 +13,8 @@
             - else
               = f.input :confidential, label: 'Is this a confidential sub-program?', hint: 'Anyone in a match involving a confidential program will have their name hidden on lists of matches by default.'
             = f.input :cori_hearing_required, label: "Requires #{Translation.translate('CORI hearing')}", hint: "This sub-program requires a #{Translation.translate('CORI hearing')} review for any clients matched in #{Translation.translate('Route Thirteen')}"
+            - scheme = @subprogram.match_route.match_prioritization.title
+            = f.association :match_prioritization, collection: MatchPrioritization::Base.prioritization_schemes.map {|prioritization_scheme| [prioritization_scheme.title, prioritization_scheme.first.id]}, label_method: :first, value_method: :second, include_blank: "Use Prioritization from Route: #{scheme}", as: :select_2
             = f.association :housing_subsidy_administrator, label: "#{Translation.translate('Housing Subsidy Administrator')}", as: :select2
             = f.association :service_provider, label: 'Service Provider', as: :select2
             = f.association :sub_contractor, label: 'Sub-Contractor', as: :select2
