@@ -76,5 +76,17 @@ module Reporting::FilterScopes
 
       scope.cohorts(@filter.cohort_ids)
     end
+
+    private def filter_for_contacts(scope)
+      return scope if @filter.contacts.blank?
+
+      scope.contacts(@filter.contacts.map(&:to_s))
+    end
+
+    private def filter_for_contact_type(scope)
+      return scope if @filter.contact_type.blank?
+
+      scope.contacts_in_type(@filter.contacts.map(&:to_s), @filter.contact_type)
+    end
   end
 end

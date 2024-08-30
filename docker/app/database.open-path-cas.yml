@@ -5,7 +5,7 @@ default: &default
   username: <%= ENV['DATABASE_USER'] %>
   password: <%= ENV['DATABASE_PASS'] %>
   host: <%= ENV['DATABASE_HOST'] %>
-  sslmode: 'verify-full'
+  sslmode: <%= ENV.fetch('SSLMODE', 'verify-full') %>
   sslrootcert: /etc/ssl/certs/us-east-1-bundle.pem
 
 <%= ENV.fetch('RAILS_ENV') { 'unknown' } %>:

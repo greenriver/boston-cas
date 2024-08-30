@@ -8,6 +8,8 @@ module MatchRoutes
   class Base < ApplicationRecord
     self.table_name = :match_routes
     serialize :prioritized_client_columns, Array
+    serialize :routes_parked_on_active_match, Array
+    serialize :routes_parked_on_successful_match, Array
 
     belongs_to :match_prioritization, class_name: MatchPrioritization::Base.name, foreign_key: :match_prioritization_id, primary_key: :id
     belongs_to :tag if column_names.include?('tag_id')

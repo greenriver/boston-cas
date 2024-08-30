@@ -5,21 +5,21 @@
 ###
 
 module MatchDecisions
-  module RouteSixDeclineReasons
+  module RouteElevenDeclineReasons
     extend ActiveSupport::Concern
 
     def step_decline_reasons(_contact)
       [
+        'Client has another housing option',
+        'Client is already receiving navigation services',
+        'Health and Safety',
         'Does not agree to services',
         'Does not want housing at this time',
         'Incarcerated',
         'Client has disengaged',
         'Client has disappeared',
-        'Client has another housing option',
         'Client deceased',
         'Other',
-        'Health and Safety',
-        'Client receiving navigation services',
       ]
     end
   end

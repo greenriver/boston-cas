@@ -5,21 +5,22 @@
 ###
 
 module MatchDecisions
-  module RouteSixDeclineReasons
+  module RouteElevenCancelReasons
     extend ActiveSupport::Concern
 
-    def step_decline_reasons(_contact)
+    def step_cancel_reasons
       [
-        'Does not agree to services',
-        'Does not want housing at this time',
         'Incarcerated',
+        'Match expired',
+        'Client has declined match',
         'Client has disengaged',
         'Client has disappeared',
-        'Client has another housing option',
+        'Vacancy should not have been entered',
+        'Client received another housing opportunity',
+        'Client is already receiving navigation services',
+        'Client no longer eligible for match',
         'Client deceased',
         'Other',
-        'Health and Safety',
-        'Client receiving navigation services',
       ]
     end
   end

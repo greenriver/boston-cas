@@ -36,7 +36,7 @@ jobs:
             trivy_skip_files: /app/config/key.pem,/app/docker/sftp/ssh_host_ed25519_key,/app/docker/sftp/ssh_host_rsa_key
             target: prod-build
             build-args: |
-              BUILD_TAG=3.1.4-alpine3.18
+              BUILD_TAG=3.1.6-alpine3.20
               BUNDLER_VERSION=2.4.13
               USER_ID=1000
               GROUP_ID=1000

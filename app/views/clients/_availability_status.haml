@@ -10,9 +10,12 @@
 - if @client.unavailable_as_candidate_fors.exists?
   .blocked-on-routes
     %p.m-2.mt-4.muted-text
-      - if UnavailableAsCandidateFor.expiration_length.positive?
-        %em Clients are blocked from matching on the same route for #{UnavailableAsCandidateFor.describe_expiration_length} after a complete and successful match.
+      - if @client.unavailable_fors_include_active_match?
+        %em Clients are blocked from matching while actively in a resource match.
       - else
+        - if UnavailableAsCandidateFor.expiration_length.positive?
+          %em Clients are blocked from matching on the same route for #{UnavailableAsCandidateFor.describe_expiration_length} after a complete and successful match.
+        - else
         %em Clients are blocked from matching on the same route after a complete and successful match.
     %p.m-2.mt-4.muted-text
       %em #{@client.name} will not match any vacancies on the following routes:

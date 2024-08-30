@@ -3,6 +3,19 @@
 class SetupLogging
   attr_accessor :config
 
+  STANDARD_TAGS = {
+    gr_client: 'openpath',
+
+    # If there are more apps, these would differ. Some other examples:
+    # airflow, superset, or other microservices that would conceivably run on
+    # the same cluster and/or have some close relationship with the main application.
+    app: 'cas',
+
+    # Some Green River clients have multiple tenants running the same general
+    # code (but with different databases or environment variables)
+    tenant: ENV.fetch('CLIENT', 'unknown-client-set-CLIENT-env-var'),
+  }.freeze
+
   def initialize(config)
     self.config = config
   end
@@ -19,7 +32,7 @@ class SetupLogging
     elsif Rails.env.production?
       _production
     else
-      raise "Set up logging for your environment and try again"
+      raise 'Set up logging for your environment and try again'
     end
   end
 
@@ -62,7 +75,7 @@ class SetupLogging
         rails_env: Rails.env,
         request_time: time,
         application: 'CAS',
-      }.reverse_merge(@tags).to_json + "\r\n"
+      }.merge(STANDARD_TAGS).reverse_merge(@tags).to_json + "\r\n"
     end
   end
 
@@ -89,7 +102,7 @@ class SetupLogging
         x_forwarded_for: event.payload[:x_forwarded_for],
         rails_env: Rails.env,
         exception: event.payload[:exception]&.first,
-      }
+      }.merge(STANDARD_TAGS)
     end
   end
 
@@ -114,7 +127,7 @@ class SetupLogging
     config.lograge.enabled = false
     config.log_level = ENV.fetch('LOG_LEVEL') { 'info' }.to_sym
     config.logger = _tagged ActiveSupport::Logger.new("log/#{Rails.env}.log")
-    #config.logger.formatter = ActiveSupport::Logger::SimpleFormatter.new
+    # config.logger.formatter = ActiveSupport::Logger::SimpleFormatter.new
   end
 
   def _staging

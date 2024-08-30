@@ -31,6 +31,7 @@ RSpec.describe 'Running the match engine...', type: :request do
   let(:route) do
     r = MatchRoutes::Default.first
     r.update(match_prioritization_id: priority.id)
+    r.update(routes_parked_on_active_match: [r.class.name])
     r
   end
 

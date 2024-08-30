@@ -76,6 +76,7 @@ module CasSeeds
       ['Client no longer eligible for match', nil],
       ['Client deceased', nil],
       ['Vacancy filled by other client', nil],
+      ['Client receiving navigation services', nil],
     ].freeze
 
     LIMITED_ADMINISTRATIVE_CANCEL_REASONS = [

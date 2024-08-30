@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_08_180516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -753,6 +753,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_10_185742) do
     t.boolean "show_referral_source", default: false
     t.boolean "show_move_in_date", default: false
     t.boolean "show_address_field", default: false
+    t.text "routes_parked_on_active_match"
+    t.text "routes_parked_on_successful_match"
     t.index ["tag_id"], name: "index_match_routes_on_tag_id"
   end
 
