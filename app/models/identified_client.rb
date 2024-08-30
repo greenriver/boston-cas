@@ -11,32 +11,63 @@ class IdentifiedClient < NonHmisClient
   alias gender genders
   alias race races
 
+  scope :visible_to, ->(user) do
+    if user.can_edit_all_clients? || user.can_manage_all_identified_clients?
+      all
+    elsif user.can_view_all_covid_pathways?
+      covid_ids = where(id: NonHmisAssessment.limitable_pathways.select(:non_hmis_client_id)).pluck(:id)
+      agency_associated_ids = where(
+        arel_table[:agency_id].eq(nil).
+        or(arel_table[:agency_id].eq(user.agency.id)),
+      ).pluck(:id)
+
+      where(id: covid_ids + agency_associated_ids)
+    else
+      where(
+        arel_table[:agency_id].eq(nil).
+        or(arel_table[:agency_id].eq(user.agency.id)),
+      )
+    end
+  end
+
+  scope :editable_by, ->(user) do
+    if user.can_edit_all_clients? || user.can_manage_all_identified_clients?
+      all
+    else
+      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
+
+      if pathways_enabled?
+        all
+      else
+        where(agency_id: user.agency.id)
+      end
+    end
+  end
+
   # Allow same search rules as Client
-  scope :text_search, -> (text) do
+  scope :text_search, ->(text) do
     return none unless text.present?
+
     text.strip!
     sa = arel_table
-    numeric = /[\d-]+/.match(text).try(:[], 0) == text
     date = /\d\d\/\d\d\/\d\d\d\d/.match(text).try(:[], 0) == text
     social = /\d\d\d-\d\d-\d\d\d\d/.match(text).try(:[], 0) == text
     # Explicitly search for only last, first if there's a comma in the search
     if text.include?(',')
       last, first = text.split(',').map(&:strip)
-      if last.present?
-        where = search_last_name(last).or(search_alternate_name(last))
-      end
+      where = search_last_name(last).or(search_alternate_name(last)) if last.present?
       if last.present? && first.present?
         where = where.and(search_first_name(first)).or(search_alternate_name(first))
       elsif first.present?
         where = search_first_name(first).or(search_alternate_name(first))
       end
-      # Explicity search for "first last"
+      # Explicitly search for "first last"
     elsif text.include?(' ')
       first, last = text.split(' ').map(&:strip)
       where = search_first_name(first)
-          .and(search_last_name(last))
-          .or(search_alternate_name(first))
-          .or(search_alternate_name(last))
+        .and(search_last_name(last))
+        .or(search_alternate_name(first))
+        .or(search_alternate_name(last))
       # Explicitly search for a PersonalID
     elsif social
       where = sa[:ssn].eq(text.gsub('-', ''))

@@ -9,6 +9,39 @@ class DeidentifiedClient < NonHmisClient
   has_many :client_assessments, class_name: 'DeidentifiedClientAssessment', foreign_key: :non_hmis_client_id, dependent: :destroy
   accepts_nested_attributes_for :client_assessments
 
+  scope :visible_to, ->(user) do
+    if user.can_edit_all_clients? || user.can_manage_all_deidentified_clients?
+      all
+    elsif user.can_view_all_covid_pathways?
+      covid_ids = where(id: NonHmisAssessment.limitable_pathways.select(:non_hmis_client_id)).pluck(:id)
+      agency_associated_ids = where(
+        arel_table[:agency_id].eq(nil).
+        or(arel_table[:agency_id].eq(user.agency.id)),
+      ).pluck(:id)
+
+      where(id: covid_ids + agency_associated_ids)
+    else
+      where(
+        arel_table[:agency_id].eq(nil).
+        or(arel_table[:agency_id].eq(user.agency.id)),
+      )
+    end
+  end
+
+  scope :editable_by, ->(user) do
+    if user.can_edit_all_clients? || user.can_manage_all_deidentified_clients?
+      all
+    else
+      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
+
+      if pathways_enabled?
+        all
+      else
+        where(agency_id: user.agency.id)
+      end
+    end
+  end
+
   # Search only the client identifier
   scope :text_search, ->(text) do
     return none unless text.present?

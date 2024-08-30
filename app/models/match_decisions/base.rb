@@ -42,6 +42,9 @@ module MatchDecisions
     attr_accessor :shelter_expiration
 
     scope :pending, -> { where(status: [:pending, :other_clients_canceled]) }
+    scope :initialized_decisions, -> do
+      where.not(status: nil)
+    end
     scope :awaiting_action, -> do
       where(status: [:pending, :other_clients_canceled, :acknowledged])
     end

@@ -1,0 +1,29 @@
+.match-decision.c-card.c-card--flush.card--block
+  .c-card__content
+    = simple_form_for @decision, url: access_context.match_decision_path(@match, @decision) do |form|
+      = render 'match_decisions/shelter_agency_expiration', form: form
+      - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.current || can_reject_matches?
+        .o-pre-choose
+          = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
+        .o-choose.o-choose--flush
+          .o-choose__choice
+            %header
+              .o-choose__title
+                .c-choice-icon.c-choice-icon--confirm.mr-4
+                %h3 Accept Match
+            .o-choose__content
+              - if has_unit?
+                %p
+                  Please confirm the client's building and unit.
+                  .form-inputs
+                    .building-and-unit
+                      = form.input :building_id, collection: Building.all, selected: default_building_id , label: 'Building', disabled: !@decision.editable?, input_html: {class: 'building', notification_id: notification_id}
+                      = form.input :unit_id, collection: candidate_units, selected: default_unit_id, label: 'Unit', disabled: !@decision.editable?,
+                        input_html: {class: 'unit', data: {dependent: true, url: '/buildings/:id/available_move_in_units.json', 'value-method' => :id, 'label-method' => :name, default_parent_id: default_building_id, default_value: default_unit_id, default_label: default_unit_name}}
+              %p
+                %i.icon-info
+                If accepted, all involved parties will be notified.
+
+              = form.submit 'Accept Match', class: 'btn btn-success jAccept', data: {submit_param_name: 'decision[status]', submit_param_value: 'accepted'}, disabled: (!@decision.editable?)
+
+          = render 'match_decisions/cancel_actions', form: form
