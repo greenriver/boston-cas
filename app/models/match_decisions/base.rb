@@ -86,7 +86,7 @@ module MatchDecisions
     def editable?
       # can this decision be updated by a notification response?
       # override this default behavior in subclasses
-      initialized? && match_open?
+      initialized? && match_open? && saved_status !~ /\A(acknowledged|accepted|confirmed|declined|canceled|rejected|complete|completed|scheduled|no_hearing|mitigation_required|mitigation_not_required|decline_overridden|decline_overridden_returned|decline_confirmed)\z/
     end
 
     def expires?
@@ -98,6 +98,10 @@ module MatchDecisions
     end
 
     def stallable?
+      false
+    end
+
+    def skipped?
       false
     end
 

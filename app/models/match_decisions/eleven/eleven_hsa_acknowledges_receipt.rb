@@ -59,10 +59,6 @@ module MatchDecisions::Eleven
       true
     end
 
-    def editable?
-      super && saved_status !~ /acknowledged/
-    end
-
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: :pending

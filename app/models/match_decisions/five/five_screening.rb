@@ -97,10 +97,6 @@ module MatchDecisions::Five
       status&.to_sym.in?([:mitigation_required, :mitigation_not_required])
     end
 
-    def editable?
-      super && saved_status !~ /mitigation_required|mitigation_not_required/
-    end
-
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end

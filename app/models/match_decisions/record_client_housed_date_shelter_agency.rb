@@ -6,7 +6,6 @@
 
 module MatchDecisions
   class RecordClientHousedDateShelterAgency < Base
-
     attr_accessor :building_id
     attr_accessor :unit_id
 
@@ -44,10 +43,6 @@ module MatchDecisions
       }
     end
 
-    def editable?
-      super && saved_status !~ /complete/
-    end
-
     def permitted_params
       super + [:client_move_in_date]
     end
@@ -66,7 +61,7 @@ module MatchDecisions
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
       Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
     end
 
@@ -103,12 +98,10 @@ module MatchDecisions
 
     private
 
-      def client_move_in_date_present_if_status_complete
-        if status == 'complete' && client_move_in_date.blank?
-          errors.add :client_move_in_date, 'must be filled in'
-        end
-      end
+    def client_move_in_date_present_if_status_complete
+      return unless status == 'complete' && client_move_in_date.blank?
 
+      errors.add :client_move_in_date, 'must be filled in'
+    end
   end
-
 end

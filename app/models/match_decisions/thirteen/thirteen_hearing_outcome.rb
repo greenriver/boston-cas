@@ -29,6 +29,10 @@ module MatchDecisions::Thirteen
       :housing_subsidy_admin_contacts
     end
 
+    def skipped?
+      ! match.sub_program.cori_hearing_required?
+    end
+
     # Notifications to send when this step is initiated
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
