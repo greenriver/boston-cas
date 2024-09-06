@@ -5,8 +5,7 @@
 - skipped_names = match_decisions.select(&:skipped?).map { |m| m.class.name }
 - match_decisions.reject!(&:skipped?)
 - types.reject! { |class_name, _| class_name.in?(skipped_names) }
-- i = 0
-- types.transform_values! { |v| i += 1 }
+- types = types.keys.zip(1..).to_h
 - size ||= 'lg'
 - small_class = 'c-stepped-progress--sm'
 
