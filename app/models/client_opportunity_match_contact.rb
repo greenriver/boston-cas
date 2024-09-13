@@ -20,10 +20,9 @@ class ClientOpportunityMatchContact < ApplicationRecord
     return none unless text.present?
 
     contact_matches = Contact.where(
-      Contact.arel_table[:id].eq(arel_table[:contact_id])
+      Contact.arel_table[:id].eq(arel_table[:contact_id]),
     ).text_search(text).arel.exists
 
     where(contact_matches)
   end
-
 end

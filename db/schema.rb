@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_27_172144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.integer "contact_order"
     t.index ["building_id"], name: "index_building_contacts_on_building_id"
     t.index ["contact_id"], name: "index_building_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_building_contacts_on_deleted_at"
@@ -127,6 +128,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.boolean "ssp", default: false, null: false
     t.boolean "hsp", default: false, null: false
     t.boolean "do", default: false, null: false
+    t.integer "contact_order"
     t.index ["contact_id"], name: "index_client_opportunity_match_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_client_opportunity_match_contacts_on_deleted_at"
     t.index ["match_id"], name: "index_client_opportunity_match_contacts_on_match_id"
@@ -332,7 +334,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.jsonb "ongoing_es_enrollments"
     t.jsonb "ongoing_so_enrollments"
     t.jsonb "last_seen_projects"
-    t.boolean "federal_benefits"
     t.index ["active_cohort_ids"], name: "index_clients_on_active_cohort_ids"
     t.index ["available"], name: "index_clients_on_available"
     t.index ["calculated_last_homeless_night"], name: "index_clients_on_calculated_last_homeless_night"
@@ -1004,7 +1005,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.text "partner_warehouse_id"
     t.text "partner_name"
     t.boolean "share_information_permission"
-    t.boolean "federal_benefits"
     t.index ["agency_id"], name: "index_non_hmis_assessments_on_agency_id"
     t.index ["user_id"], name: "index_non_hmis_assessments_on_user_id"
   end
@@ -1101,7 +1101,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.boolean "no_single_gender", default: false
     t.boolean "transgender", default: false
     t.boolean "questioning", default: false
-    t.boolean "federal_benefits"
     t.index ["deleted_at"], name: "index_non_hmis_clients_on_deleted_at"
   end
 
@@ -1139,6 +1138,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
     t.boolean "housing_subsidy_admin", default: false, null: false
+    t.integer "contact_order"
     t.index ["contact_id"], name: "index_opportunity_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at"
     t.index ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id"
@@ -1386,7 +1386,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.jsonb "ongoing_es_enrollments"
     t.jsonb "ongoing_so_enrollments"
     t.jsonb "last_seen_projects"
-    t.boolean "federal_benefits"
     t.index ["calculated_chronic_homelessness"], name: "index_project_clients_on_calculated_chronic_homelessness"
     t.index ["client_id"], name: "index_project_clients_on_client_id"
     t.index ["date_of_birth"], name: "index_project_clients_on_date_of_birth"
@@ -1694,6 +1693,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_155547) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
+    t.integer "contact_order"
     t.index ["contact_id"], name: "index_subgrantee_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at"
     t.index ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id"

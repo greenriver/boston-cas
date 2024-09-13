@@ -18,5 +18,4 @@ module UpdateableAttributes
     assign_attributes attrs
     save
   end
-
 end
