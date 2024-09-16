@@ -51,23 +51,21 @@ class MatchContactsController < ApplicationController
   private
 
   def set_contact_order(update_contact, order_number = 1)
-    join_contact = match.client_opportunity_match_contacts.find(update_contact)
-    contact_type = nil
-    match_contact_methods.each do |type, _|
-      contact_type = type if join_contact.send(type)
-    end
+    ClientOpportunityMatchContact.transaction do
+      join_contact = match.client_opportunity_match_contacts.find(update_contact)
+      contact_type = nil
+      match_contact_methods.each do |type, _|
+        contact_type = type if join_contact.send(type)
+      end
 
-    # We currently only want one contact per order number, so strip order status for any other contacts in the group
-    a_t = ClientOpportunityMatchContact.arel_table
-    contacts = @match.client_opportunity_match_contacts.where(a_t[contact_type].eq(true)).where(contact_order: order_number)
-    contacts.each do |contact|
-      contact.contact_order = nil
-      contact.save
-    end
+      # We currently only want one contact per order number, so strip order status for any other contacts in the group
+      a_t = ClientOpportunityMatchContact.arel_table
+      @match.client_opportunity_match_contacts.where(a_t[contact_type].eq(true)).where(contact_order: order_number).update_all(contact_order: nil)
 
-    # Set the selected contact as ordered contact
-    join_contact.contact_order = order_number
-    join_contact.save
+      # Set the selected contact as ordered contact
+      join_contact.contact_order = order_number
+      join_contact.save!
+    end
   end
 
   def match_contact_methods
