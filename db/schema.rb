@@ -51,7 +51,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_172144) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
-    t.integer "contact_order"
     t.index ["building_id"], name: "index_building_contacts_on_building_id"
     t.index ["contact_id"], name: "index_building_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_building_contacts_on_deleted_at"
@@ -1138,7 +1137,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_172144) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
     t.boolean "housing_subsidy_admin", default: false, null: false
-    t.integer "contact_order"
     t.index ["contact_id"], name: "index_opportunity_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_opportunity_contacts_on_deleted_at"
     t.index ["opportunity_id"], name: "index_opportunity_contacts_on_opportunity_id"
@@ -1693,7 +1691,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_172144) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
-    t.integer "contact_order"
     t.index ["contact_id"], name: "index_subgrantee_contacts_on_contact_id"
     t.index ["deleted_at"], name: "index_subgrantee_contacts_on_deleted_at"
     t.index ["subgrantee_id"], name: "index_subgrantee_contacts_on_subgrantee_id"
