@@ -18,7 +18,7 @@ class ClientOpportunityMatchContact < ApplicationRecord
 
   scope :for_contact_type, ->(contact_type) do
     contact_type_column = ClientOpportunityMatchContact.column_for(contact_type)
-    where(ClientOpportunityMatchContact.arel_table[contact_type_column.to_sym].eq(true))
+    where(contact_type_column => true)
   end
 
   def self.text_search(text)

@@ -59,8 +59,7 @@ class MatchContactsController < ApplicationController
       end
 
       # We currently only want one contact per order number, so strip order status for any other contacts in the group
-      a_t = ClientOpportunityMatchContact.arel_table
-      @match.client_opportunity_match_contacts.where(a_t[contact_type].eq(true)).where(contact_order: order_number).update_all(contact_order: nil)
+      @match.client_opportunity_match_contacts.where(contact_type => true, contact_order: order_number).update_all(contact_order: nil)
 
       # Set the selected contact as ordered contact
       join_contact.contact_order = order_number
