@@ -13,7 +13,8 @@
 - if editable
   = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, include_blank: true, input_html: {id: "#{contact_type}_#{SecureRandom.hex(5)}", class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name }}
   %div{ data: {selected_contacts: true} }
-    - object.send(selected_contacts_method)&.each do |contact|
+    - selected_contacts = object.send(selected_contacts_method)
+    - selected_contacts&.each do |contact|
       - join_contact = all_join_contacts[contact.id]
       .selected-contact.c-contact-list__contact.margin-0
         %input{type: :hidden, name: input_name, value: contact.id, class: :jContactHidden}
@@ -26,11 +27,12 @@
             .ml-4{data: data}
               %i.icon-warning
         .ml-auto
-          - if join_contact&.contact_order == 1
-            %i.icon-checkbox-checked.ml-2{ data: { toggle: :tooltip, title: 'Primary Contact' }}
-          - elsif join_contact.present? && current_contact&.user_can_edit_match_contacts?
-            = link_to reorder_match_contacts_path(@match, join_contact: join_contact), method: :post, remote: true do 
-              %i.icon-checkbox-unchecked.ml-2{ data: { toggle: :tooltip, title: 'Set Primary Contact' }}
+          - if selected_contacts.count > 1
+            - if join_contact&.contact_order == 1
+              %i.icon-checkbox-checked.ml-2{ data: { toggle: :tooltip, title: 'Primary Contact' }}
+            - elsif join_contact.present? && current_contact&.user_can_edit_match_contacts?
+              = link_to reorder_match_contacts_path(@match, join_contact: join_contact), method: :post, remote: true do 
+                %i.icon-checkbox-unchecked.ml-2{ data: { toggle: :tooltip, title: 'Set Primary Contact' }}
           -# Don't allow removal of self if you can't edit all contacts
           - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
             = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
