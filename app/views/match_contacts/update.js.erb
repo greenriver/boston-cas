@@ -16,5 +16,6 @@
     $('select.select2').each(function(i) {
       $(this).select2({dropdownParent: $(this).closest('form')});
     });
+    $('[data-toggle="tooltip"]').tooltip();
   <% end %>
 })()
