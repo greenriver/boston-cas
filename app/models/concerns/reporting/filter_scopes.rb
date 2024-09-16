@@ -98,7 +98,7 @@ module Reporting::FilterScopes
     private def filter_for_contact_order(scope)
       return scope if @filter.contact_order.blank? || @filter.contact_order.zero?
 
-      scope.contacts_in_order(@filter.contacts.map(&:to_s), @filter.contact_order)
+      scope.contacts_with_order_value(@filter.contacts.map(&:to_s), @filter.contact_order)
     end
   end
 end
