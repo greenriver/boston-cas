@@ -29,10 +29,10 @@
         .ml-auto
           - if selected_contacts.count > 1
             - if join_contact&.contact_order == 1
-              %i.icon-checkbox-checked.ml-2{ data: { toggle: :tooltip, title: 'Primary Contact' }}
+              %i.icon-checkbox-checked.ml-2.mr-4{ data: { toggle: :tooltip, title: 'Primary Contact' }}
             - elsif join_contact.present? && current_contact&.user_can_edit_match_contacts?
-              = link_to reorder_match_contacts_path(@match, join_contact: join_contact), method: :post, remote: true do 
-                %i.icon-checkbox-unchecked.ml-2{ data: { toggle: :tooltip, title: 'Set Primary Contact' }}
+              = link_to reorder_match_contacts_path(@match, join_contact: join_contact), method: :post, remote: true do
+                %i.icon-checkbox-unchecked.ml-2.mr-4{ data: { toggle: :tooltip, title: 'Set Primary Contact' }}
           -# Don't allow removal of self if you can't edit all contacts
           - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
             = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
