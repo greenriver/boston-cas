@@ -40,6 +40,11 @@ class MatchContactsController < ApplicationController
     order_number = 1 # Default to setting the contact as primary
     order_number = params[:order_number].to_i if params[:order_number]
     set_contact_order(params[:join_contact], order_number)
+    set_match
+    set_match_contacts
+    # byebug
+    return if request.xhr?
+
     redirect_to match_path(@match)
   end
 

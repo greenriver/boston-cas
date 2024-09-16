@@ -13,6 +13,9 @@ module RelatedDefaultContacts
     Contact.active_contacts
   end
 
+  def contact_order
+  end
+
   def available_shelter_agency_contacts
     contact_scope.where.not(id: shelter_agency_contact_ids)
   end

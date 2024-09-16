@@ -16,12 +16,19 @@ class MatchContacts
 
   attr_accessor :match,
                 :shelter_agency_contact_ids,
+                :shelter_agency_join_contacts,
                 :client_contact_ids,
+                :client_join_contacts,
                 :dnd_staff_contact_ids,
+                :dnd_staff_join_contacts,
                 :housing_subsidy_admin_contact_ids,
+                :housing_subsidy_admin_join_contacts,
                 :ssp_contact_ids,
+                :ssp_join_contacts,
                 :hsp_contact_ids,
+                :hsp_join_contacts,
                 :do_contact_ids,
+                :do_join_contacts,
                 :client_email
 
   delegate :to_param, to: :match
@@ -37,6 +44,13 @@ class MatchContacts
     self.ssp_contacts = match.ssp_contacts
     self.hsp_contacts = match.hsp_contacts
     self.do_contacts = match.do_contacts
+    self.shelter_agency_join_contacts = match.client_opportunity_match_contacts.where(shelter_agency: true).index_by(&:contact_id)
+    self.client_join_contacts = match.client_opportunity_match_contacts.where(client: true).index_by(&:contact_id)
+    self.dnd_staff_join_contacts = match.client_opportunity_match_contacts.where(dnd_staff: true).index_by(&:contact_id)
+    self.housing_subsidy_admin_join_contacts = match.client_opportunity_match_contacts.where(housing_subsidy_admin: true).index_by(&:contact_id)
+    self.ssp_join_contacts = match.client_opportunity_match_contacts.where(ssp: true).index_by(&:contact_id)
+    self.hsp_join_contacts = match.client_opportunity_match_contacts.where(hsp: true).index_by(&:contact_id)
+    self.do_join_contacts = match.client_opportunity_match_contacts.where(do: true).index_by(&:contact_id)
     self.client_email = match.client.email
   end
 
@@ -45,15 +59,6 @@ class MatchContacts
 
     successful = false
     Contact.transaction do
-      # Get record of current join contacts before wiping and recreating
-      shelter_agency_join_contacts = match.client_opportunity_match_contacts.where(shelter_agency: true).index_by(&:contact_id)
-      client_join_contacts = match.client_opportunity_match_contacts.where(client: true).index_by(&:contact_id)
-      dnd_staff_join_contacts = match.client_opportunity_match_contacts.where(dnd_staff: true).index_by(&:contact_id)
-      housing_subsidy_admin_join_contacts = match.client_opportunity_match_contacts.where(housing_subsidy_admin: true).index_by(&:contact_id)
-      ssp_join_contacts = match.client_opportunity_match_contacts.where(ssp: true).index_by(&:contact_id)
-      hsp_join_contacts = match.client_opportunity_match_contacts.where(hsp: true).index_by(&:contact_id)
-      do_join_contacts = match.client_opportunity_match_contacts.where(do: true).index_by(&:contact_id)
-
       # When a type has contacts set, make sure at least one is the primary contact
       shelter_agency_contact_orders = shelter_agency_contact_ids.map { |id| [id, shelter_agency_join_contacts[id.to_i]&.contact_order] }
       shelter_agency_contact_orders.first[-1] = 1 if shelter_agency_contact_orders.present? && shelter_agency_contact_orders.all? { |c| c.last.nil? }
@@ -95,8 +100,15 @@ class MatchContacts
 
       successful = true
     end
-    # reloading here to get new contact ids. Directly setting the contact fields triggers UpdateableAttributes causing a duplicate contact to occur.
+    # reloading here to get new contact ids. Directly setting the contact id fields triggers UpdateableAttributes causing a duplicate contact to occur.
     match.reload
+    self.shelter_agency_join_contacts = match.client_opportunity_match_contacts.where(shelter_agency: true).index_by(&:contact_id)
+    self.client_join_contacts = match.client_opportunity_match_contacts.where(client: true).index_by(&:contact_id)
+    self.dnd_staff_join_contacts = match.client_opportunity_match_contacts.where(dnd_staff: true).index_by(&:contact_id)
+    self.housing_subsidy_admin_join_contacts = match.client_opportunity_match_contacts.where(housing_subsidy_admin: true).index_by(&:contact_id)
+    self.ssp_join_contacts = match.client_opportunity_match_contacts.where(ssp: true).index_by(&:contact_id)
+    self.hsp_join_contacts = match.client_opportunity_match_contacts.where(hsp: true).index_by(&:contact_id)
+    self.do_join_contacts = match.client_opportunity_match_contacts.where(do: true).index_by(&:contact_id)
 
     successful
   end
@@ -134,6 +146,19 @@ class MatchContacts
 
   def input_names
     self.class.input_names
+  end
+
+  def join_contacts_method_for input_name
+    @join_contacts_method_for ||= {
+      shelter_agency_contacts: :shelter_agency_join_contacts,
+      client_contacts: :client_join_contacts,
+      dnd_staff_contacts: :dnd_staff_join_contacts,
+      housing_subsidy_admin_contacts: :housing_subsidy_admin_join_contacts,
+      ssp_contacts: :ssp_join_contacts,
+      hsp_contacts: :hsp_join_contacts,
+      do_contacts: :do_join_contacts,
+    }
+    @join_contacts_method_for[input_name] || input_name
   end
 
   def available_contacts_method_for input_name
