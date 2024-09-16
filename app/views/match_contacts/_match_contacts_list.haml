@@ -10,8 +10,7 @@
       - Translation.translate('Housing Search Providers')
       .c-detail-group__title--secondary= Translation.translate(title)
       .detail-box--value 
-        - contact_type_column = contact_type.to_s.sub('_contacts','').to_sym #TODO: This feels too hacky
-        - all_contacts = match.client_opportunity_match_contacts.where(ClientOpportunityMatchContact.arel_table[contact_type_column.to_sym].eq(true)).index_by(&:contact_id)
+        - all_contacts = match.client_opportunity_match_contacts.for_contact_type(contact_type).index_by(&:contact_id)  
         - match.send(contact_type).order(:contact_order).each do |contact|
           - join_contact = all_contacts[contact.id]
           - data = {}

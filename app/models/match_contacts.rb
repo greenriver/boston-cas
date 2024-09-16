@@ -133,15 +133,7 @@ class MatchContacts
   end
 
   def self.input_names
-    [
-      :shelter_agency_contacts,
-      :dnd_staff_contacts,
-      :housing_subsidy_admin_contacts,
-      :ssp_contacts,
-      :hsp_contacts,
-      :do_contacts,
-      :client_contacts,
-    ]
+    ClientOpportunityMatchContact.contact_type_columns.keys
   end
 
   def input_names
@@ -149,16 +141,7 @@ class MatchContacts
   end
 
   def join_contacts_method_for input_name
-    @join_contacts_method_for ||= {
-      shelter_agency_contacts: :shelter_agency_join_contacts,
-      client_contacts: :client_join_contacts,
-      dnd_staff_contacts: :dnd_staff_join_contacts,
-      housing_subsidy_admin_contacts: :housing_subsidy_admin_join_contacts,
-      ssp_contacts: :ssp_join_contacts,
-      hsp_contacts: :hsp_join_contacts,
-      do_contacts: :do_join_contacts,
-    }
-    @join_contacts_method_for[input_name] || input_name
+    ClientOpportunityMatchContact.join_method_for(input_name)
   end
 
   def available_contacts_method_for input_name

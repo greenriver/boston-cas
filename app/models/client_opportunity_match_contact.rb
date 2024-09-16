@@ -16,6 +16,11 @@ class ClientOpportunityMatchContact < ApplicationRecord
 
   acts_as_paranoid
 
+  scope :for_contact_type, ->(contact_type) do
+    contact_type_column = ClientOpportunityMatchContact.column_for(contact_type)
+    where(ClientOpportunityMatchContact.arel_table[contact_type_column.to_sym].eq(true))
+  end
+
   def self.text_search(text)
     return none unless text.present?
 
@@ -24,5 +29,33 @@ class ClientOpportunityMatchContact < ApplicationRecord
     ).text_search(text).arel.exists
 
     where(contact_matches)
+  end
+
+  def self.contact_types
+    [
+      :shelter_agency,
+      :client,
+      :dnd_staff,
+      :housing_subsidy_admin,
+      :ssp,
+      :hsp,
+      :do,
+    ].freeze
+  end
+
+  def self.contact_type_columns
+    contact_types.map { |t| ["#{t}_contacts".to_sym, t] }.to_h
+  end
+
+  def self.column_for(contact_type)
+    contact_type_columns[contact_type] || contact_type
+  end
+
+  def self.join_contact_methods
+    contact_types.map { |t| ["#{t}_contacts".to_sym, "#{t}_join_contacts".to_sym] }.to_h
+  end
+
+  def self.join_method_for(contact_type)
+    join_contact_methods[contact_type] || contact_type
   end
 end
