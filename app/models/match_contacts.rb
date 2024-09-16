@@ -145,28 +145,10 @@ class MatchContacts
   end
 
   def available_contacts_method_for input_name
-    @available_contacts_methods ||= {
-      shelter_agency_contacts: :available_shelter_agency_contacts,
-      client_contacts: :available_client_contacts,
-      dnd_staff_contacts: :available_dnd_staff_contacts,
-      housing_subsidy_admin_contacts: :available_housing_subsidy_admin_contacts,
-      ssp_contacts: :available_ssp_contacts,
-      hsp_contacts: :available_hsp_contacts,
-      do_contacts: :available_do_contacts,
-    }
-    @available_contacts_methods[input_name] || input_name
+    ClientOpportunityMatchContact.available_contact_method_for(input_name)
   end
 
   def selected_contacts_method_for input_name
-    @selected_contacts_methods ||= {
-      shelter_agency_contacts: :shelter_agency_contacts,
-      client_contacts: :client_contacts,
-      dnd_staff_contacts: :dnd_staff_contacts,
-      housing_subsidy_admin_contacts: :housing_subsidy_admin_contacts,
-      ssp_contacts: :ssp_contacts,
-      hsp_contacts: :hsp_contacts,
-      do_contacts: :do_contacts,
-    }
-    @selected_contacts_methods[input_name] || input_name
+    ClientOpportunityMatchContact.selected_contact_method_for(input_name)
   end
 end
