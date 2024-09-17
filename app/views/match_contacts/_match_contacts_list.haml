@@ -9,12 +9,17 @@
       - Translation.translate('Stabilization Service Providers')
       - Translation.translate('Housing Search Providers')
       .c-detail-group__title--secondary= Translation.translate(title)
-      .detail-box--value
-        - match.send(contact_type).each do |contact|
+      .detail-box--value 
+        - all_contacts = match.client_opportunity_match_contacts.for_contact_type(contact_type).index_by(&:contact_id)  
+        - selected_contacts = match.send(contact_type).order(:contact_order)
+        - selected_contacts.each do |contact|
+          - join_contact = all_contacts[contact.id]
           - data = {}
           - data = {toggle: :tooltip, title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
           .contact.mb-2
             = contact.name
+            - if join_contact.contact_order == 1 && selected_contacts.count > 1
+              %i.icon-user.ml-2{ data: { toggle: :tooltip, title: 'Primary Contact' }}
             %br
             .d-flex
               .email= mail_to contact.email, nil, target: '_blank'
@@ -23,7 +28,7 @@
                   %i.icon-warning
             - phone = contact.phone_for_display
             - if phone.present? && phone.strip.length > 1
-              %br
               = phone
+              %br
         - if !match.send(contact_type).any?
           %p.c-detail-group__no-result No contacts
