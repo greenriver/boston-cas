@@ -81,3 +81,4 @@ app/views/root/_homepage_content.haml
 
 # Ignore docker certificates
 docker/nginx-proxy/certs
+prometheus-metrics/**

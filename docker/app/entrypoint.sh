@@ -6,19 +6,22 @@
 # auto-export variables
 set -a
 
-echo Getting Role Info
-curl --silent 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > role.info.log
+if [[ "${EKS}" != "true" ]]
+then
+  echo Getting Role Info
+  curl --silent 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > role.info.log
 
-cd /app
+  cd /app
 
-echo 'Getting secrets for the environment...'
-T1=`date +%s`
-bundle exec ./bin/download_secrets.rb > .env
-T2=`date +%s`
-echo "...secrets took $(expr $T2 - $T1) seconds"
+  echo 'Getting secrets for the environment...'
+  T1=`date +%s`
+  bundle exec ./bin/download_secrets.rb > .env
+  T2=`date +%s`
+  echo "...secrets took $(expr $T2 - $T1) seconds"
 
-echo Sourcing environment
-. .env
+  echo Sourcing environment
+  . .env
+fi
 
 echo 'Constructing an ERB-free database.yml file...'
 T1=`date +%s`
@@ -29,6 +32,11 @@ echo "...database materialize took $(expr $T2 - $T1) seconds"
 echo 'Setting Timezone'
 cp /usr/share/zoneinfo/$TIMEZONE /app/etc-localtime
 echo $TIMEZONE > /etc/timezone
+
+if [ "$CONTAINER_VARIANT" == "dj" ]; then
+  echo "Calling: $@"
+  exec "$@"
+fi
 
 # echo 'Syncing the client assets from s3...'
 # T1=`date +%s`
