@@ -50,7 +50,7 @@ class AssetCompiler
 
     if @secret_arn.present?
       time_me name: 'Secrets download' do
-        better_system(`SECRET_ARN=#{@secret_arn.shellescape} bin/download_secrets.rb > .env`)
+        better_system("SECRET_ARN=#{@secret_arn.shellescape} bin/download_secrets.rb > .env")
       end
     end
 
