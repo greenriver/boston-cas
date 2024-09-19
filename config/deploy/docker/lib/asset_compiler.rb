@@ -77,6 +77,9 @@ class AssetCompiler
 
   def better_system(cmd)
     puts "Running: #{cmd}"
-    puts "======== And it failed" unless system(cmd)
+    return if system(cmd)
+
+    puts "======== And it failed"
+    exit 1
   end
 end
