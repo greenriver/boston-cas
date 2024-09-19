@@ -54,10 +54,9 @@ if ENV['CAS_SENTRY_DSN'].present?
 end
 
 module Sentry
-
   module_function
 
-  def capture_exception_with_info(e, msg, info = {})
+  def capture_exception_with_info(error, msg, info = {})
     return unless Sentry.initialized?
 
     Sentry.with_scope do |scope|
@@ -67,7 +66,7 @@ module Sentry
           message: msg,
         }.merge(info || {}),
       )
-      Sentry.capture_exception(e)
+      Sentry.capture_exception(error)
     end
   end
 end
