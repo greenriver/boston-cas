@@ -126,9 +126,13 @@ services:
 
   db:
     image: postgres:12-alpine
+    container_name: cas-db
     environment:
       POSTGRES_PASSWORD: postgres
       PSQL_HISTFILE: /root/log/.psql_history
+      PGUSER: postgres
+      PGPASS: postgres
+      PGDATABASE: cas
     volumes:
       - dbdata:/var/lib/postgresql/data
     ports:
