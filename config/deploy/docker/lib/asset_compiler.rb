@@ -50,7 +50,7 @@ class AssetCompiler
 
     if @secret_arn.present?
       time_me name: 'Secrets download' do
-        system(`SECRET_ARN=#{@secret_arn.shellescape} bin/download_secrets.rb > .env`)
+        better_system(`SECRET_ARN=#{@secret_arn.shellescape} bin/download_secrets.rb > .env`)
       end
     end
 
@@ -62,18 +62,20 @@ class AssetCompiler
 
   def recompile!
     time_me name: 'Compiling assets' do
-      # system('source .env; bundle exec rails --quiet assets:precompile > /dev/null 2>&1') # TODO: don't call out to rake like this, it's inefficient
-      system('source .env; bundle exec rails --quiet assets:precompile') # TODO: don't call out to rake like this, it's inefficient
-      puts "======"
+      better_system('source .env; bundle exec rails --quiet assets:precompile > /dev/null 2>&1') # TODO: don't call out to rake like this, it's inefficient
       # Run this twice, there might be a bug
-      #system('source .env; bundle exec rails --quiet assets:precompile > /dev/null 2>&1')
-      system('source .env; bundle exec rails --quiet assets:precompile')
+      better_system('source .env; bundle exec rails --quiet assets:precompile > /dev/null 2>&1')
     end
   end
 
   def push_to_s3!(checksum)
     time_me name: 'Uploading compiled assets' do
-      system("aws s3 cp --recursive public/assets s3://#{self.class.compiled_assets_s3_path(@target_group_name, checksum).shellescape} >/dev/null")
+      better_system("aws s3 cp --recursive public/assets s3://#{self.class.compiled_assets_s3_path(@target_group_name, checksum).shellescape} >/dev/null")
     end
+  end
+
+  def better_system(cmd)
+    puts "Running: #{cmd}"
+    puts "======== And it failed" unless system(cmd)
   end
 end
