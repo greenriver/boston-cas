@@ -79,7 +79,7 @@ class AssetCompiler
     puts "Running: #{cmd}"
     return if system(cmd)
 
-    puts "======== And it failed"
+    puts '======== And it failed'
     exit 1
   end
 end
