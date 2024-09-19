@@ -50,7 +50,7 @@ module BostonCa
       generate.test_framework :rspec
     end
 
-    require_relative("setup_logging")
+    require_relative('setup_logging')
     setup_logging = SetupLogging.new(config)
     setup_logging.run!
 
@@ -59,7 +59,6 @@ module BostonCa
 
     # force all requests over ssl by default
     config.force_ssl = true
-
 
     # additional library paths
     config.autoload_paths << Rails.root.join('lib', 'util')
