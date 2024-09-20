@@ -88,6 +88,15 @@ jobs:
         bundle config set --local without 'production staging development'
         bundle install --jobs 10 --retry 3
 
+    - name: Cache Node.js modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
+    - name: Install Node.js modules
+      run: yarn install --frozen-lockfile
+
     - name: Generate checksum and compile
       env:
         SECRETS_YML_SECRET_ARN: ${{ secrets.SECRETS_YML_SECRET_ARN }}
