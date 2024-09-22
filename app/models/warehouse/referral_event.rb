@@ -63,12 +63,14 @@ module Warehouse
           end
         else
           reason = match.unsuccessful_reason
+          unsuccessful_decision = match.unsuccessful_decision
+          closed_timestamp = unsuccessful_decision&.updated_at || match.updated_at
           if reason.present? && reason.referral_result.present?
             if event.referral_result != reason.referral_result
               event.update(
                 event: match.sub_program.event,
                 referral_result: reason.referral_result,
-                referral_result_date: reason.referral_result_date,
+                referral_result_date: closed_timestamp,
               )
             end
           else

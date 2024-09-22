@@ -463,9 +463,9 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def unsuccessful_reason
-    return unsuccessful_decision.administrative_cancel_reason if canceled?
+    return unsuccessful_decision&.administrative_cancel_reason if canceled?
 
-    unsuccessful_decision.decline_reason
+    unsuccessful_decision&.decline_reason
   end
 
   # Find the latest decision in the route that was declined with a reason
