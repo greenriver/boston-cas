@@ -25,7 +25,7 @@ module MatchRoutes
       {
         'MatchDecisions::Eleven::ElevenHsaAcknowledgesReceipt' => 1,
         'MatchDecisions::Eleven::ElevenHsaAcceptsClient' => 2,
-        'MatchDecisions::Eleven::ElevenConfirmHsaAcceptsClientDeclineDndStaff' => 2,
+        'MatchDecisions::Eleven::ElevenConfirmHsaAcceptsClientDeclineDndStaff' => 3,
       }
     end
 

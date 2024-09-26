@@ -7,7 +7,7 @@
 module MatchDecisionReasons
   class AdministrativeCancel < Base
     def self.available(include_other: true, route: nil) # rubocop:disable Lint/UnusedMethodArgument
-      other = MatchDecisionReasons::Other.first
+      other = MatchDecisionReasons::Base.other.first
       # none = OpenStruct.new(name: 'None', id: nil)
       av = active.to_a
       # av << none
@@ -21,7 +21,7 @@ module MatchDecisionReasons
     end
 
     def self.available_for_provider_only(include_other: true, route: nil) # rubocop:disable Lint/UnusedMethodArgument
-      other = MatchDecisionReasons::Other.first
+      other = MatchDecisionReasons::Base.other.first
       # none = OpenStruct.new(name: 'None', id: nil)
       av = active.where(name: provider_only_options).to_a
       av << other if include_other

@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Thirteen
-  class ThirteenConfirmMatchSuccess < ::MatchDecisions::Base
+  class ThirteenConfirmMatchSuccess < Base
     include MatchDecisions::RouteEightCancelReasons
 
     def statuses

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_05_133313) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_07_201535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -625,14 +625,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_05_133313) do
 
   create_table "match_decision_reasons", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.string "type", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "active", default: true, null: false
     t.boolean "ineligible_in_warehouse", default: false, null: false
     t.integer "referral_result"
     t.boolean "limited", default: false
-    t.index ["type"], name: "index_match_decision_reasons_on_type"
+    t.datetime "deleted_at"
   end
 
   create_table "match_decisions", id: :serial, force: :cascade do |t|

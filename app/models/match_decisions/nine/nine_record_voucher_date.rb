@@ -7,7 +7,8 @@
 module MatchDecisions::Nine
   class NineRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteEightCancelReasons
+    include MatchDecisions::RouteNineDeclineReasons
+    include MatchDecisions::RouteNineCancelReasons
 
     attr_accessor :rfta_submitted
 
@@ -106,17 +107,21 @@ module MatchDecisions::Nine
     #   :nine_record_voucher_date_housing_subsidy_admin
     # end
 
-    private def decline_reason_scope(_contact)
-      reasons = [
+    def step_decline_reasons(_contact)
+      [
+        'Client has another housing option',
+        'Client needs higher level of care',
+        'Client refused offer',
+        "Client won't be eligible based on funding source",
+        "Client won't be eligible for housing type",
+        "Client won't be eligible for services",
+        'Household became disengaged',
         'Immigration status',
         'Ineligible for Housing Program',
         'Self-resolved',
-        'Client refused offer',
-        'Client needs higher level of care',
         'Unable to reach client after multiple attempts',
+        'Other',
       ]
-      MatchDecisionReasons::Base.where(type: 'MatchDecisionReasons::All', name: reasons).
-        or(MatchDecisionReasons::NineRecordVoucherDateDecline.all)
     end
 
     # Only record an event if we moved forward (which only happens if rfta_submitted is checked)

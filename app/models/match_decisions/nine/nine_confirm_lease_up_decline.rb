@@ -7,7 +7,8 @@
 module MatchDecisions::Nine
   class NineConfirmLeaseUpDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteEightCancelReasons
+    include MatchDecisions::RouteNineDeclineReasons
+    include MatchDecisions::RouteNineCancelReasons
 
     def step_name
       "#{Translation.translate('DND')} confirms #{Translation.translate('Move In')} failure"

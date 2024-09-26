@@ -92,7 +92,7 @@ module MatchRoutes
 
     # The number of the step in match_steps of the first step where a client interaction is required
     private def first_client_step_number
-      self.class.match_steps[first_client_step]
+      self.class.match_steps_for_reporting[first_client_step]
     end
 
     def on_or_after_first_client_step?(current_decision)
@@ -100,15 +100,15 @@ module MatchRoutes
     end
 
     def on_first_client_step?(current_decision)
-      return false unless self.class.match_steps[current_decision.class.name].present?
+      return false unless self.class.match_steps_for_reporting[current_decision.class.name].present?
 
-      self.class.match_steps[current_decision.class.name] == first_client_step_number
+      self.class.match_steps_for_reporting[current_decision.class.name] == first_client_step_number
     end
 
     def after_first_client_step?(current_decision)
-      return false unless self.class.match_steps[current_decision.class.name].present?
+      return false unless self.class.match_steps_for_reporting[current_decision.class.name].present?
 
-      self.class.match_steps[current_decision.class.name] > first_client_step_number
+      self.class.match_steps_for_reporting[current_decision.class.name] > first_client_step_number
     end
 
     def success_decision

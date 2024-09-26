@@ -5,7 +5,7 @@
 ###
 
 module MatchDecisions::Thirteen
-  class ThirteenClientMatch < ::MatchDecisions::Base
+  class ThirteenClientMatch < Base
     include MatchDecisions::RouteThirteenCancelReasons
 
     validate :ensure_required_contacts_present_on_accept

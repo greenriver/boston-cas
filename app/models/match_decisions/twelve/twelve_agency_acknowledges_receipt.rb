@@ -71,7 +71,7 @@ module MatchDecisions::Twelve
     end
 
     def accessible_by? contact
-      contact.user_can_act_on_behalf_of_match_contacts?
+      contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.send(contact_actor_type))
     end
 

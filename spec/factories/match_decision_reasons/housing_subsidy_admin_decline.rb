@@ -5,9 +5,8 @@
 ###
 
 FactoryBot.define do
-  factory :hsa_decline_reason, class: 'MatchDecisionReasons::HousingSubsidyAdminDecline' do
+  factory :hsa_decline_reason, class: 'MatchDecisionReasons::Base' do
     name { 'Ineligible for Housing Program' }
-    type { 'MatchDecisionReasons::HousingSubsidyAdminDecline' }
     active { true }
     ineligible_in_warehouse { true }
   end
