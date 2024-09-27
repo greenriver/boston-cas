@@ -24,18 +24,15 @@ class DjMetrics
     end
   end
 
-  def metrics_ready?
-    File.exist?(METRICS_DIR + '/ready')
-  end
-
   def register_metrics_for_delayed_job_worker!
     Dir['/app/prometheus-metrics/*'].each do |file_path|
+      next unless file_path.match?(/_#{Process.pid}.bin/) # only delete our own pid files.
+
       File.unlink(file_path)
     end
 
     register_metrics_for_metrics_endpoint!
     refresh_queue_sizes!
-    FileUtils.touch('/app/prometheus-metrics/ready')
   end
 
   def dj_job_status_total_metric
@@ -65,14 +62,14 @@ class DjMetrics
     Delayed::Job.where('failed_at IS NULL').where('locked_by IS NULL').group(:queue).count.each do |queue, size|
       @queues << queue
       others.delete(queue)
-      Rails.logger.info "Setting #{queue} to size #{size}"
-      dj_queue_size_metric.set(size, labels: { queue: queue.encode('ascii-8bit') })
+      # Rails.logger.info "Setting #{queue} to size #{size}"
+      dj_queue_size_metric.set(size, labels: { queue: queue })
     end
 
     # These are the ones that are now empty (if any)
     others.each do |queue|
-      Rails.logger.info "Setting #{queue} to size 0"
-      dj_queue_size_metric.set(0, labels: { queue: queue.encode('ascii-8bit') })
+      # Rails.logger.info "Setting #{queue} to size 0"
+      dj_queue_size_metric.set(0, labels: { queue: queue })
     end
   end
 

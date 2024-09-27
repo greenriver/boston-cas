@@ -34,6 +34,12 @@ cp /usr/share/zoneinfo/$TIMEZONE /app/etc-localtime
 echo $TIMEZONE > /etc/timezone
 
 if [ "$CONTAINER_VARIANT" == "dj" ]; then
+  if [[ "${ENABLE_DJ_METRICS}" == "true" ]] ; then
+    echo "Starting metrics server"
+    # not cluster mode with 5 threads
+    bundle exec puma --no-config -w 0 -t 1:5 /app/dj-metrics/config.ru &
+  fi
+
   echo "Calling: $@"
   exec "$@"
 fi
@@ -54,6 +60,10 @@ T1=`date +%s`
 ASSET_CHECKSUM=$(ASSETS_PREFIX=${ASSETS_PREFIX} ./bin/asset_checksum) # This should return the same hash as the call in asset_compiler.rb
 T2=`date +%s`
 echo "...checksumming took $(expr $T2 - $T1) seconds"
+
+if grep 'Access denied' asset.checksum.log > /dev/null 2>&1; then
+  echo "Looks like you cannot access the assets bucket. Check your IAM permissions"
+fi
 
 # echo "asset.checksum.log"
 # cat asset.checksum.log
