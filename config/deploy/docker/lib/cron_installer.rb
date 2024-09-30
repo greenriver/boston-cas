@@ -20,9 +20,9 @@ class CronInstaller
     if cluster_type.present?
       self.cluster_type = cluster_type.to_sym
     elsif ENV['EKS'] == 'true'
-      self.cluster_type = :eks
+      self.cluster_type = :eks_mode
     else
-      self.cluster_type = :ecs
+      self.cluster_type = :ecs_mode
     end
   end
 
@@ -33,7 +33,7 @@ class CronInstaller
 
   private
 
-  def eks
+  def eks_mode
     entry_number = 0
 
     Cronjob.clear!
@@ -68,7 +68,7 @@ class CronInstaller
     Cronjob.clear_defunct_vpas!
   end
 
-  def ecs
+  def ecs_mode
     entry_number = 0
 
     ScheduledTask.clear!(target_group_name)
@@ -227,7 +227,7 @@ class CronInstaller
         raise 'Implement jitter for slash-based cron entries'
       end
 
-    if cluster_type == :eks
+    if cluster_type == :eks_mode
       "#{minute_with_jitter} #{utc_hour} #{day_of_month} #{month} #{day_of_week}".tr('?', '*')
     else
       "cron(#{minute_with_jitter}, #{utc_hour}, #{day_of_month}, #{month}, #{day_of_week}, #{year})"
@@ -253,4 +253,4 @@ class CronInstaller
   end
 end
 
-CronInstaller.new.run! if $PROGRAM_NAME.match?(/cron_installer/)
+C

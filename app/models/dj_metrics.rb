@@ -13,7 +13,7 @@ class DjMetrics
   def initialize
     Prometheus::Client.config.data_store = Prometheus::Client::DataStores::DirectFileStore.new(dir: METRICS_DIR)
 
-    @queues = Set.new(['mailers', 'default'])
+    @queues = Set.new(['default', 'mailers'])
   end
 
   def register_metrics_for_metrics_endpoint!
@@ -82,4 +82,4 @@ class DjMetrics
   def prometheus
     @prometheus ||= Prometheus::Client.registry
   end
-end
+e
