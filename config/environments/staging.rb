@@ -4,7 +4,7 @@ Rails.application.configure do
   slack_config = Rails.application.config_for(:exception_notifier)[:slack]
 
   config.cache_classes = true
-  config.eager_load = true
+  config.eager_load = ENV.fetch('EAGER_LOAD', 'true') == 'true'
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
   config.assets.js_compressor = :terser
