@@ -23,7 +23,7 @@ if ENV['CAS_SENTRY_DSN'].present?
     # Replacement for Raven's: `config.sanitize_fields`
     # See: https://stackoverflow.com/questions/68867756/missing-piece-in-sentry-raven-to-sentry-ruby-guide
     # And: https://github.com/getsentry/sentry-ruby/issues/1140
-    filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters - [:email])
+    filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
     config.before_send = ->(event, _hint) do
       filter.filter(event.to_hash)
     end
