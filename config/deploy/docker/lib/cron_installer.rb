@@ -253,4 +253,4 @@ class CronInstaller
   end
 end
 
-C
+CronInstaller.new.run! if $PROGRAM_NAME.match?(/cron_installer/)
