@@ -20,9 +20,11 @@ module Warehouse
     end
 
     def rejected
-      reason = client_opportunity_match.current_decision&.decline_reason
+      reason = client_opportunity_match.unsuccessful_reason
+      unsuccessful_decision = client_opportunity_match.unsuccessful_decision
+      closed_timestamp = unsuccessful_decision&.updated_at || client_opportunity_match.updated_at
       if reason&.referral_result.present?
-        update(referral_result: reason.referral_result, referral_result_date: reason.referral_result_date)
+        update(referral_result: reason.referral_result, referral_result_date: closed_timestamp)
       else
         destroy
       end
@@ -62,13 +64,15 @@ module Warehouse
             )
           end
         else
-          reason = match.current_decision&.decline_reason
+          reason = match.unsuccessful_reason
+          unsuccessful_decision = match.unsuccessful_decision
+          closed_timestamp = unsuccessful_decision&.updated_at || match.updated_at
           if reason.present? && reason.referral_result.present?
             if event.referral_result != reason.referral_result
               event.update(
                 event: match.sub_program.event,
                 referral_result: reason.referral_result,
-                referral_result_date: reason.referral_result_date,
+                referral_result_date: closed_timestamp,
               )
             end
           else
