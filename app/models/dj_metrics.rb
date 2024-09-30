@@ -88,4 +88,4 @@ class DjMetrics
   def prometheus
     @prometheus ||= Prometheus::Client.registry
   end
-e
+end
