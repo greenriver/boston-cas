@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2024 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 # https://github.com/prometheus/client_ruby
 #
 # This is run by a rails (the delayed job worker) AND by a standalone sinatra
