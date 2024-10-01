@@ -27,7 +27,7 @@ class CronInstaller
   end
 
   def run!
-    puts "The current time is #{Time.now} and the current time in zone is #{Time.zone.now}"
+    Rails.logger.info "The current time is #{Time.now} and the current time in zone is #{Time.zone.now}"
     send(cluster_type)
   end
 
