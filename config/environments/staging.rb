@@ -1,7 +1,7 @@
 require 'yaml'
 Rails.application.configure do
   deliver_method = ENV['MAIL_DELIVERY_METHOD'].to_sym
-  slack_config = Rails.application.config_for(:exception_notifier)[:slack]
+  Rails.application.config_for(:exception_notifier)[:slack]
 
   config.cache_classes = true
   config.eager_load = ENV.fetch('EAGER_LOAD', 'true') == 'true'
@@ -21,7 +21,7 @@ Rails.application.configure do
 
   config.sandbox_email_mode = true
   config.action_mailer.delivery_method = deliver_method
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https }
   if deliver_method == :smtp
     config.action_mailer.smtp_settings = {
       address: ENV['SMTP_SERVER'],
