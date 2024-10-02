@@ -135,15 +135,6 @@ task :echo_options do
 end
 after 'git:wrapper', :echo_options
 
-task :trigger_job_restarts do
-  on roles(:app) do
-    within release_path do
-      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), "\"Rails.cache.write('deploy-dir', Delayed::Worker::Deployment.deployed_to)\""
-    end
-  end
-end
-after 'deploy:symlink:release', :trigger_job_restarts
-
 if ENV['RELOAD_NGINX']=='true'
   task :reload_nginx do
     on roles(:web) do
