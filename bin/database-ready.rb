@@ -56,7 +56,7 @@ class DbTester
         downs += 1 if status == 'down'
       end
 
-      return if ups > 3 && downs == 0
+      return if ups > 3 && downs.zero?
 
       puts "Less than 3 migrations up or a migration has not run yet. Trying again in #{SLEEP_TIME_SEC} seconds."
 
