@@ -22,6 +22,8 @@ class SubProgram < ApplicationRecord
 
   belongs_to :housing_subsidy_administrator, class_name: 'Subgrantee', foreign_key: :hsa_id
 
+  belongs_to :match_prioritization, class_name: 'MatchPrioritization::Base', foreign_key: :match_prioritization_id, primary_key: :id, optional: true
+
   has_many :vouchers
   has_many :file_tags
   has_one :match_route, through: :program
@@ -110,6 +112,10 @@ class SubProgram < ApplicationRecord
 
   def program_type_label
     SubProgram.types.select { |m| m[:value] == program_type }.first[:label]
+  end
+
+  def active_prioritization_scheme
+    match_prioritization.presence || match_route.match_prioritization
   end
 
   def update_summary!

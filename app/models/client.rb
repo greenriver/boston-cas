@@ -255,8 +255,8 @@ class Client < ApplicationRecord
     @default_client_contacts ||= ClientContacts.new client: self
   end
 
-  def self.prioritized(match_route, scope)
-    match_route.match_prioritization.prioritization_for_clients(scope)
+  def self.prioritized(prioritization_scheme, scope)
+    prioritization_scheme.prioritization_for_clients(scope)
   end
 
   # A random number for prioritization that require a tie-breaker
@@ -378,6 +378,17 @@ class Client < ApplicationRecord
 
   def remote_data_source
     @remote_data_source ||= project_client&.data_source || false
+  end
+
+  def required_number_of_bedrooms_or_sro_ok
+    text = required_number_of_bedrooms.to_s
+    text += ' (SRO OK)' if sro_ok
+
+    text
+  end
+
+  def assessment_type_description
+    NonHmisAssessment.declassify_title(NonHmisAssessment.title_from_type_for_matching(assessment_name))
   end
 
   def remote_client_visible_to?(user)
@@ -1229,6 +1240,16 @@ class Client < ApplicationRecord
         title: 'Open SO Enrollments',
         description: nil,
         type: 'Jsonb',
+      },
+      required_number_of_bedrooms_or_sro_ok: {
+        title: 'Minimum Bedrooms',
+        description: nil,
+        type: 'String',
+      },
+      assessment_type_description: {
+        title: 'Assessment Type',
+        description: nil,
+        type: 'String',
       },
     }
   end

@@ -44,10 +44,6 @@ module MatchDecisions::HomelessSetAside
       nil
     end
 
-    def editable?
-      super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
-    end
-
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'

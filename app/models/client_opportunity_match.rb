@@ -457,14 +457,35 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def unsuccessful_decision
-    initialized_decisions.where.not(decline_reason_id: nil)&.first ||
-      initialized_decisions.where.not(administrative_cancel_reason_id: nil)&.first
+    return canceled_decision if canceled?
+
+    declined_decision
   end
 
+  def unsuccessful_reason
+    return unsuccessful_decision&.administrative_cancel_reason if canceled?
+
+    unsuccessful_decision&.decline_reason
+  end
+
+  # Find the latest decision in the route that was declined with a reason
+  # If that doesn't exist, pull the latest initialized decision that was declined
   def declined_decision
-    @declined_decision ||= initialized_decisions.where.not(decline_reason_id: nil)&.first
-    @declined_decision ||= initialized_decisions.where(status: :declined)&.last
+    decision_order = match_route.class.match_steps_for_reporting.keys
+    @declined_decision ||= initialized_decisions.order_as_specified(type: decision_order).where.not(decline_reason_id: nil)&.last
+    @declined_decision ||= initialized_decisions.order_as_specified(type: decision_order).where(status: :declined)&.last
     @declined_decision
+  end
+
+  # Find the latest decision in the route that was canceled with a reason
+  # If that doesn't exist, pull the latest initialized decision that was canceled
+  def canceled_decision
+    return nil unless canceled?
+
+    decision_order = match_route.class.match_steps_for_reporting.keys
+    @canceled_decision ||= initialized_decisions.order_as_specified(type: decision_order).where.not(administrative_cancel_reason_id: nil)&.last
+    @canceled_decision ||= initialized_decisions.order_as_specified(type: decision_order).where(status: :canceled)&.last
+    @canceled_decision
   end
 
   def clear_current_decision_cache!
@@ -1021,8 +1042,8 @@ class ClientOpportunityMatch < ApplicationRecord
     tags.to_h
   end
 
-  def self.prioritized_by_client(match_route, scope)
-    match_route.match_prioritization.prioritization_for_clients(scope)
+  def self.prioritized_by_client(opportunity, scope)
+    opportunity.active_prioritization_scheme.prioritization_for_clients(scope, opportunity: opportunity)
   end
 
   def self.sort_options

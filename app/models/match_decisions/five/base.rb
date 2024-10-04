@@ -10,4 +10,4 @@ module MatchDecisions::Five
       MatchRoutes::Five.new.contact_label_for(contact_actor_type)
     end
   end
-  end
+end

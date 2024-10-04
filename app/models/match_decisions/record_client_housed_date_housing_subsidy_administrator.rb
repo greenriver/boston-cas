@@ -58,10 +58,6 @@ module MatchDecisions
       }
     end
 
-    def editable?
-      super && saved_status !~ /complete/
-    end
-
     def stallable?
       true
     end

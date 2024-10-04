@@ -65,10 +65,6 @@ module MatchDecisions::HomelessSetAside
       status&.to_sym == :completed
     end
 
-    def editable?
-      super && saved_status !~ /complete|declined/
-    end
-
     def stallable?
       true
     end
