@@ -9,7 +9,6 @@ module MatchDecisions::Eleven
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::RouteElevenDeclineReasons
     include MatchDecisions::RouteElevenCancelReasons
-    # validate :note_present_if_status_rejected
 
     def to_partial_path
       'match_decisions/eleven/confirm_match_success_dnd_staff'
@@ -19,7 +18,6 @@ module MatchDecisions::Eleven
       {
         pending: 'Pending',
         confirmed: 'Confirmed',
-        rejected: 'Rejected', # Not currently used
         declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
