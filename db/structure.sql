@@ -9,13 +9,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -558,7 +551,8 @@ CREATE TABLE public.clients (
     enrolled_in_rrh_pre_move_in boolean DEFAULT false NOT NULL,
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
-    last_seen_projects jsonb
+    last_seen_projects jsonb,
+    federal_benefits boolean
 );
 
 
@@ -2185,7 +2179,8 @@ CREATE TABLE public.non_hmis_assessments (
     pregnant_or_parent boolean,
     partner_warehouse_id text,
     partner_name text,
-    share_information_permission boolean
+    share_information_permission boolean,
+    federal_benefits boolean
 );
 
 
@@ -2305,7 +2300,8 @@ CREATE TABLE public.non_hmis_clients (
     male boolean DEFAULT false,
     no_single_gender boolean DEFAULT false,
     transgender boolean DEFAULT false,
-    questioning boolean DEFAULT false
+    questioning boolean DEFAULT false,
+    federal_benefits boolean
 );
 
 
@@ -2829,7 +2825,8 @@ CREATE TABLE public.project_clients (
     enrolled_in_rrh_pre_move_in boolean DEFAULT false NOT NULL,
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
-    last_seen_projects jsonb
+    last_seen_projects jsonb,
+    federal_benefits boolean
 );
 
 
@@ -6942,6 +6939,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170505170358'),
 ('20170511192828'),
 ('20170511194721'),
+('20170524180727'),
+('20170524180728'),
 ('20170524180811'),
 ('20170524180812'),
 ('20170605162924'),
@@ -7193,6 +7192,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211020150747'),
 ('20211027134707'),
 ('20211027170803'),
+('20211115133847'),
 ('20211122204003'),
 ('20211129190937'),
 ('20211129191957'),
@@ -7270,8 +7270,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240807193023'),
 ('20240807193306'),
 ('20240807201535'),
+('20240816134210'),
 ('20240816163828'),
 ('20240822155547'),
-('20240827172144');
+('20240827172144'),
+('20241010194153');
 
 
