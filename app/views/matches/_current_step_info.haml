@@ -1,5 +1,5 @@
 .d-flex.mb-5.align-items-end.flex-wrap
-  - unless @match.current_decision.present?
+  - if @match.current_decision.blank?
     = render 'matches/restrictions_on_reopening'
 .d-flex.mb-5.align-items-end.flex-wrap
   .d-flex.flex-column
