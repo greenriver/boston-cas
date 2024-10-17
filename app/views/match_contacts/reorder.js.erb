@@ -8,7 +8,7 @@
 
     $('.jDnDStaffContactForm').each(function(i) {
       let dnd_contact_form_html = "<%= j render 'matches/match_contacts_form' %>"
-      $(this).replaceWith(dnd_contact_form_html)
+      $(this).replaceWith('dnd_contact_form_html',dnd_contact_form_html)
     });
 
     let match_contact_form_html = "<%= j render 'match_contacts/match_contacts_list', match: @match_contacts.match %>";

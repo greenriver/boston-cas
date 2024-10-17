@@ -73,7 +73,9 @@ Rails.application.routes.draw do
         get :recreate_hsa_notifications_nine, on: :member
       end
 
-      resource :contacts, only: [:edit, :update], controller: 'match_contacts'
+      resource :contacts, only: [:edit, :update], controller: 'match_contacts' do
+        post 'reorder', on: :collection
+      end
       resources :notes, only: [:new, :create, :edit, :update, :destroy], controller: 'match_notes'
       resource :client_details, only: [:show], controller: 'match_client_details'
       resources :match_progress_updates, only: [:create], shallow: true

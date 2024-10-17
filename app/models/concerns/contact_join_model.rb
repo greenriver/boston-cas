@@ -14,15 +14,15 @@ module ContactJoinModel
   extend ActiveSupport::Concern
 
   included do
-    delegate :full_name, :email, :phone, :role,
-    to: :contact, allow_nil: true, prefix: true
+    delegate :full_name, :email, :phone, :role, :contact_order,
+             to: :contact, allow_nil: true, prefix: true
 
     accepts_nested_attributes_for :contact
 
     def self.model_name
       # really just needed for route_key
       # keeps standard naming but uses 'contact' for routes
-      @_model_name ||= ActiveModel::Name.new(self, nil, to_s.demodulize.underscore).tap do |model_name|
+      @model_name ||= ActiveModel::Name.new(self, nil, to_s.demodulize.underscore).tap do |model_name|
         model_name.instance_variable_set(:@route_key, 'contacts')
         model_name.instance_variable_set(:@singular_route_key, 'contact')
       end

@@ -160,6 +160,14 @@ class Reporting::Decisions < ApplicationRecord
       merge(contacts)
   end
 
+  scope :contacts_with_order_value, ->(contact_array, order) do
+    contacts = ClientOpportunityMatchContact.where(contact_order: order)
+    contacts.where(contact_id: contact_array) unless contact_array.blank?
+
+    joins(match: :contacts).
+      merge(contacts)
+  end
+
   scope :current_step, -> do
     where(current_step: true)
   end

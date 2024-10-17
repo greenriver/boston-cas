@@ -25,6 +25,7 @@ module Reporting
     attribute :cohort_ids, Array, default: []
     attribute :contacts, Array, default: []
     attribute :contact_type, Integer
+    attribute :contact_order, Integer
 
     # Defaults
     attribute :default_start, Date, default: (Date.current - 1.year).beginning_of_year
@@ -57,6 +58,7 @@ module Reporting
       self.cohort_ids = filters.dig(:cohort_ids)&.reject(&:blank?)&.map(&:to_sym).presence || cohort_ids
       self.contacts = filters.dig(:contacts)&.reject(&:blank?)&.map(&:to_sym).presence || contacts
       self.contact_type = filters.dig(:contact_type)&.presence || contact_type
+      self.contact_order = filters.dig(:contact_order)&.presence || contact_order
 
       ensure_date_order if valid?
       self
@@ -79,6 +81,7 @@ module Reporting
       scope = filter_for_cohorts(scope)
       scope = filter_for_contacts(scope)
       scope = filter_for_contact_type(scope)
+      scope = filter_for_contact_order(scope)
 
       scope
     end
@@ -102,6 +105,7 @@ module Reporting
           disabilities: disabilities,
           contacts: contacts,
           contact_type: contact_type,
+          contact_order: contact_order,
         },
       }
     end
@@ -117,6 +121,7 @@ module Reporting
         :end,
         :match_route,
         :contact_type,
+        :contact_order,
         match_routes: [],
         programs: [],
         program_types: [],
