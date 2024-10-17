@@ -39,14 +39,7 @@ FileUtils.chdir APP_ROOT do
   #   FileUtils.cp 'config/database.yml.sample', 'config/database.yml'
   # end
 
-
-  puts "\n== Preparing CAS database =="
-  system "bin/rake db:create"
-  system 'bundle exec rake db:schema:conditional_load'
-  system "bin/rake db:migrate"
-
-  puts "\n== Generating Seed Data for CAS Database =="
-  system "bin/rake db:seed"
+  system "bin/db_prep"
 
   puts "\n== Adding Available Rules =="
   system "bin/rake cas_seeds:create_rules"

@@ -1,4 +1,4 @@
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 I18n.config.available_locales = :en
 
 Rails.application.configure do
@@ -11,10 +11,10 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  config.hosts = [ /.*/ ]
+  config.hosts = [/.*/]
 
   # Do not eager load code on boot.
-  config.eager_load = false
+  config.eager_load = ENV.fetch('EAGER_LOAD', 'false') == 'true'
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -30,21 +30,21 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.to_i}"
+      'Cache-Control' => "public, max-age=#{2.days.to_i}",
     }
   else
     config.action_controller.perform_caching = false
 
     cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
     cache_namespace = "#{ENV.fetch('CLIENT')}-#{Rails.env}-cas"
-    redis_config = Rails.application.config_for(:cache_store).merge({ expires_in: 5.minutes, ssl: cache_ssl, namespace: cache_namespace})
+    redis_config = Rails.application.config_for(:cache_store).merge({ expires_in: 5.minutes, ssl: cache_ssl, namespace: cache_namespace })
     config.cache_store = :redis_cache_store, redis_config
   end
 
   if ENV['SMTP_SERVER']
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.default_url_options = { host: ENV['FQDN'], protocol: 'http'}
-    smtp_port = ENV.fetch('SMTP_PORT'){ 587 }
+    config.action_mailer.default_url_options = { host: ENV['FQDN'], protocol: 'http' }
+    smtp_port = ENV.fetch('SMTP_PORT') { 587 }
     config.action_mailer.perform_deliveries = true
     if ENV['SMTP_USERNAME'] && ENV['SMTP_PASSWORD']
       config.action_mailer.smtp_settings = {
@@ -65,7 +65,7 @@ Rails.application.configure do
     # Raise on delivery errors since CAS is basically a mail sending tool
     config.action_mailer.raise_delivery_errors = true
 
-    config.action_mailer.delivery_method = ENV.fetch("DEV_MAILER") { :file }.to_sym
+    config.action_mailer.delivery_method = ENV.fetch('DEV_MAILER') { :file }.to_sym
   end
   config.action_mailer.perform_caching = false
 
@@ -107,9 +107,7 @@ Rails.application.configure do
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
-  if ENV['ENABLE_EVENT_FS_CHECKER'] == '1'
-    config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  end
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker if ENV['ENABLE_EVENT_FS_CHECKER'] == '1'
 
   # Web console from outside of docker
   config.web_console.allowed_ips = ['172.16.0.0/12', '192.168.0.0/16', '10.0.0.0/8']
@@ -125,5 +123,5 @@ Rails.application.configure do
   end
 
   routes.default_url_options ||= {}
-  routes.default_url_options[:script_name]= ''
+  routes.default_url_options[:script_name] = ''
 end

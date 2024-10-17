@@ -130,10 +130,14 @@ gem 'ajax_modal_rails', '~> 1.0'
 gem 'sentry-rails', '~> 5.5'
 gem 'warning'
 
+# Metrics
 gem 'yabeda-rails'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'
 gem 'yabeda-http_requests'
+gem 'sinatra'
+
+gem 'k8s-ruby'
 
 group :development do
   # gem 'spring'
