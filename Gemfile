@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord-import'
 gem 'rack', '>= 2.2.8.1'
 gem 'pg', '~> 1.1'
-gem 'rails', '~> 7.0.8.1'
+gem 'rails', '~> 7.0.8.5'
 gem "sprockets-rails"
 gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
 gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
