@@ -142,6 +142,11 @@ Rails.application.routes.draw do
         patch 'bulk_update', on: :collection
         delete :unavailable, on: :member
       end
+      resources :archived_vouchers, only: [:index, :create, :update, :destroy] do
+        patch 'bulk_update', on: :collection
+        delete :unavailable, on: :member
+        patch 'restore', on: :member
+      end
       resource :program_details, only: [:edit, :update]
       resources :unit_for_building, only: [:new, :edit, :create, :update]
     end
