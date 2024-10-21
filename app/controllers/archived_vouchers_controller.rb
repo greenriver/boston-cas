@@ -13,7 +13,7 @@ class ArchivedVouchersController < VouchersController
   end
 
   def restore
-    @voucher.update(archived_at: nil)
+    @voucher.update(archived_at: nil, available: false, date_available: nil)
     flash[:notice] = 'Voucher restored'
     redirect_to action: :index
   end
