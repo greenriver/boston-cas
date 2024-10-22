@@ -7,12 +7,12 @@
 class VouchersController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_vouchers!
-  before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update]
+  before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update, :restore]
   before_action :require_can_reject_matches!, only: [:unavailable]
   before_action :require_can_edit_voucher_rules!, only: [:edit, :update]
-  before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable, :archive]
-  before_action :set_sub_program, only: [:edit, :update, :create, :index, :bulk_update, :unavailable, :archive]
-  before_action :set_program, only: [:edit, :update, :index, :bulk_update, :unavailable, :archive]
+  before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable, :archive, :restore]
+  before_action :set_sub_program, only: [:edit, :update, :create, :index, :bulk_update, :unavailable, :archive, :restore]
+  before_action :set_program, only: [:edit, :update, :index, :bulk_update, :unavailable, :archive, :restore]
   before_action :set_show_confidential_names
   include AjaxModalRails::Controller
   include Search
