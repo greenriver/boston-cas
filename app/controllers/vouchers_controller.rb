@@ -19,7 +19,7 @@ class VouchersController < ApplicationController
 
   def index
     @vouchers = @subprogram.vouchers.order(:id)
-    @vouchers_for_page = @vouchers.select { |v| v.status_match.blank? && v.archived_at.blank? }
+    @vouchers_for_page = @vouchers.select { |v| v.status_match.blank? && !v.archived? }
     @voucher_state = 'available or unmatched'
   end
 
