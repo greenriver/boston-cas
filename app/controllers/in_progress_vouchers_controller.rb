@@ -9,7 +9,7 @@ class InProgressVouchersController < VouchersController
     @show_search = true
     @vouchers = @subprogram.vouchers.order(:id)
     @search = search_setup(scope: :client_search)
-    @vouchers_for_page = @search.select { |v| v.status_match.present? && v.status_match.active }
+    @vouchers_for_page = @search.select { |v| v.status_match.present? && v.status_match.active && !v.archived? }
     if @search_string.present?
       @vouchers_for_page = @vouchers_for_page.select { |v| v.status_match.present? && !v.status_match.confidential? }
       @voucher_state = 'matching in-progress'
