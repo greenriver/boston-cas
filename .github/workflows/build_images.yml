@@ -42,7 +42,7 @@ jobs:
               GROUP_ID=1000
             tags: |
               type=sha,prefix=githash-
-            # type=ref,event=branch,prefix=branch-
+              type=ref,event=branch,prefix=branch-
             # type=semver,pattern=v{{major}}-{{minor}}-{{patch}},value=v1.0.0
 
     steps:
