@@ -156,6 +156,4 @@ RUN rm -rf tmp/* \
   && touch app/assets/stylesheets/theme/styles/_variables.scss \
   && RAILS_ENV=production ./bin/rake assets:precompile \
   && rm -rf tmp/* \
-  && mkdir tmp/pids \
-  && gem uninstall -i /usr/local/lib/ruby/gems/3.1.0/ rexml
-# Rmove insecure version of rexml ^^^
+  && mkdir tmp/pids
