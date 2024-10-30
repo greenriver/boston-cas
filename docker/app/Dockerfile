@@ -85,7 +85,7 @@ RUN gem update --system \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \
   && echo 'America/New_York' > /etc/timezone \
-  && chmod a+w /etc/timezone \
+  && chmod a+w /etc/timezone
 
 USER ${USER_ID}
 
