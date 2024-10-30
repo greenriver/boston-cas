@@ -157,5 +157,5 @@ RUN rm -rf tmp/* \
   && RAILS_ENV=production ./bin/rake assets:precompile \
   && rm -rf tmp/* \
   && mkdir tmp/pids \
-  && gem uninstall --no-abort-on-dependent -i /usr/local/lib/ruby/gems/3.1.0/ rexml
+  && gem uninstall --ignore-dependencies --no-abort-on-dependent -i /usr/local/lib/ruby/gems/3.1.0/ rexml
 # Rmove insecure version of rexml ^^^
