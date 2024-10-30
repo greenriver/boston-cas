@@ -85,7 +85,9 @@ RUN gem update --system \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \
   && echo 'America/New_York' > /etc/timezone \
-  && chmod a+w /etc/timezone
+  && chmod a+w /etc/timezone \
+  && gem uninstall -i /usr/local/lib/ruby/gems/3.1.0/ rexml
+# Rmove insecure version of rexml ^^^
 
 USER ${USER_ID}
 
