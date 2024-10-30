@@ -4,7 +4,7 @@ name: Build, Scan, and Lint Images
 # This _may_ fix the vulnerability.  Delete the caches prefixed with Linux-buildx-cas,
 # specifically, if you look in the failed action at the Cache Docker Layers step, the
 # layer listed under `Cache restored from key:`
-# https://github.com/greenriver/hmis-warehouse/actions/caches?query=linux-buildx
+# https://github.com/greenriver/boston-cas/actions/caches?query=linux-buildx
 on:
   push:
     branches:

@@ -118,9 +118,7 @@ RUN git config --global --add safe.directory /app \
     vim \
     xvfb \
     zsh \
-  && rm -rf /var/cache/apk/* \
-  && gem uninstall --ignore-dependencies --no-abort-on-dependent -i /usr/local/lib/ruby/gems/3.1.0/ rexml
-# Rmove insecure version of rexml ^^^
+  && rm -rf /var/cache/apk/*
 
 USER ${USER_ID}
 
