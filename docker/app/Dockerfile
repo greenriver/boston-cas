@@ -118,7 +118,9 @@ RUN git config --global --add safe.directory /app \
     vim \
     xvfb \
     zsh \
-  && rm -rf /var/cache/apk/*
+  && rm -rf /var/cache/apk/* \
+  && gem uninstall --ignore-dependencies --no-abort-on-dependent -i /usr/local/lib/ruby/gems/3.1.0/ rexml
+# Rmove insecure version of rexml ^^^
 
 USER ${USER_ID}
 
@@ -156,6 +158,4 @@ RUN rm -rf tmp/* \
   && touch app/assets/stylesheets/theme/styles/_variables.scss \
   && RAILS_ENV=production ./bin/rake assets:precompile \
   && rm -rf tmp/* \
-  && mkdir tmp/pids \
-  && gem uninstall --ignore-dependencies --no-abort-on-dependent -i /usr/local/lib/ruby/gems/3.1.0/ rexml
-# Rmove insecure version of rexml ^^^
+  && mkdir tmp/pids
