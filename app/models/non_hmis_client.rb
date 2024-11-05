@@ -152,6 +152,12 @@ class NonHmisClient < ApplicationRecord
     Warehouse::Cohort.active.where(id: active_cohort_ids).pluck(:name).join("\n")
   end
 
+  def project_names
+    return '' unless Warehouse::Base.enabled?
+
+    Warehouse::Project.where(id: enrolled_project_ids).map(&:name).join("\n")
+  end
+
   # Sorting and Searching
   scope :search_first_name, ->(name) do
     arel_table[:first_name].lower.matches("#{name.downcase}%")
