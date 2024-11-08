@@ -1,10 +1,10 @@
 require 'yaml'
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 Rails.application.configure do
   deliver_method = ENV.fetch('MAIL_DELIVERY_METHOD') { 'smtp' }.to_sym
 
   config.cache_classes = true
-  config.eager_load = true
+  config.eager_load = ENV.fetch('EAGER_LOAD', 'true') == 'true'
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
   config.assets.js_compressor = :terser
@@ -34,7 +34,7 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, ssl: cache_ssl, namespace: cache_namespace)
   config.sandbox_email_mode = false
   config.action_mailer.delivery_method = deliver_method
-  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https}
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'], protocol: :https }
   if deliver_method == :smtp
     config.action_mailer.smtp_settings = {
       address: ENV['SMTP_SERVER'],

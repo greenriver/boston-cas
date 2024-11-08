@@ -67,7 +67,9 @@ module Warehouse
           reason = match.unsuccessful_reason
           unsuccessful_decision = match.unsuccessful_decision
           closed_timestamp = unsuccessful_decision&.updated_at || match.updated_at
-          if reason.present? && reason.referral_result.present?
+          # If we have a reason, the match was closed, we may not know the result,
+          # but we should still capture the event
+          if reason.present?
             if event.referral_result != reason.referral_result
               event.update(
                 event: match.sub_program.event,
@@ -76,6 +78,8 @@ module Warehouse
               )
             end
           else
+            # If we don't know why the match was closed (no reason), just remove the event
+            # This is an unexpected situation
             event.destroy
           end
         end

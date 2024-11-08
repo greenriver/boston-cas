@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+
+APP_ROOT = File.expand_path('..', __dir__)
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+FileUtils.chdir APP_ROOT do
+  puts "\n== Preparing CAS database and main seeds =="
+  # system "bin/rake db:create"
+  # system 'bundle exec rake db:schema:conditional_load'
+  # system "bin/rake db:migrate"
+  system "bin/rake db:create db:schema:conditional_load db:migrate db:seed"
+end

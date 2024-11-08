@@ -82,10 +82,10 @@ WORKDIR /app
 
 RUN gem update --system \
   && gem install bundler --version=${BUNDLER_VERSION} \
-	&& bundle config set --local path /bundle \
+  && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \
-	&& echo 'America/New_York' > /etc/timezone \
-	&& chmod a+w /etc/timezone
+  && echo 'America/New_York' > /etc/timezone \
+  && chmod a+w /etc/timezone
 
 USER ${USER_ID}
 
@@ -106,18 +106,18 @@ ENTRYPOINT ["/usr/bin/entrypoint.dev.sh"]
 RUN git config --global --add safe.directory /app \
   && apk update \
   && apk add --no-cache \
-		alien \
-		curl \
-		docker \
-		less \
-		libpng-dev \
-		neovim \
-		nodejs \
-		openssh \
-		unzip \
-		vim \
-		xvfb \
-		zsh \
+    alien \
+    curl \
+    docker \
+    less \
+    libpng-dev \
+    neovim \
+    nodejs \
+    openssh \
+    unzip \
+    vim \
+    xvfb \
+    zsh \
   && rm -rf /var/cache/apk/*
 
 USER ${USER_ID}

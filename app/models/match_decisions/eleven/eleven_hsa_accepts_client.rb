@@ -101,7 +101,7 @@ module MatchDecisions::Eleven
 
       def accepted
         Notifications::Eleven::HsaAcceptsClientSspNotification.create_for_match! match
-        match.succeeded!(user: user)
+        @decision.next_step.initialize_decision!
       end
 
       def declined
