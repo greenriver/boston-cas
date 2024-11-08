@@ -135,7 +135,7 @@ gem 'yabeda-rails'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'
 gem 'yabeda-http_requests'
-gem 'sinatra'
+gem 'roda'
 
 gem 'k8s-ruby'
 
