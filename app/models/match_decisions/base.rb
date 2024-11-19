@@ -440,7 +440,7 @@ module MatchDecisions
       return :canceled if self.class.closed_match_statuses.include?(status_sym)
       return :canceled if status_sym == :pending && match.closed?
       return :skipped if status_sym == :skipped
-      return :active if editable?
+      return :active if editable? && !next_step&.initialized?
       return :incomplete if status_sym == :pending || status_sym == :other_clients_canceled || status.blank?
 
       :done
