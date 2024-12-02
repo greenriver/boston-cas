@@ -551,7 +551,8 @@ CREATE TABLE public.clients (
     enrolled_in_rrh_pre_move_in boolean DEFAULT false NOT NULL,
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
-    last_seen_projects jsonb
+    last_seen_projects jsonb,
+    federal_benefits boolean
 );
 
 
@@ -2178,7 +2179,8 @@ CREATE TABLE public.non_hmis_assessments (
     pregnant_or_parent boolean,
     partner_warehouse_id text,
     partner_name text,
-    share_information_permission boolean
+    share_information_permission boolean,
+    federal_benefits boolean
 );
 
 
@@ -2299,6 +2301,7 @@ CREATE TABLE public.non_hmis_clients (
     no_single_gender boolean DEFAULT false,
     transgender boolean DEFAULT false,
     questioning boolean DEFAULT false,
+    federal_benefits boolean,
     enrolled_project_ids jsonb
 );
 
@@ -2823,7 +2826,8 @@ CREATE TABLE public.project_clients (
     enrolled_in_rrh_pre_move_in boolean DEFAULT false NOT NULL,
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
-    last_seen_projects jsonb
+    last_seen_projects jsonb,
+    federal_benefits boolean
 );
 
 
@@ -3177,7 +3181,8 @@ CREATE TABLE public.roles (
     can_manage_sessions boolean DEFAULT false,
     can_edit_voucher_rules boolean DEFAULT false,
     can_manage_all_deidentified_clients boolean DEFAULT false,
-    can_manage_all_identified_clients boolean DEFAULT false
+    can_manage_all_identified_clients boolean DEFAULT false,
+    can_activate_matches boolean DEFAULT false
 );
 
 
@@ -7261,17 +7266,19 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240610132826'),
 ('20240610185742'),
 ('20240708180516'),
-('20240716143531'),
 ('20240731130949'),
 ('20240805131951'),
 ('20240805133313'),
 ('20240807193023'),
 ('20240807193306'),
 ('20240807201535'),
+('20240816134210'),
 ('20240816163828'),
 ('20240822155547'),
 ('20240827172144'),
 ('20241010194153'),
-('20241105161611');
+('20241105161611'),
+('20241202135547'),
+('20241202135711');
 
 
