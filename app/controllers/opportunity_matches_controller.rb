@@ -129,15 +129,15 @@ class OpportunityMatchesController < ApplicationController
         @opportunity.visible_by?(current_user)
   end
 
-  def can_activate_matches?
-    (current_user.can_edit_all_clients? ||
+  def can_activate_match?
+    (current_user.can_activate_matches? ||
         @opportunity.editable_by?(current_user)) &&
         ! @opportunity.successful_match
   end
-  helper_method :can_activate_matches?
+  helper_method :can_activate_match?
 
   def require_can_activate_matches!
-    not_authorized! unless can_activate_matches?
+    not_authorized! unless can_activate_match?
   end
 
   def set_show_confidential_names
