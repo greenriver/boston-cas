@@ -4,7 +4,7 @@
 - default_building_id = voucher.building.try(:id)
 - default_unit_id = voucher.unit.try(:id)
 - default_unit_name = voucher.unit.try(:name)
-- if voucher.status_match.present? || @subprogram.closed?
+- if voucher.status_match.present? || @subprogram.closed? || voucher.archived?
   - disabled = true
 - else
   - disabled_units = voucher&.building&.unavailable_units_for_vouchers_ids
@@ -94,6 +94,10 @@
               %h3.detail-box--label.mt-4 History
               = link_to closed_opportunity_matches_path(voucher.opportunity) do
                 Closed Matches
+        - if voucher.archived?
+          %h3.detail-box--label.mt-4 Archived
+          .detail-box-value
+            = voucher.archived_at
 
     .detail-box-value.d-flex.flex-wrap.justify-content-end.align-items-end
       - if voucher.can_be_destroyed?
@@ -101,6 +105,10 @@
           %span.icon-cross
           Delete
       - elsif voucher.can_be_archived?
-        = link_to archive_program_sub_program_voucher_path(id: voucher.id), method: :patch, data: {confirm: "Are you sure you want to archive this voucher? Archiving will hide this voucher permanently."}, class: 'btn btn-warning btn-sm' do
+        = link_to archive_program_sub_program_voucher_path(id: voucher.id), method: :patch, data: {confirm: "Are you sure you want to archive this voucher?"}, class: 'btn btn-warning btn-sm' do
           %span.icon-cross
           Archive
+      - elsif voucher.archived? && current_user.can_edit_vouchers
+        = link_to restore_program_sub_program_archived_voucher_path(id: voucher.id), method: :patch, data: {confirm: "Are you sure you want to restore this voucher?"}, class: 'btn btn-warning btn-sm' do
+          %span.icon-plus
+          Restore
