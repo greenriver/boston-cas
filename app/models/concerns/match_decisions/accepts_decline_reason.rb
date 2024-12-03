@@ -18,7 +18,14 @@ module MatchDecisions
           result << reason
         end
         # Move other to the end of the list
-        result.sort_by! { |m| m.name.downcase == 'other' ? 1 : 0 }
+        result.sort_by! { |m| [m.name.downcase == 'other' ? 1 : 0, m.name.downcase] }
+        result.map! do |reason|
+          # Only include the asterisks if more than 'Other' requires additional explanation
+          include_asterisk = decline_reasons_not_other_requiring_explanation.present? && (reason.other? || decline_reasons_not_other_requiring_explanation.include?(reason.name))
+          name = reason.name
+          name += '*' if include_asterisk
+          [name, reason.id]
+        end
       end
     end
 
@@ -35,7 +42,8 @@ module MatchDecisions
     private def validate_decline_reason
       errors.add :decline_reason, 'please indicate the reason for declining' if status == 'declined' && decline_reason_blank?
 
-      errors.add :decline_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'declined' && decline_reason&.other? && decline_reason_other_explanation.blank?
+      explanation_field_required = status == 'declined' && (decline_reason.other? || decline_reasons_not_other_requiring_explanation&.include?(decline_reason.name))
+      errors.add :decline_reason_other_explanation, "must be filled in if choosing '#{decline_reason.name}'" if explanation_field_required && decline_reason_other_explanation.blank?
     end
 
     private def decline_reason_blank?
