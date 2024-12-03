@@ -293,6 +293,12 @@ module TcHatCalculations
           number: 'A-16',
           hint: 'This is a summary value to indicate the client meets all requirements for PSH.  Please ask the CoC for calculation instructions',
         },
+        hoh_age: {
+          label: 'Age of the Head of Household',
+          number: 'A-17',
+          as: :pretty_boolean_group,
+          collection: ages,
+        },
         _section_b_preamble: {
           as: :partial,
           partial: 'non_hmis_assessments/tc_hat/section_b_preamble',
@@ -537,12 +543,6 @@ module TcHatCalculations
         notes: {
           label: 'Client Note',
           number: 'F-12',
-        },
-        hoh_age: {
-          label: 'Age of the Head of Household',
-          number: 'F-13',
-          as: :pretty_boolean_group,
-          collection: ages,
         },
         actively_homeless: {
           collection: {
