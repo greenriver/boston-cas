@@ -502,8 +502,8 @@ module MatchDecisions
     private def cancellations
       errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
 
-      explanation_field_required = status == 'canceled' && (administrative_cancel_reason.other? || cancel_reasons_not_other_requiring_explanation&.include?(administrative_cancel_reason.name))
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing '#{administrative_cancel_reason.name}'" if explanation_field_required && administrative_cancel_reason_other_explanation.blank?
+      explanation_field_required = status == 'canceled' && (administrative_cancel_reason&.other? || cancel_reasons_not_other_requiring_explanation&.include?(administrative_cancel_reason&.name))
+      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing '#{administrative_cancel_reason&.name}'" if explanation_field_required && administrative_cancel_reason_other_explanation&.blank?
     end
 
     private def notification_class
