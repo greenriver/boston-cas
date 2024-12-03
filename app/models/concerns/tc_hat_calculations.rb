@@ -279,9 +279,9 @@ module TcHatCalculations
           number: 'A-14',
         },
         days_homeless: {
-          label: 'Cumulative Days Homeless',
+          label: 'Total Days Experiencing Literal Homelessness or Fleeing Unsafe Situations',
           number: 'A-15',
-          hint: 'As this count of days is fixed, please ask the CoC for calculation instructions',
+          description: 'How many instances of homelessness has the client experienced in the past 3 years? This can include situations where the client has had to leave their home due to domestic violence (DV), intimate partner violence (IPV), sexual assault (SA), trafficking, or other related circumstances. They could have stayed with a friend, family, stayed in their car, or went to a shelter. You may start the calculation from when the client either first attempted to flee, even if it was not successful, started or attempted to start working with a Victim Service Provider (VSP). Include any literal homeless time and add this time together for cumulative days homeless.',
         },
         calculated_chronic_homelessness: {
           label: 'Permanent Supportive Housing Eligible',
@@ -291,7 +291,10 @@ module TcHatCalculations
           },
           as: :pretty_boolean_group,
           number: 'A-16',
-          hint: 'This is a summary value to indicate the client meets all requirements for PSH.  Please ask the CoC for calculation instructions',
+          description: 'For PSH eligibility the client must have TWO COMPONENTS
+
+  1. The client must have 12 consecutive months of literal homelessness from today’s date back OR 4 or more episodes of literal homelessness in the last 3 years that adds up to 12 months with at least 7 days between each episode.
+  2. Disabling Condition Length of Homelessness Physical, mental, or emotional impairment which is expected to be of long continued and indefinite duration; substantially impedes his or her ability to live independently and is of such nature that such ability could be improved by more suitable housing conditions. This is proven with either a VOD (Form is Provided by Partnership Homes and is completed by client and a Provider).',
         },
         hoh_age: {
           label: 'Age of the Head of Household',
