@@ -1,0 +1,4 @@
+- if options[:description].present?
+  .description.mt-2
+    - markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true)
+    = markdown.render(options[:description]).html_safe
