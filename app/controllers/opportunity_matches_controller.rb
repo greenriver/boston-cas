@@ -129,10 +129,15 @@ class OpportunityMatchesController < ApplicationController
         @opportunity.visible_by?(current_user)
   end
 
+  # You can activate a match if all of the following are true:
+  # 1. the match hasn't succeeded
+  # 2. you have can edit all clients or this opportunity is editable by you
+  # 3. you've been given the can activate matches permission
   def can_activate_match?
-    (current_user.can_activate_matches? ||
-        @opportunity.editable_by?(current_user)) &&
-        ! @opportunity.successful_match
+    return false if @opportunity.successful_match
+    return false unless current_user.can_edit_all_clients? || @opportunity.editable_by?(current_user)
+
+    current_user.can_activate_matches?
   end
   helper_method :can_activate_match?
 
