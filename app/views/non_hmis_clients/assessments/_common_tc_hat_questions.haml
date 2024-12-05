@@ -49,7 +49,7 @@
               = render 'non_hmis_clients/assessments/common_description_display', options: options
         - else
           .c-question__number= options[:number]
-          - if disabled
+          - if disabled && @assessment.respond_to?(field_name)
             - val = @assessment.public_send(field_name)
             - if options[:collection].present?
               - if val.is_a?(Array)
