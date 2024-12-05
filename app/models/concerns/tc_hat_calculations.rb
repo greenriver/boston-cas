@@ -539,10 +539,6 @@ module TcHatCalculations
           as: :pretty_checkboxes_group,
           number: 'F-3',
         },
-        _housing_rank_preamble: {
-          as: :partial,
-          partial: 'non_hmis_assessments/tc_hat/housing_rank_preamble',
-        },
         notes: {
           label: 'Client Note',
           number: 'F-12',
