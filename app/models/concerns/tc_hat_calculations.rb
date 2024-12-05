@@ -84,7 +84,7 @@ module TcHatCalculations
           label: '60 - 61',
         },
         '62' => {
-          range: 62..,
+          range: 62..90,
           label: '62 or older',
         },
       }
