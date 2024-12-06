@@ -163,6 +163,13 @@ def maintain_report_definitions
   end
 end
 
+def ensure_data_sources
+  DataSource.where(name: 'Deidentified Clients', db_identifier: 'Deidentified').first_or_create
+  DataSource.where(name: 'Imported Clients', db_identifier: 'Imported').first_or_create
+  DataSource.where(name: 'DND Warehouse', db_identifier: 'hmis_warehouse').first_or_create
+end
+
+ensure_data_sources
 hud_codes
 StalledResponse.ensure_all
 maintain_report_definitions
