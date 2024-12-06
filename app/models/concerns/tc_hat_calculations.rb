@@ -84,7 +84,7 @@ module TcHatCalculations
           label: '60 - 61',
         },
         '62' => {
-          range: 62..,
+          range: 62..90,
           label: '62 or older',
         },
       }
@@ -538,10 +538,6 @@ module TcHatCalculations
           collection: Neighborhood.for_select,
           as: :pretty_checkboxes_group,
           number: 'F-3',
-        },
-        _housing_rank_preamble: {
-          as: :partial,
-          partial: 'non_hmis_assessments/tc_hat/housing_rank_preamble',
         },
         notes: {
           label: 'Client Note',
