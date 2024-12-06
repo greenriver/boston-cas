@@ -4,7 +4,7 @@ def hud_codes
     1 => 'Full name reported',
     2 => 'Partial, street name, or code name reported',
     8 => 'Client doesn’t know',
-    9 => 'Client refused'
+    9 => 'Client refused',
   }.each do |id, name|
     item = NameQualityCode.where(numeric: id).first_or_create! do |r|
       r.numeric = id
@@ -19,7 +19,7 @@ def hud_codes
     2 => 'Approximate or partial SSN reported',
     8 => 'Client doesn’t know',
     9 => 'Client refused',
-    99 => 'Data not collected'
+    99 => 'Data not collected',
   }.each do |id, name|
     item = SocialSecurityNumberQualityCode.where(numeric: id).first_or_create! do |r|
       r.numeric = id
@@ -34,7 +34,7 @@ def hud_codes
     2 => 'Approximate or partial DOB reported',
     8 => 'Client doesn’t know',
     9 => 'Client refused',
-    99 => 'Data not collected'
+    99 => 'Data not collected',
   }.each do |id, name|
     item = DateOfBirthQualityCode.where(numeric: id).first_or_create! do |r|
       r.numeric = id
@@ -50,7 +50,7 @@ def hud_codes
     1 => 'Hispanic/Latino',
     8 => 'Client doesn’t know',
     9 => 'Client refused',
-    99 => 'Data not collected'
+    99 => 'Data not collected',
   }.each do |id, name|
     item = Ethnicity.where(numeric: id).first_or_create! do |r|
       r.numeric = id
@@ -65,7 +65,7 @@ def hud_codes
     1 => 'Yes',
     8 => 'Client doesn’t know',
     9 => 'Client refused',
-    99 => 'Data not collected'
+    99 => 'Data not collected',
   }.each do |id, name|
     item = VeteranStatus.where(numeric: id).first_or_create! do |r|
       r.numeric = id
@@ -80,7 +80,7 @@ def hud_codes
     1 => 'Yes',
     8 => 'Client doesn’t know',
     9 => 'Client refused',
-    99 => 'Data not collected'
+    99 => 'Data not collected',
   }.each do |id, name|
     item = DisablingCondition.where(numeric: id).first_or_create! do |r|
       r.numeric = id
@@ -92,7 +92,7 @@ def hud_codes
 
   [
     'HUD: CoC - Permanent Supportive Housing',
-    'HUD: CoC - Rapid Re-Housing'
+    'HUD: CoC - Rapid Re-Housing',
   ].each do |name|
     FundingSource.where(name: name).first_or_create!(name: name)
   end
@@ -143,14 +143,13 @@ def report_list
 end
 
 def cleanup_unused_reports
-  [
-  ].each do |url|
+  [].each do |url|
     ReportDefinition.where(url: url).delete_all
   end
 end
 
 def maintain_report_definitions
-  cleanup_unused_reports()
+  cleanup_unused_reports
   report_list.each do |category, reports|
     reports.each do |report|
       r = ReportDefinition.where(url: report[:url]).first_or_initialize
@@ -178,4 +177,4 @@ StalledResponse.ensure_all
 maintain_report_definitions
 # force config refresh
 Config.first&.invalidate_cache
-Translation::maintain_keys
+Translation.maintain_keys
