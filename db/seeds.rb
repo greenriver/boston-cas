@@ -164,6 +164,9 @@ def maintain_report_definitions
 end
 
 def ensure_data_sources
+  # We handle these differently in the test world
+  return if Rails.env.test?
+
   DataSource.where(name: 'Deidentified Clients', db_identifier: 'Deidentified').first_or_create
   DataSource.where(name: 'Imported Clients', db_identifier: 'Imported').first_or_create
   DataSource.where(name: 'DND Warehouse', db_identifier: 'hmis_warehouse').first_or_create
