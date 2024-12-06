@@ -11,7 +11,7 @@
             .o-choose__content
               %p
                 Please record the date the voucher was issued.
-              = form.input :date_voucher_issued, label: 'Date voucher issued', as: :date_picker, disabled: !@decision.editable?
+              = form.input :date_voucher_issued, label: Translation.translate('Date voucher issued'), as: :date_picker, disabled: !@decision.editable?
               = form.input :note, as: :text, input_html: {rows: 4, disabled: (!@decision.editable?)}
 
               %p
