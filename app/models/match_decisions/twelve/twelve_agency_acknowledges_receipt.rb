@@ -18,7 +18,6 @@ module MatchDecisions::Twelve
     validate :cant_accept_if_client_has_related_active_match
     validate :cant_accept_if_opportunity_has_related_active_match
     validate :ensure_required_contacts_present_on_accept
-    validate :validate_cancel_reason
 
     def label_for_status status
       case status.to_sym
@@ -137,12 +136,6 @@ module MatchDecisions::Twelve
       missing_contacts << "a #{Translation.translate('HSA Twelve')} Contact" if save_will_accept? && match.housing_subsidy_admin_contacts.none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
-    end
-
-    private def validate_cancel_reason
-      errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
-
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
     end
 
     private def note_present_if_status_declined
