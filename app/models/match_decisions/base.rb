@@ -61,7 +61,7 @@ module MatchDecisions
              foreign_key: :decision_id
 
     validate :ensure_status_allowed, if: :status
-    validate :cancellations, if: :administrative_cancel_reason_id
+    validate :cancellations
 
     ####################
     # Attributes
@@ -473,7 +473,26 @@ module MatchDecisions
     end
 
     def cancel_reasons
-      MatchDecisionReasons::All.where(name: step_cancel_reasons)
+      result = []
+      MatchDecisionReasons::All.where(name: step_cancel_reasons).each do |reason|
+        result << reason
+      end
+      result.sort_by! { |m| [m.name.downcase == 'other' ? 1 : 0, m.name.downcase] }
+      result.map! do |reason|
+        # Only include the asterisks if more than 'Other' requires additional explanation
+        include_asterisk = cancel_reasons_not_other_requiring_explanation.present? && (reason.other? || cancel_reasons_not_other_requiring_explanation.include?(reason.name))
+        name = reason.name
+        name += '*' if include_asterisk
+        [name, reason.id]
+      end
+    end
+
+    def decline_reasons_not_other_requiring_explanation
+      []
+    end
+
+    def cancel_reasons_not_other_requiring_explanation
+      []
     end
 
     private def ensure_status_allowed
@@ -481,7 +500,10 @@ module MatchDecisions
     end
 
     private def cancellations
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
+      errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
+
+      explanation_field_required = status == 'canceled' && (administrative_cancel_reason&.other? || cancel_reasons_not_other_requiring_explanation&.include?(administrative_cancel_reason&.name))
+      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing '#{administrative_cancel_reason&.name}'" if explanation_field_required && administrative_cancel_reason_other_explanation&.blank?
     end
 
     private def notification_class
