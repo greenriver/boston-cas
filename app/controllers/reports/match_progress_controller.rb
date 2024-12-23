@@ -19,7 +19,7 @@ module Reports
       respond_to do |format|
         format.html {}
         format.xlsx do
-          @included_sub_programs = sub_program_list.select { |sp| sp.last.in?(report_params[:sub_programs]) }
+          @included_sub_programs = sub_program_list.filter { |_name, sp_id| sp_id.in?(report_params[:sub_programs]) }
           filename = 'CAS Match Progress.xlsx'
           render xlsx: 'index', filename: filename
         end
