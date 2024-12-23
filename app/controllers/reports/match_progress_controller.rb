@@ -19,7 +19,7 @@ module Reports
       respond_to do |format|
         format.html {}
         format.xlsx do
-          @included_sub_programs = sub_program_list.invert.slice(*report_params[:sub_programs])
+          @included_sub_programs = sub_program_list.select { |sp| sp.last.in?(report_params[:sub_programs]) }
           filename = 'CAS Match Progress.xlsx'
           render xlsx: 'index', filename: filename
         end
@@ -85,20 +85,26 @@ module Reports
 
     def sub_programs
       @sub_programs ||= SubProgram.
-        joins(:program).
-        preload(:program).
-        pluck(p_t[:name], sp_t[:name], :id).
-        sort
+        joins(:program, :match_route).
+        preload(:program, :match_route).
+        order(p_t[:name].asc, sp_t[:name].asc, id: :asc).
+        map do |sp|
+          {
+            program: sp.program.name,
+            sub_program: sp.name,
+            route: sp.match_route.title,
+            id: sp.id,
+          }
+        end
     end
-    helper_method :sub_programs
 
     def sub_program_list
-      @sub_program_list ||= sub_programs.map do |project_name, sub_project_name, id|
+      @sub_program_list ||= sub_programs.map do |sp|
         [
-          [project_name, sub_project_name].join('|'),
-          id,
+          [sp[:program], sp[:sub_program], sp[:route]].compact_blank.join('|'),
+          sp[:id],
         ]
-      end.to_h
+      end.uniq
     end
     helper_method :sub_program_list
 
