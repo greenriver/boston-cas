@@ -860,6 +860,7 @@ DEPENDENCIES
   maxminddb
   memery
   mini_magick
+  mini_portile2
   minitest-reporters
   momentjs-rails (>= 2.9.0)
   net-http
