@@ -26,6 +26,9 @@ gem 'coffee-rails'
 gem 'execjs'
 gem 'jquery-rails'
 
+# Temporary fix until we know why it isn't installing
+gem 'mini_portile2'
+
 gem 'validates_email_format_of'
 
 gem 'font-awesome-sass'
