@@ -115,6 +115,7 @@ class Role < ApplicationRecord
       :can_edit_help,
       :can_audit_users,
       :can_manage_sessions,
+      :can_activate_matches,
     ]
   end
 

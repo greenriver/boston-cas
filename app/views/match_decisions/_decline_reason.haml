@@ -2,6 +2,8 @@
 - include_other = true unless include_other === false
 
 = form.association :decline_reason, collection: @decision.decline_reasons(contact: current_contact), label: "Please indicate a reason to #{client_action} this match:", as: :check_boxes, wrapper_html: {class: 'jDeclineReasons jButtonStateTriggers'}
+- if @decision.decline_reasons_not_other_requiring_explanation.present?
+  %p= "* indicates that additional information must be provided in order to submit #{client_action} reason"
 - if include_other
   = form.input :decline_reason_other_explanation, as: :text, label: "List any details related to the #{client_action} below", hint: 'Required for "Other"', placeholder: 'Other reason', input_html: {rows: 8}, wrapper_html: {class: 'jOtherDeclineReason'}
 

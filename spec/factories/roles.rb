@@ -1,6 +1,9 @@
 FactoryBot.define do
+  factory :role, class: 'Role' do
+    name { 'empty role' }
+  end
   factory :admin_role, class: 'Role' do
-    name { "admin" }
+    name { 'admin' }
     can_view_all_clients { true }
     can_edit_all_clients { true }
     can_participate_in_matches { true }
@@ -57,7 +60,7 @@ FactoryBot.define do
   end
 
   factory :shelter_role, class: 'Role' do
-    name { "shelter" }
+    name { 'shelter' }
     can_participate_in_matches { true }
     can_create_overall_note { true }
   end

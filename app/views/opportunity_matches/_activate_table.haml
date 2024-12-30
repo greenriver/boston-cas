@@ -6,7 +6,7 @@
         .col-sm-8
           %p #{pluralize(@matches.count, 'matching client')}
         .col-sm-4.text-right
-          - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
+          - if @opportunity.match_route.allow_multiple_active_matches && can_activate_match?
             .mb-4= f.button :submit, value: 'Activate Matches'
       %table.table.table-striped
         %thead
@@ -15,7 +15,7 @@
             - prioritized_column_labels.map do |label|
               %th.text-center= label
             %th.text-center Other Active Matches
-            - if can_activate_matches?
+            - if can_activate_match?
               %th.text-center Activate Match?
             - else
               %th
@@ -40,7 +40,7 @@
               - if active_client_ids.include?(client.id)
                 %td.text-center= link_to 'Current Active Match', match_path(match)
               -else
-                - if can_activate_matches?
+                - if can_activate_match?
                   - unless @opportunity.match_route.allow_multiple_active_matches
                     = render 'activate_button', client: client
                   - else
@@ -49,5 +49,5 @@
                   %td
 
       - # %p=paginate @matches
-      - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
+      - if @opportunity.match_route.allow_multiple_active_matches && can_activate_match?
         .float-right= f.button :submit, value: 'Activate Matches'
