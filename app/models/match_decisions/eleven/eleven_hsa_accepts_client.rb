@@ -70,10 +70,6 @@ module MatchDecisions::Eleven
       true
     end
 
-    def editable?
-      super && saved_status !~ /accepted|declined/
-    end
-
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'
@@ -105,7 +101,7 @@ module MatchDecisions::Eleven
 
       def accepted
         Notifications::Eleven::HsaAcceptsClientSspNotification.create_for_match! match
-        match.succeeded!(user: user)
+        @decision.next_step.initialize_decision!
       end
 
       def declined

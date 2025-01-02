@@ -59,10 +59,6 @@ module MatchDecisions
       }
     end
 
-    def editable?
-      super && saved_status !~ /scheduled|no_hearing/
-    end
-
     def stallable?
       true
     end

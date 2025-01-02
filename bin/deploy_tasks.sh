@@ -54,7 +54,7 @@ echo "...rake db:seed took $(expr $T2 - $T1) seconds"
 
 echo 'Installing cron'
 T1=`date +%s`
-bundle exec ./config/deploy/docker/lib/cron_installer.rb
+EAGER_LOAD=false bundle exec rails runner ./config/deploy/docker/lib/cron_installer.rb
 T2=`date +%s`
 echo "..../cron_installer.rb took $(expr $T2 - $T1) seconds"
 

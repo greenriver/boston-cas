@@ -105,29 +105,6 @@ class OpportunityMatchesController < ApplicationController
   end
   helper_method :prioritized_column_values
 
-  def priority_labels
-    supporting_data_columns = @opportunity.match_route.match_prioritization.supporting_data_columns
-    return supporting_data_columns.keys if supporting_data_columns.present?
-
-    [@opportunity.match_route.match_prioritization.title]
-  end
-  helper_method :priority_labels
-
-  def priority_values(client)
-    supporting_data_columns = @opportunity.match_route.match_prioritization.supporting_data_columns
-    return supporting_data_columns.values.map { |fn| fn.call(client) } if supporting_data_columns.present?
-
-    fn = @opportunity.match_route.match_prioritization.client_prioritization_summary_method
-    value = if client.class.column_names.include?(fn.to_s)
-      client.send(fn)
-    else
-      client.send(fn, match_route: @opportunity.match_route)
-    end
-
-    [value]
-  end
-  helper_method :priority_values
-
   def match_routes(client)
     counts = client.client_opportunity_matches.active.open.
       joins(:program, :match_route).
@@ -152,15 +129,20 @@ class OpportunityMatchesController < ApplicationController
         @opportunity.visible_by?(current_user)
   end
 
-  def can_activate_matches?
-    (current_user.can_edit_all_clients? ||
-        @opportunity.editable_by?(current_user)) &&
-        ! @opportunity.successful_match
+  # You can activate a match if all of the following are true:
+  # 1. the match hasn't succeeded
+  # 2. you have can edit all clients or this opportunity is editable by you
+  # 3. you've been given the can activate matches permission
+  def can_activate_match?
+    return false if @opportunity.successful_match
+    return false unless current_user.can_edit_all_clients? || @opportunity.editable_by?(current_user)
+
+    current_user.can_activate_matches?
   end
-  helper_method :can_activate_matches?
+  helper_method :can_activate_match?
 
   def require_can_activate_matches!
-    not_authorized! unless can_activate_matches?
+    not_authorized! unless can_activate_match?
   end
 
   def set_show_confidential_names

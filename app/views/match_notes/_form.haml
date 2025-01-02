@@ -2,7 +2,7 @@
 - contact_list = @match.grouped_contact_list
 .note-form
   = simple_form_for @match_note, url: match_notes_path(@match, match_note_referrer_params), as: :match_note, data: data do |form|
-    = form.input :note, as: :text, input_html: {rows: 4}, label: false
+    = form.input :note, as: :text, input_html: {rows: 4}, label: 'Note contents'
     - if @match.can_create_administrative_note?(access_context.current_contact)
       = form.input :admin_note, label: 'Administrative note?', hint: 'If checked, this note will only be visible to users who create notes like this one.  Generally this permission is only given to administrators.'
     - if @match.can_create_administrative_note?(access_context.current_contact) || current_user.can_send_notes_via_email?

@@ -1,5 +1,10 @@
 name: Build, Scan, and Lint Images
 
+# If scanning fails, you can delete the cache and have it rebuild from scratch.
+# This _may_ fix the vulnerability.  Delete the caches prefixed with Linux-buildx-cas,
+# specifically, if you look in the failed action at the Cache Docker Layers step, the
+# layer listed under `Cache restored from key:`
+# https://github.com/greenriver/boston-cas/actions/caches?query=linux-buildx
 on:
   push:
     branches:
@@ -38,12 +43,12 @@ jobs:
             build-args: |
               BUILD_TAG=3.1.6-alpine3.20
               BUNDLER_VERSION=2.5.17
-              USER_ID=1000
-              GROUP_ID=1000
+              USER_ID=10000
+              GROUP_ID=10000
             tags: |
               type=sha,prefix=githash-
-            # type=ref,event=branch,prefix=branch-
-            # type=semver,pattern=v{{major}}-{{minor}}-{{patch}},value=v1.0.0
+              type=ref,event=branch,prefix=branch-
+              type=raw,event=branch,value=branch-{{branch}}-{{sha}}
 
     steps:
       - name: Checkout
@@ -76,10 +81,6 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           role-session-name: warehouse-github-action
 
-      - name: Install aws cli
-        id: install-aws-cli
-        uses: unfor19/install-aws-cli-action@v1
-
       - name: Prepare
         id: prep
         env:
@@ -94,6 +95,8 @@ jobs:
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v5
+        env:
+          DOCKER_METADATA_SHORT_SHA_LENGTH: 7
         with:
           images: ${{ secrets.ECR_REPOSITORY_URI }}
           flavor: ${{ matrix.flavor }}
@@ -163,7 +166,10 @@ jobs:
       # https://github.com/aquasecurity/trivy-action
       - name: Run vulnerability scan
         id: vuln_scan
-        uses: aquasecurity/trivy-action@0.14.0
+        uses: aquasecurity/trivy-action@0.28.0
+        env:
+          TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
+          TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         with:
           image-ref: ${{ secrets.ECR_REPOSITORY_URI }}
           format: 'table'

@@ -86,6 +86,7 @@ class SubProgramsController < ApplicationController
         :eligibility_requirement_notes,
         :weighting_rules_active,
         :cori_hearing_required,
+        :match_prioritization_id,
       )
   end
 

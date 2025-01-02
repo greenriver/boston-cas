@@ -11,7 +11,6 @@ class Rules::Challenge < Rule
 
   def available_challenges
     [
-      'Bad Credit',
       'Domestic Violence',
       'Eviction History',
       'Felony Conviction /Criminal History',

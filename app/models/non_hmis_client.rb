@@ -152,6 +152,12 @@ class NonHmisClient < ApplicationRecord
     Warehouse::Cohort.active.where(id: active_cohort_ids).pluck(:name).join("\n")
   end
 
+  def project_names
+    return '' unless Warehouse::Base.enabled?
+
+    Warehouse::Project.where(id: enrolled_project_ids).map(&:name).join("\n")
+  end
+
   # Sorting and Searching
   scope :search_first_name, ->(name) do
     arel_table[:first_name].lower.matches("#{name.downcase}%")
@@ -292,7 +298,9 @@ class NonHmisClient < ApplicationRecord
     project_client.vispdat_score = current_assessment&.vispdat_score
     project_client.vispdat_priority_score = current_assessment&.vispdat_priority_score
     project_client.health_prioritized = current_assessment&.health_prioritized
+    # We've had a handful of HIV/AIDS columns over the years, make sure they all match
     project_client.hiv_positive = current_assessment&.hiv_aids || hiv_aids
+    project_client.hivaids_status = current_assessment&.hiv_aids || hiv_aids
     project_client.is_currently_youth = current_assessment&.is_currently_youth || false
     project_client.older_than_65 = current_assessment&.older_than_65
     # assessor info
@@ -408,7 +416,7 @@ class NonHmisClient < ApplicationRecord
     assessment.days_homeless = days_homeless
     assessment.sixty_plus = sixty_plus
     assessment.tc_hat_household_type = 'Adults with Children' if family_member
-    assessment.hiv_aids = hiv_aids
+    assessment.hiv_aids ||= hiv_aids
     assessment.pregnancy_status = pregnancy_status
     assessment.pregnant_under_28_weeks = pregnant_under_28_weeks
 

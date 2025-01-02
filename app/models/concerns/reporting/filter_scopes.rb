@@ -23,6 +23,12 @@ module Reporting::FilterScopes
       scope.program_type(@filter.program_types)
     end
 
+    private def filter_for_programs(scope)
+      return scope if @filter.programs.blank?
+
+      scope.program(@filter.programs)
+    end
+
     private def filter_for_agencies(scope)
       return scope if @filter.agencies.blank?
 
@@ -87,6 +93,12 @@ module Reporting::FilterScopes
       return scope if @filter.contact_type.blank?
 
       scope.contacts_in_type(@filter.contacts.map(&:to_s), @filter.contact_type)
+    end
+
+    private def filter_for_contact_order(scope)
+      return scope if @filter.contact_order.blank? || @filter.contact_order.zero?
+
+      scope.contacts_with_order_value(@filter.contacts.map(&:to_s), @filter.contact_order)
     end
   end
 end

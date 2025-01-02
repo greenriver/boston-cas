@@ -18,6 +18,7 @@ module MatchRoutes
       {
         'MatchDecisions::Eleven::ElevenHsaAcknowledgesReceipt' => 1,
         'MatchDecisions::Eleven::ElevenHsaAcceptsClient' => 2,
+        'MatchDecisions::Eleven::ElevenConfirmMatchSuccessDndStaff' => 3,
       }
     end
 
@@ -26,6 +27,7 @@ module MatchRoutes
         'MatchDecisions::Eleven::ElevenHsaAcknowledgesReceipt' => 1,
         'MatchDecisions::Eleven::ElevenHsaAcceptsClient' => 2,
         'MatchDecisions::Eleven::ElevenConfirmHsaAcceptsClientDeclineDndStaff' => 3,
+        'MatchDecisions::Eleven::ElevenConfirmMatchSuccessDndStaff' => 4,
       }
     end
 
@@ -41,7 +43,7 @@ module MatchRoutes
     end
 
     def success_decision
-      :eleven_hsa_accepts_client_decision
+      :eleven_confirm_match_success_dnd_staff_decision
     end
 
     def initial_contacts_for_match

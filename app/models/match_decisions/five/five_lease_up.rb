@@ -82,10 +82,6 @@ module MatchDecisions::Five
       status&.to_sym == :completed
     end
 
-    def editable?
-      super && saved_status !~ /completed|declined/
-    end
-
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
     end

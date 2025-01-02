@@ -45,10 +45,6 @@ module MatchDecisions::Six
       }
     end
 
-    def editable?
-      super && saved_status !~ /accepted|declined/
-    end
-
     def permitted_params
       super + [:prevent_matching_until, :shelter_expiration]
     end

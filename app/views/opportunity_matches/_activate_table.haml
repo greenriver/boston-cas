@@ -6,20 +6,16 @@
         .col-sm-8
           %p #{pluralize(@matches.count, 'matching client')}
         .col-sm-4.text-right
-          - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
+          - if @opportunity.match_route.allow_multiple_active_matches && can_activate_match?
             .mb-4= f.button :submit, value: 'Activate Matches'
       %table.table.table-striped
         %thead
           %tr
             %th Client Name
-            %th Assessment Type
-            %th Minimum Bedrooms
-            - unless pathways_assessment
-              %th Minimum Occupancy
             - prioritized_column_labels.map do |label|
               %th.text-center= label
             %th.text-center Other Active Matches
-            - if can_activate_matches?
+            - if can_activate_match?
               %th.text-center Activate Match?
             - else
               %th
@@ -34,13 +30,6 @@
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
                 = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
-              %td= NonHmisAssessment.declassify_title(NonHmisAssessment.title_from_type_for_matching(client.assessment_name))
-              %td
-                = client.required_number_of_bedrooms
-                - if client.sro_ok
-                  (SRO OK)
-              - unless pathways_assessment
-                %td= client.required_minimum_occupancy
               - prioritized_column_values(client).map do |value|
                 - value = value.join('; ') if value.class == Array
                 - isBoolean = [TrueClass, FalseClass].include?(value.class)
@@ -51,7 +40,7 @@
               - if active_client_ids.include?(client.id)
                 %td.text-center= link_to 'Current Active Match', match_path(match)
               -else
-                - if can_activate_matches?
+                - if can_activate_match?
                   - unless @opportunity.match_route.allow_multiple_active_matches
                     = render 'activate_button', client: client
                   - else
@@ -60,5 +49,5 @@
                   %td
 
       - # %p=paginate @matches
-      - if @opportunity.match_route.allow_multiple_active_matches && can_activate_matches?
+      - if @opportunity.match_route.allow_multiple_active_matches && can_activate_match?
         .float-right= f.button :submit, value: 'Activate Matches'

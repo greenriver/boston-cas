@@ -98,10 +98,6 @@ module MatchDecisions::Nine
       status&.to_sym == :completed
     end
 
-    def editable?
-      super && saved_status !~ /completed|declined/
-    end
-
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
         contact.in?(match.send(contact_actor_type))

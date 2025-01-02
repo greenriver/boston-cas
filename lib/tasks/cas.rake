@@ -2,9 +2,6 @@ namespace :cas do
 
   desc 'Daily tasks'
   task daily: [:environment, 'log:info_to_stdout'] do
-    # re-set cache key for delayed job
-    Rails.cache.write('deploy-dir', Delayed::Worker::Deployment.deployed_to)
-
     Warehouse::BuildReport.new.run! if Warehouse::Base.enabled?
     Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
     Cas::UpdateVoucherAvailability.new.run!

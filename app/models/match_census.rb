@@ -24,7 +24,7 @@ class MatchCensus < ActiveRecord::Base
       # Clear any existing data for this opportunity on this day, and rebuild
       where(opportunity_id: opp.id, date: Date.current).delete_all
       clients_for_route = Client.available_for_matching(opp.match_route)
-      match_prioritization = opp.match_route.match_prioritization
+      match_prioritization = opp.active_prioritization_scheme
       # IDs of prioritized clients who match this opportunity, prioritized by route configuration
       available_client_ids = opp.matching_clients(clients_for_route).map do |client|
         {

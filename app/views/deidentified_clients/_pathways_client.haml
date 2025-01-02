@@ -15,8 +15,12 @@
         - if disabled
           = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.cohort_names.split("\n").join(', '), label: 'Cohorts'
         - elsif can_add_cohorts_to_deidentified_clients?
-          = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, input_html: { multiple: true, class: 'select2' }, label: 'Cohorts'
-
+          = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, as: :select_2, input_html: { multiple: true }, label: 'Cohorts'
+      .c-question
+        - if disabled
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.project_names.split("\n").join(', '), label: 'Associated Projects'
+        - else
+          = form.input :enrolled_project_ids, collection: Warehouse::Project.options_for_select, as: :grouped_select, group_method: :last, label: 'Associated Projects', input_html: {multiple: true, class: 'select2' }
 - if can_edit_all_clients?
   .row
     .col-md-8

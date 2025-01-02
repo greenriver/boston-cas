@@ -6,7 +6,6 @@
 
 module MatchDecisions
   class ConfirmShelterAgencyDeclineDndStaff < Base
-
     def statuses
       {
         pending: 'Pending',
@@ -41,10 +40,6 @@ module MatchDecisions
 
     def contact_actor_type
       nil
-    end
-
-    def editable?
-      super && saved_status !~ /decline_overridden|decline_overridden_returned|decline_confirmed/
     end
 
     def permitted_params
@@ -97,7 +92,5 @@ module MatchDecisions
       end
     end
     private_constant :StatusCallbacks
-
   end
-
 end

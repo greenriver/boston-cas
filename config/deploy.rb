@@ -5,8 +5,8 @@ set :application, 'cas'
 set :repo_url, 'https://github.com/greenriver/boston-cas.git'
 set :client, ENV.fetch('CLIENT')
 
-set :whenever_identifier, ->{ "#{fetch(:client)}-#{fetch(:application)}_#{fetch(:stage)}" }
-set :cron_user, ENV.fetch('CRON_USER') { 'ubuntu'}
+set :whenever_identifier, -> { "#{fetch(:client)}-#{fetch(:application)}_#{fetch(:stage)}" }
+set :cron_user, ENV.fetch('CRON_USER') { 'ubuntu' }
 set :whenever_roles, [:cron, :production_cron, :staging_cron]
 set :whenever_command, -> { "bash -l -c 'cd #{fetch(:release_path)} && /usr/share/rvm/bin/rvmsudo ./bin/bundle exec whenever -u #{fetch(:cron_user)} --update-crontab #{fetch(:whenever_identifier)} --set \"environment=#{fetch(:rails_env)}\" '" }
 set :passenger_restart_command, 'sudo passenger-config restart-app --ignore-passenger-not-running --ignore-app-not-running'
@@ -18,18 +18,18 @@ if !ENV['FORCE_SSH_KEY'].nil?
     keys: [ENV['FORCE_SSH_KEY']],
     port: ENV.fetch('SSH_PORT') { '22' },
     user: ENV.fetch('DEPLOY_USER'),
-    forward_agent: true
+    forward_agent: true,
   }
 else
   set :ssh_options, {
     port: ENV.fetch('SSH_PORT') { '22' },
     user: ENV.fetch('DEPLOY_USER'),
-    forward_agent: true
+    forward_agent: true,
   }
 end
 
 set :ssh_port, ENV.fetch('SSH_PORT') { '22' }
-set :deploy_user , ENV.fetch('DEPLOY_USER')
+set :deploy_user, ENV.fetch('DEPLOY_USER')
 
 set :rvm_custom_path, ENV.fetch('RVM_CUSTOM_PATH') { '/usr/share/rvm' }
 set :rvm_ruby_version, "#{File.read('.ruby-version').strip.split('-')[1]}@global"
@@ -66,7 +66,7 @@ after 'deploy:log_revision', :group_writable_and_owned_by_ubuntu
 set :linked_files, fetch(:linked_files, []).push(
   'config/secrets.yml',
   '.env',
-  'app/views/root/_homepage_content.haml'
+  'app/views/root/_homepage_content.haml',
 )
 
 # Default value for linked_dirs is []
@@ -77,7 +77,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'var',
   'app/assets/stylesheets/theme/styles',
   'app/assets/images/theme/logo',
-  'app/assets/images/theme/icons'
+  'app/assets/images/theme/icons',
 )
 
 # Default value for default_env is {}
@@ -88,7 +88,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
 
 namespace :deploy do
   before 'assets:precompile', :touch_theme_variables do
-    on roles(:app)  do
+    on roles(:app) do
       within shared_path do
         # must exist for asset-precompile to succeed.
         execute :touch, 'app/assets/stylesheets/theme/styles/_variables.scss'
@@ -99,9 +99,9 @@ namespace :deploy do
   ##########################################################
   # Bootstrap database structure the first time you deploy #
   ##########################################################
-  if ENV['FIRST_DEPLOY']=='true'
+  if ENV['FIRST_DEPLOY'] == 'true'
     before :migrating, :load_schema do
-      on roles(:db)  do
+      on roles(:db) do
         within release_path do
           execute :rake, "db:schema:conditional_load RAILS_ENV=#{fetch(:rails_env)}"
         end
@@ -114,15 +114,15 @@ namespace :deploy do
 end
 
 after 'deploy:migrating', :check_for_bootability do
-  on roles(:app)  do
+  on roles(:app) do
     within release_path do
-      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), "User.count"
+      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), 'User.count'
     end
   end
 end
 
 after :check_for_bootability, :regular_seeds do
-  on roles(:db)  do
+  on roles(:db) do
     within release_path do
       execute :rake, "db:seed RAILS_ENV=#{fetch(:rails_env)}"
     end
@@ -135,20 +135,11 @@ task :echo_options do
 end
 after 'git:wrapper', :echo_options
 
-task :trigger_job_restarts do
-  on roles(:app) do
-    within release_path do
-      execute :bundle, :exec, :rails, :runner, '-e', fetch(:rails_env), "\"Rails.cache.write('deploy-dir', Delayed::Worker::Deployment.deployed_to)\""
-    end
-  end
-end
-after 'deploy:symlink:release', :trigger_job_restarts
-
-if ENV['RELOAD_NGINX']=='true'
+if ENV['RELOAD_NGINX'] == 'true'
   task :reload_nginx do
     on roles(:web) do
       within release_path do
-        sudo "#{fetch(:systemctl_path)}", "reload", 'nginx'
+        sudo fetch(:systemctl_path).to_s, 'reload', 'nginx'
       end
     end
   end
@@ -159,6 +150,4 @@ end
 # remove these lines after all servers are deployed.
 # e.g.
 #      MANUAL_SYSTEMD_RESTART=true cap aws_staging deploy
-if ENV['MANUAL_SYSTEMD_RESTART']=='true'
-  after 'deploy:symlink:release', 'delayed_job:restart'
-end
+after 'deploy:symlink:release', 'delayed_job:restart' if ENV['MANUAL_SYSTEMD_RESTART'] == 'true'

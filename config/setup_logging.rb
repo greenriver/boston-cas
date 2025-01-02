@@ -39,7 +39,6 @@ class SetupLogging
   class OpenPathLogFormatter < ::Logger::Formatter
     def tagged(*args, &block)
       tags = Array.wrap(args).flatten
-
       @tags = {}
       if tags[0].is_a?(Hash)
         tags.each do |t|
@@ -49,13 +48,20 @@ class SetupLogging
         @tags.merge!(tags.map { |x| [x, true] }.to_h)
       end
 
-      block.call
+      result = block.call
+
+      # Reset tags so Rails.logger.info('msg') won't be tagged with the last tag
+      clear_tags!
+
+      # This method is actually rack middleware (at least in some contexts). It
+      # needs to pass along the block call.
+      result
     end
 
     def current_tags
       # We use our object ID here to avoid conflicting with other instances
       thread_key = @thread_key ||= "activesupport_tagged_logging_tags:#{object_id}"
-      Thread.current[thread_key] ||= @tags.keys
+      Thread.current[thread_key] ||= @tags&.keys || []
     end
 
     def clear_tags!
@@ -74,7 +80,7 @@ class SetupLogging
         message: message,
         rails_env: Rails.env,
         request_time: time,
-        application: 'CAS',
+        # application: 'CAS',
       }.merge(STANDARD_TAGS).reverse_merge(@tags).to_json + "\r\n"
     end
   end
@@ -88,11 +94,12 @@ class SetupLogging
     config.lograge.custom_options = ->(event) do
       {
         request_time: Time.current,
-        application: Rails.application.class,
+        # application: Rails.application.class,
         server_protocol: event.payload[:server_protocol],
         host: event.payload[:host],
         remote_ip: event.payload[:remote_ip],
         ip: event.payload[:ip],
+        remote_addr: event.payload[:remote_addr],
         session_id: event.payload[:session_id],
         user_id: event.payload[:user_id],
         process_id: Process.pid,
@@ -102,6 +109,7 @@ class SetupLogging
         x_forwarded_for: event.payload[:x_forwarded_for],
         rails_env: Rails.env,
         exception: event.payload[:exception]&.first,
+        x_amzn_trace_id: event.payload[:request]&.headers&.env.try(:[], 'HTTP_X_AMZN_TRACE_ID'),
       }.merge(STANDARD_TAGS)
     end
   end
@@ -109,7 +117,7 @@ class SetupLogging
   def _development
     config.log_level = ENV.fetch('LOG_LEVEL') { 'debug' }.to_sym
 
-    if ENV['RAILS_LOG_TO_STDOUT'] == 'true'
+    if ENV['RAILS_LOG_TO_STDOUT'] == 'true' || ENV['LOG_STD'] == 'true'
       config.logger = _tagged(ActiveSupport::Logger.new($stdout))
     else
       config.logger = _tagged(ActiveSupport::Logger.new("log/#{Rails.env}.log"))
@@ -127,7 +135,6 @@ class SetupLogging
     config.lograge.enabled = false
     config.log_level = ENV.fetch('LOG_LEVEL') { 'info' }.to_sym
     config.logger = _tagged ActiveSupport::Logger.new("log/#{Rails.env}.log")
-    # config.logger.formatter = ActiveSupport::Logger::SimpleFormatter.new
   end
 
   def _staging

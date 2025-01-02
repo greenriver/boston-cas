@@ -1,7 +1,7 @@
 version: '3.8'
 
 x-app: &app
-  image: cas:${TARGET:-dev-build}-0.0.3
+  image: cas:${TARGET:-dev-build}-1.0
   build:
     context: .
     target: ${TARGET:-dev-build}
@@ -24,6 +24,8 @@ x-app: &app
     RAILS_ENV: ${RAILS_ENV:-development}
     REDIS_URL: redis://redis:6379/
     BOOTSNAP_CACHE_DIR: /bundle/bootsnap
+    K8S_API_HOST_AND_PORT: ${K8S_API_HOST_AND_PORT:-}
+    KUBE_CONFIG_PATH: ${KUBE_CONFIG_PATH:-/home/app-user/.kube/config}
     WEB_CONCURRENCY: 1
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
@@ -85,6 +87,18 @@ services:
       - db
       - redis
 
+  dj-metrics:
+    <<: *backend
+    entrypoint: /usr/bin/entrypoint.dj-metrics.sh
+    ports:
+      # visit localhost:34534/metrics
+      - "${DJ_METRICS_PORT:-34534}:9292"
+    expose:
+      - "9292"
+    depends_on:
+      dj:
+        condition: service_started
+
   web:
     <<: *backend
     stdin_open: true
@@ -112,9 +126,13 @@ services:
 
   db:
     image: postgres:12-alpine
+    container_name: cas-db
     environment:
       POSTGRES_PASSWORD: postgres
       PSQL_HISTFILE: /root/log/.psql_history
+      PGUSER: postgres
+      PGPASS: postgres
+      PGDATABASE: cas
     volumes:
       - dbdata:/var/lib/postgresql/data
     ports:

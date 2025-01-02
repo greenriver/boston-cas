@@ -9,4 +9,7 @@
       = f.input :contacts, as: :select_2, collection: @filter.contact_options_for_select, input_html: { multiple: true }
     .col-3
       = f.input :contact_type, as: :select_2, collection: @filter.contact_type_options_for_select, include_blank: 'Any Contact Type'
+  .row
+    .col-3
+      = f.input :contact_order, as: :boolean, label: 'Only primary contacts'
   = f.submit 'Update Dashboard', class: 'btn btn-primary'

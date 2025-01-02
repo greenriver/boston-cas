@@ -42,6 +42,10 @@ class Reporting::Decisions < ApplicationRecord
     where(program_type: limit)
   end
 
+  scope :program, ->(limit) do
+    where(program_name: Program.where(id: limit).select(:name))
+  end
+
   scope :associated_with_agency, ->(limit) do
     # joins are hard through polymorphic associations...
     program_names = EntityViewPermission.where(entity_type: 'Program', editable: true, agency_id: limit).
@@ -150,6 +154,14 @@ class Reporting::Decisions < ApplicationRecord
     type.chomp!('_contacts')
 
     contacts = ClientOpportunityMatchContact.where(type.to_sym => true)
+    contacts.where(contact_id: contact_array) unless contact_array.blank?
+
+    joins(match: :contacts).
+      merge(contacts)
+  end
+
+  scope :contacts_with_order_value, ->(contact_array, order) do
+    contacts = ClientOpportunityMatchContact.where(contact_order: order)
     contacts.where(contact_id: contact_array) unless contact_array.blank?
 
     joins(match: :contacts).

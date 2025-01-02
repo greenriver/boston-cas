@@ -51,10 +51,6 @@ module MatchDecisions::Four
       status&.to_sym == :completed
     end
 
-    def editable?
-      super && saved_status !~ /complete/
-    end
-
     def stallable?
       true
     end

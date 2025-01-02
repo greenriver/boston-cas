@@ -145,7 +145,11 @@ class Voucher < ApplicationRecord
   end
 
   def can_be_archived?
-    ! available && ! active_matches?
+    ! available && ! active_matches? && ! archived?
+  end
+
+  def archived?
+    archived_at.present?
   end
 
   def active_matches?

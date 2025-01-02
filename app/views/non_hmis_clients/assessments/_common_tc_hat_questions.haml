@@ -46,9 +46,10 @@
             .c-question__input
               = form.label field_name, { pre_label: options[:number] }.merge(options)
               = form.input field_name, collection: options[:collection], label: false, as: :pretty_boolean_group, wrapper: :custom_boolean, input_html: options[:input_html]
+              = render 'non_hmis_clients/assessments/common_description_display', options: options
         - else
           .c-question__number= options[:number]
-          - if disabled
+          - if disabled && @assessment.respond_to?(field_name)
             - val = @assessment.public_send(field_name)
             - if options[:collection].present?
               - if val.is_a?(Array)
@@ -63,9 +64,9 @@
                 = form.input(field_name, {}.merge(options))
               - elsif field_name.starts_with?('_')
                 = form.label field_name, { pre_label: options[:number] }.merge(options)
-                .description
-                  = options[:description]
+                = render 'non_hmis_clients/assessments/common_description_display', options: options
               - else
                 = form.input(field_name, { pre_label: options[:number] }.merge(options))
+                = render 'non_hmis_clients/assessments/common_description_display', options: options
 
 = render 'non_hmis_clients/assessments/tc_hat_js'

@@ -45,11 +45,7 @@ module MatchDecisions::Thirteen
     end
 
     def contact_actor_type
-      nil
-    end
-
-    def editable?
-      super && status !~ /confirmed|rejected/
+      :dnd_staff_contacts
     end
 
     def initialize_decision! send_notifications: true

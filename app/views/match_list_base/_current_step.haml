@@ -1,6 +1,11 @@
 - match_route = match.match_route
 - types = match_step_types[match_route.class.name]
 - match_decisions = match.decisions.order(id: :asc).where(type: types&.keys).to_a
+- # remove any skipped decisions
+- skipped_names = match_decisions.select(&:skipped?).map { |m| m.class.name }
+- match_decisions.reject!(&:skipped?)
+- types.reject! { |class_name, _| class_name.in?(skipped_names) }
+- types = types.keys.zip(1..).to_h
 - size ||= 'lg'
 - small_class = 'c-stepped-progress--sm'
 

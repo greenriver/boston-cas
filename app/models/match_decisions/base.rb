@@ -61,7 +61,7 @@ module MatchDecisions
              foreign_key: :decision_id
 
     validate :ensure_status_allowed, if: :status
-    validate :cancellations, if: :administrative_cancel_reason_id
+    validate :cancellations
 
     ####################
     # Attributes
@@ -86,7 +86,7 @@ module MatchDecisions
     def editable?
       # can this decision be updated by a notification response?
       # override this default behavior in subclasses
-      initialized? && match_open?
+      initialized? && match_open? && saved_status !~ /\A(accepted|confirmed|declined|canceled|rejected|complete|completed|scheduled|no_hearing|mitigation_required|mitigation_not_required|decline_overridden|decline_overridden_returned|decline_confirmed)\z/
     end
 
     def expires?
@@ -98,6 +98,10 @@ module MatchDecisions
     end
 
     def stallable?
+      false
+    end
+
+    def skipped?
       false
     end
 
@@ -436,7 +440,7 @@ module MatchDecisions
       return :canceled if self.class.closed_match_statuses.include?(status_sym)
       return :canceled if status_sym == :pending && match.closed?
       return :skipped if status_sym == :skipped
-      return :active if editable?
+      return :active if editable? && !next_step&.initialized?
       return :incomplete if status_sym == :pending || status_sym == :other_clients_canceled || status.blank?
 
       :done
@@ -469,7 +473,26 @@ module MatchDecisions
     end
 
     def cancel_reasons
-      MatchDecisionReasons::All.where(name: step_cancel_reasons)
+      result = []
+      MatchDecisionReasons::All.where(name: step_cancel_reasons).each do |reason|
+        result << reason
+      end
+      result.sort_by! { |m| [m.name.downcase == 'other' ? 1 : 0, m.name.downcase] }
+      result.map! do |reason|
+        # Only include the asterisks if more than 'Other' requires additional explanation
+        include_asterisk = cancel_reasons_not_other_requiring_explanation.present? && (reason.other? || cancel_reasons_not_other_requiring_explanation.include?(reason.name))
+        name = reason.name
+        name += '*' if include_asterisk
+        [name, reason.id]
+      end
+    end
+
+    def decline_reasons_not_other_requiring_explanation
+      []
+    end
+
+    def cancel_reasons_not_other_requiring_explanation
+      []
     end
 
     private def ensure_status_allowed
@@ -477,7 +500,10 @@ module MatchDecisions
     end
 
     private def cancellations
-      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing 'Other'" if status == 'canceled' && administrative_cancel_reason&.other? && administrative_cancel_reason_other_explanation.blank?
+      errors.add :administrative_cancel_reason_id, 'please indicate the reason for canceling' if status == 'canceled' && administrative_cancel_reason_id.blank?
+
+      explanation_field_required = status == 'canceled' && (administrative_cancel_reason&.other? || cancel_reasons_not_other_requiring_explanation&.include?(administrative_cancel_reason&.name))
+      errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing '#{administrative_cancel_reason&.name}'" if explanation_field_required && administrative_cancel_reason_other_explanation&.blank?
     end
 
     private def notification_class

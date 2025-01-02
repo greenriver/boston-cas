@@ -1,4 +1,6 @@
 = content_for :modal_title do
   Add Overall Match Note
-
+- if @match.current_decision&.stallable? && @match.stalled?
+  .alert.alert-warning
+    #{Translation.translate('This match is currently stalled.  Adding a note here will not submit a status update.  If you arrived here intending to submit a status update, please fill in the form under the Match Stalled heading.')}
 = render 'form'

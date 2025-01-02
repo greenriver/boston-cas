@@ -142,6 +142,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       :shelter_name,
       :warehouse_client_id,
       active_cohort_ids: [],
+      enrolled_project_ids: [],
       client_assessments_attributes: [
         :id,
         :type,

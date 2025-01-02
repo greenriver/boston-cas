@@ -51,10 +51,6 @@ module MatchDecisions::Six
       nil
     end
 
-    def editable?
-      super && status !~ /confirmed|rejected/
-    end
-
     def initialize_decision! send_notifications: true
       super(send_notifications: send_notifications)
       update status: 'pending'

@@ -16,7 +16,7 @@ default: &default
   host: <%= ENV['DATABASE_HOST'] %>
   <% end %>
   <% if ENV['RAILS_ENV'] == 'production' || ENV['RAILS_ENV'] == 'staging' %>
-  sslmode: 'verify-full'
+  sslmode: <%= ENV.fetch('DATABASE_SSLMODE') { 'verify-full' } %>
   sslrootcert: /etc/ssl/certs/us-east-1-bundle.pem
   <% end %>
 
