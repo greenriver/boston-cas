@@ -409,6 +409,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :acute_health_caused_episode,
       :idd_caused_episode,
       :federal_benefits,
+      :psh_required,
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

@@ -506,6 +506,23 @@ module PathwaysVersionFourCalculations
       }
     end
 
+    private def psh_requirements_options
+      {
+        'no' => {
+          label: 'Client is in need of Homeless Set Aside or other subsidized housing resources. A homeless Set Aside is a subsidized unit that DOES NOT come with supportive services.',
+          score: 0,
+        },
+        'yes' => {
+          label: 'Client is in need of Permanent Supportive Housing. Permanent Supportive Housing is a voucher or project based housing resource that comes with comprehensive support services. Individuals must meet the Dedicated Plus length of time homeless definition and have an accompanying disability for eligibility.',
+          score: 0,
+        },
+        'maybe' => {
+          label: 'Client meets eligibility for Permanent Supportive Housing and is receiving services that could be used in a Homeless Set Aside Unit. This option is for clients who may benefit from either housing resource.',
+          score: 0,
+        },
+      }
+    end
+
     def calculated_score
       return total_days_homeless_in_the_last_three_years if assessment_type == pathways_assessment_type.to_s
 
@@ -650,9 +667,16 @@ module PathwaysVersionFourCalculations
             },
           },
         },
+        psh_required: {
+          label: 'Client is in need of below housing resource:',
+          number: 'Q5',
+          as: :pretty_boolean_group,
+          collection: collection_for(:psh_requirements),
+          include_blank: false,
+        },
         need_daily_assistance: {
           label: 'Does client have a physical or mental impairment that substantially limits one or more daily life functions? Daily life functions include: obtaining food/eating, sleeping, physical movement, caring for one’s personal hygiene, and communicating.',
-          number: 'Q5',
+          number: 'Q6',
           as: :select_2,
           collection: collection_for(:need_daily_assistance),
           include_blank: false,
@@ -661,30 +685,30 @@ module PathwaysVersionFourCalculations
           label: 'Does the client have a history of substance use disorder that prevents them from living independently without support services?',
           collection: collection_for(:substance_use),
           as: :pretty_boolean_group,
-          number: 'Q6',
+          number: 'Q7',
         },
         federal_benefits: {
           label: 'Does the client qualify for federal benefits?',
           collection: collection_for(:federal_benefits),
           as: :pretty_boolean_group,
-          number: 'Q7',
+          number: 'Q8',
         },
         background_check_issues: {
           label: 'Eviction History',
-          number: 'Q8',
+          number: 'Q9',
           collection: collection_for(:background_check_issues),
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
         },
         times_moved: {
           label: 'How many times have you moved while enrolled in rapid re-housing?',
-          number: 'Q9',
+          number: 'Q10',
           as: :pretty_boolean_group,
           collection: collection_for(:times_moved),
         },
         financial_assistance_end_date: {
           label: 'Enter date for last day of financial assistance',
-          number: 'Q10',
+          number: 'Q11',
           as: :date_picker,
         },
       }
