@@ -643,6 +643,15 @@ class Client < ApplicationRecord
     bool_for_export(need_daily_assistance)
   end
 
+  def psh_required_for_export
+    case psh_required
+    when 'yes', 'no'
+      psh_required.capitalize
+    else
+      'Unknown'
+    end
+  end
+
   private def numeric_bool_for_export(value)
     return 'Yes' if value.to_s == '1'
     return 'No' if value.to_s == '0'
@@ -1254,6 +1263,10 @@ class Client < ApplicationRecord
       assessment_type_description: {
         title: 'Assessment Type',
         description: nil,
+        type: 'String',
+      },
+      psh_required: {
+        title: 'In need of Permanent Supportive Housing',
         type: 'String',
       },
     }
