@@ -12,6 +12,7 @@ module MatchDecisions
       [
         'MatchDecisions::Thirteen::ThirteenClientMatch',
         'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement',
+        'MatchDecisions::Thirteen::ThirteenClientReview',
       ].include?(type)
     end
 
@@ -24,7 +25,7 @@ module MatchDecisions
         reasons << 'Incarcerated'
         reasons << 'Institutionalized'
         reasons << 'In Treatment/Recovery Center'
-        reasons << 'Match expired' unless pre_hsa_decision? || match_success_decision?
+        reasons << 'Match expired' if pre_hsa_decision?
         reasons << 'Client has declined match' unless pre_hsa_decision?
         reasons << 'Client has disengaged' unless pre_hsa_decision?
         reasons << 'Client has disappeared' unless pre_hsa_decision?
