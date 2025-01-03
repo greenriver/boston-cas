@@ -80,6 +80,10 @@ module MatchDecisions::Thirteen
       end
     end
 
+    def expires?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
