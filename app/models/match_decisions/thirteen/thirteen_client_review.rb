@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2024 Green River Data Analysis, LLC
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -10,7 +10,12 @@ module MatchDecisions::Thirteen
     include MatchDecisions::RouteThirteenCancelReasons
     include MatchDecisions::RouteThirteenDeclineReasons
 
+    # proxy for client.release_of_information
+    attr_accessor :release_of_information
+
     validate :ensure_required_contacts_present_on_accept
+    validate :release_of_information_present_if_match_accepted
+    validate :spoken_with_services_agency_and_cori_release_submitted_if_accepted
 
     def to_partial_path
       'match_decisions/thirteen/client_review'
@@ -63,6 +68,14 @@ module MatchDecisions::Thirteen
       send_notifications_for_step if send_notifications
     end
 
+    def expires?
+      true
+    end
+
+    def stallable?
+      true
+    end
+
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{Translation.translate('Shelter Agency Thirteen')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
@@ -74,11 +87,32 @@ module MatchDecisions::Thirteen
       saved_status == 'pending' && status == 'accepted'
     end
 
+    def permitted_params
+      super + [:client_spoken_with_services_agency, :cori_release_form_submitted, :release_of_information, :shelter_expiration]
+    end
+
+    private def release_of_information_present_if_match_accepted
+      # if the Shelter Agency has just indicated a release has been signed:
+      # release_of_information = '1'
+      # if the client previously signed the release
+      # release_of_information = Time
+      errors.add :release_of_information, 'Client must provide a release of information to move forward in the match process' if status == 'accepted' && release_of_information == '0'
+    end
+
+    private def spoken_with_services_agency_and_cori_release_submitted_if_accepted
+      if status == 'accepted' # rubocop:disable Style/GuardClause
+        errors.add :client_spoken_with_services_agency, 'Communication with the services agency is required.' unless client_spoken_with_services_agency
+        errors.add :cori_release_form_submitted, 'A CORI release form is required.' if Config.get(:require_cori_release) && ! cori_release_form_submitted
+      end
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
 
       def accepted
+        # Only update the client's release_of_information attribute if we just set it
+        match.client.update_attribute(:release_of_information, Time.current) if @decision.release_of_information == '1'
         if match.sub_program.cori_hearing_required?
           @decision.next_step.initialize_decision!
         else

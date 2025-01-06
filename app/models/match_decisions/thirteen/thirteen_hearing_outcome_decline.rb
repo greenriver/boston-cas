@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2024 Green River Data Analysis, LLC
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -58,6 +58,10 @@ module MatchDecisions::Thirteen
       super(send_notifications: send_notifications)
       update status: :pending
       send_notifications_for_step if send_notifications
+    end
+
+    def stallable?
+      true
     end
 
     class StatusCallbacks < StatusCallbacks
