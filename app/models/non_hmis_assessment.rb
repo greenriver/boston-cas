@@ -79,8 +79,10 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
+      merge(IdentifiedPathwaysVersionFour.new(assessment_type: :family_pathways_2024).for_matching).
       merge(IdentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
+      merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :family_pathways_2024).for_matching).
       merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedTcHat.new.for_matching).
       merge(DeidentifiedTcHat.new.for_matching).

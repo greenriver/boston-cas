@@ -183,7 +183,7 @@ module PathwaysVersionFourCalculations
     end
 
     def family_pathways_description
-      pathways_description
+      Translation.translate('We want to reach you when there is a housing program opening for your family.')
     end
 
     def transfer_description
@@ -1342,19 +1342,9 @@ module PathwaysVersionFourCalculations
             },
           },
         },
-        sro_ok: {
-          label: 'If you are a single adult, would you consider living in a single room occupancy (SRO)?',
-          number: '4',
-          collection: {
-            'Yes' => true,
-            'No' => false,
-            'Not applicable' => nil,
-          },
-          as: :pretty_boolean_group,
-        },
         required_number_of_bedrooms: {
-          label: 'If you need a bedroom size larger than an SRO, studio or 1 bedroom, select the size below',
-          number: '5',
+          label: 'Please list the minimum bedroom size needed for your family:',
+          number: '4',
           collection: {
             '2' => 2,
             '3' => 3,
