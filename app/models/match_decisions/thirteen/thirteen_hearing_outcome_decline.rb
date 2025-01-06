@@ -60,6 +60,10 @@ module MatchDecisions::Thirteen
       send_notifications_for_step if send_notifications
     end
 
+    def stallable?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
