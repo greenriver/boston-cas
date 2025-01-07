@@ -11,7 +11,7 @@ class NonHmisAssessment < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth
+  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth, :available
   attr_writer :total_days_homeless_in_the_last_three_years
 
   belongs_to :non_hmis_client
@@ -20,7 +20,9 @@ class NonHmisAssessment < ActiveRecord::Base
 
   after_find :populate_aggregates
 
+  after_initialize :set_non_hmis_assessment_availability
   before_save :update_assessment_score
+  before_save :set_non_hmis_client_availability
 
   scope :limitable_pathways, -> do
     where(type: limited_assessment_types)
@@ -115,6 +117,24 @@ class NonHmisAssessment < ActiveRecord::Base
     update_assessment_score
     save
     non_hmis_client.save
+  end
+
+  # The Family Pathways assessment collects availability, ensure we pull this from the
+  # associated client on load
+  def set_non_hmis_assessment_availability
+    return unless pathways_v4?
+    return unless title == family_pathways_title
+
+    self.available = non_hmis_client.available
+  end
+
+  # The Family Pathways assessment collects availability, ensure we push this onto the
+  # associated client so that it is persisted
+  def set_non_hmis_client_availability
+    return unless pathways_v4?
+    return unless title == family_pathways_title
+
+    non_hmis_client.update(available: available)
   end
 
   def pathways_v3?
@@ -409,6 +429,12 @@ class NonHmisAssessment < ActiveRecord::Base
       :chronic_health_caused_episode,
       :acute_health_caused_episode,
       :idd_caused_episode,
+      :available,
+      :schools,
+      :schools_contact_info,
+      :requires_vision_or_hearing_accessibility,
+      :disqualified_for_state_assistance,
+      disqualified_for_state_assistance_reasons: [],
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

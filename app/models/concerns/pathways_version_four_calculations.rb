@@ -1220,7 +1220,20 @@ module PathwaysVersionFourCalculations
       {
         _pathways_version_four_preamble: {
           as: :partial,
-          partial: 'non_hmis_assessments/pathways_version_four/pathways_version_four_preamble',
+          partial: 'non_hmis_assessments/pathways_version_four/family_pathways_version_four_preamble',
+        },
+        available: {
+          number: '1A',
+          label: 'If you are declining information sharing, are you still interested in being matched through an anonymous route.',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+        },
+        _ce_required_questions_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/ce_required_questions_preamble',
         },
         entry_date: {
           label: 'Date of Assessment',
@@ -1266,7 +1279,7 @@ module PathwaysVersionFourCalculations
           number: '2D',
         },
         shelter_section: {
-          label: 'Do you have any agencies we could contact to get a hold of you?',
+          label: 'What agencies may we contact to reach you (client)?',
           number: '2E',
           questions: {
             agency_name: {
@@ -1307,9 +1320,23 @@ module PathwaysVersionFourCalculations
             },
           },
         },
+        child_contact_section: {
+          label: 'If you are comfortable with us reaching out to you through your child’s school(s), please list these here:',
+          number: '2H',
+          questions: {
+            schools: {
+              label: 'Schools:',
+            },
+            schools_contact_info: {
+              label: 'Contact name/email/phone:',
+              as: :text,
+              hint: 'Please provide email address and full name for each contact listed',
+            },
+          },
+        },
         other_contact: {
           label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
-          number: '2H',
+          number: '2I',
         },
         _household_preamble: {
           as: :partial,
@@ -1333,19 +1360,22 @@ module PathwaysVersionFourCalculations
           number: '3C',
           label: 'If there is a second adult in your household, is this person also homeless in the City of Boston? (This is only for match coordination. Partner can be assessed and matched separately)',
           questions: {
-            partner_warehouse_id: {
-              label: 'If yes: assessor - check for Partner Warehouse ID:',
-            },
-            partner_name: {
-              label: 'Partner Name:',
+            partner_name: { # actually collecting relationship
+              label: 'Relationship of Adult:',
               as: :text,
+              hint: 'Only collect if there is another adult in the household who is homeless in the City of Boston',
             },
           },
         },
+        _housing_size_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/household_size_preamble',
+        },
         required_number_of_bedrooms: {
           label: 'Please list the minimum bedroom size needed for your family:',
-          number: '4',
+          number: '4A',
           collection: {
+            '1' => 1,
             '2' => 2,
             '3' => 3,
             '4' => 4,
@@ -1356,7 +1386,7 @@ module PathwaysVersionFourCalculations
         },
         disability_section: {
           label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.',
-          number: '6',
+          number: '4B',
           questions: {
             requires_wheelchair_accessibility: {
               label: 'Wheelchair accessible unit',
@@ -1370,28 +1400,71 @@ module PathwaysVersionFourCalculations
               as: :pretty_boolean,
               wrapper: :custom_boolean,
             },
+            requires_vision_or_hearing_accessibility: {
+              label: 'Buildouts for vision/ hearing impairment',
+              number: '6',
+              as: :pretty_boolean,
+              wrapper: :custom_boolean,
+            },
             accessibility_other: {
               label: 'Other accessibility',
               number: '6',
             },
           },
         },
-        rrh_desired: {
-          label: 'Are you interested Rapid Re-Housing?',
-          number: '7',
+        th_desired: {
+          label: 'Are you interested Transitional Housing?',
+          number: '4C',
           as: :pretty_boolean_group,
           collection: {
             'Yes' => true,
             'No' => false,
           },
         },
+        rrh_desired: {
+          label: 'Are you interested Rapid Re-Housing?',
+          number: '4D',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+        },
+        housing_barrier_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/barriers_preamble',
+        },
+        housing_disqualified_section: {
+          number: '5A',
+          questions: {
+            disqualified_for_state_assistance: {
+              label: 'Are you disqualified for the State Emergency Assistance for Families program?',
+              number: '5A',
+              as: :pretty_boolean_group,
+              collection: {
+                'Yes' => true,
+                'No' => false,
+              },
+            },
+            disqualified_for_state_assistance_reasons: {
+              label: 'If yes, which reasons apply [OPTIONAL]',
+              number: '5C',
+              collection: {
+                Translation.translate('At fault for a fire, flood or other reason building was condemned') => 'at fault for condemned building',
+                Translation.translate('At fault for foreclosure or eviction from previous housing') => 'at fault for foreclosure or eviction',
+                Translation.translate('Family is over income limit') => 'over income limit',
+                Translation.translate('Other reason') => 'other',
+              },
+              as: :pretty_checkboxes_group,
+            },
+          },
+        },
         housing_barrier_section: {
-          label: 'Barriers to Housing:',
-          number: 8,
+          number: '5B',
           questions: {
             housing_barrier: {
               label: 'Do you have any of the following histories and/or barriers?',
-              number: 8,
+              number: '5B',
               as: :pretty_boolean_group,
               collection: {
                 'Yes' => true,
@@ -1399,13 +1472,16 @@ module PathwaysVersionFourCalculations
               },
             },
             denial_required: {
-              label: 'If yes, which ones [OPTIONAL]',
-              number: '8',
+              label: 'If yes, which reasons apply [OPTIONAL]',
+              number: '5C',
               collection: {
-                Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties OR') => 'manufacture or production of methamphetamine in household',
-                Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years OR') => 'evicted from or voucher terminated from a BHA',
+                Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties') => 'manufacture or production of methamphetamine in household',
+                Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years') => 'evicted from or voucher terminated from a BHA',
                 Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
-                Translation.translate('Other (open cases, undocumented, etc.)') => 'other',
+                Translation.translate('My family has at least one person who is not a citizen of the United States') => 'non-us citizen in household',
+                Translation.translate('I have low English literacy (reading, writing or speaking)') => 'low english literacy',
+                Translation.translate('I have low educational attainment (less than high school diploma/ GED)') => 'low educational alignment',
+                Translation.translate('Other (large family size, etc.)') => 'other',
               },
               as: :pretty_checkboxes_group,
             },

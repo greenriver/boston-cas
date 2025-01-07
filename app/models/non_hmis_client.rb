@@ -327,6 +327,7 @@ class NonHmisClient < ApplicationRecord
       :pregnancy_status,
       :pregnant_under_28_weeks,
       :child_in_household,
+      :requires_vision_or_hearing_accessibility,
     ].each do |method|
       project_client[method] = current_assessment&.send(method)
     end
@@ -361,6 +362,7 @@ class NonHmisClient < ApplicationRecord
   end
 
   def update_assessment_from_client(assessment = current_assessment)
+    assessment.available = available
     assessment.assessment_score = assessment_score
     assessment.actively_homeless = actively_homeless
     assessment.days_homeless_in_the_last_three_years = days_homeless_in_the_last_three_years
