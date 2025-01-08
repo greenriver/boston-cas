@@ -62,10 +62,6 @@ module MatchDecisions::Thirteen
       true
     end
 
-    def stallable?
-      true
-    end
-
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{Translation.translate('Shelter Agency Thirteen')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?
