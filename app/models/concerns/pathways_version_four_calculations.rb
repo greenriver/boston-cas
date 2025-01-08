@@ -1487,13 +1487,16 @@ module PathwaysVersionFourCalculations
             },
           },
         },
+        service_need_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/service_need_preamble',
+        },
         service_need_section: {
-          label: 'Service Need Indicator:',
-          number: '9',
+          number: '6',
           questions: {
             service_need: {
               label: 'Does any of the following apply to you?',
-              number: 9,
+              number: '6',
               as: :pretty_boolean_group,
               collection: {
                 'Yes' => true,
@@ -1502,7 +1505,7 @@ module PathwaysVersionFourCalculations
             },
             service_need_indicators: {
               label: 'If yes, which ones [OPTIONAL]',
-              number: '9',
+              number: '6',
               collection: {
                 Translation.translate("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters',
                 Translation.translate('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
