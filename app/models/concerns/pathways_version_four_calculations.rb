@@ -20,7 +20,10 @@ module PathwaysVersionFourCalculations
     def title
       return pathways_title if assessment_type.blank?
 
-      assessment_type_options[assessment_type.to_sym][:title]
+      title = assessment_type_options.dig(assessment_type.to_sym, :title)
+      return pathways_title if title.blank?
+
+      title
     end
 
     def pathways?
@@ -1507,15 +1510,13 @@ module PathwaysVersionFourCalculations
               label: 'If yes, which ones [OPTIONAL]',
               number: '6',
               collection: {
-                Translation.translate("I've faced indefinite restrictions and a history of restrictions from area shelters") => 'restrictions from area shelters',
-                Translation.translate('There have been instances where I declined to come inside during dangerous weather') => 'declined to come inside during dangerous weather',
-                Translation.translate('My experience of homelessness began in Boston over 10 years ago') => 'homelessness begain 10 years ago',
-                Translation.translate('I have a criminal record (CORI) or ongoing legal cases') => 'criminal record (CORI) or ongoing legal cases',
-                Translation.translate('I am on a High Utilizer of Emergency Services (HUES) list.') => 'on the HUES list',
-                Translation.translate('I am or have been at risk of engaging in high-risk and exploitative situations, such as sex trafficking.') => 'at risk of engaging in high-risk and exploitative situations',
-                Translation.translate('In the last 3 years, I have been housed but lost housing') => 'lost housing in the last 3 years',
-                Translation.translate('I have a history of extended stays (12+ months) in medical respite and other inpatient treatment facilities') => 'history of extended stas in inpatient treatment facilities',
-                Translation.translate('In the last 2 years, I have had at least one Section 12 or 35 and/or have been involuntarily committed') => 'involuntarily committed and 1+ Section 12 or 35 in the last 2 years',
+                Translation.translate('Someone in my family (me/ my dependent child) is or has been at risk of harm from domestic violence, dating violence, sexual assault, stalking or human trafficking.') => 'domestic violence',
+                Translation.translate('Someone in my family requires full time assistance to meet daily living requirements.') => 'full-time assistance required',
+                Translation.translate('Someone in my family has used inpatient hospital or treatment facilities 2 or more times over the past year.') => 'frequent hospital use',
+                Translation.translate('An adult in my family has a felony criminal record (CORI).') => 'criminal record (CORI) or ongoing legal cases',
+                Translation.translate('An adult in my family has current legal issue or was incarcerated in the last 3-5 years.') => 'legal issues or incarceration',
+                Translation.translate('My family has experienced a legal eviction from subsidized housing in the past 10 years.') => 'eviction from subsidized housing',
+                Translation.translate('DCF is or has been involved with my family.') => 'DCF involvement',
               },
               as: :pretty_checkboxes_group,
             },
@@ -1526,7 +1527,7 @@ module PathwaysVersionFourCalculations
           partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_preamble',
         },
         homeless_nights_sheltered_section: {
-          number: '10A',
+          number: '7A',
           label: 'Length of Time Homeless (Sheltered) - Warehouse:',
           questions: {
             homeless_nights_sheltered: {
@@ -1535,7 +1536,7 @@ module PathwaysVersionFourCalculations
           },
         },
         additional_homeless_nights_sheltered_section: {
-          number: '10B',
+          number: '7B',
           label: 'Length of Time Homeless (Sheltered) - Non-HMIS:',
           questions: {
             additional_homeless_nights_sheltered: {
@@ -1544,7 +1545,7 @@ module PathwaysVersionFourCalculations
           },
         },
         homeless_nights_unsheltered_section: {
-          number: '10C',
+          number: '7C',
           label: 'Length of Time Homeless (Unsheltered) - Warehouse:',
           questions: {
             homeless_nights_unsheltered: {
@@ -1553,7 +1554,7 @@ module PathwaysVersionFourCalculations
           },
         },
         additional_homeless_nights_unsheltered_section: {
-          number: '10D',
+          number: '7D',
           label: 'Length of Time Homeless (Unsheltered) - Non-HMIS:',
           questions: {
             additional_homeless_nights_unsheltered: {
@@ -1568,24 +1569,24 @@ module PathwaysVersionFourCalculations
         total_homeless_nights_sheltered: {
           label: 'Total # of Sheltered Nights:',
           hint: 'Auto calculated',
-          number: '10E',
+          number: '7E',
           disabled: true,
         },
         total_homeless_nights_unsheltered: {
           label: 'Total # of Unsheltered Nights:',
           hint: 'Auto calculated',
-          number: '10F',
+          number: '7F',
           disabled: true,
         },
         total_days_homeless_in_the_last_three_years: {
           label: 'Total # of Boston Homeless Nights: (Cannot exceed 1096)',
           hint: 'Auto calculated',
-          number: '10G',
+          number: '7G',
           disabled: true,
         },
         _household_history_epilogue: {
           as: :partial,
-          partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_epilogue',
+          partial: 'non_hmis_assessments/pathways_version_four/family_pathways_household_history_epilogue',
         },
       }
     end
