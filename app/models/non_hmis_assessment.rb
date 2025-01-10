@@ -124,6 +124,7 @@ class NonHmisAssessment < ActiveRecord::Base
   def set_non_hmis_assessment_availability
     return unless pathways_v4?
     return unless title == family_pathways_title
+    return unless non_hmis_client
 
     self.available = non_hmis_client.available
   end
