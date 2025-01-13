@@ -66,7 +66,7 @@ module PathwaysVersionFourCalculations
     def tie_breaker_date
       case assessment_type.to_sym
       when :pathways_2024, :family_pathways_2024
-        entry_date
+        calculated_first_homeless_night.presence || entry_date
       when :transfer_assessment
         financial_assistance_end_date
       end
