@@ -435,6 +435,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :schools_contact_info,
       :requires_vision_or_hearing_accessibility,
       :disqualified_for_state_assistance,
+      :calculated_first_homeless_night,
       disqualified_for_state_assistance_reasons: [],
       strengths: [],
       challenges: [],

@@ -2188,7 +2188,8 @@ CREATE TABLE public.non_hmis_assessments (
     schools character varying,
     schools_contact_info text,
     disqualified_for_state_assistance boolean DEFAULT false,
-    disqualified_for_state_assistance_reasons character varying
+    disqualified_for_state_assistance_reasons character varying,
+    calculated_first_homeless_night date
 );
 
 
@@ -7292,6 +7293,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20241202135547'),
 ('20241202135711'),
 ('20250102144339'),
-('20250107142055');
+('20250107142055'),
+('20250113131532');
 
 

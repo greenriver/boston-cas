@@ -1212,6 +1212,11 @@ module PathwaysVersionFourCalculations
           number: '10G',
           disabled: true,
         },
+        calculated_first_homeless_night: {
+          label: 'Tiebreaker - First Date Homeless',
+          number: '10H',
+          as: :date_picker,
+        },
         _household_history_epilogue: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_epilogue',
@@ -1583,6 +1588,11 @@ module PathwaysVersionFourCalculations
           hint: 'Auto calculated',
           number: '7G',
           disabled: true,
+        },
+        calculated_first_homeless_night: {
+          label: 'Tiebreaker - First Date Homeless',
+          number: '10H',
+          as: :date_picker,
         },
         _household_history_epilogue: {
           as: :partial,

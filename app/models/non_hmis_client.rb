@@ -328,6 +328,7 @@ class NonHmisClient < ApplicationRecord
       :pregnant_under_28_weeks,
       :child_in_household,
       :requires_vision_or_hearing_accessibility,
+      :calculated_first_homeless_night,
     ].each do |method|
       project_client[method] = current_assessment&.send(method)
     end
