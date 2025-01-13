@@ -1256,6 +1256,11 @@ class Client < ApplicationRecord
         description: nil,
         type: 'String',
       },
+      household_dv_survivor: {
+        title: 'Household member experiencing domestic violence',
+        description: nil,
+        type: 'Boolean',
+      },
     }
   end
 

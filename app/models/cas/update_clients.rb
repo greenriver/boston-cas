@@ -310,6 +310,7 @@ module Cas
         :ongoing_es_enrollments,
         :ongoing_so_enrollments,
         :last_seen_projects,
+        :household_dv_survivor,
       ]
     end
 

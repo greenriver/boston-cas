@@ -301,6 +301,7 @@ class NonHmisClient < ApplicationRecord
     project_client.challenges = current_assessment&.challenges&.reject(&:blank?)
     project_client.open_case = current_assessment&.tc_hat_client_history&.include?('open_case')
     project_client.housing_for_formerly_homeless = current_assessment&.housing_preferences&.include?('with_formerly_homeless')
+    project_client.household_dv_survivor = current_assessment&.calculate_household_dv_survivor? if current_assessment&.pathways_v4?
 
     [
       :foster_care,

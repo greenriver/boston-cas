@@ -554,7 +554,8 @@ CREATE TABLE public.clients (
     last_seen_projects jsonb,
     federal_benefits boolean,
     psh_required character varying DEFAULT 'maybe'::character varying,
-    requires_vision_or_hearing_accessibility boolean DEFAULT false
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    household_dv_survivor boolean
 );
 
 
@@ -2189,7 +2190,8 @@ CREATE TABLE public.non_hmis_assessments (
     schools_contact_info text,
     disqualified_for_state_assistance boolean DEFAULT false,
     disqualified_for_state_assistance_reasons character varying,
-    calculated_first_homeless_night date
+    calculated_first_homeless_night date,
+    household_dv_survivor boolean
 );
 
 
@@ -2839,7 +2841,8 @@ CREATE TABLE public.project_clients (
     last_seen_projects jsonb,
     federal_benefits boolean,
     psh_required character varying DEFAULT 'maybe'::character varying,
-    requires_vision_or_hearing_accessibility boolean DEFAULT false
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    household_dv_survivor boolean
 );
 
 
@@ -7294,6 +7297,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20241202135711'),
 ('20250102144339'),
 ('20250107142055'),
-('20250113131532');
+('20250113131532'),
+('20250113184426');
 
 

@@ -79,3 +79,7 @@
           since #{@client.dv_date}
         - else
           #{boolean_icon false}
+    - if Config.using_pathways?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label= @column_data[:household_dv_survivor][:title]
+        %span.c-detailed-list__value= boolean_icon @client.household_dv_survivor

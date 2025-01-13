@@ -76,6 +76,10 @@ module PathwaysVersionFourCalculations
       pregnant_or_parent
     end
 
+    def calculate_household_dv_survivor?
+      service_need_indicators.include?('domestic violence')
+    end
+
     def self.export_fields(assessment_name)
       shared = super.merge(
         {
@@ -468,7 +472,7 @@ module PathwaysVersionFourCalculations
     end
 
     def calculated_score
-      return total_days_homeless_in_the_last_three_years if assessment_type == pathways_assessment_type.to_s
+      return total_days_homeless_in_the_last_three_years if assessment_type.in?([pathways_assessment_type.to_s, family_pathways_assessment_type.to_s])
 
       score = 0
       score += score_for(:times_moved)
