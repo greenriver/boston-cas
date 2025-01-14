@@ -29,6 +29,7 @@ libxext
 libxml2-dev
 libxrender
 libxslt-dev
+linux-headers
 nodejs
 npm
 nss
@@ -46,4 +47,5 @@ ttf-freefont
 ttf-liberation
 tzdata
 xz
+yaml-dev
 yarn
