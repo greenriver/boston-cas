@@ -83,3 +83,7 @@
       %li.c-detailed-list__item
         %span.c-detailed-list__label= @column_data[:household_dv_survivor][:title]
         %span.c-detailed-list__value= boolean_icon @client.household_dv_survivor
+    - if Config.using_pathways?
+      %li.c-detailed-list__item
+        %span.c-detailed-list__label= @column_data[:disqualified_for_state_assistance][:title]
+        %span.c-detailed-list__value= boolean_icon @client.disqualified_for_state_assistance

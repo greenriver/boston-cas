@@ -35,4 +35,10 @@ FactoryBot.define do
   factory :priority_family_psh, class: 'MatchPrioritization::FamilyPsh' do
     active { true }
   end
+  factory :priority_rrh_and_th, class: 'MatchPrioritization::RrhAndTh' do
+    active { true }
+  end
+  factory :priority_low_income_subsidies, class: 'MatchPrioritization::LowIncomeSubsidies' do
+    active { true }
+  end
 end

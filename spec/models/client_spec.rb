@@ -224,6 +224,120 @@ RSpec.describe Client, type: :model do
         expect(prioritized_clients).to eq(ordered_clients)
       end
     end
+
+    context 'when prioritized by RrhAndTh' do
+      let(:priority) { create :priority_rrh_and_th }
+      let(:route) { create :default_route, match_prioritization: priority }
+      let(:expected_order) do
+        tie_breaker_base = 1.years.ago.to_date
+        {
+          2 => {
+            total_homeless_nights_unsheltered: 1,
+            days_homeless_in_last_three_years: 10,
+            tie_breaker_date: tie_breaker_base,
+          },
+          4 => {
+            disqualified_for_state_assistance: true,
+            household_dv_survivor: true,
+            days_homeless_in_last_three_years: 9,
+            tie_breaker_date: tie_breaker_base - 1.days,
+          },
+          1 => {
+            total_homeless_nights_unsheltered: 1,
+            days_homeless_in_last_three_years: 9,
+            tie_breaker_date: tie_breaker_base,
+          },
+          3 => {
+            disqualified_for_state_assistance: true,
+            enrolled_in_th: true,
+            days_homeless_in_last_three_years: 11,
+            tie_breaker_date: tie_breaker_base,
+          },
+          0 => {
+            days_homeless_in_last_three_years: 5,
+            tie_breaker_date: tie_breaker_base + 1.days,
+          },
+        }
+      end
+      let(:columns) do
+        [
+          :total_homeless_nights_unsheltered,
+          :disqualified_for_state_assistance,
+          :household_dv_survivor,
+          :enrolled_in_th,
+          :days_homeless_in_last_three_years,
+          :tie_breaker_date,
+        ]
+      end
+      it 'is an ActiveRecord::Relation' do
+        expect(Client.prioritized(route.match_prioritization, Client.all)).to be_an ActiveRecord::Relation
+      end
+      it 'orders by match_group' do
+        expected_order.each do |i, values|
+          clients[i].update(**values)
+        end
+        ordered_clients = expected_order.keys.map { |i| clients[i] }.pluck(*columns)
+        prioritized_clients = Client.prioritized(route.match_prioritization, Client.all).pluck(*columns)
+        expect(prioritized_clients).to eq(ordered_clients)
+      end
+    end
+
+    context 'when prioritized by LowIncomeSubsidies' do
+      let(:priority) { create :priority_low_income_subsidies }
+      let(:route) { create :default_route, match_prioritization: priority }
+      let(:expected_order) do
+        tie_breaker_base = 1.years.ago.to_date
+        {
+          2 => {
+            total_homeless_nights_unsheltered: 1,
+            days_homeless_in_last_three_years: 10,
+            tie_breaker_date: tie_breaker_base,
+          },
+          4 => {
+            housing_barrier: true,
+            household_dv_survivor: true,
+            days_homeless_in_last_three_years: 9,
+            tie_breaker_date: tie_breaker_base - 1.days,
+          },
+          1 => {
+            total_homeless_nights_unsheltered: 1,
+            days_homeless_in_last_three_years: 9,
+            tie_breaker_date: tie_breaker_base,
+          },
+          3 => {
+            housing_barrier: true,
+            enrolled_in_th: true,
+            days_homeless_in_last_three_years: 11,
+            tie_breaker_date: tie_breaker_base,
+          },
+          0 => {
+            days_homeless_in_last_three_years: 5,
+            tie_breaker_date: tie_breaker_base + 1.days,
+          },
+        }
+      end
+      let(:columns) do
+        [
+          :total_homeless_nights_unsheltered,
+          :housing_barrier,
+          :household_dv_survivor,
+          :enrolled_in_th,
+          :days_homeless_in_last_three_years,
+          :tie_breaker_date,
+        ]
+      end
+      it 'is an ActiveRecord::Relation' do
+        expect(Client.prioritized(route.match_prioritization, Client.all)).to be_an ActiveRecord::Relation
+      end
+      it 'orders by match_group' do
+        expected_order.each do |i, values|
+          clients[i].update(**values)
+        end
+        ordered_clients = expected_order.keys.map { |i| clients[i] }.pluck(*columns)
+        prioritized_clients = Client.prioritized(route.match_prioritization, Client.all).pluck(*columns)
+        expect(prioritized_clients).to eq(ordered_clients)
+      end
+    end
   end
 
   let(:bob_smith) { create :client, first_name: 'Bob', last_name: 'Smith' }

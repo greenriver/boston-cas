@@ -5,14 +5,14 @@
 ###
 
 module MatchPrioritization
-  class FamilyPsh < Base
+  class LowIncomeSubsidies < Base
     def self.title
-      'Family PSH - Boston'
+      'Low Income Subsidies (Set Asides) - Boston'
     end
 
-    # (1) Prioritization will FIRST look for households who HAVE at LEAST >0 day of unsheltered homelessness (HMIS or Family Pathways reported) OR on Housing Needs Enrollment indicating a family member is experiencing Domestic Violence (Yes on Entry) AND answer YES to service needs question on Family Pathways (Q6)
+    # (1) Prioritization will FIRST look for households who HAVE at LEAST >0 day of unsheltered homelessness (HMIS or Family Pathways reported) OR on Housing Needs Enrollment indicating a family member is experiencing Domestic Violence (Yes on Entry) AND answer YES to housing barriers question on Family Pathways (5b)
     # OF this group, prioritize by total length of time homeless from Pathways
-    # (2) IF no clients meet the requirements in (1) THEN look for clients who are ENROLLED in Emergency Shelter OR Transitional Housing AND answer YES to service needs question on Family Pathways (Q6)
+    # (2) IF no clients meet the requirements in (1) THEN look for clients who are ENROLLED in Emergency Shelter OR Transitional Housing AND answer Yes to housing barriers question on Family Pathways (5b)
     # OF this group, prioritize by total length of time homeless from Pathways
     # (3) IF no clients meet requirements of (1) or (2), then prioritize by length of time homeless
     # (4) Tie Breaker Date
@@ -20,23 +20,23 @@ module MatchPrioritization
       # case statement
       # if total_homeless_nights_unsheltered > 0
       # then 3
-      # if service_need && household_dv_survivor
+      # if housing_barrier && household_dv_survivor
       # then 3
-      # if (enrolled_in_es OR enrolled_in_th) && service_need
+      # if (enrolled_in_es OR enrolled_in_th) && housing_barrier
       # then 2
       # else
       # 1
       unsheltered_nights = c_t[:total_homeless_nights_unsheltered].gt(0)
-      service_need = c_t[:service_need].eq(true).and(c_t[:household_dv_survivor].eq(true))
-      enrolled = c_t[:service_need].eq(true).and(c_t[:enrolled_in_es].eq(true).or(c_t[:enrolled_in_th].eq(true)))
+      service_need = c_t[:housing_barrier].eq(true).and(c_t[:household_dv_survivor].eq(true))
+      enrolled = c_t[:housing_barrier].eq(true).and(c_t[:enrolled_in_es].eq(true).or(c_t[:enrolled_in_th].eq(true)))
 
       # Primary sort desc
       # Secondary sort days_homeless_in_last_three_years desc
       # Tertiary sort tie_breaker_date
       primary_order = Arel::Nodes::Case.new.
         when(unsheltered_nights).then(3). # Prioritization will FIRST look for households who HAVE at LEAST >0 day of unsheltered homelessness
-        when(service_need).then(3). # on Housing Needs Enrollment indicating a family member is experiencing Domestic Violence (Yes on Entry) AND answer YES to service needs question on Family Pathways
-        when(enrolled).then(2). # THEN look for clients who are ENROLLED in Emergency Shelter OR Transitional Housing AND answer YES to service needs question on Family Pathways
+        when(service_need).then(3). # on Housing Needs Enrollment indicating a family member is experiencing Domestic Violence (Yes on Entry) AND answer YES to housing barriers question on Family Pathways
+        when(enrolled).then(2). # IF no clients meet the requirements in (1) THEN look for clients who are ENROLLED in Emergency Shelter OR Transitional Housing AND answer Yes to housing barriers question on Family Pathways
         else(1).desc
       secondary_order = c_t[:days_homeless_in_last_three_years].desc.nulls_last
       tertiary_order = c_t[:tie_breaker_date].asc.nulls_last
@@ -47,7 +47,7 @@ module MatchPrioritization
     def self.supporting_column_names
       [
         :total_homeless_nights_unsheltered,
-        :service_need,
+        :disqualified_for_state_assistance,
         :household_dv_survivor,
         :days_homeless_in_last_three_years,
         :tie_breaker_date,
@@ -57,7 +57,7 @@ module MatchPrioritization
     def self.supporting_data_columns
       {
         'Nights unsheltered' => lambda(&:total_homeless_nights_unsheltered),
-        'Service need' => lambda(&:service_need),
+        'Ineligible for state emergency assistance' => lambda(&:disqualified_for_state_assistance),
         'Household DV survivor' => lambda(&:household_dv_survivor),
         'Days homeless in the last 3 years' => lambda(&:days_homeless_in_last_three_years),
         'Tie Breaker Date' => lambda(&:tie_breaker_date),

@@ -555,7 +555,8 @@ CREATE TABLE public.clients (
     federal_benefits boolean,
     psh_required character varying DEFAULT 'maybe'::character varying,
     requires_vision_or_hearing_accessibility boolean DEFAULT false,
-    household_dv_survivor boolean
+    household_dv_survivor boolean,
+    disqualified_for_state_assistance boolean
 );
 
 
@@ -2842,7 +2843,8 @@ CREATE TABLE public.project_clients (
     federal_benefits boolean,
     psh_required character varying DEFAULT 'maybe'::character varying,
     requires_vision_or_hearing_accessibility boolean DEFAULT false,
-    household_dv_survivor boolean
+    household_dv_survivor boolean,
+    disqualified_for_state_assistance boolean
 );
 
 

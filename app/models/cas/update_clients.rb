@@ -311,6 +311,7 @@ module Cas
         :ongoing_so_enrollments,
         :last_seen_projects,
         :household_dv_survivor,
+        :disqualified_for_state_assistance,
       ]
     end
 

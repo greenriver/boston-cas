@@ -1261,6 +1261,11 @@ class Client < ApplicationRecord
         description: nil,
         type: 'Boolean',
       },
+      disqualified_for_state_assistance: {
+        title: 'Ineligible for state emergency assistance',
+        description: nil,
+        type: 'Boolean',
+      },
     }
   end
 
