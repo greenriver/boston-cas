@@ -215,6 +215,7 @@ class MatchDecisionsController < ApplicationController
   private def decision_params
     d_p = @decision.whitelist_params_for_update(params)
     d_p.merge!(params.require(:decision).permit(:shelter_expiration)) if can_reject_matches?
+    d_p
   end
 
   private def match_contacts_params
