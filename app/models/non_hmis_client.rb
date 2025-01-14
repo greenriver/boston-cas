@@ -209,6 +209,34 @@ class NonHmisClient < ApplicationRecord
     end
 
     # current_assessment fields
+    [
+      :foster_care,
+      :drug_test,
+      :heavy_drug_use,
+      :sober,
+      :willing_case_management,
+      :employed_three_months,
+      :living_wage,
+      :need_daily_assistance,
+      :full_time_employed,
+      :can_work_full_time,
+      :willing_to_work_full_time,
+      :rrh_successful_exit,
+      :lifetime_sex_offender,
+      :th_desired,
+      :drug_test,
+      :employed_three_months,
+      :site_case_management_required,
+      :ongoing_case_management_required,
+      :currently_fleeing,
+      :dv_date,
+      :pregnancy_status,
+      :pregnant_under_28_weeks,
+      :child_in_household,
+      :psh_required,
+    ].each do |method|
+      project_client[method] = current_assessment&.send(method)
+    end
     project_client.assessment_name = current_assessment&.for_matching&.keys&.first
     project_client.assessment_score = current_assessment&.assessment_score || 0
     project_client.days_homeless_in_last_three_years = current_assessment&.total_days_homeless_in_the_last_three_years || 0
@@ -334,6 +362,13 @@ class NonHmisClient < ApplicationRecord
     ].each do |method|
       project_client[method] = current_assessment&.send(method)
     end
+
+    # Pathways transfer assessment 9/2024 changes
+    if current_assessment&.denial_required.present?
+      project_client.lifetime_sex_offender = current_assessment.denial_required.include?('lifetime sex offender in household')
+      project_client.meth_production_conviction = current_assessment.denial_required.include?('manufacture or production of methamphetamine in household')
+    end
+
     project_client.needs_update = true
     project_client
   end

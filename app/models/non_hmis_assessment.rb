@@ -13,6 +13,7 @@ class NonHmisAssessment < ActiveRecord::Base
 
   attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth, :available
   attr_writer :total_days_homeless_in_the_last_three_years
+  alias_attribute :substance_use, :substance_abuse_problem
 
   belongs_to :non_hmis_client
   belongs_to :user
@@ -436,6 +437,8 @@ class NonHmisAssessment < ActiveRecord::Base
       :requires_vision_or_hearing_accessibility,
       :disqualified_for_state_assistance,
       :calculated_first_homeless_night,
+      :federal_benefits,
+      :psh_required,
       disqualified_for_state_assistance_reasons: [],
       strengths: [],
       challenges: [],

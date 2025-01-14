@@ -312,6 +312,7 @@ module Cas
         :last_seen_projects,
         :household_dv_survivor,
         :disqualified_for_state_assistance,
+        :psh_required, # Transfer V4 Q5
       ]
     end
 
