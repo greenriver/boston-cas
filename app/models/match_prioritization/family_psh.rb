@@ -39,7 +39,7 @@ module MatchPrioritization
         when(enrolled).then(2).
         else(1).desc
       secondary_order = c_t[:days_homeless_in_last_three_years].desc.nulls_last
-      tertiary_order = c_t[:tie_breaker_date].desc.nulls_last
+      tertiary_order = c_t[:tie_breaker_date].asc.nulls_last
 
       scope.order(primary_order, secondary_order, tertiary_order)
     end
