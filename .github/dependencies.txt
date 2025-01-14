@@ -46,4 +46,5 @@ ttf-freefont
 ttf-liberation
 tzdata
 xz
+yaml-dev
 yarn
