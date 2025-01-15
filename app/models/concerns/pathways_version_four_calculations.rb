@@ -20,7 +20,10 @@ module PathwaysVersionFourCalculations
     def title
       return pathways_title if assessment_type.blank?
 
-      assessment_type_options[assessment_type.to_sym][:title]
+      title = assessment_type_options.dig(assessment_type.to_sym, :title)
+      return pathways_title if title.blank?
+
+      title
     end
 
     def pathways?
@@ -32,6 +35,10 @@ module PathwaysVersionFourCalculations
       when :pathways_2024
         {
           'PathwaysVersionFourPathways' => pathways_title,
+        }
+      when :family_pathways_2024
+        {
+          'PathwaysVersionFourFamilyPathways' => family_pathways_title,
         }
       when :transfer_assessment
         {
@@ -49,7 +56,7 @@ module PathwaysVersionFourCalculations
 
     def hud_assessment_level
       case assessment_type.to_sym
-      when :pathways_2024
+      when :pathways_2024, :family_pathways_2024
         2 # Housing Needs Assessment
       when :transfer_assessment
         1 # Crisis Needs Assessment
@@ -58,8 +65,8 @@ module PathwaysVersionFourCalculations
 
     def tie_breaker_date
       case assessment_type.to_sym
-      when :pathways_2024
-        entry_date
+      when :pathways_2024, :family_pathways_2024
+        calculated_first_homeless_night.presence || entry_date
       when :transfer_assessment
         financial_assistance_end_date
       end
@@ -67,6 +74,10 @@ module PathwaysVersionFourCalculations
 
     def family_member
       pregnant_or_parent
+    end
+
+    def calculate_household_dv_survivor?
+      service_need_indicators.include?('domestic violence')
     end
 
     def self.export_fields(assessment_name)
@@ -154,12 +165,20 @@ module PathwaysVersionFourCalculations
       :pathways_2024
     end
 
+    def family_pathways_assessment_type
+      :family_pathways_2024
+    end
+
     def transfer_assessment_type
       :transfer_assessment
     end
 
     def pathways_title
       'Pathways 2024'
+    end
+
+    def family_pathways_title
+      'Family Pathways 2024'
     end
 
     def transfer_title
@@ -170,6 +189,10 @@ module PathwaysVersionFourCalculations
       Translation.translate('We want to reach you when there is a housing program opening for you.')
     end
 
+    def family_pathways_description
+      Translation.translate('We want to reach you when there is a housing program opening for your family.')
+    end
+
     def transfer_description
       Translation.translate('Gather information about a rapid re-housing (RRH) participant’s housing stability.')
     end
@@ -177,6 +200,7 @@ module PathwaysVersionFourCalculations
     def assessment_type_options
       {
         pathways_assessment_type => { title: pathways_title, description: pathways_description },
+        family_pathways_assessment_type => { title: family_pathways_title, description: family_pathways_description },
         transfer_assessment_type => { title: transfer_title, description: transfer_description },
       }
     end
@@ -524,7 +548,7 @@ module PathwaysVersionFourCalculations
     end
 
     def calculated_score
-      return total_days_homeless_in_the_last_three_years if assessment_type == pathways_assessment_type.to_s
+      return total_days_homeless_in_the_last_three_years if assessment_type.in?([pathways_assessment_type.to_s, family_pathways_assessment_type.to_s])
 
       score = 0
       score += score_for(:need_daily_assistance)
@@ -540,6 +564,10 @@ module PathwaysVersionFourCalculations
       case title
       when pathways_title
         pathways_fields = pathways_form_fields
+        pathways_fields = deidentify_form_fields(pathways_fields) unless identified?
+        pathways_fields
+      when family_pathways_title
+        pathways_fields = family_pathways_form_fields
         pathways_fields = deidentify_form_fields(pathways_fields) unless identified?
         pathways_fields
       when transfer_title
@@ -1012,9 +1040,391 @@ module PathwaysVersionFourCalculations
           number: '10G',
           disabled: true,
         },
+        calculated_first_homeless_night: {
+          label: 'Tiebreaker - First Date Homeless',
+          number: '10H',
+          as: :date_picker,
+        },
         _household_history_epilogue: {
           as: :partial,
           partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_epilogue',
+        },
+      }
+    end
+
+    def family_pathways_form_fields
+      {
+        _pathways_version_four_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/family_pathways_version_four_preamble',
+        },
+        available: {
+          number: '1A',
+          label: 'If you are declining information sharing, are you still interested in being matched through an anonymous route.',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+        },
+        _ce_required_questions_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/ce_required_questions_preamble',
+        },
+        entry_date: {
+          label: 'Date of Assessment',
+          number: '',
+          as: :date_picker,
+          required: true,
+        },
+        hud_assessment_location: {
+          label: 'Assessment Location',
+          number: '',
+          as: :select_2,
+          collection: hud_assessment_locations,
+          required: true,
+        },
+        hud_assessment_type: {
+          label: 'Assessment Type',
+          number: '',
+          as: :select_2,
+          collection: hud_assessment_types,
+          required: true,
+        },
+        setting: {
+          label: 'Current living situation - select one (required)?',
+          number: '',
+          collection: {
+            Translation.translate('Emergency Shelter (includes domestic violence shelters)') => 'Emergency Shelter',
+            Translation.translate('Unsheltered (outside, in a place not meant for human habitation, etc.)') => 'Unsheltered',
+            Translation.translate('Transitional Housing') => 'Transitional Housing',
+            Translation.translate('Actively fleeing domestic violence in your home or staying with someone else') => 'Actively fleeing DV',
+          },
+          as: :pretty_boolean_group,
+        },
+        _contact_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/pathways_contact_preamble',
+        },
+        phone_number: {
+          label: 'Client phone number:',
+          number: '2C',
+        },
+        email_addresses: {
+          label: 'Client email:',
+          number: '2D',
+        },
+        shelter_section: {
+          label: 'What agencies may we contact to reach you (client)?',
+          number: '2E',
+          questions: {
+            agency_name: {
+              label: 'Agency:',
+            },
+            case_manager_contact_info: {
+              label: 'Agency contact name/email/phone:',
+              as: :text,
+              hint: 'Please provide email address and full name for each contact listed',
+            },
+          },
+        },
+        day_location_section: {
+          label: 'Are there agencies, shelters, or places you hang out in during the day where we could connect with you?',
+          number: '2F',
+          questions: {
+            day_locations: {
+              label: 'Agency:',
+            },
+            agency_day_contact_info: {
+              label: 'Agency contact name/email/phone:',
+              as: :text,
+              hint: 'Please provide email address and full name for each contact listed',
+            },
+          },
+        },
+        night_location_section: {
+          label: 'Are there agencies, shelters or places you hang out in during nights or weekends where we could connect with you?',
+          number: '2G',
+          questions: {
+            night_locations: {
+              label: 'Agency:',
+            },
+            agency_night_contact_info: {
+              label: 'Agency contact name/email/phone:',
+              as: :text,
+              hint: 'Please provide email address and full name for each contact listed',
+            },
+          },
+        },
+        child_contact_section: {
+          label: 'If you are comfortable with us reaching out to you through your child’s school(s), please list these here:',
+          number: '2H',
+          questions: {
+            schools: {
+              label: 'Schools:',
+            },
+            schools_contact_info: {
+              label: 'Contact name/email/phone:',
+              as: :text,
+              hint: 'Please provide email address and full name for each contact listed',
+            },
+          },
+        },
+        other_contact: {
+          label: 'Are there other ways we could contact you that we have not asked you or thought of yet?',
+          number: '2I',
+        },
+        _household_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/pathways_household_preamble',
+        },
+        household_size: {
+          label: 'What is the total number of people in your household?',
+          number: '3A',
+          input_html: { class: 'jHouseholdTrigger' },
+        },
+        pregnant_or_parent: {
+          label: 'Are you pregnant or parenting a child under 18?',
+          number: '3B',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+        },
+        household_section: {
+          number: '3C',
+          label: 'If there is a second adult in your household, is this person also homeless in the City of Boston? (This is only for match coordination. Partner can be assessed and matched separately)',
+          questions: {
+            partner_name: { # actually collecting relationship
+              label: 'Relationship of Adult:',
+              as: :text,
+              hint: 'Only collect if there is another adult in the household who is homeless in the City of Boston',
+            },
+          },
+        },
+        _housing_size_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/household_size_preamble',
+        },
+        required_number_of_bedrooms: {
+          label: 'Please list the minimum bedroom size needed for your family:',
+          number: '4A',
+          collection: {
+            '1' => 1,
+            '2' => 2,
+            '3' => 3,
+            '4' => 4,
+            '5' => 5,
+            'Not applicable' => nil,
+          },
+          as: :pretty_boolean_group,
+        },
+        disability_section: {
+          label: 'Are you seeking any of the following due to a disability? If yes, you may have to provide documentation of disability - related need.',
+          number: '4B',
+          questions: {
+            requires_wheelchair_accessibility: {
+              label: 'Wheelchair accessible unit',
+              number: '6',
+              as: :pretty_boolean,
+              wrapper: :custom_boolean,
+            },
+            requires_elevator_access: {
+              label: 'First floor/elevator (little to no stairs to your unit)',
+              number: '6',
+              as: :pretty_boolean,
+              wrapper: :custom_boolean,
+            },
+            requires_vision_or_hearing_accessibility: {
+              label: 'Buildouts for vision/ hearing impairment',
+              number: '6',
+              as: :pretty_boolean,
+              wrapper: :custom_boolean,
+            },
+            accessibility_other: {
+              label: 'Other accessibility',
+              number: '6',
+            },
+          },
+        },
+        th_desired: {
+          label: 'Are you interested Transitional Housing?',
+          number: '4C',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+        },
+        rrh_desired: {
+          label: 'Are you interested Rapid Re-Housing?',
+          number: '4D',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+        },
+        housing_barrier_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/barriers_preamble',
+        },
+        housing_disqualified_section: {
+          number: '5A',
+          questions: {
+            disqualified_for_state_assistance: {
+              label: 'Are you disqualified for the State Emergency Assistance for Families program?',
+              number: '5A',
+              as: :pretty_boolean_group,
+              collection: {
+                'Yes' => true,
+                'No' => false,
+              },
+            },
+            disqualified_for_state_assistance_reasons: {
+              label: 'If yes, which reasons apply [OPTIONAL]',
+              number: '5C',
+              collection: {
+                Translation.translate('At fault for a fire, flood or other reason building was condemned') => 'at fault for condemned building',
+                Translation.translate('At fault for foreclosure or eviction from previous housing') => 'at fault for foreclosure or eviction',
+                Translation.translate('Family is over income limit') => 'over income limit',
+                Translation.translate('Other reason') => 'other',
+              },
+              as: :pretty_checkboxes_group,
+            },
+          },
+        },
+        housing_barrier_section: {
+          number: '5B',
+          questions: {
+            housing_barrier: {
+              label: 'Do you have any of the following histories and/or barriers?',
+              number: '5B',
+              as: :pretty_boolean_group,
+              collection: {
+                'Yes' => true,
+                'No' => false,
+              },
+            },
+            denial_required: {
+              label: 'If yes, which reasons apply [OPTIONAL]',
+              number: '5C',
+              collection: {
+                Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties') => 'manufacture or production of methamphetamine in household',
+                Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years') => 'evicted from or voucher terminated from a BHA',
+                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
+                Translation.translate('My family has at least one person who is not a citizen of the United States') => 'non-us citizen in household',
+                Translation.translate('I have low English literacy (reading, writing or speaking)') => 'low english literacy',
+                Translation.translate('I have low educational attainment (less than high school diploma/ GED)') => 'low educational alignment',
+                Translation.translate('Other (large family size, etc.)') => 'other',
+              },
+              as: :pretty_checkboxes_group,
+            },
+          },
+        },
+        service_need_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/service_need_preamble',
+        },
+        service_need_section: {
+          number: '6',
+          questions: {
+            service_need: {
+              label: 'Does any of the following apply to you?',
+              number: '6',
+              as: :pretty_boolean_group,
+              collection: {
+                'Yes' => true,
+                'No' => false,
+              },
+            },
+            service_need_indicators: {
+              label: 'If yes, which ones [OPTIONAL]',
+              number: '6',
+              collection: {
+                Translation.translate('Someone in my family (me/ my dependent child) is or has been at risk of harm from domestic violence, dating violence, sexual assault, stalking or human trafficking.') => 'domestic violence',
+                Translation.translate('Someone in my family requires full time assistance to meet daily living requirements.') => 'full-time assistance required',
+                Translation.translate('Someone in my family has used inpatient hospital or treatment facilities 2 or more times over the past year.') => 'frequent hospital use',
+                Translation.translate('An adult in my family has a felony criminal record (CORI).') => 'criminal record (CORI) or ongoing legal cases',
+                Translation.translate('An adult in my family has current legal issue or was incarcerated in the last 3-5 years.') => 'legal issues or incarceration',
+                Translation.translate('My family has experienced a legal eviction from subsidized housing in the past 10 years.') => 'eviction from subsidized housing',
+                Translation.translate('DCF is or has been involved with my family.') => 'DCF involvement',
+              },
+              as: :pretty_checkboxes_group,
+            },
+          },
+        },
+        _household_history_preamble: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_preamble',
+        },
+        homeless_nights_sheltered_section: {
+          number: '7A',
+          label: 'Length of Time Homeless (Sheltered) - Warehouse:',
+          questions: {
+            homeless_nights_sheltered: {
+              label: 'Check the client’s record in the Warehouse; how many sheltered homeless nights in a shelter in the last 3 years does the client have?',
+            },
+          },
+        },
+        additional_homeless_nights_sheltered_section: {
+          number: '7B',
+          label: 'Length of Time Homeless (Sheltered) - Non-HMIS:',
+          questions: {
+            additional_homeless_nights_sheltered: {
+              label: 'Does the client have additional sheltered nights outside of HMIS/Warehouse? (At a shelter or hotel/motel paid by government or charity.)',
+            },
+          },
+        },
+        homeless_nights_unsheltered_section: {
+          number: '7C',
+          label: 'Length of Time Homeless (Unsheltered) - Warehouse:',
+          questions: {
+            homeless_nights_unsheltered: {
+              label: 'Check the client’s record in the Warehouse; how many unsheltered homeless nights in the last 3 years does the client have?',
+            },
+          },
+        },
+        additional_homeless_nights_unsheltered_section: {
+          number: '7D',
+          label: 'Length of Time Homeless (Unsheltered) - Non-HMIS:',
+          questions: {
+            additional_homeless_nights_unsheltered: {
+              label: 'Does the client have additional unsheltered  nights outside of HMIS/Warehouse? (Place not meant for human habitation/outside/car/station.)',
+            },
+          },
+        },
+        self_reported_days_verified: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/self_reported_days_verified',
+        },
+        total_homeless_nights_sheltered: {
+          label: 'Total # of Sheltered Nights:',
+          hint: 'Auto calculated',
+          number: '7E',
+          disabled: true,
+        },
+        total_homeless_nights_unsheltered: {
+          label: 'Total # of Unsheltered Nights:',
+          hint: 'Auto calculated',
+          number: '7F',
+          disabled: true,
+        },
+        total_days_homeless_in_the_last_three_years: {
+          label: 'Total # of Boston Homeless Nights: (Cannot exceed 1096)',
+          hint: 'Auto calculated',
+          number: '7G',
+          disabled: true,
+        },
+        calculated_first_homeless_night: {
+          label: 'Tiebreaker - First Date Homeless',
+          number: '10H',
+          as: :date_picker,
+        },
+        _household_history_epilogue: {
+          as: :partial,
+          partial: 'non_hmis_assessments/pathways_version_four/family_pathways_household_history_epilogue',
         },
       }
     end

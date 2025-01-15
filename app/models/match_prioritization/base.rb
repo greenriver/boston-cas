@@ -34,6 +34,7 @@ module MatchPrioritization
         MatchPrioritization::HoldsVoucherOn,
         MatchPrioritization::MatchGroup,
         MatchPrioritization::UnshelteredRandom,
+        MatchPrioritization::FamilyPsh,
       ]
     end
 
@@ -71,7 +72,9 @@ module MatchPrioritization
       self.class.client_prioritization_summary_method
     end
 
-    # NOTE match_route is only used in one prioritization scheme MatchPrioritization::Rank, which uses the tag associated with the route
+    # NOTE match_route is only used in a few prioritization schemes which uses the tag associated with the route
+    # MatchPrioritization::Rank
+    # MatchPrioritization::FamilyPsh
     def client_prioritization_summary(client, match_route)
       if self.class.client_prioritization_summary_method.present?
         fn = self.class.client_prioritization_summary_method

@@ -1265,6 +1265,16 @@ class Client < ApplicationRecord
         description: nil,
         type: 'String',
       },
+      household_dv_survivor: {
+        title: 'Household member experiencing domestic violence',
+        description: nil,
+        type: 'Boolean',
+      },
+      disqualified_for_state_assistance: {
+        title: 'Ineligible for state emergency assistance',
+        description: nil,
+        type: 'Boolean',
+      },
       psh_required: {
         title: 'In need of Permanent Supportive Housing',
         type: 'String',
