@@ -77,7 +77,7 @@ module PathwaysVersionFourCalculations
     end
 
     def calculate_household_dv_survivor?
-      service_need_indicators.include?('domestic violence')
+      service_need_indicators&.include?('domestic violence')
     end
 
     def self.export_fields(assessment_name)
