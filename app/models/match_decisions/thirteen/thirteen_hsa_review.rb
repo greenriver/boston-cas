@@ -52,7 +52,7 @@ module MatchDecisions::Thirteen
       when :pending then "#{Translation.translate('HSA Thirteen')} assigned match"
       when :accepted then "Match Reeviewed by #{Translation.translate('HSA Thirteen')}."
       when :canceled then canceled_status_label
-      when :declined then 'Match Declined'
+      when :declined then "Match Declined.  Reason: #{decline_reason_name}"
       when :back then backup_status_label
       end
     end
