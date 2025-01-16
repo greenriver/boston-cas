@@ -31,7 +31,7 @@ module MatchDecisions::Thirteen
       when :pending then "#{Translation.translate('CoC Thirteen')} to confirm match success"
       when :confirmed then "#{Translation.translate('CoC Thirteen')} confirms match success"
       when :rejected then "Match rejected by #{Translation.translate('CoC Thirteen')}"
-      when :canceled then 'Match canceled'
+      when :canceled then canceled_status_label
       when :back then backup_status_label
       end
     end
