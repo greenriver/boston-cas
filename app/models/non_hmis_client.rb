@@ -207,6 +207,7 @@ class NonHmisClient < ApplicationRecord
     (HUD_RACES.keys + HUD_GENDERS.keys).each do |field|
       project_client[field] = send(field)
     end
+    project_client.enrolled_project_ids = enrolled_project_ids&.compact_blank&.map(&:to_i)
 
     # current_assessment fields
     project_client.assessment_name = current_assessment&.for_matching&.keys&.first
