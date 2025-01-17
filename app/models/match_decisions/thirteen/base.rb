@@ -10,5 +10,9 @@ module MatchDecisions::Thirteen
       contact.user_can_act_on_behalf_of_match_contacts? ||
         contact.in?(match.send(contact_actor_type))
     end
+
+    def label
+      label_for_status status
+    end
   end
 end
