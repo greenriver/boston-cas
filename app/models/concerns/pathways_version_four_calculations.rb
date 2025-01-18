@@ -418,24 +418,33 @@ module PathwaysVersionFourCalculations
     private def background_check_issues_options
       {
         'none' => {
-          label: 'No evictions',
+          label: 'No prior eviction, no long term homeless history',
           score: 0,
         },
         'one' => {
-          label: 'Does the client have one eviction within the last 5 years?',
+          label: 'Client has one eviction in the last 5 years',
           score: 2,
         },
         'two or more' => {
-          label: 'Does the client have more than two evictions within the last 5 years?',
+          label: 'Client has more than two evictions in the last 5 years',
           score: 3,
         },
-        'due to disability' => {
-          label: 'Were any previous evictions due to a disability or substance use disorder',
+        'prevented documented history' => {
+          label: 'Client\'s length of time homeless prevents documented eviction history',
           score: 2,
         },
-        'prevented documented history' => {
-          label: 'Does the client’s length of time homeless prevent documented eviction history?',
+      }
+    end
+
+    private def background_check_issues_disability_or_substance_use_options
+      {
+        true => {
+          label: 'Yes',
           score: 2,
+        },
+        false => {
+          label: 'No',
+          score: 0,
         },
       }
     end
@@ -555,6 +564,7 @@ module PathwaysVersionFourCalculations
       score += score_for(:substance_use)
       score += score_for(:federal_benefits)
       score += score_for(:background_check_issues)
+      score += score_for(:background_check_issues_disability_or_substance_use)
       score += score_for(:times_moved)
 
       score
@@ -722,11 +732,17 @@ module PathwaysVersionFourCalculations
           number: 'Q8',
         },
         background_check_issues: {
-          label: 'Eviction History',
+          label: 'Does the client have one eviction within the last 5 years?',
           number: 'Q9',
           collection: collection_for(:background_check_issues),
           as: :pretty_checkboxes_group,
           input_html: { multiple: true },
+        },
+        background_check_issues_disability_or_substance_use: {
+          label: 'Were any previous evictions due to a disability or substance use disorder?',
+          number: 'Q9a',
+          as: :pretty_boolean_group,
+          collection: collection_for(:background_check_issues_disability_or_substance_use),
         },
         times_moved: {
           label: 'How many times have you moved while enrolled in rapid re-housing?',

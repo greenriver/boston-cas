@@ -439,6 +439,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :calculated_first_homeless_night,
       :federal_benefits,
       :psh_required,
+      :background_check_issues_disability_or_substance_use,
       disqualified_for_state_assistance_reasons: [],
       strengths: [],
       challenges: [],

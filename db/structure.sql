@@ -2192,7 +2192,8 @@ CREATE TABLE public.non_hmis_assessments (
     disqualified_for_state_assistance boolean DEFAULT false,
     disqualified_for_state_assistance_reasons character varying,
     calculated_first_homeless_night date,
-    household_dv_survivor boolean
+    household_dv_survivor boolean,
+    background_check_issues_disability_or_substance_use boolean DEFAULT false NOT NULL
 );
 
 
@@ -7300,6 +7301,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250102144339'),
 ('20250107142055'),
 ('20250113131532'),
-('20250113184426');
+('20250113184426'),
+('20250118142954');
 
 
