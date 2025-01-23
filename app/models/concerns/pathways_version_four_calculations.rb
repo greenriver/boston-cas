@@ -703,7 +703,7 @@ module PathwaysVersionFourCalculations
               collection: {
                 Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties OR') => 'manufacture or production of methamphetamine in household',
                 Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years OR') => 'evicted from or voucher terminated from a BHA',
-                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
+                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI)') => 'lifetime sex offender in household',
                 Translation.translate('Other (open cases, undocumented, etc.)') => 'other',
               },
               as: :pretty_checkboxes_group,
@@ -961,7 +961,7 @@ module PathwaysVersionFourCalculations
               collection: {
                 Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties OR') => 'manufacture or production of methamphetamine in household',
                 Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years OR') => 'evicted from or voucher terminated from a BHA',
-                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
+                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI)') => 'lifetime sex offender in household',
                 Translation.translate('Other (open cases, undocumented, etc.)') => 'other',
               },
               as: :pretty_checkboxes_group,
@@ -1216,7 +1216,7 @@ module PathwaysVersionFourCalculations
         },
         household_section: {
           number: '3C',
-          label: 'If there is a second adult in your household, is this person also homeless in the City of Boston? (This is only for match coordination. Partner can be assessed and matched separately)',
+          label: 'If there is a second adult in your household, is this person also homeless in the City of Boston? (This is only for match coordination. This person can be assessed and matched separately)',
           questions: {
             partner_name: { # actually collecting relationship
               label: 'Relationship of Adult:',
@@ -1335,7 +1335,7 @@ module PathwaysVersionFourCalculations
               collection: {
                 Translation.translate('Have been convicted or found guilty of producing methamphetamine on subsidized properties') => 'manufacture or production of methamphetamine in household',
                 Translation.translate('Have been evicted from a BHA development or have had a BHA voucher terminated within the last three years') => 'evicted from or voucher terminated from a BHA',
-                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI) OR') => 'lifetime sex offender in household',
+                Translation.translate('Registered sex offender (level 1,2,3) - lifetime registration (SORI)') => 'lifetime sex offender in household',
                 Translation.translate('My family has at least one person who is not a citizen of the United States') => 'non-us citizen in household',
                 Translation.translate('I have low English literacy (reading, writing or speaking)') => 'low english literacy',
                 Translation.translate('I have low educational attainment (less than high school diploma/ GED)') => 'low educational alignment',
