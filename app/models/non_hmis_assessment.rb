@@ -136,7 +136,7 @@ class NonHmisAssessment < ActiveRecord::Base
     return unless pathways_v4?
     return unless title == family_pathways_title
 
-    non_hmis_client.update(available: available)
+    non_hmis_client.update(available: available || false)
   end
 
   def pathways_v3?
