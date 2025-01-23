@@ -16,6 +16,11 @@ module PathwaysVersionFourCalculations
     # The denial_required validation requires the .to_s due to the varchar data type
     validates_inclusion_of :denial_required, in: [[''].to_s], message: 'Cannot be checked unless Barriers to Housing is Yes', allow_blank: false, unless: :housing_barrier?, if: :pathways?
     validates_inclusion_of :service_need_indicators, in: [''], message: 'Cannot be checked unless Service Need Indicator is Yes', allow_blank: false, unless: :service_need?, if: :pathways?
+    validate :calculated_first_homeless_night, :historic_date, on: [:create, :update]
+
+    def historic_date
+      errors.add(:calculated_first_homeless_night, 'First-Date Homeless cannot be in the future') if calculated_first_homeless_night.present? && calculated_first_homeless_night.to_date > Date.current
+    end
 
     def title
       return pathways_title if assessment_type.blank?
@@ -1060,6 +1065,7 @@ module PathwaysVersionFourCalculations
           label: 'Tiebreaker - First Date Homeless',
           number: '10H',
           as: :date_picker,
+          hint: 'Enter the date of the first time the client experienced homelessness in the city of Boston. If the exact date isn\'t known, enter the best estimate based on the information you have from the client.',
         },
         _household_history_epilogue: {
           as: :partial,
@@ -1437,6 +1443,7 @@ module PathwaysVersionFourCalculations
           label: 'Tiebreaker - First Date Homeless',
           number: '10H',
           as: :date_picker,
+          hint: 'Enter the date of the first time the client experienced homelessness in the city of Boston. If the exact date isn\'t known, enter the best estimate based on the information you have from the client.',
         },
         _household_history_epilogue: {
           as: :partial,
