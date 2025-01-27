@@ -22,6 +22,18 @@
     });
     $('input[name*="[setting]"]').trigger('change');
 
+    // Set-asides
+    $('input[name*="[psh_required]"]').on('change', function(e) {
+      value = $('input[name*="[psh_required]"]:checked').val();
+      var dependent = $('div[data-number="Q6"], div[data-number="Q7"], div[data-number="Q8"], div[data-number="Q9"], div[data-number="Q9a"], div[data-number="Q10"]')
+      if(value == 'no') {
+        dependent.addClass('d-none')
+      } else {
+        dependent.removeClass('d-none')
+      }
+    });
+    $('input[name*="[psh_required]"]').trigger('change');
+
     // Days Homeless
     var warehouse_sheltered_selector = 'input[name*="[homeless_nights_sheltered]"]';
     var warehouse_unsheltered_selector = 'input[name*="[homeless_nights_unsheltered]"]';
@@ -39,7 +51,7 @@
       var extra_sheltered_days = parseInt($(extra_sheltered_selector).val() || 0);
       var extra_unsheltered_days = parseInt($(extra_unsheltered_selector).val() || 0);
 
-      // If a client has more than 548 self-reported days (combination of sheltered and unsheltered) 
+      // If a client has more than 548 self-reported days (combination of sheltered and unsheltered)
       // and does not have a verification uploaded, count unsheltered days first, then count sheltered days UP TO 548.
       // If the additional days are verified, use the provided amounts.
       if(!additional_days_verified_checkbox.checked) {
