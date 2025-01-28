@@ -565,6 +565,9 @@ module PathwaysVersionFourCalculations
       return total_days_homeless_in_the_last_three_years if assessment_type.in?([pathways_assessment_type.to_s, family_pathways_assessment_type.to_s])
 
       score = 0
+      # Answering No to Q5 invalidates further scoring
+      return score if psh_required == 'no'
+
       score += score_for(:need_daily_assistance)
       score += score_for(:substance_use)
       score += score_for(:federal_benefits)
