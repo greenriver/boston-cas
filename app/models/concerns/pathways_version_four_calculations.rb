@@ -203,11 +203,11 @@ module PathwaysVersionFourCalculations
     end
 
     def assessment_type_options
-      {
-        pathways_assessment_type => { title: pathways_title, description: pathways_description },
-        family_pathways_assessment_type => { title: family_pathways_title, description: family_pathways_description },
-        transfer_assessment_type => { title: transfer_title, description: transfer_description },
-      }
+      {}.tap do |options|
+        options[pathways_assessment_type] = { title: pathways_title, description: pathways_description }
+        options[family_pathways_assessment_type] = { title: family_pathways_title, description: family_pathways_description } unless Rails.env.production?
+        options[transfer_assessment_type] = { title: transfer_title, description: transfer_description }
+      end
     end
 
     def locked?
