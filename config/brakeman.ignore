@@ -384,6 +384,25 @@
       "note": ""
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 123,
+      "fingerprint": "715ee6d743a8af33c7b930d728708ce19c765fb40e2ad9d2b974db04d92dc7d1",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 3.1.6 ends on 2025-03-31",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        1104
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "HTTP Verb Confusion",
       "warning_code": 118,
       "fingerprint": "7452bf4ee658fb4a4704831cce06d767e0d9310795eb7f6c3b71cd3be36cca5c",
@@ -459,7 +478,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/sub_programs/_form.html.haml",
-      "line": 56,
+      "line": 61,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "SubProgram.have_buildings",
       "render_path": [
@@ -549,7 +568,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called on model attribute",
       "file": "app/models/deidentified_client.rb",
-      "line": 50,
+      "line": 83,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:deidentified_client_assessment).constantize",
       "render_path": null,
@@ -588,6 +607,50 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "bc96467c181790a798ee1ae0d18880230febae11c67db0e607a3558cfe091e00",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/matches/_show.haml",
+      "line": 21,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => match_scope.find(params[:match_id]).decision_from_param(params[:id]), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "MatchDecisionsController",
+          "method": "show",
+          "line": 36,
+          "file": "app/controllers/match_decisions_controller.rb",
+          "rendered": {
+            "name": "matches/show",
+            "file": "app/views/matches/show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/show",
+          "line": 1,
+          "file": "app/views/matches/show.haml",
+          "rendered": {
+            "name": "matches/_show",
+            "file": "app/views/matches/_show.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "matches/_show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "d3792996969e4d5da226875f576427272077e26256594ef7e244652487e0c22f",
@@ -611,13 +674,47 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "d47ad666bd2c5879fc0e74e99ba65968bc8260527d1f195e5be301befc55ea5f",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/admin/versions/index.haml",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => PaperTrail::Version.preload(:item).order(:created_at => :desc).page(params[:page]).per(25), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::VersionsController",
+          "method": "index",
+          "line": 13,
+          "file": "app/controllers/admin/versions_controller.rb",
+          "rendered": {
+            "name": "admin/versions/index",
+            "file": "app/views/admin/versions/index.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/versions/index"
+      },
+      "user_input": "params[:page]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Remote Code Execution",
       "warning_code": 24,
       "fingerprint": "d58f795b432ce5d39f8dfff67f81bfe9925d324e31e4ac82546832a6fad3a060",
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called on model attribute",
       "file": "app/models/identified_client.rb",
-      "line": 91,
+      "line": 122,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:identified_client_assessment).constantize",
       "render_path": null,
@@ -663,7 +760,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/programs/_form.html.haml",
-      "line": 48,
+      "line": 51,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "SubProgram.have_buildings",
       "render_path": [
@@ -779,6 +876,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-02-20 09:50:36 -0500",
-  "brakeman_version": "5.4.0"
+  "updated": "2025-02-03 21:06:29 +0000",
+  "brakeman_version": "6.1.2"
 }
