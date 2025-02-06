@@ -440,6 +440,7 @@ class NonHmisAssessment < ActiveRecord::Base
       :federal_benefits,
       :psh_required,
       :background_check_issues_disability_or_substance_use,
+      :eviction_history,
       disqualified_for_state_assistance_reasons: [],
       strengths: [],
       challenges: [],

@@ -420,7 +420,7 @@ module PathwaysVersionFourCalculations
       }
     end
 
-    private def background_check_issues_options
+    private def eviction_history_options
       {
         'none' => {
           label: 'No prior eviction, no long term homeless history',
@@ -571,7 +571,7 @@ module PathwaysVersionFourCalculations
       score += score_for(:need_daily_assistance)
       score += score_for(:substance_use)
       score += score_for(:federal_benefits)
-      score += score_for(:background_check_issues)
+      score += score_for(:eviction_history)
       score += score_for(:background_check_issues_disability_or_substance_use)
       score += score_for(:times_moved)
 
@@ -739,12 +739,11 @@ module PathwaysVersionFourCalculations
           as: :pretty_boolean_group,
           number: 'Q8',
         },
-        background_check_issues: {
+        eviction_history: {
           label: 'Does the client have one eviction within the last 5 years?',
           number: 'Q9',
-          collection: collection_for(:background_check_issues),
-          as: :pretty_checkboxes_group,
-          input_html: { multiple: true },
+          collection: collection_for(:eviction_history),
+          as: :pretty_boolean_group,
         },
         background_check_issues_disability_or_substance_use: {
           label: 'Were any previous evictions due to a disability or substance use disorder?',
