@@ -166,6 +166,10 @@ module PathwaysVersionFourCalculations
       end
     end
 
+    def family_pathways?
+      assessment_type.to_sym == family_pathways_assessment_type
+    end
+
     def pathways_assessment_type
       :pathways_2024
     end
@@ -562,7 +566,8 @@ module PathwaysVersionFourCalculations
     end
 
     def calculated_score
-      return total_days_homeless_in_the_last_three_years if assessment_type.in?([pathways_assessment_type.to_s, family_pathways_assessment_type.to_s])
+      return total_days_homeless_in_the_last_three_years if assessment_type == pathways_assessment_type.to_s
+      return if assessment_type == family_pathways_assessment_type.to_s
 
       score = 0
       # Answering No to Q5 invalidates further scoring
@@ -1381,14 +1386,14 @@ module PathwaysVersionFourCalculations
         },
         _household_history_preamble: {
           as: :partial,
-          partial: 'non_hmis_assessments/pathways_version_four/pathways_household_history_preamble',
+          partial: 'non_hmis_assessments/pathways_version_four/family_pathways_household_history_preamble',
         },
         homeless_nights_sheltered_section: {
           number: '7A',
           label: 'Length of Time Homeless (Sheltered) - Warehouse:',
           questions: {
             homeless_nights_sheltered: {
-              label: 'Check the client’s record in the Warehouse; how many sheltered homeless nights in a shelter in the last 3 years does the client have?',
+              label: 'Check the client’s record in the Warehouse; how many sheltered homeless nights in a shelter does the client have?',
             },
           },
         },
@@ -1406,7 +1411,7 @@ module PathwaysVersionFourCalculations
           label: 'Length of Time Homeless (Unsheltered) - Warehouse:',
           questions: {
             homeless_nights_unsheltered: {
-              label: 'Check the client’s record in the Warehouse; how many unsheltered homeless nights in the last 3 years does the client have?',
+              label: 'Check the client’s record in the Warehouse; how many unsheltered homeless nights does the client have?',
             },
           },
         },
@@ -1435,8 +1440,8 @@ module PathwaysVersionFourCalculations
           number: '7F',
           disabled: true,
         },
-        total_days_homeless_in_the_last_three_years: {
-          label: 'Total # of Boston Homeless Nights: (Cannot exceed 1096)',
+        days_homeless: {
+          label: 'Total # of Boston Homeless Nights:',
           hint: 'Auto calculated',
           number: '7G',
           disabled: true,
