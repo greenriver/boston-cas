@@ -552,7 +552,11 @@ CREATE TABLE public.clients (
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
     last_seen_projects jsonb,
-    federal_benefits boolean
+    federal_benefits boolean,
+    psh_required character varying DEFAULT 'maybe'::character varying,
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    household_dv_survivor boolean,
+    disqualified_for_state_assistance boolean
 );
 
 
@@ -2180,7 +2184,17 @@ CREATE TABLE public.non_hmis_assessments (
     partner_warehouse_id text,
     partner_name text,
     share_information_permission boolean,
-    federal_benefits boolean
+    federal_benefits boolean,
+    psh_required character varying DEFAULT 'maybe'::character varying,
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    schools character varying,
+    schools_contact_info text,
+    disqualified_for_state_assistance boolean DEFAULT false,
+    disqualified_for_state_assistance_reasons character varying,
+    calculated_first_homeless_night date,
+    household_dv_survivor boolean,
+    background_check_issues_disability_or_substance_use boolean DEFAULT false NOT NULL,
+    eviction_history character varying
 );
 
 
@@ -2302,7 +2316,8 @@ CREATE TABLE public.non_hmis_clients (
     transgender boolean DEFAULT false,
     questioning boolean DEFAULT false,
     federal_benefits boolean,
-    enrolled_project_ids jsonb
+    enrolled_project_ids jsonb,
+    psh_required character varying DEFAULT 'maybe'::character varying
 );
 
 
@@ -2361,6 +2376,39 @@ CREATE SEQUENCE public.notifications_id_seq
 --
 
 ALTER SEQUENCE public.notifications_id_seq OWNED BY public.notifications.id;
+
+
+--
+-- Name: old_passwords; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.old_passwords (
+    id bigint NOT NULL,
+    encrypted_password character varying NOT NULL,
+    password_archivable_type character varying NOT NULL,
+    password_archivable_id integer NOT NULL,
+    password_salt character varying,
+    created_at timestamp(6) without time zone
+);
+
+
+--
+-- Name: old_passwords_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.old_passwords_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: old_passwords_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.old_passwords_id_seq OWNED BY public.old_passwords.id;
 
 
 --
@@ -2827,7 +2875,11 @@ CREATE TABLE public.project_clients (
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
     last_seen_projects jsonb,
-    federal_benefits boolean
+    federal_benefits boolean,
+    psh_required character varying DEFAULT 'maybe'::character varying,
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    household_dv_survivor boolean,
+    disqualified_for_state_assistance boolean
 );
 
 
@@ -3944,7 +3996,10 @@ CREATE TABLE public.users (
     exclude_from_directory boolean DEFAULT false,
     exclude_phone_from_directory boolean DEFAULT false,
     unique_session_id character varying,
-    receive_weekly_match_summary_email boolean DEFAULT true
+    receive_weekly_match_summary_email boolean DEFAULT true,
+    password_changed_at timestamp(6) without time zone,
+    last_activity_at timestamp(6) without time zone,
+    expired_at timestamp(6) without time zone
 );
 
 
@@ -4470,6 +4525,13 @@ ALTER TABLE ONLY public.non_hmis_clients ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.notifications ALTER COLUMN id SET DEFAULT nextval('public.notifications_id_seq'::regclass);
+
+
+--
+-- Name: old_passwords id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.old_passwords ALTER COLUMN id SET DEFAULT nextval('public.old_passwords_id_seq'::regclass);
 
 
 --
@@ -5166,6 +5228,14 @@ ALTER TABLE ONLY public.non_hmis_clients
 
 ALTER TABLE ONLY public.notifications
     ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: old_passwords old_passwords_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.old_passwords
+    ADD CONSTRAINT old_passwords_pkey PRIMARY KEY (id);
 
 
 --
@@ -6152,6 +6222,13 @@ CREATE INDEX index_outreach_histories_on_non_hmis_client_id ON public.outreach_h
 --
 
 CREATE INDEX index_outreach_histories_on_user_id ON public.outreach_histories USING btree (user_id);
+
+
+--
+-- Name: index_password_archivable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_password_archivable ON public.old_passwords USING btree (password_archivable_type, password_archivable_id);
 
 
 --
@@ -7279,6 +7356,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20241010194153'),
 ('20241105161611'),
 ('20241202135547'),
-('20241202135711');
+('20241202135711'),
+('20250102144339'),
+('20250107142055'),
+('20250113131532'),
+('20250113184426'),
+('20250118142954'),
+('20250206162624'),
+('20250208210918');
 
 
