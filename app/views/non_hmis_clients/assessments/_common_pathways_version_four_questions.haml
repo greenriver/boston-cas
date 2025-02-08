@@ -71,5 +71,4 @@
                 = form.input(field_name, { pre_label: options[:number], disabled: field_locked, hint: locked_note }.merge(options))
 
 - unless @assessment.family_pathways?
-  = debug @assessment.assessment_type
   = render 'non_hmis_clients/assessments/pathways_version_four_js'
