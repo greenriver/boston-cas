@@ -164,7 +164,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/models/rules/tagged_with_spec.rb'
     - 'spec/models/rules/vispdat_scores_spec.rb'
     - 'spec/models/user_spec.rb'
-    - 'spec/spec_helper.rb'
     - 'spec/support/tasks.rb'
     - 'spec/tasks/update_clients_spec.rb'
 
@@ -710,7 +709,6 @@ Style/Alias:
 # Cop supports --auto-correct.
 Style/BlockComments:
   Exclude:
-    - 'spec/spec_helper.rb'
 
 # Offense count: 61
 # Cop supports --auto-correct.
