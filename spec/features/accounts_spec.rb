@@ -76,7 +76,7 @@ RSpec.feature 'Accounts', type: :feature do
         user.force_password_reset!
         fill_in 'Email', with: user.email
         fill_in 'Password', with: user.password
-        click_button 'Sign In'
+        click_button 'Log in'
         expect(page).to have_content 'Sign Out'
       end
 
@@ -85,7 +85,7 @@ RSpec.feature 'Accounts', type: :feature do
         user.force_password_reset!
         fill_in 'Email', with: user.email
         fill_in 'Password', with: user.password
-        click_button 'Sign In'
+        click_button 'Log in'
         expect(page).to have_content 'Password Expired'
       end
 
@@ -94,7 +94,7 @@ RSpec.feature 'Accounts', type: :feature do
         user.force_password_reset!
         fill_in 'Email', with: user.email
         fill_in 'Password', with: user.password
-        click_button 'Sign In'
+        click_button 'Log in'
         expect(page).to have_content 'Password Expired'
       end
     end
