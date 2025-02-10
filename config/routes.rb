@@ -165,6 +165,7 @@ Rails.application.routes.draw do
       member do
         post :confirm
         post :impersonate
+        patch :expire_password
       end
       collection do
         post :stop_impersonating

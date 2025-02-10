@@ -247,6 +247,22 @@ Devise.setup do |config|
   # reset. Defaults to true, so a user is signed in automatically after a reset.
   # config.sign_in_after_reset_password = true
 
+  # Password expires after a configurable time (in seconds).
+  # Or expire passwords on demand by setting this configuration to `true`
+  # Use `user.need_change_password!` to expire a password.
+  # Setting the configuration to `false` will completely disable expiration checks.
+  # config.expire_password_after = 3.months | true | false
+  # We use the password expiration feature to handle forced password resets.
+  # If no ENV is provided, use true, which expires on demand
+  expire_password_after = ENV.fetch('PASSWORD_EXPIRATION_DAYS') { 'true' }
+  if expire_password_after == 'true'
+    config.expire_password_after = true
+  elsif expire_password_after == 'false'
+    config.expire_password_after = false
+  else
+    config.expire_password_after = expire_password_after.to_i
+  end
+
   # ==> Configuration for :encryptable
   # Allow you to use another encryption algorithm besides bcrypt (default). You can use
   # :sha1, :sha512 or encryptors from others authentication tools as :clearance_sha1,

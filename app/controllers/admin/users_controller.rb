@@ -11,7 +11,7 @@ module Admin
 
     before_action :authenticate_user!
     before_action :require_can_edit_users!, except: [:stop_impersonating]
-    before_action :set_user, only: [:edit, :confirm, :update, :destroy, :impersonate]
+    before_action :set_user, only: [:edit, :confirm, :update, :destroy, :impersonate, :expire_password]
     before_action :require_can_become_other_users!, only: [:impersonate]
 
     helper_method :sort_column, :sort_direction
@@ -101,6 +101,15 @@ module Admin
       @user.update(active: true, password: pass, password_confirmation: pass)
       @user.send_reset_password_instructions
       redirect_to({ action: :index }, notice: "User #{@user.name} re-activated")
+    end
+
+    def expire_password
+      msg = if @user.force_password_reset!
+        { notice: "User #{@user.email} has been logged out and will need to change their password on next login." }
+      else
+        { warn: "Unable to expire password for #{@user.email}, password expiration is disabled" }
+      end
+      redirect_to({ action: :index }, **msg)
     end
 
     private

@@ -23,6 +23,8 @@ class User < ApplicationRecord
          :confirmable,
          :pwned_password,
          :session_limitable,
+         :password_expirable,
+         :password_archivable,
          password_length: 10..128
   # has_secure_password # not needed with devise
   # Connect users to login attempts
@@ -162,6 +164,19 @@ class User < ApplicationRecord
   # does this user want to see messages in the app itself (versus only in email)
   # TODO make this depend on some attribute(s) configurable by the user and/or admins
   def in_app_messages?
+    true
+  end
+
+  # Dependent on devise expire_password_after being set to a value other than false
+  def force_password_reset!
+    return false unless password_expiration_enabled?
+
+    # Immediately logout the user
+    self.unique_session_id = nil
+    # Force a password change on next login
+    need_change_password! # calls save internally
+
+    # Return true to indicate success
     true
   end
 
