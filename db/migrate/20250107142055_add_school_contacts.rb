@@ -12,6 +12,5 @@ class AddSchoolContacts < ActiveRecord::Migration[7.0]
     add_column :non_hmis_assessments, :schools_contact_info, :text
     add_column :non_hmis_assessments, :disqualified_for_state_assistance, :boolean, default: false
     add_column :non_hmis_assessments, :disqualified_for_state_assistance_reasons, :string
-
   end
 end
