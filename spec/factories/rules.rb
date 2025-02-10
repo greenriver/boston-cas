@@ -527,4 +527,8 @@ FactoryBot.define do
     name { 'a housing barrier' }
     verb { 'have' }
   end
+  factory :psh_required, class: 'Rules::PshRequired' do
+    name { 'in need of Permanent Supportive Housing' }
+    verb { 'be' }
+  end
 end

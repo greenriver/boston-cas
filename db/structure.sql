@@ -552,7 +552,11 @@ CREATE TABLE public.clients (
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
     last_seen_projects jsonb,
-    federal_benefits boolean
+    federal_benefits boolean,
+    psh_required character varying DEFAULT 'maybe'::character varying,
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    household_dv_survivor boolean,
+    disqualified_for_state_assistance boolean
 );
 
 
@@ -2180,7 +2184,17 @@ CREATE TABLE public.non_hmis_assessments (
     partner_warehouse_id text,
     partner_name text,
     share_information_permission boolean,
-    federal_benefits boolean
+    federal_benefits boolean,
+    psh_required character varying DEFAULT 'maybe'::character varying,
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    schools character varying,
+    schools_contact_info text,
+    disqualified_for_state_assistance boolean DEFAULT false,
+    disqualified_for_state_assistance_reasons character varying,
+    calculated_first_homeless_night date,
+    household_dv_survivor boolean,
+    background_check_issues_disability_or_substance_use boolean DEFAULT false NOT NULL,
+    eviction_history character varying
 );
 
 
@@ -2302,7 +2316,8 @@ CREATE TABLE public.non_hmis_clients (
     transgender boolean DEFAULT false,
     questioning boolean DEFAULT false,
     federal_benefits boolean,
-    enrolled_project_ids jsonb
+    enrolled_project_ids jsonb,
+    psh_required character varying DEFAULT 'maybe'::character varying
 );
 
 
@@ -2827,7 +2842,11 @@ CREATE TABLE public.project_clients (
     ongoing_es_enrollments jsonb,
     ongoing_so_enrollments jsonb,
     last_seen_projects jsonb,
-    federal_benefits boolean
+    federal_benefits boolean,
+    psh_required character varying DEFAULT 'maybe'::character varying,
+    requires_vision_or_hearing_accessibility boolean DEFAULT false,
+    household_dv_survivor boolean,
+    disqualified_for_state_assistance boolean
 );
 
 
@@ -7279,6 +7298,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20241010194153'),
 ('20241105161611'),
 ('20241202135547'),
-('20241202135711');
+('20241202135711'),
+('20250102144339'),
+('20250107142055'),
+('20250113131532'),
+('20250113184426'),
+('20250118142954'),
+('20250206162624');
 
 

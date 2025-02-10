@@ -89,6 +89,8 @@ services:
 
   dj-metrics:
     <<: *backend
+    profiles:
+      - manual
     entrypoint: /usr/bin/entrypoint.dj-metrics.sh
     ports:
       # visit localhost:34534/metrics
