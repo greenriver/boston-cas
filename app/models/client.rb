@@ -1277,6 +1277,7 @@ class Client < ApplicationRecord
       },
       psh_required: {
         title: 'In need of Permanent Supportive Housing',
+        description: nil,
         type: 'String',
       },
     }
