@@ -140,7 +140,9 @@ gem 'yabeda-puma-plugin'
 gem 'yabeda-http_requests'
 gem 'roda'
 
-gem 'k8s-ruby'
+# Once 0.17 is released we should be able to unpin this
+# https://github.com/k8s-ruby/k8s-ruby/pull/57
+gem 'k8s-ruby', github: 'k8s-ruby/k8s-ruby', branch: 'master'
 
 group :development do
   # gem 'spring'
