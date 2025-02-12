@@ -1,38 +1,34 @@
 = content_for :page_js do
   :javascript
-    // Youth
-    $('input[name*="[hoh_age]"]').on('change', function(e) {
-      if($('input[name*="[hoh_age]"]:checked').val() == '18-24') {
-        $('.c-question[data-number="5C"]').removeClass('d-none');
+    // Q5A toggle
+    $('input[name*="[disqualified_for_state_assistance]"]').on('change', function(e) {
+      if($(e.currentTarget).val() == 'true') {
+        $('.deidentified_pathways_version_four_disqualified_for_state_assistance_reasons').removeClass('d-none');
       } else {
-        $('.c-question[data-number="5C"]').addClass('d-none');
+        $('.deidentified_pathways_version_four_disqualified_for_state_assistance_reasons').addClass('d-none');
       }
     });
-    $('input[name*="[hoh_age]"]').trigger('change');
+    $('input[name*="[disqualified_for_state_assistance]"]').trigger('change');
 
-    // DV
-    $('input[name*="[setting]"]').on('change', function(e) {
-      value = $('input[name*="[setting]"]:checked').val();
-      if(value !== undefined && value.startsWith('Actively fleeing')) {
-        $('.c-question[data-number="5D"]').removeClass('d-none');
+    // Q5B toggle
+    $('input[name*="[housing_barrier]"]').on('change', function(e) {
+      if($(e.currentTarget).val() == 'true') {
+        $('.deidentified_pathways_version_four_denial_required').removeClass('d-none');
       } else {
-        $('.c-question[data-number="5D"] input[type="radio"]').prop('checked', false);
-        $('.c-question[data-number="5D"]').addClass('d-none');
+        $('.deidentified_pathways_version_four_denial_required').addClass('d-none');
       }
     });
-    $('input[name*="[setting]"]').trigger('change');
+    $('input[name*="[housing_barrier]"]').trigger('change');
 
-    // Set-asides
-    $('input[name*="[psh_required]"]').on('change', function(e) {
-      value = $('input[name*="[psh_required]"]:checked').val();
-      var dependent = $('div[data-number="Q6"], div[data-number="Q7"], div[data-number="Q8"], div[data-number="Q9"], div[data-number="Q9a"], div[data-number="Q10"]')
-      if(value == 'no') {
-        dependent.addClass('d-none')
+    // 6 toggle
+    $('input[name*="[service_need]"]').on('change', function(e) {
+      if($(e.currentTarget).val() == 'true') {
+        $('.deidentified_pathways_version_four_service_need_indicators').removeClass('d-none');
       } else {
-        dependent.removeClass('d-none')
+        $('.deidentified_pathways_version_four_service_need_indicators').addClass('d-none');
       }
     });
-    $('input[name*="[psh_required]"]').trigger('change');
+    $('input[name*="[service_need]"]').trigger('change');
 
     // Days Homeless
     var warehouse_sheltered_selector = 'input[name*="[homeless_nights_sheltered]"]';
@@ -41,7 +37,7 @@
     var extra_unsheltered_selector = 'input[name*="[additional_homeless_nights_unsheltered]"]';
     var total_sheltered_selector = 'input[name*="[total_homeless_nights_sheltered]"]';
     var total_unsheltered_selector = 'input[name*="[total_homeless_nights_unsheltered]"]';
-    var total_selector = 'input[name*="[total_days_homeless_in_the_last_three_years]"]';
+    var total_selector = 'input[name*="[days_homeless]"]';
     var additional_days_verified_selector = 'input[name*="[self_reported_days_verified]"]'
     var additional_days_verified_checkbox = $('input.pretty_boolean[name*="[self_reported_days_verified]"]')[0];
 
@@ -66,12 +62,10 @@
       var warehouse_days = warehouse_sheltered + warehouse_unsheltered;
       var extra_days = extra_sheltered_days + extra_unsheltered_days;
 
+      // NOTE: this differs from the individual Pathways assessment as none of these are capped at 1,096
       var total_sheltered = warehouse_sheltered + extra_sheltered_days;
-      total_sheltered = total_sheltered > 1096 ? 1096 : total_sheltered;
       var total_unsheltered = warehouse_unsheltered + extra_unsheltered_days;
-      total_unsheltered = total_unsheltered > 1096 ? 1096 : total_unsheltered;
       var total = warehouse_days + extra_days
-      total = total > 1096 ? 1096 : total
 
       $(total_sheltered_selector).val(total_sheltered);
       $(total_unsheltered_selector).val(total_unsheltered);
@@ -86,24 +80,3 @@
     ).on('keyup, change', calculate_total_days);
 
     $(warehouse_sheltered_selector).trigger('change');
-
-    // Households
-    $('.jHouseholdTrigger').on('change keyup input', function(e){
-      if($(this).val() > 1) {
-        $('.jHouseholdDetails').removeClass('d-none');
-      } else {
-        $('.jHouseholdDetails').addClass('d-none');
-      }
-    });
-    $('.jHouseholdTrigger').trigger('keyup');
-
-    // Deal with "None of the Above"
-    $('input[type=checkbox]').on('change', function(e){
-      var none_of_the_above = $(this).val() == 'None of the above' || $(this).val() == 'none'
-      if(none_of_the_above && $(this).is(':checked')) {
-        // console.log($(this).is(':checked'));
-        var neighbors = $(this).closest('.controls').find('input[type=checkbox]').not(this);
-        neighbors.prop('checked', false);
-        // console.log(neighbors);
-      }
-    })
