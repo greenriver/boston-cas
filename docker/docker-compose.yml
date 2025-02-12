@@ -2,7 +2,7 @@ x-app: &app
   image: cas:${TARGET:-dev-build}-1.1
   build:
     context: .
-    target: ${TARGET:-dev-build}
+    target: ${TARGET:-dev-budockild}
     dockerfile: docker/app/Dockerfile
     args:
       BUILD_TAG: 3.4.1-alpine3.20
@@ -19,7 +19,6 @@ x-app: &app
     AWS_SECURITY_TOKEN: ${AWS_SECURITY_TOKEN:-}
     AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
     NODE_ENV: ${NODE_ENV:-development}
-    RAILS_ENV: ${RAILS_ENV:-development}
     REDIS_URL: redis://redis:6379/
     BOOTSNAP_CACHE_DIR: /bundle/bootsnap
     K8S_API_HOST_AND_PORT: ${K8S_API_HOST_AND_PORT:-}
@@ -58,7 +57,7 @@ services:
     profiles:
       - manual
     command: /bin/bash
-    entrypoint: ''
+    entrypoint: '/usr/bin/entrypoint.spec.sh'
     depends_on:
       - db
       - redis
