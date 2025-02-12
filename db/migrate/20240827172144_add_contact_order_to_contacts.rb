@@ -1,7 +1,7 @@
 class AddContactOrderToContacts < ActiveRecord::Migration[7.0]
   def change
     add_column :client_opportunity_match_contacts, :contact_order, :integer
-    
+
     # Set contact_order to 1 for all single contact types on a match
     [
       :dnd_staff,
