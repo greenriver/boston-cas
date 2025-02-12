@@ -568,7 +568,7 @@ module PathwaysVersionFourCalculations
 
     def calculated_score
       return total_days_homeless_in_the_last_three_years if assessment_type == pathways_assessment_type.to_s
-      return if assessment_type == family_pathways_assessment_type.to_s
+      return days_homeless if assessment_type == family_pathways_assessment_type.to_s
 
       score = 0
       # Answering No to Q5 invalidates further scoring
