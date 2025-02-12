@@ -10,6 +10,12 @@ gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
 gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
 
+# No longer default gems
+gem 'irb'
+gem 'reline'
+gem 'benchmark'
+gem 'rdoc'
+
 gem 'bcrypt'
 gem 'bootsnap'
 gem 'composite_primary_keys', '~> 14.0.9'
@@ -117,9 +123,6 @@ gem 'auto-session-timeout'
 
 gem 'ruby_parser', require: false
 
-# gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
-# gem 'axlsx_rails'
-# gem 'spreadsheet', require: false
 gem 'caxlsx'
 gem 'caxlsx_rails'
 gem 'xlsxtream', require: false
@@ -145,7 +148,6 @@ gem 'roda'
 gem 'k8s-ruby', github: 'k8s-ruby/k8s-ruby', branch: 'master'
 
 group :development do
-  # gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
@@ -159,7 +161,6 @@ group :development do
   gem 'rails-erd'
   gem 'ruby-prof'
   gem 'web-console'
-  # gem 'rb-readline'
   gem 'active_record_query_trace'
 end
 

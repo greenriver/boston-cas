@@ -42,7 +42,7 @@ jobs:
             target: prod-build
             build-args: |
               BUILD_TAG=3.4.1-alpine3.20
-              BUNDLER_VERSION=2.5.17
+              BUNDLER_VERSION=2.6.3
               USER_ID=10000
               GROUP_ID=10000
             tags: |
