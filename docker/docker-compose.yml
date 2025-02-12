@@ -2,7 +2,7 @@ x-app: &app
   image: cas:${TARGET:-dev-build}-1.1
   build:
     context: .
-    target: ${TARGET:-dev-budockild}
+    target: ${TARGET:-dev-build}
     dockerfile: docker/app/Dockerfile
     args:
       BUILD_TAG: 3.4.1-alpine3.20
