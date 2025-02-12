@@ -31,9 +31,9 @@ begin
 
   keys.each do |key|
     target = if prefix == ''
-               key.sub(/#{prefix}/, './')
-             else
-               key.sub(/#{prefix}/, '.')
+      key.sub(/#{prefix}/, './')
+    else
+      key.sub(/#{prefix}/, '.')
     end
     puts "#{key} -> #{target}"
 
