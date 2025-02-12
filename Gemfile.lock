@@ -894,6 +894,7 @@ DEPENDENCIES
   mini_portile2
   minitest-reporters
   momentjs-rails (>= 2.9.0)
+  mutex_m
   net-http
   nokogiri (>= 1.16.4)
   order_as_specified

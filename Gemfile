@@ -15,6 +15,7 @@ gem 'irb'
 gem 'reline'
 gem 'benchmark'
 gem 'rdoc'
+gem 'mutex_m'
 
 gem 'bcrypt'
 gem 'bootsnap'
