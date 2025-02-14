@@ -20,6 +20,7 @@ icu-dev
 imagemagick
 lftp
 libcurl
+libffi-dev
 libgcc
 libintl
 libmagic

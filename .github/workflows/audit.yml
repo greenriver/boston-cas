@@ -13,7 +13,7 @@ jobs:
   audit:
     runs-on: ubuntu-22.04
     # Docker Hub image that the job executes in
-    container: ruby:3.4.1-alpine3.20
+    container: ruby:3.3.7-alpine3.20
 
     steps:
       - name: Checkout
