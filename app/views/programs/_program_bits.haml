@@ -14,3 +14,5 @@
       Warehouse Projects for HUD Coordinated Entry
     .c-card__content
       = f.association :warehouse_projects, collection: Warehouse::Project.options_for_select, as: :grouped_select, group_method: :last, label: 'Associated Projects', input_html: {multiple: true, class: 'select2--full-width'}
+      %p If no projects are associated with this program, coordinated entry events will be created for the client in a CE participating project where the client has an enrollment overlapping the event date.  The enrollment with the earliest start date will be used.
+      %p If this program is associated with projects in the warehouse, coordinated entry events will only be created for the client if they have an overlapping enrollment in one of the specified projects.
