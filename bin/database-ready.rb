@@ -72,6 +72,3 @@ end
 
 # rake db:migrate:status:primary works sometimes? I'm confused.
 DbTester.new(ApplicationRecord).run!
-DbTester.new(GrdaWarehouseBase).run!
-DbTester.new(ReportingBase).run!
-DbTester.new(HealthBase).run!

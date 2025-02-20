@@ -704,6 +704,11 @@ class Client < ApplicationRecord
 
   def self.prioritized_columns_data
     @prioritized_columns_data ||= {
+      age: {
+        title: 'Age',
+        description: nil,
+        type: 'Integer',
+      },
       veteran: {
         title: 'Veteran',
         description: nil,
