@@ -648,7 +648,7 @@ class Client < ApplicationRecord
     when 'yes', 'no'
       psh_required.capitalize
     else
-      'Unknown'
+      'PSH or HSA'
     end
   end
 
