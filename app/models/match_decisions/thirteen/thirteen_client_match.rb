@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2024 Green River Data Analysis, LLC
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -78,6 +78,10 @@ module MatchDecisions::Thirteen
       else
         decision_action_events.create! match: match, contact: contact, action: status, note: note
       end
+    end
+
+    def expires?
+      true
     end
 
     class StatusCallbacks < StatusCallbacks

@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2024 Green River Data Analysis, LLC
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -61,7 +61,7 @@ module MatchDecisions::Thirteen
       when :pending then "#{Translation.translate('HSA Thirteen')} assigned match"
       when :accepted then "Hearing Outcome Added by #{Translation.translate('HSA Thirteen')}."
       when :canceled then canceled_status_label
-      when :declined then 'Match Declined'
+      when :declined then "Match Declined.  Reason: #{decline_reason_name}"
       when :back then backup_status_label
       end
     end
@@ -70,6 +70,10 @@ module MatchDecisions::Thirteen
       super(send_notifications: send_notifications)
       update status: 'pending'
       send_notifications_for_step if send_notifications
+    end
+
+    def stallable?
+      true
     end
 
     private def ensure_required_contacts_present_on_accept

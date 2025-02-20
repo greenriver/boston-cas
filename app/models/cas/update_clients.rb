@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2024 Green River Data Analysis, LLC
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
@@ -306,7 +306,7 @@ module Cas
         :total_homeless_nights_unsheltered, # Pathways V4 10f
         :calculated_homeless_nights_sheltered, # Pathways V4 10a
         :calculated_homeless_nights_unsheltered, # Pathways V4 10c
-        :total_homeless_nights_sheltered, # Pathways V4 10e 
+        :total_homeless_nights_sheltered, # Pathways V4 10e
         :ongoing_es_enrollments,
         :ongoing_so_enrollments,
         :last_seen_projects,

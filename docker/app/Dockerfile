@@ -12,8 +12,8 @@ RUN apk add --no-cache \
 WORKDIR /
 
 RUN openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
-    -subj "/C=US/ST=Vermont/L=Brattleboro/O=greenriver/CN=www.example.com" \
-    -keyout key.pem -out cert.pem
+  -subj "/C=US/ST=Vermont/L=Brattleboro/O=greenriver/CN=www.example.com" \
+  -keyout key.pem -out cert.pem
 
 
 #########################
@@ -58,24 +58,25 @@ COPY docker/app/rds-combined-ca-bundle.pem /etc/ssl/certs/rds-combined-ca-bundle
 
 SHELL [ "/bin/ash", "-o", "pipefail", "-c" ]
 RUN addgroup -g ${GROUP_ID} app-user || echo ok \
-   && grep ":${GROUP_ID}:" /etc/group | cut -f1 -d: > /.group_name \
-   && adduser -u ${USER_ID} -G "$(cat /.group_name)" -h /home/app-user -D app-user \
-   && mkdir /app /bundle \
-   && chown app-user:${GROUP_ID} /bundle /app
+  && grep ":${GROUP_ID}:" /etc/group | cut -f1 -d: > /.group_name \
+  && adduser -u ${USER_ID} -G "$(cat /.group_name)" -h /home/app-user -D app-user \
+  && mkdir /app /bundle \
+  && chown app-user:${GROUP_ID} /bundle /app
 
 RUN apk update \
   && apk upgrade --no-cache \
   && apk add --no-cache \
-     nodejs yarn \
-     aws-cli \
-     tzdata \
-     git \
-     bash \
-     icu icu-dev \
-     curl libcurl curl-dev \
-     libmagic file-dev file \
-     build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
-     tar xz \
+  nodejs yarn \
+  aws-cli \
+  tzdata \
+  git \
+  bash \
+  linux-headers \
+  icu icu-dev \
+  curl libcurl curl-dev \
+  libmagic file-dev file \
+  build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
+  tar xz \
   && git config --global --add safe.directory /app
 
 WORKDIR /app
@@ -106,18 +107,18 @@ ENTRYPOINT ["/usr/bin/entrypoint.dev.sh"]
 RUN git config --global --add safe.directory /app \
   && apk update \
   && apk add --no-cache \
-    alien \
-    curl \
-    docker \
-    less \
-    libpng-dev \
-    neovim \
-    nodejs \
-    openssh \
-    unzip \
-    vim \
-    xvfb \
-    zsh \
+  alien \
+  curl \
+  docker \
+  less \
+  libpng-dev \
+  neovim \
+  nodejs \
+  openssh \
+  unzip \
+  vim \
+  xvfb \
+  zsh \
   && rm -rf /var/cache/apk/*
 
 USER ${USER_ID}
