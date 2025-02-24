@@ -124,7 +124,7 @@ class NonHmisAssessment < ActiveRecord::Base
   # associated client on load
   def set_non_hmis_assessment_availability
     return unless pathways_v4?
-    return unless title == family_pathways_title
+    return unless family_pathways?
     return unless non_hmis_client
 
     self.available = non_hmis_client.available
@@ -134,7 +134,7 @@ class NonHmisAssessment < ActiveRecord::Base
   # associated client so that it is persisted
   def set_non_hmis_client_availability
     return unless pathways_v4?
-    return unless title == family_pathways_title
+    return unless family_pathways?
 
     non_hmis_client.update(available: available || false)
   end
@@ -188,7 +188,9 @@ class NonHmisAssessment < ActiveRecord::Base
         # 3. Cap the sheltered days counted at the calculated max if it exceeds that amount.
         extra_nights_sheltered = extra_nights_sheltered > max_sheltered ? max_sheltered : extra_nights_sheltered
       end
-      (warehouse_sheltered + extra_nights_sheltered).clamp(0, 1096)
+      total = warehouse_sheltered + extra_nights_sheltered
+      total = total.clamp(0, 1096) unless family_pathways?
+      total
     else
       (homeless_nights_sheltered || 0) + (additional_homeless_nights_sheltered || 0)
     end
@@ -203,10 +205,18 @@ class NonHmisAssessment < ActiveRecord::Base
         # If they are not verified, cap the total unsheltered at 548.
         extra_nights_unsheltered = extra_nights_unsheltered > 548 ? 548 : extra_nights_unsheltered
       end
-      (warehouse_unsheltered + extra_nights_unsheltered).clamp(0, 1096)
+      total = warehouse_unsheltered + extra_nights_unsheltered
+      total = total.clamp(0, 1096) unless family_pathways?
+      total
     else
       (homeless_nights_unsheltered || 0) + (additional_homeless_nights_unsheltered || 0)
     end
+  end
+
+  def days_homeless
+    return super unless pathways_v4? && family_pathways?
+
+    total_homeless_nights_sheltered + total_homeless_nights_unsheltered
   end
 
   private def update_assessment_score
