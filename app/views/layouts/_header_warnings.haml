@@ -11,34 +11,28 @@
             = link_to stop_impersonating_admin_users_path, method: :post do
               Switch Back
               %i.icon-exit.ml-2
-- unless Rails.env.production?
+- if !Rails.env.production? && !ENV['HIDE_NON_PRODUCTION_WARNING']
   #non-production-warning
     .d-flex.pt-2.pb-2
-      - if Rails.env.development?
-        .git-branch.ml-auto
-          = branch_info
-        .git-branch.ml-4
-          .navbar-text
-            .badge.badge-info.p-2
-              = Rails.version
-              on
-              = ENV['RUBY_VERSION']
-        .rails-env.ml-4.mr-6
-          .navbar-text
-            %span.badge.badge-success.p-2
-              = Rails.env
-      - else
-        .git-revision.ml-auto
-          .navbar-text
-            .badge.badge-info.p-2
-              = git_revision
-        .git-branch.ml-4
-          .navbar-text
-            .badge.badge-info.p-2
-              = Rails.version
-              on
-              = ENV['RUBY_VERSION']
-        .rails-env.ml-4.mr-6
-          .navbar-text
-            %span.badge.badge-success.p-2
-              = Rails.env
+      .git-branch.ml-auto
+        .navbar-text
+          .badge.badge-info.p-2
+            = ENV['CLIENT']
+            - if ENV['EKS']
+              (EKS)
+      .git-branch.ml-4
+        = branch_info
+      .git-revision.ml-4
+        .navbar-text
+          .badge.badge-danger.p-2
+            = git_revision
+      .git-branch.ml-4
+        .navbar-text
+          .badge.badge-info.p-2
+            = Rails.version
+            on
+            = ENV['RUBY_VERSION']
+      .rails-env.ml-4.mr-6
+        .navbar-text
+          %span.badge.badge-success.p-2
+            = Rails.env
