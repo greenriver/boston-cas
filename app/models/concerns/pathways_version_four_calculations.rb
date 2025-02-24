@@ -167,7 +167,7 @@ module PathwaysVersionFourCalculations
     end
 
     def family_pathways?
-      assessment_type.to_sym == family_pathways_assessment_type
+      assessment_type&.to_sym == family_pathways_assessment_type
     end
 
     def pathways_assessment_type
