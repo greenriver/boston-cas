@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenAcceptReferral < Base
     include MatchDecisions::AcceptsDeclineReason
@@ -56,7 +58,10 @@ module MatchDecisions::Thirteen
     def label_for_status status
       case status.to_sym
       when :pending then "#{Translation.translate('HSA Thirteen')} assigned match"
-      when :accepted then "Referral Accepted by #{Translation.translate('HSA Thirteen')}."
+      when :accepted
+        text = "Referral Accepted by #{Translation.translate('HSA Thirteen')}."
+        text += " #{Translation.translate('Date voucher issued')}: #{date_voucher_issued.try(:strftime, '%m/%d/%Y')}" if date_voucher_issued.present?
+        text
       when :canceled then canceled_status_label
       when :declined then "Match Declined.  Reason: #{decline_reason_name}"
       when :back then backup_status_label
