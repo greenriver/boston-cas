@@ -14,6 +14,7 @@ module MatchDecisions::Thirteen
 
     validate :ensure_required_contacts_present_on_accept
     validate :ensure_required_contacts_present_on_accept
+    validate :date_voucher_issued_present_if_status_complete
 
     def to_partial_path
       'match_decisions/thirteen/accept_referral'
