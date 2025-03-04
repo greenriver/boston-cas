@@ -270,7 +270,7 @@ GEM
     caxlsx_rails (0.6.3)
       actionpack (>= 3.1)
       caxlsx (>= 3.0)
-    cgi (0.4.1)
+    cgi (0.4.2)
     childprocess (5.0.0)
     choice (0.2.0)
     chronic (0.10.2)
@@ -748,7 +748,7 @@ GEM
       unf_ext
     unf_ext (0.0.9.1)
     unicode-display_width (2.6.0)
-    uri (0.13.0)
+    uri (1.0.3)
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
@@ -1035,7 +1035,7 @@ CHECKSUMS
   carrierwave-i18n (3.0.0) sha256=0919a1ddf294700b28097c433a6496fc874dd0a8c36b35b85b1f2e18236ba641
   caxlsx (4.1.0) sha256=47d0f6d8d72c570c02bbc5c0dd74d47a420bf3b202d020e105bf9d6cda298f1a
   caxlsx_rails (0.6.3) sha256=fe84fc69e6e578e6dcfde9de5219877075b3e64334c294a44605e69166deb36c
-  cgi (0.4.1) sha256=4349e1e2025c9cc73534c52c93cffc0dafc93e0a81edc0830d851a3b2c49a430
+  cgi (0.4.2) sha256=a3cb190d46a820ca01a3e28bd5b64e67003ff99d7884b70512448566f35347e6
   childprocess (5.0.0) sha256=0746b7ab1d6c68156e64a3767631d7124121516192c0492929a7f0af7310d835
   choice (0.2.0) sha256=a19617f7dfd4921b38a85d0616446620de685a113ec6d1ecc85bdb67bf38c974
   chronic (0.10.2) sha256=766f2fcce6ac3cc152249ed0f2b827770d3e517e2e87c5fba7ed74f4889d2dc3
@@ -1249,7 +1249,7 @@ CHECKSUMS
   unf (0.1.4) sha256=4999517a531f2a955750f8831941891f6158498ec9b6cb1c81ce89388e63022e
   unf_ext (0.0.9.1) sha256=926114a858934126c6bbfd3254347dadb5dae354711869368c0f75e3765fc6e9
   unicode-display_width (2.6.0) sha256=12279874bba6d5e4d2728cef814b19197dbb10d7a7837a869bab65da943b7f5a
-  uri (0.13.0) sha256=26553c2a9399762e1e8bebd4444b4361c4b21298cf1c864b22eeabc9c4998f24
+  uri (1.0.3) sha256=e9f2244608eea2f7bc357d954c65c910ce0399ca5e18a7a29207ac22d8767011
   validate_url (1.0.15) sha256=72fe164c0713d63a9970bd6700bea948babbfbdcec392f2342b6704042f57451
   validates_email_format_of (1.8.2) sha256=e2dfcf3e933547d06c41dacf066c7b07614819439c8780c3a2521ce047052577
   virtus (2.0.0) sha256=8841dae4eb7fcc097320ba5ea516bf1839e5d056c61ee27138aa4bddd6e3d1c2
