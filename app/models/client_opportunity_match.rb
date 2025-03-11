@@ -908,6 +908,16 @@ class ClientOpportunityMatch < ApplicationRecord
     join_model.save
   end
 
+  ##
+  # Retrieves details of status updates for the match from when it was stalled.
+  #
+  # @return [Hash] A hash grouping status updates by engagement status ('Engaging', 'Not Engaging', 'Other'),
+  #   with each containing an array of hashes detailing:
+  #   - `:still_active` [String] - Engagement status.
+  #   - `:response_date` [Date] - Date of the response.
+  #   - `:response` [String] - Response text.
+  #   - `:decision` [String] - Label of the decision.
+  #
   def status_update_details
     data = status_updates.order(created_at: :desc).preload(:decision).map do |m|
       response_text = m.response
@@ -925,7 +935,6 @@ class ClientOpportunityMatch < ApplicationRecord
         decision: m.decision.label,
       }
     end
-    # data.group_by { |m| m[:still_active] }.transform_values(&:count)
     data.group_by { |m| m[:still_active] }
   end
 
