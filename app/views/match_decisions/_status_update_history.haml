@@ -1,0 +1,17 @@
+- data = @match.status_update_details
+- if data.present?
+  %h2 Status Updates
+  - data.each do |label, details|
+    %h3 #{label} (#{details.count})
+    %table.table
+      %thead
+        %tr
+          %th{style: 'width: 8rem;'} Date
+          %th Decision
+          %th{style: 'width: 12rem;'} Update
+      %tbody
+        - details.each do |row|
+          %tr
+            %td= row[:response_date].try(:strftime, '%m/%d/%Y')
+            %td= row[:decision]
+            %td= row[:response]
