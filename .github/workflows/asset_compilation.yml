@@ -37,14 +37,14 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
     - name: Install GNU tar (required by cache step and checksumming)
       run: |
         apk add --no-cache tar
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1-node16
+      uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v1-node16
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -67,7 +67,7 @@ jobs:
     # this is fragile and failure prone, but the step they recommend using instead (ruby/ruby-setup)
     # isn't supported on Alpine.
     - name: cache gems
-      uses: actions/cache@v4
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
       id: gemcache
       with:
         path: |
@@ -89,7 +89,7 @@ jobs:
         bundle install --jobs 10 --retry 3
 
     - name: Cache Node.js modules
-      uses: actions/cache@v4
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
       with:
         path: node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
