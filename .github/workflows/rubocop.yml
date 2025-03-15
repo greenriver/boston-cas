@@ -50,9 +50,9 @@ jobs:
           bundle config set --local without 'production staging'
           bundle install --jobs 4 --retry 3
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v44
+      # - name: Get changed files
+      #   id: changed-files
+      #   uses: tj-actions/changed-files@v44
 
       - id: rubocop
         name: Run Rubocop
