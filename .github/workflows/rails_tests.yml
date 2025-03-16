@@ -17,7 +17,7 @@ jobs:
     # Service containers to run with job
     services:
       postgres:
-        image: postgres:13-alpine
+        image: index.docker.io/library/postgres@sha256:236985828131e95a12914071b944d0e0d21da5281312292747e222845f0ea670 # 13-alpine
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
@@ -33,7 +33,7 @@ jobs:
           - 5432:5432
 
       redis:
-        image: redis:alpine
+        image: index.docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952 # alpine
         ports:
           - 6379:6379
 
@@ -45,7 +45,7 @@ jobs:
         run: |
           apk add --no-cache git
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up dependencies
 
         run: |
@@ -57,7 +57,7 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: cache gems
-        uses: actions/cache@v4
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
         id: gemcache
         with:
           path: |
