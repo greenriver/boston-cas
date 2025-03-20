@@ -11,8 +11,9 @@ class NonHmisAssessment < ActiveRecord::Base
   has_paper_trail
   acts_as_paranoid
 
-  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth
+  attr_accessor :youth_rrh_aggregate, :dv_rrh_aggregate, :date_of_birth, :available
   attr_writer :total_days_homeless_in_the_last_three_years
+  alias_attribute :substance_use, :substance_abuse_problem
 
   belongs_to :non_hmis_client
   belongs_to :user
@@ -20,7 +21,9 @@ class NonHmisAssessment < ActiveRecord::Base
 
   after_find :populate_aggregates
 
+  after_initialize :set_non_hmis_assessment_availability
   before_save :update_assessment_score
+  before_save :set_non_hmis_client_availability
 
   scope :limitable_pathways, -> do
     where(type: limited_assessment_types)
@@ -79,8 +82,10 @@ class NonHmisAssessment < ActiveRecord::Base
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :pathways_2021).for_matching).
       merge(DeidentifiedPathwaysVersionThree.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
+      merge(IdentifiedPathwaysVersionFour.new(assessment_type: :family_pathways_2024).for_matching).
       merge(IdentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :pathways_2024).for_matching).
+      merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :family_pathways_2024).for_matching).
       merge(DeidentifiedPathwaysVersionFour.new(assessment_type: :transfer_assessment).for_matching).
       merge(IdentifiedTcHat.new.for_matching).
       merge(DeidentifiedTcHat.new.for_matching).
@@ -113,6 +118,25 @@ class NonHmisAssessment < ActiveRecord::Base
     update_assessment_score
     save
     non_hmis_client.save
+  end
+
+  # The Family Pathways assessment collects availability, ensure we pull this from the
+  # associated client on load
+  def set_non_hmis_assessment_availability
+    return unless pathways_v4?
+    return unless family_pathways?
+    return unless non_hmis_client
+
+    self.available = non_hmis_client.available
+  end
+
+  # The Family Pathways assessment collects availability, ensure we push this onto the
+  # associated client so that it is persisted
+  def set_non_hmis_client_availability
+    return unless pathways_v4?
+    return unless family_pathways?
+
+    non_hmis_client.update(available: available || false)
   end
 
   def pathways_v3?
@@ -164,7 +188,9 @@ class NonHmisAssessment < ActiveRecord::Base
         # 3. Cap the sheltered days counted at the calculated max if it exceeds that amount.
         extra_nights_sheltered = extra_nights_sheltered > max_sheltered ? max_sheltered : extra_nights_sheltered
       end
-      (warehouse_sheltered + extra_nights_sheltered).clamp(0, 1096)
+      total = warehouse_sheltered + extra_nights_sheltered
+      total = total.clamp(0, 1096) unless family_pathways?
+      total
     else
       (homeless_nights_sheltered || 0) + (additional_homeless_nights_sheltered || 0)
     end
@@ -179,10 +205,18 @@ class NonHmisAssessment < ActiveRecord::Base
         # If they are not verified, cap the total unsheltered at 548.
         extra_nights_unsheltered = extra_nights_unsheltered > 548 ? 548 : extra_nights_unsheltered
       end
-      (warehouse_unsheltered + extra_nights_unsheltered).clamp(0, 1096)
+      total = warehouse_unsheltered + extra_nights_unsheltered
+      total = total.clamp(0, 1096) unless family_pathways?
+      total
     else
       (homeless_nights_unsheltered || 0) + (additional_homeless_nights_unsheltered || 0)
     end
+  end
+
+  def days_homeless
+    return super unless pathways_v4? && family_pathways?
+
+    total_homeless_nights_sheltered + total_homeless_nights_unsheltered
   end
 
   private def update_assessment_score
@@ -407,6 +441,17 @@ class NonHmisAssessment < ActiveRecord::Base
       :chronic_health_caused_episode,
       :acute_health_caused_episode,
       :idd_caused_episode,
+      :available,
+      :schools,
+      :schools_contact_info,
+      :requires_vision_or_hearing_accessibility,
+      :disqualified_for_state_assistance,
+      :calculated_first_homeless_night,
+      :federal_benefits,
+      :psh_required,
+      :background_check_issues_disability_or_substance_use,
+      :eviction_history,
+      disqualified_for_state_assistance_reasons: [],
       strengths: [],
       challenges: [],
       tc_hat_client_history: [],

@@ -70,4 +70,5 @@
                 - locked_note = if field_locked then "Locked until #{@assessment.locked_until}" else '' end
                 = form.input(field_name, { pre_label: options[:number], disabled: field_locked, hint: locked_note }.merge(options))
 
-= render 'non_hmis_clients/assessments/pathways_version_four_js'
+- unless @assessment.family_pathways?
+  = render 'non_hmis_clients/assessments/pathways_version_four_js'

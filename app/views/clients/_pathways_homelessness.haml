@@ -28,6 +28,13 @@
     %span.icon-info{data: {toggle: :tooltip, title: @column_data[:days_homeless_in_last_three_years][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless_in_last_three_years)
   %li.c-detailed-list__item
+    %span.c-detailed-list__label= @column_data[:days_homeless][:title]
+    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:days_homeless][:description]}}
+    %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless)
+  %li.c-detailed-list__item
+    %span.c-detailed-list__label First Date Homeless
+    %span.c-detailed-list__value= date_format(@client.calculated_first_homeless_night)
+  %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:calculated_last_homeless_night][:title]
     %span.c-detailed-list__value= @client.calculated_last_homeless_night.try(:strftime, I18n.t('date.formats.default'))
   %li.c-detailed-list__item

@@ -75,3 +75,7 @@
       %li.c-detailed-list__item
         %span.c-detailed-list__label @column_data[:last_ineligible_response]
         %span.c-detailed-list__value= response ? response : boolean_icon(false)
+
+    %li.c-detailed-list__item
+      %span.c-detailed-list__label= @column_data[:psh_required][:title]
+      %span.c-detailed-list__value= @client.psh_required_for_export

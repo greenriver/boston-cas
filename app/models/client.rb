@@ -643,6 +643,15 @@ class Client < ApplicationRecord
     bool_for_export(need_daily_assistance)
   end
 
+  def psh_required_for_export
+    case psh_required
+    when 'yes', 'no'
+      psh_required.capitalize
+    else
+      'PSH or HSA'
+    end
+  end
+
   private def numeric_bool_for_export(value)
     return 'Yes' if value.to_s == '1'
     return 'No' if value.to_s == '0'
@@ -1253,6 +1262,21 @@ class Client < ApplicationRecord
       },
       assessment_type_description: {
         title: 'Assessment Type',
+        description: nil,
+        type: 'String',
+      },
+      household_dv_survivor: {
+        title: 'Household member experiencing domestic violence',
+        description: nil,
+        type: 'Boolean',
+      },
+      disqualified_for_state_assistance: {
+        title: 'Ineligible for state emergency assistance',
+        description: nil,
+        type: 'Boolean',
+      },
+      psh_required: {
+        title: 'In need of Permanent Supportive Housing',
         description: nil,
         type: 'String',
       },
