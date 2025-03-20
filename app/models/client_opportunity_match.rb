@@ -262,7 +262,7 @@ class ClientOpportunityMatch < ApplicationRecord
     {
       'Success' => 'success',
       'Rejected/Declined' => 'rejected',
-      'Canceled/Pre-Empted' => 'canceled',
+      Translation.translate('Canceled/Pre-Empted') => 'canceled',
     }
   end
 
@@ -562,7 +562,7 @@ class ClientOpportunityMatch < ApplicationRecord
       case closed_reason
       when 'success' then { name: 'Success', type: 'success' }
       when 'rejected' then { name: 'Rejected', type: 'danger' }
-      when 'canceled' then { name: 'Pre-empted', type: 'danger' }
+      when 'canceled' then { name: Translation.translate('Pre-empted'), type: 'danger' }
       end
     else
       { name: 'New', type: 'success' }
@@ -1064,12 +1064,12 @@ class ClientOpportunityMatch < ApplicationRecord
   def associated_file_tags
     tags = sub_program.file_tags.pluck(:tag_id).map { |tag| [tag, sub_program.name] } +
       requirements_with_inherited.map do |requirement|
-        requirement.associated_file_tags.flatten.map do |tag|
+        requirement.associated_file_tags&.flatten&.map do |tag|
           [
             tag,
             requirement.requirer.name,
           ]
-        end
+        end || []
       end.flatten(1)
     tags.to_h
   end
