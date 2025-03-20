@@ -21,7 +21,7 @@ jobs:
         run: |
           apk add --no-cache git
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
@@ -35,7 +35,7 @@ jobs:
         run: git config --global --add safe.directory /__w/boston-cas/boston-cas
 
       - name: cache gems
-        uses: actions/cache@v4
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
         id: gemcache
         with:
           path: |
@@ -52,12 +52,13 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v44
+        run: |
+          echo "ruby=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .rb$ | xargs)" >> $GITHUB_OUTPUT
 
       - id: rubocop
         name: Run Rubocop
         env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.ruby }}
         run: |
           # Ignore files we don't control the format of
           ignore_patterns="db/schema.rb\|bin/rails\|bin/rake\|bin/bundle"
