@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Reporting::Decisions < ApplicationRecord
   include ArelHelper
 
@@ -212,7 +214,7 @@ class Reporting::Decisions < ApplicationRecord
   end
 
   scope :unsuccessful, -> do
-    where(terminal_status: ['Pre-empted', 'Rejected'])
+    where(terminal_status: ['Pre-empted', 'Rejected', Translation.translate('Pre-empted')])
   end
 
   scope :has_reason, ->(reason) do
@@ -227,7 +229,7 @@ class Reporting::Decisions < ApplicationRecord
   end
 
   scope :preempted, -> do
-    where(terminal_status: 'Pre-empted')
+    where(terminal_status: ['Pre-empted', Translation.translate('Pre-empted')])
   end
 
   scope :declined, -> do

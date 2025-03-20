@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: false
+
 class NotificationsMailer < DatabaseMailer
   private def setup_instance_variables(notification)
     @notification = notification
@@ -180,7 +182,7 @@ class NotificationsMailer < DatabaseMailer
 
   def match_canceled(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: 'Match Administratively Canceled')
+    mail(to: @contact.email, subject: "Match #{Translation.translate('Administratively Canceled')}")
   end
 
   def shelter_agency_accepted(notification = nil)

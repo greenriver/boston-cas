@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Dashboards::Overview < Dashboards::Base
   attr_accessor :filter
 
@@ -19,7 +21,8 @@ class Dashboards::Overview < Dashboards::Base
   def match_statuses
     reporting_scope.current_step.
       group(:current_status).
-      count
+      count.
+      transform_keys { |k| Translation.translate(k) }
   end
 
   def detail_info
@@ -30,6 +33,7 @@ class Dashboards::Overview < Dashboards::Base
       },
       terminal_status: {
         header: 'Terminal Status',
+        translate: true,
       },
       updated_at: {
         header: 'Date of Status',
@@ -46,6 +50,7 @@ class Dashboards::Overview < Dashboards::Base
 
   def format_datum(key, datum)
     formatter = detail_info[key][:transformation]
+    datum = Translation.translate(datum) if detail_info.dig(key, :translate)
     return datum unless formatter.present?
 
     datum.send(formatter)
