@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module TcHatCalculations
   extend ActiveSupport::Concern
 
@@ -41,8 +43,21 @@ module TcHatCalculations
       range = age_ranges.dig(hoh_age, :range)
       return unless range.present?
 
-      fuzz = -10..10
-      rand(range).years.ago.to_date + rand(fuzz).days
+      fuzz = -50..50
+      value = rand(range)
+      if value == range.first
+        # When value is the first year in the range, we only want to SUBTRACT days
+        # This will ensure the age is at least the minimum age in the range.
+        # e.g. running on Jan 1, 2025, 17 years ago would be 2008-01-01. If we add
+        # 50 days, the dob would be 2008-02-20 which would make the client 16 years old.
+        # If we subtracting 50 days would make the date 2007-11-30 which would make the
+        # client's age 17 years.
+        fuzz = -50..-1
+      elsif value == range.last
+        # Do the opposite of the above for the other end of the range
+        fuzz = 1..50
+      end
+      value.years.ago.to_date + rand(fuzz).days
     end
 
     private def age_ranges
