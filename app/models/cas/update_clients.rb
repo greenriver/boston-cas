@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Cas
   class UpdateClients
     def run!
@@ -312,7 +314,7 @@ module Cas
         :last_seen_projects,
         :household_dv_survivor,
         :disqualified_for_state_assistance,
-        :psh_required, # Transfer V4 Q5
+        :psh_required, # Transfer V4 Q5, Family Pathways V4 Q4F
       ]
     end
 
