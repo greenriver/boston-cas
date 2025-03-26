@@ -932,7 +932,7 @@ class ClientOpportunityMatch < ApplicationRecord
         still_active: still_active,
         response_date: m.created_at.to_date,
         response: response_text,
-        decision: m.decision.label,
+        decision: m.decision.step_name,
       }
     end
     data.group_by { |m| m[:still_active] }
