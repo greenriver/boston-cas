@@ -1,5 +1,5 @@
 window.App.RoleTable = class RoleTable {
-  constructor({props, patch_url} = {props, patch_url:'/admin/roles'}) {
+  constructor({ props, patch_url } = { props, patch_url: '/admin/roles' }) {
     this.isDirty = false
     this.props = Object.assign({
       tableContainerSelector: '.j-table',
@@ -20,10 +20,10 @@ window.App.RoleTable = class RoleTable {
   init() {
     // Declare variables with defaults
     const {
-      tableSelector='.j-table__table',
-      tableSearchInputSelector='.j-table__search',
-      tableRowSelector='.j-table__row',
-      submitActionSelector= '.j-table__submit-changes',
+      tableSelector = '.j-table__table',
+      tableSearchInputSelector = '.j-table__search',
+      tableRowSelector = '.j-table__row',
+      submitActionSelector = '.j-table__submit-changes',
       tableCancelChange
     } = this.props
 
@@ -31,12 +31,12 @@ window.App.RoleTable = class RoleTable {
     this.table = $(tableSelector).DataTable({
       // scrollY: '55vh',
       scrollCollapse: true,
-      scrollX: true,
+      // scrollX: 'true',
       searching: false,
       ordering: false,
       paging: false,
       bInfo: false,
-      // fixedHeader: true,
+      fixedHeader: true,
       fixedColumns: {
         leftColumns: 1
       }
@@ -96,7 +96,7 @@ window.App.RoleTable = class RoleTable {
       })
   }
 
-  changeDirtyState(isDirty=true, event) {
+  changeDirtyState(isDirty = true, event) {
     this.isDirty = isDirty
     if (event) {
       event.target.classList.add('dirty')
@@ -135,7 +135,7 @@ window.App.RoleTable = class RoleTable {
     `)
   }
 
-  confirmSaved(error=null) {
+  confirmSaved(error = null) {
     this.isSaving = false
     const $loading = this.$tableContainer.find('.j-table__loading')
     $(this.submitActionSelector).attr('disabled', false)

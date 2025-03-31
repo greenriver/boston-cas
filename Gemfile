@@ -2,21 +2,29 @@
 source 'https://rubygems.org'
 
 gem 'activerecord-import'
-gem 'rack', '>= 2.2.8.1'
+gem 'rack', '>= 2.2.11'
 gem 'pg', '~> 1.1'
 gem 'rails', '~> 7.0.8.5'
-gem "sprockets-rails"
-gem 'rails-html-sanitizer', '>= 1.4.4' # >= 1.4.4 due to CVE-2022-23519
-gem 'loofah', '>= 2.19.1' # >= 2.19.1 due to GHSA-228g-948r-83gx
+gem 'sprockets-rails'
+gem 'rails-html-sanitizer'
+gem 'loofah'
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
+
+# No longer default gems
+gem 'irb'
+gem 'reline'
+gem 'benchmark'
+gem 'rdoc'
+gem 'mutex_m'
+gem 'drb'
 
 gem 'bcrypt'
 gem 'bootsnap'
 gem 'composite_primary_keys', '~> 14.0.9'
-gem 'csv', '>= 1.0.2' # support for bom|utf-8 in ruby 2.5
+gem 'csv'
 gem 'order_as_specified'
 gem 'with_advisory_lock'
-gem 'nokogiri', '>= 1.16.4' # GHSA-r95h-9x8f-r3f7
+gem 'nokogiri'
 
 gem 'autoprefixer-rails'
 gem 'haml-rails'
@@ -68,14 +76,14 @@ gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'json'
 gem 'amazing_print'
 
-gem 'puma', '>= 6.4.2'
+gem 'puma', '~> 6'
 gem 'redis'
 
 gem 'activerecord-session_store'
 gem 'lograge'
 gem 'logstop'
-gem 'paper_trail'
-gem 'paranoia', '~> 2.0'
+gem 'paper_trail'#, '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
+gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
 gem 'marginalia'
@@ -117,9 +125,6 @@ gem 'auto-session-timeout'
 
 gem 'ruby_parser', require: false
 
-# gem 'axlsx', git: 'https://github.com/randym/axlsx.git'
-# gem 'axlsx_rails'
-# gem 'spreadsheet', require: false
 gem 'caxlsx'
 gem 'caxlsx_rails'
 gem 'xlsxtream', require: false
@@ -140,10 +145,11 @@ gem 'yabeda-puma-plugin'
 gem 'yabeda-http_requests'
 gem 'roda'
 
-gem 'k8s-ruby'
+# Once 0.17 is released we should be able to unpin this
+# https://github.com/k8s-ruby/k8s-ruby/pull/57
+gem 'k8s-ruby', github: 'k8s-ruby/k8s-ruby', branch: 'master'
 
 group :development do
-  # gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
@@ -157,7 +163,6 @@ group :development do
   gem 'rails-erd'
   gem 'ruby-prof'
   gem 'web-console'
-  # gem 'rb-readline'
   gem 'active_record_query_trace'
 end
 

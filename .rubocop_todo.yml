@@ -94,7 +94,6 @@ Layout/EmptyLineBetweenDefs:
 # Cop supports --auto-correct.
 Layout/EmptyLines:
   Exclude:
-    - 'bin/setup'
     - 'spec/factories/match_decisions/match_recommendation_shelter_agency.rb'
     - 'spec/models/rules/interested_in_neighborhood_spec.rb'
     - 'spec/models/rules/rank_below_spec.rb'
@@ -164,7 +163,6 @@ Layout/EmptyLinesAroundBlockBody:
     - 'spec/models/rules/tagged_with_spec.rb'
     - 'spec/models/rules/vispdat_scores_spec.rb'
     - 'spec/models/user_spec.rb'
-    - 'spec/spec_helper.rb'
     - 'spec/support/tasks.rb'
     - 'spec/tasks/update_clients_spec.rb'
 
@@ -710,7 +708,6 @@ Style/Alias:
 # Cop supports --auto-correct.
 Style/BlockComments:
   Exclude:
-    - 'spec/spec_helper.rb'
 
 # Offense count: 61
 # Cop supports --auto-correct.
@@ -797,7 +794,6 @@ Style/IfInsideElse:
 # Cop supports --auto-correct.
 Style/IfUnlessModifier:
   Exclude:
-    - 'bin/setup'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -882,7 +878,6 @@ Style/ParenthesesAroundCondition:
 # Configuration parameters: PreferredDelimiters.
 Style/PercentLiteralDelimiters:
   Exclude:
-    - 'bin/setup'
 
 # Offense count: 90
 # Cop supports --auto-correct.
@@ -983,7 +978,6 @@ Style/StringLiterals:
     - 'bin/deploy'
     - 'bin/guard'
     - 'bin/rspec'
-    - 'bin/setup'
     - 'bin/update'
     - 'spec/controllers/account_emails_controller_spec.rb'
     - 'spec/controllers/account_passwords_controller_spec.rb'
@@ -1034,7 +1028,6 @@ Style/TrailingCommaInArguments:
 # SupportedStylesForMultiline: comma, consistent_comma, no_comma
 Style/TrailingCommaInArrayLiteral:
   Exclude:
-    - 'bin/setup'
 
 # Offense count: 21
 # Cop supports --auto-correct.

@@ -72,6 +72,7 @@ docker-compose.override.yml
 *.sublime-workspace
 
 .env.local
+.pgpass
 
 # Ignore themes
 app/assets/stylesheets/theme/styles

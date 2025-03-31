@@ -4,22 +4,22 @@ require:
 
 AllCops:
   Exclude:
-    - 'db/**/*'
-    - 'config/*'
-    - 'config/environments/**/*.rb'
-    - 'config/initializers/**/*.rb'
-    - 'config/locales/**/*.rb'
-    - 'script/**/*'
-    - 'bin/{rails,rake,bundle}'
-    - 'app/assets/**/*'
-    - 'bin/db_prep'
+    - "db/**/*"
+    - "config/*"
+    - "config/environments/**/*.rb"
+    - "config/initializers/**/*.rb"
+    - "config/locales/**/*.rb"
+    - "script/**/*"
+    - "bin/{rails,rake,bundle}"
+    - "app/assets/**/*"
+    - "bin/db_prep"
 
   Include:
-    - '**/Rakefile'
-    - 'app/**/*.rb'
-    - 'spec/**/*.rb'
-    - 'drivers/**/*.rb'
-    - 'lib/**/*.rb'
+    - "**/Rakefile"
+    - "app/**/*.rb"
+    - "spec/**/*.rb"
+    - "drivers/**/*.rb"
+    - "lib/**/*.rb"
 
   NewCops: disable
 
@@ -62,15 +62,14 @@ Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     # Using `[]` for string arrays instead of `()`, since normal arrays are
     # indicated with `[]` not `()`.
-    '%w': '[]'
-    '%W': '[]'
+    "%w": "[]"
+    "%W": "[]"
 
 Style/AndOr:
   Enabled: true
 
 Style/ClassAndModuleChildren:
-  Enabled:
-    false
+  Enabled: false
 
 Style/ConditionalAssignment:
   Enabled: false
@@ -88,7 +87,7 @@ Style/RescueStandardError:
   Enabled: true
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
 
 Style/CommentedKeyword:
   Enabled: false

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: false
+
 require_relative '../../lib/util/git'
 
 module ApplicationHelper
@@ -18,11 +20,11 @@ module ApplicationHelper
   # END Permissions
   #
   def yn(boolean)
-    boolean ? 'Y': 'N'
+    boolean ? 'Y' : 'N'
   end
 
   def checkmark(boolean)
-    boolean ? '✓': ''
+    boolean ? '✓' : ''
   end
 
   def yes_no(bool)
@@ -48,7 +50,7 @@ module ApplicationHelper
 
   def date_format(dob)
     dob ? l(dob, format: :default) : ''
-    #dob.try(:strftime, '%m/%d/%Y')
+    # dob.try(:strftime, '%m/%d/%Y')
   end
 
   def impersonating?
@@ -61,11 +63,11 @@ module ApplicationHelper
     return columns
   end
 
-  #returns a link appropriate for re-sorting a table
+  # returns a link appropriate for re-sorting a table
   def manual_sort_link(link_text, column, directions)
     direction = directions[column]
-    sort_direction = (direction.nil? || direction == 'asc') ? 'desc' : 'asc'
-    sort = {'sort' => column, 'direction' => sort_direction}
+    sort_direction = direction.nil? || direction == 'asc' ? 'desc' : 'asc'
+    sort = { 'sort' => column, 'direction' => sort_direction }
     params.merge!(sort)
     # FIXME: un-safe params
     link_to(link_text, params.permit!)
@@ -74,18 +76,18 @@ module ApplicationHelper
   def client_data_quality(model, fld)
     content_tag :span, class: 'cas-dq' do
       case model.send("#{fld}_quality")
-      #when 'F'; icon('check-circle', class: 'text-success', data: {toggle: :tooltip}, title: 'Full')
-      when 'P'; icon('exclamation-triangle', class: 'text-warning', data: {toggle: :tooltip}, title: 'Partial/Approximate')
-      when 'N'; icon('question-circle', class: 'text-muted', data: {toggle: :tooltip}, title: 'Client didn\'t know')
-      when 'R'; icon('eye-slash', class: 'text-muted', data: {toggle: :tooltip}, title: 'Client refused')
+      # when 'F'; icon('check-circle', class: 'text-success', data: {toggle: :tooltip}, title: 'Full')
+      when 'P' then icon('exclamation-triangle', class: 'text-warning', data: { toggle: :tooltip }, title: 'Partial/Approximate')
+      when 'N' then icon('question-circle', class: 'text-muted', data: { toggle: :tooltip }, title: 'Client didn\'t know')
+      when 'R' then icon('eye-slash', class: 'text-muted', data: { toggle: :tooltip }, title: 'Client refused')
       end
     end
   end
 
-  #returns a link appropriate for sorting a table as described
-  def sort_as_link(link_text, column, direction='asc')
-    sort_direction = (direction.nil? || direction == 'asc') ? 'asc' : 'desc'
-    sort = {'sort' => column, 'direction' => sort_direction}
+  # returns a link appropriate for sorting a table as described
+  def sort_as_link(link_text, column, direction = 'asc')
+    sort_direction = direction.nil? || direction == 'asc' ? 'asc' : 'desc'
+    sort = { 'sort' => column, 'direction' => sort_direction }
     params_copy = params.dup
     params_copy.merge!(sort)
     # FIXME: un-safe params
@@ -94,20 +96,20 @@ module ApplicationHelper
 
   def fake_partner
     short, long = * [
-      ['DND','Department of Neighborhood Development'],
-      ['PHC','Public Health Commission'],
-      ['Hope','Project Hope'],
-      ['CH','MA Coalition for the Homeless'],
-      ['DHCD','MA Dept. of Housing and Community Development'],
-      ['Camb.','City of Cambridge'],
-      ['VofA','Volunteers of America'],
-      ['NECHV','New England Center for the Homeless Veterns']
+      ['DND', 'Department of Neighborhood Development'],
+      ['PHC', 'Public Health Commission'],
+      ['Hope', 'Project Hope'],
+      ['CH', 'MA Coalition for the Homeless'],
+      ['DHCD', 'MA Dept. of Housing and Community Development'],
+      ['Camb.', 'City of Cambridge'],
+      ['VofA', 'Volunteers of America'],
+      ['NECHV', 'New England Center for the Homeless Veterns'],
     ].sample
     "<abbr title=\"#{long}\">#{short}</abbr>".html_safe
   end
 
   def enable_responsive?
-    @enable_responsive  = true
+    @enable_responsive = true
   end
 
   def body_classes
@@ -138,7 +140,7 @@ module ApplicationHelper
 
   def human_locale(locale)
     translations = {
-      en: 'Text adjustments'
+      en: 'Text adjustments',
     }
     translations[locale.to_sym].presence || locale
   end
@@ -152,9 +154,8 @@ module ApplicationHelper
   end
 
   def branch_info
-    branch_name = `git rev-parse --abbrev-ref HEAD`
-    content_tag :div, :class => "navbar-text" do
-      content_tag :span, branch_name, :class => "badge badge-warning p-2"
+    content_tag :div, class: 'navbar-text' do
+      content_tag :span, Git.branch, class: 'badge badge-warning p-2'
     end
   end
 
@@ -181,6 +182,16 @@ module ApplicationHelper
     )
   end
 
+  # Provides a generic mechanism to show an action menu if there is more than one item, button, if only one
+  # Expects an array of objects called items in the following format
+  # [{ link_to: { path: '/hud_reports/aprs/new?filter%5Bactive_roi%5D=false...'}, icon: :copy, label: 'Clone report' }, { link_to: { path: '/hud_reports/aprs/111', method: :delete }, icon: :cross, label: 'Delete' }]
+  def action_menu_or_button(items:)
+    return if items.empty?
+    return render('/common/action_menu', items: items) if items.many?
+
+    render('/common/action_button', item: items.sole)
+  end
+
   # def pretty_check_box key, label, form, attrs
   #   checked = form.object[key]
   #   value = form.object[key] ? 1 : 0
@@ -190,5 +201,4 @@ module ApplicationHelper
   #     content_tag(:label, content_tag(:span, label), for: id)
   #   end
   # end
-
 end

@@ -24,10 +24,10 @@ ARG BUILD_TAG
 FROM ruby:${BUILD_TAG} AS base
 ARG USER_ID=10000
 ARG GROUP_ID=10000
-ARG BUNDLER_VERSION=2.5.17
+ARG BUNDLER_VERSION=2.6.3
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=3.1.6
+LABEL "ruby-version"=3.3.7
 
 ENV LANG=C.UTF-8
 ENV GEM_HOME=/bundle
@@ -74,7 +74,7 @@ RUN apk update \
   linux-headers \
   icu icu-dev \
   curl libcurl curl-dev \
-  libmagic file-dev file \
+  libmagic file-dev file libffi-dev yaml-dev \
   build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
   tar xz \
   && git config --global --add safe.directory /app
