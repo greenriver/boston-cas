@@ -10,6 +10,6 @@ class Warehouse::Analytics::Sync
   include ArelHelper
 
   def self.run!
-    Warehouse::Analytics::Client.sync_clients
+    Warehouse::Analytics::Client.sync!
   end
 end
