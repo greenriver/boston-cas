@@ -11,5 +11,9 @@ class Warehouse::Analytics::Sync
 
   def self.run!
     Warehouse::Analytics::Client.sync!
+    Warehouse::Analytics::OpportunityCategory.sync!
+    Warehouse::Analytics::Opportunity.sync!
+    Warehouse::Analytics::Workflow.sync!
+    Warehouse::Analytics::Step.sync!
   end
 end

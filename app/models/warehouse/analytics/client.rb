@@ -23,9 +23,12 @@ class Warehouse::Analytics::Client < ::Warehouse::Base
           next unless hmis_client_id.present?
 
           batch << new(
+            id: client.id,
             client_id: hmis_client_id,
             calculated_first_homeless_night: client.calculated_first_homeless_night,
             calculated_last_homeless_night: client.calculated_last_homeless_night,
+            created_at: client.created_at,
+            updated_at: client.updated_at,
           )
         end
         import!(batch)
