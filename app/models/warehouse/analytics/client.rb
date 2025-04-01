@@ -19,8 +19,8 @@ class Warehouse::Analytics::Client < ::Warehouse::Base
         merge(ProjectClient.from_hmis).distinct.find_in_batches(batch_size: 1_000) do |clients|
         batch = []
         clients.each do |client|
-          # hmis_client_id = client.project_client.id_in_data_source
-          # next unless hmis_client_id.present?
+          hmis_client_id = client.project_client.id_in_data_source
+          next unless hmis_client_id.present?
 
           #   batch << Warehouse::Analytics::Client.new(
           #     client_id: hmis_client_id,
