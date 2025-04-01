@@ -22,11 +22,11 @@ class Warehouse::Analytics::Client < ::Warehouse::Base
           hmis_client_id = client.project_client.id_in_data_source
           next unless hmis_client_id.present?
 
-          #   batch << Warehouse::Analytics::Client.new(
-          #     client_id: hmis_client_id,
-          #     calculated_first_homeless_night: client.calculated_first_homeless_night,
-          #     calculated_last_homeless_night: client.calculated_last_homeless_night,
-          #   )
+          batch << Warehouse::Analytics::Client.new(
+            client_id: hmis_client_id,
+            calculated_first_homeless_night: client.calculated_first_homeless_night,
+            calculated_last_homeless_night: client.calculated_last_homeless_night,
+          )
         end
         Warehouse::Analytics::Client.import!(batch)
       end
