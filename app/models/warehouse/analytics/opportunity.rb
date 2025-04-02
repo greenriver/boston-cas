@@ -20,6 +20,7 @@ class Warehouse::Analytics::Opportunity < ::Warehouse::Base
         opportunities.each do |opportunity|
           batch << new(
             id: opportunity.id,
+            opportunity_category_id: opportunity.voucher.sub_program_id,
             unit_id: opportunity.voucher.unit_id,
             unit_name: opportunity.voucher&.unit&.name,
             created_at: opportunity.created_at,

@@ -15,5 +15,8 @@ class Warehouse::Analytics::Sync
     Warehouse::Analytics::Opportunity.sync!
     Warehouse::Analytics::Workflow.sync!
     Warehouse::Analytics::Step.sync!
+    Warehouse::Analytics::WorkflowContact.sync!
+    Warehouse::Analytics::CasUser.sync!
+    Warehouse::Analytics::WorkflowUser.sync!
   end
 end
