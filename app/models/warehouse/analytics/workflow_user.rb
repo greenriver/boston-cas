@@ -13,6 +13,7 @@ class Warehouse::Analytics::WorkflowUser < ::Warehouse::Base
       delete_all
       # All matches for HMIS (warehouse) clients
       ::ClientOpportunityMatchContact.joins(contact: :user, match: { client: :project_client, opportunity: :voucher }).
+        preload(:match, :contact).
         merge(ProjectClient.from_hmis).
         find_in_batches(batch_size: 1_000) do |match_contacts|
         batch = []

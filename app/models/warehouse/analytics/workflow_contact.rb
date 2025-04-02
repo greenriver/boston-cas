@@ -14,7 +14,7 @@ class Warehouse::Analytics::WorkflowContact < ::Warehouse::Base
       # All matches for HMIS (warehouse) clients
       ::ClientOpportunityMatchContact.joins(:contact, match: { client: :project_client, opportunity: :voucher }).
         merge(ProjectClient.from_hmis).
-        preload(match: :match_route).
+        preload(:contact, match: :match_route).
         find_in_batches(batch_size: 1_000) do |match_contacts|
         batch = []
         match_contacts.each do |match_contact|
