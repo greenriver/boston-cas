@@ -25,7 +25,7 @@ class Warehouse::Analytics::Step < ::Warehouse::Base
               previous_decision = decisions[[decisions.index(decision) - 1, 0].max]
               batch << new(
                 id: decision.id,
-                workflow_id: match_id,
+                referral_id: match_id,
                 name: decision.step_name,
                 order: route_steps[decision.type],
                 status: decision.status,

@@ -13,10 +13,10 @@ class Warehouse::Analytics::Sync
     Warehouse::Analytics::Client.sync!
     Warehouse::Analytics::OpportunityCategory.sync!
     Warehouse::Analytics::Opportunity.sync!
-    Warehouse::Analytics::Workflow.sync!
+    Warehouse::Analytics::Referral.sync!
     Warehouse::Analytics::Step.sync!
-    Warehouse::Analytics::WorkflowContact.sync!
+    Warehouse::Analytics::ReferralContact.sync!
     Warehouse::Analytics::CasUser.sync!
-    Warehouse::Analytics::WorkflowUser.sync!
+    Warehouse::Analytics::ReferralUser.sync!
   end
 end

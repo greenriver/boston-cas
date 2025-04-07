@@ -6,8 +6,8 @@
 
 # frozen_string_literal: true
 
-class Warehouse::Analytics::Workflow < ::Warehouse::Base
-  self.table_name = 'cas_analytics_workflows'
+class Warehouse::Analytics::Referral < ::Warehouse::Base
+  self.table_name = 'cas_analytics_referrals'
   def self.sync!
     transaction do
       delete_all
@@ -31,7 +31,7 @@ class Warehouse::Analytics::Workflow < ::Warehouse::Base
             client_id: match.client_id,
             opportunity_id: match.opportunity_id,
             opportunity_category_id: match.opportunity.voucher.sub_program_id,
-            workflow_name: match.match_route.title,
+            referral_name: match.match_route.title,
             started_at: match.initial_decision&.updated_at,
             completed_at: completed_at,
             stalled: match.decision_stalled?, # NOTE: this causes an N+1 query

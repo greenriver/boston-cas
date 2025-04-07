@@ -6,8 +6,8 @@
 
 # frozen_string_literal: true
 
-class Warehouse::Analytics::WorkflowContact < ::Warehouse::Base
-  self.table_name = 'cas_analytics_workflow_contacts'
+class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
+  self.table_name = 'cas_analytics_referral_contacts'
   def self.sync!
     transaction do
       delete_all
@@ -21,7 +21,7 @@ class Warehouse::Analytics::WorkflowContact < ::Warehouse::Base
           batch << new(
             id: match_contact.id,
             email: match_contact.contact.email,
-            workflow_id: match_contact.match.id,
+            referral_id: match_contact.match.id,
             contact_id: match_contact.contact_id,
             contact_type: match_contact.match.match_route.contact_label_for(match_contact.contact_type),
             created_at: match_contact.created_at,
