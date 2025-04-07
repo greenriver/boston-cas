@@ -36,6 +36,7 @@ module MatchDecisions::Thirteen
         m << Notifications::Thirteen::ThirteenHsaReviewShelterAgency
         m << Notifications::Thirteen::ThirteenHsaReviewHsa
         m << Notifications::Thirteen::ThirteenHsaReviewDndStaff
+        m << Notifications::Thirteen::ThirteenHsaReviewSsp
       end
     end
 

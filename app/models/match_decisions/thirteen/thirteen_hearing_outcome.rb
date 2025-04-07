@@ -41,6 +41,7 @@ module MatchDecisions::Thirteen
         m << Notifications::Thirteen::ThirteenHearingOutcomeShelterAgency
         m << Notifications::Thirteen::ThirteenHearingOutcomeHsa
         m << Notifications::Thirteen::ThirteenHearingOutcomeDndStaff
+        m << Notifications::Thirteen::ThirteenHearingOutcomeSsp
       end
     end
 

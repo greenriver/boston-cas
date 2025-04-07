@@ -63,17 +63,7 @@ module MatchDecisions::Thirteen
     end
 
     def stallable?
-      true
-    end
-
-    def stalled_contact_types
-      @stalled_contact_types ||= [
-        :shelter_agency_contacts,
-        :housing_subsidy_admin_contacts,
-        :dnd_staff_contacts,
-        :ssp_contacts,
-        :do_contacts,
-      ]
+      false
     end
 
     class StatusCallbacks < StatusCallbacks
