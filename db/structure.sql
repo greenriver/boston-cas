@@ -6057,6 +6057,13 @@ CREATE INDEX index_match_decisions_on_not_working_with_client_reason_id ON publi
 
 
 --
+-- Name: index_match_decisions_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_decisions_on_status ON public.match_decisions USING btree (status) WHERE (deleted_at IS NULL);
+
+
+--
 -- Name: index_match_events_on_decision_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7363,6 +7370,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250113184426'),
 ('20250118142954'),
 ('20250206162624'),
-('20250208210918');
+('20250208210918'),
+('20250319145924');
 
 
