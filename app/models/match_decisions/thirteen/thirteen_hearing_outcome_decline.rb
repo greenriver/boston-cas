@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenHearingOutcomeDecline < Base
     include MatchDecisions::AcceptsDeclineReason
@@ -62,6 +64,16 @@ module MatchDecisions::Thirteen
 
     def stallable?
       true
+    end
+
+    def stalled_contact_types
+      @stalled_contact_types ||= [
+        :shelter_agency_contacts,
+        :housing_subsidy_admin_contacts,
+        :dnd_staff_contacts,
+        :ssp_contacts,
+        :do_contacts,
+      ]
     end
 
     class StatusCallbacks < StatusCallbacks
