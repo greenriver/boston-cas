@@ -1,7 +1,6 @@
 Hello #{@contact.full_name},
-\
-The following match has been accepted by the #{Translation.translate('HSA')}:
-#{notification_match_url @notification, @match}
+
+= "The match now requires final approval from #{Translation.translate('CoC Thirteen')} staff to complete."
 \
 = render 'client_details'
 \

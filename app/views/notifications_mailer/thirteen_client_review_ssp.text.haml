@@ -1,6 +1,8 @@
 Hello #{@contact.full_name},
 \
-The following match has been accepted by the #{Translation.translate('HSA')}:
+The match is has been acknowledged by the #{Translation.translate('Shelter Agency Thirteen')} contacts and is currently in review.
+\
+Please review details:
 #{notification_match_url @notification, @match}
 \
 = render 'client_details'
