@@ -13,7 +13,7 @@ class Warehouse::Analytics::Client < ::Warehouse::Base
   # at some point in history
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       ::Client.joins(:client_opportunity_matches, :project_client).
         preload(:project_client).
         merge(ProjectClient.from_hmis).distinct.find_in_batches(batch_size: 1_000) do |clients|

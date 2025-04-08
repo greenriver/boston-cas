@@ -10,7 +10,7 @@ class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
   self.table_name = 'cas_analytics_referral_contacts'
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       # All matches for HMIS (warehouse) clients
       ::ClientOpportunityMatchContact.joins(:contact, match: { client: :project_client, opportunity: :voucher }).
         merge(ProjectClient.from_hmis).

@@ -11,7 +11,7 @@ class Warehouse::Analytics::Opportunity < ::Warehouse::Base
   # Process all opportunities
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       ::Opportunity.joins(:voucher).
         preload(voucher: :unit).
         distinct.

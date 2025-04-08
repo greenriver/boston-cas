@@ -12,7 +12,7 @@ class Warehouse::Analytics::OpportunityCategory < ::Warehouse::Base
   # Process any sub-program that has ever had an opportunity
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       ::SubProgram.joins(:program, vouchers: :opportunity).
         preload(
           :program,

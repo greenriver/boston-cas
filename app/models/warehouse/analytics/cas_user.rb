@@ -10,7 +10,7 @@ class Warehouse::Analytics::CasUser < ::Warehouse::Base
   self.table_name = 'cas_analytics_cas_users'
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       ::User.all.preload(:agency).find_in_batches(batch_size: 1_000) do |users|
         batch = []
         users.each do |user|

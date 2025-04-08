@@ -10,7 +10,7 @@ class Warehouse::Analytics::Referral < ::Warehouse::Base
   self.table_name = 'cas_analytics_referrals'
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       # All matches for HMIS (warehouse) clients
       ::ClientOpportunityMatch.joins(client: :project_client, opportunity: :voucher).
         preload(:match_route, :initialized_decisions, :initial_decision, opportunity: :voucher).

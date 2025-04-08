@@ -11,7 +11,7 @@ class Warehouse::Analytics::Step < ::Warehouse::Base
   # Process all matches and decisions
   def self.sync!
     transaction do
-      delete_all
+      connection.execute("TRUNCATE TABLE #{quoted_table_name}")
       # Batch by client opportunity match as we need to work with all decisions for a given match
       ::ClientOpportunityMatch.in_batches(of: 500) do |matches|
         batch = []
