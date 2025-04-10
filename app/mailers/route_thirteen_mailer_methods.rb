@@ -156,22 +156,22 @@ module RouteThirteenMailerMethods
 
     def thirteen_confirm_match_success_shelter_agency(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
 
     def thirteen_confirm_match_success_hsa(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
 
     def thirteen_confirm_match_success_ssp(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
 
     def thirteen_confirm_match_success_dnd_staff(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
   end
 end

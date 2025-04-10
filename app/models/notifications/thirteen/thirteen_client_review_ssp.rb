@@ -19,7 +19,7 @@ module Notifications::Thirteen
     end
 
     def event_label
-      "#{Translation.translate('HSA Thirteen')} notified of acknowledged match."
+      "#{Translation.translate('Stabilization Service Providers Thirteen')} notified of acknowledged match."
     end
   end
 end

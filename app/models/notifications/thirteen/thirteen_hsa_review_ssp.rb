@@ -19,7 +19,7 @@ module Notifications::Thirteen
     end
 
     def event_label
-      "#{Translation.translate('HSA Thirteen')} notified to submit their review."
+      "#{Translation.translate('Housing Search Provider Thirteen')} notified to submit their review."
     end
   end
 end
