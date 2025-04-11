@@ -19,7 +19,7 @@ module Notifications::Thirteen
     end
 
     def event_label
-      "#{Translation.translate('HSA Thirteen')} notified to schedule CORI review."
+      "#{Translation.translate('Stabilization Service Providers Thirteen')} notified to schedule CORI review."
     end
   end
 end

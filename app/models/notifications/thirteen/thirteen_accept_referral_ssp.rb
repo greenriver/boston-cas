@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Thirteen
   class ThirteenAcceptReferralSsp < ::Notifications::Base
     def self.create_for_match! match
@@ -17,7 +19,7 @@ module Notifications::Thirteen
     end
 
     def event_label
-      "#{Translation.translate('HSA Thirteen')} notified of match update - pending #{Translation.translate('HSA Thirteen')} accepting referral."
+      "#{Translation.translate('Stabilization Service Providers Thirteen')} notified of match update - pending #{Translation.translate('HSA Thirteen')} accepting referral."
     end
   end
 end

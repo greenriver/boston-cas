@@ -19,7 +19,7 @@ module Notifications::Thirteen
     end
 
     def event_label
-      "#{Translation.translate('Shelter Agency Thirteen')} notified of match."
+      "#{Translation.translate('Stabilization Service Providers Thirteen')} notified of match."
     end
   end
 end
