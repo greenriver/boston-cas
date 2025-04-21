@@ -6,8 +6,10 @@
 ARG BUILD_TAG
 FROM ruby:${BUILD_TAG} AS cert
 
-RUN apk add --no-cache \
-  openssl
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  openssl \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
 
@@ -29,7 +31,10 @@ ARG BUNDLER_VERSION=2.6.3
 LABEL "app"=open-path-cas
 LABEL "ruby-version"=3.3.7
 
+ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 ENV GEM_HOME=/bundle
 ENV BUNDLE_JOBS=4
 ENV BUNDLE_RETRY=3
@@ -43,41 +48,55 @@ ENV PATH /app/bin:$BUNDLE_BIN:$PATH
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
 ENV RAILS_LOG_TO_STDOUT=true
 ENV RAILS_SERVE_STATIC_FILES=true
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US.UTF-8
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV GROVER_NO_SANDBOX=true
-ENV CHROMIUM_PATH=/usr/bin/chromium-browser
+ENV CHROMIUM_PATH=/usr/bin/chromium
 
 # Allow tls connection to database with verification
 COPY docker/app/us-east-1-bundle.pem  /etc/ssl/certs/us-east-1-bundle.pem
 # Deprecated and soon to expire
 COPY docker/app/rds-combined-ca-bundle.pem /etc/ssl/certs/rds-combined-ca-bundle.pem
 
-SHELL [ "/bin/ash", "-o", "pipefail", "-c" ]
-RUN addgroup -g ${GROUP_ID} app-user || echo ok \
-  && grep ":${GROUP_ID}:" /etc/group | cut -f1 -d: > /.group_name \
-  && adduser -u ${USER_ID} -G "$(cat /.group_name)" -h /home/app-user -D app-user \
+RUN groupadd -g ${GROUP_ID} app-user \
+  && useradd -u ${USER_ID} -g app-user -s /bin/bash -d /home/app-user -m app-user \
   && mkdir /app /bundle \
   && chown app-user:${GROUP_ID} /bundle /app
 
-RUN apk update \
-  && apk upgrade --no-cache \
-  && apk add --no-cache \
-  nodejs yarn \
-  aws-cli \
+# Add PostgreSQL official repository
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl ca-certificates lsb-release gnupg \
+  && sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
+  && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg \
+  && apt-get update
+
+RUN apt-get update && apt-get upgrade -y \
+  && apt-get install -y --no-install-recommends \
+  locales-all \
+  nodejs yarnpkg \
+  awscli \
   tzdata \
   git \
   bash \
-  linux-headers \
-  icu icu-dev \
-  curl libcurl curl-dev \
-  libmagic file-dev file libffi-dev yaml-dev \
-  build-base libxml2-dev libxslt-dev postgresql-dev tmux postgresql shared-mime-info \
-  tar xz \
-  && git config --global --add safe.directory /app
+  build-essential \
+  libicu-dev \
+  libcurl4 libcurl4-openssl-dev \
+  imagemagick \
+  libmagic1 libheif1 libmagic-dev file \
+  libxml2-dev libxslt1-dev libpq-dev \
+  libx11-6 libglib2.0-0 libxrender1 libxext6 \
+  fonts-dejavu fonts-droid-fallback fonts-freefont-ttf fonts-liberation \
+  chromium chromium-common libfreetype6 libfreetype-dev libharfbuzz-dev ca-certificates \
+  lftp postgresql-16 postgresql-client-16 tmux libgeos-dev proj-bin libproj-dev zip expect \
+  shared-mime-info libyaml-dev libffi-dev \
+  tar p7zip-full vim gpg gnupg-agent poppler-utils \
+  && rm -rf /var/lib/apt/lists/* \
+  && if [ "$(uname -m)" = "aarch64" ]; then \
+       ln -s /usr/lib/aarch64-linux-gnu/libproj.so /usr/lib/libproj.so.20; \
+     else \
+       ln -s /usr/lib/x86_64-linux-gnu/libproj.so /usr/lib/libproj.so.20; \
+     fi
 
 WORKDIR /app
 
@@ -105,21 +124,10 @@ COPY docker/app/entrypoint.spec.sh /usr/bin/
 ENTRYPOINT ["/usr/bin/entrypoint.dev.sh"]
 
 RUN git config --global --add safe.directory /app \
-  && apk update \
-  && apk add --no-cache \
-  alien \
-  curl \
-  docker \
-  less \
-  libpng-dev \
-  neovim \
-  nodejs \
-  openssh \
-  unzip \
-  vim \
-  xvfb \
-  zsh \
-  && rm -rf /var/cache/apk/*
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+  neovim less docker.io python3 zsh openssh-client \
+  && rm -rf /var/lib/apt/lists/*
 
 USER ${USER_ID}
 
