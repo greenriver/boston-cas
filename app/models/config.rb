@@ -7,7 +7,7 @@
 class Config < ApplicationRecord
   after_save :invalidate_cache
   before_create :set_defaults
-  serialize :non_hmis_fields, Array
+  serialize :non_hmis_fields, type: Array
 
   def never_send_match_summary_email?
     send_match_summary_email_on.nil?

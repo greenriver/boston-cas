@@ -38,19 +38,19 @@ RSpec.describe DeidentifiedPathwaysVersionThree, type: :model do
     )
     assessment.lock
     expect(assessment.locked?).to be false
-    Timecop.travel(Time.current + (lock_grace_days - 1).days) do
+    travel_to(Time.current + (lock_grace_days - 1).days) do
       expect(assessment.locked?).to be false
       expect(assessment.in_lock_grace_period?).to be true
     end
-    Timecop.travel(Time.current + lock_grace_days.days) do
+    travel_to(Time.current + lock_grace_days.days) do
       expect(assessment.locked?).to be true
       expect(assessment.in_lock_grace_period?).to be false
     end
-    Timecop.travel(Time.current + (lock_days - 1).days) do
+    travel_to(Time.current + (lock_days - 1).days) do
       expect(assessment.locked?).to be true
       expect(assessment.in_lock_grace_period?).to be false
     end
-    Timecop.travel(Time.current + lock_days.days) do
+    travel_to(Time.current + lock_days.days) do
       expect(assessment.locked?).to be false
       expect(assessment.in_lock_grace_period?).to be false
     end

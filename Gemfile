@@ -2,9 +2,9 @@
 source 'https://rubygems.org'
 
 gem 'activerecord-import'
-gem 'rack', '>= 2.2.11'
+gem 'rack'
 gem 'pg', '~> 1.1'
-gem 'rails', '~> 7.0.8.5'
+gem 'rails', '~> 7.1.0'
 gem 'sprockets-rails'
 gem 'rails-html-sanitizer'
 gem 'loofah'
@@ -20,7 +20,6 @@ gem 'drb'
 
 gem 'bcrypt'
 gem 'bootsnap'
-gem 'composite_primary_keys', '~> 14.0.9'
 gem 'csv'
 gem 'order_as_specified'
 gem 'with_advisory_lock'
@@ -44,7 +43,7 @@ gem 'simple_form'
 gem 'virtus'
 
 gem 'kaminari'
-gem 'pagy'
+gem 'pagy', '~> 8.2'
 gem 'responders'
 gem 'memery', require: false
 gem 'todo_or_die'
@@ -157,10 +156,9 @@ group :development do
   gem 'capistrano-rvm'
 
   gem 'rack-mini-profiler', require: false
-  gem 'test-unit', '~> 3.0', require: false
 
-  gem 'letter_opener'
-  gem 'rails-erd'
+  #gem 'letter_opener'
+  # gem 'rails-erd'
   gem 'ruby-prof'
   gem 'web-console'
   gem 'active_record_query_trace'
@@ -169,14 +167,11 @@ end
 group :development, :test do
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
-  gem 'factory_bot_rails'
-  gem 'foreman'
-  gem 'guard-rspec', require: false
-  gem 'listen'
+  # gem 'foreman'
+  # gem 'guard-rspec', require: false
+  # gem 'listen'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 4.0.0.beta3'
-  gem 'timecop'
 
   gem 'overcommit'
   gem 'rubocop', require: false
@@ -187,10 +182,11 @@ group :development, :test do
 end
 
 group :test do
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
   gem 'capybara'
-  gem 'launchy'
   gem 'minitest-reporters'
   gem 'rails-controller-testing'
   gem 'rspec-mocks'
-  gem 'shoulda'
+  gem 'shoulda-matchers'
 end

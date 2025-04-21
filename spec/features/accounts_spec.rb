@@ -45,7 +45,7 @@ RSpec.feature 'Accounts', type: :feature do
           fill_in 'Password', with: 'password'
           click_button 'Log in'
         end
-        Timecop.travel(Time.current + Devise.unlock_in - 1.minute) do
+        travel_to(Time.current + Devise.unlock_in - 1.minute) do
           fill_in 'Email', with: user.email
           fill_in 'Password', with: user.password
           click_button 'Log in'
@@ -61,7 +61,7 @@ RSpec.feature 'Accounts', type: :feature do
           fill_in 'Password', with: 'password'
           click_button 'Log in'
         end
-        Timecop.travel(Time.current + Devise.unlock_in) do
+        travel_to(Time.current + Devise.unlock_in) do
           fill_in 'Email', with: user.email
           fill_in 'Password', with: user.password
           click_button 'Log in'
