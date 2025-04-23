@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module RouteThirteenMailerMethods
   extend ActiveSupport::Concern
   included do
@@ -22,12 +24,22 @@ module RouteThirteenMailerMethods
       mail(to: @contact.email, subject: 'New Housing Recommendation')
     end
 
+    def thirteen_match_acknowledgement_ssp(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: 'New Housing Recommendation')
+    end
+
     def thirteen_client_review_shelter_agency(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: 'Match Acknowledged - Requires Your Action')
     end
 
     def thirteen_client_review_hsa(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: 'Match Acknowledged')
+    end
+
+    def thirteen_client_review_ssp(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: 'Match Acknowledged')
     end
@@ -52,6 +64,11 @@ module RouteThirteenMailerMethods
       mail(to: @contact.email, subject: "Match Accepted by #{Translation.translate('Shelter Agency Thirteen')} - Requires Your Action")
     end
 
+    def thirteen_hearing_scheduled_ssp(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: "Match Accepted by #{Translation.translate('Shelter Agency Thirteen')}")
+    end
+
     def thirteen_hearing_scheduled_dnd_staff(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Accepted by #{Translation.translate('Shelter Agency Thirteen')}")
@@ -70,6 +87,11 @@ module RouteThirteenMailerMethods
     def thirteen_hearing_outcome_hsa(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Review Scheduled by #{Translation.translate('HSA Thirteen')} - Requires Your Action")
+    end
+
+    def thirteen_hearing_outcome_ssp(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: "Match Review Scheduled by #{Translation.translate('HSA Thirteen')}")
     end
 
     def thirteen_hearing_outcome_dnd_staff(notification = nil)
@@ -92,6 +114,11 @@ module RouteThirteenMailerMethods
       mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')} - Requires Your Action")
     end
 
+    def thirteen_hsa_review_ssp(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
+    end
+
     def thirteen_hsa_review_dnd_staff(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
@@ -104,22 +131,22 @@ module RouteThirteenMailerMethods
 
     def thirteen_accept_referral_shelter_agency(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
+      mail(to: @contact.email, subject: "Match Reviewed by #{Translation.translate('HSA Thirteen')}")
     end
 
     def thirteen_accept_referral_hsa(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')} - Requires Your Action")
+      mail(to: @contact.email, subject: "Match Reviewed by #{Translation.translate('HSA Thirteen')} - Requires Your Action")
     end
 
     def thirteen_accept_referral_ssp(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
+      mail(to: @contact.email, subject: "Match Reviewed by #{Translation.translate('HSA Thirteen')}")
     end
 
     def thirteen_accept_referral_hsp(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: "Match Ready for Review by #{Translation.translate('HSA Thirteen')}")
+      mail(to: @contact.email, subject: "Match Reviewed by #{Translation.translate('HSA Thirteen')}")
     end
 
     def thirteen_accept_referral_decline(notification = nil)
@@ -129,17 +156,22 @@ module RouteThirteenMailerMethods
 
     def thirteen_confirm_match_success_shelter_agency(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
 
     def thirteen_confirm_match_success_hsa(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
+    end
+
+    def thirteen_confirm_match_success_ssp(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
 
     def thirteen_confirm_match_success_dnd_staff(notification = nil)
       setup_instance_variables(notification)
-      mail(to: @contact.email, subject: 'Match Success Confirmed')
+      mail(to: @contact.email, subject: 'Confirm Match Success')
     end
   end
 end

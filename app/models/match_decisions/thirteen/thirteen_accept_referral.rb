@@ -79,6 +79,16 @@ module MatchDecisions::Thirteen
       true
     end
 
+    def stalled_contact_types
+      @stalled_contact_types ||= [
+        :shelter_agency_contacts,
+        :housing_subsidy_admin_contacts,
+        :dnd_staff_contacts,
+        :ssp_contacts,
+        :do_contacts,
+      ]
+    end
+
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{Translation.translate('Shelter Agency Thirteen')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenMatchAcknowledgement < Base
     include MatchDecisions::RouteThirteenCancelReasons
@@ -31,6 +33,7 @@ module MatchDecisions::Thirteen
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Thirteen::ThirteenMatchAcknowledgementShelterAgency
         m << Notifications::Thirteen::ThirteenMatchAcknowledgementHsa
+        m << Notifications::Thirteen::ThirteenMatchAcknowledgementSsp
       end
     end
 
