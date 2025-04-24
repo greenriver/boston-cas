@@ -6,9 +6,6 @@ x-app: &app
     dockerfile: docker/app/Dockerfile
     args:
       BUILD_TAG: 3.3.7-slim-bookworm
-      PG_MAJOR: '12'
-      NODE_MAJOR: '12'
-      YARN_VERSION: '1.17.3'
       BUNDLER_VERSION: '2.6.3'
       USER_ID: ${USER_ID:-10000}
       GROUP_ID: ${GROUP_ID:-10000}
@@ -124,7 +121,7 @@ services:
       - redis
 
   db:
-    image: postgres:12-alpine
+    image: postgres:17-alpine
     container_name: cas-db
     environment:
       POSTGRES_PASSWORD: postgres

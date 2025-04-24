@@ -81,6 +81,7 @@ RUN apt-get update && apt-get upgrade -y \
   bash \
   build-essential \
   libicu-dev \
+  iputils-ping \
   libcurl4 libcurl4-openssl-dev \
   imagemagick \
   libmagic1 libheif1 libmagic-dev file \
@@ -91,6 +92,7 @@ RUN apt-get update && apt-get upgrade -y \
   lftp postgresql-16 postgresql-client-16 tmux libgeos-dev proj-bin libproj-dev zip expect \
   shared-mime-info libyaml-dev libffi-dev \
   tar p7zip-full vim gpg gnupg-agent poppler-utils \
+  && ln -s /usr/bin/yarnpkg /usr/bin/yarn \
   && rm -rf /var/lib/apt/lists/* \
   && if [ "$(uname -m)" = "aarch64" ]; then \
        ln -s /usr/lib/aarch64-linux-gnu/libproj.so /usr/lib/libproj.so.20; \
