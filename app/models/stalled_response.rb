@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class StalledResponse < ApplicationRecord
   include ActionView::Helpers
   include ActionView::Context
@@ -154,6 +156,18 @@ class StalledResponse < ApplicationRecord
         weight: 100,
       },
       {
+        client_engaging: true,
+        reason: 'Other - engaging',
+        steps: [
+          'MatchDecisions::Thirteen::ThirteenAcceptReferral',
+          'MatchDecisions::Thirteen::ThirteenHearingOutcome',
+          'MatchDecisions::Thirteen::ThirteenHearingScheduled',
+          'MatchDecisions::Thirteen::ThirteenHsaReview',
+        ], # 3,4,5,4,7,8,9
+        requires_note: true,
+        weight: 100,
+      },
+      {
         client_engaging: false,
         reason: 'Client refusing stabilization services',
         steps: [
@@ -285,6 +299,18 @@ class StalledResponse < ApplicationRecord
           'MatchDecisions::Nine::NineRecordVoucherDate',
           'MatchDecisions::Eight::EightRecordVoucherDate',
           'MatchDecisions::Seven::ApproveMatchHousingSubsidyAdmin',
+        ], # 3,4,5,4,7,8,9
+        requires_note: true,
+        weight: 100,
+      },
+      {
+        client_engaging: false,
+        reason: 'Other - not engaging',
+        steps: [
+          'MatchDecisions::Thirteen::ThirteenAcceptReferral',
+          'MatchDecisions::Thirteen::ThirteenHearingOutcome',
+          'MatchDecisions::Thirteen::ThirteenHearingScheduled',
+          'MatchDecisions::Thirteen::ThirteenHsaReview',
         ], # 3,4,5,4,7,8,9
         requires_note: true,
         weight: 100,

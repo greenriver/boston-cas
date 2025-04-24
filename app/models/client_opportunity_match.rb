@@ -921,7 +921,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def status_update_details
     data = status_updates.order(created_at: :desc).preload(:decision).map do |m|
       response_text = m.response
-      still_active = if m.decision.still_active_responses.include?(response_text)
+      still_active = if m.decision.still_active_responses.map(&:last).include?(response_text)
         'Engaging'
       else
         'Not Engaging'
