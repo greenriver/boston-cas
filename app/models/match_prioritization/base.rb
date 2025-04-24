@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchPrioritization
   class Base < ApplicationRecord
     self.table_name = :match_prioritizations
@@ -35,6 +37,8 @@ module MatchPrioritization
         MatchPrioritization::MatchGroup,
         MatchPrioritization::UnshelteredRandom,
         MatchPrioritization::FamilyPsh,
+        MatchPrioritization::RrhAndTh,
+        MatchPrioritization::LowIncomeSubsidies,
       ]
     end
 
