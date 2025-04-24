@@ -130,3 +130,4 @@ EnrolledInPshNoMoveIn,Enrolled in PSH (Permanent Supportive Housing) without mov
 EnrolledInPhNoMoveIn,Enrolled in PH (PH – Housing Only or Housing with Services (no disability required for entry) without move-in date,,be
 EnrolledInHmisProjectTypeAnyPhNoMoveIn,Enrolled in one of the specified PH Project Types without a move in date,,be
 PshRequired,in need of Permanent Supportive Housing,,be
+EverCurrentlyFleeing,Ever fleeing DV,,be
