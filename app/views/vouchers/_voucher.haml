@@ -67,7 +67,7 @@
                     = match.overall_status[:name]
                 - if match.active? && can_reject_matches? && button
                   - button = false
-                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'ml-auto btn btn-secondary btn-sm mb-2', method: :delete, data: {confirm: "Stopping this match will remove anyone in the match and make the voucher unavailable.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
+                  = link_to unavailable_program_sub_program_voucher_path(@subprogram.program, @subprogram, voucher), class: 'ml-auto btn btn-secondary btn-sm mb-2', method: :delete, data: {confirm: "Stopping this match will remove anyone in the match and make the voucher unavailable. Anyone on the match will be made available on routes where they were parked when starting this match.  There will be NO notifications.  This should only be used when a voucher was made available incorrectly. Are you sure you want to stop the match?"} do
                     = 'Stop Match'.pluralize(active_matches.count)
           - else
             No Match
