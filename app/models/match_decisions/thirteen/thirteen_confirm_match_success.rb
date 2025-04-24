@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenConfirmMatchSuccess < Base
     include MatchDecisions::RouteEightCancelReasons
@@ -59,6 +61,7 @@ module MatchDecisions::Thirteen
         m << Notifications::Thirteen::ThirteenConfirmMatchSuccessHsa
         m << Notifications::Thirteen::ThirteenConfirmMatchSuccessShelterAgency
         m << Notifications::Thirteen::ThirteenConfirmMatchSuccessDndStaff
+        m << Notifications::Thirteen::ThirteenConfirmMatchSuccessSsp
       end
     end
 
