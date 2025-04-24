@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenClientReview < Base
     include MatchDecisions::AcceptsDeclineReason
@@ -39,6 +41,7 @@ module MatchDecisions::Thirteen
         m << Notifications::Thirteen::ThirteenClientReviewShelterAgency
         m << Notifications::Thirteen::ThirteenClientReviewHsa
         m << Notifications::Thirteen::ThirteenClientReviewDndStaff
+        m << Notifications::Thirteen::ThirteenClientReviewSsp
       end
     end
 

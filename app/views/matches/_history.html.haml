@@ -15,6 +15,14 @@
         .col-sm-7
         .col-sm-5.text-right
         %table.table.table-condensed.table-striped
+          %thead
+            %tr
+              %th Date
+              %th Event
+              %th Step
+              %th Contact
+              - if can_reissue_notifications?
+                %th Actions
           %tbody
           - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
             = render event, event: event, match: match

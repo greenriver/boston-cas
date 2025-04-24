@@ -279,6 +279,11 @@ class NotificationsMailer < DatabaseMailer
     mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
   end
 
+  def set_asides_hsa_accepts_client_ssp(notification = nil)
+    setup_instance_variables(notification)
+    mail(to: @contact.email, subject: 'Match ready for review')
+  end
+
   # end Set Asides
 
   # Progress Updates

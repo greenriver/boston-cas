@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::ProviderOnly
   class HsaAcceptsClient < ::MatchDecisions::Base
     def to_partial_path
@@ -75,6 +77,7 @@ module MatchDecisions::ProviderOnly
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::ProviderOnly::HsaAcceptsClient
+        m << Notifications::ProviderOnly::HsaAcceptsClientSspNotification
       end
     end
 
