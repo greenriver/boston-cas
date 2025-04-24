@@ -9,12 +9,7 @@
 module Warehouse
   class Base < ActiveRecord::Base
     self.abstract_class = true
-    connects_to(
-      database: {
-        writing: "#{Rails.env}_warehouse".parameterize.underscore.to_sym,
-        reading: "#{Rails.env}_warehouse".parameterize.underscore.to_sym,
-      },
-    )
+    connects_to(database: { writing: "#{Rails.env}_warehouse".parameterize.underscore.to_sym, reading: "#{Rails.env}_warehouse".parameterize.underscore.to_sym })
 
     def self.enabled?
       @enabled ||= begin
