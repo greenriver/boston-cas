@@ -19,13 +19,14 @@ module BostonCa
 
     # Continue to use config/secrets.yml. This is deprecated in rails > 7.0 but we don't want to move to
     # encrypted credentials, it's not appropriate for an open-source project
-    config.secrets = config_for(:secrets) # loads from config/secrets.yml
-    config.secret_key_base = config.secrets[:secret_key_base]
+    if File.exist?(Rails.root.join('config', 'secrets.yml'))
+      config.secrets = config_for(:secrets) # loads from config/secrets.yml
+      config.secret_key_base = config.secrets[:secret_key_base]
 
-    def secrets
-      config.secrets
+      def secrets
+        config.secrets
+      end
     end
-    # END config/secrets.yml
 
     # FIXME Suppress the Rails 5 belongs_to requirement
     config.active_record.belongs_to_required_by_default = false
