@@ -21,46 +21,42 @@ default: &default
   <% end %>
 
 development:
-  primary:
-    <<: *default
-    database: <%= ENV['DATABASE_APP_DB'] %>
-  warehouse:
-    <<: *default
-    schema_dump: false
-    database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
-    <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
-    port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
-    <% end %>
+  <<: *default
+  database: <%= ENV['DATABASE_APP_DB'] %>
 
 staging:
-  primary:
-    <<: *default
-    database: <%= ENV['DATABASE_APP_DB'] %>
-  warehouse:
-    <<: *default
-    schema_dump: false
-    database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
-    <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
-    port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
-    <% end %>
+  <<: *default
+  database: <%= ENV['DATABASE_APP_DB'] %>
 
 production:
-  primary:
-    <<: *default
-    database: <%= ENV['DATABASE_APP_DB'] %>
-  warehouse:
-    <<: *default
-    schema_dump: false
-    database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
-    <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
-    port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
-    <% end %>
+  <<: *default
+  database: <%= ENV['DATABASE_APP_DB'] %>
+
+development_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+  <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
+  port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
+  <% end %>
+
+staging_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+  <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
+  port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
+  <% end %>
+
+production_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB'] %>
+  <% if ENV['DATABASE_WAREHOUSE_PORT'] %>
+  port: <%= ENV['DATABASE_WAREHOUSE_PORT'] %>
+  <% end %>
 
 test:
-  primary:
-    <<: *default
-    database: <%= ENV['DATABASE_DB_TEST'] %>
-  warehouse:
-    <<: *default
-    schema_dump: false
-    database: <%= ENV['DATABASE_WAREHOUSE_DB_TEST'] %>
+  <<: *default
+  database: <%= ENV['DATABASE_DB_TEST'] %>
+
+test_warehouse:
+  <<: *default
+  database: <%= ENV['DATABASE_WAREHOUSE_DB_TEST'] %>
