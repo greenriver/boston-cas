@@ -97,7 +97,7 @@ Rails.application.configure do
   config.i18n.fallbacks = true
 
   # Don't log any deprecations.
-  config.active_support.report_deprecations = false
+  config.active_support.report_deprecations = true
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
