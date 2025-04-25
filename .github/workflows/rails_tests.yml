@@ -92,6 +92,7 @@ jobs:
           PORT: 80
         run: |
           bundle exec rails db:drop db:create db:schema:load db:migrate
+          createdb -h $DATABASE_HOST -U $DATABASE_USER $DATABASE_WAREHOUSE_DB_TEST
           bundle exec rails assets:precompile
       - name: Run tests
         env:
