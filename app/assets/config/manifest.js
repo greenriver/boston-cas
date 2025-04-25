@@ -3,3 +3,4 @@
 //= link_directory ../stylesheets .css
 //= link theme/styles/_variables.css
 //= link application.css
+//= link print.css
