@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class VouchersController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_vouchers!
@@ -54,7 +56,7 @@ class VouchersController < ApplicationController
   end
 
   # Find the opportunity with this voucher
-  # Mark any involved clients as available_candidate (potentially they've been matched up to the limit,
+  # Mark any involved clients as available_candidate on routes that were parked when the match started
   # deleting this match this frees one up
   # Delete any associated client opportunity matches that aren't complete
   # Remove the opportunity from matching
@@ -67,7 +69,7 @@ class VouchersController < ApplicationController
         matches.each do |m|
           next if m.closed?
 
-          m.client.make_available_in(match_route: m.match_route) if m&.client
+          m.unpark_routes_parked_for_active_match if m&.client
           m.delete
         end
         opportunity.update(available: false, available_candidate: false)
