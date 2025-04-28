@@ -921,7 +921,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def status_update_details
     data = status_updates.order(created_at: :desc).preload(:decision).map do |m|
       response_text = m.response
-      still_active = if m.decision.still_active_responses.include?(response_text)
+      still_active = if m.decision.still_active_responses.map(&:last).include?(response_text)
         'Engaging'
       else
         'Not Engaging'
@@ -1019,7 +1019,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
-  private def unpark_routes_parked_for_active_match
+  def unpark_routes_parked_for_active_match
     # Get routes parked for the current client due to an active route
     parked_active_client_routes = client&.unavailable_as_candidate_fors&.map { |r| r.match_route_type if r.reason == UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT }&.compact
     # Get routes from the config that are to be parked due to an active match on the current route

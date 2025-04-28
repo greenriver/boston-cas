@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https: //github.com/greenriver/hmis-warehouse/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :female, class: 'Rules::Female' do
     name { 'Female' }
@@ -529,6 +537,10 @@ FactoryBot.define do
   end
   factory :psh_required, class: 'Rules::PshRequired' do
     name { 'in need of Permanent Supportive Housing' }
+    verb { 'be' }
+  end
+  factory :ever_currently_fleeing, class: 'Rules::EverCurrentlyFleeing' do
+    name { 'Currently Fleeing' }
     verb { 'be' }
   end
 end
