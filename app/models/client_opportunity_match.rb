@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ClientOpportunityMatch < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
@@ -904,6 +906,36 @@ class ClientOpportunityMatch < ApplicationRecord
     join_model ||= client_opportunity_match_contacts.build contact: contact
     join_model.send("#{role}=", true)
     join_model.save
+  end
+
+  ##
+  # Retrieves details of status updates for the match from when it was stalled.
+  #
+  # @return [Hash] A hash grouping status updates by engagement status ('Engaging', 'Not Engaging', 'Other'),
+  #   with each containing an array of hashes detailing:
+  #   - `:still_active` [String] - Engagement status.
+  #   - `:response_date` [Date] - Date of the response.
+  #   - `:response` [String] - Response text.
+  #   - `:decision` [String] - Label of the decision.
+  #
+  def status_update_details
+    data = status_updates.order(created_at: :desc).preload(:decision).map do |m|
+      response_text = m.response
+      still_active = if m.decision.still_active_responses.include?(response_text)
+        'Engaging'
+      else
+        'Not Engaging'
+      end
+      # We can't currently tell if this was positive or negative when someone chose other
+      still_active = 'Other' if response_text.downcase == 'other'
+      {
+        still_active: still_active,
+        response_date: m.created_at.to_date,
+        response: response_text,
+        decision: m.decision.step_name,
+      }
+    end
+    data.group_by { |m| m[:still_active] }
   end
 
   private def add_default_dnd_staff_contacts!
