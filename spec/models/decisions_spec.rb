@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MatchDecisions::Base, type: :model do
@@ -74,7 +76,7 @@ RSpec.describe MatchDecisions::Base, type: :model do
           expect(the_match.stalled?).to be false
         end
         it 'when time passes, the match becomes stalled' do
-          Timecop.travel(Date.current + stalled_interval + 1) do
+          travel_to(Date.current + stalled_interval + 1) do
             expect(the_match.stalled?).to be true
           end
         end

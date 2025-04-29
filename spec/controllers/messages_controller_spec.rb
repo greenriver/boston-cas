@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MessagesController, type: :controller do
@@ -30,7 +32,7 @@ RSpec.describe MessagesController, type: :controller do
 
   describe 'POST seen' do
     it "sets seen_at to expected date" do
-      Timecop.freeze
+      freeze_time
       post :seen, params: { id: event.id }
 
       # the accessor gives us a ActiveSupport::TimeWithZone, which throws things off a bit
