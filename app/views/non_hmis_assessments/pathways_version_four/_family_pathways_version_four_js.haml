@@ -11,24 +11,24 @@
     $('input[name*="[disqualified_for_state_assistance]"]').trigger('change');
 
     // Q5B toggle
-    $('input[name*="[housing_barrier]"]').on('change', function(e) {
-      if($(e.currentTarget).val() == 'true') {
-        $('.deidentified_pathways_version_four_denial_required').removeClass('d-none');
-      } else {
-        $('.deidentified_pathways_version_four_denial_required').addClass('d-none');
-      }
-    });
-    $('input[name*="[housing_barrier]"]').trigger('change');
+    //$('input[name*="[housing_barrier]"]').on('change', function(e) {
+    //  if($(e.currentTarget).val() == 'true') {
+    //    $('.deidentified_pathways_version_four_denial_required').removeClass('d-none');
+    //  } else {
+    //    $('.deidentified_pathways_version_four_denial_required').addClass('d-none');
+    //  }
+    //});
+    // $('input[name*="[housing_barrier]"]').trigger('change');
 
     // 6 toggle
-    $('input[name*="[service_need]"]').on('change', function(e) {
-      if($(e.currentTarget).val() == 'true') {
-        $('.deidentified_pathways_version_four_service_need_indicators').removeClass('d-none');
-      } else {
-        $('.deidentified_pathways_version_four_service_need_indicators').addClass('d-none');
-      }
-    });
-    $('input[name*="[service_need]"]').trigger('change');
+    //$('input[name*="[service_need]"]').on('change', function(e) {
+    //  if($(e.currentTarget).val() == 'true') {
+    //    $('.deidentified_pathways_version_four_service_need_indicators').removeClass('d-none');
+    //  } else {
+    //    $('.deidentified_pathways_version_four_service_need_indicators').addClass('d-none');
+    //  }
+    //});
+    //$('input[name*="[service_need]"]').trigger('change');
 
     // Days Homeless
     var warehouse_sheltered_selector = 'input[name*="[homeless_nights_sheltered]"]';
