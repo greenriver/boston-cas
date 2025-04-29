@@ -211,8 +211,7 @@ module PathwaysVersionFourCalculations
     def assessment_type_options
       {}.tap do |options|
         options[pathways_assessment_type] = { title: pathways_title, description: pathways_description }
-        # Family Pathways is disabled in production until further notice, remove trailing `unless Rails.env.production?` when ready to deploy
-        options[family_pathways_assessment_type] = { title: family_pathways_title, description: family_pathways_description } unless Rails.env.production?
+        options[family_pathways_assessment_type] = { title: family_pathways_title, description: family_pathways_description }
         options[transfer_assessment_type] = { title: transfer_title, description: transfer_description }
       end
     end
