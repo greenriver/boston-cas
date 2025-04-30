@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchRoutes
   class Thirteen < Base
     def title
@@ -70,6 +72,10 @@ module MatchRoutes
       else
         super
       end
+    end
+
+    def first_client_step
+      'MatchDecisions::Thirteen::ThirteenMatchAcknowledgement'
     end
 
     def initial_decision
