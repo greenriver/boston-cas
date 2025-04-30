@@ -346,7 +346,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def client_info_approved_for_release?
-    if match_route.class.name.in?(['MatchRoutes::Default'])
+    if match_route.class.name.in?(['MatchRoutes::Default', 'MatchRoutes::Thirteen'])
       shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?(match_route)
     else
       client&.has_full_housing_release?(match_route) || ! Config.get(:limit_client_names_on_matches)
