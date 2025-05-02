@@ -143,9 +143,23 @@ class ClientOpportunityMatch < ApplicationRecord
     md_t = MatchDecisions::Base.arel_table
     joins(:decisions).
       where(
-        md_t[:status].eq('accepted').and(md_t[:type].eq('MatchDecisions::MatchRecommendationShelterAgency')).
+        md_t[:status].eq('accepted').and(
+          md_t[:type].in(
+            [
+              'MatchDecisions::MatchRecommendationShelterAgency',
+              'MatchDecisions::Thirteen::ThirteenClientReview',
+            ],
+          ),
+        ).
         or(
-          md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff')),
+          md_t[:status].eq('decline_overridden').and(
+            md_t[:type].in(
+              [
+                'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
+                'MatchDecisions::Thirteen::ThirteenClientReviewDecline',
+              ],
+            ),
+          ),
         ),
       )
   end
