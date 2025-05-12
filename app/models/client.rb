@@ -184,7 +184,7 @@ class Client < ApplicationRecord
   scope :text_search, ->(text) do
     return none unless text.present?
 
-    text.strip!
+    text = text.strip
     sa = arel_table
     # numeric = /[\d-]+/.match(text).try(:[], 0) == text
     date = /\d\d?\/\d\d?\/\d\d\d\d/.match(text).try(:[], 0) == text
