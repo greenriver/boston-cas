@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'street_address'
 class Client < ApplicationRecord
   before_create :assign_tie_breaker
@@ -94,8 +96,14 @@ class Client < ApplicationRecord
   end
 
   scope :editable_by, ->(user) do
-    if user.can_edit_all_clients? || user.can_edit_clients_based_on_rules?
-      visible_by(user)
+    if user&.can_edit_all_clients?
+      current_scope || all
+    elsif user&.can_edit_clients_based_on_rules? && user&.requirements&.exists?
+      client_scope = current_scope || all
+      user.requirements.each do |requirement|
+        client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
+      end
+      client_scope
     else
       none
     end
