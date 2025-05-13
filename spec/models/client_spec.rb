@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Client, type: :model do
@@ -449,6 +457,164 @@ RSpec.describe Client, type: :model do
     context 'when searching Bob' do
       it 'matches 2' do
         expect(bob_search.count).to eq 2
+      end
+    end
+  end
+
+  describe 'editable_by' do
+    let(:admin_role) { create :admin_role }
+    let(:limited_client_editor_role) { create :limited_client_viewer }
+    let(:admin_user) { create :user, roles: [admin_role] }
+    let(:limited_user) { create :user, roles: [limited_client_editor_role] }
+    let(:regular_user) { create :user }
+    let!(:client1) { create :client }
+    let!(:client2) { create :client }
+
+    context 'when user can edit all clients' do
+      it 'returns all clients' do
+        expect(Client.editable_by(admin_user).count).to eq(2)
+        expect(Client.editable_by(admin_user).pluck(:id).sort).to eq([client1.id, client2.id].sort)
+      end
+    end
+
+    context 'when user has edit permissions based on rules' do
+      let(:rule) { create :age_greater_than_sixty }
+      let(:requirement) { create :requirement, rule: rule, positive: true }
+
+      before do
+        client1.update(date_of_birth: 70.years.ago)
+        client2.update(date_of_birth: 20.years.ago)
+        limited_user.requirements << requirement
+      end
+
+      it 'returns only matching clients' do
+        expect(Client.editable_by(limited_user).count).to eq(1)
+        expect(Client.editable_by(limited_user).pluck(:id)).to eq([client1.id])
+      end
+    end
+
+    context 'when user has no edit permissions' do
+      it 'returns no clients' do
+        expect(Client.editable_by(regular_user).count).to eq(0)
+      end
+    end
+  end
+
+  describe 'accessible_by_user' do
+    let(:admin_role) { create :admin_role }
+    let(:limited_client_viewer_role) { create :limited_client_viewer }
+    let(:admin_user) { create :user, roles: [admin_role] }
+    let(:limited_user) { create :user, roles: [limited_client_viewer_role] }
+    let(:regular_user) { create :user }
+    let!(:client1) { create :client }
+    let!(:client2) { create :client }
+
+    context 'when user can view all clients' do
+      it 'returns all clients' do
+        expect(Client.accessible_by_user(admin_user).count).to eq(2)
+        expect(Client.accessible_by_user(admin_user).pluck(:id).sort).to eq([client1.id, client2.id].sort)
+      end
+    end
+
+    context 'when user has view permissions based on rules' do
+      let(:rule) { create :age_greater_than_sixty }
+      let(:requirement) { create :requirement, rule: rule, positive: true }
+
+      before do
+        client1.update(date_of_birth: 70.years.ago)
+        client2.update(date_of_birth: 20.years.ago)
+        limited_user.requirements << requirement
+      end
+
+      it 'returns only matching clients' do
+        expect(Client.accessible_by_user(limited_user).count).to eq(1)
+        expect(Client.accessible_by_user(limited_user).pluck(:id)).to eq([client1.id])
+      end
+    end
+
+    context 'when user has no view permissions' do
+      it 'returns no clients' do
+        expect(Client.accessible_by_user(regular_user).count).to eq(0)
+      end
+    end
+  end
+
+  describe 'accessible_by_user?' do
+    let(:admin_role) { create :admin_role }
+    let(:limited_client_viewer_role) { create :limited_client_viewer }
+    let(:admin_user) { create :user, roles: [admin_role] }
+    let(:limited_user) { create :user, roles: [limited_client_viewer_role] }
+    let(:regular_user) { create :user }
+    let(:client) { create :client }
+
+    context 'when user can view all clients' do
+      it 'returns true' do
+        expect(client.accessible_by_user?(admin_user)).to be true
+      end
+    end
+
+    context 'when user has view permissions based on rules' do
+      let(:rule) { create :age_greater_than_sixty }
+      let(:requirement) { create :requirement, rule: rule, positive: true }
+
+      before do
+        client.update(date_of_birth: 70.years.ago)
+        limited_user.requirements << requirement
+      end
+
+      it 'returns true for matching client' do
+        expect(client.accessible_by_user?(limited_user)).to be true
+      end
+
+      it 'returns false for non-matching client' do
+        client.update(date_of_birth: 20.years.ago)
+        expect(client.accessible_by_user?(limited_user)).to be false
+      end
+    end
+
+    context 'when user has no view permissions' do
+      it 'returns false' do
+        expect(client.accessible_by_user?(regular_user)).to be false
+      end
+    end
+  end
+
+  describe 'editable_by?' do
+    let(:admin_role) { create :admin_role }
+    let(:limited_client_editor_role) { create :limited_client_viewer }
+    let(:admin_user) { create :user, roles: [admin_role] }
+    let(:limited_user) { create :user, roles: [limited_client_editor_role] }
+    let(:regular_user) { create :user }
+    let(:client) { create :client }
+
+    context 'when user can edit all clients' do
+      it 'returns true' do
+        expect(client.editable_by?(admin_user)).to be true
+      end
+    end
+
+    context 'when user has edit permissions based on rules' do
+      let(:rule) { create :age_greater_than_sixty }
+      let(:requirement) { create :requirement, rule: rule, positive: true }
+
+      before do
+        client.update(date_of_birth: 70.years.ago)
+        limited_user.requirements << requirement
+      end
+
+      it 'returns true for matching client' do
+        expect(client.editable_by?(limited_user)).to be true
+      end
+
+      it 'returns false for non-matching client' do
+        client.update(date_of_birth: 20.years.ago)
+        expect(client.editable_by?(limited_user)).to be false
+      end
+    end
+
+    context 'when user has no edit permissions' do
+      it 'returns false' do
+        expect(client.editable_by?(regular_user)).to be false
       end
     end
   end

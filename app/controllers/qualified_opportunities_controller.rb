@@ -4,11 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class QualifiedOpportunitiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :some_clients_viewable!
-  before_action :some_clients_editable!, only: [:update]
   before_action :set_client
+  before_action :require_this_clients_viewable!
+  before_action :require_this_client_editable!, only: [:update]
   before_action :set_opportunity, only: [:update]
 
   def index
@@ -61,11 +63,11 @@ class QualifiedOpportunitiesController < ApplicationController
     Client.accessible_by_user(current_user)
   end
 
-  def some_clients_viewable!
-    client_scope.exists?
+  def require_this_clients_viewable!
+    not_authorized! unless @client.accessible_by_user?(current_user)
   end
 
-  def some_clients_editable!
-    Client.editable_by(current_user).exists?
+  def require_this_client_editable!
+    not_authorized! unless @client.editable_by?(current_user)
   end
 end
