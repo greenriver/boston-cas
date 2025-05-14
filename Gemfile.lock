@@ -678,9 +678,6 @@ GEM
     simpleidn (0.2.1)
       unf (~> 0.1.4)
     slack-notifier (2.4.0)
-    sniffer (0.5.0)
-      anyway_config (>= 1.0)
-      dry-initializer (~> 3)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -748,9 +745,6 @@ GEM
       anyway_config (>= 1.0, < 3)
       concurrent-ruby
       dry-initializer
-    yabeda-http_requests (0.2.1)
-      sniffer
-      yabeda
     yabeda-prometheus (0.9.1)
       prometheus-client (>= 3.0, < 5.0)
       rack
@@ -905,7 +899,6 @@ DEPENDENCIES
   whenever
   with_advisory_lock
   xlsxtream
-  yabeda-http_requests
   yabeda-prometheus
   yabeda-puma-plugin
   yabeda-rails
@@ -1166,7 +1159,6 @@ CHECKSUMS
   simple_form (5.3.1) sha256=3891a36a89a7f8c69f1361624c5357591578a9e9c318257cd7b9cc7b6ce47460
   simpleidn (0.2.1) sha256=35dda985b761dff5751fefa7fba02e477427c975d47b11c4c4ffaf01afe1c719
   slack-notifier (2.4.0) sha256=cd9aba3f5f3e6227f73df1f6a33ac6c127c5fac35b513b86b7ba900cd98d2b00
-  sniffer (0.5.0) sha256=cd040cc51929c04749b20baa4dd8f5985174210e13437491f4923b8de27e1359
   sprockets (4.2.2) sha256=761e5a49f1c288704763f73139763564c845a8f856d52fba013458f8af1b59b1
   sprockets-rails (3.5.2) sha256=a9e88e6ce9f8c912d349aa5401509165ec42326baf9e942a85de4b76dbc4119e
   sshkit (1.24.0) sha256=9597c1f984778ae9742f2dc839778d57a6a2efb868107046575c52ac7c628e6c
@@ -1197,7 +1189,6 @@ CHECKSUMS
   xlsxtream (2.4.0) sha256=cec4b4266412e3c65bb9283c7c1ae506b2bdac1b1841ead6ab9814a4619fbce8
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
   yabeda (0.13.1) sha256=3213025f22b7746602c8a4c41e2ed82d73a90bdc5489f6ef472142b06c1cf954
-  yabeda-http_requests (0.2.1) sha256=f1204340cd57317c8a87cf8fee8af52c150d6f622ee66276a7d27a19ee67b90a
   yabeda-prometheus (0.9.1) sha256=b87d80cae8cffbeb527c25d288eafa8eed9c1fb56cf49616db5c8611768cd5fd
   yabeda-puma-plugin (0.7.1) sha256=a41d72053b8eb5b9db92c59bfb4a95f1988bafd2fdc9f4f13836849af073b17b
   yabeda-rails (0.9.0) sha256=6011bfa1e282456dbb4f0d6571267ad57108b54fab0de37ae3b70653fa9582da
