@@ -7,8 +7,8 @@ require 'prometheus/client'
 module Prometheus
   module Middleware
     class Collector
-      TENANT = ENV.fetch('TENANT', 'none')
-      APP = ENV.fetch('APP', 'cep-reporting')
+      TENANT = ENV.fetch('CLIENT', 'none')
+      APP = ENV.fetch('APP', 'cas')
 
       def initialize(app, registry = Prometheus::Client.registry)
         @app = app
