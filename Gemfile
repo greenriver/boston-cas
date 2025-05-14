@@ -141,7 +141,6 @@ gem 'warning'
 gem 'yabeda-rails'
 gem 'yabeda-prometheus'
 gem 'yabeda-puma-plugin'
-gem 'yabeda-http_requests'
 gem 'roda'
 
 # Once 0.17 is released we should be able to unpin this
