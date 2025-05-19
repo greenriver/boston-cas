@@ -17,19 +17,19 @@ module Prometheus
         @http_requests_total = @registry.counter(
           :http_requests_total,
           docstring: 'Total number of HTTP requests received',
-          labels: [:status, :path, :method, :rails_env, :app, :tenant]
+          labels: [:status, :path, :method, :rails_env, :app, :tenant],
         )
 
         @active_requests_gauge = @registry.gauge(
           :http_active_requests,
           docstring: 'Number of active connections to the service',
-          labels: [:rails_env, :app, :tenant]
+          labels: [:rails_env, :app, :tenant],
         )
 
         @latency_histogram = @registry.histogram(
           :http_request_duration_seconds,
           docstring: 'Duration of HTTP requests',
-          labels: [:status, :path, :method, :rails_env, :app, :tenant]
+          labels: [:status, :path, :method, :rails_env, :app, :tenant],
         )
       end
 
@@ -38,7 +38,7 @@ module Prometheus
 
         # Track start of request processing
         @active_requests_gauge.increment(
-          labels: { rails_env: Rails.env, app: APP, tenant: TENANT }
+          labels: { rails_env: Rails.env, app: APP, tenant: TENANT },
         )
 
         # Process the request
@@ -52,7 +52,7 @@ module Prometheus
 
         # Track end of request processing
         @active_requests_gauge.decrement(
-          labels: { rails_env: Rails.env, app: APP, tenant: TENANT }
+          labels: { rails_env: Rails.env, app: APP, tenant: TENANT },
         )
 
         # Return the response
@@ -69,7 +69,7 @@ module Prometheus
         @http_requests_total.increment(labels: { status: status, path: path, method: method, rails_env: Rails.env, app: APP, tenant: TENANT })
         @latency_histogram.observe(
           duration,
-          labels: { status: status, path: path, method: method, rails_env: Rails.env, app: APP, tenant: TENANT }
+          labels: { status: status, path: path, method: method, rails_env: Rails.env, app: APP, tenant: TENANT },
         )
       end
     end
