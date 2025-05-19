@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module PathwaysVersionFourCalculations
   extend ActiveSupport::Concern
 
@@ -1214,7 +1216,7 @@ module PathwaysVersionFourCalculations
           input_html: { class: 'jHouseholdTrigger' },
         },
         pregnant_or_parent: {
-          label: 'Are you pregnant or parenting a child under 18?',
+          label: 'Are you pregnant and/or will a minor child be accompanying you in the home?',
           number: '3B',
           as: :pretty_boolean_group,
           collection: {
@@ -1295,6 +1297,26 @@ module PathwaysVersionFourCalculations
             'Yes' => true,
             'No' => false,
           },
+        },
+        interested_in_set_asides: {
+          label: 'Are you interested in a Homeless Set Aside Unit?',
+          number: '4E',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => true,
+            'No' => false,
+          },
+          hint: 'A homeless Set Aside is a subsidized unit that DOES NOT come with supportive services.',
+        },
+        psh_required: {
+          label: 'Are you in need of a Permanent Supporting Housing Unit?',
+          number: '4F',
+          as: :pretty_boolean_group,
+          collection: {
+            'Yes' => 'yes',
+            'No' => 'no',
+          },
+          hint: 'Client is in need of Permanent Supportive Housing. Permanent Supportive Housing is a voucher or project based housing resource that comes with comprehensive support services. Individuals must meet the Dedicated Plus length of time homeless definition and have an accompanying disability for eligibility.',
         },
         housing_barrier_preamble: {
           as: :partial,

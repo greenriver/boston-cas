@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: false
+
 module MatchDecisions
   class Base < ApplicationRecord
     extend OrderAsSpecified
@@ -423,11 +425,11 @@ module MatchDecisions
 
     def canceled_status_label
       if administrative_cancel_reason_other_explanation.present?
-        "Match canceled administratively: #{administrative_cancel_reason&.name} (#{administrative_cancel_reason_other_explanation})"
+        "Match #{Translation.translate('canceled administratively')}: #{administrative_cancel_reason&.name} (#{administrative_cancel_reason_other_explanation})"
       elsif administrative_cancel_reason.present?
-        "Match canceled administratively: #{administrative_cancel_reason.name}"
+        "Match #{Translation.translate('canceled administratively')}: #{administrative_cancel_reason.name}"
       else
-        'Match canceled administratively'
+        "Match #{Translation.translate('canceled administratively')}"
       end
     end
 

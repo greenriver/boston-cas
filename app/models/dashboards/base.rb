@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Dashboards::Base
   include ArelHelper
   def section_name(name)
@@ -19,7 +21,7 @@ class Dashboards::Base
       'In Progress' => :ongoing_not_stalled,
       'Stalled' => :stalled,
       'Success' => :success,
-      'Pre-empted' => :preempted,
+      Translation.translate('Pre-empted') => :preempted,
       'Rejected' => :rejected,
       'Declined' => :declined,
       'Expired' => :expired,
