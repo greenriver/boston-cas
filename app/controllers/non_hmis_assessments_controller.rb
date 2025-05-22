@@ -156,7 +156,17 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def set_assessment
-    @assessment = NonHmisAssessment.visible_by(current_user).find(params[:id].to_i)
+    found = @non_hmis_client.assessments.find(params[:id].to_i)
+    allowed = false
+    case action_name
+    when :show
+      allowed = found.editable_by?(current_user)
+    when :edit, :update, :destroy, :unlock
+      allowed = found.viewable_by?(current_user)
+    end
+    raise ActionController::RoutingError.new('Not Found') unless allowed
+
+    @assessment = found
   end
 
   private def set_neighborhoods
