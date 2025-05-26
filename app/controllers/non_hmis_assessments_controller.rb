@@ -149,24 +149,16 @@ class NonHmisAssessmentsController < ApplicationController
       client_id = params[:deidentified_client_id].to_i
       client_scope = DeidentifiedClient.deidentified
     else
-      raise 'unroutable, should not be reached'
+      raise 'unroutable, should not be reached' # Or handle as a bad request
     end
 
     @non_hmis_client = client_scope.visible_to(current_user).find(client_id)
+  rescue ActiveRecord::RecordNotFound
+    raise ActionController::RoutingError.new('Not Found') # Or handle as appropriate, e.g. redirect with flash
   end
 
   private def set_assessment
-    found = @non_hmis_client.assessments.find(params[:id].to_i)
-    allowed = false
-    case action_name
-    when :show
-      allowed = found.editable_by?(current_user)
-    when :edit, :update, :destroy, :unlock
-      allowed = found.viewable_by?(current_user)
-    end
-    raise ActionController::RoutingError.new('Not Found') unless allowed
-
-    @assessment = found
+    @assessment = @non_hmis_client.assessments.find(params[:id].to_i)
   end
 
   private def set_neighborhoods

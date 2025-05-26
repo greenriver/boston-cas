@@ -134,11 +134,11 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def pathways_v3?
-    type.include?('PathwaysVersionThree')
+    type&.include?('PathwaysVersionThree')
   end
 
   def pathways_v4?
-    type.include?('PathwaysVersionFour')
+    type&.include?('PathwaysVersionFour')
   end
 
   def total_days_homeless_in_the_last_three_years

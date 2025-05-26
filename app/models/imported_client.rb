@@ -62,7 +62,7 @@ class ImportedClient < NonHmisClient
   scope :visible_to, ->(user) do
     if user.can_edit_all_clients? || user.can_manage_imported_clients?
       all
-    elsif visible_through_user_agency(user)
+    else
       visible_through_user_agency(user)
     end
   end
