@@ -783,15 +783,15 @@ RSpec.describe Client, type: :model do
         end
 
         it 'returns true if linked ImportedClient is visible to admin_user' do
-            imp_for_admin = create(:imported_client, agency: other_agency, identified: true) # identified status for initial check
-            link_project_client_to_remote_record(client_under_test, imp_for_admin)
-            expect(client_under_test.remote_client_visible_to?(admin_user)).to be true
+          imp_for_admin = create(:imported_client, agency: other_agency, identified: true) # identified status for initial check
+          link_project_client_to_remote_record(client_under_test, imp_for_admin)
+          expect(client_under_test.remote_client_visible_to?(admin_user)).to be true
         end
 
         it 'returns true if linked ImportedClient is visible to imported_viewer' do
-            imp_for_viewer = create(:imported_client, agency: other_agency, identified: false) # identified status for initial check
-            link_project_client_to_remote_record(client_under_test, imp_for_viewer)
-            expect(client_under_test.remote_client_visible_to?(imported_viewer)).to be true
+          imp_for_viewer = create(:imported_client, agency: other_agency, identified: false) # identified status for initial check
+          link_project_client_to_remote_record(client_under_test, imp_for_viewer)
+          expect(client_under_test.remote_client_visible_to?(imported_viewer)).to be true
         end
       end
 
