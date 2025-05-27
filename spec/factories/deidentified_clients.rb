@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :deidentified_client do
     client_identifier { Faker::Number.number(digits: 4) }
