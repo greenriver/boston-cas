@@ -634,11 +634,9 @@ RSpec.describe Client, type: :model do
     let!(:deid_manager_role) { create(:role, name: 'remote_client_test_deid_manager', can_manage_all_deidentified_clients: true) }
     let!(:deid_viewer) { create(:user, agency: user_agency, roles: [deid_manager_role]) }
 
-    # ASSUMPTION: Role model has can_manage_all_identified_clients attribute
     let!(:id_manager_role) { create(:role, name: 'remote_client_test_id_manager', can_manage_all_identified_clients: true) }
     let!(:identified_viewer) { create(:user, agency: user_agency, roles: [id_manager_role]) }
 
-    # ASSUMPTION: Role model has can_manage_imported_clients attribute
     let!(:imp_manager_role) { create(:role, name: 'remote_client_test_imp_manager', can_manage_imported_clients: true) }
     let!(:imported_viewer) { create(:user, agency: user_agency, roles: [imp_manager_role]) }
 
