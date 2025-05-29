@@ -11,9 +11,9 @@
         %th Reason
     %tbody
       - matches.each do |closed_match|
-        - decision = closed_match.initialized_decisions.last
+        - modification_date = closed_match.unsuccessful_decision&.updated_at || closed_match.updated_at
         %tr
-          %td= link_to decision.updated_at.strftime('%m/%d/%Y'), match_path(closed_match)
+          %td= link_to modification_date.strftime('%m/%d/%Y'), match_path(closed_match)
           %td= closed_match.match_route.title
-          %td= match.overall_status[:name]
-          %td= decision.label
+          %td= closed_match.overall_status[:name]
+          %td= closed_match.unsuccessful_reason&.title.presence || 'Unknown'
