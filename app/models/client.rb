@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'street_address'
 class Client < ApplicationRecord
   before_create :assign_tie_breaker
@@ -94,8 +96,14 @@ class Client < ApplicationRecord
   end
 
   scope :editable_by, ->(user) do
-    if user.can_edit_all_clients? || user.can_edit_clients_based_on_rules?
-      visible_by(user)
+    if user&.can_edit_all_clients?
+      current_scope || all
+    elsif user&.can_edit_clients_based_on_rules? && user&.requirements&.exists?
+      client_scope = current_scope || all
+      user.requirements.each do |requirement|
+        client_scope = client_scope.merge(requirement.clients_that_fit(client_scope))
+      end
+      client_scope
     else
       none
     end
@@ -176,7 +184,7 @@ class Client < ApplicationRecord
   scope :text_search, ->(text) do
     return none unless text.present?
 
-    text.strip!
+    text = text.strip
     sa = arel_table
     # numeric = /[\d-]+/.match(text).try(:[], 0) == text
     date = /\d\d?\/\d\d?\/\d\d\d\d/.match(text).try(:[], 0) == text
@@ -353,6 +361,15 @@ class Client < ApplicationRecord
   def prioritized_matches
     o_t = Opportunity.arel_table
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
+  end
+
+  def closed_matches_for_display
+    @closed_matches_for_display ||= [].tap do |matches|
+      client_opportunity_matches.closed.order(closed_at: :desc).
+        preload(:initialized_decisions).find_each do |match|
+          matches << match
+        end
+    end
   end
 
   def housing_history

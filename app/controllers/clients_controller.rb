@@ -4,13 +4,15 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ClientsController < ApplicationController
   include ArelHelper
   include Search
 
   before_action :authenticate_user!
-  before_action :some_clients_viewable!
-  before_action :some_clients_editable!, only: [:update, :destroy]
+  before_action :require_some_clients_viewable!
+  before_action :require_some_clients_editable!, only: [:update, :destroy]
   before_action :set_client, only: [:show, :edit, :update, :destroy, :unavailable]
 
   helper_method :sort_column, :sort_direction
@@ -166,11 +168,11 @@ class ClientsController < ApplicationController
     "%#{@query}%"
   end
 
-  def some_clients_viewable!
-    client_scope.exists?
+  def require_some_clients_viewable!
+    not_authorized! unless client_scope.exists?
   end
 
-  def some_clients_editable!
-    Client.editable_by(current_user).exists?
+  def require_some_clients_editable!
+    not_authorized! unless Client.editable_by(current_user).exists?
   end
 end

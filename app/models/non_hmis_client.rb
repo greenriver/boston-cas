@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -52,7 +54,7 @@ class NonHmisClient < ApplicationRecord
     if user.can_edit_all_clients?
       all
     else
-      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients?
+      return none unless user.can_manage_identified_clients? || user.can_enter_identified_clients? || user.can_manage_deidentified_clients? || user.can_enter_deidentified_clients?
 
       if pathways_enabled?
         all
