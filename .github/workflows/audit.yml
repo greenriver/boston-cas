@@ -11,23 +11,21 @@ concurrency:
 
 jobs:
   audit:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     # Docker Hub image that the job executes in
-    container: ruby:3.3.7-alpine3.20
+    container: ruby:3.3.8-slim-bookworm
+
+    permissions:
+      contents: read
+      pull-requests: read
 
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Set up dependencies
-        run: |
-          apk add --no-cache $(cat .github/dependencies.txt)
-
-      - name: 'Install gems'
-        run: |
-          gem install bundler --version=2.6.3
-          bundle config set --local without 'production staging development'
-          bundle install --jobs 4 --retry 3
+      - name: 'Container Setup'
+        id: container-setup
+        uses: ./.github/workflows/container_setup
 
       - name: Run bundle-audit
         run: |

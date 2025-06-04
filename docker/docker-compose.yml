@@ -1,11 +1,11 @@
 x-app: &app
-  image: cas:${TARGET:-dev-build}-1.1
+  image: cas:${TARGET:-dev-build}-2.0
   build:
     context: .
     target: ${TARGET:-dev-build}
     dockerfile: docker/app/Dockerfile
     args:
-      BUILD_TAG: 3.3.7-alpine3.20
+      BUILD_TAG: 3.3.8-slim-bookworm
       PG_MAJOR: '12'
       NODE_MAJOR: '12'
       YARN_VERSION: '1.17.3'
@@ -38,8 +38,8 @@ x-backend: &backend
   tty: true
   volumes:
     - .:/app:cached
-    - rails_cache:/app/tmp/cache
-    - bundle:/bundle
+    - rails_cache_bookworm:/app/tmp/cache
+    - bundle_bookworm:/bundle
 
 services:
   shell:
@@ -124,7 +124,7 @@ services:
       - redis
 
   db:
-    image: postgres:12-alpine
+    image: postgres:17.5-alpine
     container_name: cas-db
     environment:
       POSTGRES_PASSWORD: postgres
@@ -151,9 +151,9 @@ secrets:
 volumes:
   dbdata:
   redis:
-  bundle:
-  node_modules:
-  rails_cache:
+  bundle_bookworm:
+  node_modules_bookworm:
+  rails_cache_bookworm:
 
 networks:
   default:
