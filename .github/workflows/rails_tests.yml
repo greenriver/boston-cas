@@ -17,7 +17,7 @@ jobs:
     # Service containers to run with job
     services:
       postgres:
-        image: index.docker.io/library/postgres@sha256:236985828131e95a12914071b944d0e0d21da5281312292747e222845f0ea670 # 13-alpine
+        image: index.docker.io/library/postgres@sha256:bcb90dc18910057ff49ce2ea157d8a0d534964090d39af959df41083f18c3318 # 17.5-alpine
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
