@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -27,14 +29,6 @@ class NonHmisAssessment < ActiveRecord::Base
 
   scope :limitable_pathways, -> do
     where(type: limited_assessment_types)
-  end
-
-  scope :visible_by, ->(user) do
-    where(non_hmis_client_id: NonHmisClient.visible_to(user).select(:id))
-  end
-
-  scope :editable_by, ->(user) do
-    where(agency_id: user.agency_id)
   end
 
   def self.to_class(name)
@@ -140,11 +134,11 @@ class NonHmisAssessment < ActiveRecord::Base
   end
 
   def pathways_v3?
-    type.include?('PathwaysVersionThree')
+    type&.include?('PathwaysVersionThree')
   end
 
   def pathways_v4?
-    type.include?('PathwaysVersionFour')
+    type&.include?('PathwaysVersionFour')
   end
 
   def total_days_homeless_in_the_last_three_years

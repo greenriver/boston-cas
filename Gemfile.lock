@@ -118,7 +118,7 @@ GEM
     ansi (1.5.0)
     anyway_config (2.7.2)
       ruby-next-core (~> 1.0)
-    ast (2.4.2)
+    ast (2.4.3)
     attribute_normalizer (1.2.0)
     authtrail (0.5.0)
       railties (>= 6.1)
@@ -295,7 +295,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.3.5)
-    connection_pool (2.5.2)
+    connection_pool (2.5.3)
     crass (1.0.6)
     csv (3.3.2)
     daemons (1.4.1)
@@ -328,7 +328,7 @@ GEM
     dotenv-rails (3.1.0)
       dotenv (= 3.1.0)
       railties (>= 6.1)
-    drb (2.2.1)
+    drb (2.2.3)
     dry-configurable (1.3.0)
       dry-core (~> 1.1)
       zeitwerk (~> 2.6)
@@ -410,7 +410,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.10.2)
+    json (2.12.2)
     jsonpath (1.1.5)
       multi_json
     kaminari (1.2.2)
@@ -425,7 +425,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    language_server-protocol (3.17.0.3)
+    language_server-protocol (3.17.0.5)
+    lint_roller (1.1.0)
     logger (1.7.0)
     lograge (0.14.0)
       actionpack (>= 4)
@@ -496,10 +497,10 @@ GEM
     paper_trail (16.0.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
-    parallel (1.26.3)
+    parallel (1.27.0)
     paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
-    parser (3.3.5.0)
+    parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
@@ -509,6 +510,7 @@ GEM
     pretender (0.5.0)
       actionpack (>= 6.1)
     prettyprint (0.2.0)
+    prism (1.4.0)
     prometheus-client (4.2.4)
       base64
     pry (0.15.2)
@@ -527,7 +529,7 @@ GEM
       nio4r (~> 2.0)
     pwned (2.4.1)
     racc (1.8.1)
-    rack (3.1.14)
+    rack (3.1.15)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-session (2.1.1)
@@ -581,7 +583,7 @@ GEM
       redis-client (>= 0.22.0)
     redis-client (0.24.0)
       connection_pool
-    regexp_parser (2.9.2)
+    regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
     request_store (1.7.0)
@@ -612,37 +614,33 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.2)
-    rubocop (1.67.0)
+    rubocop (1.75.7)
       json (~> 2.3)
-      language_server-protocol (>= 3.17.0)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.1.0)
       parallel (~> 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 2.4, < 3.0)
-      rubocop-ast (>= 1.32.2, < 2.0)
+      regexp_parser (>= 2.9.3, < 3.0)
+      rubocop-ast (>= 1.44.0, < 2.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.33.0)
-      parser (>= 3.3.1.0)
-    rubocop-capybara (2.20.0)
-      rubocop (~> 1.41)
-    rubocop-factory_bot (2.25.1)
-      rubocop (~> 1.41)
-    rubocop-faker (1.1.0)
+      unicode-display_width (>= 2.4.0, < 4.0)
+    rubocop-ast (1.44.1)
+      parser (>= 3.3.7.2)
+      prism (~> 1.4)
+    rubocop-faker (1.3.0)
       faker (>= 2.12.0)
-      rubocop (>= 0.82.0)
-    rubocop-rails (2.24.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.72.1)
+    rubocop-rails (2.32.0)
       activesupport (>= 4.2.0)
+      lint_roller (~> 1.1)
       rack (>= 1.1)
-      rubocop (>= 1.33.0, < 2.0)
-      rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rspec (2.29.1)
-      rubocop (~> 1.40)
-      rubocop-capybara (~> 2.17)
-      rubocop-factory_bot (~> 2.22)
-      rubocop-rspec_rails (~> 2.28)
-    rubocop-rspec_rails (2.28.3)
-      rubocop (~> 1.40)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.44.0, < 2.0)
+    rubocop-rspec (3.6.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     ruby-filemagic (0.7.3)
     ruby-next-core (1.1.1)
     ruby-prof (1.7.1)
@@ -708,7 +706,9 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.9.1)
-    unicode-display_width (2.6.0)
+    unicode-display_width (3.1.4)
+      unicode-emoji (~> 4.0, >= 4.0.4)
+    unicode-emoji (4.0.4)
     uri (1.0.3)
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
@@ -926,7 +926,7 @@ CHECKSUMS
   amazing_print (1.7.2) sha256=c89a1dfe4f8508c1e780871d51b8786efd100f625201f6e1d18a0d4dedaac702
   ansi (1.5.0) sha256=5408253274e33d9d27d4a98c46d2998266fd51cba58a7eb9d08f50e57ed23592
   anyway_config (2.7.2) sha256=30f6b087c0b41afdd43fe46c81d65a16f052a8489dab453abaeb4ea67aa74bad
-  ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
+  ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   attribute_normalizer (1.2.0) sha256=580df3f316d7f0a2cc068fd655377f4769848643328d0c6c6c685ea98ac181c4
   authtrail (0.5.0) sha256=adeab5e6480f2bffe7532e952d4dc088569bf7a4c42d97c7737b7ebda59a768b
   auto-session-timeout (1.1) sha256=c6e83ae904bc8ade0b74d448674a4478b52903501f0a63dc50c98289e77c45d3
@@ -993,7 +993,7 @@ CHECKSUMS
   coffee-script (2.4.1) sha256=82fe281e11b93c8117b98c5ea8063e71741870f1c4fbb27177d7d6333dd38765
   coffee-script-source (1.12.2) sha256=e12b16fd8927fbbf8b87cb2e9a85a6cf457c6881cc7ff8b1af15b31f70da07a4
   concurrent-ruby (1.3.5) sha256=813b3e37aca6df2a21a3b9f1d497f8cbab24a2b94cab325bffe65ee0f6cbebc6
-  connection_pool (2.5.2) sha256=c121d090f8217911f960c7b628bf2bf1b1444f284fd854edc188821c4f602108
+  connection_pool (2.5.3) sha256=cfd74a82b9b094d1ce30c4f1a346da23ee19dc8a062a16a85f58eab1ced4305b
   crass (1.0.6) sha256=dc516022a56e7b3b156099abc81b6d2b08ea1ed12676ac7a5657617f012bd45d
   csv (3.3.2) sha256=6ff0c135e65e485d1864dde6c1703b60d34cc9e19bed8452834a0b28a519bd4e
   daemons (1.4.1) sha256=8fc76d76faec669feb5e455d72f35bd4c46dc6735e28c420afb822fac1fa9a1d
@@ -1009,7 +1009,7 @@ CHECKSUMS
   diff-lcs (1.6.1) sha256=12a5a83f3e37a8e2f4427268e305914d5f1879f22b4e73bb1a09f76a3dd86cd4
   dotenv (3.1.0) sha256=8b7e682e197dbaa69bd5660cc18bc821e8152e1bb2b3c02e32f2be718fd8b2b4
   dotenv-rails (3.1.0) sha256=d2e1bc7bf39acf7f135920c81306b1eb7dbfa27a4577fce7665488d77d7fe719
-  drb (2.2.1) sha256=e9d472bf785f558b96b25358bae115646da0dbfd45107ad858b0bc0d935cb340
+  drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   dry-configurable (1.3.0) sha256=882d862858567fc1210d2549d4c090f34370fc1bb7c5c1933de3fe792e18afa8
   dry-core (1.1.0) sha256=0903821a9707649a7da545a2cd88e20f3a663ab1c5288abd7f914fa7751ab195
   dry-inflector (1.2.0) sha256=22f5d0b50fd57074ae57e2ca17e3b300e57564c218269dcf82ff3e42d3f38f2e
@@ -1043,14 +1043,15 @@ CHECKSUMS
   irb (1.15.2) sha256=222f32952e278da34b58ffe45e8634bf4afc2dc7aa9da23fed67e581aa50fdba
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   jquery-rails (4.6.0) sha256=3c4e6bf47274340b44d836b8aa1b5472c6d451e2739af5ec094421f39025a7e2
-  json (2.10.2) sha256=34e0eada93022b2a0a3345bb0b5efddb6e9ff5be7c48e409cfb54ff8a36a8b06
+  json (2.12.2) sha256=ba94a48ad265605c8fa9a50a5892f3ba6a02661aa010f638211f3cb36f44abf4
   jsonpath (1.1.5) sha256=29f70467193a2dc93ab864ec3d3326d54267961acc623f487340eb9c34931dbe
   k8s-ruby (0.16.0)
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
   kaminari-actionview (1.2.2) sha256=1330f6fc8b59a4a4ef6a549ff8a224797289ebf7a3a503e8c1652535287cc909
   kaminari-activerecord (1.2.2) sha256=0dd3a67bab356a356f36b3b7236bcb81cef313095365befe8e98057dd2472430
   kaminari-core (1.2.2) sha256=3bd26fec7370645af40ca73b9426a448d09b8a8ba7afa9ba3c3e0d39cdbb83ff
-  language_server-protocol (3.17.0.3) sha256=3d5c58c02f44a20d972957a9febe386d7e7468ab3900ce6bd2b563dd910c6b3f
+  language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
+  lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   lograge (0.14.0) sha256=42371a75823775f166f727639f5ddce73dd149452a55fc94b90c303213dc9ae1
   logstop (0.3.1) sha256=962055e109a74375c68f2bd2cbfe0b7b326939463242dc6c591235610c9b32a3
@@ -1087,14 +1088,15 @@ CHECKSUMS
   overcommit (0.63.0) sha256=d42e63eb8bfbca0dbcf5adef5264c77dd5f1981f128fed7f9bd7f668252ec414
   pagy (8.6.3) sha256=537b2ee3119f237dd6c4a0d0a35c67a77b9d91ebb9d4f85e31407c2686774fb2
   paper_trail (16.0.0) sha256=e9b9f0fb1b8b590c8231cfa931b282ba92f90e066e393930a5e1c61ae4c5019d
-  parallel (1.26.3) sha256=d86babb7a2b814be9f4b81587bf0b6ce2da7d45969fab24d8ae4bf2bb4d4c7ef
+  parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   paranoia (3.0.1) sha256=cdb50c4c5c66f61fd1354f26371a8f0ca6d60156215bebffff42e135c495d083
-  parser (3.3.5.0) sha256=f30ebb71b7830c2e7cdc4b2b0e0ec2234900e3fca3fe2fba47f78be759181ab3
+  parser (3.3.8.0) sha256=2476364142b307fa5a1b1ece44f260728be23858a9c71078e956131a75453c45
   pg (1.5.9) sha256=761efbdf73b66516f0c26fcbe6515dc7500c3f0aa1a1b853feae245433c64fdc
   popper_js (1.16.1) sha256=6b102fb5ee86c5fa68a0c865547e66d9bf7e80a951053b21c72c3c92a587d692
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   pretender (0.5.0) sha256=02120f25bc1c2b98468e136cec9e841360935dcc291158195b0cd073ff8fad77
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
+  prism (1.4.0) sha256=dc0e3e00e93160213dc2a65519d9002a4a1e7b962db57d444cf1a71565bb703e
   prometheus-client (4.2.4) sha256=d126a024ea068273008c2789bf2be87067fa5eb030f7540fe5d1a02260bbfe2f
   pry (0.15.2) sha256=12d54b8640d3fa29c9211dd4ffb08f3fd8bf7a4fd9b5a73ce5b59c8709385b6b
   pry-byebug (3.11.0) sha256=0b0abb7d309bc7f00044d512a3c8567274f7012b944b38becc8440439a1cea72
@@ -1104,7 +1106,7 @@ CHECKSUMS
   puma (6.6.0) sha256=f25c06873eb3d5de5f0a4ebc783acc81a4ccfe580c760cfe323497798018ad87
   pwned (2.4.1) sha256=e375b45e1cd78aded2c923737f75e09e64bc66582142c144bd85f4ce1fa0955d
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
-  rack (3.1.14) sha256=84613c2a8df193bb6711d9c14ecc6d5a65a7cb4312379a65e793562608944b44
+  rack (3.1.15) sha256=d12b3e9960d18a26ded961250f2c0e3b375b49ff40dbe6786e9c3b160cbffca4
   rack-mini-profiler (3.3.1) sha256=2bf0de7d5795f54581e453b248e42cc50e8d0529efac73828653a9ad2407a801
   rack-session (2.1.1) sha256=0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
@@ -1121,7 +1123,7 @@ CHECKSUMS
   redcarpet (3.6.0) sha256=8ad1889c0355ff4c47174af14edd06d62f45a326da1da6e8a121d59bdcd2e9e9
   redis (5.4.0) sha256=798900d869418a9fc3977f916578375b45c38247a556b61d58cba6bb02f7d06b
   redis-client (0.24.0) sha256=ee65ee39cb2c38608b734566167fd912384f3c1241f59075e22858f23a085dbb
-  regexp_parser (2.9.2) sha256=5a27e767ad634f8a4b544520d5cd28a0db7aa1198a5d7c9d7e11d7b3d9066446
+  regexp_parser (2.10.0) sha256=cb6f0ddde88772cd64bff1dbbf68df66d376043fe2e66a9ef77fcb1b0c548c61
   reline (0.6.1) sha256=1afcc9d7cb1029cdbe780d72f2f09251ce46d3780050f3ec39c3ccc6b60675fb
   request_store (1.7.0) sha256=e1b75d5346a315f452242a68c937ef8e48b215b9453a77a6c0acdca2934c88cb
   responders (3.1.1) sha256=92f2a87e09028347368639cfb468f5fefa745cb0dc2377ef060db1cdd79a341a
@@ -1133,14 +1135,11 @@ CHECKSUMS
   rspec-mocks (3.13.2) sha256=2327335def0e1665325a9b617e3af9ae20272741d80ac550336309a7c59abdef
   rspec-rails (7.1.1) sha256=e15dccabed211e2fd92f21330c819adcbeb1591c1d66c580d8f2d8288557e331
   rspec-support (3.13.2) sha256=cea3a2463fd9b84b9dcc9685efd80ea701aa8f7b3decb3b3ce795ed67737dbec
-  rubocop (1.67.0) sha256=8ccca7226e76d0a9974af960ea446d1fb38adf0c491214294e2fed75a85c378c
-  rubocop-ast (1.33.0) sha256=6235809347985fc9019e44180de1be56885004a4f51a74512d0b70fe0c533ed5
-  rubocop-capybara (2.20.0) sha256=2a6844b942921f230ee3ab8c94fe77f41a9406096a140245270c0e11624bb938
-  rubocop-factory_bot (2.25.1) sha256=62751bde7af789878b8a31cbd2a82e69515ce7b23a2ad1820cb0fcc3e0150134
-  rubocop-faker (1.1.0) sha256=bfdd208f79cb96f124b1ceb2b4a9399fc1b61f2c078ea203eca0e08ee2ada215
-  rubocop-rails (2.24.1) sha256=03edf766954947468f3686cedb69142fae4f10e2007287f89cc0ea7072eeac19
-  rubocop-rspec (2.29.1) sha256=534ee81a3006e7379ec6203687ef7c06ca1d137b7d6d67c2777b680b1ce82e13
-  rubocop-rspec_rails (2.28.3) sha256=9769f2077cca8af2269193ba0450e0317ae1827a132c19149fdbeecaaca32818
+  rubocop (1.75.7) sha256=23566ebb25263f26020687f8abb8aec049f3e29b6a00bdf0aa9d1db16b558be9
+  rubocop-ast (1.44.1) sha256=e3cc04203b2ef04f6d6cf5f85fe6d643f442b18cc3b23e3ada0ce5b6521b8e92
+  rubocop-faker (1.3.0) sha256=cb9ac132d44f9d2db6d5f9f8f5714700bf4d272cbaef5bce4052f4270fdc5c9b
+  rubocop-rails (2.32.0) sha256=9fcc623c8722fe71e835e99c4a18b740b5b0d3fb69915d7f0777f00794b30490
+  rubocop-rspec (3.6.0) sha256=c0e4205871776727e54dee9cc91af5fd74578001551ba40e1fe1a1ab4b404479
   ruby-filemagic (0.7.3) sha256=9dedfac69c737be29efb4542a280e345a70ba2b6ba905a518abd9998c8f3a7d9
   ruby-next-core (1.1.1) sha256=37886d41cf91072a0f14fa53b3e7e650adce1fe3b1227842bae32034dcce1d5f
   ruby-prof (1.7.1) sha256=026393448cf92fd24a91739bf71ccd2bfe88fe8a1401ee8afc4948a16d62ea24
@@ -1174,7 +1173,8 @@ CHECKSUMS
   tzinfo (2.0.6) sha256=8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b
   unf (0.1.4) sha256=4999517a531f2a955750f8831941891f6158498ec9b6cb1c81ce89388e63022e
   unf_ext (0.0.9.1) sha256=926114a858934126c6bbfd3254347dadb5dae354711869368c0f75e3765fc6e9
-  unicode-display_width (2.6.0) sha256=12279874bba6d5e4d2728cef814b19197dbb10d7a7837a869bab65da943b7f5a
+  unicode-display_width (3.1.4) sha256=8caf2af1c0f2f07ec89ef9e18c7d88c2790e217c482bfc78aaa65eadd5415ac1
+  unicode-emoji (4.0.4) sha256=2c2c4ef7f353e5809497126285a50b23056cc6e61b64433764a35eff6c36532a
   uri (1.0.3) sha256=e9f2244608eea2f7bc357d954c65c910ce0399ca5e18a7a29207ac22d8767011
   validate_url (1.0.15) sha256=72fe164c0713d63a9970bd6700bea948babbfbdcec392f2342b6704042f57451
   validates_email_format_of (1.8.2) sha256=e2dfcf3e933547d06c41dacf066c7b07614819439c8780c3a2521ce047052577

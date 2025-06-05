@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -138,12 +140,23 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def set_client
-    client_id = (params[:identified_client_id] || params[:deidentified_client_id]).to_i
-    @non_hmis_client = NonHmisClient.visible_to(current_user).find(client_id)
+    client_scope = nil
+    client_id = nil
+    if params[:identified_client_id]
+      client_id = params[:identified_client_id].to_i
+      client_scope = IdentifiedClient.identified
+    elsif params[:deidentified_client_id]
+      client_id = params[:deidentified_client_id].to_i
+      client_scope = DeidentifiedClient.deidentified
+    else
+      raise 'unroutable, should not be reached'
+    end
+
+    @non_hmis_client = client_scope.visible_to(current_user).find(client_id)
   end
 
   private def set_assessment
-    @assessment = NonHmisAssessment.visible_by(current_user).find(params[:id].to_i)
+    @assessment = @non_hmis_client.assessments.find(params[:id].to_i)
   end
 
   private def set_neighborhoods
