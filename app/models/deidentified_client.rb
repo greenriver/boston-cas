@@ -50,6 +50,7 @@ class DeidentifiedClient < NonHmisClient
   end
 
   def editable_by?(user)
+    return true if user.can_manage_all_deidentified_clients?
     return true if user.can_manage_deidentified_clients?
     return true if pathways_enabled? && user.can_enter_deidentified_clients?
     return user.agency_id == agency_id if user.can_enter_deidentified_clients?
