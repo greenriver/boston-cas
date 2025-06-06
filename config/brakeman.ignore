@@ -80,50 +80,6 @@
       "note": ""
     },
     {
-      "warning_type": "Remote Code Execution",
-      "warning_code": 24,
-      "fingerprint": "15dafe767dd3ee8f4ad2d10f3e833ed4d4b3763f74ecea893a8d8e5a6e3504ad",
-      "check_name": "UnsafeReflection",
-      "message": "Unsafe reflection method `constantize` called on model attribute",
-      "file": "app/views/non_hmis_assessments/_index.haml",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
-      "code": "NonHmisClient.visible_to(current_user).find((params[:identified_client_id] or params[:deidentified_client_id]).to_i).assessment_type.constantize",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "NonHmisAssessmentsController",
-          "method": "index",
-          "line": 17,
-          "file": "app/controllers/non_hmis_assessments_controller.rb",
-          "rendered": {
-            "name": "non_hmis_assessments/index",
-            "file": "app/views/non_hmis_assessments/index.haml"
-          }
-        },
-        {
-          "type": "template",
-          "name": "non_hmis_assessments/index",
-          "line": 1,
-          "file": "app/views/non_hmis_assessments/index.haml",
-          "rendered": {
-            "name": "non_hmis_assessments/_index",
-            "file": "app/views/non_hmis_assessments/_index.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "non_hmis_assessments/_index"
-      },
-      "user_input": "NonHmisClient.visible_to(current_user).find((params[:identified_client_id] or params[:deidentified_client_id]).to_i)",
-      "confidence": "Medium",
-      "cwe_id": [
-        470
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "272bd9135442f395012a87ac47a02fe2dcaa8bf8f7db7b78b079036a4279e439",
@@ -407,6 +363,50 @@
       "note": ""
     },
     {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 24,
+      "fingerprint": "766bfe92c30146079752b09d21f5626fdd45897124919f2dcb115f5785e5779f",
+      "check_name": "UnsafeReflection",
+      "message": "Unsafe reflection method `constantize` called on parameter value",
+      "file": "app/views/non_hmis_assessments/_index.haml",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
+      "code": "((nil or DeidentifiedClient.deidentified) or IdentifiedClient.identified).visible_to(current_user).find(((nil or params[:deidentified_client_id].to_i) or params[:identified_client_id].to_i)).assessment_type.constantize",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "NonHmisAssessmentsController",
+          "method": "index",
+          "line": 19,
+          "file": "app/controllers/non_hmis_assessments_controller.rb",
+          "rendered": {
+            "name": "non_hmis_assessments/index",
+            "file": "app/views/non_hmis_assessments/index.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "non_hmis_assessments/index",
+          "line": 1,
+          "file": "app/views/non_hmis_assessments/index.haml",
+          "rendered": {
+            "name": "non_hmis_assessments/_index",
+            "file": "app/views/non_hmis_assessments/_index.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "non_hmis_assessments/_index"
+      },
+      "user_input": "params[:identified_client_id]",
+      "confidence": "Medium",
+      "cwe_id": [
+        470
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "85e335c4575b12b61263ca6d933cb810fe5f86ad44c5f53e83e8558af7897a58",
@@ -428,6 +428,50 @@
         77
       ],
       "note": "We're just injecting the git revision."
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "aa40ebbd05a2cdc706d57a2f8e6b85f802a97a5319aa8417ca850ebe851e84fd",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/non_hmis_assessments/_form.haml",
+      "line": 37,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => \"#{((nil or DeidentifiedClient.deidentified) or IdentifiedClient.identified).visible_to(current_user).find(((nil or params[:deidentified_client_id].to_i) or params[:identified_client_id].to_i)).type.tableize}/#{build_assessment.model_name.element}\", { :client_form => f, :assessment_form => f, :disabled => disabled, :limited => build_assessment.hide_confidential?(current_user) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "NonHmisAssessmentsController",
+          "method": "new",
+          "line": 23,
+          "file": "app/controllers/non_hmis_assessments_controller.rb",
+          "rendered": {
+            "name": "non_hmis_assessments/new",
+            "file": "app/views/non_hmis_assessments/new.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "non_hmis_assessments/new",
+          "line": 1,
+          "file": "app/views/non_hmis_assessments/new.haml",
+          "rendered": {
+            "name": "non_hmis_assessments/_form",
+            "file": "app/views/non_hmis_assessments/_form.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "non_hmis_assessments/_form"
+      },
+      "user_input": "params[:identified_client_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
     },
     {
       "warning_type": "SQL Injection",
@@ -549,7 +593,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called on model attribute",
       "file": "app/models/deidentified_client.rb",
-      "line": 83,
+      "line": 74,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:deidentified_client_assessment).constantize",
       "render_path": null,
@@ -695,7 +739,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called on model attribute",
       "file": "app/models/identified_client.rb",
-      "line": 122,
+      "line": 113,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:identified_client_assessment).constantize",
       "render_path": null,

@@ -410,9 +410,14 @@ class Client < ApplicationRecord
 
   def remote_client_visible_to?(user)
     return true unless project_client.is_deidentified? || project_client.is_identified?
-    return true if NonHmisClient.visible_to(user).where(id: remote_id).exists?
 
-    false
+    [
+      DeidentifiedClient.deidentified,
+      IdentifiedClient.identified,
+      ImportedClient.all,
+    ].any? do |scope|
+      scope.visible_to(user).where(id: remote_id).exists?
+    end
   end
 
   # Link to the warehouse or other authoritative data source

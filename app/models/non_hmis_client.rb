@@ -31,10 +31,8 @@ class NonHmisClient < ApplicationRecord
     where(available: true)
   end
 
-  scope :visible_to, ->(user) do
-    if user.can_edit_all_clients?
-      all
-    elsif user.can_view_all_covid_pathways?
+  scope :visible_through_user_agency, ->(user) do
+    if user.can_view_all_covid_pathways?
       covid_ids = where(id: NonHmisAssessment.limitable_pathways.select(:non_hmis_client_id)).pluck(:id)
       agency_associated_ids = where(
         arel_table[:agency_id].eq(nil).
