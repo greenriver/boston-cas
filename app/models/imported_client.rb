@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ImportedClient < NonHmisClient
   has_one :project_client, -> do
     where(
@@ -34,7 +36,7 @@ class ImportedClient < NonHmisClient
       elsif first.present?
         where = search_first_name(first).or(search_alternate_name(first))
       end
-      # Explicity search for "first last"
+      # Explicitly search for "first last"
     elsif text.include?(' ')
       first, last = text.split(' ').map(&:strip)
       where = search_first_name(first).

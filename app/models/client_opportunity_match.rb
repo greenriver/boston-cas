@@ -143,9 +143,23 @@ class ClientOpportunityMatch < ApplicationRecord
     md_t = MatchDecisions::Base.arel_table
     joins(:decisions).
       where(
-        md_t[:status].eq('accepted').and(md_t[:type].eq('MatchDecisions::MatchRecommendationShelterAgency')).
+        md_t[:status].eq('accepted').and(
+          md_t[:type].in(
+            [
+              'MatchDecisions::MatchRecommendationShelterAgency',
+              'MatchDecisions::Thirteen::ThirteenClientReview',
+            ],
+          ),
+        ).
         or(
-          md_t[:status].eq('decline_overridden').and(md_t[:type].eq('MatchDecisions::ConfirmShelterAgencyDeclineDndStaff')),
+          md_t[:status].eq('decline_overridden').and(
+            md_t[:type].in(
+              [
+                'MatchDecisions::ConfirmShelterAgencyDeclineDndStaff',
+                'MatchDecisions::Thirteen::ThirteenClientReviewDecline',
+              ],
+            ),
+          ),
         ),
       )
   end
@@ -346,7 +360,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def client_info_approved_for_release?
-    if match_route.class.name.in?(['MatchRoutes::Default'])
+    if match_route.class.name.in?(['MatchRoutes::Default', 'MatchRoutes::Thirteen'])
       shelter_agency_approval_or_dnd_override? && client&.has_full_housing_release?(match_route)
     else
       client&.has_full_housing_release?(match_route) || ! Config.get(:limit_client_names_on_matches)
@@ -921,7 +935,7 @@ class ClientOpportunityMatch < ApplicationRecord
   def status_update_details
     data = status_updates.order(created_at: :desc).preload(:decision).map do |m|
       response_text = m.response
-      still_active = if m.decision.still_active_responses.include?(response_text)
+      still_active = if m.decision.still_active_responses.map(&:last).include?(response_text)
         'Engaging'
       else
         'Not Engaging'
@@ -1019,7 +1033,7 @@ class ClientOpportunityMatch < ApplicationRecord
     end
   end
 
-  private def unpark_routes_parked_for_active_match
+  def unpark_routes_parked_for_active_match
     # Get routes parked for the current client due to an active route
     parked_active_client_routes = client&.unavailable_as_candidate_fors&.map { |r| r.match_route_type if r.reason == UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT }&.compact
     # Get routes from the config that are to be parked due to an active match on the current route

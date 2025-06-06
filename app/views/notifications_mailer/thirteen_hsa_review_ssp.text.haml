@@ -1,6 +1,9 @@
 Hello #{@contact.full_name},
 \
-The following match has been accepted by the #{Translation.translate('HSA')}:
+The match is pending the review by #{Translation.translate('HSA Thirteen')} and is currently pending action by #{Translation.translate('HSA Thirteen')}.
+\
+\
+Please review details:
 #{notification_match_url @notification, @match}
 \
 = render 'client_details'

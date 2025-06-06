@@ -7,19 +7,19 @@
 # frozen_string_literal: true
 
 module Notifications::Thirteen
-  class ThirteenAcceptReferralHsp < ::Notifications::Base
+  class ThirteenClientReviewSsp < ::Notifications::Base
     def self.create_for_match! match
-      match.hsp_contacts.each do |contact|
+      match.ssp_contacts.each do |contact|
         create! match: match, recipient: contact
       end
     end
 
     def decision
-      match.thirteen_accept_referral_decision
+      match.thirteen_client_review_decision
     end
 
     def event_label
-      "#{Translation.translate('Housing Search Provider Thirteen')} notified of match update - pending #{Translation.translate('HSA Thirteen')} accepting referral."
+      "#{Translation.translate('Stabilization Service Providers Thirteen')} notified of acknowledged match."
     end
   end
 end

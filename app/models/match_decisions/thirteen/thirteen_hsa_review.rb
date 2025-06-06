@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenHsaReview < Base
     include MatchDecisions::AcceptsDeclineReason
@@ -34,6 +36,7 @@ module MatchDecisions::Thirteen
         m << Notifications::Thirteen::ThirteenHsaReviewShelterAgency
         m << Notifications::Thirteen::ThirteenHsaReviewHsa
         m << Notifications::Thirteen::ThirteenHsaReviewDndStaff
+        m << Notifications::Thirteen::ThirteenHsaReviewSsp
       end
     end
 
@@ -50,7 +53,7 @@ module MatchDecisions::Thirteen
     def label_for_status status
       case status.to_sym
       when :pending then "#{Translation.translate('HSA Thirteen')} assigned match"
-      when :accepted then "Match Reeviewed by #{Translation.translate('HSA Thirteen')}."
+      when :accepted then "Match Reviewed by #{Translation.translate('HSA Thirteen')}."
       when :canceled then canceled_status_label
       when :declined then "Match Declined.  Reason: #{decline_reason_name}"
       when :back then backup_status_label
@@ -67,6 +70,15 @@ module MatchDecisions::Thirteen
       true
     end
 
+    def stalled_contact_types
+      @stalled_contact_types ||= [
+        :shelter_agency_contacts,
+        :housing_subsidy_admin_contacts,
+        :dnd_staff_contacts,
+        :ssp_contacts,
+        :do_contacts,
+      ]
+    end
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
       missing_contacts << "a #{Translation.translate('Shelter Agency Thirteen')} Contact" if save_will_accept? && match.shelter_agency_contacts.none?

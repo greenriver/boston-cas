@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+The #{Translation.translate('CORI hearing')} for this match has been scheduled by #{Translation.translate('Shelter Agency Thirteen')} contacts and is currently pending the outcome of this hearing being entered by #{Translation.translate('Shelter Agency Thirteen')}.
+\
+Please review details:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

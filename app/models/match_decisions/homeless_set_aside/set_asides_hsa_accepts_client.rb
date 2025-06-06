@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcceptsClient < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
@@ -65,6 +67,7 @@ module MatchDecisions::HomelessSetAside
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HomelessSetAside::HsaAcceptsClient
+        m << Notifications::HomelessSetAside::HsaAcceptsClientSspNotification
       end
     end
 

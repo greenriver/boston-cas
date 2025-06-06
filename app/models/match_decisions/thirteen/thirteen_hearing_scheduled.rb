@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenHearingScheduled < Base
     include MatchDecisions::AcceptsDeclineReason
@@ -39,6 +41,7 @@ module MatchDecisions::Thirteen
         m << Notifications::Thirteen::ThirteenHearingScheduledShelterAgency
         m << Notifications::Thirteen::ThirteenHearingScheduledHsa
         m << Notifications::Thirteen::ThirteenHearingScheduledDndStaff
+        m << Notifications::Thirteen::ThirteenHearingScheduledSsp
       end
     end
 
@@ -74,6 +77,16 @@ module MatchDecisions::Thirteen
 
     def stallable?
       true
+    end
+
+    def stalled_contact_types
+      @stalled_contact_types ||= [
+        :shelter_agency_contacts,
+        :housing_subsidy_admin_contacts,
+        :dnd_staff_contacts,
+        :ssp_contacts,
+        :do_contacts,
+      ]
     end
 
     private def ensure_required_contacts_present_on_accept
