@@ -55,16 +55,9 @@ ENV RAILS_LOG_TO_STDOUT=true
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-ENV GROVER_NO_SANDBOX=true
-ENV CHROMIUM_PATH=/usr/bin/chromium
 
 # Allow tls connection to database with verification
 COPY docker/app/us-east-1-bundle.pem  /etc/ssl/certs/us-east-1-bundle.pem
-# Deprecated and soon to expire
-COPY docker/app/rds-combined-ca-bundle.pem /etc/ssl/certs/rds-combined-ca-bundle.pem
 
 RUN groupadd -g ${GROUP_ID} app-user \
   && useradd -l -u ${USER_ID} -g app-user -s /bin/bash -d /home/app-user -m app-user \
@@ -86,8 +79,6 @@ RUN apt-get update && apt-get upgrade -y \
   awscli \
   bash \
   build-essential \
-  chromium \
-  chromium-common \
   dbus \
   dbus-user-session \
   file \
@@ -95,7 +86,6 @@ RUN apt-get update && apt-get upgrade -y \
   fonts-droid-fallback \
   fonts-freefont-ttf \
   fonts-liberation \
-  freetds-dev \
   git \
   gnupg-agent \
   gpg \

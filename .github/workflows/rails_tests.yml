@@ -62,7 +62,7 @@ jobs:
           cp config/secrets.yml.sample config/secrets.yml
           mkdir app/assets/stylesheets/theme/styles
           touch app/assets/stylesheets/theme/styles/_variables.scss
-          cp .rspec.travis .rspec
+          cp .rspec.ci .rspec
 
       - name: Prepare test db
         env:

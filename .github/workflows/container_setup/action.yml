@@ -67,9 +67,6 @@ runs:
           dbus \
           packagekit \
           packagekit-tools \
-          fonts-dejavu \
-          fonts-freefont-ttf \
-          freetds-dev \
           git \
           lftp \
           libcurl4-openssl-dev \
@@ -84,11 +81,7 @@ runs:
           libyaml-dev \
           nodejs \
           poppler-utils \
-          postgresql-client-16 \
           postgresql-client-17 \
-          python3 \
-          python3-pip \
-          python3-venv \
           software-properties-common \
           unzip \
           zlib1g-dev \
