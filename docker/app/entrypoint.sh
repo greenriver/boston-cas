@@ -15,9 +15,7 @@ then
 
   echo 'Getting secrets for the environment...'
   T1=`date +%s`
-  pwd  # Print current directory
   bundle exec ./bin/download_secrets.rb > .env
-  ls -la .env  # Check if file exists and its permissions
   if [ ! -f .env ]; then
     echo "Failed to create .env file"
       exit 1
