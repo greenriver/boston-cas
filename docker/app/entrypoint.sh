@@ -26,7 +26,7 @@ then
   echo "...secrets took $(expr $T2 - $T1) seconds"
 
   echo Sourcing environment
-  . .env
+  . /app/.env
 fi
 
 echo 'Constructing an ERB-free database.yml file...'
