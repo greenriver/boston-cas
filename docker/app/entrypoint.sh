@@ -6,7 +6,7 @@
 # auto-export variables
 set -a
 
-if [[ "${EKS}" != "true" ]]
+if [ "${EKS}" != "true" ]
 then
   echo Getting Role Info
   curl --silent 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > role.info.log
@@ -34,7 +34,7 @@ cp /usr/share/zoneinfo/$TIMEZONE /app/etc-localtime
 echo $TIMEZONE > /etc/timezone
 
 if [ "$CONTAINER_VARIANT" == "dj" ]; then
-  if [[ "${ENABLE_DJ_METRICS}" == "true" ]] ; then
+  if [ "${ENABLE_DJ_METRICS}" = "true" ] ; then
     echo "Starting metrics server"
     # not cluster mode with 5 threads
     bundle exec puma --no-config -w 0 -t 1:5 /app/dj-metrics/config.ru &
