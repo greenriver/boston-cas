@@ -6,7 +6,7 @@
 # auto-export variables
 set -a
 
-if [[ "${EKS}" != "true" ]]
+if [ "${EKS}" != "true" ]
 then
   echo Getting Role Info
   curl --silent 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > role.info.log
@@ -16,11 +16,15 @@ then
   echo 'Getting secrets for the environment...'
   T1=`date +%s`
   bundle exec ./bin/download_secrets.rb > .env
+  if [ ! -f .env ]; then
+    echo "Failed to create .env file"
+      exit 1
+  fi
   T2=`date +%s`
   echo "...secrets took $(expr $T2 - $T1) seconds"
 
   echo Sourcing environment
-  . .env
+  . /app/.env
 fi
 
 echo 'Constructing an ERB-free database.yml file...'
@@ -34,7 +38,7 @@ cp /usr/share/zoneinfo/$TIMEZONE /app/etc-localtime
 echo $TIMEZONE > /etc/timezone
 
 if [ "$CONTAINER_VARIANT" == "dj" ]; then
-  if [[ "${ENABLE_DJ_METRICS}" == "true" ]] ; then
+  if [ "${ENABLE_DJ_METRICS}" = "true" ] ; then
     echo "Starting metrics server"
     # not cluster mode with 5 threads
     bundle exec puma --no-config -w 0 -t 1:5 /app/dj-metrics/config.ru &
