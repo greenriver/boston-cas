@@ -156,7 +156,7 @@ class NonHmisAssessmentsController < ApplicationController
   end
 
   private def set_assessment
-    @assessment = @non_hmis_client.assessments.find(params[:id].to_i)
+    @assessment = @non_hmis_client.non_hmis_assessments.find(params[:id].to_i)
   end
 
   private def set_neighborhoods
