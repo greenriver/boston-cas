@@ -96,13 +96,13 @@ class Role < ApplicationRecord
       :can_manage_config,
       :can_create_overall_note,
       :can_delete_client_notes,
-      :can_enter_deidentified_clients, # Allows entering/editing de-identified clients for the user's own agency.
-      :can_manage_deidentified_clients,
+      :can_enter_deidentified_clients, # Allows entering/editing de-identified clients for the user's own agency. (Required for access, even if you are just "managing")
+      :can_manage_deidentified_clients, # allows managing de-identified clients for the user's own agency.
       :can_manage_all_deidentified_clients, # Administrative permission: Allows managing de-identified clients across all agencies.
       :can_export_deidentified_clients,
       :can_add_cohorts_to_deidentified_clients,
-      :can_enter_identified_clients, # Allows entering/editing identified clients for the user's own agency.
-      :can_manage_identified_clients,
+      :can_enter_identified_clients, # Allows entering/editing identified clients for the user's own agency. (Required for access, even if you are just "managing")
+      :can_manage_identified_clients, # allows managing identified clients for the user's own agency.
       :can_manage_all_identified_clients, # Administrative permission: Allows managing identified clients across all agencies.
       :can_export_identified_clients,
       :can_view_all_covid_pathways,

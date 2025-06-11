@@ -31,10 +31,10 @@
             Parked Clients
       - if current_user.can_see_non_hmis_clients?
         %li.o-menu__item
-          - if can_enter_deidentified_clients? || can_manage_deidentified_clients?
+          - if can_enter_deidentified_clients?
             = link_to deidentified_clients_path, class: 'o-menu__link' do
               #{Translation.translate('Non-HMIS Clients')}
-          - elsif can_enter_identified_clients? || can_manage_identified_clients?
+          - elsif can_enter_identified_clients?
             = link_to identified_clients_path, class: 'o-menu__link' do
               #{Translation.translate('Non-HMIS Clients')}
           - elsif can_manage_imported_clients?
