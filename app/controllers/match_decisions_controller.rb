@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class MatchDecisionsController < ApplicationController
   include HasMatchAccessContext
   include Decisions
@@ -42,6 +44,7 @@ class MatchDecisionsController < ApplicationController
     @types = MatchRoutes::Base.match_steps
 
     @match_contacts.update match_contacts_params if params[:match_contacts].present?
+
     # If the match is already expired, and we're un-expiring it, then allow it
     if @match.expired? && params[:commit] == 'Save Expiration Date' && can_reject_matches? && decision_params[:shelter_expiration].present?
       original_status = @decision.status
@@ -94,6 +97,10 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = 'Sorry, you can only disable a vacancy when cancelling a match'
       render 'matches/show'
 
+    elsif only_updating_expiration?
+      change_expiration
+      flash[:notice] = 'The expiration date has been updated.' unless request.xhr?
+      redirect_to access_context.match_path(@match, redirect: 'true')
     elsif @decision.update(decision_params)
       # Wrapped in a transaction to prevent the match match engine (which runs in parallel) from seeing
       # partial updates
@@ -145,6 +152,14 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = "Please review the form problems below.<br /> #{@decision.errors.full_messages.join('; ')}"
       render 'matches/show'
     end
+  end
+
+  private def only_updating_expiration?
+    decision_params[:shelter_expiration].present? &&
+      decision_params[:status] == 'expiration_update' &&
+      decision_params[:prevent_matching_until].blank? &&
+      decision_params[:administrative_cancel_reason_id].blank? &&
+      decision_params[:decline_reason_id].blank?
   end
 
   private def change_expiration
