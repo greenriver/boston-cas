@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include HasRequirements
   include Rails.application.routes.url_helpers
@@ -205,8 +207,7 @@ class User < ApplicationRecord
   end
 
   def can_see_non_hmis_clients?
-    can_enter_deidentified_clients? || can_manage_deidentified_clients? || can_enter_identified_clients? || can_manage_identified_clients? ||
-      can_manage_imported_clients?
+    can_enter_deidentified_clients? || can_enter_identified_clients? || can_manage_imported_clients?
   end
 
   def can_view_some_clients?
