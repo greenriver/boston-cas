@@ -1,9 +1,9 @@
 namespace :cas do
-
   desc 'Daily tasks'
   task daily: [:environment, 'log:info_to_stdout'] do
     Warehouse::BuildReport.new.run! if Warehouse::Base.enabled?
     Warehouse::FlagHoused.new.run! if Warehouse::Base.enabled?
+    Warehouse::Analytics::Sync.run! if Warehouse::Base.enabled?
     Cas::UpdateVoucherAvailability.new.run!
     UnavailableAsCandidateFor.cleanup_expired!
     Matching::RunEngineJob.perform_later
@@ -11,7 +11,7 @@ namespace :cas do
   end
 
   desc 'Hourly tasks'
-  task hourly:  [:environment, 'log:info_to_stdout'] do
+  task hourly: [:environment, 'log:info_to_stdout'] do
     # attempt to keep the matched counts in sync.
     SubProgram.find_each do |sp|
       sp.update_summary!

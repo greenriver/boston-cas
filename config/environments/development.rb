@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/integer/time'
 I18n.config.available_locales = :en
 
@@ -9,8 +11,7 @@ Rails.application.configure do
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
-  config.cache_classes = false
-
+  config.enable_reloading = true
   config.hosts = [/.*/]
 
   # Do not eager load code on boot.
@@ -19,12 +20,12 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  # config.assets.js_compressor = :terser
-
   # Enable server timing
   config.server_timing = true
 
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
+  # Enable/disable caching. By default caching is disabled.
+  # Run rails dev:cache to toggle caching.
+  if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
@@ -40,6 +41,9 @@ Rails.application.configure do
     redis_config = Rails.application.config_for(:cache_store).merge({ expires_in: 5.minutes, ssl: cache_ssl, namespace: cache_namespace })
     config.cache_store = :redis_cache_store, redis_config
   end
+
+  # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
 
   if ENV['SMTP_SERVER']
     config.action_mailer.delivery_method = :smtp
@@ -64,13 +68,9 @@ Rails.application.configure do
   else
     # Raise on delivery errors since CAS is basically a mail sending tool
     config.action_mailer.raise_delivery_errors = true
-
     config.action_mailer.delivery_method = ENV.fetch('DEV_MAILER') { :file }.to_sym
   end
   config.action_mailer.perform_caching = false
-
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :raise
@@ -86,6 +86,9 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+
+  # Highlight code that enqueued background job in logs.
+  config.active_job.verbose_enqueue_logs = true
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
@@ -124,4 +127,7 @@ Rails.application.configure do
 
   routes.default_url_options ||= {}
   routes.default_url_options[:script_name] = ''
+
+  # Raise error when a before_action's only/except options reference missing actions
+  # config.action_controller.raise_on_missing_callback_actions = true
 end

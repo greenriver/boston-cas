@@ -12,6 +12,7 @@
 - if @opportunities.any?
   %p #{@client.full_name} meets all requirements for the following vacancies.  These vacancies are either not yet involved in an active match, or the match has not progressed to a stage that would be disruptive if it were canceled, such as #{Translation.translate("#{Translation.translate('DND')} Initial Review")}.  Activating a match on a vacancy below will cancel any match involving the vacancy returning the matched client into the pool of available clients. It will not cancel other matches involving #{@client.full_name}.
 
+  - can_activate_match = @client.editable_by?(current_user)
   .table-responsive
     .c-card.c.card__flush.mb-4
       .c-card__content.p-0
@@ -40,6 +41,10 @@
                       = "(#{r.requirer.name})"
                     %br
                 %td= link_to opportunity.id, opportunity_matches_path(opportunity)
-                %th= link_to 'Activate!', client_qualified_opportunity_path(@client, opportunity), class: 'btn btn-sm btn-secondary', method: :patch
+                %th
+                  - if can_activate_match
+                    = link_to 'Activate!', client_qualified_opportunity_path(@client, opportunity), class: 'btn btn-sm btn-secondary', method: :patch
+                  - else
+                    %span.text-muted Activate Unavailable
 - else
   %p #{@client.full_name} is not eligible for any available opportunities

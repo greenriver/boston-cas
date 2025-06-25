@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -9,7 +11,7 @@ module Warehouse
     self.table_name = :Project
     acts_as_paranoid(column: :DateDeleted)
 
-    belongs_to :organization, class_name: Warehouse::Organization.name, primary_key: [:OrganizationID, :data_source_id], foreign_key: [:OrganizationID, :data_source_id], inverse_of: :projects
+    belongs_to :organization, class_name: Warehouse::Organization.name, primary_key: [:OrganizationID, :data_source_id], query_constraints: [:OrganizationID, :data_source_id], inverse_of: :projects
 
     def name
       return 'Confidential Project' if confidential?
