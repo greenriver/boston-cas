@@ -363,6 +363,15 @@ class Client < ApplicationRecord
     client_opportunity_matches.joins(:opportunity).order(o_t[:matchability].asc)
   end
 
+  def closed_matches_for_display
+    @closed_matches_for_display ||= [].tap do |matches|
+      client_opportunity_matches.closed.order(closed_at: :desc).
+        preload(:initialized_decisions).find_each do |match|
+          matches << match
+        end
+    end
+  end
+
   def housing_history
     # client_opportunity_matches.inspect
   end

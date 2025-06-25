@@ -1,0 +1,19 @@
+- matches = @client.closed_matches_for_display - [match]
+- if can_reject_matches? && matches.count.positive?
+  %h3.detail-box--label
+    Closed Matches
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Date
+        %th Route
+        %th Status
+        %th Reason
+    %tbody
+      - matches.each do |closed_match|
+        - modification_date = closed_match.unsuccessful_decision&.updated_at || closed_match.updated_at
+        %tr
+          %td= link_to modification_date.strftime('%m/%d/%Y'), match_path(closed_match)
+          %td= closed_match.match_route.title
+          %td= closed_match.overall_status[:name]
+          %td= closed_match.unsuccessful_reason&.title.presence || 'Unknown'
