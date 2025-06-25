@@ -59,6 +59,14 @@ class ImportedClient < NonHmisClient
     where(where)
   end
 
+  scope :visible_to, ->(user) do
+    if user.can_edit_all_clients? || user.can_manage_imported_clients?
+      all
+    else
+      visible_through_user_agency(user)
+    end
+  end
+
   def editable_by?(user)
     return true if user.can_manage_imported_clients?
 

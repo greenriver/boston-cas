@@ -618,4 +618,197 @@ RSpec.describe Client, type: :model do
       end
     end
   end
+
+  describe 'remote_client_visible_to?' do
+    let!(:user_agency) { create(:agency, name: 'User Test Agency') }
+    let!(:other_agency) { create(:agency, name: 'Other Test Agency') }
+    let!(:deidentified_data_source) { create(:data_source, :deidentified) } # Defined once
+
+    let!(:admin_role) { create(:role, name: 'remote_client_test_admin_editor', can_edit_all_clients: true) }
+    let!(:admin_user) { create(:user, agency: user_agency, roles: [admin_role]) }
+
+    let!(:basic_role) { create(:role, name: 'remote_client_test_basic_user') } # No special global perms
+    let!(:basic_user_in_user_agency) { create(:user, agency: user_agency, roles: [basic_role]) }
+    let!(:basic_user_in_other_agency) { create(:user, agency: other_agency, roles: [basic_role]) }
+
+    let!(:deid_manager_role) { create(:role, name: 'remote_client_test_deid_manager', can_manage_all_deidentified_clients: true) }
+    let!(:deid_viewer) { create(:user, agency: user_agency, roles: [deid_manager_role]) }
+
+    let!(:id_manager_role) { create(:role, name: 'remote_client_test_id_manager', can_manage_all_identified_clients: true) }
+    let!(:identified_viewer) { create(:user, agency: user_agency, roles: [id_manager_role]) }
+
+    let!(:imp_manager_role) { create(:role, name: 'remote_client_test_imp_manager', can_manage_imported_clients: true) }
+    let!(:imported_viewer) { create(:user, agency: user_agency, roles: [imp_manager_role]) }
+
+    let!(:client_under_test) do
+      client = create(:client)
+      # Ensure project_client exists and has the correct data_source_id for NonHmis related records
+      create(:project_client, client_id: client.id, data_source_id: deidentified_data_source.id)
+      client
+    end
+
+    # Helper to link client_under_test's project_client to a specific NonHmisClient record
+    # This NonHmisClient record's `identified` boolean will drive ProjectClient#is_identified?/is_deidentified?
+    # and its ID will be used as `remote_id` in the visibility check loop.
+    def link_project_client_to_remote_record(client_obj, remote_record_instance)
+      pc = client_obj.project_client
+      # Ensure data_source_id is correct for NonHmisClient types, matching what project_client was created with.
+      # This assumes DeidentifiedClient, IdentifiedClient, ImportedClient all use this deidentified_data_source
+      expected_non_hmis_ds_id = deidentified_data_source.id
+
+      unless pc.data_source_id == expected_non_hmis_ds_id
+        # Fail fast if there's a mismatch, as it indicates a setup problem for these tests.
+        raise "ProjectClient data_source_id mismatch: PC has #{pc.data_source_id}, expected NonHmis DS ID is #{expected_non_hmis_ds_id}"
+      end
+
+      pc.update!(id_in_data_source: remote_record_instance.id)
+      client_obj.reload # Crucial for client.remote_id and project_client states
+    end
+
+    context 'when project_client is not effectively linked to a NonHmisClient (making is_deidentified? and is_identified? both false)' do
+      before do
+        # Ensure project_client.id_in_data_source points to nothing, making actual_remote_record nil
+        # (assuming ProjectClient#is_identified?/is_deidentified? rely on actual_remote_record)
+        client_under_test.project_client.update!(id_in_data_source: -999) # Non-existent ID
+        client_under_test.reload
+      end
+
+      it 'returns true (due to the `unless` condition in the method)' do
+        # This tests the first return path: `return true unless project_client.is_deidentified? || project_client.is_identified?`
+        expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+      end
+    end
+
+    context 'when project_client is linked to an actual NonHmisClient record' do
+      # These contexts test the main loop logic where is_deidentified? OR is_identified? is true.
+
+      context 'and linked to a DeidentifiedClient (record.identified == false)' do
+        let!(:deid_visible_to_basic) { create(:deidentified_client, agency: user_agency, identified: false) }
+        let!(:deid_invisible_to_basic) { create(:deidentified_client, agency: other_agency, identified: false) }
+        let!(:deid_for_admin) { create(:deidentified_client, agency: other_agency, identified: false) }
+        let!(:deid_for_deid_viewer) { create(:deidentified_client, agency: other_agency, identified: false) }
+
+        it 'returns true if linked DeidentifiedClient is visible to basic_user_in_user_agency' do
+          link_project_client_to_remote_record(client_under_test, deid_visible_to_basic)
+          expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+        end
+
+        it 'returns false if linked DeidentifiedClient is not visible to basic_user_in_user_agency (and no other types match for this ID)' do
+          link_project_client_to_remote_record(client_under_test, deid_invisible_to_basic)
+          # Ensure no other client types with this ID could grant visibility
+          IdentifiedClient.where(id: deid_invisible_to_basic.id).destroy_all
+          ImportedClient.where(id: deid_invisible_to_basic.id).destroy_all
+          expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be false
+        end
+
+        it 'returns true if linked DeidentifiedClient is visible to admin_user' do
+          link_project_client_to_remote_record(client_under_test, deid_for_admin)
+          expect(client_under_test.remote_client_visible_to?(admin_user)).to be true
+        end
+
+        it 'returns true if linked DeidentifiedClient is visible to deid_viewer' do
+          link_project_client_to_remote_record(client_under_test, deid_for_deid_viewer)
+          expect(client_under_test.remote_client_visible_to?(deid_viewer)).to be true
+        end
+      end
+
+      context 'and linked to an IdentifiedClient (record.identified == true)' do
+        let!(:id_visible_to_basic) { create(:identified_client, agency: user_agency, identified: true) }
+        let!(:id_invisible_to_basic) { create(:identified_client, agency: other_agency, identified: true) }
+        let!(:id_for_admin) { create(:identified_client, agency: other_agency, identified: true) }
+        let!(:id_for_id_viewer) { create(:identified_client, agency: other_agency, identified: true) }
+
+        it 'returns true if linked IdentifiedClient is visible to basic_user_in_user_agency' do
+          link_project_client_to_remote_record(client_under_test, id_visible_to_basic)
+          expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+        end
+
+        it 'returns false if linked IdentifiedClient is not visible to basic_user_in_user_agency (and no other types match)' do
+          link_project_client_to_remote_record(client_under_test, id_invisible_to_basic)
+          DeidentifiedClient.where(id: id_invisible_to_basic.id).destroy_all
+          ImportedClient.where(id: id_invisible_to_basic.id).destroy_all
+          expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be false
+        end
+
+        it 'returns true if linked IdentifiedClient is visible to admin_user' do
+          link_project_client_to_remote_record(client_under_test, id_for_admin)
+          expect(client_under_test.remote_client_visible_to?(admin_user)).to be true
+        end
+
+        it 'returns true if linked IdentifiedClient is visible to identified_viewer' do
+          link_project_client_to_remote_record(client_under_test, id_for_id_viewer)
+          expect(client_under_test.remote_client_visible_to?(identified_viewer)).to be true
+        end
+      end
+
+      context 'and linked to an ImportedClient' do
+        # The ImportedClient.all scope is used, so its own `identified` status does not affect this specific scope's filtering.
+        # However, its `identified` status DOES affect ProjectClient#is_identified?/is_deidentified?,
+        # determining if we enter the loop.
+
+        context 'when the ImportedClient record has identified: false (making ProjectClient deidentified)' do
+          let!(:imp_deid_visible_to_basic) { create(:imported_client, agency: user_agency, identified: false) }
+          let!(:imp_deid_invisible_to_basic) { create(:imported_client, agency: other_agency, identified: false) }
+
+          it 'returns true if linked (deidentified) ImportedClient is visible to basic_user_in_user_agency' do
+            link_project_client_to_remote_record(client_under_test, imp_deid_visible_to_basic)
+            expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+          end
+
+          it 'returns false if linked (deidentified) ImportedClient is not visible (and others do not match)' do
+            link_project_client_to_remote_record(client_under_test, imp_deid_invisible_to_basic)
+            DeidentifiedClient.where(id: imp_deid_invisible_to_basic.id).destroy_all
+            IdentifiedClient.where(id: imp_deid_invisible_to_basic.id).destroy_all
+            expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be false
+          end
+        end
+
+        context 'when the ImportedClient record has identified: true (making ProjectClient identified)' do
+          let!(:imp_id_visible_to_basic) { create(:imported_client, agency: user_agency, identified: true) }
+          let!(:imp_id_invisible_to_basic) { create(:imported_client, agency: other_agency, identified: true) }
+
+          it 'returns true if linked (identified) ImportedClient is visible to basic_user_in_user_agency' do
+            link_project_client_to_remote_record(client_under_test, imp_id_visible_to_basic)
+            expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+          end
+
+          it 'returns false if linked (identified) ImportedClient is not visible (and others do not match)' do
+            link_project_client_to_remote_record(client_under_test, imp_id_invisible_to_basic)
+            DeidentifiedClient.where(id: imp_id_invisible_to_basic.id).destroy_all
+            IdentifiedClient.where(id: imp_id_invisible_to_basic.id).destroy_all
+            expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be false
+          end
+        end
+
+        it 'returns true if linked ImportedClient is visible to admin_user' do
+          imp_for_admin = create(:imported_client, agency: other_agency, identified: true) # identified status for initial check
+          link_project_client_to_remote_record(client_under_test, imp_for_admin)
+          expect(client_under_test.remote_client_visible_to?(admin_user)).to be true
+        end
+
+        it 'returns true if linked ImportedClient is visible to imported_viewer' do
+          imp_for_viewer = create(:imported_client, agency: other_agency, identified: false) # identified status for initial check
+          link_project_client_to_remote_record(client_under_test, imp_for_viewer)
+          expect(client_under_test.remote_client_visible_to?(imported_viewer)).to be true
+        end
+      end
+
+      # Test the OR logic of the .any? block
+      it 'returns true if remote_id matches a visible DeidentifiedClient, even if an IdentifiedClient with same ID would not be visible' do
+        # Setup: PC linked to a DeidentifiedClient that IS visible
+        visible_deid = create(:deidentified_client, agency: user_agency, identified: false)
+        link_project_client_to_remote_record(client_under_test, visible_deid)
+
+        expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+      end
+
+      it 'returns true if remote_id matches a visible IdentifiedClient, after a DeidentifiedClient with same ID was not visible' do
+        # Setup: PC linked to an IdentifiedClient that IS visible
+        visible_id = create(:identified_client, agency: user_agency, identified: true)
+        link_project_client_to_remote_record(client_under_test, visible_id)
+
+        expect(client_under_test.remote_client_visible_to?(basic_user_in_user_agency)).to be true
+      end
+    end
+  end
 end

@@ -14,19 +14,8 @@ class DeidentifiedClient < NonHmisClient
   scope :visible_to, ->(user) do
     if user.can_edit_all_clients? || user.can_manage_all_deidentified_clients?
       all
-    elsif user.can_view_all_covid_pathways?
-      covid_ids = where(id: NonHmisAssessment.limitable_pathways.select(:non_hmis_client_id)).pluck(:id)
-      agency_associated_ids = where(
-        arel_table[:agency_id].eq(nil).
-        or(arel_table[:agency_id].eq(user.agency.id)),
-      ).pluck(:id)
-
-      where(id: covid_ids + agency_associated_ids)
     else
-      where(
-        arel_table[:agency_id].eq(nil).
-        or(arel_table[:agency_id].eq(user.agency.id)),
-      )
+      visible_through_user_agency(user)
     end
   end
 
@@ -61,6 +50,7 @@ class DeidentifiedClient < NonHmisClient
   end
 
   def editable_by?(user)
+    return true if user.can_manage_all_deidentified_clients?
     return true if user.can_manage_deidentified_clients?
     return true if pathways_enabled? && user.can_enter_deidentified_clients?
     return user.agency_id == agency_id if user.can_enter_deidentified_clients?
