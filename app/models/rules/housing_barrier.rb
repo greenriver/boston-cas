@@ -8,7 +8,7 @@
 
 class Rules::HousingBarrier < Rule
   def description
-    "Matches clients who have a #{Translation.translate('Housing Barrier').downcase} as indicated in an assesment. "
+    "Matches clients who have a #{Translation.translate('Housing Barrier').downcase} as indicated in an assessment. "
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
