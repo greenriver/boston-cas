@@ -171,6 +171,29 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "503764c0ca9d478470081a2a9eaa486bb8b021ddf5024caeff5e7bf28e121071",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/rules/tagged_with.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "scope.where((\"tags ->>'#{requirement.variable}' is not null\" or \"not(tags ->>'#{requirement.variable}' is not null) OR tags is null\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Rules::TaggedWith",
+        "method": "clients_that_fit"
+      },
+      "user_input": "requirement.variable",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "50b6526d2855834552716cadcb7d87a71e755a9982a18a0f4a570048d2765096",
@@ -480,7 +503,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/non_hmis_assessment_type.rb",
-      "line": 25,
+      "line": 32,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where((\"'#{value_as_array(requirement.variable)}'::jsonb ? assessment_name\" or \"not(#{\"'#{value_as_array(requirement.variable)}'::jsonb ? assessment_name\"}) OR assessment_name is null\"))",
       "render_path": null,
@@ -570,7 +593,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/rank_below.rb",
-      "line": 30,
+      "line": 37,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"(tags->>'#{opportunity.match_route.tag_id.to_i}')::int >= #{requirement.variable}\")",
       "render_path": null,
@@ -593,7 +616,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called on model attribute",
       "file": "app/models/deidentified_client.rb",
-      "line": 74,
+      "line": 75,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:deidentified_client_assessment).constantize",
       "render_path": null,
@@ -646,7 +669,7 @@
           "type": "controller",
           "class": "MatchDecisionsController",
           "method": "show",
-          "line": 36,
+          "line": 38,
           "file": "app/controllers/match_decisions_controller.rb",
           "rendered": {
             "name": "matches/show",
@@ -672,29 +695,6 @@
       "confidence": "Weak",
       "cwe_id": [
         22
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "d3792996969e4d5da226875f576427272077e26256594ef7e244652487e0c22f",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/rules/tagged_with.rb",
-      "line": 27,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "scope.where((\"tags ->>'#{requirement.variable.to_s}' is not null\" or \"not(tags ->>'#{requirement.variable.to_s}' is not null) OR tags is null\"))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Rules::TaggedWith",
-        "method": "clients_that_fit"
-      },
-      "user_input": "requirement.variable",
-      "confidence": "Weak",
-      "cwe_id": [
-        89
       ],
       "note": ""
     },
@@ -739,7 +739,7 @@
       "check_name": "UnsafeReflection",
       "message": "Unsafe reflection method `constantize` called on model attribute",
       "file": "app/models/identified_client.rb",
-      "line": 113,
+      "line": 114,
       "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
       "code": "Config.get(:identified_client_assessment).constantize",
       "render_path": null,
@@ -762,7 +762,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/rank_below.rb",
-      "line": 28,
+      "line": 35,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"(tags->>'#{opportunity.match_route.tag_id.to_i}')::int < #{requirement.variable}\")",
       "render_path": null,
