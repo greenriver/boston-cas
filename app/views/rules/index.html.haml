@@ -15,6 +15,7 @@
           %tr
             %th Verb
             %th Rule
+            %th Description
             %th Applies to all matches?
             %th In-use in
         %tbody
@@ -23,6 +24,7 @@
               - attributes = {:class => rule.deleted_at.present? ? 'deleted' : nil}
               %td{attributes}= rule.verb.try :titleize
               %td{attributes}= Translation.translate(rule.name)
+              %td{attributes}= rule.description
               %td{attributes}
                 - if rule.always_apply?
                   Always Apply

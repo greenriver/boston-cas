@@ -4,17 +4,21 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::OneEightyDaysHomelessLastThreeYears < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:days_homeless_in_last_three_years.to_s)
-      if requirement.positive
-        where = c_t[:days_homeless_in_last_three_years].gteq(180)
-      else
-        where = c_t[:days_homeless_in_last_three_years].lt(180)
-      end
-      scope.where(where)
+  def description
+    'Matches clients who have been homeless for 180 days or more in the last three years.'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
+    raise RuleDatabaseStructureMissing.new("clients.days_homeless_in_last_three_years missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:days_homeless_in_last_three_years.to_s)
+
+    if requirement.positive
+      where = c_t[:days_homeless_in_last_three_years].gteq(180)
     else
-      raise RuleDatabaseStructureMissing.new("clients.days_homeless_in_last_three_years missing. Cannot check clients against #{self.class}.")
+      where = c_t[:days_homeless_in_last_three_years].lt(180)
     end
+    scope.where(where)
   end
 end

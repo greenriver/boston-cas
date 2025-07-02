@@ -4,19 +4,22 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::HoldsVoucher < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:holds_voucher_on.to_s)
-      if requirement.positive
-        scope.where.not(holds_voucher_on: nil)
-      else
-        scope.where(holds_voucher_on: nil)
-      end
-    else
-      raise RuleDatabaseStructureMissing.new("clients.holds_voucher_on missing. Cannot check clients against #{self.class}.")
-    end
+  def description
+    'Matches clients who hold a voucher either from the warehouse, a non-HMIS assessment, or because of a match in CAS.'
   end
 
+  def clients_that_fit(scope, requirement, _opportunity)
+    raise RuleDatabaseStructureMissing.new("clients.holds_voucher_on missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:holds_voucher_on.to_s)
+
+    if requirement.positive
+      scope.where.not(holds_voucher_on: nil)
+    else
+      scope.where(holds_voucher_on: nil)
+    end
+  end
 
   def apply_to_match(match)
     # Don't try and copy contacts unless the client holds a voucher

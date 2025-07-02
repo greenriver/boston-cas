@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::AssessmentScoreGreaterThanSpecified < Rule
+  def description
+    'Matches clients who have an assessment score greater than the specified value.'
+  end
+
   def variable_requirement?
     true
   end

@@ -4,12 +4,16 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::ChildInHousehold < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:child_in_household.to_s)
-      scope.where(child_in_household: requirement.positive)
-    else
-      raise RuleDatabaseStructureMissing.new("clients.child_in_household missing. Cannot check clients against #{self.class}.")
-    end
+  def description
+    "Matches clients who have indicated there are #{Translation.translate('Children under age 18 in household').downcase}."
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
+    raise RuleDatabaseStructureMissing.new("clients.child_in_household missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:child_in_household.to_s)
+
+    scope.where(child_in_household: requirement.positive)
   end
 end

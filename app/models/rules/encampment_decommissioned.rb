@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::EncampmentDecommissioned < Rule
+  def description
+    'Matches clients who have been in a decommissioned encampment.  This is specific to configuration in the warehouse.'
+  end
+
   def clients_that_fit(scope, requirement, _opportunity)
     column = :encampment_decomissioned
     raise RuleDatabaseStructureMissing.new("clients.#{column} missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(column.to_s)

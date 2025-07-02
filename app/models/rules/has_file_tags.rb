@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::HasFileTags < Rule
+  def description
+    'Matches clients who have the specified files in the warehouse.'
+  end
+
   def variable_requirement?
     true
   end

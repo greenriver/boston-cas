@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::Challenge < Rule
+  def description
+    'Matches clients who have indicated they have at least one of the chosen challenges.'
+  end
+
   def variable_requirement?
     true
   end

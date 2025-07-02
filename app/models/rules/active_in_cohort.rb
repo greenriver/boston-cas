@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::ActiveInCohort < Rule
+  def description
+    'Matches clients who are present in a cohort in the warehouse and have intentional contacts within the designated time period.  Non-HMIS clients must be assigned cohorts manually.'
+  end
+
   def variable_requirement?
     true
   end
@@ -25,16 +31,14 @@ class Rules::ActiveInCohort < Rule
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
-    if Client.column_names.include?(:active_cohort_ids.to_s)
-      if requirement.positive
-        where = 'active_cohort_ids @> ANY(ARRAY [?]::jsonb[])'
-      else
-        where = 'not(active_cohort_ids @> ANY( ARRAY [?]::jsonb[])) OR active_cohort_ids is null'
-      end
-      scope.where(where, value_as_array(requirement.variable))
+    raise RuleDatabaseStructureMissing.new("clients.active_cohort_ids missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:active_cohort_ids.to_s)
+
+    if requirement.positive
+      where = 'active_cohort_ids @> ANY(ARRAY [?]::jsonb[])'
     else
-      raise RuleDatabaseStructureMissing.new("clients.active_cohort_ids missing. Cannot check clients against #{self.class}.")
+      where = 'not(active_cohort_ids @> ANY( ARRAY [?]::jsonb[])) OR active_cohort_ids is null'
     end
+    scope.where(where, value_as_array(requirement.variable))
   end
 
   private def value_as_array(value)

@@ -1098,7 +1098,7 @@ class Client < ApplicationRecord
         type: 'Jsonb',
       },
       challenges: {
-        title: Translation.translate('Challenges for housing placment'),
+        title: Translation.translate('Challenges for housing placement'),
         description: nil,
         type: 'Jsonb',
       },

@@ -4,11 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-###
-# Copyright 2016 - 2025 Green River Data Analysis, LLC
-#
-# License detail: https://github.com/greenriver/hmis-warehouse/blob/production/LICENSE.md
-###
+# frozen_string_literal: true
 
 class Translation < ApplicationRecord
   include NotifierConfig
@@ -83,7 +79,7 @@ class Translation < ApplicationRecord
       'Case Workers',
       'CAS Reports',
       'CE Assessment',
-      'Challenges for housing placment',
+      'Challenges for housing placement',
       'Check off all the Boston neighborhoods you are willing to live in. Another way to decide is to figure out which places you will not live in, and check off the rest. You are not penalized if you change your mind about where you want to live.',
       'Children under age 18 in household',
       'Chronically homeless family',
