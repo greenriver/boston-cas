@@ -8,7 +8,7 @@
 
 class Rules::RankBelow < Rule
   def description
-    'Matches clients whose rank on cohorts isbelow the specified value.'
+    'Matches clients whose rank on cohorts is below the specified value.'
   end
 
   def variable_requirement?
