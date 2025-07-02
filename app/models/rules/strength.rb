@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::Strength < Rule
+  def description
+    "Matches clients who have at least one of the specified #{Translation.translate('Strengths').downcase} as indicated on an assessment."
+  end
+
   def variable_requirement?
     true
   end

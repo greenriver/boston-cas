@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::Occupancy < Rule
+  def description
+    'Matches clients who have indicated a minimum required occupancy less than or equal to the specified value.  This is sometimes calculated base on household composition.'
+  end
+
   def variable_requirement?
     true
   end
@@ -28,15 +34,13 @@ class Rules::Occupancy < Rule
     available_occupancy.to_h.try(:[], value.to_i) || value
   end
 
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:required_minimum_occupancy.to_s)
-      if requirement.positive
-        scope.where(c_t[:required_minimum_occupancy].lteq(requirement.variable))
-      else
-        scope.where(c_t[:required_minimum_occupancy].gt(requirement.variable))
-      end
+  def clients_that_fit(scope, requirement, _opportunity)
+    raise RuleDatabaseStructureMissing.new("clients.required_minimum_occupancy missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:required_minimum_occupancy.to_s)
+
+    if requirement.positive
+      scope.where(c_t[:required_minimum_occupancy].lteq(requirement.variable))
     else
-      raise RuleDatabaseStructureMissing.new("clients.required_minimum_occupancy missing. Cannot check clients against #{self.class}.")
+      scope.where(c_t[:required_minimum_occupancy].gt(requirement.variable))
     end
   end
 end

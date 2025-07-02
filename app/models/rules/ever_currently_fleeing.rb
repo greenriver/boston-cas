@@ -7,6 +7,10 @@
 # frozen_string_literal: true
 
 class Rules::EverCurrentlyFleeing < Rule
+  def description
+    'Matches clients who have ever indicated they are currently fleeing.'
+  end
+
   def clients_that_fit(scope, requirement, _opportunity)
     column = :currently_fleeing
 

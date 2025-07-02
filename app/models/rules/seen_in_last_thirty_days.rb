@@ -4,17 +4,22 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::SeenInLastThirtyDays < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if last_seen = c_t[:calculated_last_homeless_night]
-      if requirement.positive
-        where = c_t[:calculated_last_homeless_night].gteq( 30.days.ago )
-      else
-        where = c_t[:calculated_last_homeless_night].lt( 30.days.ago )
-      end
-      scope.where(where)
+  def description
+    'Matches clients who have been seen in a homeless project in the last 30 days.'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
+    last_seen = c_t[:calculated_last_homeless_night]
+    raise RuleDatabaseStructureMissing.new("calculated_last_homeless_night is missing. Cannot check clients against #{self.class}.") unless last_seen.present?
+
+    if requirement.positive
+      where = c_t[:calculated_last_homeless_night].gteq(30.days.ago)
     else
-      raise RuleDatabaseStructureMissing.new("calculated_last_homeless_night is missing. Cannot check clients against #{self.class}.")
+      where = c_t[:calculated_last_homeless_night].lt(30.days.ago)
     end
+    scope.where(where)
   end
 end

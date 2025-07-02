@@ -4,8 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::HmisClient < Rule
-  def clients_that_fit(scope, requirement, opportunity)
+  def description
+    'Matches clients who come from HMIS via the warehouse.'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
     if requirement.positive
       scope.where(id: ProjectClient.from_hmis.select(:client_id))
     else

@@ -4,8 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::AgeGreaterThanSixty < Rule
-  def clients_that_fit(scope, requirement, opportunity) # rubocop:disable Lint/UnusedMethodArgument
+  def description
+    'Matches clients who are 60 years or older.'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
     raise RuleDatabaseStructureMissing.new("clients.date_of_birth missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:date_of_birth.to_s)
 
     years_ago = Date.current - 60.years

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rule < ApplicationRecord
   self.table_name = 'rules'
   include MatchArchive
@@ -35,6 +37,10 @@ class Rule < ApplicationRecord
 
   def name_with_verb
     "#{verb} #{Translation.translate(name)}"
+  end
+
+  def description
+    ''
   end
 
   def variable_requirement?
