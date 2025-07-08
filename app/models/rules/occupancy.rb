@@ -8,7 +8,7 @@
 
 class Rules::Occupancy < Rule
   def description
-    'Matches clients who have indicated a minimum required occupancy less than or equal to the specified value.  This is sometimes calculated base on household composition.'
+    'Matches clients who have indicated a minimum required occupancy less than or equal to the specified value.  This is sometimes calculated base on household composition and other times based on an assessment.'
   end
 
   def variable_requirement?

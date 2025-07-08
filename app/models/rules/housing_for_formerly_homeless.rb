@@ -8,7 +8,7 @@
 
 class Rules::HousingForFormerlyHomeless < Rule
   def description
-    'Matches clients who prefer to live in a community with others who are formerly homeless.'
+    'Matches clients who prefer to live in a community with others who are formerly homeless as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

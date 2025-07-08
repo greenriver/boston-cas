@@ -8,7 +8,7 @@
 
 class Rules::Challenge < Rule
   def description
-    'Matches clients who have indicated they have at least one of the chosen challenges.'
+    'Matches clients who have indicated they have at least one of the chosen challenges as indicated on an assessment.'
   end
 
   def variable_requirement?

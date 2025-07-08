@@ -8,7 +8,7 @@
 
 class Rules::BedroomExact < Rule
   def description
-    'Matches clients who require the exact number of bedrooms specified in "Minimum number of bedrooms required".'
+    'Matches clients who require the exact number of bedrooms specified in "Minimum number of bedrooms required" as indicated on an assessment.'
   end
 
   def variable_requirement?

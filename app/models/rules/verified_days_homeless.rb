@@ -8,7 +8,7 @@
 
 class Rules::VerifiedDaysHomeless < Rule
   def description
-    'Matches clients who have had their days homeless verified.'
+    'Matches clients who have had their days homeless verified. This rule is not currently receiving new data.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

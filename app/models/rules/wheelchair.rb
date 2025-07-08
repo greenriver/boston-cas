@@ -8,7 +8,7 @@
 
 class Rules::Wheelchair < Rule
   def description
-    'Matches clients who require wheelchair accessibility.'
+    'Matches clients who require wheelchair accessibility as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

@@ -8,7 +8,7 @@
 
 class Rules::VispdatScoreFourOrLess < Rule
   def description
-    'Matches clients who have a VISPDAT score of 4 or less.'
+    'Matches clients who have a VISPDAT score of 4 or less as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

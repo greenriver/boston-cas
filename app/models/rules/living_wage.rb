@@ -8,7 +8,7 @@
 
 class Rules::LivingWage < Rule
   def description
-    "Matches clients who are #{Translation.translate('Earning a living wage ($13 or more)').downcase}."
+    "Matches clients who are #{Translation.translate('Earning a living wage ($13 or more)').downcase} as indicated on an assessment."
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

@@ -8,7 +8,7 @@
 
 class Rules::EncampmentDecommissioned < Rule
   def description
-    'Matches clients who have been in a decommissioned encampment.  This is specific to configuration in the warehouse.'
+    'Matches clients who have been in a decommissioned encampment as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
