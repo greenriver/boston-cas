@@ -8,7 +8,7 @@
 
 class Rules::MiAndSaCoMorbid < Rule
   def description
-    'Matches clients who have both a mental health disorder and a substance use disorder as seen in the most recent HUD disability response.'
+    'Matches clients who have both a mental health disability and a substance use disorder as seen in the most recent HUD disability response.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

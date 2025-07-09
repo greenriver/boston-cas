@@ -776,7 +776,7 @@ class Client < ApplicationRecord
         type: 'Boolean',
       },
       mental_health_problem: {
-        title: 'Mental Health Disorder',
+        title: 'Mental Health Disability',
         description: nil,
         type: 'Boolean',
       },

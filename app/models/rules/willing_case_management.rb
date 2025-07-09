@@ -8,7 +8,7 @@
 
 class Rules::WillingCaseManagement < Rule
   def description
-    "Matches clients who are #{Translation.translate('Willing to engage with housing case management').downcase}."
+    "Matches clients who are #{Translation.translate('Willing to engage with housing case management').downcase} as indicated on an assessment."
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
