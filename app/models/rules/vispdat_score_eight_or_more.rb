@@ -8,7 +8,7 @@
 
 class Rules::VispdatScoreEightOrMore < Rule
   def description
-    'Matches clients who have a VISPDAT score of 8 or more.'
+    'Matches clients who have a VISPDAT score of 8 or more as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

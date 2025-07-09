@@ -8,7 +8,7 @@
 
 class Rules::FosterYouth < Rule
   def description
-    "Matches clients who have indicated they have #{Translation.translate('Youth in foster care').downcase}."
+    "Matches clients who have indicated they have #{Translation.translate('Youth in foster care').downcase} as indicated on an assessment."
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

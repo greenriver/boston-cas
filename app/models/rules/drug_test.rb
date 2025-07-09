@@ -8,7 +8,7 @@
 
 class Rules::DrugTest < Rule
   def description
-    'Matches clients who can pass a drug test.'
+    'Matches clients who can pass a drug test as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

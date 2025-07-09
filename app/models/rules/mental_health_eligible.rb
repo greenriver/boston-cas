@@ -8,7 +8,7 @@
 
 class Rules::MentalHealthEligible < Rule
   def description
-    'Matches clients whose most recent HUD disability response indicates they have a mental health disorder.'
+    'Matches clients whose most recent HUD disability response indicates they have a mental health disability.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

@@ -8,7 +8,7 @@
 
 class Rules::ChildInHousehold < Rule
   def description
-    "Matches clients who have indicated there are #{Translation.translate('Children under age 18 in household').downcase}."
+    "Matches clients who have indicated there are #{Translation.translate('Children under age 18 in household').downcase} as indicated on an assessment."
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

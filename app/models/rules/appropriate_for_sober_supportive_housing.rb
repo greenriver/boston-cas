@@ -8,7 +8,7 @@
 
 class Rules::AppropriateForSoberSupportiveHousing < Rule
   def description
-    'Matches clients who are appropriate for sober supportive housing.'
+    'Matches clients who are appropriate for sober supportive housing as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

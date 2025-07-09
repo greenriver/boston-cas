@@ -8,7 +8,7 @@
 
 class Rules::CspechEligible < Rule
   def description
-    "Matches clients who are #{Translation.translate('CSPECH Eligible')}."
+    "Matches clients who are #{Translation.translate('CSPECH Eligible')}. This rule is not currently receiving new data."
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

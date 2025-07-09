@@ -8,7 +8,7 @@
 
 class Rules::WillingToLiveInCongregateHousing < Rule
   def description
-    'Matches clients who are willing to live in congregate housing.'
+    'Matches clients who are willing to live in congregate housing as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

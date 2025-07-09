@@ -8,7 +8,7 @@
 
 class Rules::LifetimeSexOffender < Rule
   def description
-    'Matches clients who have been marked as lifetime sex offenders.'
+    'Matches clients who have been marked as lifetime sex offenders as indicated on an assessment.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)

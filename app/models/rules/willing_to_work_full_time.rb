@@ -8,7 +8,7 @@
 
 class Rules::WillingToWorkFullTime < Rule
   def description
-    "Matches clients who are #{Translation.translate('Willing to work full-time').downcase}."
+    "Matches clients who are #{Translation.translate('Willing to work full-time').downcase} as indicated on an assessment."
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
