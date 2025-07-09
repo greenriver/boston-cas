@@ -8,7 +8,7 @@
 
 class Rules::VerifiedDisability < Rule
   def description
-    'Matches clients who have had their disability verified in the warehouse..'
+    'Matches clients who have had their disability verified in the warehouse.'
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
