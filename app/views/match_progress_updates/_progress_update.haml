@@ -21,3 +21,5 @@
 
   %td.history--contact-name= event&.contact_name || 'Contact Missing'
   %td
+  - if can_reissue_notifications?
+    %td
