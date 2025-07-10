@@ -12,43 +12,20 @@ jobs:
   rubocop:
     name: Rubocop
     # Containers must run in Linux based operating systems
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     # Docker Hub image that the job executes in
-    container: ruby:3.3.7-alpine3.20
+    container: ruby:3.3.8-slim-bookworm
     steps:
-      - name: Install git
-        run: |
-          apk add --no-cache git
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: 'Container Setup'
+        id: container-setup
+        uses: ./.github/workflows/container_setup
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
-
-      - id: dependencies
-        name: Set up dependencies
-        run: |
-          apk add --no-cache $(cat .github/dependencies.txt)
-
-      # ensure changed-files can read repo files from git
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory /__w/boston-cas/boston-cas
-
-      - name: cache gems
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
-        id: gemcache
-        with:
-          path: |
-            vendor/bundle
-            /usr/local/bundle/
-          key: ${{ runner.os }}-gemcache-${{ hashFiles('**/Gemfile.lock') }}-${{ hashFiles('**/.ruby-version') }}
-
-      - id: gems
-        name: Install gems
-        run: |
-          gem install bundler --version=2.6.3
-          bundle config set --local without 'production staging'
-          bundle install --jobs 4 --retry 3
 
       - name: Get changed files
         id: changed-files

@@ -10,14 +10,14 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     # Docker Hub image that the job executes in
-    container: ruby:3.3.7-alpine3.20
+    container: ruby:3.3.8-slim-bookworm
 
     # Service containers to run with job
     services:
       postgres:
-        image: index.docker.io/library/postgres@sha256:236985828131e95a12914071b944d0e0d21da5281312292747e222845f0ea670 # 13-alpine
+        image: index.docker.io/library/postgres@sha256:bcb90dc18910057ff49ce2ea157d8a0d534964090d39af959df41083f18c3318 # 17.5-alpine
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
@@ -41,42 +41,29 @@ jobs:
       DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
       DATABASE_DB_TEST: boston_cas_test
     steps:
-      - name: Install git
-        run: |
-          apk add --no-cache git
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: Set up dependencies
 
+      - name: 'Container Setup'
+        id: container-setup
+        uses: ./.github/workflows/container_setup
+
+      - name: Prepare test db
         run: |
-          apk add --no-cache $(cat .github/dependencies.txt)
+          pg_isready -h postgres -U postgres
+          bin/db_prep
 
-          echo "postgres:5432:*:postgres:postgres" > ~/.pgpass
+          echo "Setting up .pgpass"
+          echo "postgres:*:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass
-
-          yarn install --frozen-lockfile
-
-      - name: cache gems
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
-        id: gemcache
-        with:
-          path: |
-            vendor/bundle
-            /usr/local/bundle/
-          key: ${{ runner.os }}-gemcache-${{ hashFiles('**/Gemfile.lock') }}-${{ hashFiles('**/.ruby-version') }}
-
-      - name: Install gems
-        run: |
-          gem install bundler --version=2.6.3
-          bundle config set --local without 'production staging development'
-          bundle install --jobs 4 --retry 3
 
       - name: 'App setup'
         run: |
           cp config/secrets.yml.sample config/secrets.yml
           mkdir app/assets/stylesheets/theme/styles
           touch app/assets/stylesheets/theme/styles/_variables.scss
-          cp .rspec.travis .rspec
+          cp .rspec.ci .rspec
+
       - name: Prepare test db
         env:
           RAILS_ENV: test
