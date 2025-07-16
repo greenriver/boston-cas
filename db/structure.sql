@@ -3573,7 +3573,7 @@ CREATE TABLE public.sub_programs (
     weighting_rules_active boolean DEFAULT true,
     cori_hearing_required boolean,
     match_prioritization_id bigint,
-    reporting_project_id integer
+    reporting_project_id bigint
 );
 
 
