@@ -39,6 +39,7 @@ class Warehouse::Analytics::OpportunityCategory < ::Warehouse::Base
             sub_contractor_name: sub_program.sub_contractor&.name,
             hsa_id: sub_program.housing_subsidy_administrator&.id,
             hsa_name: sub_program.housing_subsidy_administrator&.name,
+            reporting_project_id: sub_program.reporting_project_id,
             created_at: sub_program.created_at,
             updated_at: sub_program.updated_at,
           )
