@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class SubProgramsController < ApplicationController
   include ProgramPermissions
 
@@ -87,6 +89,7 @@ class SubProgramsController < ApplicationController
         :weighting_rules_active,
         :cori_hearing_required,
         :match_prioritization_id,
+        :reporting_project_id,
       )
   end
 
