@@ -87,6 +87,14 @@ FactoryBot.define do
     name { 'Income' }
     verb { 'have' }
   end
+  factory :income_minimum, class: 'Rules::IncomeMinimum' do
+    name { 'Minimum Monthly Income' }
+    verb { 'have' }
+  end
+  factory :income_maximum, class: 'Rules::IncomeMaximum' do
+    name { 'Maximum Monthly Income' }
+    verb { 'have' }
+  end
   factory :last_seen, class: 'Rules::SeenInLastThirtyDays' do
     name { 'Seen in Last 30 Days' }
     verb { 'be' }
