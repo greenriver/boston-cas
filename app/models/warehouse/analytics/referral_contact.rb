@@ -19,7 +19,6 @@ class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
         batch = []
         match_contacts.each do |match_contact|
           batch << new(
-            # id: match_contact.id,
             email: match_contact.contact.email,
             referral_id: match_contact.match.id,
             contact_id: match_contact.contact_id,
@@ -33,14 +32,12 @@ class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
 
       # Additionally, anyone who has the ability to user_can_reject_matches? or user_can_approve_matches?
       # (matches access for MatchDecisions::Base#admin_only?)
-      # max_id = match_contacts.last.id
       match_admins = User.active.match_admins.joins(:contact).preload(:contact).to_a
       ClientOpportunityMatch.find_in_batches(batch_size: 1_000) do |matches|
         batch = []
         matches.each do |match|
           match_admins.each do |user|
             batch << new(
-              # id: max_id + 1,
               email: user.contact.email,
               referral_id: match.id,
               contact_id: user.contact.id,
@@ -48,7 +45,6 @@ class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
               created_at: user.contact.created_at,
               updated_at: user.contact.updated_at,
             )
-            # max_id += 1
           end
         end
         import!(batch)
