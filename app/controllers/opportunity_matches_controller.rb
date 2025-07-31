@@ -32,7 +32,7 @@ class OpportunityMatchesController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data @exporter.to_csv, filename: "matches-#{@opportunity.id}-#{Time.now.strftime('%Y-%m-%d')}.csv"
+        send_data @exporter.to_csv, filename: "prioritized-clients-#{@opportunity.id}-#{Time.now.strftime('%Y-%m-%d')}.csv"
       end
     end
   end

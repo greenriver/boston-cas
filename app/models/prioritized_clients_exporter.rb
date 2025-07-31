@@ -28,9 +28,9 @@ class PrioritizedClientsExporter
   def to_csv
     CSV.generate(headers: true) do |csv|
       # Include a notes column in the download
-      csv << headers + ['Notes']
+      csv << headers(view_type: :download)
       (@active_matches + @available_matches).each do |client|
-        csv << row_for_client(client) + ['']
+        csv << row_for_client(client, view_type: :download)
       end
     end
   end
@@ -87,12 +87,25 @@ class PrioritizedClientsExporter
 
   private
 
-  def headers
-    ['Client Name'] + prioritized_column_labels + ['Other Active Matches', 'Status']
+  def headers(view_type: :view)
+    headers = ['Client Name']
+    headers += ['CAS ID', 'Remote ID', 'Data Source'] if view_type == :download
+    headers += prioritized_column_labels
+    headers += ['Other Active Matches', 'Status']
+    headers += ['Notes'] if view_type == :download
+    headers
   end
 
-  def row_for_client(client)
-    [client_name(client)] + prioritized_column_values(client) + [other_active_matches(client), status(client)]
+  def row_for_client(client, view_type: :view)
+    row = [client_name(client)]
+    data_source = client.remote_data_source
+    data_source_name = nil
+    data_source_name = data_source.name if data_source
+    row += [client.id, client.remote_id, data_source_name] if view_type == :download
+    row += prioritized_column_values(client)
+    row += [other_active_matches(client), status(client)]
+    row += [''] if view_type == :download
+    row
   end
 
   def client_name(client)
