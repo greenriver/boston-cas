@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_access_to_opportunity!
@@ -20,6 +22,19 @@ class OpportunityMatchesController < ApplicationController
     @matches = (@actives + @availables).uniq
     @sub_program = @opportunity.sub_program
     @program = @sub_program.program
+    @exporter = PrioritizedClientsExporter.new(
+      active_matches: @actives,
+      available_matches: @availables,
+      opportunity: @opportunity,
+      current_user: current_user,
+    )
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data @exporter.to_csv, filename: "matches-#{@opportunity.id}-#{Time.now.strftime('%Y-%m-%d')}.csv"
+      end
+    end
   end
 
   def closed
@@ -75,47 +90,23 @@ class OpportunityMatchesController < ApplicationController
     }
   end
 
-  def prioritized_column_data
-    @prioritized_column_data ||= Client.prioritized_columns_data
-  end
+  helper_method :prioritized_column_labels, :prioritized_column_values, :match_routes, :active_client_ids
 
   def prioritized_column_labels
-    [].tap do |result|
-      @opportunity.match_route.prioritized_client_columns.map(&:to_sym).each do |column|
-        column_data = prioritized_column_data[column]
-        next if column_data.blank?
-        next if column_data[:display_check].present? && send(column_data[:display_check]) == false
-
-        result << column_data[:title]
-      end
-    end
+    @exporter.prioritized_column_labels
   end
-  helper_method :prioritized_column_labels
 
   def prioritized_column_values(client)
-    [].tap do |result|
-      @opportunity.match_route.prioritized_client_columns.map(&:to_sym).each do |column|
-        column_data = prioritized_column_data[column]
-        next if column_data.blank?
-        next if column_data[:display_check].present? && ! current_user.public_send(column_data[:display_check])
-
-        result << client.send(column)
-      end
-    end
+    @exporter.prioritized_column_values(client)
   end
-  helper_method :prioritized_column_values
 
   def match_routes(client)
-    counts = client.client_opportunity_matches.active.open.
-      joins(:program, :match_route).
-      where.not(opportunity: @opportunity).
-      group(:type).
-      count
-    counts.map do |key, value|
-      [key.constantize.new.title, value]
-    end
+    @exporter.match_routes(client)
   end
-  helper_method :match_routes
+
+  def active_client_ids
+    @exporter.active_client_ids
+  end
 
   def show_confidential_names?
     @show_confidential_names

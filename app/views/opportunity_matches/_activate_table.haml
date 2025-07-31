@@ -4,6 +4,8 @@
     = simple_form_for :checkboxes do |f|
       .row
         .col-sm-8
+          - if current_user.can_activate_matches?
+            .mb-4= link_to "Download CSV", opportunity_matches_path(@opportunity, format: :csv), class: 'btn btn-secondary'
           %p #{pluralize(@matches.count, 'matching client')}
         .col-sm-4.text-right
           - if @opportunity.match_route.allow_multiple_active_matches && can_activate_match?
