@@ -29,8 +29,11 @@ class PrioritizedClientsExporter
     CSV.generate(headers: true) do |csv|
       # Include a notes column in the download
       csv << headers(view_type: :download)
-      (@active_matches + @available_matches).each do |client|
-        csv << row_for_client(client, view_type: :download)
+      @active_matches.each do |client|
+        csv << row_for_client(client, active: true, view_type: :download)
+      end
+      @available_matches.each do |client|
+        csv << row_for_client(client, active: false, view_type: :download)
       end
     end
   end
@@ -90,20 +93,23 @@ class PrioritizedClientsExporter
   def headers(view_type: :view)
     headers = ['Client Name']
     headers += ['CAS ID', 'Remote ID', 'Data Source'] if view_type == :download
+    headers += ['Referral Date'] if view_type == :download
     headers += prioritized_column_labels
-    headers += ['Other Active Matches', 'Status']
+    headers += ['Other Active Matches', 'Status'] if view_type == :view
     headers += ['Notes'] if view_type == :download
     headers
   end
 
-  def row_for_client(client, view_type: :view)
+  def row_for_client(client, active:, view_type: :view)
+    referral_date = (client.match_for_opportunity(@opportunity)&.match_created_event&.date if active) || ''
     row = [client_name(client)]
     data_source = client.remote_data_source
     data_source_name = nil
     data_source_name = data_source.name if data_source
     row += [client.id, client.remote_id, data_source_name] if view_type == :download
+    row += [referral_date] if view_type == :download
     row += prioritized_column_values(client)
-    row += [other_active_matches(client), status(client)]
+    row += [other_active_matches(client), status(client)] if view_type == :view
     row += [''] if view_type == :download
     row
   end
