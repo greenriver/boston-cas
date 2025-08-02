@@ -27,6 +27,7 @@ class OpportunityMatchesController < ApplicationController
       available_matches: @availables,
       opportunity: @opportunity,
       current_user: current_user,
+      confidential_override: show_confidential_names?,
     )
 
     respond_to do |format|

@@ -9,21 +9,27 @@ RSpec.describe PrioritizedClientsExporter, type: :model do
   let(:opportunity) { create(:opportunity, sub_program: sub_program) }
   let(:active_matches) { create_list(:client, 2) }
   let(:available_matches) { create_list(:client, 2) }
-  let(:exporter) { described_class.new(active_matches: active_matches, available_matches: available_matches, opportunity: opportunity, current_user: user) }
 
   describe '#client_name' do
-    subject { exporter.send(:client_name, client) }
+    subject { exporter.send(:client_name, client, view_type: :view) }
 
     let(:client) { create(:client) }
-    let!(:project_client) { create(:project_client, client: client) }
     let!(:match) { create(:client_opportunity_match, client: client, opportunity: opportunity) }
 
     context 'with a user who can view confidential information' do
       let(:user) { create(:user) }
-      before { user.roles << create(:role, can_view_client_confidentiality: true) }
+      let(:role) { create(:role, can_view_client_confidentiality: true, can_view_all_clients: true) }
+      let(:exporter) { described_class.new(active_matches: active_matches, available_matches: available_matches, opportunity: opportunity, current_user: user, confidential_override: true) }
+
+      before do
+        user.roles << role
+      end
 
       context 'when client is confidential' do
-        before { client.update(confidential: true) }
+        before do
+          client.update(confidential: true)
+          client.reload
+        end
         it { is_expected.to eq(client.name) }
       end
 
@@ -35,6 +41,7 @@ RSpec.describe PrioritizedClientsExporter, type: :model do
 
     context 'with a user who cannot view confidential information' do
       let(:user) { create(:user) }
+      let(:exporter) { described_class.new(active_matches: active_matches, available_matches: available_matches, opportunity: opportunity, current_user: user) }
 
       context 'when client is confidential' do
         before { client.update(confidential: true) }

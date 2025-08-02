@@ -17,22 +17,27 @@ class PrioritizedClientsExporter
   # @param available_matches [Array<Client>] Clients available for matching
   # @param opportunity [Opportunity] The housing opportunity being matched
   # @param current_user [User] The user requesting the export
-  def initialize(active_matches:, available_matches:, opportunity:, current_user:)
+  def initialize(active_matches:, available_matches:, opportunity:, current_user:, confidential_override: false)
     @active_matches = active_matches
     @available_matches = available_matches
     @opportunity = opportunity
     @current_user = current_user
     @active_client_ids = @active_matches.pluck(:client_id)
+    @confidential_override = confidential_override
   end
 
   def to_csv
     CSV.generate(headers: true) do |csv|
       # Include a notes column in the download
       csv << headers(view_type: :download)
+      visited = Set.new
       @active_matches.each do |client|
         csv << row_for_client(client, active: true, view_type: :download)
+        visited << client.id
       end
       @available_matches.each do |client|
+        next if visited.include?(client.id)
+
         csv << row_for_client(client, active: false, view_type: :download)
       end
     end
@@ -88,8 +93,6 @@ class PrioritizedClientsExporter
     end
   end
 
-  private
-
   def headers(view_type: :view)
     headers = ['Client Name']
     headers += ['CAS ID', 'Remote ID', 'Data Source'] if view_type == :download
@@ -102,7 +105,7 @@ class PrioritizedClientsExporter
 
   def row_for_client(client, active:, view_type: :view)
     referral_date = (client.match_for_opportunity(@opportunity)&.match_created_event&.date if active) || ''
-    row = [client_name(client)]
+    row = [client_name(client, view_type: view_type)]
     data_source = client.remote_data_source
     data_source_name = nil
     data_source_name = data_source.name if data_source
@@ -114,17 +117,21 @@ class PrioritizedClientsExporter
     row
   end
 
-  def client_name(client)
+  def client_name(client, view_type: :view)
     match = client.match_for_opportunity(@opportunity)
     confidential_opportunity = @opportunity.confidential? && !client.has_full_housing_release?(@opportunity&.match_route)
     confidential_client = client.confidential? || match.try(:confidential?)
+    hide_name_in_download = confidential_client || confidential_opportunity
+    hide_name_in_view = hide_name_in_download && !@confidential_override
 
-    # In the controller, show_confidential_names depends on params[:confidential_override]
-    # For CSV export, we assume we don't have this override.
-    show_confidential = @current_user.can_view_client_confidentiality?
-    hide_client_name = (confidential_client || confidential_opportunity) && !show_confidential
+    # fetch correctly redacted name (full name if the client isn't confidential)
+    name = match&.client_name_for_contact(@current_user.contact, hidden: hide_name_in_download) || client.client_name_for_user(@current_user, hidden: hide_name_in_download)
+    # if this is a download, return the potentially redacted name
+    # if the user can't view confidential clients, return the potentially redacted name
+    return name if view_type == :download || ! @current_user.can_view_client_confidentiality?
 
-    match&.client_name_for_contact(@current_user.contact, hidden: hide_client_name) || client.client_name_for_user(@current_user, hidden: hide_client_name)
+    # Return the full name, potentially redacted if we haven't specifically requested an override
+    match&.client_name_for_contact(@current_user.contact, hidden: hide_name_in_view) || client.client_name_for_user(@current_user, hidden: hide_name_in_view)
   end
 
   def other_active_matches(client)
