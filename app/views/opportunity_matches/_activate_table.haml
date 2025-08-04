@@ -4,6 +4,8 @@
     = simple_form_for :checkboxes do |f|
       .row
         .col-sm-8
+          - if current_user.can_activate_matches?
+            .mb-4= link_to "Download CSV", opportunity_matches_path(@opportunity, format: :csv), class: 'btn btn-secondary'
           %p #{pluralize(@matches.count, 'matching client')}
         .col-sm-4.text-right
           - if @opportunity.match_route.allow_multiple_active_matches && can_activate_match?
@@ -22,18 +24,13 @@
         %tbody
           - @matches.each do |client|
             - match = client.match_for_opportunity(@opportunity)
-            - confidential_opportunity = @opportunity.confidential? && ! client.has_full_housing_release?(@opportunity&.match_route)
-            - confidential_client = client.confidential? || match.try(:confidential?)
-            - hide_client_name = ( confidential_client || confidential_opportunity) && ! show_confidential_names?
-            - name = match&.client_name_for_contact(current_user.contact, hidden: hide_client_name) || client.client_name_for_user(current_user, hidden: hide_client_name)
+            - name = @exporter.client_name(client, view_type: :view)
 
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
                 = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
               - prioritized_column_values(client).map do |value|
-                - value = value.join('; ') if value.class == Array
-                - isBoolean = [TrueClass, FalseClass].include?(value.class)
-                %td.text-center= isBoolean ? checkmark(value) : value
+                %td.text-center= value
               %td.text-center
                 = render 'client_match_routes', client: client
 

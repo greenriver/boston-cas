@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/hmis-warehouse/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :client, class: 'Client' do
     ssn { Faker::Number.number(digits: 9) }
@@ -17,5 +25,9 @@ FactoryBot.define do
     sequence(:tie_breaker_date) { |_n| Faker::Date.between(from: 1.years.ago, to: Date.yesterday) }
 
     disability_verified_on { nil }
+
+    trait :confidential do
+      confidential { true }
+    end
   end
 end
