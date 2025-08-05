@@ -21,6 +21,7 @@ class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
           batch << new(
             email: match_contact.contact.email,
             referral_id: match_contact.match.id,
+            cas_user_id: match_contact.contact.user_id,
             contact_id: match_contact.contact_id,
             contact_type: match_contact.match.match_route.contact_label_for(match_contact.contact_type),
             created_at: match_contact.created_at,
@@ -40,6 +41,7 @@ class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
             batch << new(
               email: user.contact.email,
               referral_id: match.id,
+              cas_user_id: user.id,
               contact_id: user.contact.id,
               contact_type: 'Match Administrator',
               created_at: user.contact.created_at,
