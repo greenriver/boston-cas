@@ -299,8 +299,12 @@ RSpec.describe MatchDigestMailer, type: :mailer do
       expect(mail_body).to include('Match started:')
 
       # Check that non-matching data is excluded
-      expect(mail_body).not_to include('2 weeks ago') # Old canceled/expired matches
-      expect(mail_body).not_to include('2 weeks from now') # Not expiring soon
+      # Note: Since dates are formatted as MM/DD/YYYY, we check for the actual formatted dates
+      # that should appear in the email instead of relative time strings
+      expect(mail_body).to include(canceled_match.updated_at.strftime('%m/%d/%Y')) # Canceled match date
+      expect(mail_body).to include(expired_match.shelter_expiration.strftime('%m/%d/%Y')) # Expired match date
+      expect(mail_body).to include(expiring_match.shelter_expiration.strftime('%m/%d/%Y')) # Expiring match date
+      expect(mail_body).to include(active_match.created_at.strftime('%m/%d/%Y')) # Active match start date
 
       # Verify the email structure
       expect(mail_body).to include('CAS Match Weekly Summary')
