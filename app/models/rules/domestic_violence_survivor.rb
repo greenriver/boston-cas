@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::DomesticViolenceSurvivor < Rule
+  def description
+    'Matches clients who have indicated they are a domestic violence survivor on an assessment or via a HUD assessment within the chosen time period as defined in the warehouse configuration. Non-HMIS clients are marked as survivors if they have indicated they are currently fleeing, interested in DV RRH, or deidentified.'
+  end
+
   def clients_that_fit(scope, requirement, _opportunity)
     raise RuleDatabaseStructureMissing.new("clients.domestic_violence missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:domestic_violence.to_s)
 

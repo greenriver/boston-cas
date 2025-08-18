@@ -4,22 +4,27 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::EnrolledInHmisProjectType < Rule
+  def description
+    'Matches clients who are enrolled in a specified HMIS project type.'
+  end
+
   def variable_requirement?
     true
   end
 
   def available_project_types
     {
-      es: "ES - Emergency Shelter",
-      ph: "PH - Permanent Housing",
-      psh: "PSH - Permanent Supportive Housing",
+      es: 'ES - Emergency Shelter',
+      ph: 'PH - Permanent Housing',
+      psh: 'PSH - Permanent Supportive Housing',
       rrh: 'RRH - Rapid Re-Housing',
       sh: 'SH - Safe Haven',
       so: 'SO - Street Outreach',
       th: 'Transitional Housing',
     }
-
   end
 
   def display_for_variable value

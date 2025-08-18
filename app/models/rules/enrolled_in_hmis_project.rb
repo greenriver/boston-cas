@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::EnrolledInHmisProject < Rule
+  def description
+    'Matches clients who are enrolled in a specified HMIS project. Associated projects for Non-HMIS clients are used in place of enrollments.'
+  end
+
   def variable_requirement?
     true
   end

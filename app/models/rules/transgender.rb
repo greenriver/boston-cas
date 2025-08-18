@@ -4,8 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::Transgender < Rule
-  def clients_that_fit(scope, requirement, opportunity) # rubocop:disable Lint/UnusedMethodArgument
+  def description
+    'Matches clients whose gender is transgender.'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
     column = :transgender
     raise RuleDatabaseStructureMissing.new("clients.#{column} missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(column.to_s)
 

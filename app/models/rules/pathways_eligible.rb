@@ -4,7 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::PathwaysEligible < Rule
+  def description
+    'Matches clients who do not have a decline on the route that is newer than the most recent assessment date.'
+  end
+
   def clients_that_fit(scope, requirement, opportunity)
     return scope unless opportunity
 
@@ -19,13 +25,13 @@ class Rules::PathwaysEligible < Rule
   end
 
   # Ineligible clients have an appropriate decline that is newer than any
-    # assessment
+  # assessment
   private def ineligible_ids(opportunity)
-    Client.joins(client_opportunity_matches: [{decisions: :decline_reason}]).
+    Client.joins(client_opportunity_matches: [{ decisions: :decline_reason }]).
       where(md_b_t[:updated_at].gt(c_t[:rrh_assessment_collected_at])).
       merge(
         ClientOpportunityMatch.closed.
-        on_route(opportunity.match_route)
+        on_route(opportunity.match_route),
       ).
       merge(MatchDecisionReasons::Base.ineligible_in_warehouse).
       select(:id)

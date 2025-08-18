@@ -4,8 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::AgeGreaterThanTwenty < Rule
-  def clients_that_fit(scope, requirement, opportunity) # rubocop:disable Lint/UnusedMethodArgument
+  def description
+    'Matches clients who are 20 years or older.'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
     if Client.column_names.include?(:date_of_birth.to_s) # rubocop:disable Style/GuardClause
       years_ago = Date.current - 20.years
       if requirement.positive

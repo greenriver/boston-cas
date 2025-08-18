@@ -776,7 +776,7 @@ class Client < ApplicationRecord
         type: 'Boolean',
       },
       mental_health_problem: {
-        title: 'Mental Health Disorder',
+        title: 'Mental Health Disability',
         description: nil,
         type: 'Boolean',
       },
@@ -1098,7 +1098,7 @@ class Client < ApplicationRecord
         type: 'Jsonb',
       },
       challenges: {
-        title: Translation.translate('Challenges for housing placment'),
+        title: Translation.translate('Challenges for housing placement'),
         description: nil,
         type: 'Jsonb',
       },

@@ -4,12 +4,16 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Rules::MajoritySheltered < Rule
-  def clients_that_fit(scope, requirement, opportunity)
-    if Client.column_names.include?(:majority_sheltered.to_s)
-      scope.where(majority_sheltered: requirement.positive)
-    else
-      raise RuleDatabaseStructureMissing.new("clients.majority_sheltered missing. Cannot check clients against #{self.class}.")
-    end
+  def description
+    'Matches clients whose most recent current living situation is sheltered. Only used in some installations'
+  end
+
+  def clients_that_fit(scope, requirement, _opportunity)
+    raise RuleDatabaseStructureMissing.new("clients.majority_sheltered missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:majority_sheltered.to_s)
+
+    scope.where(majority_sheltered: requirement.positive)
   end
 end
