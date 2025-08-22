@@ -22,13 +22,27 @@ module Admin
       # Handle search queries
       handle_search_query
 
-      # search
-      if params[:q].present?
-        @users = user_scope.text_search(params[:q])
-        @inactive_users = User.inactive.text_search(params[:q])
-      else
-        @users = user_scope
-        @inactive_users = User.inactive
+      filter_data
+    end
+
+    def search
+      @search_query = ClientSearchQuery.find(params[:id])
+      return handle_invalid_query('Search query not found') if @search_query.nil?
+
+      @search_query.touch
+
+      filter_data
+
+      render :index
+    end
+
+    private def filter_data
+      @users = user_scope
+      @inactive_users = User.inactive
+      if @search_query.present? && @search_query.query_params[:q].present?
+        @query = @search_query.query_params[:q] # for the search form
+        @users = @users.text_search(@search_query.query_params[:q])
+        @inactive_users = @inactive_users.text_search(@search_query.query_params[:q])
       end
 
       # sort / paginate
@@ -44,6 +58,12 @@ module Admin
       @closed_matches = Contact.where(user_id: user_ids).
         joins(:matches).merge(ClientOpportunityMatch.closed).
         group(:user_id).count
+    end
+
+    private def handle_invalid_query(message)
+      flash[:error] = message
+      redirect_to admin_users_path
+      return
     end
 
     def edit

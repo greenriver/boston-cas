@@ -179,7 +179,8 @@ Rails.application.routes.draw do
         post :stop_impersonating
       end
     end
-    resources :user_search_queries, only: [:show]
+    resources :user_search_queries, only: [:create]
+    get 'user_search_queries/:id', to: 'users#search', as: :user_search_query
     resources :agencies do
       post :move_user
     end
