@@ -19,6 +19,23 @@ class ClientsController < ApplicationController
 
   # GET /hmis/clients
   def index
+    # Handle search queries
+    handle_search_query
+    filter_data
+  end
+
+  def search
+    @search_query = ClientSearchQuery.find(params[:id])
+    return handle_invalid_query('Search query not found') if @search_query.nil?
+
+    @search_query.touch
+
+    filter_data
+
+    render :index
+  end
+
+  private def filter_data
     @show_vispdat = can_view_vspdats?
     @show_assessment = Client.where.not(assessment_score: 0).exists?
     sort_string = sorter
@@ -27,9 +44,8 @@ class ClientsController < ApplicationController
       m[:column] == @column && m[:direction] == @direction
     end.first[:title]
 
-    # Handle search queries
-    handle_search_query
     @search = search_setup(scope: :text_search)
+    @query = @search_string || @search_query&.query_params&.[](:q) # for the search form
     @clients = if @search_string.present?
       @search
     else
@@ -62,6 +78,18 @@ class ClientsController < ApplicationController
     @active_filter = params[:availability].present? || params[:veteran].present?
     @available_clients = @clients.available
     @unavailable_clients = @clients.unavailable
+  end
+
+  private def search_params
+    # Setup some instance variables for sorting
+    sorter
+    {
+      q: params[:q] || @search_query&.query_params&.[](:q),
+      availability: params[:availability],
+      veteran: params[:veteran],
+      sort: @column,
+      direction: @direction,
+    }.compact
   end
 
   private def search_scope
@@ -179,16 +207,18 @@ class ClientsController < ApplicationController
     not_authorized! unless Client.editable_by(current_user).exists?
   end
 
-  def handle_search_query
-    return unless params[:search_form].present? && params[:search_form][:q].present?
+  private def handle_search_query
+    return unless params[:q]&.strip.present?
 
-    permitted_params = ClientSearchQuery.permit_params(params[:search_form])
+    # When someone searches, capture the full context including filters
+    # Make sure we capture the current state from the page, not just URL params
+    permitted_params = ClientSearchQuery.permit_params(ActionController::Parameters.new(search_params))
     return unless permitted_params.present?
 
     @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
     return if @search_query.errors.any?
 
-    redirect_to client_search_query_path(@search_query) if request.get?
+    redirect_to search_path if request.get?
   rescue ActiveRecord::RecordInvalid
     # Handle validation errors gracefully
   end

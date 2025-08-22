@@ -32,9 +32,11 @@ Rails.application.routes.draw do
     resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
     resources :qualified_opportunities, only: [:index, :update]
   end
-  resources :client_search_queries, only: [:show]
+  resources :client_search_queries, only: [:create]
+  get 'client_search_queries/:id', to: 'clients#search', as: :client_search_query
   resources :unavailable_clients, only: [:index]
-  resources :unavailable_client_search_queries, only: [:show]
+  resources :unavailable_client_search_queries, only: [:create]
+  get 'unavailable_client_search_queries/:id', to: 'unavailable_clients#search', as: :unavailable_client_search_query
   resources :opportunities do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
@@ -273,7 +275,8 @@ Rails.application.routes.draw do
       patch :shelter_location
     end
   end
-  resources :deidentified_client_search_queries, only: [:show]
+  resources :deidentified_client_search_queries, only: [:create]
+  get 'deidentified_client_search_queries/:id', to: 'deidentified_clients#search', as: :deidentified_client_search_query
   resources :identified_clients do
     resources :non_hmis_assessments do
       patch :unlock, on: :member
@@ -283,9 +286,11 @@ Rails.application.routes.draw do
       patch :shelter_location
     end
   end
-  resources :identified_client_search_queries, only: [:show]
+  resources :identified_client_search_queries, only: [:create]
+  get 'identified_client_search_queries/:id', to: 'identified_clients#search', as: :identified_client_search_query
   resources :imported_clients
-  resources :imported_client_search_queries, only: [:show]
+  resources :imported_client_search_queries, only: [:create]
+  get 'imported_client_search_queries/:id', to: 'imported_clients#search', as: :imported_client_search_query
   resources :messages, only: [:show, :index] do
     collection do
       get :poll

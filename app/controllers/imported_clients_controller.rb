@@ -9,10 +9,12 @@
 class ImportedClientsController < NonHmisClientsController
   before_action :require_can_manage_imported_clients!
 
-  def index
-    # Handle search queries
-    handle_search_query
-    super
+  private def search_path
+    imported_client_search_query_path(@search_query)
+  end
+
+  private def non_hmis_client_index_path
+    imported_clients_path
   end
 
   def new
@@ -56,6 +58,10 @@ class ImportedClientsController < NonHmisClientsController
   def update
     @non_hmis_client.update(client_params)
     respond_with(@non_hmis_client, location: imported_clients_path)
+  end
+
+  def non_hmis_client_search_queries_path
+    imported_client_search_queries_path
   end
 
   def sort_options
@@ -109,19 +115,5 @@ class ImportedClientsController < NonHmisClientsController
 
   def assessment_type
     Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
-  end
-
-  def handle_search_query
-    return unless params[:search_form].present? && params[:search_form][:q].present?
-
-    permitted_params = ClientSearchQuery.permit_params(params[:search_form])
-    return unless permitted_params.present?
-
-    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
-    return if @search_query.errors.any?
-
-    redirect_to imported_client_search_query_path(@search_query) if request.get?
-  rescue ActiveRecord::RecordInvalid
-    # Handle validation errors gracefully
   end
 end

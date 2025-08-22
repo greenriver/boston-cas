@@ -6,72 +6,10 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class UnavailableClientsController < ClientsController
-  def index
-    @show_vispdat = can_view_vspdats?
-    @show_assessment = Client.where.not(assessment_score: 0).exists?
-    sort_string = sorter
-
-    @sorted_by = Client.sort_options(show_vispdat: @show_vispdat, show_assessment: @show_assessment).select do |m|
-      m[:column] == @column && m[:direction] == @direction
-    end.first[:title]
-
-    # Handle search queries
-    handle_search_query
-    @search = search_setup(scope: :text_search)
-
-    # Start with unavailable clients only
-    @clients = if @search_string.present?
-      @search.unavailable
-    else
-      client_scope.unavailable
-    end
-
-    # Filter
-    if params[:veteran].present?
-      if params[:veteran] == '1'
-        @clients = @clients.veteran
-      elsif params[:veteran] == '0'
-        @clients = @clients.non_veteran
-      end
-    end
-
-    # For unavailable clients, we still check the availability filter but it mainly affects the display
-    if params[:availability].present?
-      available_scope = Client.possible_availability_states.keys.detect { |m| m == params[:availability].to_sym }
-      available_scope ||= :all
-      @clients = @clients.public_send(available_scope) if available_scope != :unavailable
-    end
-
-    # paginate
-    @page = params[:page].presence || 1
-    @clients = @clients.reorder(sort_string).page(@page.to_i).per(25)
-
-    client_ids = @clients.map(&:id)
-
-    @matches = ClientOpportunityMatch.
-      group(:client_id).
-      where(client_id: client_ids).
-      count
-
-    @active_filter = params[:availability].present? || params[:veteran].present?
-    @available_clients = @clients.available
-    @unavailable_clients = @clients.unavailable
-  end
-
-  private
-
-  def handle_search_query
-    return unless params[:search_form].present? && params[:search_form][:q].present?
-
-    permitted_params = ClientSearchQuery.permit_params(params[:search_form])
-    return unless permitted_params.present?
-
-    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
-    return if @search_query.errors.any?
-
-    redirect_to unavailable_client_search_query_path(@search_query) if request.get?
-  rescue ActiveRecord::RecordInvalid
-    # Handle validation errors gracefully
+  def search_path
+    unavailable_client_search_query_path(@search_query)
   end
 end

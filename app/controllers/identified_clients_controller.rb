@@ -12,10 +12,12 @@ class IdentifiedClientsController < NonHmisClientsController
   before_action :require_match_access_context!, only: [:current_assessment_limited]
   before_action :require_can_manage_identified_clients!, only: [:destroy]
 
-  def index
-    # Handle search queries
-    handle_search_query
-    super
+  private def search_path
+    identified_client_search_query_path(@search_query)
+  end
+
+  private def non_hmis_client_index_path
+    identified_clients_path
   end
 
   def create
@@ -50,6 +52,10 @@ class IdentifiedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
+  def non_hmis_client_search_queries_path
+    identified_client_search_queries_path
+  end
+
   def assessment_type
     Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
   end
@@ -76,7 +82,7 @@ class IdentifiedClientsController < NonHmisClientsController
   helper_method :sort_options
 
   def filter_terms
-    [:agency, :cohort, :family_member, :available]
+    [:agency, :cohort, :family_member, :available, :assessment]
   end
   helper_method :filter_terms
 
@@ -200,19 +206,5 @@ class IdentifiedClientsController < NonHmisClientsController
 
   private def client_type
     Translation.translate('Identified Clients')
-  end
-
-  def handle_search_query
-    return unless params[:search_form].present? && params[:search_form][:q].present?
-
-    permitted_params = ClientSearchQuery.permit_params(params[:search_form])
-    return unless permitted_params.present?
-
-    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
-    return if @search_query.errors.any?
-
-    redirect_to identified_client_search_query_path(@search_query) if request.get?
-  rescue ActiveRecord::RecordInvalid
-    # Handle validation errors gracefully
   end
 end

@@ -10,8 +10,7 @@
     .o-filtration__header
       %h3.client__filter-header Filter clients
 
-    = form_tag(nil, method: "get", class: :jFilter) do
-      -# preserve sort and search for filtering
+    = form_tag(request.original_url, method: "get", class: :jFilter) do
       - if params[:sort]
         = hidden_field_tag :sort, params[:sort]
       - if params[:direction]
