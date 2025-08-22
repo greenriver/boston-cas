@@ -32,7 +32,9 @@ Rails.application.routes.draw do
     resources :client_notes, controller: 'client_notes', only: [:index, :destroy, :create]
     resources :qualified_opportunities, only: [:index, :update]
   end
+  resources :client_search_queries, only: [:show]
   resources :unavailable_clients, only: [:index]
+  resources :unavailable_client_search_queries, only: [:show]
   resources :opportunities do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
@@ -88,7 +90,9 @@ Rails.application.routes.draw do
   manage_matches
 
   resources :active_matches, only: :index
+  resources :active_match_search_queries, only: [:show]
   resources :closed_matches, only: :index
+  resources :closed_match_search_queries, only: [:show]
 
   # also temporary, for testing
   namespace :testing do
@@ -173,6 +177,7 @@ Rails.application.routes.draw do
         post :stop_impersonating
       end
     end
+    resources :user_search_queries, only: [:show]
     resources :agencies do
       post :move_user
     end
@@ -265,6 +270,7 @@ Rails.application.routes.draw do
       patch :shelter_location
     end
   end
+  resources :deidentified_client_search_queries, only: [:show]
   resources :identified_clients do
     resources :non_hmis_assessments do
       patch :unlock, on: :member
@@ -274,7 +280,9 @@ Rails.application.routes.draw do
       patch :shelter_location
     end
   end
+  resources :identified_client_search_queries, only: [:show]
   resources :imported_clients
+  resources :imported_client_search_queries, only: [:show]
   resources :messages, only: [:show, :index] do
     collection do
       get :poll

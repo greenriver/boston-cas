@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -9,6 +11,12 @@ class DeidentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_deidentified_clients!, except: [:current_assessment_limited]
   before_action :require_match_access_context!, only: [:current_assessment_limited]
   before_action :require_can_manage_deidentified_clients!, only: [:destroy]
+
+  def index
+    # Handle search queries
+    handle_search_query
+    super
+  end
 
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
@@ -249,5 +257,19 @@ class DeidentifiedClientsController < NonHmisClientsController
 
   private def client_type
     Translation.translate('De-Identified Clients')
+  end
+
+  def handle_search_query
+    return unless params[:search_form].present? && params[:search_form][:q].present?
+
+    permitted_params = ClientSearchQuery.permit_params(params[:search_form])
+    return unless permitted_params.present?
+
+    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
+    return if @search_query.errors.any?
+
+    redirect_to deidentified_client_search_query_path(@search_query) if request.get?
+  rescue ActiveRecord::RecordInvalid
+    # Handle validation errors gracefully
   end
 end

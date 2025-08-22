@@ -10,6 +10,20 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -375,6 +389,27 @@ CREATE SEQUENCE public.client_opportunity_matches_id_seq
 --
 
 ALTER SEQUENCE public.client_opportunity_matches_id_seq OWNED BY public.client_opportunity_matches.id;
+
+
+--
+-- Name: client_search_queries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.client_search_queries (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    created_by_id bigint NOT NULL,
+    params jsonb NOT NULL,
+    fingerprint character varying NOT NULL
+);
+
+
+--
+-- Name: COLUMN client_search_queries.fingerprint; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.client_search_queries.fingerprint IS 'hash of normalized search parameters used for deduplication and efficient query retrieval';
 
 
 --
@@ -4897,6 +4932,14 @@ ALTER TABLE ONLY public.client_opportunity_matches
 
 
 --
+-- Name: client_search_queries client_search_queries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.client_search_queries
+    ADD CONSTRAINT client_search_queries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: clients clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6724,6 +6767,13 @@ CREATE INDEX index_weighting_rules_on_route_id ON public.weighting_rules USING b
 
 
 --
+-- Name: uidx_client_search_queries; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uidx_client_search_queries ON public.client_search_queries USING btree (fingerprint);
+
+
+--
 -- Name: non_hmis_assessments non_hmis_assessments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6866,6 +6916,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250821213202'),
 ('20250716125401'),
 ('20250319145924'),
 ('20250208210918'),

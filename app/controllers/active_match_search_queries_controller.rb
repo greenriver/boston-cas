@@ -1,23 +1,45 @@
-# frozen_string_literal: true
-
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-class ActiveMatchesController < MatchListBaseController
-  before_action :set_available_routes
-  before_action :set_current_route
-  before_action :set_available_steps
-  before_action :set_sort_options
+# frozen_string_literal: true
 
-  helper_method :sort_column, :sort_direction
+class ActiveMatchSearchQueriesController < ActiveMatchesController
+  def show
+    @search_query = ClientSearchQuery.find(params[:id])
 
-  def index
-    # Handle search queries
-    handle_search_query
+    # If someone submits an empty search, redirect to main index with preserved filters
+    if params[:q] && params[:q].strip.blank?
+      # Use saved search query parameters as the baseline, excluding the empty search term
+      preserved_params = @search_query.query_params.except('q').merge(
+        params.permit(:current_route, :current_step, :current_program, :current_contact_type, :current_filter_contact, :sort, :direction).compact,
+      )
+      redirect_to active_matches_path(preserved_params)
+      return
+    end
 
+    # If there's a new search query in params, handle it
+    if search_params_present? && search_params_different?
+      handle_search_query
+      return if performed? # Stop if we redirected
+    end
+
+    # Use the saved search query parameters
+    @search_query.query_params.each do |key, value|
+      params[key] = value
+    end
+
+    # Trigger the before_action callbacks manually since we're overriding params
+    set_available_routes
+    set_current_route
+    set_sort_options
+
+    # Only set available steps if current route is valid
+    set_available_steps if @current_route.present?
+
+    # Call parent logic
     @match_state = :active_matches
     @show_vispdat = show_vispdat?
     @matches = match_scope
@@ -39,8 +61,10 @@ class ActiveMatchesController < MatchListBaseController
       joins(:client).
       order(sort_matches)
     @match_ids = @matches.pluck(:id)
-    @column = sort_column
-    @direction = sort_direction
+
+    # Ensure sorting parameters are properly set from saved query
+    @column = params[:sort] || sort_column
+    @direction = params[:direction] || sort_direction
     @active_filter = [@current_step, @current_program, @current_contact_type, @current_filter_contact].map(&:presence).any?
     @types = MatchRoutes::Base.match_steps
 
@@ -95,55 +119,32 @@ class ActiveMatchesController < MatchListBaseController
         ],
       ).
       to_a
-  end
 
-  private def match_scope
-    match_source.accessible_by_user(current_user).active.preload(:decisions)
-  end
-
-  private def set_heading
-    @heading = 'Matches in Progress'
-  end
-
-  def sort_column
-    available_sort = ClientOpportunityMatch.sort_options.map { |m| m[:column] }
-    @sort_column ||= available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
-  end
-
-  def sort_direction
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
+    render template: 'active_matches/index'
   end
 
   private
 
-  def handle_search_query
-    return unless search_params_present?
-
-    # When someone searches, capture the full context including filters
-    # Make sure we capture the current state from the page, not just URL params
-    search_params = {
-      q: params[:q],
-      current_route: @current_route_name,
-      current_step: params[:current_step],
-      current_program: params[:current_program],
-      current_contact_type: params[:current_contact_type],
-      current_filter_contact: params[:current_filter_contact],
-      sort: params[:sort] || sort_column,
-      direction: params[:direction] || sort_direction,
-    }.compact
-
-    permitted_params = ClientSearchQuery.permit_params(ActionController::Parameters.new(search_params))
-    return unless permitted_params.present?
-
-    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
-    return if @search_query.errors.any?
-
-    redirect_to active_match_search_query_path(@search_query) if request.get?
-  rescue ActiveRecord::RecordInvalid
-    # Handle validation errors gracefully
+  def filter_params
+    # Override to make the Clear button go to the active_matches index
+    super.merge(controller: 'active_matches', action: 'index')
   end
+  helper_method :filter_params
 
-  def search_params_present?
-    params[:q].present? && params[:q].strip.present?
+  def sort_column
+    # Use saved search query sort if available, otherwise fall back to parent
+    params[:sort] || super
+  end
+  helper_method :sort_column
+
+  def sort_direction
+    # Use saved search query direction if available, otherwise fall back to parent
+    params[:direction] || super
+  end
+  helper_method :sort_direction
+
+  def search_params_different?
+    # Only consider it different if there's a new search term
+    params[:q].present? && params[:q].strip.present? && params[:q] != @search_query.query_params[:q]
   end
 end

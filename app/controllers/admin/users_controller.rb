@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -17,6 +19,9 @@ module Admin
     helper_method :sort_column, :sort_direction
 
     def index
+      # Handle search queries
+      handle_search_query
+
       # search
       if params[:q].present?
         @users = user_scope.text_search(params[:q])
@@ -168,6 +173,22 @@ module Admin
 
     def set_user
       @user = user_scope.find params[:id].to_i
+    end
+
+    def handle_search_query
+      return unless params[:q].present?
+
+      search_params = ActionController::Parameters.new({ q: params[:q] })
+      permitted_params = ClientSearchQuery.permit_params(search_params)
+      return unless permitted_params.present?
+
+      @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
+      return if @search_query.errors.any?
+
+      # Redirect to the search query URL if this is a GET request
+      redirect_to admin_user_search_query_path(@search_query) if request.get?
+    rescue ActiveRecord::RecordInvalid
+      # Handle validation errors gracefully
     end
   end
 end

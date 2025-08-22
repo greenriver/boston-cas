@@ -1,6 +1,6 @@
 %ul.nav.nav-tabs
   -if can_edit_users?
-    %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_users_path))}
+    %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_users_path) || controller_name == 'user_search_queries')}
       = link_to 'Users', admin_users_path, class: 'nav-link'
     %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_roles_path))}
       = link_to 'Roles', admin_roles_path, class: 'nav-link'
