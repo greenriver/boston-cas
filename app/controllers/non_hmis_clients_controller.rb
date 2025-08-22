@@ -195,12 +195,12 @@ class NonHmisClientsController < ApplicationController
     if @column.blank?
       if pathways_enabled?
         if can_manage_identified_clients?
-          @column = 'non_hmis_clients.assessment_score'
+          @column = 'assessment_score'
         else
           @column = 'assessed_at'
         end
       else
-        @column = 'non_hmis_clients.days_homeless_in_the_last_three_years'
+        @column = 'days_homeless_in_the_last_three_years'
       end
       @direction = 'desc'
       sort_string = "#{@column} #{@direction}"

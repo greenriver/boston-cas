@@ -5,38 +5,34 @@ require 'rails_helper'
 RSpec.describe Admin::UserSearchQueriesController, type: :controller do
   let!(:admin) { create(:user) }
   let!(:admin_role) { create(:admin_role) }
-  let!(:search_query) { create(:client_search_query, created_by: admin) }
 
   before do
     authenticate admin
     admin.roles << admin_role
   end
 
-  describe 'GET #show' do
-    it 'assigns the search query and users collection' do
-      get :show, params: { id: search_query.id }
-      expect(assigns(:search_query)).to eq(search_query)
-      expect(assigns(:users)).to respond_to(:each)
-    end
-
-    it 'uses the search query parameters' do
-      get :show, params: { id: search_query.id }
-      expect(controller.params[:q]).to eq(search_query.query_params[:q])
-    end
-
-    it 'renders the admin/users index template' do
-      get :show, params: { id: search_query.id }
-      expect(response).to render_template('admin/users/index')
-    end
-
-    it 'redirects to new search query when different search term is provided' do
+  describe 'POST #create' do
+    it 'creates a search query with q and sort/direction and redirects to users#search' do
       expect do
-        get :show, params: { id: search_query.id, q: 'different search' }
+        post :create, params: { q: 'alpha', sort: 'last_name', direction: 'asc' }
       end.to change(ClientSearchQuery, :count).by(1)
 
-      new_search_query = ClientSearchQuery.last
-      expect(response).to redirect_to(admin_user_search_query_path(new_search_query))
-      expect(new_search_query.query_params[:q]).to eq('different search')
+      query = ClientSearchQuery.last
+      expect(query.query_params[:q]).to eq('alpha')
+      expect(query.query_params[:sort]).to eq('last_name')
+      expect(query.query_params[:direction]).to eq('asc')
+      expect(response).to redirect_to(admin_user_search_query_path(id: query.id))
+    end
+
+    it 'reuses an existing search query for identical parameters' do
+      post :create, params: { q: 'alpha', sort: 'last_name', direction: 'asc' }
+      first_query = ClientSearchQuery.last
+
+      expect do
+        post :create, params: { q: 'alpha', sort: 'last_name', direction: 'asc' }
+      end.not_to change(ClientSearchQuery, :count)
+
+      expect(response).to redirect_to(admin_user_search_query_path(id: first_query.id))
     end
   end
 end

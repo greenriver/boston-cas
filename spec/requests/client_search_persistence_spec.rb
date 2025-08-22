@@ -14,7 +14,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
   describe 'Client search persistence' do
     it 'creates a search query and redirects on search' do
       expect do
-        get clients_path, params: { search_form: { q: 'john doe' } }
+        post client_search_queries_path, params: { search_form: { q: 'john doe' } }
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
@@ -31,7 +31,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
   describe 'Deidentified client search persistence' do
     it 'creates a search query and redirects on search' do
       expect do
-        get deidentified_clients_path, params: { search_form: { q: 'jane doe' } }
+        post deidentified_client_search_queries_path, params: { search_form: { q: 'jane doe' } }
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
@@ -48,7 +48,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
   describe 'Identified client search persistence' do
     it 'creates a search query and redirects on search' do
       expect do
-        get identified_clients_path, params: { search_form: { q: 'bob smith' } }
+        post identified_client_search_queries_path, params: { search_form: { q: 'bob smith' } }
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
@@ -82,7 +82,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
   describe 'Unavailable client search persistence' do
     it 'creates a search query and redirects on search' do
       expect do
-        get unavailable_clients_path, params: { search_form: { q: 'unavailable client' } }
+        post unavailable_client_search_queries_path, params: { search_form: { q: 'unavailable client' } }
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
@@ -99,12 +99,12 @@ RSpec.describe 'Client Search Persistence', type: :request do
   describe 'Search query reuse' do
     it 'reuses existing search query for identical searches' do
       # First search
-      get clients_path, params: { search_form: { q: 'john doe' } }
+      post client_search_queries_path, params: { search_form: { q: 'john doe' } }
       first_query = ClientSearchQuery.last
 
       # Second identical search should reuse the same query
       expect do
-        get clients_path, params: { search_form: { q: 'john doe' } }
+        post client_search_queries_path, params: { search_form: { q: 'john doe' } }
       end.not_to change(ClientSearchQuery, :count)
 
       expect(response).to redirect_to(client_search_query_path(first_query))
