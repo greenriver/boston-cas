@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class MatchListBaseController < ApplicationController
   include NotifierConfig
   before_action :authenticate_user!
@@ -17,21 +19,57 @@ class MatchListBaseController < ApplicationController
   end
 
   def index
-    # search
-    @matches = if params[:q].present?
-      match_scope.text_search(params[:q])
-    else
-      match_scope
-    end
+    # Handle search queries
+    handle_search_query
+    filter_data
+  end
 
-    @matches = @matches.
-      references(:client).
-      includes(:client).
-      order(sort_opportunities).
-      preload(:client, :opportunity, :decisions).
-      page(params[:page]).per(25)
-    @match_ids = @matches.pluck(:id)
-    @show_vispdat = show_vispdat?
+  def search
+    @search_query = ClientSearchQuery.find(params[:id])
+    return handle_invalid_query('Search query not found') if @search_query.nil?
+
+    @search_query.touch
+
+    filter_data
+
+    render :index
+  end
+
+  private def handle_search_query
+    return unless search_params_present?
+
+    # When someone searches, capture the full context including filters
+    # Make sure we capture the current state from the page, not just URL params
+    search_params = {
+      q: params[:q],
+      current_route: @current_route_name,
+      current_step: params[:current_step],
+      current_program: params[:current_program],
+      current_contact_type: params[:current_contact_type],
+      current_filter_contact: params[:current_filter_contact],
+      sort: params[:sort] || sort_column,
+      direction: params[:direction] || sort_direction,
+    }.compact
+
+    permitted_params = ClientSearchQuery.permit_params(ActionController::Parameters.new(search_params))
+    return unless permitted_params.present?
+
+    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
+    return if @search_query.errors.any?
+
+    redirect_to search_path if request.get?
+  rescue ActiveRecord::RecordInvalid
+    # Handle validation errors gracefully
+  end
+
+  private def handle_invalid_query(message)
+    flash[:error] = message
+    redirect_to match_list_path
+    return
+  end
+
+  def search_params_present?
+    params[:q].present? && params[:q].strip.present?
   end
 
   private def sort_opportunities
@@ -226,7 +264,7 @@ class MatchListBaseController < ApplicationController
     # end
 
     contact.client_opportunity_match_contacts.joins(:match).map(&:match).map do |m|
-      m.id if m.try(:show_client_info_to?, contact) || false # rubocop:disable Lint/LiteralAsCondition
+      m.id if m.try(:show_client_info_to?, contact) || false
     end.compact
   end
 

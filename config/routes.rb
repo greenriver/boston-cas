@@ -90,9 +90,11 @@ Rails.application.routes.draw do
   manage_matches
 
   resources :active_matches, only: :index
-  resources :active_match_search_queries, only: [:show]
+  resources :active_match_search_queries, only: [:create]
+  get 'active_match_search_queries/:id', to: 'active_matches#search', as: :active_match_search_query
   resources :closed_matches, only: :index
-  resources :closed_match_search_queries, only: [:show]
+  resources :closed_match_search_queries, only: [:create]
+  get 'closed_match_search_queries/:id', to: 'closed_matches#search', as: :closed_match_search_query
 
   # also temporary, for testing
   namespace :testing do

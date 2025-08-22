@@ -11,7 +11,7 @@ class ClientSearchQuery < ApplicationRecord
 
   MAX_STRING_LENGTH = 100
   ALLOWED_PARAMS = ['q', 'client', 'current_route', 'current_step', 'current_program', 'current_contact_type', 'current_filter_contact', 'sort', 'direction'].freeze
-  ALLOWED_CLIENT_PARAMS = ['first_name', 'last_name', 'dob', 'ssn'].freeze
+  ALLOWED_CLIENT_PARAMS = ['first_name', 'last_name', 'dob', 'ssn', 'email'].freeze
 
   validate :validate_params
 

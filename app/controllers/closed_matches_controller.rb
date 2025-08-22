@@ -13,10 +13,15 @@ class ClosedMatchesController < MatchListBaseController
   before_action :set_available_steps
   before_action :set_sort_options
 
-  def index
-    # Handle search queries
-    handle_search_query
+  private def match_list_path
+    closed_matches_path
+  end
 
+  private def search_path
+    closed_match_search_query_path(@search_query)
+  end
+
+  private def filter_data
     @match_state = :closed_matches
     @show_vispdat = show_vispdat?
     @matches = match_scope
@@ -32,7 +37,8 @@ class ClosedMatchesController < MatchListBaseController
     @matches = filter_by_route(@current_route, @matches)
     @matches = filter_by_program(@current_program, @matches)
     @matches = filter_by_contact(@current_filter_contact, @current_contact_type, @matches)
-    @search_string = params[:q]
+    @search_string = @search_query&.query_params.try(:[], :q)
+    @query = @search_string # for the search form
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
       joins(:client).
@@ -100,12 +106,6 @@ class ClosedMatchesController < MatchListBaseController
     @heading = 'Closed Matches'
   end
 
-  # TODO: remove this, there was a duplicate method, leaving as of 11/13/2022
-  # until we've confirmed it was unnecessary
-  # private def match_scope
-  #   match_source.accessible_by_user(current_user).closed
-  # end
-
   private def sort_column
     available_sort = ClientOpportunityMatch.sort_options.map { |m| m[:column] }
     available_sort.include?(params[:sort]) ? params[:sort] : 'last_decision'
@@ -113,36 +113,5 @@ class ClosedMatchesController < MatchListBaseController
 
   private def sort_direction
     ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
-  end
-
-  def handle_search_query
-    return unless search_params_present?
-
-    # When someone searches, capture the full context including filters
-    # Make sure we capture the current state from the page, not just URL params
-    search_params = {
-      q: params[:q],
-      current_route: @current_route_name,
-      current_step: params[:current_step],
-      current_program: params[:current_program],
-      current_contact_type: params[:current_contact_type],
-      current_filter_contact: params[:current_filter_contact],
-      sort: params[:sort] || sort_column,
-      direction: params[:direction] || sort_direction,
-    }.compact
-
-    permitted_params = ClientSearchQuery.permit_params(ActionController::Parameters.new(search_params))
-    return unless permitted_params.present?
-
-    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
-    return if @search_query.errors.any?
-
-    redirect_to closed_match_search_query_path(@search_query) if request.get?
-  rescue ActiveRecord::RecordInvalid
-    # Handle validation errors gracefully
-  end
-
-  def search_params_present?
-    params[:q].present? && params[:q].strip.present?
   end
 end
