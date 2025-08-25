@@ -95,6 +95,6 @@ jobs:
           FQDN: openpath.host
           PORT: 80
         run: |
-          bundle exec rspec spec/controllers/closed_matches_controller_search_spec.rb
-          # bundle exec rspec spec/controllers/active_matches_controller_search_spec.rb
+          bundle exec rspec spec/requests/closed_matches_search_spec.rb --format documentation
+          # bundle exec rspec spec/requests/active_matches_search_spec.rb --format documentation
           # bundle exec rspec
