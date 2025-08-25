@@ -25,7 +25,6 @@ RSpec.describe ClosedMatchesController, type: :controller do
   describe 'GET #search' do
     it 'assigns the search query' do
       authenticate admin
-      @controller = ClosedMatchesController.new
       get :search, params: { id: search_query.id }
       expect(assigns(:search_query)).to eq(search_query)
     end
