@@ -18,28 +18,31 @@ RSpec.describe ClosedMatchesController, type: :controller do
   let!(:closed_match_2) { create(:unsuccessful_client_opportunity_match, client: client2, opportunity: opportunity2) }
 
   before do
-    authenticate admin
     admin.roles << admin_role
     allow(MatchRoutes::Base).to receive(:filterable_routes).and_return({ 'Default' => 'MatchRoutes::Default' })
   end
 
   describe 'GET #search' do
     it 'assigns the search query' do
+      authenticate admin
       get :search, params: { id: search_query.id }
       expect(assigns(:search_query)).to eq(search_query)
     end
 
     it 'uses the search query parameters' do
+      authenticate admin
       get :search, params: { id: search_query.id }
       expect(assigns(:search_query).query_params).to eq(search_query.params.with_indifferent_access)
     end
 
     it 'renders the closed_matches index template' do
+      authenticate admin
       get :search, params: { id: search_query.id }
       expect(response).to render_template('closed_matches/index')
     end
 
     it 'does not redirect when only filter parameters change' do
+      authenticate admin
       expect do
         get :search, params: { id: search_query.id, current_route: 'MatchRoutes::Default' }
       end.not_to change(ClientSearchQuery, :count)
@@ -48,6 +51,7 @@ RSpec.describe ClosedMatchesController, type: :controller do
     end
 
     it 'applies sort parameters from params and shows the opportunities' do
+      authenticate admin
       allow(MatchRoutes::Base).to receive(:filterable_routes).and_return({ 'Default' => 'MatchRoutes::Default' })
       get :search, params: { id: search_query.id, sort: 'last_decision', direction: 'asc' }
       expect(response.body).to include(opportunity1.voucher.sub_program.program.name)
@@ -55,6 +59,7 @@ RSpec.describe ClosedMatchesController, type: :controller do
     end
 
     it 'accepts step, program, and contact filters without creating a new search query and shows filtered results' do
+      authenticate admin
       expect do
         get :search, params: { id: search_query.id, current_step: 'some_step', current_program: program.id, current_contact_type: 'hsp_contacts' }
       end.not_to change(ClientSearchQuery, :count)
