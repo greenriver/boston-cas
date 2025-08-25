@@ -3,14 +3,20 @@
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
-#
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe OpportunityMatchesController, type: :request do
   let!(:contact) { create :macbeth }
   let!(:user) { create :user, contact: contact }
   let!(:prioritization_scheme) { create :priority_days_homeless }
-  let!(:route) { create :default_route, match_prioritization: prioritization_scheme }
+  let!(:route) do
+    route = MatchRoutes::Default.first
+    route.update(match_prioritization: prioritization_scheme)
+    route
+  end
   let!(:match) { create :client_opportunity_match, active: false, match_route: route }
   let!(:project_client) { create :project_client, client_id: match.client.id }
   let!(:role) { create :role, can_see_alternate_matches: true, can_edit_assigned_programs: false, can_activate_matches: false, can_view_assigned_programs: true }
