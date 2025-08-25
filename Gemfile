@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord-import'
 gem 'rack'
 gem 'pg', '~> 1.1'
-gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 7.1.5.2'
 gem 'sprockets-rails'
 gem 'rails-html-sanitizer'
 gem 'loofah'
@@ -81,7 +81,7 @@ gem 'redis'
 gem 'activerecord-session_store'
 gem 'lograge'
 gem 'logstop'
-gem 'paper_trail'#, '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
+gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
@@ -156,7 +156,7 @@ group :development do
 
   gem 'rack-mini-profiler', require: false
 
-  #gem 'letter_opener'
+  # gem 'letter_opener'
   # gem 'rails-erd'
   gem 'ruby-prof'
   gem 'web-console'
