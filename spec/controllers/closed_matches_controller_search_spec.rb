@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe ClosedMatchesController, type: :controller do
+  # Ensure routes exist before running tests
+  MatchRoutes::Base.ensure_all
+  MatchPrioritization::Base.ensure_all
+
   render_views
   let!(:admin) { create(:user) }
   let!(:admin_role) { create(:admin_role) }
