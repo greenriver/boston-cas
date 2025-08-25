@@ -18,6 +18,7 @@ RSpec.describe ClosedMatchesController, type: :controller do
   let!(:closed_match_2) { create(:unsuccessful_client_opportunity_match, client: client2, opportunity: opportunity2) }
 
   before do
+    allow_any_instance_of(ClosedMatchesController).to receive(:setup_notifier)
     admin.roles << admin_role
     allow(MatchRoutes::Base).to receive(:filterable_routes).and_return({ 'Default' => 'MatchRoutes::Default' })
   end

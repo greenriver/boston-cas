@@ -8,6 +8,7 @@ RSpec.describe ActiveMatchesController, type: :controller do
   let!(:search_query) { create(:client_search_query, created_by: admin) }
 
   before do
+    allow_any_instance_of(ActiveMatchesController).to receive(:setup_notifier)
     admin.roles << admin_role
     allow(MatchRoutes::Base).to receive(:filterable_routes).and_return({ 'Default' => 'MatchRoutes::Default' })
   end
