@@ -33,26 +33,26 @@ RSpec.describe ClosedMatchesController, type: :controller do
   describe 'GET #search' do
     it 'assigns the search query' do
       authenticate admin
-      get :search, params: { id: search_query.id }
+      get closed_match_search_query_path, params: { id: search_query.id }
       expect(assigns(:search_query)).to eq(search_query)
     end
 
     it 'uses the search query parameters' do
       authenticate admin
-      get :search, params: { id: search_query.id }
+      get closed_match_search_query_path, params: { id: search_query.id }
       expect(assigns(:search_query).query_params).to eq(search_query.params.with_indifferent_access)
     end
 
     it 'renders the closed_matches index template' do
       authenticate admin
-      get :search, params: { id: search_query.id }
+      get closed_match_search_query_path, params: { id: search_query.id }
       expect(response).to render_template('closed_matches/index')
     end
 
     it 'does not redirect when only filter parameters change' do
       authenticate admin
       expect do
-        get :search, params: { id: search_query.id, current_route: 'MatchRoutes::Default' }
+        get closed_match_search_query_path, params: { id: search_query.id, current_route: 'MatchRoutes::Default' }
       end.not_to change(ClientSearchQuery, :count)
 
       expect(response).to render_template('closed_matches/index')
@@ -61,7 +61,7 @@ RSpec.describe ClosedMatchesController, type: :controller do
     it 'applies sort parameters from params and shows the opportunities' do
       authenticate admin
       allow(MatchRoutes::Base).to receive(:filterable_routes).and_return({ 'Default' => 'MatchRoutes::Default' })
-      get :search, params: { id: search_query.id, sort: 'last_decision', direction: 'asc' }
+      get closed_match_search_query_path, params: { id: search_query.id, sort: 'last_decision', direction: 'asc' }
       expect(response.body).to include(opportunity1.voucher.sub_program.program.name)
       expect(response.body).to include(opportunity2.voucher.sub_program.program.name)
     end
@@ -69,7 +69,7 @@ RSpec.describe ClosedMatchesController, type: :controller do
     it 'accepts step, program, and contact filters without creating a new search query and shows filtered results' do
       authenticate admin
       expect do
-        get :search, params: { id: search_query.id, current_step: 'some_step', current_program: program.id, current_contact_type: 'hsp_contacts' }
+        get closed_match_search_query_path, params: { id: search_query.id, current_step: 'some_step', current_program: program.id, current_contact_type: 'hsp_contacts' }
       end.not_to change(ClientSearchQuery, :count)
       expect(response.body).to include('Closed Matches')
       # Page should still show opportunities content under these filters
