@@ -15,8 +15,8 @@ RSpec.describe ClosedMatchesController, type: :controller do
   let!(:opportunity1) { create(:opportunity, voucher: voucher1) }
   let!(:opportunity2) { create(:opportunity, voucher: voucher2) }
 
-  # Create a route first, then use it in the matches
-  let!(:match_route) { create(:default_route) }
+  # Use existing route like the successful integration tests do
+  let!(:match_route) { MatchRoutes::Default.first }
   let!(:closed_match_1) { create(:client_opportunity_match, client: client1, opportunity: opportunity1, match_route: match_route, closed: true, active: false) }
   let!(:closed_match_2) { create(:client_opportunity_match, client: client2, opportunity: opportunity2, match_route: match_route, closed: true, active: false) }
 
