@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 class CreateClientSearchQueries < ActiveRecord::Migration[7.1]
   def change
     enable_extension 'pgcrypto' unless extension_enabled?('pgcrypto')

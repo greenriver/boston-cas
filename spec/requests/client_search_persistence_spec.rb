@@ -5,6 +5,9 @@ require 'rails_helper'
 RSpec.describe 'Client Search Persistence', type: :request do
   let!(:admin) { create(:user) }
   let!(:admin_role) { create(:admin_role) }
+  let!(:client) { create(:client) }
+  let!(:identified_client) { create(:identified_client) }
+  let!(:deidentified_client) { create(:deidentified_client) }
 
   before do
     sign_in admin

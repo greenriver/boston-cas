@@ -84,7 +84,7 @@
       "warning_code": 122,
       "fingerprint": "21ab0fe00fdd5899ffc405cff75aadb91b805ee996a614f7e27b08a287e9062d",
       "check_name": "EOLRails",
-      "message": "Support for Rails 7.1.5.1 ends on 2025-10-01",
+      "message": "Support for Rails 7.1.5.2 ends on 2025-10-01",
       "file": "Gemfile.lock",
       "line": 1114,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
@@ -95,6 +95,29 @@
       "confidence": "Weak",
       "cwe_id": [
         1104
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "HTTP Verb Confusion",
+      "warning_code": 118,
+      "fingerprint": "25ef7f1c0d440c7c6b0d988955133bb57ce4595559d9d0803b25ba27e8c0450f",
+      "check_name": "VerbConfusion",
+      "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
+      "file": "app/controllers/clients_controller.rb",
+      "line": 221,
+      "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
+      "code": "redirect_to(search_path) if request.get?",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ClientsController",
+        "method": "handle_search_query"
+      },
+      "user_input": "request.get?",
+      "confidence": "Weak",
+      "cwe_id": [
+        352
       ],
       "note": ""
     },
@@ -152,6 +175,29 @@
       "confidence": "Medium",
       "cwe_id": [
         79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "HTTP Verb Confusion",
+      "warning_code": 118,
+      "fingerprint": "38d368ccc518acfc96f071ee1161f9cf2f98f29feb47ed0525c139c13f629315",
+      "check_name": "VerbConfusion",
+      "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
+      "file": "app/controllers/admin/users_controller.rb",
+      "line": 209,
+      "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
+      "code": "if request.get? then\n  redirect_to(admin_user_search_query_path(ClientSearchQuery.find_or_create_by_params(ClientSearchQuery.permit_params(ActionController::Parameters.new(:q => params[:q])), :user => current_user)))\nend",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::UsersController",
+        "method": "handle_search_query"
+      },
+      "user_input": "request.get?",
+      "confidence": "Weak",
+      "cwe_id": [
+        352
       ],
       "note": ""
     },
@@ -472,6 +518,29 @@
       "note": "We're just injecting the git revision."
     },
     {
+      "warning_type": "HTTP Verb Confusion",
+      "warning_code": 118,
+      "fingerprint": "951b8790bc493517491c84421b52815f02ad4805badf59d74f73b6592273ab1b",
+      "check_name": "VerbConfusion",
+      "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
+      "file": "app/controllers/non_hmis_clients_controller.rb",
+      "line": 51,
+      "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
+      "code": "redirect_to(search_path) if request.get?",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "NonHmisClientsController",
+        "method": "handle_search_query"
+      },
+      "user_input": "request.get?",
+      "confidence": "Weak",
+      "cwe_id": [
+        352
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "aa40ebbd05a2cdc706d57a2f8e6b85f802a97a5319aa8417ca850ebe851e84fd",
@@ -714,6 +783,29 @@
       "confidence": "Weak",
       "cwe_id": [
         22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "HTTP Verb Confusion",
+      "warning_code": 118,
+      "fingerprint": "d209ea56f73594c18b3adcd6cac968ec22094e1a64edf448c02e4f77ba0c802e",
+      "check_name": "VerbConfusion",
+      "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
+      "file": "app/controllers/match_list_base_controller.rb",
+      "line": 60,
+      "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
+      "code": "redirect_to(search_path) if request.get?",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MatchListBaseController",
+        "method": "handle_search_query"
+      },
+      "user_input": "request.get?",
+      "confidence": "Weak",
+      "cwe_id": [
+        352
       ],
       "note": ""
     },
