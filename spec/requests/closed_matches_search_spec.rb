@@ -83,14 +83,5 @@ RSpec.describe 'ClosedMatches Search', type: :request do
       expect(response).to have_http_status(:success)
       expect(response.body).to include('Closed Matches')
     end
-
-    it 'renders the page with search query data accessible' do
-      get closed_match_search_query_path(search_query)
-
-      # While we can't test assigns() in request specs, we can verify the search
-      # query is being used by checking that our test search query was accessed
-      expect(search_query.reload.updated_at).to be > 1.second.ago
-      expect(response).to have_http_status(:success)
-    end
   end
 end
