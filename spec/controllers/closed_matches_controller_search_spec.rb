@@ -19,6 +19,7 @@ RSpec.describe ClosedMatchesController, type: :controller do
 
   before do
     allow_any_instance_of(ClosedMatchesController).to receive(:setup_notifier)
+    authenticate admin
     admin.roles << admin_role
     allow(MatchRoutes::Base).to receive(:filterable_routes).and_return({ 'Default' => 'MatchRoutes::Default' })
   end
