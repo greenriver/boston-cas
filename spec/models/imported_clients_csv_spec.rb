@@ -38,7 +38,7 @@ RSpec.describe ImportedClientsCsv, type: :model do
   end
 
   def read file
-    content = File.read('spec/fixtures/imported_clients_csv/' + file)
+    content = File.read("spec/fixtures/imported_clients_csv/#{file}")
     ImportedClientsCsv.new(content: content)
   end
 end

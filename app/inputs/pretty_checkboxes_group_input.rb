@@ -18,7 +18,7 @@ class PrettyCheckboxesGroupInput < SimpleForm::Inputs::CollectionCheckBoxesInput
 
       collection.each do |label, value, _|
         checked = current_value && value.in?(current_value)
-        id = name.to_s.parameterize + '_' + value.to_s
+        id = "#{name.to_s.parameterize}_#{value.to_s}"
         label_text_el = template.content_tag(:span, label, class: 'c-checkbox__label')
         checkbox_classes = ['c-checkbox', 'mb-1']
         template.concat(

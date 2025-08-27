@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ClientContactsController < ApplicationController
   include AjaxModalRails::Controller
 
@@ -16,14 +18,14 @@ class ClientContactsController < ApplicationController
 
   def update
     saved = @client_contacts.update(client_contacts_params)
-    unless request.xhr?
-      if saved
-        flash[:notice] = 'Default Client Contacts updated'
-        redirect_to client_path(@client)
-      else
-        flash[:error] = 'Please review the form problems below.'
-        redirect_to :edit
-      end
+    return if request.xhr?
+
+    if saved
+      flash[:notice] = 'Default Client Contacts updated'
+      redirect_to client_path(@client)
+    else
+      flash[:error] = 'Please review the form problems below.'
+      redirect_to :edit
     end
   end
 
@@ -44,13 +46,13 @@ class ClientContactsController < ApplicationController
   def client_contacts_params
     base_params = params[:client_contacts] || ActionController::Parameters.new
     base_params.permit(
-        shelter_agency_contact_ids: [],
-        housing_subsidy_admin_contact_ids: [],
-        dnd_staff_contact_ids: [],
-        regular_contact_ids: [],
-        ssp_contact_ids: [],
-        hsp_contact_ids: [],
-        do_contact_ids: []
+      shelter_agency_contact_ids: [],
+      housing_subsidy_admin_contact_ids: [],
+      dnd_staff_contact_ids: [],
+      regular_contact_ids: [],
+      ssp_contact_ids: [],
+      hsp_contact_ids: [],
+      do_contact_ids: [],
     ).tap do |result|
       result[:shelter_agency_contact_ids] = result[:shelter_agency_contact_ids]&.map(&:to_i) || []
       result[:regular_contact_ids] = result[:regular_contact_ids]&.map(&:to_i) || []
@@ -62,23 +64,20 @@ class ClientContactsController < ApplicationController
     end
   end
 
-  private
+  def contact_owner_source
+    Client
+  end
 
-    def contact_owner_source
-      Client
-    end
+  def contact_join_model_source
+    @contact_owner.client_contacts
+  end
 
-    def contact_join_model_source
-      @contact_owner.client_contacts
-    end
+  def join_model_class
+    ClientContact
+  end
 
-    def join_model_class
-      ClientContact
-    end
-
-    def hsa_can_edit_contacts?
-      false
-    end
-    helper_method :hsa_can_edit_contacts?
-
+  def hsa_can_edit_contacts?
+    false
+  end
+  helper_method :hsa_can_edit_contacts?
 end

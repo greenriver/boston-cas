@@ -95,7 +95,7 @@ class NonHmisClient < ApplicationRecord
   def current_assessment
     @current_assessment ||= begin
       a_t = NonHmisAssessment.arel_table
-      sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST, ' + a_t[:updated_at].desc.to_sql)
+      sort_string = Arel.sql("#{a_t[:entry_date].desc.to_sql} NULLS LAST, #{a_t[:updated_at].desc.to_sql}")
       NonHmisAssessment.where(non_hmis_client_id: id).
         order(sort_string).first ||
         client_assessments.build
@@ -497,7 +497,7 @@ class NonHmisClient < ApplicationRecord
 
   def self.current_assessments_for(client_ids)
     a_t = NonHmisAssessment.arel_table
-    sort_string = Arel.sql(a_t[:entry_date].desc.to_sql + ' NULLS LAST, ' + a_t[:updated_at].desc.to_sql)
+    sort_string = Arel.sql("#{a_t[:entry_date].desc.to_sql} NULLS LAST, #{a_t[:updated_at].desc.to_sql}")
     NonHmisAssessment.one_for_column(
       order_clause: sort_string,
       source_arel_table: NonHmisAssessment.arel_table,

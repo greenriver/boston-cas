@@ -25,7 +25,7 @@ class PrettyBooleanGroupInput < SimpleForm::Inputs::CollectionRadioButtonsInput
           checked = value == current_value
           tag_name = :radio_button_tag
         end
-        id = name.to_s.parameterize + '_' + value.to_s
+        id = "#{name.to_s.parameterize}_#{value.to_s}"
         label_text_el = template.content_tag(:span, label, class: 'c-checkbox__label')
         checkbox_classes = ['c-checkbox', 'mb-1']
         checkbox_classes << 'c-checkbox--round' unless input_html_options[:multiple]
