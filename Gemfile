@@ -49,9 +49,6 @@ gem 'memery', require: false
 gem 'todo_or_die'
 
 # File processing
-gem 'carrierwave', '>= 2.2.5' # CVE-2023-49090
-gem 'carrierwave-i18n'
-gem 'mini_magick'
 gem 'ruby-filemagic'
 
 # AWS SDK is needed for deployment and within the application
@@ -81,7 +78,7 @@ gem 'redis'
 gem 'activerecord-session_store'
 gem 'lograge'
 gem 'logstop'
-gem 'paper_trail'#, '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
+gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
@@ -156,7 +153,7 @@ group :development do
 
   gem 'rack-mini-profiler', require: false
 
-  #gem 'letter_opener'
+  # gem 'letter_opener'
   # gem 'rails-erd'
   gem 'ruby-prof'
   gem 'web-console'
