@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::CspechEligible < Rule
   def description
     "Matches clients who are #{Translation.translate('CSPECH Eligible')}. This rule is not currently receiving new data."

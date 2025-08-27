@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::EnrolledInRrh < Rule
   def description
     'Matches clients who are enrolled in a RRH project (project type 13) with a move-in date in the past.'

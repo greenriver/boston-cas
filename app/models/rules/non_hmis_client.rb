@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::NonHmisClient < Rule
   def description
     'Matches clients who were entered directly in CAS as non-HMIS clients.'

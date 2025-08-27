@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::VispdatScoreThreeOrLess < Rule
   def description
     'Matches clients who have a VISPDAT score of 3 or less as indicated on an assessment.'

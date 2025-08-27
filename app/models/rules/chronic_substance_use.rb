@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::ChronicSubstanceUse < Rule
   def description
     'Matches clients whose most recent HUD disability response indicates they have a substance use disorder.'

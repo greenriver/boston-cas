@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Warehouse::Analytics::CasUser < ::Warehouse::Base
   self.table_name = 'cas_analytics_cas_users'
   def self.sync!

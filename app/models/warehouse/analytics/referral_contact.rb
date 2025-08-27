@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Warehouse::Analytics::ReferralContact < ::Warehouse::Base
   self.table_name = 'cas_analytics_referral_contacts'
   def self.sync!

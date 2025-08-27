@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::IncomeMaximum < Rule
   def description
     'Matches clients who have at most the maximum income as indicated on a HUD assessment. Or other assessment as configured in the warehouse.'

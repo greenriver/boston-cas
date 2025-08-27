@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class ImportedClientsController < NonHmisClientsController
   before_action :require_can_manage_imported_clients!
 

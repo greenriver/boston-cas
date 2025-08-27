@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::VaEligible < Rule
   def description
     'Matches clients who are VA eligible. No longer in use.'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::ActiveInCohort < Rule
   def description
     'Matches clients who are present in a cohort in the warehouse and have intentional contacts within the designated time period.  Non-HMIS clients must be assigned cohorts manually.'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::Asylee < Rule
   def description
     'Matches clients who are are seeking asylum. This rule is not currently receiving new data.'

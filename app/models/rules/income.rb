@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::Income < Rule
   def description
     'Matches clients who have an income as indicated on a HUD assessment.'

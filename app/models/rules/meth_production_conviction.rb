@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::MethProductionConviction < Rule
   def description
     'Matches clients who have been convicted of meth production as indicated on an assessment.'

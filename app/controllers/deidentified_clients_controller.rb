@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class DeidentifiedClientsController < NonHmisClientsController
   include HasMatchAccessContext
   before_action :require_can_enter_deidentified_clients!, except: [:current_assessment_limited]

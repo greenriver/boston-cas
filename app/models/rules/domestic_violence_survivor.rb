@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::DomesticViolenceSurvivor < Rule
   def description
     'Matches clients who have indicated they are a domestic violence survivor on an assessment or via a HUD assessment within the chosen time period as defined in the warehouse configuration. Non-HMIS clients are marked as survivors if they have indicated they are currently fleeing, interested in DV RRH, or deidentified.'

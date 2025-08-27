@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::ProviderOnly
   class HsaAcceptsClient < ::MatchDecisions::Base
     def to_partial_path

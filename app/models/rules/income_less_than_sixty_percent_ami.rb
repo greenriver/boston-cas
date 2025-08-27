@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::IncomeLessThanSixtyPercentAmi < Rule
   def description
     'Matches clients who have an income less than 60% of the AMI. NOTE: AMI is set on the site configuration page.'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::BedroomExact < Rule
   def description
     'Matches clients who require the exact number of bedrooms specified in "Minimum number of bedrooms required" as indicated on an assessment.'

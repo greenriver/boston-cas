@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::WillingToWorkFullTime < Rule
   def description
     "Matches clients who are #{Translation.translate('Willing to work full-time').downcase} as indicated on an assessment."

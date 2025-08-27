@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::DrugTest < Rule
   def description
     'Matches clients who can pass a drug test as indicated on an assessment.'

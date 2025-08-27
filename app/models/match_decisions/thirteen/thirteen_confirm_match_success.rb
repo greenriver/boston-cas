@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Thirteen
   class ThirteenConfirmMatchSuccess < Base
     include MatchDecisions::RouteEightCancelReasons

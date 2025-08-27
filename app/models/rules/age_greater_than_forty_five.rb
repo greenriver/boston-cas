@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::AgeGreaterThanFortyFive < Rule
   def description
     'Matches clients who are 45 years or older.'

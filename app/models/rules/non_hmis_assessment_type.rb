@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::NonHmisAssessmentType < Rule
   def description
     'Matches clients whose most recent non-HMIS assessment is of the specified types.'

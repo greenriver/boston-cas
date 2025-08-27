@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::OneEightyDaysHomelessLastThreeYears < Rule
   def description
     'Matches clients who have been homeless for 180 days or more in the last three years.'

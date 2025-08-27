@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::HuesEligible < Rule
   def description
     'Matches clients who are HUES eligible. This is no longer in use.'

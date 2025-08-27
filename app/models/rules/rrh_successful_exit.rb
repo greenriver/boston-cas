@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::RrhSuccessfulExit < Rule
   def description
     "Matches clients who are #{Translation.translate('Able to successfully exit 12-24 month RRH program').downcase} as indicated on an assessment."

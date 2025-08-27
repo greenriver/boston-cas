@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::MiAndSaCoMorbid < Rule
   def description
     'Matches clients who have both a mental health disability and a substance use disorder as seen in the most recent HUD disability response.'

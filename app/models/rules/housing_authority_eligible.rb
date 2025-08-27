@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::HousingAuthorityEligible < Rule
   def description
     "Matches clients who are #{Translation.translate('Housing Authority Eligible').downcase}. This is no longer in use."

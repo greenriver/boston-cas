@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::Occupancy < Rule
   def description
     'Matches clients who have indicated a minimum required occupancy less than or equal to the specified value.  This is sometimes calculated base on household composition and other times based on an assessment.'

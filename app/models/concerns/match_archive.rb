@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 # Methods used to save the state of the universe during match creation
 module MatchArchive
   # This module serves as a record of what is needed to get a model to work with the requirement manager

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_access_to_opportunity!

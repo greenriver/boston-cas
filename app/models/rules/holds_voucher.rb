@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::HoldsVoucher < Rule
   def description
     'Matches clients who hold a voucher either from the warehouse, a non-HMIS assessment, or because of a match in CAS.'

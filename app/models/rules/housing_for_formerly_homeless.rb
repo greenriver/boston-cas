@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::HousingForFormerlyHomeless < Rule
   def description
     'Matches clients who prefer to live in a community with others who are formerly homeless as indicated on an assessment.'

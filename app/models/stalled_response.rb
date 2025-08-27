@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class StalledResponse < ApplicationRecord
   include ActionView::Helpers
   include ActionView::Context

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::EmployedThreeMonths < Rule
   def description
     "Matches clients who have been #{Translation.translate('Employed for 3 or more months').downcase} as indicated on an assessment, not HUD related."

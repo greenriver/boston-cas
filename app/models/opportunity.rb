@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Opportunity < ApplicationRecord
   acts_as_paranoid
   has_paper_trail

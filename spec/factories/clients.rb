@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/hmis-warehouse/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :client, class: 'Client' do
     ssn { Faker::Number.number(digits: 9) }

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::CurrentlyFleeing < Rule
   def description
     'Matches clients who are currently fleeing domestic violence and have a DV date within the last 3 months.'

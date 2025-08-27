@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::RequireInterestInNeighborhood < Rule
   def description
     'Matches clients who have indicated they are interested in living in a specific neighborhood as indicated on an assessment.  Clients with no preferences are excluded.'

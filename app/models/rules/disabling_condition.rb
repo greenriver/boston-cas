@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::DisablingCondition < Rule
   def description
     'Matches clients who have at least one disabling condition in their most recent HUD disability response or have indicated they have a disabling condition at the enrollment level.'

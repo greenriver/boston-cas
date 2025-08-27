@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::WillingCaseManagement < Rule
   def description
     "Matches clients who are #{Translation.translate('Willing to engage with housing case management').downcase} as indicated on an assessment."

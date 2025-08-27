@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 require 'street_address'
 class Client < ApplicationRecord
   before_create :assign_tie_breaker
@@ -443,7 +441,7 @@ class Client < ApplicationRecord
     remote_id if from_hmis?
   end
 
-  def has_full_housing_release?(route = nil) # rubocop:disable Naming/PredicateName
+  def has_full_housing_release?(route = nil)
     return true if route.present? && ! route.expects_roi?
 
     # If we have a warehouse connected, use the file tags available there
@@ -483,7 +481,7 @@ class Client < ApplicationRecord
     (routes - ufs).count.zero?
   end
 
-  def is_available_for_matching? # rubocop:disable Naming/PredicateName
+  def is_available_for_matching?
     return false if unavailable_on_all_routes?
 
     available
@@ -518,7 +516,7 @@ class Client < ApplicationRecord
       maximum(mdr_b_t[:updated_at])&.to_date
   end
 
-  def has_enrollments? # rubocop:disable Naming/PredicateName
+  def has_enrollments?
     enrolled_in_th ||
     enrolled_in_sh ||
     enrolled_in_so ||

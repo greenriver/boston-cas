@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::PathwaysEligible < Rule
   def description
     'Matches clients who do not have a decline on the route that is newer than the most recent assessment date.'

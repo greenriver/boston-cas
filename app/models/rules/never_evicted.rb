@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::NeverEvicted < Rule
   def description
     'Matches clients who have not indicated they have been evicted as indicated on an assessment.'

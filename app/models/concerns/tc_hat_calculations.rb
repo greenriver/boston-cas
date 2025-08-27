@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module TcHatCalculations
   extend ActiveSupport::Concern
 
@@ -141,7 +139,7 @@ module TcHatCalculations
       # Pregnant clients are always considered a family
       return true if pregnancy_status
       # There is a child, but the parent doesn't, and won't have custody
-      return false if tc_hat_single_parent_child_over_ten && (!tc_hat_legal_custody && !tc_hat_will_gain_legal_custody)
+      return false if tc_hat_single_parent_child_over_ten && !tc_hat_legal_custody && !tc_hat_will_gain_legal_custody
       # Client indicated the household is adult only
       return false unless tc_hat_household_type.in?(['Adults with Children', 'Youth'])
       return true if household_size.present? && household_size > 1

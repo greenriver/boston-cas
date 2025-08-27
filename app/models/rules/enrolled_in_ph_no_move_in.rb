@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::EnrolledInPhNoMoveIn < Rule
   def description
     'Matches clients who are enrolled in a PH project (project types 9 and 10) without a move-in date.'

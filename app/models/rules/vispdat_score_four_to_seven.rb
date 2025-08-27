@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::VispdatScoreFourToSeven < Rule
   def description
     'Matches clients who have a VISPDAT score between 4 and 7 as indicated on an assessment.'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::UnshelteredDays < Rule
   def description
     'Matches clients who have been unsheltered for at least the specified number of days.'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::IncomeMinimum < Rule
   def description
     'Matches clients who have at least the minimum income as indicated on a HUD assessment. Or other assessment as configured in the warehouse.'

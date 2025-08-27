@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::AssessmentCompletedWithin < Rule
   def description
     'Matches clients who have completed the assessment within the last specified number of days.  The particular assessment is based on the CAS and Warehouse configuration.'

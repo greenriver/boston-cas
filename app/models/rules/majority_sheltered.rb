@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::MajoritySheltered < Rule
   def description
     'Matches clients whose most recent current living situation is sheltered. Only used in some installations'

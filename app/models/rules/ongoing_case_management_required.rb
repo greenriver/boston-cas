@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::OngoingCaseManagementRequired < Rule
   def description
     'Matches clients who have indicated they require ongoing housing case management as indicated on an assessment.'

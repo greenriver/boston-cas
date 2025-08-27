@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::ThDesired < Rule
   def description
     "Matches clients who are #{Translation.translate('Interested in Transitional Housing').downcase} as indicated on an assessment."

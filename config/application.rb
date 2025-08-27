@@ -31,6 +31,9 @@ module BostonCa
     # FIXME Suppress the Rails 5 belongs_to requirement
     config.active_record.belongs_to_required_by_default = false
 
+    # Set frozen_string_literal to true for all files in the app
+    config.frozen_string_literal = true
+
     # https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
     config.active_record.use_yaml_unsafe_load = true
 

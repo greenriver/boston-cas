@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::VerifiedDaysHomeless < Rule
   def description
     'Matches clients who have had their days homeless verified. This rule is not currently receiving new data.'

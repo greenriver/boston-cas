@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::AppropriateForSoberSupportiveHousing < Rule
   def description
     'Matches clients who are appropriate for sober supportive housing as indicated on an assessment.'

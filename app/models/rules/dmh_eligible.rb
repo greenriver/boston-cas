@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::DmhEligible < Rule
   def description
     'Matches clients who are eligible for the DMH program as defined in the warehouse configuration. This rule is not currently receiving new data.'

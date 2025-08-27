@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::ChildInHousehold < Rule
   def description
     "Matches clients who have indicated there are #{Translation.translate('Children under age 18 in household').downcase} as indicated on an assessment."

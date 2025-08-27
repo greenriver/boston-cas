@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::CanWorkFullTime < Rule
   def description
     'Matches clients who are able to work full time as indicated on an assessment.'

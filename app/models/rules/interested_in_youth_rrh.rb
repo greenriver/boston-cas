@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::InterestedInYouthRrh < Rule
   def description
     'Matches clients who are interested in Youth Rapid Re-Housing as indicated on an assessment.'

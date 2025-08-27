@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::HeavyDrugUse < Rule
   def description
     "Matches clients who have a #{Translation.translate('History of heavy drug use').downcase} as indicated on an assessment."

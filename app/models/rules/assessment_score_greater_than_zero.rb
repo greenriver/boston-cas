@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::AssessmentScoreGreaterThanZero < Rule
   def description
     'Matches clients who have an assessment score greater than zero.  The goal of this rule is to match clients who have been assessed.'

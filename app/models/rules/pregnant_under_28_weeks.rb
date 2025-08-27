@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::PregnantUnder28Weeks < Rule
   def description
     'Matches clients who are pregnant and under 28 weeks along. No longer in use.'

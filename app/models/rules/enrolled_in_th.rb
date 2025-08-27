@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::EnrolledInTh < Rule
   def description
     'Matches clients who are enrolled in a TH project (project type 2).'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::InterestedInNeighborhood < Rule
   def description
     'Matches clients who are interested in a specific neighborhood as indicated on an assessment.  This rule also matches any client who has not indicated a neighborhood preference.'

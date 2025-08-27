@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::IneligibleImmigrant < Rule
   def description
     'Matches clients who are ineligible for immigration status. This is no longer in use.'

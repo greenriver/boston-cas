@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::FosterYouth < Rule
   def description
     "Matches clients who have indicated they have #{Translation.translate('Youth in foster care').downcase} as indicated on an assessment."

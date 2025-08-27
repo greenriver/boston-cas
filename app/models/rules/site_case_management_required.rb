@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::SiteCaseManagementRequired < Rule
   def description
     "Matches clients who #{Translation.translate('Needs site-based case management').downcase} as indicated on an assessment."

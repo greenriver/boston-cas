@@ -81,8 +81,9 @@ Metrics/BlockLength:
 Style/RescueStandardError:
   Enabled: true
 
+# This is now the default
 Style/FrozenStringLiteralComment:
-  Enabled: true
+  Enabled: false
 
 Style/CommentedKeyword:
   Enabled: false

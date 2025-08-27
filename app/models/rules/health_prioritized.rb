@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::HealthPrioritized < Rule
   def description
     'Matches clients who have been prioritized for health reasons. This is no longer in use.'

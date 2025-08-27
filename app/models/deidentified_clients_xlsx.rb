@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class DeidentifiedClientsXlsx < ApplicationRecord
   # Remove CarrierWave dependency
   # mount_uploader :file, DeidentifiedClientsXlsxFileUploader

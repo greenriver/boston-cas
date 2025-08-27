@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :default_route, class: 'MatchRoutes::Default' do
     active { true }

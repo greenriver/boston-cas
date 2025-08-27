@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::LifetimeSexOffender < Rule
   def description
     'Matches clients who have been marked as lifetime sex offenders as indicated on an assessment.'

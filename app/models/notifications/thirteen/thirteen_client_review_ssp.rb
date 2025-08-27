@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module Notifications::Thirteen
   class ThirteenClientReviewSsp < ::Notifications::Base
     def self.create_for_match! match

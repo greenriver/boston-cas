@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::ServiceNeed < Rule
   def description
     "Matches clients who have indicated they have a #{Translation.translate('Service Need').downcase} as indicated on an assessment."

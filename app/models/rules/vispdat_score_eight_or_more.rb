@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::VispdatScoreEightOrMore < Rule
   def description
     'Matches clients who have a VISPDAT score of 8 or more as indicated on an assessment.'

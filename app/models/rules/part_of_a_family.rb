@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::PartOfAFamily < Rule
   def description
     'Matches clients who indicated on an assessment that there are more people in their household than just themselves, or who are pregnant.'

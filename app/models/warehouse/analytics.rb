@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 # The Analytics module supports export of CAS to our analytics store. These tables are consumed view views in the warehouse analytics schema
 
 # Data Flow:

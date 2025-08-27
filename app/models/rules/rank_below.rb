@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::RankBelow < Rule
   def description
     'Matches clients whose rank on cohorts is below the specified value.'

@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 class Rules::EnrolledInEs < Rule
   def description
     'Matches clients who are enrolled in emergency shelter.  Non-HMIS clients may be able to indicate enrollment in ES on an assessment.'
