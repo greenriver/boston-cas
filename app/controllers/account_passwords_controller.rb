@@ -14,7 +14,7 @@ class AccountPasswordsController < ApplicationController
 
   def update
     if @user.update_with_password(account_params)
-      flash[:notice] = "Password was changed."
+      flash[:notice] = 'Password was changed.'
       bypass_sign_in(@user)
       redirect_to edit_account_password_path
     else

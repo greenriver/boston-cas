@@ -56,7 +56,7 @@ class AssociatedContactsController < ApplicationController
 
   def update
     if @contact_join_model.update contact_join_model_params
-      redirect_to({action: :index}, notice: "Contact updated")
+      redirect_to({action: :index}, notice: 'Contact updated')
     else
       flash[:error] = 'Please review the form problems below'
       render :edit
@@ -66,12 +66,12 @@ class AssociatedContactsController < ApplicationController
   def destroy
     @contact_join_model = contact_join_model_source.find params[:id]
     @contact_join_model.destroy
-    redirect_to({action: :index}, notice: "Contact removed")
+    redirect_to({action: :index}, notice: 'Contact removed')
   end
 
   def restore
     contact_join_model_source.restore(params[:id])
-    redirect_to( {action: :index}, notice: "Contact restored")
+    redirect_to( {action: :index}, notice: 'Contact restored')
   end
 
   private
@@ -120,6 +120,6 @@ class AssociatedContactsController < ApplicationController
     end
 
     def join_model_class
-      raise "Abstract Method"
+      raise 'Abstract Method'
     end
 end

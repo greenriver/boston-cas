@@ -23,7 +23,7 @@ class MatchProgressUpdatesController < ApplicationController
       @update.save
       Notifications::ProgressUpdateSubmitted.create_for_match!(@match)
     else
-      flash[:error] = "Unable to save your response"
+      flash[:error] = 'Unable to save your response'
     end
 
     respond_with(@update, location: match_path(@match))

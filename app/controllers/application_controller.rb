@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-require "application_responder"
+require 'application_responder'
 
 class ApplicationController < ActionController::Base
   include ControllerAuthorization

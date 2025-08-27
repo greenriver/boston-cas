@@ -26,7 +26,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def create
     if creating_admin?
       if ! current_user.valid_password?(confirmation_params[:confirmation_password])
-        flash[:error] = "User not updated. Incorrect password"
+        flash[:error] = 'User not updated. Incorrect password'
         @user = User.new
         @user.build_contact
         render :confirm

@@ -21,11 +21,11 @@ class SubProgramContactsController < ApplicationController
     saved = @program_contacts.update program_contacts_params
     unless request.xhr?
       if saved
-        flash[:notice] = "Contacts updated"
+        flash[:notice] = 'Contacts updated'
         redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
       else
         raise @program_contacts.errors.full_messages.inspect
-        flash[:error] = "Please review the form problems below."
+        flash[:error] = 'Please review the form problems below.'
         redirect_to edit_program_sub_program_contacts_path(@program, @subprogram)
       end
     end

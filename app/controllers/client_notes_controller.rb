@@ -23,12 +23,12 @@ class ClientNotesController < ApplicationController
     begin
       if @client_note.user_can_destroy?(current_user)
         @client_note.destroy!
-        flash[:notice] = "Note was successfully deleted."
+        flash[:notice] = 'Note was successfully deleted.'
       else
-        raise "You are not authorized to delete this note."
+        raise 'You are not authorized to delete this note.'
       end
     rescue Exception => e
-      flash[:error] = "Note could not be deleted."
+      flash[:error] = 'Note could not be deleted.'
     end
     redirect_to client_path(@client_id)
   end

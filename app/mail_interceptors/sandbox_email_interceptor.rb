@@ -36,7 +36,7 @@ class SandboxEmailInterceptor
   end
 
   def self.body_warning
-    "***This message is for training purposes only, the following information is fictitious and does not represent a real housing opportunity or homeless client.***"
+    '***This message is for training purposes only, the following information is fictitious and does not represent a real housing opportunity or homeless client.***'
   end
 
 end

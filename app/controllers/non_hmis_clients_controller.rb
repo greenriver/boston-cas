@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   include AjaxModalRails::Controller
@@ -239,7 +241,7 @@ class NonHmisClientsController < ApplicationController
       dirty_params[:agency_id] = current_user.agency_id
     end
 
-    dirty_params[:available] = dirty_params[:available] == '1' || dirty_params[:available] == 'true' if dirty_params[:available].present?
+    dirty_params[:available] = ['1', 'true'].include?(dirty_params[:available]) if dirty_params[:available].present?
     dirty_params[:shelter_name] = dirty_params.dig(:client_assessments_attributes, '0', :shelter_name)
 
     return dirty_params

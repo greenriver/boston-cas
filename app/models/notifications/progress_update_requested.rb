@@ -16,7 +16,7 @@ module Notifications
     end
 
     def event_label
-      "Progress update requested"
+      'Progress update requested'
     end
   end
 end

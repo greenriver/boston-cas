@@ -35,7 +35,7 @@ class Service < ApplicationRecord
   end
 
   def requirements_description
-    requirements.map(&:name).compact.join ", "
+    requirements.map(&:name).compact.join ', '
   end
 
 end

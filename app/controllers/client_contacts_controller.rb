@@ -18,10 +18,10 @@ class ClientContactsController < ApplicationController
     saved = @client_contacts.update(client_contacts_params)
     unless request.xhr?
       if saved
-        flash[:notice] = "Default Client Contacts updated"
+        flash[:notice] = 'Default Client Contacts updated'
         redirect_to client_path(@client)
       else
-        flash[:error] = "Please review the form problems below."
+        flash[:error] = 'Please review the form problems below.'
         redirect_to :edit
       end
     end

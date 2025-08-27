@@ -14,7 +14,7 @@ module Notifications
     end
 
     def event_label
-      "Contact notified of match success confirmation."
+      'Contact notified of match success confirmation.'
     end
 
   end

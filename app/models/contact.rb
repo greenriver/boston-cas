@@ -41,7 +41,7 @@ class Contact < ApplicationRecord
   end
 
   def full_name
-    [first_name, last_name].compact.join " "
+    [first_name, last_name].compact.join ' '
   end
   alias_method :name, :full_name
 
@@ -85,13 +85,13 @@ class Contact < ApplicationRecord
   def self.contact_type_for(input_name)
     choices = {
       shelter_agency_contacts: 'shelter_agency',
-      client_contacts: "client",
-      regular_contacts: "client",
-      dnd_staff_contacts: "dnd_staff",
-      housing_subsidy_admin_contacts: "housing_subsidy_admin",
-      ssp_contacts: "ssp",
-      hsp_contacts: "hsp",
-      do_contacts: "do",
+      client_contacts: 'client',
+      regular_contacts: 'client',
+      dnd_staff_contacts: 'dnd_staff',
+      housing_subsidy_admin_contacts: 'housing_subsidy_admin',
+      ssp_contacts: 'ssp',
+      hsp_contacts: 'hsp',
+      do_contacts: 'do',
     }
     choices[input_name] || input_name
   end
