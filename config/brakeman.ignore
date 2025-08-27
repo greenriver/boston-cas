@@ -1,6 +1,70 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "01d89b921bebf8371e75106f4be154f53641ee5a6a050829d4d0ed3eadf0e56c",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 12,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:calculated_homeless_nights_unsheltered][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:calculated_homeless_nights_unsheltered]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "023c724508b4c341ebb8aae1c407e91e113c05bccffe0dca58702f276fbe1dd0",
@@ -30,7 +94,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/buildings/_breadcrumbs.haml",
-      "line": 3,
+      "line": 4,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Building.model_name.human.pluralize",
       "render_path": [
@@ -51,6 +115,70 @@
       },
       "user_input": null,
       "confidence": "Medium",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "0de9b69927c7e56fddc893ab58129435a3367d39c66f6fe5b3d9bd419b060214",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/matches/_client_details.haml",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :placement => :top, :title => (\"This client has not signed the #{Translation.translate(\"HAN release\")} and their name cannot be released to the #{Translation.translate(\"HSA\")}, #{Translation.translate(\"SSP\")}, or the #{Translation.translate(\"HSP\")}. All correspondence regarding this client should reference match ID #{match.id}. If the client signs the #{Translation.translate(\"HAN release\")} at any time during the match the change will be reflected in CAS and their information will become available.\"))",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "MatchDecisionsController",
+          "method": "show",
+          "line": 38,
+          "file": "app/controllers/match_decisions_controller.rb",
+          "rendered": {
+            "name": "matches/show",
+            "file": "app/views/matches/show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/show",
+          "line": 1,
+          "file": "app/views/matches/show.haml",
+          "rendered": {
+            "name": "matches/_show",
+            "file": "app/views/matches/_show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/_show",
+          "line": 6,
+          "file": "app/views/matches/_show.haml",
+          "rendered": {
+            "name": "matches/_details",
+            "file": "app/views/matches/_details.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/_details",
+          "line": 44,
+          "file": "app/views/matches/_details.html.haml",
+          "rendered": {
+            "name": "matches/_client_details",
+            "file": "app/views/matches/_client_details.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "matches/_client_details"
+      },
+      "user_input": "Translation.translate(\"HAN release\")",
+      "confidence": "Weak",
       "cwe_id": [
         79
       ],
@@ -80,13 +208,111 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "16290309872a41edd340d37dbb663b56d7db79b5e3b7454c274b812adb35b985",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 32,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:days_homeless][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:days_homeless]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "1e65c696752048bba7e15948670906df5a4689c44301be1067ffe17fd8f2abe8",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/audits/show.haml",
+      "line": 24,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => (\"Method: #{(Unresolved Model).new.method}\"))",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::AuditsController",
+          "method": "show",
+          "line": 14,
+          "file": "app/controllers/admin/audits_controller.rb",
+          "rendered": {
+            "name": "admin/audits/show",
+            "file": "app/views/admin/audits/show.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/audits/show"
+      },
+      "user_input": "(Unresolved Model).new.method",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Unmaintained Dependency",
       "warning_code": 122,
       "fingerprint": "21ab0fe00fdd5899ffc405cff75aadb91b805ee996a614f7e27b08a287e9062d",
       "check_name": "EOLRails",
-      "message": "Support for Rails 7.1.5.1 ends on 2025-10-01",
+      "message": "Support for Rails 7.1.5.2 ends on 2025-10-01",
       "file": "Gemfile.lock",
-      "line": 1114,
+      "line": 1098,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -95,6 +321,60 @@
       "confidence": "Weak",
       "cwe_id": [
         1104
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "21b43a4da5f4c3330902aa574136118c00997bf8be75cffef9eb035066cc1cdf",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_homelessness.haml",
+      "line": 26,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:days_literally_homeless_in_last_three_years][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:days_literally_homeless_in_last_three_years]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
@@ -128,7 +408,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/buildings/edit.html.haml",
-      "line": 3,
+      "line": 4,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Building.model_name.human.pluralize",
       "render_path": [
@@ -158,11 +438,183 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
+      "fingerprint": "352d6a52ad5dfb2eded9c5e62a3ae190a4dacfa8427ea8aac63e10abce4bceb9",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped parameter value",
+      "file": "app/views/opportunities/_table.haml",
+      "line": 2,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_id(true, (params[:tab] or route_to_html_id(MatchRoutes::Base.available.first)))",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "OpportunitiesController",
+          "method": "index",
+          "line": 57,
+          "file": "app/controllers/opportunities_controller.rb",
+          "rendered": {
+            "name": "opportunities/index",
+            "file": "app/views/opportunities/index.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "opportunities/index",
+          "line": 20,
+          "file": "app/views/opportunities/index.haml",
+          "rendered": {
+            "name": "opportunities/_table",
+            "file": "app/views/opportunities/_table.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "opportunities/_table"
+      },
+      "user_input": "params[:tab]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "456068ce2d94ba706531418a9048d475d13b7379b1140632bc4323d778355d07",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 28,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:days_homeless_in_last_three_years][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:days_homeless_in_last_three_years]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "49ce9562a7049c2122cbdaef59207e552e9b6b6b8a0f758b6924482f42555e99",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:total_homeless_nights_sheltered][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:total_homeless_nights_sheltered]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "4d07b6db27f38d8334c1cdb085024af1a122fcb263118f2b3a91a51d4993f22c",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/layouts/application.html.haml",
-      "line": 31,
+      "line": 32,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Translation.translate(\"Boston Coordinated Access\").split(\" \").join(\"<br />\")",
       "render_path": [
@@ -240,6 +692,70 @@
         "template": "messages/show"
       },
       "user_input": "current_user.messages.find(params.require(:id))",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "5459faef88631b404c02e24c366df93e1e1a89dcd2b1f3fbfbf933674be8e110",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 4,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:calculated_homeless_nights_sheltered][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:calculated_homeless_nights_sheltered]",
       "confidence": "Weak",
       "cwe_id": [
         79
@@ -472,13 +988,77 @@
       "note": "We're just injecting the git revision."
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "9c6c5916d5900085d860b70bb27bbe63c281ba53f5a181ec15f2849efd68c4f9",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:additional_homeless_nights_unsheltered][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:additional_homeless_nights_unsheltered]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "aa40ebbd05a2cdc706d57a2f8e6b85f802a97a5319aa8417ca850ebe851e84fd",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/non_hmis_assessments/_form.haml",
-      "line": 37,
+      "line": 38,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => \"#{((nil or DeidentifiedClient.deidentified) or IdentifiedClient.identified).visible_to(current_user).find(((nil or params[:deidentified_client_id].to_i) or params[:identified_client_id].to_i)).type.tableize}/#{build_assessment.model_name.element}\", { :client_form => f, :assessment_form => f, :disabled => disabled, :limited => build_assessment.hide_confidential?(current_user) })",
       "render_path": [
@@ -512,6 +1092,60 @@
       "confidence": "Weak",
       "cwe_id": [
         22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "acf991d42d54ada9bd614ef25e9562586d5ce2180ee9e9e144ad5587234355f4",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_homelessness.haml",
+      "line": 18,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:hmis_days_homeless_last_three_years][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:hmis_days_homeless_last_three_years]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
@@ -602,6 +1236,114 @@
       "confidence": "Medium",
       "cwe_id": [
         77
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b460cda6125c844eb0a07bbd0398be509b0a606a375c4457f675719cb3a6988d",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/opportunity_matches/_requirements.haml",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => (Unresolved Model).new.rule.description)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "OpportunityMatchesController",
+          "method": "index",
+          "line": 34,
+          "file": "app/controllers/opportunity_matches_controller.rb",
+          "rendered": {
+            "name": "opportunity_matches/index",
+            "file": "app/views/opportunity_matches/index.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "opportunity_matches/index",
+          "line": 3,
+          "file": "app/views/opportunity_matches/index.haml",
+          "rendered": {
+            "name": "opportunity_matches/_match_details",
+            "file": "app/views/opportunity_matches/_match_details.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "opportunity_matches/_match_details",
+          "line": 13,
+          "file": "app/views/opportunity_matches/_match_details.haml",
+          "rendered": {
+            "name": "opportunity_matches/_requirements",
+            "file": "app/views/opportunity_matches/_requirements.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "opportunity_matches/_requirements"
+      },
+      "user_input": "(Unresolved Model).new.rule",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b78fce79ed439a5885b1f78749b0eb7dfd0cbc96c80d9fe428ce81bfaf697eb8",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_homelessness.haml",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:days_homeless][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:days_homeless]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
@@ -714,6 +1456,70 @@
       "confidence": "Weak",
       "cwe_id": [
         22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "d02ebdcc2a528463130aecb137b1b3dad144568a59348f9ee58fa68882eddac1",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 24,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:total_homeless_nights_unsheltered][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:total_homeless_nights_unsheltered]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
@@ -844,6 +1650,70 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
+      "fingerprint": "db98caf76c1727134c21c35ad6638d1d275622bd8a77542c08febc297a5a2fce",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_pathways_homelessness.haml",
+      "line": 8,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:additional_homeless_nights_sheltered][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_homelessness",
+          "line": 6,
+          "file": "app/views/clients/_homelessness.haml",
+          "rendered": {
+            "name": "clients/_pathways_homelessness",
+            "file": "app/views/clients/_pathways_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_pathways_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:additional_homeless_nights_sheltered]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "dc147405c1e02b10df380712ac9e324cc78eeb5d0623656d4918a18652961b99",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
@@ -888,11 +1758,65 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
+      "fingerprint": "dd08a25462c8045749e4e46d9c402f79f789ba4cba6fb74830ba0622014c8f01",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped parameter value",
+      "file": "app/views/matches/_history.html.haml",
+      "line": 12,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :history_events => match_scope.find(params[:match_id]).timeline_events.count)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "MatchDecisionsController",
+          "method": "show",
+          "line": 38,
+          "file": "app/controllers/match_decisions_controller.rb",
+          "rendered": {
+            "name": "matches/show",
+            "file": "app/views/matches/show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/show",
+          "line": 1,
+          "file": "app/views/matches/show.haml",
+          "rendered": {
+            "name": "matches/_show",
+            "file": "app/views/matches/_show.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "matches/_show",
+          "line": 28,
+          "file": "app/views/matches/_show.haml",
+          "rendered": {
+            "name": "matches/_history",
+            "file": "app/views/matches/_history.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "matches/_history"
+      },
+      "user_input": "params[:match_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "e573c825cc00fff29941da7c8eef06cac9291e316b68425345a7e2ffcb48566b",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/buildings/edit.html.haml",
-      "line": 5,
+      "line": 7,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Building.model_name.human",
       "render_path": [
@@ -918,7 +1842,61 @@
         79
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "f0270f22338425825dba047fea0f6e50730ef30c0817ba69d4c2ae231ca087ca",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/clients/_homelessness.haml",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_data(true, \"'\", :toggle => :tooltip, :title => Client.prioritized_columns_data[:days_homeless_in_last_three_years][:description])",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ClientsController",
+          "method": "show",
+          "line": 78,
+          "file": "app/controllers/clients_controller.rb",
+          "rendered": {
+            "name": "clients/show",
+            "file": "app/views/clients/show.html.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/show",
+          "line": 33,
+          "file": "app/views/clients/show.html.haml",
+          "rendered": {
+            "name": "clients/_availability",
+            "file": "app/views/clients/_availability.haml"
+          }
+        },
+        {
+          "type": "template",
+          "name": "clients/_availability",
+          "line": 9,
+          "file": "app/views/clients/_availability.haml",
+          "rendered": {
+            "name": "clients/_homelessness",
+            "file": "app/views/clients/_homelessness.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "clients/_homelessness"
+      },
+      "user_input": "Client.prioritized_columns_data[:days_homeless_in_last_three_years]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
     }
   ],
-  "brakeman_version": "7.0.2"
+  "brakeman_version": "7.1.0"
 }
