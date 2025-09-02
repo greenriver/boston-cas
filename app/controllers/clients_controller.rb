@@ -12,8 +12,8 @@ class ClientsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :require_some_clients_viewable!
-  before_action :require_some_clients_editable!, only: [:update, :destroy]
-  before_action :set_client, only: [:show, :edit, :update, :destroy, :unavailable]
+  before_action :require_some_clients_editable!, only: [:update]
+  before_action :set_client, only: [:show, :edit, :update, :unavailable]
 
   helper_method :sort_column, :sort_direction
 

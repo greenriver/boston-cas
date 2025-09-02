@@ -82,7 +82,6 @@ gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail,
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
-gem 'marginalia'
 gem 'active_record_distinct_on'
 
 gem 'devise', '~> 4'
