@@ -9,10 +9,6 @@
 class MessagesController < ApplicationController
   include AjaxModalRails::Controller
 
-  # Add specific exclusions for this controller
-  skip_before_action :compose_activity, only: [:poll]
-  skip_after_action :log_activity, only: [:poll]
-
   def index
     id = message_params[:id].presence
     if id
