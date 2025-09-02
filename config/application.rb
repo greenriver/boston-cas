@@ -20,6 +20,9 @@ module BostonCa
     # Add autoload paths to load path (Rails 7.1 default)
     config.add_autoload_paths_to_load_path = false
 
+    # Add lib/util to autoload paths early, before Rails freezes the array
+    config.autoload_paths += [Rails.root.join('lib', 'util')]
+
     # Enable raising on invalid cache expiration times
     config.active_support.raise_on_invalid_cache_expiration_time = true
 
@@ -106,8 +109,7 @@ module BostonCa
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: ['assets', 'tasks'])
-    config.autoload_paths << Rails.root.join('lib', 'util')
-
+    config.autoload_paths += [Rails.root.join('lib', 'util')]
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
