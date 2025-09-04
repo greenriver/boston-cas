@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
 require 'shellwords'
 require_relative '../config/deploy/docker/lib/asset_compiler'
 
