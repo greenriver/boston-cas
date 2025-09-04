@@ -43,7 +43,7 @@ module BostonCa
     config.active_record.before_committed_on_all_records = true
 
     # Keep YAML as default column serializer (you have this set in your 7.1 file)
-    config.active_record.default_column_serializer = 'YAML'
+    config.active_record.default_column_serializer = YAML
 
     # Run after_commit callbacks in order defined
     config.active_record.run_after_transaction_callbacks_in_order_defined = true

@@ -9,8 +9,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Running the match engine...', type: :request do
-  MatchRoutes::Base.ensure_all
-  MatchPrioritization::Base.ensure_all
   let!(:female_clients) { create_list :client, 2, female: true }
   let!(:male_clients) { create_list :client, 8, male: true }
   let!(:unknown_gender_clients) { create_list :client, 7 }
