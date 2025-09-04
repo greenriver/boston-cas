@@ -120,6 +120,7 @@ RUN apt-get update && apt-get upgrade -y \
   shared-mime-info \
   software-properties-common \
   tar \
+  tini \
   tzdata \
   vim \
   && rm -rf /var/lib/apt/lists/* \
@@ -170,7 +171,7 @@ USER ${USER_ID}
 FROM base AS prod-build
 
 COPY docker/app/entrypoint.sh /usr/bin/
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+ENTRYPOINT ["tini", "--", "/usr/bin/entrypoint.sh"]
 
 COPY --chown=app-user:${GROUP_ID} --from=cert /key.pem /cert.pem /app/config/
 COPY --chown=app-user:${GROUP_ID} Gemfile Gemfile.lock ./

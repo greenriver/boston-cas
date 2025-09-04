@@ -45,6 +45,10 @@ class User < ApplicationRecord
   scope :developer, -> { joins(:roles).where(roles: { name: 'developer' }) }
   scope :dnd_initial_contact, -> { active.dnd_staff.where receive_initial_notification: true }
   scope :housing_subsidy_admin, -> { joins(:roles).where(roles: { can_add_vacancies: true }) }
+  scope :match_admins, -> do
+    joins(:roles).where(roles: { can_reject_matches: true }).
+      or(joins(:roles).where(roles: { can_approve_matches: true }))
+  end
   scope :active, -> { where active: true }
   scope :inactive, -> { where active: false }
   scope :has_recent_activity, -> do

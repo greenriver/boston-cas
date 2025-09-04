@@ -1,5 +1,5 @@
 x-app: &app
-  image: cas:${TARGET:-dev-build}-2.0
+  image: cas:${TARGET:-dev-build}-2.1
   build:
     context: .
     target: ${TARGET:-dev-build}

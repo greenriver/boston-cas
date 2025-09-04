@@ -131,3 +131,5 @@ EnrolledInPhNoMoveIn,Enrolled in PH (PH – Housing Only or Housing with Service
 EnrolledInHmisProjectTypeAnyPhNoMoveIn,Enrolled in one of the specified PH Project Types without a move in date,,be
 PshRequired,in need of Permanent Supportive Housing,,be
 EverCurrentlyFleeing,Ever fleeing DV,,be
+IncomeMinimum,Monthly income greater than or equal to specified amount,,have
+IncomeMaximum,Monthly income less than or equal to specified amount,,have

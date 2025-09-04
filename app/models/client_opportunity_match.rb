@@ -648,7 +648,7 @@ class ClientOpportunityMatch < ApplicationRecord
   end
 
   def can_create_administrative_note? contact
-    contact.present? && (contact.user.present? && (contact.user.can_approve_matches? || contact.user.can_reject_matches?))
+    contact.present? && contact.user.present? && (contact.user.can_approve_matches? || contact.user.can_reject_matches?)
   end
 
   def match_contacts
@@ -935,7 +935,12 @@ class ClientOpportunityMatch < ApplicationRecord
   def status_update_details
     data = status_updates.order(created_at: :desc).preload(:decision).map do |m|
       response_text = m.response
-      still_active = if m.decision.still_active_responses.map(&:last).include?(response_text)
+      response_decision = m.decision
+      # Handle the case where we can't determine the decision associated with the status update
+      # This can happen for decision responses that no longer exist or were added before we connected them to decisions
+      still_active = if response_decision.blank?
+        'Other'
+      elsif response_decision.still_active_responses.map(&:last).include?(response_text)
         'Engaging'
       else
         'Not Engaging'
@@ -946,7 +951,7 @@ class ClientOpportunityMatch < ApplicationRecord
         still_active: still_active,
         response_date: m.created_at.to_date,
         response: response_text,
-        decision: m.decision.step_name,
+        decision: response_decision&.step_name || 'Unknown',
       }
     end
     data.group_by { |m| m[:still_active] }

@@ -23,6 +23,7 @@ class Warehouse::Analytics::Opportunity < ::Warehouse::Base
             opportunity_category_id: opportunity.voucher.sub_program_id,
             unit_id: opportunity.voucher.unit_id,
             unit_name: opportunity.voucher&.unit&.name,
+            made_available_at: opportunity.voucher&.made_available_at,
             created_at: opportunity.created_at,
             updated_at: opportunity.updated_at,
           )
