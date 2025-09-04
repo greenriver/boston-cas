@@ -7,9 +7,6 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  before_action :compose_activity, except: [:active]
-  after_action :log_activity, except: [:active]
-
   # configure auto_session_timeout
   def active
     render_session_status
