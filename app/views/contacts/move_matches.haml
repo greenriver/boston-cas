@@ -14,6 +14,6 @@
         = f.input :destination, collection: @contacts, label: 'Assign match contacts to', input_html: { class: :select2 }, include_blank: 'Remove Contact from All Matches'
 
       .form-actions
-        = f.button :submit, value: 'Move All Contacts'
+        = f.button :submit, value: 'Move All Contacts', data: { confirm: 'Moving all matches is not easily reversible.  Are you sure you want to continue?' }
 
 = render 'init_select2'
