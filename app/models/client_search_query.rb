@@ -6,6 +6,23 @@
 
 # frozen_string_literal: true
 
+##
+# ClientSearchQuery stores and manages search parameters for client searches in the CAS system.
+#
+# This class handles the persistence and validation of search queries, allowing users to save
+# and reuse search criteria. It normalizes parameters, generates unique fingerprints for
+# deduplication, and validates that only allowed parameters are stored.
+#
+# **IMPORTANT: This class stores persisted PII (Personally Identifiable Information)**
+# including client names, dates of birth, SSNs, and email addresses as provided during the search.
+#
+# @example Creating a search query
+#   params = { q: "John", client: { first_name: "John", last_name: "Doe" } }
+#   query = ClientSearchQuery.find_or_create_by_params(params, user: current_user)
+#
+# @example Accessing query parameters
+#   query.query_params # => { "q" => "John", "client" => { "first_name" => "John", "last_name" => "Doe" } }
+#
 class ClientSearchQuery < ApplicationRecord
   belongs_to :created_by, class_name: 'User'
 

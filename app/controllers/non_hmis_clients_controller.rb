@@ -23,6 +23,8 @@ class NonHmisClientsController < ApplicationController
   def index
     # Handle search queries
     handle_search_query
+    return if performed?
+
     filter_data
   end
 

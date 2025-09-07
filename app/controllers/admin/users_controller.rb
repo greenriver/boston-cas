@@ -21,12 +21,13 @@ module Admin
     def index
       # Handle search queries
       handle_search_query
+      return if performed?
 
       filter_data
     end
 
     def search
-      @search_query = ClientSearchQuery.find(params[:id])
+      @search_query = ClientSearchQuery.find_by(id: params[:id])
       return handle_invalid_query('Search query not found') if @search_query.nil?
 
       @search_query.touch
@@ -206,9 +207,7 @@ module Admin
       return if @search_query.errors.any?
 
       # Redirect to the search query URL if this is a GET request
-      redirect_to admin_user_search_query_path(@search_query) if request.get?
-    rescue ActiveRecord::RecordInvalid
-      # Handle validation errors gracefully
+      redirect_to admin_user_search_query_path(@search_query) if request.get? || request.head?
     end
   end
 end
