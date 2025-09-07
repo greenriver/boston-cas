@@ -2,6 +2,7 @@
 package.box
 package.tgz
 .vagrant/
+.cursor/
 .claude/
 *.rbc
 capybara-*.html
