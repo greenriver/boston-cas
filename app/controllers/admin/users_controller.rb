@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -17,13 +19,31 @@ module Admin
     helper_method :sort_column, :sort_direction
 
     def index
-      # search
-      if params[:q].present?
-        @users = user_scope.text_search(params[:q])
-        @inactive_users = User.inactive.text_search(params[:q])
-      else
-        @users = user_scope
-        @inactive_users = User.inactive
+      # Handle search queries
+      handle_search_query
+      return if performed?
+
+      filter_data
+    end
+
+    def search
+      @search_query = ClientSearchQuery.find_by(id: params[:id])
+      return handle_invalid_query('Search query not found') if @search_query.nil?
+
+      @search_query.touch
+
+      filter_data
+
+      render :index
+    end
+
+    private def filter_data
+      @users = user_scope
+      @inactive_users = User.inactive
+      if @search_query.present? && @search_query.query_params[:q].present?
+        @query = @search_query.query_params[:q] # for the search form
+        @users = @users.text_search(@search_query.query_params[:q])
+        @inactive_users = @inactive_users.text_search(@search_query.query_params[:q])
       end
 
       # sort / paginate
@@ -39,6 +59,12 @@ module Admin
       @closed_matches = Contact.where(user_id: user_ids).
         joins(:matches).merge(ClientOpportunityMatch.closed).
         group(:user_id).count
+    end
+
+    private def handle_invalid_query(message)
+      flash[:error] = message
+      redirect_to admin_users_path
+      return
     end
 
     def edit
@@ -168,6 +194,20 @@ module Admin
 
     def set_user
       @user = user_scope.find params[:id].to_i
+    end
+
+    def handle_search_query
+      return unless params[:q].present?
+
+      search_params = ActionController::Parameters.new({ q: params[:q] })
+      permitted_params = ClientSearchQuery.permit_params(search_params)
+      return unless permitted_params.present?
+
+      @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
+      return if @search_query.errors.any?
+
+      # Redirect to the search query URL if this is a GET request
+      redirect_to admin_user_search_query_path(@search_query) if request.get? || request.head?
     end
   end
 end

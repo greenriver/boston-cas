@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'xlsxtream'
 class NonHmisClientsController < ApplicationController
   include AjaxModalRails::Controller
@@ -13,18 +15,74 @@ class NonHmisClientsController < ApplicationController
   before_action :require_can_edit_this_client!, only: [:edit, :update, :new_assessment, :destroy]
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
-  before_action :set_active_filter, only: [:index]
+  before_action :set_active_filter, only: [:index, :search]
   before_action :find_match, only: [:current_assessment_limited]
 
+  helper_method :non_hmis_client_search_queries_path
+
   def index
+    # Handle search queries
+    handle_search_query
+    return if performed?
+
+    filter_data
+  end
+
+  def search
+    @search_query = ClientSearchQuery.find(params[:id])
+    return handle_invalid_query('Search query not found') if @search_query.nil?
+
+    @search_query.touch
+
+    filter_data
+
+    render :index
+  end
+
+  private def handle_search_query
+    return unless params[:q]&.strip.present?
+
+    # When someone searches, capture the full context including filters
+    # Make sure we capture the current state from the page, not just URL params
+    permitted_params = ClientSearchQuery.permit_params(ActionController::Parameters.new(search_params))
+    return unless permitted_params.present?
+
+    @search_query = ClientSearchQuery.find_or_create_by_params(permitted_params, user: current_user)
+    return if @search_query.errors.any?
+
+    redirect_to search_path if request.get?
+  rescue ActiveRecord::RecordInvalid
+    # Handle validation errors gracefully
+  end
+
+  private def search_params
+    # Setup some instance variables for sorting
+    sorter
+    {
+      q: params[:q] || @search_query&.query_params&.[](:q),
+      assessment: params[:assessment],
+      available: params[:available],
+      agency: params[:agency],
+      sort: @column,
+      direction: @direction,
+    }.compact
+  end
+
+  private def handle_invalid_query(message)
+    flash[:error] = message
+    redirect_to non_hmis_client_index_path
+    return
+  end
+
+  def filter_data
     # sort
     sort_order = sorter
     @sorted_by = sort_options.select do |m|
       m[:column] == @column && m[:direction] == @direction
     end.first&.try(:[], :title)
-
     # construct query
     @search = search_setup(scope: :text_search)
+    @query = @search_string || @search_query&.query_params&.[](:q) # for the search form
     @non_hmis_clients = @search
 
     # filter
@@ -40,6 +98,18 @@ class NonHmisClientsController < ApplicationController
         @page = params[:page].presence || 1
         @non_hmis_clients = @non_hmis_clients.joins(:agency) if @column == 'agencies.name'
         @non_hmis_clients = @non_hmis_clients.reorder(sort_order).page(@page.to_i).per(25)
+
+        # To avoid issues with DISTINCT and ORDER BY, the sort expression must be in the SELECT list.
+        # We also want to exclude JSON columns as postgres gets really confused.
+        a_t = NonHmisClient.arel_table
+        columns = NonHmisClient.diet_columns.map do |col|
+          a_t[col]
+        end
+
+        sort_expression = sort_order.split(/ASC|DESC/i).first.strip
+        select_args = [Arel.sql(sort_expression)] + columns
+
+        @non_hmis_clients = @non_hmis_clients.select(*select_args)
       end
       format.xlsx do
         download
@@ -127,12 +197,12 @@ class NonHmisClientsController < ApplicationController
     if @column.blank?
       if pathways_enabled?
         if can_manage_identified_clients?
-          @column = 'non_hmis_clients.assessment_score'
+          @column = 'assessment_score'
         else
-          @column = 'non_hmis_clients.assessed_at'
+          @column = 'assessed_at'
         end
       else
-        @column = 'non_hmis_clients.days_homeless_in_the_last_three_years'
+        @column = 'days_homeless_in_the_last_three_years'
       end
       @direction = 'desc'
       sort_string = "#{@column} #{@direction}"
@@ -239,7 +309,7 @@ class NonHmisClientsController < ApplicationController
       dirty_params[:agency_id] = current_user.agency_id
     end
 
-    dirty_params[:available] = dirty_params[:available] == '1' || dirty_params[:available] == 'true' if dirty_params[:available].present?
+    dirty_params[:available] = ['1', 'true'].include?(dirty_params[:available]) if dirty_params[:available].present?
     dirty_params[:shelter_name] = dirty_params.dig(:client_assessments_attributes, '0', :shelter_name)
 
     return dirty_params

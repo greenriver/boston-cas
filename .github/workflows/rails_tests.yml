@@ -48,10 +48,9 @@ jobs:
         id: container-setup
         uses: ./.github/workflows/container_setup
 
-      - name: Prepare test db
+      - name: Check if postgres is ready
         run: |
           pg_isready -h postgres -U postgres
-          bin/db_prep
 
           echo "Setting up .pgpass"
           echo "postgres:*:*:postgres:postgres" > ~/.pgpass
@@ -76,6 +75,7 @@ jobs:
           DEFAULT_FROM: greenriver.testing@mailinator.com
           DATABASE_WAREHOUSE_DB_TEST: test_hmis_warehouse
           HOSTNAME: openpath.host
+          CLIENT: openpath
           PORT: 80
         run: |
           bundle exec rails db:drop db:create db:schema:load db:migrate

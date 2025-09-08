@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -9,6 +11,14 @@ class DeidentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_deidentified_clients!, except: [:current_assessment_limited]
   before_action :require_match_access_context!, only: [:current_assessment_limited]
   before_action :require_can_manage_deidentified_clients!, only: [:destroy]
+
+  private def search_path
+    deidentified_client_search_query_path(@search_query)
+  end
+
+  private def non_hmis_client_index_path
+    deidentified_clients_path
+  end
 
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
@@ -41,6 +51,10 @@ class DeidentifiedClientsController < NonHmisClientsController
       @non_hmis_client.destroy
     end
     respond_with(@non_hmis_client, location: deidentified_clients_path)
+  end
+
+  def non_hmis_client_search_queries_path
+    deidentified_client_search_queries_path
   end
 
   def choose_upload
@@ -113,7 +127,7 @@ class DeidentifiedClientsController < NonHmisClientsController
   helper_method :sort_options
 
   def filter_terms
-    [:agency, :cohort, :available]
+    [:agency, :assessment, :available, :cohort]
   end
   helper_method :filter_terms
 

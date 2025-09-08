@@ -1,4 +1,6 @@
-= form_tag(nil, method: "get") do
+- url = defined?(url) ? url : nil
+- method = defined?(method) ? method : :get
+= form_tag(url, method: method) do
   -# Preserve sort and filtering
   - if params[:sort]
     = hidden_field_tag :sort, params[:sort]
@@ -6,6 +8,8 @@
     = hidden_field_tag :direction, params[:direction]
   - if params[:current_tab]
     = hidden_field_tag :current_tab, params[:current_tab]
+  - if defined?(current_route)
+    = hidden_field_tag :current_route, current_route
   - filter_terms.each do | term |
     - if params[term]
       = hidden_field_tag term, params[term]

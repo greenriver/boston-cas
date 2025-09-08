@@ -80,6 +80,17 @@ class NonHmisClient < ApplicationRecord
     where.not(warehouse_client_id: nil)
   end
 
+  def self.diet_columns
+    column_names - [
+      'neighborhood_interests',
+      'active_cohort_ids',
+      'tags',
+      'enrolled_project_ids',
+      'rrh_assessment_contact_info',
+      'rrh_desired',
+    ]
+  end
+
   def self.data_source
     return DataSource.non_hmis.first if Rails.env.test? # in the test environment this data source id drifts
 

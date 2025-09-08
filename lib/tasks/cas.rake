@@ -1,4 +1,12 @@
 namespace :cas do
+  def self.safely_execute(&block)
+    block.call
+  rescue StandardError => e
+    puts e.message
+    Sentry.capture_exception(e)
+    Rails.logger.error(e.message)
+  end
+
   desc 'Daily tasks'
   task daily: [:environment, 'log:info_to_stdout'] do
     Warehouse::BuildReport.new.run! if Warehouse::Base.enabled?
@@ -19,6 +27,10 @@ namespace :cas do
     Client.add_missing_tie_breakers
 
     BuildTranslationCacheJob.perform_later
+
+    safely_execute do
+      CleanupClientSearchQueriesTask.perform
+    end
   end
 
   desc 'Add/Update Clients with chronically homeless'
