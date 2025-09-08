@@ -3,7 +3,7 @@
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
-#
+
 # frozen_string_literal: true
 
 require 'memery'
@@ -104,7 +104,7 @@ Rack::Attack.tap do |config|
     end
   end
 
-   # Goal: prevent scripts run through authenticated user accounts from harvesting data or excessive use of the site, with an allowance for known poor behavior for cohorts, roll-ups, and other pages that load more than one request per page.
+  # Goal: prevent scripts run through authenticated user accounts from harvesting data or excessive use of the site, with an allowance for known poor behavior for cohorts, roll-ups, and other pages that load more than one request per page.
   config.throttle(
     'General per-ip limit on authenticated requests',
     limit: 150,
