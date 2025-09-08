@@ -47,6 +47,7 @@ gem 'pagy', '~> 8.2'
 gem 'responders'
 gem 'memery', require: false
 gem 'todo_or_die'
+gem 'rack-attack'
 
 # File processing
 gem 'carrierwave', '>= 2.2.5' # CVE-2023-49090
