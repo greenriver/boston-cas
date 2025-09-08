@@ -111,7 +111,6 @@ module BostonCa
     # This provides SQL query tagging for debugging in development
     config.active_record.query_log_tags_enabled = true
     config.active_record.query_log_tags = [:application, :controller, :action, :line]
-    config.active_record.query_log_tags_format = :sqlcommenter
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
