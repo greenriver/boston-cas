@@ -23,7 +23,7 @@ class ImportedClientsCsv < ApplicationRecord
 
   # Validate file content before creating record
   def self.validate_file_content(file_content, claimed_content_type = nil)
-    allowed_types = ['text/plain', 'text/csv', 'application/csv']
+    allowed_types = ['text/plain', 'text/csv', 'application/csv', 'application/vnd.ms-excel']
     super(file_content, claimed_content_type, allowed_types, '.csv')
   end
 
