@@ -12,6 +12,23 @@ require 'rails_helper'
 
 RSpec.describe Rack::Attack, type: :request do
   let(:user) { create :user }
+  let(:search_paths) do
+    [
+      '/client_search_queries',
+      '/client_search_queries/1',
+      '/unavailable_client_search_queries',
+      '/unavailable_client_search_queries/1',
+      '/deidentified_client_search_queries',
+      '/deidentified_client_search_queries/1',
+      '/identified_client_search_queries',
+      '/identified_client_search_queries/1',
+      '/imported_client_search_queries',
+      '/imported_client_search_queries/1',
+    ]
+  end
+
+  let(:read_paths) { search_paths.select { |path| path.include?('/1') } }
+  let(:write_paths) { search_paths.reject { |path| path.include?('/1') } }
 
   before(:all) do
     Rack::Attack.enabled = true
@@ -162,6 +179,93 @@ RSpec.describe Rack::Attack, type: :request do
 
       # Verify that Sentry was called only once for similar events
       expect(Sentry).to have_received(:capture_message).once
+    end
+  end
+
+  describe 'regex helper methods' do
+    let(:request) { Rack::Attack::Request.new(env) }
+    let(:env) { {} }
+
+    describe 'regex pattern matching' do
+      it 'correctly matches and rejects paths for both regex patterns' do
+        aggregate_failures 'read regex tests' do
+          read_paths.each do |path|
+            expect(path).to match(request.client_search_query_read_regex), "Expected #{path} to match read regex"
+            expect(path).not_to match(request.client_search_query_write_regex), "Expected #{path} not to match write regex"
+          end
+        end
+
+        aggregate_failures 'write regex tests' do
+          write_paths.each do |path|
+            expect(path).to match(request.client_search_query_write_regex), "Expected #{path} to match write regex"
+            expect(path).not_to match(request.client_search_query_read_regex), "Expected #{path} not to match read regex"
+          end
+        end
+      end
+    end
+  end
+
+  describe 'search query throttling with regex methods' do
+    before do
+      sign_in user
+    end
+
+    describe 'search query throttling' do
+      it 'throttles GET requests to client_search_queries with ID' do
+        aggregate_failures do
+          read_paths.each_with_index do |path, index|
+            # Use different IP addresses for each path to avoid cache interference
+            ip_address = "192.168.1.#{index + 1}"
+
+            requests_sent = till_throttled(requests_to_send: 30) do |i|
+              get(path.gsub('1', (i + 1).to_s), headers: { 'REMOTE_ADDR' => ip_address })
+            end
+            expect(requests_sent).to eq(30), "Expected #{path} to be throttled for GET at 30 requests, got #{requests_sent}"
+          end
+        end
+      end
+
+      it 'POST requests to client_search_queries with ID return 404s' do
+        aggregate_failures do
+          read_paths.each_with_index do |path, index|
+            # Use different IP addresses for each path to avoid cache interference
+            ip_address = "192.168.2.#{index + 1}"
+
+            till_throttled(requests_to_send: 5, mode: :slow) do |i|
+              post(path.gsub('1', (i + 1).to_s), params: { q: "test search #{i}" }, headers: { 'REMOTE_ADDR' => ip_address })
+            end
+            expect(response.status).to eq(404), "Expected POST to #{path} to return 404, got #{response.status}"
+          end
+        end
+      end
+
+      it 'throttles POST requests to client_search_queries without ID' do
+        aggregate_failures do
+          write_paths.each_with_index do |path, index|
+            # Use different IP addresses for each path to avoid cache interference
+            ip_address = "192.168.2.#{index + 1}"
+
+            requests_sent = till_throttled(requests_to_send: 30, mode: :slow) do |i|
+              post(path, params: { q: "test search #{i}" }, headers: { 'REMOTE_ADDR' => ip_address })
+            end
+            expect(requests_sent).to eq(30), "Expected #{path} to be throttled for POST at 30 requests, got #{requests_sent}"
+          end
+        end
+      end
+
+      it 'does not throttle GET requests to client_search_queries without ID' do
+        aggregate_failures do
+          write_paths.each_with_index do |path, index|
+            # Use different IP addresses for each path to avoid cache interference
+            ip_address = "192.168.3.#{index + 1}"
+
+            requests_sent = till_throttled(requests_to_send: 5) do
+              get(path, headers: { 'REMOTE_ADDR' => ip_address })
+            end
+            expect(requests_sent).to be_nil, "Expected #{path} not to be throttled for GET"
+          end
+        end
+      end
     end
   end
 end

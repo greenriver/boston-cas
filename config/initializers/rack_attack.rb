@@ -26,6 +26,14 @@ module RackAttackRequestHelpers
     get? && path == '/users/password/edit'
   end
 
+  def client_search_query_read_regex
+    /_?client_search_queries\/[\w-]+\z/
+  end
+
+  def client_search_query_write_regex
+    /_?client_search_queries\z/
+  end
+
   # returns the x-forward-for ip if we think the sending ip is trusted. Depends the RemoteIp rails middleware installed higher in the stack
   memoize def request_ip
     result = env['action_dispatch.remote_ip']&.to_s
@@ -121,7 +129,7 @@ Rack::Attack.tap do |config|
     limit: 30,
     period: 1.minute,
   ) do |request|
-    if request.tracking_enabled? && request.authenticated? && request.post? && request.path == '/client_search_queries'
+    if request.tracking_enabled? && request.authenticated? && request.post? && request.path.match?(request.client_search_query_write_regex)
       request.request_ip
     end
   end
@@ -132,7 +140,7 @@ Rack::Attack.tap do |config|
     limit: 30,
     period: 1.minute,
   ) do |request|
-    if request.tracking_enabled? && request.authenticated? && request.get? && request.path =~ /^\/client_search_queries\/[\w-]+\z/
+    if request.tracking_enabled? && request.authenticated? && request.get? && request.path.match?(request.client_search_query_read_regex)
       request.request_ip
     end
   end
