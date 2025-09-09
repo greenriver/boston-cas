@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchProgressUpdates
   class Base < ::ApplicationRecord
     self.table_name = 'match_progress_updates'
@@ -104,6 +106,10 @@ module MatchProgressUpdates
 
     def note_editable_by? editing_contact
       editing_contact.present? && (contact == editing_contact || match.can_create_administrative_note?(editing_contact))
+    end
+
+    def complete?
+      submitted_at.present?
     end
 
     def is_editable? # rubocop:disable Naming/PredicateName
