@@ -95,7 +95,7 @@ class DbTester
         end
 
         puts "Migration summary: #{ups} up, #{downs} down"
-        return if ups > 3 && downs == 0
+        return if ups > 3 && downs.zero?
       rescue Timeout::Error
         puts 'Migration status check timed out after 30 seconds'
       rescue StandardError => e
