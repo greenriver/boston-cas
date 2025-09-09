@@ -485,6 +485,8 @@ GEM
     nokogiri (1.18.9)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    nokogiri (1.18.9-arm64-darwin)
+      racc (~> 1.4)
     order_as_specified (1.7)
       activerecord (>= 5.0.0)
     orm_adapter (0.5.0)
@@ -530,6 +532,8 @@ GEM
     pwned (2.4.1)
     racc (1.8.1)
     rack (3.1.16)
+    rack-attack (6.7.0)
+      rack (>= 1.0, < 4)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-session (2.1.1)
@@ -764,6 +768,7 @@ GEM
     zip_tricks (5.6.0)
 
 PLATFORMS
+  arm64-darwin-24
   ruby
 
 DEPENDENCIES
@@ -863,6 +868,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 6)
   rack
+  rack-attack
   rack-mini-profiler
   rails (~> 7.1.5.2)
   rails-controller-testing
@@ -1082,6 +1088,7 @@ CHECKSUMS
   net-ssh (7.3.0) sha256=172076c4b30ce56fb25a03961b0c4da14e1246426401b0f89cba1a3b54bf3ef0
   nio4r (2.7.4) sha256=d95dee68e0bb251b8ff90ac3423a511e3b784124e5db7ff5f4813a220ae73ca9
   nokogiri (1.18.9) sha256=ac5a7d93fd0e3cef388800b037407890882413feccca79eb0272a2715a82fa33
+  nokogiri (1.18.9-arm64-darwin) sha256=eea3f1f06463ff6309d3ff5b88033c4948d0da1ab3cc0a3a24f63c4d4a763979
   order_as_specified (1.7) sha256=5e4016542f0bda13bc21821021199192567c32823a22f6962bc16b3dc254ce13
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   ostruct (0.6.1) sha256=09a3fb7ecc1fa4039f25418cc05ae9c82bd520472c5c6a6f515f03e4988cb817
@@ -1107,6 +1114,7 @@ CHECKSUMS
   pwned (2.4.1) sha256=e375b45e1cd78aded2c923737f75e09e64bc66582142c144bd85f4ce1fa0955d
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.1.16) sha256=efb5606c351efc56b85b10c3493055d0d35209d23f44792ec4e1183eb0234635
+  rack-attack (6.7.0) sha256=3ca47e8f66cd33b2c96af53ea4754525cd928ed3fa8da10ee6dad0277791d77c
   rack-mini-profiler (3.3.1) sha256=2bf0de7d5795f54581e453b248e42cc50e8d0529efac73828653a9ad2407a801
   rack-session (2.1.1) sha256=0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463

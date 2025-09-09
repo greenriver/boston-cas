@@ -66,4 +66,12 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include AuthenticationHelper, type: :controller
   config.include FactoryBot::Syntax::Methods
+
+  config.before(:suite) do
+    # disable paper trail for test performance
+    PaperTrail.enabled = false
+
+    # disable rack attack unless we are testing it explicitly
+    Rack::Attack.enabled = false
+  end
 end
