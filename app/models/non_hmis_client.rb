@@ -81,13 +81,16 @@ class NonHmisClient < ApplicationRecord
   end
 
   def self.diet_columns
-    column_names - [
+    column_names - big_columns
+  end
+
+  def self.big_columns
+    [
       'neighborhood_interests',
       'active_cohort_ids',
       'tags',
       'enrolled_project_ids',
       'rrh_assessment_contact_info',
-      'rrh_desired',
     ]
   end
 
@@ -395,7 +398,7 @@ class NonHmisClient < ApplicationRecord
   end
 
   def build_assessment_if_missing
-    return if self.class.skip_build_assessment_if_missing?
+    return if Current.try(:skip_build_assessment_if_missing) || self.class.skip_build_assessment_if_missing?
     return unless persisted?
     return if client_assessments.exists?
 

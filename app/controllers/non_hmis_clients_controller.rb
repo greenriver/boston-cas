@@ -17,6 +17,7 @@ class NonHmisClientsController < ApplicationController
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index, :search]
   before_action :find_match, only: [:current_assessment_limited]
+  around_action :with_skip_build_assessment_if_missing, only: [:index]
 
   helper_method :non_hmis_client_search_queries_path
 
@@ -26,6 +27,15 @@ class NonHmisClientsController < ApplicationController
     return if performed?
 
     filter_data
+  end
+
+  # This allows us to skip the build_assessment_if_missing method in the non_hmis_client model
+  # which calls some attributes that are explicitly not loaded in the index action so sort will work
+  private def with_skip_build_assessment_if_missing
+    Current.skip_build_assessment_if_missing = true
+    yield
+  ensure
+    Current.skip_build_assessment_if_missing = nil
   end
 
   def search

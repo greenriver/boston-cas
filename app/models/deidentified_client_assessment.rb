@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class DeidentifiedClientAssessment < NonHmisAssessment
   class << self
     include ActionView::Helpers::TextHelper
@@ -76,6 +78,10 @@ class DeidentifiedClientAssessment < NonHmisAssessment
       view_helper.concat(assessment_date)
       view_helper.concat(assessment_title)
     end
+    # Because the index is loaded with a subset of columns, we need to reload the client
+    # This is a known N+1, but this version of the assessment isn't frequently used, so we're
+    # goig to live with it for now
+    client.reload
     row = [
       view_helper.link_to(client.client_identifier, url_helpers.deidentified_client_path(id: client.id)),
       client.agency&.name,
