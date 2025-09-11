@@ -17,7 +17,7 @@ class ActiveMatchSearchQueriesController < ActiveMatchesController
 
     query = ClientSearchQuery.find_or_create_by_params(safe_params, user: current_user)
     if query.valid?
-      redirect_to active_match_search_query_path(sanitized_search_params.merge(id: query.id, current_route: @current_route_name).symbolize_keys)
+      redirect_to active_match_search_query_path(sanitized_search_params.merge(id: query.id, current_route: @current_route_name))
     else
       flash[:error] = 'Search query not valid'
       redirect_to active_matches_path
