@@ -19,7 +19,7 @@
   - @prompt = t '.search_prompt'
 .row.o-search
   .col-sm-4.o-search__input-wrapper
-    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results', url: closed_match_search_queries_path, method: :post, search_params: search_params.to_h.symbolize_keys.merge(current_route: @current_route_name)
+    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results', url: closed_match_search_queries_path, method: :post, sanitized_search_params: sanitized_search_params.merge(current_route: @current_route_name)
 
   .col-sm-8.sort-filter.o-search__actions
     = render 'filter', available_steps: ClientOpportunityMatch.closed_filter_options, return_path: closed_matches_path, label_method: :closed, available_routes: @available_routes

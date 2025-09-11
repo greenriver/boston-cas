@@ -48,7 +48,7 @@ module Admin
 
       # sort / paginate
       @users = @users
-        .order(sort_column => sort_direction)
+        .reorder(sort_column => sort_direction)
         .page(params[:page]).per(25)
 
       # count number of active/closed matches per user

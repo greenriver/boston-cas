@@ -219,7 +219,7 @@ class NonHmisClientsController < ApplicationController
           @column = 'assessed_at'
         end
       else
-        @column = 'days_homeless_in_the_last_three_years'
+        @column = 'non_hmis_clients.days_homeless_in_the_last_three_years'
       end
       @direction = 'desc'
       sort_string = "#{@column} #{@direction}"
