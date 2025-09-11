@@ -21,7 +21,7 @@ RSpec.describe Admin::UserSearchQueriesController, type: :controller do
       expect(query.query_params[:q]).to eq('alpha')
       expect(query.query_params[:sort]).to eq('last_name')
       expect(query.query_params[:direction]).to eq('asc')
-      expect(response).to redirect_to(admin_user_search_query_path(id: query.id))
+      expect(response).to redirect_to(admin_user_search_query_path(search_params.merge(id: query.id)))
     end
 
     it 'reuses an existing search query for identical parameters' do

@@ -91,6 +91,24 @@ class ImportedClientsController < NonHmisClientsController
   end
   helper_method :sort_options
 
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
+    default_sort = sort_options.first.try(:[], :order)
+
+    sort_string = if @column.blank?
+      @column = sort_options.first.try(:[], :column)
+      @direction = sort_options.first.try(:[], :direction)
+      default_sort
+    else
+      sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.try(:first).try(:[], :order) || default_sort
+    end
+    sort_string += ' NULLS LAST' if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
+    sort_string
+  end
+
   def filter_terms
     [:family_member, :available]
   end

@@ -19,7 +19,7 @@
 
 .row
   .col-sm-4
-    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results', current_route: @current_route_name, url: active_match_search_queries_path, method: :post
+    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results', url: active_match_search_queries_path, method: :post, search_params: search_params.to_h.symbolize_keys.merge(current_route: @current_route_name)
 
   .col-sm-8.sort-filter.d-flex
     = render 'filter', available_steps: @available_steps, return_path: active_matches_path, label_method: :active, available_routes: @available_routes

@@ -325,4 +325,23 @@ class MatchListBaseController < ApplicationController
     )
   end
   helper_method :filter_params
+
+  def search_params
+    params.permit(
+      :q,
+      :current_route,
+      :sort,
+      :direction,
+      :current_step,
+      :current_program,
+      :current_contact_type,
+      :current_filter_contact,
+    )
+  end
+  helper_method :search_params
+
+  def sanitized_search_params
+    search_params.to_h.symbolize_keys.except(:q)
+  end
+  helper_method :sanitized_search_params
 end

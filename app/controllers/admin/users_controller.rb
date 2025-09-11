@@ -178,6 +178,11 @@ module Admin
       )
     end
 
+    def sanitized_search_params
+      params.permit(:direction, :sort).to_h.symbolize_keys
+    end
+    helper_method :sanitized_search_params
+
     def confirmation_params
       params.require(:user).permit(
         :confirmation_password,
