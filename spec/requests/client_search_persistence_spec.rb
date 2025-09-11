@@ -8,6 +8,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
   let!(:client) { create(:client) }
   let!(:identified_client) { create(:identified_client) }
   let!(:deidentified_client) { create(:deidentified_client) }
+  let(:default_sort) { { direction: 'desc', sort: 'days_homeless_in_last_three_years' } }
 
   before do
     sign_in admin
@@ -21,7 +22,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
-      expect(response).to redirect_to(client_search_query_path(search_query))
+      expect(response).to redirect_to(client_search_query_path(search_query, **default_sort))
     end
 
     it 'displays search results via persisted query URL' do
@@ -32,13 +33,14 @@ RSpec.describe 'Client Search Persistence', type: :request do
   end
 
   describe 'Deidentified client search persistence' do
+    let(:default_sort) { { direction: 'desc', sort: 'non_hmis_clients.days_homeless_in_the_last_three_years' } }
     it 'creates a search query and redirects on search' do
       expect do
         post deidentified_client_search_queries_path, params: { search_form: { q: 'jane doe' } }
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
-      expect(response).to redirect_to(deidentified_client_search_query_path(search_query))
+      expect(response).to redirect_to(deidentified_client_search_query_path(search_query, **default_sort))
     end
 
     it 'displays search results via persisted query URL' do
@@ -49,13 +51,14 @@ RSpec.describe 'Client Search Persistence', type: :request do
   end
 
   describe 'Identified client search persistence' do
+    let(:default_sort) { { direction: 'desc', sort: 'non_hmis_clients.days_homeless_in_the_last_three_years' } }
     it 'creates a search query and redirects on search' do
       expect do
         post identified_client_search_queries_path, params: { search_form: { q: 'bob smith' } }
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
-      expect(response).to redirect_to(identified_client_search_query_path(search_query))
+      expect(response).to redirect_to(identified_client_search_query_path(search_query, **default_sort))
     end
 
     it 'displays search results via persisted query URL' do
@@ -89,7 +92,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
       end.to change(ClientSearchQuery, :count).by(1)
 
       search_query = ClientSearchQuery.last
-      expect(response).to redirect_to(unavailable_client_search_query_path(search_query))
+      expect(response).to redirect_to(unavailable_client_search_query_path(search_query, **default_sort))
     end
 
     it 'displays search results via persisted query URL' do
@@ -110,7 +113,7 @@ RSpec.describe 'Client Search Persistence', type: :request do
         post client_search_queries_path, params: { search_form: { q: 'john doe' } }
       end.not_to change(ClientSearchQuery, :count)
 
-      expect(response).to redirect_to(client_search_query_path(first_query))
+      expect(response).to redirect_to(client_search_query_path(first_query, **default_sort))
     end
   end
 end
