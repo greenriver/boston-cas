@@ -120,8 +120,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       { title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true },
       { title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'non_hmis_clients.assessment_score DESC', visible: true },
       { title: 'Assessment Date', column: 'assessed_at', direction: 'desc', order: 'non_hmis_clients.assessed_at DESC', visible: true },
-      { title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-        order: 'days_homeless_in_the_last_three_years DESC', visible: true },
+      { title: 'Days Homeless in the Last 3 Years', column: 'non_hmis_clients.days_homeless_in_the_last_three_years', direction: 'desc',
+        order: 'non_hmis_clients.days_homeless_in_the_last_three_years DESC', visible: true },
     ].freeze
   end
   helper_method :sort_options

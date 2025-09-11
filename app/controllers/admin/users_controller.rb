@@ -48,7 +48,7 @@ module Admin
 
       # sort / paginate
       @users = @users
-        .order(sort_column => sort_direction)
+        .reorder(sort_column => sort_direction)
         .page(params[:page]).per(25)
 
       # count number of active/closed matches per user
@@ -177,6 +177,11 @@ module Admin
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
       )
     end
+
+    def sanitized_search_params
+      params.permit(:direction, :sort).to_h.symbolize_keys
+    end
+    helper_method :sanitized_search_params
 
     def confirmation_params
       params.require(:user).permit(

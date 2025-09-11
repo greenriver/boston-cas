@@ -10,6 +10,11 @@
     = hidden_field_tag :current_tab, params[:current_tab]
   - if defined?(current_route)
     = hidden_field_tag :current_route, current_route
+  - if defined?(sanitized_search_params)
+    - sanitized_search_params.each do | key, value|
+      - next if value.blank?
+
+      = hidden_field_tag key, value
   - filter_terms.each do | term |
     - if params[term]
       = hidden_field_tag term, params[term]

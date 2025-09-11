@@ -94,6 +94,11 @@ class ClientsController < ApplicationController
     }.compact
   end
 
+  def sanitized_search_params
+    search_params.to_h.symbolize_keys.except(:q)
+  end
+  helper_method :sanitized_search_params
+
   private def search_scope
     client_scope
   end
