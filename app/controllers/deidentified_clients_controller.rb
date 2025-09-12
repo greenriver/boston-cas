@@ -155,6 +155,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       :vispdat_priority_score,
       :shelter_name,
       :warehouse_client_id,
+      :month_of_birth,
+      :year_of_birth,
       active_cohort_ids: [],
       enrolled_project_ids: [],
       client_assessments_attributes: [
@@ -240,17 +242,34 @@ class DeidentifiedClientsController < NonHmisClientsController
     )
   end
 
-  private def append_client_identifier dirty_params
+  private def append_client_identifier(dirty_params)
     dirty_params[:last_name] = "Anonymous - #{dirty_params[:client_identifier]}"
     dirty_params[:first_name] = "Anonymous - #{dirty_params[:client_identifier]}"
 
     return dirty_params
   end
 
-  private def clean_params dirty_params
+  private def clean_params(dirty_params)
     dirty_params = clean_client_params(dirty_params)
+    dirty_params = calculate_dob(dirty_params)
 
     return append_client_identifier(dirty_params)
+  end
+
+  private def calculate_dob(dirty_params)
+    # Clear the DOB if the client is a youth or the month or year of birth are blank
+    clear_dob = dirty_params[:is_currently_youth] == '1' ||
+      dirty_params[:month_of_birth].blank? ||
+      dirty_params[:year_of_birth].blank?
+    if clear_dob
+      dirty_params[:date_of_birth] = nil
+    else
+      dirty_params[:date_of_birth] = Date.new(dirty_params[:year_of_birth].to_i, dirty_params[:month_of_birth].to_i, 1)
+    end
+    dirty_params.delete(:month_of_birth)
+    dirty_params.delete(:year_of_birth)
+
+    dirty_params
   end
 
   private def import_params

@@ -10,6 +10,7 @@ class DeidentifiedClient < NonHmisClient
   validates :client_identifier, uniqueness: true
   has_many :client_assessments, class_name: 'DeidentifiedClientAssessment', foreign_key: :non_hmis_client_id, dependent: :destroy
   accepts_nested_attributes_for :client_assessments
+  attr_accessor :month_of_birth, :year_of_birth
 
   scope :visible_to, ->(user) do
     if user.can_edit_all_clients? || user.can_manage_all_deidentified_clients?
