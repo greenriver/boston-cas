@@ -1,4 +1,4 @@
-Rails.logger.debug { "Running initializer in #{__FILE__}" }
+# Rails.logger.debug "Running initializer in #{__FILE__}"
 
 if ENV['EKS'] != 'true'
   def find_log_stream_name

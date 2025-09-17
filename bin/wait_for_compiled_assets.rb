@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'shellwords'
 require_relative '../config/deploy/docker/lib/asset_compiler'
 
 target_group_name = ENV.fetch('TARGET_GROUP_NAME', false)

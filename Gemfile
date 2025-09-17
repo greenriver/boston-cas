@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord-import'
 gem 'rack'
 gem 'pg', '~> 1.1'
-gem 'rails', '~> 7.1.5.2'
+gem 'rails', '~> 7.2.2.2'
 gem 'sprockets-rails'
 gem 'rails-html-sanitizer'
 gem 'loofah'
@@ -49,10 +49,7 @@ gem 'memery', require: false
 gem 'todo_or_die'
 
 # File processing
-gem 'carrierwave', '>= 2.2.5' # CVE-2023-49090
-gem 'carrierwave-i18n'
-gem 'mini_magick'
-gem 'ruby-filemagic'
+gem 'marcel'
 
 # AWS SDK is needed for deployment and within the application
 gem 'aws-sdk-rails'
@@ -81,11 +78,10 @@ gem 'redis'
 gem 'activerecord-session_store'
 gem 'lograge'
 gem 'logstop'
-gem 'paper_trail'#, '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
+gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
-gem 'marginalia'
 gem 'active_record_distinct_on'
 
 gem 'devise', '~> 4'
@@ -156,7 +152,7 @@ group :development do
 
   gem 'rack-mini-profiler', require: false
 
-  #gem 'letter_opener'
+  # gem 'letter_opener'
   # gem 'rails-erd'
   gem 'ruby-prof'
   gem 'web-console'

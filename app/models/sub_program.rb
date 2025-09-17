@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class SubProgram < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
@@ -126,7 +128,7 @@ class SubProgram < ApplicationRecord
   end
 
   # returns a useful array of types that have buildings attached
-  def self.have_buildings # rubocop:disable Naming/PredicateName
+  def self.have_buildings # rubocop:disable Naming/PredicatePrefix
     b = []
     types.select { |sp| sp[:building] == true }.each do |sp|
       b << sp[:value]
@@ -134,7 +136,7 @@ class SubProgram < ApplicationRecord
     b
   end
 
-  def has_buildings? # rubocop:disable Naming/PredicateName
+  def has_buildings? # rubocop:disable Naming/PredicatePrefix
     SubProgram.have_buildings.include?(program_type)
   end
 

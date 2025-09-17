@@ -4,8 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ImportedClientsCsv < ApplicationRecord
-  mount_uploader :file, ImportedClientsCsvFileUploader
+  # Remove CarrierWave dependency
+  # mount_uploader :file, ImportedClientsCsvFileUploader
+
+  include FileContentValidator
 
   attr_reader :added, :touched, :problems, :clients
 
@@ -14,6 +19,12 @@ class ImportedClientsCsv < ApplicationRecord
     @added = 0
     @touched = 0
     @clients = []
+  end
+
+  # Validate file content before creating record
+  def self.validate_file_content(file_content, claimed_content_type = nil)
+    allowed_types = ['text/plain', 'text/csv', 'application/csv', 'application/vnd.ms-excel']
+    super(file_content, claimed_content_type, allowed_types, '.csv')
   end
 
   def import(agency)
