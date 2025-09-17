@@ -1,7 +1,14 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Rules::PathwaysEligible, type: :model do
-  MatchRoutes::Base.ensure_all
   describe 'clients_that_fit' do
     let!(:rule) { create :pathways_eligible }
     let!(:bob) { create :client, first_name: 'Bob', rrh_assessment_collected_at: '2020-03-01'.to_date }

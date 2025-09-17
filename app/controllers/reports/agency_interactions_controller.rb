@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Reports
   class AgencyInteractionsController < ApplicationController
     include ArelHelper
@@ -33,9 +35,11 @@ module Reports
     helper_method :match_decision_reasons_collection
 
     def reason_text(match_decision_reason)
-      text = match_decision_reason.name
-      text << " (#{match_decision_reason.title})" if match_decision_reason.title.present? && match_decision_reason.title != match_decision_reason.name
-      text
+      if match_decision_reason.title.present? && match_decision_reason.title != match_decision_reason.name
+        "#{match_decision_reason.name} (#{match_decision_reason.title})"
+      else
+        match_decision_reason.name
+      end
     end
     helper_method :reason_text
 

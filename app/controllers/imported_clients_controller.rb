@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ImportedClientsController < NonHmisClientsController
   before_action :require_can_manage_imported_clients!
 
@@ -21,15 +23,27 @@ class ImportedClientsController < NonHmisClientsController
 
     begin
       file = import_params[:file]
-      content = file.read
-      content = content.encode('UTF-8', 'binary', invalid: :replace, undef: :replace)
+      file_content = file.read
+      file_content = file_content.encode('UTF-8', 'binary', invalid: :replace, undef: :replace)
 
+      # Validate file content before creating record
+      validation_result = ImportedClientsCsv.validate_file_content(file_content, file.content_type)
+
+      unless validation_result[:valid]
+        @upload = ImportedClientsCsv.new
+        flash[:alert] = validation_result[:error]
+        render :new
+        return
+      end
+
+      # File is valid, now create the record
       @upload = ImportedClientsCsv.create(
         filename: file.original_filename,
         user_id: current_user.id,
-        content_type: file.content_type,
-        content: content,
+        content_type: validation_result[:detected_type], # Use the real detected type
+        content: file_content,
       )
+
       success = @upload.import(current_user.agency)
       unless success
         @upload = ImportedClientsCsv.new

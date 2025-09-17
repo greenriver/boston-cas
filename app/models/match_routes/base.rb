@@ -1,10 +1,10 @@
-# frozen_string_literal: true
-
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
+
+# frozen_string_literal: true
 
 module MatchRoutes
   class Base < ApplicationRecord
@@ -234,7 +234,7 @@ module MatchRoutes
       raise NotImplementedError
     end
 
-    private def has_tag_if_prioritization_requires_it # rubocop:disable  Naming/PredicateName
+    private def has_tag_if_prioritization_requires_it # rubocop:disable Naming/PredicatePrefix
       errors.add :tag_id, 'Chosen prioritization scheme requires a tag be set' if tag_id.blank? && match_prioritization&.requires_tag?
     end
   end
