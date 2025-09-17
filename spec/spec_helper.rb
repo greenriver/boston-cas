@@ -106,5 +106,13 @@ RSpec.configure do |config|
   config.before(:suite) do
     Rails.application.load_seed # loading seeds
     MatchRoutes::Base.ensure_all
+    MatchPrioritization::Base.ensure_all
+    CasSeeds::Rules.new.run!
+  end
+
+  config.after(:suite) do
+    [MatchRoutes::Base, MatchPrioritization::Base, Rule].each do |model|
+      ApplicationRecord.connection.execute("TRUNCATE TABLE #{model.quoted_table_name} RESTART IDENTITY")
+    end
   end
 end
