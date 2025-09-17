@@ -49,7 +49,7 @@ gem 'memery', require: false
 gem 'todo_or_die'
 
 # File processing
-gem 'ruby-filemagic'
+gem 'marcel'
 
 # AWS SDK is needed for deployment and within the application
 gem 'aws-sdk-rails'

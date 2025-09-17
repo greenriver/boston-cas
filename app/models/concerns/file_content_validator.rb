@@ -108,25 +108,4 @@ module FileContentValidator
       end
     end
   end
-
-  # Instance methods for validation
-  def validate_file_format
-    return true if content.blank?
-
-    result = self.class.validate_file_content(content, content_type)
-    result[:valid]
-  end
-
-  def validate_file_size
-    return true if content.blank?
-
-    content.bytesize <= 25.megabytes
-  end
-
-  def validate_content_type
-    return true if content.blank?
-
-    result = self.class.validate_file_content(content, content_type)
-    result[:valid]
-  end
 end
