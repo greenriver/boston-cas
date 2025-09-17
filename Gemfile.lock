@@ -804,7 +804,6 @@ DEPENDENCIES
   logstop
   loofah
   marcel
-  marginalia
   maxminddb
   memery
   mini_portile2

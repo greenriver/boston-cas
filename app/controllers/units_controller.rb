@@ -44,6 +44,8 @@ class UnitsController < ApplicationController
   def new
     @unit = Unit.new
     set_building
+    @unit.elevator_accessible = @unit.building.elevator_accessible_default
+    set_building
   end
 
   # GET /hmis/units/1/edit
