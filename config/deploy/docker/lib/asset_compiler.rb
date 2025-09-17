@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/object/blank'
+require 'shellwords'
 require_relative 'aws_sdk_helpers'
 require 'dotenv'
 

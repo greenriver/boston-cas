@@ -1,7 +1,14 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Rules::RankBelow, type: :model do
-  MatchRoutes::Base.ensure_all
   describe 'clients_that_fit' do
     let!(:rule) { create :rank_below }
     let!(:bob) { create :client, first_name: 'Bob', tags: {1 => 5} }

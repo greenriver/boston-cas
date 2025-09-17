@@ -4,7 +4,9 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
-require "application_responder"
+# frozen_string_literal: true
+
+require 'application_responder'
 
 class ApplicationController < ActionController::Base
   include ControllerAuthorization
@@ -27,14 +29,14 @@ class ApplicationController < ActionController::Base
   before_action :compose_activity, except: [:poll, :active, :rollup, :image] # , only: [:show, :index, :merge, :unmerge, :edit, :update, :destroy, :create, :new]
   after_action :log_activity, except: [:poll, :active, :rollup, :image] # , only: [:show, :index, :merge, :unmerge, :edit, :destroy, :create, :new]
 
-  #before_action :_basic_auth, if: -> { Rails.env.staging? }
+  # before_action :_basic_auth, if: -> { Rails.env.staging? }
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!, :set_sentry_user
 
   before_action :prepare_exception_notifier
 
   # Allow devise login links to pass along a destination
-  after_action :store_current_location, :unless => :devise_controller?
+  after_action :store_current_location, unless: :devise_controller?
 
   private
 
@@ -57,7 +59,7 @@ class ApplicationController < ActionController::Base
     payload[:user_id] = current_user&.id
     payload[:pid] = Process.pid
     payload[:request_id] = request.uuid
-    payload[:request_start] = request.headers['HTTP_X_REQUEST_START'].try(:gsub, /\At=/,'')
+    payload[:request_start] = request.headers['HTTP_X_REQUEST_START'].try(:gsub, /\At=/, '')
   end
 
   def info_for_paper_trail
@@ -65,7 +67,7 @@ class ApplicationController < ActionController::Base
       user_id: warden&.user&.id,
       notification_code: params[:notification_id],
       session_id: request.env['rack.session.record']&.session_id,
-      request_id: request.uuid
+      request_id: request.uuid,
     }
   end
 
@@ -102,7 +104,7 @@ class ApplicationController < ActionController::Base
   end
 
   def filter_terms
-    [  ]
+    []
   end
   helper_method :filter_terms
 
@@ -117,7 +119,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_hostname
-    @op_hostname ||= `hostname` rescue 'test-server'
+    @op_hostname ||= begin # rubocop:disable Naming/MemoizedInstanceVariableName
+                       `hostname`
+                     rescue StandardError
+                       'test-server'
+                     end
   end
 
   def prepare_exception_notifier

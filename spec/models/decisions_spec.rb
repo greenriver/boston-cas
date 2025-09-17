@@ -4,8 +4,6 @@ require 'rails_helper'
 
 RSpec.describe MatchDecisions::Base, type: :model do
   describe 'DND Match recommendation' do
-    MatchRoutes::Base.ensure_all
-    MatchPrioritization::Base.ensure_all
     let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
     let(:route) do
       r = MatchRoutes::Default.first

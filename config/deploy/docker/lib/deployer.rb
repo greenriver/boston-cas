@@ -1,6 +1,7 @@
 require 'date'
 require 'byebug'
 require 'English'
+require 'shellwords'
 require_relative 'roll_out'
 require_relative 'aws_sdk_helpers'
 require_relative 'asset_compiler'
