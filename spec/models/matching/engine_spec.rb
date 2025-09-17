@@ -1,10 +1,15 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 include ActiveJob::TestHelper
 
 RSpec.describe Matching::Engine, type: :model do
-  CasSeeds::Rules.new.run!
-  # MatchRoutes::Base.ensure_all
-  # MatchPrioritization::Base.ensure_all
   # MatchRoutes::ProviderOnly.first.update(should_cancel_other_matches: false)
   let!(:priority) { create :priority_vispdat_priority }
   let!(:route) { create :default_route, match_prioritization: priority }
