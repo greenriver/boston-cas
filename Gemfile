@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord-import'
 gem 'rack'
 gem 'pg', '~> 1.1'
-gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 7.2.2.2'
 gem 'sprockets-rails'
 gem 'rails-html-sanitizer'
 gem 'loofah'
@@ -82,7 +82,6 @@ gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail,
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
-gem 'marginalia'
 gem 'active_record_distinct_on'
 
 gem 'devise', '~> 4'
