@@ -10,3 +10,36 @@ namespace :db do
     end
   end
 end
+
+# Start Monkey Patch for pg_dump 17.6
+# Helper method to fix pg_dump 17.6 \restrict and \unrestrict commands
+# Dynamically determines which structure file to fix based on the current database connection
+def fix_pg_dump_restrict_commands
+  return unless Rails.env.development? || Rails.env.test?
+
+  [
+    'structure.sql',
+  ].each do |file_name|
+    structure_file = Rails.root.join('db', file_name)
+    next unless File.exist?(structure_file)
+
+    schema = File.read(structure_file)
+    next unless schema.match?(/^\\restrict|^\\unrestrict/)
+
+    schema.gsub!(/^\\restrict/, '-- \restrict')
+    schema.gsub!(/^\\unrestrict/, '-- \unrestrict')
+    File.write(structure_file, schema)
+  end
+end
+
+Rake::Task['db:schema:dump'].enhance do
+  fix_pg_dump_restrict_commands
+end
+
+Rake::Task['db:migrate'].enhance do
+  fix_pg_dump_restrict_commands
+end
+
+Rake::Task['db:schema:dump'].enhance do
+  fix_pg_dump_restrict_commands
+end
