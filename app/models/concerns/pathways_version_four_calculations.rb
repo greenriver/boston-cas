@@ -53,7 +53,7 @@ module PathwaysVersionFourCalculations
         }
       end
       status = if identified? then 'Identified' else 'Deidentified' end
-      options.map do |k, v|
+      options&.map do |k, v|
         [
           "#{status}#{k}",
           "#{v} - #{status}",

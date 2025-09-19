@@ -6,9 +6,9 @@
 
 - if show_match_status_facet_nav?
   %ul.nav.nav-tabs
-    %li.nav-item{role: "presentation", class: ('active' if controller_path == 'active_matches')}
+    %li.nav-item.active{role: "presentation"}
       = link_to 'Matches in Progress', active_matches_path, class: 'nav-link'
-    %li.nav-item{role: "presentation", class: ('active' if controller_path == 'closed_matches')}
+    %li.nav-item{role: "presentation"}
       = link_to 'Closed Matches', closed_matches_path, class: 'nav-link'
 
 .row
@@ -19,7 +19,7 @@
 
 .row
   .col-sm-4
-    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results'
+    = render 'search_form', tooltip: 'Search with PersonalID or full or partial "first last" or "last, first" for more specific results', url: active_match_search_queries_path, method: :post, sanitized_search_params: sanitized_search_params.merge(current_route: @current_route_name)
 
   .col-sm-8.sort-filter.d-flex
     = render 'filter', available_steps: @available_steps, return_path: active_matches_path, label_method: :active, available_routes: @available_routes
