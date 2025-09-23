@@ -71,11 +71,29 @@ RSpec.describe Rack::Attack, type: :request do
     status_encountered ? requests_sent - 1 : nil
   end
 
+  shared_examples 'blocks active storage routes' do
+    let(:active_storage_paths) do
+      [
+        '/rails/active_storage/blobs/redirect/fake-signed-id/file.jpg',
+        '/rails/active_storage/representations/redirect/fake-signed-id/file.jpg',
+        '/rails/active_storage/disk/fake-key/file.jpg',
+      ]
+    end
+
+    it 'returns 403 for all Active Storage endpoints' do
+      active_storage_paths.each do |path|
+        get path
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
   before(:each) do
     Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
   end
 
   describe 'when not-logged in' do
+    include_examples 'blocks active storage routes'
     describe 'when hitting the homepage' do
       let(:path) { root_path }
 
@@ -113,6 +131,8 @@ RSpec.describe Rack::Attack, type: :request do
     before do
       sign_in user
     end
+
+    include_examples 'blocks active storage routes'
 
     describe 'and hitting the homepage' do
       let(:path) { root_path }
