@@ -9,8 +9,10 @@
 FactoryBot.define do
   factory :default_route, class: 'MatchRoutes::Default' do
     active { true }
+    association :match_prioritization, factory: :priority_days_homeless
   end
   factory :provider_route, class: 'MatchRoutes::ProviderOnly' do
     active { true }
+    association :match_prioritization, factory: :priority_days_homeless
   end
 end

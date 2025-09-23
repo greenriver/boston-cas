@@ -1,0 +1,110 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
+##
+# ClientSearchQuery stores and manages search parameters for client searches in the CAS system.
+#
+# This class handles the persistence and validation of search queries, allowing users to save
+# and reuse search criteria. It normalizes parameters, generates unique fingerprints for
+# deduplication, and validates that only allowed parameters are stored.
+#
+# **IMPORTANT: This class stores persisted PII (Personally Identifiable Information)**
+# including client names, dates of birth, SSNs, and email addresses as provided during the search.
+#
+# @example Creating a search query
+#   params = { q: "John", client: { first_name: "John", last_name: "Doe" } }
+#   query = ClientSearchQuery.find_or_create_by_params(params, user: current_user)
+#
+# @example Accessing query parameters
+#   query.query_params # => { "q" => "John", "client" => { "first_name" => "John", "last_name" => "Doe" } }
+#
+class ClientSearchQuery < ApplicationRecord
+  belongs_to :created_by, class_name: 'User'
+
+  MAX_STRING_LENGTH = 100
+  ALLOWED_PARAMS = ['q', 'client', 'current_route', 'current_step', 'current_program', 'current_contact_type', 'current_filter_contact', 'sort', 'direction'].freeze
+  ALLOWED_CLIENT_PARAMS = ['first_name', 'last_name', 'dob', 'ssn', 'email'].freeze
+
+  validate :validate_params
+
+  # @param params [ActionController::Parameters] request params
+  # @return [ActionController::Parameters, nil] Permitted parameters or nil if no valid params present
+  def self.permit_params(params)
+    params.permit(*ALLOWED_PARAMS, client: ALLOWED_CLIENT_PARAMS).presence
+  end
+
+  def self.find_or_create_by_params(params, user:)
+    norm = normalize_params(params.to_h)
+
+    # Validate params first
+    instance = new(params: norm)
+    instance.validate_params
+    return instance if instance.errors.any?
+
+    fingerprint = generate_fingerprint(norm)
+    upsert(
+      { fingerprint: fingerprint, params: norm, created_by_id: user.id },
+      unique_by: :fingerprint,
+      on_duplicate: Arel.sql('params = EXCLUDED.params, created_by_id = EXCLUDED.created_by_id'),
+    )
+
+    find_by!(fingerprint: fingerprint)
+  end
+
+  def self.generate_fingerprint(params)
+    Digest::SHA256.hexdigest(params.to_json)
+  end
+
+  def self.normalize_params(params)
+    return {} if params.nil?
+
+    params.transform_values do |v|
+      case v
+      when Hash
+        normalize_params(v)
+      when String
+        v.strip
+      else
+        v
+      end
+    end.reject { |_, v| v.blank? }.sort.to_h
+  end
+
+  def validate_params
+    return if params.blank?
+
+    # Validate top-level parameters
+    invalid_params = params.keys - ALLOWED_PARAMS
+    errors.add(:params, "contains invalid parameters: #{invalid_params.join(', ')}") if invalid_params.any?
+
+    # Validate client parameters if present
+    if params['client'].present?
+      invalid_client_params = params['client'].keys - ALLOWED_CLIENT_PARAMS
+      errors.add(:params, "contains invalid client parameters: #{invalid_client_params.join(', ')}") if invalid_client_params.any?
+    end
+
+    # Validate string lengths
+    validate_string_lengths(params)
+  end
+
+  def validate_string_lengths(hash, prefix = nil)
+    hash.each do |key, value|
+      case value
+      when String
+        field = prefix ? "#{prefix}.#{key}" : key
+        errors.add(:params, "#{field} is too long (max #{MAX_STRING_LENGTH} characters)") if value.length > MAX_STRING_LENGTH
+      when Hash
+        validate_string_lengths(value, prefix ? "#{prefix}.#{key}" : key)
+      end
+    end
+  end
+
+  def query_params
+    params.with_indifferent_access
+  end
+end

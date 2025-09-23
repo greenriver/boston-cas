@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -11,6 +13,14 @@ class DeidentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_deidentified_clients!, except: [:current_assessment_limited]
   before_action :require_match_access_context!, only: [:current_assessment_limited]
   before_action :require_can_manage_deidentified_clients!, only: [:destroy]
+
+  private def search_path
+    deidentified_client_search_query_path(@search_query)
+  end
+
+  private def non_hmis_client_index_path
+    deidentified_clients_path
+  end
 
   def create
     @non_hmis_client = client_source.create(clean_params(deidentified_client_params))
@@ -43,6 +53,10 @@ class DeidentifiedClientsController < NonHmisClientsController
       @non_hmis_client.destroy
     end
     respond_with(@non_hmis_client, location: deidentified_clients_path)
+  end
+
+  def non_hmis_client_search_queries_path
+    deidentified_client_search_queries_path
   end
 
   def choose_upload
@@ -121,14 +135,14 @@ class DeidentifiedClientsController < NonHmisClientsController
       { title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true },
       { title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'non_hmis_clients.assessment_score DESC', visible: true },
       { title: 'Assessment Date', column: 'assessed_at', direction: 'desc', order: 'non_hmis_clients.assessed_at DESC', visible: true },
-      { title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-        order: 'days_homeless_in_the_last_three_years DESC', visible: true },
+      { title: 'Days Homeless in the Last 3 Years', column: 'non_hmis_clients.days_homeless_in_the_last_three_years', direction: 'desc',
+        order: 'non_hmis_clients.days_homeless_in_the_last_three_years DESC', visible: true },
     ].freeze
   end
   helper_method :sort_options
 
   def filter_terms
-    [:agency, :cohort, :available]
+    [:agency, :assessment, :available, :cohort]
   end
   helper_method :filter_terms
 
@@ -156,6 +170,8 @@ class DeidentifiedClientsController < NonHmisClientsController
       :vispdat_priority_score,
       :shelter_name,
       :warehouse_client_id,
+      :month_of_birth,
+      :year_of_birth,
       active_cohort_ids: [],
       enrolled_project_ids: [],
       client_assessments_attributes: [
@@ -241,17 +257,34 @@ class DeidentifiedClientsController < NonHmisClientsController
     )
   end
 
-  private def append_client_identifier dirty_params
+  private def append_client_identifier(dirty_params)
     dirty_params[:last_name] = "Anonymous - #{dirty_params[:client_identifier]}"
     dirty_params[:first_name] = "Anonymous - #{dirty_params[:client_identifier]}"
 
     return dirty_params
   end
 
-  private def clean_params dirty_params
+  private def clean_params(dirty_params)
     dirty_params = clean_client_params(dirty_params)
+    dirty_params = calculate_dob(dirty_params)
 
     return append_client_identifier(dirty_params)
+  end
+
+  private def calculate_dob(dirty_params)
+    # Clear the DOB if the client is a youth or the month or year of birth are blank
+    clear_dob = dirty_params[:is_currently_youth] == '1' ||
+      dirty_params[:month_of_birth].blank? ||
+      dirty_params[:year_of_birth].blank?
+    if clear_dob
+      dirty_params[:date_of_birth] = nil
+    else
+      dirty_params[:date_of_birth] = Date.new(dirty_params[:year_of_birth].to_i, dirty_params[:month_of_birth].to_i, 1)
+    end
+    dirty_params.delete(:month_of_birth)
+    dirty_params.delete(:year_of_birth)
+
+    dirty_params
   end
 
   private def import_params

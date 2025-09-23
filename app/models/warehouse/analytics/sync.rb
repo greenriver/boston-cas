@@ -18,5 +18,6 @@ class Warehouse::Analytics::Sync
     Warehouse::Analytics::ReferralContact.sync!
     Warehouse::Analytics::CasUser.sync!
     Warehouse::Analytics::ReferralUser.sync!
+    Warehouse::Analytics::RejectionReason.sync!
   end
 end
