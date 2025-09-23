@@ -10,13 +10,14 @@ $stdout.sync = true
 require 'timeout'
 
 class DbTester
-  attr_accessor :model, :start_time
+  attr_accessor :model, :migration_path, :start_time
 
   GIVE_UP_AFTER_SEC = 3600
   SLEEP_TIME_SEC = 60
 
-  def initialize(model)
+  def initialize(model, migration_path)
     self.model = model
+    self.migration_path = migration_path
     self.start_time = Time.current
   end
 
@@ -28,9 +29,7 @@ class DbTester
     puts "Database checks passed for #{model}"
   end
 
-  private
-
-  def can_connect?
+  private def can_connect?
     loop do
       puts "Attempting to connect with #{model}"
 
@@ -61,7 +60,7 @@ class DbTester
 
       begin
         result = Timeout.timeout(30) do
-          model.connection.schema_migration.table_exists?
+          migration_context.schema_migration.table_exists?
         end
         puts "Table existence check completed: #{result}"
         return if result
@@ -76,7 +75,15 @@ class DbTester
     end
   end
 
-  def migrations?
+  private def migration_context
+    if model.connection.respond_to?(:migration_context)
+      model.connection.migration_context
+    else
+      ActiveRecord::MigrationContext.new(migration_path)
+    end
+  end
+
+  private def migrations?
     loop do
       puts "Checking migrations for #{model}"
 
@@ -85,7 +92,7 @@ class DbTester
         downs = 0
 
         migration_status = Timeout.timeout(30) do
-          model.connection.migration_context.migrations_status
+          migration_context.migrations_status
         end
         puts "Migration status fetched, processing #{migration_status.length} migrations..."
 
@@ -108,11 +115,11 @@ class DbTester
     end
   end
 
-  def sleep_or_exit
+  private def sleep_or_exit
     exit(1) if (Time.current - start_time) > GIVE_UP_AFTER_SEC
     sleep SLEEP_TIME_SEC
   end
 end
 
 # rake db:migrate:status:primary works sometimes? I'm confused.
-DbTester.new(ApplicationRecord).run!
+DbTester.new(ApplicationRecord, 'db/migrate').run!
