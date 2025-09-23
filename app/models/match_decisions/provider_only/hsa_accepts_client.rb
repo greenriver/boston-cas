@@ -12,6 +12,7 @@ module MatchDecisions::ProviderOnly
       'match_decisions/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteTwoDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
