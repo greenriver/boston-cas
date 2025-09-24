@@ -9,6 +9,7 @@ gem 'sprockets-rails'
 gem 'rails-html-sanitizer'
 gem 'loofah'
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
+gem 'rexml', '>= 3.4.2' # CVE-2025-58767, note this is bundled with ruby, and must be explicitly pinned
 
 # No longer default gems
 gem 'irb'

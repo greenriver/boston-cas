@@ -838,6 +838,7 @@ DEPENDENCIES
   redis
   reline
   responders
+  rexml (>= 3.4.2)
   roda
   roo
   rspec-mocks
