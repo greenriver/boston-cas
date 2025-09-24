@@ -34,7 +34,7 @@ ARG GROUP_ID=10000
 ARG BUNDLER_VERSION=2.6.3
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=3.3.8
+LABEL "ruby-version"=3.4.5
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
@@ -117,6 +117,7 @@ RUN apt-get update && apt-get upgrade -y \
   policykit-1 \
   poppler-utils \
   postgresql-client \
+  procps \
   shared-mime-info \
   software-properties-common \
   tar \
@@ -134,6 +135,8 @@ RUN apt-get update && apt-get upgrade -y \
 WORKDIR /app
 
 RUN gem update --system \
+  && gem update rexml \
+  && gem cleanup rexml \
   && gem install bundler --version=${BUNDLER_VERSION} \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \

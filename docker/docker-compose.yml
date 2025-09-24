@@ -27,6 +27,7 @@ x-app: &app
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
     BUNDLE_FORCE_RUBY_PLATFORM: 'true'
+    SSH_AUTH_SOCK: /ssh-agent
   tmpfs:
     - /tmp
 
@@ -45,7 +46,6 @@ services:
     profiles:
       - manual
     command: /bin/bash
-    entrypoint: ''
     depends_on:
       - db
       - redis
