@@ -6,6 +6,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class DeidentifiedClientsController < NonHmisClientsController
   include HasMatchAccessContext
   before_action :require_can_enter_deidentified_clients!, except: [:current_assessment_limited]
@@ -81,11 +83,24 @@ class DeidentifiedClientsController < NonHmisClientsController
     end
 
     begin
+      file_content = file.read
+
+      # Validate file content before creating record
+      validation_result = DeidentifiedClientsXlsx.validate_file_content(file_content, file.content_type)
+
+      unless validation_result[:valid]
+        @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+        flash[:alert] = validation_result[:error]
+        render :choose_upload
+        return
+      end
+
+      # File is valid, now create the record
       @upload = DeidentifiedClientsXlsx.create(
         filename: file.original_filename,
         user_id: current_user.id,
-        content_type: file.content_type,
-        content: file.read,
+        content_type: validation_result[:detected_type], # Use the real detected type
+        content: file_content,
       )
     rescue StandardError
       @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)

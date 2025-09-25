@@ -42,7 +42,7 @@ jobs:
             trivy_skip_files: /app/config/key.pem,/app/docker/sftp/ssh_host_ed25519_key,/app/docker/sftp/ssh_host_rsa_key
             target: prod-build
             build-args: |
-              BUILD_TAG=3.3.8-slim-bookworm
+              BUILD_TAG=3.4.5-slim-bookworm
               BUNDLER_VERSION=2.6.3
               USER_ID=10000
               GROUP_ID=10000
@@ -136,6 +136,9 @@ jobs:
           build-args: ${{ matrix.build-args }}
           cache-from: type=local,src=/tmp/.buildx-cache/${{ matrix.cache_key }}
           cache-to: type=local,dest=/tmp/.buildx-cache/${{ matrix.cache_key }},mode=max
+
+      - name: Verify rexml version
+        run: docker run --rm ${{ secrets.ECR_REPOSITORY_URI }} gem info rexml
 
       - name: Push image with tags
         env:

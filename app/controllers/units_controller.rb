@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class UnitsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_units!
@@ -43,6 +45,8 @@ class UnitsController < ApplicationController
   # GET /hmis/units/new
   def new
     @unit = Unit.new
+    set_building
+    @unit.elevator_accessible = @unit.building.elevator_accessible_default
     set_building
   end
 

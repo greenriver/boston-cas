@@ -135,6 +135,8 @@ RUN apt-get update && apt-get upgrade -y \
 WORKDIR /app
 
 RUN gem update --system \
+  && gem update rexml \
+  && gem cleanup rexml \
   && gem install bundler --version=${BUNDLER_VERSION} \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \

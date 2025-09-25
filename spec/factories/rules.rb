@@ -199,6 +199,14 @@ FactoryBot.define do
     name { 'Age greater than 62' }
     verb { 'be' }
   end
+  factory :age_greater_than_x, class: 'Rules::AgeGreaterThanX' do
+    name { 'Age greater than X' }
+    verb { 'be' }
+  end
+  factory :age_greater_than_y, class: 'Rules::AgeGreaterThanY' do
+    name { 'Age greater than Y' }
+    verb { 'be' }
+  end
   # factory :age_greater_than_twenty_five, class: 'Rules::AgeGreaterThanTwentyFive' do
   #   name { "Age greater than 25" }
   #   verb { "be" }

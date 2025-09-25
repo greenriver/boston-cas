@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class BuildingsController < ApplicationController
   include HasMatchAccessContext
 
@@ -102,37 +104,50 @@ class BuildingsController < ApplicationController
   end
   helper_method :show_confidential_names?
 
-	private
-    def building_scope
-      Building.all
-    end
+  private
 
-    def set_building
-      @building = building_scope.find(params[:id])
-    end
+  def building_scope
+    Building.all
+  end
 
-    def set_show_confidential_names
-      @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
-    end
+  def set_building
+    @building = building_scope.find(params[:id])
+  end
 
-    def building_params
-      params.require(:building).permit(
-        :name, :building_type, :subgrantee_id, :address, :city, :state, :zip_code,
-        service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  def set_show_confidential_names
+    @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
+  end
 
-    def sort_column
-      Building.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  def building_params
+    params.require(:building).permit(
+      :name,
+      :building_type,
+      :subgrantee_id,
+      :address,
+      :city,
+      :state,
+      :zip_code,
+      :elevator_accessible_default,
+      service_ids: [],
+      requirements_attributes: [
+        :id,
+        :rule_id,
+        :positive,
+        :variable,
+        :_destroy,
+      ],
+    )
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
+  def sort_column
+    Building.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
 
+  def query_string
+    "%#{@query}%"
+  end
 end

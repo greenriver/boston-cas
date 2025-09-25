@@ -1,11 +1,11 @@
 x-app: &app
-  image: cas:${TARGET:-dev-build}-2.1
+  image: cas:${TARGET:-dev-build}-2.2
   build:
     context: .
     target: ${TARGET:-dev-build}
     dockerfile: docker/app/Dockerfile
     args:
-      BUILD_TAG: 3.3.8-slim-bookworm
+      BUILD_TAG: 3.4.5-slim-bookworm
       NODE_MAJOR: '12'
       YARN_VERSION: '1.17.3'
       BUNDLER_VERSION: '2.6.3'

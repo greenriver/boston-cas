@@ -12,6 +12,7 @@
         = f.input :state, disabled: disabled
         = f.input :zip_code, disabled: disabled
         = f.association :subgrantee, label_method: :name, disabled: disabled
+        = f.input :elevator_accessible_default, as: :pretty_boolean, disabled: disabled, label: 'Should all units in this building be elevator accessible or ground floor by default?', hint: 'If checked, any new units will include a checked "Is this unit elevator accessible, or a ground floor unit?" as a default value.'
 
         = render 'service_manager/form_fields', form: f, heading: "Services Attached to this #{Building.model_name.human}"
 

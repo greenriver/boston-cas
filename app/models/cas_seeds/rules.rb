@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'csv'
 
 if Rails.env.development? || Rails.env.test?
@@ -40,6 +42,5 @@ module CasSeeds
 
       Rails.logger.info "Removed #{remove_rule_ids.count} rules"
     end
-
   end
 end

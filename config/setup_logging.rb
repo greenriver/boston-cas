@@ -68,6 +68,25 @@ class SetupLogging
       @tags = {}
     end
 
+    # Rails 7.2's TaggedLogging expects the formatter to respond to these
+    # methods when the logger is wrapped. Implement them to integrate with our
+    # existing tag storage.
+    def push_tags(*tags)
+      tags = Array.wrap(tags).flatten
+      @tags ||= {}
+      if tags.first.is_a?(Hash)
+        tags.each { |t| @tags.merge!(t) }
+      elsif tags.present?
+        @tags.merge!(tags.map { |x| [x, true] }.to_h)
+      end
+      current_tags
+    end
+
+    def pop_tags(_size = nil)
+      clear_tags!
+      []
+    end
+
     def call(severity, time, program_name, message)
       @tags ||= {}
       message = '' if message.blank?
