@@ -141,8 +141,6 @@ jobs:
         env:
           image: ${{ secrets.ECR_REPOSITORY_URI }}
         run: |
-          echo "Verifying rexml version"
-          docker run --rm ${{ secrets.ECR_REPOSITORY_URI }} gem info rexml
           echo "${{ steps.meta.outputs.tags }}" | xargs -I TAG -n1 docker tag ${image} TAG
 
           # docker image ls
@@ -190,8 +188,6 @@ jobs:
 
       - name: Fix .trivy permissions
         run:
-          echo "Updating rexml version prior to trivy scan"
-          gem update rexml
           sudo chown -R $(stat . -c %u:%g) .trivy
 
       # Not completely sure this remains private
