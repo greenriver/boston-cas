@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Thirteen
   class ThirteenHearingOutcomeDecline < ::Notifications::Base
     def self.create_for_match! match
@@ -13,7 +15,7 @@ module Notifications::Thirteen
     end
 
     def decision
-      match.hearing_outcome_decline_dnd_staff_decision
+      match.thirteen_hearing_outcome_decline_decision
     end
 
     def event_label

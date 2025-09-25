@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Thirteen
   class ThirteenConfirmMatchSuccessHsa < ::Notifications::Base
     def self.create_for_match! match
@@ -13,7 +15,7 @@ module Notifications::Thirteen
     end
 
     def decision
-      match.thirteen_hsa_review_decision
+      match.thirteen_confirm_match_success_decision
     end
 
     def event_label

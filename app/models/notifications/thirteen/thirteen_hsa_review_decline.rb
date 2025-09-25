@@ -15,7 +15,7 @@ module Notifications::Thirteen
     end
 
     def decision
-      match.hsa_review_decline_decision
+      match.thirteen_hsa_review_decline_decision
     end
 
     def event_label

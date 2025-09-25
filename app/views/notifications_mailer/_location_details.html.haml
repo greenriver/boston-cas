@@ -1,0 +1,14 @@
+%p
+  %strong #{Building.model_name.human}:
+  = @match.opportunity_details.building_name
+%p
+  %strong Unit:
+  = @match.opportunity_details.unit_name
+%p
+  %strong Address:
+  - if @match.opportunity_details.building_address.blank?
+    Not Available
+  - else
+    - @match.opportunity_details.building_address.each do |address_line|
+      = address_line
+      %br
