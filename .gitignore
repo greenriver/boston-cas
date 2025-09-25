@@ -66,6 +66,7 @@ bower.json
 /.env
 .env.*
 docker-compose.override.yml
+/dev**
 
 # warehouse data
 /var
