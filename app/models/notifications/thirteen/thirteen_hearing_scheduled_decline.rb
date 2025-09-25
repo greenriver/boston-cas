@@ -13,7 +13,7 @@ module Notifications::Thirteen
     end
 
     def decision
-      match.hearing_scheduled_decline_dnd_staff_decision
+      match.thirteen_hearing_scheduled_decline_decision
     end
 
     def event_label

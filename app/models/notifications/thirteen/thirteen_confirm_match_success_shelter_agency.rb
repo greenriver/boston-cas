@@ -13,7 +13,7 @@ module Notifications::Thirteen
     end
 
     def decision
-      match.thirteen_hsa_review_decision
+      match.thirteen_confirm_match_success_decision
     end
 
     def event_label
