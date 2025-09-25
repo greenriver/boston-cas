@@ -561,7 +561,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.2)
+    rexml (3.4.4)
     roda (3.95.0)
       rack
     roo (2.10.1)
@@ -838,6 +838,7 @@ DEPENDENCIES
   redis
   reline
   responders
+  rexml (>= 3.4.2)
   roda
   roo
   rspec-mocks
@@ -1085,7 +1086,7 @@ CHECKSUMS
   reline (0.6.2) sha256=1dad26a6008872d59c8e05244b119347c9f2ddaf4a53dce97856cd5f30a02846
   request_store (1.7.0) sha256=e1b75d5346a315f452242a68c937ef8e48b215b9453a77a6c0acdca2934c88cb
   responders (3.1.1) sha256=92f2a87e09028347368639cfb468f5fefa745cb0dc2377ef060db1cdd79a341a
-  rexml (3.4.2) sha256=1384268554a37af5da5279431ca3f2f37d46f09ffdd6c95e17cc84c83ea7c417
+  rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   roda (3.95.0) sha256=61fbc5f00f234f1b92c3eae7f4195c1310e1c70cb61dcebfe559201b554140d8
   roo (2.10.1) sha256=cbb43bc955f9c110e74b721c835fb9bd3515b63af88ec709ac87fbf30f8be70e
   rspec-core (3.13.3) sha256=25136507f4f9cf2e8977a2851e64e438b4331646054e345998714108745cdfe4

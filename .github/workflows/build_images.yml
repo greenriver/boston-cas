@@ -187,7 +187,8 @@ jobs:
           skip-files: ${{ matrix.trivy_skip_files }}
 
       - name: Fix .trivy permissions
-        run: sudo chown -R $(stat . -c %u:%g) .trivy
+        run:
+          sudo chown -R $(stat . -c %u:%g) .trivy
 
       # Not completely sure this remains private
       # - name: Report
