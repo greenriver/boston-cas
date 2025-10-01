@@ -4,9 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   class ApproveMatchHousingSubsidyAdmin < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteOneDeclineReasons
 
     # validate :note_present_if_status_declined
 

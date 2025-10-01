@@ -489,7 +489,7 @@ module MatchDecisions
       end
     end
 
-    def decline_reasons_not_other_requiring_explanation
+    def decline_reasons_not_other_requiring_explanation(_contact = nil)
       []
     end
 

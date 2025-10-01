@@ -4,9 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   class ScheduleCriminalHearingHousingSubsidyAdmin < Base
     include MatchDecisions::AcceptsDeclineReason # For shelter agency declines
+    include MatchDecisions::RouteOneDeclineReasons
 
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
