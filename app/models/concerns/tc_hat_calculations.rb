@@ -71,8 +71,12 @@ module TcHatCalculations
           label: 'less than 17',
         },
         '18' => {
-          range: 18..24,
-          label: '18 - 24',
+          range: 18..22,
+          label: '18 - 22',
+        },
+        '23' => {
+          range: 23..24,
+          label: '23 - 24',
         },
         '25' => {
           range: 25..30,
@@ -141,7 +145,7 @@ module TcHatCalculations
       # Pregnant clients are always considered a family
       return true if pregnancy_status
       # There is a child, but the parent doesn't, and won't have custody
-      return false if tc_hat_single_parent_child_over_ten && (!tc_hat_legal_custody && !tc_hat_will_gain_legal_custody)
+      return false if tc_hat_single_parent_child_over_ten && !tc_hat_legal_custody && !tc_hat_will_gain_legal_custody
       # Client indicated the household is adult only
       return false unless tc_hat_household_type.in?(['Adults with Children', 'Youth'])
       return true if household_size.present? && household_size > 1
