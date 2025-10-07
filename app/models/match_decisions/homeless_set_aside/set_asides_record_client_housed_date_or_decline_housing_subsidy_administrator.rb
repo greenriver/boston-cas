@@ -141,6 +141,8 @@ module MatchDecisions::HomelessSetAside
     end
 
     private def client_move_in_date_present_if_status_complete
+      return unless show_move_in_date?
+
       errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
   end

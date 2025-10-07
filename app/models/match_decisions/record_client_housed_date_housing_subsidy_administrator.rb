@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   class RecordClientHousedDateHousingSubsidyAdministrator < Base
     include MatchDecisions::AcceptsDeclineReason # For shelter agency declines
