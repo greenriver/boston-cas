@@ -12,6 +12,10 @@ require 'aws-sdk-ssm'
 require 'aws-sdk-s3'
 require 'active_support'
 
+# Temporary workaround for OpenSSL 3.6.0 CRL checking issue
+# Set AWS_SDK_SSL_VERIFY_PEER=false to disable SSL verification
+Aws.config.update(ssl_verify_peer: false) if ENV['AWS_SDK_SSL_VERIFY_PEER'] == 'false'
+
 module AwsSdkHelpers
   extend ActiveSupport::Concern
 
