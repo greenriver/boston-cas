@@ -10,6 +10,7 @@ gem 'rails-html-sanitizer'
 gem 'loofah'
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
 gem 'rexml', '>= 3.4.2' # CVE-2025-58767, note this is bundled with ruby, and must be explicitly pinned
+gem 'openssl', '>=3.3.1' # override the default ruby version of openssl https://github.com/ruby/openssl/issues/949#issuecomment-3370358680
 
 # No longer default gems
 gem 'irb'
