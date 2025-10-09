@@ -8,6 +8,7 @@
 $stdout.sync = true
 
 require 'timeout'
+require 'active_record/migration'
 
 class DbTester
   attr_accessor :model, :start_time
@@ -61,7 +62,7 @@ class DbTester
 
       begin
         result = Timeout.timeout(30) do
-          model.connection.schema_migration.table_exists?
+          model.connection.table_exists?(:schema_migrations)
         end
         puts "Table existence check completed: #{result}"
         return if result
@@ -85,7 +86,7 @@ class DbTester
         downs = 0
 
         migration_status = Timeout.timeout(30) do
-          model.connection.migration_context.migrations_status
+          model.connection_pool.migration_context.migrations_status
         end
         puts "Migration status fetched, processing #{migration_status.length} migrations..."
 
