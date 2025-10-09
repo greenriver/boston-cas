@@ -66,6 +66,9 @@
       var action = 'addClass'
       if ($(this).val() === 'scheduled') {
         action = 'removeClass'
+      } else {
+        // clear the date
+        $('#decision_criminal_hearing_date').val('');
       }
       $('.jScheduled')[action]('d-none')
     });
