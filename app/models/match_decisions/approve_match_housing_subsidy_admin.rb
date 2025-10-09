@@ -142,7 +142,7 @@ module MatchDecisions
       ]
       combined_reasons ||= (shelter_agency_contact_reasons + hsa_contact_reasons).uniq
 
-      if contact.user_can_act_on_behalf_of_match_contacts?
+      if contact&.user&.can_act_on_behalf_of_match_contacts?
         combined_reasons
       elsif contact.in?(match.shelter_agency_contacts)
         shelter_agency_contact_reasons
