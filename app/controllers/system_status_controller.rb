@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class SystemStatusController < ApplicationController
   skip_before_action :authenticate_user!
 
@@ -74,7 +76,7 @@ class SystemStatusController < ApplicationController
 
     cas = 'unknown'
     begin
-      cas = ApplicationRecord.connection.migration_context.current_version
+      cas = ApplicationRecord.connection_pool.migration_context.current_version
     rescue StandardError
       cas = 'unknown'
     end
