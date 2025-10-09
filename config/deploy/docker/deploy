@@ -13,7 +13,7 @@ revision = nil
 args.deployments.each_with_index do |deployment, idx|
   deployment[:revision] = revision if idx.positive? && revision.present?
   puts "Deploying #{deployment[:target_group_name]}..."
-  deployer = Deployer.new(**deployment).run!
+  deployer = Deployer.new(**deployment)
   revision ||= deployer.revision # Set revision for next deployments
 
   puts "Deploying #{deployer.version} to #{deployer.target_group_name} (#{idx + 1}/#{args.deployments.count})..."
