@@ -57,7 +57,6 @@ class UnitForBuildingController < ApplicationController
     Building.all
   end
 
-  # Only allow a trusted parameter "white list" through.
   def unit_params
     params.require(:unit_for_building).permit(
       :name,
