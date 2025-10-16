@@ -15,7 +15,6 @@ module MatchDecisions
         'SORI',
         'CORI',
         'Does not agree to services',
-        'Immigration status',
         'Unsafe environment for this person',
         'Unwilling to live in that neighborhood',
         'Unwilling to live in SRO',

@@ -4,13 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   module DefaultHsaDeclineReasons
     extend ActiveSupport::Concern
 
     def step_decline_reasons(_contact)
       [
-        'Immigration status',
         'Ineligible for Housing Program',
         'Self-resolved',
         'Falsification of documents',
