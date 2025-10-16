@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class OpportunitiesController < ApplicationController
   require 'securerandom'
 
@@ -131,7 +133,7 @@ class OpportunitiesController < ApplicationController
 
       vouchers = []
       opportunity_params[:units].to_i.times do
-        unit = Unit.create(building: building, name: SecureRandom.hex, available: true) if sub_program.has_buildings?
+        unit = Unit.create!(building: building, name: SecureRandom.hex, available: true, elevator_accessible: building.elevator_accessible_default) if sub_program.has_buildings?
         options = { sub_program: sub_program, available: true, creator: @current_user }
         requirements = WeightingRule.requirements_and_increment!(sub_program)
         options[:requirements] = requirements if requirements.present?
