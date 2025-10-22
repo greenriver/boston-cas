@@ -1,0 +1,6 @@
+%p
+  %strong Program Name:
+  = @match.opportunity_details.program_name.try(:html_safe)
+%p
+  %strong Service Provider:
+  = @match.opportunity_details.service_provider_name.try(:html_safe)

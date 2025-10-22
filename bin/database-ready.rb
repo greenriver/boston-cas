@@ -8,7 +8,7 @@
 $stdout.sync = true
 
 require 'timeout'
-require 'active_record/migration'
+require_relative '../config/environment'
 
 class DbTester
   attr_accessor :model, :start_time
