@@ -64,7 +64,8 @@ module MatchDecisions
 
       return unless explanation_field_required && decline_reason_other_explanation.blank?
 
-      if all_declines_require_explanation(contact)
+      # Current contact is unknown in this context
+      if all_declines_require_explanation(nil)
         errors.add :base, 'Decline reason details must be provided for the selection of any decline reason'
       else
         errors.add :decline_reason_other_explanation, "must be filled in if choosing '#{decline_reason&.name}'"
