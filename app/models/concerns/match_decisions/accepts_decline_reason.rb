@@ -57,11 +57,18 @@ module MatchDecisions
     end
 
     private def validate_decline_reason
-      errors.add :decline_reason, 'please indicate the reason for declining' if status == 'declined' && decline_reason_blank? || (status == 'shelter_declined' && decline_reason_other_explanation.blank?)
+      errors.add :decline_reason, ' is required when declining a match, please indicate the reason for declining' if status == 'declined' && decline_reason_blank? || (status == 'shelter_declined' && decline_reason_other_explanation.blank?)
 
       explanation_field_required = status == 'declined' && (decline_reason&.other? || decline_reasons_not_other_requiring_explanation&.include?(decline_reason&.name))
       explanation_field_required ||= status == 'shelter_declined' && (decline_reason&.other? || decline_reasons_not_other_requiring_explanation&.include?(decline_reason&.name))
-      errors.add :decline_reason_other_explanation, "must be filled in if choosing '#{decline_reason&.name}'" if explanation_field_required && decline_reason_other_explanation.blank?
+
+      return unless explanation_field_required && decline_reason_other_explanation.blank?
+
+      if all_declines_require_explanation(contact)
+        errors.add :base, 'Decline reason details must be provided for the selection of any decline reason'
+      else
+        errors.add :decline_reason_other_explanation, "must be filled in if choosing '#{decline_reason&.name}'"
+      end
     end
 
     private def decline_reason_blank?
