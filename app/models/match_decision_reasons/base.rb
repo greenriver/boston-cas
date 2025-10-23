@@ -4,8 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisionReasons
   class Base < ApplicationRecord
+    CLIENT_REJECTED = 2
+    PROVIDER_REJECTED = 3
+
     self.table_name = 'match_decision_reasons'
     acts_as_paranoid
 
@@ -22,6 +27,13 @@ module MatchDecisionReasons
 
     def title
       name
+    end
+
+    def referral_result_text
+      return 'Client Rejected' if referral_result == CLIENT_REJECTED
+      return 'Provider Rejected' if referral_result == PROVIDER_REJECTED
+
+      ''
     end
 
     def other?

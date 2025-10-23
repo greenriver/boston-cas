@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -9,6 +11,14 @@ class IdentifiedClientsController < NonHmisClientsController
   before_action :require_can_enter_identified_clients!, except: [:current_assessment_limited]
   before_action :require_match_access_context!, only: [:current_assessment_limited]
   before_action :require_can_manage_identified_clients!, only: [:destroy]
+
+  private def search_path
+    identified_client_search_query_path(@search_query)
+  end
+
+  private def non_hmis_client_index_path
+    identified_clients_path
+  end
 
   def create
     @non_hmis_client = client_source.create(clean_params(identified_client_params))
@@ -42,6 +52,10 @@ class IdentifiedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: identified_clients_path)
   end
 
+  def non_hmis_client_search_queries_path
+    identified_client_search_queries_path
+  end
+
   def assessment_type
     Config.get(:identified_client_assessment) || 'IdentifiedClientAssessment'
   end
@@ -61,14 +75,14 @@ class IdentifiedClientsController < NonHmisClientsController
       { title: 'Agency Z-A', column: 'agencies.name', direction: 'desc', order: 'LOWER(agencies.name) DESC', visible: true },
       { title: 'Assessment Score', column: 'assessment_score', direction: 'desc', order: 'non_hmis_clients.assessment_score DESC', visible: true },
       { title: 'Assessment Date', column: 'assessed_at', direction: 'desc', order: 'non_hmis_clients.assessed_at DESC', visible: true },
-      { title: 'Days Homeless in the Last 3 Years', column: 'days_homeless_in_the_last_three_years', direction: 'desc',
-        order: 'days_homeless_in_the_last_three_years DESC', visible: true },
+      { title: 'Days Homeless in the Last 3 Years', column: 'non_hmis_clients.days_homeless_in_the_last_three_years', direction: 'desc',
+        order: 'non_hmis_clients.days_homeless_in_the_last_three_years DESC', visible: true },
     ].freeze
   end
   helper_method :sort_options
 
   def filter_terms
-    [:agency, :cohort, :family_member, :available]
+    [:agency, :cohort, :family_member, :available, :assessment]
   end
   helper_method :filter_terms
 

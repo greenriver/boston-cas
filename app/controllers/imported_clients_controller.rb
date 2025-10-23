@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -6,6 +8,14 @@
 
 class ImportedClientsController < NonHmisClientsController
   before_action :require_can_manage_imported_clients!
+
+  private def search_path
+    imported_client_search_query_path(@search_query)
+  end
+
+  private def non_hmis_client_index_path
+    imported_clients_path
+  end
 
   def new
     @upload = ImportedClientsCsv.new
@@ -50,6 +60,10 @@ class ImportedClientsController < NonHmisClientsController
     respond_with(@non_hmis_client, location: imported_clients_path)
   end
 
+  def non_hmis_client_search_queries_path
+    imported_client_search_queries_path
+  end
+
   def sort_options
     [
       {
@@ -76,6 +90,24 @@ class ImportedClientsController < NonHmisClientsController
     ]
   end
   helper_method :sort_options
+
+  def sorter
+    @column = params[:sort]
+    @direction = params[:direction]
+    default_sort = sort_options.first.try(:[], :order)
+
+    sort_string = if @column.blank?
+      @column = sort_options.first.try(:[], :column)
+      @direction = sort_options.first.try(:[], :direction)
+      default_sort
+    else
+      sort_options.select do |m|
+        m[:column] == @column && m[:direction] == @direction
+      end.try(:first).try(:[], :order) || default_sort
+    end
+    sort_string += ' NULLS LAST' if ApplicationRecord.connection.adapter_name == 'PostgreSQL'
+    sort_string
+  end
 
   def filter_terms
     [:family_member, :available]

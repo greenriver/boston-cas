@@ -12,7 +12,7 @@
 
   .row
     .col-sm-6
-      = render 'search_form'
+      = render 'search_form', url: admin_user_search_queries_path, method: :post, sanitized_search_params: sanitized_search_params
 
 %ul.nav.nav-tabs
   %li.nav-item

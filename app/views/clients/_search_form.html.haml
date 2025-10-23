@@ -1,11 +1,17 @@
 - options = { class: :jSearch }
 - options[:url] = destination if defined?(destination)
-= simple_form_for :search_form, **options, method: :get do |f|
+- method = defined?(method) ? method : :get
+= simple_form_for :search_form, **options, method: method do |f|
   -# Preserve sort and filtering
   - if params[:sort]
     = hidden_field_tag :sort, params[:sort]
   - if params[:direction]
     = hidden_field_tag :direction, params[:direction]
+  - if defined?(sanitized_search_params)
+    - sanitized_search_params.each do | key, value|
+      - next if value.blank?
+
+      = hidden_field_tag key, value
   - filter_terms.each do | term |
     - if params[term]
       = hidden_field_tag term, params[term]

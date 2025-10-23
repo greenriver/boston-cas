@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :role, class: 'Role' do
     name { 'empty role' }
@@ -56,6 +64,8 @@ FactoryBot.define do
     can_delete_client_notes { true }
     can_enter_deidentified_clients { true }
     can_manage_deidentified_clients { true }
+    can_enter_identified_clients { true }
+    can_manage_identified_clients { true }
     can_edit_help { true }
   end
 

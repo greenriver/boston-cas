@@ -1,15 +1,31 @@
 .row
-  .col-md-6
+  .col-md-12
     .c-question
       - if disabled
         = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.client_identifier, label: 'Client Identifier'
       - else
         = form.input :client_identifier, required: true
+    %hr
     .c-question
+      - unless disabled
+        %h3 Age
+        %p As this is a deidentified client, you cannot provide their exact date of birth, however, you can indicate the client is between the ages of 18 and 24 (a youth), or can enter a month and year of birth and the system will calculate the age.
       - if disabled
-        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.is_currently_youth, label: 'Is the client between the ages of 18 and 24?'
+        - if @non_hmis_client.date_of_birth.blank?
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.is_currently_youth, label: 'Is the client between the ages of 18 and 24?'
       - else
-        = form.input :is_currently_youth, as: :pretty_boolean, wrapper: :custom_boolean
+        = form.input :is_currently_youth, as: :pretty_boolean, wrapper: :custom_boolean, input_html: { class: 'jIsYouth' }
+    .c-question.jBirthDate
+      - if disabled
+        - if @non_hmis_client.date_of_birth.present? && @non_hmis_client.is_currently_youth.blank?
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.age, label: 'Age'
+      - else
+        .row
+          .col-6
+            = form.input :month_of_birth, as: :select_2, collection: (1..12).map { |m| ["#{Date::MONTHNAMES[m]} (#{m})", m] }, selected: @non_hmis_client.date_of_birth&.month, include_blank: true
+          .col-6
+            = form.input :year_of_birth, as: :select_2, collection: (1920..Date.current.year).to_a.reverse, selected: @non_hmis_client.date_of_birth&.year, include_blank: true
+    %hr
     - if Warehouse::Base.enabled?
       .c-question
         - if disabled

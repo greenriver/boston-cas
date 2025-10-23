@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -12,7 +14,15 @@ class ActiveMatchesController < MatchListBaseController
 
   helper_method :sort_column, :sort_direction
 
-  def index
+  private def match_list_path
+    active_matches_path
+  end
+
+  private def search_path
+    active_match_search_query_path(@search_query)
+  end
+
+  private def filter_data
     @match_state = :active_matches
     @show_vispdat = show_vispdat?
     @matches = match_scope
@@ -28,7 +38,8 @@ class ActiveMatchesController < MatchListBaseController
     @matches = filter_by_route(@current_route, @matches)
     @matches = filter_by_program(@current_program, @matches)
     @matches = filter_by_contact(@current_filter_contact, @current_contact_type, @matches)
-    @search_string = params[:q]
+    @search_string = @search_query&.query_params.try(:[], :q)
+    @query = @search_string # for the search form
     @matches = search_matches(@search_string, @matches)
     @matches = @matches.joins("CROSS JOIN LATERAL (#{decision_sub_query.to_sql}) last_decision").
       joins(:client).
