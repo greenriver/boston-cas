@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class MatchDigestMailer < DatabaseMailer
   def digest(contact)
     @matches = {
@@ -34,7 +36,7 @@ class MatchDigestMailer < DatabaseMailer
       # Unclear why host isn't correctly set as it is for other mailers
       match_data = { path: match_url(match, host: ENV['FQDN']) }
       updated_at = match.updated_at.strftime(I18n.t('date.formats.default'))
-      if match.decision_stalled?
+      if match.decision_stalled? && match.active?
         @matches[:stalled][:matches] << match_data.
           merge(text: "Stalled on: #{match.stall_date.try(:strftime, I18n.t('date.formats.default')) || 'unknown'}, last updated: #{updated_at}")
       elsif match.canceled_recently?
