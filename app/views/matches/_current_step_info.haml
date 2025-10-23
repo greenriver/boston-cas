@@ -10,7 +10,7 @@
           -if @match.overall_status[:name] != "In Progress"
             = @match.overall_status[:name]
           -else
-            = @match.current_decision.step_name
+            = @match.current_decision&.step_name
       .summary-readout--tile
         %h3.h4 Assigned To
         %h1.h2

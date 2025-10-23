@@ -22,6 +22,7 @@ class Warehouse::Analytics::ReferralUser < ::Warehouse::Base
             id: match_contact.id,
             email: match_contact.contact.email,
             referral_id: match_contact.match.id,
+            cas_user_id: match_contact.contact.user_id,
           )
         end
         import!(batch)

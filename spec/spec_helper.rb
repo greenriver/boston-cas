@@ -105,5 +105,6 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Rails.application.load_seed # loading seeds
+    MatchRoutes::Base.ensure_all
   end
 end
