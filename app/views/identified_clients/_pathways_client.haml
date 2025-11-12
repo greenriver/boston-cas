@@ -36,22 +36,29 @@
   %h3 Agency Information
   - if can_edit_all_clients?
     .jAgency
-      .row
-        .col-md-10
-          - if disabled
-            .c-question
-              = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency&.name, label: 'Agency'
-          - else
-            = form.association :agency, input_html: {class: :select2}, disabled: disabled
-
-    .row
-      .col-md-10
-        - label = "Default #{Translation.translate('Shelter Agency')} Contact"
-        - if disabled
-          .c-question
-            = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name_with_email, label: label
-        - else
-          = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
+      - if disabled
+        .c-question
+          = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.agency&.name, label: 'Agency'
+      - else
+        = form.association :agency, input_html: {class: :select2}, disabled: disabled
+    - label = "Default #{Translation.translate('Shelter Agency')} Contact"
+    - if disabled
+      .c-question
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.contact&.name_with_email, label: label
+    - else
+      = form.input :contact_id, collection: @contacts, as: :grouped_select, group_method: :last, selected: @contact_id, include_blank: 'None', label: label, input_html: {class: 'select2 jContact' }, disabled: disabled
+  %hr
+  - if Warehouse::Base.enabled?
+    .c-question
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.cohort_names.split("\n").join(', '), label: 'Cohorts'
+      - elsif can_add_cohorts_to_deidentified_clients?
+        = form.input :active_cohort_ids, collection: Warehouse::Cohort.active, as: :select_2, input_html: { multiple: true }, label: 'Cohorts'
+    .c-question
+      - if disabled
+        = render 'non_hmis_clients/assessments/question_display', value: @non_hmis_client.project_names.split("\n").join(', '), label: 'Associated Projects'
+      - else
+        = form.input :enrolled_project_ids, collection: Warehouse::Project.options_for_select, as: :grouped_select, group_method: :last, label: 'Associated Projects', input_html: {multiple: true, class: 'select2' }
   %h3 Housing Release
   %p Please check the appropriate housing release.  If no release is on file, leave both unchecked.
   = form.input :limited_release_on_file, as: :pretty_boolean, wrapper: :custom_boolean, label: "#{Translation.translate('Limited CAS Release')} on File", disabled: disabled

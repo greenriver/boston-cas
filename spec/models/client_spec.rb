@@ -811,4 +811,131 @@ RSpec.describe Client, type: :model do
       end
     end
   end
+
+  describe '#enrolled_project_names' do
+    let(:client) { create :client }
+
+    context 'when enrolled_project_ids is nil' do
+      before do
+        client.update(enrolled_project_ids: nil)
+      end
+
+      it 'returns an empty array' do
+        expect(client.enrolled_project_names).to eq([])
+      end
+    end
+
+    context 'when enrolled_project_ids is empty' do
+      before do
+        client.update(enrolled_project_ids: [])
+      end
+
+      it 'returns an empty array' do
+        expect(client.enrolled_project_names).to eq([])
+      end
+    end
+
+    context 'when enrolled_project_ids contains valid project IDs' do
+      let(:organization) { double('Warehouse::Organization', confidential?: false) }
+      let(:project1) do
+        double('Warehouse::Project', id: 1, confidential?: false).tap do |p|
+          allow(p).to receive(:organization).and_return(organization)
+          allow(p).to receive(:name).and_return('Project One')
+        end
+      end
+      let(:project2) do
+        double('Warehouse::Project', id: 2, confidential?: false).tap do |p|
+          allow(p).to receive(:organization).and_return(organization)
+          allow(p).to receive(:name).and_return('Project Two')
+        end
+      end
+
+      before do
+        client.update(enrolled_project_ids: [1, 2])
+        relation = double('ActiveRecord::Relation')
+        allow(Warehouse::Project).to receive(:preload).with(:organization).and_return(relation)
+        allow(relation).to receive(:where).with(id: [1, 2]).and_return([project1, project2])
+      end
+
+      it 'returns the project names' do
+        expect(client.enrolled_project_names).to contain_exactly('Project One', 'Project Two')
+      end
+    end
+
+    context 'when enrolled_project_ids contains IDs that do not exist' do
+      before do
+        client.update(enrolled_project_ids: [999_999, 999_998])
+        relation = double('ActiveRecord::Relation')
+        allow(Warehouse::Project).to receive(:preload).with(:organization).and_return(relation)
+        allow(relation).to receive(:where).with(id: [999_999, 999_998]).and_return([])
+      end
+
+      it 'returns an empty array' do
+        expect(client.enrolled_project_names).to eq([])
+      end
+    end
+
+    context 'when enrolled_project_ids contains a mix of valid and invalid IDs' do
+      let(:organization) { double('Warehouse::Organization', confidential?: false) }
+      let(:project1) do
+        double('Warehouse::Project', id: 1, confidential?: false).tap do |p|
+          allow(p).to receive(:organization).and_return(organization)
+          allow(p).to receive(:name).and_return('Project One')
+        end
+      end
+
+      before do
+        client.update(enrolled_project_ids: [1, 999_999])
+        relation = double('ActiveRecord::Relation')
+        allow(Warehouse::Project).to receive(:preload).with(:organization).and_return(relation)
+        allow(relation).to receive(:where).with(id: [1, 999_999]).and_return([project1])
+      end
+
+      it 'returns only the names of existing projects' do
+        expect(client.enrolled_project_names).to eq(['Project One'])
+      end
+    end
+
+    context 'when a project is confidential' do
+      let(:organization) { double('Warehouse::Organization', confidential?: false) }
+      let(:confidential_project) do
+        double('Warehouse::Project', id: 3, confidential?: true).tap do |p|
+          allow(p).to receive(:organization).and_return(organization)
+          allow(p).to receive(:name).and_return('Confidential Project')
+        end
+      end
+
+      before do
+        client.update(enrolled_project_ids: [3])
+        relation = double('ActiveRecord::Relation')
+        allow(Warehouse::Project).to receive(:preload).with(:organization).and_return(relation)
+        allow(relation).to receive(:where).with(id: [3]).and_return([confidential_project])
+      end
+
+      it 'returns "Confidential Project" instead of the project name' do
+        expect(client.enrolled_project_names).to eq(['Confidential Project'])
+      end
+    end
+
+    context 'when a project\'s organization is confidential' do
+      let(:confidential_organization) { double('Warehouse::Organization', confidential?: true) }
+      let(:project) do
+        double('Warehouse::Project', id: 4, confidential?: false).tap do |p|
+          allow(p).to receive(:organization).and_return(confidential_organization)
+          allow(p).to receive(:name).and_return('Confidential Project')
+        end
+      end
+
+      before do
+        client.update(enrolled_project_ids: [4])
+        relation = double('ActiveRecord::Relation')
+        allow(Warehouse::Project).to receive(:preload).with(:organization).and_return(relation)
+        allow(relation).to receive(:where).with(id: [4]).and_return([project])
+      end
+
+      it 'returns "Confidential Project" instead of the project name' do
+        expect(client.enrolled_project_names).to eq(['Confidential Project'])
+      end
+    end
+  end
 end

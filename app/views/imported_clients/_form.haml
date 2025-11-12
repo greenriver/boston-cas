@@ -89,7 +89,7 @@
 .row
   .col-sm-6
     .form-inputs
-      = f.input :warehouse_client_id, label: 'Warehouse Client ID'
+      = f.input :warehouse_client_id, label: 'Warehouse Client ID', hint: 'Only used to provide a link to the client in the warehouse.'
       = f.input :available
     .form-actions
       = f.button :submit, "Update Client", class: 'btn btn-primary'

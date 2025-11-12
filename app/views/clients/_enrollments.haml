@@ -1,7 +1,7 @@
 .col-md-6.c-card__content-group
   .c-card__content-group-heading
     .c-card__content-group-icon.icon-file-drawn
-    %h5 Enrollments
+    %h5 Enrollment Project Types
   - if @client.has_enrollments?
     %ul.c-detailed-list<
       %li.list-unstyled
@@ -35,5 +35,12 @@
         - if @client.enrolled_in_ph_pre_move_in
           .client__service_type_ph
             .service-type__program-type PH no move-in date
+  - else
+    %p.font-no-data None
+  - if Warehouse::Base.enabled?
+    %h5 Projects
+    %ul.c-detailed-list<
+      - @client.enrolled_project_names.each do |name|
+        %li.list-unstyled.mb-2= name
   - else
     %p.font-no-data None
