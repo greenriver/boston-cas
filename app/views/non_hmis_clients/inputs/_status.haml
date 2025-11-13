@@ -3,7 +3,7 @@
     - if @non_hmis_client.identified?
       .col-12
         .c-question
-          = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false
+          = f.input :warehouse_client_id, label: "Warehouse Client ID", required: false, hint: 'Only used to provide a link to the client in the warehouse.'
   .col-12
     .c-question
       - label = 'Active Status'

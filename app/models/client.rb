@@ -443,7 +443,7 @@ class Client < ApplicationRecord
     remote_id if from_hmis?
   end
 
-  def has_full_housing_release?(route = nil) # rubocop:disable Naming/PredicateName
+  def has_full_housing_release?(route = nil) # rubocop:disable Naming/PredicatePrefix
     return true if route.present? && ! route.expects_roi?
 
     # If we have a warehouse connected, use the file tags available there
@@ -483,7 +483,7 @@ class Client < ApplicationRecord
     (routes - ufs).count.zero?
   end
 
-  def is_available_for_matching? # rubocop:disable Naming/PredicateName
+  def is_available_for_matching? # rubocop:disable Naming/PredicatePrefix
     return false if unavailable_on_all_routes?
 
     available
@@ -518,7 +518,7 @@ class Client < ApplicationRecord
       maximum(mdr_b_t[:updated_at])&.to_date
   end
 
-  def has_enrollments? # rubocop:disable Naming/PredicateName
+  def has_enrollments? # rubocop:disable Naming/PredicatePrefix
     enrolled_in_th ||
     enrolled_in_sh ||
     enrolled_in_so ||
@@ -529,6 +529,10 @@ class Client < ApplicationRecord
     enrolled_in_rrh_pre_move_in ||
     enrolled_in_psh_pre_move_in ||
     enrolled_in_ph_pre_move_in
+  end
+
+  def enrolled_project_names
+    Warehouse::Project.preload(:organization).where(id: enrolled_project_ids).map(&:name)
   end
 
   def structured_rrh_assessment_contact_info

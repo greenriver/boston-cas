@@ -122,6 +122,7 @@ class IdentifiedClientsController < NonHmisClientsController
       active_cohort_ids: [],
       gender: [],
       race: [],
+      enrolled_project_ids: [],
       client_assessments_attributes: [
         :id,
         :type,
