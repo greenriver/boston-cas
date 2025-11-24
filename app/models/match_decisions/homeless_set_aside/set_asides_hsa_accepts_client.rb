@@ -81,6 +81,10 @@ module MatchDecisions::HomelessSetAside
       contact.in?(match.housing_subsidy_admin_contacts)
     end
 
+    def expires?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end
