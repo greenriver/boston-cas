@@ -120,6 +120,8 @@ module MatchDecisions::HomelessSetAside
 
       def completed
         match.succeeded!(user: user)
+        Notifications::HomelessSetAside::SetAsideMatchCompleteShelterAgency.create_for_match!(match)
+        # FIXME: need notification for shelter agency
       end
 
       def declined
