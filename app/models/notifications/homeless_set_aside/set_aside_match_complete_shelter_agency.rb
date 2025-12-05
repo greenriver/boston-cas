@@ -15,7 +15,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{Translation.translate('Shelter Agency')} notified of match completion"
+      "#{Translation.translate('Shelter Agency Contact')} notified of match completion"
     end
 
     def show_client_info?
