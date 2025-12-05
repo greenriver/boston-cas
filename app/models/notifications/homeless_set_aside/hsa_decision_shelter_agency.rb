@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::HomelessSetAside
   class HsaDecisionShelterAgency < ::Notifications::Base
     # Notification sent to DND staff of an approval decision made by the housing subsidy administrator
@@ -17,8 +19,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{Translation.translate('Shelter Agency')} sent notice of #{Translation.translate('Housing Subsidy Administrator')}'s decision."
+      "#{Translation.translate('Shelter Agency Contact')} sent notice of #{Translation.translate('Housing Subsidy Administrator')}'s decision."
     end
-
   end
 end
