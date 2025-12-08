@@ -11,7 +11,7 @@
   .blocked-on-routes
     %p.m-2.mt-4.muted-text
       - if @client.unavailable_fors_include_active_match?
-        %em Clients are blocked from matching while actively in a resource match.
+        %em Clients are blocked from matching while actively in a match.
       - else
         - if UnavailableAsCandidateFor.expiration_length.positive?
           %em Clients are blocked from matching on the same route for #{UnavailableAsCandidateFor.describe_expiration_length} after a complete and successful match.
@@ -20,12 +20,25 @@
     %p.m-2.mt-4.muted-text
       %em #{@client.name} will not match any vacancies on the following routes:
     %ul.ml-2.c-detailed-list<
-      - @client.unavailable_as_candidate_fors.each do |uf|
-        %li.c-detailed-list__item
-          %span.c-detailed-list__label
-            - note = uf.route&.title || ''
-            - if uf.expires_at.present?
-              - note += " until #{uf.expires_at.to_date}"
-            = note
-          - if Client.editable_by(current_user).where(id: @client.id).exists?
-            %span.c-detailed-list__value= link_to 'Make Available', client_unavailable_on_route_path(@client, uf), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: "Are you sure you would like #{@client.name} to be available for matching on the #{uf.route&.title}?" }
+      - @client.unavailable_as_candidate_fors.sort_by(&:created_at).reverse.each do |uf|
+        %li
+          .c-detailed-list__item.mb-4
+            %span.c-detailed-list__label
+              = uf.route&.title || ''
+              %br
+              - if uf.reason == UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT
+                - if uf.match.present?
+                  %em Active match
+                  (started: #{uf.match.created_at.to_date})
+                - else
+                  %em Active match
+              - else
+                - details = []
+                - details << "created: #{uf.created_at.to_date}" if uf.created_at.present?
+                - details << "expires: #{uf.expires_at.to_date}" if uf.expires_at.present?
+                - if uf.reason.present?
+                  %em= uf.reason
+                  - if details.any?
+                    (#{details.join(', ')})
+            - if Client.editable_by(current_user).where(id: @client.id).exists?
+              %span.c-detailed-list__value= link_to 'Make Available', client_unavailable_on_route_path(@client, uf), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: "Are you sure you would like #{@client.name} to be available for matching on the #{uf.route&.title}?" }

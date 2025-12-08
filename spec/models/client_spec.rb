@@ -811,4 +811,111 @@ RSpec.describe Client, type: :model do
       end
     end
   end
+
+  describe '#active_match_on_route?' do
+    let(:client) { create(:client) }
+    let(:priority) { create(:priority_vispdat_priority) }
+    let(:default_route) { create(:default_route, match_prioritization: priority) }
+    let(:provider_route) { create(:provider_route, match_prioritization: priority) }
+    let(:program_default) { create(:program, match_route: default_route) }
+    let(:program_provider) { create(:program, match_route: provider_route) }
+    let(:sub_program_default) { create(:sub_program, program: program_default) }
+    let(:sub_program_provider) { create(:sub_program, program: program_provider) }
+    let(:voucher_default) { create(:voucher, sub_program: sub_program_default) }
+    let(:voucher_provider) { create(:voucher, sub_program: sub_program_provider) }
+    let(:opportunity_default) { create(:opportunity, voucher: voucher_default) }
+    let(:opportunity_provider) { create(:opportunity, voucher: voucher_provider) }
+
+    context 'when client has no matches' do
+      it 'returns false' do
+        expect(client.active_match_on_route?(default_route)).to be false
+      end
+    end
+
+    context 'when client has an active match on the route' do
+      let!(:active_match) do
+        create(
+          :client_opportunity_match,
+          client: client,
+          opportunity: opportunity_default,
+          match_route: default_route,
+          active: true,
+          closed: false,
+        )
+      end
+
+      it 'returns true for the route with the active match' do
+        expect(client.active_match_on_route?(default_route)).to be true
+      end
+
+      it 'returns false for a different route' do
+        expect(client.active_match_on_route?(provider_route)).to be false
+      end
+    end
+
+    context 'when client has a closed match on the route' do
+      let!(:closed_match) do
+        create(
+          :client_opportunity_match,
+          client: client,
+          opportunity: opportunity_default,
+          match_route: default_route,
+          active: false,
+          closed: true,
+        )
+      end
+
+      it 'returns false' do
+        expect(client.active_match_on_route?(default_route)).to be false
+      end
+    end
+
+    context 'when client has active matches on multiple routes' do
+      let!(:active_match_default) do
+        create(
+          :client_opportunity_match,
+          client: client,
+          opportunity: opportunity_default,
+          match_route: default_route,
+          active: true,
+          closed: false,
+        )
+      end
+
+      let!(:active_match_provider) do
+        create(
+          :client_opportunity_match,
+          client: client,
+          opportunity: opportunity_provider,
+          match_route: provider_route,
+          active: true,
+          closed: false,
+        )
+      end
+
+      it 'returns true for each route with an active match' do
+        aggregate_failures 'checking multiple routes' do
+          expect(client.active_match_on_route?(default_route)).to be true
+          expect(client.active_match_on_route?(provider_route)).to be true
+        end
+      end
+    end
+
+    context 'when client has an inactive match on the route' do
+      let!(:inactive_match) do
+        create(
+          :client_opportunity_match,
+          client: client,
+          opportunity: opportunity_default,
+          match_route: default_route,
+          active: false,
+          closed: false,
+        )
+      end
+
+      it 'returns false' do
+        expect(client.active_match_on_route?(default_route)).to be false
+      end
+    end
+  end
 end

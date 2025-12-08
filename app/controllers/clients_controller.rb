@@ -109,6 +109,7 @@ class ClientsController < ApplicationController
     @client_notes = @client.client_notes
     @client_note = ClientNote.new
     @neighborhood_interests = Neighborhood.where(id: @client.neighborhood_interests).order(:name).pluck(:name)
+    @client.unavailable_as_candidate_fors.preload(:route, match: :match_route)
     files = Warehouse::File.for_client(@client.remote_id).
       joins(taggings: :tag).
       preload(taggings: :tag)

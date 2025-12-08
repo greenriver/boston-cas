@@ -385,6 +385,10 @@ class Client < ApplicationRecord
     active_matches.any?
   end
 
+  def active_match_on_route?(route)
+    client_opportunity_matches.active.on_route(route).exists?
+  end
+
   def remote_id
     @remote_id ||= project_client&.id_in_data_source.presence
   end
