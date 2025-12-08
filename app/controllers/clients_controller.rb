@@ -110,14 +110,18 @@ class ClientsController < ApplicationController
     @client_note = ClientNote.new
     @neighborhood_interests = Neighborhood.where(id: @client.neighborhood_interests).order(:name).pluck(:name)
     @client.unavailable_as_candidate_fors.preload(:route, match: :match_route)
-    files = Warehouse::File.for_client(@client.remote_id).
-      joins(taggings: :tag).
-      preload(taggings: :tag)
-    @files = files.map do |file|
-      file.taggings.map do |tagging|
-        [tagging.tag.name, file]
-      end
-    end.flatten(1).uniq
+    @files = if Warehouse::Base.enabled?
+      files = Warehouse::File.for_client(@client.remote_id).
+        joins(taggings: :tag).
+        preload(taggings: :tag)
+      files.map do |file|
+        file.taggings.map do |tagging|
+          [tagging.tag.name, file]
+        end
+      end.flatten(1).uniq
+    else
+      []
+    end
   end
 
   def update
