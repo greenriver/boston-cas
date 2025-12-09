@@ -3,12 +3,21 @@
 require_relative 'lib/command_args'
 require_relative 'lib/deployer'
 require 'ostruct'
+require 'active_support/all'
 
 args = CommandArgs.new
 
-args.deployments.each do |deployment|
+# Keep track of first deployed revision (git hash), so we can deploy the same revision to all target groups
+revision = nil
+
+args.deployments.each_with_index do |deployment, idx|
+  deployment[:revision] = revision if idx.positive? && revision.present?
   puts "Deploying #{deployment[:target_group_name]}..."
-  Deployer.new(**deployment).run!
+  deployer = Deployer.new(**deployment)
+  revision ||= deployer.revision # Set revision for next deployments
+
+  puts "Deploying #{deployer.version} to #{deployer.target_group_name} (#{idx + 1}/#{args.deployments.count})..."
+  deployer.run!
 
   # poll between deployments to prevent scaling out too much while we have
   # double the web containers.

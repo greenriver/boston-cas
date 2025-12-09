@@ -29,7 +29,7 @@ RSpec.describe Rules::PathwaysEligible, type: :model do
         roy_match.program.update(match_route_id: MatchRoutes::ProviderOnly.first.id)
         bob_match.program.update(match_route_id: MatchRoutes::ProviderOnly.first.id)
         decision = roy.client_opportunity_matches.first.hsa_accepts_client_decision
-        decision.update(decline_reason_id: hsa_decline_reason.id, status: :declined)
+        decision.update!(decline_reason_id: hsa_decline_reason.id, status: :declined, decline_reason_other_explanation: 'test')
       end
 
       context 'when positive' do

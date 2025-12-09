@@ -10,6 +10,7 @@ module MatchDecisions::HomelessSetAside
   class SetAsidesHsaAcceptsClient < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::DefaultSetAsidesDeclineReasons
+    include MatchDecisions::RouteThreeDeclineReasons
 
     # validate :note_present_if_status_declined
     validate :ensure_required_contacts_present_on_accept

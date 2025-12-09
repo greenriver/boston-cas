@@ -4,10 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::HomelessSetAside
   class SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::DefaultSetAsidesDeclineReasons
+    include MatchDecisions::RouteThreeDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -138,6 +141,8 @@ module MatchDecisions::HomelessSetAside
     end
 
     private def client_move_in_date_present_if_status_complete
+      return unless show_move_in_date?
+
       errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
   end

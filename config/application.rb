@@ -118,5 +118,8 @@ module BostonCa
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Disable Active Storage routes
+    config.active_storage.draw_routes = false
   end
 end

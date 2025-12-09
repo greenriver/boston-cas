@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Nine
   class NineLeaseUp < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
@@ -123,6 +125,8 @@ module MatchDecisions::Nine
     end
 
     private def client_move_in_date_present_if_status_complete
+      return unless show_move_in_date?
+
       errors.add :client_move_in_date, 'must be filled in' if status == 'completed' && client_move_in_date.blank?
     end
   end

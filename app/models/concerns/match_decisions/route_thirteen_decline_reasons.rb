@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   module RouteThirteenDeclineReasons
     extend ActiveSupport::Concern
@@ -13,7 +15,6 @@ module MatchDecisions
         'SORI',
         'CORI',
         'Does not agree to services',
-        'Immigration status',
         'Unsafe environment for this person',
         'Unwilling to live in that neighborhood',
         'Unwilling to live in SRO',
@@ -31,11 +32,8 @@ module MatchDecisions
       ]
     end
 
-    def decline_reasons_not_other_requiring_explanation
-      [
-        'Ineligible for Housing Program',
-        'Additional screening criteria imposed by third parties',
-      ]
+    def decline_reasons_not_other_requiring_explanation(contact = nil)
+      step_decline_reasons(contact).reject { |reason| reason == 'Other' }
     end
   end
 end

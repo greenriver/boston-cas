@@ -8,6 +8,8 @@ AgeGreaterThanFifty,Age greater than 50,,be
 AgeGreaterThanFiftyFive,Age greater than 55,,be
 AgeGreaterThanSixty,Age greater than 60,,be
 AgeGreaterThanSixtyTwo,Age greater than 62,,be
+AgeGreaterThanX,Age greater than X,,be
+AgeGreaterThanY,Age greater than Y,,be
 ChronicallyHomeless,Chronically Homeless as defined by HUD,,be
 MiAndSaCoMorbid,Co-morbid (MI & SA),,be
 PhysicalDisablingCondition,Disabling condition: physical,,have

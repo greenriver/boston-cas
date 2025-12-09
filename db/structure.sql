@@ -1,3 +1,8 @@
+-- \restrict 9yqLkSanUSuqd3yFoRrZF8CEHgxMRNixVq24aX5hDEo2ywdpADtudsFhwMhkUIs
+
+-- Dumped from database version 17.5 (Debian 17.5-1.pgdg120+1)
+-- Dumped by pg_dump version 17.6 (Debian 17.6-1.pgdg12+1)
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -200,7 +205,8 @@ CREATE TABLE public.buildings (
     city character varying,
     state character varying,
     zip_code character varying,
-    geo_code character varying
+    geo_code character varying,
+    elevator_accessible_default boolean DEFAULT false
 );
 
 
@@ -6911,9 +6917,12 @@ ALTER TABLE ONLY public.sub_programs
 -- PostgreSQL database dump complete
 --
 
+-- \unrestrict 9yqLkSanUSuqd3yFoRrZF8CEHgxMRNixVq24aX5hDEo2ywdpADtudsFhwMhkUIs
+
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250917150302'),
 ('20250821213202'),
 ('20250716125401'),
 ('20250319145924'),

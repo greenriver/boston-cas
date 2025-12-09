@@ -1,7 +1,10 @@
+# frozen_string_literal: false
+
 require 'date'
 require 'byebug'
 require 'English'
 require 'shellwords'
+require 'active_support/all'
 require_relative 'roll_out'
 require_relative 'aws_sdk_helpers'
 require_relative 'asset_compiler'
@@ -19,8 +22,9 @@ class Deployer
   TEST_PORT   = 9999
   WAIT_TIME   = 2
 
-  attr_accessor :version
-  attr_accessor :image_tag
+  attr_accessor :revision      # full git hash
+  attr_accessor :version       # first 7 chars of git hash
+  attr_accessor :image_tag     # ENV['IMAGE_TAG'] or "githash-#{version}"
   attr_accessor :image_tag_latest
 
   # The AWS identifier for the payload of secret environment variables
@@ -48,6 +52,8 @@ class Deployer
 
   attr_accessor :service_registry_arns
 
+  attr_accessor :skip_remote_git_check
+
   attr_accessor :args
 
   def initialize(args)
@@ -63,7 +69,9 @@ class Deployer
     self.registry_id              = args.fetch(:registry_id)
     self.repo_name                = args.fetch(:repo_name)
     self.variant                  = 'web'
-    self.version                  = `git rev-parse --short=7 HEAD`.chomp
+    self.revision                 = args.fetch(:revision, `git rev-parse HEAD`.chomp)
+    self.skip_remote_git_check    = args.fetch(:revision, nil)&.present? # skip check if revision was specified
+    self.version                  = revision[0..6]
     self.args                     = OpenStruct.new(args)
 
     Dir.chdir(_root)
@@ -120,7 +128,7 @@ class Deployer
   def _initial_steps
     # _ensure_clean_repo!
     _set_revision!
-    _check_that_you_pushed_to_remote!
+    _check_that_you_pushed_to_remote! unless skip_remote_git_check
     _docker_login!
     _wait_for_image_ready
     _check_secrets!
@@ -152,7 +160,7 @@ class Deployer
   end
 
   def _set_revision!
-    `git rev-parse HEAD > #{_assets_path}/REVISION`
+    `echo #{revision} > #{_assets_path}/REVISION`
   end
 
   def _check_that_you_pushed_to_remote!
@@ -259,7 +267,7 @@ class Deployer
   end
 
   def _set_image_tag!
-    if ENV['IMAGE_TAG']
+    if ENV['IMAGE_TAG'] # used for debugging
       self.image_tag = ENV['IMAGE_TAG']
       self.image_tag_latest = 'latest-' + ENV['IMAGE_TAG']
     else

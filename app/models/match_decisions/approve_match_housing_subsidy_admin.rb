@@ -4,9 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   class ApproveMatchHousingSubsidyAdmin < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteOneDeclineReasons
 
     # validate :note_present_if_status_declined
 
@@ -125,7 +128,6 @@ module MatchDecisions
       hsa_contact_reasons = [
         'CORI',
         'SORI',
-        'Immigration status',
         'Client needs higher level of care',
         'Unable to reach client after multiple attempts',
         'Household did not respond after initial acceptance of match',
@@ -139,7 +141,7 @@ module MatchDecisions
       ]
       combined_reasons ||= (shelter_agency_contact_reasons + hsa_contact_reasons).uniq
 
-      if contact.user_can_act_on_behalf_of_match_contacts?
+      if contact&.user&.can_act_on_behalf_of_match_contacts?
         combined_reasons
       elsif contact.in?(match.shelter_agency_contacts)
         shelter_agency_contact_reasons

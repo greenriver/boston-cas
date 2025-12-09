@@ -420,7 +420,7 @@
           "type": "controller",
           "class": "BuildingsController",
           "method": "edit",
-          "line": 69,
+          "line": 71,
           "file": "app/controllers/buildings_controller.rb",
           "rendered": {
             "name": "buildings/edit",
@@ -806,7 +806,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 113,
+      "line": 121,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -821,6 +821,29 @@
         77
       ],
       "note": "We're just injecting a git revision"
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "5f29070f834e4bef599dfa0165a10347dae5a8a2b965980ad3d6d60e8fcdd417",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "config/deploy/docker/lib/deployer.rb",
+      "line": 163,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`echo #{revision} > #{_assets_path}/REVISION`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Deployer",
+        "method": "_set_revision!"
+      },
+      "user_input": "revision",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": ""
     },
     {
       "warning_type": "Command Injection",
@@ -975,7 +998,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 112,
+      "line": 120,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep refs/heads/#{`git rev-parse --abbrev-ref HEAD`.chomp}$`",
       "render_path": null,
@@ -1240,29 +1263,6 @@
       "confidence": "Medium",
       "cwe_id": [
         79
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "b2e9f8410ba6ed5963253a0daa5e634213118de8263268da7799b1a3440965fb",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 155,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`git rev-parse HEAD > #{_assets_path}/REVISION`",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Deployer",
-        "method": "_set_revision!"
-      },
-      "user_input": "_assets_path",
-      "confidence": "Medium",
-      "cwe_id": [
-        77
       ],
       "note": ""
     },
@@ -1874,7 +1874,7 @@
           "type": "controller",
           "class": "BuildingsController",
           "method": "edit",
-          "line": 69,
+          "line": 71,
           "file": "app/controllers/buildings_controller.rb",
           "rendered": {
             "name": "buildings/edit",
