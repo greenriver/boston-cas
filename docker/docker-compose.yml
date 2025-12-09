@@ -6,9 +6,9 @@ x-app: &app
     dockerfile: docker/app/Dockerfile
     args:
       BUILD_TAG: 3.4.5-slim-bookworm
-      NODE_MAJOR: '12'
-      YARN_VERSION: '1.17.3'
-      BUNDLER_VERSION: '2.6.3'
+      NODE_MAJOR: "12"
+      YARN_VERSION: "1.17.3"
+      BUNDLER_VERSION: "2.7.1"
       USER_ID: ${USER_ID:-10000}
       GROUP_ID: ${GROUP_ID:-10000}
   environment: &env
@@ -26,7 +26,7 @@ x-app: &app
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
-    BUNDLE_FORCE_RUBY_PLATFORM: 'true'
+    BUNDLE_FORCE_RUBY_PLATFORM: "true"
     SSH_AUTH_SOCK: /ssh-agent
   tmpfs:
     - /tmp
@@ -55,7 +55,7 @@ services:
     profiles:
       - manual
     command: /bin/bash
-    entrypoint: '/usr/bin/entrypoint.spec.sh'
+    entrypoint: "/usr/bin/entrypoint.spec.sh"
     depends_on:
       - db
       - redis
@@ -77,7 +77,7 @@ services:
   dj:
     <<: *backend
     command: ./bin/rake jobs:work
-    entrypoint: ''
+    entrypoint: ""
     depends_on:
       - db
       - redis

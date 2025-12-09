@@ -43,7 +43,7 @@ jobs:
             target: prod-build
             build-args: |
               BUILD_TAG=3.4.5-slim-bookworm
-              BUNDLER_VERSION=2.6.3
+              BUNDLER_VERSION=2.7.1
               USER_ID=10000
               GROUP_ID=10000
             tags: |
@@ -179,16 +179,15 @@ jobs:
           TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         with:
           image-ref: ${{ secrets.ECR_REPOSITORY_URI }}
-          format: 'table'
-          exit-code: '1'
+          format: "table"
+          exit-code: "1"
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: "CRITICAL,HIGH"
           cache-dir: .trivy
           skip-files: ${{ matrix.trivy_skip_files }}
 
       - name: Fix .trivy permissions
-        run:
-          sudo chown -R $(stat . -c %u:%g) .trivy
+        run: sudo chown -R $(stat . -c %u:%g) .trivy
 
       # Not completely sure this remains private
       # - name: Report
