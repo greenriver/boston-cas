@@ -4,10 +4,25 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class DeidentifiedClientsXlsx < ApplicationRecord
-  mount_uploader :file, DeidentifiedClientsXlsxFileUploader
+  # Remove CarrierWave dependency
+  # mount_uploader :file, DeidentifiedClientsXlsxFileUploader
+
+  include FileContentValidator
+
   attr_accessor :agency_id, :update_availability
   attr_reader :added, :touched, :problems, :clients
+
+  # Validate file content before creating record
+  def self.validate_file_content(file_content, claimed_content_type = nil)
+    allowed_types = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+    ]
+    super(file_content, claimed_content_type, allowed_types, '.xlsx')
+  end
 
   def agency_options_for_select
     Agency.order(name: :asc).pluck(:name, :id).to_h

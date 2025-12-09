@@ -1,11 +1,15 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 include ActiveJob::TestHelper
 
 RSpec.describe MatchPrioritization::Rank, type: :model do
-  CasSeeds::Rules.new.run!
-  # MatchRoutes::Base.ensure_all
-  # MatchPrioritization::Base.ensure_all
-
   let!(:priority) { create :priority_rank }
   let!(:tag) { create :tag }
   let!(:route) { create :default_route, match_prioritization: priority, tag_id: tag.id }

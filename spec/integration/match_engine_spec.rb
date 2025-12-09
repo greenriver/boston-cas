@@ -1,8 +1,14 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Running the match engine...', type: :request do
-  MatchRoutes::Base.ensure_all
-  MatchPrioritization::Base.ensure_all
   let!(:female_clients) { create_list :client, 2, female: true }
   let!(:male_clients) { create_list :client, 8, male: true }
   let!(:unknown_gender_clients) { create_list :client, 7 }
@@ -28,10 +34,9 @@ RSpec.describe 'Running the match engine...', type: :request do
   let!(:funding_source) { create :funding_source }
   let!(:subgrantee) { create :subgrantee }
   let(:priority) { MatchPrioritization::DaysHomelessLastThreeYears.first }
-  let(:route) do
+  let!(:route) do
     r = MatchRoutes::Default.first
-    r.update(match_prioritization_id: priority.id)
-    r.update(routes_parked_on_active_match: [r.class.name])
+    r.update(match_prioritization_id: priority.id, routes_parked_on_active_match: [r.class.name])
     r
   end
 
