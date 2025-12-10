@@ -21,7 +21,7 @@ module MatchDecisions::HomelessSetAside
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('Housing Subsidy Administrator')} reviewing match"
+      when :pending then "#{Translation.translate('Shelter Agency Contact')} reviewing match"
       when :accepted then "Match accepted by #{Translation.translate('Housing Subsidy Administrator')}"
       when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
@@ -42,11 +42,11 @@ module MatchDecisions::HomelessSetAside
     end
 
     def actor_type
-      Translation.translate('HSA')
+      Translation.translate('Shelter Agency')
     end
 
     def contact_actor_type
-      :housing_subsidy_admin_contacts
+      :shelter_agency_contacts
     end
 
     def statuses
@@ -83,6 +83,10 @@ module MatchDecisions::HomelessSetAside
     end
 
     def expires?
+      true
+    end
+
+    def stallable?
       true
     end
 
