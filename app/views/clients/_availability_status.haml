@@ -16,7 +16,7 @@
   %p
     In addition to the overall availability status, which prevents matching on any route, clients may be blocked from matching vacancies on specific routes.  Below is a list of routes for which this client is blocked.  Blocking can occur due to active matches, successful matches, or manual "parking."
   %p
-    Configuration each route will determine if a client is blocked from one or more routes when actively involved in a match or successful in a match.
+    Configuration for each route will determine if a client is blocked from one or more routes when actively involved in a match or successful in a match.
   .blocked-on-routes
     %p.m-2.mt-4.muted-text
       - if @client.unavailable_fors_include_active_match?
@@ -30,7 +30,7 @@
       %em #{@client.name} will not match any vacancies on the following routes:
     %ul.ml-2.c-detailed-list<
       - @client.unavailable_as_candidate_fors.sort_by(&:created_at).reverse.each do |uf|
-        - next unless uf.route.active?
+        - next unless uf.route&.active?
         %li
           .c-detailed-list__item.mb-4
             %span.c-detailed-list__label
