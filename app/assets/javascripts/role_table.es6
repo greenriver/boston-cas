@@ -42,6 +42,15 @@ window.App.RoleTable = class RoleTable {
       }
     });
 
+    // Sync horizontal scroll position of fixed header with table-responsive container
+    const $tableResponsive = $(tableSelector).closest('.table-responsive');
+    if ($tableResponsive.length) {
+      $tableResponsive.on('scroll', function() {
+        const scrollLeft = $(this).scrollLeft();
+        $('.fixedHeader-floating').css('left', -scrollLeft + 'px');
+      });
+    }
+
     // Init Table search
     new App.ListSearch({
       inputClass: tableSearchInputSelector,
