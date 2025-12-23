@@ -43,6 +43,10 @@ class Rule < ApplicationRecord
     ''
   end
 
+  def selection_note(_context: nil)
+    nil
+  end
+
   def variable_requirement?
     false
   end

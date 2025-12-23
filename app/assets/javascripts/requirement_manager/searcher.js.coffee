@@ -25,12 +25,15 @@ class App.RequirementManager.Searcher
 
   _init_select_listener: ->
     $(".jVariableRequirment").hide()
+    $(".jRuleSelectionNote").hide()
     $(@element).on 'select2:select', (e) =>
       rule_id = $(@element).val()
       $(".jVariableRequirment").hide()
+      $(".jRuleSelectionNote").hide()
       $(".jVariableRequirment[data-rule-id=#{rule_id}]").show()
       $(".jVariableRequirment[data-rule-id=#{rule_id}] select").css('width', '100%')
       $(".jVariableRequirment[data-rule-id=#{rule_id}] select").select2()
+      $(".jRuleSelectionNote[data-rule-id=#{rule_id}]").show()
 
   reset: ->
     # resetting select2 this way currently throws

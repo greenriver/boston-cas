@@ -18,7 +18,7 @@
                 %td= translation.key
                 %td
                   = simple_form_for(translation, remote: true, url: admin_translation_text_path(translation.id), method: :patch, html: {class: 'jTranslationTextForm'})do |t|
-                    = t.input :text, label: false, input_html: {class: 'jTranslationText', rows: 2, cols: 30}
+                    = t.input :text, as: :text, label: false, input_html: {class: 'jTranslationText', rows: 4, cols: 30}
                 %td
                   %button.btn.btn-secondary.btn-sm
                     Save
