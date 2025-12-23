@@ -36,11 +36,19 @@ window.App.RoleTable = class RoleTable {
       ordering: false,
       paging: false,
       bInfo: false,
-      fixedHeader: true,
-      fixedColumns: {
-        leftColumns: 1
-      }
+      fixedHeader: true
+      // Note: Using CSS sticky positioning for first column instead of fixedColumns
+      // for better compatibility with table-responsive horizontal scrolling
     });
+
+    // Sync horizontal scroll position of fixed header with table-responsive container
+    const $tableResponsive = $(tableSelector).closest('.table-responsive');
+    if ($tableResponsive.length) {
+      $tableResponsive.on('scroll', function() {
+        const scrollLeft = $(this).scrollLeft();
+        $('.fixedHeader-floating').css('left', -scrollLeft + 'px');
+      });
+    }
 
     // Init Table search
     new App.ListSearch({
