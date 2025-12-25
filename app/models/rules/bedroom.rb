@@ -20,7 +20,7 @@ class Rules::Bedroom < Rule
       ### Note
       If this voucher is attached to a 2 bedroom unit, to match a client who requires 2 or more bedrooms, choose "Can't have minimum number of bedrooms" with "One" selected as the number of bedrooms.
 
-      For a 3 bedroom unit, choose"Can't have minimum number of bedrooms" with "Two".
+      For a 3 bedroom unit, choose "Can't have minimum number of bedrooms" with "Two" selected as the number of bedrooms.
     NOTE
     Translation.translate(note)
   end
