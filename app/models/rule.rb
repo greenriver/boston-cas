@@ -43,6 +43,10 @@ class Rule < ApplicationRecord
     ''
   end
 
+  def selection_note(context: nil) # rubocop:disable Lint/UnusedMethodArgument
+    nil
+  end
+
   def variable_requirement?
     false
   end

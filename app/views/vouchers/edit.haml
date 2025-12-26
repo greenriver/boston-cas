@@ -4,7 +4,7 @@
 %div{style: 'margin-bottom: 8em;'}
   = simple_form_for(@voucher, url: program_sub_program_voucher_path(@program, @subprogram, @voucher)) do |f|
     = f.error_notification
-    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Voucher', hide_inherited: true
+    = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: 'Rules for this Voucher', hide_inherited: true, note_context: :voucher
 
     .form-actions
       = f.button :submit
