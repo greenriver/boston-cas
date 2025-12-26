@@ -9,10 +9,12 @@ RSpec.describe 'Client Availability Status', type: :request do
   let!(:client) { create(:client) }
   let!(:project_client) { create(:project_client, client_id: client.id, data_source: data_source) }
   let(:priority) { create(:priority_vispdat_priority) }
-  let(:default_route) { create(:default_route, match_prioritization: priority) }
-  let(:provider_route) { create(:provider_route, match_prioritization: priority) }
+  let!(:default_route) { MatchRoutes::Default.first || create(:default_route, match_prioritization: priority) }
+  let!(:provider_route) { MatchRoutes::ProviderOnly.first || create(:provider_route, match_prioritization: priority) }
 
   before do
+    default_route.update(active: true)
+    provider_route.update(active: true)
     admin.roles << admin_role
     sign_in admin
   end

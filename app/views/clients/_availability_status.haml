@@ -1,3 +1,7 @@
+%p
+  A client will be available for matching if they meet the requirements in the
+  %strong Method used to determine which clients to sync with CAS
+  as set on the Site Config page in the associated HMIS Warehouse, or if they are a non-HMIS client and have been marked available.
 .c-tag.c-tag--full-width{class: "c-tag--#{@client.is_available_for_matching? ? 'success' : 'warning'}"}
   .c-tag__wrapper
     .c-tag__icon.c-tag__icon--sm
@@ -7,20 +11,26 @@
       - if can_reject_matches?
         .c-tag__action
           = render 'park_client_form'
+%hr
 - if @client.unavailable_as_candidate_fors.exists?
+  %p
+    In addition to the overall availability status, which prevents matching on any route, clients may be blocked from matching vacancies on specific routes.  Below is a list of routes for which this client is blocked.  Blocking can occur due to active matches, successful matches, or manual "parking."
+  %p
+    Configuration for each route will determine if a client is blocked from one or more routes when actively involved in a match or successful in a match.
   .blocked-on-routes
     %p.m-2.mt-4.muted-text
       - if @client.unavailable_fors_include_active_match?
-        %em Clients are blocked from matching while actively in a match.
+        %em This client is actively in a match and will be blocked from matching as noted below:
       - else
         - if UnavailableAsCandidateFor.expiration_length.positive?
-          %em Clients are blocked from matching on the same route for #{UnavailableAsCandidateFor.describe_expiration_length} after a complete and successful match.
+          %em This client was successful in a match and has been blocked from matching on the same route for #{UnavailableAsCandidateFor.describe_expiration_length}.
         - else
-        %em Clients are blocked from matching on the same route after a complete and successful match.
+          %em Clients are blocked from matching on the same route after a complete and successful match.
     %p.m-2.mt-4.muted-text
       %em #{@client.name} will not match any vacancies on the following routes:
     %ul.ml-2.c-detailed-list<
       - @client.unavailable_as_candidate_fors.sort_by(&:created_at).reverse.each do |uf|
+        - next unless uf.route&.active?
         %li
           .c-detailed-list__item.mb-4
             %span.c-detailed-list__label
