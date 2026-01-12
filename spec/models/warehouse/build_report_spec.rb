@@ -281,11 +281,14 @@ RSpec.describe Warehouse::BuildReport, type: :model do
     context 'when warehouse is disabled' do
       before do
         allow(Warehouse::Base).to receive(:enabled?).and_return(false)
-        # Stub Warehouse::CasReport methods so we can verify they weren't called
-        # Re-stub here to ensure RSpec can track method calls (stubs from before(:suite) may not be tracked)
-        allow(Warehouse::CasReport).to receive(:transaction).and_yield
-        allow(Warehouse::CasReport).to receive(:delete_all)
-        allow(Warehouse::CasReport).to receive(:import!)
+        # Use stub_const to replace the real class with a double.
+        # This prevents ActiveRecord schema introspection since it's no longer the real class.
+        # We also tell it to yield when transaction is called.
+        report_double = double('Warehouse::CasReport')
+        allow(report_double).to receive(:transaction).and_yield
+        allow(report_double).to receive(:delete_all)
+        allow(report_double).to receive(:import!)
+        stub_const('Warehouse::CasReport', report_double)
       end
 
       it 'only fills reporting table' do
