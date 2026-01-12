@@ -256,10 +256,12 @@ RSpec.describe Warehouse::BuildReport, type: :model do
         # Skip if warehouse is not available (catches errors from table checks)
 
         skip 'Warehouse database not available' unless warehouse_available?
-        allow(Warehouse::Base).to receive(:enabled?).and_return(true)
-        allow(Warehouse::CasReport).to receive(:transaction).and_yield
-        allow(Warehouse::CasReport).to receive(:delete_all)
-        allow(Warehouse::CasReport).to receive(:import!)
+        if warehouse_available?
+          allow(Warehouse::Base).to receive(:enabled?).and_return(true)
+          allow(Warehouse::CasReport).to receive(:transaction).and_yield
+          allow(Warehouse::CasReport).to receive(:delete_all)
+          allow(Warehouse::CasReport).to receive(:import!)
+        end
       rescue ActiveRecord::StatementInvalid, PG::UndefinedTable
         skip 'Warehouse database not available'
       end
