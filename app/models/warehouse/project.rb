@@ -13,8 +13,9 @@ module Warehouse
 
     belongs_to :organization, class_name: Warehouse::Organization.name, primary_key: [:OrganizationID, :data_source_id], foreign_key: [:OrganizationID, :data_source_id], inverse_of: :projects
 
+    # Projects can be made confidential explicitly or by inheriting from their organization
     def name
-      return 'Confidential Project' if confidential?
+      return 'Confidential Project' if confidential? || organization.confidential?
 
       self.ProjectName
     end
