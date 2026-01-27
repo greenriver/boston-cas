@@ -36,19 +36,14 @@ window.App.RoleTable = class RoleTable {
       ordering: false,
       paging: false,
       bInfo: false,
-      fixedHeader: true
+      fixedHeader: false
       // Note: Using CSS sticky positioning for first column instead of fixedColumns
       // for better compatibility with table-responsive horizontal scrolling
     });
 
-    // Sync horizontal scroll position of fixed header with table-responsive container
-    const $tableResponsive = $(tableSelector).closest('.table-responsive');
-    if ($tableResponsive.length) {
-      $tableResponsive.on('scroll', function() {
-        const scrollLeft = $(this).scrollLeft();
-        $('.fixedHeader-floating').css('left', -scrollLeft + 'px');
-      });
-    }
+    this.updateHeaderOffsets = this.updateHeaderOffsets.bind(this)
+    this.updateHeaderOffsets()
+    $(window).on('resize', this.updateHeaderOffsets)
 
     // Init Table search
     new App.ListSearch({
@@ -67,6 +62,18 @@ window.App.RoleTable = class RoleTable {
       if (this.isDirty) {
         return 'Looks like there are unsaved changes. Those changes will be lost if you navigate away'
       }
+    }
+  }
+
+  updateHeaderOffsets() {
+    const $table = this.$tableContainer.find('.j-table__table')
+    const $primaryHeader = $table.find('thead tr.c-table__header--primary')
+    const headerHeight = $primaryHeader.outerHeight() || 0
+    if (this.$tableContainer.length) {
+      this.$tableContainer[0].style.setProperty(
+        '--role-table-primary-header-height',
+        `${headerHeight}px`
+      )
     }
   }
 
