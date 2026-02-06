@@ -68,6 +68,7 @@ module MatchDecisions::HomelessSetAside
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::HomelessSetAside::HsaAcceptsClient
+        m << Notifications::HomelessSetAside::SetAsideFirstStepShelterAgency
         m << Notifications::HomelessSetAside::HsaAcceptsClientSspNotification
       end
     end
@@ -79,6 +80,10 @@ module MatchDecisions::HomelessSetAside
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
       contact.in?(match.housing_subsidy_admin_contacts)
+    end
+
+    def expires?
+      true
     end
 
     class StatusCallbacks < StatusCallbacks

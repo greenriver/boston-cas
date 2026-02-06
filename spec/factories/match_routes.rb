@@ -15,4 +15,8 @@ FactoryBot.define do
     active { true }
     association :match_prioritization, factory: :priority_days_homeless
   end
+  factory :homeless_set_aside_route, class: 'MatchRoutes::HomelessSetAside' do
+    active { true }
+    association :match_prioritization, factory: :priority_days_homeless
+  end
 end

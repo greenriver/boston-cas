@@ -5,14 +5,14 @@
 #   id: container-setup
 #   uses: ./.github/workflows/container_setup
 
-name: 'Container Setup'
-description: 'Sets up the container for running tests'
+name: "Container Setup"
+description: "Sets up the container for running tests"
 
 inputs:
   additional_packages:
-    description: 'Additional packages to install'
+    description: "Additional packages to install"
     required: false
-    default: ''
+    default: ""
 
 runs:
   using: "composite"
@@ -111,7 +111,7 @@ runs:
       run: |
         # Install pg gem with correct configuration
         # gem install pg -- --with-pg-config=/usr/bin/pg_config
-        gem install bundler --version=2.6.3
+        gem install bundler --version=2.7.1
         bundle config set --local without 'production staging development'
         bundle install --jobs 10 --retry 3
 

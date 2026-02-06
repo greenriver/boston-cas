@@ -7,7 +7,7 @@
 # frozen_string_literal: true
 
 module Notifications::HomelessSetAside
-  class MatchInitiationForShelterAgency < ::Notifications::Base
+  class SetAsideMatchCompleteShelterAgency < ::Notifications::Base
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
@@ -15,7 +15,7 @@ module Notifications::HomelessSetAside
     end
 
     def event_label
-      "#{Translation.translate('Shelter Agency Contact')} notified of match detail"
+      "#{Translation.translate('Shelter Agency Contact')} notified of match completion"
     end
 
     def show_client_info?

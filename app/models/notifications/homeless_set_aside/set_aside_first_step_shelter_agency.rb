@@ -7,7 +7,7 @@
 # frozen_string_literal: true
 
 module Notifications::HomelessSetAside
-  class MatchInitiationForShelterAgency < ::Notifications::Base
+  class SetAsideFirstStepShelterAgency < ::Notifications::Base
     def self.create_for_match! match
       match.shelter_agency_contacts.each do |contact|
         create! match: match, recipient: contact
