@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications
   class Base < ApplicationRecord
     self.table_name = 'notifications'
@@ -74,6 +76,17 @@ module Notifications
 
     def self.recreate_for_match! match, contact
       create! match: match, recipient: contact
+    end
+
+    # Override in subclasses to specify which contact types receive this notification
+    # Example: [:shelter_agency_contacts, :dnd_staff_contacts]
+    def self.contact_types_for_notification
+      []
+    end
+
+    # Used by views to display which contact types receive notifications
+    def self.contact_types_for_this_notification
+      contact_types_for_notification
     end
 
     def expired?

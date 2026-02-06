@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -7,6 +9,10 @@
 module Notifications::Eight
   class MatchCanceled < Notifications::MatchCanceled
     # Send to all contacts
+    def self.contact_types_for_notification
+      [:contacts]
+    end
+
     def self.create_for_match! match
       contacts = match.contacts
 

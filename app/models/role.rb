@@ -1,10 +1,10 @@
-# frozen_string_literal: true
-
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
+
+# frozen_string_literal: true
 
 class Role < ApplicationRecord
   has_many :user_roles, dependent: :destroy, inverse_of: :role
