@@ -247,4 +247,9 @@ class Reporting::Decisions < ApplicationRecord
   scope :rejected, -> do
     where(terminal_status: 'Rejected')
   end
+
+  # Returns the reason for an unsuccessful match (either decline or cancel reason)
+  def reason
+    decline_reason.presence || administrative_cancel_reason
+  end
 end

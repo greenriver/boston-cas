@@ -35,6 +35,9 @@ class Dashboards::Overview < Dashboards::Base
         header: 'Terminal Status',
         translate: true,
       },
+      reason: {
+        header: 'Reason',
+      },
       updated_at: {
         header: 'Date of Status',
         transformation: :to_date,
