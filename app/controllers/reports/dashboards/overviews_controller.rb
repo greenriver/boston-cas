@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Reports::Dashboards::OverviewsController < ApplicationController
   before_action :require_can_view_reports!
   before_action :set_filter
@@ -22,8 +24,19 @@ class Reports::Dashboards::OverviewsController < ApplicationController
       data = data.has_reason(params[:reason])
       @reason = @report.reason_from_param(params[:reason])
     end
-    data = data.current_step.joins(:client).current_step.order(updated_at: :desc)
-    @pagy, @data = pagy(data.current_step.joins(:client).order(updated_at: :desc), items: 50)
+    data = data.current_step.joins(:client).order(updated_at: :desc)
+
+    respond_to do |format|
+      format.html do
+        @pagy, @data = pagy(data, items: 50)
+      end
+      format.xlsx do
+        @data = data
+        title = @reason.present? ? @reason : @section
+        filename = "#{title} - #{Date.current.strftime('%Y-%m-%d')}.xlsx"
+        render xlsx: 'details', filename: filename
+      end
+    end
   end
 
   def sections

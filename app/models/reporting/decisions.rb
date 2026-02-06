@@ -218,8 +218,16 @@ class Reporting::Decisions < ApplicationRecord
   end
 
   scope :has_reason, ->(reason) do
-    where(decline_reason: reason).
-      or(where(administrative_cancel_reason: reason))
+    if reason == 'Other'
+      # Match exact "Other" OR "Other: [custom text]" reasons
+      where(decline_reason: reason).
+        or(where(arel_table[:decline_reason].matches('Other:%'))).
+        or(where(administrative_cancel_reason: reason)).
+        or(where(arel_table[:administrative_cancel_reason].matches('Other:%')))
+    else
+      where(decline_reason: reason).
+        or(where(administrative_cancel_reason: reason))
+    end
   end
 
   # This filters the decisions to ones with a reason field, but does not otherwise narrow the scope
@@ -238,5 +246,10 @@ class Reporting::Decisions < ApplicationRecord
 
   scope :rejected, -> do
     where(terminal_status: 'Rejected')
+  end
+
+  # Returns the reason for an unsuccessful match (either decline or cancel reason)
+  def reason
+    decline_reason.presence || administrative_cancel_reason
   end
 end
