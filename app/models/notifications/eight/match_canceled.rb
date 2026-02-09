@@ -14,10 +14,10 @@ module Notifications::Eight
     end
 
     def self.create_for_match! match
-      contacts = match.contacts
-
-      contacts.each do |contact|
-        create! match: match, recipient: contact
+      contact_types_for_notification.each do |contact_type|
+        match.send(contact_type).each do |contact|
+          create! match: match, recipient: contact
+        end
       end
     end
   end

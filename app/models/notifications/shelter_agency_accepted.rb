@@ -9,7 +9,10 @@
 module Notifications
   class ShelterAgencyAccepted < Base
     def self.contact_types_for_notification
-      [:shelter_agency_contacts, :dnd_staff_contacts]
+      [
+        :shelter_agency_contacts,
+        :dnd_staff_contacts,
+      ]
     end
 
     def self.create_for_match!(match)
