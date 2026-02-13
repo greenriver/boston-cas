@@ -1,0 +1,30 @@
+wb = xlsx_package.workbook
+title = @reason.present? ? @reason : @section
+# Sanitize title for Excel tab name: remove invalid characters (\/:*?[]") and limit to 31 chars
+sanitized_title = title.to_s.gsub(/[\\\/:*?\[\]]/, '-').truncate(31, omission: '')
+wb.add_worksheet(name: sanitized_title) do |sheet|
+  header_style = sheet.styles.add_style(sz: 12, b: true, alignment: { horizontal: :center })
+
+  # Add header row
+  headers = ['Match ID', 'Client', 'Route']
+  headers += @report.detail_headers
+  sheet.add_row(headers, style: header_style)
+
+  # Add data rows
+  @data.each do |row|
+    row_data = [
+      row.match_id,
+      row.client.name,
+      row.match_route,
+    ]
+
+    # Add detail columns
+    @report.detail_columns.each do |column_name|
+      value = row.public_send(column_name)
+      formatted_value = @report.format_datum(column_name, value)
+      row_data << formatted_value
+    end
+
+    sheet.add_row(row_data)
+  end
+end
