@@ -66,9 +66,14 @@ Rails.application.configure do
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
   # Use Redis cache store
-  cache_ssl = (ENV.fetch('CACHE_SSL') { 'false' }) == 'true'
+  cache_ssl = ENV.fetch('CACHE_SSL') { 'false' } == 'true'
   cache_namespace = "#{ENV.fetch('CLIENT')}-#{Rails.env}-cas"
-  config.cache_store = :redis_cache_store, Rails.application.config_for(:cache_store).merge(expires_in: 8.hours, ssl: cache_ssl, namespace: cache_namespace)
+  redis_config = Rails.application.config_for(:cache_store).merge(
+    expires_in: 8.hours,
+    ssl: cache_ssl,
+    namespace: cache_namespace,
+  )
+  config.cache_store = :redis_cache_store, redis_config
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
