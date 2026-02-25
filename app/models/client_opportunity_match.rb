@@ -635,10 +635,32 @@ class ClientOpportunityMatch < ApplicationRecord
     current_decision.step_name if active?
   end
 
-  def timeline_events
+  private def timeline_events
     event_history = events.preload(:notification, :contact, decision: [:decline_reason, :not_working_with_client_reason]).all.to_a
     status_history = status_updates.complete.preload(:notification, :contact).to_a
     event_history + status_history
+  end
+
+  def grouped_timeline_events
+    events = timeline_events
+    notification_deliveries, others = events.partition { |e| e.is_a?(MatchEvents::NotificationDelivery) }
+
+    display_events = others.map { |e| MatchHistoryDisplayEvent.new(event: e) }
+
+    grouped = notification_deliveries.group_by do |e|
+      [
+        e.notification&.class&.name,
+        e.notification&.decision&.id,
+        e.created_at&.to_date,
+      ]
+    end
+
+    grouped.each_value do |group|
+      first = group.min_by(&:created_at)
+      display_events << MatchHistoryDisplayEvent.new(event: first, events: group)
+    end
+
+    display_events.sort_by(&:timestamp).reverse
   end
 
   def can_create_overall_note? contact

@@ -1,4 +1,4 @@
-%tr
+%tr.history-row{data: event.history_row_metadata}
   %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
   %td.history--event-name
     = event.name
@@ -15,11 +15,8 @@
         = event.note
         - if event.note_editable_by? current_contact
           .history--event-note--actions
-            =link_to edit_match_match_progress_update_note_path(match, event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
+            = link_to edit_match_match_progress_update_note_path(match, event.event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
               %span.icon-pencil
               Edit Note
   %td= event.decision&.step_name
-  %td.history--contact-name= event&.contact_name || 'Contact Missing'
-  %td
-  - if can_reissue_notifications?
-    %td
+  %td.history--contact-name= event.contact_display
