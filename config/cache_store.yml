@@ -1,4 +1,4 @@
-<% # Resolved Redis URL: REDIS_URL, else built from CACHE_*, else localhost fallback
+<% # Resolved Redis URL: REDIS_URL (as-is, no auth appended), else built from CACHE_* with auth, else localhost fallback
   redis_url = if ENV['REDIS_URL'].present?
     ENV['REDIS_URL']
   elsif ENV['CACHE_HOST'].present?
@@ -7,13 +7,6 @@
     "#{scheme}://#{auth}#{ENV['CACHE_HOST']}:#{ENV['CACHE_PORT']}/#{ENV['CACHE_DB'] || 0}"
   else
     'redis://localhost:6379/1'
-  end
-  use_redis_url = ENV['REDIS_URL'].present? %>
+  end %>
 <%= ENV.fetch('RAILS_ENV') { 'unknown' } %>:
-<% unless use_redis_url %>
-  host: <%= ENV['CACHE_HOST'] %>
-  port: <%= ENV['CACHE_PORT'] %>
-  db: <%= ENV['CACHE_DB'] %>
-<% end %>
   url: <%= redis_url %>
-<%= "  password: #{ENV['CACHE_AUTH_TOKEN']}\n" if ENV['CACHE_AUTH_TOKEN'].present? %>

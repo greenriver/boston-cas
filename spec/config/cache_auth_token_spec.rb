@@ -77,24 +77,18 @@ RSpec.describe 'Redis config (cache_store.yml)' do
   end
 
   describe 'password (cache_store.yml)' do
-    it 'omits password when CACHE_AUTH_TOKEN is unset' do
-      with_env('CACHE_AUTH_TOKEN' => nil) do
-        config = load_cache_store_config
-        expect(config).not_to have_key('password')
-      end
-    end
-
-    it 'omits password when CACHE_AUTH_TOKEN is blank' do
-      with_env('CACHE_AUTH_TOKEN' => '') do
-        config = load_cache_store_config
-        expect(config).not_to have_key('password')
-      end
-    end
-
-    it 'includes password when CACHE_AUTH_TOKEN is set' do
+    it 'never outputs separate password key (auth is in URL when built from CACHE_*)' do
       with_env('CACHE_AUTH_TOKEN' => 'devtoken') do
         config = load_cache_store_config
-        expect(config['password']).to eq('devtoken')
+        expect(config).not_to have_key('password')
+      end
+    end
+
+    it 'uses REDIS_URL as-is when set, ignoring CACHE_AUTH_TOKEN' do
+      with_env('REDIS_URL' => 'redis://redis:6379/', 'CACHE_AUTH_TOKEN' => 'ignored') do
+        config = load_cache_store_config
+        expect(config['url']).to eq('redis://redis:6379/')
+        expect(config).not_to have_key('password')
       end
     end
   end
