@@ -9,7 +9,7 @@
       - if can_recreate_this_decision?
         - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
           = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-sm btn-light'
-  .c-card.c-card--block.c-card--flush.jHistoryCount{data: {history_events: @match.grouped_timeline_events.size, controller: "history"}}
+  .c-card.c-card--block.c-card--flush.jHistoryCount{data: {history_events: (local_assigns[:history_events_count] || match.grouped_timeline_events.size).to_s, controller: "history"}}
     .c-card__content.pt-0.pb-0
 
       - if @match.grouped_timeline_events.any?

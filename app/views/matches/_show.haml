@@ -26,7 +26,7 @@
 
 - poll = params[:redirect] == "true"
 .jDynamicHistory{data: (poll ? { history_path: history_path, history_poll: "true" } : {})}
-  = render 'matches/history', match: @match
+  = render 'matches/history', match: @match, history_events_count: @match.grouped_timeline_events.size
 
 = content_for :page_js do
   :javascript
