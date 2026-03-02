@@ -4,8 +4,15 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications
   class MatchInitiationForManualNotification < Notifications::Base
+    # Custom create_for_match! with dynamic contact type and conditional logic
+    def self.contact_types_for_notification
+      [] # Not applicable - uses dynamic contact type from match.match_route.initial_contacts_for_match
+    end
+
     def self.create_for_match! match
       match.send(match.match_route.initial_contacts_for_match).each do |contact|
         # this notification includes a link to the un-started matches, don't send anything

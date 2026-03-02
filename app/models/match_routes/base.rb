@@ -81,6 +81,10 @@ module MatchRoutes
       raise NotImplementedError
     end
 
+    def untranslated_title
+      raise NotImplementedError
+    end
+
     def initial_decision
       raise NotImplementedError
     end

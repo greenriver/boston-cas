@@ -4,10 +4,16 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchRoutes
   class HomelessSetAside < Base
     def title
-      Translation.translate('Homeless Set-Aside Route')
+      Translation.translate(untranslated_title)
+    end
+
+    def untranslated_title
+      'Homeless Set-Aside Route'
     end
 
     def self.available_sub_types_for_search

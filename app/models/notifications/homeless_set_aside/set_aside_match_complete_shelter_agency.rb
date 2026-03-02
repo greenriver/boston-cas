@@ -8,9 +8,15 @@
 
 module Notifications::HomelessSetAside
   class SetAsideMatchCompleteShelterAgency < ::Notifications::Base
+    def self.contact_types_for_notification
+      [:shelter_agency_contacts]
+    end
+
     def self.create_for_match! match
-      match.shelter_agency_contacts.each do |contact|
-        create! match: match, recipient: contact
+      contact_types_for_notification.each do |contact_type|
+        match.send(contact_type).each do |contact|
+          create! match: match, recipient: contact
+        end
       end
     end
 
