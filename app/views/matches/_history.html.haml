@@ -12,35 +12,38 @@
   .c-card.c-card--block.c-card--flush.jHistoryCount{data: {history_events: @match.grouped_timeline_events.size, controller: "history"}}
     .c-card__content.pt-0.pb-0
 
-      .form-horizontal.pt-2
-        .form-group.row.mb-2
-          %label.control-label.col-sm-1.col-form-label.pr-1 Show
-          .col-sm-11
-            %select.form-control.form-control-sm.select2{data: {history_target: "collapseSelect"}}
-              - MatchHistoryDisplayEvent.history_show_options.each do |value, label|
-                %option{value: value, selected: value == MatchHistoryDisplayEvent.history_default_show_value}= label
-        .form-group.row.mb-2{data: {history_target: "dateRangeRow"}, hidden: true}
-          %label.control-label.col-sm-1.col-form-label.pr-1 Date range
-          .col-sm-11
-            .row
-              .col-sm-5
-                .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
-                  %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateStart"}, placeholder: "Start"}
-                  %span.input-group-addon
-                    %i.icon-calendar
-              .col-sm-5
-                .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
-                  %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateEnd"}, placeholder: "End"}
-                  %span.input-group-addon
-                    %i.icon-calendar
-        .form-group.row.mb-2
-          %label.control-label.col-sm-1.col-form-label.pr-1 Event
-          .col-sm-11
-            %select.form-control.form-control-sm.select2{data: {history_target: "eventSelect"}}
-        .form-group.row.mb-2
-          %label.control-label.col-sm-1.col-form-label.pr-1 Contact
-          .col-sm-11
-            %select.form-control.form-control-sm.select2{multiple: true, data: {history_target: "contactSelect"}}
+      - if @match.grouped_timeline_events.any?
+        .form-horizontal.pt-2
+          .row
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Show
+                %select.form-control.form-control-sm.select2{data: {history_target: "collapseSelect"}}
+                  - MatchHistoryDisplayEvent.history_show_options.each do |value, label|
+                    %option{value: value, selected: value == MatchHistoryDisplayEvent.history_default_show_value}= label
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Contact
+                %select.form-control.form-control-sm.select2{multiple: true, data: {history_target: "contactSelect"}}
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Event
+                %select.form-control.form-control-sm.select2{data: {history_target: "eventSelect"}}
+          .row{data: {history_target: "dateRangeRow"}, hidden: true}
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Date range
+                .row
+                  .col-6
+                    .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
+                      %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateStart"}, placeholder: "Start"}
+                      %span.input-group-addon
+                        %i.icon-calendar
+                  .col-6
+                    .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
+                      %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateEnd"}, placeholder: "End"}
+                      %span.input-group-addon
+                        %i.icon-calendar
 
       %table.table.table-condensed.table-striped
         %thead
