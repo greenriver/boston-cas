@@ -24,7 +24,8 @@
 - if @notification.present?
   - history_path = notification_match_history_path(@notification, @match)
 
-.jDynamicHistory{data: {history_path: history_path }}
+- poll = params[:redirect] == "true"
+.jDynamicHistory{data: (poll ? { history_path: history_path, history_poll: "true" } : {})}
   = render 'matches/history', match: @match
 
 = content_for :page_js do
@@ -52,35 +53,3 @@
       $(this).closest('form').trigger('submit');
       $('.modal:visible .close').trigger('click');
     });
-
-- if(params[:redirect] == "true")
-  = content_for :page_js do
-    :javascript
-      (function($) {
-        var refresh_count = 0;
-        var intervalId = setInterval(function() {
-          var $history = $('.jDynamicHistory');
-          var url = $history.data('history-path');
-          $.get(url, function(data){
-            var $parsed = $(data);
-            var new_event_count = $parsed.find('.jHistoryCount').attr('data-history-events');
-            var old_event_count = $history.find('.jHistoryCount').attr('data-history-events');
-            if (new_event_count !== old_event_count) {
-              var $card = $history.find('.jHistoryCount');
-              var state = {
-                collapse: $card.find('[data-history-target="collapseSelect"]').val(),
-                dateStart: $card.find('[data-history-target="dateStart"]').val(),
-                dateEnd: $card.find('[data-history-target="dateEnd"]').val(),
-                eventType: $card.find('[data-history-target="eventSelect"]').val(),
-                contactIds: $card.find('[data-history-target="contactSelect"]').val() || []
-              };
-              $history.data('history-restore', state);
-              $history.html(data);
-            }
-            refresh_count++;
-            if (refresh_count >= 10) {
-              clearInterval(intervalId);
-            }
-          });
-        }, 10000);
-      })(jQuery);

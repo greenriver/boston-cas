@@ -4,10 +4,10 @@
  * License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
  */
 
-// NOTE: The history section is polled and replaced via $('.jDynamicHistory').html(data)
-// when the event count changes (see matches/_show.haml). When the DOM is replaced,
-// Stimulus disconnects the old controller and connects to the new element.
-// connect() must re-init ALL JS: Select2, datepickers, tooltips. disconnect() cleans up.
+// NOTE: When poll is enabled, this controller polls the history URL and replaces the
+// section when event count changes. When the DOM is replaced, Stimulus disconnects
+// the old controller and connects to the new element. connect() must re-init ALL JS:
+// Select2, datepickers, tooltips. disconnect() cleans up.
 
 (function () {
   const { Controller } = window.Stimulus
@@ -25,6 +25,7 @@
       this.element.querySelectorAll('[data-toggle="tooltip"]').forEach((el) => {
         if (typeof jQuery !== 'undefined') jQuery(el).tooltip()
       })
+      if (this.shouldPoll()) this.startPolling()
     }
 
     initDatePickers() {
@@ -66,6 +67,10 @@
     }
 
     disconnect() {
+      if (this._pollIntervalId) {
+        clearInterval(this._pollIntervalId)
+        this._pollIntervalId = null
+      }
       if (typeof jQuery === 'undefined') return
       const selects = []
       if (this.hasCollapseSelectTarget) selects.push(this.collapseSelectTarget)
@@ -81,6 +86,53 @@
         $el.off('changeDate.historyFilter')
         if ($el.data('datepicker')) $el.datepicker('destroy')
       })
+    }
+
+    shouldPoll() {
+      const wrapper = this.element.closest('.jDynamicHistory')
+      return wrapper?.getAttribute('data-history-poll') === 'true'
+    }
+
+    startPolling() {
+      const wrapper = this.element.closest('.jDynamicHistory')
+      const path = wrapper?.getAttribute('data-history-path')
+      if (!path) return
+      let refreshCount = 0
+      this._pollIntervalId = setInterval(() => {
+        fetch(path)
+          .then((r) => r.text())
+          .then((html) => {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(html, 'text/html')
+            const newCard = doc.querySelector('.jHistoryCount')
+            const oldEventCount = this.element.dataset.historyEvents
+            const newEventCount = newCard?.dataset?.historyEvents
+            if (newEventCount !== oldEventCount) {
+              const state = this.captureState()
+              const wrapper = this.element.closest('.jDynamicHistory')
+              if (wrapper && typeof jQuery !== 'undefined') {
+                jQuery(wrapper).data('history-restore', state)
+              }
+              if (wrapper) wrapper.innerHTML = html
+            }
+            refreshCount++
+            if (refreshCount >= 10 && this._pollIntervalId) {
+              clearInterval(this._pollIntervalId)
+              this._pollIntervalId = null
+            }
+          })
+          .catch(() => {})
+      }, 10000)
+    }
+
+    captureState() {
+      return {
+        collapse: this.hasCollapseSelectTarget ? this.collapseSelectTarget.value : null,
+        dateStart: this.hasDateStartTarget ? this.dateStartTarget.value : null,
+        dateEnd: this.hasDateEndTarget ? this.dateEndTarget.value : null,
+        eventType: this.hasEventSelectTarget ? this.eventSelectTarget.value : null,
+        contactIds: this.getSelectedContactIds()
+      }
     }
 
     restorePollState() {
