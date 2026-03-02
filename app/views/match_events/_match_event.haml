@@ -1,4 +1,4 @@
-%tr
+%tr.history-row{data: event.history_row_metadata}
   %td.history--date= event.timestamp.try(:strftime, '%m/%d/%Y')
   %td.history--event-name
     = event.name
@@ -8,12 +8,10 @@
         = event.note
         - if event.note_editable_by? current_contact
           .history--event-note--actions
-            =link_to edit_match_note_path(match, event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
+            = link_to edit_match_note_path(match, event.event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
               %span.icon-pencil
               Edit Note
   %td= event.decision&.step_name
-  %td.history--contact-name= event&.contact_name || 'Contact Missing'
-  - if can_reissue_notifications?
-    %td.history--resend-notification
-      - if event.notification.present? && event.notification.decision == @match.current_decision
-        = link_to 'Re-send notification', resend_notification_path(event.notification.code)
+  %td.history--contact-name
+    - tooltip_data = (event.grouped && event.contacts.size > 1) ? {toggle: "tooltip", placement: "top", html: "true", title: event.contact_names.map { |n| h(n) }.join("<br>").html_safe} : {}
+    %span.history--contacts-tooltip{data: tooltip_data}= event.contact_display

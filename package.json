@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "_comment": "NOTE: not all packages are managed here, many are checked into source at /vendor/assets or /app/assets/javascripts/",
   "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
     "billboard.js": "^3.18.0",
     "d3": "^7.6.1"
   },
