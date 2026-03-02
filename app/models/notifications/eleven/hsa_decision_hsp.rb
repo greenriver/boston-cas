@@ -4,13 +4,21 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Eleven
   class HsaDecisionHsp < ::Notifications::Base
     # Notification sent to a client of a decision made by the housing subsidy administrator
 
+    def self.contact_types_for_notification
+      [:hsp_contacts]
+    end
+
     def self.create_for_match! match
-      match.hsp_contacts.each do |contact|
-        create! match: match, recipient: contact
+      contact_types_for_notification.each do |contact_type|
+        match.send(contact_type).each do |contact|
+          create! match: match, recipient: contact
+        end
       end
     end
 

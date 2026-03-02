@@ -4,10 +4,16 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchRoutes
   class Default < Base
     def title
-      Translation.translate('Default Match Route')
+      Translation.translate(untranslated_title)
+    end
+
+    def untranslated_title
+      'Default Match Route'
     end
 
     def self.available_sub_types_for_search
