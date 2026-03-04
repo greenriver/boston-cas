@@ -39,7 +39,7 @@
 
     initSelects() {
       if (typeof jQuery === 'undefined') return
-      if (this.hasCollapseSelectTarget) this.initSingleSelect(this.collapseSelectTarget, true,)
+      if (this.hasCollapseSelectTarget) this.initSingleSelect(this.collapseSelectTarget, true)
       if (this.hasEventSelectTarget) this.initSingleSelect(this.eventSelectTarget, true)
       if (this.hasContactSelectTarget) {
         const $el = jQuery(this.contactSelectTarget)
