@@ -49,6 +49,10 @@ class MatchHistoryDisplayEvent
     @event.decision
   end
 
+  def step_name
+    decision&.step_name || @event.try(:match)&.decision_active_at(timestamp)&.step_name
+  end
+
   def contacts
     return [@event.contact].compact unless grouped
 

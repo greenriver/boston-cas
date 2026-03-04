@@ -18,5 +18,5 @@
             = link_to edit_match_match_progress_update_note_path(match, event.event, match_note_referrer_params), data: {loads_in_pjax_modal: true} do
               %span.icon-pencil
               Edit Note
-  %td= event.decision&.step_name
+  %td= event.step_name
   %td.history--contact-name= event.contact_display

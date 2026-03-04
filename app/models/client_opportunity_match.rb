@@ -508,6 +508,15 @@ class ClientOpportunityMatch < ApplicationRecord
     @current_decision = nil
   end
 
+  def decision_active_at(timestamp)
+    return nil unless timestamp.present?
+
+    initialized_decisions
+      .where('match_decisions.updated_at <= ?', timestamp)
+      .order(updated_at: :desc)
+      .first || initial_decision
+  end
+
   def add_default_contacts!
     add_default_dnd_staff_contacts!
     add_default_housing_subsidy_admin_contacts!
