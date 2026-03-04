@@ -39,7 +39,7 @@
 
     initSelects() {
       if (typeof jQuery === 'undefined') return
-      if (this.hasCollapseSelectTarget) this.initSingleSelect(this.collapseSelectTarget, true, { width: '30em' })
+      if (this.hasCollapseSelectTarget) this.initSingleSelect(this.collapseSelectTarget, true,)
       if (this.hasEventSelectTarget) this.initSingleSelect(this.eventSelectTarget, true)
       if (this.hasContactSelectTarget) {
         const $el = jQuery(this.contactSelectTarget)
@@ -47,7 +47,6 @@
         $el.select2({
           placeholder: 'All contacts',
           allowClear: true,
-          width: '30em',
         })
         $el.off('change.historyFilter').on('change.historyFilter', () => this.apply())
       }
