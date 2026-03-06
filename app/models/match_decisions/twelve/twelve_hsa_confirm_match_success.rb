@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Twelve
   class TwelveHsaConfirmMatchSuccess < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
@@ -81,8 +83,8 @@ module MatchDecisions::Twelve
       end
     end
 
-    def notify_contact_of_action_taken_on_behalf_of(contact:) # rubocop:disable Lint/UnusedMethodArgument
-      Notifications::OnBehalfOf.create_for_match!(match, contact_actor_type)
+    def notify_on_behalf_of?
+      true
     end
 
     def accessible_by? contact

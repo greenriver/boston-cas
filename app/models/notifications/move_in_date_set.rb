@@ -17,14 +17,6 @@ module Notifications
       ]
     end
 
-    def self.create_for_match!(match)
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
-    end
-
     def event_label
       "#{Translation.translate('Shelter Agency')}, #{Translation.translate('Housing Subsidy Administrator')}, #{Translation.translate('Stabilization Service Provider')}, and #{Translation.translate('Housing Search Provider')} contacts notified, #{Translation.translate('lease start date')} set."
     end

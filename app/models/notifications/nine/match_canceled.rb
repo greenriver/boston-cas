@@ -13,12 +13,8 @@ module Notifications::Nine
       [:contacts]
     end
 
-    def self.create_for_match! match
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
+    def self.create_for_match!(match, decision_id: nil)
+      Notifications::Base.instance_method(:create_for_match!).bind(self).call(match, decision_id: decision_id)
     end
   end
 end

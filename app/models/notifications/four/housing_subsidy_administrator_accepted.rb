@@ -12,14 +12,6 @@ module Notifications::Four
       [:shelter_agency_contacts, :dnd_staff_contacts]
     end
 
-    def self.create_for_match! match
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
-    end
-
     def decision
       match.four_schedule_criminal_hearing_housing_subsidy_admin_decision
     end
