@@ -20,14 +20,6 @@ module Notifications
       ]
     end
 
-    def self.create_for_match!(match)
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
-    end
-
     def event_label
       if Config.get(:notify_all_on_progress_update)
         'Progress update submitted, all contacts notified'

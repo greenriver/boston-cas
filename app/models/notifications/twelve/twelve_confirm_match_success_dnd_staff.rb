@@ -12,14 +12,6 @@ module Notifications::Twelve
       [:dnd_staff_contacts]
     end
 
-    def self.create_for_match! match
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
-    end
-
     def decision
       match.twelve_confirm_match_success_dnd_staff_decision
     end

@@ -13,9 +13,9 @@ module Notifications
       [] # Not applicable - contact_type is passed as parameter to create_for_match!
     end
 
-    def self.create_for_match! match, contact_type
+    def self.create_for_match!(match, contact_type, decision_id: nil)
       match.send(contact_type).each do |contact|
-        create! match: match, recipient: contact
+        create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end
     end
 

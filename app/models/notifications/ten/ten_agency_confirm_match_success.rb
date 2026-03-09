@@ -12,14 +12,6 @@ module Notifications::Ten
       [:shelter_agency_contacts]
     end
 
-    def self.create_for_match! match
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
-    end
-
     def decision
       match.ten_agency_confirm_match_success_decision
     end

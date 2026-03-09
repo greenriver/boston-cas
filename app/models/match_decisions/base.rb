@@ -238,12 +238,57 @@ module MatchDecisions
     # on the prior step)
     def recreate_notifications_for_this_step
       notifications_for_this_step.each do |n|
-        n.create_for_match! match
+        n.create_for_match!(match, decision_id: id)
       end
     end
 
     def notifications_for_this_step
       # override in subclass, return an array of notifications appropriate to resend for the current step
+    end
+
+    def self.backfill_decision_id_on_events!
+      # Scope to decisions for matches that have notification delivery events with nil decision_id
+      decisions_scope = MatchDecisions::Base.where(
+        match_id: MatchEvents::NotificationDelivery.where(decision_id: nil).select(:match_id),
+      )
+
+      # Load events with nil decision_id, grouped by match (includes notification for type lookup)
+      match_ids = decisions_scope.distinct.pluck(:match_id)
+      events = MatchEvents::NotificationDelivery
+        .where(decision_id: nil, match_id: match_ids)
+        .includes(:notification)
+
+      events_by_match = events.group_by(&:match_id)
+      decision_to_event_ids = Hash.new { |h, k| h[k] = [] }
+
+      # Store decisions per match to avoid repeated queries
+      decisions_by_match = {}
+
+      decisions_scope.find_each do |decision|
+        notification_classes = decision.notifications_for_this_step
+        next if notification_classes.blank?
+
+        # Load all decisions for this match (cached per match)
+        decisions_by_match[decision.match_id] ||= MatchDecisions::Base.where(match_id: decision.match_id).to_a
+        match_decisions = decisions_by_match[decision.match_id]
+
+        # Consider only events for this match
+        (events_by_match[decision.match_id] || []).each do |event|
+          next unless notification_classes.include?(event.notification.class)
+
+          # Only assign when this decision is the only one in the match that sends this notification type
+          decisions_sending_this_notification = match_decisions.select do |d|
+            d.notifications_for_this_step.include?(event.notification.class)
+          end
+
+          decision_to_event_ids[decision.id] << event.id if decisions_sending_this_notification.size == 1
+        end
+      end
+
+      # Persist decision_id on events
+      decision_to_event_ids.each do |decision_id, event_ids|
+        MatchEvents::NotificationDelivery.where(id: event_ids).update_all(decision_id: decision_id)
+      end
     end
 
     def holds_voucher?
@@ -304,8 +349,21 @@ module MatchDecisions
       MatchEvents::UnitUpdated.create(match_id: match.id, note: "Previously: #{previous_unit}", contact_id: contact_id)
     end
 
-    # override in subclass
-    def notify_contact_of_action_taken_on_behalf_of contact:
+    def notify_contact_of_action_taken_on_behalf_of(contact:) # rubocop:disable Lint/UnusedMethodArgument
+      return unless notify_on_behalf_of?
+      return if skip_notify_on_behalf_of_when_canceled? && status == 'canceled'
+
+      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type, decision_id: id
+    end
+
+    # Override to return true when this decision should send OnBehalfOf notification
+    def notify_on_behalf_of?
+      false
+    end
+
+    # Override to return true to skip notification when status is 'canceled'
+    def skip_notify_on_behalf_of_when_canceled?
+      false
     end
 
     def self.model_name
@@ -386,7 +444,7 @@ module MatchDecisions
 
     def send_notifications_for_step
       notifications_for_this_step.each do |notification|
-        notification.create_for_match! match
+        notification.create_for_match!(match, decision_id: id)
       end
     end
 

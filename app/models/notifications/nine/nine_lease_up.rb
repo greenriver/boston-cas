@@ -12,14 +12,6 @@ module Notifications::Nine
       [:housing_subsidy_admin_contacts]
     end
 
-    def self.create_for_match! match
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create! match: match, recipient: contact
-        end
-      end
-    end
-
     def decision
       match.nine_lease_up_decision
     end

@@ -13,11 +13,11 @@ module Notifications::Eight
       []
     end
 
-    def self.create_for_match! match
+    def self.create_for_match!(match, decision_id: nil)
       contacts = match.contacts - match.dnd_staff_contacts
 
       contacts.each do |contact|
-        create! match: match, recipient: contact
+        create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end
     end
   end

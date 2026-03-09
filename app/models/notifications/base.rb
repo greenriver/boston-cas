@@ -22,6 +22,8 @@ module Notifications
     delegate :name, to: :recipient, allow_nil: true, prefix: true
     has_many :notification_delivery_events, class_name: 'MatchEvents::NotificationDelivery', foreign_key: :notification_id
 
+    attribute :decision_id_for_delivery, :integer
+
     validates :code, uniqueness: true
 
     before_validation :setup_code
@@ -36,13 +38,15 @@ module Notifications
     end
 
     def deliver
-      DeliverJob.perform_later(self) if match.match_route.send_notifications
+      return unless match.match_route.send_notifications
+
+      DeliverJob.perform_later(self, decision_id_for_delivery)
     end
 
     class DeliverJob < ActiveJob::Base
-      def perform(notification)
+      def perform(notification, decision_id = nil)
         NotificationsMailer.send(notification.notification_type, notification).deliver_now
-        notification.record_delivery_event!
+        notification.record_delivery_event!(decision_id: decision_id)
       end
     end
     private_constant :DeliverJob
@@ -58,7 +62,7 @@ module Notifications
     end
 
     def decision
-      nil
+      notification_delivery_events.last&.decision
     end
 
     def event_label
@@ -66,12 +70,21 @@ module Notifications
       raise 'abstract method not implemented'
     end
 
-    def record_delivery_event!
-      notification_delivery_events.create! match: match, contact: recipient
+    def record_delivery_event!(decision_id: nil)
+      decision_id_to_use = decision_id || decision&.id
+      notification_delivery_events.create!(match: match, contact: recipient, decision_id: decision_id_to_use)
     end
 
     def contacts_editable?
       false
+    end
+
+    def self.create_for_match!(match, decision_id: nil)
+      contact_types_for_notification.each do |contact_type|
+        match.send(contact_type).each do |contact|
+          create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
+        end
+      end
     end
 
     def self.recreate_for_match! match, contact
