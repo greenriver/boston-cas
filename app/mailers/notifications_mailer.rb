@@ -276,7 +276,7 @@ class NotificationsMailer < DatabaseMailer
 
   def set_aside_first_step_shelter_agency(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: 'New Housing Recommendation')
+    mail(to: @contact.email, subject: 'New Housing Recommendation - Requires Your Action')
   end
 
   def set_aside_match_complete_shelter_agency(notification = nil)
@@ -286,7 +286,7 @@ class NotificationsMailer < DatabaseMailer
 
   def set_asides_hsa_accepts_client(notification = nil)
     setup_instance_variables(notification)
-    mail(to: @contact.email, subject: 'Match ready for review - Requires Your Action')
+    mail(to: @contact.email, subject: 'Match ready for review')
   end
 
   def set_asides_hsa_accepts_client_ssp(notification = nil)

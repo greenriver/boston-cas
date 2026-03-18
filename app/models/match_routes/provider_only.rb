@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchRoutes
   class ProviderOnly < Base
     def title
@@ -25,7 +27,7 @@ module MatchRoutes
       {
         'MatchDecisions::ProviderOnly::HsaAcknowledgesReceipt' => 1,
         'MatchDecisions::ProviderOnly::HsaAcceptsClient' => 2,
-        'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 2,
+        'MatchDecisions::ProviderOnly::ConfirmHsaAcceptsClientDeclineDndStaff' => 3,
       }
     end
 

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Matching::Engine
   class << self
     def for_available_clients(opportunities, match_route:)
@@ -81,6 +83,8 @@ class Matching::Engine
         universe_state: universe_state,
       )
 
+      # If this is the highest priority client, activate the match if auto activation is enabled,
+      # Otherwise, create the match, and send a notification indicating people have been matched to the opportunity.
       if client_priority == 1
         if opportunity.match_route.should_activate_match
           match.activate!(touch_referral_event: opportunity.match_route.auto_initialize_event?)

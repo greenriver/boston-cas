@@ -66,7 +66,7 @@ RSpec.describe NotificationsMailer, type: :mailer do
       mail = NotificationsMailer.set_aside_first_step_shelter_agency(notification)
 
       expect(mail.to).to eq([shelter_agency_contact.email])
-      expect(mail.subject).to eq('New Housing Recommendation')
+      expect(mail.subject).to eq('New Housing Recommendation - Requires Your Action')
     end
 
     it 'includes match details in email body' do

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Warehouse
   class BuildReport
     include ArelHelper
@@ -191,6 +193,8 @@ module Warehouse
           match.overall_status[:name]
         end
 
+        decision_order = match.match_route.class.match_steps_for_reporting[decision.type]
+
         row = {
           source_data_source: data_source,
           client_id: ds_client_id,
@@ -198,11 +202,11 @@ module Warehouse
           match_id: match.id,
           vacancy_id: match.opportunity_id,
           decision_id: decision.id,
-          decision_order: match_route.class.match_steps_for_reporting[decision.type],
+          decision_order: decision_order,
           match_step: step_name,
           decision_status: decision.label || 'unknown',
           current_step: decision == current_decision,
-          decline_reason: explain(decision, :decline_reason),
+          decline_reason: decline_reason(match, decision, decision_order, current_status),
           ineligible_in_warehouse: ineligible_in_warehouse,
           event_contact: event_contact&.name_with_email,
           event_contact_agency: event_contact&.agency&.name,
@@ -267,6 +271,22 @@ module Warehouse
       explanation = r.name
       explanation = "#{explanation}: #{decision.send "#{reason}_other_explanation"}" if r.other?
       explanation
+    end
+
+    # When a decline is accepted, the administrative decision is marked as rejected, but may not include the decline reason.
+    # Use the decision that was declined to populate the reason if the administrative decision doesn't have one
+    def decline_reason(match, decision, decision_order, current_status)
+      decline_reason = explain(decision, :decline_reason)
+      return decline_reason unless current_status == 'Rejected'
+
+      # Walk backwards through the decisions, looking for decisions with a reporting order one step lower and a lower ID to find where the decline was requested
+      decline_decision = match.decisions.reverse.detect do |d|
+        d_order = match.match_route.class.match_steps_for_reporting[d.type]
+        d_order.present? && d_order == decision_order - 1 && decision.id > d.id
+      end
+      return decline_reason unless decline_decision.present?
+
+      explain(decline_decision, :decline_reason)
     end
   end
 end

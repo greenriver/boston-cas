@@ -4,10 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Cas
   class UpdateVoucherAvailability
-
     def run!
+      # Enable vouchers that have a scheduled availability date that has arrived
       vouchers = Voucher.where.not(date_available: nil).where(available: false)
       vouchers.find_each do |v|
         if v.opportunity&.status_match.blank? && v.date_available <= Date.current
@@ -19,7 +21,7 @@ module Cas
         end
       end
       # Find any vouchers that had been marked available in the future, but for whatever reason are
-      # connected to an opportunity that isn't availablea and has no active or successful match.
+      # connected to an opportunity that isn't available and has no active or successful match.
       vouchers = Voucher.where.not(date_available: nil).where(available: true).
         joins(:opportunity).
         merge(Opportunity.where(available_candidate: false))
@@ -36,7 +38,7 @@ module Cas
       end
 
       # Find any vouchers that had been marked available, but for whatever reason are
-      # connected to an opportunity that isn't availablea and has no active or successful match.
+      # connected to an opportunity that isn't available and has no active or successful match.
       vouchers = Voucher.where(date_available: nil, available: true).
         joins(:opportunity).
         merge(Opportunity.where(available_candidate: false))
@@ -51,8 +53,5 @@ module Cas
         end
       end
     end
-
-    private
-
   end
 end
