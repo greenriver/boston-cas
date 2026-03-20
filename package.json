@@ -5,7 +5,9 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "billboard.js": "^3.18.0",
-    "d3": "^7.6.1",
+    "d3": "^7.6.1"
+  },
+  "devDependencies": {
     "yarn-deduplicate": "^6.0.2"
   },
   "repository": {
