@@ -34,7 +34,7 @@ ARG GROUP_ID=10000
 ARG BUNDLER_VERSION=2.7.1
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=3.4.5
+LABEL "ruby-version"=3.4.9
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
