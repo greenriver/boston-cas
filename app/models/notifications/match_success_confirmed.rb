@@ -4,18 +4,16 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications
   class MatchSuccessConfirmed < Base
-
-    def self.create_for_match! match
-      match.contacts.each do |contact|
-        create! match: match, recipient: contact
-      end
+    def self.contact_types_for_notification
+      [:contacts]
     end
 
     def event_label
-      "Contact notified of match success confirmation."
+      'Contact notified of match success confirmation.'
     end
-
   end
 end

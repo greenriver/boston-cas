@@ -24,8 +24,9 @@
 - if @notification.present?
   - history_path = notification_match_history_path(@notification, @match)
 
-.jDynamicHistory{data: {history_path: history_path }}
-  = render 'matches/history', match: @match
+- poll = params[:redirect] == "true"
+.jDynamicHistory{data: (poll ? { history_path: history_path, history_poll: "true" } : {})}
+  = render 'matches/history', match: @match, history_events_count: @match.grouped_timeline_events.size
 
 = content_for :page_js do
   :javascript
@@ -52,25 +53,3 @@
       $(this).closest('form').trigger('submit');
       $('.modal:visible .close').trigger('click');
     });
-
-- if(params[:redirect] == "true")
-  = content_for :page_js do
-    :javascript
-      (function($) {
-        var refresh_count = 0;
-        setInterval(function() {
-          var $history = $('.jDynamicHistory');
-          var url = $history.data('history-path');
-          $.get(url, function(data){
-            new_event_count = $(data).attr('data-history-events')
-            old_event_count = $history.find('.jHistoryCount').attr('data-history-events');
-            if (new_event_count != old_event_count) {
-              $history.html(data);
-            }
-            refresh_count++;
-            if (refresh_count >= 10){
-              clearInterval();
-            }
-          });
-        }, 10000);
-      })(jQuery);

@@ -2,6 +2,13 @@
 - content_for :title, title
 = content_for :modal_title, title
 
+.d-flex.justify-content-between.align-items-center.mb-3
+  %div
+  .btn-group
+    = link_to details_reports_dashboards_overviews_path(request.query_parameters.merge(format: :xlsx)), class: 'btn btn-secondary' do
+      %span.icon-download2
+      Download Excel
+
 - if @pagy.count.positive?
   = render 'common/pagination_top', item_name: 'match'
   .table-responsive

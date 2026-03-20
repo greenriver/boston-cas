@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 # Manual testing routine
 # reload!; include NotifierConfig; setup_notifier('test_user')
 # @notifier.ping('test message')
@@ -31,10 +33,7 @@ class ApplicationNotifier < Slack::Notifier
 
   # use the same redis instance we use for caching
   def self.redis
-    Redis.new Rails.application.config_for(:cache_store).merge(
-      timeout: 1,
-      ssl: (ENV.fetch('CACHE_SSL') { 'false' }) == 'true',
-    )
+    Redis.new(Rails.application.config_for(:cache_store).merge(timeout: 1))
   end
 
   # prefix all keys with a CLIENT specific key

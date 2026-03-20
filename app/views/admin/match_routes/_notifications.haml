@@ -3,14 +3,20 @@
     %tr
       %th Step Name
       %th Notifications
+      %th Contact Types
   %tbody
     - route.class.match_steps.keys.each do |step_class_name|
       - step = step_class_name.constantize.new
-      %tr
-        %td= step.step_name
-        %td
-          %ul.list-unstyled
-            - step.notifications_for_this_step.each do |notification_class|
-              - notification = notification_class.new
-              %li= notification.event_label
-              %br
+      - notifications = step.notifications_for_this_step
+      - notifications.each_with_index do |notification_class, index|
+        - notification = notification_class.new
+        - contact_types = notification_class.contact_types_for_this_notification
+        %tr
+          - if index.zero?
+            %td{rowspan: notifications.size}= step.step_name
+          %td= notification.event_label
+          %td
+            - if contact_types.any?
+              = contact_types.map { |ct| ct.to_s.humanize.titleize }.join(', ')
+            - else
+              %em.text-muted N/A

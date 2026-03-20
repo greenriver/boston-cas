@@ -6,7 +6,7 @@
 %h1= content_for :title
 
 %h2 Settings
-.well.p-0
+.well.p-0.mb-6
   .overflow-x-scroll{style: "height: 800px"}
     %table.table.table-fixed.table-striped
       %thead
@@ -31,7 +31,11 @@
       %tbody
         - @routes.each do |route|
           %tr
-            %td= link_to route.title, edit_admin_match_route_path(route)
+            %td
+              = link_to route.title, edit_admin_match_route_path(route)
+              - if route.title != route.untranslated_title
+                %br
+                %em.text-muted.font-size-small= "(#{route.untranslated_title})"
             %td= checkmark route.active
             %td= route.housing_type
             %td= checkmark route.contacts_editable_by_hsa
@@ -50,10 +54,17 @@
             %td= checkmark(route.expects_roi)
             %td= route.tag&.name
 
+
 %h2 Notifications
 
-.row
-  - @routes.each do |route|
-    .col
-      %h3= route.title
-      = render 'notifications', route: route
+%ul.nav.nav-tabs{role: 'tablist'}
+  - @routes.each_with_index do |route, index|
+    %li.nav-item{role: 'presentation'}
+      %a.nav-link{class: ('active' if index.zero?), id: "route-#{route.id}-tab", data: {toggle: 'tab'}, href: "#route-#{route.id}", role: 'tab', aria: {controls: "route-#{route.id}", selected: index.zero?}}
+        = route.title
+
+.tab-content
+  - @routes.each_with_index do |route, index|
+    .tab-pane.fade{class: ('show active' if index.zero?), id: "route-#{route.id}", role: 'tabpanel', aria: {labelledby: "route-#{route.id}-tab"}}
+      .p-3
+        = render 'notifications', route: route

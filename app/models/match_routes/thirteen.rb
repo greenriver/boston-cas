@@ -9,7 +9,11 @@
 module MatchRoutes
   class Thirteen < Base
     def title
-      Translation.translate('Match Route Thirteen')
+      Translation.translate(untranslated_title)
+    end
+
+    def untranslated_title
+      'Match Route Thirteen'
     end
 
     def self.available_sub_types_for_search

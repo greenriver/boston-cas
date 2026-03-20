@@ -9,7 +9,11 @@
 module MatchRoutes
   class ProviderOnly < Base
     def title
-      Translation.translate('Provider Only Route')
+      Translation.translate(untranslated_title)
+    end
+
+    def untranslated_title
+      'Provider Only Route'
     end
 
     def self.available_sub_types_for_search

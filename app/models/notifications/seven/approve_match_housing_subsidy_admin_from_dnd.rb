@@ -4,12 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Seven
   class ApproveMatchHousingSubsidyAdminFromDnd < ::Notifications::Base
-    def self.create_for_match! match
-      match.housing_subsidy_admin_contacts.each do |contact|
-        create! match: match, recipient: contact
-      end
+    def self.contact_types_for_notification
+      [:housing_subsidy_admin_contacts]
     end
 
     def decision

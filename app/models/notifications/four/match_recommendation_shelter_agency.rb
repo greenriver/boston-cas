@@ -4,12 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Four
   class MatchRecommendationShelterAgency < ::Notifications::MatchRecommendationShelterAgency
-
     def decision
       match.four_match_recommendation_shelter_agency_decision
     end
-
   end
 end

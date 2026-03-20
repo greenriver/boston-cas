@@ -8,10 +8,8 @@
 
 module Notifications::Thirteen
   class ThirteenConfirmMatchSuccessDndStaff < ::Notifications::Base
-    def self.create_for_match! match
-      match.dnd_staff_contacts.each do |contact|
-        create! match: match, recipient: contact
-      end
+    def self.contact_types_for_notification
+      [:dnd_staff_contacts]
     end
 
     def decision

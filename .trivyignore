@@ -7,3 +7,7 @@ CVE-2025-43857
 # this version of rexml is included with the default ruby in the container, but not used
 # as we install a newer version for the application
 CVE-2025-58767
+
+# this version of uri l is included with the default ruby in the container, but not used
+# as we install a newer version for the application
+CVE-2025-61594

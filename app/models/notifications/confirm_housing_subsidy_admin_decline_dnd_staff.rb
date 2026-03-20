@@ -4,13 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications
   class ConfirmHousingSubsidyAdminDeclineDndStaff < Base
-
-    def self.create_for_match! match
-      match.dnd_staff_contacts.each do |contact|
-        create! match: match, recipient: contact
-      end
+    def self.contact_types_for_notification
+      [:dnd_staff_contacts]
     end
 
     def decision
@@ -20,6 +19,5 @@ module Notifications
     def event_label
       "#{Translation.translate('DND')} notified of #{Translation.translate('housing subsidy administrator')} decline.  Confirmation pending."
     end
-
   end
 end

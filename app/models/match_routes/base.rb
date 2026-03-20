@@ -12,6 +12,7 @@ module MatchRoutes
     serialize :prioritized_client_columns, type: Array
     serialize :routes_parked_on_active_match, type: Array
     serialize :routes_parked_on_successful_match, type: Array
+    has_paper_trail
 
     belongs_to :match_prioritization, class_name: 'MatchPrioritization::Base', foreign_key: :match_prioritization_id, primary_key: :id
     belongs_to :tag if column_names.include?('tag_id')
@@ -77,6 +78,10 @@ module MatchRoutes
 
     # implement in sub-classes
     def title
+      raise NotImplementedError
+    end
+
+    def untranslated_title
       raise NotImplementedError
     end
 
