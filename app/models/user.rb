@@ -225,4 +225,11 @@ class User < ApplicationRecord
   def name_with_email
     "#{name} <#{email}>"
   end
+
+  # patch CVE-2026-32700, avoids upgrading from 4 to 5. Remove this after we migrate to SSO
+  protected def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
+    TodoOrDie('Remove devise patch for CVE-2026-32700', if: !defined?(Devise))
+    unconfirmed_email_will_change!
+    super
+  end
 end
