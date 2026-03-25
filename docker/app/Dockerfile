@@ -118,6 +118,7 @@ RUN apt-get update && apt-get upgrade -y \
   poppler-utils \
   postgresql-client \
   procps \
+  pinentry-tty \
   shared-mime-info \
   software-properties-common \
   tar \
