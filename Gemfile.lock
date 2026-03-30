@@ -818,7 +818,7 @@ DEPENDENCIES
   html2haml
   irb
   jquery-rails
-  json
+  json (>= 2.19.2)
   k8s-ruby!
   kaminari
   lograge
