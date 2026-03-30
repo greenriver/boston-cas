@@ -1,10 +1,10 @@
-# frozen_string_literal: true
-
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
+
+# frozen_string_literal: true
 
 module Notifications::Eight
   class MatchCanceled < Notifications::MatchCanceled
@@ -14,7 +14,7 @@ module Notifications::Eight
     end
 
     def self.create_for_match!(match, decision_id: nil)
-      Notifications::Base.instance_method(:create_for_match!).bind(self).call(match, decision_id: decision_id)
+      Notifications::Base.singleton_class.instance_method(:create_for_match!).bind(self).call(match, decision_id: decision_id)
     end
   end
 end
