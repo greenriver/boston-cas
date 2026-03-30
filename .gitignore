@@ -87,3 +87,7 @@ app/views/root/_homepage_content.haml
 # Ignore docker certificates
 docker/nginx-proxy/certs
 prometheus-metrics/**
+
+# Include Devbox files
+!devbox.json
+!devbox.lock
