@@ -943,11 +943,15 @@ RSpec.describe Client, type: :model do
       expect(client.postal_code_for_export).to eq('02101')
     end
 
-    context 'when the address cannot be parsed' do
-      subject(:client) { build(:client, address: 'unknown location') }
+    context 'when StreetAddress cannot parse the address' do
+      # StreetAddress 2.x parses many partial strings rather than returning nil,
+      # so we stub parse to nil to test the fallback logic in isolation.
+      subject(:client) { build(:client, address: 'no address on file') }
+
+      before { allow(StreetAddress::US).to receive(:parse).and_return(nil) }
 
       it 'falls back to the raw address string for line 1' do
-        expect(client.line_1_for_export).to eq('unknown location')
+        expect(client.line_1_for_export).to eq('no address on file')
       end
 
       it 'returns nil for city' do
