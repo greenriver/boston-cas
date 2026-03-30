@@ -3,8 +3,8 @@ name: Rails Tests
 on:
   push:
     branches:
-      - '*'
-      - '**/*'
+      - "*"
+      - "**/*"
 concurrency:
   group: ${{ github.ref }}-tests
   cancel-in-progress: true
@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     # Docker Hub image that the job executes in
-    container: ruby:3.4.9-slim-bookworm
+    container: ruby:4.0.2-slim-bookworm
 
     # Service containers to run with job
     services:
@@ -44,7 +44,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: 'Container Setup'
+      - name: "Container Setup"
         id: container-setup
         uses: ./.github/workflows/container_setup
 
@@ -56,7 +56,7 @@ jobs:
           echo "postgres:*:*:postgres:postgres" > ~/.pgpass
           chmod 600 ~/.pgpass
 
-      - name: 'App setup'
+      - name: "App setup"
         run: |
           cp config/secrets.yml.sample config/secrets.yml
           mkdir app/assets/stylesheets/theme/styles
