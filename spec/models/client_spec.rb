@@ -918,4 +918,52 @@ RSpec.describe Client, type: :model do
       end
     end
   end
+
+  # Regression coverage for the StreetAddress 1.x → 2.x major upgrade.
+  # Client#line_1_for_export, #city_for_export, #state_for_export, and
+  # #postal_code_for_export all delegate to StreetAddress::US.parse. If the
+  # gem's public API changed (attribute names, parse return type, etc.) these
+  # methods would silently return nil in every CSV/report export.
+  describe 'address export methods' do
+    subject(:client) { build(:client, address: '123 Main St, Boston, MA 02101') }
+
+    it 'parses the street line' do
+      expect(client.line_1_for_export).to eq('123 Main St')
+    end
+
+    it 'parses the city' do
+      expect(client.city_for_export).to eq('Boston')
+    end
+
+    it 'parses the state' do
+      expect(client.state_for_export).to eq('MA')
+    end
+
+    it 'parses the postal code' do
+      expect(client.postal_code_for_export).to eq('02101')
+    end
+
+    context 'when the address cannot be parsed' do
+      subject(:client) { build(:client, address: 'unknown location') }
+
+      it 'falls back to the raw address string for line 1' do
+        expect(client.line_1_for_export).to eq('unknown location')
+      end
+
+      it 'returns nil for city' do
+        expect(client.city_for_export).to be_nil
+      end
+    end
+
+    context 'when address is nil' do
+      subject(:client) { build(:client, address: nil) }
+
+      it 'returns nil for all fields without raising' do
+        expect(client.line_1_for_export).to be_nil
+        expect(client.city_for_export).to be_nil
+        expect(client.state_for_export).to be_nil
+        expect(client.postal_code_for_export).to be_nil
+      end
+    end
+  end
 end

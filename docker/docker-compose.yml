@@ -5,7 +5,7 @@ x-app: &app
     target: ${TARGET:-dev-build}
     dockerfile: docker/app/Dockerfile
     args:
-      BUILD_TAG: 3.4.9-slim-bookworm
+      BUILD_TAG: 4.0.2-slim-bookworm
       NODE_MAJOR: "24"
       YARN_VERSION: "1.22.22"
       BUNDLER_VERSION: "2.7.1"
