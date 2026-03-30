@@ -14,3 +14,6 @@ CVE-2025-61594
 
 # devise, we monkey patched the user model; avoids major version upgrade as we will replace devise with SSO in the near future
 CVE-2026-32700
+
+# vulnerable json version is included in ruby 4.0.2, gemfile specified a fixed version
+CVE-2026-33210
