@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 gem 'activerecord-import'
-gem 'rack'
+gem 'rack', '< 3.2' # pinning to the same max version as is required by rails 7.2
 gem 'pg', '~> 1.1'
 gem 'rails', '7.2.3.1'
 gem 'sprockets-rails'
