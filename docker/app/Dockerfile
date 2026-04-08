@@ -135,9 +135,11 @@ RUN apt-get update && apt-get upgrade -y \
 
 WORKDIR /app
 
+# rexml: CVE-2025-58767, rack: CVE in system gem shipped with base image — both must be explicitly updated since they're bundled with ruby
+# gem cleanup removes old gemspecs that vulnerability scanners (e.g. Trivy) would otherwise flag
 RUN gem update --system \
-  && gem update rexml \
-  && gem cleanup rexml \
+  && gem update rexml rack \
+  && gem cleanup rexml rack \
   && gem install bundler --version=${BUNDLER_VERSION} \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \
