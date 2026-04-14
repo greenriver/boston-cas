@@ -1,5 +1,0 @@
-/* Boston default theme — no color overrides.
-   Uses the compiled application.css brand defaults ($brand-primary: #457687, etc.).
-   All other clients with custom colors have their own file in this directory. */
-:root {
-}
