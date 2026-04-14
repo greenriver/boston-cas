@@ -6,8 +6,4 @@
 //= link theme/styles/_variables.css
 //= link application.css
 //= link print.css
-//= link client_themes/boston.css
-//= link client_themes/dhcd.css
-//= link client_themes/hforward.css
-//= link client_themes/qa.css
-//= link client_themes/tarrant_county.css
+//= link_tree ../stylesheets/client_themes
