@@ -38,7 +38,6 @@
 //= require_tree ./service_manager
 //= require_tree ./matches
 //= require_tree ./users
-//= require_tree ./controllers
 //= require enhanced_submit_param
 //= require site_menu
 //= require single_option_checkboxes
