@@ -261,8 +261,9 @@ class OpportunitiesController < ApplicationController
   private def query_string
     "%#{@query}%"
   end
+
   private def require_can_view_opportunities_or_can_add_vacancies!
-    can_view_opportunities? || can_add_vacancies?
+    not_authorized! unless can_view_opportunities? || can_add_vacancies?
   end
 
   private def successful_matches(opportunities)
