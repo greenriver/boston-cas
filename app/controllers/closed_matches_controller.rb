@@ -84,7 +84,7 @@ class ClosedMatchesController < MatchListBaseController
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!
-    can_view_all_matches? || can_view_own_closed_matches?
+    not_authorized! unless can_view_all_matches? || can_view_own_closed_matches?
   end
 
   def match_scope
