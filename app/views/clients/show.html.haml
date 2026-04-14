@@ -6,7 +6,7 @@
       - if @client.merged_into
         %a
           = link_to client_path(@client.merged_into) do
-            %span.icon-shrink2{data: { bs_toggle: 'tooltip', placement: 'top'}, title: "Merged into #{@client.merged_with_name}"}
+            %span.icon-shrink2{data: { bs_toggle: 'tooltip', bs_placement: 'top'}, title: "Merged into #{@client.merged_with_name}"}
         Now:
         = link_to client_path(@client.merged_into) do
           = @client.merged_with_name

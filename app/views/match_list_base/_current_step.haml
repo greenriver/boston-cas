@@ -25,8 +25,8 @@
           - link = '#'
           - if can_reject_matches? || match.on_or_after_first_client_step?
             - link = match_path(match)
-          = link_to link, class: 'c-stepped-progress__step-link', data: { bs_toggle: :tooltip, title: decision.step_name} do
+          = link_to link, class: 'c-stepped-progress__step-link', data: { bs_toggle: :tooltip, bs_title: decision.step_name} do
             .c-stepped-progress__step-number= types[decision.type]
         - else
-          .c-stepped-progress__step-link--static{data: { bs_toggle: :tooltip, title: decision.step_name}}
+          .c-stepped-progress__step-link--static{data: { bs_toggle: :tooltip, bs_title: decision.step_name}}
             .c-stepped-progress__step-number= types[decision.type]

@@ -97,7 +97,7 @@
       - prioritization_scheme.important_days_homeless_calculations.each do |scheme, text|
         %li.c-detailed-list__item
           %span.c-detailed-list__label= text[:label]
-          %span.icon-info{data: { bs_toggle: :tooltip, title: text[:tooltip]}}
+          %span.icon-info{data: { bs_toggle: :tooltip, bs_title: text[:tooltip]}}
           %span.c-detailed-list__value= number_with_delimiter(@client.send(scheme))
     .c-card__content-group-heading
       .c-card__content-group-icon.icon-house
@@ -127,7 +127,7 @@
               = match.overall_status[:name]
 = content_for :modal_only_footer do
   = link_to access_context.match_client_details_path(@match) do
-    %span.icon-printer{title: "Printable", data: { bs_toggle: "tooltip", placement: "top"}, aria: {label: 'Printable'}}
+    %span.icon-printer{title: "Printable", data: { bs_toggle: "tooltip", bs_placement: "top"}, aria: {label: 'Printable'}}
 
 = content_for :page_js do
   :javascript

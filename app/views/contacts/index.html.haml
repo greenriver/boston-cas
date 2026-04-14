@@ -33,7 +33,7 @@
                 - if user && can_edit_users?
                   = link_to c.last_name, edit_admin_user_path(user)
                 - else
-                  %i.icon-warning.mr-2{data: { bs_toggle: :tooltip, title: 'No associated user' }}
+                  %i.icon-warning.mr-2{data: { bs_toggle: :tooltip, bs_title: 'No associated user' }}
                   = c.last_name
               %td
                 - if user && can_edit_users?

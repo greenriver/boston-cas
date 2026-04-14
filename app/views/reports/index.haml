@@ -20,7 +20,7 @@
               = link_to report.url, class: 'c-card__content' do
                 .c-card__title
                   - unless report.limitable?
-                    %i.icon-notification{data: { bs_toggle: :tooltip, title: 'Report is not limited by agency.'}}
+                    %i.icon-notification{data: { bs_toggle: :tooltip, bs_title: 'Report is not limited by agency.'}}
                   = report.name
                 .c-card__description= report.description.html_safe
 

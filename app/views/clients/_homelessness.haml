@@ -11,19 +11,19 @@
         %span.c-detailed-list__value= date_format(@client.calculated_first_homeless_night)
       %li.c-detailed-list__item
         %span.c-detailed-list__label= @column_data[:days_homeless][:title]
-        %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:days_homeless][:description]}}
+        %span.icon-info{data: { bs_toggle: :tooltip, bs_title: @column_data[:days_homeless][:description]}}
         %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless)
       %li.c-detailed-list__item
         %span.c-detailed-list__label= Translation.translate('Days Homeless in Last Three Years from HMIS')
-        %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:hmis_days_homeless_last_three_years][:description]}}
+        %span.icon-info{data: { bs_toggle: :tooltip, bs_title: @column_data[:hmis_days_homeless_last_three_years][:description]}}
         %span.c-detailed-list__value= number_with_delimiter(@client.hmis_days_homeless_last_three_years)
       %li.c-detailed-list__item
         %span.c-detailed-list__label= @column_data[:days_homeless_in_last_three_years][:title]
-        %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:days_homeless_in_last_three_years][:description]}}
+        %span.icon-info{data: { bs_toggle: :tooltip, bs_title: @column_data[:days_homeless_in_last_three_years][:description]}}
         %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless_in_last_three_years)
       %li.c-detailed-list__item
         %span.c-detailed-list__label= @column_data[:days_literally_homeless_in_last_three_years][:title]
-        %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:days_literally_homeless_in_last_three_years][:description]}}
+        %span.icon-info{data: { bs_toggle: :tooltip, bs_title: @column_data[:days_literally_homeless_in_last_three_years][:description]}}
         %span.c-detailed-list__value= number_with_delimiter(@client.days_literally_homeless_in_last_three_years)
       %li.c-detailed-list__item
         %span.c-detailed-list__label Days Homeless
