@@ -2,32 +2,32 @@
 $choice-icon-type: (
   confirm: (
     icon: map-get($icons, checkmark),
-    background: $brand-success-l,
-    color: $brand-success,
+    background: var(--brand-success-l),
+    color: var(--brand-success),
     font-size: rem(14px)
   ),
   cancel: (
     icon: map-get($icons, minus-circle),
-    background: $brand-warning-l,
-    color: $brand-warning,
+    background: var(--brand-warning-l),
+    color: var(--brand-warning),
     font-size: rem(20px)
   ),
   park: (
     icon: map-get($icons, clock),
-    background: $brand-warning-l,
-    color: $brand-warning,
+    background: var(--brand-warning-l),
+    color: var(--brand-warning),
     font-size: rem(20px)
   ),
   reject: (
     icon: map-get($icons, cross),
-    background: $brand-danger-l,
-    color: $brand-danger,
+    background: var(--brand-danger-l),
+    color: var(--brand-danger),
     font-size: rem(14px)
   ),
   not-working: (
     icon: map-get($icons, stop),
-    background: $brand-danger-l,
-    color: $brand-danger,
+    background: var(--brand-danger-l),
+    color: var(--brand-danger),
     font-size: rem(16px)
   ),
   backup: (
@@ -39,7 +39,7 @@ $choice-icon-type: (
   revert: (
     icon: map-get($icons, step-back),
     background: $gray-030,
-    color: $brand-danger,
+    color: var(--brand-danger),
     font-size: rem(16px)
   ),
 

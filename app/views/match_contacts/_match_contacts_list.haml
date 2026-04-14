@@ -19,7 +19,7 @@
           .contact.mb-2
             = contact.name
             - if join_contact.contact_order == 1 && selected_contacts.count > 1
-              %i.icon-user.ml-2{ data: { toggle: :tooltip, title: 'Primary Contact' }}
+              %i.icon-user.ml-2{ data: { bs_toggle: :tooltip, title: 'Primary Contact' }}
             %br
             .d-flex
               .email= mail_to contact.email, nil, target: '_blank'

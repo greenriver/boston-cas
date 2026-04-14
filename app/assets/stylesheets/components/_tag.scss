@@ -22,7 +22,7 @@ $tag-correction: $tag-height / 2;
   height: $tag-height;
   width: $tag-height;
   box-shadow: 0 0 0 2px $body-bg;
-  background: $brand-success-l;
+  background: var(--brand-success-l);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@ $tag-correction: $tag-height / 2;
   @include open-sans-bold;
   font-size: 18px;
   text-transform: uppercase;
-  background: $brand-success-l;
+  background: var(--brand-success-l);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -105,9 +105,9 @@ $tag-correction: $tag-height / 2;
 }
 
 $tag-types: (
-  success: $brand-success-l,
-  warning: $brand-warning-l,
-  danger: $brand-danger-l,
+  success: var(--brand-success-l),
+  warning: var(--brand-warning-l),
+  danger: var(--brand-danger-l),
   info: $brand-info,
 );
 

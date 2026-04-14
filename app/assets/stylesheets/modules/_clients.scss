@@ -1,5 +1,5 @@
 .client__active-match-elsewhere {
-  background-color: lighten($brand-warning, 15%);
+  background-color: $brand-warning-l;
 }
 
 .client-alternate-name {
@@ -12,14 +12,14 @@
 .filter-sort__filter-active .btn-default,
 .filter-sort__filter-active .btn-light,
 {
-  background-color: $brand-primary-ll;
+  background-color: var(--brand-primary-ll);
 }
 
 .clients__client-card {
   @include card;
   margin-bottom: space(3);
   &--flagged {
-    box-shadow: inset 0 0 0 1px $brand-danger-l;
+    box-shadow: inset 0 0 0 1px var(--brand-danger-l);
   }
 }
 
@@ -28,7 +28,7 @@
 }
 
 .clients__client-name {
-  color: $brand-secondary;
+  color: var(--brand-secondary);
   text-transform: none;
   margin-bottom: space(5);
 }
@@ -63,7 +63,7 @@
 .client__details dd {
   &.featured {
     font-weight: 600;
-    color: $brand-primary;
+    color: var(--brand-primary);
   }
 }
 
@@ -124,5 +124,5 @@
 }
 .client--match-active
 {
-  border-left: 4px solid $brand-success;
+  border-left: 4px solid var(--brand-success);
 }

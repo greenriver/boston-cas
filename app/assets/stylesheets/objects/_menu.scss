@@ -3,7 +3,7 @@
   max-width: $nav-side-width;
   flex: 0 0 $nav-side-width;
   align-self: stretch;
-  background-color: $cob-sg-charles-blue;
+  background-color: var(--cob-sg-charles-blue);
   overflow: auto;
   z-index: 500;
   padding: space(6) space(4) space(4);

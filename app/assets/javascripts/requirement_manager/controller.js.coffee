@@ -127,5 +127,5 @@ class App.RequirementManager.Controller
   show_loading_spinner: (callback) ->
     $(@loading_spinner).show callback
 
-# fix select2 typing in modal
-$.fn.modal.Constructor.prototype.enforceFocus = -> {}
+# Bootstrap 4's $.fn.modal.Constructor was removed in Bootstrap 5.
+# Select2-in-modal focus is handled by the select2:open handler in init.js.coffee.

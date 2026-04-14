@@ -4,7 +4,7 @@
 %ul.nav.nav-tabs{role: :tablist}
   - @report_definitions.each_with_index do |(group_name, reports), index|
     %li.nav-item{role: :presentation}
-      %a{href: "##{group_name.parameterize.dasherize}", role: :tab, data: {toggle: :tab}, aria: {controls: "#{group_name}"}, class: 'nav-link'}
+      %a{href: "##{group_name.parameterize.dasherize}", role: :tab, data: { bs_toggle: :tab}, aria: {controls: "#{group_name}"}, class: 'nav-link'}
         #{group_name}
 
 .tab-content#reports-tab-content
@@ -20,25 +20,24 @@
               = link_to report.url, class: 'c-card__content' do
                 .c-card__title
                   - unless report.limitable?
-                    %i.icon-notification{data: {toggle: :tooltip, title: 'Report is not limited by agency.'}}
+                    %i.icon-notification{data: { bs_toggle: :tooltip, title: 'Report is not limited by agency.'}}
                   = report.name
                 .c-card__description= report.description.html_safe
 
 
 = content_for :page_js do
   :javascript
-    var selectedTab = window.location.hash
-    if (!selectedTab) {
-      $("ul.nav-tabs li:first-child a").tab('show')
-    }
-    $('.nav-tabs a').click(function(e) {
-      e.preventDefault();
-      $(this).tab('show');
-      $(this).parent().siblings().removeClass('active')
-    });
-    $("ul.nav-tabs a").on("shown.bs.tab", function(e) {
-      var id = $(e.target).attr("href").substr(1);
-      history.pushState({}, id, $(e.target).attr("href"));
-    });
-    var hash = window.location.hash;
-    $('.nav-tabs a[href="' + hash + '"]').tab('show');
+    (function() {
+      var hash = window.location.hash;
+      var tabToShow = hash
+        ? document.querySelector('.nav-tabs a[href="' + hash + '"]')
+        : document.querySelector('ul.nav-tabs li:first-child a');
+      if (tabToShow) { new bootstrap.Tab(tabToShow).show(); }
+
+      document.querySelectorAll('ul.nav-tabs a').forEach(function(el) {
+        el.addEventListener('shown.bs.tab', function(e) {
+          var href = e.target.getAttribute('href');
+          if (href) { history.pushState({}, '', href); }
+        });
+      });
+    })();

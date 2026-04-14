@@ -1,0 +1,29 @@
+/* DHCD (Dept of Housing and Community Development) brand theme */
+:root {
+  /* Brand colors */
+  --brand-primary:    #14558f;
+  --brand-primary-l:  #8AAAC7;
+  --brand-primary-ll: #E7EEF4;
+  --brand-success:    #388557;
+  --brand-success-l:  #97C2A9;
+  --brand-success-d:  #388557;
+  --brand-warning:    #F6C51B;
+  --brand-warning-l:  #FBE28D;
+  --brand-danger:     #CD0D0D;
+  --brand-danger-d:   #680A1D;
+  --brand-danger-l:   #AD7E88;
+  --cas-blue:         #14558f;
+  --cob-sg-blue-003:  #14558f;
+  --cob-sg-charles-blue: #14558f;
+  --cob-sg-optimistic-blue: #8AAAC7;
+  --cob-sg-freedom-trail-red: #CD0D0D;
+  /* Bootstrap 5 theme color overrides (used by Bootstrap components) */
+  --bs-primary:       #14558f;
+  --bs-primary-rgb:   20, 85, 143;
+  --bs-success:       #388557;
+  --bs-success-rgb:   56, 133, 87;
+  --bs-warning:       #F6C51B;
+  --bs-warning-rgb:   246, 197, 27;
+  --bs-danger:        #CD0D0D;
+  --bs-danger-rgb:    205, 13, 13;
+}

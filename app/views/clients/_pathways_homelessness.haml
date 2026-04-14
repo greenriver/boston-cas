@@ -1,35 +1,35 @@
 %ul.c-detailed-list<
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:calculated_homeless_nights_sheltered][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:calculated_homeless_nights_sheltered][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:calculated_homeless_nights_sheltered][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.calculated_homeless_nights_sheltered)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:additional_homeless_nights_sheltered][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:additional_homeless_nights_sheltered][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:additional_homeless_nights_sheltered][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.additional_homeless_nights_sheltered)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:calculated_homeless_nights_unsheltered][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:calculated_homeless_nights_unsheltered][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:calculated_homeless_nights_unsheltered][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.calculated_homeless_nights_unsheltered)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:additional_homeless_nights_unsheltered][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:additional_homeless_nights_unsheltered][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:additional_homeless_nights_unsheltered][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.additional_homeless_nights_unsheltered)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:total_homeless_nights_sheltered][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:total_homeless_nights_sheltered][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:total_homeless_nights_sheltered][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.total_homeless_nights_sheltered)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:total_homeless_nights_unsheltered][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:total_homeless_nights_unsheltered][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:total_homeless_nights_unsheltered][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.total_homeless_nights_unsheltered)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:days_homeless_in_last_three_years][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:days_homeless_in_last_three_years][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:days_homeless_in_last_three_years][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless_in_last_three_years)
   %li.c-detailed-list__item
     %span.c-detailed-list__label= @column_data[:days_homeless][:title]
-    %span.icon-info{data: {toggle: :tooltip, title: @column_data[:days_homeless][:description]}}
+    %span.icon-info{data: { bs_toggle: :tooltip, title: @column_data[:days_homeless][:description]}}
     %span.c-detailed-list__value= number_with_delimiter(@client.days_homeless)
   %li.c-detailed-list__item
     %span.c-detailed-list__label First Date Homeless

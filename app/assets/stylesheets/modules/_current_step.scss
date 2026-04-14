@@ -2,9 +2,9 @@
   text-transform: uppercase;
   font-size: $font-size-h3;
   float: left;
-  @include margin(0 36px null null);
+  @include cas-margin(0 36px null null);
   @media(max-width: $screen-xs-max) {
-    @include margin(24px 0 null null);
+    @include cas-margin(24px 0 null null);
     float: none;
   }
 }
@@ -15,7 +15,7 @@
 }
 .current-step--assignemnt--label {
   text-transform: uppercase;
-  color: $cas-blue;
+  color: var(--cas-blue);
   font-size: rem(16);
   line-height: 1.7;
   @media(max-width: $screen-xs-max) {

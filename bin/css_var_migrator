@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Convert Sass brand variable usage to CSS custom properties in component SCSS.
+# Run once; review the diff carefully before committing.
+# WARNING: Sass function calls like darken($brand-primary) will also be converted
+# and will need manual fixing afterward.
+set -e
+
+mapfile -d '' FILES < <(find \
+  app/assets/stylesheets/base \
+  app/assets/stylesheets/components \
+  app/assets/stylesheets/elements \
+  app/assets/stylesheets/helpers \
+  app/assets/stylesheets/layouts \
+  app/assets/stylesheets/modules \
+  app/assets/stylesheets/objects \
+  app/assets/stylesheets/overrides \
+  app/assets/stylesheets/utilities \
+  -type f -name "*.scss" -print0 2>/dev/null)
+
+for var in brand-primary brand-primary-l brand-primary-ll brand-primary-d \
+            brand-secondary brand-secondary-l \
+            brand-success brand-success-l brand-success-d \
+            brand-warning brand-warning-l brand-warning-d \
+            brand-danger brand-danger-l brand-danger-d \
+            cas-blue link-color; do
+  perl -pi -e "s/(?<![a-z0-9-])\\\$$var(?![a-z0-9-])/var(--$var)/g" "${FILES[@]}"
+done
+
+echo "Done. Review with: git diff app/assets/stylesheets"
+echo "Check for invalid CSS-var-in-Sass-function patterns with:"
+echo "  grep -r 'darken(var\|lighten(var\|rgba(var' app/assets/stylesheets/base app/assets/stylesheets/components app/assets/stylesheets/elements app/assets/stylesheets/helpers app/assets/stylesheets/layouts app/assets/stylesheets/modules app/assets/stylesheets/objects app/assets/stylesheets/overrides app/assets/stylesheets/utilities app/assets/stylesheets/tools"

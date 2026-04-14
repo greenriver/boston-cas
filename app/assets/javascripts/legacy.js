@@ -15,16 +15,11 @@
 // Vendor libs
 ////////////////////
 //= require jquery3
-//= require popper
-//= require bootstrap
-//= require @hotwired/stimulus/dist/stimulus.umd
 //= require moment
 //= require jquery_ujs
 //= require handlebars.runtime
 //= require select2
 //= require remote_select_load
-//= require bootstrap-datepicker
-//= require bootstrap-datetimepicker
 //= require jquery.periodicalupdater
 //= require jquery.updater
 //= require DataTables/datatables.min
@@ -44,7 +39,6 @@
 //= require_tree ./matches
 //= require_tree ./users
 //= require_tree ./controllers
-//= require ./stimulus_application
 //= require enhanced_submit_param
 //= require site_menu
 //= require single_option_checkboxes

@@ -11,14 +11,14 @@
 
 .c-contact-list__remove
 {
-  color: $brand-danger;
+  color: var(--brand-danger);
   margin-left: auto;
   &:hover,
   &:focus {
     text-decoration: none;
   }
   [class^="icon-"] {
-    color: $brand-danger !important;
+    color: var(--brand-danger) !important;
   }
 }
 

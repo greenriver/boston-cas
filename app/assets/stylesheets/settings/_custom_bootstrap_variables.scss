@@ -1,17 +1,10 @@
-// bootstrap overrides -- copy of bs3 variables
-$bootstrap-sass-asset-helper: false !default;
-
+// bootstrap overrides
 $body-bg: #f9f9f9;
 $body-color: $gray-080;
 
-$nav-tabs-active-link-hover-bg:  $body-bg;
-
-$nav-link-padding-y: 20px;
-$nav-link-padding-x: 15px;
+$nav-link-padding-y: 1.25rem;
+$nav-link-padding-x: 0.9375rem;
 $nav-tabs-border-radius: 0;
-
-// Links
-$link-color: $link-color;
 
 // Inputs
 $input-btn-padding-y: .6rem;
@@ -34,28 +27,17 @@ $info:          $brand-info;
 $warning:       $brand-warning;
 $danger:        $brand-danger;
 
-$theme-colors: () !default;
-$theme-colors: map-merge((
-  "primary":    $primary,
-  "secondary":  $secondary,
-  "success":    $success,
-  "info":       $info,
-  "warning":    $warning,
-  "danger":     $danger,
-  "light":      $light,
-  "dark":       $dark
-), $theme-colors);
-
 // Tooltips
 $tooltip-font-size: 13px;
 $tooltip-max-width: 300px;
 
-$heading-color: $gray-070;
+$headings-color: $gray-070; // Bootstrap 5 renamed $heading-color → $headings-color
+$heading-color: $headings-color; // Keep local alias for app files still referencing this
 
 // Links
 $link-color: $cob-sg-optimistic-blue;
+$link-decoration: none; // BS5 default is underline; match BS4 behavior of no underline
 $link-hover-color: darken($link-color, 15%);
-$link-hover-decoration: none;
 $pagination-padding-y: .65rem;
 $pagination-padding-x: 1rem;
 
@@ -64,5 +46,6 @@ $pagination-color: $link-color;
 $pagination-active-bg: $brand-primary-d;
 
 // Table
+// App-specific variable — not a Bootstrap 5 variable (BS5 dropped $table-head-bg)
 $table-head-bg: $gray-015;
 $table-hover-bg: lighten($cob-sg-blue-005, 2%);

@@ -6,7 +6,7 @@
   - requirements = @opportunity.requirements_with_inherited
   - if requirements.count > 0
     - requirements.each do |r|
-      .mb-2{data: { toggle: :tooltip, title: r.rule.description }}
+      .mb-2{data: { bs_toggle: :tooltip, title: r.rule.description }}
         = r.name
         - if r.variable.present?
           = r.display_for_variable

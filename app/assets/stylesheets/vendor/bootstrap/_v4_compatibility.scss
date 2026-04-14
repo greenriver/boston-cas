@@ -1,0 +1,68 @@
+// Bootstrap 4 → 5 compatibility aliases.
+// These allow views to be updated incrementally after the core migration.
+// Remove these as views are updated.
+
+// Directional spacing utilities (BS5 uses logical start/end; BS4 used physical left/right)
+@each $size, $value in $spacers {
+  .ml-#{$size}  { margin-left:   $value !important; }
+  .mr-#{$size}  { margin-right:  $value !important; }
+  .pl-#{$size}  { padding-left:  $value !important; }
+  .pr-#{$size}  { padding-right: $value !important; }
+}
+// Auto margins (not in $spacers — must be listed separately)
+.ml-auto { margin-left:  auto !important; }
+.mr-auto { margin-right: auto !important; }
+
+// Text alignment
+.text-right { text-align: right !important; }
+.text-left  { text-align: left  !important; }
+
+// Float helpers
+.float-right { float: right !important; }
+.float-left  { float: left  !important; }
+
+// Form helpers
+.form-group { margin-bottom: 1rem; }
+.help-block { display: block; margin-top: .25rem; font-size: .875em; color: $gray-600; }
+
+// .control-label and .sr-only: extend Bootstrap 5 equivalents
+.control-label { @extend .form-label; }
+.sr-only { @include visually-hidden(); }
+
+// Column offset (BS5 dropped the col- prefix on offsets)
+.col-sm-offset-3 { margin-left: 25%; }
+
+// Checkbox/radio wrapper class (renamed in BS5)
+.checkbox { display: block; position: relative; padding-left: 1.5em; }
+
+// form-inline was removed in BS5
+.form-inline { display: flex; flex-flow: row wrap; align-items: center; }
+
+// Caret suppression (matching $enable-caret: false behavior)
+.dropdown-toggle::after { display: none; }
+
+// Badge color aliases — BS4 .badge-* → BS5 .text-bg-*
+.badge-primary   { @extend .text-bg-primary; }
+.badge-secondary { @extend .text-bg-secondary; }
+.badge-success   { @extend .text-bg-success; }
+.badge-danger    { @extend .text-bg-danger; }
+.badge-warning   { @extend .text-bg-warning; }
+.badge-info      { @extend .text-bg-info; }
+.badge-light     { @extend .text-bg-light; }
+.badge-dark      { @extend .text-bg-dark; }
+
+// Input group addon (renamed to input-group-text in BS5)
+.input-group-addon { @extend .input-group-text; }
+
+// Button hover: suppress the global a:hover underline for button elements
+.btn:hover,
+.btn:focus { text-decoration: none !important; }
+
+// BS4 button group toggle — hide radio/checkbox inputs inside .btn labels
+// (Bootstrap 5 removed data-toggle="buttons" jQuery plugin; JS in init.js.coffee handles active state)
+[data-bs-toggle="buttons"] .btn input[type="radio"],
+[data-bs-toggle="buttons"] .btn input[type="checkbox"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}

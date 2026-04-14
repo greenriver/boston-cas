@@ -9,8 +9,7 @@
     - if subtitle.present?
       %h5.modal-title--secondary(data-ajax-modal-title-secondary)
         = subtitle
-  %button.close.pull-right(aria-label="Close" data-ajax-modal-close type="button")
-    %i.icon-cross
+  %button.btn-close.pull-right(aria-label="Close" data-ajax-modal-close type="button")
 .modal-body.clearfix
   %div{"data-ajax-modal-body" => ""}
     = yield

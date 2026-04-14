@@ -47,7 +47,7 @@
                   %thead
                     %tr
                       %th Rules
-                      %th{ data: { toggle: :tooltip, title: 'Rules with a lower weight will be applied next.' }} Relative Weight
+                      %th{ data: { bs_toggle: :tooltip, title: 'Rules with a lower weight will be applied next.' }} Relative Weight
                       %th
                   %tbody
                     - @route.weighting_rules.each do |rule|

@@ -37,7 +37,7 @@
           .col-md-12.c-card__content-block
             %h5 Confidential Client
             - confidential = @client.confidential
-            .btn-group.btn-group-toggle.mb-3{"data-toggle" => "buttons"}
+            .btn-group.btn-group-toggle.mb-3{"data-bs-toggle" => "buttons"}
               %label.btn.btn-sm.btn-secondary{class: ('active' if confidential)}
                 = f.radio_button :confidential, true, {checked: confidential, data: {remote: true, method: 'patch'}}
                 Confidential

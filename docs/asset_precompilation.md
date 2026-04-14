@@ -1,30 +1,64 @@
-## Asset Checksumming
+## CSS Architecture and Client Theming
 
-`bin/asset_checksum`
+### How it works
 
-In order to make it easy to tell if the assets need to be recompiled or if the cached versions can be used, we generate a checksum based on the content of `app/assets` (including client theme files). The goal is for the checksum to be guaranteed to change if a change is made to the source assets that will alter the compiled output, *and* guaranteed *not* to change otherwise.
+`application.css` compiles once for all clients. Brand colors are defined as Sass variables in
+`app/assets/stylesheets/settings/_colors.scss` and exposed as CSS custom properties in a `:root`
+block near the top of `app/assets/stylesheets/application.scss.erb`:
 
-*Note: Because the checksum when stored in "cache" (S3) will be namespaced to client/environment, it is not necessary to hash any of the client ENV secrets (CLIENT or RAILS_ENV would have been the only ones affecting compiled output).*
+```scss
+:root {
+  --brand-primary:    #{$brand-primary};
+  --brand-primary-l:  #{$brand-primary-l};
+  // ... etc.
+  --bs-primary:       #{$primary};
+  --bs-primary-rgb:   #{to-rgb($primary)};
+  // ... etc.
+}
+```
 
-## The GitHub Actions Workflow
+All custom component styles reference these CSS variables (`var(--brand-primary)`) rather than
+hard-coded Sass variable values. Bootstrap 5's own components also use CSS custom properties
+internally, so they respond to the same overrides.
 
-`.github/workflows/asset_compilation.yml`
+### Per-client color overrides
 
-This workflow iterates through every client (for both environments). It uses a [matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) to iterate over a list of anonymized identifiers (`gha_staging_load_1`, `gha_production_load_3`), which are used to preserve client anonymity in an open source code base. Each identifier is passed to `bin/compile_assets.rb`.
+Each client that diverges from the default color palette has a thin CSS file in
+`app/assets/stylesheets/client_themes/` that overrides the `:root` custom properties:
 
-## The Asset Compiler
+These files contain only `:root { --brand-primary: ...; ... }` and very simple overrides. No Sass compilation is required — they are plain CSS served alongside `application.css`.
 
-`bin/compile_assets.rb`
-`config/deploy/docker/lib/asset_compiler.rb`
+The layout loads the client theme file at runtime based on `ENV['CLIENT']`
+(`app/views/layouts/application.html.haml`), checking once per rails boot to see if the file exists.
 
-`bin/compile_assets.rb` is analogous to `bin/deploy.rb`. It uses `config/deploy/docker/lib/command_args.rb` to pull down the secrets.yml file from AWS Secrets Manager (the credentials are stored in the GitHub [repository secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) and are not loaded for non-internal workflow runs). It takes the anonymized identifier passed by the workflow and finds it in the list of client group identifiers at the bottom of the secrets.yml file, where it is mapped to real client identifying information. Currently each anonymized "group" has only 1 client, in order to maximize speed of the parallel asset compilation. The client information is passed to `AssetCompiler.run!`
+### Adding a new client theme
 
-`config/deploy/docker/lib/asset_compiler.rb` is analogous to `config/deploy/docker/lib/deployer.rb`. It starts by performing an asset_checksum and checking if that checksum has been stored in S3 yet. If it has, we don't need to do anything else, since the compiled output of the source assets would match the stored compiled output. If the checksum hasn't been stored, then there has been a change to the assets. In this case we pull down the client ENV secrets to bootstrap the client environment, and run asset precompilation via rake. These assets are then uploaded to S3 under the client, environment, and checksum.
+1. Create `app/assets/stylesheets/client_themes/{client_name}.css` with `:root` overrides for
+   whichever brand variables differ from the defaults.
+2. Add the new file to the precompile list in `config/initializers/assets.rb`.
+3. Set `ENV['CLIENT']` to `{client_name}` in the client's deployment environment.
 
-## The Deployed Containers
+---
 
-`config/deploy/docker/assets/entrypoint.sh`
+## Asset Precompilation
 
-When a container spins up, the Docker entrypoint script generates an asset_checksum and pulls down the assets from S3. If the assets don't exist yet, the script will wait (`bin/wait_for_compiled_assets.rb`) and check again every 60 seconds. Note that this will happen in the deploy container before any of the application containers are spun up, meaning that you should be able to catch missing assets before the deploy goes through.
+`config/initializers/assets.rb` registers all assets that Sprockets must precompile beyond the
+defaults (`application.js`, `application.css`):
 
-**NOTE:** If you make a change in the remote client theme files, you will need to ensure that the GitHub Actions workflow runs at least once to pick up that change. Otherwise the checksum generated in the entrypoint won't match the last stored checksum and the waiting will never finish.
+- `print.css` — print stylesheet
+- `theme/styles/*.css` — operator-uploaded theme style overrides (loaded from S3 at deploy time)
+- `client_themes/*.css` — per-client CSS variable override files (one per client listed above)
+
+Assets are precompiled **once** as part of the Docker image build. No per-client or
+per-environment variants are produced.
+
+---
+
+## Asset Checksumming and S3 Sync
+
+`bin/asset_checksum` and `bin/sync_app_assets.rb` still run at deploy time. They handle
+per-client **image and logo assets** (not CSS) that are stored in S3 and pulled into the
+running container. These are unrelated to CSS compilation and continue to work the same way.
+
+`config/deploy/docker/assets/entrypoint.sh` runs `bin/sync_app_assets.rb` when a container
+starts, downloading any client-specific image overrides from S3.

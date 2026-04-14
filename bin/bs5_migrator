@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Migrate Bootstrap 4 data-* attributes to Bootstrap 5 data-bs-* namespace.
+# IMPORTANT: Review `git diff` carefully — data-placement substitution may have false positives.
+set -e
+
+mapfile -d '' FILES < <(find app/views app/assets/javascripts -type f \
+  \( -name "*.haml" -o -name "*.html.erb" -o -name "*.js" \) -print0)
+
+# HAML hash syntax: data: { toggle: ... } → data: { bs_toggle: ... }
+perl -pi -e 's/data:\s*\{\s*toggle:/data: { bs_toggle:/g' "${FILES[@]}"
+perl -pi -e 's/data:\s*\{\s*dismiss:/data: { bs_dismiss:/g' "${FILES[@]}"
+perl -pi -e 's/data:\s*\{\s*target:/data: { bs_target:/g' "${FILES[@]}"
+
+# HTML attribute syntax
+perl -pi -e 's/data-toggle="/data-bs-toggle="/g' "${FILES[@]}"
+perl -pi -e 's/data-dismiss="/data-bs-dismiss="/g' "${FILES[@]}"
+perl -pi -e 's/data-target="/data-bs-target="/g' "${FILES[@]}"
+
+# Tooltip/popover placement
+perl -pi -e 's/data-placement="/data-bs-placement="/g' "${FILES[@]}"
+
+# Symbol-key syntax: 'data-toggle': "value"
+perl -pi -e "s/'data-toggle':\s*\"/'data-bs-toggle': \"/g" "${FILES[@]}"
+perl -pi -e "s/'data-placement':\s*\"/'data-bs-placement': \"/g" "${FILES[@]}"
+perl -pi -e "s/'data-dismiss':\s*\"/'data-bs-dismiss': \"/g" "${FILES[@]}"
+perl -pi -e "s/'data-target':\s*\"/'data-bs-target': \"/g" "${FILES[@]}"
+
+# Hash-rocket syntax: "data-toggle" => "value"
+perl -pi -e 's/"data-toggle"\s*=>\s*"/"data-bs-toggle" => "/g' "${FILES[@]}"
+perl -pi -e 's/"data-placement"\s*=>\s*"/"data-bs-placement" => "/g' "${FILES[@]}"
+
+echo "Done. Review all changes with: git diff app/views app/assets/javascripts"

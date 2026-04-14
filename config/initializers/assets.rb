@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 # frozen_string_literal: true
 
 # Be sure to restart your server when you modify this file.
@@ -17,3 +23,11 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Rails.application.config.assets.precompile += ['print.css']
 Rails.application.config.assets.precompile += ['theme/styles/*.css']
+
+# Client-specific theme CSS variable overrides (loaded at runtime based on ENV['CLIENT'])
+Rails.application.config.assets.precompile += [
+  'client_themes/dhcd.css',
+  'client_themes/hforward.css',
+  'client_themes/tarrant_county.css',
+  'client_themes/qa.css',
+]

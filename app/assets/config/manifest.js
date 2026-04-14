@@ -1,6 +1,13 @@
+//= link_tree ../builds
 //= link_tree ../images
-//= link_directory ../javascripts .js
+//= link legacy.js
+//= link version.js
 //= link_directory ../stylesheets .css
 //= link theme/styles/_variables.css
 //= link application.css
 //= link print.css
+//= link client_themes/boston.css
+//= link client_themes/dhcd.css
+//= link client_themes/hforward.css
+//= link client_themes/qa.css
+//= link client_themes/tarrant_county.css

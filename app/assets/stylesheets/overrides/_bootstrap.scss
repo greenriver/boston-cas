@@ -37,13 +37,20 @@ input {
   text-decoration: none;
 }
 
+// Bootstrap computes foreground color via color-contrast(); override where our
+// brand colors produce better legibility with white text.
+.text-bg-success,
+.text-bg-warning {
+  color: $white !important;
+}
+
 // Buttons
 
 .btn-light {
-  border: 1px solid $brand-primary;
-  color: $brand-primary;
+  border: 1px solid var(--brand-primary);
+  color: var(--brand-primary);
   &:hover {
-    background: $brand-primary;
+    background: var(--brand-primary);
     color: $white;
   }
 }
@@ -78,9 +85,9 @@ input {
   border-top-right-radius: $input-border-radius;
   border-bottom-right-radius: $input-border-radius;
   border-left: 0;
-  background: $brand-primary-ll;
+  background: var(--brand-primary-ll);
   &:hover {
-    background: $brand-primary;
+    background: var(--brand-primary);
     color: $white;
   }
 }
