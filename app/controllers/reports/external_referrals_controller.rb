@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Reports
   class ExternalReferralsController < ApplicationController
     before_action :authenticate_user!
@@ -16,7 +18,7 @@ module Reports
 
     def refer
       @clients = client_scope.preload(:external_referrals, :active_matches)
-      ids = params[:referrals][:clients].select { |_, v| v == '1' }.keys.map(&:to_i)
+      ids = params.dig(:referrals, :clients)&.select { |_, v| v == '1' }&.keys&.map(&:to_i) || []
       if ids.any?
         # limit download and add referral
         @clients = @clients.where(id: ids)
