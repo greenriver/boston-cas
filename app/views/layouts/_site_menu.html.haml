@@ -1,102 +1,12 @@
 .o-menu.js-menu.off-canvas
-  -# Match related items
-  %ul.o-menu__group.list-unstyled
-    - available_routes = MatchRoutes::Base.filterable_routes
-    - if available_routes.count > 1
-      %li.o-menu__item.o-menu__header Matches in Progress
-      - available_routes.each do |route|
-        - route_name = route.first
-        %li.o-menu__item
-          = link_to route_name, active_matches_path(current_route: route_name), class: 'o-menu__link'
-    - else
-      %li.o-menu__item
-        = link_to active_matches_path, class: 'o-menu__link' do
-          Matches in Progress
-  -# Reporting items
-  - if can_view_reports?
-    %ul.o-menu__group.list-unstyled
-      %li.o-menu__item
-        = link_to reports_path, class: 'o-menu__link' do
-          Reports
-  -# Inventory and HMIS related items
-  - if can_view_opportunities? || can_view_contacts? || can_view_programs? || can_view_assigned_programs? || can_view_buildings? || current_user.can_see_non_hmis_clients?
-    %ul.o-menu__group.list-unstyled
-      - if current_user.can_view_some_clients?
-        %li.o-menu__item
-          = link_to clients_path, class: 'o-menu__link' do
-            All Clients
-      - if Client.accessible_by_user(current_user).parked.any?
-        %li.o-menu__item
-          = link_to reports_parked_clients_path, class: 'o-menu__link' do
-            Parked Clients
-      - if current_user.can_see_non_hmis_clients?
-        %li.o-menu__item
-          - if can_enter_deidentified_clients?
-            = link_to deidentified_clients_path, class: 'o-menu__link' do
-              #{Translation.translate('Non-HMIS Clients')}
-          - elsif can_enter_identified_clients?
-            = link_to identified_clients_path, class: 'o-menu__link' do
-              #{Translation.translate('Non-HMIS Clients')}
-          - elsif can_manage_imported_clients?
-            = link_to imported_clients_path, class: 'o-menu__link' do
-              #{Translation.translate('Non-HMIS Clients')}
-      - if can_view_contacts?
-        %li.o-menu__item
-          = link_to contacts_path, class: 'o-menu__link' do
-            Contacts
-      - if can_view_opportunities?
-        %li.o-menu__item
-          = link_to opportunities_path, class: 'o-menu__link' do
-            Vacancies
-      - if can_view_programs? || can_view_assigned_programs?
-        %li.o-menu__item
-          = link_to programs_path, class: 'o-menu__link' do
-            Programs
-      - if can_view_funding_sources?
-        %li.o-menu__item
-          = link_to funding_sources_path, class: 'o-menu__link' do
-            Funding Sources
-      - if can_view_subgrantees?
-        %li.o-menu__item
-          = link_to subgrantees_path, class: 'o-menu__link' do
-            Sub-Grantees
-      - if can_view_buildings?
-        %li.o-menu__item
-          = link_to buildings_path, class: 'o-menu__link' do
-            = "#{Building.model_name.human.pluralize}"
-      - if can_manage_neighborhoods?
-        %li.o-menu__item
-          = link_to neighborhoods_path, class: 'o-menu__link' do
-            Neighborhoods
-      - if can_manage_tags?
-        %li.o-menu__item
-          = link_to tags_path, class: 'o-menu__link' do
-            = Translation.translate('Tags')
-      - if can_view_rule_list?
-        %li.o-menu__item
-          = link_to rules_path, class: 'o-menu__link' do
-            Rules List
-      - if can_view_available_services?
-        %li.o-menu__item
-          = link_to services_path, class: 'o-menu__link' do
-            Services List
-
-  - if can_edit_users? || can_edit_translations?
-    = render 'menus/admin_dashboard'
+  %nav{ 'aria-labelledby': 'site-menu-label' }
+    %h2#site-menu-label.sr-only Site Menu
+    = render 'menus/site_menu'
 
   - if help_link || can_edit_help?
     = render 'menus/help'
   - if Rails.env.development?
     = render 'menus/style_guide'
-  %ul.o-menu__group.no-border.list-unstyled
-    %li.o-menu__item
-      = link_to edit_account_path, class: 'o-menu__link' do
-        Edit Account
-    %li.o-menu__item
-      = link_to destroy_user_session_path, :method => :delete, class: 'o-menu__link' do
-        %span.mr-2 Sign Out
-        %i{class: "icon-exit"}
 
-
-  %a.js-back-to-top.o-menu__to-top.o-menu__link{ href:'#' }
+  %a.js-back-to-top.o-menu__to-top.o-menu__link{ href: '#' }
     Back to Top

@@ -1,0 +1,65 @@
+%ul.nav.flex-column.flex-nowrap.overflow-hidden.site-menu.w-100
+  - site_menu.each do |item|
+    - next unless item.show?
+
+    %li.nav-item.d-flex
+      .link-wrapper.w-100
+        - if item.children?
+          - submenu_id = "#{item.id}-submenu"
+          - collapsed_state = item.collapsed_class(request.env['PATH_INFO'])
+          - is_open = collapsed_state == :show
+          - href = item.href.present? ? item.href : "##{submenu_id}"
+          - options = item.options.merge(href: href)
+          - options[:class] = [%w(nav-link d-flex), ('collapsed' unless is_open)].flatten.compact.join(' ')
+          - collapse_data = (options[:data] || {}).dup
+          - collapse_data[:toggle] = 'collapse'
+          - collapse_data[:target] = "##{submenu_id}"
+          - options[:data] = collapse_data
+        - else
+          - href = item.href
+          - options = item.options.merge(href: href)
+          - active_class = menu_item_active?(item) ? 'active' : nil
+          - options[:class] = [%w(nav-link d-flex), active_class].flatten.compact.join(' ')
+        %a{ **options }
+          .icon-wrapper
+            - if item.icon?
+              %i.menu-icon{ class: item.icon }
+          .link-text.pb-2
+            = item.title
+            - if item.trailing_icon
+              %i.icon{ class: item.trailing_icon }
+          - if item.children?
+            .ml-auto.toggle-icon-up
+              %i.icon-minus
+            .ml-auto.toggle-icon-down
+              %i.icon-plus
+        - if item.children?
+          %div{ id: submenu_id, class: ['collapse', ('show' if is_open)].compact.join(' '), aria: { expanded: is_open.to_s } }
+            %ul.flex-column.pl-1.nav
+              - item.children.each do |child|
+                %li.nav-item
+                  - if child.icon?
+                    %i.menu-icon{ class: child.icon }
+                  - if child.children?
+                    .group-header= child.title
+                    .group
+                      %ul.flex-column.pl-2.nav
+                        - child.children.each do |grand_child|
+                          %li.nav-item.d-flex
+                            - if grand_child.icon?
+                              .icon-wrapper
+                                %i.menu-icon{ class: grand_child.icon }
+                            %div
+                              - gc_opts = grand_child.options.merge(class: [%w(nav-link), ('active' if menu_item_active?(grand_child))].flatten.compact.join(' '))
+                              %a{ **gc_opts }
+                                .link-text
+                                  = grand_child.title
+                                  - if grand_child.trailing_icon
+                                    %i.icon{ class: grand_child.trailing_icon }
+                  - else
+                    - ch_opts = child.options.merge(class: [%w(nav-link), ('active' if menu_item_active?(child))].flatten.compact.join(' '))
+                    %a{ **ch_opts }
+                      .link-text
+                        = child.title
+                        - if child.trailing_icon
+                          %i.icon.ml-2{ class: child.trailing_icon }
