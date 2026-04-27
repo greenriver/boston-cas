@@ -15,7 +15,7 @@
         - selected_contacts.each do |contact|
           - join_contact = all_contacts[contact.id]
           - data = {}
-          - data = {toggle: :tooltip, title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
+          - data = {bs_toggle: :tooltip, bs_title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
           .contact.mb-2
             = contact.name
             - if join_contact.contact_order == 1 && selected_contacts.count > 1
