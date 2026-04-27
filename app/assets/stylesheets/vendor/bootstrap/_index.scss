@@ -1,48 +1,48 @@
-/*!
- * Bootstrap v4.1.1 (https://getbootstrap.com/)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
+// Bootstrap 5 import order
+// 1. Functions must come first
+@import "bootstrap/scss/functions";
 
-@import "bootstrap/functions";
-@import "default_variables";
+// 2. Our custom variable overrides (injected before Bootstrap's defaults)
 @import "../../settings/custom_bootstrap_variables";
-@import "bootstrap/mixins";
-@import "bootstrap/root";
-@import "bootstrap/reboot";
-@import "bootstrap/type";
-@import "bootstrap/images";
-@import "bootstrap/code";
-@import "bootstrap/grid";
-@import "bootstrap/tables";
-@import "bootstrap/forms";
-@import "bootstrap/buttons";
-@import "bootstrap/transitions";
-@import "bootstrap/dropdown";
-@import "bootstrap/button-group";
-@import "bootstrap/input-group";
-@import "bootstrap/custom-forms";
-@import "bootstrap/nav";
-/* @import "bootstrap/navbar"; */
-/* @import "bootstrap/card"; */
-/* @import "bootstrap/breadcrumb"; */
-@import "bootstrap/pagination";
-@import "bootstrap/badge";
-/* @import "bootstrap/jumbotron"; */
-@import "bootstrap/alert";
-/* @import "bootstrap/progress"; */
-/* @import "bootstrap/media"; */
-/* @import "bootstrap/list-group"; */
-@import "bootstrap/close";
-@import "bootstrap/modal";
-@import "bootstrap/tooltip";
-@import "bootstrap/popover";
-/* @import "bootstrap/carousel"; */
-@import "bootstrap/utilities";
-@import "bootstrap/print";
 
-th .fa {
-  padding-left: 4px;
-  color: $cas-blue;
-}
+// 3. Bootstrap defaults, maps, mixins, utilities
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// 4. Bootstrap root (emits :root CSS custom properties from our Sass variables)
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+/* @import "bootstrap/scss/navbar"; */
+/* @import "bootstrap/scss/card"; */
+/* @import "bootstrap/scss/breadcrumb"; */
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+/* @import "bootstrap/scss/progress"; */
+/* @import "bootstrap/scss/list-group"; */
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/popover";
+/* @import "bootstrap/scss/carousel"; */
+@import "bootstrap/scss/spinners";
+@import "bootstrap/scss/helpers";
+
+// 5. Utilities API (generates utility classes — must come after components)
+@import "bootstrap/scss/utilities/api";
+
+// 6. Bootstrap 4 compat aliases — keep until views are fully updated
+@import "v4_compatibility";

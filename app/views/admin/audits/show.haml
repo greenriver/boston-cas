@@ -21,7 +21,7 @@
             %tr
               %td
                 - tooltip = "Method: #{i.method}"
-                %span.action{data: {toggle: :tooltip, title: tooltip}}
+                %span.action{data: { bs_toggle: :tooltip, bs_title: tooltip}}
                   = i.action_name
 
               %td= link_to title, i.path

@@ -3,6 +3,6 @@
   %div.alert.alert-dismissible{:class => ["alert-#{notice_types[type]}", " #{type}"]}
     - if msg.is_a?(String)
       = msg.html_safe unless msg.blank?
-    %a.close.icon-cross{href: '#', 'data-dismiss': 'alert', 'aria-label': 'close'}
+    %button.btn-close{'data-bs-dismiss': 'alert', 'aria-label': 'Close'}
 .crumbs
   = yield :crumbs

@@ -35,14 +35,14 @@
                 %label.control-label.col-form-label.d-block Date range
                 .row
                   .col-6
-                    .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
+                    .input-group.date.datepicker{data: {controller: "datepicker"}}
                       %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateStart"}, placeholder: "Start"}
-                      %span.input-group-addon
+                      %span.input-group-text{data: {td_toggle: "datetimepicker"}}
                         %i.icon-calendar
                   .col-6
-                    .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
+                    .input-group.date.datepicker{data: {controller: "datepicker"}}
                       %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateEnd"}, placeholder: "End"}
-                      %span.input-group-addon
+                      %span.input-group-text{data: {td_toggle: "datetimepicker"}}
                         %i.icon-calendar
 
       %table.table.table-condensed.table-striped

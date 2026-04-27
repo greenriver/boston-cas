@@ -1,6 +1,9 @@
+//= link_tree ../builds
 //= link_tree ../images
-//= link_directory ../javascripts .js
+//= link legacy.js
+//= link version.js
 //= link_directory ../stylesheets .css
 //= link theme/styles/_variables.css
 //= link application.css
 //= link print.css
+//= link_tree ../stylesheets/client_themes

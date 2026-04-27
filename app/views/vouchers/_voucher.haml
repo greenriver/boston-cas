@@ -37,7 +37,7 @@
           .col-sm-10
             = v.input :available, disabled: disabled, as: :boolean
           .col-sm-2
-            %span.ml-4.icon-info{data:{ toggle: :tooltip, placement: :top, title: creation_info.html_safe, html: :true}}
+            %span.ml-4.icon-info{data: { bs_toggle: :tooltip, bs_placement: :top, bs_title: creation_info.html_safe, bs_html: :true}}
         .detail-box-value
           = v.input :date_available, disabled: disabled, as: :date_picker, value: voucher.date_available, label: 'Date voucher or unit becomes available'
         - if can_edit_voucher_rules?
@@ -60,10 +60,10 @@
               .w-100.d-flex
                 - can_see_details_of_this_match = ClientOpportunityMatch.accessible_by_user(current_user).where(id: match.id).present? rescue false
                 - if can_see_details_of_this_match
-                  .mb-2{ data: { toggle: :tooltip, title: name }}
+                  .mb-2{ data: { bs_toggle: :tooltip, bs_title: name }}
                     = link_to match.overall_status[:name], match_path(match)
                 - else
-                  .mb-2{ data: { toggle: :tooltip, title: name }}
+                  .mb-2{ data: { bs_toggle: :tooltip, bs_title: name }}
                     = match.overall_status[:name]
                 - if match.active? && can_reject_matches? && button
                   - button = false

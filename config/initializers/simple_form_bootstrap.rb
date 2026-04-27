@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
   config.error_notification_class = 'alert alert-danger'
@@ -135,7 +143,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.optional :readonly
 
-    b.wrapper tag: 'div', class: 'col-sm-offset-3 col-sm-9' do |wr|
+    b.wrapper tag: 'div', class: 'offset-sm-3 col-sm-9' do |wr|
       wr.wrapper tag: 'div', class: 'checkbox' do |ba|
         ba.use :label_input
       end
@@ -165,7 +173,7 @@ SimpleForm.setup do |config|
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
-    b.use :label, class: 'sr-only'
+    b.use :label, class: 'visually-hidden'
 
     b.use :input, class: 'form-control'
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
@@ -176,7 +184,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.optional :readonly
     b.use :label, class: 'control-label'
-    b.wrapper tag: 'div', class: 'form-inline' do |ba|
+    b.wrapper tag: 'div', class: 'd-flex flex-wrap align-items-center gap-2' do |ba|
       ba.use :input, class: 'form-control'
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -195,6 +203,6 @@ SimpleForm.setup do |config|
     boolean: :vertical_boolean,
     datetime: :multi_select,
     date: :multi_select,
-    time: :multi_select
+    time: :multi_select,
   }
 end

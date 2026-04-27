@@ -21,7 +21,7 @@
 }
 
 .help-block {
-  @include margin(0 0 8px 0);
+  @include cas-margin(0 0 8px 0);
   @extend .label-helper;
   margin-top: rem(-5px);
   margin-bottom: space(2);
@@ -32,13 +32,13 @@
 }
 
 .requirement-warning {
-  color: $brand-danger;
+  color: var(--brand-danger);
   @include open-sans-medium;
-  @include padding(space(1) 0);
+  @include cas-padding(space(1) 0);
 }
 
 .form-actions {
-  @include margin(10px null);
+  @include cas-margin(10px null);
 }
 
 .button-row {
@@ -50,10 +50,10 @@
 }
 
 .form-group__indented-01 {
-  @include margin(10px null 10px 40px);
+  @include cas-margin(10px null 10px 40px);
 }
 .form-group__indented-02 {
-  @include margin(null null null 20px);
+  @include cas-margin(null null null 20px);
 }
 .form--checkbox-groups {
   margin-bottom: 30px;
@@ -66,7 +66,7 @@
   padding-left: 0;
 }
 .has-error .help-block {
-  color: $brand-danger;
+  color: var(--brand-danger);
 }
 
 .error .form-control {

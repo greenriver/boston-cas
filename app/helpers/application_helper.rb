@@ -182,6 +182,22 @@ module ApplicationHelper
     )
   end
 
+  def client_theme_stylesheet_exists?
+    ApplicationHelper.client_theme_stylesheet_exists?
+  end
+
+  # Class method to check and cache the existence of a client theme stylesheet so
+  # the file is only read once per deployment.
+  def self.client_theme_stylesheet_exists?
+    client = ENV['CLIENT'].presence
+    return false unless client
+
+    @client_theme_stylesheet_exists ||= {}
+    @client_theme_stylesheet_exists.fetch(client) do
+      File.exist?(Rails.root.join('app/assets/stylesheets/client_themes', "#{client}.css"))
+    end
+  end
+
   # Provides a generic mechanism to show an action menu if there is more than one item, button, if only one
   # Expects an array of objects called items in the following format
   # [{ link_to: { path: '/hud_reports/aprs/new?filter%5Bactive_roi%5D=false...'}, icon: :copy, label: 'Clone report' }, { link_to: { path: '/hud_reports/aprs/111', method: :delete }, icon: :cross, label: 'Delete' }]

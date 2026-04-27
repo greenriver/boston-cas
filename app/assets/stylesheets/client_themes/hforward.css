@@ -1,0 +1,31 @@
+/* HomeForward brand theme */
+:root {
+  /* Brand colors */
+  --brand-primary: #4F2C1D;
+  --brand-primary-l: #9C6651;
+  --brand-success: #66CDAA;
+  --brand-success-l: #c1ebdd;
+  --brand-success-ll: #e0f5ee;
+  --brand-warning: #EAAA00;
+  --brand-warning-l: #ffefc7;
+  --brand-danger: #D22630;
+  --brand-danger-d: #4b1c11;
+  --brand-danger-l: #eea6aa;
+  --cas-blue: #4F2C1D;
+  --cob-sg-charles-blue: #4F2C1D;
+  --cob-sg-blue-003: #4F2C1D;
+  /* Bootstrap 5 theme color overrides */
+  --bs-primary: #4F2C1D;
+  --bs-primary-rgb: 79, 44, 29;
+  --bs-success: #66CDAA;
+  --bs-success-rgb: 102, 205, 170;
+  --bs-warning: #EAAA00;
+  --bs-warning-rgb: 234, 170, 0;
+  --bs-danger: #D22630;
+  --bs-danger-rgb: 210, 38, 48;
+}
+
+.badge.badge-warning,
+.badge.badge-success {
+  color: black !important;
+}

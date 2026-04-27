@@ -14,11 +14,11 @@
             This match expired on
             %strong= "#{@match.shelter_expiration}."
       .expiration_update_link
-        %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
+        %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: { bs_toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
           Update Expiration Date
     - else
       This match currently has no expiration date.
-      %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: {toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
+      %a{href: '#update-date', class: 'btn btn-secondary btn-sm margin-left-02', data: { bs_toggle:'collapse'}, aria: {expanded:'false', controls:'collapseExample'}}
         Add Expiration Date
   #update-date.collapse
     %label Expiration Date

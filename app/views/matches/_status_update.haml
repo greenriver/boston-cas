@@ -5,7 +5,7 @@
   .match-decision.c-card.c-card--flush.card--block
     .c-card__content
       .o-pre-choose
-        .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: {toggle: :buttons}}
+        .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: { bs_toggle: :buttons}}
           - this_one = params[:working_with_client] == 'jStillWorking' || params[:working_with_client].blank?
           %label.btn.btn-light{class: this_one ? 'active' : ''}
             %input{type: :radio, name: :working_with_client, autocomplete: :off, checked: :checked, value: 'jStillWorking'}
