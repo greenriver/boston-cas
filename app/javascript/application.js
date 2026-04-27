@@ -15,7 +15,7 @@ window.bootstrap = bootstrap
 // Initialize Bootstrap tooltips and popovers after DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
-    new bootstrap.Tooltip(el)
+    bootstrap.Tooltip.getOrCreateInstance(el)
   })
   document.querySelectorAll('[data-bs-toggle="popover"]').forEach((el) => {
     new bootstrap.Popover(el)

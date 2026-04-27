@@ -19,7 +19,7 @@
       .selected-contact.c-contact-list__contact.margin-0
         %input{type: :hidden, name: input_name, value: contact.id, class: :jContactHidden}
         - data = {}
-        - data = {toggle: :tooltip, title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
+        - data = {bs_toggle: :tooltip, bs_title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
         .c-contact-list__details.d-flex
           = "#{contact.name} | "
           = contact.email
@@ -49,4 +49,6 @@
           %span= contact.phone
 = content_for :page_js do
   :javascript
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+      if (window.bootstrap && window.bootstrap.Tooltip) window.bootstrap.Tooltip.getOrCreateInstance(el);
+    });

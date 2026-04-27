@@ -131,4 +131,6 @@
 
 = content_for :page_js do
   :javascript
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+      if (window.bootstrap && window.bootstrap.Tooltip) window.bootstrap.Tooltip.getOrCreateInstance(el);
+    });

@@ -22,7 +22,7 @@ export default class extends Controller {
     this.initDateChangeListeners()
     this.apply()
     this.element.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
-      if (typeof jQuery !== 'undefined') jQuery(el).tooltip()
+      window.bootstrap?.Tooltip?.getOrCreateInstance(el)
     })
     if (this.shouldPoll()) this.startPolling()
   }
@@ -84,6 +84,9 @@ export default class extends Controller {
         if ($el.hasClass('select2-hidden-accessible')) $el.select2('destroy')
       })
     }
+    this.element.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
+      window.bootstrap?.Tooltip?.getInstance(el)?.dispose()
+    })
     if (this.hasDateStartTarget && this._dateStartHandler) {
       this.dateStartTarget.removeEventListener('change', this._dateStartHandler)
       this._dateStartHandler = null
@@ -127,7 +130,7 @@ export default class extends Controller {
             this._pollIntervalId = null
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     }, 10000)
   }
 
