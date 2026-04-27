@@ -46,6 +46,26 @@ RSpec.describe 'ClosedMatches Search', type: :request do
     end
   end
 
+  describe 'authorization' do
+    context 'when user lacks can_view_all_matches and can_view_own_closed_matches' do
+      let(:unprivileged_user) { create(:user) }
+
+      before do
+        sign_in unprivileged_user
+      end
+
+      it 'redirects from index' do
+        get closed_matches_path
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'redirects from search query show' do
+        get closed_match_search_query_path(search_query)
+        expect(response).to redirect_to(root_path)
+      end
+    end
+  end
+
   describe 'GET /closed_match_search_queries/:id' do
     it 'renders successfully and shows search results' do
       get closed_match_search_query_path(search_query)
