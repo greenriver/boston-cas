@@ -38,9 +38,9 @@
             %ul.flex-column.pl-1.nav
               - item.children.each do |child|
                 %li.nav-item
-                  - if child.icon?
-                    %i.menu-icon{ class: child.icon }
                   - if child.children?
+                    - if child.icon?
+                      %i.menu-icon{ class: child.icon }
                     .group-header= child.title
                     .group
                       %ul.flex-column.pl-2.nav
@@ -57,8 +57,11 @@
                                   - if grand_child.trailing_icon
                                     %i.icon{ class: grand_child.trailing_icon }
                   - else
-                    - ch_opts = child.options.merge(class: [%w(nav-link), ('active' if menu_item_active?(child))].flatten.compact.join(' '))
+                    - ch_opts = child.options.merge(class: [%w(nav-link d-flex align-items-center), ('active' if menu_item_active?(child))].flatten.compact.join(' '))
                     %a{ **ch_opts }
+                      - if child.icon?
+                        .icon-wrapper
+                          %i.menu-icon{ class: child.icon }
                       .link-text
                         = child.title
                         - if child.trailing_icon
