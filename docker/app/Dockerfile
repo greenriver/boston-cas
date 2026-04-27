@@ -212,6 +212,7 @@ RUN rm -rf tmp/* \
 # which are unreachable at runtime, so we drop the whole package managers here.
 USER root
 RUN rm -rf /usr/lib/node_modules/npm /usr/lib/node_modules/yarn \
-  && rm -f /usr/bin/npm /usr/bin/npx /usr/bin/yarn /usr/bin/yarnpkg
+  && rm -f /usr/bin/npm /usr/bin/npx /usr/bin/yarn /usr/bin/yarnpkg \
+  && rm -rf /app/node_modules
 
 USER ${USER_ID}
