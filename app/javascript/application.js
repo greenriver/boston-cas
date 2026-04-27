@@ -20,6 +20,22 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-bs-toggle="popover"]').forEach((el) => {
     new bootstrap.Popover(el)
   })
+
+  const matchesCollapseKey = 'cas-sidebar-matches-collapsed'
+  const matchesCollapseEl = document.getElementById('matches-submenu')
+  if (matchesCollapseEl) {
+    matchesCollapseEl.addEventListener('hidden.bs.collapse', () => {
+      sessionStorage.setItem(matchesCollapseKey, '1')
+    })
+    matchesCollapseEl.addEventListener('shown.bs.collapse', () => {
+      sessionStorage.removeItem(matchesCollapseKey)
+    })
+
+    if (sessionStorage.getItem(matchesCollapseKey) === '1') {
+      const collapse = bootstrap.Collapse.getOrCreateInstance(matchesCollapseEl, { toggle: false })
+      collapse.hide()
+    }
+  }
 })
 
 // Start Stimulus

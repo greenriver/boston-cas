@@ -26,4 +26,21 @@ RSpec.describe Menu::Item do
       expect(regex.match?('reports/123')).to be_truthy
     end
   end
+
+  describe '#collapsed_class' do
+    it 'matches PATH_INFO using path-only segments when child URLs include query params' do
+      child = described_class.new(path: '/active_matches?current_route=PSH', children: [])
+      item = described_class.new(children: [child], match_pattern_terminator: '.*')
+
+      expect(item.collapsed_class('/active_matches')).to eq(:show)
+    end
+
+    it 'matches match_pattern for individual match pages' do
+      item = described_class.new(
+        match_pattern: '(?:^/matches/\d+$)',
+      )
+
+      expect(item.collapsed_class('/matches/42')).to eq(:show)
+    end
+  end
 end

@@ -55,6 +55,7 @@ class Menu::Menu
         id: 'matches',
         icon: 'icon-team',
         match_pattern_terminator: '.*',
+        match_pattern: '(?:^/active_matches$)|(?:^/closed_matches$)|(?:^/matches/\d+$)',
       )
       routes.each do |route|
         route_name = route.first
@@ -62,6 +63,7 @@ class Menu::Menu
           Menu::Item.new(
             user: user,
             path: active_matches_path(current_route: route_name),
+            alternate_paths: [closed_matches_path(current_route: route_name)],
             title: route_name,
             visible: ->(_u) { true },
           ),
@@ -72,6 +74,7 @@ class Menu::Menu
       Menu::Item.new(
         user: user,
         path: active_matches_path,
+        alternate_paths: [closed_matches_path],
         title: Translation.translate('Matches in Progress'),
         id: 'matches',
         icon: 'icon-team',

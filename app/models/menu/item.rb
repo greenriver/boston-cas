@@ -71,7 +71,7 @@ class Menu::Item < OpenStruct
     item.children.each do |child|
       found_paths += children_paths(child, paths)
 
-      found_paths << child.path
+      found_paths << child.path if child.path.present?
     end
 
     found_paths
@@ -79,14 +79,19 @@ class Menu::Item < OpenStruct
 
   def collapse_regex
     terminator = match_pattern_terminator || '\z'
-    regex_parts = children_paths(self, paths).reject(&:blank?).map { |p| "^#{p}#{terminator}" }
+    regex_parts = children_paths(self, []).reject(&:blank?).map do |p|
+      path_only = p.to_s.split('?', 2).first
+      "^#{Regexp.escape(path_only)}#{terminator}"
+    end
     regex_parts << match_pattern if match_pattern.present?
     Regexp.new(regex_parts.join('|'))
   end
 
   def collapsed_class(path_info)
+    candidate = path_info.to_s.gsub("\n", '').slice(0, 500)
+
     return :show if always_open
-    return :show if collapse_regex.match?(path_info.gsub("\n", '').slice(0, 500))
+    return :show if collapse_regex.match?(candidate)
 
     :collapsed
   end
