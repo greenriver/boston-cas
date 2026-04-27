@@ -33,6 +33,6 @@
                 %td= client.assessment_score
                 %td= client.tie_breaker_date
                 %td
-                  = f.input "[clients][#{client.id}]", as: :boolean, label: false, input_html: {class: 'jReferral'}
+                  = f.input :referrals, as: :boolean, label: false, input_html: {class: 'jReferral', id: "referrals_clients_#{client.id}", name: "referrals[clients][#{client.id}]"}
   %p= page_entries_info @clients
   = paginate @clients
