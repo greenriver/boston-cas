@@ -126,6 +126,9 @@ RSpec.describe Menu::Menu do
     end
 
     it 'includes a collapsible Matches section when multiple routes exist' do
+      routes = [['PSH Route', {}], ['RRH Route', {}]]
+      allow(MatchRoutes::Base).to receive(:filterable_routes).and_return(routes)
+
       menu_list = described_class.new(user: user, context: menu_context).site_menu
 
       matches = menu_list.find { |i| i.show? && i.id.to_s == 'matches' }
