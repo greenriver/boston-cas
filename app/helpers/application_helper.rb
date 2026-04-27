@@ -19,6 +19,18 @@ module ApplicationHelper
   end
   # END Permissions
   #
+  def site_menu
+    ::Menu::Menu.new(user: current_user, context: self).site_menu
+  end
+
+  def menu_item_active?(item)
+    return false unless item.respond_to?(:path) && item.path.present?
+
+    current_page?(item.path)
+  rescue StandardError
+    false
+  end
+
   def yn(boolean)
     boolean ? 'Y' : 'N'
   end
