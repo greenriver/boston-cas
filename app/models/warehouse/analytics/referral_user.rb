@@ -27,6 +27,27 @@ class Warehouse::Analytics::ReferralUser < ::Warehouse::Base
         end
         import!(batch)
       end
+
+      next_id = maximum(:id) + 1
+      # Additionally, anyone who has the ability to user_can_reject_matches? or user_can_approve_matches?
+      # (matches access for MatchDecisions::Base#admin_only?)
+      match_admins = User.active.match_admins.joins(:contact).preload(:contact).to_a
+      ClientOpportunityMatch.find_in_batches(batch_size: 1_000) do |matches|
+        batch = []
+        matches.each do |match|
+          match_admins.each do |user|
+            batch << new(
+              id: next_id,
+              email: user.contact.email,
+              referral_id: match.id,
+              cas_user_id: user.id,
+            )
+            next_id += 1
+          end
+        end
+
+        import!(batch)
+      end
     end
   end
 end
