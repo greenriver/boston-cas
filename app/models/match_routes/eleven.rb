@@ -4,10 +4,16 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchRoutes
   class Eleven < Base
     def title
-      Translation.translate('Match Route Eleven')
+      Translation.translate(untranslated_title)
+    end
+
+    def untranslated_title
+      'Match Route Eleven'
     end
 
     def self.available_sub_types_for_search

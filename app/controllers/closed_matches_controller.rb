@@ -1,10 +1,10 @@
-# frozen_string_literal: true
-
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
+
+# frozen_string_literal: true
 
 class ClosedMatchesController < MatchListBaseController
   before_action :require_can_view_all_matches_or_can_view_own_closed_matches!
@@ -84,7 +84,7 @@ class ClosedMatchesController < MatchListBaseController
   end
 
   def require_can_view_all_matches_or_can_view_own_closed_matches!
-    can_view_all_matches? || can_view_own_closed_matches?
+    not_authorized! unless can_view_all_matches? || can_view_own_closed_matches?
   end
 
   def match_scope

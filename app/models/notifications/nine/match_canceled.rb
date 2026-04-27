@@ -4,15 +4,17 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Nine
   class MatchCanceled < Notifications::MatchCanceled
     # Send to all contacts
-    def self.create_for_match! match
-      contacts = match.contacts
+    def self.contact_types_for_notification
+      [:contacts]
+    end
 
-      contacts.each do |contact|
-        create! match: match, recipient: contact
-      end
+    def self.create_for_match!(match, decision_id: nil)
+      Notifications::Base.instance_method(:create_for_match!).bind(self).call(match, decision_id: decision_id)
     end
   end
 end

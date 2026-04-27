@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Nine
   class NineRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
@@ -90,8 +92,8 @@ module MatchDecisions::Nine
       Notifications::Nine::NineRecordVoucherDate.create_for_match! match
     end
 
-    def notify_contact_of_action_taken_on_behalf_of contact: # rubocop:disable Lint/UnusedMethodArgument
-      Notifications::OnBehalfOf.create_for_match! match, contact_actor_type
+    def notify_on_behalf_of?
+      true
     end
 
     def accessible_by? contact

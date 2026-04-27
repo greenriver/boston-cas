@@ -9,20 +9,54 @@
       - if can_recreate_this_decision?
         - if @match.current_decision.present? && @match.current_decision.notifications_for_this_step.any?
           = link_to 'Resend all notifications for current step', recreate_notifications_match_decision_path(@match, @match.current_decision), class: 'btn btn-sm btn-light'
-  .c-card.c-card--block.c-card--flush.jHistoryCount{:data => {:history_events => @match.timeline_events.count}}
+  .c-card.c-card--block.c-card--flush.jHistoryCount{data: {history_events: (local_assigns[:history_events_count] || match.grouped_timeline_events.size).to_s, controller: "history"}}
     .c-card__content.pt-0.pb-0
-      .row
-        .col-sm-7
-        .col-sm-5.text-right
-        %table.table.table-condensed.table-striped
-          %thead
-            %tr
-              %th Date
-              %th Event
-              %th Step
-              %th Contact
-              - if can_reissue_notifications?
-                %th Actions
-          %tbody
-          - match.timeline_events.sort_by(&:timestamp).reverse.each do |event|
-            = render event, event: event, match: match
+
+      - if @match.grouped_timeline_events.any?
+        .form-horizontal.pt-2
+          .row
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Show
+                %select.form-control.form-control-sm.select2{data: {history_target: "collapseSelect"}}
+                  - MatchHistoryDisplayEvent.history_show_options.each do |value, label|
+                    %option{value: value, selected: value == MatchHistoryDisplayEvent.history_default_show_value}= label
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Contact
+                %select.form-control.form-control-sm.select2{multiple: true, data: {history_target: "contactSelect"}}
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Event
+                %select.form-control.form-control-sm.select2{data: {history_target: "eventSelect"}}
+          .row{data: {history_target: "dateRangeRow"}, hidden: true}
+            .col-sm-4
+              .form-group.mb-2
+                %label.control-label.col-form-label.d-block Date range
+                .row
+                  .col-6
+                    .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
+                      %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateStart"}, placeholder: "Start"}
+                      %span.input-group-addon
+                        %i.icon-calendar
+                  .col-6
+                    .input-group.date.datepicker{data: {provide: "datepicker", "date-today-highlight" => true}}
+                      %input.form-control.form-control-sm.datepicker{type: "text", data: {history_target: "dateEnd"}, placeholder: "End"}
+                      %span.input-group-addon
+                        %i.icon-calendar
+
+      %table.table.table-condensed.table-striped
+        %thead
+          %tr
+            %th Date
+            %th Event
+            %th Step
+            %th Contact
+        %tbody
+          - if match.grouped_timeline_events.empty?
+            %tr.history--empty-message
+              %td{colspan: 4}
+                No matching history
+          - else
+            - match.grouped_timeline_events.each do |event|
+              = render event, event: event, match: match

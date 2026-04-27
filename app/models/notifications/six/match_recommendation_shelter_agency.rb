@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Notifications::Six
   class MatchRecommendationShelterAgency < ::Notifications::MatchRecommendationShelterAgency
     def notification_type

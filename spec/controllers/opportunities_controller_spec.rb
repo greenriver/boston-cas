@@ -19,6 +19,45 @@ RSpec.describe OpportunitiesController, type: :controller do
     user.roles << admin_role
   end
 
+  describe 'authorization' do
+    context 'when user lacks can_view_opportunities and can_add_vacancies' do
+      let(:unprivileged_user) { create(:user) }
+
+      before do
+        authenticate(unprivileged_user)
+      end
+
+      it 'redirects from new' do
+        get :new
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'prevents creating opportunities' do
+        sub_program = create(:sub_program, program: program, program_type: 'Sponsor-Based')
+        expect do
+          post :create, params: { opportunity: { program: sub_program.id.to_s, units: '1' } }
+        end.not_to change(Opportunity, :count)
+        expect(Voucher.count).to eq(0)
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'when user has can_add_vacancies' do
+      let(:vacancy_role) { create(:role, name: 'vacancy_manager', can_add_vacancies: true) }
+      let(:vacancy_user) { create(:user) }
+
+      before do
+        vacancy_user.roles << vacancy_role
+        authenticate(vacancy_user)
+      end
+
+      it 'allows access to new' do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
   describe 'POST #create' do
     context 'when creating project-based units' do
       let(:building) { create(:building, elevator_accessible_default: building_default) }
