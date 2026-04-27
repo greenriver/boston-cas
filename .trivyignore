@@ -17,3 +17,6 @@ CVE-2026-32700
 
 # vulnerable json version is included in ruby 4.0.2, gemfile specified a fixed version
 CVE-2026-33210
+
+# erb vulnerability, using patched 6.0.4 in rails, but core ruby comes with vulnerable version
+CVE-2026-41316
