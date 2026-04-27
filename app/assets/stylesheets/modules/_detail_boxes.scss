@@ -17,7 +17,7 @@
   }
 }
 .detail-box--header {
-  @include margin(18px null 0);
+  @include cas-margin(18px null 0);
   text-transform: uppercase;
   font-size: rem(14);
   color: darken($cas-red-green, 30);
@@ -26,5 +26,5 @@
   font-size: rem(12);
 }
 .detail-box--new-requirement {
-  color: darken($brand-danger, 30);
+  color: $brand-danger-d;
 }

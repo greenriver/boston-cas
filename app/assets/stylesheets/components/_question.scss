@@ -4,11 +4,11 @@
 }
 
 .c-question--primary {
-  background: lighten($brand-primary-ll, 5%);
+  background: $brand-primary-ll;
 }
 
 .c-question--secondary {
-  background: lighten($brand-secondary-l, 5%);
+  background: $brand-secondary-l;
 }
 
 .c-question--without-number {

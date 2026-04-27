@@ -21,5 +21,5 @@
       %li.c-detailed-list__item
         %span.c-detailed-list__label
           %span= @column_data[:vispdat_priority_score][:title]
-          %span.icon-info{data: {toggle: :tooltip}, title: @column_data[:vispdat_priority_score][:description]}
+          %span.icon-info{data: { bs_toggle: :tooltip}, title: @column_data[:vispdat_priority_score][:description]}
         %span.c-detailed-list__value= @client.vispdat_priority_score

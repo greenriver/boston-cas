@@ -15,7 +15,7 @@
         .o-pre-choose
           = render 'match_decisions/shelter_agency_expiration', form: form
           - if ! @match.shelter_expiration? || @match.shelter_expiration >= Date.current || can_reject_matches?
-            .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: {toggle: :buttons}}
+            .btn-group.btn-group-toggle.jActionToggle.mb-6.mt-4{data: { bs_toggle: :buttons}}
               -# {'The client has been at your agency in the past two weeks': 'jStillWorking', 'The client has not been at your agency in the past two weeks': 'jNoLongerWorking'}.each do |title,key|
               - this_one = params[:working_with_client] == 'jStillWorking' || params[:working_with_client].blank?
               %label.btn.btn-light{class: this_one ? 'active' : ''}

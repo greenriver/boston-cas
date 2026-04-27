@@ -200,10 +200,12 @@
 @mixin border-width($vals...) {
   @include directional-property(border, width, $vals...);
 }
-@mixin padding($vals...) {
+// These mixins use Bourbon-style shorthand (null = skip that side).
+// Named with cas- prefix to avoid conflict with Bootstrap 5 RFS @mixin margin/padding.
+@mixin cas-padding($vals...) {
   @include directional-property(padding, false, $vals...);
 }
-@mixin margin($vals...) {
+@mixin cas-margin($vals...) {
   @include directional-property(margin, false, $vals...);
 }
 
@@ -554,7 +556,14 @@
   }
 
   // Customize the `:focus` state to imitate native WebKit styles.
-  @include form-control-focus();
+  // Note: form-control-focus() was removed in Bootstrap 5; using direct focus styles.
+  &:focus {
+    color: $input-focus-color;
+    background-color: $input-focus-bg;
+    border-color: $input-focus-border-color;
+    outline: 0;
+    box-shadow: $input-focus-box-shadow;
+  }
 
   // Placeholder
   &::placeholder {

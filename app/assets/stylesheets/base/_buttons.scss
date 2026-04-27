@@ -5,9 +5,11 @@ button.close {
 
 .btn {
   @include open-sans-bold;
+
   [class^='icon'] {
     margin-right: space(2);
   }
+
   display: inline-flex;
   align-items: center;
 }
@@ -16,6 +18,7 @@ button.close {
   @include open-sans-bold;
   display: inline-flex;
   align-items: center;
+
   [class^='icon'] {
     margin-right: 0;
   }
@@ -41,18 +44,20 @@ button.close {
   color: #FFF;
 } */
 
-.open > .btn-default.dropdown-toggle {
+.open>.btn-default.dropdown-toggle {
   background-color: $gray-050;
   color: #FFF;
 }
 
 .btn-primary {
-  background: $brand-primary;
-  border-color: $brand-primary-d;
+  background: var(--brand-primary);
+  border-color: var(--brand-primary-d);
   color: $white;
+
   &:hover {
     background: darken($brand-primary-l, 25%);
   }
+
   &.active,
   &:active,
   &:focus,
@@ -61,13 +66,16 @@ button.close {
     box-shadow: 0 0 0 2px rgba($brand-primary, .5);
     outline: 0;
   }
+
   &:disabled,
   &.disabled {
     background: desaturate($brand-primary-l, 80%);
     border-color: desaturate($brand-primary, 80%);
     color: rgba($black, .55);
   }
+
   &--outline {
+
     &:hover,
     &:focus {
       background: rgba($brand-primary-l, 25%);
@@ -77,12 +85,14 @@ button.close {
 
 .btn-secondary {
   background: $white;
-  border-color: $brand-primary;
-  color: $brand-primary;
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+
   &:hover {
     background: darken($brand-primary-l, 25%);
-    border-color: $brand-primary-d
+    border-color: var(--brand-primary-d)
   }
+
   &.active,
   &:active,
   &:focus,
@@ -92,13 +102,16 @@ button.close {
     color: $white;
     outline: 0;
   }
+
   &:disabled,
   &.disabled {
     background: desaturate($brand-primary-l, 80%);
     border-color: desaturate($brand-primary, 80%);
     color: rgba($black, .55);
   }
+
   &--outline {
+
     &:hover,
     &:focus {
       background: rgba($brand-primary-l, 25%);
@@ -107,14 +120,16 @@ button.close {
 }
 
 .btn-success {
-  background: $brand-success-l;
-  border-color: $brand-success;
-  color: rgba($black, .75);
+  background: var(--brand-success-l);
+  border-color: var(--brand-success);
+  color: $black;
+
   &:hover {
-    background: $brand-success-d;
-    border-color: $brand-primary-d;
+    background: var(--brand-success-d);
+    border-color: var(--brand-primary-d);
     color: $black;
   }
+
   &.active,
   &:active,
   &:focus,
@@ -124,13 +139,16 @@ button.close {
     outline: 0;
     color: $white;
   }
+
   &:disabled,
   &.disabled {
     background: desaturate($brand-success-l, 80%);
     border-color: desaturate($brand-success, 80%);
     color: rgba($black, .55);
   }
+
   &--outline {
+
     &:hover,
     &:focus {
       background: rgba($brand-success-l, 25%);
@@ -139,19 +157,22 @@ button.close {
 }
 
 .btn-warning {
-  background: $brand-warning-l;
-  border-color: $brand-warning;
-  color: rgba($black, 55%);
+  background: var(--brand-warning-l);
+  border-color: var(--brand-warning);
+  color: $black;
+
   &:hover {
-    background: $brand-warning-d;
+    background: var(--brand-warning-d);
     color: rgba($black, 1);
   }
+
   &:disabled,
   &.disabled {
     background: desaturate($brand-warning-l, 80%);
     border-color: desaturate($brand-warning, 80%);
     color: $black;
   }
+
   &.active,
   &:active,
   &:focus,
@@ -161,7 +182,9 @@ button.close {
     outline: 0;
     color: $white;
   }
+
   &--outline {
+
     &:hover,
     &:focus {
       background: rgba($brand-warning-l, 25%);
@@ -170,19 +193,22 @@ button.close {
 }
 
 .btn-danger {
-  background: $brand-danger-l;
-  border-color: $brand-danger;
+  background: var(--brand-danger-l);
+  border-color: var(--brand-danger);
   color: rgba($black, 1);
+
   &:hover {
-    background: $brand-danger-d;
+    background: var(--brand-danger-d);
     color: $black;
   }
+
   &:disabled,
   &.disabled {
     background: desaturate($brand-danger-l, 80%);
     border-color: desaturate($brand-danger, 80%);
     color: rgba($black, .55);
   }
+
   &.active,
   &:active,
   &:focus,
@@ -192,7 +218,9 @@ button.close {
     outline: 0;
     color: $white;
   }
+
   &--outline {
+
     &:hover,
     &:focus {
       background: rgba($brand-danger-l, 25%);
@@ -207,8 +235,9 @@ button.close {
 
 .btn-light {
   &:hover {
-    background: $brand-primary-l;
+    background: var(--brand-primary-l);
   }
+
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
     background: darken($brand-primary-l, 25%);
@@ -217,13 +246,13 @@ button.close {
 }
 
 // Dropdown toggle buttons
-.open > .btn-light.dropdown-toggle,
-.open > .btn-secondary.dropdown-toggle,
-.open > .dropdown-toggle.btn-default,
-.show > .btn-secondary.dropdown-toggle,
-.show > .btn-light.dropdown-toggle,
-.show > .dropdown-toggle.btn-default {
-  background: $brand-primary;
+.open>.btn-light.dropdown-toggle,
+.open>.btn-secondary.dropdown-toggle,
+.open>.dropdown-toggle.btn-default,
+.show>.btn-secondary.dropdown-toggle,
+.show>.btn-light.dropdown-toggle,
+.show>.dropdown-toggle.btn-default {
+  background: var(--brand-primary);
   color: $white;
 }
 
@@ -238,47 +267,56 @@ button.close {
 .btn [class*=" icon-"] {
   font-size: rem(12);
 }
+
 .btn-label {
   @include open-sans-condensed-bold;
   text-transform: uppercase;
   font-size: rem(14);
   text-align: left;
 }
+
 .btn-label__primary {
-  color: darken($brand-primary, 10);
+  color: $brand-primary-d;
 }
+
 .buttons-row .btn {
   margin-bottom: 4px;
   margin-left: 4px;
 }
+
 .btn-no-border-radius {
   border-radius: 0;
 }
+
 .btn-primary__reverse {
   background-color: #fff;
   color: $cob-sg-blue-004;
   border: 1px solid $gray-030;
 }
+
 .btn__number {
   font-size: rem(26);
   padding: 3px 12px;
   line-height: 1;
 }
+
 .btn-rule-condition {
   border: 1px solid $gray-040;
   background-color: #fff;
   border-radius: 0;
   color: $gray-065;
 }
+
 .btn-rule-condition:hover,
 .btn-rule-condition:focus {
-  background-color: $brand-primary;
-  border-color: $brand-primary;
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
   color: #fff;
 }
+
 .btn-rule-condition.active {
-  border-color: $brand-primary;
+  border-color: var(--brand-primary);
   box-shadow: none;
-  background-color: $brand-primary;
+  background-color: var(--brand-primary);
   color: #fff;
 }

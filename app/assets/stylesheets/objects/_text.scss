@@ -1,9 +1,9 @@
 .o-color--primary {
-  color: $brand-primary;
+  color: var(--brand-primary);
 }
 
 /* .o-color--secondary {
-  color: $brand-secondary;
+  color: var(--brand-secondary);
 } */
 
 .o-color--white {
@@ -24,15 +24,15 @@
 
 .o-color--positive,
 .o-color--success {
-  color: $brand-success;
+  color: var(--brand-success);
 }
 
 .o-color--danger {
-  color: $brand-danger;
+  color: var(--brand-danger);
 }
 
 .o-color--warning {
-  color: $brand-warning;
+  color: var(--brand-warning);
 }
 
 .o-text--normal {

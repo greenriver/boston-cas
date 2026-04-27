@@ -130,7 +130,7 @@
   &:hover {
     background: lighten($gray-020, 2%);
     .c-checkbox__check-icon {
-      background: $brand-success-l;
+      background: var(--brand-success-l);
     }
   }
   .c-checkbox__check-container {
@@ -146,7 +146,7 @@
 .c-checkbox--round input:checked ~ label {
   .c-checkbox__check-icon {
     border-radius: 50%;
-    background: $brand-success;
+    background: var(--brand-success);
   }
   &:focus,
   &:hover {

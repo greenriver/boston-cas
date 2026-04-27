@@ -6,6 +6,7 @@ gem 'rack', '< 3.2' # pinning to the same max version as is required by rails 7.
 gem 'pg', '~> 1.1'
 gem 'rails', '7.2.3.1'
 gem 'sprockets-rails'
+gem 'jsbundling-rails'
 gem 'rails-html-sanitizer'
 gem 'loofah'
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
@@ -31,7 +32,6 @@ gem 'nokogiri'
 gem 'autoprefixer-rails'
 gem 'haml-rails'
 gem 'babel-transpiler'
-gem 'bootstrap', '~> 4.3.1' # updating this to 4.5.3 causes a weird missing variable bug
 gem 'coffee-rails'
 gem 'execjs'
 gem 'jquery-rails'

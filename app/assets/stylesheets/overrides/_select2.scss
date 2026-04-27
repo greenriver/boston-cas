@@ -19,7 +19,7 @@
 }
 
 .select2-container--bootstrap .select2-results__option--highlighted[aria-selected] {
-  background-color: $brand-primary;
+  background-color: var(--brand-primary);
 }
 
 .select2-results__option[aria-selected="true"] {
@@ -46,7 +46,7 @@
   &,
   b {
     position: static;
-    border-color: $brand-primary transparent transparent transparent;
+    border-color: var(--brand-primary) transparent transparent transparent;
   }
 }
 
@@ -108,7 +108,7 @@
   margin-left: auto;
   min-width: 7em;
   cursor: pointer;
-  color: $link-color;
+  color: var(--link-color);
   display: flex;
   align-items: center;
   justify-content: flex-end;

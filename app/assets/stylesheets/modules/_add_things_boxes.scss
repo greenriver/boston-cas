@@ -40,5 +40,5 @@
 
 // This colors Rules that aren't persisted a light yellow.
 .row[data-persisted-id=''] {
-  background-color: $brand-warning-l;
+  background-color: var(--brand-warning-l);
 }

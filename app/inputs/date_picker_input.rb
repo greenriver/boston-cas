@@ -4,12 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class DatePickerInput < SimpleForm::Inputs::StringInput
   def input(wrapper_options)
     set_html_options
     set_value_html_option
 
-    template.content_tag :div, class: 'input-group date datepicker', data: { provide: 'datepicker', 'date-today-highlight' => true } do
+    template.content_tag :div, class: 'input-group date datepicker', data: { controller: 'datepicker' } do
       input = super(wrapper_options)
       input + input_button
     end
@@ -22,13 +24,11 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   private
 
   def input_button
-    template.content_tag :span, '', class: 'input-group-addon icon-calendar'
+    template.content_tag :span, '', class: 'input-group-text icon-calendar', data: { td_toggle: 'datetimepicker' }
   end
 
   def set_html_options
     input_html_options[:type] = 'text'
-    input_html_options[:data] ||= {}
-    input_html_options[:data].merge!(date_options: date_options)
   end
 
   def set_value_html_option
@@ -42,27 +42,6 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   end
 
   def display_pattern
-    I18n.t('datepicker.dformat', default: '%d/%m/%Y')
-  end
-
-  def picker_pattern
-    I18n.t('datepicker.pformat', default: 'DD/MM/YYYY')
-  end
-
-  def date_view_header_format
-    I18n.t('dayViewHeaderFormat', default: 'MMMM YYYY')
-  end
-
-  def date_options_base
-    {
-      locale: I18n.locale.to_s,
-      format: picker_pattern,
-      dayViewHeaderFormat: date_view_header_format,
-    }
-  end
-
-  def date_options
-    custom_options = input_html_options[:data][:date_options] || {}
-    date_options_base.merge!(custom_options)
+    I18n.t('datepicker.dformat', default: '%b %e, %Y')
   end
 end

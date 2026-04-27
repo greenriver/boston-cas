@@ -19,7 +19,7 @@
       .selected-contact.c-contact-list__contact.margin-0
         %input{type: :hidden, name: input_name, value: contact.id, class: :jContactHidden}
         - data = {}
-        - data = {toggle: :tooltip, title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
+        - data = {bs_toggle: :tooltip, bs_title: 'No associated active user, will not receive emails.'} unless contact_ids_with_active_users.include?(contact.id)
         .c-contact-list__details.d-flex
           = "#{contact.name} | "
           = contact.email
@@ -29,10 +29,10 @@
         .ml-auto
           - if selected_contacts.count > 1
             - if join_contact&.contact_order == 1
-              %i.icon-checkbox-checked.ml-2.mr-4{ data: { toggle: :tooltip, title: 'Primary Contact' }}
+              %i.icon-checkbox-checked.ml-2.mr-4{ data: { bs_toggle: :tooltip, bs_title: 'Primary Contact' }}
             - elsif join_contact.present? && current_contact&.user_can_edit_match_contacts?
               = link_to reorder_match_contacts_path(@match, join_contact: join_contact), method: :post, remote: true do
-                %i.icon-checkbox-unchecked.ml-2.mr-4{ data: { toggle: :tooltip, title: 'Set Primary Contact' }}
+                %i.icon-checkbox-unchecked.ml-2.mr-4{ data: { bs_toggle: :tooltip, bs_title: 'Set Primary Contact' }}
           -# Don't allow removal of self if you can't edit all contacts
           - if current_contact&.user_can_edit_match_contacts? || current_contact&.id != contact.id
             = link_to '#', data: {contact_id: contact.id, input_name: input_name}, class: 'jContactDelete c-contact-list__remove selected-contact--remove-link' do
@@ -49,4 +49,6 @@
           %span= contact.phone
 = content_for :page_js do
   :javascript
-    $('[data-toggle="tooltip"]').tooltip();
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+      if (window.bootstrap && window.bootstrap.Tooltip) window.bootstrap.Tooltip.getOrCreateInstance(el);
+    });

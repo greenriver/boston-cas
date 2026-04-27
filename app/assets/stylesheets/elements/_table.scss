@@ -11,3 +11,9 @@ table.table-fixed {
 .table-hover tr {
   cursor: pointer;
 }
+
+// Sort icon in table headers
+th .fa {
+  padding-left: 4px;
+  color: var(--cas-blue);
+}
