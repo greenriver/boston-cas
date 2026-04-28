@@ -19,6 +19,19 @@ module ApplicationHelper
   end
   # END Permissions
   #
+  def site_menu
+    ::Menu::Menu.new(user: current_user, context: self).site_menu
+  end
+
+  def menu_item_active?(item)
+    return false unless item.respond_to?(:path) && item.path.present?
+
+    paths = [item.path] + Array(item.try(:alternate_paths)).compact
+    paths.uniq.any? { |p| menu_request_matches_generated_path?(p) }
+  rescue StandardError
+    false
+  end
+
   def yn(boolean)
     boolean ? 'Y' : 'N'
   end
@@ -206,6 +219,20 @@ module ApplicationHelper
     return render('/common/action_menu', items: items) if items.many?
 
     render('/common/action_button', item: items.sole)
+  end
+
+  private
+
+  # current_page? treats query strings strictly; filtered match lists add extra params (sort, step, …).
+  # Treat a menu link as active when the path matches and generated query keys match request params.
+  def menu_request_matches_generated_path?(generated_path)
+    path_part, query_part = generated_path.to_s.split('?', 2)
+    return false unless request.path == path_part
+
+    return true if query_part.blank?
+
+    expected = Rack::Utils.parse_query(query_part)
+    expected.all? { |key, val| params[key].to_s == val.to_s }
   end
 
   # def pretty_check_box key, label, form, attrs

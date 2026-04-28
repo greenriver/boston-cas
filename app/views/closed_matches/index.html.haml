@@ -8,9 +8,9 @@
 - if show_match_status_facet_nav?
   %ul.nav.nav-tabs
     %li.nav-item{role: "presentation"}
-      = link_to 'Matches in Progress', active_matches_path, class: 'nav-link'
+      = link_to 'Matches in Progress', active_matches_path(current_route: @current_route_name), class: 'nav-link'
     %li.nav-item.active{role: "presentation"}
-      = link_to 'Closed Matches', closed_matches_path, class: 'nav-link'
+      = link_to 'Closed Matches', closed_matches_path(current_route: @current_route_name), class: 'nav-link'
 
 .row
   .col-sm-12
