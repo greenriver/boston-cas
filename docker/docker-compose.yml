@@ -5,7 +5,7 @@ x-app: &app
     target: ${TARGET:-dev-build}
     dockerfile: docker/app/Dockerfile
     args:
-      BUILD_TAG: 4.0.2-slim-bookworm
+      BUILD_TAG: 4.0.3-slim-bookworm
       NODE_MAJOR: "24"
       YARN_VERSION: "1.22.22"
       BUNDLER_VERSION: "2.7.1"
@@ -139,13 +139,11 @@ services:
     env_file:
       - .env.local
     command: >
-      sh -c '
-      if [ -n "$$CACHE_AUTH_TOKEN" ]; then
+      sh -c ' if [ -n "$$CACHE_AUTH_TOKEN" ]; then
         exec redis-server --requirepass "$$CACHE_AUTH_TOKEN";
       else
         exec redis-server;
-      fi
-      '
+      fi '
     volumes:
       - redis:/data
     ports:
