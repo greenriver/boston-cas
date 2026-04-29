@@ -2,6 +2,12 @@ input {
   min-height: 40px; // Match height of inputs to buttons
 }
 
+// Bootstrap 5 sets explicit sizes on .form-check-input (especially .form-switch).
+// A global min-height inflates switches and breaks the pill/knob appearance.
+input.form-check-input {
+  min-height: unset;
+}
+
 .container-fluid {
   padding-right: $container-padding;
   padding-left: $container-padding;

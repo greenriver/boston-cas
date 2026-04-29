@@ -4,13 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Admin
   class RolesController < ApplicationController
     before_action :require_can_edit_roles!
     before_action :set_role, only: [:edit, :update, :destroy]
-
-    require 'active_support'
-    require 'active_support/core_ext/string/inflections'
 
     def index
       @roles = role_scope.order(name: :asc)
@@ -44,7 +43,18 @@ module Admin
 
     def destroy
       @role.destroy
-      redirect_to({action: :index}, notice: 'Role deleted')
+      redirect_to({ action: :index }, notice: 'Role deleted')
+    end
+
+    def batch_update
+      Role.transaction do
+        batch_params.each do |id, permitted|
+          role_scope.find(id.to_i).update!(permitted)
+        end
+      end
+      redirect_to admin_roles_path, notice: 'Roles updated successfully.'
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+      redirect_to admin_roles_path, alert: "Update failed: #{e.message}"
     end
 
     private
@@ -61,9 +71,19 @@ module Admin
       params.require(:role).
         permit(
           :name,
-          Role.permissions
+          Role.permissions,
         )
     end
-  end
 
+    def batch_params
+      permitted_perms = Role.permissions.map(&:to_s)
+      result = {}
+      (params[:role] || {}).each do |role_id, role_attrs|
+        next unless role_attrs.is_a?(ActionController::Parameters)
+
+        result[role_id] = role_attrs.permit(*permitted_perms)
+      end
+      result
+    end
+  end
 end

@@ -1,0 +1,16 @@
+- id         ||= SecureRandom.hex(4)
+- title      ||= ''
+- heading_data ||= {}
+- wrapper_class ||= ''
+
+-# Matches HMIS Warehouse: bordered card, tab-style header when expanded, chevron swap (see modules/_role_manager.scss).
+.role-manager-panel.panel-group{ class: wrapper_class }
+  .role-manager-panel__card
+    %button.role-manager-panel__heading.btn.w-100.d-flex.align-items-center.text-start.collapsed{ type: 'button', data: heading_data.merge({ bs_toggle: 'collapse', bs_target: "##{id}" }), aria: { expanded: 'false', controls: id } }
+      %h4.role-manager-panel__title.mb-0.flex-grow-1= title
+      .role-manager-panel__chevrons.ms-auto.d-flex.align-items-center{ aria: { hidden: true } }
+        %i.icon-angle-right.role-manager-panel__icon--when-collapsed
+        %i.icon-angle-down.role-manager-panel__icon--when-expanded
+    .panel-collapse.collapse{ id: id, role: 'region' }
+      .role-manager-panel__body
+        = yield
