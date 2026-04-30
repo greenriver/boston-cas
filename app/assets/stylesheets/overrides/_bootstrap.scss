@@ -28,6 +28,7 @@ input.form-check-input {
   margin: 0;
   display: flex;
   align-items: center;
+
   [class^='icon'] {
     margin-right: space(4);
   }
@@ -55,6 +56,7 @@ input.form-check-input {
 .btn-light {
   border: 1px solid var(--brand-primary);
   color: var(--brand-primary);
+
   &:hover {
     background: var(--brand-primary);
     color: $white;
@@ -64,13 +66,16 @@ input.form-check-input {
 .btn-outline-danger:not(:hover) {
   background-color: white;
 }
+
 .checkbox,
 .radio {
   display: block;
+
   input {
     margin-right: space(2);
     min-height: auto;
   }
+
   label {
     display: flex;
     align-items: center;
@@ -92,14 +97,15 @@ input.form-check-input {
   border-bottom-right-radius: $input-border-radius;
   border-left: 0;
   background: var(--brand-primary-ll);
+
   &:hover {
     background: var(--brand-primary);
     color: $white;
   }
 }
 
-input.disabled ~ .input-group-addon,
-input:disabled ~ .input-group-addon {
+input.disabled~.input-group-addon,
+input:disabled~.input-group-addon {
   pointer-events: none;
   background: $input-disabled;
   color: $gray-050;
@@ -146,8 +152,7 @@ input:disabled ~ .input-group-addon {
   padding: $input-padding-y $input-padding-x;
 }
 
-[class^="col"]
-{
+[class^="col"] {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;

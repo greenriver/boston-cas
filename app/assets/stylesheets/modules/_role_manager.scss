@@ -25,13 +25,17 @@
 
   .edit-role-link {
     color: var(--gray-080, #555);
-    &:hover { text-decoration: underline; }
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
-  // Show/Hide Roles list (list-group SCSS not in vendor bundle — set spacing here)
+  /* Show/Hide Roles list (list-group SCSS not in vendor bundle — set spacing here) */
   .role-names .list-group-item {
     align-items: center;
     padding: space(2) space(3);
+    border-bottom: 1px solid white;
   }
 
   .role-wrapper {
@@ -138,8 +142,9 @@
   // Global `components/checkbox` applies checkbox-default / checkbox-checked label backgrounds ($white / green tint).
   // Those properties still cascade here because role_permission mixins only style ::before/::after — explicitly reset label surface so .administrative / panel body shows through.
   .c-checkbox {
-    input:checked ~ label,
-    input:not(:checked) ~ label {
+
+    input:checked~label,
+    input:not(:checked)~label {
       @include role_permission-checkbox-default(20px, false);
       padding-left: calc(#{rem(20px)} + #{space(2)});
       background: transparent;
@@ -157,11 +162,11 @@
       }
     }
 
-    input:not(:checked) ~ label {
+    input:not(:checked)~label {
       @include role_permission-checkbox-not-checked;
     }
 
-    input:checked ~ label {
+    input:checked~label {
       @include role_permission-checkbox-checked;
       background: transparent;
 
@@ -172,7 +177,7 @@
       }
     }
 
-    input.dirty:checked + label {
+    input.dirty:checked+label {
       @include role_permission-checkbox-checked-dirty;
       background: transparent;
 
@@ -183,7 +188,7 @@
       }
     }
 
-    input.dirty:not(:checked) + label {
+    input.dirty:not(:checked)+label {
       @include role_permission-checkbox-not-checked-dirty;
       background: transparent;
 
@@ -196,38 +201,10 @@
   }
 
   // The Stimulus controller uses `.hide` to show/hide columns and buttons
-  .hide { display: none !important; }
-
-  // Role color chips — 15 pastel colors matching Warehouse HSL palette (65% lightness, adjusted for contrast)
-  $role-colors: (
-    1:  (#c4b0a6, #333),
-    2:  (#d7b3a2, #333),
-    3:  (#b4b6a5, #333),
-    4:  (#bac18b, #333),
-    5:  (#c7afca, #333),
-    6:  (#bcb2ae, #333),
-    7:  (#d7a2d5, #333),
-    8:  (#82c99f, #333),
-    9:  (#afb6ca, #333),
-    10: (#bcafca, #333),
-    11: (#8bc19c, #333),
-    12: (#ceb18d, #333),
-    13: (#d6b3b8, #333),
-    14: (#caafbc, #333),
-    15: (#82c9bb, #333),
-  );
-
-  @each $n, $pair in $role-colors {
-    $bg: nth($pair, 1);
-    $fg: nth($pair, 2);
-
-    .role-color-#{$n} {
-      background-color: $bg;
-      color: $fg;
-
-      a, a:visited, a:hover {
-        color: $fg;
-      }
-    }
+  .hide {
+    display: none !important;
   }
+
+  // Role color chips — generated from HSL palette (65% lightness, WCAG AAA contrast)
+  @include many-colors('role-color');
 }

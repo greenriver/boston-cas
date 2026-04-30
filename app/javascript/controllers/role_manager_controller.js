@@ -20,21 +20,22 @@ const controller = class extends Controller {
     this.path = $(this.inputWrapperTarget).data('roleManagerFormValue')
     this.columnStateKey = 'roleManagerState' + this.path
     this.enabledColumns = []
+    this._syncingCategory = false
+    this.categoryState = {}
     this.enabledColumns = this.setInitialColumns()
     this.setInitialState()
-    this._syncingCategory = false
     this.bindCollapseSyncListeners()
   }
 
-  // Sync same-category panels across role columns by listening to Bootstrap's own
-  // collapse events rather than the click event, avoiding race conditions with
-  // Bootstrap's own data-bs-toggle handler.
+  // Sync same-category panels across role columns. Uses native addEventListener
+  // because Bootstrap 5 fires CustomEvents with type "show.bs.collapse" — jQuery's
+  // .on() strips the namespace and listens for "show", which never matches.
   bindCollapseSyncListeners() {
     this.permissionCategoryTargets.forEach((button) => {
-      const $panel = $(button).siblings('.panel-collapse')
-      if (!$panel.length) return
-      $panel.on('show.bs.collapse', () => this._syncCategory(button, 'show'))
-      $panel.on('hide.bs.collapse', () => this._syncCategory(button, 'hide'))
+      const panel = $(button).siblings('.panel-collapse')[0]
+      if (!panel) return
+      panel.addEventListener('show.bs.collapse', () => this._syncCategory(button, 'show'))
+      panel.addEventListener('hide.bs.collapse', () => this._syncCategory(button, 'hide'))
     })
   }
 
@@ -42,6 +43,7 @@ const controller = class extends Controller {
     if (this._syncingCategory) return
     this._syncingCategory = true
     const category = $(sourceButton).data('roleManagerCategoryValue')
+    this.categoryState[category] = action
     this.permissionCategoryTargets.forEach((button) => {
       if (button === sourceButton) return
       if ($(button).data('roleManagerCategoryValue') !== category) return
@@ -76,8 +78,27 @@ const controller = class extends Controller {
         $(column).removeClass('hide')
       }
     })
+    this._applyCategoryStateToColumn(target_role)
     const search_string = $(this.searchInputTarget).val().toLowerCase()
     this.showSearchPermissions(search_string, false)
+  }
+
+  _applyCategoryStateToColumn(target_role) {
+    const prev = this._syncingCategory
+    this._syncingCategory = true
+    this.permissionCategoryTargets.forEach((button) => {
+      if ($(button).closest('[data-role-manager-role-value]').data('roleManagerRoleValue') != target_role) return
+      const storedAction = this.categoryState[$(button).data('roleManagerCategoryValue')]
+      if (!storedAction) return
+      const $panel = $(button).siblings('.panel-collapse')
+      if (!$panel.length) return
+      if (storedAction === 'show' && !$panel.hasClass('show')) {
+        $panel.collapse('show')
+      } else if (storedAction === 'hide' && $panel.hasClass('show')) {
+        $panel.collapse('hide')
+      }
+    })
+    this._syncingCategory = prev
   }
 
   hideColumn(target_role) {

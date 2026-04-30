@@ -171,7 +171,7 @@ class Role < ApplicationRecord
   end
 
   def color_index
-    (name.bytes.sum % 15) + 1
+    (name.bytes.sum % 75) + 1
   end
 
   def self.permissions
