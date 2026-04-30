@@ -13,17 +13,17 @@
         .me-auto.my-auto.hide{ data: { 'role-manager': { target: 'changeButton' } } }
           = submit_tag 'Save Changes', class: 'btn btn-primary btn-sm'
     .d-flex
-      .w-25{ style: 'min-width: 350px;' }
-        .card-body.border-end.border-dark
+      .w-25.border-end.border-dark{ style: 'min-width: 350px;' }
+        .card-body
           %label.w-100{ for: 'search-roles' } Search
           %input#search-roles.form-control.j-table__search.w-100{ placeholder: 'Search permissions', data: { 'role-manager': { target: 'searchInput' }, action: 'keyup->role-manager#searchPermissions' } }
-        .administrative-permissions.d-flex.administrative.border-end.border-dark
+        .administrative-permissions.d-flex.administrative
           .form-check.form-switch
             %input.form-check-input{ type: :checkbox, role: :switch, id: 'administrative-permissions-toggle', checked: :checked, data: { 'role-manager': { target: 'administrativeFilter' }, action: 'change->role-manager#toggleAdmin' } }
           .ms-2.my-auto Administrative Permissions
           .ms-auto.my-auto
             %i.icon-lock
-        .list-group.list-group-flush.role-names.border-end.border-dark
+        .list-group.list-group-flush.role-names
           %h4.mx-auto.mt-2 Show/Hide Roles
           - @roles.each do |role|
             - role_color_class = "role-color-#{role.color_index}"

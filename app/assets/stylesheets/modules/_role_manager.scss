@@ -1,11 +1,18 @@
 .roles {
+  border: 1px solid $gray-040;
+
   .card-header {
     padding: 0;
+    border-bottom: 2px solid $gray-040;
 
     h2 {
       font-size: 18px;
       font-weight: bold;
     }
+  }
+
+  .card-body {
+    padding: space(3);
   }
 
   .user-role {
@@ -28,7 +35,7 @@
   }
 
   .role-wrapper {
-    overflow-x: auto;
+    overflow-x: scroll;
   }
 
   .role-name-header h3 {
@@ -55,8 +62,9 @@
 
   .role-manager-panel__card {
     background: $white;
-    border: 1px solid $gray-025;
-    border-radius: $border-radius-default;
+    border: 0;
+    border-bottom: 1px solid $gray-025;
+    border-radius: 0;
     overflow: hidden;
   }
 
