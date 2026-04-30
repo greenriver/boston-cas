@@ -108,7 +108,7 @@ class Role < ApplicationRecord
       # Matches — Match Management
       can_delete_matches: { description: 'Permanently delete matches', category: 'Matches', sub_category: 'Match Management', administrative: false },
       can_reopen_matches: { description: 'Reopen closed matches', category: 'Matches', sub_category: 'Match Management', administrative: false },
-      can_activate_matches: { description: 'Activate pending matches', category: 'Matches', sub_category: 'Match Management', administrative: false },
+      can_activate_matches: { description: 'Activate proposed matches', category: 'Matches', sub_category: 'Match Management', administrative: false },
 
       # Housing Inventory — Buildings & Units
       can_view_buildings: { description: 'View building records', category: 'Housing Inventory', sub_category: 'Buildings & Units', administrative: false },
