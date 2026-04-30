@@ -123,7 +123,7 @@ class Role < ApplicationRecord
       can_edit_programs: { description: 'Create and edit programs', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
       can_edit_assigned_programs: { description: 'Edit programs assigned to own agency', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
       can_view_vouchers: { description: 'View voucher and the voucher tab within a program', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
-      can_edit_vouchers: { description: 'Create and edit voucher records', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
+      can_edit_vouchers: { description: 'Create and edit voucher within programs', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
       can_edit_voucher_rules: { description: 'Edit voucher eligibility rules', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
 
       # Housing Inventory — Opportunities
