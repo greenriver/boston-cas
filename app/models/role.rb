@@ -115,7 +115,7 @@ class Role < ApplicationRecord
       can_edit_buildings: { description: 'Create and edit building records', category: 'Housing Inventory', sub_category: 'Buildings & Units', administrative: false },
       can_view_units: { description: 'View unit records', category: 'Housing Inventory', sub_category: 'Buildings & Units', administrative: false },
       can_edit_units: { description: 'Create and edit unit records', category: 'Housing Inventory', sub_category: 'Buildings & Units', administrative: false },
-      can_add_vacancies: { description: 'Mark units as vacant', category: 'Housing Inventory', sub_category: 'Buildings & Units', administrative: false },
+      can_add_vacancies: { description: 'Create vacancies, which result in vouchers ready to match', category: 'Housing Inventory', sub_category: 'Buildings & Units', administrative: false },
 
       # Housing Inventory — Programs & Vouchers
       can_view_programs: { description: 'View all programs', category: 'Housing Inventory', sub_category: 'Programs & Vouchers', administrative: false },
