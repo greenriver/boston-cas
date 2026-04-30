@@ -1,0 +1,34 @@
+- categories = permissions.keys.sort
+- categories.each do |category|
+  - category_data = permissions[category]
+  - category_value = category.gsub(' ', '-').gsub('&', '').downcase
+  - category_slug = "#{category_value}_#{role.id}"
+  = render layout: 'common/panel_collapse', locals: { id: category_slug, title: category, heading_data: { 'role-manager': { target: 'permissionCategory', 'category-value': category_value } } } do
+    - sub_categories = category_data.keys.sort_by { |k| k.to_s }
+    - sub_categories.each do |sub_category|
+      .sub-category-wrapper{ data: { 'role-manager': { target: 'subCategoryWrapper' } } }
+        - if sub_category.present?
+          %h4.sub-category-title= sub_category
+        - perms = category_data[sub_category]
+        - perms.each do |perm|
+          - perm_name = perm[:name]
+          - label = perm_name.to_s.humanize
+          - is_admin = perm[:administrative]
+          - admin_data = is_admin ? { 'role-manager': { target: 'administrativeInput' } } : {}
+          .form-check.mb-3{ class: (is_admin ? 'administrative' : nil), data: admin_data }
+            - if is_admin
+              .mb-1
+                %small
+                  %i.icon-lock.icon-sm
+                  Administrative Permission
+            - field_id   = "#{perm_name}_#{role.id}"
+            - field_name = "role[#{role.id}][#{perm_name}]"
+            - checked    = role.send(perm_name) ? 'checked' : nil
+            %input{ name: field_name, type: 'hidden', value: 0 }
+            .c-checkbox.d-flex
+              %input{ id: field_id, name: field_name, type: 'checkbox', value: 1, checked: checked, data: { 'role-manager': { target: 'individualPermission', 'role-value': role.id, 'permission-value': perm_name }, action: 'role-manager#updateState' } }
+              %label.w-100{ for: field_id }= label
+            - if perm[:description].present?
+              .ms-4
+                %small.form-text= perm[:description]
+            .input-status{ style: 'height: 2em' }

@@ -1,0 +1,47 @@
+.card.roles{ data: { controller: 'role-manager' } }
+  = form_tag batch_update_admin_roles_path, method: :patch do
+    .card-header
+      .d-flex
+        .user-role.w-25.d-flex.border-end.border-dark{ style: 'min-width: 350px;' }
+          %h2 User Roles
+          .ms-auto
+            = link_to new_admin_role_path, class: 'btn btn-secondary btn-sm' do
+              %span.icon-plus
+              Add Role
+        %h2.permission-header.me-4 Permissions
+        .form-change-count.me-4.my-auto{ data: { 'role-manager': { target: 'changeCount' } } }
+        .me-auto.my-auto.hide{ data: { 'role-manager': { target: 'changeButton' } } }
+          = submit_tag 'Save Changes', class: 'btn btn-primary btn-sm'
+    .d-flex
+      .w-25.border-end.border-dark{ style: 'min-width: 350px;' }
+        .card-body
+          %label.w-100{ for: 'search-roles' } Search
+          %input#search-roles.form-control.j-table__search.w-100{ placeholder: 'Search permissions', data: { 'role-manager': { target: 'searchInput' }, action: 'keyup->role-manager#searchPermissions' } }
+        .administrative-permissions.d-flex.administrative
+          .form-check.form-switch
+            %input.form-check-input{ type: :checkbox, role: :switch, id: 'administrative-permissions-toggle', checked: :checked, data: { 'role-manager': { target: 'administrativeFilter' }, action: 'change->role-manager#toggleAdmin' } }
+          .ms-2.my-auto Administrative Permissions
+          .ms-auto.my-auto
+            %i.icon-lock
+        .list-group.list-group-flush.role-names
+          %h4.mx-auto.mt-2.ps-4 Show/Hide Roles
+          - @roles.each.with_index do |role, i|
+            - role_color_class = "role-color-#{i + 1}"
+            %li.list-group-item.d-flex{ class: role_color_class }
+              .form-check.form-switch
+                %input.form-check-input{ type: :checkbox, role: :switch, id: "role-toggle-#{role.id}", data: { 'role-manager': { target: 'roleToggle', 'role-value': role.id }, action: 'change->role-manager#toggleColumn' } }
+              .ms-4
+                = link_to role.name, edit_admin_role_path(role), target: :_blank, class: 'edit-role-link'
+      .role-wrapper.w-75{ data: { 'role-manager': { target: 'inputWrapper', 'form-value': batch_update_admin_roles_path } } }
+        - permissions = Role.permissions_by_group
+        .d-flex
+          - @roles.each.with_index do |role, i|
+            - role_color_class = "role-color-#{i + 1}"
+            .role-column.hide{ data: { 'role-manager': { target: 'roleColumn', 'role-value': role.id } } }
+              .role-name-header.role-column.d-flex.hide{ class: role_color_class, data: { 'role-manager': { target: 'roleColumn', 'role-value': role.id } } }
+                %h3= role.name
+              = render 'admin/roles/role_column', role: role, permissions: permissions
+    .d-flex.w-100.p-2
+      .form-change-count.me-4.my-auto.ms-auto{ data: { 'role-manager': { target: 'changeCount' } } }
+      .me-2.my-auto.hide{ data: { 'role-manager': { target: 'changeButton' } } }
+        = submit_tag 'Save Changes', class: 'btn btn-primary btn-sm'
