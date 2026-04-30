@@ -97,7 +97,7 @@ class Role < ApplicationRecord
       can_participate_in_matches: { description: 'Participate in the match process as a contact', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_view_all_matches: { description: 'View all matches in the system', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_view_own_closed_matches: { description: 'View own closed matches', category: 'Matches', sub_category: 'Participation', administrative: false },
-      can_see_alternate_matches: { description: 'View alternate match candidates', category: 'Matches', sub_category: 'Participation', administrative: false },
+      can_see_alternate_matches: { description: 'View alternate match candidates for own matches', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_see_all_alternate_matches: { description: 'View all alternate match candidates', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_edit_match_contacts: { description: 'Edit contacts on a match', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_approve_matches: { description: 'Approve matches at any step', category: 'Matches', sub_category: 'Participation', administrative: false },
