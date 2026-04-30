@@ -3,7 +3,7 @@
   - category_data = permissions[category]
   - category_value = category.gsub(' ', '-').gsub('&', '').downcase
   - category_slug = "#{category_value}_#{role.id}"
-  = render layout: 'common/panel_collapse', locals: { id: category_slug, title: category, heading_data: { action: 'role-manager#toggleSection', 'role-manager': { target: 'permissionCategory', 'category-value': category_value } } } do
+  = render layout: 'common/panel_collapse', locals: { id: category_slug, title: category, heading_data: { 'role-manager': { target: 'permissionCategory', 'category-value': category_value } } } do
     - sub_categories = category_data.keys.sort_by { |k| k.to_s }
     - sub_categories.each do |sub_category|
       .sub-category-wrapper{ data: { 'role-manager': { target: 'subCategoryWrapper' } } }

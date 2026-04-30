@@ -22,21 +22,38 @@ const controller = class extends Controller {
     this.enabledColumns = []
     this.enabledColumns = this.setInitialColumns()
     this.setInitialState()
+    this._syncingCategory = false
+    this.bindCollapseSyncListeners()
   }
 
-  toggleSection(e) {
-    const target_category = $(e.currentTarget).data('roleManagerCategoryValue')
-    this.permissionCategoryTargets.forEach((section) => {
-      const section_category = $(section).data('roleManagerCategoryValue')
-      const current_panel = $(e.currentTarget).siblings('.panel-collapse')
-      if (section != e.currentTarget && section_category == target_category) {
-        if ($(current_panel).hasClass('show')) {
-          $(section).siblings('.panel-collapse').collapse('hide')
-        } else {
-          $(section).siblings('.panel-collapse').collapse('show')
-        }
+  // Sync same-category panels across role columns by listening to Bootstrap's own
+  // collapse events rather than the click event, avoiding race conditions with
+  // Bootstrap's own data-bs-toggle handler.
+  bindCollapseSyncListeners() {
+    this.permissionCategoryTargets.forEach((button) => {
+      const $panel = $(button).siblings('.panel-collapse')
+      if (!$panel.length) return
+      $panel.on('show.bs.collapse', () => this._syncCategory(button, 'show'))
+      $panel.on('hide.bs.collapse', () => this._syncCategory(button, 'hide'))
+    })
+  }
+
+  _syncCategory(sourceButton, action) {
+    if (this._syncingCategory) return
+    this._syncingCategory = true
+    const category = $(sourceButton).data('roleManagerCategoryValue')
+    this.permissionCategoryTargets.forEach((button) => {
+      if (button === sourceButton) return
+      if ($(button).data('roleManagerCategoryValue') !== category) return
+      const $panel = $(button).siblings('.panel-collapse')
+      if (!$panel.length) return
+      if (action === 'show' && !$panel.hasClass('show')) {
+        $panel.collapse('show')
+      } else if (action === 'hide' && $panel.hasClass('show')) {
+        $panel.collapse('hide')
       }
     })
+    this._syncingCategory = false
   }
 
   toggleColumn(e) {
