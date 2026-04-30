@@ -101,7 +101,7 @@ class Role < ApplicationRecord
       can_see_all_alternate_matches: { description: 'View all alternate match candidates', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_edit_match_contacts: { description: 'Edit contacts on a match', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_approve_matches: { description: 'Approve matches at final step', category: 'Matches', sub_category: 'Participation', administrative: false },
-      can_reject_matches: { description: 'Reject matches at any step', category: 'Matches', sub_category: 'Participation', administrative: false },
+      can_reject_matches: { description: 'See and use the cancel match functionality', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_act_on_behalf_of_match_contacts: { description: 'Act on behalf of another match contact', category: 'Matches', sub_category: 'Participation', administrative: false },
       can_reissue_notifications: { description: 'Resend match notifications', category: 'Matches', sub_category: 'Participation', administrative: false },
 
