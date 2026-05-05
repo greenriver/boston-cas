@@ -7,8 +7,14 @@
     "billboard.js": "^3.18.0",
     "d3": "^7.6.1"
   },
+  "devDependencies": {
+    "yarn-deduplicate": "^6.0.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/greenriver/boston-cas.git"
+  },
+  "scripts": {
+    "dedup": "yarn-deduplicate -s fewer yarn.lock"
   }
 }

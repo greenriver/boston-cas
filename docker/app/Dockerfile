@@ -34,7 +34,7 @@ ARG GROUP_ID=10000
 ARG BUNDLER_VERSION=2.7.1
 
 LABEL "app"=open-path-cas
-LABEL "ruby-version"=3.4.5
+LABEL "ruby-version"=3.4.9
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
@@ -69,7 +69,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends curl ca-certificates lsb-release gnupg \
   && sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
   && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg \
-  && curl -fsSL https://deb.nodesource.com/setup_18.x | bash -s -- -y \
+  && curl -fsSL https://deb.nodesource.com/setup_24.x | bash -s -- -y \
   && apt-get update \
   && apt-get remove -y nodejs \
   && rm -rf /var/lib/apt/lists/*
@@ -118,6 +118,7 @@ RUN apt-get update && apt-get upgrade -y \
   poppler-utils \
   postgresql-client \
   procps \
+  pinentry-tty \
   shared-mime-info \
   software-properties-common \
   tar \
@@ -130,7 +131,7 @@ RUN apt-get update && apt-get upgrade -y \
     else \
       ln -s /usr/lib/x86_64-linux-gnu/libproj.so /usr/lib/libproj.so.20; \
     fi \
-  && npm install -g yarn@1.22.19
+  && npm install -g yarn@1.22.22
 
 WORKDIR /app
 
@@ -202,3 +203,12 @@ RUN rm -rf tmp/* \
   && RAILS_ENV=production ./bin/rake assets:precompile \
   && rm -rf tmp/* \
   && mkdir tmp/pids
+
+
+# Trivy flags CVEs in npm's bundled node_modules (/usr/lib/node_modules/npm/node_modules),
+# which are unreachable at runtime, so we drop the whole package managers here.
+USER root
+RUN rm -rf /usr/lib/node_modules/npm /usr/lib/node_modules/yarn \
+  && rm -f /usr/bin/npm /usr/bin/npx /usr/bin/yarn /usr/bin/yarnpkg
+
+USER ${USER_ID}
