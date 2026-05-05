@@ -1,0 +1,40 @@
+- title = "Theme"
+- content_for :title, title
+
+= render 'menus/admin_tabs'
+
+%h1= content_for :title
+
+= simple_form_for @theme, url: admin_themes_path, html: { multipart: true } do |f|
+  .row
+    .col-sm-8
+      %h3 Logo
+      - if @theme.logo.attached?
+        .mb-2
+          = image_tag theme_assets_logo_path, style: 'max-height: 80px'
+      = f.input :logo, as: :file, label: 'Logo'
+
+      %h3 Favicons
+      - if @theme.favicon_32.attached?
+        .mb-2
+          = image_tag theme_assets_favicon_32_path, style: 'max-height: 32px'
+      = f.input :favicon_32, as: :file, label: 'Favicon 32x32 (PNG)'
+
+      - if @theme.favicon_16.attached?
+        .mb-2
+          = image_tag theme_assets_favicon_16_path, style: 'max-height: 16px'
+      = f.input :favicon_16, as: :file, label: 'Favicon 16x16 (PNG)'
+
+      - if @theme.favicon_ico.attached?
+        .mb-2
+          = image_tag theme_assets_favicon_ico_path, style: 'max-height: 32px'
+      = f.input :favicon_ico, as: :file, label: 'Favicon (.ico)'
+
+      %h3 Homepage
+      = f.input :homepage_content, as: :text, input_html: { rows: 15 }, hint: 'HTML content displayed on the home page. Leave blank to use the default text.'
+
+      %h3 Custom CSS
+      = f.input :css, as: :text, input_html: { rows: 10 }, hint: 'Leave blank — per-client CSS will be wired up after the Bootstrap 5 migration.'
+  .row
+    .col-sm-6
+      = f.submit 'Save Theme', class: 'btn btn-success'

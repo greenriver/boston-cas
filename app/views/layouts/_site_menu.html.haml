@@ -93,7 +93,7 @@
       = link_to edit_account_path, class: 'o-menu__link' do
         Edit Account
     %li.o-menu__item
-      = link_to destroy_user_session_path, :method => :delete, class: 'o-menu__link' do
+      = link_to destroy_user_session_path, method: :delete, class: 'o-menu__link' do
         %span.mr-2 Sign Out
         %i{class: "icon-exit"}
 
