@@ -1,7 +1,7 @@
 namespace :test do
-  desc 'Send a test email via SES. Usage: rake mail:test_ses[your@email.com]'
+  desc 'Send a test email via SES. Usage: rake test:test_ses[your@email.com]'
   task :test_ses, [:to] => :environment do |_t, args|
-    raise 'Usage: rake mail:test_ses[your@email.com]' if args[:to].blank?
+    raise 'Usage: rake test:test_ses[your@email.com]' if args[:to].blank?
 
     ActionMailer::Base.delivery_method = :ses
     TestMailer.ping(args[:to]).deliver_now
