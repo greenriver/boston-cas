@@ -67,8 +67,10 @@ RSpec.describe Theme, type: :model do
   end
 
   describe '#set_theme_default_favicons!' do
-    it 'does nothing when the icons directory files do not exist' do
+    it 'does nothing when neither the theme icons nor fallback files exist' do
       theme = create(:theme)
+      allow(File).to receive(:exist?).and_call_original
+      allow(File).to receive(:exist?).with(a_string_including('favicon')).and_return(false)
       theme.set_theme_default_favicons!
       expect(theme.favicon_32.attached?).to be false
       expect(theme.favicon_16.attached?).to be false
@@ -77,12 +79,12 @@ RSpec.describe Theme, type: :model do
 
     it 'attaches a favicon when the file exists on disk' do
       theme = create(:theme)
-      icons_dir = Rails.root.join('app', 'assets', 'images', 'theme', 'icons')
+      favicon_path = Rails.root.join('app', 'assets', 'images', 'theme', 'icons', 'favicon-32x32.png').to_s
       allow(File).to receive(:exist?).and_call_original
-      allow(File).to receive(:exist?).with(icons_dir.join('favicon-32x32.png').to_s).and_return(true)
-      allow(File).to receive(:open).and_call_original
+      allow(File).to receive(:exist?).with(favicon_path).and_return(true)
       fake_file = StringIO.new('fake png data')
-      allow(File).to receive(:open).with(icons_dir.join('favicon-32x32.png')).and_return(fake_file)
+      allow(File).to receive(:open).and_call_original
+      allow(File).to receive(:open).with(favicon_path).and_return(fake_file)
       theme.set_theme_default_favicons!
       expect(theme.favicon_32.attached?).to be true
     end

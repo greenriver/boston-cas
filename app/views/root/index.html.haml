@@ -1,6 +1,6 @@
 - theme_content = Theme.homepage_content
 - if theme_content.present?
-  = theme_content.html_safe
+  = sanitize(theme_content)
 - elsif lookup_context.exists?('homepage_content', ['root'], true)
   = render 'root/homepage_content'
 - else
