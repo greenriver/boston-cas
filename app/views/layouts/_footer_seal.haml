@@ -1,3 +1,4 @@
-- if ENV['LOGO'].present?
+- theme_logo = Theme.logo
+- if theme_logo.attached?
   %span.seal-image
-    = image_tag "theme/logo/#{ENV['LOGO']}", class: :seal
+    = image_tag theme_assets_logo_path, class: :seal
