@@ -29,7 +29,9 @@ class Menu::Menu
       end
       menu << admin_dashboard_section
       menu << account_section
-    end
+      menu << help_section
+      menu << style_guide_section
+    end.compact
   end
 
   private def h
@@ -301,9 +303,81 @@ class Menu::Menu
         title: Translation.translate('Sign Out'),
         icon: 'icon-exit',
         visible: ->(_u) { true },
-        data: { method: :delete },
+        http_method: :delete,
       ),
     )
     menu
+  end
+
+  private def help_section
+    if h.can_edit_help?
+      menu = Menu::Item.new(
+        user: user,
+        title: Translation.translate('Help'),
+        id: 'help',
+        icon: 'icon-question',
+        match_pattern_terminator: '.*',
+      )
+      menu.add_child(
+        Menu::Item.new(
+          user: user,
+          path: help_index_path,
+          title: Translation.translate('Help Documents'),
+          visible: ->(_u) { true },
+        ),
+      )
+      if h.help_for_path
+        menu.add_child(
+          Menu::Item.new(
+            user: user,
+            path: edit_help_path(h.help_for_path),
+            title: Translation.translate('Edit Help'),
+            data: { loads_in_pjax_modal: true },
+            visible: ->(_u) { true },
+          ),
+        )
+        menu.add_child(help_link_item)
+      else
+        menu.add_child(
+          Menu::Item.new(
+            user: user,
+            path: new_help_path(controller_path: h.controller_path, action_name: h.action_name),
+            title: Translation.translate('Add Help Here'),
+            data: { loads_in_pjax_modal: true },
+            visible: ->(_u) { true },
+          ),
+        )
+      end
+      menu
+    elsif h.help_for_path
+      help_link_item(id: 'help', icon: 'icon-question')
+    end
+  end
+
+  private def help_link_item(id: nil, icon: nil)
+    path = h.help_for_path.external? ? h.help_for_path.external_url : help_path(h.help_for_path)
+    Menu::Item.new(
+      user: user,
+      path: path,
+      title: Translation.translate('Help'),
+      id: id,
+      icon: icon,
+      target: (h.help_for_path.external? ? '_blank' : nil),
+      data: (h.help_for_path.external? ? nil : { loads_in_pjax_modal: true }),
+      visible: ->(_u) { true },
+    )
+  end
+
+  private def style_guide_section
+    return unless Rails.env.development?
+
+    Menu::Item.new(
+      user: user,
+      path: style_guides_path,
+      title: Translation.translate('Style Guide'),
+      id: 'style-guide',
+      icon: 'icon-pencil',
+      visible: ->(_u) { true },
+    )
   end
 end

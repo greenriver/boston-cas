@@ -182,15 +182,6 @@
   outline: none;
 }
 
-// Environment-specific overrides (development gets purple header, staging gets dark gray)
-<% unless Rails.env.production? %>
-<% if Rails.env.staging? %>
-@import '_custom/env/staging';
-<% else %>
-@import '_custom/env/development';
-<% end %>
-<% end %>
-
 .popover ol {
   padding-left: 0 !important;
   -webkit-padding-start: 10px !important;

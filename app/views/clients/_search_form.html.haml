@@ -17,5 +17,5 @@
       = hidden_field_tag term, params[term]
 
   .input-group
-    = f.input :q, placeholder: @prompt, class: 'form-control', autofocus: true, input_html: { value: @search_string }, label: false
+    = f.input_field :q, placeholder: @prompt, class: 'form-control', autofocus: true, value: @search_string
     %button.btn.btn-primary{type: :submit} Search

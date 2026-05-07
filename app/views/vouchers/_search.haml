@@ -3,5 +3,5 @@
     .col-md-6
       = simple_form_for :search_form, url: url_for, method: :get, class: :jSearch do |f|
         .input-group
-          = f.input :q, placeholder: 'Client name...', class: 'form-control', autofocus: true, input_html: { value: @search_string }, label: false
+          = f.input_field :q, placeholder: 'Client name...', class: 'form-control', autofocus: true, value: @search_string
           %button.btn.btn-primary{type: :submit} Search
