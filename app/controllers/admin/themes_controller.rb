@@ -34,7 +34,7 @@ module Admin
     end
 
     private def set_theme
-      @theme = Theme.active_theme
+      @theme = Theme.where(client: ENV['CLIENT']).first_or_create
     end
   end
 end

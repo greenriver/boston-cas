@@ -4,6 +4,8 @@
 = render 'menus/admin_tabs'
 
 %h1= content_for :title
+%p.alert.alert-info
+  Please note, it may take up to 1 minute for theme changes to be applied.
 
 = simple_form_for @theme, url: admin_themes_path, html: { multipart: true } do |f|
   .row
