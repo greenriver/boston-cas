@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright 2016 - 2025 Green River Data Analysis, LLC
 #
@@ -6,23 +8,22 @@
 
 # email message stowed in database
 class Message < ApplicationRecord
-
-  SCHEDULES = %w(
-    immediate
-    daily
-  )
+  SCHEDULES = [
+    'immediate',
+    'daily',
+  ].freeze
 
   belongs_to :contact
   has_one :user, through: :contact
-  scope :sent, -> (time=DateTime.current) { where arel_table[:sent_at].lteq time }
+  scope :sent, ->(time = DateTime.current) { where arel_table[:sent_at].lteq time }
   scope :unsent, -> { where sent_at: nil }
-  scope :seen, -> (time=DateTime.current) { where arel_table[:seen_at].lteq time }
+  scope :seen, ->(time = DateTime.current) { where arel_table[:seen_at].lteq time }
   scope :unseen, -> { where seen_at: nil }
-  scope :before, -> (time) { where arel_table[:created_at].lt time }
+  scope :before, ->(time) { where arel_table[:created_at].lt time }
 
   # support presentation of html or text messages in html or text format
   def sanitized_body(render_as:)
-    raise ArgumentError, "format not supported: \"#{render_as}\"" unless render_as.in?([:text, :html])
+    raise ArgumentError.new("format not supported: \"#{render_as}\"") unless render_as.in?([:text, :html])
 
     html ? sanitized_html(body, format: render_as) : sanitized_text(body, format: render_as)
   end
@@ -30,7 +31,6 @@ class Message < ApplicationRecord
   def opened?
     seen_at.present?
   end
-
 
   # called on text messages only
   private def sanitized_text(raw, format:)
