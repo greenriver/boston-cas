@@ -139,8 +139,10 @@ WORKDIR /app
 # erb: CVE-2026-41316
 # gem cleanup removes old gemspecs that vulnerability scanners (e.g. Trivy) would otherwise flag
 RUN gem update --system \
-  && gem update rexml rack erb \
-  && gem cleanup rexml rack erb \
+  && gem update rexml rack erb net-imap \
+  && gem cleanup rexml rack erb net-imap \
+  && find /usr/local/lib/ruby/gems -path "*/specifications/default/erb-*.gemspec" -delete \
+  && find /usr/local/lib/ruby/gems -path "*/specifications/default/net-imap-*.gemspec" -delete \
   && gem install bundler --version=${BUNDLER_VERSION} \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \

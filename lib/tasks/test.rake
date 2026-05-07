@@ -1,4 +1,13 @@
 namespace :test do
+  desc 'Send a test email via SES. Usage: rake test:test_ses[your@email.com]'
+  task :test_ses, [:to] => :environment do |_t, args|
+    raise 'Usage: rake test:test_ses[your@email.com]' if args[:to].blank?
+
+    ActionMailer::Base.delivery_method = :ses
+    TestMailer.ping(args[:to]).deliver_now
+    puts "Sent via SES to #{args[:to]}"
+  end
+
   desc 'Test generating an Exception'
   task :exception, [] => [:environment] do |_t, _args|
     raise StandardError.new('An Exception has been raised from within a Rake task.')
@@ -23,7 +32,7 @@ namespace :test do
     Sentry.capture_exception_with_info(
       StandardError.new("Testing Sentry.capture_exception_with_info from #{Rails.env} for boston-cas"),
       'Testing custom error message',
-      { with: 'data' }
+      { with: 'data' },
     )
     sleep 1
 
