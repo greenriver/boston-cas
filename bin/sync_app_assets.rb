@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# frozen_string_literal: true
+
 # awscli adds too much weight
 # api doesn't have s3 sync
 # So, this script exists
