@@ -3,10 +3,5 @@
     %h2#site-menu-label.sr-only Site Menu
     = render 'menus/site_menu'
 
-  - if help_link || can_edit_help?
-    = render 'menus/help'
-  - if Rails.env.development?
-    = render 'menus/style_guide'
-
   %a.js-back-to-top.o-menu__to-top.o-menu__link{ href: '#' }
     Back to Top

@@ -86,6 +86,9 @@ app/assets/images/theme/logo
 app/assets/images/theme/icons
 app/views/root/_homepage_content.haml
 
+# Ignore active storage files
+storage/
+
 # Ignore docker certificates
 docker/nginx-proxy/certs
 prometheus-metrics/**
