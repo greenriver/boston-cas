@@ -265,40 +265,6 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
-      "fingerprint": "50b6526d2855834552716cadcb7d87a71e755a9982a18a0f4a570048d2765096",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/messages/show.html.haml",
-      "line": 7,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "simple_format(current_user.messages.find(params.require(:id)).body_html).gsub(URI.regexp([\"http\", \"https\"]), \"<a href=\\\"\\\\0\\\">\\\\0</a>\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "MessagesController",
-          "method": "show",
-          "line": 36,
-          "file": "app/controllers/messages_controller.rb",
-          "rendered": {
-            "name": "messages/show",
-            "file": "app/views/messages/show.html.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "messages/show"
-      },
-      "user_input": "current_user.messages.find(params.require(:id))",
-      "confidence": "Weak",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
       "fingerprint": "56d6c57b58aa10d073020b82321767564a0ae7ff153f3db75a178cd675506d52",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
