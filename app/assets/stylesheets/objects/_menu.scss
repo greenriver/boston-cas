@@ -93,6 +93,18 @@
   text-decoration: underline;
 }
 
+.site-menu button.nav-link {
+  background: none;
+  border: none;
+  color: $white;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover .link-text {
+    text-decoration: underline;
+  }
+}
+
 .site-menu .menu-icon {
   color: $menu-section-accent;
 }

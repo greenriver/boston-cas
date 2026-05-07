@@ -23,9 +23,10 @@ RSpec.describe Admin::ThemesController, type: :controller do
       expect(response).to render_template(:index)
     end
 
-    it 'assigns the active theme' do
+    it 'assigns the theme directly from the database, bypassing the cache' do
+      theme = Theme.where(client: ENV['CLIENT']).first_or_create
       get :index
-      expect(assigns(:theme)).to eq(Theme.active_theme)
+      expect(assigns(:theme)).to eq(theme)
     end
   end
 

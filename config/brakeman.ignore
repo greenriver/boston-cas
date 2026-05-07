@@ -63,7 +63,7 @@
       "check_name": "MassAssignment",
       "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
       "file": "app/helpers/application_helper.rb",
-      "line": 94,
+      "line": 107,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.permit!",
       "render_path": null,
@@ -86,7 +86,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 120,
+      "line": 119,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep refs/heads/#{`git rev-parse --abbrev-ref HEAD`.chomp}$`",
       "render_path": null,
@@ -189,7 +189,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 121,
+      "line": 120,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -212,7 +212,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/layouts/application.html.haml",
-      "line": 32,
+      "line": 42,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Translation.translate(\"Boston Coordinated Access\").split(\" \").join(\"<br />\")",
       "render_path": [
@@ -336,7 +336,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 163,
+      "line": 162,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`echo #{revision} > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -382,7 +382,7 @@
       "check_name": "MassAssignment",
       "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
       "file": "app/helpers/application_helper.rb",
-      "line": 73,
+      "line": 86,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.permit!",
       "render_path": null,
@@ -438,7 +438,7 @@
       "check_name": "VerbConfusion",
       "message": "Potential HTTP verb confusion. `HEAD` is routed like `GET` but `request.get?` will return `false`",
       "file": "app/controllers/application_controller.rb",
-      "line": 94,
+      "line": 93,
       "link": "https://brakemanscanner.org/docs/warning_types/http_verb_confusion/",
       "code": "return unless request.get?",
       "render_path": null,
@@ -495,6 +495,40 @@
       "confidence": "Medium",
       "cwe_id": [
         470
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "8bd8c4fe34cb387bce2432c22e1ac042b1c1d682c310bf66320d17e169909d11",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/layouts/application.html.haml",
+      "line": 29,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Theme.css_file_contents",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "AccountEmailsController",
+          "method": "update",
+          "line": 28,
+          "file": "app/controllers/account_emails_controller.rb",
+          "rendered": {
+            "name": "layouts/application",
+            "file": "app/views/layouts/application.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "layouts/application"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
