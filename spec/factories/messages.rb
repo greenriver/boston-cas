@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   # puts Message.new.attributes
   factory :message do
     from    { ['macbeth@scotland.gov.uk'] }
     subject { 'futility' }
+    association :contact
     body do
       <<-TEXT.strip_heredoc
         Tomorrow and tomorrow and tomorrow
