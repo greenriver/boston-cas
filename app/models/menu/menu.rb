@@ -303,7 +303,7 @@ class Menu::Menu
         title: Translation.translate('Sign Out'),
         icon: 'icon-exit',
         visible: ->(_u) { true },
-        data: { method: :delete },
+        http_method: :delete,
       ),
     )
     menu

@@ -57,12 +57,23 @@
                                   - if grand_child.trailing_icon
                                     %i.icon{ class: grand_child.trailing_icon }
                   - else
-                    - ch_opts = child.options.merge(class: [%w(nav-link d-flex align-items-center), ('active' if menu_item_active?(child))].flatten.compact.join(' '))
-                    %a{ **ch_opts }
-                      - if child.icon?
-                        .icon-wrapper
-                          %i.menu-icon{ class: child.icon }
-                      .link-text
-                        = child.title
-                        - if child.trailing_icon
-                          %i.icon.ml-2{ class: child.trailing_icon }
+                    - ch_class = [%w(nav-link d-flex align-items-center), ('active' if menu_item_active?(child))].flatten.compact.join(' ')
+                    - if child.http_method.present?
+                      = button_to(child.path, method: child.http_method, class: "#{ch_class} w-100", form: { class: 'm-0 p-0 w-100' }) do
+                        - if child.icon?
+                          .icon-wrapper
+                            %i.menu-icon{ class: child.icon }
+                        .link-text
+                          = child.title
+                          - if child.trailing_icon
+                            %i.icon.ml-2{ class: child.trailing_icon }
+                    - else
+                      - ch_opts = child.options.merge(class: ch_class)
+                      %a{ **ch_opts }
+                        - if child.icon?
+                          .icon-wrapper
+                            %i.menu-icon{ class: child.icon }
+                        .link-text
+                          = child.title
+                          - if child.trailing_icon
+                            %i.icon.ml-2{ class: child.trailing_icon }

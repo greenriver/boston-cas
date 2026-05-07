@@ -34,7 +34,7 @@
       = f.input :homepage_content, as: :text, input_html: { rows: 15 }, hint: 'HTML content displayed on the home page. Leave blank to use the default text.'
 
       %h3 Custom CSS
-      = f.input :css, as: :text, input_html: { rows: 10 }, hint: 'Leave blank — per-client CSS will be wired up after the Bootstrap 5 migration.'
+      = f.input :css, as: :text, input_html: { rows: 10 }, hint: 'Must be valid CSS.', label: 'CSS'
   .row
     .col-sm-6
       = f.submit 'Save Theme', class: 'btn btn-success'

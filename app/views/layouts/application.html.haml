@@ -22,6 +22,11 @@
       - Dir.glob('app/assets/stylesheets/theme/styles/*.scss') do |stylesheet|
         - theme_styles = "theme/styles/#{File.basename(stylesheet, '.scss')}"
         = stylesheet_link_tag(theme_styles, media: 'all')
+    - theme_css = Theme.css_file_contents
+    - if theme_css.present?
+      %style{ type: 'text/css' }
+        :plain
+          #{theme_css}
 
     = render 'layouts/favicon'
     = csrf_meta_tags
