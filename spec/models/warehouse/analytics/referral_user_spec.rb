@@ -8,7 +8,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Warehouse::Analytics::ReferralUser, type: :model do
+RSpec.describe Warehouse::Analytics::ReferralUser do
   describe '.sync!' do
     let(:match) { instance_double(ClientOpportunityMatch, id: 42) }
     let(:match_admin) do
@@ -22,13 +22,15 @@ RSpec.describe Warehouse::Analytics::ReferralUser, type: :model do
     let(:hmis_match_contacts_scope) { double('hmis match contacts scope') }
     let(:active_users) { double('active users') }
     let(:match_admins) { double('match admins') }
+    let(:warehouse_connection) { instance_double('Connection', execute: true) }
 
     before do
-      allow(described_class).to receive(:transaction).and_yield
-      allow(described_class).to receive(:connection).and_return(
-        instance_double('Connection', execute: true),
-      )
+      allow(described_class).to receive(:connection).and_return(warehouse_connection)
       allow(described_class).to receive(:quoted_table_name).and_return('cas_analytics_referral_users')
+      allow(described_class).to receive(:transaction).and_yield
+      allow(described_class).to receive(:new) do |**attrs|
+        Struct.new(*attrs.keys, keyword_init: true).new(**attrs)
+      end
       allow(described_class).to receive(:import!) do |batch|
         imported_batches << batch
       end
