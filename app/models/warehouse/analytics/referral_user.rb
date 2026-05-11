@@ -28,7 +28,7 @@ class Warehouse::Analytics::ReferralUser < ::Warehouse::Base
         import!(batch)
       end
 
-      next_id = maximum(:id) + 1
+      next_id = (maximum(:id) || 0) + 1
       # Additionally, anyone who has the ability to user_can_reject_matches? or user_can_approve_matches?
       # (matches access for MatchDecisions::Base#admin_only?)
       match_admins = User.active.match_admins.joins(:contact).preload(:contact).to_a
