@@ -141,6 +141,7 @@ WORKDIR /app
 RUN gem update --system \
   && gem update rexml rack erb net-imap \
   && gem cleanup rexml rack erb net-imap \
+  && gem uninstall -i /usr/local/lib/ruby/gems/4.0.0 net-imap -v 0.6.2 \
   && find /usr/local/lib/ruby/gems -path "*/specifications/default/erb-*.gemspec" -delete \
   && find /usr/local/lib/ruby/gems -path "*/specifications/default/net-imap-*.gemspec" -delete \
   && gem install bundler --version=${BUNDLER_VERSION} \
