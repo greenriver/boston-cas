@@ -1,8 +1,8 @@
 on:
   push:
     branches:
-      - '*'
-      - '**/*'
+      - "*"
+      - "**/*"
 
 name: Precompile any assets that have changed and push them to S3
 
@@ -33,34 +33,34 @@ jobs:
           - gha_production_load_6
 
     runs-on: ubuntu-24.04
-    container: ruby:3.4.9-slim-bookworm
+    container: ruby:4.0.2-slim-bookworm
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v1-node16
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: 'Container Setup'
-      id: container-setup
-      uses: ./.github/workflows/container_setup
+      - name: "Container Setup"
+        id: container-setup
+        uses: ./.github/workflows/container_setup
 
-    - name: Generate checksum and compile
-      env:
-        SECRETS_YML_SECRET_ARN: ${{ secrets.SECRETS_YML_SECRET_ARN }}
-        DATABASE_ADAPTER: postgresql
-        DATABASE_HOST: postgres
-        DATABASE_PASS: postgres
-        DATABASE_USER: postgres
-        DEFAULT_FROM: greenriver.testing@mailinator.com
-        ENCRYPTION_KEY: strongEncryptionstrongEncryptionstrongEncryption
-        DATABASE_DB_TEST: boston_cas_test
-        HOSTNAME: openpath.host
-        PORT: 80
-      run: |
-        DEPLOY_PROTECT_SECRETS=true EXCEPTION_WEBHOOK_CHANNEL_OVERRIDE=gr-op-gha-except bundle exec bin/compile_assets.rb ${{ matrix.client_group }}
+      - name: Generate checksum and compile
+        env:
+          SECRETS_YML_SECRET_ARN: ${{ secrets.SECRETS_YML_SECRET_ARN }}
+          DATABASE_ADAPTER: postgresql
+          DATABASE_HOST: postgres
+          DATABASE_PASS: postgres
+          DATABASE_USER: postgres
+          DEFAULT_FROM: greenriver.testing@mailinator.com
+          ENCRYPTION_KEY: strongEncryptionstrongEncryptionstrongEncryption
+          DATABASE_DB_TEST: boston_cas_test
+          HOSTNAME: openpath.host
+          PORT: 80
+        run: |
+          DEPLOY_PROTECT_SECRETS=true EXCEPTION_WEBHOOK_CHANNEL_OVERRIDE=gr-op-gha-except bundle exec bin/compile_assets.rb ${{ matrix.client_group }}

@@ -15,6 +15,8 @@
           %tr
             %th Current Step
             %th Initial Match Date
+            - if active_tab == 'history'
+              %th Closed Date
             %th Program
             %th Sub-Program
             %th Funding Source &amp; Service Provider
@@ -28,6 +30,8 @@
                 - if show_links_to_matches?
                   = link_to(match.current_step_name || match.overall_status[:name], match_path(match))
               %td= match.created_at.try(:strftime, I18n.t('date.formats.default'))
+              - if active_tab == 'history'
+                %td= match.updated_at.try(:strftime, I18n.t('date.formats.default'))
               %td
                 = link_to match.opportunity_details.program_name, edit_program_sub_program_path(match.opportunity_details.sub_program.program, match.opportunity_details.sub_program)
               %td= match.opportunity_details.sub_program_name

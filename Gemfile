@@ -10,6 +10,7 @@ gem 'rails-html-sanitizer'
 gem 'loofah'
 gem 'tzinfo', '>= 1.2.10' # CVE-2022-31163
 gem 'rexml', '>= 3.4.2' # CVE-2025-58767, note this is bundled with ruby, and must be explicitly pinned
+gem 'json', '>= 2.19.2' # CVE-2026-33210, note this is bundled with ruby, and must be explicitly pinned
 gem 'openssl', '>=3.3.1' # override the default ruby version of openssl https://github.com/ruby/openssl/issues/949#issuecomment-3370358680
 
 # No longer default gems
@@ -72,11 +73,11 @@ gem 'aws-sdk-sns', require: false
 gem 'aws-sdk-ssm', '~> 1'
 gem 'aws-sdk-cloudwatch', require: false
 gem 'aws-sdk-cloudwatchlogs', require: false
-gem 'json'
 gem 'amazing_print'
 
 gem 'puma', '~> 6'
 gem 'redis'
+gem 'connection_pool', '~> 2.4' # connection_pool 3.x uses keyword-only args; Rails 7.2 passes a positional hash (incompatible with Ruby 4.0)
 
 gem 'activerecord-session_store'
 gem 'lograge'
