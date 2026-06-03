@@ -31,8 +31,10 @@ class App.RequirementManager.Searcher
       $(".jVariableRequirment").hide()
       $(".jRuleSelectionNote").hide()
       $(".jVariableRequirment[data-rule-id=#{rule_id}]").show()
-      $(".jVariableRequirment[data-rule-id=#{rule_id}] select").css('width', '100%')
-      $(".jVariableRequirment[data-rule-id=#{rule_id}] select").select2()
+      $variableSelect = $(".jVariableRequirment[data-rule-id=#{rule_id}] select")
+      $variableSelect.css('width', '100%')
+      $variableSelect.select2
+        dropdownParent: $(@element).closest('form')
       $(".jRuleSelectionNote[data-rule-id=#{rule_id}]").show()
 
   reset: ->
