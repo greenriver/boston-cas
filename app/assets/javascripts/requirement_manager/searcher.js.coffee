@@ -15,13 +15,19 @@ class App.RequirementManager.Searcher
     @_init_select2()
     @_init_select_listener()
 
+  _dropdownParent: (element) ->
+    # .modal-body has overflow-y:auto in Bootstrap 5 scrollable modals, which clips
+    # the dropdown. Use .modal-content (above the clip boundary) when inside a modal.
+    $modalContent = $(element).closest('.modal-content')
+    if $modalContent.length then $modalContent else $(element).closest('form')
+
   _init_select2: ->
     $(@element).select2
       theme: 'bootstrap'
       data: @_select2_data()
       placeholder: @placeholder
       width: '100%'
-      dropdownParent: $(@element).closest('form')
+      dropdownParent: @_dropdownParent(@element)
 
   _init_select_listener: ->
     $(".jVariableRequirment").hide()
@@ -34,7 +40,7 @@ class App.RequirementManager.Searcher
       $variableSelect = $(".jVariableRequirment[data-rule-id=#{rule_id}] select")
       $variableSelect.css('width', '100%')
       $variableSelect.select2
-        dropdownParent: $(@element).closest('form')
+        dropdownParent: @_dropdownParent($variableSelect[0])
       $(".jRuleSelectionNote[data-rule-id=#{rule_id}]").show()
 
   reset: ->
