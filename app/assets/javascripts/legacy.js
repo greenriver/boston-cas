@@ -15,7 +15,6 @@
 // Vendor libs
 ////////////////////
 //= require jquery3
-//= require moment
 //= require jquery_ujs
 //= require handlebars.runtime
 //= require select2

@@ -93,6 +93,9 @@ storage/
 docker/nginx-proxy/certs
 prometheus-metrics/**
 
+# Devbox local environment (gems, nix store, etc.)
+.devbox/
+
 # Include Devbox files
 !devbox.json
 !devbox.lock
