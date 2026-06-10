@@ -1,0 +1,27 @@
+.modal.fade#return-modal{tabindex: '-1', aria: {labelledby: 'return-modal-label', hidden: 'true'}}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title#return-modal-label Return for Changes
+        %button.btn-close{type: 'button', "data-bs-dismiss": "modal", aria: {label: 'Close'}}
+      = form_with url: return_submission_vacancy_submission_path(@submission), method: :post, local: true do |f|
+        .modal-body
+          .mb-3
+            = f.label :body, 'Note for submitter', class: 'form-label'
+            %span.text-danger *
+            = f.text_area :body, class: 'form-control', rows: 4, id: 'return_note_body'
+        .modal-footer
+          %button.btn.btn-outline-secondary{type: 'button', "data-bs-dismiss": "modal"} Cancel
+          = f.submit 'Return for Changes', class: 'btn btn-warning', id: 'return-submit-btn', disabled: true
+
+= content_for :page_js do
+  :javascript
+    document.addEventListener('DOMContentLoaded', function() {
+      var textarea = document.getElementById('return_note_body');
+      var submitBtn = document.getElementById('return-submit-btn');
+      if (textarea && submitBtn) {
+        textarea.addEventListener('input', function() {
+          submitBtn.disabled = textarea.value.trim() === '';
+        });
+      }
+    });

@@ -1,0 +1,12 @@
+.text-muted.small.mb-3
+  = link_to 'All Vacancy Submissions', vacancy_submissions_path
+  |  /
+  = link_to (@program&.name || 'Submission'), vacancy_submission_path(@submission)
+  |  /
+  Edit
+
+%h1.h3.mb-4= "Edit — #{@program&.name || 'Submission'}"
+
+.row
+  .col-md-8
+    = render 'form', vacancy_submission: @submission

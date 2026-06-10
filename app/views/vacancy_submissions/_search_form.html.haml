@@ -1,0 +1,9 @@
+= form_with url: vacancy_submissions_path, method: :get, local: true do |f|
+  .row.mb-3.align-items-center.g-2
+    .col-auto
+      = f.text_field :q, value: params[:q], placeholder: 'Search by program name...', class: 'form-control form-control-sm'
+    .col-auto
+      - status_options = [['Queue (Awaiting + Changes Requested)', 'queue'], ['All Statuses', 'all'], ['Awaiting Approval', 'awaiting_approval'], ['Return / Changes Requested', 'return_changes_requested'], ['Active', 'active']]
+      = f.select :status, status_options, { selected: params[:status].presence || 'queue' }, class: 'form-select form-select-sm'
+    .col-auto
+      = f.submit 'Search', class: 'btn btn-sm btn-secondary'

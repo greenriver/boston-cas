@@ -1,0 +1,115 @@
+- last_reviewer_note = @notes.select { |n| n.note_type == 'reviewer_note' }.last
+
+.vacancy-submission-detail
+  .text-muted.small.mb-3
+    = link_to 'All Vacancy Submissions', vacancy_submissions_path
+    |  /
+    = @program&.name || 'Submission'
+
+  .d-flex.align-items-center.gap-2.mb-4
+    %h1.h3.mb-0= @program&.name || '—'
+    = vacancy_submission_status_badge(@submission)
+
+  - if @submission.status == 'return_changes_requested' && last_reviewer_note
+    .alert-changes-requested.mb-4
+      %p.fw-semibold.mb-1 Changes Requested by CAS Admin
+      = simple_format(h(last_reviewer_note.body))
+
+  .well
+    .card
+      .card-header Submission Details
+      .card-body
+        .row.g-3
+          .col-sm-6
+            %span.vs-field-label Submitted
+            %div.vs-field-value= @submission.created_at.strftime('%b %-d, %Y %I:%M %p')
+          .col-sm-6
+            %span.vs-field-label By
+            %div.vs-field-value= @submission.user&.name || '—'
+          .col-sm-6
+            %span.vs-field-label Email
+            %div.vs-field-value= @submission.user&.email || '—'
+          .col-sm-6
+            %span.vs-field-label Phone
+            %div.vs-field-value= @submission.user&.contact&.phone || '—'
+          .col-sm-6
+            %span.vs-field-label Organization
+            %div.vs-field-value= @submission.user&.agency&.name || '—'
+
+  .well
+    .card
+      .card-header
+        .d-flex.justify-content-between.align-items-center
+          %span Program
+          - if @submission.resubmittable? && can_add_vacancies?
+            = link_to 'Edit', edit_vacancy_submission_path(@submission), class: 'btn btn-outline-secondary btn-sm', style: 'text-transform: none; letter-spacing: normal; font-weight: 400; font-size: 13px;'
+      .card-body
+        .row.g-3
+          .col-sm-6
+            %span.vs-field-label Program
+            %div.vs-field-value= @program&.name || '—'
+          .col-sm-6
+            %span.vs-field-label Sub-Program
+            %div.vs-field-value= @sub_program&.name || '—'
+          .col-sm-6
+            %span.vs-field-label Resource Type
+            %div.vs-field-value= @submission.draft_data['resource_type'] || '—'
+          .col-sm-6
+            %span.vs-field-label Unit Type
+            %div.vs-field-value= @submission.voucher_type_display
+          - unless @submission.draft_data['is_voucher']
+            .col-sm-6
+              %span.vs-field-label Address
+              %div.vs-field-value= @submission.site_display
+
+  - if @submission.resubmittable? && can_add_vacancies?
+    .well
+      .card
+        .card-header Actions
+        .card-body
+          = button_to 'Resubmit for Approval', resubmit_vacancy_submission_path(@submission), method: :post, class: 'btn btn-primary'
+          %p.text-muted.small.mt-1 Notifies the CAS Admin that your corrections are ready for re-review.
+  - elsif @submission.status == 'awaiting_approval' && can_review_vacancies?
+    .well
+      .card
+        .card-header Actions
+        .card-body
+          .d-flex.gap-2
+            = button_to 'Approve', approve_vacancy_submission_path(@submission), method: :post, class: 'btn btn-success'
+            %button.btn.btn-warning{"data-bs-toggle": "modal", "data-bs-target": "#return-modal"}
+              Return for Changes
+
+  .well
+    .card
+      .card-header
+        .d-flex.justify-content-between.align-items-center
+          %span
+            Activity Log
+            %span.text-muted.fw-normal{style: 'text-transform: none; letter-spacing: normal; font-size: 12px;'}= "(#{@notes.size})"
+          %button.btn.btn-link.btn-sm.p-0{"data-bs-toggle": "collapse", "data-bs-target": "#activity-log", style: 'text-transform: none; letter-spacing: normal; font-size: 13px; font-weight: 400;'}
+            Show / Hide
+      .collapse.show#activity-log
+        - if @notes.any?
+          .table-responsive
+            %table.table.table-sm.mb-0
+              %thead.table-light
+                %tr
+                  %th Time
+                  %th Action
+                  %th By
+                  %th Details
+              %tbody
+                - @notes.reverse_each do |note|
+                  - next if note.body == 'Returned for changes.'
+                  %tr
+                    %td.text-muted.text-nowrap= note.created_at.strftime('%b %-d, %Y %I:%M %p')
+                    %td= note.action_label
+                    %td= note.user&.name || 'System'
+                    %td= note.body
+        - else
+          .p-3
+            %p.text-muted.mb-0 No activity yet.
+
+  = link_to '← Back to All Vacancy Submissions', vacancy_submissions_path, class: 'text-muted small'
+
+= render 'return_modal'

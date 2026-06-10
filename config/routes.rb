@@ -51,6 +51,13 @@ Rails.application.routes.draw do
       get :closed, on: :collection
     end
   end
+  resources :vacancy_submissions, only: [:index, :new, :create, :show, :edit, :update] do
+    member do
+      post :approve
+      post :return_submission
+      post :resubmit
+    end
+  end
   resources :buildings do
     resources :contacts, except: :show, controller: :building_contacts, concerns: [:restorable]
     get :available_units, on: :member
