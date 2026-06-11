@@ -3,12 +3,8 @@
 - initial_sub = vacancy_submission.sub_program_id || 0
 - stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub }
 
-= form_with model: vacancy_submission, local: true, html: { id: 'vacancy_submission_form', data: stimulus_data } do |f|
-  - if vacancy_submission.errors.any?
-    .alert.alert-danger
-      %ul.mb-0
-        - vacancy_submission.errors.full_messages.each do |msg|
-          %li= msg
+= simple_form_for vacancy_submission, html: { id: 'vacancy_submission_form', data: stimulus_data } do |f|
+  = f.error_notification
 
   %p.text-muted.small
     Fields marked with
@@ -20,25 +16,20 @@
     .c-card__content
       %h5.c-card__title Resource Type & Program
 
-      .mb-3
-        = label_tag :program_id, 'Program Name', class: 'form-label required'
-        = f.select :program_id,
-            options_for_select(@programs.map { |p| [p.name, p.id] }, vacancy_submission.program_id),
-            { include_blank: '-- Select a program --' },
-            class: 'form-select select2',
-            data: { 'vacancy-submission-form-target': 'programSelect', action: 'change->vacancy-submission-form#onProgramChange' }
+      = f.input :program_id, label: 'Program Name', as: :select2,
+          collection: @programs.map { |p| [p.name, p.id] },
+          include_blank: '-- Select a program --',
+          required: true,
+          input_html: { data: { 'vacancy-submission-form-target': 'programSelect' } }
 
-      .mb-3
-        = label_tag :sub_program_id, 'Sub-Program Name', class: 'form-label required'
-        = f.select :sub_program_id,
-            options_for_select([]),
-            { include_blank: '-- Select a sub-program --' },
-            class: 'form-select select2',
-            disabled: true,
-            data: { 'vacancy-submission-form-target': 'subProgramSelect', action: 'change->vacancy-submission-form#onSubProgramChange' }
+      = f.input :sub_program_id, label: 'Sub-Program Name', as: :select2,
+          collection: [],
+          include_blank: '-- Select a sub-program --',
+          required: true,
+          input_html: { disabled: true, data: { 'vacancy-submission-form-target': 'subProgramSelect' } }
 
-      .mb-3
-        %label.form-label Resource Type
+      .form-group
+        %label.control-label Resource Type
         .form-control-plaintext.text-muted{style: 'min-height: 38px;', data: { 'vacancy-submission-form-target': 'resourceTypeDisplay' }}
           = vacancy_submission.resource_type.presence || '—'
 
@@ -47,38 +38,29 @@
     .c-card__content
       %h5.c-card__title Unit Type
 
-      .mb-3
-        %label.form-label Unit Type
-        / Populated by the vacancy-submission-form Stimulus controller based on sub-program selection
+      .form-group
+        %label.control-label Unit Type
         .form-control-plaintext.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeDisplay' }}
         %small.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeHint' }}
 
       / Address fields — shown only for physical units
       %div{hidden: true, data: { 'vacancy-submission-form-target': 'addressFields' }}
         %hr
-        %p.fw-semibold.mb-3 Unit Address
+        %p.fw-semibold Unit Address
 
-        .mb-3
-          = label_tag :unit_address_street, 'Site Address', class: 'form-label required'
-          = f.text_field :unit_address_street, class: 'form-control', placeholder: '123 Main St'
+        = f.input :unit_address_street, label: 'Site Address', required: true, placeholder: 'Street Address'
 
-        .row.mb-3
+        .row
           .col-md-6
-            = label_tag :unit_address_unit_number, 'Unit Number', class: 'form-label'
-            = f.text_field :unit_address_unit_number, class: 'form-control', placeholder: 'Apt 2B'
+            = f.input :unit_address_unit_number, label: 'Unit Number', placeholder: 'Apt Number'
           .col-md-6
-            = label_tag :unit_address_city, 'City', class: 'form-label required'
-            = f.text_field :unit_address_city, class: 'form-control', placeholder: 'Boston'
+            = f.input :unit_address_city, label: 'City', required: true, placeholder: 'City'
 
-        .row.mb-3
+        .row
           .col-md-6
-            = label_tag :unit_address_state, 'State', class: 'form-label required'
-            = f.text_field :unit_address_state,
-                value: vacancy_submission.unit_address_state.presence || 'MA',
-                class: 'form-control'
+            = f.input :unit_address_state, label: 'State', required: true
           .col-md-6
-            = label_tag :unit_address_zip, 'Zip Code', class: 'form-label required'
-            = f.text_field :unit_address_zip, class: 'form-control', placeholder: '02101'
+            = f.input :unit_address_zip, label: 'Zip Code', required: true, placeholder: '99999'
 
   / Actions
   .d-flex.gap-2

@@ -22,6 +22,7 @@
   "scripts": {
     "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets",
     "build:production": "esbuild app/javascript/application.js --bundle --sourcemap --minify --outdir=app/assets/builds --public-path=/assets",
+    "watch": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --watch=forever",
     "dedup": "yarn-deduplicate -s fewer yarn.lock"
   }
 }
