@@ -1,3 +1,9 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
 # frozen_string_literal: true
 
 class VacancySubmissionNote < ApplicationRecord
@@ -8,9 +14,9 @@ class VacancySubmissionNote < ApplicationRecord
 
   ACTION_LABELS = {
     'Initial submission' => 'Submitted',
-    'Approved'           => 'Approved',
-    'Resubmitted'        => 'Resubmitted',
-    'Updated:'           => 'Submission Edited',
+    'Approved' => 'Approved',
+    'Resubmitted' => 'Resubmitted',
+    'Updated:' => 'Submission Edited',
   }.freeze
 
   validates :note_type, inclusion: { in: NOTE_TYPES }

@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe VacancySubmission, type: :model do
@@ -73,12 +81,12 @@ RSpec.describe VacancySubmission, type: :model do
   describe '#site_display' do
     it 'returns formatted address for physical units' do
       vs = described_class.new(draft_data: {
-        'is_voucher' => false,
-        'unit_address_street' => '123 Main St',
-        'unit_address_city' => 'Boston',
-        'unit_address_state' => 'MA',
-        'unit_address_zip' => '02101',
-      })
+                                 'is_voucher' => false,
+                                 'unit_address_street' => '123 Main St',
+                                 'unit_address_city' => 'Boston',
+                                 'unit_address_state' => 'MA',
+                                 'unit_address_zip' => '02101',
+                               })
       expect(vs.site_display).to eq('123 Main St, Boston, MA, 02101')
     end
 
@@ -166,6 +174,53 @@ RSpec.describe VacancySubmission, type: :model do
     it '#resubmittable? is false when active' do
       vs = build(:vacancy_submission, :active)
       expect(vs.resubmittable?).to be false
+    end
+  end
+
+  describe 'state transition methods' do
+    let(:user) { create(:user) }
+
+    describe '#approve!' do
+      let(:submission) { create(:vacancy_submission, status: 'awaiting_approval') }
+
+      it 'transitions status to active' do
+        expect { submission.approve!(user: user) }.to change { submission.reload.status }.to('active')
+      end
+
+      it 'creates a status_change note' do
+        expect { submission.approve!(user: user) }.to change(VacancySubmissionNote, :count).by(1)
+        expect(VacancySubmissionNote.last.note_type).to eq('status_change')
+      end
+    end
+
+    describe '#return_for_changes!' do
+      let(:submission) { create(:vacancy_submission, status: 'awaiting_approval') }
+
+      it 'transitions status to return_changes_requested' do
+        expect do
+          submission.return_for_changes!(body: 'Fix the address.', user: user)
+        end.to change { submission.reload.status }.to('return_changes_requested')
+      end
+
+      it 'creates a reviewer_note and a status_change note' do
+        expect do
+          submission.return_for_changes!(body: 'Fix it.', user: user)
+        end.to change(VacancySubmissionNote, :count).by(2)
+        types = VacancySubmissionNote.last(2).map(&:note_type)
+        expect(types).to include('reviewer_note', 'status_change')
+      end
+    end
+
+    describe '#resubmit!' do
+      let(:submission) { create(:vacancy_submission, :changes_requested) }
+
+      it 'transitions status to awaiting_approval' do
+        expect { submission.resubmit!(user: user) }.to change { submission.reload.status }.to('awaiting_approval')
+      end
+
+      it 'creates a status_change note' do
+        expect { submission.resubmit!(user: user) }.to change(VacancySubmissionNote, :count).by(1)
+      end
     end
   end
 

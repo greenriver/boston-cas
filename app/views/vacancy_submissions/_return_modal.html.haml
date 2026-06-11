@@ -1,4 +1,4 @@
-.modal.fade#return-modal{tabindex: '-1', aria: {labelledby: 'return-modal-label', hidden: 'true'}}
+.modal.fade#return-modal{tabindex: '-1', aria: {labelledby: 'return-modal-label', hidden: 'true'}, data: { controller: 'return-modal' }}
   .modal-dialog
     .modal-content
       .modal-header
@@ -9,19 +9,9 @@
           .mb-3
             = f.label :body, 'Note for submitter', class: 'form-label'
             %span.text-danger *
-            = f.text_area :body, class: 'form-control', rows: 4, id: 'return_note_body'
+            = f.text_area :body, class: 'form-control', rows: 4,
+                data: { 'return-modal-target': 'textarea', action: 'input->return-modal#onInput' }
         .modal-footer
           %button.btn.btn-outline-secondary{type: 'button', "data-bs-dismiss": "modal"} Cancel
-          = f.submit 'Return for Changes', class: 'btn btn-warning', id: 'return-submit-btn', disabled: true
-
-= content_for :page_js do
-  :javascript
-    document.addEventListener('DOMContentLoaded', function() {
-      var textarea = document.getElementById('return_note_body');
-      var submitBtn = document.getElementById('return-submit-btn');
-      if (textarea && submitBtn) {
-        textarea.addEventListener('input', function() {
-          submitBtn.disabled = textarea.value.trim() === '';
-        });
-      }
-    });
+          = f.submit 'Return for Changes', class: 'btn btn-warning', disabled: true,
+              data: { 'return-modal-target': 'submitButton' }

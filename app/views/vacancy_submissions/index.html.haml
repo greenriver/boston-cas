@@ -29,11 +29,11 @@
         %tbody
           - if @vacancy_submissions.any?
             - @vacancy_submissions.each do |submission|
-              %tr{onclick: "window.location='#{vacancy_submission_path(submission)}'", style: 'cursor: pointer;'}
+              %tr
                 %td= vacancy_submission_status_badge(submission)
                 %td= submission.created_at.to_date
                 %td= submission.updated_at.to_date
-                %td= @programs_by_id[submission.draft_data['program_id'].to_i]&.name || '—'
+                %td= link_to(@programs_by_id[submission.draft_data['program_id'].to_i]&.name || '—', vacancy_submission_path(submission))
                 %td= submission.site_display
                 %td= submission.voucher_type_display
                 %td —
