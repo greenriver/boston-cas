@@ -78,6 +78,44 @@ RSpec.describe VacancySubmission, type: :model do
     end
   end
 
+  describe 'JSONB accessors' do
+    describe '#program_id' do
+      it 'casts a string value to integer' do
+        vs = described_class.new(draft_data: { 'program_id' => '42' })
+        expect(vs.program_id).to eq(42)
+      end
+
+      it 'returns nil when not set' do
+        vs = described_class.new(draft_data: {})
+        expect(vs.program_id).to be_nil
+      end
+    end
+
+    describe '#sub_program_id' do
+      it 'casts a string value to integer' do
+        vs = described_class.new(draft_data: { 'sub_program_id' => '7' })
+        expect(vs.sub_program_id).to eq(7)
+      end
+
+      it 'returns nil when not set' do
+        vs = described_class.new(draft_data: {})
+        expect(vs.sub_program_id).to be_nil
+      end
+    end
+
+    describe '#voucher?' do
+      it 'returns true when is_voucher is true' do
+        vs = described_class.new(draft_data: { 'is_voucher' => true })
+        expect(vs.voucher?).to be true
+      end
+
+      it 'returns false when is_voucher is false' do
+        vs = described_class.new(draft_data: { 'is_voucher' => false })
+        expect(vs.voucher?).to be false
+      end
+    end
+  end
+
   describe '#site_display' do
     it 'returns formatted address for physical units' do
       vs = described_class.new(draft_data: {

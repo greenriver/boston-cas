@@ -19,15 +19,15 @@ class VacancySubmissionsController < ApplicationController
       .order(updated_at: :desc)
       .page(params[:page]).per(25)
 
-    program_ids = @vacancy_submissions.map { |vs| vs.draft_data['program_id'].to_i }.uniq.compact
+    program_ids = @vacancy_submissions.map(&:program_id).uniq.compact
     @programs_by_id = Program.where(id: program_ids).index_by(&:id)
   end
 
   def show
     @submission = VacancySubmission.includes(user: [:contact, :agency]).find(params[:id])
     @notes = @submission.vacancy_submission_notes.includes(:user).order(created_at: :asc)
-    @program = Program.find_by(id: @submission.draft_data['program_id'].to_i)
-    @sub_program = SubProgram.find_by(id: @submission.draft_data['sub_program_id'].to_i)
+    @program = Program.find_by(id: @submission.program_id)
+    @sub_program = SubProgram.find_by(id: @submission.sub_program_id)
   end
 
   def new
@@ -40,7 +40,10 @@ class VacancySubmissionsController < ApplicationController
     sub_program = SubProgram.find_by(id: submission_params[:sub_program_id])
 
     unless program && sub_program
-      @vacancy_submission = VacancySubmission.new
+      @vacancy_submission = VacancySubmission.new(
+        program_id: submission_params[:program_id],
+        sub_program_id: submission_params[:sub_program_id],
+      )
       @vacancy_submission.errors.add(:base, 'Program and sub-program are required')
       load_form_data
       return render :new, status: :unprocessable_entity
@@ -89,8 +92,8 @@ class VacancySubmissionsController < ApplicationController
     @submission = VacancySubmission.find(params[:id])
     return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be edited in its current state.' unless @submission.resubmittable?
 
-    @program = Program.find_by(id: @submission.draft_data['program_id'].to_i)
-    @sub_program = SubProgram.find_by(id: @submission.draft_data['sub_program_id'].to_i)
+    @program = Program.find_by(id: @submission.program_id)
+    @sub_program = SubProgram.find_by(id: @submission.sub_program_id)
     load_form_data
   end
 
@@ -102,8 +105,8 @@ class VacancySubmissionsController < ApplicationController
     sub_program = SubProgram.find_by(id: submission_params[:sub_program_id])
 
     unless program && sub_program
-      @program = Program.find_by(id: @submission.draft_data['program_id'].to_i)
-      @sub_program = SubProgram.find_by(id: @submission.draft_data['sub_program_id'].to_i)
+      @program = Program.find_by(id: @submission.program_id)
+      @sub_program = SubProgram.find_by(id: @submission.sub_program_id)
       load_form_data
       @submission.errors.add(:base, 'Program and sub-program are required')
       return render :edit, status: :unprocessable_entity

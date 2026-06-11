@@ -33,7 +33,7 @@
                 %td= vacancy_submission_status_badge(submission)
                 %td= submission.created_at.to_date
                 %td= submission.updated_at.to_date
-                %td= link_to(@programs_by_id[submission.draft_data['program_id'].to_i]&.name || '—', vacancy_submission_path(submission))
+                %td= link_to(@programs_by_id[submission.program_id]&.name || '—', vacancy_submission_path(submission))
                 %td= submission.site_display
                 %td= submission.voucher_type_display
                 %td —

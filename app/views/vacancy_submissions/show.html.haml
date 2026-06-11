@@ -53,11 +53,11 @@
             %div.vs-field-value= @sub_program&.name || '—'
           .col-sm-6
             %span.vs-field-label Resource Type
-            %div.vs-field-value= @submission.draft_data['resource_type'] || '—'
+            %div.vs-field-value= @submission.resource_type || '—'
           .col-sm-6
             %span.vs-field-label Unit Type
             %div.vs-field-value= @submission.voucher_type_display
-          - unless @submission.draft_data['is_voucher']
+          - unless @submission.voucher?
             .col-sm-6
               %span.vs-field-label Address
               %div.vs-field-value= @submission.site_display

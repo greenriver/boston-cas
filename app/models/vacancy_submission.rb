@@ -12,6 +12,11 @@ class VacancySubmission < ApplicationRecord
   belongs_to :user, optional: true
   has_many :vacancy_submission_notes, dependent: :destroy
 
+  store_accessor :draft_data,
+                 :program_id, :sub_program_id, :resource_type, :is_voucher,
+                 :unit_address_street, :unit_address_unit_number,
+                 :unit_address_city, :unit_address_state, :unit_address_zip
+
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
 
@@ -50,19 +55,27 @@ class VacancySubmission < ApplicationRecord
     sub_program&.program_type == 'Tenant-Based'
   end
 
-  def site_display
-    return '—' if draft_data['is_voucher']
+  def program_id
+    super&.to_i
+  end
 
-    [
-      draft_data['unit_address_street'],
-      draft_data['unit_address_city'],
-      draft_data['unit_address_state'],
-      draft_data['unit_address_zip'],
-    ].compact.reject(&:blank?).join(', ').presence || '—'
+  def sub_program_id
+    super&.to_i
+  end
+
+  def voucher?
+    is_voucher
+  end
+
+  def site_display
+    return '—' if voucher?
+
+    [unit_address_street, unit_address_city, unit_address_state, unit_address_zip]
+      .compact.reject(&:blank?).join(', ').presence || '—'
   end
 
   def voucher_type_display
-    draft_data['is_voucher'] ? 'Voucher' : 'Physical Unit'
+    voucher? ? 'Voucher' : 'Physical Unit'
   end
 
   def status_display
@@ -128,13 +141,13 @@ class VacancySubmission < ApplicationRecord
   private
 
   def required_draft_fields
-    errors.add(:base, 'Program is required')     if draft_data['program_id'].blank?
-    errors.add(:base, 'Sub-program is required') if draft_data['sub_program_id'].blank?
-    return if draft_data['is_voucher']
+    errors.add(:base, 'Program is required') if program_id.blank?
+    errors.add(:base, 'Sub-program is required') if sub_program_id.blank?
+    return if voucher?
 
-    errors.add(:base, 'Street address is required') if draft_data['unit_address_street'].blank?
-    errors.add(:base, 'City is required')            if draft_data['unit_address_city'].blank?
-    errors.add(:base, 'State is required')           if draft_data['unit_address_state'].blank?
-    errors.add(:base, 'Zip code is required')        if draft_data['unit_address_zip'].blank?
+    errors.add(:base, 'Street address is required') if unit_address_street.blank?
+    errors.add(:base, 'City is required') if unit_address_city.blank?
+    errors.add(:base, 'State is required') if unit_address_state.blank?
+    errors.add(:base, 'Zip code is required') if unit_address_zip.blank?
   end
 end

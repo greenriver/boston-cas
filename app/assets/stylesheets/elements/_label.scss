@@ -3,6 +3,11 @@ label {
   @include open-sans;
 }
 
+.form-label.required::after {
+  content: ' *';
+  color: var(--brand-danger);
+}
+
 .label-helper {
   font-style: italic;
   font-size: 95%;
