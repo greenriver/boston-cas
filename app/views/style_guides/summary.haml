@@ -1,14 +1,21 @@
-.mt-4
-  = render 'tags'
+.row
+  .col-sm-10
+    .mt-4
+      = render 'badges'
 
-.mt-4
-  = render 'typography'
+    .mt-4
+      = render 'tags'
 
-.mt-4.mb-8
-  = render 'stepped_progress'
+    .mt-4
+      = render 'typography'
 
-.mt-4.mb-8
-  = render 'buttons'
+    .mt-4.mb-8
+      = render 'stepped_progress'
 
-.mt-4
-  = render 'alerts'
+    .mt-4.mb-8
+      = render 'buttons'
+
+    .mt-4
+      = render 'alerts'
+  .col-sm-2
+    = render 'pages'

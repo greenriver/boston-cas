@@ -3,9 +3,10 @@ label {
   @include open-sans;
 }
 
-.form-label.required::after {
-  content: ' *';
+label abbr[title="required"],
+label abbr[data-bs-original-title="required"] {
   color: var(--brand-danger);
+  text-decoration: none;
 }
 
 .label-helper {

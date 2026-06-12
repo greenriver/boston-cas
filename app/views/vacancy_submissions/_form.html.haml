@@ -16,16 +16,15 @@
     .c-card__content
       %h5.c-card__title Resource Type & Program
 
-      = f.input :program_id, label: 'Program Name', as: :select2,
+      = f.input :program_id, label: 'Program', as: :select2,
           collection: @programs.map { |p| [p.name, p.id] },
           include_blank: '-- Select a program --',
           required: true,
           input_html: { data: { 'vacancy-submission-form-target': 'programSelect' } }
 
-      = f.input :sub_program_id, label: 'Sub-Program Name', as: :select2,
+      = f.input :sub_program_id, label: 'Sub-Program', as: :select2,
           collection: [],
-          include_blank: '-- Select a sub-program --',
-          required: true,
+          include_blank: false,
           input_html: { disabled: true, data: { 'vacancy-submission-form-target': 'subProgramSelect' } }
 
       .form-group

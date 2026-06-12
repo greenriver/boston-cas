@@ -63,7 +63,7 @@ export default class extends Controller {
 
   populateSubPrograms(programId, selectedSubProgramId) {
     const sub = this.subProgramSelectTarget
-    sub.innerHTML = '<option value="">-- Select a sub-program --</option>'
+    sub.innerHTML = ''
 
     const program = this.programMap[programId]
     if (!programId || !program) {

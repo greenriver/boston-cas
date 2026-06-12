@@ -14,6 +14,7 @@ class VacancySubmissionsController < ApplicationController
   before_action :require_can_add_vacancies!, only: [:resubmit, :edit, :update]
 
   def index
+    @search_string = params[:q]
     @vacancy_submissions = VacancySubmission
       .filtered(search: params[:q], status_filter: params[:status])
       .order(updated_at: :desc)
@@ -220,7 +221,7 @@ class VacancySubmissionsController < ApplicationController
         sub_programs: p.sub_programs.order(:name).map do |sp|
           {
             id: sp.id,
-            name: sp.name,
+            name: sp.name.presence || '(unnamed)',
             is_voucher: VacancySubmission.derive_is_voucher(sp),
             program_type: sp.program_type,
           }
