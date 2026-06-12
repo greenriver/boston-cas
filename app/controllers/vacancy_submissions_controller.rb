@@ -12,6 +12,8 @@ class VacancySubmissionsController < ApplicationController
   before_action :require_can_submit_or_review_vacancies!, only: [:show]
   before_action :require_can_review_vacancies!, only: [:approve, :return_submission]
   before_action :require_can_add_vacancies!, only: [:resubmit, :edit, :update]
+  before_action :load_submission, only: [:approve, :return_submission, :resubmit]
+  before_action :load_resubmittable_submission, only: [:edit, :update]
 
   def index
     @search_string = params[:q]
@@ -50,30 +52,10 @@ class VacancySubmissionsController < ApplicationController
       return render :new, status: :unprocessable_entity
     end
 
-    is_voucher = VacancySubmission.derive_is_voucher(sub_program)
-    resource_type = VacancySubmission.derive_resource_type(program)
-
-    draft_data = {
-      'program_id' => program.id,
-      'sub_program_id' => sub_program.id,
-      'resource_type' => resource_type,
-      'is_voucher' => is_voucher,
-    }
-
-    unless is_voucher
-      draft_data.merge!(
-        'unit_address_street' => submission_params[:unit_address_street],
-        'unit_address_unit_number' => submission_params[:unit_address_unit_number],
-        'unit_address_city' => submission_params[:unit_address_city],
-        'unit_address_state' => submission_params[:unit_address_state],
-        'unit_address_zip' => submission_params[:unit_address_zip],
-      )
-    end
-
     @vacancy_submission = VacancySubmission.new(
       user: current_user,
       status: 'awaiting_approval',
-      draft_data: draft_data,
+      draft_data: build_draft_data(program: program, sub_program: sub_program),
     )
 
     if @vacancy_submission.save
@@ -90,18 +72,12 @@ class VacancySubmissionsController < ApplicationController
   end
 
   def edit
-    @submission = VacancySubmission.find(params[:id])
-    return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be edited in its current state.' unless @submission.resubmittable?
-
     @program = Program.find_by(id: @submission.program_id)
     @sub_program = @program.sub_programs.find_by(id: @submission.sub_program_id)
     load_form_data
   end
 
   def update
-    @submission = VacancySubmission.find(params[:id])
-    return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be edited in its current state.' unless @submission.resubmittable?
-
     program = Program.find_by(id: submission_params[:program_id])
     sub_program = program.sub_programs.find_by(id: submission_params[:sub_program_id])
 
@@ -113,25 +89,7 @@ class VacancySubmissionsController < ApplicationController
       return render :edit, status: :unprocessable_entity
     end
 
-    is_voucher = VacancySubmission.derive_is_voucher(sub_program)
-    resource_type = VacancySubmission.derive_resource_type(program)
-
-    draft_data = @submission.draft_data.merge(
-      'program_id' => program.id,
-      'sub_program_id' => sub_program.id,
-      'resource_type' => resource_type,
-      'is_voucher' => is_voucher,
-    )
-
-    unless is_voucher
-      draft_data.merge!(
-        'unit_address_street' => submission_params[:unit_address_street],
-        'unit_address_unit_number' => submission_params[:unit_address_unit_number],
-        'unit_address_city' => submission_params[:unit_address_city],
-        'unit_address_state' => submission_params[:unit_address_state],
-        'unit_address_zip' => submission_params[:unit_address_zip],
-      )
-    end
+    draft_data = @submission.draft_data.merge(build_draft_data(program: program, sub_program: sub_program))
 
     changed_sections = detect_changed_sections(@submission.draft_data, draft_data)
 
@@ -153,39 +111,64 @@ class VacancySubmissionsController < ApplicationController
   end
 
   def approve
-    submission = VacancySubmission.find(params[:id])
-    return redirect_to vacancy_submission_path(submission), alert: 'This submission cannot be approved in its current state.' unless submission.approvable?
+    return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be approved in its current state.' unless @submission.approvable?
 
-    submission.approve!(user: current_user)
-    redirect_to vacancy_submission_path(submission), notice: 'Submission approved.'
+    @submission.approve!(user: current_user)
+    redirect_to vacancy_submission_path(@submission), notice: 'Submission approved.'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to vacancy_submission_path(submission), alert: "Could not approve: #{e.message}"
+    redirect_to vacancy_submission_path(@submission), alert: "Could not approve: #{e.message}"
   end
 
   def return_submission
-    submission = VacancySubmission.find(params[:id])
+    return redirect_to vacancy_submission_path(@submission), alert: 'Note is required when returning a submission.' if params[:body].blank?
 
-    return redirect_to vacancy_submission_path(submission), alert: 'Note is required when returning a submission.' if params[:body].blank?
+    return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be returned in its current state.' unless @submission.returnable?
 
-    return redirect_to vacancy_submission_path(submission), alert: 'This submission cannot be returned in its current state.' unless submission.returnable?
-
-    submission.return_for_changes!(body: params[:body], user: current_user)
-    redirect_to vacancy_submission_path(submission), notice: 'Submission returned for changes.'
+    @submission.return_for_changes!(body: params[:body], user: current_user)
+    redirect_to vacancy_submission_path(@submission), notice: 'Submission returned for changes.'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to vacancy_submission_path(submission), alert: "Could not return submission: #{e.message}"
+    redirect_to vacancy_submission_path(@submission), alert: "Could not return submission: #{e.message}"
   end
 
   def resubmit
-    submission = VacancySubmission.find(params[:id])
-    return redirect_to vacancy_submission_path(submission), alert: 'This submission cannot be resubmitted in its current state.' unless submission.resubmittable?
+    return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be resubmitted in its current state.' unless @submission.resubmittable?
 
-    submission.resubmit!(user: current_user)
-    redirect_to vacancy_submission_path(submission), notice: 'Submission resubmitted for review.'
+    @submission.resubmit!(user: current_user)
+    redirect_to vacancy_submission_path(@submission), notice: 'Submission resubmitted for review.'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to vacancy_submission_path(submission), alert: "Could not resubmit: #{e.message}"
+    redirect_to vacancy_submission_path(@submission), alert: "Could not resubmit: #{e.message}"
   end
 
   private
+
+  def load_submission
+    @submission = VacancySubmission.find(params[:id])
+  end
+
+  def load_resubmittable_submission
+    @submission = VacancySubmission.find(params[:id])
+    redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be edited in its current state.' unless @submission.resubmittable?
+  end
+
+  def build_draft_data(program:, sub_program:)
+    is_voucher = VacancySubmission.derive_is_voucher(sub_program)
+    data = {
+      'program_id' => program.id,
+      'sub_program_id' => sub_program.id,
+      'resource_type' => VacancySubmission.derive_resource_type(program),
+      'is_voucher' => is_voucher,
+    }
+    unless is_voucher
+      data.merge!(
+        'unit_address_street' => submission_params[:unit_address_street],
+        'unit_address_unit_number' => submission_params[:unit_address_unit_number],
+        'unit_address_city' => submission_params[:unit_address_city],
+        'unit_address_state' => submission_params[:unit_address_state],
+        'unit_address_zip' => submission_params[:unit_address_zip],
+      )
+    end
+    data
+  end
 
   def detect_changed_sections(old_data, new_data)
     sections = []
