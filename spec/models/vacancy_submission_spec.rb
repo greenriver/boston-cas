@@ -18,10 +18,15 @@ RSpec.describe VacancySubmission, type: :model do
     it 'is valid with required fields' do
       vs = described_class.new(
         status: 'awaiting_approval',
-        draft_data: { 'program_id' => program.id, 'sub_program_id' => sub_program.id,
-                      'is_voucher' => false, 'unit_address_street' => '123 Main St',
-                      'unit_address_city' => 'Boston', 'unit_address_state' => 'MA',
-                      'unit_address_zip' => '02101' },
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'unit_address_street' => '123 Main St',
+          'unit_address_city' => 'Boston',
+          'unit_address_state' => 'MA',
+          'unit_address_zip' => '02101',
+        },
       )
       expect(vs).to be_valid
     end
@@ -35,13 +40,13 @@ RSpec.describe VacancySubmission, type: :model do
     it 'is invalid when program_id missing' do
       vs = described_class.new(status: 'awaiting_approval', draft_data: { 'sub_program_id' => sub_program.id })
       expect(vs).not_to be_valid
-      expect(vs.errors[:base]).to include('Program is required')
+      expect(vs.errors[:program_id]).to include('can\'t be blank')
     end
 
     it 'is invalid when sub_program_id missing' do
       vs = described_class.new(status: 'awaiting_approval', draft_data: { 'program_id' => program.id })
       expect(vs).not_to be_valid
-      expect(vs.errors[:base]).to include('Sub-program is required')
+      expect(vs.errors[:sub_program_id]).to include('can\'t be blank')
     end
 
     it 'requires address fields for physical units' do
@@ -50,7 +55,7 @@ RSpec.describe VacancySubmission, type: :model do
         draft_data: { 'program_id' => program.id, 'sub_program_id' => sub_program.id, 'is_voucher' => false },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:base]).to include('Street address is required')
+      expect(vs.errors[:unit_address_street]).to include('can\'t be blank')
     end
 
     it 'does not require address fields for voucher units' do
