@@ -9,7 +9,7 @@
 
 - if @submission.status == 'return_changes_requested' && last_reviewer_note
   .alert-changes-requested.mb-4
-    %p.fw-semibold.mb-1 Changes Requested by CAS Admin
+    %p.fw-semibold.mb-1 Changes Requested by #{last_reviewer_note.user&.name || 'the CAS Admin'}
     = simple_format(h(last_reviewer_note.body))
 
 
@@ -23,16 +23,16 @@
         %dd.vs-field-value.mb-0= @submission.created_at.strftime('%b %-d, %Y %I:%M %p')
       .col-sm-6
         %dt.vs-field-label By
-        %dd.vs-field-value.mb-0= @submission.user&.name || '—'
+        %dd.vs-field-value.mb-0= @submission.user&.name.presence || '—'
       .col-sm-6
         %dt.vs-field-label Email
-        %dd.vs-field-value.mb-0= @submission.user&.email || '—'
+        %dd.vs-field-value.mb-0= @submission.user&.email.presence || '—'
       .col-sm-6
         %dt.vs-field-label Phone
-        %dd.vs-field-value.mb-0= @submission.user&.contact&.phone || '—'
+        %dd.vs-field-value.mb-0= @submission.user&.contact&.phone.presence || '—'
       .col-sm-6
         %dt.vs-field-label Organization
-        %dd.vs-field-value.mb-0= @submission.user&.agency&.name || '—'
+        %dd.vs-field-value.mb-0= @submission.user&.agency&.name.presence || '—'
 
 
 .c-card
@@ -63,10 +63,10 @@
 - if @submission.resubmittable? && can_add_vacancies?
   .c-card
     .c-card__header
-      %h2Actions
+      %h2 Actions
     .c-card__content
+      %p Notifies #{last_reviewer_note.user&.name || 'the CAS Admin'} that your corrections are ready for re-review.
       = button_to 'Resubmit for Approval', resubmit_vacancy_submission_path(@submission), method: :post, class: 'btn btn-primary'
-      %p.text-muted.small.mt-1 Notifies the CAS Admin that your corrections are ready for re-review.
 - elsif @submission.status == 'awaiting_approval' && can_review_vacancies?
   .c-card
     .c-card__header
