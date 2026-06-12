@@ -141,13 +141,13 @@ class VacancySubmission < ApplicationRecord
   private
 
   def required_draft_fields
-    errors.add(:base, 'Program is required') if program_id.blank?
-    errors.add(:base, 'Sub-program is required') if sub_program_id.blank?
+    errors.add(:program_id, :blank) if program_id.blank?
+    errors.add(:sub_program_id, :blank) if sub_program_id.blank?
     return if voucher?
 
-    errors.add(:base, 'Street address is required') if unit_address_street.blank?
-    errors.add(:base, 'City is required') if unit_address_city.blank?
-    errors.add(:base, 'State is required') if unit_address_state.blank?
-    errors.add(:base, 'Zip code is required') if unit_address_zip.blank?
+    errors.add(:unit_address_street, :blank) if unit_address_street.blank?
+    errors.add(:unit_address_city, :blank) if unit_address_city.blank?
+    errors.add(:unit_address_state, :blank) if unit_address_state.blank?
+    errors.add(:unit_address_zip, :blank) if unit_address_zip.blank?
   end
 end

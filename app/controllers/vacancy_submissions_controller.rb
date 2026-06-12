@@ -40,14 +40,15 @@ class VacancySubmissionsController < ApplicationController
 
   def create
     program = Program.find_by(id: submission_params[:program_id])
-    sub_program = program.sub_programs.find_by(id: submission_params[:sub_program_id])
+    sub_program = program&.sub_programs&.find_by(id: submission_params[:sub_program_id])
 
     unless program && sub_program
       @vacancy_submission = VacancySubmission.new(
         program_id: submission_params[:program_id],
         sub_program_id: submission_params[:sub_program_id],
       )
-      @vacancy_submission.errors.add(:base, 'Program and sub-program are required')
+      @vacancy_submission.errors.add(:program_id, :blank) unless program
+      @vacancy_submission.errors.add(:sub_program_id, :blank) unless sub_program
       load_form_data
       return render :new, status: :unprocessable_entity
     end
@@ -79,13 +80,14 @@ class VacancySubmissionsController < ApplicationController
 
   def update
     program = Program.find_by(id: submission_params[:program_id])
-    sub_program = program.sub_programs.find_by(id: submission_params[:sub_program_id])
+    sub_program = program&.sub_programs&.find_by(id: submission_params[:sub_program_id])
 
     unless program && sub_program
       @program = Program.find_by(id: @submission.program_id)
-      @sub_program = @program.sub_programs.find_by(id: @submission.sub_program_id)
+      @sub_program = @program&.sub_programs&.find_by(id: @submission.sub_program_id)
       load_form_data
-      @submission.errors.add(:base, 'Program and sub-program are required')
+      @submission.errors.add(:program_id, :blank) unless program
+      @submission.errors.add(:sub_program_id, :blank) unless sub_program
       return render :edit, status: :unprocessable_entity
     end
 
