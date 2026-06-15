@@ -1,6 +1,6 @@
 = form_tag(vacancy_submissions_path, method: :get) do
   .input-group
-    - status_options = [['Queue (Awaiting + Changes Requested)', 'queue'], ['All Statuses', 'all'], ['Awaiting Approval', 'awaiting_approval'], ['Return / Changes Requested', 'return_changes_requested'], ['Active', 'active']]
+    - status_options = [['Queue (Awaiting + Changes Requested)', 'queue'], ['All Statuses', 'all']] + VacancySubmissionsHelper::STATUS_DISPLAY.map { |k, v| [v, k] }
     = select_tag :status, options_for_select(status_options, params[:status].presence || 'queue'), class: 'form-select'
     %input.form-control{name: :q, type: :text, placeholder: @prompt, value: @search_string}
     %button.btn.btn-primary{type: :submit} Search
