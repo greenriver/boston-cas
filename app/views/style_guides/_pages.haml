@@ -1,0 +1,5 @@
+.c-card
+  .c-card__content
+    %ul.nav.flex-column
+      - guide_routes.each do |key, value|
+        %li.nav-item= link_to(value, send("#{key}_style_guides_path"), class: 'nav-link')

@@ -26,5 +26,8 @@ bundle config --global set build.sassc --disable-march-tune-native
 bundle install --quiet || echo "bundle install failed"
 yarn install --silent --frozen-lockfile || echo "yarn install failed"
 
+yarn build || echo "yarn build failed"
+yarn watch &
+
 # Then exec the container's main process (what's set as CMD in the Dockerfile).
 exec "$@"

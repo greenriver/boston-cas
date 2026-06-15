@@ -22,32 +22,33 @@ $cas-red-green: rgb(231, 223, 221) !default; // #E7DFDD
 // additional cas colors
 $cas-blue-007: #90A4BC !default;
 
-$brand-primary:         #457687 !default;
-$brand-primary-l:       #81adb9 !default;
-$brand-primary-ll:      #d8e7ea !default;
-$brand-primary-d:       darken($brand-primary, 5%) !default;
-$brand-secondary:       #7D5226 !default;
-$brand-secondary-l:     lighten($brand-secondary, 25%) !default;
-$brand-success:         #009f44 !default;
-$brand-success-l:       #81e7a7 !default;
-$brand-success-d:       #68c27f !default;
+$brand-primary: #457687 !default;
+$brand-primary-l: #81adb9 !default;
+$brand-primary-ll: #d8e7ea !default;
+$brand-primary-d: darken($brand-primary, 5%) !default;
+$brand-secondary: #7D5226 !default;
+$brand-secondary-l: lighten($brand-secondary, 25%) !default;
+$brand-success: #009f44 !default;
+$brand-success-l: #81e7a7 !default;
+$brand-success-d: #68c27f !default;
 $brand-positive: $brand-success;
 $brand-positive-l: $brand-success-l;
-$brand-info:            $brand-primary-l !default;
-$brand-warning:         #bc6923 !default;
-$brand-warning-l:       #ffcb9b !default;
-$brand-warning-d:       #e5b17e !default;
+$brand-info: $brand-primary-l !default;
+$brand-warning: #bc6923 !default;
+$brand-warning-l: #ffcb9b !default;
+$brand-warning-d: #e5b17e !default;
 
 // Sidebar / site menu (override in theme/styles/_variables.scss per deployment)
 $menu-sidebar-bg: $cas-blue !default;
 $menu-sidebar-border-d: darken($cas-blue, 6%) !default;
 $menu-section-accent: $brand-warning-l !default;
-$brand-danger:          #bb2716 !default;
-$brand-danger-d:        #df9489 !default;
-$brand-danger-l:        #ffa69b !default;
+$brand-danger: #bb2716 !default;
+$brand-danger-d: #df9489 !default;
+$brand-danger-l: #ffa69b !default;
 
 
 $white: rgba(255, 255, 255, 1) !default;
+$gray-010: rgb(250, 251, 252) !default;
 $gray-015: rgb(242, 242, 242) !default; // #f2f2f2 COB-sg lightest gray (bg)
 $gray-020: rgb(233, 231, 237) !default; // #E9E7ED
 $gray-025: rgb(228, 228, 228) !default; // #e4e4e4 COB-sg 2nd-to-lightest gray
@@ -61,12 +62,15 @@ $gray-070: rgb(64, 64, 64) !default; // #404040
 $gray-080: rgb(51, 51, 51) !default; // #333
 $black: rgba(0, 0, 0, 1) !default;
 
-$gray-base:              #000 !default;
-$gray-darker:            lighten($gray-base, 13.5%) !default; // #222
-$gray-dark:              lighten($gray-base, 20%) !default;   // #333
-$gray:                   lighten($gray-base, 33.5%) !default; // #555
-$gray-light:             lighten($gray-base, 46.7%) !default; // #777
-$gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
+$gray-base: #000 !default;
+$gray-darker: lighten($gray-base, 13.5%) !default; // #222
+$gray-dark: lighten($gray-base, 20%) !default; // #333
+$gray: lighten($gray-base, 33.5%) !default; // #555
+$gray-light: lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter: lighten($gray-base, 93.5%) !default; // #eee
+
+// Forms
+$input-bg: white;
 
 // Links
 $link-color: #A46B32;
@@ -83,14 +87,14 @@ $tab-bg: #88A6C9; // Primary in HMIS
 $text-color: $gray-070;
 
 $theme-colors: (
-  "primary":    $brand-primary,
-  "secondary":  $brand-secondary,
-  "success":    $brand-success,
-  "info":       $brand-info,
-  "warning":    $brand-warning,
-  "danger":     $brand-danger,
-  "light":      $white,
-  "dark":       $gray-080
+  "primary": $brand-primary,
+  "secondary": $brand-secondary,
+  "success": $brand-success,
+  "info": $brand-info,
+  "warning": $brand-warning,
+  "danger": $brand-danger,
+  "light": $white,
+  "dark": $gray-080
 );
 
 $input-disabled: #eeeeee;

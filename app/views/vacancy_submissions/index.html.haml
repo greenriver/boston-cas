@@ -1,0 +1,48 @@
+.o-page__title
+  %h1 All Vacancy Submissions
+  - if can_view_opportunities?
+    .o-page__action
+      = link_to new_vacancy_submission_path, class: 'btn btn-primary' do
+        %span.icon-plus
+        New Vacancy
+
+- @prompt = 'Search by program name...'
+
+.col-md-9
+  = render 'search_form'
+
+.row.table-utilities
+  .col-12
+    %p= page_entries_info @vacancy_submissions
+
+.table-responsive
+  .c-card.c-card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-hover.mb-0
+        %thead
+          %tr
+            %th Status
+            %th Date Submitted
+            %th Last Updated
+            %th Program
+            %th Site
+            %th Voucher Type
+            %th Bedrooms
+            %th Changes Requested
+        %tbody
+          - if @vacancy_submissions.any?
+            - @vacancy_submissions.each do |submission|
+              %tr
+                %td= vacancy_submission_status_badge(submission)
+                %td= submission.created_at.to_date
+                %td= submission.updated_at.to_date
+                %td= link_to(@programs_by_id[submission.program_id]&.name || '—', vacancy_submission_path(submission))
+                %td= submission.site_display
+                %td= submission.voucher_type_display
+                %td —
+                %td —
+          - else
+            %tr
+              %td{colspan: 8} No vacancy submissions found.
+
+%p= paginate @vacancy_submissions

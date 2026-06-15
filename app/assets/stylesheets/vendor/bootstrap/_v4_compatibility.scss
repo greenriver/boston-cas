@@ -41,15 +41,24 @@
 // Caret suppression (matching $enable-caret: false behavior)
 .dropdown-toggle::after { display: none; }
 
-// Badge color aliases — BS4 .badge-* → BS5 .text-bg-*
-.badge-primary   { @extend .text-bg-primary; }
-.badge-secondary { @extend .text-bg-secondary; }
-.badge-success   { @extend .text-bg-success; }
-.badge-danger    { @extend .text-bg-danger; }
-.badge-warning   { @extend .text-bg-warning; }
-.badge-info      { @extend .text-bg-info; }
-.badge-light     { @extend .text-bg-light; }
-.badge-dark      { @extend .text-bg-dark; }
+// Badge color aliases — soft/subtle style using Bootstrap 5.3 CSS custom properties
+@each $color in (primary, secondary, success, danger, warning, info) {
+  .badge-#{$color} {
+    background-color: var(--bs-#{$color}-bg-subtle);
+    color: var(--bs-#{$color}-text-emphasis);
+    border: 1px solid var(--bs-#{$color}-border-subtle);
+  }
+}
+.badge-light {
+  background-color: var(--bs-light-bg-subtle);
+  color: var(--bs-light-text-emphasis);
+  border: 1px solid var(--bs-light-border-subtle);
+}
+.badge-dark {
+  background-color: var(--bs-dark-bg-subtle);
+  color: var(--bs-dark-text-emphasis);
+  border: 1px solid var(--bs-dark-border-subtle);
+}
 
 // Input group addon (renamed to input-group-text in BS5)
 .input-group-addon { @extend .input-group-text; }
