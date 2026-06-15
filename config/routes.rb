@@ -3,6 +3,12 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
+  # Public theme asset endpoints — no authentication required
+  get 'theme/logo',       to: 'theme_assets#logo',       as: :theme_assets_logo
+  get 'theme/favicon_32', to: 'theme_assets#favicon_32', as: :theme_assets_favicon_32
+  get 'theme/favicon_16', to: 'theme_assets#favicon_16', as: :theme_assets_favicon_16
+  get 'theme/favicon_ico', to: 'theme_assets#favicon_ico', as: :theme_assets_favicon_ico
+
   devise_for :users, controllers: { invitations: 'users/invitations', sessions: 'users/sessions' }
   devise_scope :user do
     match 'active' => 'users/sessions#active', via: :get
@@ -192,6 +198,9 @@ Rails.application.routes.draw do
     resources :translation_keys, only: [:index, :update]
     resources :translation_text, only: [:update]
     resources :configs, only: [:index] do
+      patch :update, on: :collection
+    end
+    resources :themes, only: [:index] do
       patch :update, on: :collection
     end
     resources :match_routes, only: [:index, :edit, :update] do

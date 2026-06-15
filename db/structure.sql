@@ -1,8 +1,3 @@
--- \restrict qRfFTTNTDTdgc22caFaN5NRNxTvGayatyyEYG5Q7bzdWWl5a5LhJhQJHxAitU2b
-
--- Dumped from database version 17.5 (Debian 17.5-1.pgdg120+1)
--- Dumped by pg_dump version 17.6 (Debian 17.6-1.pgdg12+1)
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -32,6 +27,105 @@ COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_attachments (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    record_type character varying NOT NULL,
+    record_id bigint NOT NULL,
+    blob_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_attachments_id_seq OWNED BY public.active_storage_attachments.id;
+
+
+--
+-- Name: active_storage_blobs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_blobs (
+    id bigint NOT NULL,
+    key character varying NOT NULL,
+    filename character varying NOT NULL,
+    content_type character varying,
+    metadata text,
+    service_name character varying NOT NULL,
+    byte_size bigint NOT NULL,
+    checksum character varying,
+    created_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_blobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_blobs_id_seq OWNED BY public.active_storage_blobs.id;
+
+
+--
+-- Name: active_storage_variant_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_variant_records (
+    id bigint NOT NULL,
+    blob_id bigint NOT NULL,
+    variation_digest character varying NOT NULL
+);
+
+
+--
+-- Name: active_storage_variant_records_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_variant_records_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_variant_records_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_variant_records_id_seq OWNED BY public.active_storage_variant_records.id;
+
 
 --
 -- Name: activity_logs; Type: TABLE; Schema: public; Owner: -
@@ -363,10 +457,10 @@ CREATE TABLE public.client_opportunity_matches (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
-    selected boolean,
     active boolean DEFAULT false NOT NULL,
     closed boolean DEFAULT false NOT NULL,
     closed_reason character varying,
+    selected boolean,
     universe_state json,
     custom_expiration_length integer,
     shelter_expiration date,
@@ -487,8 +581,8 @@ CREATE TABLE public.clients (
     vispdat_priority_score integer DEFAULT 0,
     vispdat_length_homeless_in_days integer DEFAULT 0 NOT NULL,
     cspech_eligible boolean DEFAULT false,
-    calculated_last_homeless_night date,
     alternate_names character varying,
+    calculated_last_homeless_night date,
     congregate_housing boolean DEFAULT false,
     sober_housing boolean DEFAULT false,
     enrolled_project_ids jsonb,
@@ -960,8 +1054,8 @@ ALTER SEQUENCE public.domestic_violence_survivors_id_seq OWNED BY public.domesti
 CREATE TABLE public.entity_view_permissions (
     id integer NOT NULL,
     user_id integer,
-    entity_type character varying NOT NULL,
     entity_id integer NOT NULL,
+    entity_type character varying NOT NULL,
     editable boolean,
     deleted_at timestamp without time zone,
     agency_id bigint
@@ -1030,8 +1124,8 @@ CREATE TABLE public.external_referrals (
     client_id bigint NOT NULL,
     user_id bigint NOT NULL,
     referred_on date NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone
 );
 
@@ -1304,8 +1398,8 @@ CREATE TABLE public.housing_attributes (
     name character varying,
     value character varying,
     deleted_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1339,8 +1433,8 @@ CREATE TABLE public.housing_media_links (
     label character varying,
     url character varying,
     deleted_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1608,8 +1702,8 @@ CREATE TABLE public.match_decisions (
     deleted_at timestamp without time zone,
     administrative_cancel_reason_id integer,
     administrative_cancel_reason_other_explanation character varying,
-    application_date date,
     disable_opportunity boolean DEFAULT false,
+    application_date date,
     external_software_used boolean DEFAULT false NOT NULL,
     address character varying,
     include_note_in_email boolean,
@@ -1691,8 +1785,8 @@ CREATE TABLE public.match_mitigation_reasons (
     client_opportunity_match_id bigint,
     mitigation_reason_id bigint,
     addressed boolean DEFAULT false,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1806,7 +1900,7 @@ CREATE TABLE public.match_routes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     stalled_interval integer DEFAULT 7 NOT NULL,
-    match_prioritization_id integer DEFAULT 7 NOT NULL,
+    match_prioritization_id integer DEFAULT 6 NOT NULL,
     should_cancel_other_matches boolean DEFAULT true NOT NULL,
     should_activate_match boolean DEFAULT true NOT NULL,
     should_prevent_multiple_matches_per_client boolean DEFAULT true NOT NULL,
@@ -1893,8 +1987,8 @@ CREATE TABLE public.mitigation_reasons (
     id bigint NOT NULL,
     name character varying,
     active boolean DEFAULT true,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2141,6 +2235,8 @@ CREATE TABLE public.non_hmis_assessments (
     assessment_name character varying,
     hud_assessment_location integer,
     hud_assessment_type integer,
+    staff_name character varying,
+    staff_email character varying,
     enrolled_in_es boolean DEFAULT false NOT NULL,
     enrolled_in_so boolean DEFAULT false NOT NULL,
     additional_homeless_nights_sheltered integer DEFAULT 0,
@@ -2293,7 +2389,7 @@ CREATE TABLE public.non_hmis_clients (
     calculated_chronic_homelessness integer,
     type character varying,
     available boolean DEFAULT true NOT NULL,
-    neighborhood_interests json DEFAULT '[]'::jsonb,
+    neighborhood_interests json DEFAULT '[]'::json,
     income_total_monthly double precision,
     disabling_condition boolean DEFAULT false,
     physical_disability boolean DEFAULT false,
@@ -2463,9 +2559,9 @@ CREATE TABLE public.opportunities (
     updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
     unit_id integer,
-    matchability double precision,
     available_candidate boolean DEFAULT true,
     voucher_id integer,
+    matchability double precision,
     success boolean DEFAULT false
 );
 
@@ -2566,8 +2662,8 @@ CREATE TABLE public.outreach_histories (
     non_hmis_client_id bigint NOT NULL,
     user_id bigint NOT NULL,
     outreach_name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2814,8 +2910,8 @@ CREATE TABLE public.project_clients (
     sober_housing boolean DEFAULT false,
     enrolled_project_ids jsonb,
     active_cohort_ids jsonb,
-    client_identifier character varying,
     vispdat_priority_score integer DEFAULT 0,
+    client_identifier character varying,
     assessment_score integer DEFAULT 0 NOT NULL,
     ssvf_eligible boolean DEFAULT false NOT NULL,
     rrh_desired boolean DEFAULT false NOT NULL,
@@ -3159,8 +3255,8 @@ ALTER SEQUENCE public.reporting_decisions_id_seq OWNED BY public.reporting_decis
 CREATE TABLE public.requirements (
     id integer NOT NULL,
     rule_id integer,
-    requirer_type character varying,
     requirer_id integer,
+    requirer_type character varying,
     positive boolean,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone,
@@ -3200,12 +3296,9 @@ CREATE TABLE public.roles (
     updated_at timestamp without time zone NOT NULL,
     can_view_all_clients boolean DEFAULT false,
     can_edit_all_clients boolean DEFAULT false,
-    can_edit_clients_based_on_rules boolean DEFAULT false,
     can_participate_in_matches boolean DEFAULT false,
     can_view_all_matches boolean DEFAULT false,
-    can_view_own_closed_matches boolean DEFAULT false,
     can_see_alternate_matches boolean DEFAULT false,
-    can_see_all_alternate_matches boolean DEFAULT false,
     can_edit_match_contacts boolean DEFAULT false,
     can_approve_matches boolean DEFAULT false,
     can_reject_matches boolean DEFAULT false,
@@ -3215,11 +3308,6 @@ CREATE TABLE public.roles (
     can_edit_users boolean DEFAULT false,
     can_view_full_ssn boolean DEFAULT false,
     can_view_full_dob boolean DEFAULT false,
-    can_view_dmh_eligibility boolean DEFAULT false,
-    can_view_va_eligibility boolean DEFAULT false,
-    can_view_hues_eligibility boolean DEFAULT false,
-    can_view_hiv_positive_eligibility boolean DEFAULT false,
-    can_view_client_confidentiality boolean DEFAULT false,
     can_view_buildings boolean DEFAULT false,
     can_edit_buildings boolean DEFAULT false,
     can_view_funding_sources boolean DEFAULT false,
@@ -3229,10 +3317,7 @@ CREATE TABLE public.roles (
     can_view_vouchers boolean DEFAULT false,
     can_edit_vouchers boolean DEFAULT false,
     can_view_programs boolean DEFAULT false,
-    can_view_assigned_programs boolean DEFAULT false,
     can_edit_programs boolean DEFAULT false,
-    can_edit_assigned_programs boolean DEFAULT false,
-    can_edit_voucher_rules boolean DEFAULT false,
     can_view_opportunities boolean DEFAULT false,
     can_edit_opportunities boolean DEFAULT false,
     can_reissue_notifications boolean DEFAULT false,
@@ -3247,33 +3332,44 @@ CREATE TABLE public.roles (
     can_edit_available_services boolean DEFAULT false,
     can_assign_services boolean DEFAULT false,
     can_assign_requirements boolean DEFAULT false,
+    can_view_dmh_eligibility boolean DEFAULT false,
+    can_view_va_eligibility boolean DEFAULT false NOT NULL,
+    can_view_hues_eligibility boolean DEFAULT false NOT NULL,
     can_become_other_users boolean DEFAULT false,
+    can_view_client_confidentiality boolean DEFAULT false NOT NULL,
+    can_view_hiv_positive_eligibility boolean DEFAULT false,
+    can_view_own_closed_matches boolean DEFAULT false,
     can_edit_translations boolean DEFAULT false,
     can_view_vspdats boolean DEFAULT false,
     can_manage_config boolean DEFAULT false,
     can_create_overall_note boolean DEFAULT false,
-    can_delete_client_notes boolean DEFAULT false,
     can_enter_deidentified_clients boolean DEFAULT false,
     can_manage_deidentified_clients boolean DEFAULT false,
-    can_manage_all_deidentified_clients boolean DEFAULT false,
-    can_export_deidentified_clients boolean DEFAULT false,
     can_add_cohorts_to_deidentified_clients boolean DEFAULT false,
+    can_delete_client_notes boolean DEFAULT false,
     can_enter_identified_clients boolean DEFAULT false,
     can_manage_identified_clients boolean DEFAULT false,
-    can_manage_all_identified_clients boolean DEFAULT false,
-    can_export_identified_clients boolean DEFAULT false,
-    can_view_all_covid_pathways boolean DEFAULT false,
     can_add_cohorts_to_identified_clients boolean DEFAULT false,
     can_manage_neighborhoods boolean DEFAULT false,
+    can_view_assigned_programs boolean DEFAULT false,
+    can_edit_assigned_programs boolean DEFAULT false,
+    can_export_deidentified_clients boolean DEFAULT false,
+    can_export_identified_clients boolean DEFAULT false,
     can_manage_tags boolean DEFAULT false,
     can_manage_imported_clients boolean DEFAULT false,
+    can_edit_clients_based_on_rules boolean DEFAULT false,
     can_send_notes_via_email boolean DEFAULT false,
     can_upload_deidentified_clients boolean DEFAULT false,
     can_delete_matches boolean DEFAULT false,
     can_reopen_matches boolean DEFAULT false,
+    can_see_all_alternate_matches boolean DEFAULT false,
     can_edit_help boolean DEFAULT false,
     can_audit_users boolean DEFAULT false,
+    can_view_all_covid_pathways boolean DEFAULT false,
     can_manage_sessions boolean DEFAULT false,
+    can_edit_voucher_rules boolean DEFAULT false,
+    can_manage_all_deidentified_clients boolean DEFAULT false,
+    can_manage_all_identified_clients boolean DEFAULT false,
     can_activate_matches boolean DEFAULT false
 );
 
@@ -3452,8 +3548,8 @@ CREATE TABLE public.shelter_histories (
     non_hmis_client_id bigint NOT NULL,
     user_id bigint NOT NULL,
     shelter_name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3552,8 +3648,8 @@ CREATE TABLE public.sub_program_contacts (
     id bigint NOT NULL,
     sub_program_id bigint NOT NULL,
     contact_id bigint NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
     dnd_staff boolean DEFAULT false NOT NULL,
     housing_subsidy_admin boolean DEFAULT false NOT NULL,
@@ -3774,6 +3870,39 @@ CREATE SEQUENCE public.tags_id_seq
 --
 
 ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
+
+
+--
+-- Name: themes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.themes (
+    id bigint NOT NULL,
+    client character varying,
+    homepage_content text,
+    css text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: themes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.themes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: themes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.themes_id_seq OWNED BY public.themes.id;
 
 
 --
@@ -4024,8 +4153,8 @@ CREATE TABLE public.users (
     invitation_sent_at timestamp without time zone,
     invitation_accepted_at timestamp without time zone,
     invitation_limit integer,
-    invited_by_type character varying,
     invited_by_id integer,
+    invited_by_type character varying,
     invitations_count integer DEFAULT 0,
     receive_initial_notification boolean DEFAULT false,
     first_name character varying,
@@ -4186,8 +4315,8 @@ CREATE TABLE public.weighting_rules (
     route_id bigint,
     requirement_id bigint,
     applied_to integer DEFAULT 0,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone
 );
 
@@ -4209,6 +4338,27 @@ CREATE SEQUENCE public.weighting_rules_id_seq
 --
 
 ALTER SEQUENCE public.weighting_rules_id_seq OWNED BY public.weighting_rules.id;
+
+
+--
+-- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET DEFAULT nextval('public.active_storage_attachments_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_blobs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('public.active_storage_blobs_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_variant_records id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET DEFAULT nextval('public.active_storage_variant_records_id_seq'::regclass);
 
 
 --
@@ -4779,6 +4929,13 @@ ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id
 
 
 --
+-- Name: themes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.themes ALTER COLUMN id SET DEFAULT nextval('public.themes_id_seq'::regclass);
+
+
+--
 -- Name: translation_keys id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -4853,6 +5010,30 @@ ALTER TABLE ONLY public.vouchers ALTER COLUMN id SET DEFAULT nextval('public.vou
 --
 
 ALTER TABLE ONLY public.weighting_rules ALTER COLUMN id SET DEFAULT nextval('public.weighting_rules_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_attachments active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT active_storage_attachments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_blobs active_storage_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_blobs
+    ADD CONSTRAINT active_storage_blobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_variant_records active_storage_variant_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_variant_records
+    ADD CONSTRAINT active_storage_variant_records_pkey PRIMARY KEY (id);
 
 
 --
@@ -5528,6 +5709,14 @@ ALTER TABLE ONLY public.tags
 
 
 --
+-- Name: themes themes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.themes
+    ADD CONSTRAINT themes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: translation_keys translation_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5634,6 +5823,34 @@ CREATE INDEX created_at_idx ON public.activity_logs USING brin (created_at);
 --
 
 CREATE INDEX delayed_jobs_priority ON public.delayed_jobs USING btree (priority, run_at);
+
+
+--
+-- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_storage_attachments_on_blob_id ON public.active_storage_attachments USING btree (blob_id);
+
+
+--
+-- Name: index_active_storage_attachments_uniqueness; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON public.active_storage_attachments USING btree (record_type, record_id, name, blob_id);
+
+
+--
+-- Name: index_active_storage_blobs_on_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_blobs USING btree (key);
+
+
+--
+-- Name: index_active_storage_variant_records_uniqueness; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.active_storage_variant_records USING btree (blob_id, variation_digest);
 
 
 --
@@ -6778,150 +6995,166 @@ CREATE UNIQUE INDEX uidx_client_search_queries ON public.client_search_queries U
 
 
 --
--- Name: sub_programs fk_rails_08099961f4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.sub_programs
-    ADD CONSTRAINT fk_rails_08099961f4 FOREIGN KEY (program_id) REFERENCES public.programs(id);
-
-
---
--- Name: sub_programs fk_rails_1c9726a2f9; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sub_programs
-    ADD CONSTRAINT fk_rails_1c9726a2f9 FOREIGN KEY (hsa_id) REFERENCES public.subgrantees(id);
+ALTER TABLE ONLY public.active_storage_variant_records
+    ADD CONSTRAINT fk_rails_993965df05 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
 
 
 --
--- Name: non_hmis_assessments fk_rails_2ebe7e2474; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: non_hmis_assessments non_hmis_assessments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.non_hmis_assessments
-    ADD CONSTRAINT fk_rails_2ebe7e2474 FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT non_hmis_assessments_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: user_roles fk_rails_318345354e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_roles
-    ADD CONSTRAINT fk_rails_318345354e FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
-
-
---
--- Name: user_roles fk_rails_3369e0d5fc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_roles
-    ADD CONSTRAINT fk_rails_3369e0d5fc FOREIGN KEY (role_id) REFERENCES public.roles(id) ON DELETE CASCADE;
-
-
---
--- Name: vouchers fk_rails_3938619bb0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vouchers
-    ADD CONSTRAINT fk_rails_3938619bb0 FOREIGN KEY (sub_program_id) REFERENCES public.sub_programs(id);
-
-
---
--- Name: vouchers fk_rails_3e6ca7b204; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vouchers
-    ADD CONSTRAINT fk_rails_3e6ca7b204 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
--- Name: reissue_requests fk_rails_5502b5ba7e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.reissue_requests
-    ADD CONSTRAINT fk_rails_5502b5ba7e FOREIGN KEY (reissued_by) REFERENCES public.users(id);
-
-
---
--- Name: programs fk_rails_6a0a1e6411; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.programs
-    ADD CONSTRAINT fk_rails_6a0a1e6411 FOREIGN KEY (subgrantee_id) REFERENCES public.subgrantees(id);
-
-
---
--- Name: sub_programs fk_rails_7aa5978182; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sub_programs
-    ADD CONSTRAINT fk_rails_7aa5978182 FOREIGN KEY (building_id) REFERENCES public.buildings(id);
-
-
---
--- Name: reissue_requests fk_rails_7f153cde04; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.reissue_requests
-    ADD CONSTRAINT fk_rails_7f153cde04 FOREIGN KEY (notification_id) REFERENCES public.notifications(id);
-
-
---
--- Name: opportunities fk_rails_90139b441c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: opportunities opportunities_voucher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.opportunities
-    ADD CONSTRAINT fk_rails_90139b441c FOREIGN KEY (voucher_id) REFERENCES public.vouchers(id);
+    ADD CONSTRAINT opportunities_voucher_id_fkey FOREIGN KEY (voucher_id) REFERENCES public.vouchers(id);
 
 
 --
--- Name: programs fk_rails_9d29596bf8; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: programs programs_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.programs
-    ADD CONSTRAINT fk_rails_9d29596bf8 FOREIGN KEY (funding_source_id) REFERENCES public.funding_sources(id);
+    ADD CONSTRAINT programs_contact_id_fkey FOREIGN KEY (contact_id) REFERENCES public.contacts(id);
 
 
 --
--- Name: vouchers fk_rails_b7b36b70ab; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: programs programs_funding_source_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.programs
+    ADD CONSTRAINT programs_funding_source_id_fkey FOREIGN KEY (funding_source_id) REFERENCES public.funding_sources(id);
+
+
+--
+-- Name: programs programs_subgrantee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.programs
+    ADD CONSTRAINT programs_subgrantee_id_fkey FOREIGN KEY (subgrantee_id) REFERENCES public.subgrantees(id);
+
+
+--
+-- Name: reissue_requests reissue_requests_notification_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reissue_requests
+    ADD CONSTRAINT reissue_requests_notification_id_fkey FOREIGN KEY (notification_id) REFERENCES public.notifications(id);
+
+
+--
+-- Name: reissue_requests reissue_requests_reissued_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reissue_requests
+    ADD CONSTRAINT reissue_requests_reissued_by_fkey FOREIGN KEY (reissued_by) REFERENCES public.users(id);
+
+
+--
+-- Name: sub_programs sub_programs_building_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sub_programs
+    ADD CONSTRAINT sub_programs_building_id_fkey FOREIGN KEY (building_id) REFERENCES public.buildings(id);
+
+
+--
+-- Name: sub_programs sub_programs_hsa_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sub_programs
+    ADD CONSTRAINT sub_programs_hsa_id_fkey FOREIGN KEY (hsa_id) REFERENCES public.subgrantees(id);
+
+
+--
+-- Name: sub_programs sub_programs_program_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sub_programs
+    ADD CONSTRAINT sub_programs_program_id_fkey FOREIGN KEY (program_id) REFERENCES public.programs(id);
+
+
+--
+-- Name: sub_programs sub_programs_sub_contractor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sub_programs
+    ADD CONSTRAINT sub_programs_sub_contractor_id_fkey FOREIGN KEY (sub_contractor_id) REFERENCES public.subgrantees(id);
+
+
+--
+-- Name: sub_programs sub_programs_subgrantee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sub_programs
+    ADD CONSTRAINT sub_programs_subgrantee_id_fkey FOREIGN KEY (subgrantee_id) REFERENCES public.subgrantees(id);
+
+
+--
+-- Name: user_roles user_roles_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_roles
+    ADD CONSTRAINT user_roles_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.roles(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_roles user_roles_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_roles
+    ADD CONSTRAINT user_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: vouchers vouchers_sub_program_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vouchers
-    ADD CONSTRAINT fk_rails_b7b36b70ab FOREIGN KEY (unit_id) REFERENCES public.units(id);
+    ADD CONSTRAINT vouchers_sub_program_id_fkey FOREIGN KEY (sub_program_id) REFERENCES public.sub_programs(id);
 
 
 --
--- Name: sub_programs fk_rails_b8163bf251; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vouchers vouchers_unit_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.sub_programs
-    ADD CONSTRAINT fk_rails_b8163bf251 FOREIGN KEY (subgrantee_id) REFERENCES public.subgrantees(id);
-
-
---
--- Name: programs fk_rails_c0d5ae3683; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.programs
-    ADD CONSTRAINT fk_rails_c0d5ae3683 FOREIGN KEY (contact_id) REFERENCES public.contacts(id);
+ALTER TABLE ONLY public.vouchers
+    ADD CONSTRAINT vouchers_unit_id_fkey FOREIGN KEY (unit_id) REFERENCES public.units(id);
 
 
 --
--- Name: sub_programs fk_rails_f92c6a12a3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vouchers vouchers_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.sub_programs
-    ADD CONSTRAINT fk_rails_f92c6a12a3 FOREIGN KEY (sub_contractor_id) REFERENCES public.subgrantees(id);
+ALTER TABLE ONLY public.vouchers
+    ADD CONSTRAINT vouchers_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict qRfFTTNTDTdgc22caFaN5NRNxTvGayatyyEYG5Q7bzdWWl5a5LhJhQJHxAitU2b
-
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260505173350'),
+('20260505170932'),
 ('20250917150302'),
 ('20250821213202'),
 ('20250716125401'),
@@ -7018,6 +7251,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129191957'),
 ('20211129190937'),
 ('20211122204003'),
+('20211115133847'),
 ('20211027170803'),
 ('20211027134707'),
 ('20211020150747'),
@@ -7269,6 +7503,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170605162924'),
 ('20170524180812'),
 ('20170524180811'),
+('20170524180728'),
+('20170524180727'),
 ('20170511194721'),
 ('20170511192828'),
 ('20170505170358'),
