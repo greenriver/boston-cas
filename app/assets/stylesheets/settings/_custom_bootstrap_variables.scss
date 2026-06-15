@@ -10,9 +10,13 @@ $nav-tabs-border-radius: 0;
 $input-btn-padding-y: .6rem;
 $input-padding-y: $input-btn-padding-y;
 
+// Badges
+$badge-padding-y: 0.5rem;
+$badge-padding-x: 0.75em;
+
 // Buttons
-$btn-padding-x   : 2rem;
-$btn-padding-y   : $input-btn-padding-y;
+$btn-padding-x : 2rem;
+$btn-padding-y : $input-btn-padding-y;
 $btn-padding-x-sm: 1.5rem;
 $btn-padding-y-sm: .4rem;
 
@@ -20,12 +24,12 @@ $btn-padding-y-sm: .4rem;
 $input-border-color: $brand-primary-l;
 $input-disabled-bg: $input-disabled;
 
-$primary:       $brand-primary;
-$secondary:     $brand-secondary;
-$success:       $brand-success;
-$info:          $brand-info;
-$warning:       $brand-warning;
-$danger:        $brand-danger;
+$primary: $brand-primary;
+$secondary: $brand-secondary;
+$success: $brand-success;
+$info: $brand-info;
+$warning: $brand-warning;
+$danger: $brand-danger;
 
 // Tooltips
 $tooltip-font-size: 13px;
@@ -47,5 +51,8 @@ $pagination-active-bg: $brand-primary-d;
 
 // Table
 // App-specific variable — not a Bootstrap 5 variable (BS5 dropped $table-head-bg)
-$table-head-bg: $gray-015;
-$table-hover-bg: lighten($cob-sg-blue-005, 2%);
+$table-bg: white;
+$table-head-bg: $gray-010;
+$table-hover-bg: $gray-015;
+$table-cell-padding-x: 0.75rem;
+$table-cell-padding-y: 0.75rem;

@@ -1,10 +1,12 @@
 .table-utilities {
   margin-top: space(2);
   margin-bottom: space(2);
+
   @media (max-width: $screen-sm-max) {
     @include cas-margin(12px null 24px);
   }
 }
+
 // .table > thead > tr > th,
 // .table > thead > tr > td,
 // .table > tbody > tr > th,
@@ -16,21 +18,24 @@
 .table__init-cap-header th {
   text-transform: capitalize;
 }
+
 th[class^="sort-"] {
   background-color: $cas-red-green;
 }
+
 .table__full-width {
   width: 100%;
 }
+
 .table-responsive span[class^="icon-"],
 .table-responsive span[class*="icon-"] {
   font-size: rem(12);
 }
+
 .btn-sm span[class^="icon-"],
 .btn-sm span[class*="icon-"],
 .btn-sm span[class^="icon-"],
-.btn-sm span[class*="icon-"]
-{
+.btn-sm span[class*="icon-"] {
   font-size: 10px;
   line-height: 1.5;
   padding-right: 2px;
@@ -38,18 +43,20 @@ th[class^="sort-"] {
 
 .table tr.no-border,
 table tr.no-border {
+
   &,
-  > th,
-  > td {
+  >th,
+  >td {
     border: 0;
   }
 }
 
-.table thead td {
+.table thead td,
+.table thead th {
   background: $table-head-bg;
   font-weight: 800;
   border-bottom-color: $gray-020;
-  border-bottom-size: 2px;
+  border-bottom-width: 2px;
 }
 
 .pagy-container {

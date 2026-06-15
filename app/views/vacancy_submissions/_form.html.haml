@@ -1,14 +1,10 @@
-- editing     = vacancy_submission.persisted?
-- form_url    = editing ? vacancy_submission_path(vacancy_submission) : vacancy_submissions_path
-- form_method = editing ? :patch : :post
-- dd          = editing ? vacancy_submission.draft_data : {}
+- editing = vacancy_submission.persisted?
+- initial_program = vacancy_submission.program_id || 0
+- initial_sub = vacancy_submission.sub_program_id || 0
+- stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub }
 
-= form_with url: form_url, method: form_method, local: true, html: { id: 'vacancy_submission_form' } do |f|
-  - if vacancy_submission.errors.any?
-    .alert.alert-danger
-      %ul.mb-0
-        - vacancy_submission.errors.full_messages.each do |msg|
-          %li= msg
+= simple_form_for vacancy_submission, html: { id: 'vacancy_submission_form', data: stimulus_data } do |f|
+  = f.error_notification
 
   %p.text-muted.small
     Fields marked with
@@ -16,150 +12,56 @@
     are required.
 
   / ── Section 1: Resource Type & Program ──
-  .card.mb-4
-    .card-body
-      %h5.card-title Resource Type & Program
+  .c-card.mb-4
+    .c-card__content
+      %h5.c-card__title Resource Type & Program
 
-      .mb-3
-        = label_tag :program_id, 'Program Name', class: 'form-label required'
-        = select_tag 'vacancy_submission[program_id]',
-            options_for_select(@programs.map { |p| [p.name, p.id] }, dd['program_id'] || params.dig(:vacancy_submission, :program_id)),
-            include_blank: '-- Select a program --',
-            class: 'form-select select2',
-            id: 'vs_program_id'
+      = f.input :program_id, label: 'Program', as: :select2,
+          collection: @programs.map { |p| [p.name, p.id] },
+          include_blank: '-- Select a program --',
+          required: true,
+          input_html: { data: { 'vacancy-submission-form-target': 'programSelect' } }
 
-      .mb-3
-        = label_tag :sub_program_id, 'Sub-Program Name', class: 'form-label required'
-        = select_tag 'vacancy_submission[sub_program_id]',
-            options_for_select([]),
-            include_blank: '-- Select a sub-program --',
-            class: 'form-select select2',
-            id: 'vs_sub_program_id',
-            disabled: true
+      = f.input :sub_program_id, label: 'Sub-Program', as: :select2,
+          collection: [],
+          include_blank: false,
+          input_html: { disabled: true, data: { 'vacancy-submission-form-target': 'subProgramSelect' } }
 
-      .mb-3
-        %label.form-label Resource Type
-        %div#vs_resource_type_display.form-control-plaintext.text-muted{style: 'min-height: 38px;'}
-          = dd['resource_type'].presence || params.dig(:vacancy_submission, :resource_type).presence || '—'
+      .form-group
+        %label.control-label Resource Type
+        .form-control-plaintext.text-muted{style: 'min-height: 38px;', data: { 'vacancy-submission-form-target': 'resourceTypeDisplay' }}
+          = vacancy_submission.resource_type.presence || '—'
 
   / ── Section 2: Unit Type ──
-  .card.mb-4
-    .card-body
-      %h5.card-title Unit Type
+  .c-card.mb-4
+    .c-card__content
+      %h5.c-card__title Unit Type
 
-      .mb-3
-        %label.form-label Unit Type
-        %div#vs_unit_type_display.form-control-plaintext.text-muted
-        %small#vs_unit_type_hint.text-muted
+      .form-group
+        %label.control-label Unit Type
+        .form-control-plaintext.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeDisplay' }}
+        %small.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeHint' }}
 
       / Address fields — shown only for physical units
-      #vs_address_fields{style: 'display:none;'}
+      %div{hidden: true, data: { 'vacancy-submission-form-target': 'addressFields' }}
         %hr
-        %p.fw-semibold.mb-3 Unit Address
+        %p.fw-semibold Unit Address
 
-        .mb-3
-          = label_tag :unit_address_street, 'Site Address', class: 'form-label required'
-          = text_field_tag 'vacancy_submission[unit_address_street]',
-              dd['unit_address_street'] || params.dig(:vacancy_submission, :unit_address_street),
-              class: 'form-control', placeholder: '123 Main St'
+        = f.input :unit_address_street, label: 'Site Address', required: true, placeholder: 'Street Address'
 
-        .row.mb-3
+        .row
           .col-md-6
-            = label_tag :unit_address_unit_number, 'Unit Number', class: 'form-label'
-            = text_field_tag 'vacancy_submission[unit_address_unit_number]',
-                dd['unit_address_unit_number'] || params.dig(:vacancy_submission, :unit_address_unit_number),
-                class: 'form-control', placeholder: 'Apt 2B'
+            = f.input :unit_address_unit_number, label: 'Unit Number', placeholder: 'Number'
           .col-md-6
-            = label_tag :unit_address_city, 'City', class: 'form-label required'
-            = text_field_tag 'vacancy_submission[unit_address_city]',
-                dd['unit_address_city'] || params.dig(:vacancy_submission, :unit_address_city),
-                class: 'form-control', placeholder: 'Boston'
+            = f.input :unit_address_city, label: 'City', required: true, placeholder: 'City'
 
-        .row.mb-3
+        .row
           .col-md-6
-            = label_tag :unit_address_state, 'State', class: 'form-label required'
-            = text_field_tag 'vacancy_submission[unit_address_state]',
-                dd['unit_address_state'] || params.dig(:vacancy_submission, :unit_address_state).presence || 'MA',
-                class: 'form-control'
+            = f.input :unit_address_state, label: 'State', required: true
           .col-md-6
-            = label_tag :unit_address_zip, 'Zip Code', class: 'form-label required'
-            = text_field_tag 'vacancy_submission[unit_address_zip]',
-                dd['unit_address_zip'] || params.dig(:vacancy_submission, :unit_address_zip),
-                class: 'form-control', placeholder: '02101'
+            = f.input :unit_address_zip, label: 'Zip Code', required: true, placeholder: '99999'
 
   / Actions
   .d-flex.gap-2
-    = submit_tag(editing ? 'Save Changes' : 'Submit Vacancy', class: 'btn btn-primary')
+    = f.submit (editing ? 'Save Changes' : 'Submit Vacancy'), class: 'btn btn-primary'
     = link_to 'Cancel', (editing ? vacancy_submission_path(vacancy_submission) : vacancy_submissions_path), class: 'btn btn-outline-secondary'
-
-= content_for :page_js do
-  :javascript
-    $(document).ready(function() {
-      var programsData = #{raw @programs_data.to_json};
-      var programMap = {};
-      programsData.forEach(function(p) { programMap[p.id] = p; });
-
-      function populateSubPrograms(programId, selectedSubProgramId) {
-        var $sub = $('#vs_sub_program_id');
-        $sub.empty().append('<option value="">-- Select a sub-program --</option>');
-
-        if (!programId || !programMap[programId]) {
-          $sub.prop('disabled', true);
-          $('#vs_resource_type_display').text('—');
-          return;
-        }
-
-        var program = programMap[programId];
-        $('#vs_resource_type_display').text(program.resource_type || '—');
-
-        program.sub_programs.forEach(function(sp) {
-          var selected = (String(sp.id) === String(selectedSubProgramId)) ? 'selected' : '';
-          $sub.append(
-            $('<option>', {
-              value: sp.id,
-              selected: selected,
-              'data-is-voucher': sp.is_voucher,
-              'data-program-type': sp.program_type,
-            }).text(sp.name)
-          );
-        });
-
-        $sub.prop('disabled', false);
-        refreshUnitType();
-      }
-
-      function refreshUnitType() {
-        var $opt = $('#vs_sub_program_id option:selected');
-        if (!$opt.val()) {
-          $('#vs_unit_type_display').text('—');
-          $('#vs_unit_type_hint').text('');
-          $('#vs_address_fields').hide();
-          return;
-        }
-
-        var isVoucher = $opt.data('is-voucher');
-        var programType = $opt.data('program-type') || '';
-
-        if (isVoucher) {
-          $('#vs_unit_type_display').text('Voucher');
-          $('#vs_unit_type_hint').text('Tenant-Based — no physical address required');
-          $('#vs_address_fields').hide();
-        } else {
-          $('#vs_unit_type_display').text('Physical Unit');
-          $('#vs_unit_type_hint').text(programType ? 'Sub-program type: ' + programType : '');
-          $('#vs_address_fields').show();
-        }
-      }
-
-      $('#vs_program_id').on('change', function() {
-        populateSubPrograms($(this).val(), null);
-      });
-
-      $('#vs_sub_program_id').on('change', refreshUnitType);
-
-      var initialProgram = #{(dd['program_id'] || params.dig(:vacancy_submission, :program_id)).to_json};
-      var initialSubProgram = #{(dd['sub_program_id'] || params.dig(:vacancy_submission, :sub_program_id)).to_json};
-      if (initialProgram) {
-        populateSubPrograms(initialProgram, initialSubProgram);
-      }
-    });

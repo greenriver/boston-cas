@@ -1,28 +1,36 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :vacancy_submission do
     association :user
     status { 'awaiting_approval' }
 
     transient do
-      the_program    { create(:program) }
+      the_program     { create(:program) }
       the_sub_program { create(:sub_program, program: the_program, program_type: 'Project-Based', building: create(:building)) }
-      is_voucher     { false }
+      is_voucher      { false }
     end
 
     draft_data do
       data = {
-        'program_id'     => the_program.id,
+        'program_id' => the_program.id,
         'sub_program_id' => the_sub_program.id,
-        'resource_type'  => 'PSH Resource',
-        'is_voucher'     => is_voucher,
+        'resource_type' => 'PSH Resource',
+        'is_voucher' => is_voucher,
       }
       unless is_voucher
         data.merge!(
-          'unit_address_street'      => '123 Main St',
+          'unit_address_street' => '123 Main St',
           'unit_address_unit_number' => '1A',
-          'unit_address_city'        => 'Boston',
-          'unit_address_state'       => 'MA',
-          'unit_address_zip'         => '02101',
+          'unit_address_city' => 'Boston',
+          'unit_address_state' => 'MA',
+          'unit_address_zip' => '02101',
         )
       end
       data
@@ -30,6 +38,7 @@ FactoryBot.define do
 
     trait :voucher do
       is_voucher { true }
+
       transient do
         the_sub_program { create(:sub_program, program: the_program, program_type: 'Tenant-Based') }
       end

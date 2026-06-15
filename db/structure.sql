@@ -2451,8 +2451,8 @@ CREATE TABLE public.non_hmis_clients (
     no_single_gender boolean DEFAULT false,
     transgender boolean DEFAULT false,
     questioning boolean DEFAULT false,
-    enrolled_project_ids jsonb,
     federal_benefits boolean,
+    enrolled_project_ids jsonb,
     psh_required character varying DEFAULT 'maybe'::character varying
 );
 
@@ -7340,7 +7340,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240805133313'),
 ('20240805131951'),
 ('20240731130949'),
-('20240716143531'),
 ('20240708180516'),
 ('20240610185742'),
 ('20240610132826'),

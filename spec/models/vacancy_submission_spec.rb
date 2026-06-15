@@ -1,3 +1,11 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+###
+
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe VacancySubmission, type: :model do
@@ -10,10 +18,15 @@ RSpec.describe VacancySubmission, type: :model do
     it 'is valid with required fields' do
       vs = described_class.new(
         status: 'awaiting_approval',
-        draft_data: { 'program_id' => program.id, 'sub_program_id' => sub_program.id,
-                      'is_voucher' => false, 'unit_address_street' => '123 Main St',
-                      'unit_address_city' => 'Boston', 'unit_address_state' => 'MA',
-                      'unit_address_zip' => '02101' },
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'unit_address_street' => '123 Main St',
+          'unit_address_city' => 'Boston',
+          'unit_address_state' => 'MA',
+          'unit_address_zip' => '02101',
+        },
       )
       expect(vs).to be_valid
     end
@@ -27,13 +40,13 @@ RSpec.describe VacancySubmission, type: :model do
     it 'is invalid when program_id missing' do
       vs = described_class.new(status: 'awaiting_approval', draft_data: { 'sub_program_id' => sub_program.id })
       expect(vs).not_to be_valid
-      expect(vs.errors[:base]).to include('Program is required')
+      expect(vs.errors[:program_id]).to include('can\'t be blank')
     end
 
     it 'is invalid when sub_program_id missing' do
       vs = described_class.new(status: 'awaiting_approval', draft_data: { 'program_id' => program.id })
       expect(vs).not_to be_valid
-      expect(vs.errors[:base]).to include('Sub-program is required')
+      expect(vs.errors[:sub_program_id]).to include('can\'t be blank')
     end
 
     it 'requires address fields for physical units' do
@@ -42,7 +55,7 @@ RSpec.describe VacancySubmission, type: :model do
         draft_data: { 'program_id' => program.id, 'sub_program_id' => sub_program.id, 'is_voucher' => false },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:base]).to include('Street address is required')
+      expect(vs.errors[:unit_address_street]).to include('can\'t be blank')
     end
 
     it 'does not require address fields for voucher units' do
@@ -70,15 +83,53 @@ RSpec.describe VacancySubmission, type: :model do
     end
   end
 
+  describe 'JSONB accessors' do
+    describe '#program_id' do
+      it 'casts a string value to integer' do
+        vs = described_class.new(draft_data: { 'program_id' => '42' })
+        expect(vs.program_id).to eq(42)
+      end
+
+      it 'returns nil when not set' do
+        vs = described_class.new(draft_data: {})
+        expect(vs.program_id).to be_nil
+      end
+    end
+
+    describe '#sub_program_id' do
+      it 'casts a string value to integer' do
+        vs = described_class.new(draft_data: { 'sub_program_id' => '7' })
+        expect(vs.sub_program_id).to eq(7)
+      end
+
+      it 'returns nil when not set' do
+        vs = described_class.new(draft_data: {})
+        expect(vs.sub_program_id).to be_nil
+      end
+    end
+
+    describe '#voucher?' do
+      it 'returns true when is_voucher is true' do
+        vs = described_class.new(draft_data: { 'is_voucher' => true })
+        expect(vs.voucher?).to be true
+      end
+
+      it 'returns false when is_voucher is false' do
+        vs = described_class.new(draft_data: { 'is_voucher' => false })
+        expect(vs.voucher?).to be false
+      end
+    end
+  end
+
   describe '#site_display' do
     it 'returns formatted address for physical units' do
       vs = described_class.new(draft_data: {
-        'is_voucher' => false,
-        'unit_address_street' => '123 Main St',
-        'unit_address_city' => 'Boston',
-        'unit_address_state' => 'MA',
-        'unit_address_zip' => '02101',
-      })
+                                 'is_voucher' => false,
+                                 'unit_address_street' => '123 Main St',
+                                 'unit_address_city' => 'Boston',
+                                 'unit_address_state' => 'MA',
+                                 'unit_address_zip' => '02101',
+                               })
       expect(vs.site_display).to eq('123 Main St, Boston, MA, 02101')
     end
 
@@ -166,6 +217,53 @@ RSpec.describe VacancySubmission, type: :model do
     it '#resubmittable? is false when active' do
       vs = build(:vacancy_submission, :active)
       expect(vs.resubmittable?).to be false
+    end
+  end
+
+  describe 'state transition methods' do
+    let(:user) { create(:user) }
+
+    describe '#approve!' do
+      let(:submission) { create(:vacancy_submission, status: 'awaiting_approval') }
+
+      it 'transitions status to active' do
+        expect { submission.approve!(user: user) }.to change { submission.reload.status }.to('active')
+      end
+
+      it 'creates a status_change note' do
+        expect { submission.approve!(user: user) }.to change(VacancySubmissionNote, :count).by(1)
+        expect(VacancySubmissionNote.last.note_type).to eq('status_change')
+      end
+    end
+
+    describe '#return_for_changes!' do
+      let(:submission) { create(:vacancy_submission, status: 'awaiting_approval') }
+
+      it 'transitions status to return_changes_requested' do
+        expect do
+          submission.return_for_changes!(body: 'Fix the address.', user: user)
+        end.to change { submission.reload.status }.to('return_changes_requested')
+      end
+
+      it 'creates a reviewer_note and a status_change note' do
+        expect do
+          submission.return_for_changes!(body: 'Fix it.', user: user)
+        end.to change(VacancySubmissionNote, :count).by(2)
+        types = VacancySubmissionNote.last(2).map(&:note_type)
+        expect(types).to include('reviewer_note', 'status_change')
+      end
+    end
+
+    describe '#resubmit!' do
+      let(:submission) { create(:vacancy_submission, :changes_requested) }
+
+      it 'transitions status to awaiting_approval' do
+        expect { submission.resubmit!(user: user) }.to change { submission.reload.status }.to('awaiting_approval')
+      end
+
+      it 'creates a status_change note' do
+        expect { submission.resubmit!(user: user) }.to change(VacancySubmissionNote, :count).by(1)
+      end
     end
   end
 

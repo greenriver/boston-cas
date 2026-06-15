@@ -6,9 +6,11 @@
 
 import * as bootstrap from 'bootstrap'
 import { Application } from '@hotwired/stimulus'
-import HistoryController from './controllers/history_controller'
 import DatepickerController from './controllers/datepicker_controller'
+import HistoryController from './controllers/history_controller'
+import ReturnModalController from './controllers/return_modal_controller'
 import RoleManagerController from './controllers/role_manager_controller'
+import VacancySubmissionFormController from './controllers/vacancy_submission_form_controller'
 
 // Expose bootstrap globally for any legacy inline scripts that reference window.bootstrap
 window.bootstrap = bootstrap
@@ -41,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Start Stimulus
 const application = Application.start()
-application.register('history', HistoryController)
 application.register('datepicker', DatepickerController)
+application.register('history', HistoryController)
+application.register('return-modal', ReturnModalController)
 application.register('role-manager', RoleManagerController)
+application.register('vacancy-submission-form', VacancySubmissionFormController)
