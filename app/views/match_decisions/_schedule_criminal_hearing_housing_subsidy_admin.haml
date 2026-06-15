@@ -24,7 +24,7 @@
                 %label(for="decision_criminal_hearing_date")= Translation.translate('Date and time of criminal background hearing')
                 .row.form-group
                   .col-md-6
-                    = form.input :criminal_hearing_date, as: :string, label: false, disabled: !@decision.editable?, input_html: {class: :date_time_picker, style: 'width: 15em;'}
+                    = form.input :criminal_hearing_date, as: :date_time_picker, label: false, disabled: !@decision.editable?
 
               = form.input :note, as: :text, input_html: {rows: 4, disabled: !@decision.editable?}
               = render 'match_decisions/continue_button', text: 'Continue Match', icon: 'checkmark', button_attributes: {class: 'btn btn-success jSubmit', disabled: !@decision.editable?}
@@ -36,18 +36,6 @@
 
 = content_for :page_js do
   :javascript
-    $('.date_time_picker').datetimepicker({
-      sideBySide: true,
-      stepping: 15,
-      format: "MMM D, YYYY h:mm a",
-      icons: {
-        time: "icon icon-clock",
-        date: "icon icon-calendar",
-        up: "icon icon-arrow-up",
-        down: "icon icon-arrow-down"
-      }
-    });
-
     function update_button_states() {
         var prevent_matching_present = $('#decision_prevent_matching_until').val() != ''
         if(prevent_matching_present) {

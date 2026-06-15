@@ -21,11 +21,24 @@ class window.AjaxModal
     @_registerClose()
     @_registerOnHide()
 
+  _initSelect2WhenReady: (contentReady, modalShown, content) ->
+    # Bootstrap 5 modal animations run ~300ms. If the AJAX response arrives before
+    # the animation completes, select2 cannot measure the container width and renders
+    # at the wrong size. Both flags must be true before we initialize.
+    if contentReady[0] and modalShown[0]
+      content.find('select.select2').select2({ dropdownParent: content })
+
   _registerLinks: ->
     $('body').on 'click', @linkTriggersSelector, (e) =>
       e.preventDefault()
       @open()
       history.replaceState({}, 'Modal', $(e.target).attr("href"))
+      contentReady = [false]
+      modalShown = [false]
+      content = @content
+      @modal.one 'shown.bs.modal', =>
+        modalShown[0] = true
+        @_initSelect2WhenReady(contentReady, modalShown, content)
       $.ajax
         url: e.currentTarget.getAttribute("href"),
         dataType: 'html',
@@ -35,7 +48,8 @@ class window.AjaxModal
         complete: (xhr, status) =>
           @loading.hide()
           @content.html xhr.responseText
-          @content.find('select.select2').select2({ dropdownParent: @content })
+          contentReady[0] = true
+          @_initSelect2WhenReady(contentReady, modalShown, content)
           @open
 
   _registerForms: ->
@@ -44,6 +58,12 @@ class window.AjaxModal
       form = event.currentTarget
       event.preventDefault()
       @open()
+      contentReady = [false]
+      modalShown = [false]
+      content = @content
+      @modal.one 'shown.bs.modal', =>
+        modalShown[0] = true
+        @_initSelect2WhenReady(contentReady, modalShown, content)
       $.ajax
         url: form.getAttribute('action')
         type: form.getAttribute('method')
@@ -55,7 +75,8 @@ class window.AjaxModal
         complete: (xhr, status) =>
           @loading.hide()
           @content.html xhr.responseText
-          @content.find('select.select2').select2({ dropdownParent: @content })
+          contentReady[0] = true
+          @_initSelect2WhenReady(contentReady, modalShown, content)
           @open
       return false
 
