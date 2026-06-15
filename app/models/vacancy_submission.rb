@@ -70,7 +70,7 @@ class VacancySubmission < ApplicationRecord
   def site_display
     return '—' if voucher?
 
-    [unit_address_street, unit_address_city, unit_address_state, unit_address_zip]
+    [unit_address_street, unit_address_unit_number, unit_address_city, unit_address_state, unit_address_zip]
       .compact.reject(&:blank?).join(', ').presence || '—'
   end
 
