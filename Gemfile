@@ -101,10 +101,8 @@ gem 'maxminddb' # for local geocoding of login attempts
 gem 'geocoder'
 
 gem 'attribute_normalizer'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 gem 'fuzzy_match'
 gem 'handlebars_assets'
-gem 'momentjs-rails', '>= 2.9.0'
 
 gem 'delayed_job_active_record'
 gem 'terser'
