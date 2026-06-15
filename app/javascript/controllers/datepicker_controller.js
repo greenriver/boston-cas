@@ -55,7 +55,7 @@ export default class extends Controller {
       ? JSON.parse(this.element.dataset.dateOptions)
       : {}
 
-    const finalOptions = { ...defaultOptions, ...elementOptions }
+    const finalOptions = this.deepMerge(defaultOptions, elementOptions)
 
     this.datepicker = new TempusDominus(this.element, finalOptions)
 
@@ -67,7 +67,7 @@ export default class extends Controller {
     this.element.addEventListener('change.td', (_event) => {
       const inputField = this.element.querySelector('input')
       if (inputField) {
-        inputField.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }))
+        inputField.dispatchEvent(new CustomEvent('change', { bubbles: true, cancelable: true, detail: true }))
       }
     })
   }
@@ -118,7 +118,19 @@ export default class extends Controller {
       if (parsed) return parsed
     }
 
+    const configuredFormat = optionsData.localization?.format || ''
+    const isDateTimeFormat = /[hHtT]/.test(configuredFormat)
+
+    const dateTimeFormats = isDateTimeFormat ? [
+      'MMM d, yyyy h:mm T',
+      'MMM d, yyyy h:mm t',
+      'MMMM d, yyyy h:mm T',
+      'MMMM d, yyyy h:mm t',
+      'MMM d, yyyy HH:mm',
+    ] : []
+
     const formats = [
+      ...dateTimeFormats,
       'MMM d, yyyy',
       'MMMM d, yyyy',
       'MM/dd/yyyy',
@@ -166,5 +178,24 @@ export default class extends Controller {
     if (source === source.toUpperCase()) return target.toUpperCase()
     if (source === source.toLowerCase()) return target.toLowerCase()
     return target[0].toUpperCase() + target.slice(1)
+  }
+
+  deepMerge(target, source) {
+    const result = { ...target }
+    for (const key of Object.keys(source)) {
+      if (
+        source[key] !== null &&
+        typeof source[key] === 'object' &&
+        !Array.isArray(source[key]) &&
+        target[key] !== null &&
+        typeof target[key] === 'object' &&
+        !Array.isArray(target[key])
+      ) {
+        result[key] = this.deepMerge(target[key], source[key])
+      } else {
+        result[key] = source[key]
+      }
+    }
+    return result
   }
 }

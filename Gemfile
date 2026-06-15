@@ -75,7 +75,7 @@ gem 'aws-sdk-cloudwatch', require: false
 gem 'aws-sdk-cloudwatchlogs', require: false
 gem 'amazing_print'
 
-gem 'puma', '~> 6'
+gem 'puma', '~> 8'
 gem 'redis'
 gem 'connection_pool', '~> 2.4' # connection_pool 3.x uses keyword-only args; Rails 7.2 passes a positional hash (incompatible with Ruby 4.0)
 
@@ -101,10 +101,8 @@ gem 'maxminddb' # for local geocoding of login attempts
 gem 'geocoder'
 
 gem 'attribute_normalizer'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 gem 'fuzzy_match'
 gem 'handlebars_assets'
-gem 'momentjs-rails', '>= 2.9.0'
 
 gem 'delayed_job_active_record'
 gem 'terser'
