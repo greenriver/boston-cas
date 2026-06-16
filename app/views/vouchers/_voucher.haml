@@ -85,9 +85,9 @@
                 - else
                   = match.client_name_for_contact(current_contact, hidden: match.confidential? && ! show_confidential_names?)
         - if (! voucher.can_be_destroyed? && ! voucher.active_matches?) || voucher.opportunity.present?
-          %h3.detail-box--label.mt-4 Alternate Clients
           .detail-box-value
-            - if voucher.opportunity.present?
+            - if voucher.opportunity.present? && voucher.available?
+              %h3.detail-box--label.mt-4 Alternate Clients
               = link_to opportunity_matches_path(voucher.opportunity) do
                 Prioritized Clients
             - if ! voucher.can_be_destroyed? && ! voucher.active_matches?
