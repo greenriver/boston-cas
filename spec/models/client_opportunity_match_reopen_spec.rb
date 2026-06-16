@@ -96,6 +96,40 @@ RSpec.describe ClientOpportunityMatch, type: :model do
       end
     end
 
+    context 'on a successful Match Route Thirteen match' do
+      let(:route) { MatchRoutes::Thirteen.first }
+      let!(:match) do
+        create :client_opportunity_match,
+               match_route: route,
+               active: false,
+               closed: true,
+               closed_reason: 'success'
+      end
+
+      # A fully successful match: it ran all the way through, leaving Match
+      # Acknowledgement permanently `acknowledged` and the final Confirm Match
+      # Success decision `confirmed`.
+      before(:each) do
+        set_status(match.thirteen_client_match_decision, 'accepted')
+        set_status(match.thirteen_match_acknowledgement_decision, 'acknowledged')
+        set_status(match.thirteen_client_review_decision, 'accepted')
+        set_status(match.thirteen_hearing_scheduled_decision, 'accepted')
+        set_status(match.thirteen_hearing_outcome_decision, 'accepted')
+        set_status(match.thirteen_hsa_review_decision, 'accepted')
+        set_status(match.thirteen_accept_referral_decision, 'accepted')
+        set_status(match.thirteen_confirm_match_success_decision, 'confirmed')
+      end
+
+      it 'reopens the success decision, not an earlier acknowledged step' do
+        match.reopen!(contact)
+
+        aggregate_failures do
+          expect(match.thirteen_confirm_match_success_decision.reload.status).to eq('pending')
+          expect(match.thirteen_match_acknowledgement_decision.reload.status).to eq('acknowledged')
+        end
+      end
+    end
+
     context 'on a canceled Default route match' do
       let(:route) { MatchRoutes::Default.first }
       let!(:match) do
