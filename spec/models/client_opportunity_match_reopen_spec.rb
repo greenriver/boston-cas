@@ -31,9 +31,6 @@ RSpec.describe ClientOpportunityMatch, type: :model do
       end
 
       context 'with a realistic decision chain canceled at the Hearing Outcome step' do
-        # Reproduces the production state from match 412917: the match progressed
-        # normally (leaving Match Acknowledgement permanently `acknowledged`) and
-        # was then canceled at the Hearing Outcome step with a cancel reason.
         let(:cancel_reason) { MatchDecisionReasons::AdministrativeCancel.create!(name: 'Vacancy filled by other client') }
 
         before(:each) do
