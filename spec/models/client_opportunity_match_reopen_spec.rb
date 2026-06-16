@@ -128,8 +128,11 @@ RSpec.describe ClientOpportunityMatch, type: :model do
     end
 
     context 'when the warehouse is not enabled' do
-      # In environments without the warehouse schema (e.g. CI), reopen! must not
-      # touch warehouse tables -- they do not exist there.
+      # In environments without the warehouse schema (e.g. CI) the warehouse
+      # tables do not exist, so reopen! must not query them. We swap the
+      # warehouse model for a null-object spy via stub_const -- mocking the real
+      # AR class would make its verifying double introspect the missing table,
+      # raising PG::UndefinedTable before reopen! even runs.
       let(:route) { MatchRoutes::Thirteen.first }
       let!(:match) do
         create :client_opportunity_match,
@@ -142,14 +145,16 @@ RSpec.describe ClientOpportunityMatch, type: :model do
       before(:each) do
         set_status(match.thirteen_hearing_outcome_decision, 'canceled')
         allow(Warehouse::Base).to receive(:enabled?).and_return(false)
+        stub_const('Warehouse::CasHoused', spy('Warehouse::CasHoused'))
       end
 
-      it 'does not query warehouse tables' do
-        expect(Warehouse::CasHoused).not_to receive(:where)
-
+      it 'reopens the match without querying the warehouse' do
         match.reopen!(contact)
 
-        expect(match.thirteen_hearing_outcome_decision.reload.status).to eq('pending')
+        aggregate_failures do
+          expect(Warehouse::CasHoused).not_to have_received(:where)
+          expect(match.thirteen_hearing_outcome_decision.reload.status).to eq('pending')
+        end
       end
     end
 
