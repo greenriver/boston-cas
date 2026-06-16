@@ -127,6 +127,32 @@ RSpec.describe ClientOpportunityMatch, type: :model do
       end
     end
 
+    context 'when the warehouse is not enabled' do
+      # In environments without the warehouse schema (e.g. CI), reopen! must not
+      # touch warehouse tables -- they do not exist there.
+      let(:route) { MatchRoutes::Thirteen.first }
+      let!(:match) do
+        create :client_opportunity_match,
+               match_route: route,
+               active: false,
+               closed: true,
+               closed_reason: 'canceled'
+      end
+
+      before(:each) do
+        set_status(match.thirteen_hearing_outcome_decision, 'canceled')
+        allow(Warehouse::Base).to receive(:enabled?).and_return(false)
+      end
+
+      it 'does not query warehouse tables' do
+        expect(Warehouse::CasHoused).not_to receive(:where)
+
+        match.reopen!(contact)
+
+        expect(match.thirteen_hearing_outcome_decision.reload.status).to eq('pending')
+      end
+    end
+
     context 'on a canceled Default route match' do
       let(:route) { MatchRoutes::Default.first }
       let!(:match) do

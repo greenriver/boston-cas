@@ -747,11 +747,13 @@ class ClientOpportunityMatch < ApplicationRecord
       update(closed: false, active: true, closed_reason: nil)
       (decision_to_reopen || current_decision).update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
-      # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
-      # so clean that up...
-      Warehouse::CasHoused.where(match_id: id).destroy_all
 
-      active_referral_event&.clear if Warehouse::Base.enabled?
+      if Warehouse::Base.enabled?
+        # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
+        # so clean that up...
+        Warehouse::CasHoused.where(match_id: id).destroy_all
+        active_referral_event&.clear
+      end
     end
   end
 
