@@ -722,12 +722,22 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def reopen!(contact, user: nil)
     self.class.transaction do
+      # Determine the decision the match was closed at *before* we clear the
+      # closed state. `current_decision` returns nil while closed, and once
+      # reopened it identifies the active step of an open match by status
+      # (pending/acknowledged/expiration_update) -- which skips right over the
+      # terminal `canceled`/`declined` decision we actually want to reactivate
+      # and can land on an earlier step that still carries an `acknowledged`
+      # status. `unsuccessful_decision` finds the decision that actually closed
+      # the match.
+      decision_to_reopen = unsuccessful_decision
+
       # Park client on any other routes where this route is set to block matching when the client is involved in this route
       match_route.routes_parked_on_active_match.reject(&:empty?).each do |park_route|
         client.make_unavailable_in(match_route: park_route.constantize, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
       end
       update(closed: false, active: true, closed_reason: nil)
-      current_decision.update(status: :pending)
+      (decision_to_reopen || current_decision).update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
       # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
       # so clean that up...
