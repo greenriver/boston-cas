@@ -7,12 +7,12 @@ namespace :code do
   # NOTE, before you commit, you can check a PR for this with
   # git diff -U0 --minimal HEAD~1 | grep -v '^+#.*2024' | grep -v '^+#.*LICENSE.md' | grep -v '^+###$' | grep -v '^+#$' | grep -v '^diff --git' | grep -v '^index' | grep '^--- a' | grep '^+++ b' | more
   #
-  # To review a branch vs main, skipping files where the only changes
+  # To review a branch vs another branch, skipping files where the only changes
   # are the copyright notice and/or frozen_string_literal, write to a diff file:
   #   branch=branch-with-changes; \
   #   target=target-branch; \
   #   git diff -w $target...$branch --name-only | while read f; do \
-  #     extra=$(git diff -U0 -w main...$branch -- "$f" | grep '^[+-]' | \
+  #     extra=$(git diff -U0 -w $target...$branch -- "$f" | grep '^[+-]' | \
   #       grep -v '^---' | grep -v '^+++' | \
   #       grep -v '^[-+]$' | \
   #       grep -v '^[-+]###$' | \
@@ -21,7 +21,7 @@ namespace :code do
   #       grep -vE '^-# Copyright [0-9]{4} - [0-9]{4} Green River Data Analysis, LLC' | \
   #       grep -v '^+# Copyright Green River Data Group, Inc.' | \
   #       grep -v '^[-+]# frozen_string_literal: true'); \
-  #     [ -n "$extra" ] && git diff -w main...$branch -- "$f"; \
+  #     [ -n "$extra" ] && git diff -w $target...$branch -- "$f"; \
   #   done > tmp/changes.diff
   desc 'Ensure the copyright is included in all ruby files'
   task :maintain_copyright, [] => [:environment, 'log:info_to_stdout'] do
