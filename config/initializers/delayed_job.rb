@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 Delayed::Worker.destroy_failed_jobs = false
 Delayed::Worker.sleep_delay = 5
 Delayed::Worker.max_attempts = 3
