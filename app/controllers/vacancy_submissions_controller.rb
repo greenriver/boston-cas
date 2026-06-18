@@ -7,8 +7,24 @@
 # frozen_string_literal: true
 
 class VacancySubmissionsController < ApplicationController
+  SECTIONS = {
+    'route' => ->(sp, _vs) {
+      { partial: 'vacancy_submissions/route',
+        resource_type: VacancySubmission.derive_resource_type(sp) }
+    },
+    'requirements' => ->(sp, _vs) {
+      { partial: 'requirement_manager/inherited_rules',
+        inheritee: sp, show_label: false }
+    },
+    'vacancy' => ->(sp, vs) {
+      { partial: 'vacancy_submissions/vacancy',
+        sub_program: sp,
+        vacancy_submission: vs,
+        is_voucher: VacancySubmission.derive_is_voucher(sp) }
+    },
+  }.freeze
   before_action :authenticate_user!
-  before_action :require_can_view_opportunities!, only: [:index, :new, :create]
+  before_action :require_can_view_opportunities!, only: [:index, :new, :create, :sub_program_section]
   before_action :require_can_submit_or_review_vacancies!, only: [:show]
   before_action :require_can_review_vacancies!, only: [:approve, :return_submission]
   before_action :require_can_add_vacancies!, only: [:resubmit, :edit, :update]
@@ -112,6 +128,21 @@ class VacancySubmissionsController < ApplicationController
     end
   end
 
+  def sub_program_section
+    config = SECTIONS[params[:section]]
+    return head :not_found unless config
+
+    sub_program = SubProgram.find(params[:sub_program_id])
+    vacancy_submission = if params[:vacancy_submission_id].present?
+      VacancySubmission.find(params[:vacancy_submission_id])
+    else
+      VacancySubmission.new
+    end
+
+    locals = config.call(sub_program, vacancy_submission)
+    render partial: locals.delete(:partial), locals: locals
+  end
+
   def approve
     return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be approved in its current state.' unless @submission.approvable?
 
@@ -157,7 +188,7 @@ class VacancySubmissionsController < ApplicationController
     data = {
       'program_id' => program.id,
       'sub_program_id' => sub_program.id,
-      'resource_type' => VacancySubmission.derive_resource_type(program),
+      'resource_type' => VacancySubmission.derive_resource_type(sub_program),
       'is_voucher' => is_voucher,
     }
     unless is_voucher
@@ -202,7 +233,7 @@ class VacancySubmissionsController < ApplicationController
       {
         id: p.id,
         name: p.name,
-        resource_type: VacancySubmission.derive_resource_type(p),
+        resource_type: nil,
         sub_programs: p.sub_programs.order(:name).map do |sp|
           {
             id: sp.id,

@@ -1,17 +1,23 @@
-%label Inherited Rules
+- unless local_assigns[:show_label] == false
+  %label Inherited Rules
 - if inheritee.inherited_requirements_by_source.values.none?(&:present?)
   %p (none)
 - else
   .table-responsive
     %table.table
-      %tr
-        %th Source
-        %th Rule
-      - inheritee.inherited_requirements_by_source.each do |requirement_source, requirements|
-        - requirements.each do |requirement|
-          %tr
-            %td= requirement_source.name
-            %td
-              = requirement.name
-              - if requirement.variable.present?
-                = requirement.display_for_variable
+      %thead
+        %tr
+          %th Type
+          %th Rule
+          %th Source
+      %tbody
+        - inheritee.inherited_requirements_by_source.each do |requirement_source, requirements|
+          - requirements.each do |requirement|
+            %tr
+              %td
+                %div{class: "badge badge-#{requirement.modal_verb_class}"}= requirement.modal_verb
+              %td
+                = requirement.rule_text
+                - if requirement.variable.present?
+                  = requirement.rule_text
+              %td= requirement_source.name

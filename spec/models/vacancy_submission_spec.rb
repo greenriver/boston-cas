@@ -79,7 +79,7 @@ RSpec.describe VacancySubmission, type: :model do
 
   describe '.derive_resource_type' do
     it 'returns a non-blank string for any program with a match_route' do
-      expect(described_class.derive_resource_type(program)).to be_present
+      expect(described_class.derive_resource_type(sub_program)).to be_present
     end
   end
 

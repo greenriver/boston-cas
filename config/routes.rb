@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     end
   end
   resources :vacancy_submissions, only: [:index, :new, :create, :show, :edit, :update] do
+    get :sub_program_section, on: :collection
     member do
       post :approve
       post :return_submission

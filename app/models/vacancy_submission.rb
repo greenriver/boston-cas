@@ -20,11 +20,6 @@ class VacancySubmission < ApplicationRecord
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
 
-  RESOURCE_TYPE_LABELS = {
-    'MatchRoutes::HomelessSetAside' => 'Homeless Set Aside',
-    'MatchRoutes::Default' => 'PSH Resource',
-  }.freeze
-
   validates :status, inclusion: { in: STATUSES }
   validate :required_draft_fields
 
@@ -44,11 +39,8 @@ class VacancySubmission < ApplicationRecord
     end
   end
 
-  def self.derive_resource_type(program)
-    return 'Unknown' unless program&.match_route
-
-    RESOURCE_TYPE_LABELS[program.match_route.class.name] ||
-      program.match_route.class.name.demodulize.titleize
+  def self.derive_resource_type(sub_program)
+    sub_program&.match_route&.title
   end
 
   def self.derive_is_voucher(sub_program)

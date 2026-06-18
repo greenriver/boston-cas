@@ -10,19 +10,20 @@ export default class extends Controller {
   static targets = [
     'programSelect',
     'subProgramSelect',
-    'resourceTypeDisplay',
-    'unitTypeDisplay',
-    'unitTypeHint',
-    'addressFields',
+    'routeContainer',
+    'vacancyContainer',
+    'requirementsContainer',
   ]
 
   static values = {
     programs: Array,
     initialProgram: Number,
     initialSubProgram: Number,
+    vacancySubmissionId: Number,
   }
 
   connect() {
+    this.isInitializing = true
     this.programMap = {}
     this.programsValue.forEach((p) => {
       this.programMap[p.id] = p
@@ -43,6 +44,10 @@ export default class extends Controller {
     if (this.initialProgramValue) {
       this.populateSubPrograms(this.initialProgramValue, this.initialSubProgramValue)
     }
+    this.isInitializing = false
+    if (this.initialSubProgramValue) {
+      this.refreshAll()
+    }
   }
 
   disconnect() {
@@ -58,7 +63,7 @@ export default class extends Controller {
   }
 
   onSubProgramChange() {
-    this.refreshUnitType()
+    this.refreshAll()
   }
 
   populateSubPrograms(programId, selectedSubProgramId) {
@@ -68,12 +73,9 @@ export default class extends Controller {
     const program = this.programMap[programId]
     if (!programId || !program) {
       sub.disabled = true
-      this.resourceTypeDisplayTarget.textContent = '—'
-      this.refreshUnitType()
+      this.refreshAll()
       return
     }
-
-    this.resourceTypeDisplayTarget.textContent = program.resource_type || '—'
 
     program.sub_programs.forEach((sp) => {
       const selected = selectedSubProgramId && String(sp.id) === String(selectedSubProgramId)
@@ -87,31 +89,35 @@ export default class extends Controller {
     if (typeof $ !== 'undefined') {
       $(sub).trigger('change')
     }
-    this.refreshUnitType()
+    this.refreshAll()
   }
 
-  refreshUnitType() {
-    const sub = this.subProgramSelectTarget
-    const selected = sub.options[sub.selectedIndex]
+  static sectionDefs = [
+    { target: 'routeContainer',        section: 'route',         emptyHtml: '' },
+    { target: 'requirementsContainer', section: 'requirements',  emptyHtml: '<p class="text-muted">Select a sub-program to see inherited requirements.</p>' },
+    { target: 'vacancyContainer',      section: 'vacancy',       emptyHtml: '<p class="text-muted">Select a sub-program to see unit type information.</p>' },
+  ]
 
-    if (!selected || !selected.value) {
-      this.unitTypeDisplayTarget.textContent = '—'
-      this.unitTypeHintTarget.textContent = ''
-      this.addressFieldsTarget.hidden = true
+  refreshAll() {
+    this.constructor.sectionDefs.forEach(def => this.refreshSection(def))
+  }
+
+  async refreshSection({ target, section, emptyHtml }) {
+    if (this.isInitializing) return
+
+    const hasProp = `has${target[0].toUpperCase()}${target.slice(1)}Target`
+    if (!this[hasProp]) return
+
+    const containerProp = `${target}Target`
+    const subProgramId = this.subProgramSelectTarget.value
+    if (!subProgramId) {
+      this[containerProp].innerHTML = emptyHtml
       return
     }
 
-    const isVoucher = selected.dataset.isVoucher === 'true'
-    const programType = selected.dataset.programType || ''
-
-    if (isVoucher) {
-      this.unitTypeDisplayTarget.textContent = 'Voucher'
-      this.unitTypeHintTarget.textContent = 'Tenant-Based — no physical address required'
-      this.addressFieldsTarget.hidden = true
-    } else {
-      this.unitTypeDisplayTarget.textContent = 'Physical Unit'
-      this.unitTypeHintTarget.textContent = programType ? 'Sub-program type: ' + programType : ''
-      this.addressFieldsTarget.hidden = false
-    }
+    let url = `/vacancy_submissions/sub_program_section?sub_program_id=${subProgramId}&section=${section}`
+    if (this.vacancySubmissionIdValue) url += `&vacancy_submission_id=${this.vacancySubmissionIdValue}`
+    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    this[containerProp].innerHTML = await response.text()
   }
 }

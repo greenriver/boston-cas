@@ -1,7 +1,7 @@
 - editing = vacancy_submission.persisted?
 - initial_program = vacancy_submission.program_id || 0
 - initial_sub = vacancy_submission.sub_program_id || 0
-- stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub }
+- stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub, 'vacancy-submission-form-vacancy-submission-id-value' => vacancy_submission.id.to_i }
 
 = simple_form_for vacancy_submission, html: { id: 'vacancy_submission_form', data: stimulus_data } do |f|
   = f.error_notification
@@ -11,14 +11,14 @@
     %span.text-danger *
     are required.
 
-  / ── Section 1: Resource Type & Program ──
+  / ── Section 1: Route & Program ──
   .c-card.mb-4
     .c-card__content
-      %h5.c-card__title Resource Type & Program
+      %h5.c-card__title Route & Program
 
       = f.input :program_id, label: 'Program', as: :select2,
           collection: @programs.map { |p| [p.name, p.id] },
-          include_blank: '-- Select a program --',
+          include_blank: 'Select a program',
           required: true,
           input_html: { data: { 'vacancy-submission-form-target': 'programSelect' } }
 
@@ -27,39 +27,21 @@
           include_blank: false,
           input_html: { disabled: true, data: { 'vacancy-submission-form-target': 'subProgramSelect' } }
 
-      .form-group
-        %label.control-label Resource Type
-        .form-control-plaintext.text-muted{style: 'min-height: 38px;', data: { 'vacancy-submission-form-target': 'resourceTypeDisplay' }}
-          = vacancy_submission.resource_type.presence || '—'
+      %div{data: { 'vacancy-submission-form-target': 'routeContainer' }}
 
-  / ── Section 2: Unit Type ──
+  / ── Inherited Requirements ──
   .c-card.mb-4
     .c-card__content
-      %h5.c-card__title Unit Type
+      %h5.c-card__title Inherited Requirements
+      %div{data: { 'vacancy-submission-form-target': 'requirementsContainer' }}
+        %p.text-muted Select a sub-program to see inherited requirements.
 
-      .form-group
-        %label.control-label Unit Type
-        .form-control-plaintext.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeDisplay' }}
-        %small.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeHint' }}
-
-      / Address fields — shown only for physical units
-      %div{hidden: true, data: { 'vacancy-submission-form-target': 'addressFields' }}
-        %hr
-        %p.fw-semibold Unit Address
-
-        = f.input :unit_address_street, label: 'Site Address', required: true, placeholder: 'Street Address'
-
-        .row
-          .col-md-6
-            = f.input :unit_address_unit_number, label: 'Unit Number', placeholder: 'Number'
-          .col-md-6
-            = f.input :unit_address_city, label: 'City', required: true, placeholder: 'City'
-
-        .row
-          .col-md-6
-            = f.input :unit_address_state, label: 'State', required: true
-          .col-md-6
-            = f.input :unit_address_zip, label: 'Zip Code', required: true, placeholder: '99999'
+  / ── Section 2: Vacancy ──
+  .c-card.mb-4
+    .c-card__content
+      %h5.c-card__title Vacancy
+      %div{data: { 'vacancy-submission-form-target': 'vacancyContainer' }}
+        %p.text-muted Select a sub-program to see unit type information.
 
   / Actions
   .d-flex.gap-2

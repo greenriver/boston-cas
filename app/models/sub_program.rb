@@ -106,6 +106,10 @@ class SubProgram < ApplicationRecord
     @default_match_contacts ||= SubProgramContacts.new sub_program: self
   end
 
+  def full_name
+    "#{program.name} - #{name.presence || '(unnamed)'}"
+  end
+
   def name_with_status
     @name_with_status = name
     @name_with_status += ' (Closed) ' if closed?
