@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # munged out of https://gist.github.com/d11wtq/1176236
 module Mail
   class DatabaseDelivery

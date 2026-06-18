@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 require 'amazing_print'
 require_relative 'deployer'
 require_relative 'aws_sdk_helpers'

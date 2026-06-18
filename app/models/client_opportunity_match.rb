@@ -1,7 +1,7 @@
 ###
-# Copyright 2016 - 2025 Green River Data Analysis, LLC
+# Copyright Green River Data Group, Inc.
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
 # frozen_string_literal: true
@@ -472,6 +472,14 @@ class ClientOpportunityMatch < ApplicationRecord
     @current_decision ||= initialized_decisions.order_as_specified(type: later_decisions_first).limit(1).first
   end
 
+  # The decision the match was closed at -- the one reopen! should reactivate.
+  # Must be called while the match is still closed (relies on the closed_reason).
+  def closing_decision
+    return send(match_route.success_decision) if successful?
+
+    unsuccessful_decision
+  end
+
   def unsuccessful_decision
     return canceled_decision if canceled?
 
@@ -722,18 +730,30 @@ class ClientOpportunityMatch < ApplicationRecord
 
   def reopen!(contact, user: nil)
     self.class.transaction do
+      # Determine the decision the match was closed at *before* we clear the
+      # closed state. `current_decision` returns nil while closed, and once
+      # reopened it identifies the active step of an open match by status
+      # (pending/acknowledged/expiration_update) -- which skips right over the
+      # terminal `success`/`canceled`/`declined` decision we actually want to
+      # reactivate and can land on an earlier step that still carries an
+      # `acknowledged` status. `closing_decision` finds the decision that
+      # actually closed the match.
+      decision_to_reopen = closing_decision
+
       # Park client on any other routes where this route is set to block matching when the client is involved in this route
       match_route.routes_parked_on_active_match.reject(&:empty?).each do |park_route|
         client.make_unavailable_in(match_route: park_route.constantize, user: user, match: self, reason: UnavailableAsCandidateFor::ACTIVE_MATCH_TEXT)
       end
       update(closed: false, active: true, closed_reason: nil)
-      current_decision.update(status: :pending)
+      (decision_to_reopen || current_decision).update(status: :pending)
       MatchEvents::Reopened.create(match_id: id, contact_id: contact.id)
-      # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
-      # so clean that up...
-      Warehouse::CasHoused.where(match_id: id).destroy_all
 
-      active_referral_event&.clear if Warehouse::Base.enabled?
+      if Warehouse::Base.enabled?
+        # If this match was picked up in nightly processing, the client now appears as housed in the warehouse,
+        # so clean that up...
+        Warehouse::CasHoused.where(match_id: id).destroy_all
+        active_referral_event&.clear
+      end
     end
   end
 

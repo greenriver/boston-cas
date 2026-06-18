@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # An abstraction around a kubernetes cronjob
 # https://github.com/k8s-ruby/k8s-ruby
 class Cronjob

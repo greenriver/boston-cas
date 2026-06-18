@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # frozen_string_literal: true
 
 # This script is used to prevent booting of kubernetes pods before the database

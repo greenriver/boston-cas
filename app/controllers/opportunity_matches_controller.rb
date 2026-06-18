@@ -1,7 +1,7 @@
 ###
-# Copyright 2016 - 2025 Green River Data Analysis, LLC
+# Copyright Green River Data Group, Inc.
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
 # frozen_string_literal: true
@@ -122,10 +122,12 @@ class OpportunityMatchesController < ApplicationController
   end
 
   # You can activate a match if all of the following are true:
-  # 1. the match hasn't succeeded
-  # 2. you have can edit all clients or this opportunity is editable by you
-  # 3. you've been given the can activate matches permission
+  # 1. the opportunity's voucher is available
+  # 2. the match hasn't succeeded
+  # 3. you have can edit all clients or this opportunity is editable by you
+  # 4. you've been given the can activate matches permission
   def can_activate_match?
+    return false unless @opportunity.voucher&.available?
     return false if @opportunity.successful_match
     return false unless current_user.can_edit_all_clients? || @opportunity.editable_by?(current_user)
 

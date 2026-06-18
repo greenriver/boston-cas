@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # frozen_string_literal: true
 
 RSpec.shared_examples 'client core visibility and editability' do |client_factory_name, perm_manage_all, perm_manage_non_all, perm_enter|
