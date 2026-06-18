@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # Require the custom mail delivery classes
 require Rails.root.join('lib', 'util', 'mail', 'database_delivery')
 require Rails.root.join('lib', 'util', 'mail', 'ses_delivery')

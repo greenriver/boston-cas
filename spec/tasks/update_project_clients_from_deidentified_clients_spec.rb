@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 require "rails_helper"
 
 describe "rake cas:update_project_clients_from_deidentified_clients", type: :task do

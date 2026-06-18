@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 Yabeda.configure do
   default_tag :rails_env, Rails.env
   default_tag :app, 'cas'
