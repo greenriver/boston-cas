@@ -13,9 +13,7 @@ class VacancySubmission < ApplicationRecord
   has_many :vacancy_submission_notes, dependent: :destroy
 
   store_accessor :draft_data,
-                 :program_id, :sub_program_id, :resource_type, :is_voucher,
-                 :unit_address_street, :unit_address_unit_number,
-                 :unit_address_city, :unit_address_state, :unit_address_zip
+                 :program_id, :sub_program_id, :route, :is_voucher, :units
 
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
@@ -39,7 +37,7 @@ class VacancySubmission < ApplicationRecord
     end
   end
 
-  def self.derive_resource_type(sub_program)
+  def self.derive_route(sub_program)
     sub_program&.match_route&.title
   end
 
@@ -60,10 +58,12 @@ class VacancySubmission < ApplicationRecord
   end
 
   def site_display
-    return '—' if voucher?
+    return [] if voucher?
 
-    [unit_address_street, unit_address_unit_number, unit_address_city, unit_address_state, unit_address_zip]
-      .compact.reject(&:blank?).join(', ').presence || '—'
+    Array(units).map do |u|
+      [u['street'], u['unit_number'], u['city'], u['state'], u['zip']]
+        .compact.reject(&:blank?).join(', ').presence || '—'
+    end
   end
 
   def voucher_type_display
@@ -135,11 +135,24 @@ class VacancySubmission < ApplicationRecord
   def required_draft_fields
     errors.add(:program_id, :blank) if program_id.blank?
     errors.add(:sub_program_id, :blank) if sub_program_id.blank?
-    return if voucher?
+    validate_units
+  end
 
-    errors.add(:unit_address_street, :blank) if unit_address_street.blank?
-    errors.add(:unit_address_city, :blank) if unit_address_city.blank?
-    errors.add(:unit_address_state, :blank) if unit_address_state.blank?
-    errors.add(:unit_address_zip, :blank) if unit_address_zip.blank?
+  def validate_units
+    unit_list = Array(units)
+    if unit_list.empty?
+      errors.add(:units, :blank)
+      return
+    end
+    if voucher?
+      unit_list.each { |u| errors.add(:units, 'each voucher must have a name') if u['name'].blank? }
+    else
+      unit_list.each do |u|
+        errors.add(:units, 'each unit must have a street address') if u['street'].blank?
+        errors.add(:units, 'each unit must have a city') if u['city'].blank?
+        errors.add(:units, 'each unit must have a state') if u['state'].blank?
+        errors.add(:units, 'each unit must have a zip code') if u['zip'].blank?
+      end
+    end
   end
 end

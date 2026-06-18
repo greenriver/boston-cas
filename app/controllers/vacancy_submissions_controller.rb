@@ -10,7 +10,7 @@ class VacancySubmissionsController < ApplicationController
   SECTIONS = {
     'route' => ->(sp, _vs) {
       { partial: 'vacancy_submissions/route',
-        resource_type: VacancySubmission.derive_resource_type(sp) }
+        route: VacancySubmission.derive_route(sp) }
     },
     'requirements' => ->(sp, _vs) {
       { partial: 'requirement_manager/inherited_rules',
@@ -184,23 +184,13 @@ class VacancySubmissionsController < ApplicationController
   end
 
   def build_draft_data(program:, sub_program:)
-    is_voucher = VacancySubmission.derive_is_voucher(sub_program)
-    data = {
+    {
       'program_id' => program.id,
       'sub_program_id' => sub_program.id,
-      'resource_type' => VacancySubmission.derive_resource_type(sub_program),
-      'is_voucher' => is_voucher,
+      'route' => VacancySubmission.derive_route(sub_program),
+      'is_voucher' => VacancySubmission.derive_is_voucher(sub_program),
+      'units' => submission_params[:units]&.values&.map(&:to_h) || [],
     }
-    unless is_voucher
-      data.merge!(
-        'unit_address_street' => submission_params[:unit_address_street],
-        'unit_address_unit_number' => submission_params[:unit_address_unit_number],
-        'unit_address_city' => submission_params[:unit_address_city],
-        'unit_address_state' => submission_params[:unit_address_state],
-        'unit_address_zip' => submission_params[:unit_address_zip],
-      )
-    end
-    data
   end
 
   def detect_changed_sections(old_data, new_data)
@@ -208,10 +198,7 @@ class VacancySubmissionsController < ApplicationController
     sections << 'Program' if old_data['program_id'] != new_data['program_id']
     sections << 'Sub-Program' if old_data['sub_program_id'] != new_data['sub_program_id']
     sections << 'Unit Type' if old_data['is_voucher'] != new_data['is_voucher']
-
-    address_keys = ['unit_address_street', 'unit_address_unit_number', 'unit_address_city', 'unit_address_state', 'unit_address_zip']
-    sections << 'Address' if address_keys.any? { |k| old_data[k] != new_data[k] }
-
+    sections << 'Vacancy' if old_data['units'].to_json != new_data['units'].to_json
     sections
   end
 
@@ -222,8 +209,7 @@ class VacancySubmissionsController < ApplicationController
   def submission_params
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id,
-      :unit_address_street, :unit_address_unit_number,
-      :unit_address_city, :unit_address_state, :unit_address_zip
+      units: [:name, :street, :unit_number, :city, :state, :zip]
     )
   end
 
