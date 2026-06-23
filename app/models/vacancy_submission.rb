@@ -13,7 +13,8 @@ class VacancySubmission < ApplicationRecord
   has_many :vacancy_submission_notes, dependent: :destroy
 
   store_accessor :draft_data,
-                 :program_id, :sub_program_id, :route, :is_voucher, :units
+                 :program_id, :sub_program_id, :route, :is_voucher, :units,
+                 :required_document_names
 
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze

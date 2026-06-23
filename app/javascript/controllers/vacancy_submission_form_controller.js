@@ -11,8 +11,9 @@ export default class extends Controller {
     'programSelect',
     'subProgramSelect',
     'routeContainer',
-    'vacancyContainer',
     'requirementsContainer',
+    'documentsContainer',
+    'vacancyContainer',
   ]
 
   static values = {
@@ -93,9 +94,10 @@ export default class extends Controller {
   }
 
   static sectionDefs = [
-    { target: 'routeContainer',        section: 'route',         emptyHtml: '' },
-    { target: 'requirementsContainer', section: 'requirements',  emptyHtml: '<p class="text-muted">Select a sub-program to see inherited requirements.</p>' },
-    { target: 'vacancyContainer',      section: 'vacancy',       emptyHtml: '<p class="text-muted">Select a sub-program to see unit type information.</p>' },
+    { target: 'routeContainer', section: 'route', emptyHtml: '' },
+    { target: 'requirementsContainer', section: 'requirements', emptyHtml: '<p class="text-muted">Select a sub-program to see inherited requirements.</p>' },
+    { target: 'documentsContainer', section: 'required_documents', emptyHtml: '' },
+    { target: 'vacancyContainer', section: 'vacancy', emptyHtml: '<p class="text-muted">Select a sub-program to see unit type information.</p>' },
   ]
 
   refreshAll() {
@@ -117,7 +119,37 @@ export default class extends Controller {
 
     let url = `/vacancy_submissions/sub_program_section?sub_program_id=${subProgramId}&section=${section}`
     if (this.vacancySubmissionIdValue) url += `&vacancy_submission_id=${this.vacancySubmissionIdValue}`
+
+    if (section === 'required_documents') {
+      const raw = this[containerProp].dataset.selectedNames
+      if (raw) {
+        const names = JSON.parse(raw)
+        names.forEach(name => { url += `&required_document_names[]=${encodeURIComponent(name)}` })
+        delete this[containerProp].dataset.selectedNames
+      }
+    }
+
     const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
     this[containerProp].innerHTML = await response.text()
+    this.applyErrors(this[containerProp])
+  }
+
+  applyErrors(container) {
+    const raw = container.dataset.fieldErrors
+    if (!raw) return
+    let errors
+    try { errors = JSON.parse(raw) } catch { return }
+    delete container.dataset.fieldErrors
+    if (!errors.length) return
+
+    container.querySelectorAll('input[required]').forEach((input) => {
+      if (input.value.trim() === '') {
+        input.classList.add('is-invalid')
+        const feedback = document.createElement('div')
+        feedback.className = 'invalid-feedback'
+        feedback.textContent = 'This field is required.'
+        input.after(feedback)
+      }
+    })
   }
 }

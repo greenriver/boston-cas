@@ -36,11 +36,15 @@
       %div{data: { 'vacancy-submission-form-target': 'requirementsContainer' }}
         %p.text-muted Select a sub-program to see inherited requirements.
 
+  / ── Required Documents ──
+  %div{data: { 'vacancy-submission-form-target': 'documentsContainer', 'selected-names': Array(vacancy_submission.required_document_names).to_json }}
+
   / ── Section 2: Vacancy ──
   .c-card.mb-4
     .c-card__content
       %h5.c-card__title Vacancy
-      %div{data: { 'vacancy-submission-form-target': 'vacancyContainer' }}
+      - units_errors = vacancy_submission.errors[:units]
+      %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json }}
         %p.text-muted Select a sub-program to see unit type information.
 
   / Actions

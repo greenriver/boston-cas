@@ -16,6 +16,11 @@ class VacancySubmissionsController < ApplicationController
       { partial: 'requirement_manager/inherited_rules',
         inheritee: sp, show_label: false }
     },
+    'required_documents' => ->(sp, vs) {
+      { partial: 'vacancy_submissions/required_documents',
+        sub_program: sp,
+        vacancy_submission: vs }
+    },
     'vacancy' => ->(sp, vs) {
       { partial: 'vacancy_submissions/vacancy',
         sub_program: sp,
@@ -138,6 +143,7 @@ class VacancySubmissionsController < ApplicationController
     else
       VacancySubmission.new
     end
+    vacancy_submission.required_document_names = Array(params[:required_document_names]) if params[:required_document_names].present?
 
     locals = config.call(sub_program, vacancy_submission)
     render partial: locals.delete(:partial), locals: locals
@@ -190,6 +196,7 @@ class VacancySubmissionsController < ApplicationController
       'route' => VacancySubmission.derive_route(sub_program),
       'is_voucher' => VacancySubmission.derive_is_voucher(sub_program),
       'units' => submission_params[:units]&.values&.map(&:to_h) || [],
+      'required_document_names' => Array(submission_params[:required_document_names]),
     }
   end
 
@@ -199,6 +206,7 @@ class VacancySubmissionsController < ApplicationController
     sections << 'Sub-Program' if old_data['sub_program_id'] != new_data['sub_program_id']
     sections << 'Unit Type' if old_data['is_voucher'] != new_data['is_voucher']
     sections << 'Vacancy' if old_data['units'].to_json != new_data['units'].to_json
+    sections << 'Required Documents' if old_data['required_document_names'] != new_data['required_document_names']
     sections
   end
 
@@ -209,7 +217,8 @@ class VacancySubmissionsController < ApplicationController
   def submission_params
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id,
-      units: [:name, :street, :unit_number, :city, :state, :zip]
+      units: [:name, :street, :unit_number, :city, :state, :zip],
+      required_document_names: []
     )
   end
 

@@ -55,28 +55,31 @@
       .col-sm-6
         %dt.vs-field-label Vacancy
         %dd.vs-field-value.mb-0= @submission.voucher_type_display
-      - units = Array(@submission.units)
-      - if @submission.voucher?
-        .col-sm-6
-          %dt.vs-field-label= pluralize(units.size, 'Voucher')
-          %dd.vs-field-value.mb-0
-            - if units.any?
-              %ul.mb-0.ps-3
-                - units.each do |u|
-                  %li= u['name'].presence || '—'
-            - else
-              —
-      - else
-        .col-sm-6
-          %dt.vs-field-label= pluralize(units.size, 'Unit')
-          %dd.vs-field-value.mb-0
-            - addresses = @submission.site_display
-            - if addresses.any?
-              %ul.mb-0.ps-3
-                - addresses.each do |addr|
-                  %li= addr
-            - else
-              —
+
+- units = Array(@submission.units)
+- units.each_with_index do |unit, i|
+  .c-card
+    .c-card__header
+      %h2= @submission.voucher? ? "Voucher #{i + 1}" : "Unit #{i + 1}"
+    - unless @submission.voucher?
+      .c-card__content
+        %address.mb-0
+          = unit['street'].presence || '—'
+          - if unit['unit_number'].present?
+            %br/
+            = unit['unit_number']
+          %br/
+          = "#{[unit['city'], unit['state']].select(&:present?).join(', ')} #{unit['zip']}".strip.presence || '—'
+
+- required_names = Array(@submission.required_document_names).select(&:present?)
+- if required_names.any?
+  .c-card
+    .c-card__header
+      %h2 Required Documents
+    .c-card__content
+      %ul.mb-0.ps-3
+        - required_names.each do |name|
+          %li= name
 
 - if @sub_program
   .c-card

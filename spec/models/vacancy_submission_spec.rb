@@ -191,6 +191,20 @@ RSpec.describe VacancySubmission, type: :model do
     end
   end
 
+  describe '#required_document_names' do
+    it 'stores and retrieves an array of document name strings' do
+      vs = described_class.new(
+        draft_data: { 'required_document_names' => ['Photo ID', 'Lease Agreement'] },
+      )
+      expect(vs.required_document_names).to eq(['Photo ID', 'Lease Agreement'])
+    end
+
+    it 'returns nil when not set' do
+      vs = described_class.new(draft_data: {})
+      expect(vs.required_document_names).to be_nil
+    end
+  end
+
   describe '#voucher_type_display' do
     it 'returns Physical Unit when not a voucher' do
       vs = described_class.new(draft_data: { 'is_voucher' => false })
