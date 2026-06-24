@@ -23,25 +23,32 @@ export default class extends Controller {
       .replaceAll('__NUMBER__', number)
     this.listTarget.insertAdjacentHTML('beforeend', html)
     this.nextIndex++
-    this.renumberVouchers()
+    this.renumber()
     this.updateRemoveButtons()
   }
 
   removeUnit(event) {
     event.currentTarget.closest('[data-unit-entry]').remove()
-    this.renumberVouchers()
+    this.renumber()
     this.updateRemoveButtons()
   }
 
-  renumberVouchers() {
-    if (!this.isVoucherValue) return
-    this.listTarget.querySelectorAll('[data-unit-entry]').forEach((entry, index) => {
-      const label = entry.querySelector('[data-voucher-label]')
-      const input = entry.querySelector('[data-voucher-name]')
-      const number = index + 1
-      if (label) label.textContent = `Voucher ${number}`
-      if (input) input.value = `Voucher ${number}`
-    })
+  renumber() {
+    const entries = this.listTarget.querySelectorAll('[data-unit-entry]')
+    if (this.isVoucherValue) {
+      entries.forEach((entry, index) => {
+        const label = entry.querySelector('[data-voucher-label]')
+        const input = entry.querySelector('[data-voucher-name]')
+        const number = index + 1
+        if (label) label.textContent = `Voucher ${number}`
+        if (input) input.value = `Voucher ${number}`
+      })
+    } else {
+      entries.forEach((entry, index) => {
+        const title = entry.querySelector('[data-unit-card-title]')
+        if (title) title.textContent = `Unit ${index + 1}`
+      })
+    }
   }
 
   updateRemoveButtons() {
