@@ -1,7 +1,8 @@
 - if sub_program.file_tags.any?
   .c-card.mb-4
+    .c-card__header
+      %h2 Required Documents
     .c-card__content
-      %h5.c-card__title Required Documents
       %p.text-muted.small Select any documents a client must have before they can move in.
       - checked_names = Array(vacancy_submission.required_document_names)
       - sub_program.file_tags.order(:name).each do |tag|

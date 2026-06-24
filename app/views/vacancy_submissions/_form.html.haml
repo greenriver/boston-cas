@@ -13,9 +13,9 @@
 
   / ── Section 1: Route & Program ──
   .c-card.mb-4
+    .c-card__header
+      %h2 Route & Program
     .c-card__content
-      %h5.c-card__title Route & Program
-
       = f.input :program_id, label: 'Program', as: :select2,
           collection: @programs.map { |p| [p.name, p.id] },
           include_blank: 'Select a program',
@@ -31,8 +31,9 @@
 
   / ── Inherited Requirements ──
   .c-card.mb-4
+    .c-card__header
+      %h2 Inherited Requirements
     .c-card__content
-      %h5.c-card__title Inherited Requirements
       %div{data: { 'vacancy-submission-form-target': 'requirementsContainer' }}
         %p.text-muted Select a sub-program to see inherited requirements.
 
@@ -41,8 +42,9 @@
 
   / ── Section 2: Vacancy ──
   .c-card.mb-4
+    .c-card__header
+      %h2 Vacancy
     .c-card__content
-      %h5.c-card__title Vacancy
       - units_errors = vacancy_submission.errors[:units]
       %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json }}
         %p.text-muted Select a sub-program to see unit type information.
