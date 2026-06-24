@@ -1399,7 +1399,8 @@ CREATE TABLE public.housing_attributes (
     value character varying,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    include_value boolean DEFAULT true NOT NULL
 );
 
 
@@ -7310,6 +7311,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260624131950'),
 ('20260601000002'),
 ('20260601000001'),
 ('20260528000001'),

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class HousingAttributesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_housingable # Must be defined on the child class
@@ -15,7 +17,8 @@ class HousingAttributesController < ApplicationController
   end
 
   def new
-    @attribute = @housingable.housing_attributes.build
+    include_value = params[:amenity] != 'true'
+    @attribute = @housingable.housing_attributes.build(include_value: include_value)
   end
 
   def create
@@ -54,6 +57,7 @@ class HousingAttributesController < ApplicationController
     params.require(:housing_attribute).permit(
       :name,
       :value,
+      :include_value,
       "#{@housingable.class.name.downcase}_id",
     )
   end
