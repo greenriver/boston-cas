@@ -11,6 +11,7 @@ import HistoryController from './controllers/history_controller'
 import ReturnModalController from './controllers/return_modal_controller'
 import RoleManagerController from './controllers/role_manager_controller'
 import VacancySubmissionFormController from './controllers/vacancy_submission_form_controller'
+import VacancyUnitAttributesController from './controllers/vacancy_unit_attributes_controller'
 import VacancyUnitsController from './controllers/vacancy_units_controller'
 
 // Expose bootstrap globally for any legacy inline scripts that reference window.bootstrap
@@ -49,4 +50,5 @@ application.register('history', HistoryController)
 application.register('return-modal', ReturnModalController)
 application.register('role-manager', RoleManagerController)
 application.register('vacancy-submission-form', VacancySubmissionFormController)
+application.register('vacancy-unit-attributes', VacancyUnitAttributesController)
 application.register('vacancy-units', VacancyUnitsController)

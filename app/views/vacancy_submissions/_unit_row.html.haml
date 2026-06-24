@@ -64,5 +64,34 @@
             .form-check
               %input.form-check-input{ type: 'checkbox', name: "vacancy_submission[units][#{index}][shared_spaces][]", value: space, id: "unit_#{index}_shared_#{space.parameterize}", checked: Array(unit['shared_spaces']).include?(space) }
               %label.form-check-label{ for: "unit_#{index}_shared_#{space.parameterize}" }= space
+    %fieldset{data: { controller: 'vacancy-unit-attributes', 'unit-index': index, 'attribute-catalog': attr_catalog.to_json }}
+      %legend Attributes
+      %div{data: { 'vacancy-unit-attributes-target': 'list' }}
+        - Array(unit['attributes']).each_with_index do |attr, attr_i|
+          - saved_values = attr_catalog[attr['name']] || []
+          .d-flex.gap-2.align-items-start.mb-2{data: { 'attr-entry': '' }}
+            .flex-grow-1
+              %select.form-select.select2{ name: "vacancy_submission[units][#{index}][attributes][#{attr_i}][name]", data: { tags: true, action: 'vacancy-unit-attributes#nameChanged' } }
+                %option{value: ''} Select name...
+                - attr_names.each do |n|
+                  %option{value: n, selected: attr['name'] == n}= n
+            .flex-grow-1
+              %select.form-select.select2{ name: "vacancy_submission[units][#{index}][attributes][#{attr_i}][value]", data: { tags: true, 'attr-value-select': '' } }
+                %option{value: ''} Select value...
+                - saved_values.each do |v|
+                  %option{value: v, selected: attr['value'] == v}= v
+            %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-attributes#removeAttribute' }} Remove
+      %template{data: { 'attr-template': '' }}
+        .d-flex.gap-2.align-items-start.mb-2{data: { 'attr-entry': '' }}
+          .flex-grow-1
+            %select.form-select.select2{ name: 'vacancy_submission[units][__UNIT_INDEX__][attributes][__ATTR_INDEX__][name]', data: { tags: true, action: 'vacancy-unit-attributes#nameChanged' } }
+              %option{value: ''} Select name...
+              - attr_names.each do |n|
+                %option{value: n}= n
+          .flex-grow-1
+            %select.form-select.select2{ name: 'vacancy_submission[units][__UNIT_INDEX__][attributes][__ATTR_INDEX__][value]', data: { tags: true, 'attr-value-select': '' } }
+              %option{value: ''} Select value...
+          %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-attributes#removeAttribute' }} Remove
+      %button.btn.btn-sm.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-unit-attributes#addAttribute' }} + Add Attribute
     .d-flex.justify-content-end.mt-2
       %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove

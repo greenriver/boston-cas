@@ -144,7 +144,7 @@ class VacancySubmissionsController < ApplicationController
       VacancySubmission.new
     end
     vacancy_submission.required_document_names = Array(params[:required_document_names]) if params[:required_document_names].present?
-    vacancy_submission.units = params[:units].values.map(&:to_unsafe_h) if params[:units].present?
+    vacancy_submission.units = normalize_units(params[:units]) if params[:units].present?
 
     locals = config.call(sub_program, vacancy_submission)
     render partial: locals.delete(:partial), locals: locals
@@ -196,7 +196,7 @@ class VacancySubmissionsController < ApplicationController
       'sub_program_id' => sub_program.id,
       'route' => VacancySubmission.derive_route(sub_program),
       'is_voucher' => VacancySubmission.derive_is_voucher(sub_program),
-      'units' => submission_params[:units]&.values&.map(&:to_h) || [],
+      'units' => normalize_units(submission_params[:units]),
       'required_document_names' => Array(submission_params[:required_document_names]),
     }
   end
@@ -218,9 +218,19 @@ class VacancySubmissionsController < ApplicationController
   def submission_params
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id,
-      units: [:name, :street, :unit_number, :city, :state, :zip, :date_ready, :age_limit, :bedrooms, shared_spaces: []],
+      units: [:name, :street, :unit_number, :city, :state, :zip, :date_ready, :age_limit, :bedrooms, shared_spaces: [], attributes: [:name, :value]],
       required_document_names: []
     )
+  end
+
+  def normalize_units(units_params)
+    return [] if units_params.blank?
+
+    units_params.values.map do |unit|
+      h = unit.respond_to?(:to_unsafe_h) ? unit.to_unsafe_h : unit.to_h
+      h['attributes'] = Array(h['attributes']&.values)
+      h
+    end
   end
 
   def load_form_data
