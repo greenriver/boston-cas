@@ -1,0 +1,5 @@
+.border.rounded.p-3.mb-3{data: { 'unit-entry': '' }}
+  .d-flex.align-items-center.justify-content-between
+    %p.fw-semibold.mb-0{data: { 'voucher-label': '' }}= "Voucher #{number}"
+    %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove
+  %input{type: 'hidden', name: "vacancy_submission[units][#{index}][name]", value: "Voucher #{number}", data: { 'voucher-name': '' }}

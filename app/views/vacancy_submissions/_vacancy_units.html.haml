@@ -1,0 +1,9 @@
+.mb-4{data: { controller: 'vacancy-units', 'vacancy-units-is-voucher-value': false }}
+  %div{data: { 'vacancy-units-target': 'list' }}
+    - unit_list.each_with_index do |unit, i|
+      = render 'vacancy_submissions/unit_row', unit: unit, index: i, number: i + 1
+  %template{data: { 'unit-template': '' }}
+    = render 'vacancy_submissions/unit_row', unit: {}, index: '__INDEX__', number: '__NUMBER__'
+  .d-flex.justify-content-end.mt-2.pe-4
+    %button.btn.btn-outline-secondary{type: 'button', data: { action: 'vacancy-units#addUnit' }}
+      + Add another unit

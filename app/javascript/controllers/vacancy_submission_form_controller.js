@@ -120,18 +120,34 @@ export default class extends Controller {
     let url = `/vacancy_submissions/sub_program_section?sub_program_id=${subProgramId}&section=${section}`
     if (this.vacancySubmissionIdValue) url += `&vacancy_submission_id=${this.vacancySubmissionIdValue}`
 
-    if (section === 'required_documents') {
-      const raw = this[containerProp].dataset.selectedNames
-      if (raw) {
-        const names = JSON.parse(raw)
-        names.forEach(name => { url += `&required_document_names[]=${encodeURIComponent(name)}` })
-        delete this[containerProp].dataset.selectedNames
-      }
+    const rawForward = this[containerProp].dataset.forwardParams
+    if (rawForward) {
+      const encoded = this.encodeParams(JSON.parse(rawForward))
+      if (encoded) url += `&${encoded}`
+      delete this[containerProp].dataset.forwardParams
     }
 
     const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
     this[containerProp].innerHTML = await response.text()
     this.applyErrors(this[containerProp])
+  }
+
+  encodeParams(obj, prefix = '') {
+    return Object.entries(obj).flatMap(([key, value]) => {
+      const fullKey = prefix ? `${prefix}[${key}]` : key
+      if (Array.isArray(value)) {
+        if (value.length === 0) return []
+        if (typeof value[0] === 'object' && value[0] !== null) {
+          return value.flatMap((item, i) => this.encodeParams(item, `${fullKey}[${i}]`))
+        }
+        return value.map(v => `${encodeURIComponent(fullKey)}[]=${encodeURIComponent(v)}`)
+      }
+      if (typeof value === 'object' && value !== null) {
+        return this.encodeParams(value, fullKey)
+      }
+      if (value === null || value === undefined || value === '') return []
+      return [`${encodeURIComponent(fullKey)}=${encodeURIComponent(value)}`]
+    }).join('&')
   }
 
   applyErrors(container) {
@@ -142,14 +158,17 @@ export default class extends Controller {
     delete container.dataset.fieldErrors
     if (!errors.length) return
 
-    container.querySelectorAll('input[required]').forEach((input) => {
-      if (input.value.trim() === '') {
-        input.classList.add('is-invalid')
-        const feedback = document.createElement('div')
-        feedback.className = 'invalid-feedback'
-        feedback.textContent = 'This field is required.'
-        input.after(feedback)
-      }
+    container.querySelectorAll('input[required], select[required]').forEach((el) => {
+      if (el.value.trim() !== '') return
+      el.classList.add('is-invalid')
+      const select2Container = el.nextElementSibling?.classList.contains('select2-container')
+        ? el.nextElementSibling
+        : null
+      if (select2Container) select2Container.classList.add('is-invalid')
+      const feedback = document.createElement('div')
+      feedback.className = 'invalid-feedback'
+      feedback.textContent = 'This field is required.'
+      ;(select2Container || el).after(feedback)
     })
   }
 }

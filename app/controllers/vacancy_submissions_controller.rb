@@ -144,6 +144,7 @@ class VacancySubmissionsController < ApplicationController
       VacancySubmission.new
     end
     vacancy_submission.required_document_names = Array(params[:required_document_names]) if params[:required_document_names].present?
+    vacancy_submission.units = params[:units].values.map(&:to_unsafe_h) if params[:units].present?
 
     locals = config.call(sub_program, vacancy_submission)
     render partial: locals.delete(:partial), locals: locals
@@ -217,7 +218,7 @@ class VacancySubmissionsController < ApplicationController
   def submission_params
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id,
-      units: [:name, :street, :unit_number, :city, :state, :zip],
+      units: [:name, :street, :unit_number, :city, :state, :zip, :date_ready, :age_limit, :bedrooms, shared_spaces: []],
       required_document_names: []
     )
   end

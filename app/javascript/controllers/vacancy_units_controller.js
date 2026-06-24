@@ -13,6 +13,7 @@ export default class extends Controller {
   connect() {
     this.nextIndex = this.listTarget.querySelectorAll('[data-unit-entry]').length
     this.updateRemoveButtons()
+    this.initSelect2(this.element)
   }
 
   addUnit() {
@@ -22,9 +23,18 @@ export default class extends Controller {
       .replaceAll('__INDEX__', this.nextIndex)
       .replaceAll('__NUMBER__', number)
     this.listTarget.insertAdjacentHTML('beforeend', html)
+    const entries = this.listTarget.querySelectorAll('[data-unit-entry]')
+    this.initSelect2(entries[entries.length - 1])
     this.nextIndex++
     this.renumber()
     this.updateRemoveButtons()
+  }
+
+  initSelect2(container) {
+    if (!window.App?.Form?.Select2Input) return
+    container.querySelectorAll('select.select2').forEach((el) => {
+      new window.App.Form.Select2Input(el)
+    })
   }
 
   removeUnit(event) {

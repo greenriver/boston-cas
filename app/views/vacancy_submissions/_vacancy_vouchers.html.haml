@@ -1,0 +1,12 @@
+.c-card.mb-4
+  .c-card__header
+    %h2 Vouchers
+  .c-card__content
+    %div{data: { controller: 'vacancy-units', 'vacancy-units-is-voucher-value': true }}
+      %div{data: { 'vacancy-units-target': 'list' }}
+        - unit_list.each_with_index do |unit, i|
+          = render 'vacancy_submissions/voucher_row', unit: unit, index: i, number: i + 1
+      %template{data: { 'unit-template': '' }}
+        = render 'vacancy_submissions/voucher_row', unit: {}, index: '__INDEX__', number: '__NUMBER__'
+      %button.btn.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-units#addUnit' }}
+        + Add another voucher
