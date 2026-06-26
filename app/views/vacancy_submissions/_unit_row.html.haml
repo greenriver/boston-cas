@@ -12,12 +12,17 @@
     = render 'vacancy_submissions/unit_amenities', unit: unit, index: index, amenity_names: amenity_names, readonly: readonly
     = render 'vacancy_submissions/unit_attributes', unit: unit, index: index, attr_catalog: attr_catalog, attr_names: attr_names, readonly: readonly
     = render 'vacancy_submissions/unit_media_links', unit: unit, index: index, readonly: readonly
-    = render 'vacancy_submissions/unit_requirements',
-      unit: unit,
-      index: index,
-      on_unit: true,
-      all_rules: all_rules,
-      readonly: readonly
+    = render 'vacancy_submissions/unit_requirements', unit: unit, index: index, on_unit: true, all_rules: all_rules, readonly: readonly
+    - if readonly
+      - if unit['notes'].present?
+        %dl.row.g-2.mb-0
+          .col-sm-12
+            %dt.vs-field-label Unit Notes
+            %dd.vs-field-value.mb-0= simple_format(h(unit['notes']))
+    - else
+      .mb-3
+        %label.form-label Unit Notes
+        %textarea.form-control{name: "vacancy_submission[units][#{index}][notes]", rows: 3, placeholder: 'Any notes about this unit...'}= unit['notes']
   - unless readonly
     .d-flex.justify-content-end.mt-2
       %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove

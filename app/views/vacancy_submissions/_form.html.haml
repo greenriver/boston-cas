@@ -45,6 +45,13 @@
   %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json, 'forward-params': { units: Array(vacancy_submission.units) }.to_json }}
     %p.text-muted Select a sub-program to see unit type information.
 
+  / ── General Notes ──
+  .c-card.mb-4
+    .c-card__header
+      %h2 General Notes
+    .c-card__content
+      = f.input :notes, label: 'Additional Notes — Screening Criteria, Special Eligibility & Relevant Info', as: :text, input_html: { rows: 4, placeholder: 'Enter any additional notes about this vacancy submission...' }, hint: 'Please describe any screening criteria, special eligibility requirements, or other information relevant to this submission.'
+
   / Actions
   .d-flex.gap-2
     = f.submit (editing ? 'Save Changes' : 'Submit Vacancy'), class: 'btn btn-primary'

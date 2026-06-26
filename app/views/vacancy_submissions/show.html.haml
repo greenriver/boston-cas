@@ -82,6 +82,13 @@
         - required_names.each do |name|
           %li= name
 
+- if @submission.notes.present?
+  .c-card
+    .c-card__header
+      %h2 General Notes
+    .c-card__content
+      = simple_format(h(@submission.notes))
+
 - if @sub_program
   .c-card
     .c-card__header

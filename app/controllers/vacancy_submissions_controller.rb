@@ -198,6 +198,7 @@ class VacancySubmissionsController < ApplicationController
       'is_voucher' => VacancySubmission.derive_is_voucher(sub_program),
       'units' => normalize_units(submission_params[:units]),
       'required_document_names' => Array(submission_params[:required_document_names]),
+      'notes' => submission_params[:notes].to_s.strip.presence,
     }
   end
 
@@ -208,6 +209,7 @@ class VacancySubmissionsController < ApplicationController
     sections << 'Unit Type' if old_data['is_voucher'] != new_data['is_voucher']
     sections << 'Vacancy' if old_data['units'].to_json != new_data['units'].to_json
     sections << 'Required Documents' if old_data['required_document_names'] != new_data['required_document_names']
+    sections << 'Notes' if old_data['notes'] != new_data['notes']
     sections
   end
 
@@ -217,10 +219,10 @@ class VacancySubmissionsController < ApplicationController
 
   def submission_params
     params.require(:vacancy_submission).permit(
-      :program_id, :sub_program_id,
+      :program_id, :sub_program_id, :notes,
       units: [
         :name, :street, :unit_number, :city, :state, :zip,
-        :date_ready, :age_limit, :bedrooms,
+        :date_ready, :age_limit, :bedrooms, :notes,
         shared_spaces: [],
         amenities: [],
         attributes: [:name, :value],

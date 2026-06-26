@@ -14,7 +14,7 @@ class VacancySubmission < ApplicationRecord
 
   store_accessor :draft_data,
                  :program_id, :sub_program_id, :route, :is_voucher, :units,
-                 :required_document_names
+                 :required_document_names, :notes
 
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
