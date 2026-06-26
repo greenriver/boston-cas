@@ -19,5 +19,5 @@
               %td
                 = requirement.rule_text
                 - if requirement.variable.present?
-                  = requirement.rule_text
+                  = requirement.display_for_variable
               %td= requirement_source.name
