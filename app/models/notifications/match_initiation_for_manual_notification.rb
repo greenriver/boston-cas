@@ -18,6 +18,7 @@ module Notifications
         # this notification includes a link to the un-started matches, don't send anything
         # if the user can't access the link
         user = contact.user
+        next if user.blank? || !user.active?
         next unless user&.can_see_alternate_matches? || user&.can_see_all_alternate_matches?
 
         create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)

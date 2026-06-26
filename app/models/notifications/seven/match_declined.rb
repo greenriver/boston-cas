@@ -17,6 +17,8 @@ module Notifications::Seven
       contacts = match.contacts - match.dnd_staff_contacts
 
       contacts.each do |contact|
+        next if contact.user.blank? || !contact.user.active?
+
         create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end
     end

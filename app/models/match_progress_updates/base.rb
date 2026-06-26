@@ -112,7 +112,7 @@ module MatchProgressUpdates
       submitted_at.present?
     end
 
-    def is_editable? # rubocop:disable Naming/PredicateName
+    def is_editable? # rubocop:disable Naming/PredicatePrefix
       response.blank? && match.stalled?
     end
 
@@ -127,6 +127,8 @@ module MatchProgressUpdates
 
     def self.create_for_match! match
       match.public_send(match_contact_scope).each do |contact|
+        next if contact.user.blank? || !contact.user.active?
+
         where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
     end

@@ -82,12 +82,16 @@ module Notifications
     def self.create_for_match!(match, decision_id: nil)
       contact_types_for_notification.each do |contact_type|
         match.send(contact_type).each do |contact|
+          next if contact.user.blank? || !contact.user.active?
+
           create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
         end
       end
     end
 
     def self.recreate_for_match! match, contact
+      return if contact.user.blank? || !contact.user.active?
+
       create! match: match, recipient: contact
     end
 

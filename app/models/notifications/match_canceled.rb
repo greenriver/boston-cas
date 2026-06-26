@@ -19,6 +19,8 @@ module Notifications
       contacts -= (match.housing_subsidy_admin_contacts + match.ssp_contacts + match.hsp_contacts) unless match.hsa_involved?
 
       contacts.each do |contact|
+        next if contact.user.blank? || !contact.user.active?
+
         create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end
     end

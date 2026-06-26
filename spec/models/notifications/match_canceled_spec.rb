@@ -34,6 +34,8 @@ RSpec.describe 'Match canceled notifications', type: :model do
       let(:match) { create(:client_opportunity_match, match_route: route, opportunity: opportunity) }
       let(:contact) { create(:contact) }
       let(:dnd_contact) { create(:contact) }
+      let!(:contact_user) { create(:user, contact: contact) }
+      let!(:dnd_user) { create(:user, contact: dnd_contact) }
 
       before do
         match.contacts << contact
