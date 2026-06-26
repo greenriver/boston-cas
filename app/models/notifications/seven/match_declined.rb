@@ -17,7 +17,7 @@ module Notifications::Seven
       contacts = match.contacts - match.dnd_staff_contacts
 
       contacts.each do |contact|
-        next if contact.notification_recipient?
+        next unless contact.notification_recipient?
 
         create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end

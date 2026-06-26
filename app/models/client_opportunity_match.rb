@@ -447,7 +447,7 @@ class ClientOpportunityMatch < ApplicationRecord
 
     Contact.where(id: contact_ids).find_each do |contact|
       # If the contact is missing a user account, don't send this
-      if contact.user.present? && contact.user.active? && contact.user.receive_weekly_match_summary_email?
+      if contact.notification_recipient? && contact.user.receive_weekly_match_summary_email?
         MatchDigestMailer.digest(contact).deliver_now
         # Attempt to be nice to the mailer
         sleep(5)
