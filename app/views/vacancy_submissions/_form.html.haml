@@ -1,7 +1,7 @@
 - editing = vacancy_submission.persisted?
 - initial_program = vacancy_submission.program_id || 0
 - initial_sub = vacancy_submission.sub_program_id || 0
-- stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub }
+- stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub, 'vacancy-submission-form-vacancy-submission-id-value' => vacancy_submission.id.to_i }
 
 = simple_form_for vacancy_submission, html: { id: 'vacancy_submission_form', data: stimulus_data } do |f|
   = f.error_notification
@@ -11,14 +11,14 @@
     %span.text-danger *
     are required.
 
-  / ── Section 1: Resource Type & Program ──
+  / ── Section 1: Route & Program ──
   .c-card.mb-4
+    .c-card__header
+      %h2 Route & Program
     .c-card__content
-      %h5.c-card__title Resource Type & Program
-
       = f.input :program_id, label: 'Program', as: :select2,
           collection: @programs.map { |p| [p.name, p.id] },
-          include_blank: '-- Select a program --',
+          include_blank: 'Select a program',
           required: true,
           input_html: { data: { 'vacancy-submission-form-target': 'programSelect' } }
 
@@ -27,39 +27,30 @@
           include_blank: false,
           input_html: { disabled: true, data: { 'vacancy-submission-form-target': 'subProgramSelect' } }
 
-      .form-group
-        %label.control-label Resource Type
-        .form-control-plaintext.text-muted{style: 'min-height: 38px;', data: { 'vacancy-submission-form-target': 'resourceTypeDisplay' }}
-          = vacancy_submission.resource_type.presence || '—'
+      %div{data: { 'vacancy-submission-form-target': 'routeContainer' }}
 
-  / ── Section 2: Unit Type ──
+  / ── Inherited Requirements ──
   .c-card.mb-4
+    .c-card__header
+      %h2 Inherited Requirements
     .c-card__content
-      %h5.c-card__title Unit Type
+      %div{data: { 'vacancy-submission-form-target': 'requirementsContainer' }}
+        %p.text-muted Select a sub-program to see inherited requirements.
 
-      .form-group
-        %label.control-label Unit Type
-        .form-control-plaintext.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeDisplay' }}
-        %small.text-muted{data: { 'vacancy-submission-form-target': 'unitTypeHint' }}
+  / ── Required Documents ──
+  %div{data: { 'vacancy-submission-form-target': 'documentsContainer', 'forward-params': { required_document_names: Array(vacancy_submission.required_document_names) }.to_json }}
 
-      / Address fields — shown only for physical units
-      %div{hidden: true, data: { 'vacancy-submission-form-target': 'addressFields' }}
-        %hr
-        %p.fw-semibold Unit Address
+  / ── Section 2: Vacancy ──
+  - units_errors = vacancy_submission.errors[:units]
+  %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json, 'forward-params': { units: Array(vacancy_submission.units) }.to_json }}
+    %p.text-muted Select a sub-program to see unit type information.
 
-        = f.input :unit_address_street, label: 'Site Address', required: true, placeholder: 'Street Address'
-
-        .row
-          .col-md-6
-            = f.input :unit_address_unit_number, label: 'Unit Number', placeholder: 'Number'
-          .col-md-6
-            = f.input :unit_address_city, label: 'City', required: true, placeholder: 'City'
-
-        .row
-          .col-md-6
-            = f.input :unit_address_state, label: 'State', required: true
-          .col-md-6
-            = f.input :unit_address_zip, label: 'Zip Code', required: true, placeholder: '99999'
+  / ── General Notes ──
+  .c-card.mb-4
+    .c-card__header
+      %h2 General Notes
+    .c-card__content
+      = f.input :notes, label: 'Additional Notes — Screening Criteria, Special Eligibility & Relevant Info', as: :text, input_html: { rows: 4, placeholder: 'Enter any additional notes about this vacancy submission...' }, hint: 'Please describe any screening criteria, special eligibility requirements, or other information relevant to this submission.'
 
   / Actions
   .d-flex.gap-2

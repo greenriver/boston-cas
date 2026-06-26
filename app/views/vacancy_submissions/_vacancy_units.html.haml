@@ -1,0 +1,14 @@
+- attr_catalog = HousingAttribute.with_value.pluck(:name, :value).each_with_object(Hash.new { |h, k| h[k] = [] }) { |(n, v), h| h[n] << v }
+- attr_catalog.each_value { |vals| vals.sort!.uniq! }
+- attr_names = attr_catalog.keys.sort
+- amenity_names = HousingAttribute.without_value.pluck(:name).uniq.sort
+- all_rules = Rule.order(:name).to_a
+.mb-4{data: { controller: 'vacancy-units', 'vacancy-units-is-voucher-value': false }}
+  %div{data: { 'vacancy-units-target': 'list' }}
+    - unit_list.each_with_index do |unit, i|
+      = render 'vacancy_submissions/unit_row', unit: unit, index: i, number: i + 1, attr_catalog: attr_catalog, attr_names: attr_names, amenity_names: amenity_names, all_rules: all_rules
+  %template{data: { 'unit-template': '' }}
+    = render 'vacancy_submissions/unit_row', unit: {}, index: '__INDEX__', number: '__NUMBER__', attr_catalog: attr_catalog, attr_names: attr_names, amenity_names: amenity_names, all_rules: all_rules
+  .d-flex.justify-content-end.mt-2.pe-4
+    %button.btn.btn-outline-secondary{type: 'button', data: { action: 'vacancy-units#addUnit' }}
+      + Add another unit

@@ -4,110 +4,117 @@
  * License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
  */
 
+// Shared variable-input logic for both requirements controllers.
+// Mixed into controller prototypes after class definition.
 export const RequirementVariableMixin = {
-  wireMultiSelectSync(entry) {
-    entry.querySelectorAll('[data-req-multi-display]').forEach((multiDisplay) => {
-      const hidden = entry.querySelector('[data-req-variable]')
-      if (!hidden) return
-      const sync = () => {
-        const selected = Array.from(multiDisplay.selectedOptions).map((o) => o.value)
-        hidden.value = selected.join(',')
-      }
-      if (window.$) {
-        $(multiDisplay).off('change.reqsync').on('change.reqsync', sync)
-      } else {
-        multiDisplay.addEventListener('change', sync)
-      }
-    })
+  select2Options(el) {
+    if (!window.$) return {}
+    const modalContent = el.closest('.modal-content')
+    return modalContent ? { dropdownParent: $(modalContent) } : {}
   },
 
-  select2Options(el) {
-    const $modalContent = window.$ ? $(el).closest('.modal-content') : null
-    const dropdownParent = $modalContent?.length ? $modalContent[0] : el.closest('form')
-    return { dropdownParent, width: '100%' }
+  wireMultiSelectSync(entry) {
+    const multiDisplay = entry.querySelector('[data-req-multi-display]')
+    if (!multiDisplay) return
+    const hidden = entry.querySelector('[data-req-variable]')
+    if (!hidden) return
+    const sync = () => {
+      hidden.value = Array.from(multiDisplay.selectedOptions)
+        .map((o) => o.value)
+        .join(',')
+    }
+    multiDisplay.addEventListener('change', sync)
+    if (window.$) $(multiDisplay).on('select2:select select2:unselect', sync)
   },
 
   updateVariableInput(entry, ruleSelect) {
     const container = entry.querySelector('[data-req-variable-container]')
     if (!container) return
-
-    const selectedOption = ruleSelect.options[ruleSelect.selectedIndex]
-    const isVariable = selectedOption?.dataset?.variable === 'true'
-    const varType = selectedOption?.dataset?.variableType || ''
-    const varOptionsRaw = selectedOption?.dataset?.variableOptions || '[]'
-    const varLabel = selectedOption?.dataset?.variableLabel || ''
+    const selected = ruleSelect.options[ruleSelect.selectedIndex]
+    const isVariable = selected?.dataset.variable === 'true'
+    if (!isVariable) {
+      container.hidden = true
+      container.innerHTML = ''
+      return
+    }
+    container.hidden = false
+    const type = selected?.dataset.variableType || 'text'
+    const options = JSON.parse(selected?.dataset.variableOptions || '[]')
+    const label = selected?.dataset.variableLabel || ''
     const varName = container.dataset.variableName
-
-    container.hidden = !isVariable
-    if (!isVariable) return
-
-    const labelEl = container.querySelector('label')
-    if (labelEl) labelEl.textContent = varLabel
-
-    let varOptions = []
-    try { varOptions = JSON.parse(varOptionsRaw) } catch (_e) {}
-
+    const currentValue = container.querySelector('[data-req-variable]')?.value || ''
     container.innerHTML = ''
-    if (labelEl) container.appendChild(labelEl)
+    if (label) {
+      const labelEl = document.createElement('label')
+      labelEl.className = 'form-label mb-1'
+      labelEl.textContent = label
+      container.appendChild(labelEl)
+    }
+    if (type === 'select') {
+      this.buildSelectInput(container, varName, options, currentValue, false)
+    } else if (type === 'multi-select') {
+      this.buildSelectInput(container, varName, options, currentValue.split(',').filter(Boolean), true)
+    } else if (type === 'number') {
+      const input = document.createElement('input')
+      input.type = 'number'
+      input.className = 'form-control'
+      input.placeholder = 'Value'
+      input.name = `${varName}[variable]`
+      input.dataset.reqVariable = ''
+      input.value = currentValue
+      container.appendChild(input)
+    } else {
+      const input = document.createElement('input')
+      input.type = 'text'
+      input.className = 'form-control'
+      input.placeholder = 'Value'
+      input.name = `${varName}[variable]`
+      input.dataset.reqVariable = ''
+      input.value = currentValue
+      container.appendChild(input)
+    }
+  },
 
-    if (varType === 'select') {
-      const sel = this._buildSelect(varName, varOptions)
-      sel.setAttribute('data-req-variable', '')
-      container.appendChild(sel)
-      this._initSelect2(sel)
-    } else if (varType === 'multi-select') {
-      const multiSel = this._buildSelect(varName + '_display', varOptions, true)
-      multiSel.setAttribute('data-req-multi-display', '')
+  buildSelectInput(container, varName, options, currentValue, multiple) {
+    if (multiple) {
       const hidden = document.createElement('input')
       hidden.type = 'hidden'
-      hidden.name = varName + '[variable]'
-      hidden.setAttribute('data-req-variable', '')
-      container.appendChild(multiSel)
+      hidden.name = `${varName}[variable]`
+      hidden.dataset.reqVariable = ''
+      hidden.value = Array.isArray(currentValue) ? currentValue.join(',') : currentValue
+
+      const select = document.createElement('select')
+      select.className = 'form-select select2'
+      select.multiple = true
+      select.dataset.reqMultiDisplay = ''
+      options.forEach(([val, label]) => {
+        const opt = new Option(label, val)
+        opt.selected = currentValue.includes(val.toString())
+        select.appendChild(opt)
+      })
+      const sync = () => {
+        hidden.value = Array.from(select.selectedOptions)
+          .map((o) => o.value)
+          .join(',')
+      }
+      select.addEventListener('change', sync)
+      if (window.$) $(select).on('select2:select select2:unselect', sync)
+      container.appendChild(select)
       container.appendChild(hidden)
-      this._initSelect2(multiSel)
-      this.wireMultiSelectSync(entry)
-    } else if (varType === 'number') {
-      const inp = document.createElement('input')
-      inp.type = 'number'
-      inp.className = 'form-control'
-      inp.name = varName + '[variable]'
-      inp.placeholder = 'Value'
-      inp.setAttribute('data-req-variable', '')
-      container.appendChild(inp)
+      if (window.App?.Form?.Select2Input) new window.App.Form.Select2Input(select, this.select2Options(container))
     } else {
-      const inp = document.createElement('input')
-      inp.type = 'text'
-      inp.className = 'form-control'
-      inp.name = varName + '[variable]'
-      inp.placeholder = 'Value'
-      inp.setAttribute('data-req-variable', '')
-      container.appendChild(inp)
-    }
-  },
-
-  _buildSelect(name, options, multiple = false) {
-    const sel = document.createElement('select')
-    sel.className = 'form-select select2'
-    sel.name = name
-    if (multiple) sel.multiple = true
-    if (!multiple) {
-      const blank = document.createElement('option')
-      blank.value = ''
-      blank.textContent = 'Select...'
-      sel.appendChild(blank)
-    }
-    options.forEach(([val, label]) => {
-      const opt = document.createElement('option')
-      opt.value = val
-      opt.textContent = label
-      sel.appendChild(opt)
-    })
-    return sel
-  },
-
-  _initSelect2(el) {
-    if (window.App?.Form?.Select2Input) {
-      new window.App.Form.Select2Input(el, this.select2Options(el))
+      const select = document.createElement('select')
+      select.className = 'form-select select2'
+      select.name = `${varName}[variable]`
+      select.dataset.reqVariable = ''
+      select.appendChild(new Option('Select...', ''))
+      options.forEach(([val, label]) => {
+        const opt = new Option(label, val)
+        opt.selected = val.toString() === currentValue.toString()
+        select.appendChild(opt)
+      })
+      container.appendChild(select)
+      if (window.App?.Form?.Select2Input) new window.App.Form.Select2Input(select, this.select2Options(container))
     }
   },
 }

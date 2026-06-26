@@ -1,0 +1,48 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- if readonly
+  %dl.g-2.mb-3
+    %dt.vs-field-label Date Ready
+    %dd.vs-field-value.mb-2= unit['date_ready'].presence || '—'
+    %dt.vs-field-label Age Limit
+    %dd.vs-field-value.mb-2= unit['age_limit'].presence || '—'
+    %dt.vs-field-label Bedrooms
+    %dd.vs-field-value.mb-2= unit['bedrooms'].presence || '—'
+  - shared = Array(unit['shared_spaces']).select(&:present?)
+  - if shared.any?
+    %dt.vs-field-label Shared Spaces
+    %dd.vs-field-value.mb-2= shared.join(', ')
+- else
+  %fieldset.mb-4
+    %legend
+      Unit Details
+    .row.mb-3
+      .col-md-6
+        %label.form-label
+          Date unit will be ready
+          %abbr{title: 'required'} *
+        %input.form-control{ type: 'date', name: "vacancy_submission[units][#{index}][date_ready]", value: unit['date_ready'], min: Date.today.iso8601, required: true }
+    .row.mb-3
+      .col-md-6
+        %label.form-label
+          Age limit
+          %abbr{title: 'required'} *
+        %select.form-select.select2{ name: "vacancy_submission[units][#{index}][age_limit]", required: true }
+          %option{value: ''} Select...
+          - ['N/A', '50+', '55+', '60+'].each do |opt|
+            %option{value: opt, selected: unit['age_limit'] == opt}= opt
+    .row.mb-3
+      .col-md-6
+        %label.form-label
+          Number of bedrooms
+          %abbr{title: 'required'} *
+        %select.form-select.select2{ name: "vacancy_submission[units][#{index}][bedrooms]", required: true }
+          %option{value: ''} Select...
+          - ['SRO', 'Studio', 'One bedroom', 'Two bedrooms', 'Three or more bedrooms'].each do |opt|
+            %option{value: opt, selected: unit['bedrooms'] == opt}= opt
+    .mb-3
+      %label.form-label Shared spaces
+      .d-flex.gap-4
+        - ['Kitchen', 'Living Room', 'Bathroom'].each do |space|
+          .form-check
+            %input.form-check-input{ type: 'checkbox', name: "vacancy_submission[units][#{index}][shared_spaces][]", value: space, id: "unit_#{index}_shared_#{space.parameterize}", checked: Array(unit['shared_spaces']).include?(space) }
+            %label.form-check-label{ for: "unit_#{index}_shared_#{space.parameterize}" }= space

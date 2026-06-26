@@ -1,0 +1,80 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- on_unit = local_assigns.fetch(:on_unit, false)
+- json_requirements = Array(unit['requirements'])
+- all_rules = local_assigns.fetch(:all_rules, [])
+- if readonly
+  - reqs = json_requirements.select { |r| r['rule_id'].present? }
+  - if reqs.any?
+    %p
+      %strong Requirements
+    .table-responsive
+      %table.table
+        %thead
+          %tr
+            %th Type
+            %th Rule
+        %tbody
+          - rules = Rule.where(id:reqs.map { |r| r['rule_id'] }.compact).index_by(&:id)
+          - reqs.each do |req|
+            - rule = rules[req['rule_id'].to_i]
+            - next unless rule
+            - req_positive = req['positive'].to_s == 'true' || req['positive'] == true
+            - requirement = Requirement.new(rule: rule, positive: req_positive, variable: req['variable'])
+            %tr
+              %td
+                %div{class: req_positive ? 'badge badge-primary' : 'badge badge-warning'}= req_positive ? 'Must' : "Can't"
+              %td
+                = requirement.name
+                = requirement.display_for_variable
+- else
+  %fieldset.mb-4{data: { controller: 'vacancy-unit-requirements' }}
+    %legend Requirements
+    %div{data: { 'vacancy-unit-requirements-target': 'list' }}
+      - json_requirements.each_with_index do |req, req_i|
+        - next if req['rule_id'].blank?
+        - selected_rule = all_rules.find { |r| r.id.to_s == req['rule_id'].to_s }
+        .mb-2{data: { 'req-entry': '' }}
+          .d-flex.gap-2.align-items-center
+            %select.form-select.w-auto.flex-shrink-0{ name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][positive]" }
+              %option{value: 'true', selected: req['positive'].to_s == 'true'} Must
+              %option{value: 'false', selected: req['positive'].to_s != 'true'} Can't
+            %select.form-select.select2.flex-grow-1{ name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][rule_id]", data: { 'req-rule-select': '' } }
+              %option{value: ''} Select rule...
+              - all_rules.each do |rule_opt|
+                - rule_name = on_unit ? (rule_opt.alternate_name.presence || rule_opt.name_with_verb) : rule_opt.name_with_verb
+                %option{value: rule_opt.id, selected: rule_opt.id.to_s == req['rule_id'].to_s, data: { variable: rule_opt.variable_requirement?.to_s, 'variable-type': rule_opt.variable_input_type.to_s, 'variable-options': rule_opt.variable_options.to_json, 'variable-label': rule_opt.variable_label.to_s }}= rule_name
+            %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-requirements#removeReq' }} Remove
+          .mt-1{ data: { 'req-variable-container': '', 'variable-name': "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}]" }, hidden: !selected_rule&.variable_requirement? }
+            - if selected_rule&.variable_requirement?
+              - if selected_rule.variable_label.present?
+                %label.form-label.mb-1= selected_rule.variable_label
+              - case selected_rule.variable_input_type
+              - when 'select'
+                %select.form-select.select2{ name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", data: { 'req-variable': '' } }
+                  %option{value: ''} Select...
+                  - selected_rule.variable_options.each do |val, label|
+                    %option{value: val, selected: val.to_s == req['variable'].to_s}= label
+              - when 'multi-select'
+                - current_values = req['variable'].to_s.split(',')
+                %select.form-select.select2{ multiple: true, data: { 'req-multi-display': '' } }
+                  - selected_rule.variable_options.each do |val, label|
+                    %option{value: val, selected: current_values.include?(val.to_s)}= label
+                %input{type: 'hidden', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], data: { 'req-variable': '' }}
+              - when 'number'
+                %input.form-control{type: 'number', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], placeholder: 'Value', data: { 'req-variable': '' }}
+              - else
+                %input.form-control{type: 'text', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], placeholder: 'Value', data: { 'req-variable': '' }}
+    %template{data: { 'req-template': '' }}
+      .mb-2{data: { 'req-entry': '' }}
+        .d-flex.gap-2.align-items-center
+          %select.form-select.w-auto.flex-shrink-0{ name: "vacancy_submission[units][#{index}][requirements_attributes][__REQ__][positive]" }
+            %option{value: 'true'} Must
+            %option{value: 'false'} Can't
+          %select.form-select.select2.flex-grow-1{ name: "vacancy_submission[units][#{index}][requirements_attributes][__REQ__][rule_id]", data: { 'req-rule-select': '' } }
+            %option{value: ''} Select rule...
+            - all_rules.each do |rule_opt|
+              - rule_name = on_unit ? (rule_opt.alternate_name.presence || rule_opt.name_with_verb) : rule_opt.name_with_verb
+              %option{value: rule_opt.id, data: { variable: rule_opt.variable_requirement?.to_s, 'variable-type': rule_opt.variable_input_type.to_s, 'variable-options': rule_opt.variable_options.to_json, 'variable-label': rule_opt.variable_label.to_s }}= rule_name
+          %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-requirements#removeReq' }} Remove
+        .mt-1{ data: { 'req-variable-container': '', 'variable-name': "vacancy_submission[units][#{index}][requirements_attributes][__REQ__]" }, hidden: true }
+    %button.btn.btn-sm.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-unit-requirements#addReq' }} + Add Rule
