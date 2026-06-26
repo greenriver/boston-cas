@@ -225,6 +225,7 @@ class VacancySubmissionsController < ApplicationController
         :date_ready, :age_limit, :bedrooms, :notes,
         shared_spaces: [],
         amenities: [],
+        accessibility: [],
         attributes: [:name, :value],
         media_links: [:url, :label],
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]

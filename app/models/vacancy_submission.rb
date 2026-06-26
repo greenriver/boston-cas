@@ -16,6 +16,16 @@ class VacancySubmission < ApplicationRecord
                  :program_id, :sub_program_id, :route, :is_voucher, :units,
                  :required_document_names, :notes
 
+  # This maps accessibility features to rules, it's unclear if these should always be enforced
+  # or if we need a mechanism to specify they are optional.  For instance, someone who isn't
+  # a wheelchair user can live comfortably in a building that is wheelchair accessible.
+  ACCESSIBILITY_OPTIONS = {
+    'Wheelchair accessible unit' => Rules::Wheelchair,
+    'Wheelchair accessible building' => Rules::Wheelchair,
+    'Elevator to unit' => Rules::Elevator,
+    'Ground floor unit' => Rules::Elevator,
+  }.freeze
+
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
 
