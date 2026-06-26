@@ -69,11 +69,16 @@ class VacancySubmission < ApplicationRecord
   end
 
   def site_display
-    return [] if voucher?
+    return ['N/A'] if voucher?
 
     Array(units).map do |u|
-      [u['street'], u['unit_number'], u['city'], u['state'], u['zip']]
-        .compact.reject(&:blank?).join(', ').presence || '—'
+      [
+        u['street'],
+        u['unit_number'],
+        u['city'],
+        u['state'],
+        u['zip'],
+      ].compact.reject(&:blank?).join(', ').presence
     end
   end
 
@@ -87,6 +92,18 @@ class VacancySubmission < ApplicationRecord
       'return_changes_requested' => 'Return / Changes Requested',
       'active' => 'Active',
     }[status] || status.to_s.humanize
+  end
+
+  def bedrooms_display
+    return ['—'] if voucher?
+
+    Array(units).map { |u| u['bedrooms'] }.compact.reject(&:blank?)
+  end
+
+  def changes_requested_display
+    return '—' if status != 'return_changes_requested'
+
+    vacancy_submission_notes.select { |n| n.note_type == 'reviewer_note' }.last&.body || '—'
   end
 
   # Reviewers can approve from either queue state — including return_changes_requested —
