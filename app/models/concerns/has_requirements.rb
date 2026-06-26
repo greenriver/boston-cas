@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 # The unwitting consequence of decentralizing the network of requirements was
 # that I had to put code in place to avoid infinitely looping (in two
 # different ways). There are a few different ways this code can be improved.
@@ -14,12 +16,12 @@ module HasRequirements
 
   included do
     has_many :requirements, as: :requirer
-    accepts_nested_attributes_for :requirements, allow_destroy: true
+    accepts_nested_attributes_for :requirements, allow_destroy: true, reject_if: ->(attrs) { attrs['rule_id'].blank? }
   end
 
   def available_rules
     Rule.where.not(id: requirements.select(:rule_id)).order(:name)
   end
 
-  class ClassMethodLoopException < StandardError; end;
+  class ClassMethodLoopException < StandardError; end
 end

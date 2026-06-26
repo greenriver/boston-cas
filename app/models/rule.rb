@@ -47,8 +47,92 @@ class Rule < ApplicationRecord
     nil
   end
 
+  VARIABLE_INPUT_TYPES = {
+    'Rules::ActiveInCohort' => 'multi-select',
+    'Rules::AgeGreaterThanX' => 'number',
+    'Rules::AgeGreaterThanY' => 'number',
+    'Rules::AssessmentCompletedWithin' => 'select',
+    'Rules::AssessmentScoreGreaterThanSpecified' => 'select',
+    'Rules::Bedroom' => 'select',
+    'Rules::BedroomExact' => 'select',
+    'Rules::Challenge' => 'multi-select',
+    'Rules::EnrolledInHmisProjectTypeAnyPhNoMoveIn' => 'multi-select',
+    'Rules::EnrolledInHmisProjectType' => 'multi-select',
+    'Rules::EnrolledInHmisProject' => 'multi-select',
+    'Rules::HasFileTags' => 'multi-select',
+    'Rules::IncomeMaximum' => 'number',
+    'Rules::IncomeMinimum' => 'number',
+    'Rules::InterestedInNeighborhood' => 'select',
+    'Rules::NonHmisAssessmentType' => 'multi-select',
+    'Rules::Occupancy' => 'select',
+    'Rules::RankBelow' => 'select',
+    'Rules::Strength' => 'multi-select',
+    'Rules::TaggedWith' => 'select',
+    'Rules::UnshelteredDays' => 'select',
+  }.freeze
+
+  VARIABLE_LABELS = {
+    'Rules::ActiveInCohort' => 'Cohort',
+    'Rules::AgeGreaterThanX' => 'Age',
+    'Rules::AgeGreaterThanY' => 'Age',
+    'Rules::AssessmentCompletedWithin' => 'Assessment',
+    'Rules::AssessmentScoreGreaterThanSpecified' => 'Assessment Score',
+    'Rules::Bedroom' => 'Bedrooms',
+    'Rules::BedroomExact' => 'Bedrooms',
+    'Rules::Challenge' => 'Challenge',
+    'Rules::EnrolledInHmisProjectTypeAnyPhNoMoveIn' => 'Project Types',
+    'Rules::EnrolledInHmisProjectType' => 'Project Types',
+    'Rules::EnrolledInHmisProject' => 'Projects',
+    'Rules::HasFileTags' => 'File Tags',
+    'Rules::IncomeMaximum' => 'Income',
+    'Rules::IncomeMinimum' => 'Income',
+    'Rules::InterestedInNeighborhood' => 'Neighborhood',
+    'Rules::NonHmisAssessmentType' => 'Assessment Types',
+    'Rules::Occupancy' => 'Occupancy',
+    'Rules::RankBelow' => 'Rank',
+    'Rules::Strength' => 'Strength',
+    'Rules::TaggedWith' => 'Tag',
+    'Rules::UnshelteredDays' => 'Days Unsheltered',
+  }.freeze
+
+  VARIABLE_OPTIONS_METHODS = {
+    'Rules::ActiveInCohort' => :available_cohorts,
+    'Rules::AssessmentCompletedWithin' => :available_options,
+    'Rules::AssessmentScoreGreaterThanSpecified' => :available_scores,
+    'Rules::Bedroom' => :available_number_of_bedrooms,
+    'Rules::BedroomExact' => :available_number_of_bedrooms,
+    'Rules::Challenge' => :available_challenges,
+    'Rules::EnrolledInHmisProjectTypeAnyPhNoMoveIn' => :available_project_types,
+    'Rules::EnrolledInHmisProjectType' => :available_project_types,
+    'Rules::EnrolledInHmisProject' => :available_projects,
+    'Rules::HasFileTags' => :available_tags,
+    'Rules::InterestedInNeighborhood' => :available_neighborhoods,
+    'Rules::NonHmisAssessmentType' => :available_assessments,
+    'Rules::Occupancy' => :available_occupancy,
+    'Rules::RankBelow' => :available_ranks,
+    'Rules::Strength' => :available_strengths,
+    'Rules::TaggedWith' => :available_tags,
+    'Rules::UnshelteredDays' => :available_unsheltered_days,
+  }.freeze
+
   def variable_requirement?
     false
+  end
+
+  def variable_input_type
+    VARIABLE_INPUT_TYPES[self.class.name]
+  end
+
+  def variable_label
+    VARIABLE_LABELS[self.class.name]
+  end
+
+  def variable_options
+    method_name = VARIABLE_OPTIONS_METHODS[self.class.name]
+    return [] unless method_name
+
+    result = public_send(method_name)
+    result.is_a?(Hash) ? result.to_a : result
   end
 
   def display_for_variable(_value)
