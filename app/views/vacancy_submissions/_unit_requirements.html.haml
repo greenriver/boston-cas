@@ -18,10 +18,11 @@
           - reqs.each do |req|
             - rule = rules[req['rule_id'].to_i]
             - next unless rule
-            - requirement = Requirement.new(rule: rule, positive: req['positive'].to_s == 'true' || req['positive'] == true, variable: req['variable'])
+            - req_positive = req['positive'].to_s == 'true' || req['positive'] == true
+            - requirement = Requirement.new(rule: rule, positive: req_positive, variable: req['variable'])
             %tr
               %td
-                %div{class: ['badge', requirement.modal_verb_class]}= requirement.modal_verb
+                %div{class: req_positive ? 'badge badge-primary' : 'badge badge-warning'}= req_positive ? 'Must' : "Can't"
               %td
                 = requirement.name
                 = requirement.display_for_variable
