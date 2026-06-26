@@ -15,7 +15,7 @@
           - requirements.each do |requirement|
             %tr
               %td
-                %div{class: "badge badge-#{requirement.modal_verb_class}"}= requirement.modal_verb
+                %div{class: ['badge', requirement.modal_verb_class]} }= requirement.modal_verb
               %td
                 = requirement.rule_text
                 - if requirement.variable.present?

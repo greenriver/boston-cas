@@ -187,7 +187,7 @@ RSpec.describe VacancySubmission, type: :model do
 
     it 'returns an empty array for vouchers' do
       vs = described_class.new(draft_data: { 'is_voucher' => true, 'units' => [{ 'name' => 'V-1' }] })
-      expect(vs.site_display).to eq([])
+      expect(vs.site_display).to eq(['N/A'])
     end
   end
 

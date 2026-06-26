@@ -51,7 +51,7 @@ class Requirement < ApplicationRecord
   end
 
   def modal_verb_class
-    positive? ? 'primary' : 'warning'
+    positive? ? 'badge-primary' : 'badge-warning'
   end
 
   def display_for_variable

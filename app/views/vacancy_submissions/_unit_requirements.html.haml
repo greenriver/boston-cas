@@ -21,7 +21,7 @@
             - requirement = Requirement.new(rule: rule, positive: req['positive'].to_s == 'true' || req['positive'] == true, variable: req['variable'])
             %tr
               %td
-                %div{class: "badge badge-#{requirement.modal_verb_class}"}= requirement.modal_verb
+                %div{class: ['badge', requirement.modal_verb_class]}= requirement.modal_verb
               %td
                 = requirement.name
                 = requirement.display_for_variable
