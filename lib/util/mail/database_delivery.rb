@@ -21,7 +21,7 @@ module Mail
       delivery_method_options = @parameters
 
       Contact.where(email: mail[:to].addresses).each do |contact|
-        next if contact.notification_recipient?
+        next unless contact.notification_recipient?
 
         # store the "email" in the database
         message = ::Message.create(
