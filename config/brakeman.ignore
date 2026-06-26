@@ -7,7 +7,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/command_args.rb",
-      "line": 34,
+      "line": 40,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`diff #{path} #{tmppath}`",
       "render_path": null,
@@ -86,7 +86,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 119,
+      "line": 125,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git ls-remote origin | grep refs/heads/#{`git rev-parse --abbrev-ref HEAD`.chomp}$`",
       "render_path": null,
@@ -109,7 +109,7 @@
       "check_name": "EOLRails",
       "message": "Support for Rails 7.2.3.1 ends on 2026-08-09",
       "file": "Gemfile.lock",
-      "line": 1083,
+      "line": 1075,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -151,7 +151,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/ecs_tools.rb",
-      "line": 25,
+      "line": 31,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "system(\"ssh #{\"ecs0.openpath.host\"} 'docker commit #{`ssh #{\"ecs0.openpath.host\"} \"docker ps -a -n 10\"`.split(/\\n/).grep(/#{IMAGE}/).first.split(/\\s/).first} shell'\")",
       "render_path": null,
@@ -202,13 +202,46 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "33b06d2b14093fefd2e2dc479aead03e88041ace6634b994f7dc5aee37236f1f",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/vacancy_submissions/_unit_requirements.html.haml",
+      "line": 25,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, [\"badge\", Requirement.modal_verb_class_for(((req[\"positive\"].to_s == \"true\") or (req[\"positive\"] == true)))])",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "vacancy_submissions/_unit_row",
+          "line": 16,
+          "file": "app/views/vacancy_submissions/_unit_row.html.haml",
+          "rendered": {
+            "name": "vacancy_submissions/_unit_requirements",
+            "file": "app/views/vacancy_submissions/_unit_requirements.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "vacancy_submissions/_unit_requirements"
+      },
+      "user_input": "Requirement.modal_verb_class_for(((req[\"positive\"].to_s == \"true\") or (req[\"positive\"] == true)))",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "3dd8310433b78a9a0f49518f45599807fd8847d87b373a5eea8c8992d3cb13f3",
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 120,
+      "line": 126,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git rev-parse #{`git rev-parse --abbrev-ref HEAD`.chomp}`",
       "render_path": null,
@@ -265,7 +298,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/tagged_with.rb",
-      "line": 34,
+      "line": 46,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where((\"tags ->>'#{requirement.variable}' is not null\" or \"not(tags ->>'#{requirement.variable}' is not null) OR tags is null\"))",
       "render_path": null,
@@ -321,7 +354,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/deployer.rb",
-      "line": 162,
+      "line": 168,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`echo #{revision} > #{_assets_path}/REVISION`",
       "render_path": null,
@@ -344,7 +377,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "config/deploy/docker/lib/ecs_tools.rb",
-      "line": 38,
+      "line": 44,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "exec(\"awslogs get #{group} ALL --watch\")",
       "render_path": null,
@@ -547,7 +580,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/non_hmis_assessment_type.rb",
-      "line": 32,
+      "line": 44,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where((\"'#{value_as_array(requirement.variable)}'::jsonb ? assessment_name\" or \"not(#{\"'#{value_as_array(requirement.variable)}'::jsonb ? assessment_name\"}) OR assessment_name is null\"))",
       "render_path": null,
@@ -614,7 +647,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/rank_below.rb",
-      "line": 37,
+      "line": 49,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"(tags->>'#{opportunity.match_route.tag_id.to_i}')::int >= #{requirement.variable}\")",
       "render_path": null,
@@ -728,7 +761,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/rules/rank_below.rb",
-      "line": 35,
+      "line": 47,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"(tags->>'#{opportunity.match_route.tag_id.to_i}')::int < #{requirement.variable}\")",
       "render_path": null,
@@ -867,5 +900,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "8.0.4"
+  "brakeman_version": "8.0.5"
 }
