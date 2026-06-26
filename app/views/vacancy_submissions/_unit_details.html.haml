@@ -28,7 +28,7 @@
           %abbr{title: 'required'} *
         %select.form-select.select2{ name: "vacancy_submission[units][#{index}][age_limit]", required: true }
           %option{value: ''} Select...
-          - ['N/A', '50+', '55+', '60+'].each do |opt|
+          - VacancySubmission::AGE_LIMIT_OPTIONS.each do |opt|
             %option{value: opt, selected: unit['age_limit'] == opt}= opt
     .row.mb-3
       .col-md-6
@@ -37,12 +37,12 @@
           %abbr{title: 'required'} *
         %select.form-select.select2{ name: "vacancy_submission[units][#{index}][bedrooms]", required: true }
           %option{value: ''} Select...
-          - ['SRO', 'Studio', 'One bedroom', 'Two bedrooms', 'Three or more bedrooms'].each do |opt|
+          - VacancySubmission::BEDROOM_OPTIONS.each do |opt|
             %option{value: opt, selected: unit['bedrooms'] == opt}= opt
     .mb-3
       %label.form-label Shared spaces
       .d-flex.gap-4
-        - ['Kitchen', 'Living Room', 'Bathroom'].each do |space|
+        - VacancySubmission::SHARED_SPACE_OPTIONS.each do |space|
           .form-check
             %input.form-check-input{ type: 'checkbox', name: "vacancy_submission[units][#{index}][shared_spaces][]", value: space, id: "unit_#{index}_shared_#{space.parameterize}", checked: Array(unit['shared_spaces']).include?(space) }
             %label.form-check-label{ for: "unit_#{index}_shared_#{space.parameterize}" }= space

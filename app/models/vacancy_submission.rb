@@ -26,6 +26,10 @@ class VacancySubmission < ApplicationRecord
     'Ground floor unit' => Rules::Elevator,
   }.freeze
 
+  BEDROOM_OPTIONS = ['SRO', 'Studio', 'One bedroom', 'Two bedrooms', 'Three or more bedrooms'].freeze
+  AGE_LIMIT_OPTIONS = ['N/A', '50+', '55+', '60+'].freeze
+  SHARED_SPACE_OPTIONS = ['Kitchen', 'Living Room', 'Bathroom'].freeze
+
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
 

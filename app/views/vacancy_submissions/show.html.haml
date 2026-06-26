@@ -67,10 +67,9 @@
       .c-card__content
         = render 'vacancy_submissions/voucher_row', unit: unit, index: i, number: i + 1, readonly: true
 - else
-  - attr_catalog = HousingAttribute.with_value.pluck(:name, :value).each_with_object(Hash.new { |h, k| h[k] = [] }) { |(n, v), h| h[n] << v }
-  - attr_catalog.each_value { |vals| vals.sort!.uniq! }
-  - attr_names = attr_catalog.keys.sort
-  - amenity_names = HousingAttribute.without_value.pluck(:name).uniq.sort
+  - attr_catalog = HousingAttribute.attribute_catalog
+  - attr_names = HousingAttribute.existing_attributes
+  - amenity_names = HousingAttribute.existing_amenities
   - units.each_with_index do |unit, i|
     = render 'vacancy_submissions/unit_row', unit: unit, index: i, number: i + 1, readonly: true, amenity_names: amenity_names, attr_catalog: attr_catalog, attr_names: attr_names
 

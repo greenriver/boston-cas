@@ -46,12 +46,20 @@ class Requirement < ApplicationRecord
     end
   end
 
+  def self.modal_verb_for(positive)
+    positive ? 'Must' : "Can't"
+  end
+
+  def self.modal_verb_class_for(positive)
+    positive ? 'badge-primary' : 'badge-warning'
+  end
+
   def modal_verb
-    positive? ? 'Must' : "Can't"
+    self.class.modal_verb_for(positive?)
   end
 
   def modal_verb_class
-    positive? ? 'badge-primary' : 'badge-warning'
+    self.class.modal_verb_class_for(positive?)
   end
 
   def display_for_variable

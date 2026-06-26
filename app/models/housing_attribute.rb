@@ -26,6 +26,12 @@ class HousingAttribute < ApplicationRecord
     without_value.pluck(:name).uniq.sort
   end
 
+  def self.attribute_catalog
+    with_value.pluck(:name, :value).each_with_object(Hash.new { |h, k| h[k] = [] }) do |(n, v), h|
+      h[n] << v
+    end.tap { |h| h.each_value { |vals| vals.sort!.uniq! } }
+  end
+
   def existing_values(for_attribute: nil)
     for_attribute ||= name
     return [] if for_attribute.blank?
