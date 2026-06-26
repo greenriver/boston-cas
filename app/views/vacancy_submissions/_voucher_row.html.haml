@@ -9,8 +9,4 @@
       %p.fw-semibold.mb-0{data: { 'voucher-label': '' }}= "Voucher #{number}"
       %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove
     %input{type: 'hidden', name: "vacancy_submission[units][#{index}][name]", value: "Voucher #{number}", data: { 'voucher-name': '' }}
-  = render 'vacancy_submissions/unit_requirements',
-    unit: unit,
-    index: index,
-    all_rules: all_rules,
-    readonly: readonly
+  = render 'vacancy_submissions/unit_requirements', unit: unit, index: index, all_rules: all_rules, readonly: readonly

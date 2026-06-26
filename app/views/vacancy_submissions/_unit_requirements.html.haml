@@ -5,17 +5,24 @@
 - if readonly
   - reqs = json_requirements.select { |r| r['rule_id'].present? }
   - if reqs.any?
-    %dl.row.g-2.mb-3
-      .col-12
-        %dt.vs-field-label Requirements
-        %dd.vs-field-value.mb-0
-          %ul.mb-0.ps-3
-            - reqs.each do |req|
-              - rule = Rule.find_by(id: req['rule_id'])
-              - next unless rule
-              - polarity = req['positive'].to_s == 'true' || req['positive'] == true ? 'Must' : "Can't"
-              - variable_display = req['variable'].present? && rule.variable_requirement? ? " (#{rule.display_for_variable(req['variable'])})" : ''
-              %li= "#{polarity}: #{rule.name_with_verb}#{variable_display}"
+    .table-responsive
+      %table.table
+        %thead
+          %tr
+            %th Type
+            %th Rule
+        %tbody
+          - rules = Rule.where(id:reqs.map { |r| r['rule_id'] }.compact).index_by(&:id)
+          - reqs.each do |req|
+            - rule = rules[req['rule_id'].to_i]
+            - next unless rule
+            - requirement = Requirement.new(rule: rule, positive: req['positive'].to_s == 'true' || req['positive'] == true, variable: req['variable'])
+            %tr
+              %td
+                %div{class: "badge badge-#{requirement.modal_verb_class}"}= requirement.modal_verb
+              %td
+                = requirement.name
+                = requirement.display_for_variable
 - else
   %fieldset.mb-4{data: { controller: 'vacancy-unit-requirements' }}
     %legend Requirements
