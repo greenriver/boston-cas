@@ -218,7 +218,15 @@ class VacancySubmissionsController < ApplicationController
   def submission_params
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id,
-      units: [:name, :street, :unit_number, :city, :state, :zip, :date_ready, :age_limit, :bedrooms, shared_spaces: [], attributes: [:name, :value]],
+      units: [
+        :name, :street, :unit_number, :city, :state, :zip,
+        :date_ready, :age_limit, :bedrooms,
+        shared_spaces: [],
+        amenities: [],
+        attributes: [:name, :value],
+        media_links: [:url, :label],
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
+      ],
       required_document_names: []
     )
   end
@@ -229,7 +237,24 @@ class VacancySubmissionsController < ApplicationController
     units_params.values.map do |unit|
       h = unit.respond_to?(:to_unsafe_h) ? unit.to_unsafe_h : unit.to_h
       h['attributes'] = Array(h['attributes']&.values)
+      h['media_links'] = Array(h['media_links']&.values)
+      # requirements_attributes comes from the form submit; requirements (as a
+      # numeric-keyed hash) comes from forward-params on re-render after failure.
+      h['requirements'] = if h.key?('requirements_attributes')
+        normalize_requirements(h.delete('requirements_attributes'))
+      else
+        reqs = h['requirements']
+        reqs.is_a?(Hash) ? reqs.values : Array(reqs)
+      end
       h
+    end
+  end
+
+  def normalize_requirements(reqs_params)
+    return [] if reqs_params.blank?
+
+    reqs_params.values.reject { |r| r['_destroy'].to_s == '1' }.map do |r|
+      { 'rule_id' => r['rule_id'].to_s, 'positive' => r['positive'].to_s, 'variable' => r['variable'].to_s }
     end
   end
 

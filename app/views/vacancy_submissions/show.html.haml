@@ -57,19 +57,20 @@
         %dd.vs-field-value.mb-0= @submission.voucher_type_display
 
 - units = Array(@submission.units)
-- units.each_with_index do |unit, i|
-  .c-card
-    .c-card__header
-      %h2= @submission.voucher? ? "Voucher #{i + 1}" : "Unit #{i + 1}"
-    - unless @submission.voucher?
+- if @submission.voucher?
+  - units.each_with_index do |unit, i|
+    .c-card
+      .c-card__header
+        %h2= "Voucher #{i + 1}"
       .c-card__content
-        %address.mb-0
-          = unit['street'].presence || '—'
-          - if unit['unit_number'].present?
-            %br/
-            = unit['unit_number']
-          %br/
-          = "#{[unit['city'], unit['state']].select(&:present?).join(', ')} #{unit['zip']}".strip.presence || '—'
+        = render 'vacancy_submissions/voucher_row', unit: unit, index: i, number: i + 1, readonly: true
+- else
+  - attr_catalog = HousingAttribute.with_value.pluck(:name, :value).each_with_object(Hash.new { |h, k| h[k] = [] }) { |(n, v), h| h[n] << v }
+  - attr_catalog.each_value { |vals| vals.sort!.uniq! }
+  - attr_names = attr_catalog.keys.sort
+  - amenity_names = HousingAttribute.without_value.pluck(:name).uniq.sort
+  - units.each_with_index do |unit, i|
+    = render 'vacancy_submissions/unit_row', unit: unit, index: i, number: i + 1, readonly: true, amenity_names: amenity_names, attr_catalog: attr_catalog, attr_names: attr_names
 
 - required_names = Array(@submission.required_document_names).select(&:present?)
 - if required_names.any?

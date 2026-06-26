@@ -1,5 +1,16 @@
-.border.rounded.p-3.mb-3{data: { 'unit-entry': '' }}
-  .d-flex.align-items-center.justify-content-between
-    %p.fw-semibold.mb-0{data: { 'voucher-label': '' }}= "Voucher #{number}"
-    %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove
-  %input{type: 'hidden', name: "vacancy_submission[units][#{index}][name]", value: "Voucher #{number}", data: { 'voucher-name': '' }}
+- readonly = local_assigns.fetch(:readonly, false)
+- all_rules = local_assigns.fetch(:all_rules, [])
+.border.rounded.p-3.mb-3{data: (readonly ? {} : { 'unit-entry': '' })}
+  - if readonly
+    .d-flex.align-items-center.mb-2
+      %p.fw-semibold.mb-0= unit['name'].presence || '—'
+  - else
+    .d-flex.align-items-center.justify-content-between
+      %p.fw-semibold.mb-0{data: { 'voucher-label': '' }}= "Voucher #{number}"
+      %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove
+    %input{type: 'hidden', name: "vacancy_submission[units][#{index}][name]", value: "Voucher #{number}", data: { 'voucher-name': '' }}
+  = render 'vacancy_submissions/unit_requirements',
+    unit: unit,
+    index: index,
+    all_rules: all_rules,
+    readonly: readonly

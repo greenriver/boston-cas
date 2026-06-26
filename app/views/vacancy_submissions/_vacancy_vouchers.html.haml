@@ -1,3 +1,4 @@
+- all_rules = Rule.order(:name).to_a
 .c-card.mb-4
   .c-card__header
     %h2 Vouchers
@@ -5,8 +6,8 @@
     %div{data: { controller: 'vacancy-units', 'vacancy-units-is-voucher-value': true }}
       %div{data: { 'vacancy-units-target': 'list' }}
         - unit_list.each_with_index do |unit, i|
-          = render 'vacancy_submissions/voucher_row', unit: unit, index: i, number: i + 1
+          = render 'vacancy_submissions/voucher_row', unit: unit, index: i, number: i + 1, all_rules: all_rules
       %template{data: { 'unit-template': '' }}
-        = render 'vacancy_submissions/voucher_row', unit: {}, index: '__INDEX__', number: '__NUMBER__'
+        = render 'vacancy_submissions/voucher_row', unit: {}, index: '__INDEX__', number: '__NUMBER__', all_rules: all_rules
       %button.btn.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-units#addUnit' }}
         + Add another voucher

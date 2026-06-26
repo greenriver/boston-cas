@@ -1,97 +1,23 @@
-.c-card.mb-2{data: { 'unit-entry': '' }}
+- readonly = local_assigns.fetch(:readonly, false)
+- amenity_names = local_assigns.fetch(:amenity_names, [])
+- attr_catalog = local_assigns.fetch(:attr_catalog, {})
+- attr_names = local_assigns.fetch(:attr_names, [])
+- all_rules = local_assigns.fetch(:all_rules, [])
+.c-card.mb-2{data: (readonly ? {} : { 'unit-entry': '' })}
   .c-card__header
-    %h2{data: { 'unit-card-title': '' }}= "Unit #{number}"
+    %h2{data: (readonly ? {} : { 'unit-card-title': '' })}= "Unit #{number}"
   .c-card__content
-    %fieldset
-      %legend
-        Unit Address
-      .mb-3
-        %label.form-label.fw-semibold
-          Site Address
-          %abbr{title: 'required'} *
-        %input.form-control{ name: "vacancy_submission[units][#{index}][street]", value: unit['street'], placeholder: 'Street Address', required: true }
-      .row.mb-3
-        .col-md-6
-          %label.form-label Unit Number
-          %input.form-control{ name: "vacancy_submission[units][#{index}][unit_number]", value: unit['unit_number'], placeholder: 'Number' }
-        .col-md-6
-          %label.form-label
-            City
-            %abbr{title: 'required'} *
-          %input.form-control{ name: "vacancy_submission[units][#{index}][city]", value: unit['city'], placeholder: 'City', required: true }
-      .row.mb-3
-        .col-md-6
-          %label.form-label
-            State
-            %abbr{title: 'required'} *
-          %input.form-control{ name: "vacancy_submission[units][#{index}][state]", value: unit['state'], required: true }
-        .col-md-6
-          %label.form-label
-            Zip Code
-            %abbr{title: 'required'} *
-          %input.form-control{ name: "vacancy_submission[units][#{index}][zip]", value: unit['zip'], placeholder: '99999', required: true }
-    %fieldset
-      %legend
-        Unit Details
-      .row.mb-3
-        .col-md-6
-          %label.form-label
-            Date unit will be ready
-            %abbr{title: 'required'} *
-          %input.form-control{ type: 'date', name: "vacancy_submission[units][#{index}][date_ready]", value: unit['date_ready'], required: true }
-      .row.mb-3
-        .col-md-6
-          %label.form-label
-            Age limit
-            %abbr{title: 'required'} *
-          %select.form-select.select2{ name: "vacancy_submission[units][#{index}][age_limit]", required: true }
-            %option{value: ''} Select...
-            - ['N/A', '50+', '55+', '60+'].each do |opt|
-              %option{value: opt, selected: unit['age_limit'] == opt}= opt
-      .row.mb-3
-        .col-md-6
-          %label.form-label
-            Number of bedrooms
-            %abbr{title: 'required'} *
-          %select.form-select.select2{ name: "vacancy_submission[units][#{index}][bedrooms]", required: true }
-            %option{value: ''} Select...
-            - ['SRO', 'Studio', 'One bedroom', 'Two bedrooms', 'Three or more bedrooms'].each do |opt|
-              %option{value: opt, selected: unit['bedrooms'] == opt}= opt
-      .mb-3
-        %label.form-label Shared spaces
-        .d-flex.gap-4
-          - ['Kitchen', 'Living Room', 'Bathroom'].each do |space|
-            .form-check
-              %input.form-check-input{ type: 'checkbox', name: "vacancy_submission[units][#{index}][shared_spaces][]", value: space, id: "unit_#{index}_shared_#{space.parameterize}", checked: Array(unit['shared_spaces']).include?(space) }
-              %label.form-check-label{ for: "unit_#{index}_shared_#{space.parameterize}" }= space
-    %fieldset{data: { controller: 'vacancy-unit-attributes', 'unit-index': index, 'attribute-catalog': attr_catalog.to_json }}
-      %legend Attributes
-      %div{data: { 'vacancy-unit-attributes-target': 'list' }}
-        - Array(unit['attributes']).each_with_index do |attr, attr_i|
-          - saved_values = attr_catalog[attr['name']] || []
-          .d-flex.gap-2.align-items-start.mb-2{data: { 'attr-entry': '' }}
-            .flex-grow-1
-              %select.form-select.select2{ name: "vacancy_submission[units][#{index}][attributes][#{attr_i}][name]", data: { tags: true, action: 'vacancy-unit-attributes#nameChanged' } }
-                %option{value: ''} Select name...
-                - attr_names.each do |n|
-                  %option{value: n, selected: attr['name'] == n}= n
-            .flex-grow-1
-              %select.form-select.select2{ name: "vacancy_submission[units][#{index}][attributes][#{attr_i}][value]", data: { tags: true, 'attr-value-select': '' } }
-                %option{value: ''} Select value...
-                - saved_values.each do |v|
-                  %option{value: v, selected: attr['value'] == v}= v
-            %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-attributes#removeAttribute' }} Remove
-      %template{data: { 'attr-template': '' }}
-        .d-flex.gap-2.align-items-start.mb-2{data: { 'attr-entry': '' }}
-          .flex-grow-1
-            %select.form-select.select2{ name: 'vacancy_submission[units][__UNIT_INDEX__][attributes][__ATTR_INDEX__][name]', data: { tags: true, action: 'vacancy-unit-attributes#nameChanged' } }
-              %option{value: ''} Select name...
-              - attr_names.each do |n|
-                %option{value: n}= n
-          .flex-grow-1
-            %select.form-select.select2{ name: 'vacancy_submission[units][__UNIT_INDEX__][attributes][__ATTR_INDEX__][value]', data: { tags: true, 'attr-value-select': '' } }
-              %option{value: ''} Select value...
-          %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-attributes#removeAttribute' }} Remove
-      %button.btn.btn-sm.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-unit-attributes#addAttribute' }} + Add Attribute
+    = render 'vacancy_submissions/unit_address', unit: unit, index: index, readonly: readonly
+    = render 'vacancy_submissions/unit_details', unit: unit, index: index, readonly: readonly
+    = render 'vacancy_submissions/unit_amenities', unit: unit, index: index, amenity_names: amenity_names, readonly: readonly
+    = render 'vacancy_submissions/unit_attributes', unit: unit, index: index, attr_catalog: attr_catalog, attr_names: attr_names, readonly: readonly
+    = render 'vacancy_submissions/unit_media_links', unit: unit, index: index, readonly: readonly
+    = render 'vacancy_submissions/unit_requirements',
+      unit: unit,
+      index: index,
+      on_unit: true,
+      all_rules: all_rules,
+      readonly: readonly
+  - unless readonly
     .d-flex.justify-content-end.mt-2
       %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove

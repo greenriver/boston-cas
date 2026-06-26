@@ -30,18 +30,26 @@ class App.RequirementManager.Searcher
       dropdownParent: @_dropdownParent(@element)
 
   _init_select_listener: ->
-    $(".jVariableRequirment").hide()
-    $(".jRuleSelectionNote").hide()
+    $mgr = $(@controller.element)
+    $mgr.find(".jVariableRequirment").hide()
+    $mgr.find(".jRuleSelectionNote").hide()
     $(@element).on 'select2:select', (e) =>
       rule_id = $(@element).val()
-      $(".jVariableRequirment").hide()
-      $(".jRuleSelectionNote").hide()
-      $(".jVariableRequirment[data-rule-id=#{rule_id}]").show()
-      $variableSelect = $(".jVariableRequirment[data-rule-id=#{rule_id}] select")
+      $mgr.find(".jVariableRequirment").hide()
+      $mgr.find(".jRuleSelectionNote").hide()
+      $mgr.find(".jVariableRequirment[data-rule-id=#{rule_id}]").show()
+      $variableSelect = $mgr.find(".jVariableRequirment[data-rule-id=#{rule_id}] select")
       $variableSelect.css('width', '100%')
       $variableSelect.select2
         dropdownParent: @_dropdownParent($variableSelect[0])
-      $(".jRuleSelectionNote[data-rule-id=#{rule_id}]").show()
+      $mgr.find(".jRuleSelectionNote[data-rule-id=#{rule_id}]").show()
+
+      # Auto-add for non-variable rules when positivity is already chosen
+      chosen_rule = @available_rules.find(Number(rule_id))
+      positivity = @controller.new_requirement_positive_value
+      if chosen_rule && !chosen_rule.variable && (positivity == true || positivity == false)
+        @controller.add_requirement_from_rule_searcher()
+        $mgr.find(".jVariableRequirment").hide()
 
   reset: ->
     # resetting select2 this way currently throws

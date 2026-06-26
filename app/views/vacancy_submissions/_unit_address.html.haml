@@ -1,0 +1,42 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- if readonly
+  %dl.row.g-2.mb-3
+    .col-sm-6
+      %dt.vs-field-label Address
+      %dd.vs-field-value.mb-0
+        %address.mb-0
+          = unit['street'].presence || '—'
+          - if unit['unit_number'].present?
+            %br/
+            = unit['unit_number']
+          %br/
+          = "#{[unit['city'], unit['state']].select(&:present?).join(', ')} #{unit['zip']}".strip.presence || '—'
+- else
+  %fieldset.mb-4
+    %legend
+      Unit Address
+    .mb-3
+      %label.form-label.fw-semibold
+        Site Address
+        %abbr{title: 'required'} *
+      %input.form-control{ name: "vacancy_submission[units][#{index}][street]", value: unit['street'], placeholder: 'Street Address', required: true }
+    .row.mb-3
+      .col-md-6
+        %label.form-label Unit Number
+        %input.form-control{ name: "vacancy_submission[units][#{index}][unit_number]", value: unit['unit_number'], placeholder: 'Number' }
+      .col-md-6
+        %label.form-label
+          City
+          %abbr{title: 'required'} *
+        %input.form-control{ name: "vacancy_submission[units][#{index}][city]", value: unit['city'], placeholder: 'City', required: true }
+    .row.mb-3
+      .col-md-6
+        %label.form-label
+          State
+          %abbr{title: 'required'} *
+        %input.form-control{ name: "vacancy_submission[units][#{index}][state]", value: unit['state'], required: true }
+      .col-md-6
+        %label.form-label
+          Zip Code
+          %abbr{title: 'required'} *
+        %input.form-control{ name: "vacancy_submission[units][#{index}][zip]", value: unit['zip'], placeholder: '99999', required: true }

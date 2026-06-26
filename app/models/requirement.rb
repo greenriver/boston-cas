@@ -14,7 +14,7 @@ class Requirement < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
-  delegate :variable_requirement?, to: :rule
+  delegate :variable_requirement?, to: :rule, allow_nil: true
   validates_presence_of :variable, if: :variable_requirement?
 
   def clients_that_fit(scope, opportunity = nil)

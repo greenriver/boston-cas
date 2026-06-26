@@ -1,0 +1,37 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- if readonly
+  - attrs = Array(unit['attributes']).select { |a| a['name'].present? }
+  - if attrs.any?
+    %dl.row.g-2.mb-3
+      .col-12
+        %dt.vs-field-label Attributes
+        %dd.vs-field-value.mb-0
+          %ul.mb-0.ps-3
+            - attrs.each do |attr|
+              %li= "#{attr['name']}: #{attr['value']}"
+- else
+  %fieldset.mb-4{data: { controller: 'vacancy-unit-attributes', 'unit-index': index, 'attribute-catalog': attr_catalog.to_json }}
+    %legend Attributes
+    %div{data: { 'vacancy-unit-attributes-target': 'list' }}
+      - Array(unit['attributes']).each_with_index do |attr, attr_i|
+        - saved_values = attr_catalog[attr['name']] || []
+        .d-flex.gap-2.align-items-start.mb-2{data: { 'attr-entry': '' }}
+          %select.form-select.select2{ name: "vacancy_submission[units][#{index}][attributes][#{attr_i}][name]", data: { tags: true, 'attr-name-select': true } }
+            %option{value: ''} Select name...
+            - attr_names.each do |n|
+              %option{value: n, selected: attr['name'] == n}= n
+          %select.form-select.select2{ name: "vacancy_submission[units][#{index}][attributes][#{attr_i}][value]", data: { tags: true, 'attr-value-select': true } }
+            %option{value: ''} Select value...
+            - saved_values.each do |v|
+              %option{value: v, selected: attr['value'] == v}= v
+          %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-attributes#removeAttribute' }} Remove
+    %template{data: { 'attr-template': '' }}
+      .d-flex.gap-2.align-items-start.mb-2{data: { 'attr-entry': '' }}
+        %select.form-select.select2{ name: 'vacancy_submission[units][__UNIT_INDEX__][attributes][__ATTR_INDEX__][name]', data: { tags: true, 'attr-name-select': true } }
+          %option{value: ''} Select name...
+          - attr_names.each do |n|
+            %option{value: n}= n
+        %select.form-select.select2{ name: 'vacancy_submission[units][__UNIT_INDEX__][attributes][__ATTR_INDEX__][value]', data: { tags: true, 'attr-value-select': true } }
+          %option{value: ''} Select value...
+        %button.btn.btn-sm.btn-outline-danger.mt-1{type: 'button', data: { action: 'vacancy-unit-attributes#removeAttribute' }} Remove
+    %button.btn.btn-sm.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-unit-attributes#addAttribute' }} + Add Attribute

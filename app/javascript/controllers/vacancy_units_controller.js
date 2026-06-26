@@ -14,6 +14,7 @@ export default class extends Controller {
     this.nextIndex = this.listTarget.querySelectorAll('[data-unit-entry]').length
     this.updateRemoveButtons()
     this.initSelect2(this.element)
+    this.initRequirementManagers(this.element)
   }
 
   addUnit() {
@@ -24,10 +25,20 @@ export default class extends Controller {
       .replaceAll('__NUMBER__', number)
     this.listTarget.insertAdjacentHTML('beforeend', html)
     const entries = this.listTarget.querySelectorAll('[data-unit-entry]')
-    this.initSelect2(entries[entries.length - 1])
+    const newEntry = entries[entries.length - 1]
+    this.initSelect2(newEntry)
+    this.initRequirementManagers(newEntry)
     this.nextIndex++
     this.renumber()
     this.updateRemoveButtons()
+  }
+
+  initRequirementManagers(container) {
+    if (!window.App?.RequirementManager?.Controller) return
+    container.querySelectorAll('[data-requirement-manager]:not([data-rm-ready])').forEach((el) => {
+      el.setAttribute('data-rm-ready', '1')
+      new window.App.RequirementManager.Controller(el)
+    })
   }
 
   initSelect2(container) {

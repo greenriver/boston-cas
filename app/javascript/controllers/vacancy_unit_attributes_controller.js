@@ -11,6 +11,7 @@ export default class extends Controller {
 
   connect() {
     this.nextIndex = this.listTarget.querySelectorAll('[data-attr-entry]').length
+    this.attachNameHandlers(this.listTarget)
   }
 
   addAttribute() {
@@ -30,8 +31,7 @@ export default class extends Controller {
     event.currentTarget.closest('[data-attr-entry]').remove()
   }
 
-  nameChanged(event) {
-    const nameSelect = event.currentTarget
+  cascadeValues(nameSelect) {
     const entry = nameSelect.closest('[data-attr-entry]')
     const valueSelect = entry.querySelector('[data-attr-value-select]')
     if (!valueSelect) return
@@ -57,10 +57,18 @@ export default class extends Controller {
     if (window.App?.Form?.Select2Input) new window.App.Form.Select2Input(valueSelect)
   }
 
+  attachNameHandlers(container) {
+    if (!window.$) return
+    $(container).find('[data-attr-name-select]')
+      .off('change.vacancyUnitAttr')
+      .on('change.vacancyUnitAttr', (e) => this.cascadeValues(e.currentTarget))
+  }
+
   initSelect2(container) {
     if (!window.App?.Form?.Select2Input) return
     container.querySelectorAll('select.select2').forEach((el) => {
       new window.App.Form.Select2Input(el)
     })
+    this.attachNameHandlers(container)
   }
 }
