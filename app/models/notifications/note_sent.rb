@@ -17,7 +17,7 @@ module Notifications
 
     def self.create_for_match! match_id:, contact_id:, note:, include_content: true
       contact = Contact.find(contact_id)
-      return if contact.user.blank? || !contact.user.active?
+      return if contact.notification_recipient?
 
       create! client_opportunity_match_id: match_id, recipient_id: contact_id, note: note, include_content: include_content
     end

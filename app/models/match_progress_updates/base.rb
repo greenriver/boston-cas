@@ -127,7 +127,7 @@ module MatchProgressUpdates
 
     def self.create_for_match! match
       match.public_send(match_contact_scope).each do |contact|
-        next if contact.user.blank? || !contact.user.active?
+        next if contact.notification_recipient?
 
         where(match_id: match.id, contact_id: contact.id).first_or_create!
       end
