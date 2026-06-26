@@ -24,7 +24,7 @@
         %label.form-label
           Date unit will be ready
           %abbr{title: 'required'} *
-        %input.form-control{ type: 'date', name: "vacancy_submission[units][#{index}][date_ready]", value: unit['date_ready'], required: true }
+        %input.form-control{ type: 'date', name: "vacancy_submission[units][#{index}][date_ready]", value: unit['date_ready'], min: Date.today.iso8601, required: true }
     .row.mb-3
       .col-md-6
         %label.form-label
