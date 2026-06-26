@@ -31,3 +31,6 @@ CVE-2026-42246
 
 # Devise monkey patch added in config/initializers/devise_cve_2026_40295.rb
 CVE-2026-40295
+
+# excon not exploitable, no patch yet available. See #9324
+CVE-2026-54171
