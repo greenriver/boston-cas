@@ -2,10 +2,9 @@
 - if readonly
   - checked = Array(unit['amenities']).select(&:present?)
   - if checked.any?
-    %dl.row.g-2.mb-3
-      .col-sm-6
-        %dt.vs-field-label Amenities
-        %dd.vs-field-value.mb-0= checked.join(', ')
+    %dl.g-2.mb-3
+      %dt.vs-field-label Amenities
+      %dd.vs-field-value.mb-2= checked.join(', ')
 - else
   - if amenity_names.any?
     %fieldset.mb-4

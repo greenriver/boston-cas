@@ -2,13 +2,12 @@
 - if readonly
   - attrs = Array(unit['attributes']).select { |a| a['name'].present? }
   - if attrs.any?
-    %dl.row.g-2.mb-3
-      .col-12
-        %dt.vs-field-label Attributes
-        %dd.vs-field-value.mb-0
-          %ul.mb-0.ps-3
-            - attrs.each do |attr|
-              %li= "#{attr['name']}: #{attr['value']}"
+    %dl.g-2.mb-3
+      %dt.vs-field-label Attributes
+      %dd.vs-field-value.mb-2
+        %ul.mb-0.ps-4
+          - attrs.each do |attr|
+            %li= "#{attr['name']}: #{attr['value']}"
 - else
   %fieldset.mb-4{data: { controller: 'vacancy-unit-attributes', 'unit-index': index, 'attribute-catalog': attr_catalog.to_json }}
     %legend Attributes

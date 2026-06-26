@@ -5,6 +5,8 @@
 - if readonly
   - reqs = json_requirements.select { |r| r['rule_id'].present? }
   - if reqs.any?
+    %p
+      %strong Requirements
     .table-responsive
       %table.table
         %thead

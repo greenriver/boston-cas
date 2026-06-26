@@ -1,20 +1,16 @@
 - readonly = local_assigns.fetch(:readonly, false)
 - if readonly
-  %dl.row.g-2.mb-3
-    .col-sm-6
-      %dt.vs-field-label Date Ready
-      %dd.vs-field-value.mb-0= unit['date_ready'].presence || '—'
-    .col-sm-6
-      %dt.vs-field-label Age Limit
-      %dd.vs-field-value.mb-0= unit['age_limit'].presence || '—'
-    .col-sm-6
-      %dt.vs-field-label Bedrooms
-      %dd.vs-field-value.mb-0= unit['bedrooms'].presence || '—'
-    - shared = Array(unit['shared_spaces']).select(&:present?)
-    - if shared.any?
-      .col-sm-6
-        %dt.vs-field-label Shared Spaces
-        %dd.vs-field-value.mb-0= shared.join(', ')
+  %dl.g-2.mb-3
+    %dt.vs-field-label Date Ready
+    %dd.vs-field-value.mb-2= unit['date_ready'].presence || '—'
+    %dt.vs-field-label Age Limit
+    %dd.vs-field-value.mb-2= unit['age_limit'].presence || '—'
+    %dt.vs-field-label Bedrooms
+    %dd.vs-field-value.mb-2= unit['bedrooms'].presence || '—'
+  - shared = Array(unit['shared_spaces']).select(&:present?)
+  - if shared.any?
+    %dt.vs-field-label Shared Spaces
+    %dd.vs-field-value.mb-2= shared.join(', ')
 - else
   %fieldset.mb-4
     %legend

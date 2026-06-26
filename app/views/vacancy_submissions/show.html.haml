@@ -8,9 +8,13 @@
   = vacancy_submission_status_badge(@submission)
 
 - if @submission.status == 'return_changes_requested' && last_reviewer_note
-  .alert-changes-requested.mb-4
-    %p.fw-semibold.mb-1 Changes Requested by #{last_reviewer_note.user&.name || 'the CAS Admin'}
-    = simple_format(h(last_reviewer_note.body))
+  .alert-changes-requested.mb-4.d-flex.justify-content-between.align-items-center
+    .change-note
+      %p.fw-semibold.mb-1 Changes Requested by #{last_reviewer_note.user&.name || 'the CAS Admin'}
+      = simple_format(h(last_reviewer_note.body))
+    .change-actions
+      - if @submission.resubmittable? && can_add_vacancies?
+        = link_to 'Edit', edit_vacancy_submission_path(@submission), class: 'btn btn-outline-secondary btn-sm'
 
 
 .c-card
@@ -39,8 +43,6 @@
   .c-card__header
     .d-flex.justify-content-between.align-items-center
       %h2 Program
-      - if @submission.resubmittable? && can_add_vacancies?
-        = link_to 'Edit', edit_vacancy_submission_path(@submission), class: 'btn btn-outline-secondary btn-sm', style: 'text-transform: none; letter-spacing: normal; font-weight: 400; font-size: 13px;'
   .c-card__content
     %dl.row.g-3.mb-0
       .col-sm-6
