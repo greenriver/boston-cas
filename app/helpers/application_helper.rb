@@ -86,14 +86,21 @@ module ApplicationHelper
     link_to(link_text, params.permit!)
   end
 
+  DATA_QUALITY_ICONS = {
+    '2' => { icon: 'warning', css_class: 'text-warning', title: 'Partial/Approximate' },
+    'P' => { icon: 'warning', css_class: 'text-warning', title: 'Partial/Approximate' },
+    '8' => { icon: 'question', css_class: 'text-muted', title: "Client didn't know" },
+    'N' => { icon: 'question', css_class: 'text-muted', title: "Client didn't know" },
+    '9' => { icon: 'eye-blocked', css_class: 'text-muted', title: 'Client refused' },
+    'R' => { icon: 'eye-blocked', css_class: 'text-muted', title: 'Client refused' },
+  }.freeze
+
   def client_data_quality(model, fld)
+    config = DATA_QUALITY_ICONS[model.send("#{fld}_quality").to_s]
+    return unless config
+
     content_tag :span, class: 'cas-dq' do
-      case model.send("#{fld}_quality")
-      # when 'F'; icon('check-circle', class: 'text-success', data: {bs_toggle: :tooltip}, bs_title: 'Full')
-      when 'P' then icon('exclamation-triangle', class: 'text-warning', data: { bs_toggle: :tooltip, bs_title: 'Partial/Approximate'})
-      when 'N' then icon('question-circle', class: 'text-muted', data: { bs_toggle: :tooltip, bs_title: 'Client didn\'t know'})
-      when 'R' then icon('eye-slash', class: 'text-muted', data: { bs_toggle: :tooltip, bs_title: 'Client refused'})
-      end
+      content_tag :i, '', class: "icon icon-#{config[:icon]} #{config[:css_class]}", data: { bs_toggle: :tooltip, bs_title: config[:title] }
     end
   end
 
