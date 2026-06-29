@@ -89,10 +89,10 @@ module ApplicationHelper
   def client_data_quality(model, fld)
     content_tag :span, class: 'cas-dq' do
       case model.send("#{fld}_quality")
-      # when 'F'; icon('check-circle', class: 'text-success', data: {toggle: :tooltip}, title: 'Full')
-      when 'P' then icon('exclamation-triangle', class: 'text-warning', data: { toggle: :tooltip }, title: 'Partial/Approximate')
-      when 'N' then icon('question-circle', class: 'text-muted', data: { toggle: :tooltip }, title: 'Client didn\'t know')
-      when 'R' then icon('eye-slash', class: 'text-muted', data: { toggle: :tooltip }, title: 'Client refused')
+      # when 'F'; icon('check-circle', class: 'text-success', data: {bs_toggle: :tooltip}, bs_title: 'Full')
+      when 'P' then icon('exclamation-triangle', class: 'text-warning', data: { bs_toggle: :tooltip }, bs_title: 'Partial/Approximate')
+      when 'N' then icon('question-circle', class: 'text-muted', data: { bs_toggle: :tooltip }, bs_title: 'Client didn\'t know')
+      when 'R' then icon('eye-slash', class: 'text-muted', data: { bs_toggle: :tooltip }, bs_title: 'Client refused')
       end
     end
   end

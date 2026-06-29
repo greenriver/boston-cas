@@ -6,7 +6,7 @@
         = link_to new_building_path, class: 'btn btn-primary margin-bottom-02' do
           %span.icon-plus
           = "Add a #{Building.model_name.human}"
-        %a.how-to-popover{'data-bs-toggle': "popover", 'data-bs-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
+        %a.how-to-popover{'data-bs-toggle': "popover", 'data-bs-placement': "bottom", 'data-bs-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-bs-html': "true", 'data-bs-trigger': "focus"}
           %span.icon-info
           How to Add a Vacancy
   .row

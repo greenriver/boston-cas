@@ -13,5 +13,8 @@
               Edit Note
   %td= event.decision&.step_name
   %td.history--contact-name
-    - tooltip_data = {bs_toggle: "tooltip", bs_placement: "top", bs_html: "true", bs_title: event.contact_names.map { |n| h(n) }.join("<br>").html_safe}
-    %span.history--contacts-tooltip{data: tooltip_data}= event.contact_display
+    - tooltip_title = event.contact_names.map { |n| h(n) }.join("<br>").html_safe
+    - if tooltip_title.present?
+      %span.history--contacts-tooltip{data: {bs_toggle: "tooltip", bs_placement: "top", bs_html: "true", bs_title: tooltip_title}}= event.contact_display
+    - else
+      = event.contact_display
