@@ -11,6 +11,9 @@
                 %h3 Acknowledge Match
             .o-choose__content
               - if @decision.status.to_s.in?(['pending', 'expiration_update'])
+                - if Translation.translated?('match shelter agency agreement modal')
+                  %p
+                    = simple_format Translation.translate('match shelter agency agreement modal')
                 %div{data: {acknowledge_href: access_context.match_decision_acknowledgment_path(@match, @decision)}}
                 = render 'match_decisions/continue_button', text: 'Acknowledge Receipt of Match Details', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'acknowledged'}, disabled: !(@decision.editable?) }
           - if can_reject_matches?
