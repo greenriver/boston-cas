@@ -50,7 +50,8 @@
         %dd.vs-field-value.mb-0= @program&.name || '—'
       .col-sm-6
         %dt.vs-field-label Sub-Program
-        %dd.vs-field-value.mb-0= @sub_program&.name || '—'
+        - include_link = @sub_program && (can_edit_programs? || @sub_program&.editable_by?(current_user))
+        %dd.vs-field-value.mb-0= link_to_if include_link, @sub_program&.name || '—', program_sub_program_path(@program, @sub_program)
       .col-sm-6
         %dt.vs-field-label Route
         %dd.vs-field-value.mb-0= @submission.route || '—'
