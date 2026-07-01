@@ -25,6 +25,7 @@
       = render 'housing_attributes/amenities', housing_object: @unit, mode: 'edit'
       = render 'housing_media_links/links', housing_object: @unit, mode: 'edit'
       = render 'requirement_manager/form_fields', form: f, selected_requirements_heading: "Rules for this #{Unit.model_name.human}", on_unit: true
+      = f.input :notes, as: :text, label: 'Notes', hint: 'Notes about this unit'
 
   .form-actions
     = f.button :submit

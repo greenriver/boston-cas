@@ -414,6 +414,10 @@ FactoryBot.define do
     name { 'Ok wih SRO' }
     verb { 'be' }
   end
+  factory :bedroom_exact, class: 'Rules::BedroomExact' do
+    name { 'Bedroom exact' }
+    verb { 'have' }
+  end
   factory :evicted, class: 'Rules::NeverEvicted' do
     name { 'Never been evicted' }
     verb { 'have' }
