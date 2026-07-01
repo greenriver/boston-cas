@@ -164,13 +164,14 @@ module MatchProgressUpdates
     def self.send_notifications
       contacts = contacts_for_stalled_matches
       contacts.each do |contact_id, match_ids|
-        notifications = []
-        match_ids.each do |match_id|
-          notifications << Notifications::ProgressUpdateRequested.create_for_match!(
+        notifications = match_ids.filter_map do |match_id|
+          Notifications::ProgressUpdateRequested.create_for_match!(
             match_id: match_id,
             contact_id: contact_id,
           )
         end
+        next if notifications.empty?
+
         NotificationsMailer.progress_update_requested(notifications.map(&:id)).deliver_later
         notifications.each(&:record_delivery_event!)
       end
@@ -196,13 +197,14 @@ module MatchProgressUpdates
     def self.batch_should_notify_dnd
       contacts = dnd_contacts_for_late_stalled_matches
       contacts.each do |contact_id, match_ids|
-        notifications = []
-        match_ids.each do |match_id|
-          notifications << Notifications::DndProgressUpdateLate.create_for_match!(
+        notifications = match_ids.filter_map do |match_id|
+          Notifications::DndProgressUpdateLate.create_for_match!(
             match_id: match_id,
             contact_id: contact_id,
           )
         end
+        next if notifications.empty?
+
         NotificationsMailer.dnd_progress_update_late(notifications.map(&:id)).deliver_later
         notifications.each(&:record_delivery_event!)
       end
