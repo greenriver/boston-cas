@@ -14,7 +14,8 @@
   - if requirements.count > 0
     - requirements.each do |r|
       = '*' if changed_ids.include? r.rule_id
-      .mb-2{data: { bs_toggle: :tooltip, bs_title: r.rule&.description.presence}}
+      - rule_tooltip = r.rule&.description.presence
+      .mb-2{data: (rule_tooltip ? { bs_toggle: :tooltip, bs_title: rule_tooltip } : {})}
         = r.name(on_unit: on_unit)
         - if r.variable.present?
           = r.display_for_variable

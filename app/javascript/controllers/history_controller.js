@@ -22,6 +22,8 @@ export default class extends Controller {
     this.initDateChangeListeners()
     this.apply()
     this.element.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
+      const title = el.getAttribute('data-bs-title') ?? el.getAttribute('title')
+      if (!title) return
       window.bootstrap?.Tooltip?.getOrCreateInstance(el)
     })
     if (this.shouldPoll()) this.startPolling()
