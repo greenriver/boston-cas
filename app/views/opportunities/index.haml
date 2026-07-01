@@ -1,6 +1,6 @@
 .o-page__title
   %h1= t '.title'
-  - if can_add_vacancies?
+  - if can_add_vacancies? && Config.active_vacancy_submission_mechanism_traditional?
     .o-page__action.o-page__action--stacked
       = link_to new_opportunity_path, class: 'btn btn-primary margin-bottom-02' do
         %span.icon-plus
@@ -8,6 +8,12 @@
       %a.how-to-popover{'data-bs-toggle': "popover", 'data-bs-placement': "bottom", 'data-content': "<ol><li>Find the #{Building.model_name.human} & edit units available</li><li>Find program and make a voucher available</li></ol>", role: 'button', 'tabindex': 0,'data-html': "true", 'data-trigger': "focus"}
         %span.icon-info
         How to Add a Vacancy
+  - elsif can_add_vacancies?
+    .o-page__action.o-page__action--stacked
+      = link_to new_vacancy_submission_path, class: 'btn btn-primary margin-bottom-02' do
+        %span.icon-plus
+        Add a Vacancy
+
 
 - @prompt = t '.search_prompt'
 .row.o-search

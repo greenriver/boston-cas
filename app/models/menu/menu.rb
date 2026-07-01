@@ -173,7 +173,7 @@ class Menu::Menu
         user: user,
         path: vacancy_submissions_path,
         title: Translation.translate('Vacancy Submissions'),
-        visible: ->(_user) { h.can_view_opportunities? },
+        visible: ->(_user) { ! Config.active_vacancy_submission_mechanism_traditional? && h.can_view_opportunities? },
       ),
     )
     menu.add_child(

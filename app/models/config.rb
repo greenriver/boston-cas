@@ -64,4 +64,15 @@ class Config < ApplicationRecord
       'Allow match notes in email notifications (default to yes)' => true,
     }.freeze
   end
+
+  def vacancy_submission_mechanism_options
+    {
+      'Traditional' => 'traditional',
+      'Vacancy Submissions' => 'vacancy_submission',
+    }.freeze
+  end
+
+  def self.active_vacancy_submission_mechanism_traditional?
+    get(:vacancy_submission_mechanism) == 'traditional'
+  end
 end
