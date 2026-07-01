@@ -32,6 +32,11 @@ th[class^="sort-"] {
   font-size: rem(12);
 }
 
+// Allow dropdown menus to extend outside the scroll container while open.
+.table-responsive:has(.dropdown-menu.show) {
+  overflow: visible;
+}
+
 .btn-sm span[class^="icon-"],
 .btn-sm span[class*="icon-"],
 .btn-sm span[class^="icon-"],
