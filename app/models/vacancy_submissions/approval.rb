@@ -18,15 +18,16 @@ module VacancySubmissions
     def call!
       sub_program = resolve_sub_program!
 
-      Array(vacancy_submission.units).each do |unit_hash|
-        if sub_program.has_buildings?
-          unit = build_unit_for(unit_hash)
-          create_voucher!(sub_program, unit_hash, unit: unit)
-          next
-        end
+      updated_units = Array(vacancy_submission.units).map do |unit_hash|
+        unit = build_unit_for(unit_hash) if sub_program.has_buildings?
+        voucher = create_voucher!(sub_program, unit_hash, unit: unit)
 
-        create_voucher!(sub_program, unit_hash)
+        unit_hash = unit_hash.merge('voucher_id' => voucher.id)
+        unit ? unit_hash.merge('unit_id' => unit.id) : unit_hash
       end
+
+      vacancy_submission.units = updated_units
+      vacancy_submission.save!
     end
 
     private
@@ -52,6 +53,7 @@ module VacancySubmissions
       )
       voucher.create_opportunity!(available: false, available_candidate: false)
       attach_requirements!(unit || voucher, unit_hash)
+      voucher
     end
 
     def resolve_building_for(unit_hash)

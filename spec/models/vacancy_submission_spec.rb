@@ -334,6 +334,13 @@ RSpec.describe VacancySubmission, type: :model do
           expect(voucher.available).to eq(false)
         end
 
+        it 'persists the created voucher_id back onto the submission, with no unit_id' do
+          voucher_submission.approve!(user: user)
+          unit_hash = voucher_submission.reload.units.first
+          expect(unit_hash['voucher_id']).to eq(Voucher.last.id)
+          expect(unit_hash['unit_id']).to be_nil
+        end
+
         it 'creates an unpublished Opportunity for the voucher' do
           voucher_submission.approve!(user: user)
           opportunity = Voucher.last.opportunity
@@ -424,6 +431,13 @@ RSpec.describe VacancySubmission, type: :model do
           expect(unit.building).to eq(Building.last)
           voucher = Voucher.last
           expect(voucher.unit).to eq(unit)
+        end
+
+        it 'persists the created unit_id and voucher_id back onto the submission' do
+          physical_submission.approve!(user: user)
+          unit_hash = physical_submission.reload.units.first
+          expect(unit_hash['unit_id']).to eq(Unit.last.id)
+          expect(unit_hash['voucher_id']).to eq(Voucher.last.id)
         end
 
         it 'reuses an existing Building when its address/city/state/zip already matches' do
