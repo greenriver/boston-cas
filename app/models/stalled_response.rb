@@ -40,7 +40,7 @@ class StalledResponse < ApplicationRecord
     if requires_note
       label = content_tag(:span) do
         concat(reason)
-        concat(content_tag(:i, class: 'ml-2 icon-info', data: { toggle: :tooltip, title: 'Requires a note' }) { '' })
+        concat(content_tag(:i, class: 'ml-2 icon-info', data: { bs_toggle: :tooltip, bs_title: 'Requires a note' }) { '' })
       end
     else
       label = reason
