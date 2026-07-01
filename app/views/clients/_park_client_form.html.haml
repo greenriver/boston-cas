@@ -1,5 +1,5 @@
 .dropdown.c-dropdown
-  %a#park-client-dropdown.btn.btn-sm.btn-secondary.dropdown-toggle{aria: {expanded:  'false', haspopup:  'true'}, data: { bs_toggle:  'dropdown'}, href:  '#', role:  'button'}
+  %a#park-client-dropdown.btn.btn-sm.btn-secondary.dropdown-toggle{aria: {expanded:  'false', haspopup:  'true'}, data: { bs_toggle:  'dropdown', bs_auto_close: 'outside'}, href:  '#', role:  'button'}
     Park Client
   .c-dropdown__menu.c-dropdown__menu--sized.dropdown-menu.dropdown-menu-right.p-4{"aria-labelledby" => "park-client-dropdown"}
     = simple_form_for(@client) do |f|

@@ -65,9 +65,8 @@ class MatchHistoryDisplayEvent
 
   def contact_display
     return @event.contact_name || 'Contact Missing' unless grouped
-    return contacts.first&.name || 'Contact Missing' if contacts.size == 1
 
-    "#{contacts.size} Contacts Notified"
+    "#{contacts.size} #{'Contact'.pluralize(contacts.size)} Notified"
   end
 
   def days_ago
