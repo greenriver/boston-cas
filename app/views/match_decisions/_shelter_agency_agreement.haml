@@ -1,13 +1,22 @@
 = content_for :page_js do
   :javascript
     // Force agreement with terms
-    $('#shelter-agency-modal').modal('hide');
-    $('.jCancel').on('click', function(e){
-      $('#shelter-agency-modal').modal('hide');
-    });
-    $('.jNeedsToAgree').on('click', function(e) {
-      e.preventDefault();
-    });
+    (function() {
+      var modalEl = document.getElementById('shelter-agency-modal');
+      if (!modalEl || !window.bootstrap) return;
+
+      var hideModal = function() {
+        window.bootstrap.Modal.getInstance(modalEl)?.hide();
+      };
+
+      window.bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+
+      $('.jCancel').on('click', hideModal);
+      $('#shelter-agency-modal .jAccept').on('click', hideModal);
+      $('.jNeedsToAgree').on('click', function(e) {
+        e.preventDefault();
+      });
+    })();
 
 #shelter-agency-modal.modal.fade(role="dialog")
   .modal-dialog(role="document")
@@ -24,5 +33,5 @@
       .modal-footer(data-modal-footer)
         %button.btn.btn-secondary.pull-right.jCancel(aria-label="Close" pjax-modal-close type="button")
           Cancel
-        %button.btn.btn-primary.jAccept
+        %button.btn.btn-primary.jAccept{type: 'submit'}
           Accept
