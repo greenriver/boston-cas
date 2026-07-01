@@ -13,14 +13,8 @@ module Notifications::Four
       []
     end
 
-    def self.create_for_match!(match, decision_id: nil)
-      contacts = match.contacts - match.dnd_staff_contacts
-
-      contacts.each do |contact|
-        next unless contact.notification_recipient?
-
-        create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
-      end
+    def self.notification_recipients_for(match)
+      match.contacts - match.dnd_staff_contacts
     end
   end
 end

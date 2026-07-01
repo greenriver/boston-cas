@@ -51,10 +51,6 @@ class Contact < ApplicationRecord
     "#{name} <#{email}>"
   end
 
-  def has_user? # rubocop:disable Naming/PredicatePrefix
-    user.present?
-  end
-
   def notification_recipient?
     user&.active?
   end

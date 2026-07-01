@@ -13,16 +13,11 @@ module Notifications
       []
     end
 
-    def self.create_for_match!(match, decision_id: nil)
+    def self.notification_recipients_for(match)
       contacts = match.contacts - match.dnd_staff_contacts
       # don't send to the HSA, SSP, or HSP contacts unless they have been involved
       contacts -= (match.housing_subsidy_admin_contacts + match.ssp_contacts + match.hsp_contacts) unless match.hsa_involved?
-
-      contacts.each do |contact|
-        next unless contact.notification_recipient?
-
-        create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
-      end
+      contacts
     end
 
     def event_label
