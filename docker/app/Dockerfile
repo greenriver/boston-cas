@@ -90,6 +90,7 @@ RUN apt-get update && apt-get upgrade -y \
   gnupg-agent \
   gpg \
   imagemagick \
+  jq \
   libcurl4 \
   libcurl4-openssl-dev \
   libffi-dev \
