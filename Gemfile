@@ -55,26 +55,14 @@ gem 'rack-attack'
 # File processing
 gem 'marcel'
 
-# AWS SDK.
-#
-# Only the gems the running app actually uses are auto-required at boot. The
-# rest are used exclusively by deploy/ops tooling (config/deploy/**) or the
-# startup secrets fetch (bin/download_secrets.rb -> aws_sdk_helpers.rb), both of
-# which `require` what they need explicitly. Those are marked `require: false`
-# so Bundler doesn't auto-require them during Rails boot.
-#
-# Why this matters: the aws-sdk-rails railtie walks `Aws.constants` on boot and
-# force-loads the ::Client of every AWS gem that's been required. Compiling
-# those large generated client files (e.g. aws-sdk-ecr) via bootsnap is where
-# boot has intermittently heap-corrupted and core-dumped (see bin/database-ready
-# and core-dump.txt). `require: false` keeps them installed for the deploy
-# helpers while keeping them out of the boot path.
+# AWS SDK. Only the gems used by the running app are auto-required. The rest are
+# marked `require: false`: their consumers (deploy/ops tooling, the startup
+# secrets fetch) require them explicitly
 gem 'aws-sdk-rails'         # railtie + SQS ActiveJob + SES mailer integration
-gem 'aws-sdk-s3', '~> 1'    # ActiveStorage (config/storage.yml) + bin/sync_app_assets.rb
-gem 'aws-sdk-ses', '~> 1'   # lib/util/mail/ses_delivery.rb (mail delivery)
+gem 'aws-sdk-s3', '~> 1'    # ActiveStorage + bin/sync_app_assets.rb
+gem 'aws-sdk-ses', '~> 1'   # lib/util/mail/ses_delivery.rb
 
-# Deploy/ops-only or startup-secrets-only — not referenced by the running app.
-# Kept installed but not auto-required (their consumers require them directly).
+# Not referenced by the running app; kept installed but not auto-required.
 gem 'aws-sdk-autoscaling', '~> 1', require: false
 gem 'aws-sdk-cloudwatch', require: false
 gem 'aws-sdk-cloudwatchevents', '~> 1', require: false
