@@ -55,24 +55,41 @@ gem 'rack-attack'
 # File processing
 gem 'marcel'
 
-# AWS SDK is needed for deployment and within the application
-gem 'aws-sdk-rails'
-gem 'aws-sdk-autoscaling', '~> 1'
-gem 'aws-sdk-cloudwatchevents', '~> 1'
-gem 'aws-sdk-ecs', '~> 1'
-gem 'aws-sdk-ec2', '~> 1'
-gem 'aws-sdk-elasticloadbalancingv2', '~> 1'
-gem 'aws-sdk-glacier', '~> 1'
-gem 'aws-sdk-rds', '~> 1'
-gem 'aws-sdk-s3', '~> 1'
-gem 'aws-sdk-secretsmanager', '~> 1'
-gem 'aws-sdk-ses', '~> 1'
-gem 'aws-sdk-iam', '~> 1'
-gem 'aws-sdk-ecr', '~> 1'
-gem 'aws-sdk-sns', require: false
-gem 'aws-sdk-ssm', '~> 1'
+# AWS SDK.
+#
+# Only the gems the running app actually uses are auto-required at boot. The
+# rest are used exclusively by deploy/ops tooling (config/deploy/**) or the
+# startup secrets fetch (bin/download_secrets.rb -> aws_sdk_helpers.rb), both of
+# which `require` what they need explicitly. Those are marked `require: false`
+# so Bundler doesn't auto-require them during Rails boot.
+#
+# Why this matters: the aws-sdk-rails railtie walks `Aws.constants` on boot and
+# force-loads the ::Client of every AWS gem that's been required. Compiling
+# those large generated client files (e.g. aws-sdk-ecr) via bootsnap is where
+# boot has intermittently heap-corrupted and core-dumped (see bin/database-ready
+# and core-dump.txt). `require: false` keeps them installed for the deploy
+# helpers while keeping them out of the boot path.
+gem 'aws-sdk-rails'         # railtie + SQS ActiveJob + SES mailer integration
+gem 'aws-sdk-s3', '~> 1'    # ActiveStorage (config/storage.yml) + bin/sync_app_assets.rb
+gem 'aws-sdk-ses', '~> 1'   # lib/util/mail/ses_delivery.rb (mail delivery)
+
+# Deploy/ops-only or startup-secrets-only — not referenced by the running app.
+# Kept installed but not auto-required (their consumers require them directly).
+gem 'aws-sdk-autoscaling', '~> 1', require: false
 gem 'aws-sdk-cloudwatch', require: false
+gem 'aws-sdk-cloudwatchevents', '~> 1', require: false
 gem 'aws-sdk-cloudwatchlogs', require: false
+gem 'aws-sdk-ec2', '~> 1', require: false
+gem 'aws-sdk-ecr', '~> 1', require: false
+gem 'aws-sdk-ecs', '~> 1', require: false
+gem 'aws-sdk-elasticloadbalancingv2', '~> 1', require: false
+gem 'aws-sdk-glacier', '~> 1', require: false
+gem 'aws-sdk-iam', '~> 1', require: false
+gem 'aws-sdk-rds', '~> 1', require: false
+gem 'aws-sdk-secretsmanager', '~> 1', require: false
+gem 'aws-sdk-sns', require: false
+gem 'aws-sdk-ssm', '~> 1', require: false
+
 gem 'amazing_print'
 
 gem 'puma', '~> 8'
