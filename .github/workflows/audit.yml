@@ -13,7 +13,7 @@ jobs:
   audit:
     runs-on: ubuntu-24.04
     # Docker Hub image that the job executes in
-    container: ruby:4.0.2-slim-bookworm
+    container: ruby:4.0.5-slim-bookworm
 
     permissions:
       contents: read
