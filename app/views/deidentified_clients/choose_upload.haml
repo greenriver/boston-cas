@@ -13,8 +13,8 @@
     = simple_form_for @upload, url: import_deidentified_clients_path, method: :post do |f|
       = f.error_notification
       .form-inputs
-        = f.input :file, as: :file, label: false
-        = f.input :agency_id, as: :select_2, collection: @upload.agency_options_for_select, required: true
-        = f.input :update_availability, as: :boolean, label: 'Update client availability', hint: 'Make only the clients in the selected agency that appear in the selected file available'
+        = f.input :file, as: :file, label: false, required: true
+        = f.input :agency_id, as: :select_2, collection: @upload.agency_options_for_select(current_user), include_blank: 'Select an agency', required: true
+        = f.input :update_availability, as: :radio_buttons, collection: [['Yes', true], ['No', false]], label: 'Update client availability', hint: 'Make only the clients in the selected agency that appear in the selected file available', required: true
       .form-actions
         = f.button :submit, value: 'Upload Excel'

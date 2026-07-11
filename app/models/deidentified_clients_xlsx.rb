@@ -24,8 +24,8 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     super(file_content, claimed_content_type, allowed_types, '.xlsx')
   end
 
-  def agency_options_for_select
-    Agency.order(name: :asc).pluck(:name, :id).to_h
+  def agency_options_for_select(user)
+    DeidentifiedClient.agencies_available_to(user).order(name: :asc).pluck(:name, :id).to_h
   end
 
   def valid_header?
