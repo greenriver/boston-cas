@@ -13,7 +13,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   include FileContentValidator
 
   attr_accessor :agency_id, :update_availability
-  attr_reader :added, :touched, :problems, :clients
+  attr_reader :added, :touched, :skipped, :skipped_identifiers, :problems, :clients
 
   # Validate file content before creating record
   def self.validate_file_content(file_content, claimed_content_type = nil)
@@ -38,6 +38,8 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   def import(agency, update_availability: false)
     @added = 0
     @touched = 0
+    @skipped = 0
+    @skipped_identifiers = []
     @clients = []
     @update_availability = update_availability
 
@@ -50,6 +52,19 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
       row = Hash[file_attributes.keys.zip(raw)]
       client = DeidentifiedClient.where(agency: agency, client_identifier: row[:client_identifier]).first_or_initialize
+
+      # A Home-base ID is globally unique (validation-only), but this importer keys on
+      # (agency, client_identifier). When the same ID is already live under a *different*
+      # agency, the global :taken validation makes the save silently fail — the client never
+      # persists and appears "ineligible". Skip it cleanly and report it, without leaking
+      # which agency owns it.
+      if client.new_record? &&
+         DeidentifiedClient.where(client_identifier: row[:client_identifier]).where.not(agency_id: agency&.id).exists?
+        @skipped += 1
+        @skipped_identifiers << row[:client_identifier]
+        next
+      end
+
       @clients << client
       cleaned = begin
         clean_row(client, row)
@@ -64,9 +79,12 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         cleaned[:actively_homeless] = true
       end
 
-      @added += 1 if client.updated_at.nil?
-      @touched += 1 if client.updated_at.present?
-      client.update(cleaned)
+      # Count and run the assessment block only on a successful save; a failed save leaves
+      # the client in @clients so its errors render in import.haml.
+      was_new = client.new_record?
+      next unless client.update(cleaned)
+
+      was_new ? (@added += 1) : (@touched += 1)
 
       assessment = client.current_assessment
       assessment.actively_homeless = true if @update_availability
