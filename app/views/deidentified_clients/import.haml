@@ -9,8 +9,8 @@
   %li= "#{@upload.added} new clients added"
   %li= "#{@upload.touched} existing clients updated"
   %li= "#{problems} records with problems"
-  - if @upload.skipped.to_i > 0
-    %li= "#{@upload.skipped} clients skipped — their ID is already registered to another agency"
+  - if @upload.skipped_identifiers.present?
+    %li= "#{@upload.skipped_identifiers.size} clients skipped — their ID is already registered to another agency"
     %ul
       - @upload.skipped_identifiers.each do |identifier|
         %li= identifier

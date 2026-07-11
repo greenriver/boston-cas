@@ -26,10 +26,18 @@ RSpec.describe DeidentifiedClientsXlsx, type: :model do
 
     b = DeidentifiedClientsXlsx.new(content: content)
     b.import(agency_b, update_availability: true)
-    expect(b.skipped).to eq(1)
     expect(b.added).to eq(0)
-    expect(b.skipped_identifiers).to include(home_base_id)
+    expect(b.skipped_identifiers).to contain_exactly(home_base_id)
     expect(DeidentifiedClient.where(client_identifier: home_base_id).count).to eq(1)
+  end
+
+  it 'reports a colliding ID once even when it appears on multiple rows' do
+    DeidentifiedClientsXlsx.new(content: content).import(agency_a, update_availability: true)
+
+    multi = DeidentifiedClientsXlsx.new(content: build_xlsx([row, row]))
+    multi.import(agency_b, update_availability: true)
+
+    expect(multi.skipped_identifiers).to eq([home_base_id])
   end
 
   it 'updates in place on a same-agency re-upload' do

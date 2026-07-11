@@ -13,7 +13,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   include FileContentValidator
 
   attr_accessor :agency_id, :update_availability
-  attr_reader :added, :touched, :skipped, :skipped_identifiers, :problems, :clients
+  attr_reader :added, :touched, :skipped_identifiers, :problems, :clients
 
   # Validate file content before creating record
   def self.validate_file_content(file_content, claimed_content_type = nil)
@@ -38,7 +38,6 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   def import(agency, update_availability: false)
     @added = 0
     @touched = 0
-    @skipped = 0
     @skipped_identifiers = []
     @clients = []
     @update_availability = update_availability
@@ -51,17 +50,18 @@ class DeidentifiedClientsXlsx < ApplicationRecord
       next if skip?(raw, index)
 
       row = Hash[file_attributes.keys.zip(raw)]
-      client = DeidentifiedClient.where(agency: agency, client_identifier: row[:client_identifier]).first_or_initialize
 
-      # A Home-base ID is globally unique (validation-only), but this importer keys on
-      # (agency, client_identifier). When the same ID is already live under a *different*
-      # agency, the global :taken validation makes the save silently fail — the client never
-      # persists and appears "ineligible". Skip it cleanly and report it, without leaking
-      # which agency owns it.
-      if client.new_record? &&
-         DeidentifiedClient.where(client_identifier: row[:client_identifier]).where.not(agency_id: agency&.id).exists?
-        @skipped += 1
-        @skipped_identifiers << row[:client_identifier]
+      # A Home-base ID is globally unique, so look the client up by ID alone — one indexed
+      # query per row, no table-wide preload. If it's already live under a *different* agency
+      # this importer can't claim it: the global :taken validation would make the save
+      # silently fail and the client would appear "ineligible". Skip it cleanly and report it
+      # (once per ID), without leaking which agency owns it.
+      client = DeidentifiedClient.find_by(client_identifier: row[:client_identifier]) ||
+        DeidentifiedClient.new(agency: agency, client_identifier: row[:client_identifier])
+
+      if client.persisted? && client.agency_id != agency&.id
+        # Report each colliding ID once, even if it appears on multiple rows.
+        @skipped_identifiers << row[:client_identifier] unless @skipped_identifiers.include?(row[:client_identifier])
         next
       end
 
