@@ -40,6 +40,72 @@ RSpec.describe DeidentifiedClientsXlsx, type: :model do
     expect(multi.skipped_identifiers).to eq([home_base_id])
   end
 
+  it 'reports a row with bad data instead of silently dropping it, and still imports the good rows' do
+    bad_row = ['1', 'MAYBE', 'HB-BAD', 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'No', 'No', 'No']
+    importer = DeidentifiedClientsXlsx.new(content: build_xlsx([row, bad_row]))
+    importer.import(agency_a, update_availability: true)
+
+    expect(importer.added).to eq(1) # only the good row counted
+    expect(DeidentifiedClient.find_by(agency: agency_a, client_identifier: home_base_id)).to be_present
+
+    failed = importer.clients.detect { |c| c.client_identifier == 'HB-BAD' }
+    expect(failed).to be_present
+    expect(failed.errors).to be_present # surfaces in import.haml's problems table
+    expect(DeidentifiedClient.find_by(client_identifier: 'HB-BAD')).to be_nil
+  end
+
+  it 'raises and rolls the whole import back on a non-user-correctable save failure' do
+    existing = create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: 'ALREADY-HERE',
+      available: true,
+      actively_homeless: true,
+    )
+
+    # Simulate a DB-level failure while persisting the assessment (validation is skipped for
+    # these, so only a hard error can occur here).
+    allow_any_instance_of(DeidentifiedClientAssessment).to receive(:save!).and_raise(ActiveRecord::StatementInvalid, 'boom')
+
+    importer = DeidentifiedClientsXlsx.new(content: content)
+    expect { importer.import(agency_a, update_availability: true) }.to raise_error(ActiveRecord::StatementInvalid)
+
+    # The up-front availability reset must be rolled back, and the new roster client must not persist.
+    expect(existing.reload.available).to eq(true)
+    expect(DeidentifiedClient.find_by(client_identifier: home_base_id)).to be_nil
+  end
+
+  it 'reports an unexpected internal error to Sentry after the transaction commits' do
+    importer = DeidentifiedClientsXlsx.new(content: content)
+    # An unexpected failure in row processing that attaches no user-facing error.
+    allow(importer).to receive(:clean_row).and_raise(RuntimeError, 'kaboom')
+
+    expect(Sentry).to receive(:capture_exception).with(instance_of(RuntimeError))
+
+    importer.import(agency_a, update_availability: true)
+    # The row could not be processed, so nothing was imported, but the run still committed.
+    expect(importer.added).to eq(0)
+  end
+
+  it 'does not report buffered internal errors to Sentry when the transaction rolls back' do
+    # First row hits an unexpected error (would be buffered); second row forces a hard rollback.
+    first_id = 'HB-FIRST'
+    first_row = ['1', 'No', first_id, 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'No', 'No', 'No']
+    importer = DeidentifiedClientsXlsx.new(content: build_xlsx([first_row, row]))
+
+    allow(importer).to receive(:clean_row).and_wrap_original do |original, client, row_hash|
+      raise 'kaboom' if row_hash[:client_identifier] == first_id
+
+      original.call(client, row_hash)
+    end
+    allow_any_instance_of(DeidentifiedClientAssessment).to receive(:save!).and_raise(ActiveRecord::StatementInvalid, 'boom')
+
+    # The buffered first-row error must NOT be flushed, because its transaction rolled back.
+    expect(Sentry).not_to receive(:capture_exception)
+
+    expect { importer.import(agency_a, update_availability: true) }.to raise_error(ActiveRecord::StatementInvalid)
+  end
+
   it 'updates in place on a same-agency re-upload' do
     DeidentifiedClientsXlsx.new(content: content).import(agency_a, update_availability: true)
     again = DeidentifiedClientsXlsx.new(content: content)
@@ -83,6 +149,22 @@ RSpec.describe DeidentifiedClientsXlsx, type: :model do
     # The uploaded roster only contains home_base_id, so the dropped client loses eligibility.
     expect(dropped.reload.available).to eq(false)
     expect(DeidentifiedClient.find_by(agency: agency_a, client_identifier: home_base_id)&.available).to eq(true)
+  end
+
+  it 'leaves existing availability untouched when update_availability is not set' do
+    # A client already available but absent from the uploaded roster. With update_availability
+    # off there is no up-front reset, so this client must stay available rather than be de-listed.
+    dropped = create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: 'NOT-IN-FILE',
+      available: true,
+      actively_homeless: true,
+    )
+
+    DeidentifiedClientsXlsx.new(content: content).import(agency_a, update_availability: false)
+
+    expect(dropped.reload.available).to eq(true)
   end
 
   it 'converts roster columns into the correct eligibility and special-population fields' do
