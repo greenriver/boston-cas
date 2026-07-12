@@ -45,14 +45,11 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     return unless valid_header?
 
     # Internal (non-user) errors are buffered here and reported to Sentry only after the
-    # transaction commits — reporting mid-transaction would flag rows for a run that may still
-    # roll back and persist nothing. On rollback the block below raises out, this flush is
-    # skipped, and the propagating exception is what reaches Sentry instead.
-    deferred_reports = []
+    # transaction commits
+    sentry_queue = []
 
     # Availability is reset up front, so the whole roster must be atomic: a non-recoverable
-    # failure partway through has to roll that reset back rather than leave every client in
-    # the agency stranded as unavailable.
+    # otherwise a failure could leave all clients in the agency unavailable.
     DeidentifiedClient.transaction do
       DeidentifiedClient.where(agency: agency).update_all(available: false) if @update_availability
 
@@ -61,16 +58,12 @@ class DeidentifiedClientsXlsx < ApplicationRecord
 
         row = Hash[file_attributes.keys.zip(raw)]
 
-        # A Home-base ID is globally unique, so look the client up by ID alone — one indexed
-        # query per row, no table-wide preload. If it's already live under a *different* agency
-        # this importer can't claim it: the global :taken validation would make the save
-        # silently fail and the client would appear "ineligible". Skip it cleanly and report it
-        # (once per ID), without leaking which agency owns it.
+        # A Home-base ID is globally unique, so look the client up by ID alone If it's already
+        # live under a *different* agency skip and report it
         client = DeidentifiedClient.find_by(client_identifier: row[:client_identifier]) ||
           DeidentifiedClient.new(agency: agency, client_identifier: row[:client_identifier])
 
         if client.persisted? && client.agency_id != agency&.id
-          # Report each colliding ID once, even if it appears on multiple rows.
           @skipped_identifiers << row[:client_identifier] unless @skipped_identifiers.include?(row[:client_identifier])
           next
         end
@@ -79,13 +72,12 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         cleaned = begin
           clean_row(client, row)
         rescue StandardError => e
-          # clean_row's helpers attach a field-level error before raising — those are expected,
-          # user-correctable data problems that render in the problems table. If nothing was
-          # attached, this is an unexpected/internal failure: a plain rescue would hide it from
-          # Sentry, so buffer it for reporting (as an un-rescued exception would surface) and
-          # still show a row-level message so the user knows which row was dropped.
+          # clean_row's helpers attach a field-level error before raising. Tthose are expected,
+          # user-correctable data problems. But if nothing was attached then this is an
+          # internal failure, report it and show a row-level message so the user knows which row
+          # was dropped.
           if client.errors.empty?
-            deferred_reports << e
+            sentry_queue << e
             client.errors.add(:base, "Could not process row: #{e.message}")
           end
           next
@@ -102,10 +94,9 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         # errors render in import.haml, and don't count it or touch its assessment.
         was_new = client.new_record?
         unless client.update(cleaned)
-          # A false return with no validation errors means a callback halted the save — an
-          # internal condition, not bad user data — so buffer it for Sentry rather than letting
-          # it vanish (no exception is raised, and there is nothing for the user to correct).
-          deferred_reports << "De-identified roster save halted for client #{client.client_identifier}" if client.errors.empty?
+          # A false return with no validation errors means a callback halted the save due to
+          # an internal error, not bad user data
+          sentry_queue << "De-identified roster save halted for client #{client.client_identifier}" if client.errors.empty?
           next
         end
 
@@ -119,14 +110,13 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         client.actively_homeless = assessment.actively_homeless
         assessment = client.update_assessment_from_client(assessment)
         # Validation is skipped (we don't have the CE Event required fields), so a failure here
-        # is a DB-level, non-user-correctable error. Raise loudly and roll the whole import back
-        # rather than leave the client available with a missing/blank assessment.
+        # is a DB-level, non-user-correctable error. Raise loudly and roll back the tx
         assessment.save!(validate: false)
       end
     end
 
-    # Transaction committed — safe to report the internal errors we buffered above.
-    deferred_reports.each do |report|
+    # Transaction committed, report the internal errors
+    sentry_queue.each do |report|
       report.is_a?(Exception) ? Sentry.capture_exception(report) : Sentry.capture_message(report)
     end
   end
