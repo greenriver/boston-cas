@@ -72,7 +72,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         cleaned = begin
           clean_row(client, row)
         rescue StandardError => e
-          # clean_row's helpers attach a field-level error before raising. Tthose are expected,
+          # clean_row's helpers attach a field-level error before raising. Those are expected,
           # user-correctable data problems. But if nothing was attached then this is an
           # internal failure, report it and show a row-level message so the user knows which row
           # was dropped.
