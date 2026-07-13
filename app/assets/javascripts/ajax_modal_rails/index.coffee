@@ -26,7 +26,7 @@ class window.AjaxModal
     # the animation completes, select2 cannot measure the container width and renders
     # at the wrong size. Both flags must be true before we initialize.
     if contentReady[0] and modalShown[0]
-      content.find('select.select2').select2({ dropdownParent: content })
+      content.find('select.select2').select2({ dropdownParent: content.closest('.modal-content') })
 
   _registerLinks: ->
     $('body').on 'click', @linkTriggersSelector, (e) =>
