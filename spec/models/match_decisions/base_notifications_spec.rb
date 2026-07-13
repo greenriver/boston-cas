@@ -23,6 +23,8 @@ RSpec.describe MatchDecisions::Base, type: :model do
     let(:match) { create(:client_opportunity_match, match_route: route, opportunity: opportunity, active: true) }
     let(:shelter_contact) { create(:contact, email: 'shelter@example.com') }
     let(:admin_contact) { create(:contact, email: 'admin@example.com') }
+    let!(:shelter_user) { create(:user, contact: shelter_contact) }
+    let!(:admin_user) { create(:user, contact: admin_contact) }
 
     before do
       match.shelter_agency_contacts << shelter_contact

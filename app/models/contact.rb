@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Contact < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
@@ -41,16 +43,16 @@ class Contact < ApplicationRecord
   end
 
   def full_name
-    [first_name, last_name].compact.join " "
+    [first_name, last_name].compact.join ' '
   end
-  alias_method :name, :full_name
+  alias name full_name
 
   def name_with_email
     "#{name} <#{email}>"
   end
 
-  def has_user?
-    user.present?
+  def notification_recipient?
+    user&.active?
   end
 
   def self.text_search(text)
@@ -63,7 +65,7 @@ class Contact < ApplicationRecord
       .or(arel_table[:email].matches(query))
       .or(arel_table[:phone].matches(query))
       .or(arel_table[:cell_phone].matches(query))
-      .or(arel_table[:role].matches(query))
+      .or(arel_table[:role].matches(query)),
     )
   end
 
@@ -85,13 +87,13 @@ class Contact < ApplicationRecord
   def self.contact_type_for(input_name)
     choices = {
       shelter_agency_contacts: 'shelter_agency',
-      client_contacts: "client",
-      regular_contacts: "client",
-      dnd_staff_contacts: "dnd_staff",
-      housing_subsidy_admin_contacts: "housing_subsidy_admin",
-      ssp_contacts: "ssp",
-      hsp_contacts: "hsp",
-      do_contacts: "do",
+      client_contacts: 'client',
+      regular_contacts: 'client',
+      dnd_staff_contacts: 'dnd_staff',
+      housing_subsidy_admin_contacts: 'housing_subsidy_admin',
+      ssp_contacts: 'ssp',
+      hsp_contacts: 'hsp',
+      do_contacts: 'do',
     }
     choices[input_name] || input_name
   end
