@@ -18,6 +18,9 @@ module Notifications
     end
 
     def self.create_for_match! match_id:, contact_id:
+      contact = Contact.find(contact_id)
+      return unless contact.notification_recipient?
+
       create! client_opportunity_match_id: match_id, recipient_id: contact_id
     end
 

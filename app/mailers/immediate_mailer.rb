@@ -4,12 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ImmediateMailer < ApplicationMailer
   def immediate(message, recipient, delivery_method_options = nil)
     @message = message
-    # Don't send to disabled accounts, but let contacts with no accounts go through
-    inactive_user = User.inactive.find_by(email: recipient)
-    return if inactive_user.present?
+    # Don't send to disabled accounts, or contacts with no accounts
+    contact = Contact.find_by(email: recipient)
+    return if contact.blank? || !contact.notification_recipient?
 
     mail(
       from: message.from,

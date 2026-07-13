@@ -69,16 +69,16 @@ RSpec.describe Message, type: :model do
 
   describe 'When no user is connected to a contact' do
     describe 'Sending a message with deliver_now' do
-      it 'creates a message' do
+      it 'does not create a message' do
         expect do
           TestDatabaseMailer.ping(contact.email).deliver_now
-        end.to change { Message.count }.by(1)
+        end.not_to(change { Message.count })
       end
 
-      it 'sends a message' do
+      it 'does not send a message' do
         expect do
           TestDatabaseMailer.ping(contact.email).deliver_now
-        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+        end.not_to(change { ActionMailer::Base.deliveries.size })
       end
     end
 
@@ -89,20 +89,38 @@ RSpec.describe Message, type: :model do
         end.to have_enqueued_job(ActionMailer::MailDeliveryJob)
       end
 
-      it 'creates a message' do
+      it 'does not create a message' do
         perform_enqueued_jobs do
           expect do
             TestDatabaseMailer.ping(contact.email).deliver_later
-          end.to change { Message.count }.by(1)
+          end.not_to(change { Message.count })
         end
       end
 
-      it 'sends a message' do
+      it 'does not send a message' do
         perform_enqueued_jobs do
           expect do
             TestDatabaseMailer.ping(contact.email).deliver_later
-          end.to change { ActionMailer::Base.deliveries.size }.by(1)
+          end.not_to(change { ActionMailer::Base.deliveries.size })
         end
+      end
+    end
+  end
+
+  describe 'When user is inactive' do
+    let!(:user) { create :user, contact: contact, active: false, email_schedule: 'immediate' }
+
+    describe 'Sending a message with deliver_now' do
+      it 'does not create a message' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.not_to(change { Message.count })
+      end
+
+      it 'does not send a message' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.not_to(change { ActionMailer::Base.deliveries.size })
       end
     end
   end
