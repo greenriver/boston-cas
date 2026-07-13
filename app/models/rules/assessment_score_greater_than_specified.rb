@@ -15,6 +15,18 @@ class Rules::AssessmentScoreGreaterThanSpecified < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Assessment Score'
+  end
+
+  def variable_options
+    available_scores
+  end
+
   def available_scores
     @available_scores ||= Array.new(20) { |i| (i + 1) * 5 }.map { |i| [i, i] }
   end

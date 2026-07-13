@@ -7,11 +7,5 @@
       - checked_names = Array(vacancy_submission.required_document_names)
       - sub_program.file_tags.order(:name).each do |tag|
         .form-check.mb-2
-          %input.form-check-input{
-            type: 'checkbox',
-            name: 'vacancy_submission[required_document_names][]',
-            value: tag.name,
-            id: "required_document_#{tag.id}",
-            checked: checked_names.include?(tag.name)
-          }
+          %input.form-check-input{ type: 'checkbox', name: 'vacancy_submission[required_document_names][]', value: tag.name, id: "required_document_#{tag.id}", checked: checked_names.include?(tag.name) }
           %label.form-check-label{ for: "required_document_#{tag.id}" }= tag.name

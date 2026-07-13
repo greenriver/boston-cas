@@ -15,6 +15,18 @@ class Rules::UnshelteredDays < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Days Unsheltered'
+  end
+
+  def variable_options
+    available_unsheltered_days
+  end
+
   def available_unsheltered_days
     [
       [1, '1 Day'],
