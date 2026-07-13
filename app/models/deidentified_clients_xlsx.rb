@@ -13,7 +13,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   include FileContentValidator
 
   attr_accessor :agency_id, :update_availability
-  attr_reader :added, :touched, :problems, :clients
+  attr_reader :added, :touched, :skipped_identifiers, :problems, :clients
 
   # Validate file content before creating record
   def self.validate_file_content(file_content, claimed_content_type = nil)
@@ -24,8 +24,8 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     super(file_content, claimed_content_type, allowed_types, '.xlsx')
   end
 
-  def agency_options_for_select
-    Agency.order(name: :asc).pluck(:name, :id).to_h
+  def agency_options_for_select(user)
+    DeidentifiedClient.agencies_available_to(user).order(name: :asc).pluck(:name, :id).to_h
   end
 
   def valid_header?
@@ -38,44 +38,86 @@ class DeidentifiedClientsXlsx < ApplicationRecord
   def import(agency, update_availability: false)
     @added = 0
     @touched = 0
+    @skipped_identifiers = []
     @clients = []
     @update_availability = update_availability
 
     return unless valid_header?
 
-    DeidentifiedClient.where(agency: agency).update_all(available: false) if @update_availability
+    # Internal (non-user) errors are buffered here and reported to Sentry only after the
+    # transaction commits
+    sentry_queue = []
 
-    @xlsx.each_with_index do |raw, index|
-      next if skip?(raw, index)
+    # Availability is reset up front, so the whole roster must be atomic: a non-recoverable
+    # otherwise a failure could leave all clients in the agency unavailable.
+    DeidentifiedClient.transaction do
+      DeidentifiedClient.where(agency: agency).update_all(available: false) if @update_availability
 
-      row = Hash[file_attributes.keys.zip(raw)]
-      client = DeidentifiedClient.where(agency: agency, client_identifier: row[:client_identifier]).first_or_initialize
-      @clients << client
-      cleaned = begin
-        clean_row(client, row)
-      rescue StandardError
-        next
+      @xlsx.each_with_index do |raw, index|
+        next if skip?(raw, index)
+
+        row = Hash[file_attributes.keys.zip(raw)]
+
+        # A Home-base ID is globally unique, so look the client up by ID alone If it's already
+        # live under a *different* agency skip and report it
+        client = DeidentifiedClient.find_by(client_identifier: row[:client_identifier]) ||
+          DeidentifiedClient.new(agency: agency, client_identifier: row[:client_identifier])
+
+        if client.persisted? && client.agency_id != agency&.id
+          @skipped_identifiers << row[:client_identifier] unless @skipped_identifiers.include?(row[:client_identifier])
+          next
+        end
+
+        @clients << client
+        cleaned = begin
+          clean_row(client, row)
+        rescue StandardError => e
+          # clean_row's helpers attach a field-level error before raising. Those are expected,
+          # user-correctable data problems. But if nothing was attached then this is an
+          # internal failure, report it and show a row-level message so the user knows which row
+          # was dropped.
+          if client.errors.empty?
+            sentry_queue << e
+            client.errors.add(:base, "Could not process row: #{e.message}")
+          end
+          next
+        end
+
+        cleaned[:agency_id] = agency&.id
+        cleaned[:identified] = false # mark as de-identified client
+        if @update_availability
+          cleaned[:available] = true
+          cleaned[:actively_homeless] = true
+        end
+
+        # A failed save is user-correctable bad data: leave the client in @clients so its
+        # errors render in import.haml, and don't count it or touch its assessment.
+        was_new = client.new_record?
+        unless client.update(cleaned)
+          # A false return with no validation errors means a callback halted the save due to
+          # an internal error, not bad user data
+          sentry_queue << "De-identified roster save halted for client #{client.client_identifier}" if client.errors.empty?
+          next
+        end
+
+        was_new ? (@added += 1) : (@touched += 1)
+
+        assessment = client.current_assessment
+        assessment.actively_homeless = true if @update_availability
+        assessment_type = Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
+        assessment = build_assessment(client, agency, assessment_type) if assessment.nil? || assessment.class.name != assessment_type
+        # maintain current active status
+        client.actively_homeless = assessment.actively_homeless
+        assessment = client.update_assessment_from_client(assessment)
+        # Validation is skipped (we don't have the CE Event required fields), so a failure here
+        # is a DB-level, non-user-correctable error. Raise loudly and roll back the tx
+        assessment.save!(validate: false)
       end
+    end
 
-      cleaned[:agency_id] = agency&.id
-      cleaned[:identified] = false # mark as de-identified client
-      if @update_availability
-        cleaned[:available] = true
-        cleaned[:actively_homeless] = true
-      end
-
-      @added += 1 if client.updated_at.nil?
-      @touched += 1 if client.updated_at.present?
-      client.update(cleaned)
-
-      assessment = client.current_assessment
-      assessment.actively_homeless = true if @update_availability
-      assessment_type = Config.get(:deidentified_client_assessment) || 'DeidentifiedClientAssessment'
-      assessment = build_assessment(client, agency, assessment_type) if assessment.nil? || assessment.class.name != assessment_type
-      # maintain current active status
-      client.actively_homeless = assessment.actively_homeless
-      assessment = client.update_assessment_from_client(assessment)
-      assessment.save(validate: false) # We don't have the CE Event required fields
+    # Transaction committed, report the internal errors
+    sentry_queue.each do |report|
+      report.is_a?(Exception) ? Sentry.capture_exception(report) : Sentry.capture_message(report)
     end
   end
 
