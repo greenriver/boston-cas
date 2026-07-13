@@ -13,17 +13,21 @@ class VacancySubmission < ApplicationRecord
   has_many :vacancy_submission_notes, dependent: :destroy
 
   store_accessor :draft_data,
-                 :program_id, :sub_program_id, :resource_type, :is_voucher,
-                 :unit_address_street, :unit_address_unit_number,
-                 :unit_address_city, :unit_address_state, :unit_address_zip
+                 :program_id, :sub_program_id, :route, :is_voucher, :units,
+                 :required_document_names, :notes
+
+  # This maps accessibility features to rules, it's unclear if these should always be enforced
+  # or if we need a mechanism to specify they are optional.  For instance, someone who isn't
+  # a wheelchair user can live comfortably in a building that is wheelchair accessible.
+  ACCESSIBILITY_OPTIONS = {
+    'Wheelchair accessible unit' => Rules::Wheelchair,
+    'Wheelchair accessible building' => Rules::Wheelchair,
+    'Elevator to unit' => Rules::Elevator,
+    'Ground floor unit' => Rules::Elevator,
+  }.freeze
 
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
   REVIEW_QUEUE_STATUSES = ['awaiting_approval', 'return_changes_requested'].freeze
-
-  RESOURCE_TYPE_LABELS = {
-    'MatchRoutes::HomelessSetAside' => 'Homeless Set Aside',
-    'MatchRoutes::Default' => 'PSH Resource',
-  }.freeze
 
   validates :status, inclusion: { in: STATUSES }
   validate :required_draft_fields
@@ -44,11 +48,8 @@ class VacancySubmission < ApplicationRecord
     end
   end
 
-  def self.derive_resource_type(program)
-    return 'Unknown' unless program&.match_route
-
-    RESOURCE_TYPE_LABELS[program.match_route.class.name] ||
-      program.match_route.class.name.demodulize.titleize
+  def self.derive_route(sub_program)
+    sub_program&.match_route&.title
   end
 
   def self.derive_is_voucher(sub_program)
@@ -68,10 +69,17 @@ class VacancySubmission < ApplicationRecord
   end
 
   def site_display
-    return '—' if voucher?
+    return ['N/A'] if voucher?
 
-    [unit_address_street, unit_address_unit_number, unit_address_city, unit_address_state, unit_address_zip]
-      .compact.reject(&:blank?).join(', ').presence || '—'
+    Array(units).map do |u|
+      [
+        u['street'],
+        u['unit_number'],
+        u['city'],
+        u['state'],
+        u['zip'],
+      ].compact.reject(&:blank?).join(', ').presence
+    end
   end
 
   def voucher_type_display
@@ -84,6 +92,18 @@ class VacancySubmission < ApplicationRecord
       'return_changes_requested' => 'Return / Changes Requested',
       'active' => 'Active',
     }[status] || status.to_s.humanize
+  end
+
+  def bedrooms_display
+    return ['—'] if voucher?
+
+    Array(units).map { |u| u['bedrooms'] }.compact.reject(&:blank?)
+  end
+
+  def changes_requested_display
+    return '—' if status != 'return_changes_requested'
+
+    vacancy_submission_notes.select { |n| n.note_type == 'reviewer_note' }.last&.body || '—'
   end
 
   # Reviewers can approve from either queue state — including return_changes_requested —
@@ -143,11 +163,24 @@ class VacancySubmission < ApplicationRecord
   def required_draft_fields
     errors.add(:program_id, :blank) if program_id.blank?
     errors.add(:sub_program_id, :blank) if sub_program_id.blank?
-    return if voucher?
+    validate_units
+  end
 
-    errors.add(:unit_address_street, :blank) if unit_address_street.blank?
-    errors.add(:unit_address_city, :blank) if unit_address_city.blank?
-    errors.add(:unit_address_state, :blank) if unit_address_state.blank?
-    errors.add(:unit_address_zip, :blank) if unit_address_zip.blank?
+  def validate_units
+    unit_list = Array(units)
+    if unit_list.empty?
+      errors.add(:units, :blank)
+      return
+    end
+    if voucher?
+      unit_list.each { |u| errors.add(:units, 'each voucher must have a name') if u['name'].blank? }
+    else
+      unit_list.each do |u|
+        errors.add(:units, 'each unit must have a street address') if u['street'].blank?
+        errors.add(:units, 'each unit must have a city') if u['city'].blank?
+        errors.add(:units, 'each unit must have a state') if u['state'].blank?
+        errors.add(:units, 'each unit must have a zip code') if u['zip'].blank?
+      end
+    end
   end
 end

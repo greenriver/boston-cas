@@ -7,8 +7,29 @@
 # frozen_string_literal: true
 
 class VacancySubmissionsController < ApplicationController
+  SECTIONS = {
+    'route' => ->(sp, _vs) {
+      { partial: 'vacancy_submissions/route',
+        route: VacancySubmission.derive_route(sp) }
+    },
+    'requirements' => ->(sp, _vs) {
+      { partial: 'requirement_manager/inherited_rules',
+        inheritee: sp, show_label: false }
+    },
+    'required_documents' => ->(sp, vs) {
+      { partial: 'vacancy_submissions/required_documents',
+        sub_program: sp,
+        vacancy_submission: vs }
+    },
+    'vacancy' => ->(sp, vs) {
+      { partial: 'vacancy_submissions/vacancy',
+        sub_program: sp,
+        vacancy_submission: vs,
+        is_voucher: VacancySubmission.derive_is_voucher(sp) }
+    },
+  }.freeze
   before_action :authenticate_user!
-  before_action :require_can_view_opportunities!, only: [:index, :new, :create]
+  before_action :require_can_view_opportunities!, only: [:index, :new, :create, :sub_program_section]
   before_action :require_can_submit_or_review_vacancies!, only: [:show]
   before_action :require_can_review_vacancies!, only: [:approve, :return_submission]
   before_action :require_can_add_vacancies!, only: [:resubmit, :edit, :update]
@@ -112,6 +133,23 @@ class VacancySubmissionsController < ApplicationController
     end
   end
 
+  def sub_program_section
+    config = SECTIONS[params[:section]]
+    return head :not_found unless config
+
+    sub_program = SubProgram.find(params[:sub_program_id])
+    vacancy_submission = if params[:vacancy_submission_id].present?
+      VacancySubmission.find(params[:vacancy_submission_id])
+    else
+      VacancySubmission.new
+    end
+    vacancy_submission.required_document_names = Array(params[:required_document_names]) if params[:required_document_names].present?
+    vacancy_submission.units = normalize_units(params[:units]) if params[:units].present?
+
+    locals = config.call(sub_program, vacancy_submission)
+    render partial: locals.delete(:partial), locals: locals
+  end
+
   def approve
     return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be approved in its current state.' unless @submission.approvable?
 
@@ -153,23 +191,15 @@ class VacancySubmissionsController < ApplicationController
   end
 
   def build_draft_data(program:, sub_program:)
-    is_voucher = VacancySubmission.derive_is_voucher(sub_program)
-    data = {
+    {
       'program_id' => program.id,
       'sub_program_id' => sub_program.id,
-      'resource_type' => VacancySubmission.derive_resource_type(program),
-      'is_voucher' => is_voucher,
+      'route' => VacancySubmission.derive_route(sub_program),
+      'is_voucher' => VacancySubmission.derive_is_voucher(sub_program),
+      'units' => normalize_units(submission_params[:units]),
+      'required_document_names' => Array(submission_params[:required_document_names]),
+      'notes' => submission_params[:notes].to_s.strip.presence,
     }
-    unless is_voucher
-      data.merge!(
-        'unit_address_street' => submission_params[:unit_address_street],
-        'unit_address_unit_number' => submission_params[:unit_address_unit_number],
-        'unit_address_city' => submission_params[:unit_address_city],
-        'unit_address_state' => submission_params[:unit_address_state],
-        'unit_address_zip' => submission_params[:unit_address_zip],
-      )
-    end
-    data
   end
 
   def detect_changed_sections(old_data, new_data)
@@ -177,10 +207,9 @@ class VacancySubmissionsController < ApplicationController
     sections << 'Program' if old_data['program_id'] != new_data['program_id']
     sections << 'Sub-Program' if old_data['sub_program_id'] != new_data['sub_program_id']
     sections << 'Unit Type' if old_data['is_voucher'] != new_data['is_voucher']
-
-    address_keys = ['unit_address_street', 'unit_address_unit_number', 'unit_address_city', 'unit_address_state', 'unit_address_zip']
-    sections << 'Address' if address_keys.any? { |k| old_data[k] != new_data[k] }
-
+    sections << 'Vacancy' if old_data['units'].to_json != new_data['units'].to_json
+    sections << 'Required Documents' if old_data['required_document_names'] != new_data['required_document_names']
+    sections << 'Notes' if old_data['notes'] != new_data['notes']
     sections
   end
 
@@ -190,10 +219,46 @@ class VacancySubmissionsController < ApplicationController
 
   def submission_params
     params.require(:vacancy_submission).permit(
-      :program_id, :sub_program_id,
-      :unit_address_street, :unit_address_unit_number,
-      :unit_address_city, :unit_address_state, :unit_address_zip
+      :program_id, :sub_program_id, :notes,
+      units: [
+        :name, :street, :unit_number, :city, :state, :zip,
+        :date_ready, :age_limit, :bedrooms, :notes,
+        shared_spaces: [],
+        amenities: [],
+        accessibility: [],
+        attributes: [:name, :value],
+        media_links: [:url, :label],
+        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
+      ],
+      required_document_names: []
     )
+  end
+
+  def normalize_units(units_params)
+    return [] if units_params.blank?
+
+    units_params.values.map do |unit|
+      h = unit.respond_to?(:to_unsafe_h) ? unit.to_unsafe_h : unit.to_h
+      h['attributes'] = Array(h['attributes']&.values)
+      h['media_links'] = Array(h['media_links']&.values)
+      # requirements_attributes comes from the form submit; requirements (as a
+      # numeric-keyed hash) comes from forward-params on re-render after failure.
+      h['requirements'] = if h.key?('requirements_attributes')
+        normalize_requirements(h.delete('requirements_attributes'))
+      else
+        reqs = h['requirements']
+        reqs.is_a?(Hash) ? reqs.values : Array(reqs)
+      end
+      h
+    end
+  end
+
+  def normalize_requirements(reqs_params)
+    return [] if reqs_params.blank?
+
+    reqs_params.values.reject { |r| r['_destroy'].to_s == '1' }.map do |r|
+      { 'rule_id' => r['rule_id'].to_s, 'positive' => r['positive'].to_s, 'variable' => r['variable'].to_s }
+    end
   end
 
   def load_form_data
@@ -202,7 +267,7 @@ class VacancySubmissionsController < ApplicationController
       {
         id: p.id,
         name: p.name,
-        resource_type: VacancySubmission.derive_resource_type(p),
+        resource_type: nil,
         sub_programs: p.sub_programs.order(:name).map do |sp|
           {
             id: sp.id,

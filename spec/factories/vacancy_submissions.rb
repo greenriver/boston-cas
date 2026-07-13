@@ -21,17 +21,13 @@ FactoryBot.define do
       data = {
         'program_id' => the_program.id,
         'sub_program_id' => the_sub_program.id,
-        'resource_type' => 'PSH Resource',
+        'route' => 'PSH Resource',
         'is_voucher' => is_voucher,
       }
-      unless is_voucher
-        data.merge!(
-          'unit_address_street' => '123 Main St',
-          'unit_address_unit_number' => '1A',
-          'unit_address_city' => 'Boston',
-          'unit_address_state' => 'MA',
-          'unit_address_zip' => '02101',
-        )
+      if is_voucher
+        data['units'] = [{ 'name' => 'Voucher #1' }]
+      else
+        data['units'] = [{ 'street' => '123 Main St', 'unit_number' => '1A', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' }]
       end
       data
     end

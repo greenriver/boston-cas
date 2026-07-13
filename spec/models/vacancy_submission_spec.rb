@@ -22,10 +22,7 @@ RSpec.describe VacancySubmission, type: :model do
           'program_id' => program.id,
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
-          'unit_address_street' => '123 Main St',
-          'unit_address_city' => 'Boston',
-          'unit_address_state' => 'MA',
-          'unit_address_zip' => '02101',
+          'units' => [{ 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' }],
         },
       )
       expect(vs).to be_valid
@@ -49,21 +46,76 @@ RSpec.describe VacancySubmission, type: :model do
       expect(vs.errors[:sub_program_id]).to include('can\'t be blank')
     end
 
-    it 'requires address fields for physical units' do
+    it 'is invalid when units is empty for a physical unit submission' do
       vs = described_class.new(
         status: 'awaiting_approval',
-        draft_data: { 'program_id' => program.id, 'sub_program_id' => sub_program.id, 'is_voucher' => false },
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [],
+        },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:unit_address_street]).to include('can\'t be blank')
+      expect(vs.errors[:units]).to be_present
     end
 
-    it 'does not require address fields for voucher units' do
+    it 'is invalid when a physical unit is missing required address fields' do
       vs = described_class.new(
         status: 'awaiting_approval',
-        draft_data: { 'program_id' => program.id, 'sub_program_id' => tenant_based_sub_program.id, 'is_voucher' => true },
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [{ 'street' => '', 'city' => '', 'state' => '', 'zip' => '' }],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(vs.errors[:units]).to be_present
+    end
+
+    it 'is invalid when one of multiple physical units is missing required address fields' do
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [
+            { 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
+            { 'street' => '', 'city' => '', 'state' => '', 'zip' => '' },
+          ],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(vs.errors[:units]).to be_present
+    end
+
+    it 'is valid with a named voucher' do
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => tenant_based_sub_program.id,
+          'is_voucher' => true,
+          'units' => [{ 'name' => 'Section 8 #1234' }],
+        },
       )
       expect(vs).to be_valid
+    end
+
+    it 'is invalid when a voucher unit has a blank name' do
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => tenant_based_sub_program.id,
+          'is_voucher' => true,
+          'units' => [{ 'name' => '' }],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(vs.errors[:units]).to be_present
     end
   end
 
@@ -77,9 +129,9 @@ RSpec.describe VacancySubmission, type: :model do
     end
   end
 
-  describe '.derive_resource_type' do
+  describe '.derive_route' do
     it 'returns a non-blank string for any program with a match_route' do
-      expect(described_class.derive_resource_type(program)).to be_present
+      expect(described_class.derive_route(sub_program)).to be_present
     end
   end
 
@@ -122,20 +174,34 @@ RSpec.describe VacancySubmission, type: :model do
   end
 
   describe '#site_display' do
-    it 'returns formatted address for physical units' do
+    it 'returns an array of formatted addresses for physical units' do
       vs = described_class.new(draft_data: {
                                  'is_voucher' => false,
-                                 'unit_address_street' => '123 Main St',
-                                 'unit_address_city' => 'Boston',
-                                 'unit_address_state' => 'MA',
-                                 'unit_address_zip' => '02101',
+                                 'units' => [
+                                   { 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
+                                   { 'street' => '456 Oak Ave', 'unit_number' => '2B', 'city' => 'Cambridge', 'state' => 'MA', 'zip' => '02139' },
+                                 ],
                                })
-      expect(vs.site_display).to eq('123 Main St, Boston, MA, 02101')
+      expect(vs.site_display).to eq(['123 Main St, Boston, MA, 02101', '456 Oak Ave, 2B, Cambridge, MA, 02139'])
     end
 
-    it 'returns em dash for vouchers' do
-      vs = described_class.new(draft_data: { 'is_voucher' => true })
-      expect(vs.site_display).to eq('—')
+    it 'returns an empty array for vouchers' do
+      vs = described_class.new(draft_data: { 'is_voucher' => true, 'units' => [{ 'name' => 'V-1' }] })
+      expect(vs.site_display).to eq(['N/A'])
+    end
+  end
+
+  describe '#required_document_names' do
+    it 'stores and retrieves an array of document name strings' do
+      vs = described_class.new(
+        draft_data: { 'required_document_names' => ['Photo ID', 'Lease Agreement'] },
+      )
+      expect(vs.required_document_names).to eq(['Photo ID', 'Lease Agreement'])
+    end
+
+    it 'returns nil when not set' do
+      vs = described_class.new(draft_data: {})
+      expect(vs.required_document_names).to be_nil
     end
   end
 

@@ -69,11 +69,15 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: {
           program_id: program.id,
           sub_program_id: sub_program.id,
-          unit_address_street: '123 Main St',
-          unit_address_unit_number: '1A',
-          unit_address_city: 'Boston',
-          unit_address_state: 'MA',
-          unit_address_zip: '02101',
+          units: {
+            '0' => {
+              street: '123 Main St',
+              unit_number: '1A',
+              city: 'Boston',
+              state: 'MA',
+              zip: '02101',
+            },
+          },
         },
       }
     end
@@ -109,7 +113,11 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
       it 'sets is_voucher to true and does not require address' do
         post :create, params: {
-          vacancy_submission: { program_id: program.id, sub_program_id: voucher_sp.id },
+          vacancy_submission: {
+            program_id: program.id,
+            sub_program_id: voucher_sp.id,
+            units: { '0' => { name: 'Voucher #1' } },
+          },
         }
         expect(VacancySubmission.last.draft_data['is_voucher']).to be true
       end
@@ -191,24 +199,28 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: {
           program_id: program.id,
           sub_program_id: sub_program.id,
-          unit_address_street: '456 New St',
-          unit_address_city: 'Boston',
-          unit_address_state: 'MA',
-          unit_address_zip: '02101',
+          units: {
+            '0' => {
+              street: '456 New St',
+              city: 'Boston',
+              state: 'MA',
+              zip: '02101',
+            },
+          },
         },
       }
     end
 
     it 'updates the submission draft_data' do
       patch :update, params: update_params
-      expect(submission.reload.draft_data['unit_address_street']).to eq('456 New St')
+      expect(submission.reload.draft_data['units'][0]['street']).to eq('456 New St')
     end
 
     it 'creates a note recording the address change' do
       expect do
         patch :update, params: update_params
       end.to change(VacancySubmissionNote, :count).by(1)
-      expect(VacancySubmissionNote.last.body).to include('Address')
+      expect(VacancySubmissionNote.last.body).to include('Vacancy')
     end
 
     it 'redirects to the show page on success' do
