@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class Requirement < ApplicationRecord
   include MatchArchive
   belongs_to :rule
@@ -12,7 +14,7 @@ class Requirement < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
-  delegate :variable_requirement?, to: :rule
+  delegate :variable_requirement?, to: :rule, allow_nil: true
   validates_presence_of :variable, if: :variable_requirement?
 
   def clients_that_fit(scope, opportunity = nil)
@@ -33,11 +35,23 @@ class Requirement < ApplicationRecord
   delegate :alternate_name, to: :rule, allow_nil: true, prefix: true
 
   def name(on_unit: false)
+    "#{positive? ? 'Must' : "Can't"} #{rule_text(on_unit: on_unit)}"
+  end
+
+  def rule_text(on_unit: false)
     if on_unit && rule_alternate_name.present?
-      "#{positive? ? 'Must' : "Can't"} #{Translation.translate(rule_alternate_name)}"
+      Translation.translate(rule_alternate_name)
     else
-      "#{positive? ? 'Must' : "Can't"} #{rule&.verb} #{Translation.translate(rule_name)}"
+      "#{rule&.verb} #{Translation.translate(rule_name)}"
     end
+  end
+
+  def modal_verb
+    positive? ? 'Must' : "Can't"
+  end
+
+  def modal_verb_class
+    positive? ? 'primary' : 'warning'
   end
 
   def display_for_variable
