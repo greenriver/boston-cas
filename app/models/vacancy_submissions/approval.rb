@@ -85,10 +85,13 @@ module VacancySubmissions
     end
 
     def elevator_accessible?(unit_hash)
-      Array(unit_hash['accessibility']).any? { |opt| VacancySubmission::ACCESSIBILITY_OPTIONS[opt] == Rules::Elevator }
+      Array(unit_hash['accessibility']).any? { |opt| VacancySubmission::ELEVATOR_ACCESSIBILITY_OPTIONS.include?(opt) }
     end
 
     def attach_accessibility_requirements!(unit, unit_hash)
+      # Elevator / ground-floor options map to nil in ACCESSIBILITY_OPTIONS (they set
+      # Unit#elevator_accessible in build_unit_for instead), so compact leaves only the
+      # accessibility options that become Requirements (e.g. Wheelchair).
       rule_classes = Array(unit_hash['accessibility']).map { |opt| VacancySubmission::ACCESSIBILITY_OPTIONS[opt] }.compact.uniq
       rule_classes.each do |rule_class|
         Requirement.create!(requirer: unit, rule: find_rule!(rule_class), positive: true)
