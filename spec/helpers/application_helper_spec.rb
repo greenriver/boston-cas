@@ -13,8 +13,8 @@ require 'rails_helper'
 # `menu_request_matches_generated_path?` is the app's only URL query-string
 # parser (`Rack::Utils.parse_query`, application_helper.rb). Rails 8.1 removes
 # legacy Action Pack semicolon/bracket query parsing, and Rack changed its
-# separator handling; these specs pin the current 7.2 behavior so any change
-# in path/query comparison surfaces here.
+# separator handling; these specs cover the current 7.2 behavior any regressions
+# in path/query comparison would surface here.
 RSpec.describe ApplicationHelper, type: :helper do
   describe '#menu_request_matches_generated_path?' do
     # Drive the private helper with a stubbed request path and params, mirroring

@@ -33,6 +33,9 @@ module BostonCa
     # :html4 when Nokogiri::HTML5 is unavailable; we always want :html5.
     config.dom_testing_default_html_version = :html5
 
+    # Set log file size for local environments
+    config.log_file_size = 100 * 1024 * 1024 if Rails.env.local?
+
     # Continue to use config/secrets.yml. This is deprecated in rails > 7.0 but we don't want to move to
     # encrypted credentials, it's not appropriate for an open-source project
     if File.exist?(Rails.root.join('config', 'secrets.yml'))
