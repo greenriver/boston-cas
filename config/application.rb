@@ -94,6 +94,9 @@ module BostonCa
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # NOTE: on load_defaults 8.1, active_record.postgresql_adapter_decode_dates is
+    # `true` — raw-SQL `date` columns return Date, not String. Accepted intentionally after review
+
     # Disable Active Storage routes
     config.active_storage.draw_routes = false
   end

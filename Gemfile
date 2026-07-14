@@ -187,7 +187,6 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'capybara'
-  gem 'minitest-reporters'
   gem 'rails-controller-testing'
   gem 'rspec-mocks'
   gem 'shoulda-matchers'

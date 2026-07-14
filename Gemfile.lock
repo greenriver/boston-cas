@@ -112,7 +112,6 @@ GEM
     ajax_modal_rails (1.0.12)
       rails (>= 4)
     amazing_print (2.0.0)
-    ansi (1.5.0)
     anyway_config (2.8.0)
       ruby-next-core (~> 1.0)
     ast (2.4.3)
@@ -427,11 +426,6 @@ GEM
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
-    minitest-reporters (1.7.1)
-      ansi
-      builder
-      minitest (>= 5.0)
-      ruby-progressbar
     msgpack (1.8.3)
     multi_json (1.21.1)
     mutex_m (0.3.0)
@@ -817,7 +811,6 @@ DEPENDENCIES
   maxminddb
   memery
   mini_portile2
-  minitest-reporters
   mutex_m
   net-http
   nokogiri
@@ -896,7 +889,6 @@ CHECKSUMS
   airbrussh (1.6.1) sha256=9a5fc95583cefe722054a016d26ff0338cf00072b031b829086dde2039d5836a
   ajax_modal_rails (1.0.12) sha256=d386142f420d83d6d2fc2253ff98e3e80233caf0613a5235e989af679afb436d
   amazing_print (2.0.0) sha256=2e36aba46ac78d37ed27ca0e2056afe3583183bb5c64f157c246b267355e5d6a
-  ansi (1.5.0) sha256=5408253274e33d9d27d4a98c46d2998266fd51cba58a7eb9d08f50e57ed23592
   anyway_config (2.8.0) sha256=f6797a7231f81202dcd3d0c07284e836e45713e761d320180348b13a5c7c9306
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   attribute_normalizer (1.2.0) sha256=580df3f316d7f0a2cc068fd655377f4769848643328d0c6c6c685ea98ac181c4
@@ -1030,7 +1022,6 @@ CHECKSUMS
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
-  minitest-reporters (1.7.1) sha256=5060413a0c95b8c32fe73e0606f3631c173a884d7900e50013e15094eb50562c
   msgpack (1.8.3) sha256=8bda4a6428d3244e50d6bd55854d354edbada88a4e1f4f5731a39a0f86bee6a1
   multi_json (1.21.1) sha256=e6126a31808e3b4d19f483c775ceac34df190dffa62adfb63a165ee14ba68080
   mutex_m (0.3.0) sha256=cfcb04ac16b69c4813777022fdceda24e9f798e48092a2b817eb4c0a782b0751
