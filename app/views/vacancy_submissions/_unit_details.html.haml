@@ -28,7 +28,7 @@
           %abbr{title: 'required'} *
         %select.form-select.select2{ name: "vacancy_submission[units][#{index}][age_limit]", required: true }
           %option{value: ''} Select...
-          - VacancySubmission::AGE_LIMIT_OPTIONS.each do |opt|
+          - VacancySubmission::AGE_LIMIT_OPTIONS.each_key do |opt|
             %option{value: opt, selected: unit['age_limit'] == opt}= opt
     .row.mb-3
       .col-md-6
@@ -37,7 +37,7 @@
           %abbr{title: 'required'} *
         %select.form-select.select2{ name: "vacancy_submission[units][#{index}][bedrooms]", required: true }
           %option{value: ''} Select...
-          - VacancySubmission::BEDROOM_OPTIONS.each do |opt|
+          - VacancySubmission::BEDROOM_OPTIONS.each_key do |opt|
             %option{value: opt, selected: unit['bedrooms'] == opt}= opt
     .mb-3
       %label.form-label Shared spaces

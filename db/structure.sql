@@ -736,7 +736,8 @@ CREATE TABLE public.configs (
     limit_client_names_on_matches boolean DEFAULT true,
     include_note_in_email_default boolean,
     notify_all_on_progress_update boolean DEFAULT false,
-    send_match_summary_email_on integer
+    send_match_summary_email_on integer,
+    vacancy_submission_mechanism character varying DEFAULT 'Traditional'::character varying
 );
 
 
@@ -4067,7 +4068,8 @@ CREATE TABLE public.units (
     data_source_id integer,
     data_source_id_column_name character varying,
     elevator_accessible boolean DEFAULT false NOT NULL,
-    active boolean DEFAULT true NOT NULL
+    active boolean DEFAULT true NOT NULL,
+    notes text
 );
 
 
@@ -7311,6 +7313,8 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260701170632'),
+('20260701000001'),
 ('20260624131950'),
 ('20260601000002'),
 ('20260601000001'),

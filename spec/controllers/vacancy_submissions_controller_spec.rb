@@ -153,6 +153,29 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       expect(assigns(:notes).to_a).to eq([note1, note2])
     end
 
+    context 'when the submission is active and has a linked unit' do
+      render_views
+
+      let(:unit) { create(:unit, building: create(:building)) }
+      let(:active_submission) { create(:vacancy_submission, :active) }
+
+      before do
+        active_submission.units = [{ 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101', 'unit_id' => unit.id, 'voucher_id' => 999 }]
+        active_submission.save!
+      end
+
+      it 'shows an Edit Unit link when the user can edit units' do
+        get :show, params: { id: active_submission.id }
+        expect(response.body).to include(edit_unit_path(unit))
+      end
+
+      it 'does not show an Edit Unit link when the user cannot edit units' do
+        user.roles = [create(:role, name: 'reviewer_only', can_review_vacancies: true)]
+        get :show, params: { id: active_submission.id }
+        expect(response.body).not_to include(edit_unit_path(unit))
+      end
+    end
+
     context 'when user lacks both vacancy permissions' do
       let(:no_vacancy_role) { create(:role, name: 'no_vacancy') }
 

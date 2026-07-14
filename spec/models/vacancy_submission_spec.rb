@@ -300,6 +300,500 @@ RSpec.describe VacancySubmission, type: :model do
         expect { submission.approve!(user: user) }.to change(VacancySubmissionNote, :count).by(1)
         expect(VacancySubmissionNote.last.note_type).to eq('status_change')
       end
+
+      context 'for a Tenant-Based (voucher) submission' do
+        let!(:rule) { create(:homeless) }
+        let(:voucher_submission) do
+          create(
+            :vacancy_submission,
+            :voucher,
+            status: 'awaiting_approval',
+            the_program: program,
+            the_sub_program: tenant_based_sub_program,
+          )
+        end
+
+        before do
+          voucher_submission.units = [
+            {
+              'name' => 'Voucher #1',
+              'date_ready' => '2026-08-15',
+              'requirements' => [
+                { 'rule_id' => rule.id.to_s, 'positive' => 'true', 'variable' => '' },
+              ],
+            },
+          ]
+          voucher_submission.save!
+        end
+
+        it 'creates one Voucher per unit entry with no unit assigned and unavailable' do
+          expect { voucher_submission.approve!(user: user) }.to change(Voucher, :count).by(1)
+          voucher = Voucher.last
+          expect(voucher.sub_program).to eq(tenant_based_sub_program)
+          expect(voucher.unit_id).to be_nil
+          expect(voucher.available).to eq(false)
+        end
+
+        it 'persists the created voucher_id back onto the submission, with no unit_id' do
+          voucher_submission.approve!(user: user)
+          unit_hash = voucher_submission.reload.units.first
+          expect(unit_hash['voucher_id']).to eq(Voucher.last.id)
+          expect(unit_hash['unit_id']).to be_nil
+        end
+
+        it 'creates an unpublished Opportunity for the voucher' do
+          voucher_submission.approve!(user: user)
+          opportunity = Voucher.last.opportunity
+          expect(opportunity).to be_present
+          expect(opportunity.available).to eq(false)
+          expect(opportunity.available_candidate).to eq(false)
+        end
+
+        it 'attaches requirements directly to the Voucher' do
+          voucher_submission.approve!(user: user)
+          voucher = Voucher.last
+          expect(voucher.requirements.count).to eq(1)
+          requirement = voucher.requirements.last
+          expect(requirement.rule_id).to eq(rule.id)
+          expect(requirement.positive).to eq(true)
+        end
+
+        it 'sets date_available from date_ready' do
+          voucher_submission.approve!(user: user)
+          expect(Voucher.last.date_available).to eq(Date.parse('2026-08-15'))
+        end
+
+        it 'defaults date_available to Date.current when date_ready is blank' do
+          voucher_submission.units = [{ 'name' => 'Voucher #1' }]
+          voucher_submission.save!
+          voucher_submission.approve!(user: user)
+          expect(Voucher.last.date_available).to eq(Date.current)
+        end
+
+        it 'raises ActiveRecord::RecordInvalid and rolls back when sub_program_id does not resolve' do
+          voucher_submission.units = [{ 'name' => 'Voucher #1' }]
+          voucher_submission.sub_program_id = 0
+          voucher_submission.save!(validate: false)
+
+          expect { voucher_submission.approve!(user: user) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(voucher_submission.reload.status).to eq('awaiting_approval')
+        end
+      end
+
+      context 'for a Project-Based (physical unit) submission' do
+        let!(:rule) { create(:homeless) }
+        let!(:wheelchair_rule) { create(:wheelchair_accessible) }
+        let!(:elevator_rule) { create(:elevator) }
+        let!(:sro_ok_rule) { create(:sro_ok) }
+        let!(:bedroom_exact_rule) { create(:bedroom_exact) }
+        let!(:age_greater_than_fifty_rule) { create(:age_greater_than_fifty) }
+        let!(:age_greater_than_fifty_five_rule) { create(:age_greater_than_fifty_five) }
+        let!(:age_greater_than_sixty_rule) { create(:age_greater_than_sixty) }
+        let(:physical_submission) do
+          create(
+            :vacancy_submission,
+            status: 'awaiting_approval',
+            the_program: program,
+            the_sub_program: sub_program,
+          )
+        end
+
+        before do
+          physical_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'notes' => 'Newly renovated',
+              'accessibility' => ['Elevator to unit'],
+              'requirements' => [
+                { 'rule_id' => rule.id.to_s, 'positive' => 'true', 'variable' => '' },
+              ],
+            },
+          ]
+          physical_submission.save!
+        end
+
+        it 'creates a Building matching the submitted address when none exists' do
+          expect { physical_submission.approve!(user: user) }.to change(Building, :count).by(1)
+          building = Building.last
+          expect(building.address).to eq('123 Main St')
+          expect(building.city).to eq('Boston')
+          expect(building.state).to eq('MA')
+          expect(building.zip_code).to eq('02101')
+        end
+
+        it 'creates a Unit under the Building, associated to the new Voucher' do
+          expect { physical_submission.approve!(user: user) }.to change(Unit, :count).by(1)
+          unit = Unit.last
+          expect(unit.building).to eq(Building.last)
+          voucher = Voucher.last
+          expect(voucher.unit).to eq(unit)
+        end
+
+        it 'persists the created unit_id and voucher_id back onto the submission' do
+          physical_submission.approve!(user: user)
+          unit_hash = physical_submission.reload.units.first
+          expect(unit_hash['unit_id']).to eq(Unit.last.id)
+          expect(unit_hash['voucher_id']).to eq(Voucher.last.id)
+        end
+
+        it 'reuses an existing Building when its address/city/state/zip already matches' do
+          existing_building = create(
+            :building,
+            address: '123 Main St',
+            city: 'Boston',
+            state: 'MA',
+            zip_code: '02101',
+          )
+
+          expect { physical_submission.approve!(user: user) }.not_to change(Building, :count)
+          expect(Unit.last.building).to eq(existing_building)
+        end
+
+        it 'reuses one Building for two unit entries sharing an address' do
+          physical_submission.units = [
+            { 'street' => '123 Main St', 'unit_number' => '1A', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
+            { 'street' => '123 Main St', 'unit_number' => '1B', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
+          ]
+          physical_submission.save!
+
+          expect { physical_submission.approve!(user: user) }.to change(Building, :count).by(1).
+            and change(Unit, :count).by(2)
+          expect(Unit.last(2).map(&:building).uniq).to eq([Building.last])
+        end
+
+        it 'uses unit_number for Unit#name when present' do
+          physical_submission.approve!(user: user)
+          expect(Unit.last.name).to eq('1A')
+        end
+
+        it 'falls back to a generated name when unit_number is blank' do
+          physical_submission.units = [
+            { 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          expect(Unit.last.name).to be_present
+        end
+
+        it 'sets Unit#available to true' do
+          physical_submission.approve!(user: user)
+          expect(Unit.last.available).to eq(true)
+        end
+
+        it 'sets Unit#elevator_accessible to true when accessibility includes Elevator to unit' do
+          physical_submission.approve!(user: user)
+          expect(Unit.last.elevator_accessible).to eq(true)
+        end
+
+        it 'sets Unit#elevator_accessible to true when accessibility includes Ground floor unit' do
+          physical_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'accessibility' => ['Ground floor unit'],
+            },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          expect(Unit.last.elevator_accessible).to eq(true)
+        end
+
+        it 'sets Unit#elevator_accessible to false when accessibility does not include an elevator option' do
+          physical_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'accessibility' => ['Wheelchair accessible unit'],
+            },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          expect(Unit.last.elevator_accessible).to eq(false)
+        end
+
+        it 'sets Unit#notes from the submitted per-unit notes' do
+          physical_submission.approve!(user: user)
+          expect(Unit.last.notes).to eq('Newly renovated')
+        end
+
+        it 'attaches unit-level requirements to the Unit, not the Voucher' do
+          physical_submission.approve!(user: user)
+          unit = Unit.last
+          voucher = Voucher.last
+
+          requirement = unit.requirements.find_by(rule_id: rule.id)
+          expect(requirement).to be_present
+          expect(requirement.positive).to eq(true)
+          expect(requirement.requirer).to eq(unit)
+
+          expect(voucher.requirements.count).to eq(0)
+        end
+
+        it 'creates exactly one Rules::Wheelchair Requirement when both wheelchair accessibility options are selected' do
+          physical_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'accessibility' => ['Wheelchair accessible unit', 'Wheelchair accessible building'],
+            },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          unit = Unit.last
+          wheelchair_requirements = unit.requirements.select { |r| r.rule.type == wheelchair_rule.type }
+          expect(wheelchair_requirements.size).to eq(1)
+          expect(wheelchair_requirements.first.positive).to eq(true)
+        end
+
+        it 'creates exactly one Rules::Elevator Requirement when both elevator accessibility options are selected' do
+          physical_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'accessibility' => ['Elevator to unit', 'Ground floor unit'],
+            },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          unit = Unit.last
+          elevator_requirements = unit.requirements.select { |r| r.rule.type == elevator_rule.type }
+          expect(elevator_requirements.size).to eq(1)
+          expect(elevator_requirements.first.positive).to eq(true)
+        end
+
+        context 'bedrooms' do
+          {
+            'SRO' => { rule: :sro_ok_rule, variable: nil },
+            'Studio' => { rule: :bedroom_exact_rule, variable: '1' },
+            'One bedroom' => { rule: :bedroom_exact_rule, variable: '1' },
+            'Two bedrooms' => { rule: :bedroom_exact_rule, variable: '2' },
+            'Three or more bedrooms' => { rule: :bedroom_exact_rule, variable: '3' },
+          }.each do |bedroom_option, expectation|
+            it "creates the expected Requirement for bedrooms: #{bedroom_option}" do
+              physical_submission.units = [
+                {
+                  'street' => '123 Main St',
+                  'unit_number' => '1A',
+                  'city' => 'Boston',
+                  'state' => 'MA',
+                  'zip' => '02101',
+                  'bedrooms' => bedroom_option,
+                },
+              ]
+              physical_submission.save!
+
+              physical_submission.approve!(user: user)
+              unit = Unit.last
+              expect(unit.requirements.count).to eq(1)
+              requirement = unit.requirements.last
+              expect(requirement.rule.type).to eq(send(expectation[:rule]).type)
+              expect(requirement.positive).to eq(true)
+              expect(requirement.variable).to eq(expectation[:variable])
+            end
+          end
+        end
+
+        context 'age_limit' do
+          {
+            '50+' => :age_greater_than_fifty_rule,
+            '55+' => :age_greater_than_fifty_five_rule,
+            '60+' => :age_greater_than_sixty_rule,
+          }.each do |age_limit_option, rule_let|
+            it "creates the expected Requirement for age_limit: #{age_limit_option}" do
+              physical_submission.units = [
+                {
+                  'street' => '123 Main St',
+                  'unit_number' => '1A',
+                  'city' => 'Boston',
+                  'state' => 'MA',
+                  'zip' => '02101',
+                  'age_limit' => age_limit_option,
+                },
+              ]
+              physical_submission.save!
+
+              physical_submission.approve!(user: user)
+              unit = Unit.last
+              expect(unit.requirements.count).to eq(1)
+              requirement = unit.requirements.last
+              expect(requirement.rule.type).to eq(send(rule_let).type)
+              expect(requirement.positive).to eq(true)
+            end
+          end
+
+          it 'creates no Requirement when age_limit is N/A' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+                'age_limit' => 'N/A',
+              },
+            ]
+            physical_submission.save!
+
+            physical_submission.approve!(user: user)
+            expect(Unit.last.requirements.count).to eq(0)
+          end
+
+          it 'creates no Requirement when age_limit is blank' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+              },
+            ]
+            physical_submission.save!
+
+            physical_submission.approve!(user: user)
+            expect(Unit.last.requirements.count).to eq(0)
+          end
+        end
+
+        context 'shared spaces, amenities, attributes, and media links' do
+          it 'creates a HousingAttribute with include_value: false for each shared space' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+                'shared_spaces' => ['Laundry room', 'Common kitchen'],
+              },
+            ]
+            physical_submission.save!
+
+            physical_submission.approve!(user: user)
+            unit = Unit.last
+            attributes = unit.housing_attributes.without_value
+            expect(attributes.pluck(:name)).to contain_exactly('Laundry room', 'Common kitchen')
+            expect(attributes.pluck(:include_value)).to all(eq(false))
+          end
+
+          it 'creates a HousingAttribute with include_value: false for each amenity' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+                'amenities' => ['Dishwasher', 'Air conditioning'],
+              },
+            ]
+            physical_submission.save!
+
+            physical_submission.approve!(user: user)
+            unit = Unit.last
+            attributes = unit.housing_attributes.without_value
+            expect(attributes.pluck(:name)).to contain_exactly('Dishwasher', 'Air conditioning')
+            expect(attributes.pluck(:include_value)).to all(eq(false))
+          end
+
+          it 'creates a HousingAttribute with include_value: true for each name/value attribute, skipping blank names' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+                'attributes' => [
+                  { 'name' => 'Heat', 'value' => 'Gas' },
+                  { 'name' => '', 'value' => 'Should be skipped' },
+                ],
+              },
+            ]
+            physical_submission.save!
+
+            physical_submission.approve!(user: user)
+            unit = Unit.last
+            attributes = unit.housing_attributes.with_value
+            expect(attributes.count).to eq(1)
+            expect(attributes.first.name).to eq('Heat')
+            expect(attributes.first.value).to eq('Gas')
+            expect(attributes.first.include_value).to eq(true)
+          end
+
+          it 'skips attributes with a blank value instead of raising' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+                'attributes' => [
+                  { 'name' => 'Heat', 'value' => 'Gas' },
+                  { 'name' => 'Should be skipped', 'value' => '' },
+                ],
+              },
+            ]
+            physical_submission.save!
+
+            expect { physical_submission.approve!(user: user) }.not_to raise_error
+            unit = Unit.last
+            attributes = unit.housing_attributes.with_value
+            expect(attributes.count).to eq(1)
+            expect(attributes.first.name).to eq('Heat')
+          end
+
+          it 'creates a HousingMediaLink for each media link, skipping blank urls, defaulting blank labels to Photo' do
+            physical_submission.units = [
+              {
+                'street' => '123 Main St',
+                'unit_number' => '1A',
+                'city' => 'Boston',
+                'state' => 'MA',
+                'zip' => '02101',
+                'media_links' => [
+                  { 'url' => 'https://example.com/photo.jpg', 'label' => 'Kitchen' },
+                  { 'url' => 'https://example.com/photo2.jpg', 'label' => '' },
+                  { 'url' => '', 'label' => 'Should be skipped' },
+                ],
+              },
+            ]
+            physical_submission.save!
+
+            physical_submission.approve!(user: user)
+            unit = Unit.last
+            media_links = unit.housing_media_links
+            expect(media_links.count).to eq(2)
+            expect(media_links.pluck(:url)).to contain_exactly('https://example.com/photo.jpg', 'https://example.com/photo2.jpg')
+            kitchen_link = media_links.find_by(url: 'https://example.com/photo.jpg')
+            expect(kitchen_link.label).to eq('Kitchen')
+            defaulted_link = media_links.find_by(url: 'https://example.com/photo2.jpg')
+            expect(defaulted_link.label).to eq('Photo')
+          end
+        end
+      end
     end
 
     describe '#return_for_changes!' do

@@ -268,7 +268,7 @@ class VacancySubmissionsController < ApplicationController
         id: p.id,
         name: p.name,
         resource_type: nil,
-        sub_programs: p.sub_programs.order(:name).map do |sp|
+        sub_programs: p.sub_programs.open.order(:name).map do |sp|
           {
             id: sp.id,
             name: sp.name.presence || '(unnamed)',

@@ -26,8 +26,23 @@ class VacancySubmission < ApplicationRecord
     'Ground floor unit' => Rules::Elevator,
   }.freeze
 
-  BEDROOM_OPTIONS = ['SRO', 'Studio', 'One bedroom', 'Two bedrooms', 'Three or more bedrooms'].freeze
-  AGE_LIMIT_OPTIONS = ['N/A', '50+', '55+', '60+'].freeze
+  # Studio and 3+ bedrooms don't have a dedicated Rule yet, so we approximate
+  # with Rules::BedroomExact until product decides how they should be modeled.
+  BEDROOM_OPTIONS = {
+    'SRO' => { rule_class: Rules::SroOk, variable: nil },
+    'Studio' => { rule_class: Rules::BedroomExact, variable: 1 }, # approximation; TBD with product team
+    'One bedroom' => { rule_class: Rules::BedroomExact, variable: 1 },
+    'Two bedrooms' => { rule_class: Rules::BedroomExact, variable: 2 },
+    'Three or more bedrooms' => { rule_class: Rules::BedroomExact, variable: 3 }, # collapses 3+ to exactly 3 for now
+  }.freeze
+
+  AGE_LIMIT_OPTIONS = {
+    'N/A' => nil,
+    '50+' => Rules::AgeGreaterThanFifty,
+    '55+' => Rules::AgeGreaterThanFiftyFive,
+    '60+' => Rules::AgeGreaterThanSixty,
+  }.freeze
+
   SHARED_SPACE_OPTIONS = ['Kitchen', 'Living Room', 'Bathroom'].freeze
 
   STATUSES = ['awaiting_approval', 'return_changes_requested', 'active'].freeze
@@ -127,6 +142,7 @@ class VacancySubmission < ApplicationRecord
   def approve!(user:)
     transaction do
       update!(status: 'active')
+      VacancySubmissions::Approval.new(self, user: user).call!
       vacancy_submission_notes.create!(
         user: user,
         note_type: 'status_change',
