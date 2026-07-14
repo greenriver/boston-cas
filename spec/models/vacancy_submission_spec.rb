@@ -794,6 +794,58 @@ RSpec.describe VacancySubmission, type: :model do
           end
         end
       end
+
+      context 'failure modes (atomicity and error surfacing)' do
+        let(:failing_submission) do
+          create(
+            :vacancy_submission,
+            status: 'awaiting_approval',
+            the_program: program,
+            the_sub_program: sub_program,
+          )
+        end
+
+        it 'raises RecordInvalid and rolls back everything when a unit ready date is unparseable' do
+          failing_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'date_ready' => 'not-a-date',
+            },
+          ]
+          failing_submission.save!
+
+          expect { failing_submission.approve!(user: user) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(failing_submission.reload.status).to eq('awaiting_approval')
+          expect(Voucher.count).to eq(0)
+          expect(Unit.count).to eq(0)
+          expect(Requirement.count).to eq(0)
+        end
+
+        it 'raises RecordInvalid and rolls back everything when a required Rule is not configured' do
+          # 'Elevator to unit' maps to Rules::Elevator, whose Rule row is intentionally not seeded here.
+          failing_submission.units = [
+            {
+              'street' => '123 Main St',
+              'unit_number' => '1A',
+              'city' => 'Boston',
+              'state' => 'MA',
+              'zip' => '02101',
+              'accessibility' => ['Elevator to unit'],
+            },
+          ]
+          failing_submission.save!
+
+          expect { failing_submission.approve!(user: user) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(failing_submission.reload.status).to eq('awaiting_approval')
+          expect(Voucher.count).to eq(0)
+          expect(Unit.count).to eq(0)
+          expect(Requirement.count).to eq(0)
+        end
+      end
     end
 
     describe '#return_for_changes!' do

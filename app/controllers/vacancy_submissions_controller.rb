@@ -157,6 +157,10 @@ class VacancySubmissionsController < ApplicationController
     redirect_to vacancy_submission_path(@submission), notice: 'Submission approved.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to vacancy_submission_path(@submission), alert: "Could not approve: #{e.message}"
+  rescue StandardError => e
+    Rails.logger.error("VacancySubmission ##{@submission.id} approval failed: #{e.class}: #{e.message}")
+    redirect_to vacancy_submission_path(@submission),
+                alert: 'Could not approve: an unexpected error occurred and no changes were saved.'
   end
 
   def return_submission

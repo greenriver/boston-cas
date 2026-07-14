@@ -91,7 +91,7 @@ module VacancySubmissions
     def attach_accessibility_requirements!(unit, unit_hash)
       rule_classes = Array(unit_hash['accessibility']).map { |opt| VacancySubmission::ACCESSIBILITY_OPTIONS[opt] }.compact.uniq
       rule_classes.each do |rule_class|
-        Requirement.create!(requirer: unit, rule: Rule.find_by(type: rule_class.name), positive: true)
+        Requirement.create!(requirer: unit, rule: find_rule!(rule_class), positive: true)
       end
     end
 
@@ -101,7 +101,7 @@ module VacancySubmissions
 
       Requirement.create!(
         requirer: unit,
-        rule: Rule.find_by(type: mapping[:rule_class].name),
+        rule: find_rule!(mapping[:rule_class]),
         positive: true,
         variable: mapping[:variable],
       )
@@ -111,7 +111,7 @@ module VacancySubmissions
       rule_class = VacancySubmission::AGE_LIMIT_OPTIONS[unit_hash['age_limit']]
       return if rule_class.nil?
 
-      Requirement.create!(requirer: unit, rule: Rule.find_by(type: rule_class.name), positive: true)
+      Requirement.create!(requirer: unit, rule: find_rule!(rule_class), positive: true)
     end
 
     def attach_value_less_housing_attributes!(unit, names)
@@ -150,7 +150,21 @@ module VacancySubmissions
     end
 
     def resolved_date(unit_hash)
-      unit_hash['date_ready'].present? ? Date.parse(unit_hash['date_ready']) : Date.current
+      raw = unit_hash['date_ready']
+      return Date.current if raw.blank?
+
+      Date.parse(raw)
+    rescue ArgumentError # includes Date::Error
+      vacancy_submission.errors.add(:base, "'#{raw}' is not a valid ready date")
+      raise ActiveRecord::RecordInvalid.new(vacancy_submission)
+    end
+
+    def find_rule!(rule_class)
+      rule = Rule.find_by(type: rule_class.name)
+      return rule if rule.present?
+
+      vacancy_submission.errors.add(:base, "Required rule '#{rule_class.name}' is not configured")
+      raise ActiveRecord::RecordInvalid.new(vacancy_submission)
     end
   end
 end

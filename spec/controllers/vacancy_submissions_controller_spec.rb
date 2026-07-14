@@ -305,6 +305,29 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
     end
+
+    context 'when approval fails' do
+      it 'surfaces a RecordInvalid as a flash alert and leaves the status unchanged' do
+        allow_any_instance_of(VacancySubmission).to receive(:approve!).
+          and_raise(ActiveRecord::RecordInvalid.new(submission))
+
+        post :approve, params: { id: submission.id }
+
+        expect(response).to redirect_to(vacancy_submission_path(submission))
+        expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'rescues an unexpected error and surfaces a generic alert instead of raising' do
+        allow_any_instance_of(VacancySubmission).to receive(:approve!).
+          and_raise(StandardError.new('boom'))
+
+        expect { post :approve, params: { id: submission.id } }.not_to raise_error
+        expect(response).to redirect_to(vacancy_submission_path(submission))
+        expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+    end
   end
 
   describe 'POST #return_submission' do
