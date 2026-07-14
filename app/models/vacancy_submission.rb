@@ -16,15 +16,22 @@ class VacancySubmission < ApplicationRecord
                  :program_id, :sub_program_id, :route, :is_voucher, :units,
                  :required_document_names, :notes
 
-  # This maps accessibility features to rules, it's unclear if these should always be enforced
-  # or if we need a mechanism to specify they are optional.  For instance, someone who isn't
-  # a wheelchair user can live comfortably in a building that is wheelchair accessible.
+  # Accessibility options captured by the Unit#elevator_accessible boolean rather
+  # than a Requirement rule — both simply set elevator_accessible to true.
+  ELEVATOR_ACCESSIBILITY_OPTIONS = ['Elevator to unit', 'Ground floor unit'].freeze
+
+  # Accessibility checkboxes shown on the vacancy form. Wheelchair options map to
+  # the Requirement rule they enforce; the elevator / ground-floor options map to
+  # nil because they are captured by the Unit#elevator_accessible boolean
+  # (see ELEVATOR_ACCESSIBILITY_OPTIONS) rather than a Requirement.
+  #
+  # It's unclear if the wheelchair requirements should always be enforced or if we
+  # need a mechanism to mark them optional. For instance, someone who isn't a
+  # wheelchair user can live comfortably in a wheelchair accessible building.
   ACCESSIBILITY_OPTIONS = {
     'Wheelchair accessible unit' => Rules::Wheelchair,
     'Wheelchair accessible building' => Rules::Wheelchair,
-    'Elevator to unit' => Rules::Elevator,
-    'Ground floor unit' => Rules::Elevator,
-  }.freeze
+  }.merge(ELEVATOR_ACCESSIBILITY_OPTIONS.index_with { nil }).freeze
 
   # Studio and 3+ bedrooms don't have a dedicated Rule yet, so we approximate
   # with Rules::BedroomExact until product decides how they should be modeled.

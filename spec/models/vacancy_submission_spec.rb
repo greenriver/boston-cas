@@ -469,7 +469,6 @@ RSpec.describe VacancySubmission, type: :model do
       context 'for a Project-Based (physical unit) submission' do
         let!(:rule) { create(:homeless) }
         let!(:wheelchair_rule) { create(:wheelchair_accessible) }
-        let!(:elevator_rule) { create(:elevator) }
         let!(:sro_ok_rule) { create(:sro_ok) }
         let!(:bedroom_exact_rule) { create(:bedroom_exact) }
         let!(:age_greater_than_fifty_rule) { create(:age_greater_than_fifty) }
@@ -648,7 +647,10 @@ RSpec.describe VacancySubmission, type: :model do
           expect(wheelchair_requirements.first.positive).to eq(true)
         end
 
-        it 'creates exactly one Rules::Elevator Requirement when both elevator accessibility options are selected' do
+        it 'does not create a Requirement for elevator/ground-floor accessibility (captured by Unit#elevator_accessible)' do
+          # Rules::Elevator is intentionally not a seeded rule — elevator/ground-floor
+          # accessibility is represented by the Unit#elevator_accessible boolean, which
+          # matching consumes directly. Approval must not depend on a Rules::Elevator rule.
           physical_submission.units = [
             {
               'street' => '123 Main St',
@@ -661,11 +663,10 @@ RSpec.describe VacancySubmission, type: :model do
           ]
           physical_submission.save!
 
-          physical_submission.approve!(user: user)
+          expect { physical_submission.approve!(user: user) }.not_to raise_error
           unit = Unit.last
-          elevator_requirements = unit.requirements.select { |r| r.rule.type == elevator_rule.type }
-          expect(elevator_requirements.size).to eq(1)
-          expect(elevator_requirements.first.positive).to eq(true)
+          expect(unit.elevator_accessible).to eq(true)
+          expect(unit.requirements).to be_empty
         end
 
         context 'bedrooms' do
@@ -912,7 +913,9 @@ RSpec.describe VacancySubmission, type: :model do
         end
 
         it 'raises RecordInvalid and rolls back everything when a required Rule is not configured' do
-          # 'Elevator to unit' maps to Rules::Elevator, whose Rule row is intentionally not seeded here.
+          # Simulate a misconfigured environment: 'Wheelchair accessible unit' maps to
+          # Rules::Wheelchair, so remove that seeded rule to force the find_rule! guard.
+          Rule.where(type: 'Rules::Wheelchair').destroy_all
           failing_submission.units = [
             {
               'street' => '123 Main St',
@@ -920,7 +923,7 @@ RSpec.describe VacancySubmission, type: :model do
               'city' => 'Boston',
               'state' => 'MA',
               'zip' => '02101',
-              'accessibility' => ['Elevator to unit'],
+              'accessibility' => ['Wheelchair accessible unit'],
             },
           ]
           failing_submission.save!
@@ -929,7 +932,6 @@ RSpec.describe VacancySubmission, type: :model do
           expect(failing_submission.reload.status).to eq('awaiting_approval')
           expect(Voucher.count).to eq(0)
           expect(Unit.count).to eq(0)
-          expect(Requirement.count).to eq(0)
         end
       end
     end
