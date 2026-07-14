@@ -50,20 +50,20 @@
                 %label.form-label.mb-1= selected_rule.variable_label
               - case selected_rule.variable_input_type
               - when 'select'
-                %select.form-select.select2{ name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", data: { 'req-variable': '' } }
+                %select.form-select.select2{ name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", required: true, data: { 'req-variable': '' } }
                   %option{value: ''} Select...
                   - selected_rule.variable_options.each do |val, label|
                     %option{value: val, selected: val.to_s == req['variable'].to_s}= label
               - when 'multi-select'
                 - current_values = req['variable'].to_s.split(',')
-                %select.form-select.select2{ multiple: true, data: { 'req-multi-display': '' } }
+                %select.form-select.select2{ multiple: true, required: true, data: { 'req-multi-display': '' } }
                   - selected_rule.variable_options.each do |val, label|
                     %option{value: val, selected: current_values.include?(val.to_s)}= label
                 %input{type: 'hidden', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], data: { 'req-variable': '' }}
               - when 'number'
-                %input.form-control{type: 'number', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], placeholder: 'Value', data: { 'req-variable': '' }}
+                %input.form-control{type: 'number', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], placeholder: 'Value', required: true, data: { 'req-variable': '' }}
               - else
-                %input.form-control{type: 'text', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], placeholder: 'Value', data: { 'req-variable': '' }}
+                %input.form-control{type: 'text', name: "vacancy_submission[units][#{index}][requirements_attributes][#{req_i}][variable]", value: req['variable'], placeholder: 'Value', required: true, data: { 'req-variable': '' }}
     %template{data: { 'req-template': '' }}
       .mb-2{data: { 'req-entry': '' }}
         .d-flex.gap-2.align-items-center

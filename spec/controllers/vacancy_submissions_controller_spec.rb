@@ -131,6 +131,34 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         expect(response).to render_template(:new)
       end
     end
+
+    context 'with a variable-requiring rule but a blank variable' do
+      let!(:variable_rule) { create(:bedroom_exact) }
+
+      it 'does not create a submission and re-renders new' do
+        expect do
+          post :create, params: {
+            vacancy_submission: {
+              program_id: program.id,
+              sub_program_id: sub_program.id,
+              units: {
+                '0' => {
+                  street: '123 Main St',
+                  unit_number: '1A',
+                  city: 'Boston',
+                  state: 'MA',
+                  zip: '02101',
+                  requirements_attributes: {
+                    '0' => { rule_id: variable_rule.id.to_s, positive: 'true', variable: '' },
+                  },
+                },
+              },
+            },
+          }
+        end.not_to change(VacancySubmission, :count)
+        expect(response).to render_template(:new)
+      end
+    end
   end
 
   describe 'GET #show' do

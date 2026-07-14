@@ -91,6 +91,92 @@ RSpec.describe VacancySubmission, type: :model do
       expect(vs.errors[:units]).to be_present
     end
 
+    it 'is invalid when a requirement uses a variable-requiring rule but the variable is blank' do
+      variable_rule = create(:bedroom_exact)
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [
+            {
+              'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101',
+              'requirements' => [
+                { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
+              ]
+            },
+          ],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(vs.errors[:units]).to be_present
+    end
+
+    it 'is valid when a variable-requiring rule has its variable set' do
+      variable_rule = create(:bedroom_exact)
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [
+            {
+              'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101',
+              'requirements' => [
+                { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '2' },
+              ]
+            },
+          ],
+        },
+      )
+      expect(vs).to be_valid
+    end
+
+    it 'ignores a blank variable for a rule that does not require one' do
+      non_variable_rule = create(:homeless)
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [
+            {
+              'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101',
+              'requirements' => [
+                { 'rule_id' => non_variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
+              ]
+            },
+          ],
+        },
+      )
+      expect(vs).to be_valid
+    end
+
+    it 'is invalid when a voucher requirement uses a variable-requiring rule with a blank variable' do
+      variable_rule = create(:bedroom_exact)
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => tenant_based_sub_program.id,
+          'is_voucher' => true,
+          'units' => [
+            {
+              'name' => 'Voucher #1',
+              'requirements' => [
+                { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
+              ],
+            },
+          ],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(vs.errors[:units]).to be_present
+    end
+
     it 'is valid with a named voucher' do
       vs = described_class.new(
         status: 'awaiting_approval',

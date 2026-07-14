@@ -60,6 +60,7 @@ export const RequirementVariableMixin = {
       input.className = 'form-control'
       input.placeholder = 'Value'
       input.name = `${varName}[variable]`
+      input.required = true
       input.dataset.reqVariable = ''
       input.value = currentValue
       container.appendChild(input)
@@ -69,6 +70,7 @@ export const RequirementVariableMixin = {
       input.className = 'form-control'
       input.placeholder = 'Value'
       input.name = `${varName}[variable]`
+      input.required = true
       input.dataset.reqVariable = ''
       input.value = currentValue
       container.appendChild(input)
@@ -86,6 +88,7 @@ export const RequirementVariableMixin = {
       const select = document.createElement('select')
       select.className = 'form-select select2'
       select.multiple = true
+      select.required = true
       select.dataset.reqMultiDisplay = ''
       options.forEach(([val, label]) => {
         const opt = new Option(label, val)
@@ -106,6 +109,7 @@ export const RequirementVariableMixin = {
       const select = document.createElement('select')
       select.className = 'form-select select2'
       select.name = `${varName}[variable]`
+      select.required = true
       select.dataset.reqVariable = ''
       select.appendChild(new Option('Select...', ''))
       options.forEach(([val, label]) => {
