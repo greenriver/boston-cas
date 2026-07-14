@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord-import'
 gem 'rack', '< 3.2' # pinning to the same max version as is required by rails 7.2
 gem 'pg', '~> 1.1'
-gem 'rails', '~> 8.0.0'
+gem 'rails', '~> 8.1.0'
 gem 'sprockets-rails'
 gem 'jsbundling-rails'
 gem 'rails-html-sanitizer'
