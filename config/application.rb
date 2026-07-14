@@ -22,7 +22,7 @@ module BostonCa
   class Application < Rails::Application
     # Load framework defaults for the current Rails version. Overrides below are
     # intentional deviations from these defaults.
-    config.load_defaults 7.2
+    config.load_defaults 8.0
 
     # Keep YAML as the default column serializer. The framework default is `nil`
     # (Rails 7.1+); this is an intentional override to preserve existing
