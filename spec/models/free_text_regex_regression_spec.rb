@@ -10,8 +10,9 @@ require 'rails_helper'
 
 # Regression net for the Rails 7.2 -> 8.1 upgrade (audit hotspot).
 #
-# Rails 8 sets a global `Regexp.timeout` (1 second by default). These are the
-# only free-text regexes in the app that run against user-supplied strings:
+# Rails 8 sets a global `Regexp.timeout` (1 second by default).
+# https://guides.rubyonrails.org/configuring.html#default-values-for-target-version-8-0
+# These are the only free-text regexes in the app that run against user-supplied strings:
 #   - NonHmisClientsHelper::PHONE_NUMBER_REGEX (validated in
 #     PathwaysVersionFourCalculations)
 #   - the "^Email:/^Phone:/^Address:" matches in
