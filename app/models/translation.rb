@@ -21,6 +21,11 @@ class Translation < ApplicationRecord
     translated.presence || text
   end
 
+  def self.translated?(text)
+    translated_text = translate(text)
+    translated_text != text
+  end
+
   def self.cache_key(text)
     digest = Digest::MD5.hexdigest(text.to_s)
     "translations/#{digest}"

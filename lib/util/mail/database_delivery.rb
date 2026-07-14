@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 # munged out of https://gist.github.com/d11wtq/1176236
 module Mail
   class DatabaseDelivery
@@ -19,6 +21,8 @@ module Mail
       delivery_method_options = @parameters
 
       Contact.where(email: mail[:to].addresses).each do |contact|
+        next unless contact.notification_recipient?
+
         # store the "email" in the database
         message = ::Message.create(
           contact_id: contact.id,
@@ -50,7 +54,7 @@ module Mail
         return [false, text_part.body.to_s] if text_part
       end
       body    = mail.body.to_s
-      is_html = /\A<html>.*<\/html>\z/im === body.strip # rubocop:disable Style/CaseEquality
+      is_html = /\A<html>.*<\/html>\z/im === body.strip
       [is_html, body]
     end
   end
