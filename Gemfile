@@ -128,7 +128,7 @@ gem 'auto-session-timeout'
 gem 'ruby_parser', require: false
 
 gem 'caxlsx'
-gem 'caxlsx_rails'
+gem 'caxlsx_rails', '>= 0.7.1' # 0.7.1+ restores `render xlsx: 'template'` resolution under Rails 8 (0.6.x relied on Rails defaulting options[:template] to the action name)
 gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 gem 'roo'
