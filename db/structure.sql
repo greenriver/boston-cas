@@ -737,7 +737,7 @@ CREATE TABLE public.configs (
     include_note_in_email_default boolean,
     notify_all_on_progress_update boolean DEFAULT false,
     send_match_summary_email_on integer,
-    vacancy_submission_mechanism character varying DEFAULT 'Traditional'::character varying
+    vacancy_submission_mechanism character varying DEFAULT 'traditional'::character varying
 );
 
 
@@ -7313,6 +7313,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260714153122'),
 ('20260701170632'),
 ('20260701000001'),
 ('20260624131950'),
