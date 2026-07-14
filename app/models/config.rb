@@ -73,6 +73,6 @@ class Config < ApplicationRecord
   end
 
   def self.active_vacancy_submission_mechanism_traditional?
-    get(:vacancy_submission_mechanism) == 'traditional'
+    get(:vacancy_submission_mechanism)&.downcase == 'traditional'
   end
 end

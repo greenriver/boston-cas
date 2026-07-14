@@ -20,6 +20,7 @@ class UnitForBuildingController < ApplicationController
     @unit = unit_source.new(unit_params)
     @unit.elevator_accessible = @unit.building.elevator_accessible_default
     if @unit.save
+      @unit.apply_default_housing_attributes
       flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> in <a href=\"#{building_path(@unit.building)}\">#{@unit.building.name}</a> was successfully created."
       redirect_to program_sub_program_vouchers_path(program_id: params[:program_id].to_i, sub_program_id: params[:sub_program_id].to_i)
     else

@@ -131,6 +131,34 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         expect(response).to render_template(:new)
       end
     end
+
+    context 'with a variable-requiring rule but a blank variable' do
+      let!(:variable_rule) { create(:bedroom_exact) }
+
+      it 'does not create a submission and re-renders new' do
+        expect do
+          post :create, params: {
+            vacancy_submission: {
+              program_id: program.id,
+              sub_program_id: sub_program.id,
+              units: {
+                '0' => {
+                  street: '123 Main St',
+                  unit_number: '1A',
+                  city: 'Boston',
+                  state: 'MA',
+                  zip: '02101',
+                  requirements_attributes: {
+                    '0' => { rule_id: variable_rule.id.to_s, positive: 'true', variable: '' },
+                  },
+                },
+              },
+            },
+          }
+        end.not_to change(VacancySubmission, :count)
+        expect(response).to render_template(:new)
+      end
+    end
   end
 
   describe 'GET #show' do
@@ -303,6 +331,29 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       it 'redirects with not authorized' do
         post :approve, params: { id: submission.id }
         expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'when approval fails' do
+      it 'surfaces a RecordInvalid as a flash alert and leaves the status unchanged' do
+        allow_any_instance_of(VacancySubmission).to receive(:approve!).
+          and_raise(ActiveRecord::RecordInvalid.new(submission))
+
+        post :approve, params: { id: submission.id }
+
+        expect(response).to redirect_to(vacancy_submission_path(submission))
+        expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'rescues an unexpected error and surfaces a generic alert instead of raising' do
+        allow_any_instance_of(VacancySubmission).to receive(:approve!).
+          and_raise(StandardError.new('boom'))
+
+        expect { post :approve, params: { id: submission.id } }.not_to raise_error
+        expect(response).to redirect_to(vacancy_submission_path(submission))
+        expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
       end
     end
   end

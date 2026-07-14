@@ -202,5 +202,21 @@ class VacancySubmission < ApplicationRecord
         errors.add(:units, 'each unit must have a zip code') if u['zip'].blank?
       end
     end
+    unit_list.each { |u| validate_requirement_variables(u) }
+  end
+
+  # Requirements attached to a unit/voucher may reference a rule that needs a
+  # variable (e.g. bedroom count, HMIS projects). The draft form can submit
+  # such a rule with a blank variable, so guard it here rather than deferring
+  # the failure to approval time.
+  def validate_requirement_variables(unit)
+    Array(unit['requirements']).each do |req|
+      next if req['rule_id'].blank? || req['variable'].present?
+
+      rule = Rule.find_by(id: req['rule_id'])
+      next unless rule&.variable_requirement?
+
+      errors.add(:units, "#{rule.name} requires a value")
+    end
   end
 end
