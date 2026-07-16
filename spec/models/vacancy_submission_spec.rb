@@ -22,7 +22,7 @@ RSpec.describe VacancySubmission, type: :model do
           'program_id' => program.id,
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
-          'units' => [{ 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' }],
+          'units' => [{ 'building_id' => building.id, 'unit_number' => '1A' }],
         },
       )
       expect(vs).to be_valid
@@ -60,21 +60,35 @@ RSpec.describe VacancySubmission, type: :model do
       expect(vs.errors[:units]).to be_present
     end
 
-    it 'is invalid when a physical unit is missing required address fields' do
+    it 'is invalid when a physical unit is missing a building' do
       vs = described_class.new(
         status: 'awaiting_approval',
         draft_data: {
           'program_id' => program.id,
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
-          'units' => [{ 'street' => '', 'city' => '', 'state' => '', 'zip' => '' }],
+          'units' => [{ 'building_id' => '', 'unit_number' => '1A' }],
         },
       )
       expect(vs).not_to be_valid
       expect(vs.errors[:units]).to be_present
     end
 
-    it 'is invalid when one of multiple physical units is missing required address fields' do
+    it 'is invalid when a physical unit is missing a unit number' do
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [{ 'building_id' => building.id, 'unit_number' => '' }],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(vs.errors[:units]).to be_present
+    end
+
+    it 'is invalid when one of multiple physical units is missing its building or unit number' do
       vs = described_class.new(
         status: 'awaiting_approval',
         draft_data: {
@@ -82,8 +96,8 @@ RSpec.describe VacancySubmission, type: :model do
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
           'units' => [
-            { 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
-            { 'street' => '', 'city' => '', 'state' => '', 'zip' => '' },
+            { 'building_id' => building.id, 'unit_number' => '1A' },
+            { 'building_id' => '', 'unit_number' => '' },
           ],
         },
       )
@@ -101,7 +115,7 @@ RSpec.describe VacancySubmission, type: :model do
           'is_voucher' => false,
           'units' => [
             {
-              'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101',
+              'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
                 { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
               ]
@@ -123,7 +137,7 @@ RSpec.describe VacancySubmission, type: :model do
           'is_voucher' => false,
           'units' => [
             {
-              'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101',
+              'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
                 { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '2' },
               ]
@@ -144,7 +158,7 @@ RSpec.describe VacancySubmission, type: :model do
           'is_voucher' => false,
           'units' => [
             {
-              'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101',
+              'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
                 { 'rule_id' => non_variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
               ]
@@ -260,15 +274,30 @@ RSpec.describe VacancySubmission, type: :model do
   end
 
   describe '#site_display' do
-    it 'returns an array of formatted addresses for physical units' do
+    it 'returns the building name, unit number, and full address for each physical unit' do
+      elm = create(:building, name: 'Elm Apartments', address: '123 Main St', city: 'Boston', state: 'MA', zip_code: '02101')
+      oak = create(:building, name: 'Oak House', address: '456 Oak Ave', city: 'Cambridge', state: 'MA', zip_code: '02139')
       vs = described_class.new(draft_data: {
                                  'is_voucher' => false,
                                  'units' => [
-                                   { 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
-                                   { 'street' => '456 Oak Ave', 'unit_number' => '2B', 'city' => 'Cambridge', 'state' => 'MA', 'zip' => '02139' },
+                                   { 'building_id' => elm.id, 'unit_number' => '1A' },
+                                   { 'building_id' => oak.id, 'unit_number' => '2B' },
                                  ],
                                })
-      expect(vs.site_display).to eq(['123 Main St, Boston, MA, 02101', '456 Oak Ave, 2B, Cambridge, MA, 02139'])
+      expect(vs.site_display).to eq(
+        [
+          'Elm Apartments, Unit 1A, 123 Main St, Boston, MA 02101',
+          'Oak House, Unit 2B, 456 Oak Ave, Cambridge, MA 02139',
+        ],
+      )
+    end
+
+    it 'falls back to a placeholder when the building can no longer be found' do
+      vs = described_class.new(draft_data: {
+                                 'is_voucher' => false,
+                                 'units' => [{ 'building_id' => 0, 'unit_number' => '1A' }],
+                               })
+      expect(vs.site_display).to eq(['—'])
     end
 
     it 'returns an empty array for vouchers' do
@@ -486,11 +515,8 @@ RSpec.describe VacancySubmission, type: :model do
         before do
           physical_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'notes' => 'Newly renovated',
               'accessibility' => ['Elevator to unit'],
               'requirements' => [
@@ -501,19 +527,14 @@ RSpec.describe VacancySubmission, type: :model do
           physical_submission.save!
         end
 
-        it 'creates a Building matching the submitted address when none exists' do
-          expect { physical_submission.approve!(user: user) }.to change(Building, :count).by(1)
-          building = Building.last
-          expect(building.address).to eq('123 Main St')
-          expect(building.city).to eq('Boston')
-          expect(building.state).to eq('MA')
-          expect(building.zip_code).to eq('02101')
+        it 'does not create a new Building' do
+          expect { physical_submission.approve!(user: user) }.not_to change(Building, :count)
         end
 
-        it 'creates a Unit under the Building, associated to the new Voucher' do
+        it 'creates a Unit on the submitted existing Building, associated to the new Voucher' do
           expect { physical_submission.approve!(user: user) }.to change(Unit, :count).by(1)
           unit = Unit.last
-          expect(unit.building).to eq(Building.last)
+          expect(unit.building).to eq(building)
           voucher = Voucher.last
           expect(voucher.unit).to eq(unit)
         end
@@ -525,44 +546,31 @@ RSpec.describe VacancySubmission, type: :model do
           expect(unit_hash['voucher_id']).to eq(Voucher.last.id)
         end
 
-        it 'reuses an existing Building when its address/city/state/zip already matches' do
-          existing_building = create(
-            :building,
-            address: '123 Main St',
-            city: 'Boston',
-            state: 'MA',
-            zip_code: '02101',
-          )
-
-          expect { physical_submission.approve!(user: user) }.not_to change(Building, :count)
-          expect(Unit.last.building).to eq(existing_building)
-        end
-
-        it 'reuses one Building for two unit entries sharing an address' do
+        it 'creates a Unit on the submitted building for each unit entry, without creating buildings' do
           physical_submission.units = [
-            { 'street' => '123 Main St', 'unit_number' => '1A', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
-            { 'street' => '123 Main St', 'unit_number' => '1B', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
+            { 'building_id' => building.id, 'unit_number' => '1A' },
+            { 'building_id' => building.id, 'unit_number' => '1B' },
           ]
           physical_submission.save!
 
-          expect { physical_submission.approve!(user: user) }.to change(Building, :count).by(1).
-            and change(Unit, :count).by(2)
-          expect(Unit.last(2).map(&:building).uniq).to eq([Building.last])
+          expect { physical_submission.approve!(user: user) }.to change(Unit, :count).by(2).
+            and change(Building, :count).by(0)
+          expect(Unit.last(2).map(&:building).uniq).to eq([building])
         end
 
-        it 'uses unit_number for Unit#name when present' do
+        it 'raises RecordInvalid and rolls back when the submitted building cannot be found' do
+          physical_submission.units = [{ 'building_id' => 0, 'unit_number' => '1A' }]
+          physical_submission.save!
+
+          expect { physical_submission.approve!(user: user) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(physical_submission.reload.status).to eq('awaiting_approval')
+          expect(Unit.count).to eq(0)
+          expect(Voucher.count).to eq(0)
+        end
+
+        it 'uses unit_number for Unit#name' do
           physical_submission.approve!(user: user)
           expect(Unit.last.name).to eq('1A')
-        end
-
-        it 'falls back to a generated name when unit_number is blank' do
-          physical_submission.units = [
-            { 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' },
-          ]
-          physical_submission.save!
-
-          physical_submission.approve!(user: user)
-          expect(Unit.last.name).to be_present
         end
 
         it 'sets Unit#available to true' do
@@ -578,11 +586,8 @@ RSpec.describe VacancySubmission, type: :model do
         it 'sets Unit#elevator_accessible to true when accessibility includes Ground floor unit' do
           physical_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'accessibility' => ['Ground floor unit'],
             },
           ]
@@ -595,11 +600,8 @@ RSpec.describe VacancySubmission, type: :model do
         it 'sets Unit#elevator_accessible to false when accessibility does not include an elevator option' do
           physical_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'accessibility' => ['Wheelchair accessible unit'],
             },
           ]
@@ -630,11 +632,8 @@ RSpec.describe VacancySubmission, type: :model do
         it 'creates exactly one Rules::Wheelchair Requirement when both wheelchair accessibility options are selected' do
           physical_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'accessibility' => ['Wheelchair accessible unit', 'Wheelchair accessible building'],
             },
           ]
@@ -653,11 +652,8 @@ RSpec.describe VacancySubmission, type: :model do
           # matching consumes directly. Approval must not depend on a Rules::Elevator rule.
           physical_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'accessibility' => ['Elevator to unit', 'Ground floor unit'],
             },
           ]
@@ -680,11 +676,8 @@ RSpec.describe VacancySubmission, type: :model do
             it "creates the expected Requirement for bedrooms: #{bedroom_option}" do
               physical_submission.units = [
                 {
-                  'street' => '123 Main St',
+                  'building_id' => building.id,
                   'unit_number' => '1A',
-                  'city' => 'Boston',
-                  'state' => 'MA',
-                  'zip' => '02101',
                   'bedrooms' => bedroom_option,
                 },
               ]
@@ -710,11 +703,8 @@ RSpec.describe VacancySubmission, type: :model do
             it "creates the expected Requirement for age_limit: #{age_limit_option}" do
               physical_submission.units = [
                 {
-                  'street' => '123 Main St',
+                  'building_id' => building.id,
                   'unit_number' => '1A',
-                  'city' => 'Boston',
-                  'state' => 'MA',
-                  'zip' => '02101',
                   'age_limit' => age_limit_option,
                 },
               ]
@@ -732,11 +722,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates no Requirement when age_limit is N/A' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
                 'age_limit' => 'N/A',
               },
             ]
@@ -749,11 +736,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates no Requirement when age_limit is blank' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
               },
             ]
             physical_submission.save!
@@ -767,11 +751,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingAttribute with include_value: false for each shared space' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
                 'shared_spaces' => ['Laundry room', 'Common kitchen'],
               },
             ]
@@ -787,11 +768,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingAttribute with include_value: false for each amenity' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
                 'amenities' => ['Dishwasher', 'Air conditioning'],
               },
             ]
@@ -807,11 +785,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingAttribute with include_value: true for each name/value attribute, skipping blank names' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
                 'attributes' => [
                   { 'name' => 'Heat', 'value' => 'Gas' },
                   { 'name' => '', 'value' => 'Should be skipped' },
@@ -832,11 +807,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'skips attributes with a blank value instead of raising' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
                 'attributes' => [
                   { 'name' => 'Heat', 'value' => 'Gas' },
                   { 'name' => 'Should be skipped', 'value' => '' },
@@ -855,11 +827,8 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingMediaLink for each media link, skipping blank urls, defaulting blank labels to Photo' do
             physical_submission.units = [
               {
-                'street' => '123 Main St',
+                'building_id' => building.id,
                 'unit_number' => '1A',
-                'city' => 'Boston',
-                'state' => 'MA',
-                'zip' => '02101',
                 'media_links' => [
                   { 'url' => 'https://example.com/photo.jpg', 'label' => 'Kitchen' },
                   { 'url' => 'https://example.com/photo2.jpg', 'label' => '' },
@@ -895,11 +864,8 @@ RSpec.describe VacancySubmission, type: :model do
         it 'raises RecordInvalid and rolls back everything when a unit ready date is unparseable' do
           failing_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'date_ready' => 'not-a-date',
             },
           ]
@@ -918,11 +884,8 @@ RSpec.describe VacancySubmission, type: :model do
           Rule.where(type: 'Rules::Wheelchair').destroy_all
           failing_submission.units = [
             {
-              'street' => '123 Main St',
+              'building_id' => building.id,
               'unit_number' => '1A',
-              'city' => 'Boston',
-              'state' => 'MA',
-              'zip' => '02101',
               'accessibility' => ['Wheelchair accessible unit'],
             },
           ]
@@ -951,6 +914,16 @@ RSpec.describe VacancySubmission, type: :model do
         end.to change(VacancySubmissionNote, :count).by(2)
         types = VacancySubmissionNote.last(2).map(&:note_type)
         expect(types).to include('reviewer_note', 'status_change')
+      end
+
+      it 'returns a submission whose units predate the building requirement without validating them' do
+        legacy = create(:vacancy_submission, status: 'awaiting_approval')
+        legacy.units = [{ 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' }]
+        legacy.save!(validate: false)
+
+        expect do
+          legacy.return_for_changes!(body: 'Please pick a building.', user: user)
+        end.to change { legacy.reload.status }.to('return_changes_requested')
       end
     end
 

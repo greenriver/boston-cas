@@ -13,6 +13,7 @@ import RoleManagerController from './controllers/role_manager_controller'
 import VacancySubmissionFormController from './controllers/vacancy_submission_form_controller'
 import RequirementsController from './controllers/requirements_controller'
 import VacancyUnitAttributesController from './controllers/vacancy_unit_attributes_controller'
+import VacancyUnitBuildingController from './controllers/vacancy_unit_building_controller'
 import VacancyUnitMediaLinksController from './controllers/vacancy_unit_media_links_controller'
 import VacancyUnitRequirementsController from './controllers/vacancy_unit_requirements_controller'
 import VacancyUnitsController from './controllers/vacancy_units_controller'
@@ -57,6 +58,7 @@ application.register('role-manager', RoleManagerController)
 application.register('vacancy-submission-form', VacancySubmissionFormController)
 application.register('requirements', RequirementsController)
 application.register('vacancy-unit-attributes', VacancyUnitAttributesController)
+application.register('vacancy-unit-building', VacancyUnitBuildingController)
 application.register('vacancy-unit-media-links', VacancyUnitMediaLinksController)
 application.register('vacancy-unit-requirements', VacancyUnitRequirementsController)
 application.register('vacancy-units', VacancyUnitsController)

@@ -1,42 +1,39 @@
 - readonly = local_assigns.fetch(:readonly, false)
+- default_building_id = local_assigns.fetch(:default_building_id, nil)
+- confidential = local_assigns.fetch(:confidential, false)
 - if readonly
+  - building = Building.find_by(id: unit['building_id'])
   %dl.row.g-2.mb-3
     .col-sm-6
-      %dt.vs-field-label Address
+      %dt.vs-field-label Building
       %dd.vs-field-value.mb-0
-        %address.mb-0
-          = unit['street'].presence || '—'
-          - if unit['unit_number'].present?
-            %br/
-            = unit['unit_number']
+        - if building
+          = building.name
           %br/
-          = "#{[unit['city'], unit['state']].select(&:present?).join(', ')} #{unit['zip']}".strip.presence || '—'
+          = building.building_address.join(', ').presence || '—'
+        - else
+          = '—'
+    .col-sm-6
+      %dt.vs-field-label Unit Number
+      %dd.vs-field-value.mb-0= unit['unit_number'].presence || '—'
 - else
-  %fieldset.mb-4
+  - selected_building_id = unit['building_id'].presence || default_building_id
+  %fieldset.mb-4{data: { controller: 'vacancy-unit-building' }}
     %legend
       Unit Address
     .mb-3
       %label.form-label.fw-semibold
-        Site Address
+        Building
         %abbr{title: 'required'} *
-      %input.form-control{ name: "vacancy_submission[units][#{index}][street]", value: unit['street'], placeholder: 'Street Address', required: true }
-    .row.mb-3
-      .col-md-6
-        %label.form-label Unit Number
-        %input.form-control{ name: "vacancy_submission[units][#{index}][unit_number]", value: unit['unit_number'], placeholder: 'Number' }
-      .col-md-6
-        %label.form-label
-          City
-          %abbr{title: 'required'} *
-        %input.form-control{ name: "vacancy_submission[units][#{index}][city]", value: unit['city'], placeholder: 'City', required: true }
-    .row.mb-3
-      .col-md-6
-        %label.form-label
-          State
-          %abbr{title: 'required'} *
-        %input.form-control{ name: "vacancy_submission[units][#{index}][state]", value: unit['state'], required: true }
-      .col-md-6
-        %label.form-label
-          Zip Code
-          %abbr{title: 'required'} *
-        %input.form-control{ name: "vacancy_submission[units][#{index}][zip]", value: unit['zip'], placeholder: '99999', required: true }
+      %select.form-select.select2{ name: "vacancy_submission[units][#{index}][building_id]", required: true, style: 'width: 100%;', data: { 'vacancy-unit-building-target': 'select', action: 'change->vacancy-unit-building#render' } }
+        %option{value: ''} Select a building…
+        = vacancy_building_select_options(selected_building_id)
+      .mt-2.small{data: { 'vacancy-unit-building-target': 'display' }, hidden: true}
+    .mb-3
+      - if confidential
+        .alert.alert-warning.py-2.small
+          This program is confidential, do not enter a real address as the unit number
+      %label.form-label
+        Unit Number
+        %abbr{title: 'required'} *
+      %input.form-control{ name: "vacancy_submission[units][#{index}][unit_number]", value: unit['unit_number'], placeholder: 'Number', required: true }

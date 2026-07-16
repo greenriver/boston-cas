@@ -225,7 +225,7 @@ class VacancySubmissionsController < ApplicationController
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id, :notes,
       units: [
-        :name, :street, :unit_number, :city, :state, :zip,
+        :name, :building_id, :unit_number,
         :date_ready, :age_limit, :bedrooms, :notes,
         shared_spaces: [],
         amenities: [],

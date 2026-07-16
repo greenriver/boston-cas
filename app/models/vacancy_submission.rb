@@ -98,13 +98,14 @@ class VacancySubmission < ApplicationRecord
     return ['N/A'] if voucher?
 
     Array(units).map do |u|
+      building = Building.find_by(id: u['building_id'])
+      next '—' if building.nil?
+
       [
-        u['street'],
-        u['unit_number'],
-        u['city'],
-        u['state'],
-        u['zip'],
-      ].compact.reject(&:blank?).join(', ').presence
+        building.name,
+        ("Unit #{u['unit_number']}" if u['unit_number'].present?),
+        *building.building_address,
+      ].compact.reject(&:blank?).join(', ').presence || '—'
     end
   end
 
@@ -160,7 +161,12 @@ class VacancySubmission < ApplicationRecord
 
   def return_for_changes!(body:, user:)
     transaction do
-      update!(status: 'return_changes_requested')
+      # Returning is how a reviewer sends a submission back to be fixed, so it
+      # must work even when the draft is invalid (e.g. units captured under an
+      # older address mechanism). Only the reviewer note is required here; that
+      # is enforced in the controller.
+      self.status = 'return_changes_requested'
+      save!(validate: false)
       vacancy_submission_notes.create!(
         user: user,
         note_type: 'reviewer_note',
@@ -203,10 +209,8 @@ class VacancySubmission < ApplicationRecord
       unit_list.each { |u| errors.add(:units, 'each voucher must have a name') if u['name'].blank? }
     else
       unit_list.each do |u|
-        errors.add(:units, 'each unit must have a street address') if u['street'].blank?
-        errors.add(:units, 'each unit must have a city') if u['city'].blank?
-        errors.add(:units, 'each unit must have a state') if u['state'].blank?
-        errors.add(:units, 'each unit must have a zip code') if u['zip'].blank?
+        errors.add(:units, 'each unit must have a building') if u['building_id'].blank?
+        errors.add(:units, 'each unit must have a unit number') if u['unit_number'].blank?
       end
     end
     unit_list.each { |u| validate_requirement_variables(u) }

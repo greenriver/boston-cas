@@ -57,12 +57,11 @@ module VacancySubmissions
     end
 
     def resolve_building_for(unit_hash)
-      Building.find_or_create_by!(
-        address: unit_hash['street'],
-        city: unit_hash['city'],
-        state: unit_hash['state'],
-        zip_code: unit_hash['zip'],
-      ) { |b| b.name = unit_hash['street'] }
+      building = Building.find_by(id: unit_hash['building_id'])
+      return building if building.present?
+
+      vacancy_submission.errors.add(:base, 'Selected building could not be found')
+      raise ActiveRecord::RecordInvalid.new(vacancy_submission)
     end
 
     def build_unit_for(unit_hash)

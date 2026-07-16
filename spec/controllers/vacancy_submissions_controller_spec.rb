@@ -62,7 +62,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
   describe 'POST #create' do
     let(:program)     { create(:program) }
-    let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: create(:building)) }
+    let(:building)    { create(:building) }
+    let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: building) }
 
     let(:valid_params) do
       {
@@ -71,11 +72,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           sub_program_id: sub_program.id,
           units: {
             '0' => {
-              street: '123 Main St',
+              building_id: building.id,
               unit_number: '1A',
-              city: 'Boston',
-              state: 'MA',
-              zip: '02101',
             },
           },
         },
@@ -143,11 +141,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
               sub_program_id: sub_program.id,
               units: {
                 '0' => {
-                  street: '123 Main St',
+                  building_id: building.id,
                   unit_number: '1A',
-                  city: 'Boston',
-                  state: 'MA',
-                  zip: '02101',
                   requirements_attributes: {
                     '0' => { rule_id: variable_rule.id.to_s, positive: 'true', variable: '' },
                   },
@@ -158,6 +153,43 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         end.not_to change(VacancySubmission, :count)
         expect(response).to render_template(:new)
       end
+    end
+  end
+
+  describe 'GET #sub_program_section (vacancy section)' do
+    render_views
+
+    let(:program)  { create(:program) }
+    let(:building) { create(:building, name: 'Maple Court', address: '10 Maple St', city: 'Boston', state: 'MA', zip_code: '02118') }
+
+    def get_vacancy_section(sub_program)
+      get :sub_program_section, params: { section: 'vacancy', sub_program_id: sub_program.id }
+    end
+
+    it 'renders a building select2 dropdown listing existing buildings by name and street' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building)
+      get_vacancy_section(sub_program)
+      expect(response.body).to include('vacancy_submission[units][0][building_id]')
+      expect(response.body).to include('select2')
+      expect(response.body).to include('Maple Court (10 Maple St)')
+    end
+
+    it 'pre-selects the sub-program building by default' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building)
+      get_vacancy_section(sub_program)
+      expect(response.body).to match(/value="#{building.id}"[^>]*selected|selected[^>]*value="#{building.id}"/)
+    end
+
+    it 'shows the confidential warning when the sub-program is confidential' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building, confidential: true)
+      get_vacancy_section(sub_program)
+      expect(response.body).to include('This program is confidential, do not enter a real address as the unit number')
+    end
+
+    it 'omits the confidential warning when the sub-program is not confidential' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building, confidential: false)
+      get_vacancy_section(sub_program)
+      expect(response.body).not_to include('This program is confidential')
     end
   end
 
@@ -188,7 +220,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       let(:active_submission) { create(:vacancy_submission, :active) }
 
       before do
-        active_submission.units = [{ 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101', 'unit_id' => unit.id, 'voucher_id' => 999 }]
+        active_submission.units = [{ 'building_id' => unit.building_id, 'unit_number' => '1A', 'unit_id' => unit.id, 'voucher_id' => 999 }]
         active_submission.save!
       end
 
@@ -240,9 +272,11 @@ RSpec.describe VacancySubmissionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:program)     { create(:program) }
-    let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: create(:building)) }
-    let!(:submission) { create(:vacancy_submission, :changes_requested, the_program: program, the_sub_program: sub_program) }
+    let(:program)      { create(:program) }
+    let(:building)     { create(:building) }
+    let(:new_building) { create(:building) }
+    let(:sub_program)  { create(:sub_program, program: program, program_type: 'Project-Based', building: building) }
+    let!(:submission)  { create(:vacancy_submission, :changes_requested, the_program: program, the_sub_program: sub_program) }
 
     let(:update_params) do
       {
@@ -252,10 +286,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           sub_program_id: sub_program.id,
           units: {
             '0' => {
-              street: '456 New St',
-              city: 'Boston',
-              state: 'MA',
-              zip: '02101',
+              building_id: new_building.id,
+              unit_number: '2B',
             },
           },
         },
@@ -264,7 +296,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
     it 'updates the submission draft_data' do
       patch :update, params: update_params
-      expect(submission.reload.draft_data['units'][0]['street']).to eq('456 New St')
+      expect(submission.reload.draft_data['units'][0]['building_id'].to_i).to eq(new_building.id)
     end
 
     it 'creates a note recording the address change' do
