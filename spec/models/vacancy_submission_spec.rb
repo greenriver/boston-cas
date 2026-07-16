@@ -897,6 +897,88 @@ RSpec.describe VacancySubmission, type: :model do
           expect(Unit.count).to eq(0)
         end
       end
+
+      context 'weighting rules' do
+        # The :program factory uses MatchRoutes::Default.first, so a WeightingRule on
+        # that route applies to the submission's sub-program (match_route is through the
+        # program). This mirrors how opportunities_controller/vouchers_controller apply
+        # weighting rules when they create vouchers.
+        let(:route) { MatchRoutes::Default.first }
+
+        context 'when the route has an active weighting rule' do
+          let!(:weighting_rule_rule) { create(:homeless) }
+          let!(:weighting_rule) do
+            wr = create(:weighting_rule, route: route)
+            Requirement.create!(requirer: wr, rule: weighting_rule_rule)
+            wr
+          end
+
+          let(:physical_submission) do
+            create(
+              :vacancy_submission,
+              status: 'awaiting_approval',
+              the_program: program,
+              the_sub_program: sub_program,
+            )
+          end
+
+          it 'copies the weighting rule requirements onto the created Voucher' do
+            physical_submission.approve!(user: user)
+            expect(Voucher.last.requirements.map(&:rule_id)).to include(weighting_rule_rule.id)
+          end
+
+          it 'increments the weighting rule applied_to counter once per created voucher' do
+            expect { physical_submission.approve!(user: user) }.to change { weighting_rule.reload.applied_to }.by(1)
+          end
+
+          it 'applies weighting rules to Tenant-Based (voucher-only) submissions too' do
+            voucher_submission = create(
+              :vacancy_submission,
+              :voucher,
+              status: 'awaiting_approval',
+              the_program: program,
+              the_sub_program: tenant_based_sub_program,
+            )
+
+            voucher_submission.approve!(user: user)
+            expect(Voucher.last.requirements.map(&:rule_id)).to include(weighting_rule_rule.id)
+            expect(weighting_rule.reload.applied_to).to eq(1)
+          end
+
+          it 'applies weighting rules once per voucher for multi-unit submissions' do
+            physical_submission.units = [
+              { 'building_id' => building.id, 'unit_number' => '1A' },
+              { 'building_id' => building.id, 'unit_number' => '1B' },
+            ]
+            physical_submission.save!
+
+            expect { physical_submission.approve!(user: user) }.to change { weighting_rule.reload.applied_to }.by(2)
+            expect(Voucher.last(2).map { |v| v.requirements.map(&:rule_id) }).to all(include(weighting_rule_rule.id))
+          end
+
+          it 'does not apply weighting rules when the sub-program has them disabled' do
+            sub_program.update!(weighting_rules_active: false)
+
+            expect { physical_submission.approve!(user: user) }.not_to(change { weighting_rule.reload.applied_to })
+            expect(Voucher.last.requirements.map(&:rule_id)).not_to include(weighting_rule_rule.id)
+          end
+        end
+
+        context 'when the route has no weighting rules' do
+          let(:physical_submission) do
+            create(
+              :vacancy_submission,
+              status: 'awaiting_approval',
+              the_program: program,
+              the_sub_program: sub_program,
+            )
+          end
+
+          it 'approves without error and creates the voucher' do
+            expect { physical_submission.approve!(user: user) }.to change(Voucher, :count).by(1)
+          end
+        end
+      end
     end
 
     describe '#return_for_changes!' do

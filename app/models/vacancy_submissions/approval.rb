@@ -44,13 +44,19 @@ module VacancySubmissions
     end
 
     def create_voucher!(sub_program, unit_hash, unit: nil)
-      voucher = Voucher.create!(
+      options = {
         sub_program: sub_program,
         creator: user,
         unit: unit,
         available: false,
         date_available: resolved_date(unit_hash),
-      )
+      }
+      # Apply match-route weighting rules just as opportunities_controller and
+      # vouchers_controller do: pull the next rule for the route, increment its
+      # round-robin counter, and attach copies of its requirements to the voucher.
+      weighting_requirements = WeightingRule.requirements_and_increment!(sub_program)
+      options[:requirements] = weighting_requirements if weighting_requirements.present?
+      voucher = Voucher.create!(options)
       voucher.create_opportunity!(available: false, available_candidate: false)
       attach_requirements!(unit || voucher, unit_hash)
       voucher
