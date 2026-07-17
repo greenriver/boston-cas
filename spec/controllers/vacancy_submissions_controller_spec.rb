@@ -106,6 +106,20 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       expect(response).to redirect_to(vacancy_submissions_path)
     end
 
+    it 'notifies reviewers that a submission is awaiting review' do
+      notifier = instance_double(VacancySubmissions::Notifier)
+      allow(VacancySubmissions::Notifier).to receive(:new).and_return(notifier)
+      expect(notifier).to receive(:notify_submitted!)
+
+      post :create, params: valid_params
+    end
+
+    it 'does not notify when the submission is invalid' do
+      expect(VacancySubmissions::Notifier).not_to receive(:new)
+
+      post :create, params: { vacancy_submission: { program_id: program.id } }
+    end
+
     context 'with a Tenant-Based sub-program (voucher)' do
       let(:voucher_sp) { create(:sub_program, program: program, program_type: 'Tenant-Based') }
 
@@ -407,6 +421,20 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       expect(types).to include('reviewer_note', 'status_change')
     end
 
+    it 'notifies the submitter that changes were requested' do
+      notifier = instance_double(VacancySubmissions::Notifier)
+      allow(VacancySubmissions::Notifier).to receive(:new).and_return(notifier)
+      expect(notifier).to receive(:notify_changes_requested!)
+
+      post :return_submission, params: { id: submission.id, body: 'Fix it.' }
+    end
+
+    it 'does not notify when the body is blank' do
+      expect(VacancySubmissions::Notifier).not_to receive(:new)
+
+      post :return_submission, params: { id: submission.id, body: '' }
+    end
+
     it 'redirects with alert when body is blank' do
       post :return_submission, params: { id: submission.id, body: '' }
       expect(response).to redirect_to(vacancy_submission_path(submission))
@@ -451,6 +479,14 @@ RSpec.describe VacancySubmissionsController, type: :controller do
     it 'redirects to the show page' do
       post :resubmit, params: { id: submission.id }
       expect(response).to redirect_to(vacancy_submission_path(submission))
+    end
+
+    it 'notifies reviewers that the submission was resubmitted' do
+      notifier = instance_double(VacancySubmissions::Notifier)
+      allow(VacancySubmissions::Notifier).to receive(:new).and_return(notifier)
+      expect(notifier).to receive(:notify_resubmitted!)
+
+      post :resubmit, params: { id: submission.id }
     end
 
     it 'redirects with alert when not resubmittable' do
