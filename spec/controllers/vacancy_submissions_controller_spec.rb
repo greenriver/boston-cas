@@ -381,9 +381,12 @@ RSpec.describe VacancySubmissionsController, type: :controller do
     end
 
     context 'when approval fails' do
-      it 'surfaces a RecordInvalid as a flash alert and leaves the status unchanged' do
-        allow_any_instance_of(VacancySubmission).to receive(:approve!).
-          and_raise(ActiveRecord::RecordInvalid.new(submission))
+      it 'surfaces a RecordInvalid as a flash alert and rolls back the status' do
+        # Drive a real approval failure (no stubbing): a unit whose building can't
+        # be found makes Approval raise RecordInvalid, so this exercises the real
+        # rescue path and the reload genuinely proves the transaction rolled back.
+        submission.units = [{ 'building_id' => 0, 'unit_number' => '1A' }]
+        submission.save!
 
         post :approve, params: { id: submission.id }
 
@@ -393,13 +396,16 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       end
 
       it 'rescues an unexpected error and surfaces a generic alert instead of raising' do
-        allow_any_instance_of(VacancySubmission).to receive(:approve!).
-          and_raise(StandardError.new('boom'))
+        # The real approval path converts its domain failures into RecordInvalid, so
+        # an arbitrary non-domain error (e.g. an infrastructure fault) can only be
+        # produced with a stub. This is the one branch that needs a seam; the deeper
+        # fix would be making #approve! injectable so we needn't stub the class.
+        allow(VacancySubmission).to receive(:find).and_return(submission)
+        allow(submission).to receive(:approve!).and_raise(StandardError.new('boom'))
 
         expect { post :approve, params: { id: submission.id } }.not_to raise_error
         expect(response).to redirect_to(vacancy_submission_path(submission))
         expect(flash[:alert]).to be_present
-        expect(submission.reload.status).to eq('awaiting_approval')
       end
     end
   end

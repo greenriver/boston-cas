@@ -629,6 +629,40 @@ RSpec.describe VacancySubmission, type: :model do
           expect(voucher.requirements.count).to eq(0)
         end
 
+        it 'creates an exclusionary Requirement when positive is submitted as false' do
+          physical_submission.units = [
+            {
+              'building_id' => building.id,
+              'unit_number' => '1A',
+              'requirements' => [
+                { 'rule_id' => rule.id.to_s, 'positive' => 'false', 'variable' => '' },
+              ],
+            },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          requirement = Unit.last.requirements.find_by(rule_id: rule.id)
+          expect(requirement.positive).to eq(false)
+        end
+
+        it 'defaults a Requirement to positive when positive is omitted' do
+          physical_submission.units = [
+            {
+              'building_id' => building.id,
+              'unit_number' => '1A',
+              'requirements' => [
+                { 'rule_id' => rule.id.to_s, 'variable' => '' },
+              ],
+            },
+          ]
+          physical_submission.save!
+
+          physical_submission.approve!(user: user)
+          requirement = Unit.last.requirements.find_by(rule_id: rule.id)
+          expect(requirement.positive).to eq(true)
+        end
+
         it 'creates exactly one Rules::Wheelchair Requirement when both wheelchair accessibility options are selected' do
           physical_submission.units = [
             {
