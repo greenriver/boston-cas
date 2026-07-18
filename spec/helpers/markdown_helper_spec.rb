@@ -39,5 +39,30 @@ RSpec.describe MarkdownHelper, type: :helper do
       expect(helper.render_markdown(nil)).to eq('')
       expect(helper.render_markdown(nil)).to be_html_safe
     end
+
+    describe 'HTML safety' do
+      it 'escapes raw HTML tags instead of rendering them' do
+        html = helper.render_markdown('<script>alert(1)</script>')
+        expect(html).not_to include('<script>')
+        expect(html).to include('&lt;script&gt;')
+      end
+
+      it 'escapes an injected img tag so it renders as inert text, not an element' do
+        html = helper.render_markdown('<img src=x onerror=alert(1)>')
+        expect(html).not_to include('<img')
+        expect(html).to include('&lt;img')
+      end
+
+      it 'does not emit a javascript: link from markdown link syntax' do
+        html = helper.render_markdown('[click me](javascript:alert(document.cookie))')
+        expect(html).not_to include('href="javascript:')
+        expect(html).not_to include('<a ')
+      end
+
+      it 'does not emit an image tag from markdown image syntax' do
+        html = helper.render_markdown('![pixel](https://attacker.example/track.gif)')
+        expect(html).not_to include('<img')
+      end
+    end
   end
 end
