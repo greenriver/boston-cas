@@ -86,6 +86,7 @@ class VacancySubmissionsController < ApplicationController
         note_type: 'status_change',
         body: 'Initial submission.',
       )
+      VacancySubmissions::Notifier.new(@vacancy_submission).notify_submitted!
       redirect_to vacancy_submissions_path, notice: 'Vacancy submission created.'
     else
       load_form_data
@@ -169,6 +170,7 @@ class VacancySubmissionsController < ApplicationController
     return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be returned in its current state.' unless @submission.returnable?
 
     @submission.return_for_changes!(body: params[:body], user: current_user)
+    VacancySubmissions::Notifier.new(@submission).notify_changes_requested!
     redirect_to vacancy_submission_path(@submission), notice: 'Submission returned for changes.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to vacancy_submission_path(@submission), alert: "Could not return submission: #{e.message}"
@@ -178,6 +180,7 @@ class VacancySubmissionsController < ApplicationController
     return redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be resubmitted in its current state.' unless @submission.resubmittable?
 
     @submission.resubmit!(user: current_user)
+    VacancySubmissions::Notifier.new(@submission).notify_resubmitted!
     redirect_to vacancy_submission_path(@submission), notice: 'Submission resubmitted for review.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to vacancy_submission_path(@submission), alert: "Could not resubmit: #{e.message}"
@@ -225,7 +228,7 @@ class VacancySubmissionsController < ApplicationController
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id, :notes,
       units: [
-        :name, :street, :unit_number, :city, :state, :zip,
+        :name, :building_id, :unit_number,
         :date_ready, :age_limit, :bedrooms, :notes,
         shared_spaces: [],
         amenities: [],

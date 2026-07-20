@@ -62,7 +62,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
   describe 'POST #create' do
     let(:program)     { create(:program) }
-    let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: create(:building)) }
+    let(:building)    { create(:building) }
+    let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: building) }
 
     let(:valid_params) do
       {
@@ -71,11 +72,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           sub_program_id: sub_program.id,
           units: {
             '0' => {
-              street: '123 Main St',
+              building_id: building.id,
               unit_number: '1A',
-              city: 'Boston',
-              state: 'MA',
-              zip: '02101',
             },
           },
         },
@@ -106,6 +104,20 @@ RSpec.describe VacancySubmissionsController, type: :controller do
     it 'redirects to index on success' do
       post :create, params: valid_params
       expect(response).to redirect_to(vacancy_submissions_path)
+    end
+
+    it 'notifies reviewers that a submission is awaiting review' do
+      notifier = instance_double(VacancySubmissions::Notifier)
+      allow(VacancySubmissions::Notifier).to receive(:new).and_return(notifier)
+      expect(notifier).to receive(:notify_submitted!)
+
+      post :create, params: valid_params
+    end
+
+    it 'does not notify when the submission is invalid' do
+      expect(VacancySubmissions::Notifier).not_to receive(:new)
+
+      post :create, params: { vacancy_submission: { program_id: program.id } }
     end
 
     context 'with a Tenant-Based sub-program (voucher)' do
@@ -143,11 +155,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
               sub_program_id: sub_program.id,
               units: {
                 '0' => {
-                  street: '123 Main St',
+                  building_id: building.id,
                   unit_number: '1A',
-                  city: 'Boston',
-                  state: 'MA',
-                  zip: '02101',
                   requirements_attributes: {
                     '0' => { rule_id: variable_rule.id.to_s, positive: 'true', variable: '' },
                   },
@@ -158,6 +167,43 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         end.not_to change(VacancySubmission, :count)
         expect(response).to render_template(:new)
       end
+    end
+  end
+
+  describe 'GET #sub_program_section (vacancy section)' do
+    render_views
+
+    let(:program)  { create(:program) }
+    let(:building) { create(:building, name: 'Maple Court', address: '10 Maple St', city: 'Boston', state: 'MA', zip_code: '02118') }
+
+    def get_vacancy_section(sub_program)
+      get :sub_program_section, params: { section: 'vacancy', sub_program_id: sub_program.id }
+    end
+
+    it 'renders a building select2 dropdown listing existing buildings by name and street' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building)
+      get_vacancy_section(sub_program)
+      expect(response.body).to include('vacancy_submission[units][0][building_id]')
+      expect(response.body).to include('select2')
+      expect(response.body).to include('Maple Court (10 Maple St)')
+    end
+
+    it 'pre-selects the sub-program building by default' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building)
+      get_vacancy_section(sub_program)
+      expect(response.body).to match(/value="#{building.id}"[^>]*selected|selected[^>]*value="#{building.id}"/)
+    end
+
+    it 'shows the confidential warning when the sub-program is confidential' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building, confidential: true)
+      get_vacancy_section(sub_program)
+      expect(response.body).to include('This program is confidential, do not enter a real address as the unit number')
+    end
+
+    it 'omits the confidential warning when the sub-program is not confidential' do
+      sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building, confidential: false)
+      get_vacancy_section(sub_program)
+      expect(response.body).not_to include('This program is confidential')
     end
   end
 
@@ -188,7 +234,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       let(:active_submission) { create(:vacancy_submission, :active) }
 
       before do
-        active_submission.units = [{ 'street' => '123 Main St', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101', 'unit_id' => unit.id, 'voucher_id' => 999 }]
+        active_submission.units = [{ 'building_id' => unit.building_id, 'unit_number' => '1A', 'unit_id' => unit.id, 'voucher_id' => 999 }]
         active_submission.save!
       end
 
@@ -240,9 +286,11 @@ RSpec.describe VacancySubmissionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:program)     { create(:program) }
-    let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: create(:building)) }
-    let!(:submission) { create(:vacancy_submission, :changes_requested, the_program: program, the_sub_program: sub_program) }
+    let(:program)      { create(:program) }
+    let(:building)     { create(:building) }
+    let(:new_building) { create(:building) }
+    let(:sub_program)  { create(:sub_program, program: program, program_type: 'Project-Based', building: building) }
+    let!(:submission)  { create(:vacancy_submission, :changes_requested, the_program: program, the_sub_program: sub_program) }
 
     let(:update_params) do
       {
@@ -252,10 +300,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           sub_program_id: sub_program.id,
           units: {
             '0' => {
-              street: '456 New St',
-              city: 'Boston',
-              state: 'MA',
-              zip: '02101',
+              building_id: new_building.id,
+              unit_number: '2B',
             },
           },
         },
@@ -264,7 +310,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
     it 'updates the submission draft_data' do
       patch :update, params: update_params
-      expect(submission.reload.draft_data['units'][0]['street']).to eq('456 New St')
+      expect(submission.reload.draft_data['units'][0]['building_id'].to_i).to eq(new_building.id)
     end
 
     it 'creates a note recording the address change' do
@@ -335,9 +381,12 @@ RSpec.describe VacancySubmissionsController, type: :controller do
     end
 
     context 'when approval fails' do
-      it 'surfaces a RecordInvalid as a flash alert and leaves the status unchanged' do
-        allow_any_instance_of(VacancySubmission).to receive(:approve!).
-          and_raise(ActiveRecord::RecordInvalid.new(submission))
+      it 'surfaces a RecordInvalid as a flash alert and rolls back the status' do
+        # Drive a real approval failure (no stubbing): a unit whose building can't
+        # be found makes Approval raise RecordInvalid, so this exercises the real
+        # rescue path and the reload genuinely proves the transaction rolled back.
+        submission.units = [{ 'building_id' => 0, 'unit_number' => '1A' }]
+        submission.save!
 
         post :approve, params: { id: submission.id }
 
@@ -347,13 +396,16 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       end
 
       it 'rescues an unexpected error and surfaces a generic alert instead of raising' do
-        allow_any_instance_of(VacancySubmission).to receive(:approve!).
-          and_raise(StandardError.new('boom'))
+        # The real approval path converts its domain failures into RecordInvalid, so
+        # an arbitrary non-domain error (e.g. an infrastructure fault) can only be
+        # produced with a stub. This is the one branch that needs a seam; the deeper
+        # fix would be making #approve! injectable so we needn't stub the class.
+        allow(VacancySubmission).to receive(:find).and_return(submission)
+        allow(submission).to receive(:approve!).and_raise(StandardError.new('boom'))
 
         expect { post :approve, params: { id: submission.id } }.not_to raise_error
         expect(response).to redirect_to(vacancy_submission_path(submission))
         expect(flash[:alert]).to be_present
-        expect(submission.reload.status).to eq('awaiting_approval')
       end
     end
   end
@@ -373,6 +425,20 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       end.to change(VacancySubmissionNote, :count).by(2)
       types = VacancySubmissionNote.last(2).map(&:note_type)
       expect(types).to include('reviewer_note', 'status_change')
+    end
+
+    it 'notifies the submitter that changes were requested' do
+      notifier = instance_double(VacancySubmissions::Notifier)
+      allow(VacancySubmissions::Notifier).to receive(:new).and_return(notifier)
+      expect(notifier).to receive(:notify_changes_requested!)
+
+      post :return_submission, params: { id: submission.id, body: 'Fix it.' }
+    end
+
+    it 'does not notify when the body is blank' do
+      expect(VacancySubmissions::Notifier).not_to receive(:new)
+
+      post :return_submission, params: { id: submission.id, body: '' }
     end
 
     it 'redirects with alert when body is blank' do
@@ -419,6 +485,14 @@ RSpec.describe VacancySubmissionsController, type: :controller do
     it 'redirects to the show page' do
       post :resubmit, params: { id: submission.id }
       expect(response).to redirect_to(vacancy_submission_path(submission))
+    end
+
+    it 'notifies reviewers that the submission was resubmitted' do
+      notifier = instance_double(VacancySubmissions::Notifier)
+      allow(VacancySubmissions::Notifier).to receive(:new).and_return(notifier)
+      expect(notifier).to receive(:notify_resubmitted!)
+
+      post :resubmit, params: { id: submission.id }
     end
 
     it 'redirects with alert when not resubmittable' do

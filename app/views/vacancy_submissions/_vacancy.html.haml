@@ -2,4 +2,4 @@
 - if is_voucher
   = render 'vacancy_submissions/vacancy_vouchers', unit_list: unit_list
 - else
-  = render 'vacancy_submissions/vacancy_units', unit_list: unit_list
+  = render 'vacancy_submissions/vacancy_units', unit_list: unit_list, default_building_id: sub_program&.building_id, confidential: sub_program&.confidential?

@@ -27,7 +27,7 @@ FactoryBot.define do
       if is_voucher
         data['units'] = [{ 'name' => 'Voucher #1' }]
       else
-        data['units'] = [{ 'street' => '123 Main St', 'unit_number' => '1A', 'city' => 'Boston', 'state' => 'MA', 'zip' => '02101' }]
+        data['units'] = [{ 'building_id' => the_sub_program.building_id, 'unit_number' => '1A' }]
       end
       data
     end
