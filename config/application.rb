@@ -20,48 +20,17 @@ Bundler.require(*Rails.groups)
 
 module BostonCa
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    # Load framework defaults for the current Rails version. Overrides below are
+    # intentional deviations from these defaults.
+    config.load_defaults 8.1
 
-    # Add autoload paths to load path (Rails 7.1 default)
-    config.add_autoload_paths_to_load_path = false
-
-    # Enable raising on invalid cache expiration times
-    config.active_support.raise_on_invalid_cache_expiration_time = true
-
-    # Use SQLCommenter format for query log tags
-    config.active_record.query_log_tags_format = :sqlcommenter
-
-    # Enable precompilation of filter parameters for better performance
-    config.precompile_filter_parameters = true
-
-    # Enable raising on assignment to attr_readonly attributes
-    config.active_record.raise_on_assign_to_attr_readonly = true
-
-    # Enable validating only parent-related columns for presence
-    config.active_record.belongs_to_required_validates_foreign_key = false
-
-    ###
-    # Enable before_committed! callbacks on all enrolled records in a transaction.
-    # The previous behavior was to only run the callbacks on the first copy of a record
-    # if there were multiple copies of the same record enrolled in the transaction.
-    #++
-    config.active_record.before_committed_on_all_records = true
-
-    # Keep YAML as default column serializer (you have this set in your 7.1 file)
+    # Keep YAML as the default column serializer. The framework default is `nil`
+    # (Rails 7.1+); this is an intentional override to preserve existing
+    # serialized-column behavior.
     config.active_record.default_column_serializer = YAML
 
-    # Run after_commit callbacks in order defined
-    config.active_record.run_after_transaction_callbacks_in_order_defined = true
-
-    # Generate secure tokens on initialize
-    config.active_record.generate_secure_token_on = :initialize
-
-    # Use HTML5 sanitizers when supported
-    config.action_view.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
-    config.action_text.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
-
-    # Use HTML5 parser for DOM testing
+    # Force the HTML5 parser for DOM testing. The framework default falls back to
+    # :html4 when Nokogiri::HTML5 is unavailable; we always want :html5.
     config.dom_testing_default_html_version = :html5
 
     # Set log file size for local environments
@@ -124,6 +93,9 @@ module BostonCa
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # NOTE: on load_defaults 8.1, active_record.postgresql_adapter_decode_dates is
+    # `true` — raw-SQL `date` columns return Date, not String. Accepted intentionally after review
 
     # Disable Active Storage routes
     config.active_storage.draw_routes = false
