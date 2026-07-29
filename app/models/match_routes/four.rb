@@ -40,10 +40,12 @@ module MatchRoutes
         'MatchDecisions::Four::MatchRecommendationHsa' => 4,
         'MatchDecisions::Four::ConfirmHsaInitialDeclineDndStaff' => 5,
         'MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin' => 6,
-        'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin' => 7,
-        'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff' => 8,
-        'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator' => 9,
-        'MatchDecisions::Four::ConfirmMatchSuccessDndStaff' => 10,
+        'MatchDecisions::Four::ConfirmScheduleCriminalHearingDeclineDndStaff' => 7,
+        'MatchDecisions::Four::ApproveMatchHousingSubsidyAdmin' => 8,
+        'MatchDecisions::Four::ConfirmHousingSubsidyAdminDeclineDndStaff' => 9,
+        'MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdministrator' => 10,
+        'MatchDecisions::Four::ConfirmRecordClientHousedDateDeclineDndStaff' => 11,
+        'MatchDecisions::Four::ConfirmMatchSuccessDndStaff' => 12,
       }
     end
 
