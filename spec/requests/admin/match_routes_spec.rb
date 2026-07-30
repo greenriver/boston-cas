@@ -87,5 +87,26 @@ RSpec.describe 'Admin::MatchRoutes', type: :request do
 
       expect(row.css('td')[1].text.strip).to eq('N/A')
     end
+
+    it 'loads reason counts for all steps with a single query, regardless of step count' do
+      reason = create(:match_decision_reason, name: 'Reason A')
+      3.times do |i|
+        step = create(:match_decision_step, route: active_route, decision_type: "MatchDecisions::FakeStep#{i}")
+        create(:match_decision_reason_assignment, route: active_route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+        create(:match_decision_reason_assignment, route: active_route, decision_type: step.decision_type, kind: 'cancel', match_decision_reason: reason)
+      end
+
+      queries = []
+      counter = lambda do |_name, _started, _finished, _id, payload|
+        queries << payload[:sql] unless payload[:name] == 'SCHEMA'
+      end
+
+      ActiveSupport::Notifications.subscribed(counter, 'sql.active_record') do
+        get edit_admin_match_route_path(active_route)
+      end
+
+      reason_assignment_queries = queries.select { |q| q.include?('match_decision_reason_assignments') }
+      expect(reason_assignment_queries.size).to eq(1)
+    end
   end
 end

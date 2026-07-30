@@ -33,6 +33,7 @@ module Admin
       @steps = MatchDecisionStep.where(route: @route).sort_by do |step|
         @route.class.match_steps[step.decision_type] || @route.class.match_steps_for_reporting[step.decision_type] || Float::INFINITY
       end
+      @reason_counts = MatchDecisionReasonAssignment.where(route: @route).with_active_reason.group(:decision_type, :kind).count
     end
 
     def update_params
