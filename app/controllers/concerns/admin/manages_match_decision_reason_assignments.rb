@@ -18,9 +18,12 @@ module Admin::ManagesMatchDecisionReasonAssignments
   end
 
   private def sync_kind!(route:, decision_type:, kind:, rows_params:)
-    existing = MatchDecisionReasonAssignment.where(route: route, decision_type: decision_type, kind: kind).index_by(&:match_decision_reason_id)
+    return if rows_params.nil?
 
-    (rows_params || {}).each do |reason_id, row|
+    existing = MatchDecisionReasonAssignment.where(route: route, decision_type: decision_type, kind: kind).index_by(&:match_decision_reason_id)
+    offered_reason_ids = MatchDecisionReasons::Base.active.ids
+
+    rows_params.each do |reason_id, row|
       next unless row[:selected] == '1'
 
       reason_id = reason_id.to_i
@@ -32,7 +35,9 @@ module Admin::ManagesMatchDecisionReasonAssignments
       assignment.save!
     end
 
-    existing.each_value(&:destroy)
+    existing.each do |reason_id, assignment|
+      assignment.destroy if offered_reason_ids.include?(reason_id)
+    end
   end
 
   private def match_decision_reason_rows(route:, decision_type:)

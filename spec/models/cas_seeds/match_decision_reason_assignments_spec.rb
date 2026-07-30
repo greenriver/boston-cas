@@ -38,6 +38,29 @@ RSpec.describe CasSeeds::MatchDecisionReasonAssignments do
       expect(assignments.pluck(:audience)).to include('shelter_agency_contacts', 'housing_subsidy_admin_contacts')
     end
 
+    it 'assigns each audience-tagged reason to its own audience, not the other' do
+      described_class.new.run!
+
+      shelter_agency_reason = MatchDecisionReasons::Base.find_by(name: 'Client has another housing option')
+      hsa_reason = MatchDecisionReasons::Base.find_by(name: 'CORI')
+
+      shelter_agency_assignment = MatchDecisionReasonAssignment.find_by(decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin', match_decision_reason: shelter_agency_reason)
+      hsa_assignment = MatchDecisionReasonAssignment.find_by(decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin', match_decision_reason: hsa_reason)
+
+      expect(shelter_agency_assignment.audience).to eq('shelter_agency_contacts')
+      expect(hsa_assignment.audience).to eq('housing_subsidy_admin_contacts')
+    end
+
+    it 'seeds every resolvable row from the assignments CSV, dropping none silently' do
+      described_class.new.run!
+
+      csv_row_count = CSV.read(Rails.root.join('db', 'seeds', 'match_decision_reason_assignments.csv'), headers: true).size
+      approve_match_hsa_count = CasSeeds::MatchDecisionReasonAssignments::APPROVE_MATCH_HOUSING_SUBSIDY_ADMIN_SHELTER_AGENCY_ONLY_REASONS.size +
+        CasSeeds::MatchDecisionReasonAssignments::APPROVE_MATCH_HOUSING_SUBSIDY_ADMIN_HSA_ONLY_REASONS.size + 1
+
+      expect(MatchDecisionReasonAssignment.count).to eq(csv_row_count + approve_match_hsa_count)
+    end
+
     it 'is idempotent' do
       described_class.new.run!
       count_after_first_run = MatchDecisionReasonAssignment.count

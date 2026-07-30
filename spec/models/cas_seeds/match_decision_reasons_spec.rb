@@ -21,6 +21,14 @@ RSpec.describe CasSeeds::MatchDecisionReasons do
       expect(cori.referral_result).to eq(MatchDecisionReasons::Base::PROVIDER_REJECTED)
     end
 
+    it 'maps CLIENT_REJECTED reasons correctly' do
+      described_class.new.run!
+
+      client_deceased = MatchDecisionReasons::Base.find_by(name: 'Client deceased')
+
+      expect(client_deceased.referral_result).to eq(MatchDecisionReasons::Base::CLIENT_REJECTED)
+    end
+
     it 'is idempotent' do
       described_class.new.run!
       count_after_first_run = MatchDecisionReasons::Base.count

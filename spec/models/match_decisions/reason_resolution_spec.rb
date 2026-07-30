@@ -48,6 +48,15 @@ RSpec.describe 'MatchDecisions reason resolution', type: :model do
       expect(decision.decline_reasons(contact: nil)).to eq([['Active Reason', active_reason.id]])
     end
 
+    it 'excludes limited reasons' do
+      active_reason = create(:match_decision_reason, name: 'Active Reason')
+      limited_reason = create(:match_decision_reason, name: 'Limited Reason', active: true, limited: true)
+      create(:match_decision_reason_assignment, route: route, decision_type: decision.class.name, kind: 'decline', match_decision_reason: active_reason, position: 0)
+      create(:match_decision_reason_assignment, route: route, decision_type: decision.class.name, kind: 'decline', match_decision_reason: limited_reason, position: 1)
+
+      expect(decision.decline_reasons(contact: nil)).to eq([['Active Reason', active_reason.id]])
+    end
+
     it 'appends an asterisk to reasons requiring explanation when not all non-Other reasons require it' do
       needs_explanation = create(:match_decision_reason, name: 'Needs Explanation')
       no_explanation = create(:match_decision_reason, name: 'No Explanation Needed')

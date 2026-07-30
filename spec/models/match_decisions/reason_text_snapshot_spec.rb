@@ -62,6 +62,15 @@ RSpec.describe 'MatchDecisions reason text snapshotting', type: :model do
 
       expect(decision.reload.decline_reason_name).to eq('Client Deceased')
     end
+
+    it 'falls back to the live reason name when the snapshot column is blank (pre-migration rows)' do
+      reason = create(:match_decision_reason, name: 'Client Deceased')
+      decision.update!(decline_reason: reason)
+      decision.update_column(:decline_reason_text, nil)
+      reason.update!(name: 'Renamed Reason')
+
+      expect(decision.reload.decline_reason_name).to eq('Renamed Reason')
+    end
   end
 
   describe '#canceled_status_label' do
@@ -71,6 +80,15 @@ RSpec.describe 'MatchDecisions reason text snapshotting', type: :model do
       reason.update!(name: 'Renamed Reason')
 
       expect(decision.reload.canceled_status_label).to include('Match Expired')
+    end
+
+    it 'falls back to the live reason name when the snapshot column is blank (pre-migration rows)' do
+      reason = create(:match_decision_reason, name: 'Match Expired')
+      decision.update!(administrative_cancel_reason: reason)
+      decision.update_column(:administrative_cancel_reason_text, nil)
+      reason.update!(name: 'Renamed Reason')
+
+      expect(decision.reload.canceled_status_label).to include('Renamed Reason')
     end
   end
 end

@@ -76,5 +76,36 @@ RSpec.describe 'Admin::MatchDecisionReasons', type: :request do
 
       expect(response).to redirect_to(root_path)
     end
+
+    it 'redirects from GET new without rendering the form' do
+      get new_admin_match_decision_reason_path
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it 'redirects from POST create without creating a record' do
+      expect do
+        post admin_match_decision_reasons_path, params: { match_decision_reason: { name: 'Should not be created' } }
+      end.not_to change(MatchDecisionReasons::Base, :count)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it 'redirects from GET edit without rendering the form' do
+      reason = create(:match_decision_reason, name: 'Existing Reason')
+
+      get edit_admin_match_decision_reason_path(reason)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it 'redirects from PATCH update without changing the record' do
+      reason = create(:match_decision_reason, name: 'Existing Reason', active: true)
+
+      patch admin_match_decision_reason_path(reason), params: { match_decision_reason: { name: 'Changed Name' } }
+
+      expect(reason.reload.name).to eq('Existing Reason')
+      expect(response).to redirect_to(root_path)
+    end
   end
 end

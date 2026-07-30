@@ -112,5 +112,62 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
 
       expect(MatchDecisionReasonAssignment.where(route: route, decision_type: step_without_declines.decision_type, kind: 'decline')).to be_empty
     end
+
+    it 'preserves an assignment whose reason has since been deactivated, across an unrelated update' do
+      retired_reason = create(:match_decision_reason, name: 'Retired reason')
+      assignment = create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: retired_reason)
+      retired_reason.update!(active: false)
+
+      patch admin_match_route_match_decision_step_path(route, step), params: {
+        match_decision_step: { default_referral_result: MatchDecisionReasons::Base::PROVIDER_REJECTED },
+      }
+
+      expect(MatchDecisionReasonAssignment.exists?(assignment.id)).to be true
+    end
+
+    it 'preserves existing assignments when the request omits the assignments key entirely' do
+      assignment = create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+
+      patch admin_match_route_match_decision_step_path(route, step), params: {
+        match_decision_step: { default_referral_result: MatchDecisionReasons::Base::PROVIDER_REJECTED },
+      }
+
+      expect(MatchDecisionReasonAssignment.exists?(assignment.id)).to be true
+    end
+
+    it 'still destroys an assignment for an active reason that is submitted unchecked' do
+      assignment = create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+
+      patch admin_match_route_match_decision_step_path(route, step), params: {
+        assignments: { decline: { reason.id.to_s => { selected: '0' } } },
+      }
+
+      expect(MatchDecisionReasonAssignment.exists?(assignment.id)).to be false
+    end
+  end
+
+  describe 'authorization' do
+    let!(:limited_role) { create(:role, name: 'limited') }
+    let!(:limited_user) { create(:user) }
+
+    before do
+      limited_user.roles << limited_role
+      sign_in limited_user
+    end
+
+    it 'redirects users without can_manage_config from GET edit' do
+      get edit_admin_match_route_match_decision_step_path(route, step)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it 'redirects users without can_manage_config from PATCH update, without changing the record' do
+      patch admin_match_route_match_decision_step_path(route, step), params: {
+        match_decision_step: { default_referral_result: MatchDecisionReasons::Base::PROVIDER_REJECTED },
+      }
+
+      expect(step.reload.default_referral_result).to be_nil
+      expect(response).to redirect_to(root_path)
+    end
   end
 end

@@ -83,5 +83,33 @@ RSpec.describe MatchDecisionReasonAssignment, type: :model do
 
       expect(resolved).to eq([])
     end
+
+    it 'does not leak a different decision_type (step) on the same route into resolution' do
+      create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepTwo', kind: 'decline', match_decision_reason: reason_a)
+
+      resolved = MatchDecisionReasonAssignment.resolve_for(route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline')
+
+      expect(resolved).to eq([])
+    end
+
+    it 'excludes an assignment whose reason has been deactivated' do
+      create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: reason_a, position: 0)
+      inactive_reason = create(:match_decision_reason, name: 'Inactive Reason', active: false)
+      create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: inactive_reason, position: 1)
+
+      resolved = MatchDecisionReasonAssignment.resolve_for(route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline')
+
+      expect(resolved.map(&:match_decision_reason)).to eq([reason_a])
+    end
+
+    it 'excludes an assignment whose reason is limited, even though it is still active' do
+      create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: reason_a, position: 0)
+      limited_reason = create(:match_decision_reason, name: 'Limited Reason', active: true, limited: true)
+      create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: limited_reason, position: 1)
+
+      resolved = MatchDecisionReasonAssignment.resolve_for(route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline')
+
+      expect(resolved.map(&:match_decision_reason)).to eq([reason_a])
+    end
   end
 end
