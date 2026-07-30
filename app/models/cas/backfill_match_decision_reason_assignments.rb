@@ -7,6 +7,14 @@
 # frozen_string_literal: true
 
 module Cas
+  # REMOVE_AFTER_REASON_CHANGE: this whole class exists only to reconstruct the pre-existing hardcoded Ruby
+  # reason lists (ea-8986) into match_decision_steps/match_decision_reason_assignments. Once every environment
+  # has run cas_seeds:backfill_match_decision_reason_assignments at least once, this has nothing left to do —
+  # step_decline_reasons/step_cancel_reasons always resolve from the DB now, so re-running this is a no-op.
+  # Safe to delete this class, its rake task, and its spec at that point. If a fresh instance ever needs
+  # seeding after that (e.g. spinning up a new environment), don't resurrect this reconstruction approach —
+  # it depends on Ruby methods that will no longer carry any real data. Seed from a data dump/fixture of the
+  # already-correct match_decision_steps/match_decision_reason_assignments tables instead.
   class BackfillMatchDecisionReasonAssignments
     # MatchDecisions::Base#step_cancel_reasons has already been rewritten (elsewhere in this migration) to read
     # from the very tables this task is populating. For a decision class that never overrode step_cancel_reasons,

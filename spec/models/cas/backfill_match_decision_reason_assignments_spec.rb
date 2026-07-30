@@ -8,6 +8,9 @@
 
 require 'rails_helper'
 
+# REMOVE_AFTER_REASON_CHANGE: delete this spec alongside Cas::BackfillMatchDecisionReasonAssignments
+# once every environment has run the backfill at least once (see comment on that class).
+
 # Simulates a decision class in its pre-migration state: reasons hardcoded in Ruby,
 # exactly the shape Cas::BackfillMatchDecisionReasonAssignments needs to read from.
 class MatchDecisions::BackfillSpecStep < MatchDecisions::Base
