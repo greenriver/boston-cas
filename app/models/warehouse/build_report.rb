@@ -268,7 +268,8 @@ module Warehouse
     def explain(decision, reason)
       return unless (r = decision.send(reason))
 
-      explanation = r.name
+      text_method = "#{reason}_text"
+      explanation = decision.respond_to?(text_method) ? decision.send(text_method).presence || r.name : r.name
       explanation = "#{explanation}: #{decision.send "#{reason}_other_explanation"}" if r.other?
       explanation
     end

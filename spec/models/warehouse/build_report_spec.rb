@@ -429,6 +429,16 @@ RSpec.describe Warehouse::BuildReport, type: :model do
       result = build_report.explain(decision, :decline_reason)
       expect(result).to be_nil
     end
+
+    it 'keeps returning the reason name as it was when chosen, even if the catalog reason is later renamed' do
+      decline_reason = create(:dnd_staff_decline_reason, name: 'Client declined')
+      decision.update(decline_reason: decline_reason)
+      decline_reason.update!(name: 'Renamed reason')
+
+      result = build_report.explain(decision.reload, :decline_reason)
+
+      expect(result).to eq('Client declined')
+    end
   end
 
   describe '#decline_reason' do

@@ -1,0 +1,22 @@
+- %w[decline cancel].each do |kind|
+  .c-card.mb-4
+    .c-card__header
+      %h3= "#{kind.titleize} Reasons"
+    .c-card__content.p-0
+      .table-responsive
+        %table.table.table-striped.mb-0
+          %thead
+            %tr
+              %th Include
+              %th Reason
+              %th Position
+              %th Requires Explanation
+          %tbody
+            - rows[kind.to_sym].each do |row|
+              %tr
+                %td
+                  = hidden_field_tag "assignments[#{kind}][#{row.reason.id}][selected]", '0'
+                  = check_box_tag "assignments[#{kind}][#{row.reason.id}][selected]", '1', row.assignment.present?
+                %td= row.reason.name
+                %td= number_field_tag "assignments[#{kind}][#{row.reason.id}][position]", row.assignment&.position || 0, style: 'width: 5em'
+                %td= check_box_tag "assignments[#{kind}][#{row.reason.id}][requires_explanation]", '1', row.assignment&.requires_explanation || false

@@ -31,6 +31,11 @@
           = f.input :routes_parked_on_successful_match, collection: MatchRoutes::Base.all.map { |route| [route.title, route.class] }.sort , label: 'Routes to park a client after a successful match', input_html: { class: :select2, multiple: true }
           = f.button :submit, value: "Update #{@route.title}"
   .col-md-6
+    .c-card.mb-4
+      .c-card__header
+        %h2 Decline &amp; Cancel Reasons
+      .c-card__content
+        = link_to 'Manage Decline & Cancel Reasons for this Route', edit_admin_match_route_route_reason_assignment_path(@route), class: 'btn btn-primary'
     .c-card
       .c-card__header
         %h2 Weighting

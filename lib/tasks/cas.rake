@@ -85,4 +85,9 @@ namespace :cas do
   task add_missing_holds_voucher_on: [:environment, 'log:info_to_stdout'] do
     Client.add_missing_holds_voucher_on
   end
+
+  desc 'One-time backfill of match_decision_steps/match_decision_reason_assignments from current hardcoded reason lists'
+  task backfill_match_decision_reason_assignments: [:environment, 'log:info_to_stdout'] do
+    Cas::BackfillMatchDecisionReasonAssignments.new.run!
+  end
 end
