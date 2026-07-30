@@ -13,6 +13,10 @@ require 'rails_helper'
 # route-specific concern that might otherwise override step_decline_reasons/step_cancel_reasons.
 class MatchDecisions::ReasonResolutionSpecStep < MatchDecisions::Base
   include MatchDecisions::AcceptsDeclineReason
+
+  def supports_multiple_actors?
+    true
+  end
 end
 
 RSpec.describe 'MatchDecisions reason resolution', type: :model do

@@ -208,6 +208,13 @@ module MatchDecisions
       false
     end
 
+    # Override to return true for a step where more than one contact type can
+    # independently act on it (e.g. both a shelter agency contact and an HSA
+    # contact can decline it), each seeing a different, audience-scoped set of reasons.
+    def supports_multiple_actors?
+      false
+    end
+
     ######################
     # Decision Lifecycle
     ######################

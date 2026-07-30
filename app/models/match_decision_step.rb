@@ -16,6 +16,11 @@ class MatchDecisionStep < ApplicationRecord
     decision_class.present? && decision_class.include?(MatchDecisions::AcceptsDeclineReason)
   end
 
+  def supports_multiple_actors?
+    decision_class = decision_type.safe_constantize
+    decision_class.present? && decision_class.new.supports_multiple_actors?
+  end
+
   # Matches how the match page labels the "Current Step" (@match.current_decision.step_name).
   def display_name
     decision_type.safe_constantize&.new&.step_name || decision_type.demodulize.titleize

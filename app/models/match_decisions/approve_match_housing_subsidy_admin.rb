@@ -111,6 +111,10 @@ module MatchDecisions
       contact.in?(match.shelter_agency_contacts)
     end
 
+    def supports_multiple_actors?
+      true
+    end
+
     class StatusCallbacks < StatusCallbacks
       def pending
       end

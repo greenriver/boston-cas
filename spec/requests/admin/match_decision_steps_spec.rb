@@ -14,6 +14,7 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
   let(:route) { create(:default_route) }
   let(:step) { create(:match_decision_step, route: route, decision_type: 'MatchDecisions::MatchRecommendationDndStaff') }
   let(:step_without_declines) { create(:match_decision_step, route: route, decision_type: 'MatchDecisions::ConfirmMatchSuccessDndStaff') }
+  let(:multi_actor_step) { create(:match_decision_step, route: route, decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin') }
 
   before do
     admin.roles << admin_role
@@ -43,15 +44,31 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
       expect(response.body).to include('Cancel Reasons')
     end
 
-    it "shows an Audience select with the route's own visible contact type labels and the assignment's current audience selected" do
+    it "shows an Audience select with the route's own visible contact type labels and the assignment's current audience selected, for a step that supports multiple actors" do
       reason = create(:match_decision_reason, name: 'Reason A')
-      create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason, audience: 'shelter_agency_contacts')
+      create(:match_decision_reason_assignment, route: route, decision_type: multi_actor_step.decision_type, kind: 'decline', match_decision_reason: reason, audience: 'shelter_agency_contacts')
 
-      get edit_admin_match_route_match_decision_step_path(route, step)
+      get edit_admin_match_route_match_decision_step_path(route, multi_actor_step)
 
       expect(response.body).to include('Audience')
       expect(response.body).to include('Shelter Agency')
       expect(response.body).to match(/<option selected="selected" value="shelter_agency_contacts">Shelter Agency<\/option>/)
+    end
+
+    it 'omits the Audience column entirely for a step that does not support multiple actors' do
+      get edit_admin_match_route_match_decision_step_path(route, step)
+
+      expect(response.body).not_to include('Audience')
+    end
+
+    it 'shows the Audience column on the Decline table but not the Cancel table, even for a step that supports multiple actors' do
+      get edit_admin_match_route_match_decision_step_path(route, multi_actor_step)
+
+      doc = Nokogiri::HTML(response.body)
+      cards = doc.css('.c-card').index_by { |card| card.at_css('h3')&.text }
+
+      expect(cards['Decline Reasons'].text).to include('Audience')
+      expect(cards['Cancel Reasons'].text).not_to include('Audience')
     end
   end
 
@@ -79,12 +96,12 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
       expect(other_step_level).to be_empty
     end
 
-    it 'persists an audience selection onto the assignment' do
-      patch admin_match_route_match_decision_step_path(route, step), params: {
+    it 'persists an audience selection onto the assignment, for a step that supports multiple actors' do
+      patch admin_match_route_match_decision_step_path(route, multi_actor_step), params: {
         assignments: { decline: { reason.id.to_s => { selected: '1', position: '0', audience: 'shelter_agency_contacts' } } },
       }
 
-      assignment = MatchDecisionReasonAssignment.find_by(route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+      assignment = MatchDecisionReasonAssignment.find_by(route: route, decision_type: multi_actor_step.decision_type, kind: 'decline', match_decision_reason: reason)
       expect(assignment.audience).to eq('shelter_agency_contacts')
     end
 

@@ -1,6 +1,7 @@
 - kinds = local_assigns.fetch(:kinds, %w[decline cancel])
 .row
   - kinds.each do |kind|
+    - show_audience = kind == 'decline' && @step.supports_multiple_actors?
     .col-lg-6
       .c-card.mb-4
         .c-card__header
@@ -15,7 +16,8 @@
                   %th Position
                   %th Requires Explanation
                   %th Referral Result
-                  %th Audience
+                  - if show_audience
+                    %th Audience
               %tbody
                 - rows[kind.to_sym].each do |row|
                   %tr
@@ -30,5 +32,6 @@
                       - if row.reason.referral_result.present?
                         %br
                         %em.text-muted.font-size-small= "Default: #{row.reason.referral_result_text}"
-                    %td
-                      = select_tag "assignments[#{kind}][#{row.reason.id}][audience]", options_for_select([['Everyone', '']] + @route.visible_contact_types.map { |contact_type| [@route.contact_label_for(contact_type), contact_type] }, row.assignment&.audience)
+                    - if show_audience
+                      %td
+                        = select_tag "assignments[#{kind}][#{row.reason.id}][audience]", options_for_select([['Everyone', '']] + @route.visible_contact_types.map { |contact_type| [@route.contact_label_for(contact_type), contact_type] }, row.assignment&.audience)

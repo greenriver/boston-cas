@@ -30,14 +30,24 @@ RSpec.describe MatchDecisionReasonAssignment, type: :model do
       expect(assignment).to be_valid
     end
 
-    it 'is valid when set to one of its route\'s visible contact types' do
-      assignment = build(:match_decision_reason_assignment, route: route, match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
+    it "is valid when set to one of its route's visible contact types, on a step that supports multiple actors" do
+      assignment = build(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin', match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
       expect(assignment).to be_valid
     end
 
     it 'is invalid when set to a contact type not visible on its route' do
       eight_route = MatchRoutes::Eight.create!(active: true, match_prioritization: create(:priority_days_homeless))
-      assignment = build(:match_decision_reason_assignment, route: eight_route, match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
+      assignment = build(:match_decision_reason_assignment, route: eight_route, decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin', match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
+      expect(assignment).not_to be_valid
+    end
+
+    it 'is invalid when set on a step that does not support multiple actors' do
+      assignment = build(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::MatchRecommendationDndStaff', match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
+      expect(assignment).not_to be_valid
+    end
+
+    it 'is invalid on a cancel-kind assignment, even for a step that supports multiple actors (only decline has a real audience use case today)' do
+      assignment = build(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin', kind: 'cancel', match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
       expect(assignment).not_to be_valid
     end
   end

@@ -53,6 +53,23 @@ RSpec.describe MatchDecisionStep, type: :model do
     end
   end
 
+  describe '#supports_multiple_actors?' do
+    it 'is true for MatchDecisions::ApproveMatchHousingSubsidyAdmin, the one step two contact types can independently decline' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin')
+      expect(step.supports_multiple_actors?).to eq(true)
+    end
+
+    it 'is false for a decision class that does not override it' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::MatchRecommendationDndStaff')
+      expect(step.supports_multiple_actors?).to eq(false)
+    end
+
+    it 'is false when decision_type does not resolve to a real class' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::NoSuchClass')
+      expect(step.supports_multiple_actors?).to eq(false)
+    end
+  end
+
   describe '#display_name' do
     it "uses the decision class's own step_name, matching how the match page labels the current step" do
       step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::Thirteen::ThirteenClientMatch')
