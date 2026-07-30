@@ -67,7 +67,7 @@ jobs:
           docker run -v $(pwd)/.hadolint.yaml:/.hadolint.yaml \
             -e HADOLINT_IGNORE=${{ matrix.hadolint_ignore }} \
             -v $(pwd)/${{ matrix.dockerfile }}:/Dockerfile \
-            --rm -i ghcr.io/hadolint/hadolint:v2.15.0-alpine hadolint /Dockerfile
+            --rm -i ghcr.io/hadolint/hadolint:latest-alpine hadolint /Dockerfile
 
       - name: Set up Docker Buildx
         id: buildx
