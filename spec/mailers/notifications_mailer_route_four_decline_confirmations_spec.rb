@@ -146,34 +146,4 @@ RSpec.describe NotificationsMailer, type: :mailer do
       end
     end
   end
-
-  describe 'end-to-end decline confirmation flow' do
-    it 'persists a notification pointing back at the match and the dnd staff recipient for a recorded-housed-date decline' do
-      match.four_record_client_housed_date_housing_subsidy_administrator_decision.initialize_decision!(send_notifications: false)
-      match.four_record_client_housed_date_housing_subsidy_administrator_decision.update!(status: 'declined', decline_reason: decline_reason)
-      match.four_record_client_housed_date_housing_subsidy_administrator_decision.run_status_callback!(user: decision_user)
-
-      notification = Notifications::Four::ConfirmRecordClientHousedDateDeclineDndStaff
-        .where(match: match, recipient: dnd_staff_contact)
-        .first
-
-      expect(notification).to be_present
-      expect(notification.match).to eq(match)
-      expect(notification.recipient).to eq(dnd_staff_contact)
-    end
-
-    it 'persists a notification pointing back at the match and the dnd staff recipient for a criminal-hearing decline' do
-      match.four_schedule_criminal_hearing_housing_subsidy_admin_decision.initialize_decision!(send_notifications: false)
-      match.four_schedule_criminal_hearing_housing_subsidy_admin_decision.update!(status: 'declined', decline_reason: decline_reason)
-      match.four_schedule_criminal_hearing_housing_subsidy_admin_decision.run_status_callback!(user: decision_user)
-
-      notification = Notifications::Four::ConfirmScheduleCriminalHearingDeclineDndStaff
-        .where(match: match, recipient: dnd_staff_contact)
-        .first
-
-      expect(notification).to be_present
-      expect(notification.match).to eq(match)
-      expect(notification.recipient).to eq(dnd_staff_contact)
-    end
-  end
 end

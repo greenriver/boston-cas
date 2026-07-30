@@ -21,7 +21,8 @@ RSpec.describe 'Route Four decline UI', type: :request do
   before do
     sign_in hsa_user
     match.housing_subsidy_admin_contacts << hsa_user.contact
-    allow_any_instance_of(ClientOpportunityMatch).to receive(:show_client_info_to?).and_return(false)
+    # Client#non_hmis? queries DataSource.non_hmis, which has no seed row in the test
+    # database, so it raises NoMethodError on nil.id unless stubbed.
     allow_any_instance_of(Client).to receive(:non_hmis?).and_return(false)
   end
 

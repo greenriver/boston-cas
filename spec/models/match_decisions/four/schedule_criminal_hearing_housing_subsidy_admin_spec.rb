@@ -69,5 +69,20 @@ RSpec.describe MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin,
 
       expect(confirm_decision.reload.status).to eq('pending')
     end
+
+    it 'creates a confirm-decline decision for a match that predates this decision type' do
+      confirm_decision.destroy
+      match.reload # clear the cached has_one association so the callback sees it as missing
+
+      decision.update!(status: 'declined', decline_reason: decline_reason)
+
+      expect do
+        decision.run_status_callback!(user: admin_contact)
+      end.to change {
+        MatchDecisions::Four::ConfirmScheduleCriminalHearingDeclineDndStaff.where(match: match).count
+      }.by(1)
+
+      expect(match.reload.four_confirm_schedule_criminal_hearing_decline_dnd_staff_decision.status).to eq('pending')
+    end
   end
 end
