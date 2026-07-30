@@ -15,8 +15,9 @@ module MatchDecisions
       before_save :snapshot_decline_reason_text
     end
 
-    def decline_reason_assignments(_contact = nil)
-      MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: 'decline')
+    def decline_reason_assignments(contact = nil)
+      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: 'decline')
+      filter_reason_assignments_by_audience(assignments, contact)
     end
 
     def step_decline_reasons(contact = nil)

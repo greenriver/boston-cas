@@ -42,6 +42,17 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
       expect(response.body).not_to include('Decline Reasons')
       expect(response.body).to include('Cancel Reasons')
     end
+
+    it "shows an Audience select with the route's own visible contact type labels and the assignment's current audience selected" do
+      reason = create(:match_decision_reason, name: 'Reason A')
+      create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason, audience: 'shelter_agency_contacts')
+
+      get edit_admin_match_route_match_decision_step_path(route, step)
+
+      expect(response.body).to include('Audience')
+      expect(response.body).to include('Shelter Agency')
+      expect(response.body).to match(/<option selected="selected" value="shelter_agency_contacts">Shelter Agency<\/option>/)
+    end
   end
 
   describe 'PATCH update' do
@@ -66,6 +77,15 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
       other_step_level = MatchDecisionReasonAssignment.where(route: route, decision_type: other_step.decision_type, kind: 'decline')
       expect(step_level.map(&:match_decision_reason_id)).to eq([reason.id])
       expect(other_step_level).to be_empty
+    end
+
+    it 'persists an audience selection onto the assignment' do
+      patch admin_match_route_match_decision_step_path(route, step), params: {
+        assignments: { decline: { reason.id.to_s => { selected: '1', position: '0', audience: 'shelter_agency_contacts' } } },
+      }
+
+      assignment = MatchDecisionReasonAssignment.find_by(route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+      expect(assignment.audience).to eq('shelter_agency_contacts')
     end
 
     it 'ignores decline assignment params for a step that does not support declines' do

@@ -15,6 +15,7 @@ class MatchDecisionReasonAssignment < ApplicationRecord
 
   validates :kind, inclusion: { in: ['decline', 'cancel'] }
   validates :decision_type, presence: true
+  validates :audience, inclusion: { in: ->(assignment) { assignment.route&.visible_contact_types&.map(&:to_s) || [] }, allow_blank: true }
 
   scope :ordered, -> { order(:position, :id) }
   scope :with_active_reason, -> { joins(:match_decision_reason).merge(MatchDecisionReasons::Base.active) }

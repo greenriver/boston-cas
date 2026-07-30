@@ -66,6 +66,51 @@ RSpec.describe 'MatchDecisions reason resolution', type: :model do
     end
   end
 
+  describe 'audience' do
+    let(:shelter_agency_contact) { create(:contact) }
+    let(:hsa_contact) { create(:contact) }
+    let(:on_behalf_of_admin) do
+      admin = create(:user)
+      admin.roles << create(:admin_role)
+      admin.contact
+    end
+    let(:everyone_reason) { create(:match_decision_reason, name: 'Everyone Reason') }
+    let(:shelter_agency_reason) { create(:match_decision_reason, name: 'Shelter Agency Reason') }
+    let(:hsa_reason) { create(:match_decision_reason, name: 'HSA Reason') }
+
+    before do
+      match.shelter_agency_contacts << shelter_agency_contact
+      match.housing_subsidy_admin_contacts << hsa_contact
+      create(:match_decision_reason_assignment, route: route, decision_type: decision.class.name, kind: 'decline', match_decision_reason: everyone_reason, position: 0, audience: nil)
+      create(:match_decision_reason_assignment, route: route, decision_type: decision.class.name, kind: 'decline', match_decision_reason: shelter_agency_reason, position: 1, audience: 'shelter_agency_contacts')
+      create(:match_decision_reason_assignment, route: route, decision_type: decision.class.name, kind: 'decline', match_decision_reason: hsa_reason, position: 2, audience: 'housing_subsidy_admin_contacts')
+    end
+
+    it 'shows a shelter agency contact the blank-audience reason and its own audience-tagged reason, not the other audience' do
+      names = decision.decline_reasons(contact: shelter_agency_contact).map(&:first)
+
+      expect(names).to contain_exactly('Everyone Reason', 'Shelter Agency Reason')
+    end
+
+    it 'shows an HSA contact the blank-audience reason and its own audience-tagged reason, not the other audience' do
+      names = decision.decline_reasons(contact: hsa_contact).map(&:first)
+
+      expect(names).to contain_exactly('Everyone Reason', 'HSA Reason')
+    end
+
+    it 'shows a contact who can act on behalf of match contacts every audience' do
+      names = decision.decline_reasons(contact: on_behalf_of_admin).map(&:first)
+
+      expect(names).to contain_exactly('Everyone Reason', 'Shelter Agency Reason', 'HSA Reason')
+    end
+
+    it 'shows every audience when no contact is given' do
+      names = decision.decline_reasons(contact: nil).map(&:first)
+
+      expect(names).to contain_exactly('Everyone Reason', 'Shelter Agency Reason', 'HSA Reason')
+    end
+  end
+
   describe '#cancel_reasons' do
     it 'resolves options from step-level assignments and marks reasons requiring explanation' do
       needs_explanation = create(:match_decision_reason, name: 'Needs Explanation')

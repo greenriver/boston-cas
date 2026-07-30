@@ -1658,7 +1658,8 @@ CREATE TABLE public.match_decision_reason_assignments (
     referral_result integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    deleted_at timestamp(6) without time zone
+    deleted_at timestamp(6) without time zone,
+    audience character varying
 );
 
 
@@ -7451,6 +7452,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260730161749'),
 ('20260730092443'),
 ('20260729172307'),
 ('20260729172306'),

@@ -24,6 +24,24 @@ RSpec.describe MatchDecisionReasonAssignment, type: :model do
     expect(assignment).not_to be_valid
   end
 
+  describe 'audience' do
+    it 'is valid when blank (visible to everyone)' do
+      assignment = build(:match_decision_reason_assignment, route: route, match_decision_reason: reason_a, audience: nil)
+      expect(assignment).to be_valid
+    end
+
+    it 'is valid when set to one of its route\'s visible contact types' do
+      assignment = build(:match_decision_reason_assignment, route: route, match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
+      expect(assignment).to be_valid
+    end
+
+    it 'is invalid when set to a contact type not visible on its route' do
+      eight_route = MatchRoutes::Eight.create!(active: true, match_prioritization: create(:priority_days_homeless))
+      assignment = build(:match_decision_reason_assignment, route: eight_route, match_decision_reason: reason_a, audience: 'shelter_agency_contacts')
+      expect(assignment).not_to be_valid
+    end
+  end
+
   describe '.resolve_for' do
     it 'returns step-specific assignments, ordered by position, for that step' do
       create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: reason_b, position: 1)

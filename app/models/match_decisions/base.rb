@@ -516,17 +516,18 @@ module MatchDecisions
       self.class.const_get :StatusCallbacks
     end
 
-    def cancel_reason_assignments
-      MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: 'cancel')
+    def cancel_reason_assignments(contact = nil)
+      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: 'cancel')
+      filter_reason_assignments_by_audience(assignments, contact)
     end
 
     def step_cancel_reasons
       cancel_reason_assignments.map { |assignment| assignment.match_decision_reason.name }
     end
 
-    def cancel_reasons
-      not_other_requiring_explanation = cancel_reasons_not_other_requiring_explanation
-      cancel_reason_assignments.map do |assignment|
+    def cancel_reasons(contact: nil)
+      not_other_requiring_explanation = cancel_reasons_not_other_requiring_explanation(contact)
+      cancel_reason_assignments(contact).map do |assignment|
         reason = assignment.match_decision_reason
         # Only include the asterisks if more than 'Other' requires additional explanation
         include_asterisk = not_other_requiring_explanation.present? && (reason.other? || not_other_requiring_explanation.include?(reason.name))
@@ -534,6 +535,14 @@ module MatchDecisions
         name += '*' if include_asterisk
         [name, reason.id]
       end
+    end
+
+    # A reason assignment with a blank audience is visible to everyone. A contact who
+    # can act on behalf of match contacts (e.g. an admin) sees every audience.
+    private def filter_reason_assignments_by_audience(assignments, contact)
+      return assignments if contact.nil? || contact.user_can_act_on_behalf_of_match_contacts?
+
+      assignments.select { |assignment| assignment.audience.blank? || contact.in?(match.public_send(assignment.audience)) }
     end
 
     def effective_referral_result
@@ -549,8 +558,8 @@ module MatchDecisions
       []
     end
 
-    def cancel_reasons_not_other_requiring_explanation
-      cancel_reason_assignments.select(&:requires_explanation).map { |assignment| assignment.match_decision_reason.name }
+    def cancel_reasons_not_other_requiring_explanation(contact = nil)
+      cancel_reason_assignments(contact).select(&:requires_explanation).map { |assignment| assignment.match_decision_reason.name }
     end
 
     private def ensure_status_allowed

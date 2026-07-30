@@ -22,12 +22,11 @@ T1=`date +%s`
 T2=`date +%s`
 echo "...rake cas_seeds:create_match_decision_reasons took $(expr $T2 - $T1) seconds"
 
-# REMOVE_AFTER_REASON_CHANGE: see comment in lib/tasks/cas_seeds.rake
-echo 'Backfill match decision reason assignments'
+echo 'Seed match decision reason assignments'
 T1=`date +%s`
-./bin/rake cas_seeds:backfill_match_decision_reason_assignments
+./bin/rake cas_seeds:seed_match_decision_reason_assignments
 T2=`date +%s`
-echo "...rake cas_seeds:backfill_match_decision_reason_assignments took $(expr $T2 - $T1) seconds"
+echo "...rake cas_seeds:seed_match_decision_reason_assignments took $(expr $T2 - $T1) seconds"
 
 echo 'Ensure all match routes exist'
 T1=`date +%s`

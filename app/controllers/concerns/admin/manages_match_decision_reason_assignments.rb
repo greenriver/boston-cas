@@ -28,6 +28,7 @@ module Admin::ManagesMatchDecisionReasonAssignments
       assignment.position = row[:position].presence || 0
       assignment.requires_explanation = row[:requires_explanation] == '1'
       assignment.referral_result = row[:referral_result].presence
+      assignment.audience = row[:audience].presence
       assignment.save!
     end
 

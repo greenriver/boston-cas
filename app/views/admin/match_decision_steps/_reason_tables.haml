@@ -15,6 +15,7 @@
                   %th Position
                   %th Requires Explanation
                   %th Referral Result
+                  %th Audience
               %tbody
                 - rows[kind.to_sym].each do |row|
                   %tr
@@ -29,3 +30,5 @@
                       - if row.reason.referral_result.present?
                         %br
                         %em.text-muted.font-size-small= "Default: #{row.reason.referral_result_text}"
+                    %td
+                      = select_tag "assignments[#{kind}][#{row.reason.id}][audience]", options_for_select([['Everyone', '']] + @route.visible_contact_types.map { |contact_type| [@route.contact_label_for(contact_type), contact_type] }, row.assignment&.audience)

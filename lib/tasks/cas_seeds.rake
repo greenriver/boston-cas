@@ -12,7 +12,7 @@ namespace :cas_seeds do
     :ensure_all_match_prioritization_schemes_exist,
     :ensure_non_hmis_datasource_exists,
     :create_match_decision_reasons,
-    :backfill_match_decision_reason_assignments,
+    :seed_match_decision_reason_assignments,
     :create_mitigation_reasons,
     :create_admin_user,
     :ensure_all_users_have_contacts,
@@ -38,13 +38,9 @@ namespace :cas_seeds do
     CasSeeds::MatchDecisionReasons.new.run!
   end
 
-  # REMOVE_AFTER_REASON_CHANGE: one-time backfill of match_decision_steps/match_decision_reason_assignments
-  # from the pre-existing hardcoded Ruby reason lists (ea-8986). Idempotent, so safe to leave running on every
-  # deploy until every environment (including any restored from an older snapshot) has run it at least once.
-  # Depends on create_match_decision_reasons (the reason catalog) already existing.
-  desc 'backfill match decision reason assignments from legacy hardcoded reason lists'
-  task backfill_match_decision_reason_assignments: [:environment, 'log:info_to_stdout'] do
-    Cas::BackfillMatchDecisionReasonAssignments.new.run!
+  desc 'seed match decision steps and reason assignments from db/seeds/match_decision_reason_assignments.csv'
+  task seed_match_decision_reason_assignments: [:environment, 'log:info_to_stdout'] do
+    CasSeeds::MatchDecisionReasonAssignments.new.run!
   end
 
   desc 'create mitigation reasons'
