@@ -61,6 +61,7 @@ bower.json
 .DS_Store
 
 # personal tool stuff
+/.local*
 /.tags
 /.tags1
 /.envrc
@@ -99,3 +100,6 @@ prometheus-metrics/**
 # Include Devbox files
 !devbox.json
 !devbox.lock
+
+# Subagent-driven-development scratch workspace
+/.superpowers/
