@@ -1,4 +1,4 @@
-%a#assessments-dropdown.btn.btn-sm.btn-secondary.dropdown-toggle{aria: {expanded:  'false', haspopup:  'true'}, data: {toggle:  'dropdown'}, href:  '#', role:  'button'}
+%a#assessments-dropdown.btn.btn-sm.btn-secondary.dropdown-toggle{aria: {expanded:  'false', haspopup:  'true'}, data: { bs_toggle:  'dropdown'}, href:  '#', role:  'button'}
   #{@assessment.created_at} by #{@assessment.user&.name}
 .dropdown-menu{"aria-labelledby" => "assessments-dropdown"}
   - @non_hmis_client.non_hmis_assessments.each do |assessment|

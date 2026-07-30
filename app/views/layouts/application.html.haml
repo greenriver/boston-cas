@@ -10,13 +10,23 @@
     %link{rel: :icon, type: 'image/png', href: 'data:;base64,iVBORw0KGgo='}
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700|Open+Sans+Condensed:700|Montserrat:400,300,500,700|Lora:400,400i', rel: 'stylesheet', type: 'text/css'}
     = stylesheet_link_tag 'application', media: 'all'
+    - if Rails.env.development? || Rails.env.staging?
+      = stylesheet_link_tag "_custom/env/#{Rails.env}", media: 'all'
+    - if client_theme_stylesheet_exists?
+      = stylesheet_link_tag "client_themes/#{ENV['CLIENT']}", media: 'all'
     = stylesheet_link_tag 'print', media: 'print'
     = javascript_include_tag 'application'
+    = javascript_include_tag 'legacy'
 
     = cache('theme', expires_in: 1.minutes) do
       - Dir.glob('app/assets/stylesheets/theme/styles/*.scss') do |stylesheet|
         - theme_styles = "theme/styles/#{File.basename(stylesheet, '.scss')}"
         = stylesheet_link_tag(theme_styles, media: 'all')
+    - theme_css = Theme.css_file_contents
+    - if theme_css.present?
+      %style{ type: 'text/css' }
+        :plain
+          #{theme_css}
 
     = render 'layouts/favicon'
     = csrf_meta_tags

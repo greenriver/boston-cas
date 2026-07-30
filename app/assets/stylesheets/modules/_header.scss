@@ -2,8 +2,8 @@
 // From
 
 .o-header--page {
-  background-color: $cob-sg-blue-003;
-  box-shadow: 0 0 0 2px darken($cob-sg-blue-003, 8%);
+  background-color: var(--cob-sg-blue-003);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cob-sg-blue-003) 92%, black);
   height: $header-height;
   display: flex;
   align-items: stretch;
@@ -82,13 +82,13 @@
 }
 
 .o-header--page__title a {
-  color: $cob-sg-charles-blue;
+  color: var(--cob-sg-charles-blue);
 }
 
 .o-header--page__title a:hover,
 .o-header--page__title a:focus {
   text-decoration: none;
-  color: lighten($cob-sg-charles-blue, 15);
+  color: color-mix(in srgb, var(--cob-sg-charles-blue) 85%, white);
 }
 
 .o-header--page__sub-title {
@@ -114,7 +114,7 @@
     width: 2rem;
   }
   .message-count {
-    background-color: $cob-sg-optimistic-blue;
+    background-color: var(--cob-sg-optimistic-blue);
     transform: translate(-50%, -50%);
   }
   ul li.message {
@@ -146,12 +146,12 @@
 }
 
 .btn.email-messages-envelope [class^="icon-"]:hover {
-  color:  $cob-sg-optimistic-blue;
+  color: var(--cob-sg-optimistic-blue);
 }
 
 .utility {
   @media (min-width: $screen-sm-min) {
-    @include margin(null null null 243px);
+    @include cas-margin(null null null 243px);
   }
 }
 
@@ -162,7 +162,7 @@
 .user-state {
   width: 60px;
   height: 59px;
-  background-color: $cob-sg-charles-blue;
+  background-color: var(--cob-sg-charles-blue);
   float: right;
   padding-top: 8px;
 }

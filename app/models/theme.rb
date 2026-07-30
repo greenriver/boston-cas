@@ -97,5 +97,16 @@ class Theme < ApplicationRecord
     favicon_ico.attach(io: File.open(path.to_s), filename: 'favicon.ico') if File.exist?(path.to_s)
   end
 
+  def self.css_file_contents
+    css = active_theme.css
+    sanitize_css(css.presence)
+  end
+
+  def self.sanitize_css(css)
+    return unless css
+
+    css.delete('<')
+  end
+
   after_save { self.class.invalidate_cache }
 end

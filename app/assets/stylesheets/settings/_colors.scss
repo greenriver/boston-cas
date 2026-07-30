@@ -37,6 +37,11 @@ $brand-info:            $brand-primary-l !default;
 $brand-warning:         #bc6923 !default;
 $brand-warning-l:       #ffcb9b !default;
 $brand-warning-d:       #e5b17e !default;
+
+// Sidebar / site menu (override in theme/styles/_variables.scss per deployment)
+$menu-sidebar-bg: $cas-blue !default;
+$menu-sidebar-border-d: darken($cas-blue, 6%) !default;
+$menu-section-accent: $brand-warning-l !default;
 $brand-danger:          #bb2716 !default;
 $brand-danger-d:        #df9489 !default;
 $brand-danger-l:        #ffa69b !default;

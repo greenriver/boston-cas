@@ -1,0 +1,17 @@
+/* QA brand theme — uses default brand colors, no overrides needed */
+:root {}
+
+body>header,
+.o-header--page {
+  background-color: rgb(117, 85, 159);
+}
+
+footer {
+  background-color: rgb(117, 85, 159);
+  box-shadow: none;
+  color: white;
+}
+
+.o-header--page__title a {
+  color: rgb(28, 26, 27);
+}

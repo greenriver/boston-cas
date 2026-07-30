@@ -14,9 +14,17 @@ CVE-2025-61594
 
 # devise, we monkey patched the user model; avoids major version upgrade as we will replace devise with SSO in the near future
 CVE-2026-32700
+# devise, solved with monkey patch to avoid major version upgrade
+CVE-2026-40295
 
 # vulnerable json version is included in ruby 4.0.2, gemfile specified a fixed version
 CVE-2026-33210
+
+# esbuild 0.28.0 (the latest) uses Go 1.26.1; these three CVEs require Go 1.26.2 which no
+# esbuild release has shipped yet.
+CVE-2026-32280 exp:2026-06-26
+CVE-2026-32281 exp:2026-06-26
+CVE-2026-32283 exp:2026-06-26
 
 # we patched this in app, ignore residual alerts stale system deps
 CVE-2026-42246

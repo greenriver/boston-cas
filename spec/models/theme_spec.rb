@@ -39,12 +39,55 @@ RSpec.describe Theme, type: :model do
     end
   end
 
+  describe '.css_file_contents' do
+    it 'returns the css string when set' do
+      create(:theme, client: ENV['CLIENT'], css: 'body { color: red; }')
+      expect(Theme.css_file_contents).to eq('body { color: red; }')
+    end
+
+    it 'returns nil when css is blank' do
+      create(:theme, client: ENV['CLIENT'], css: nil)
+      expect(Theme.css_file_contents).to be_nil
+    end
+
+    it 'returns nil when css is an empty string' do
+      create(:theme, client: ENV['CLIENT'], css: '')
+      expect(Theme.css_file_contents).to be_nil
+    end
+
+    it 'strips < characters to prevent </style> injection' do
+      create(:theme, client: ENV['CLIENT'], css: 'body { color: red; } </style><script>alert(1)</script><style>')
+      expect(Theme.css_file_contents).not_to include('<')
+    end
+  end
+
+  describe '.sanitize_css' do
+    it 'returns nil when passed nil' do
+      expect(Theme.sanitize_css(nil)).to be_nil
+    end
+
+    it 'removes < characters from the css' do
+      expect(Theme.sanitize_css('</style><script>evil</script>')).to eq('/style>script>evil/script>')
+    end
+
+    it 'leaves valid css unchanged' do
+      css = "body { color: red; }\n.foo { font-size: 1rem; }"
+      expect(Theme.sanitize_css(css)).to eq(css)
+    end
+  end
+
   describe 'cache invalidation' do
     it 'sets @theme to nil after save so the next call re-fetches' do
       theme = Theme.active_theme
       Theme.instance_variable_set(:@theme, theme)
       theme.update!(homepage_content: 'updated')
       expect(Theme.instance_variable_get(:@theme)).to be_nil
+    end
+
+    it 'resets @theme_cached_at after save so the next call re-fetches from the database' do
+      Theme.active_theme
+      Theme.instance_variable_get(:@theme).update!(homepage_content: 'updated')
+      expect(Theme.instance_variable_get(:@theme_cached_at)).to be_nil
     end
   end
 

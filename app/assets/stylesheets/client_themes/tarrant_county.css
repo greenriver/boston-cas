@@ -1,0 +1,15 @@
+/* Tarrant County brand theme */
+:root {
+  /* Brand colors */
+  --brand-primary: #457687;
+  --cob-sg-blue-003: #0A4667;
+  /* Bootstrap 5 theme color overrides (used by Bootstrap components) */
+  --bs-primary: #457687;
+  --bs-primary-rgb: 69, 118, 135;
+}
+
+body>header,
+.o-header--page {
+  background-color: #112c3b;
+  box-shadow: 0 0 0 2px #062d42;
+}

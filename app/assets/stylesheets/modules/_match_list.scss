@@ -129,8 +129,8 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
 
 .match-progress-bar__step--canceled .match-progress-bar__step__marker
 {
-  background-color: darken($brand-danger, 15);
-  border: 1px solid darken($brand-danger, 15);
+  background-color: $brand-danger-d;
+  border: 1px solid $brand-danger-d;
 }
 
 .match-progress-bar__step--active .match-progress-bar__step__marker .number,
@@ -163,8 +163,8 @@ $match-progress-bar-step-border-width: $match-progress-bar-step-marker-border-wi
 //When last step is canceled
 .match-progress-bar__step:last-of-type.match-progress-bar__step--canceled .match-progress-bar__step__marker
 {
-  background-color: darken($brand-danger, 15);
-  border: 1px solid darken($brand-danger, 15);
+  background-color: $brand-danger-d;
+  border: 1px solid $brand-danger-d;
   color: white;
 }
 .match-step-status

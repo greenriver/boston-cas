@@ -60,7 +60,7 @@
 %ul.nav.nav-tabs{role: 'tablist'}
   - @routes.each_with_index do |route, index|
     %li.nav-item{role: 'presentation'}
-      %a.nav-link{class: ('active' if index.zero?), id: "route-#{route.id}-tab", data: {toggle: 'tab'}, href: "#route-#{route.id}", role: 'tab', aria: {controls: "route-#{route.id}", selected: index.zero?}}
+      %a.nav-link{class: ('active' if index.zero?), id: "route-#{route.id}-tab", data: { bs_toggle: 'tab'}, href: "#route-#{route.id}", role: 'tab', aria: {controls: "route-#{route.id}", selected: index.zero?}}
         = route.title
 
 .tab-content

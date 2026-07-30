@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# frozen_string_literal: true
+
 # awscli adds too much weight
 # api doesn't have s3 sync
 # So, this script exists
@@ -50,11 +52,13 @@ begin
       next
     end
 
-    resp = client.get_object({
-                               bucket: bucket,
-                               key: key,
-                               response_target: target,
-                             })
+    resp = client.get_object(
+      {
+        bucket: bucket,
+        key: key,
+        response_target: target,
+      },
+    )
   end
 rescue Aws::S3::Errors::NoSuchBucket
   puts "[#{__FILE__}] Cannot find the bucket: #{bucket}"

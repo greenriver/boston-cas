@@ -192,7 +192,9 @@ Rails.application.routes.draw do
     resources :agencies do
       post :move_user
     end
-    resources :roles
+    resources :roles do
+      collection { patch :batch_update }
+    end
     resources :versions, only: [:index]
 
     resources :translation_keys, only: [:index, :update]

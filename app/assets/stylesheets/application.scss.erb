@@ -1,16 +1,3 @@
-// Per installation and environment files
-<%
-  sheet = Rails.root.join('app', 'assets', 'stylesheets', '_custom', "#{ENV['CLIENT']}.scss")
-  if ENV['CLIENT'].present? && File.exist?(sheet)
-%>
-  @import "./_custom/<%=ENV['CLIENT']%>";
-<% end %>
-<%
-  sheet = Rails.root.join('app', 'assets', 'stylesheets', '_custom', 'env', "#{ENV['RAILS_ENV']}.scss")
-  if ENV['RAILS_ENV'].present? && File.exist?(sheet)
-%>
-@import "./_custom/env/<%=ENV['RAILS_ENV']%>";
-<% end %>
 // Settings
 // (Colors, Variables, Fonts)
 // (Ordered by inclusion)
@@ -25,19 +12,63 @@
 // Tools
 // (Mixins, Functions)
 @import
+  'tools/constants',
   'tools/functions',
+  'tools/color_calculations',
   'tools/mixins';
 
 // Vendor
 @import
   'vendor/bootstrap/index',
   'font-awesome',
-  'bootstrap-datetimepicker',
   'select2',
-  'select2-bootstrap',
-  'bootstrap-datepicker3',
+  'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min',
+  '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min',
   'datatables_bootstrap',
   'billboard.js/dist/billboard.min';
+
+// Expose brand colors as CSS custom properties for runtime client theming.
+// Client-specific CSS files override these variables without requiring recompilation.
+:root {
+  --brand-primary:    #{$brand-primary};
+  --brand-primary-l:  #{$brand-primary-l};
+  --brand-primary-ll: #{$brand-primary-ll};
+  --brand-primary-d:  #{$brand-primary-d};
+  --brand-secondary:  #{$brand-secondary};
+  --brand-secondary-l:#{$brand-secondary-l};
+  --brand-success:    #{$brand-success};
+  --brand-success-l:  #{$brand-success-l};
+  --brand-success-d:  #{$brand-success-d};
+  --brand-warning:    #{$brand-warning};
+  --brand-warning-l:  #{$brand-warning-l};
+  --brand-warning-d:  #{$brand-warning-d};
+  --brand-danger:     #{$brand-danger};
+  --brand-danger-l:   #{$brand-danger-l};
+  --brand-danger-d:   #{$brand-danger-d};
+  --cas-blue:         #{$cas-blue};
+  --cas-red:          #{$cas-red};
+  --cas-green:        #{$cas-green};
+  --link-color:       #{$link-color};
+  --cob-sg-blue-003:          #{$cob-sg-blue-003};
+  --cob-sg-optimistic-blue:   #{$cob-sg-optimistic-blue};
+  --cob-sg-charles-blue:      #{$cob-sg-charles-blue};
+  --cob-sg-freedom-trail-red: #{$cob-sg-freedom-trail-red};
+
+  // Override Bootstrap 5's theme-color RGB vars to match our brand palette.
+  // These appear after Bootstrap's own :root block in the compiled output so
+  // they win the cascade — ensuring .text-bg-*, .btn-*, alert-*, etc. all
+  // use our brand colors rather than Bootstrap's bright defaults.
+  --bs-primary:       #{$primary};
+  --bs-primary-rgb:   #{to-rgb($primary)};
+  --bs-secondary:     #{$secondary};
+  --bs-secondary-rgb: #{to-rgb($secondary)};
+  --bs-success:       #{$success};
+  --bs-success-rgb:   #{to-rgb($success)};
+  --bs-warning:       #{$warning};
+  --bs-warning-rgb:   #{to-rgb($warning)};
+  --bs-danger:        #{$danger};
+  --bs-danger-rgb:    #{to-rgb($danger)};
+}
 
 // Elements
 @import
@@ -106,6 +137,7 @@
 @import "modules/vouchers";
 @import "modules/add_things_boxes";
 @import "modules/requirement_manager";
+@import "modules/role_manager";
 @import "modules/clients";
 @import "modules/filter_sort";
 @import "modules/_match_list";

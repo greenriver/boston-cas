@@ -14,6 +14,8 @@ capybara-*.html
 /db/*.sqlite3-journal
 /public/system
 /public/assets
+/app/assets/builds/*
+!/app/assets/builds/.keep
 /coverage/
 /brakeman/
 /spec/tmp
@@ -90,6 +92,9 @@ storage/
 # Ignore docker certificates
 docker/nginx-proxy/certs
 prometheus-metrics/**
+
+# Devbox local environment (gems, nix store, etc.)
+.devbox/
 
 # Include Devbox files
 !devbox.json

@@ -1,0 +1,210 @@
+.roles {
+  border: 1px solid $gray-040;
+
+  .card-header {
+    padding: 0;
+    border-bottom: 2px solid $gray-040;
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+
+  .card-body {
+    padding: space(3);
+  }
+
+  .user-role {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .permission-header {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .edit-role-link {
+    color: var(--gray-080, #555);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* Show/Hide Roles list (list-group SCSS not in vendor bundle — set spacing here) */
+  .role-names .list-group-item {
+    align-items: center;
+    padding: space(2) space(3);
+    border-bottom: 1px solid white;
+  }
+
+  .role-wrapper {
+    overflow-x: scroll;
+  }
+
+  .role-name-header h3 {
+    padding: 1rem;
+    margin: 0 auto;
+    font-size: 14px;
+    font-weight: bold;
+    color: inherit; // global h3 uses $heading-color; use .role-color-* foreground on header
+  }
+
+  .role-column {
+    min-width: 25rem;
+    border-right: 1px solid $gray-025;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  // Permission category blocks (aligned with HMIS Warehouse: .panel-group { margin-bottom: 0 })
+  .role-manager-panel {
+    margin-bottom: 0;
+  }
+
+  .role-manager-panel__card {
+    background: $white;
+    border: 0;
+    border-bottom: 1px solid $gray-025;
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  .role-manager-panel__heading {
+    // Warehouse uses .py-0 on .panel-heading; keep row compact
+    min-height: 0;
+    padding: space(2) space(4);
+    border: 0;
+    border-radius: 0;
+    background: $white;
+    color: $text-color;
+    box-shadow: none;
+    align-items: center;
+
+    @include media-breakpoint-down(sm) {
+      min-height: 44px;
+    }
+  }
+
+  .role-manager-panel__heading[aria-expanded='true'],
+  .role-manager-panel__heading:not(.collapsed) {
+    background: lighten($tab-bg, 30%);
+
+    .role-manager-panel__title {
+      color: $black;
+    }
+  }
+
+  .role-manager-panel__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.25;
+  }
+
+  .role-manager-panel__chevrons [class^='icon-'] {
+    font-size: 22px;
+  }
+
+  .role-manager-panel__icon--when-expanded {
+    display: none;
+  }
+
+  .role-manager-panel__heading:not(.collapsed) {
+    .role-manager-panel__icon--when-collapsed {
+      display: none;
+    }
+
+    .role-manager-panel__icon--when-expanded {
+      display: inline;
+    }
+  }
+
+  .role-manager-panel__body {
+    border-top: 2px solid $gray-020;
+    padding: space(3);
+  }
+
+  .sub-category-title {
+    margin: 0 0 space(2);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .administrative {
+    background-color: rgba(0, 0, 0, 0.04);
+    padding: 1rem;
+  }
+
+  // Dirty-state checkbox styles using CAS mixins.
+  // Global `components/checkbox` applies checkbox-default / checkbox-checked label backgrounds ($white / green tint).
+  // Those properties still cascade here because role_permission mixins only style ::before/::after — explicitly reset label surface so .administrative / panel body shows through.
+  .c-checkbox {
+
+    input:checked~label,
+    input:not(:checked)~label {
+      @include role_permission-checkbox-default(20px, false);
+      padding-left: calc(#{rem(20px)} + #{space(2)});
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding-top: 0;
+      padding-right: 0;
+      padding-bottom: 0;
+      min-height: unset;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background: transparent;
+      }
+    }
+
+    input:not(:checked)~label {
+      @include role_permission-checkbox-not-checked;
+    }
+
+    input:checked~label {
+      @include role_permission-checkbox-checked;
+      background: transparent;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background: transparent;
+      }
+    }
+
+    input.dirty:checked+label {
+      @include role_permission-checkbox-checked-dirty;
+      background: transparent;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background: transparent;
+      }
+    }
+
+    input.dirty:not(:checked)+label {
+      @include role_permission-checkbox-not-checked-dirty;
+      background: transparent;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background: transparent;
+      }
+    }
+  }
+
+  // The Stimulus controller uses `.hide` to show/hide columns and buttons
+  .hide {
+    display: none !important;
+  }
+
+  // Role color chips — generated from HSL palette (65% lightness, WCAG AAA contrast)
+  @include many-colors('role-color');
+}
