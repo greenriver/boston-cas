@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module RouteFourMailerMethods
   extend ActiveSupport::Concern
   included do
@@ -23,6 +25,16 @@ module RouteFourMailerMethods
     end
 
     def confirm_hsa_initial_decline_dnd_staff(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')} - Requires Your Action")
+    end
+
+    def confirm_schedule_criminal_hearing_decline_dnd_staff(notification = nil)
+      setup_instance_variables(notification)
+      mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')} - Requires Your Action")
+    end
+
+    def confirm_record_client_housed_date_decline_dnd_staff(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: "Match Declined by #{Translation.translate('HSA')} - Requires Your Action")
     end
