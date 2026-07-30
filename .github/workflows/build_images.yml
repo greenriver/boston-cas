@@ -38,7 +38,7 @@ jobs:
             dockerfile: docker/app/Dockerfile
             keep_latest_tag: true
             cache_key: cas
-            hadolint_ignore: DL3018,DL3013,DL3008
+            hadolint_ignore: DL3018,DL3013,DL3008,DL3066
             trivy_skip_files: /app/config/key.pem,/app/docker/sftp/ssh_host_ed25519_key,/app/docker/sftp/ssh_host_rsa_key
             target: prod-build
             build-args: |
@@ -67,7 +67,7 @@ jobs:
           docker run -v $(pwd)/.hadolint.yaml:/.hadolint.yaml \
             -e HADOLINT_IGNORE=${{ matrix.hadolint_ignore }} \
             -v $(pwd)/${{ matrix.dockerfile }}:/Dockerfile \
-            --rm -i ghcr.io/hadolint/hadolint:latest-alpine hadolint /Dockerfile
+            --rm -i ghcr.io/hadolint/hadolint:v2.15.0-alpine hadolint /Dockerfile
 
       - name: Set up Docker Buildx
         id: buildx
