@@ -11,7 +11,7 @@ FactoryBot.define do
     association :route, factory: :default_route
     association :match_decision_reason
     kind { 'decline' }
-    decision_type { '' }
+    sequence(:decision_type) { |n| "MatchDecisions::FakeStep#{n}" }
     position { 0 }
   end
 end

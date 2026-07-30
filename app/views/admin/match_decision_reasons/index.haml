@@ -12,7 +12,10 @@
         Add a Reason
 
   %p.text-muted
-    This is the catalog of reasons available to routes. To choose which of these apply to a specific route (and any per-step overrides), use the "Decline & Cancel Reasons" link on that route's admin page.
+    This is the catalog of reasons available to routes. To choose which of these apply to a specific route (and any per-step overrides), use the
+    %strong Decline & Cancel Reasons
+    link on that
+    = link_to("route's admin page", admin_match_routes_path)
 
   .table-responsive
     .c-card.c.card__flush.mb-4
@@ -21,9 +24,9 @@
           %thead
             %tr
               %th Name
-              %th Rejection Type
+              %th Referral Result
               %th Active
-              %th
+              %th Actions
           %tbody
             - @match_decision_reasons.each do |reason|
               %tr

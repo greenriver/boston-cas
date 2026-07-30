@@ -35,4 +35,33 @@ RSpec.describe MatchDecisionStep, type: :model do
 
     expect(on_other_route).to be_valid
   end
+
+  describe '#supports_declines?' do
+    it 'is true for a decision class that includes MatchDecisions::AcceptsDeclineReason' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::MatchRecommendationDndStaff')
+      expect(step.supports_declines?).to eq(true)
+    end
+
+    it 'is false for a decision class that does not include MatchDecisions::AcceptsDeclineReason' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::ConfirmMatchSuccessDndStaff')
+      expect(step.supports_declines?).to eq(false)
+    end
+
+    it 'is false when decision_type does not resolve to a real class' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::NoSuchClass')
+      expect(step.supports_declines?).to eq(false)
+    end
+  end
+
+  describe '#display_name' do
+    it "uses the decision class's own step_name, matching how the match page labels the current step" do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::Thirteen::ThirteenClientMatch')
+      expect(step.display_name).to eq('Client Match')
+    end
+
+    it 'falls back to a titleized class name when decision_type does not resolve to a real class' do
+      step = build(:match_decision_step, route: route, decision_type: 'MatchDecisions::NoSuchClass')
+      expect(step.display_name).to eq('No Such Class')
+    end
+  end
 end

@@ -11,8 +11,8 @@ module Admin::ManagesMatchDecisionReasonAssignments
 
   ReasonRow = Struct.new(:reason, :assignment)
 
-  private def sync_match_decision_reason_assignments!(route:, decision_type:, assignments_params:)
-    ['decline', 'cancel'].each do |kind|
+  private def sync_match_decision_reason_assignments!(route:, decision_type:, assignments_params:, kinds: ['decline', 'cancel'])
+    kinds.each do |kind|
       sync_kind!(route: route, decision_type: decision_type, kind: kind, rows_params: assignments_params&.dig(kind))
     end
   end
@@ -27,6 +27,7 @@ module Admin::ManagesMatchDecisionReasonAssignments
       assignment = existing.delete(reason_id) || MatchDecisionReasonAssignment.new(route: route, decision_type: decision_type, kind: kind, match_decision_reason_id: reason_id)
       assignment.position = row[:position].presence || 0
       assignment.requires_explanation = row[:requires_explanation] == '1'
+      assignment.referral_result = row[:referral_result].presence
       assignment.save!
     end
 

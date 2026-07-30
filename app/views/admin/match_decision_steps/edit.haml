@@ -1,19 +1,19 @@
-- title = "#{@route.title}: #{@step.decision_type.demodulize.titleize}"
+- title = "#{@route.title}: #{@step.display_name}"
 - content_for :title, title
-
-= render 'menus/admin_tabs'
+= content_for :crumbs do
+  = link_to '« Back to Route', edit_admin_match_route_path(@route)
 
 %h1= content_for :title
-%p= link_to '« Back to Route Reasons', edit_admin_match_route_route_reason_assignment_path(@route)
 
 = form_tag admin_match_route_match_decision_step_path(@route, @step), method: :patch do
   .c-card.mb-4
     .c-card__header
-      %h3 Default Rejection Type
+      %h3 Default Referral Result
     .c-card__content
       = select_tag 'match_decision_step[default_referral_result]', options_for_select({ 'None' => nil, 'Client Rejected' => MatchDecisionReasons::Base::CLIENT_REJECTED, 'Provider Rejected' => MatchDecisionReasons::Base::PROVIDER_REJECTED }, @step.default_referral_result)
 
   %p.text-muted
-    Adding any reason here overrides the route's defaults for this step only.
-  = render 'admin/match_decision_steps/reason_tables', rows: @rows
-  = submit_tag 'Save Step Overrides', class: 'btn btn-primary'
+    Choose which reasons apply to this step.
+  = render 'admin/match_decision_steps/reason_tables', rows: @rows, kinds: (@step.supports_declines? ? %w[decline cancel] : %w[cancel])
+  .text-right
+    = submit_tag 'Save Step Reasons', class: 'btn btn-primary'

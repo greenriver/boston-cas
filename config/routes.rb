@@ -213,7 +213,6 @@ Rails.application.routes.draw do
     end
     resources :match_routes, only: [:index, :edit, :update] do
       resources :weighting_rules, on: :member, except: [:create]
-      resource :route_reason_assignment, only: [:edit, :update]
       resources :match_decision_steps, only: [:edit, :update]
     end
     resources :match_decision_reasons, except: [:show, :destroy]

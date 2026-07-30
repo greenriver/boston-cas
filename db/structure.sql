@@ -1650,7 +1650,7 @@ ALTER SEQUENCE public.match_census_id_seq OWNED BY public.match_census.id;
 CREATE TABLE public.match_decision_reason_assignments (
     id bigint NOT NULL,
     route_id bigint NOT NULL,
-    decision_type character varying DEFAULT ''::character varying NOT NULL,
+    decision_type character varying NOT NULL,
     match_decision_reason_id bigint NOT NULL,
     kind character varying NOT NULL,
     "position" integer DEFAULT 0 NOT NULL,
@@ -7451,6 +7451,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260730092443'),
 ('20260729172307'),
 ('20260729172306'),
 ('20260729172305'),

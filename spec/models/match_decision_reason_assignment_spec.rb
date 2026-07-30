@@ -19,8 +19,13 @@ RSpec.describe MatchDecisionReasonAssignment, type: :model do
     expect(assignment).not_to be_valid
   end
 
+  it 'requires a decision_type (there is no route-wide default scope)' do
+    assignment = build(:match_decision_reason_assignment, route: route, match_decision_reason: reason_a, decision_type: '')
+    expect(assignment).not_to be_valid
+  end
+
   describe '.resolve_for' do
-    it 'returns step-specific assignments, ordered by position, when they exist for the step' do
+    it 'returns step-specific assignments, ordered by position, for that step' do
       create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: reason_b, position: 1)
       create(:match_decision_reason_assignment, route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: reason_a, position: 0)
 
@@ -29,12 +34,10 @@ RSpec.describe MatchDecisionReasonAssignment, type: :model do
       expect(resolved.map(&:match_decision_reason)).to eq([reason_a, reason_b])
     end
 
-    it 'falls back to the route-level default when no step-specific assignment exists for that step' do
-      route_default = create(:match_decision_reason_assignment, route: route, decision_type: '', kind: 'decline', match_decision_reason: reason_a)
+    it 'returns an empty list when no assignment exists for that step, with no route-wide fallback' do
+      resolved = MatchDecisionReasonAssignment.resolve_for(route: route, decision_type: 'MatchDecisions::StepWithNoAssignments', kind: 'decline')
 
-      resolved = MatchDecisionReasonAssignment.resolve_for(route: route, decision_type: 'MatchDecisions::StepWithNoOverride', kind: 'decline')
-
-      expect(resolved).to eq([route_default])
+      expect(resolved).to eq([])
     end
 
     it 'does not mix cancel-kind assignments into a decline resolution for the same step' do
@@ -46,7 +49,7 @@ RSpec.describe MatchDecisionReasonAssignment, type: :model do
     end
 
     it 'does not leak another route\'s assignments into resolution' do
-      create(:match_decision_reason_assignment, route: other_route, decision_type: '', kind: 'decline', match_decision_reason: reason_a)
+      create(:match_decision_reason_assignment, route: other_route, decision_type: 'MatchDecisions::StepOne', kind: 'decline', match_decision_reason: reason_a)
 
       resolved = MatchDecisionReasonAssignment.resolve_for(route: route, decision_type: 'MatchDecisions::StepOne', kind: 'decline')
 

@@ -45,16 +45,28 @@ module Cas
       decision = decision_class.new
       MatchDecisionStep.find_or_create_by!(route: route, decision_type: decision_type)
 
-      if decision.respond_to?(:step_decline_reasons)
-        backfill_kind(
-          route: route,
-          decision_type: decision_type,
-          kind: 'decline',
-          names: decision.step_decline_reasons(nil),
-          requiring_explanation_names: decision.decline_reasons_not_other_requiring_explanation(nil),
-        )
-      end
+      # Decline and cancel backfill are independent: a decision class with contact-dependent decline
+      # logic (e.g. ApproveMatchHousingSubsidyAdmin) can raise when instantiated without a real match,
+      # but that must not also skip its otherwise-unrelated cancel reason backfill.
+      backfill_decline(route: route, decision_type: decision_type, decision: decision)
+      backfill_cancel(route: route, decision_type: decision_type, decision: decision)
+    end
 
+    private def backfill_decline(route:, decision_type:, decision:)
+      return unless decision.respond_to?(:step_decline_reasons)
+
+      backfill_kind(
+        route: route,
+        decision_type: decision_type,
+        kind: 'decline',
+        names: decision.step_decline_reasons(nil),
+        requiring_explanation_names: decision.decline_reasons_not_other_requiring_explanation(nil),
+      )
+    rescue StandardError => e
+      Rails.logger.warn("Skipping decline reason backfill for #{decision_type} on #{route.class.name}: #{e.message}")
+    end
+
+    private def backfill_cancel(route:, decision_type:, decision:)
       backfill_kind(
         route: route,
         decision_type: decision_type,
@@ -65,7 +77,7 @@ module Cas
         requiring_explanation_names: [],
       )
     rescue StandardError => e
-      Rails.logger.warn("Skipping decision reason backfill for #{decision_type} on #{route.class.name}: #{e.message}")
+      Rails.logger.warn("Skipping cancel reason backfill for #{decision_type} on #{route.class.name}: #{e.message}")
     end
 
     private def cancel_reason_names(decision)

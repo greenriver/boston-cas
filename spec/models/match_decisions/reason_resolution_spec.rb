@@ -31,11 +31,8 @@ RSpec.describe 'MatchDecisions reason resolution', type: :model do
       expect(decision.decline_reasons(contact: nil)).to eq([['Reason A', reason_a.id], ['Reason B', reason_b.id]])
     end
 
-    it 'falls back to the route-level default when no step-specific assignment exists' do
-      reason = create(:match_decision_reason, name: 'Route Default Reason')
-      create(:match_decision_reason_assignment, route: route, decision_type: '', kind: 'decline', match_decision_reason: reason)
-
-      expect(decision.decline_reasons(contact: nil)).to eq([['Route Default Reason', reason.id]])
+    it 'returns no options when no assignment exists for this step, with no route-wide fallback' do
+      expect(decision.decline_reasons(contact: nil)).to eq([])
     end
 
     it 'excludes inactive reasons' do
@@ -79,11 +76,8 @@ RSpec.describe 'MatchDecisions reason resolution', type: :model do
       expect(decision.cancel_reasons).to eq([['Needs Explanation*', needs_explanation.id], ['Plain Reason', plain.id]])
     end
 
-    it 'falls back to the route-level default when no step-specific cancel assignment exists' do
-      reason = create(:match_decision_reason, name: 'Route Cancel Default')
-      create(:match_decision_reason_assignment, route: route, decision_type: '', kind: 'cancel', match_decision_reason: reason)
-
-      expect(decision.cancel_reasons).to eq([['Route Cancel Default', reason.id]])
+    it 'returns no options when no cancel assignment exists for this step, with no route-wide fallback' do
+      expect(decision.cancel_reasons).to eq([])
     end
   end
 

@@ -51,7 +51,7 @@ class MatchDecisions::BackfillSpecStepThatErrors < MatchDecisions::Base
   end
 
   def step_cancel_reasons
-    []
+    ['Cancel Reason One']
   end
 end
 
@@ -118,13 +118,20 @@ RSpec.describe Cas::BackfillMatchDecisionReasonAssignments, type: :model do
         not_to change(MatchDecisionReasonAssignment, :count)
     end
 
-    it 'logs and continues instead of raising when the decision class errors without a real match' do
+    it 'logs and continues instead of raising when decline backfill errors for a step without a real match' do
       expect do
         backfill.backfill_step(route: route, decision_type: 'MatchDecisions::BackfillSpecStepThatErrors')
       end.not_to raise_error
 
       expect(MatchDecisionStep.find_by(route: route, decision_type: 'MatchDecisions::BackfillSpecStepThatErrors')).to be_present
-      expect(MatchDecisionReasonAssignment.where(route: route, decision_type: 'MatchDecisions::BackfillSpecStepThatErrors')).to be_empty
+      expect(MatchDecisionReasonAssignment.where(route: route, decision_type: 'MatchDecisions::BackfillSpecStepThatErrors', kind: 'decline')).to be_empty
+    end
+
+    it 'still backfills cancel reasons for a step even though its decline backfill errored' do
+      backfill.backfill_step(route: route, decision_type: 'MatchDecisions::BackfillSpecStepThatErrors')
+
+      assignments = MatchDecisionReasonAssignment.where(route: route, decision_type: 'MatchDecisions::BackfillSpecStepThatErrors', kind: 'cancel')
+      expect(assignments.map { |a| a.match_decision_reason.name }).to eq(['Cancel Reason One'])
     end
   end
 end
