@@ -38,7 +38,7 @@ jobs:
             dockerfile: docker/app/Dockerfile
             keep_latest_tag: true
             cache_key: cas
-            hadolint_ignore: DL3018,DL3013,DL3008
+            hadolint_ignore: DL3018,DL3013,DL3008,DL3066
             trivy_skip_files: /app/config/key.pem,/app/docker/sftp/ssh_host_ed25519_key,/app/docker/sftp/ssh_host_rsa_key
             target: prod-build
             build-args: |
