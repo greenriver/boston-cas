@@ -1,7 +1,7 @@
-- kinds = local_assigns.fetch(:kinds, %w[decline cancel])
+- kinds = local_assigns.fetch(:kinds, MatchDecisionReasonAssignment::KINDS)
 .row
   - kinds.each do |kind|
-    - show_audience = kind == 'decline' && @step.supports_multiple_actors?
+    - show_audience = kind == MatchDecisionReasonAssignment::KIND_DECLINE && @step.supports_multiple_actors?
     .col-lg-6
       .c-card.mb-4
         .c-card__header

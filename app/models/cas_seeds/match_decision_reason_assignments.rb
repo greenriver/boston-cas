@@ -104,7 +104,7 @@ module CasSeeds
         return
       end
 
-      MatchDecisionReasonAssignment.find_or_create_by!(route: route, decision_type: decision_type, match_decision_reason: reason, kind: 'decline') do |assignment|
+      MatchDecisionReasonAssignment.find_or_create_by!(route: route, decision_type: decision_type, match_decision_reason: reason, kind: MatchDecisionReasonAssignment::KIND_DECLINE) do |assignment|
         assignment.audience = audience
         assignment.position = position
       end

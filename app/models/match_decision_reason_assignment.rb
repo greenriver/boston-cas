@@ -10,10 +10,14 @@ class MatchDecisionReasonAssignment < ApplicationRecord
   acts_as_paranoid
   has_paper_trail
 
+  KIND_DECLINE = 'decline'
+  KIND_CANCEL = 'cancel'
+  KINDS = [KIND_DECLINE, KIND_CANCEL].freeze
+
   belongs_to :route, class_name: 'MatchRoutes::Base'
   belongs_to :match_decision_reason, class_name: 'MatchDecisionReasons::Base'
 
-  validates :kind, inclusion: { in: ['decline', 'cancel'] }
+  validates :kind, inclusion: { in: KINDS }
   validates :decision_type, presence: true
   validates :audience, inclusion: { in: ->(assignment) { assignment.route&.visible_contact_types&.map(&:to_s) || [] }, allow_blank: true }
   validate :audience_only_on_steps_supporting_multiple_actors
@@ -28,7 +32,7 @@ class MatchDecisionReasonAssignment < ApplicationRecord
   private def audience_only_on_steps_supporting_multiple_actors
     return if audience.blank?
 
-    if kind != 'decline'
+    if kind != KIND_DECLINE
       errors.add(:audience, 'is only applicable to decline reasons')
       return
     end

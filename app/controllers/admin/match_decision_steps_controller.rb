@@ -20,7 +20,7 @@ module Admin
 
     def update
       @step.update(default_referral_result_params)
-      kinds = @step.supports_declines? ? ['decline', 'cancel'] : ['cancel']
+      kinds = @step.supports_declines? ? MatchDecisionReasonAssignment::KINDS : [MatchDecisionReasonAssignment::KIND_CANCEL]
       sync_match_decision_reason_assignments!(route: @route, decision_type: @step.decision_type, assignments_params: assignments_params, kinds: kinds)
       redirect_to edit_admin_match_route_match_decision_step_path(@route, @step), notice: 'Step reasons updated.'
     end

@@ -16,7 +16,7 @@ module MatchDecisions
     end
 
     def decline_reason_assignments(contact = nil)
-      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: 'decline')
+      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: MatchDecisionReasonAssignment::KIND_DECLINE)
       filter_reason_assignments_by_audience(assignments, contact)
     end
 

@@ -24,7 +24,7 @@ module Admin::ManagesMatchDecisionReasonAssignments
   # Persists decline/cancel reason assignments from nested form params for a
   # route + decision_type. +kinds+ defaults to both decline and cancel; pass a
   # subset when a step only manages one kind.
-  private def sync_match_decision_reason_assignments!(route:, decision_type:, assignments_params:, kinds: ['decline', 'cancel'])
+  private def sync_match_decision_reason_assignments!(route:, decision_type:, assignments_params:, kinds: MatchDecisionReasonAssignment::KINDS)
     kinds.each do |kind|
       sync_kind!(route: route, decision_type: decision_type, kind: kind, rows_params: assignments_params&.dig(kind))
     end
@@ -64,8 +64,8 @@ module Admin::ManagesMatchDecisionReasonAssignments
     existing_by_kind = MatchDecisionReasonAssignment.where(route: route, decision_type: decision_type).group_by(&:kind)
 
     {
-      decline: build_rows(reasons, existing_by_kind['decline'] || []),
-      cancel: build_rows(reasons, existing_by_kind['cancel'] || []),
+      MatchDecisionReasonAssignment::KIND_DECLINE.to_sym => build_rows(reasons, existing_by_kind[MatchDecisionReasonAssignment::KIND_DECLINE] || []),
+      MatchDecisionReasonAssignment::KIND_CANCEL.to_sym => build_rows(reasons, existing_by_kind[MatchDecisionReasonAssignment::KIND_CANCEL] || []),
     }
   end
 

@@ -524,7 +524,7 @@ module MatchDecisions
     end
 
     def cancel_reason_assignments(contact = nil)
-      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: 'cancel')
+      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: MatchDecisionReasonAssignment::KIND_CANCEL)
       filter_reason_assignments_by_audience(assignments, contact)
     end
 
@@ -556,7 +556,7 @@ module MatchDecisions
       reason = decline_reason || administrative_cancel_reason
       return nil unless reason
 
-      kind = decline_reason ? 'decline' : 'cancel'
+      kind = decline_reason ? MatchDecisionReasonAssignment::KIND_DECLINE : MatchDecisionReasonAssignment::KIND_CANCEL
       assignment = MatchDecisionReasonAssignment.find_by(route: match_route, decision_type: self.class.name, match_decision_reason: reason, kind: kind)
       assignment&.referral_result || reason.referral_result || MatchDecisionStep.find_by(route: match_route, decision_type: self.class.name)&.default_referral_result
     end
