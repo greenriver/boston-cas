@@ -224,10 +224,17 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       expect(response.body).to include('This program is confidential, do not enter a real address as the unit number')
     end
 
-    it 'omits the confidential warning when the sub-program is not confidential' do
+    it 'omits the confidential warning when neither the program nor the sub-program is confidential' do
       sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: building, confidential: false)
       get_vacancy_section(sub_program)
       expect(response.body).not_to include('This program is confidential')
+    end
+
+    it 'shows the confidential warning when the program is confidential, even if the sub-program is not' do
+      confidential_program = create(:program, confidential: true)
+      sub_program = create(:sub_program, program: confidential_program, program_type: 'Project-Based', building: building, confidential: false)
+      get_vacancy_section(sub_program)
+      expect(response.body).to include('This program is confidential, do not enter a real address as the unit number')
     end
   end
 
