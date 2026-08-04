@@ -133,13 +133,19 @@ RSpec.describe HousingAttribute, type: :model do
       expect(untouched_type.reload.name).to eq('Elevater')
     end
 
-    it 'does nothing when the new name is blank or unchanged' do
+    it 'does nothing when the new name is blank' do
       row = create(:housing_attribute, :without_value, housingable: building, name: 'Elevator')
 
       expect { described_class.rename(old_name: 'Elevator', new_name: '', include_value: false) }.
         not_to(change { row.reload.name })
-      expect { described_class.rename(old_name: 'Elevator', new_name: 'Elevator', include_value: false) }.
-        not_to(change { row.reload.versions.count })
+    end
+
+    it 'skips the update entirely when the new name equals the old name' do
+      create(:housing_attribute, :without_value, housingable: building, name: 'Elevator')
+
+      expect(described_class).not_to receive(:transaction)
+
+      described_class.rename(old_name: 'Elevator', new_name: 'Elevator', include_value: false)
     end
   end
 
@@ -158,11 +164,12 @@ RSpec.describe HousingAttribute, type: :model do
       expect(other_name.reload.value).to eq('1')
     end
 
-    it 'does nothing when the old and new value are the same' do
-      row = create(:housing_attribute, :with_value, housingable: building, name: 'Bedrooms', value: '1')
+    it 'skips the update entirely when the old and new value are the same' do
+      create(:housing_attribute, :with_value, housingable: building, name: 'Bedrooms', value: '1')
 
-      expect { described_class.rename_value(name: 'Bedrooms', old_value: '1', new_value: '1') }.
-        not_to(change { row.reload.versions.count })
+      expect(described_class).not_to receive(:transaction)
+
+      described_class.rename_value(name: 'Bedrooms', old_value: '1', new_value: '1')
     end
   end
 end
