@@ -4,7 +4,7 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# Most things with inherited rules only inherit
+# Most things with inherited requirements only inherit
 # from services, so the common code is here
 module InheritsRequirementsFromServices
   extend ActiveSupport::Concern
