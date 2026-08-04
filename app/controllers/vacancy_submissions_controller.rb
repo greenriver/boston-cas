@@ -37,14 +37,14 @@ class VacancySubmissionsController < ApplicationController
   before_action :load_resubmittable_submission, only: [:edit, :update]
 
   def index
-    @search_string = params[:q]
     @vacancy_submissions = VacancySubmission
-      .filtered(search: params[:q], status_filter: params[:status])
+      .filtered(program_id: params[:program_id], status_filter: params[:status])
       .order(updated_at: :desc)
       .page(params[:page]).per(25)
 
     program_ids = @vacancy_submissions.map(&:program_id).uniq.compact
     @programs_by_id = Program.where(id: program_ids).index_by(&:id)
+    @programs = Program.where(id: VacancySubmission.program_ids_in_use).order(:name).pluck(:name, :id)
   end
 
   def show

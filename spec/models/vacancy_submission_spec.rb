@@ -338,19 +338,46 @@ RSpec.describe VacancySubmission, type: :model do
     let!(:active) { create(:vacancy_submission, status: 'active') }
 
     it 'returns queue records by default' do
-      result = described_class.filtered(search: nil, status_filter: 'queue')
+      result = described_class.filtered(program_id: nil, status_filter: 'queue')
       expect(result).to include(awaiting, changes)
       expect(result).not_to include(active)
     end
 
     it 'returns all records for all filter' do
-      result = described_class.filtered(search: nil, status_filter: 'all')
+      result = described_class.filtered(program_id: nil, status_filter: 'all')
       expect(result).to include(awaiting, changes, active)
     end
 
     it 'returns only the specified status' do
-      result = described_class.filtered(search: nil, status_filter: 'active')
+      result = described_class.filtered(program_id: nil, status_filter: 'active')
       expect(result).to contain_exactly(active)
+    end
+
+    it 'returns only submissions for the given program' do
+      target_program = create(:program)
+      matching = create(:vacancy_submission, status: 'active', the_program: target_program)
+      other_program_submission = create(:vacancy_submission, status: 'active')
+
+      result = described_class.filtered(program_id: target_program.id, status_filter: 'all')
+
+      expect(result).to include(matching)
+      expect(result).not_to include(other_program_submission, awaiting, changes, active)
+    end
+  end
+
+  describe '.program_ids_in_use' do
+    it 'returns each distinct program id used by any submission regardless of status, and excludes unused programs' do
+      active_program = create(:program)
+      queue_program = create(:program)
+      unused_program = create(:program)
+      create(:vacancy_submission, status: 'active', the_program: active_program)
+      create(:vacancy_submission, status: 'active', the_program: active_program)
+      create(:vacancy_submission, status: 'awaiting_approval', the_program: queue_program)
+
+      result = described_class.program_ids_in_use
+
+      expect(result).to contain_exactly(active_program.id, queue_program.id)
+      expect(result).not_to include(unused_program.id)
     end
   end
 

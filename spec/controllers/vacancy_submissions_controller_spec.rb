@@ -40,6 +40,30 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       get :index
       expect(response).to have_http_status(:ok)
     end
+
+    context 'rendering the program filter' do
+      render_views
+
+      it 'renders a select2 dropdown of programs and an Update Filter button, not a text search box' do
+        create(:vacancy_submission, the_program: create(:program, name: 'Sunset Housing'))
+        get :index
+
+        expect(response.body).to include('select2')
+        expect(response.body).to include('Sunset Housing')
+        expect(response.body).to include('Update Filter')
+        expect(response.body).not_to include('name="q"')
+      end
+
+      it 'excludes programs that have no vacancy submissions' do
+        create(:vacancy_submission, the_program: create(:program, name: 'Sunset Housing'))
+        create(:program, name: 'Never Submitted')
+
+        get :index
+
+        expect(response.body).to include('Sunset Housing')
+        expect(response.body).not_to include('Never Submitted')
+      end
+    end
   end
 
   describe 'GET #new' do
