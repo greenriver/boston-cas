@@ -1,0 +1,49 @@
+- type_label = @row.include_value? ? 'Attribute' : 'Amenity'
+- title = "Edit #{type_label} '#{@row.name}'"
+- content_for :title, title
+= render 'menus/admin_tabs'
+%h1= content_for :title
+
+.row.mb-4
+  .col-sm-6
+    = simple_form_for :housing_attribute_name, url: admin_housing_attribute_name_path(@row.id), method: :patch do |f|
+      .form-inputs
+        = f.input :name, label: 'Attribute name', input_html: { value: @row.name }
+        - @values.each do |v|
+          .form-group
+            = label_tag nil, "Value: #{v.value}", class: 'control-label'
+            = hidden_field_tag 'housing_attribute_name[value_renames][][old_value]', v.value
+            = text_field_tag 'housing_attribute_name[value_renames][][new_value]', v.value, class: 'form-control'
+        %p.text-muted
+          Renaming into a name or value that already exists as this same type (#{type_label})
+          merges the two. A same name used as the other type is a separate entity and is unaffected.
+      .form-actions.text-right
+        = f.button :submit, class: 'btn btn-primary'
+  .col-sm-6
+- if @values.any?
+  .values-table.mb-4
+    %h2 Available Options
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Value
+          %th In Use
+      %tbody
+        - @values.each do |v|
+          %tr
+            %td= v.value
+            %td= v.count
+
+%h2 Currently Used By
+%table.table.table-striped
+  %thead
+    %tr
+      %th Type
+      %th Record
+      %th Value
+  %tbody
+    - @rows.each do |row|
+      %tr
+        %td= housingable_type(row.housingable)
+        %td= link_to housingable_name(row.housingable), housingable_edit_path(row.housingable)
+        %td= row.value

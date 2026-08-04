@@ -222,6 +222,7 @@ Rails.application.routes.draw do
     resources :match_routes, only: [:index, :edit, :update] do
       resources :weighting_rules, on: :member, except: [:create]
     end
+    resources :housing_attribute_names, only: [:index, :edit, :update]
     resources :sessions, only: [:index, :destroy]
   end
 
