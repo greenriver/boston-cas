@@ -96,7 +96,7 @@
     .c-card__header
       %h2 Inherited Requirements
     .c-card__content
-      = render 'requirement_manager/inherited_rules', inheritee: @sub_program
+      = render 'requirement_manager/inherited_rules', inheritee: @sub_program, show_label: false
 
 - if @submission.resubmittable? && can_add_vacancies?
   .c-card

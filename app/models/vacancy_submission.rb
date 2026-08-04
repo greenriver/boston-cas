@@ -61,9 +61,9 @@ class VacancySubmission < ApplicationRecord
   scope :queue,     -> { where(status: REVIEW_QUEUE_STATUSES) }
   scope :by_status, ->(s) { where(status: s) }
 
-  def self.filtered(search:, status_filter:)
+  def self.filtered(program_id:, status_filter:)
     scope = all
-    scope = scope.where('draft_data::text ILIKE ?', "%#{ActiveRecord::Base.sanitize_sql_like(search)}%") if search.present?
+    scope = scope.where("draft_data ->> 'program_id' = ?", program_id.to_s) if program_id.present?
     case status_filter.to_s
     when 'queue', ''
       scope.queue
@@ -72,6 +72,10 @@ class VacancySubmission < ApplicationRecord
     else
       scope.by_status(status_filter)
     end
+  end
+
+  def self.program_ids_in_use
+    distinct.pluck(Arel.sql("(draft_data ->> 'program_id')::integer")).compact
   end
 
   def self.derive_route(sub_program)
