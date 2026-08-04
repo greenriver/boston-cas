@@ -22,12 +22,6 @@ T1=`date +%s`
 T2=`date +%s`
 echo "...rake cas_seeds:create_match_decision_reasons took $(expr $T2 - $T1) seconds"
 
-echo 'Seed match decision reason assignments'
-T1=`date +%s`
-./bin/rake cas_seeds:seed_match_decision_reason_assignments
-T2=`date +%s`
-echo "...rake cas_seeds:seed_match_decision_reason_assignments took $(expr $T2 - $T1) seconds"
-
 echo 'Ensure all match routes exist'
 T1=`date +%s`
 ./bin/rake cas_seeds:ensure_all_match_routes_exist

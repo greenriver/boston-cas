@@ -10,6 +10,8 @@ module MatchDecisions::Four
   class MatchRecommendationHsa < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
     include MatchDecisions::AcceptsNotWorkingWithClientReason
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     # proxy for client.release_of_information
     attr_accessor :release_of_information

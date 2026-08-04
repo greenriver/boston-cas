@@ -1,9 +1,0 @@
-- title = "Edit #{@match_decision_reason.name}"
-- content_for :title, title
-= content_for :crumbs do
-  = link_to action: :index do
-    &laquo; Manage #{Translation.translate('Decline & Cancel Reasons')}
-
-%h1= content_for :title
-
-= render 'form'

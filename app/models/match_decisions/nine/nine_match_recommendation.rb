@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Nine
   class NineMatchRecommendation < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteNineDeclineReasons
+    include MatchDecisions::DefaultDndStaffDeclineReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match
@@ -67,6 +67,17 @@ module MatchDecisions::Nine
       @notifications_for_this_step ||= [].tap do |m|
         m << Notifications::Nine::NineMatchRecommendation
       end
+    end
+
+    def step_cancel_reasons
+      [
+        'Match expired',
+        'Client has disengaged',
+        'Client has disappeared',
+        'Incarcerated',
+        'Client no longer eligible for match',
+        'Other',
+      ]
     end
 
     class StatusCallbacks < StatusCallbacks

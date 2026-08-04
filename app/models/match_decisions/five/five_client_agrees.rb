@@ -4,11 +4,10 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Five
   class FiveClientAgrees < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultShelterAgencyDeclineReasons
 
     def step_name
       Translation.translate('Client Agrees To Match')

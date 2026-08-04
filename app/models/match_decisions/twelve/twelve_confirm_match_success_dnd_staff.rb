@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Twelve
   class TwelveConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteTwelveDeclineReasons
+    include MatchDecisions::RouteTwelveCancelReasons
     # validate :note_present_if_status_rejected
 
     def to_partial_path

@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Twelve
   class TwelveAgencyAcknowledgesReceiptDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteTwelveDeclineReasons
+    include MatchDecisions::RouteTwelveCancelReasons
 
     def to_partial_path
       'match_decisions/twelve/agency_acknowledges_receipt_decline'

@@ -9,6 +9,8 @@
 module MatchDecisions::Four
   class RecordClientHousedDateHousingSubsidyAdministrator < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::DefaultHsaDeclineReasons
+    include MatchDecisions::RouteFourCancelReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
