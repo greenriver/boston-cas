@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 # Most things with inherited requirements only inherit
 # from services, so the common code is here
 module InheritsRequirementsFromServicesOnly
@@ -19,5 +21,4 @@ module InheritsRequirementsFromServicesOnly
       preload_inherited_service_requirements
     end
   end
-
 end
