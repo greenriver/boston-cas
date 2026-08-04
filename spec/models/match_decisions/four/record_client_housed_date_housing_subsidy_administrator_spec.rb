@@ -13,7 +13,7 @@ RSpec.describe MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdminis
   let(:match) { create(:client_opportunity_match, match_route: match_route) }
   let(:decision) { match.four_record_client_housed_date_housing_subsidy_administrator_decision }
   let(:confirm_decision) { match.four_confirm_record_client_housed_date_decline_dnd_staff_decision }
-  let(:decline_reason) { MatchDecisionReasons::All.where(name: 'Self-resolved').first_or_create! }
+  let(:decline_reason) { MatchDecisionReasons::All.where(name: 'Client deceased').first_or_create! }
   let(:admin_contact) do
     user = create(:user)
     user.roles << create(:admin_role)
@@ -34,6 +34,47 @@ RSpec.describe MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdminis
     it 'is valid when declined with a decline_reason' do
       decision.assign_attributes(status: 'declined', decline_reason: decline_reason)
       expect(decision).to be_valid
+    end
+  end
+
+  describe '#decline_reasons' do
+    it 'offers the route four post-approval reason list, not the shared DefaultHsaDeclineReasons list' do
+      [
+        'Ineligible for Housing Program',
+        'Client has another housing option',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Does not agree to services',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Client has disappeared',
+        'Client has disengaged',
+        'Client deceased',
+        'Incarcerated',
+        'Other',
+      ].each { |name| MatchDecisionReasons::All.where(name: name).first_or_create! }
+      MatchDecisionReasons::All.where(name: 'CORI').first_or_create!
+
+      names = decision.decline_reasons(contact: nil).map(&:first)
+
+      expect(names).to contain_exactly(
+        'Ineligible for Housing Program',
+        'Client has another housing option',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Does not agree to services',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Client has disappeared',
+        'Client has disengaged',
+        'Client deceased',
+        'Incarcerated',
+        'Other',
+      )
     end
   end
 
