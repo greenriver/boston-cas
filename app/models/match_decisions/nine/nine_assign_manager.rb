@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Nine
   class NineAssignManager < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteNineDeclineReasons
-    include MatchDecisions::RouteNineCancelReasons
 
     validate :manager_present_if_status_complete
 
@@ -100,12 +100,6 @@ module MatchDecisions::Nine
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
         contact.in?(match.send(contact_actor_type))
-    end
-
-    def step_decline_reasons(_contact)
-      [
-        'Other',
-      ]
     end
 
     def whitelist_params_for_update params

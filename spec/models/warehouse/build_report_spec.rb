@@ -429,6 +429,46 @@ RSpec.describe Warehouse::BuildReport, type: :model do
       result = build_report.explain(decision, :decline_reason)
       expect(result).to be_nil
     end
+
+    it 'keeps returning the reason name as it was when chosen, even if the catalog reason is later renamed' do
+      decline_reason = create(:dnd_staff_decline_reason, name: 'Client declined')
+      decision.update(decline_reason: decline_reason)
+      decline_reason.update!(name: 'Renamed reason')
+
+      result = build_report.explain(decision.reload, :decline_reason)
+
+      expect(result).to eq('Client declined')
+    end
+
+    it 'keeps returning the administrative cancel reason name as it was when chosen, even if the catalog reason is later renamed' do
+      cancel_reason = create(:match_decision_reason, name: 'Match expired')
+      decision.update!(administrative_cancel_reason: cancel_reason)
+      cancel_reason.update!(name: 'Renamed reason')
+
+      result = build_report.explain(decision.reload, :administrative_cancel_reason)
+
+      expect(result).to eq('Match expired')
+    end
+
+    it 'still appends the historical explanation after the catalog reason is renamed away from "Other"' do
+      reason = create(:dnd_staff_decline_reason, name: 'Other')
+      decision.update!(decline_reason: reason, decline_reason_other_explanation: 'Custom explanation')
+      reason.update!(name: 'Something else entirely')
+
+      result = build_report.explain(decision.reload, :decline_reason)
+
+      expect(result).to eq('Other: Custom explanation')
+    end
+
+    it 'does not append an explanation for a historical decision whose reason is later renamed to "Other"' do
+      reason = create(:dnd_staff_decline_reason, name: 'Client declined')
+      decision.update!(decline_reason: reason)
+      reason.update!(name: 'Other')
+
+      result = build_report.explain(decision.reload, :decline_reason)
+
+      expect(result).to eq('Client declined')
+    end
   end
 
   describe '#decline_reason' do

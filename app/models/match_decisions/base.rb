@@ -64,6 +64,7 @@ module MatchDecisions
 
     validate :ensure_status_allowed, if: :status
     validate :cancellations
+    before_save :snapshot_administrative_cancel_reason_text
 
     ####################
     # Attributes
@@ -204,6 +205,13 @@ module MatchDecisions
     end
 
     def declineable_by?(_contact)
+      false
+    end
+
+    # Override to return true for a step where more than one contact type can
+    # independently act on it (e.g. both a shelter agency contact and an HSA
+    # contact can decline it), each seeing a different, audience-scoped set of reasons.
+    def supports_multiple_actors?
       false
     end
 
@@ -482,10 +490,11 @@ module MatchDecisions
     end
 
     def canceled_status_label
+      reason_text = administrative_cancel_reason_text.presence || administrative_cancel_reason&.name
       if administrative_cancel_reason_other_explanation.present?
-        "Match #{Translation.translate('canceled administratively')}: #{administrative_cancel_reason&.name} (#{administrative_cancel_reason_other_explanation})"
+        "Match #{Translation.translate('canceled administratively')}: #{reason_text} (#{administrative_cancel_reason_other_explanation})"
       elsif administrative_cancel_reason.present?
-        "Match #{Translation.translate('canceled administratively')}: #{administrative_cancel_reason.name}"
+        "Match #{Translation.translate('canceled administratively')}: #{reason_text}"
       else
         "Match #{Translation.translate('canceled administratively')}"
       end
@@ -514,45 +523,50 @@ module MatchDecisions
       self.class.const_get :StatusCallbacks
     end
 
-    def step_cancel_reasons
-      [
-        'Match expired',
-        'Client has declined match',
-        'Client has disengaged',
-        'Client has disappeared',
-        'SSP CORI',
-        'HSP CORI',
-        'Incarcerated',
-        'Vacancy should not have been entered',
-        'Client received another housing opportunity',
-        'Client no longer eligible for match',
-        'Client deceased',
-        'Vacancy filled by other client',
-        'Other',
-      ]
+    def cancel_reason_assignments(contact = nil)
+      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: MatchDecisionReasonAssignment::KIND_CANCEL)
+      filter_reason_assignments_by_audience(assignments, contact)
     end
 
-    def cancel_reasons
-      result = []
-      MatchDecisionReasons::All.where(name: step_cancel_reasons).each do |reason|
-        result << reason
-      end
-      result.sort_by! { |m| [m.name.downcase == 'other' ? 1 : 0, m.name.downcase] }
-      result.map! do |reason|
+    def step_cancel_reasons
+      cancel_reason_assignments.map { |assignment| assignment.match_decision_reason.name }
+    end
+
+    def cancel_reasons(contact: nil)
+      not_other_requiring_explanation = cancel_reasons_not_other_requiring_explanation(contact)
+      cancel_reason_assignments(contact).map do |assignment|
+        reason = assignment.match_decision_reason
         # Only include the asterisks if more than 'Other' requires additional explanation
-        include_asterisk = cancel_reasons_not_other_requiring_explanation.present? && (reason.other? || cancel_reasons_not_other_requiring_explanation.include?(reason.name))
+        include_asterisk = not_other_requiring_explanation.present? && (reason.other? || not_other_requiring_explanation.include?(reason.name))
         name = reason.name
         name += '*' if include_asterisk
         [name, reason.id]
       end
     end
 
+    # A reason assignment with a blank audience is visible to everyone. A contact who
+    # can act on behalf of match contacts (e.g. an admin) sees every audience.
+    private def filter_reason_assignments_by_audience(assignments, contact)
+      return assignments if contact.nil? || contact.user_can_act_on_behalf_of_match_contacts?
+
+      assignments.select { |assignment| assignment.audience.blank? || contact.in?(match.public_send(assignment.audience)) }
+    end
+
+    def effective_referral_result
+      reason = decline_reason || administrative_cancel_reason
+      return nil unless reason
+
+      kind = decline_reason ? MatchDecisionReasonAssignment::KIND_DECLINE : MatchDecisionReasonAssignment::KIND_CANCEL
+      assignment = MatchDecisionReasonAssignment.find_by(route: match_route, decision_type: self.class.name, match_decision_reason: reason, kind: kind)
+      assignment&.referral_result || reason.referral_result || MatchDecisionStep.find_by(route: match_route, decision_type: self.class.name)&.default_referral_result
+    end
+
     def decline_reasons_not_other_requiring_explanation(_contact = nil)
       []
     end
 
-    def cancel_reasons_not_other_requiring_explanation
-      []
+    def cancel_reasons_not_other_requiring_explanation(contact = nil)
+      cancel_reason_assignments(contact).select(&:requires_explanation).map { |assignment| assignment.match_decision_reason.name }
     end
 
     private def ensure_status_allowed
@@ -564,6 +578,10 @@ module MatchDecisions
 
       explanation_field_required = status == 'canceled' && (administrative_cancel_reason&.other? || cancel_reasons_not_other_requiring_explanation&.include?(administrative_cancel_reason&.name))
       errors.add :administrative_cancel_reason_other_explanation, "must be filled in if choosing '#{administrative_cancel_reason&.name}'" if explanation_field_required && administrative_cancel_reason_other_explanation&.blank?
+    end
+
+    private def snapshot_administrative_cancel_reason_text
+      self.administrative_cancel_reason_text = administrative_cancel_reason.name if administrative_cancel_reason_id_changed? && administrative_cancel_reason.present?
     end
 
     private def notification_class
