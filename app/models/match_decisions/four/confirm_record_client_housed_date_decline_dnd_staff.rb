@@ -8,6 +8,8 @@
 
 module MatchDecisions::Four
   class ConfirmRecordClientHousedDateDeclineDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::RouteFourCancelReasons
+
     def statuses
       {
         pending: 'Pending',

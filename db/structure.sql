@@ -736,8 +736,7 @@ CREATE TABLE public.configs (
     limit_client_names_on_matches boolean DEFAULT true,
     include_note_in_email_default boolean,
     notify_all_on_progress_update boolean DEFAULT false,
-    send_match_summary_email_on integer,
-    vacancy_submission_mechanism character varying DEFAULT 'traditional'::character varying
+    send_match_summary_email_on integer
 );
 
 
@@ -1400,8 +1399,7 @@ CREATE TABLE public.housing_attributes (
     value character varying,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    include_value boolean DEFAULT true NOT NULL
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1644,45 +1642,6 @@ ALTER SEQUENCE public.match_census_id_seq OWNED BY public.match_census.id;
 
 
 --
--- Name: match_decision_reason_assignments; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.match_decision_reason_assignments (
-    id bigint NOT NULL,
-    route_id bigint NOT NULL,
-    decision_type character varying NOT NULL,
-    match_decision_reason_id bigint NOT NULL,
-    kind character varying NOT NULL,
-    "position" integer DEFAULT 0 NOT NULL,
-    requires_explanation boolean DEFAULT false NOT NULL,
-    referral_result integer,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    deleted_at timestamp(6) without time zone,
-    audience character varying
-);
-
-
---
--- Name: match_decision_reason_assignments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.match_decision_reason_assignments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: match_decision_reason_assignments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.match_decision_reason_assignments_id_seq OWNED BY public.match_decision_reason_assignments.id;
-
-
---
 -- Name: match_decision_reasons; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1720,39 +1679,6 @@ ALTER SEQUENCE public.match_decision_reasons_id_seq OWNED BY public.match_decisi
 
 
 --
--- Name: match_decision_steps; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.match_decision_steps (
-    id bigint NOT NULL,
-    route_id bigint NOT NULL,
-    decision_type character varying NOT NULL,
-    default_referral_result integer,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: match_decision_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.match_decision_steps_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: match_decision_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.match_decision_steps_id_seq OWNED BY public.match_decision_steps.id;
-
-
---
 -- Name: match_decisions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1783,9 +1709,7 @@ CREATE TABLE public.match_decisions (
     include_note_in_email boolean,
     date_voucher_issued timestamp without time zone,
     manager character varying,
-    criminal_hearing_outcome_recorded boolean,
-    decline_reason_text character varying,
-    administrative_cancel_reason_text character varying
+    criminal_hearing_outcome_recorded boolean
 );
 
 
@@ -3446,8 +3370,7 @@ CREATE TABLE public.roles (
     can_edit_voucher_rules boolean DEFAULT false,
     can_manage_all_deidentified_clients boolean DEFAULT false,
     can_manage_all_identified_clients boolean DEFAULT false,
-    can_activate_matches boolean DEFAULT false,
-    can_review_vacancies boolean DEFAULT false NOT NULL
+    can_activate_matches boolean DEFAULT false
 );
 
 
@@ -4142,8 +4065,7 @@ CREATE TABLE public.units (
     data_source_id integer,
     data_source_id_column_name character varying,
     elevator_accessible boolean DEFAULT false NOT NULL,
-    active boolean DEFAULT true NOT NULL,
-    notes text
+    active boolean DEFAULT true NOT NULL
 );
 
 
@@ -4269,73 +4191,6 @@ CREATE SEQUENCE public.users_id_seq
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-
-
---
--- Name: vacancy_submission_notes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.vacancy_submission_notes (
-    id bigint NOT NULL,
-    vacancy_submission_id bigint NOT NULL,
-    user_id bigint,
-    note_type character varying NOT NULL,
-    body text NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: vacancy_submission_notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.vacancy_submission_notes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: vacancy_submission_notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.vacancy_submission_notes_id_seq OWNED BY public.vacancy_submission_notes.id;
-
-
---
--- Name: vacancy_submissions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.vacancy_submissions (
-    id bigint NOT NULL,
-    user_id bigint,
-    status character varying DEFAULT 'awaiting_approval'::character varying NOT NULL,
-    draft_data jsonb DEFAULT '{}'::jsonb NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: vacancy_submissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.vacancy_submissions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: vacancy_submissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.vacancy_submissions_id_seq OWNED BY public.vacancy_submissions.id;
 
 
 --
@@ -4759,24 +4614,10 @@ ALTER TABLE ONLY public.match_census ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- Name: match_decision_reason_assignments id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.match_decision_reason_assignments ALTER COLUMN id SET DEFAULT nextval('public.match_decision_reason_assignments_id_seq'::regclass);
-
-
---
 -- Name: match_decision_reasons id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.match_decision_reasons ALTER COLUMN id SET DEFAULT nextval('public.match_decision_reasons_id_seq'::regclass);
-
-
---
--- Name: match_decision_steps id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.match_decision_steps ALTER COLUMN id SET DEFAULT nextval('public.match_decision_steps_id_seq'::regclass);
 
 
 --
@@ -5144,20 +4985,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Name: vacancy_submission_notes id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submission_notes ALTER COLUMN id SET DEFAULT nextval('public.vacancy_submission_notes_id_seq'::regclass);
-
-
---
--- Name: vacancy_submissions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submissions ALTER COLUMN id SET DEFAULT nextval('public.vacancy_submissions_id_seq'::regclass);
-
-
---
 -- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5514,27 +5341,11 @@ ALTER TABLE ONLY public.match_census
 
 
 --
--- Name: match_decision_reason_assignments match_decision_reason_assignments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.match_decision_reason_assignments
-    ADD CONSTRAINT match_decision_reason_assignments_pkey PRIMARY KEY (id);
-
-
---
 -- Name: match_decision_reasons match_decision_reasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.match_decision_reasons
     ADD CONSTRAINT match_decision_reasons_pkey PRIMARY KEY (id);
-
-
---
--- Name: match_decision_steps match_decision_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.match_decision_steps
-    ADD CONSTRAINT match_decision_steps_pkey PRIMARY KEY (id);
 
 
 --
@@ -5962,22 +5773,6 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: vacancy_submission_notes vacancy_submission_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submission_notes
-    ADD CONSTRAINT vacancy_submission_notes_pkey PRIMARY KEY (id);
-
-
---
--- Name: vacancy_submissions vacancy_submissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submissions
-    ADD CONSTRAINT vacancy_submissions_pkey PRIMARY KEY (id);
-
-
---
 -- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6028,13 +5823,6 @@ CREATE INDEX created_at_idx ON public.activity_logs USING brin (created_at);
 --
 
 CREATE INDEX delayed_jobs_priority ON public.delayed_jobs USING btree (priority, run_at);
-
-
---
--- Name: idx_on_match_decision_reason_id_54e59b4f78; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_on_match_decision_reason_id_54e59b4f78 ON public.match_decision_reason_assignments USING btree (match_decision_reason_id);
 
 
 --
@@ -6360,13 +6148,6 @@ CREATE INDEX index_contacts_on_user_id ON public.contacts USING btree (user_id);
 
 
 --
--- Name: index_decision_steps_on_route_and_decision_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_decision_steps_on_route_and_decision_type ON public.match_decision_steps USING btree (route_id, decision_type);
-
-
---
 -- Name: index_entity_view_permissions_on_agency_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6511,20 +6292,6 @@ CREATE INDEX index_match_census_on_match_prioritization_id ON public.match_censu
 --
 
 CREATE INDEX index_match_census_on_opportunity_id ON public.match_census USING btree (opportunity_id);
-
-
---
--- Name: index_match_decision_reason_assignments_on_route_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_match_decision_reason_assignments_on_route_id ON public.match_decision_reason_assignments USING btree (route_id);
-
-
---
--- Name: index_match_decision_steps_on_route_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_match_decision_steps_on_route_id ON public.match_decision_steps USING btree (route_id);
 
 
 --
@@ -6826,13 +6593,6 @@ CREATE INDEX index_project_clients_on_date_of_birth ON public.project_clients US
 --
 
 CREATE INDEX index_project_clients_on_source_last_changed ON public.project_clients USING btree (source_last_changed);
-
-
---
--- Name: index_reason_assignments_on_route_step_reason_kind; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_reason_assignments_on_route_step_reason_kind ON public.match_decision_reason_assignments USING btree (route_id, decision_type, match_decision_reason_id, kind);
 
 
 --
@@ -7186,41 +6946,6 @@ CREATE UNIQUE INDEX index_users_on_unlock_token ON public.users USING btree (unl
 
 
 --
--- Name: index_vacancy_submission_notes_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vacancy_submission_notes_on_user_id ON public.vacancy_submission_notes USING btree (user_id);
-
-
---
--- Name: index_vacancy_submission_notes_on_vacancy_submission_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vacancy_submission_notes_on_vacancy_submission_id ON public.vacancy_submission_notes USING btree (vacancy_submission_id);
-
-
---
--- Name: index_vacancy_submissions_on_draft_data; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vacancy_submissions_on_draft_data ON public.vacancy_submissions USING gin (draft_data);
-
-
---
--- Name: index_vacancy_submissions_on_status; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vacancy_submissions_on_status ON public.vacancy_submissions USING btree (status);
-
-
---
--- Name: index_vacancy_submissions_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vacancy_submissions_on_user_id ON public.vacancy_submissions USING btree (user_id);
-
-
---
 -- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7267,30 +6992,6 @@ CREATE INDEX index_weighting_rules_on_route_id ON public.weighting_rules USING b
 --
 
 CREATE UNIQUE INDEX uidx_client_search_queries ON public.client_search_queries USING btree (fingerprint);
-
-
---
--- Name: vacancy_submissions fk_rails_14ca527d24; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submissions
-    ADD CONSTRAINT fk_rails_14ca527d24 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
--- Name: vacancy_submission_notes fk_rails_8379de24b6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submission_notes
-    ADD CONSTRAINT fk_rails_8379de24b6 FOREIGN KEY (vacancy_submission_id) REFERENCES public.vacancy_submissions(id);
-
-
---
--- Name: vacancy_submission_notes fk_rails_851fc7240f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.vacancy_submission_notes
-    ADD CONSTRAINT fk_rails_851fc7240f FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -7452,19 +7153,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20260730161749'),
-('20260730092443'),
-('20260729172307'),
-('20260729172306'),
-('20260729172305'),
 ('20260728120000'),
-('20260714153122'),
-('20260701170632'),
-('20260701000001'),
-('20260624131950'),
-('20260601000002'),
-('20260601000001'),
-('20260528000001'),
 ('20260505173350'),
 ('20260505170932'),
 ('20250917150302'),

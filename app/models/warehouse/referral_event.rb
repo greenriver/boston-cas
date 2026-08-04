@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module Warehouse
   class ReferralEvent < Base
     self.table_name = :cas_referral_events
@@ -25,9 +23,8 @@ module Warehouse
       reason = client_opportunity_match.unsuccessful_reason
       unsuccessful_decision = client_opportunity_match.unsuccessful_decision
       closed_timestamp = unsuccessful_decision&.updated_at || client_opportunity_match.updated_at
-      effective_referral_result = unsuccessful_decision&.effective_referral_result || reason&.referral_result
-      if effective_referral_result.present?
-        update(referral_result: effective_referral_result, referral_result_date: closed_timestamp)
+      if reason&.referral_result.present?
+        update(referral_result: reason.referral_result, referral_result_date: closed_timestamp)
       else
         destroy
       end
@@ -70,14 +67,13 @@ module Warehouse
           reason = match.unsuccessful_reason
           unsuccessful_decision = match.unsuccessful_decision
           closed_timestamp = unsuccessful_decision&.updated_at || match.updated_at
-          effective_referral_result = unsuccessful_decision&.effective_referral_result || reason&.referral_result
           # If we have a reason, the match was closed, we may not know the result,
           # but we should still capture the event
           if reason.present?
-            if event.referral_result != effective_referral_result
+            if event.referral_result != reason.referral_result
               event.update(
                 event: match.sub_program.event,
-                referral_result: effective_referral_result,
+                referral_result: reason.referral_result,
                 referral_result_date: closed_timestamp,
               )
             end

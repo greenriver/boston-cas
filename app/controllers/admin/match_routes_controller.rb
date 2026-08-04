@@ -4,17 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module Admin
   class MatchRoutesController < ApplicationController
     before_action :require_can_manage_config!
     before_action :load_match_route, only: [:edit, :update]
-    before_action :load_steps, only: [:edit]
 
     def index
       @routes = MatchRoutes::Base.all.order(id: :desc)
-      @active_routes, @inactive_routes = @routes.to_a.partition(&:active)
     end
 
     def edit
@@ -27,13 +23,6 @@ module Admin
 
     def load_match_route
       @route = MatchRoutes::Base.find params[:id].to_i
-    end
-
-    private def load_steps
-      @steps = MatchDecisionStep.where(route: @route).sort_by do |step|
-        @route.class.match_steps[step.decision_type] || @route.class.match_steps_for_reporting[step.decision_type] || Float::INFINITY
-      end
-      @reason_counts = MatchDecisionReasonAssignment.where(route: @route).with_active_reason.group(:decision_type, :kind).count
     end
 
     def update_params

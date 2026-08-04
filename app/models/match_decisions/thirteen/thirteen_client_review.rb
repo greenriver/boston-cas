@@ -9,6 +9,8 @@
 module MatchDecisions::Thirteen
   class ThirteenClientReview < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteThirteenCancelReasons
+    include MatchDecisions::RouteThirteenDeclineReasons
 
     # proxy for client.release_of_information
     attr_accessor :release_of_information

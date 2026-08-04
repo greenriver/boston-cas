@@ -9,6 +9,8 @@
 module MatchDecisions::Six
   class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteSixDeclineReasons
+    include MatchDecisions::RouteSixCancelReasons
 
     def to_partial_path
       'match_decisions/six_approve_match_housing_subsidy_admin'

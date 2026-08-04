@@ -4,8 +4,6 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::ProviderOnly
   class ConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
     def to_partial_path
@@ -97,5 +95,13 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
+  end
+
+  def step_cancel_reasons
+    [
+      'Vacancy should not have been entered',
+      'Vacancy filled by other client',
+      'Other',
+    ]
   end
 end

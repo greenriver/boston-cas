@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Nine
   class NineConfirmLeaseUpDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteNineDeclineReasons
+    include MatchDecisions::RouteNineCancelReasons
 
     def step_name
       "#{Translation.translate('DND')} confirms #{Translation.translate('Move In')} failure"
@@ -80,5 +80,18 @@ module MatchDecisions::Nine
       end
     end
     private_constant :StatusCallbacks
+
+    def step_decline_reasons(_contact)
+      [
+        'Immigration status',
+        'Ineligible for Housing Program',
+        'Self-resolved',
+        'Household did not respond after initial acceptance of match',
+        'Client refused offer',
+        'Client needs higher level of care',
+        'Unable to reach client after multiple attempts',
+        'Other',
+      ].freeze
+    end
   end
 end

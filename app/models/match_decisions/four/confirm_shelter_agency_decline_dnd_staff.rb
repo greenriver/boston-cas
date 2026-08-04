@@ -4,10 +4,10 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Four
   class ConfirmShelterAgencyDeclineDndStaff < ::MatchDecisions::Base
+    include MatchDecisions::RouteFourCancelReasons
+
     def statuses
       {
         pending: 'Pending',

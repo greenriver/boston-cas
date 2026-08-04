@@ -9,6 +9,8 @@
 module MatchDecisions::Thirteen
   class ThirteenHearingOutcomeDecline < Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteThirteenDeclineReasons
+    include MatchDecisions::RouteThirteenCancelReasons
 
     def to_partial_path
       'match_decisions/thirteen/hearing_outcome_decline'

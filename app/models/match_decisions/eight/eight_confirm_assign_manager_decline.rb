@@ -4,11 +4,10 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-# frozen_string_literal: true
-
 module MatchDecisions::Eight
   class EightConfirmAssignManagerDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteEightCancelReasons
 
     def step_name
       "#{Translation.translate('DND')} confirms case manager assignment decline"

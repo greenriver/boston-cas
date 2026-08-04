@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :cas do
   def self.safely_execute(&block)
     block.call
@@ -23,7 +21,9 @@ namespace :cas do
   desc 'Hourly tasks'
   task hourly: [:environment, 'log:info_to_stdout'] do
     # attempt to keep the matched counts in sync.
-    SubProgram.find_each(&:update_summary!)
+    SubProgram.find_each do |sp|
+      sp.update_summary!
+    end
     Client.add_missing_tie_breakers
 
     BuildTranslationCacheJob.perform_later

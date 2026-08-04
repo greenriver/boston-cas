@@ -988,7 +988,7 @@ class ClientOpportunityMatch < ApplicationRecord
         'Not Engaging'
       end
       # We can't currently tell if this was positive or negative when someone chose other
-      still_active = 'Other' if response_text&.downcase == 'other'
+      still_active = 'Other' if response_text.downcase == 'other'
       {
         still_active: still_active,
         response_date: m.created_at.to_date,

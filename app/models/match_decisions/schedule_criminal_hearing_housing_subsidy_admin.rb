@@ -9,6 +9,7 @@
 module MatchDecisions
   class ScheduleCriminalHearingHousingSubsidyAdmin < Base
     include MatchDecisions::AcceptsDeclineReason # For shelter agency declines
+    include MatchDecisions::RouteOneDeclineReasons
 
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
@@ -71,6 +72,20 @@ module MatchDecisions
         :housing_subsidy_admin_contacts,
         :ssp_contacts,
         :hsp_contacts,
+      ]
+    end
+
+    def step_decline_reasons(_contact)
+      [
+        'Client has another housing option',
+        'Does not agree to services',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Health and Safety',
       ]
     end
 

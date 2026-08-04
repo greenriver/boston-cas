@@ -1,35 +1,32 @@
-# frozen_string_literal: true
-
 namespace :cas_seeds do
   # The tasks in this file are to seed the CAS db with fake data for development.
 
   desc 'Run all cas seed tasks'
-  task all: [
-    :create_opportunities,
-    :create_rules,
-    :create_services,
-    :ensure_all_match_routes_exist,
-    :ensure_all_match_prioritization_schemes_exist,
-    :ensure_non_hmis_datasource_exists,
-    :create_match_decision_reasons,
-    :seed_match_decision_reason_assignments,
-    :create_mitigation_reasons,
-    :create_admin_user,
-    :ensure_all_users_have_contacts,
-  ]
+  task all: %i{
+    create_opportunities
+    create_rules
+    create_services
+    ensure_all_match_routes_exist
+    ensure_all_match_prioritization_schemes_exist
+    ensure_non_hmis_datasource_exists
+    create_match_decision_reasons
+    create_mitigation_reasons
+    create_admin_user
+    ensure_all_users_have_contacts
+  }
 
   desc 'create fake opportunities'
-  task create_opportunities: [:environment, 'log:info_to_stdout'] do
+  task create_opportunities: [:environment, "log:info_to_stdout"] do
     CasSeeds::Opportunities.new.run!
   end
 
   desc 'create rules'
-  task create_rules: [:environment, 'log:info_to_stdout'] do
+  task create_rules: [:environment, "log:info_to_stdout"] do
     CasSeeds::Rules.new.run!
   end
 
   desc 'create services'
-  task create_services: [:environment, 'log:info_to_stdout'] do
+  task create_services: [:environment, "log:info_to_stdout"] do
     CasSeeds::Services.new.run!
   end
 
@@ -38,28 +35,23 @@ namespace :cas_seeds do
     CasSeeds::MatchDecisionReasons.new.run!
   end
 
-  desc 'seed match decision steps and reason assignments from db/seeds/match_decision_reason_assignments.csv'
-  task seed_match_decision_reason_assignments: [:environment, 'log:info_to_stdout'] do
-    CasSeeds::MatchDecisionReasonAssignments.new.run!
-  end
-
   desc 'create mitigation reasons'
-  task create_mitigation_reasons: [:environment, 'log:info_to_stdout'] do
+  task create_mitigation_reasons: [:environment, "log:info_to_stdout"] do
     CasSeeds::MitigationReasons.new.run!
   end
 
   desc 'import vouchers'
-  task import_vouchers: [:environment, 'log:info_to_stdout'] do
+  task import_vouchers: [:environment, "log:info_to_stdout"] do
     CasSeeds::Vouchers.new.run!
   end
 
   desc 'import chronically homeless project clients for mvp'
-  task import_chronically_homeless_from_csv: [:environment, 'log:info_to_stdout'] do
+  task import_chronically_homeless_from_csv: [:environment, "log:info_to_stdout"] do
     CasSeeds::ChronicallyHomeless.new.run!
   end
 
   desc 'ensure all users have contacts'
-  task ensure_all_users_have_contacts: [:environment, 'log:info_to_stdout'] do
+  task ensure_all_users_have_contacts: [:environment, "log:info_to_stdout"] do
     user_ids_to_exclude = Contact.distinct.pluck(:user_id)
 
     users = User.where.not(id: user_ids_to_exclude)
@@ -72,25 +64,26 @@ namespace :cas_seeds do
       user.contact.email = user.email
       user.contact.save
     end
+
   end
 
   desc 'ensure all match routes exist'
-  task ensure_all_match_routes_exist: [:environment, 'log:info_to_stdout'] do
+  task ensure_all_match_routes_exist: [:environment, "log:info_to_stdout"] do
     MatchRoutes::Base.ensure_all
   end
 
   desc 'ensure all match prioritization schemes exist'
-  task ensure_all_match_prioritization_schemes_exist: [:environment, 'log:info_to_stdout'] do
+  task ensure_all_match_prioritization_schemes_exist: [:environment, "log:info_to_stdout"] do
     MatchPrioritization::Base.ensure_all
   end
 
   desc 'ensure non-HMIS data source exists'
-  task ensure_non_hmis_datasource_exists: [:environment, 'log:info_to_stdout'] do
+  task ensure_non_hmis_datasource_exists: [:environment, "log:info_to_stdout"] do
     DataSource.where(name: 'Deidentified Clients', db_identifier: 'Deidentified').first_or_create
   end
 
   desc 'Create a first user'
-  task create_admin_user: [:environment, 'log:info_to_stdout'] do
+  task create_admin_user: [:environment, "log:info_to_stdout"] do
     # Add a user.  This should not be added in production
     unless Rails.env =~ /production|staging|test/
       email = 'test-noreply@example.com'
@@ -113,7 +106,7 @@ namespace :cas_seeds do
         user.receive_initial_notification = true
         user.save!
         admin_role = Role.where(name: :admin).first_or_create do |role|
-          permissions = role.attributes.select { |a| a.starts_with?('can') }.transform_values { |_v| true }
+          permissions = role.attributes.select { |a| a.starts_with?('can') }.transform_values { |v| true }
           role.update(permissions)
         end
         user.roles << admin_role
@@ -123,7 +116,7 @@ namespace :cas_seeds do
   end
 
   desc 'Create stalled reasons'
-  task stalled_reasons: [:environment, 'log:info_to_stdout'] do
+  task stalled_reasons: [:environment, "log:info_to_stdout"] do
     StalledResponse.ensure_all
   end
 
@@ -144,4 +137,5 @@ namespace :cas_seeds do
   # task add_housing_subsidy_admin_to_all_opportunities: [:environment, "log:info_to_stdout"] do
   #   CasSeeds::OpportunityHousingSubsidyAdminContact.new.run!
   # end
+
 end
