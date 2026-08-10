@@ -7,7 +7,7 @@
     = render 'filter'
     = render 'sort', sort_options: Client.sort_options(show_vispdat: @show_vispdat)
 - if Client.accessible_by_user(current_user).parked.any?
-  .alert.alert-warning
+  .alert.alert-warning.mt-4
     %p
       %i.icon-warning
       = "Some clients are parked.&nbsp;".html_safe

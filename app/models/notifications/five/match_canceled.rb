@@ -13,8 +13,8 @@ module Notifications::Five
       [:contacts]
     end
 
-    def self.create_for_match!(match, decision_id: nil)
-      Notifications::Base.singleton_class.instance_method(:create_for_match!).bind(self).call(match, decision_id: decision_id)
+    def self.notification_recipients_for(match)
+      match.contacts
     end
   end
 end

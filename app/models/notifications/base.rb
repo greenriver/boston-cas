@@ -80,14 +80,16 @@ module Notifications
     end
 
     def self.create_for_match!(match, decision_id: nil)
-      contact_types_for_notification.each do |contact_type|
-        match.send(contact_type).each do |contact|
-          create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
-        end
+      notification_recipients_for(match).each do |contact|
+        next unless contact.notification_recipient?
+
+        create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end
     end
 
     def self.recreate_for_match! match, contact
+      return unless contact.notification_recipient?
+
       create! match: match, recipient: contact
     end
 
@@ -95,6 +97,12 @@ module Notifications
     # Example: [:shelter_agency_contacts, :dnd_staff_contacts]
     def self.contact_types_for_notification
       []
+    end
+
+    # Override in subclasses whose recipient set can't be expressed as a plain
+    # list of contact_types_for_notification associations (e.g. exclusions).
+    def self.notification_recipients_for(match)
+      contact_types_for_notification.flat_map { |contact_type| match.send(contact_type) }
     end
 
     # Used by views to display which contact types receive notifications

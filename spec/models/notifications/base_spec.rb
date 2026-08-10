@@ -20,6 +20,7 @@ RSpec.describe Notifications::Base, type: :model do
       create(:client_opportunity_match, match_route: route)
     end
     let(:shelter_contact) { create(:contact, email: 'shelter@example.com') }
+    let!(:shelter_user) { create(:user, contact: shelter_contact) }
     let(:decision) do
       create(
         :match_decisions_match_recommendation_shelter_agency,

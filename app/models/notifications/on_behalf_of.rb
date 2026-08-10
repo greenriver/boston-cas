@@ -15,6 +15,8 @@ module Notifications
 
     def self.create_for_match!(match, contact_type, decision_id: nil)
       match.send(contact_type).each do |contact|
+        next unless contact.notification_recipient?
+
         create!(match: match, recipient: contact, decision_id_for_delivery: decision_id)
       end
     end

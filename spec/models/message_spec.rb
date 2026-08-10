@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Message, type: :model do
@@ -5,18 +7,72 @@ RSpec.describe Message, type: :model do
   ActiveJob::Base.queue_adapter = :test
   let!(:contact) { create :contact, email: 'noreply@greenriver.com' }
 
-  describe 'When no user is connected to a contact' do
-    describe 'Sending a message with deliver_now' do
-      it 'creates a message' do
-        expect do
-          TestDatabaseMailer.ping(contact.email).deliver_now
-        end.to change { Message.count }.by(1)
+  describe '#sanitized_body' do
+    let(:html_message) do
+      create(
+        :message,
+        body: '<html><head></head><body><a href="#" onclick="runBadCode()">Click Me</a> <span class="highlight">Text</span></body></html>',
+        html: true,
+      )
+    end
+    let(:text_message) do
+      create(
+        :message,
+        body: '<a href="#" onclick="runBadCode()">Click Me</a> <span class="highlight">Text</span></body>',
+        html: false,
+      )
+    end
+
+    describe 'text format' do
+      it 'returns raw unescaped body for text message' do
+        result = text_message.sanitized_body(render_as: :text)
+        expect(result).to eq(text_message.body)
+        expect(result).not_to be_html_safe
       end
 
-      it 'sends a message' do
+      it 'returns safe text from html message' do
+        result = html_message.sanitized_body(render_as: :text)
+        expect(result).to eq('Click Me Text')
+        expect(result).not_to be_html_safe
+      end
+    end
+
+    describe 'html format' do
+      it 'returns stripped sanitized html from text message' do
+        result = text_message.sanitized_body(render_as: :html)
+        expect(result).to eq('<p>Click Me Text</p>')
+        expect(result).to be_html_safe
+      end
+
+      it 'returns sanitized html from html message' do
+        result = html_message.sanitized_body(render_as: :html)
+        expect(result).to eq('<a href="#">Click Me</a> <span class="highlight">Text</span>')
+        expect(result).to be_html_safe
+      end
+
+      it 'makes urls clickable for text messages' do
+        url = 'http://example.com?a=1&b=2'
+        text_message.body = "hello #{url}"
+        result = text_message.sanitized_body(render_as: :html)
+        escaped_url = 'http://example.com?a=1&amp;b=2'
+        expect(result).to eq("<p>hello <a href=\"#{escaped_url}\">#{escaped_url}</a></p>")
+        expect(result).to be_html_safe
+      end
+    end
+  end
+
+  describe 'When no user is connected to a contact' do
+    describe 'Sending a message with deliver_now' do
+      it 'does not create a message' do
         expect do
           TestDatabaseMailer.ping(contact.email).deliver_now
-        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+        end.not_to(change { Message.count })
+      end
+
+      it 'does not send a message' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.not_to(change { ActionMailer::Base.deliveries.size })
       end
     end
 
@@ -27,20 +83,38 @@ RSpec.describe Message, type: :model do
         end.to have_enqueued_job(ActionMailer::MailDeliveryJob)
       end
 
-      it 'creates a message' do
+      it 'does not create a message' do
         perform_enqueued_jobs do
           expect do
             TestDatabaseMailer.ping(contact.email).deliver_later
-          end.to change { Message.count }.by(1)
+          end.not_to(change { Message.count })
         end
       end
 
-      it 'sends a message' do
+      it 'does not send a message' do
         perform_enqueued_jobs do
           expect do
             TestDatabaseMailer.ping(contact.email).deliver_later
-          end.to change { ActionMailer::Base.deliveries.size }.by(1)
+          end.not_to(change { ActionMailer::Base.deliveries.size })
         end
+      end
+    end
+  end
+
+  describe 'When user is inactive' do
+    let!(:user) { create :user, contact: contact, active: false, email_schedule: 'immediate' }
+
+    describe 'Sending a message with deliver_now' do
+      it 'does not create a message' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.not_to(change { Message.count })
+      end
+
+      it 'does not send a message' do
+        expect do
+          TestDatabaseMailer.ping(contact.email).deliver_now
+        end.not_to(change { ActionMailer::Base.deliveries.size })
       end
     end
   end
