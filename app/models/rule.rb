@@ -47,8 +47,24 @@ class Rule < ApplicationRecord
     nil
   end
 
+  def self.variable_rule_classes
+    descendants.select { |c| c.new.variable_requirement? }
+  end
+
   def variable_requirement?
     false
+  end
+
+  def variable_input_type
+    nil
+  end
+
+  def variable_label
+    nil
+  end
+
+  def variable_options
+    []
   end
 
   def display_for_variable(_value)

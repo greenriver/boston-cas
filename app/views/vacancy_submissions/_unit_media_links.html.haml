@@ -1,0 +1,32 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- if readonly
+  - links = Array(unit['media_links']).select { |l| l['url'].present? }
+  - if links.any?
+    %dl.row.g-2.mb-3
+      .col-12
+        %dt.vs-field-label Photos & Media
+        %dd.vs-field-value.mb-0
+          %ul.mb-0.ps-3
+            - links.each do |link|
+              %li= link_to(link['label'].presence || link['url'], link['url'], target: '_blank', rel: 'noopener')
+- else
+  %fieldset.mb-4{data: { controller: 'vacancy-unit-media-links', 'unit-index': index }}
+    %legend Photos & Media
+    %div{data: { 'vacancy-unit-media-links-target': 'list' }}
+      - Array(unit['media_links']).each_with_index do |link, link_i|
+        .row.g-2.mb-2.align-items-center{data: { 'media-link-entry': '' }}
+          .col-md-5
+            %input.form-control{ type: 'url', name: "vacancy_submission[units][#{index}][media_links][#{link_i}][url]", value: link['url'], placeholder: 'https://' }
+          .col-md-5
+            %input.form-control{ name: "vacancy_submission[units][#{index}][media_links][#{link_i}][label]", value: link['label'], placeholder: 'e.g. Living Room' }
+          .col-md-2
+            %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-unit-media-links#removeLink' }} Remove
+    %template{data: { 'media-link-template': '' }}
+      .row.g-2.mb-2.align-items-center{data: { 'media-link-entry': '' }}
+        .col-md-5
+          %input.form-control{ type: 'url', name: 'vacancy_submission[units][__UNIT_INDEX__][media_links][__LINK_INDEX__][url]', placeholder: 'https://' }
+        .col-md-5
+          %input.form-control{ name: 'vacancy_submission[units][__UNIT_INDEX__][media_links][__LINK_INDEX__][label]', placeholder: 'e.g. Living Room' }
+        .col-md-2
+          %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-unit-media-links#removeLink' }} Remove
+    %button.btn.btn-sm.btn-outline-secondary.mt-2{type: 'button', data: { action: 'vacancy-unit-media-links#addLink' }} + Add Photo or Media Link

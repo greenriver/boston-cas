@@ -15,6 +15,18 @@ class Rules::ActiveInCohort < Rule
     true
   end
 
+  def variable_input_type
+    'multi-select'
+  end
+
+  def variable_label
+    'Cohort'
+  end
+
+  def variable_options
+    available_cohorts
+  end
+
   def available_cohorts
     return [] unless Warehouse::Base.enabled?
 

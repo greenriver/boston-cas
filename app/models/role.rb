@@ -129,6 +129,7 @@ class Role < ApplicationRecord
       # Housing Inventory — Opportunities
       can_view_opportunities: { description: 'View housing opportunities', category: 'Housing Inventory', sub_category: 'Opportunities', administrative: false },
       can_edit_opportunities: { description: 'Create and edit housing opportunities', category: 'Housing Inventory', sub_category: 'Opportunities', administrative: false },
+      can_review_vacancies: { description: 'Review and approve vacancy submissions', category: 'Housing Inventory', sub_category: 'Opportunities', administrative: false },
 
       # Housing Inventory — Funding & Subgrantees
       can_view_funding_sources: { description: 'View funding source records', category: 'Housing Inventory', sub_category: 'Funding & Subgrantees', administrative: false },
@@ -217,6 +218,7 @@ class Role < ApplicationRecord
       :can_view_units,
       :can_edit_units,
       :can_add_vacancies,
+      :can_review_vacancies,
       :can_view_contacts,
       :can_edit_contacts,
       :can_view_rule_list,

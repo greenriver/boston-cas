@@ -17,5 +17,7 @@ App.remoteSelectLoad.init = (root) =>
       $select.append(data)
       $select.attr('placeholder', original_placeholder)
       if $select.hasClass('select2')
+        $modalContent = $select.closest('.modal-content')
+        dropdownParent = if $modalContent.length then $modalContent else $select.parent()
         $select.select2('destroy')
-        new App.Form.Select2Input this, { placeholder: original_placeholder, dropdownParent: $select.parent() }
+        new App.Form.Select2Input this, { placeholder: original_placeholder, dropdownParent: dropdownParent }

@@ -1,0 +1,17 @@
+.modal.fade#return-modal{tabindex: '-1', aria: {labelledby: 'return-modal-label', hidden: 'true'}, data: { controller: 'return-modal' }}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title#return-modal-label Return for Changes
+        %button.btn-close{type: 'button', "data-bs-dismiss": "modal", aria: {label: 'Close'}}
+      = form_with url: return_submission_vacancy_submission_path(@submission), method: :post, local: true do |f|
+        .modal-body
+          .mb-3
+            = f.label :body, 'Note for submitter', class: 'form-label'
+            %span.text-danger *
+            = f.text_area :body, class: 'form-control', rows: 4,
+                data: { 'return-modal-target': 'textarea', action: 'input->return-modal#onInput' }
+        .modal-footer
+          %button.btn.btn-outline-secondary{type: 'button', "data-bs-dismiss": "modal"} Cancel
+          = f.submit 'Return for Changes', class: 'btn btn-warning', disabled: true,
+              data: { 'return-modal-target': 'submitButton' }

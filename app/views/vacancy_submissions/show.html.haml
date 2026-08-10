@@ -1,0 +1,146 @@
+- last_reviewer_note = @notes.select { |n| n.note_type == 'reviewer_note' }.last
+= content_for :crumbs do
+  = link_to vacancy_submissions_path do
+    &laquo; All Vacancy Submissions
+
+.d-flex.align-items-center.gap-2.mb-4
+  %h1.mb-0= @program&.name || '—'
+  = vacancy_submission_status_badge(@submission)
+
+- if @submission.status == 'return_changes_requested' && last_reviewer_note
+  .alert-changes-requested.mb-4.d-flex.justify-content-between.align-items-center
+    .change-note
+      %p.fw-semibold.mb-1 Changes Requested by #{last_reviewer_note.user&.name || 'the CAS Admin'}
+      = simple_format(h(last_reviewer_note.body))
+    .change-actions
+      - if @submission.resubmittable? && can_add_vacancies?
+        = link_to 'Edit', edit_vacancy_submission_path(@submission), class: 'btn btn-outline-secondary btn-sm'
+
+
+.c-card
+  .c-card__header
+    %h2 Submission Details
+  .c-card__content
+    %dl.row.g-3.mb-0
+      .col-sm-6
+        %dt.vs-field-label Submitted
+        %dd.vs-field-value.mb-0= @submission.created_at.strftime('%b %-d, %Y %I:%M %p')
+      .col-sm-6
+        %dt.vs-field-label By
+        %dd.vs-field-value.mb-0= @submission.user&.name.presence || '—'
+      .col-sm-6
+        %dt.vs-field-label Email
+        %dd.vs-field-value.mb-0= @submission.user&.email.presence || '—'
+      .col-sm-6
+        %dt.vs-field-label Phone
+        %dd.vs-field-value.mb-0= @submission.user&.contact&.phone.presence || '—'
+      .col-sm-6
+        %dt.vs-field-label Organization
+        %dd.vs-field-value.mb-0= @submission.user&.agency&.name.presence || '—'
+
+
+.c-card
+  .c-card__header
+    .d-flex.justify-content-between.align-items-center
+      %h2 Program
+  .c-card__content
+    %dl.row.g-3.mb-0
+      .col-sm-6
+        %dt.vs-field-label Program
+        %dd.vs-field-value.mb-0= @program&.name || '—'
+      .col-sm-6
+        %dt.vs-field-label Sub-Program
+        - include_link = @sub_program && (can_edit_programs? || @sub_program&.editable_by?(current_user))
+        %dd.vs-field-value.mb-0= link_to_if include_link, @sub_program&.name || '—', edit_program_sub_program_path(@program, @sub_program)
+      .col-sm-6
+        %dt.vs-field-label Route
+        %dd.vs-field-value.mb-0= @submission.route || '—'
+      .col-sm-6
+        %dt.vs-field-label Vacancy
+        %dd.vs-field-value.mb-0= @submission.voucher_type_display
+
+- units = Array(@submission.units)
+- if @submission.voucher?
+  - units.each_with_index do |unit, i|
+    .c-card
+      .c-card__header
+        %h2= "Voucher #{i + 1}"
+      .c-card__content
+        = render 'vacancy_submissions/voucher_row', unit: unit, index: i, number: i + 1, readonly: true
+- else
+  - attr_catalog = HousingAttribute.attribute_catalog
+  - attr_names = HousingAttribute.existing_attributes
+  - amenity_names = HousingAttribute.existing_amenities
+  - units.each_with_index do |unit, i|
+    = render 'vacancy_submissions/unit_row', unit: unit, index: i, number: i + 1, readonly: true, amenity_names: amenity_names, attr_catalog: attr_catalog, attr_names: attr_names
+
+- required_names = Array(@submission.required_document_names).select(&:present?)
+- if required_names.any?
+  .c-card
+    .c-card__header
+      %h2 Required Documents
+    .c-card__content
+      %ul.mb-0.ps-3
+        - required_names.each do |name|
+          %li= name
+
+- if @submission.notes.present?
+  .c-card
+    .c-card__header
+      %h2 General Notes
+    .c-card__content
+      = simple_format(h(@submission.notes))
+
+- if @sub_program
+  .c-card
+    .c-card__header
+      %h2 Inherited Requirements
+    .c-card__content
+      = render 'requirement_manager/inherited_rules', inheritee: @sub_program, show_label: false
+
+- if @submission.resubmittable? && can_add_vacancies?
+  .c-card
+    .c-card__header
+      %h2 Actions
+    .c-card__content
+      %p Notifies #{last_reviewer_note.user&.name || 'the CAS Admin'} that your corrections are ready for re-review.
+      = button_to 'Resubmit for Approval', resubmit_vacancy_submission_path(@submission), method: :post, class: 'btn btn-primary'
+- elsif @submission.status == 'awaiting_approval' && can_review_vacancies?
+  .c-card
+    .c-card__header
+      %h2 Actions
+    .c-card__content
+      .d-flex.gap-2
+        = button_to 'Approve', approve_vacancy_submission_path(@submission), method: :post, class: 'btn btn-success'
+        %button.btn.btn-warning{"data-bs-toggle": "modal", "data-bs-target": "#return-modal"}
+          Return for Changes
+
+
+.c-card
+  .c-card__header
+    .d-flex.justify-content-between.align-items-center
+      %h2
+        Activity Log
+        %span.text-muted.fw-normal{style: 'text-transform: none; letter-spacing: normal; font-size: 12px;'}= "(#{@notes.size})"
+  .c-card__content.c-card--flush
+    - if @notes.any?
+      %table.table.table.mb-0
+        %thead
+          %tr
+            %th Time
+            %th Action
+            %th By
+            %th Details
+        %tbody
+          - @notes.reverse_each do |note|
+            - next if note.body == 'Returned for changes.'
+            %tr
+              %td.text-muted.text-nowrap= note.created_at.strftime('%b %-d, %Y %I:%M %p')
+              %td= note.action_label
+              %td= note.user&.name || 'System'
+              %td= note.body
+    - else
+      .p-3
+        %p.text-muted.mb-0 No activity yet.
+
+= render 'return_modal'

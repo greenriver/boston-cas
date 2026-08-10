@@ -1,0 +1,36 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- amenity_names = local_assigns.fetch(:amenity_names, [])
+- attr_catalog = local_assigns.fetch(:attr_catalog, {})
+- attr_names = local_assigns.fetch(:attr_names, [])
+- all_rules = local_assigns.fetch(:all_rules, [])
+- default_building_id = local_assigns.fetch(:default_building_id, nil)
+- confidential = local_assigns.fetch(:confidential, false)
+.c-card.mb-2{data: (readonly ? {} : { 'unit-entry': '' })}
+  .c-card__header
+    - if readonly && unit['unit_id'].present? && can_edit_units?
+      .d-flex.justify-content-between.align-items-center
+        %h2= "Unit #{number}"
+        = link_to 'Edit Unit', edit_unit_path(unit['unit_id']), class: 'btn btn-outline-secondary btn-sm mb-2'
+    - else
+      %h2{data: (readonly ? {} : { 'unit-card-title': '' })}= "Unit #{number}"
+  .c-card__content
+    = render 'vacancy_submissions/unit_address', unit: unit, index: index, readonly: readonly, default_building_id: default_building_id, confidential: confidential
+    = render 'vacancy_submissions/unit_details', unit: unit, index: index, readonly: readonly
+    = render 'vacancy_submissions/unit_amenities', unit: unit, index: index, amenity_names: amenity_names, readonly: readonly
+    = render 'vacancy_submissions/unit_accessibility', unit: unit, index: index, readonly: readonly
+    = render 'vacancy_submissions/unit_attributes', unit: unit, index: index, attr_catalog: attr_catalog, attr_names: attr_names, readonly: readonly
+    = render 'vacancy_submissions/unit_media_links', unit: unit, index: index, readonly: readonly
+    = render 'vacancy_submissions/unit_requirements', unit: unit, index: index, on_unit: true, all_rules: all_rules, readonly: readonly
+    - if readonly
+      - if unit['notes'].present?
+        %dl.row.g-2.mb-0
+          .col-sm-12
+            %dt.vs-field-label Unit Notes
+            %dd.vs-field-value.mb-0= simple_format(h(unit['notes']))
+    - else
+      .mb-3
+        %label.form-label Unit Notes
+        %textarea.form-control{name: "vacancy_submission[units][#{index}][notes]", rows: 3, placeholder: 'Any notes about this unit...'}= unit['notes']
+  - unless readonly
+    .d-flex.justify-content-end.mt-2
+      %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'vacancy-units#removeUnit' }} Remove

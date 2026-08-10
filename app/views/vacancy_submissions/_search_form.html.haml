@@ -1,0 +1,7 @@
+= form_tag(vacancy_submissions_path, method: :get) do
+  .d-flex.flex-wrap.gap-2.align-items-center.mb-3
+    - status_options = [['Queue (Awaiting + Changes Requested)', 'queue'], ['All Statuses', 'all']] + VacancySubmissionsHelper::STATUS_DISPLAY.map { |k, v| [v, k] }
+    = select_tag :status, options_for_select(status_options, params[:status].presence || 'queue'), class: 'form-select', style: 'width: auto;'
+    = select_tag :program_id, options_for_select([['All Programs', '']] + @programs, params[:program_id]), class: 'select2', style: 'width: 260px;'
+    %button.btn.btn-primary{type: :submit} Update Filter
+= render 'init_select2'

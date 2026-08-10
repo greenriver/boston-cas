@@ -15,6 +15,18 @@ class Rules::NonHmisAssessmentType < Rule
     true
   end
 
+  def variable_input_type
+    'multi-select'
+  end
+
+  def variable_label
+    'Assessment Types'
+  end
+
+  def variable_options
+    available_assessments
+  end
+
   def available_assessments
     @available_assessments ||= NonHmisAssessment.known_assessments_for_matching
   end

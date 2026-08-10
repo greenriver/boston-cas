@@ -15,6 +15,18 @@ class Rules::RankBelow < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Rank'
+  end
+
+  def variable_options
+    available_ranks
+  end
+
   def available_ranks
     (1..500)
   end

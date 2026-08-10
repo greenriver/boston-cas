@@ -1,0 +1,16 @@
+- title = "Housing Attributes"
+- content_for :title, title
+= render 'menus/admin_tabs'
+%h1= content_for :title
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Type
+      %th In Use
+  %tbody
+    - @names.each do |n|
+      %tr
+        %td= link_to n.name, edit_admin_housing_attribute_name_path(n.id)
+        %td= n.type
+        %td= n.count
