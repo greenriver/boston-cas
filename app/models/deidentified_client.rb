@@ -1,7 +1,7 @@
 ###
-# Copyright 2016 - 2025 Green River Data Analysis, LLC
+# Copyright Green River Data Group, Inc.
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
 # frozen_string_literal: true
@@ -31,6 +31,18 @@ class DeidentifiedClient < NonHmisClient
       else
         where(agency_id: user.agency.id)
       end
+    end
+  end
+
+  # Agencies the user may enter/edit de-identified clients for. Mirrors the editable_by scope
+  # so bulk roster uploads are restricted to the same agencies as single-record editing.
+  def self.agencies_available_to(user)
+    if user.can_edit_all_clients? || user.can_manage_all_deidentified_clients?
+      Agency.all
+    elsif user.can_manage_deidentified_clients? || user.can_enter_deidentified_clients?
+      pathways_enabled? ? Agency.all : Agency.where(id: user.agency_id)
+    else
+      Agency.none
     end
   end
 

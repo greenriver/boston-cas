@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 FactoryBot.define do
   factory :match_decisions_match_recommendation_shelter_agency, class: 'MatchDecisions::MatchRecommendationShelterAgency' do
     association :match, factory: :client_opportunity_match

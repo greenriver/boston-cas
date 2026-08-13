@@ -1,7 +1,7 @@
 ###
-# Copyright 2016 - 2025 Green River Data Analysis, LLC
+# Copyright Green River Data Group, Inc.
 #
-# License detail: https://github.com/greenriver/boston-cas/blob/production/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
 # frozen_string_literal: true
@@ -60,23 +60,30 @@ class DeidentifiedClientsController < NonHmisClientsController
   end
 
   def choose_upload
-    @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+    @upload = DeidentifiedClientsXlsx.new
   end
 
   def import
     unless params[:deidentified_clients_xlsx]&.[](:file)
-      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+      @upload = new_upload_from_params
       flash[:alert] = Translation.translate('You must attach a file in the form.')
       render :choose_upload
       return
     end
 
+    if import_params[:update_availability].blank?
+      @upload = new_upload_from_params
+      flash[:alert] = Translation.translate('You must choose whether to update client availability')
+      render :choose_upload
+      return
+    end
+
     file = import_params[:file]
-    agency = Agency.find(import_params[:agency_id].to_i)
+    agency = DeidentifiedClient.agencies_available_to(current_user).find_by(id: import_params[:agency_id])
     update_availability = import_params[:update_availability].to_s.in?(['1', 'true'])
 
     unless agency.present?
-      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+      @upload = new_upload_from_params
       flash[:alert] = Translation.translate('You must select a valid agency')
       render :choose_upload
       return
@@ -89,7 +96,7 @@ class DeidentifiedClientsController < NonHmisClientsController
       validation_result = DeidentifiedClientsXlsx.validate_file_content(file_content, file.content_type)
 
       unless validation_result[:valid]
-        @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+        @upload = new_upload_from_params
         flash[:alert] = validation_result[:error]
         render :choose_upload
         return
@@ -103,14 +110,14 @@ class DeidentifiedClientsController < NonHmisClientsController
         content: file_content,
       )
     rescue StandardError
-      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+      @upload = new_upload_from_params
       flash[:alert] = Translation.translate('Cannot read uploaded file, is it an XLSX?')
       render :choose_upload
       return
     end
 
     unless @upload.valid_header?
-      @upload = DeidentifiedClientsXlsx.new(agency_id: current_user.agency_id)
+      @upload = new_upload_from_params
       flash[:alert] = Translation.translate('Uploaded file does not have the correct header. Incorrect file?')
       render :choose_upload
       return
@@ -292,6 +299,17 @@ class DeidentifiedClientsController < NonHmisClientsController
       :file,
       :agency_id,
       :update_availability,
+    )
+  end
+
+  # Rebuild the upload form object on error without introducing a default agency or
+  # availability choice — preserve only what the user actually submitted so they are
+  # forced to make (or correct) both selections.
+  private def new_upload_from_params
+    submitted = params[:deidentified_clients_xlsx] ? import_params : ActionController::Parameters.new
+    DeidentifiedClientsXlsx.new(
+      agency_id: submitted[:agency_id],
+      update_availability: submitted[:update_availability],
     )
   end
 

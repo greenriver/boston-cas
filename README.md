@@ -8,7 +8,7 @@ The CAS matches vacancies to permanent supportive housing units to clients using
 See [`docs/Flow May Vouchers.pdf`](https://github.com/greenriver/boston-cas/raw/production/docs/Flow%20Map%20Vouchers.pdf) for a flow map that describes the process from voucher availability to person housed.
 
 ```
-Copyright © 2016 Green River Data Analysis, LLC
+Copyright © 2016 Green River Data Group, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ```
 
-A copy of the license is available in [LICENSE.md](https://github.com/greenriver/boston-cas/blob/production/LICENSE.md)
+A copy of the license is available in [LICENSE.md](https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md)
 
 ## Vision
 

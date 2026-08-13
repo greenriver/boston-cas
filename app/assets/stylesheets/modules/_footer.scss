@@ -5,12 +5,13 @@ footer {
   background-color: var(--cob-sg-charles-blue);
   /* box-shadow: inset 0 0 0 2px rgba(0,0,0,0.50); */
   color: #fff;
-  z-index: 1000;
+  z-index: 900;
 }
 
 footer p {
   margin: 0;
   font-size: rem(12px);
+
   @include media-breakpoint-up(lg) {
     width: 50%;
   }

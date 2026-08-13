@@ -55,24 +55,29 @@ gem 'rack-attack'
 # File processing
 gem 'marcel'
 
-# AWS SDK is needed for deployment and within the application
-gem 'aws-sdk-rails'
-gem 'aws-sdk-autoscaling', '~> 1'
-gem 'aws-sdk-cloudwatchevents', '~> 1'
-gem 'aws-sdk-ecs', '~> 1'
-gem 'aws-sdk-ec2', '~> 1'
-gem 'aws-sdk-elasticloadbalancingv2', '~> 1'
-gem 'aws-sdk-glacier', '~> 1'
-gem 'aws-sdk-rds', '~> 1'
-gem 'aws-sdk-s3', '~> 1'
-gem 'aws-sdk-secretsmanager', '~> 1'
-gem 'aws-sdk-ses', '~> 1'
-gem 'aws-sdk-iam', '~> 1'
-gem 'aws-sdk-ecr', '~> 1'
-gem 'aws-sdk-sns', require: false
-gem 'aws-sdk-ssm', '~> 1'
+# AWS SDK. Only the gems used by the running app are auto-required. The rest are
+# marked `require: false`: their consumers (deploy/ops tooling, the startup
+# secrets fetch) require them explicitly
+gem 'aws-sdk-rails'         # railtie + SQS ActiveJob + SES mailer integration
+gem 'aws-sdk-s3', '~> 1'    # ActiveStorage + bin/sync_app_assets.rb
+gem 'aws-sdk-ses', '~> 1'   # lib/util/mail/ses_delivery.rb
+
+# Not referenced by the running app; kept installed but not auto-required.
+gem 'aws-sdk-autoscaling', '~> 1', require: false
 gem 'aws-sdk-cloudwatch', require: false
+gem 'aws-sdk-cloudwatchevents', '~> 1', require: false
 gem 'aws-sdk-cloudwatchlogs', require: false
+gem 'aws-sdk-ec2', '~> 1', require: false
+gem 'aws-sdk-ecr', '~> 1', require: false
+gem 'aws-sdk-ecs', '~> 1', require: false
+gem 'aws-sdk-elasticloadbalancingv2', '~> 1', require: false
+gem 'aws-sdk-glacier', '~> 1', require: false
+gem 'aws-sdk-iam', '~> 1', require: false
+gem 'aws-sdk-rds', '~> 1', require: false
+gem 'aws-sdk-secretsmanager', '~> 1', require: false
+gem 'aws-sdk-sns', require: false
+gem 'aws-sdk-ssm', '~> 1', require: false
+
 gem 'amazing_print'
 
 gem 'puma', '~> 8'

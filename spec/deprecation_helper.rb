@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # Based on work from:
 # https://about.gitlab.com/blog/2021/02/03/how-we-automatically-fixed-hundreds-of-ruby-2-7-deprecation-warnings/
 if ENV.key?('RECORD_DEPRECATIONS')

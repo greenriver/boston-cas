@@ -1,3 +1,9 @@
+###
+# Copyright Green River Data Group, Inc.
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
 # Be sure to restart your server when you modify this file.
 
 # Add new inflection rules using the following format. Inflections
