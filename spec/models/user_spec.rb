@@ -22,6 +22,36 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.vacancy_reviewers' do
+    let(:reviewer_role) { create :role, can_review_vacancies: true }
+    let(:non_reviewer_role) { create :role, can_review_vacancies: false }
+
+    it 'includes active users whose role can review vacancies' do
+      reviewer = create :user, active: true, roles: [reviewer_role]
+
+      expect(User.vacancy_reviewers).to include(reviewer)
+    end
+
+    it 'excludes users without the permission' do
+      other = create :user_two, active: true, roles: [non_reviewer_role]
+
+      expect(User.vacancy_reviewers).not_to include(other)
+    end
+
+    it 'excludes inactive users even with the permission' do
+      inactive = create :user_three, active: false, roles: [reviewer_role]
+
+      expect(User.vacancy_reviewers).not_to include(inactive)
+    end
+
+    it 'returns each reviewer once even with multiple qualifying roles' do
+      second_reviewer_role = create :role, name: 'second reviewer', can_review_vacancies: true
+      reviewer = create :user, active: true, roles: [reviewer_role, second_reviewer_role]
+
+      expect(User.vacancy_reviewers.to_a.count { |u| u.id == reviewer.id }).to eq(1)
+    end
+  end
+
   describe 'client access permissions' do
     let(:rule) { create :age_greater_than_sixty }
     let(:positive) { create :requirement, rule: rule, positive: true }

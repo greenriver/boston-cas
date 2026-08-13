@@ -29,6 +29,18 @@ class Rules::Bedroom < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Bedrooms'
+  end
+
+  def variable_options
+    available_number_of_bedrooms
+  end
+
   def available_number_of_bedrooms
     [
       [1, 'One'],

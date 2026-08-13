@@ -136,7 +136,7 @@ The requirement manager is rendered via partial:
 - `form`: SimpleForm form builder
 - `selected_requirements_heading`: Label for the requirements section
 - `help_text`: Optional help text
-- `hide_inherited`: Hide inherited rules section
+- `hide_inherited`: Hide inherited requirements section
 - `on_unit`: Use alternate names for unit context
 - `section_header`: Override default "Rules" header
 - `note_context`: Context symbol for `selection_note` (e.g., `:voucher`)

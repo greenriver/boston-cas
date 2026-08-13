@@ -1,0 +1,22 @@
+%h2.mt-4 Badges
+
+%p.text-muted
+  Bootstrap badges using soft/subtle colors.
+  Class names follow the BS4 convention (.badge-*) aliased from BS5 .text-bg-* with lighter backgrounds.
+
+.d-flex.flex-wrap.gap-3.align-items-start.mb-3
+  - %w[primary secondary success danger warning info light dark].each do |color|
+    .d-flex.flex-column.align-items-center.gap-1
+      %span.badge{ class: "badge-#{color}" }= color.capitalize
+      %code.small .badge-#{color}
+
+%h3.mt-4 In context
+
+%p
+  Badges are used inline with text, e.g. status indicators:
+  %span.badge.badge-success Active
+  %span.badge.badge-warning Awaiting Approval
+  %span.badge.badge-danger Return / Changes Requested
+  %span.badge.badge-info Info
+  %span.badge.badge-primary Primary
+  %span.badge.badge-secondary Secondary

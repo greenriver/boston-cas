@@ -114,6 +114,21 @@ RSpec.describe UnitForBuildingController, type: :controller do
       end
     end
 
+    context 'when the building has default housing attributes' do
+      let(:building) { create(:building, elevator_accessible_default: false) }
+
+      before do
+        create(:housing_attribute, :with_value, housingable: building)
+      end
+
+      it 'copies the building default housing attributes onto the new unit' do
+        post :create, params: valid_params
+
+        created_unit = Unit.last
+        expect(created_unit.housing_attributes.pluck(:name, :value)).to include(['Furniture', 'Furnished'])
+      end
+    end
+
     context 'when unit creation fails validation' do
       let(:building) { create(:building, elevator_accessible_default: true) }
       let(:invalid_params) do

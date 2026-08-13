@@ -3,6 +3,12 @@ label {
   @include open-sans;
 }
 
+label abbr[title="required"],
+label abbr[data-bs-original-title="required"] {
+  color: var(--brand-danger);
+  text-decoration: none;
+}
+
 .label-helper {
   font-style: italic;
   font-size: 95%;

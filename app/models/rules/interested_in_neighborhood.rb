@@ -15,6 +15,18 @@ class Rules::InterestedInNeighborhood < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Neighborhood'
+  end
+
+  def variable_options
+    available_neighborhoods
+  end
+
   def available_neighborhoods
     Neighborhood.order(:name).pluck(:id, :name)
   end

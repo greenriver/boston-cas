@@ -57,8 +57,8 @@ class BuildingsController < ApplicationController
   end
 
   def create
-    @building = Building.create(building_params)
-    if @building
+    @building = Building.new(building_params)
+    if @building.save
       flash[:notice] = "#{@building.name} was successfully added."
       redirect_to building_path(@building)
     else

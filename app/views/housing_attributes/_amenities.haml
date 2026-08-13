@@ -1,0 +1,31 @@
+-# Partial: presents amenities (value-less attributes) associated with a building or unit
+-#   Arguments:
+-#     housing_object: The particular building or unit object
+-#     mode: current options are 'edit' or 'read'. 'read' is the default
+
+:ruby
+  mode ||= 'read'
+
+.c-card.c-card--flush.mb-4
+  %h3 Amenities
+  .c-card__content.p-0.pb-4
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Amenity
+          - if mode == 'edit'
+            %th
+      %tbody
+        - housing_object.housing_attributes.without_value.each do |amenity|
+          %tr
+            %td= amenity.name
+            - if mode == 'edit'
+              %td.text-right
+                = link_to polymorphic_path([housing_object, amenity]), method: :delete, data: { confirm: "Are you sure you want to delete the #{amenity.name} amenity? It will be removed as an option from all units, not just this unit." }, class: 'btn btn-sm btn-danger' do
+                  %i.icon-cross
+                  Remove
+    - if mode == 'edit'
+      .text-right
+        = link_to new_polymorphic_path([housing_object, HousingAttribute], amenity: true), class: 'btn btn-secondary mr-4 mt-4', data: { loads_in_pjax_modal: true } do
+          %i.icon-plus
+          Add Amenity

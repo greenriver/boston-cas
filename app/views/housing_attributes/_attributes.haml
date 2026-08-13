@@ -24,7 +24,7 @@
             %th
             %th
       %tbody
-        - housing_object.housing_attributes.each do |attribute|
+        - housing_object.housing_attributes.with_value.each do |attribute|
           %tr
             %td= attribute.name
             %td= attribute.value

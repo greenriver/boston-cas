@@ -1,0 +1,16 @@
+- readonly = local_assigns.fetch(:readonly, false)
+- if readonly
+  - checked = Array(unit['accessibility']).select(&:present?)
+  - if checked.any?
+    %dl.row.g-2.mb-3
+      .col-sm-12
+        %dt.vs-field-label Accessibility
+        %dd.vs-field-value.mb-0= checked.join(', ')
+- else
+  %fieldset.mb-4
+    %legend Accessibility
+    .d-flex.flex-wrap.gap-3
+      - VacancySubmission::ACCESSIBILITY_OPTIONS.each_key do |option|
+        .form-check
+          %input.form-check-input{ type: 'checkbox', name: "vacancy_submission[units][#{index}][accessibility][]", value: option, id: "unit_#{index}_accessibility_#{option.parameterize}", checked: Array(unit['accessibility']).include?(option) }
+          %label.form-check-label{ for: "unit_#{index}_accessibility_#{option.parameterize}" }= option
