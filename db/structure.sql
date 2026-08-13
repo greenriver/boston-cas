@@ -7153,6 +7153,7 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260728120000'),
 ('20260505173350'),
 ('20260505170932'),
 ('20250917150302'),

@@ -48,9 +48,14 @@ class DeidentifiedClientsXlsx < ApplicationRecord
     # transaction commits
     sentry_queue = []
 
-    # Availability is reset up front, so the whole roster must be atomic: a non-recoverable
-    # otherwise a failure could leave all clients in the agency unavailable.
+    unapplied_client_ids = []
+
+    # Availability is reset up front, so a raise anywhere in the loop must roll the whole roster
+    # back rather than leave every client in the agency unavailable.
     DeidentifiedClient.transaction do
+      # Must be plucked before the update_all below marks every client in the agency unavailable.
+      previously_available_ids = @update_availability ? DeidentifiedClient.where(agency: agency, available: true).pluck(:id) : []
+
       DeidentifiedClient.where(agency: agency).update_all(available: false) if @update_availability
 
       @xlsx.each_with_index do |raw, index|
@@ -80,6 +85,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
             sentry_queue << e
             client.errors.add(:base, "Could not process row: #{e.message}")
           end
+          unapplied_client_ids << client.id if client.persisted?
           next
         end
 
@@ -97,6 +103,7 @@ class DeidentifiedClientsXlsx < ApplicationRecord
           # A false return with no validation errors means a callback halted the save due to
           # an internal error, not bad user data
           sentry_queue << "De-identified roster save halted for client #{client.client_identifier}" if client.errors.empty?
+          unapplied_client_ids << client.id if client.persisted?
           next
         end
 
@@ -113,6 +120,12 @@ class DeidentifiedClientsXlsx < ApplicationRecord
         # is a DB-level, non-user-correctable error. Raise loudly and roll back the tx
         assessment.save!(validate: false)
       end
+
+      # A row that bailed out must be a no-op, so give its client back the availability the reset
+      # took away — only for clients already available, since a row we couldn't read is no reason
+      # to activate anyone.
+      restorable_ids = unapplied_client_ids & previously_available_ids
+      DeidentifiedClient.where(id: restorable_ids).update_all(available: true) if restorable_ids.any?
     end
 
     # Transaction committed, report the internal errors

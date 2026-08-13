@@ -8,6 +8,8 @@
 
 module MatchDecisions::Four
   class RecordClientHousedDateHousingSubsidyAdministrator < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteFourPostApprovalHsaDeclineReasons
     include MatchDecisions::RouteFourCancelReasons
 
     attr_accessor :building_id
@@ -23,6 +25,7 @@ module MatchDecisions::Four
       case status.to_sym
       when :pending then "#{Translation.translate('Housing Subsidy Administrator')} to note when client will move in."
       when :completed then "#{Translation.translate('Housing Subsidy Administrator')} notes #{Translation.translate('lease start date')} #{client_move_in_date.try :strftime, '%m/%d/%Y'}"
+      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -44,6 +47,7 @@ module MatchDecisions::Four
       {
         pending: 'Pending',
         completed: 'Complete',
+        declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
       }
@@ -110,6 +114,12 @@ module MatchDecisions::Four
 
       def completed
         @decision.next_step.initialize_decision!
+      end
+
+      def declined
+        Notifications::Four::MatchDeclined.create_for_match! match
+        match.create_four_confirm_record_client_housed_date_decline_dnd_staff_decision unless match.four_confirm_record_client_housed_date_decline_dnd_staff_decision.present?
+        match.four_confirm_record_client_housed_date_decline_dnd_staff_decision.initialize_decision!
       end
 
       def canceled

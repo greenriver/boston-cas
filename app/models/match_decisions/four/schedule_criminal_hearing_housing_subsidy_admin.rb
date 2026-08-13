@@ -8,10 +8,13 @@
 
 module MatchDecisions::Four
   class ScheduleCriminalHearingHousingSubsidyAdmin < ::MatchDecisions::Base
+    include MatchDecisions::AcceptsDeclineReason
+    include MatchDecisions::RouteFourPostApprovalHsaDeclineReasons
     include MatchDecisions::RouteFourCancelReasons
 
     validate :criminal_hearing_date_present_if_scheduled
     validate :criminal_hearing_date_absent_if_no_hearing
+    validate :criminal_hearing_date_absent_if_declined
 
     def label
       label_for_status status
@@ -22,6 +25,7 @@ module MatchDecisions::Four
       when :pending then "#{Translation.translate('Housing Subsidy Administrator')} #{Translation.translate('researching criminal background and deciding whether to schedule a hearing')}"
       when :scheduled then "#{Translation.translate('Housing Subsidy Administrator')} #{Translation.translate('has scheduled criminal background hearing for')} <strong>#{criminal_hearing_date}</strong>".html_safe
       when :no_hearing then "#{Translation.translate('Housing Subsidy Administrator')} #{Translation.translate('indicates there will not be a criminal background hearing')}"
+      when :declined then "Match declined by #{Translation.translate('Housing Subsidy Administrator')}.  Reason: #{decline_reason_name}"
       when :canceled then canceled_status_label
       when :back then backup_status_label
       end
@@ -44,6 +48,7 @@ module MatchDecisions::Four
         pending: 'Pending',
         scheduled: Translation.translate('Criminal Background Hearing Scheduled'),
         no_hearing: Translation.translate('There will not be a criminal background hearing'),
+        declined: 'Declined',
         canceled: 'Canceled',
         back: 'Pending',
       }
@@ -115,6 +120,12 @@ module MatchDecisions::Four
         @decision.next_step.next_step.initialize_decision!
       end
 
+      def declined
+        Notifications::Four::MatchDeclined.create_for_match! match
+        match.create_four_confirm_schedule_criminal_hearing_decline_dnd_staff_decision unless match.four_confirm_schedule_criminal_hearing_decline_dnd_staff_decision.present?
+        match.four_confirm_schedule_criminal_hearing_decline_dnd_staff_decision.initialize_decision!
+      end
+
       def canceled
         Notifications::Four::MatchCanceled.create_for_match! match
         match.canceled!
@@ -130,6 +141,10 @@ module MatchDecisions::Four
 
     def criminal_hearing_date_absent_if_no_hearing
       errors.add :criminal_hearing_date, 'must not be filled in' if status == 'no_hearing' && criminal_hearing_date.present?
+    end
+
+    def criminal_hearing_date_absent_if_declined
+      errors.add :criminal_hearing_date, 'must not be filled in' if status == 'declined' && criminal_hearing_date.present?
     end
   end
 end
