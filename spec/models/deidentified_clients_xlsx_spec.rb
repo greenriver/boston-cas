@@ -151,6 +151,113 @@ RSpec.describe DeidentifiedClientsXlsx, type: :model do
     expect(DeidentifiedClient.find_by(agency: agency_a, client_identifier: home_base_id)&.available).to eq(true)
   end
 
+  it 'keeps a client in the roster available even when their row fails to parse' do
+    existing = create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: 'HB-BADCELL',
+      available: true,
+      actively_homeless: true,
+      veteran: false,
+    )
+    bad_row = ['1', 'No', 'HB-BADCELL', 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'MAYBE', 'No', 'No']
+
+    importer = DeidentifiedClientsXlsx.new(content: build_xlsx([row, bad_row]))
+    importer.import(agency_a, update_availability: true)
+
+    expect(existing.reload.available).to eq(true)
+    # The row is a full no-op, not just availability-preserving: the unparseable Veteran cell
+    # must not have been applied.
+    expect(existing.veteran).to eq(false)
+    failed = importer.clients.detect { |c| c.client_identifier == 'HB-BADCELL' }
+    expect(failed.errors).to be_present
+    expect(importer.touched).to eq(0)
+  end
+
+  it 'keeps a client available when their row is valid but the save fails' do
+    existing = create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: home_base_id,
+      available: true,
+      actively_homeless: true,
+    )
+    # The row must parse completely clean for this to exercise the no-validation-errors branch:
+    # an unknown shelter location attaches an error without raising, which would look like bad
+    # user data instead.
+    Neighborhood.create!(name: 'Fort Worth')
+    allow_any_instance_of(DeidentifiedClient).to receive(:update).and_return(false)
+
+    # A false return with no validation errors is an internal failure, not bad user data, so it
+    # must be reported rather than silently skipped.
+    expect(Sentry).to receive(:capture_message).with("De-identified roster save halted for client #{home_base_id}")
+
+    DeidentifiedClientsXlsx.new(content: content).import(agency_a, update_availability: true)
+
+    expect(existing.reload.available).to eq(true)
+  end
+
+  it 'does not activate a previously unavailable client when their row fails to parse' do
+    # Activating a client off a row we couldn't parse would return them to matching with the stale
+    # attributes already on record.
+    existing = create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: 'HB-BADCELL',
+      available: false,
+      actively_homeless: true,
+    )
+    bad_row = ['1', 'No', 'HB-BADCELL', 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'MAYBE', 'No', 'No']
+
+    DeidentifiedClientsXlsx.new(content: build_xlsx([row, bad_row])).import(agency_a, update_availability: true)
+
+    expect(existing.reload.available).to eq(false)
+  end
+
+  it 'still de-lists a client absent from the roster when another row fails to parse' do
+    dropped = create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: 'NOT-IN-FILE',
+      available: true,
+      actively_homeless: true,
+    )
+    create(
+      :deidentified_client,
+      agency: agency_a,
+      client_identifier: 'HB-BADCELL',
+      available: true,
+      actively_homeless: true,
+    )
+    bad_row = ['1', 'No', 'HB-BADCELL', 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'MAYBE', 'No', 'No']
+
+    DeidentifiedClientsXlsx.new(content: build_xlsx([row, bad_row])).import(agency_a, update_availability: true)
+
+    expect(dropped.reload.available).to eq(false)
+  end
+
+  it 'lets the parseable row win when a client appears on both a good and a bad row' do
+    # A hand-maintained roster can list the same Home-base ID twice. The successful row must be
+    # applied regardless of which side of it the failing row falls on, and the end-of-loop
+    # availability restore must not undo it.
+    dup_a = create(:deidentified_client, agency: agency_a, client_identifier: 'HB-DUP-A', available: false, veteran: true)
+    dup_b = create(:deidentified_client, agency: agency_a, client_identifier: 'HB-DUP-B', available: false, veteran: true)
+    good = ->(id) { ['1', 'No', id, 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'No', 'No', 'No'] }
+    bad = ->(id) { ['1', 'No', id, 'No', 'No', '3', '240', 'Yes', 'No', 'No', 'Yes', 'No', 'MAYBE', 'No', 'No'] }
+
+    importer = DeidentifiedClientsXlsx.new(
+      content: build_xlsx([good.call('HB-DUP-A'), bad.call('HB-DUP-A'), bad.call('HB-DUP-B'), good.call('HB-DUP-B')]),
+    )
+    importer.import(agency_a, update_availability: true)
+
+    # good-then-bad
+    expect(dup_a.reload.available).to eq(true)
+    expect(dup_a.veteran).to eq(false)
+    # bad-then-good
+    expect(dup_b.reload.available).to eq(true)
+    expect(dup_b.veteran).to eq(false)
+  end
+
   it 'leaves existing availability untouched when update_availability is not set' do
     # A client already available but absent from the uploaded roster. With update_availability
     # off there is no up-front reset, so this client must stay available rather than be de-listed.
