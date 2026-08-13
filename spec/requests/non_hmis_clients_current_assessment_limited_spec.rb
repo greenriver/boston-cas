@@ -21,10 +21,6 @@ RSpec.describe 'NonHmisClients#current_assessment_limited', type: :request do
     sign_in viewer
   end
 
-  # Both views are rendered read-only (disabled: true), the branch _common_tc_hat_questions.haml
-  # and _common_pathways_version_three_questions.haml take when NOT editing. Regression coverage
-  # for https://github.com/greenriver/boston-cas/pull/1151#pullrequestreview-4931571565: the fix in
-  # non_hmis_assessments_spec.rb only exercised the editable (disabled: false) form.
   it 'renders a TC-HAT assessment description field for an identified client without raising NoMethodError on render_markdown' do
     create(:config, identified_client_assessment: 'IdentifiedTcHat')
     client = create(:identified_client, agency: agency, identified: true)
