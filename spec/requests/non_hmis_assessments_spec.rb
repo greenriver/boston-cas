@@ -141,4 +141,25 @@ RSpec.describe 'NonHmisAssessments', type: :request do
       end
     end
   end
+
+  describe 'editing a TC-HAT assessment' do
+    # TC-HAT form fields carry a Markdown `description:` (see TcHatCalculations#form_fields),
+    # rendered via non_hmis_clients/assessments/_common_description_display, which calls the
+    # MarkdownHelper#render_markdown helper. include_all_helpers is off (config/application.rb),
+    # so a controller only gets render_markdown if it explicitly includes MarkdownHelper.
+    let!(:tc_hat_editor_role) { create(:role, name: 'tc_hat_editor_role', can_manage_deidentified_clients: true) }
+    let!(:tc_hat_editor_user) { create(:user, agency: user_agency, roles: [tc_hat_editor_role]) }
+    let!(:assessment) do
+      create(:non_hmis_assessment, type: 'DeidentifiedTcHat', non_hmis_client: deidentified_client_user_agency, agency: user_agency)
+    end
+
+    before { sign_in tc_hat_editor_user }
+
+    it 'renders the description Markdown for a field instead of raising NoMethodError on render_markdown' do
+      get edit_deidentified_client_non_hmis_assessment_path(deidentified_client_id: deidentified_client_user_agency.id, id: assessment.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Placed on prioritization list')
+    end
+  end
 end

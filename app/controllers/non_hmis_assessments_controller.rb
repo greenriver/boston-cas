@@ -7,6 +7,8 @@
 # frozen_string_literal: true
 
 class NonHmisAssessmentsController < ApplicationController
+  helper MarkdownHelper
+
   before_action :set_client
   before_action :set_assessment, only: [:show, :edit, :update, :destroy, :unlock]
   before_action :require_can_see_assessment!, only: [:show]
