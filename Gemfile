@@ -137,7 +137,7 @@ gem 'browser'
 gem 'net-http'
 gem 'ajax_modal_rails', '~> 1.0'
 
-gem 'sentry-rails', '~> 5.5'
+gem 'sentry-rails', '~> 6'
 gem 'warning'
 
 # Metrics

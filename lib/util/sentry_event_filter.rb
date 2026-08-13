@@ -9,10 +9,8 @@
 # Scrubs sensitive parameters from a Sentry event before it's sent, mirroring
 # Raven's old `config.sanitize_fields`. Used as `Sentry::Configuration#before_send`.
 #
-# Must mutate and return the event itself, not a Hash -- sentry-ruby's transport builds
-# the envelope from whatever before_send returns, and several of its Event-specific checks
-# (dynamic_sampling_context, attachments, item type) silently no-op or send a malformed
-# item when that's a plain Hash instead of a Sentry::ErrorEvent.
+# Must mutate and return the event itself, not a Hash -- sentry-ruby silently discards the
+# event if before_send returns anything other than a Sentry::ErrorEvent or CheckInEvent.
 class SentryEventFilter
   def initialize(filter_parameters)
     @filter = ActiveSupport::ParameterFilter.new(filter_parameters)
@@ -23,6 +21,10 @@ class SentryEventFilter
     event.extra = @filter.filter(event.extra)
     event.contexts = @filter.filter(event.contexts)
     event.user = @filter.filter(event.user)
+
+    event.breadcrumbs&.each do |crumb|
+      crumb.data = @filter.filter(crumb.data) if crumb.data.is_a?(Hash)
+    end
 
     if event.request
       event.request.data = @filter.filter(event.request.data) if event.request.data.is_a?(Hash)

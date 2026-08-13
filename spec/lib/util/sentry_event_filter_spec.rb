@@ -48,6 +48,30 @@ RSpec.describe SentryEventFilter do
       expect(result).to be_a(Sentry::ErrorEvent)
     end
 
+    it 'redacts sensitive keys inside breadcrumb data while preserving breadcrumbs with none' do
+      event = build_event
+      buffer = Sentry::BreadcrumbBuffer.new
+      buffer.record(Sentry::Breadcrumb.new(category: 'query', data: { sql: 'SELECT 1', password: 'db-secret' }))
+      buffer.record(Sentry::Breadcrumb.new(category: 'http', message: 'GET /x'))
+      event.breadcrumbs = buffer
+
+      result = filter.call(event, {})
+
+      expect(result.breadcrumbs.members.map(&:data)).to eq(
+        [
+          { sql: 'SELECT 1', password: '[FILTERED]' },
+          {},
+        ],
+      )
+    end
+
+    it 'does not raise when the event has no breadcrumbs' do
+      event = build_event
+      expect(event.breadcrumbs).to be_nil
+
+      expect { filter.call(event, {}) }.not_to raise_error
+    end
+
     it 'redacts sensitive request headers while preserving safe ones' do
       event = build_event
       event.rack_env = {
