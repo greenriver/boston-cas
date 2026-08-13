@@ -242,7 +242,7 @@ class OpportunitiesController < ApplicationController
 
   # TODO: limit to programs you are associated with
   private def sub_program_scope
-    SubProgram.all
+    SubProgram.open
   end
 
   # TODO: limit to buildings you are associated with

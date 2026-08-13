@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Admin
   class ConfigsController < ApplicationController
     before_action :require_can_manage_config!
@@ -36,6 +38,7 @@ module Admin
         :include_note_in_email_default,
         :notify_all_on_progress_update,
         :send_match_summary_email_on,
+        :vacancy_submission_mechanism,
         non_hmis_fields: [],
       )
     end

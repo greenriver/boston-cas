@@ -15,6 +15,18 @@ class Rules::AgeGreaterThanX < Rule
     true
   end
 
+  def variable_input_type
+    'number'
+  end
+
+  def variable_label
+    'Age'
+  end
+
+  def variable_options
+    []
+  end
+
   def display_for_variable(value)
     value.to_i
   end

@@ -15,6 +15,18 @@ class Rules::AssessmentCompletedWithin < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Assessment'
+  end
+
+  def variable_options
+    available_options
+  end
+
   def available_options
     @available_options ||= [
       [30, 'Last Month'],

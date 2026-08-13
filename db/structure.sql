@@ -736,7 +736,8 @@ CREATE TABLE public.configs (
     limit_client_names_on_matches boolean DEFAULT true,
     include_note_in_email_default boolean,
     notify_all_on_progress_update boolean DEFAULT false,
-    send_match_summary_email_on integer
+    send_match_summary_email_on integer,
+    vacancy_submission_mechanism character varying DEFAULT 'traditional'::character varying
 );
 
 
@@ -1399,7 +1400,8 @@ CREATE TABLE public.housing_attributes (
     value character varying,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    include_value boolean DEFAULT true NOT NULL
 );
 
 
@@ -3370,7 +3372,8 @@ CREATE TABLE public.roles (
     can_edit_voucher_rules boolean DEFAULT false,
     can_manage_all_deidentified_clients boolean DEFAULT false,
     can_manage_all_identified_clients boolean DEFAULT false,
-    can_activate_matches boolean DEFAULT false
+    can_activate_matches boolean DEFAULT false,
+    can_review_vacancies boolean DEFAULT false NOT NULL
 );
 
 
@@ -4065,7 +4068,8 @@ CREATE TABLE public.units (
     data_source_id integer,
     data_source_id_column_name character varying,
     elevator_accessible boolean DEFAULT false NOT NULL,
-    active boolean DEFAULT true NOT NULL
+    active boolean DEFAULT true NOT NULL,
+    notes text
 );
 
 
@@ -4191,6 +4195,73 @@ CREATE SEQUENCE public.users_id_seq
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: vacancy_submission_notes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.vacancy_submission_notes (
+    id bigint NOT NULL,
+    vacancy_submission_id bigint NOT NULL,
+    user_id bigint,
+    note_type character varying NOT NULL,
+    body text NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: vacancy_submission_notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.vacancy_submission_notes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: vacancy_submission_notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.vacancy_submission_notes_id_seq OWNED BY public.vacancy_submission_notes.id;
+
+
+--
+-- Name: vacancy_submissions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.vacancy_submissions (
+    id bigint NOT NULL,
+    user_id bigint,
+    status character varying DEFAULT 'awaiting_approval'::character varying NOT NULL,
+    draft_data jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: vacancy_submissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.vacancy_submissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: vacancy_submissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.vacancy_submissions_id_seq OWNED BY public.vacancy_submissions.id;
 
 
 --
@@ -4985,6 +5056,20 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Name: vacancy_submission_notes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submission_notes ALTER COLUMN id SET DEFAULT nextval('public.vacancy_submission_notes_id_seq'::regclass);
+
+
+--
+-- Name: vacancy_submissions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submissions ALTER COLUMN id SET DEFAULT nextval('public.vacancy_submissions_id_seq'::regclass);
+
+
+--
 -- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5770,6 +5855,22 @@ ALTER TABLE ONLY public.user_roles
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vacancy_submission_notes vacancy_submission_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submission_notes
+    ADD CONSTRAINT vacancy_submission_notes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vacancy_submissions vacancy_submissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submissions
+    ADD CONSTRAINT vacancy_submissions_pkey PRIMARY KEY (id);
 
 
 --
@@ -6946,6 +7047,41 @@ CREATE UNIQUE INDEX index_users_on_unlock_token ON public.users USING btree (unl
 
 
 --
+-- Name: index_vacancy_submission_notes_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vacancy_submission_notes_on_user_id ON public.vacancy_submission_notes USING btree (user_id);
+
+
+--
+-- Name: index_vacancy_submission_notes_on_vacancy_submission_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vacancy_submission_notes_on_vacancy_submission_id ON public.vacancy_submission_notes USING btree (vacancy_submission_id);
+
+
+--
+-- Name: index_vacancy_submissions_on_draft_data; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vacancy_submissions_on_draft_data ON public.vacancy_submissions USING gin (draft_data);
+
+
+--
+-- Name: index_vacancy_submissions_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vacancy_submissions_on_status ON public.vacancy_submissions USING btree (status);
+
+
+--
+-- Name: index_vacancy_submissions_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vacancy_submissions_on_user_id ON public.vacancy_submissions USING btree (user_id);
+
+
+--
 -- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6992,6 +7128,30 @@ CREATE INDEX index_weighting_rules_on_route_id ON public.weighting_rules USING b
 --
 
 CREATE UNIQUE INDEX uidx_client_search_queries ON public.client_search_queries USING btree (fingerprint);
+
+
+--
+-- Name: vacancy_submissions fk_rails_14ca527d24; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submissions
+    ADD CONSTRAINT fk_rails_14ca527d24 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: vacancy_submission_notes fk_rails_8379de24b6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submission_notes
+    ADD CONSTRAINT fk_rails_8379de24b6 FOREIGN KEY (vacancy_submission_id) REFERENCES public.vacancy_submissions(id);
+
+
+--
+-- Name: vacancy_submission_notes fk_rails_851fc7240f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vacancy_submission_notes
+    ADD CONSTRAINT fk_rails_851fc7240f FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -7153,6 +7313,13 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260714153122'),
+('20260701170632'),
+('20260701000001'),
+('20260624131950'),
+('20260601000002'),
+('20260601000001'),
+('20260528000001'),
 ('20260728120000'),
 ('20260505173350'),
 ('20260505170932'),

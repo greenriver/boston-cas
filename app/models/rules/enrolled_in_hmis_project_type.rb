@@ -15,6 +15,18 @@ class Rules::EnrolledInHmisProjectType < Rule
     true
   end
 
+  def variable_input_type
+    'multi-select'
+  end
+
+  def variable_label
+    'Project Types'
+  end
+
+  def variable_options
+    available_project_types.to_a
+  end
+
   def available_project_types
     {
       es: 'ES - Emergency Shelter',

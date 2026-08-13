@@ -15,6 +15,18 @@ class Rules::Strength < Rule
     true
   end
 
+  def variable_input_type
+    'multi-select'
+  end
+
+  def variable_label
+    'Strength'
+  end
+
+  def variable_options
+    available_strengths
+  end
+
   def available_strengths
     [
       'Employable Skills',

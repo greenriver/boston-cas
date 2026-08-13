@@ -15,6 +15,18 @@ class Rules::Occupancy < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Occupancy'
+  end
+
+  def variable_options
+    available_occupancy
+  end
+
   def available_occupancy
     [
       [1, 'One'],

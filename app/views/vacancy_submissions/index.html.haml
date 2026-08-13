@@ -1,0 +1,65 @@
+.o-page__title
+  %h1 All Vacancy Submissions
+  - if can_view_opportunities?
+    .o-page__action
+      = link_to new_vacancy_submission_path, class: 'btn btn-primary' do
+        %span.icon-plus
+        New Vacancy
+
+.col-md-9
+  = render 'search_form'
+
+.row.table-utilities
+  .col-12
+    %p= page_entries_info @vacancy_submissions
+
+.table-responsive
+  .c-card.c-card__flush.mb-4
+    .c-card__content.p-0
+      %table.table.table-hover.mb-0
+        %thead
+          %tr
+            %th Status
+            %th Program
+            %th Voucher Type
+            %th Location(s)
+            %th Bedrooms
+            %th Changes Requested
+        %tbody
+          - if @vacancy_submissions.any?
+            - @vacancy_submissions.each do |submission|
+              %tr
+                %td
+                  .mb-1= vacancy_submission_status_badge(submission)
+                  .mb-1
+                    %em
+                      Submitted:
+                      %strong= submission.created_at.to_date
+                  .mb-1
+                    %em
+                      Last updated:
+                      %strong= submission.updated_at.to_date
+                %td= link_to(@programs_by_id[submission.program_id]&.name || '—', vacancy_submission_path(submission))
+                %td= submission.voucher_type_display
+                %td
+                  - multi_site = submission.site_display.length > 1
+                  - submission.site_display.each.with_index do |site, index|
+                    %p
+                      - if multi_site
+                        %strong #{index + 1}:
+                      = site
+                %td
+                  - multi_bedrooms = submission.bedrooms_display.length > 1
+                  - submission.bedrooms_display.each.with_index do |bedrooms, index|
+                    %p
+                      - if multi_bedrooms
+                        %strong #{index + 1}:
+                      = bedrooms
+                - changes_requested = submission.changes_requested_display
+                - change_class = changes_requested.length > 1 ? 'text-danger' : ''
+                %td{ class: change_class }= truncate(changes_requested, length:50, separator: ' ')
+          - else
+            %tr
+              %td{colspan: 8} No vacancy submissions found.
+
+%p= paginate @vacancy_submissions

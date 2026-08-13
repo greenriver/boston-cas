@@ -6,9 +6,17 @@
 
 import * as bootstrap from 'bootstrap'
 import { Application } from '@hotwired/stimulus'
-import HistoryController from './controllers/history_controller'
 import DatepickerController from './controllers/datepicker_controller'
+import HistoryController from './controllers/history_controller'
+import ReturnModalController from './controllers/return_modal_controller'
 import RoleManagerController from './controllers/role_manager_controller'
+import VacancySubmissionFormController from './controllers/vacancy_submission_form_controller'
+import RequirementsController from './controllers/requirements_controller'
+import VacancyUnitAttributesController from './controllers/vacancy_unit_attributes_controller'
+import VacancyUnitBuildingController from './controllers/vacancy_unit_building_controller'
+import VacancyUnitMediaLinksController from './controllers/vacancy_unit_media_links_controller'
+import VacancyUnitRequirementsController from './controllers/vacancy_unit_requirements_controller'
+import VacancyUnitsController from './controllers/vacancy_units_controller'
 
 // Expose bootstrap globally for any legacy inline scripts that reference window.bootstrap
 window.bootstrap = bootstrap
@@ -43,6 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Start Stimulus
 const application = Application.start()
-application.register('history', HistoryController)
 application.register('datepicker', DatepickerController)
+application.register('history', HistoryController)
+application.register('return-modal', ReturnModalController)
 application.register('role-manager', RoleManagerController)
+application.register('vacancy-submission-form', VacancySubmissionFormController)
+application.register('requirements', RequirementsController)
+application.register('vacancy-unit-attributes', VacancyUnitAttributesController)
+application.register('vacancy-unit-building', VacancyUnitBuildingController)
+application.register('vacancy-unit-media-links', VacancyUnitMediaLinksController)
+application.register('vacancy-unit-requirements', VacancyUnitRequirementsController)
+application.register('vacancy-units', VacancyUnitsController)
