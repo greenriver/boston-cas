@@ -25,7 +25,7 @@ class Git
 
     class << self
       # @return [Hash, nil] { tag:, ahead:, revision: }
-      def resolve(revision)
+      def resolve(revision:)
         return nil if revision.nil? || revision.strip.empty? || revision.strip == 'unknown'
 
         revision = revision.strip
@@ -51,7 +51,7 @@ class Git
 
       # @return [Boolean] true when a cache file was written
       def write_cache_file(revision:, path: CACHE_PATH)
-        details = resolve(revision)
+        details = resolve(revision: revision)
         return false if details.nil?
 
         File.write(path, JSON.generate(details))

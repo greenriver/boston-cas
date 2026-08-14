@@ -1,7 +1,7 @@
 ###
 # Copyright Green River Data Group, Inc.
 #
-# License detail: https://github.com/greenriver/hmis-warehouse/blob/production/LICENSE.md
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
 # frozen_string_literal: true
@@ -10,7 +10,7 @@ require 'rails_helper'
 
 RSpec.describe Git::ReleaseResolver do
   let(:revision) { 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' }
-  let(:repo) { 'greenriver/hmis-warehouse' }
+  let(:repo) { 'greenriver/boston-cas' }
 
   def stub_commits(shas)
     stub_request(:get, "https://api.github.com/repos/#{repo}/commits").

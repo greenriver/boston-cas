@@ -188,7 +188,7 @@ module ApplicationHelper
     return nil unless release
 
     content_tag :div, class: 'navbar-text' do
-      content_tag :span, release, class: 'badge badge-secondary p-2'
+      content_tag :span, release, class: 'badge badge-warning p-2'
     end
   end
 
