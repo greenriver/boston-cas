@@ -9,6 +9,10 @@
 require 'application_responder'
 
 class ApplicationController < ActionController::Base
+  # Include the Markdown helper globally, it is used in a handful of places
+  # and we keep forgetting to include it, this means it is available when needed.
+  helper MarkdownHelper
+
   include ControllerAuthorization
   include ActivityLogger
   include ArelHelper
