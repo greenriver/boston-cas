@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Nine
   class NineAssignCaseContact < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteNineDeclineReasons
-    include MatchDecisions::RouteNineCancelReasons
 
     validate :ensure_required_contacts_present_on_accept
 
@@ -85,24 +85,6 @@ module MatchDecisions::Nine
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
         contact.in?(match.send(contact_actor_type))
-    end
-
-    def step_decline_reasons(_contact)
-      [
-        'Other',
-      ]
-    end
-
-    def step_cancel_reasons
-      [
-        'Match expired',
-        'Client has disengaged',
-        'Client has disappeared',
-        'Incarcerated',
-        'Client received another housing opportunity',
-        'Client no longer eligible for match',
-        'Other',
-      ]
     end
 
     def whitelist_params_for_update params
