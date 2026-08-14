@@ -9,6 +9,15 @@
 require 'rails_helper'
 
 RSpec.describe Git::ReleaseResolver do
+  # rails_helper leaves net connections allowed suite-wide. Block them for this file only,
+  # so a stub that stops matching fails here instead of quietly reaching api.github.com.
+  around do |example|
+    WebMock.disable_net_connect!(allow_localhost: true)
+    example.run
+  ensure
+    WebMock.allow_net_connect!
+  end
+
   let(:revision) { 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' }
   let(:repo) { 'greenriver/boston-cas' }
 
