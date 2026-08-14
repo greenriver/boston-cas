@@ -35,7 +35,7 @@ RSpec.describe 'Users::Sessions', type: :request do
     it 'rejects invalid credentials' do
       post user_session_path, params: { user: { email: user.email, password: 'wrong-password' } }
 
-      expect(response.body).to include('Invalid Email or password')
+      expect(response.body).to include('Invalid email or password')
     end
   end
 
