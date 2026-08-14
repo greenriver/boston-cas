@@ -8,18 +8,10 @@
 
 require 'rails_helper'
 
-# Verifies the CVE-2026-40295 backport patch (GHSA-jp94-3292-c3xv).
-#
-# Root cause: Devise::FailureApp#redirect_url passed request.referrer directly
-# to redirect_to when a session timed out on a non-GET request, allowing an
-# attacker-controlled Referer header to redirect the user to an external site.
-#
-# Fix: extract_path_from_location strips the host before using the referrer.
-RSpec.describe 'CVE-2026-40295: Devise open redirect patch' do
-  # --- DeviseStoreLocationPatch ---
-  # extract_path_from_location is prepended into Devise::Controllers::StoreLocation.
-  # Any class that includes the module gets the patched version.
-  describe DeviseStoreLocationPatch, '#extract_path_from_location' do
+# Regression coverage for CVE-2026-40295 (GHSA-jp94-3292-c3xv): both methods must
+# resolve an external referrer down to a local path before using it as a redirect target.
+RSpec.describe 'Devise session-timeout redirect' do
+  describe Devise::Controllers::StoreLocation, '#extract_path_from_location' do
     let(:host) do
       Class.new { include Devise::Controllers::StoreLocation }.new
     end
@@ -57,10 +49,7 @@ RSpec.describe 'CVE-2026-40295: Devise open redirect patch' do
     end
   end
 
-  # --- DeviseFailureAppPatch ---
-  # redirect_url is prepended into Devise::FailureApp. Tests exercise the
-  # method via a real FailureApp instance with stubbed dependencies.
-  describe DeviseFailureAppPatch, '#redirect_url' do
+  describe Devise::FailureApp, '#redirect_url' do
     let(:failure_app) do
       app = Devise::FailureApp.new
       allow(app).to receive_messages(
@@ -78,12 +67,12 @@ RSpec.describe 'CVE-2026-40295: Devise open redirect patch' do
     let(:referrer) { 'https://evil.com/dashboard' }
 
     context 'when session times out on a non-GET request' do
-      context 'with an external referrer (the attack vector)' do
+      context 'with an external referrer' do
         it 'strips the host and returns only the local path' do
           expect(failure_app.send(:redirect_url)).to eq('/dashboard')
         end
 
-        it 'does not include the attacker domain in the redirect target' do
+        it 'does not include the referring domain in the redirect target' do
           expect(failure_app.send(:redirect_url)).not_to include('evil.com')
         end
 
