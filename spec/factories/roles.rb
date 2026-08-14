@@ -49,6 +49,7 @@ FactoryBot.define do
     can_view_units { true }
     can_edit_units { true }
     can_add_vacancies { true }
+    can_review_vacancies { true }
     can_view_contacts { true }
     can_edit_contacts { true }
     can_view_rule_list { true }

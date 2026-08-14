@@ -1,0 +1,58 @@
+- editing = vacancy_submission.persisted?
+- initial_program = vacancy_submission.program_id || 0
+- initial_sub = vacancy_submission.sub_program_id || 0
+- stimulus_data = { controller: 'vacancy-submission-form', 'vacancy-submission-form-programs-value' => @programs_data.to_json, 'vacancy-submission-form-initial-program-value' => initial_program, 'vacancy-submission-form-initial-sub-program-value' => initial_sub, 'vacancy-submission-form-vacancy-submission-id-value' => vacancy_submission.id.to_i }
+
+= simple_form_for vacancy_submission, html: { id: 'vacancy_submission_form', data: stimulus_data } do |f|
+  = f.error_notification
+
+  %p.text-muted.small
+    Fields marked with
+    %span.text-danger *
+    are required.
+
+  / ── Section 1: Route & Program ──
+  .c-card.mb-4
+    .c-card__header
+      %h2 Route & Program
+    .c-card__content
+      = f.input :program_id, label: 'Program', as: :select2,
+          collection: @programs.map { |p| [p.name, p.id] },
+          include_blank: 'Select a program',
+          required: true,
+          input_html: { data: { 'vacancy-submission-form-target': 'programSelect' } }
+
+      = f.input :sub_program_id, label: 'Sub-Program', as: :select2,
+          collection: [],
+          include_blank: false,
+          input_html: { disabled: true, data: { 'vacancy-submission-form-target': 'subProgramSelect' } }
+
+      %div{data: { 'vacancy-submission-form-target': 'routeContainer' }}
+
+  / ── Inherited Requirements ──
+  .c-card.mb-4
+    .c-card__header
+      %h2 Inherited Requirements
+    .c-card__content
+      %div{data: { 'vacancy-submission-form-target': 'requirementsContainer' }}
+        %p.text-muted Select a sub-program to see inherited requirements.
+
+  / ── Required Documents ──
+  %div{data: { 'vacancy-submission-form-target': 'documentsContainer', 'forward-params': { required_document_names: Array(vacancy_submission.required_document_names) }.to_json }}
+
+  / ── Section 2: Vacancy ──
+  - units_errors = vacancy_submission.errors[:units]
+  %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json, 'forward-params': { units: Array(vacancy_submission.units) }.to_json }}
+    %p.text-muted Select a sub-program to see unit type information.
+
+  / ── General Notes ──
+  .c-card.mb-4
+    .c-card__header
+      %h2 General Notes
+    .c-card__content
+      = f.input :notes, label: 'Additional Notes — Screening Criteria, Special Eligibility & Relevant Info', as: :text, input_html: { rows: 4, placeholder: 'Enter any additional notes about this vacancy submission...' }, hint: 'Please describe any screening criteria, special eligibility requirements, or other information relevant to this submission.'
+
+  / Actions
+  .d-flex.gap-2
+    = f.submit (editing ? 'Save Changes' : 'Submit Vacancy'), class: 'btn btn-primary'
+    = link_to 'Cancel', (editing ? vacancy_submission_path(vacancy_submission) : vacancy_submissions_path), class: 'btn btn-outline-secondary'

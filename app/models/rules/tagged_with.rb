@@ -15,6 +15,18 @@ class Rules::TaggedWith < Rule
     true
   end
 
+  def variable_input_type
+    'select'
+  end
+
+  def variable_label
+    'Tag'
+  end
+
+  def variable_options
+    available_tags
+  end
+
   def available_tags
     Tag.all.map { |tag| [tag.id, tag.name] }
   end

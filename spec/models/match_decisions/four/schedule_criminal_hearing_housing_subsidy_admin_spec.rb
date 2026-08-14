@@ -13,7 +13,7 @@ RSpec.describe MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin,
   let(:match) { create(:client_opportunity_match, match_route: match_route) }
   let(:decision) { match.four_schedule_criminal_hearing_housing_subsidy_admin_decision }
   let(:confirm_decision) { match.four_confirm_schedule_criminal_hearing_decline_dnd_staff_decision }
-  let(:decline_reason) { MatchDecisionReasons::All.where(name: 'Self-resolved').first_or_create! }
+  let(:decline_reason) { MatchDecisionReasons::All.where(name: 'Client deceased').first_or_create! }
   let(:admin_contact) do
     user = create(:user)
     user.roles << create(:admin_role)
@@ -40,6 +40,34 @@ RSpec.describe MatchDecisions::Four::ScheduleCriminalHearingHousingSubsidyAdmin,
       decision.assign_attributes(status: 'declined', decline_reason: decline_reason, criminal_hearing_date: Date.tomorrow)
       expect(decision).not_to be_valid
       expect(decision.errors[:criminal_hearing_date]).to be_present
+    end
+  end
+
+  describe '#decline_reasons' do
+    before do
+      CasSeeds::MatchDecisionReasons.new.run!
+      CasSeeds::MatchDecisionReasonAssignments.new.run!
+    end
+
+    it 'offers the route four post-approval reason list, not the shared DefaultHsaDeclineReasons list' do
+      names = decision.decline_reasons(contact: nil).map(&:first)
+
+      expect(names).to contain_exactly(
+        'Ineligible for Housing Program',
+        'Client has another housing option',
+        'Client refused unit (non-SRO)',
+        'Client refused voucher',
+        'Does not agree to services',
+        'Does not want housing at this time',
+        'Unsafe environment for this person',
+        'Unwilling to live in that neighborhood',
+        'Unwilling to live in SRO',
+        'Client has disappeared',
+        'Client has disengaged',
+        'Client deceased',
+        'Incarcerated',
+        'Other',
+      )
     end
   end
 

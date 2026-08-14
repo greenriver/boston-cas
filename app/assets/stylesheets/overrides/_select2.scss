@@ -92,6 +92,10 @@
   margin-bottom: rem(2px);
 }
 
+.is-invalid+.select2-container .select2-selection {
+  border-color: var(--bs-form-invalid-border-color, #dc3545);
+}
+
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
   &:only-child {
     padding: 0;

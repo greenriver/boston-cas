@@ -11,9 +11,18 @@
 
 .c-card__header {
   padding: space(3) space(3) 0 space(3);
+  background-color: $white;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $gray-020;
+  border-radius: $border-radius-default;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-width: 0;
 }
 
-.c-card > .c-card__content {
+.c-card>.c-card__content {
   @include card;
   width: 100%;
 }
@@ -23,15 +32,18 @@
 }
 
 .c-card--flush {
-  padding: 0;
+  padding: 0 !important;
+
   .table {
     margin-bottom: 0;
   }
+
   .table thead tr th,
   .table tbody tr td {
     &:first-of-type {
       padding-left: rem(15px);
     }
+
     &:last-of-type {
       padding-right: rem(15px);
     }
@@ -40,11 +52,13 @@
 
 .c-card--linked {
   cursor: pointer;
+
   &:focus,
   &:hover {
     color: $text-color;
     box-shadow: 0 2px 8px rgba($black, .1);
   }
+
   &:active {
     background-color: $body-bg;
   }
@@ -98,6 +112,7 @@
 
 .c-card__content-block-text {
   font-weight: 800;
+
   &:empty {
     margin-bottom: -30px;
   }

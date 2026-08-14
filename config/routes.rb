@@ -57,6 +57,14 @@ Rails.application.routes.draw do
       get :closed, on: :collection
     end
   end
+  resources :vacancy_submissions, only: [:index, :new, :create, :show, :edit, :update] do
+    get :sub_program_section, on: :collection
+    member do
+      post :approve
+      post :return_submission
+      post :resubmit
+    end
+  end
   resources :buildings do
     resources :contacts, except: :show, controller: :building_contacts, concerns: [:restorable]
     get :available_units, on: :member
@@ -216,6 +224,7 @@ Rails.application.routes.draw do
       resources :match_decision_steps, only: [:edit, :update]
     end
     resources :match_decision_reasons, except: [:show, :destroy]
+    resources :housing_attribute_names, only: [:index, :edit, :update]
     resources :sessions, only: [:index, :destroy]
   end
 

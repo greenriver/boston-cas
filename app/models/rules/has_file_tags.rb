@@ -15,6 +15,18 @@ class Rules::HasFileTags < Rule
     true
   end
 
+  def variable_input_type
+    'multi-select'
+  end
+
+  def variable_label
+    'File Tags'
+  end
+
+  def variable_options
+    available_tags
+  end
+
   def available_tags
     return [] unless Warehouse::Base.enabled?
 

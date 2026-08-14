@@ -1,0 +1,15 @@
+- attr_catalog = HousingAttribute.attribute_catalog
+- attr_names = HousingAttribute.existing_attributes
+- amenity_names = HousingAttribute.existing_amenities
+- all_rules = Rule.order(:name).to_a
+- default_building_id = local_assigns.fetch(:default_building_id, nil)
+- confidential = local_assigns.fetch(:confidential, false)
+.mb-4{data: { controller: 'vacancy-units', 'vacancy-units-is-voucher-value': false }}
+  %div{data: { 'vacancy-units-target': 'list' }}
+    - unit_list.each_with_index do |unit, i|
+      = render 'vacancy_submissions/unit_row', unit: unit, index: i, number: i + 1, attr_catalog: attr_catalog, attr_names: attr_names, amenity_names: amenity_names, all_rules: all_rules, default_building_id: default_building_id, confidential: confidential
+  %template{data: { 'unit-template': '' }}
+    = render 'vacancy_submissions/unit_row', unit: {}, index: '__INDEX__', number: '__NUMBER__', attr_catalog: attr_catalog, attr_names: attr_names, amenity_names: amenity_names, all_rules: all_rules, default_building_id: default_building_id, confidential: confidential
+  .d-flex.justify-content-end.mt-2.pe-4
+    %button.btn.btn-outline-secondary{type: 'button', data: { action: 'vacancy-units#addUnit' }}
+      + Add another unit

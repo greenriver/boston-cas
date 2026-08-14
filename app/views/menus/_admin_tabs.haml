@@ -21,6 +21,9 @@
   -if can_manage_config?
     %li.nav-item{role: "presentation", class: ('active' if controller_name == 'match_decision_reasons')}
       = link_to 'Decline & Cancel Reasons', admin_match_decision_reasons_path, class: 'nav-link'
+  -if can_manage_config?
+    %li.nav-item{role: "presentation", class: ('active' if current_page?(admin_housing_attribute_names_path))}
+      = link_to 'Housing Attributes', admin_housing_attribute_names_path, class: 'nav-link'
   - if can_manage_sessions?
     %li.nav-item{role: 'presentation', class: ('active' if controller_name == "sessions")}
       = link_to 'Sessions', admin_sessions_path, class: 'nav-link'
