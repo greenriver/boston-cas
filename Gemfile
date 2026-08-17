@@ -190,4 +190,5 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-mocks'
   gem 'shoulda-matchers'
+  gem 'webmock'
 end
