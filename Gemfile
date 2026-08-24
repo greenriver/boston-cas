@@ -82,18 +82,18 @@ gem 'amazing_print'
 
 gem 'puma', '~> 8'
 gem 'redis'
-gem 'connection_pool', '~> 2.4' # connection_pool 3.x uses keyword-only args; Rails 7.2 passes a positional hash (incompatible with Ruby 4.0)
+gem 'connection_pool'
 
 gem 'activerecord-session_store'
 gem 'lograge'
 gem 'logstop'
-gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
+gem 'paper_trail'
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
 gem 'active_record_distinct_on'
 
-gem 'devise', '~> 4'
+gem 'devise', '~> 5.0'
 gem 'devise_invitable', '>= 2.0.9'
 gem 'devise-pwned_password'
 gem 'devise-security'
