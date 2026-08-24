@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'activerecord-import'
 gem 'rack', '< 3.2' # pinning to the same max version as is required by rails 7.2
 gem 'pg', '~> 1.1'
-gem 'rails', '7.2.3.1'
+gem 'rails', '~> 8.1.0'
 gem 'sprockets-rails'
 gem 'jsbundling-rails'
 gem 'rails-html-sanitizer'
@@ -82,18 +82,18 @@ gem 'amazing_print'
 
 gem 'puma', '~> 8'
 gem 'redis'
-gem 'connection_pool', '~> 2.4' # connection_pool 3.x uses keyword-only args; Rails 7.2 passes a positional hash (incompatible with Ruby 4.0)
+gem 'connection_pool'
 
 gem 'activerecord-session_store'
 gem 'lograge'
 gem 'logstop'
-gem 'paper_trail' # , '~> 15' # 16 breaks models with inherited has_paper_trail, need to update significant code
+gem 'paper_trail'
 gem 'paranoia'
 gem 'validate_url'
 gem 'StreetAddress', require: false
 gem 'active_record_distinct_on'
 
-gem 'devise', '~> 4'
+gem 'devise', '~> 5.0'
 gem 'devise_invitable', '>= 2.0.9'
 gem 'devise-pwned_password'
 gem 'devise-security'
@@ -128,7 +128,7 @@ gem 'auto-session-timeout'
 gem 'ruby_parser', require: false
 
 gem 'caxlsx'
-gem 'caxlsx_rails'
+gem 'caxlsx_rails', '>= 0.7.1' # 0.7.1+ restores `render xlsx: 'template'` resolution under Rails 8 (0.6.x relied on Rails defaulting options[:template] to the action name)
 gem 'xlsxtream', require: false
 # NOTE: maybe https://github.com/weshatheleopard/rubyXL
 gem 'roo'
@@ -187,7 +187,6 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'capybara'
-  gem 'minitest-reporters'
   gem 'rails-controller-testing'
   gem 'rspec-mocks'
   gem 'shoulda-matchers'

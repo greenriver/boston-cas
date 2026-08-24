@@ -20,7 +20,7 @@ RSpec.feature 'Accounts', type: :feature do
       fill_in 'Email', with: 'noreply@example.com'
       fill_in 'Password', with: 'password'
       click_button 'Log in'
-      expect(page).to have_content 'Invalid Email or password'
+      expect(page).to have_content 'Invalid email or password'
     end
 
     scenario 'with correct password' do

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 # provides less verbose versions of stuff that's useful for working with arel
 # these are all two letters both for maximum brevity and because this makes them more includable -- they are unlikely to be stomped on by other methods or functions
 module ArelHelper
@@ -41,7 +43,10 @@ module ArelHelper
     def nf(name, args = [], aka = nil)
       raise 'args must be an Array' unless args.is_a?(Array)
 
-      Arel::Nodes::NamedFunction.new name, args.map { |v| qt v }, aka
+      # Rails 8 (Arel) dropped the alias argument from Function/NamedFunction
+      # constructors; apply the alias via #as instead.
+      function = Arel::Nodes::NamedFunction.new(name, args.map { |v| qt v })
+      aka ? function.as(aka) : function
     end
 
     def cl(*args)
