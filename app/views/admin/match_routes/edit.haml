@@ -1,5 +1,8 @@
 - title = "Edit #{@route.title}"
 - content_for :title, title
+= content_for :crumbs do
+  = link_to action: :index do
+    &laquo; Manage Routes
 %h1= content_for :title
 .row
   .col-md-6
@@ -31,43 +34,7 @@
           = f.input :routes_parked_on_successful_match, collection: MatchRoutes::Base.all.map { |route| [route.title, route.class] }.sort , label: 'Routes to park a client after a successful match', input_html: { class: :select2, multiple: true }
           = f.button :submit, value: "Update #{@route.title}"
   .col-md-6
-    .c-card
-      .c-card__header
-        %h2 Weighting
-      .c-card__content
-        .mb-4.text-right
-          = link_to new_admin_match_route_weighting_rule_path(@route), class: 'btn btn-primary' do
-            %i.icon-plus
-            Add Weighting Rule
-        - if @route.weighting_rules.any?
-          .table-responsive
-            .c-card.c.card__flush.mb-4
-              .c-card__content.p-0
-                %table.table.table-striped.mb-0
-                  %thead
-                    %tr
-                      %th Rules
-                      %th{ data: { bs_toggle: :tooltip, bs_title: 'Rules with a lower weight will be applied next.' }} Relative Weight
-                      %th
-                  %tbody
-                    - @route.weighting_rules.each do |rule|
-                      %tr
-                        %td
-                          - if rule.requirements.any?
-                            - rule.requirements.each do |r|
-                              .mb-2
-                                = link_to(edit_admin_match_route_weighting_rule_path(@route, rule)) do
-                                  = r.name
-                                  - if r.variable.present?
-                                    = r.display_for_variable
-                          - else
-                            = link_to(edit_admin_match_route_weighting_rule_path(@route, rule)) do
-                              None
-                        %td= rule.applied_to
-                        %td
-                          = link_to(admin_match_route_weighting_rule_path(@route, rule), method: :delete, class: 'btn btn-sm btn-icon-only btn-danger', data: { confirm: 'Are you sure you want to remove this rule?' }) do
-                            %i.icon-cross
-        - else
-          %p Weighting rules allow you to attach requirements to each voucher created on this route.  If you have more than one weighting rule on the route, rules will be applied to balance out the use of each rule over time.
+    = render 'weighting_rules'
+    = render 'decline_and_cancel_reasons'
 
 = render 'init_select2'

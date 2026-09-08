@@ -1,0 +1,29 @@
+.c-card.mb-4
+  .c-card__header
+    %h2 Decline &amp; Cancel Reasons
+  .c-card__content.p-0
+    .table-responsive
+      %table.table.table-striped.mb-0
+        %thead
+          %tr
+            %th Step
+            %th Active Decline Reasons
+            %th Active Cancel Reasons
+            %th Default Referral Result
+        %tbody
+          - @steps.each do |step|
+            %tr
+              %td= link_to step.display_name, edit_admin_match_route_match_decision_step_path(@route, step)
+              %td
+                - if step.supports_declines?
+                  = @reason_counts[[step.decision_type, MatchDecisionReasonAssignment::KIND_DECLINE]] || 0
+                - else
+                  N/A
+              %td= @reason_counts[[step.decision_type, MatchDecisionReasonAssignment::KIND_CANCEL]] || 0
+              %td
+                - if step.default_referral_result == MatchDecisionReasons::Base::CLIENT_REJECTED
+                  Client Rejected
+                - elsif step.default_referral_result == MatchDecisionReasons::Base::PROVIDER_REJECTED
+                  Provider Rejected
+                - else
+                  &mdash;

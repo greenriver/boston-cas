@@ -183,6 +183,15 @@ module ApplicationHelper
     Git.revision
   end
 
+  def release_info
+    release = Git.release
+    return nil unless release
+
+    content_tag :div, class: 'navbar-text' do
+      content_tag :span, release, class: 'badge badge-warning p-2'
+    end
+  end
+
   def help_link
     @help_link ||= begin
       return nil unless help_for_path
