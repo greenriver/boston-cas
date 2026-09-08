@@ -138,13 +138,15 @@ WORKDIR /app
 
 # rexml: CVE-2025-58767, rack: CVE in system gem shipped with base image — both must be explicitly updated since they're bundled with ruby
 # erb: CVE-2026-41316
+# resolv: CVE-2026-80212, CVE-2026-80213
 # gem cleanup removes old gemspecs that vulnerability scanners (e.g. Trivy) would otherwise flag
 RUN gem update --system \
-  && gem update rexml rack erb net-imap \
-  && gem cleanup rexml rack erb net-imap \
+  && gem update rexml rack erb net-imap resolv \
+  && gem cleanup rexml rack erb net-imap resolv \
   && gem uninstall -i /usr/local/lib/ruby/gems/4.0.0 net-imap -v 0.6.2 \
   && find /usr/local/lib/ruby/gems -path "*/specifications/default/erb-*.gemspec" -delete \
   && find /usr/local/lib/ruby/gems -path "*/specifications/default/net-imap-*.gemspec" -delete \
+  && find /usr/local/lib/ruby/gems -path "*/specifications/default/resolv-*.gemspec" -delete \
   && gem install bundler --version=${BUNDLER_VERSION} \
   && bundle config set --local path /bundle \
   && chown -R app-user:${GROUP_ID} /bundle \
