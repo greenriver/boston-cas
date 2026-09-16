@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+The match is pending Offer Unit or Client Approved for Unit by #{Translation.translate('Housing Search Provider Fourteen')} - it is now ready for your action.
+\
+Please review details:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'

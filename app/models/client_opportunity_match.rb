@@ -94,6 +94,9 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 13
   include RouteThirteenDecisions
 
+  # Match Route 14
+  include RouteFourteenDecisions
+
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
 
@@ -320,6 +323,14 @@ class ClientOpportunityMatch < ApplicationRecord
     return false unless contact
     return true if contact.user_can_view_all_clients?
     return on_or_after_first_client_step? if contact.in?(shelter_agency_contacts)
+
+    [:hsp_contacts, :housing_subsidy_admin_contacts, :ssp_contacts].each do |contact_type|
+      reveal_step = match_route.client_reveal_step_for(contact_type)
+      next unless reveal_step && contact.in?(send(contact_type))
+
+      return current_decision.blank? || match_route.on_or_after_step?(current_decision, reveal_step)
+    end
+
     return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?(match_route)
     return on_or_after_first_client_step? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
 

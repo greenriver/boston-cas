@@ -1,0 +1,17 @@
+Hello #{@contact.full_name},
+\
+The match has moved to Offer Unit or Client Approved for Unit. No action is required from you.
+\
+Please review details:
+#{notification_match_url @notification, @match}
+\
+= render 'client_details'
+\
+= render 'location_details'
+\
+= render 'program_details'
+\
+\
+\
+\
+= render 'email_footer'
