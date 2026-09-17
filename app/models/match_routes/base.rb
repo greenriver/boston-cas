@@ -48,6 +48,7 @@ module MatchRoutes
         MatchRoutes::Eleven,
         MatchRoutes::Twelve,
         MatchRoutes::Thirteen,
+        MatchRoutes::Fourteen,
       ]
     end
 
@@ -104,6 +105,18 @@ module MatchRoutes
 
     def on_or_after_first_client_step?(current_decision)
       on_first_client_step?(current_decision) || after_first_client_step?(current_decision)
+    end
+
+    # Step class name at or after which `contact_type` may see the client; nil means the default rules apply.
+    def client_reveal_step_for(_contact_type)
+      nil
+    end
+
+    def on_or_after_step?(current_decision, step_name)
+      position = self.class.match_steps_for_reporting[current_decision.class.name]
+      return false unless position.present?
+
+      position >= self.class.match_steps_for_reporting[step_name]
     end
 
     def on_first_client_step?(current_decision)

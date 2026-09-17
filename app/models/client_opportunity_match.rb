@@ -94,6 +94,9 @@ class ClientOpportunityMatch < ApplicationRecord
   # Match Route 13
   include RouteThirteenDecisions
 
+  # Match Route 14
+  include RouteFourteenDecisions
+
   has_many :referral_events, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
   has_one :active_referral_event, -> { where(referral_result: nil) }, class_name: 'Warehouse::ReferralEvent', foreign_key: 'client_opportunity_match_id'
 
@@ -320,6 +323,15 @@ class ClientOpportunityMatch < ApplicationRecord
     return false unless contact
     return true if contact.user_can_view_all_clients?
     return on_or_after_first_client_step? if contact.in?(shelter_agency_contacts)
+
+    [:hsp_contacts, :housing_subsidy_admin_contacts, :ssp_contacts].each do |contact_type|
+      reveal_step = match_route.client_reveal_step_for(contact_type)
+      next unless reveal_step && contact.in?(send(contact_type))
+
+      reached = current_decision || furthest_decision
+      return reached.present? && match_route.on_or_after_step?(reached, reveal_step)
+    end
+
     return on_or_after_first_client_step? if contact.in?(housing_subsidy_admin_contacts) && contacts_editable_by_hsa && client&.has_full_housing_release?(match_route)
     return on_or_after_first_client_step? if (contact.in?(housing_subsidy_admin_contacts) || contact.in?(ssp_contacts) || contact.in?(hsp_contacts)) && client_info_approved_for_release?
 
@@ -336,6 +348,12 @@ class ClientOpportunityMatch < ApplicationRecord
   scope :editable_by, ->(user) {
     joins(:program).merge(Program.editable_by(user))
   }
+
+  # Closed matches have no current decision; the last step they reached still governs who may see the client.
+  def furthest_decision
+    later_decisions_first = match_route.class.match_steps_for_reporting.keys.reverse
+    initialized_decisions.order_as_specified(type: later_decisions_first).first
+  end
 
   def on_or_after_first_client_step?
     return true if current_decision.blank?
