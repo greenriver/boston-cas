@@ -15,7 +15,7 @@ module MatchDecisions::Fourteen
     end
 
     def step_name
-      "#{Translation.translate('CoC Fourteen')} Client Review Decline"
+      "#{Translation.translate('CoC Fourteen')} Review Client Decline"
     end
 
     def actor_type
