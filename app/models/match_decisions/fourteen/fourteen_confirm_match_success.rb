@@ -24,10 +24,6 @@ module MatchDecisions::Fourteen
       'match_decisions/fourteen/confirm_match_success'
     end
 
-    def label
-      label_for_status status
-    end
-
     def label_for_status status
       case status.to_sym
       when :pending then "#{Translation.translate('CoC Fourteen')} to confirm match success"

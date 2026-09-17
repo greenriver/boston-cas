@@ -78,7 +78,7 @@ module MatchDecisions::Fourteen
     end
 
     # Override default behavior
-    def record_action_event! contact: d
+    def record_action_event! contact:
       if status == 'expiration_update'
         # Make note of the new expiration
       else
